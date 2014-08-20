@@ -46,7 +46,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	public static PokemonEffect getEffect(String e)
 	{
 		if (map == null) loadEffects();
-		if(map.containsKey(e)) return map.get(e);
+		if (map.containsKey(e)) return map.get(e);
 
 		Global.error("No such Effect "+e);
 		return null;
@@ -1076,7 +1076,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			else if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 			
 			RaiseCrits e = (RaiseCrits)victim.getEffect("RaiseCrits");
-			switch(source)
+			switch (source)
 			{
 				case ATTACK:
 				e.focusEnergy = true;

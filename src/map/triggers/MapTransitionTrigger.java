@@ -14,8 +14,8 @@ public class MapTransitionTrigger extends Trigger{
 	public MapTransitionTrigger(String name, String contents) {
 		super(name, contents);
 		Matcher m = variablePattern.matcher(contents);
-		while(m.find()){
-			switch(m.group(1)){
+		while (m.find()){
+			switch (m.group(1)){
 			case "nextMap":
 				mapName = m.group(2);
 				break;
@@ -49,7 +49,7 @@ public class MapTransitionTrigger extends Trigger{
 		
 		game.charData.setMap(mapName, mapEntranceName);
 		
-		if(mapEntranceName == null || !game.data.getMap(mapName).setCharacterToEntrance(game.charData, mapEntranceName)) {
+		if (mapEntranceName == null || !game.data.getMap(mapName).setCharacterToEntrance(game.charData, mapEntranceName)) {
 			game.charData.setLocation(newX, newY);
 		}
 		

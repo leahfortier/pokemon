@@ -22,8 +22,8 @@ public class DialogueSequence {
 		triggers = new String[100];
 		choices = new String[100];
 		int val = -1;
-		while(m.find()){
-			switch(m.group(1)){
+		while (m.find()){
+			switch (m.group(1)){
 			case "text":
 				text = m.group(4);
 				break;
@@ -33,7 +33,7 @@ public class DialogueSequence {
 				break;
 			case "choice":
 				val = Integer.parseInt(m.group(2));
-				if(m.group(3) != null)
+				if (m.group(3) != null)
 					choices[val] = m.group(3);
 				else
 					choices[val] = m.group(4);
@@ -50,14 +50,14 @@ public class DialogueSequence {
 		triggers = Arrays.copyOf(triggers, max+1);
 	}
 	public void choose(int choiceIndex, MapView mapView, Game game){
-		if(choiceIndex < 0 || choiceIndex >= next.length)
+		if (choiceIndex < 0 || choiceIndex >= next.length)
 			return;
-		if(next[choiceIndex] != null){
+		if (next[choiceIndex] != null){
 			mapView.setDialogue(next[choiceIndex]);
 		}
-		if(triggers[choiceIndex] != null){
+		if (triggers[choiceIndex] != null){
 			Trigger trigger = game.data.getTrigger(triggers[choiceIndex]);
-			if(trigger.isTriggered(game.charData))
+			if (trigger.isTriggered(game.charData))
 				trigger.execute(game);
 		}
 	}

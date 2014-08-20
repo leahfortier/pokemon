@@ -834,7 +834,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public boolean use(Trainer t)
-		{// TODO: if(Can ride bike) Set the bike as a 'currentlyUsing' item
+		{// TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
 		// May need to make this take in info on the route
 			return false;
 		}
@@ -885,7 +885,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public boolean use(Trainer t)
-		{// TODO: if(spot in front of player is a fishing spot) Set as
+		{// TODO: if (spot in front of player is a fishing spot) Set as
 			// 'currentlyUsing'
 		// May need to make this take in info on the route
 			return false;

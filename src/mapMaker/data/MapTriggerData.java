@@ -40,7 +40,7 @@ public class MapTriggerData {
 	private void readTriggers() {
 
 		triggerFile = new File(mapMaker.root.getPath()+MapMaker.FILE_SLASH+mapTriggersFilePath+currentMap+mapFileNameExtension);
-		if(!triggerFile.exists())
+		if (!triggerFile.exists())
 			return;
 		
 		String fileText = Global.readEntireFile(triggerFile, false);
@@ -58,20 +58,20 @@ public class MapTriggerData {
 	}
 	
 	public void save() {
-		if(saved)
+		if (saved)
 			return;
 		saved = true;
 		
 		try {
 				
-			if(!triggerFile.exists()) {
+			if (!triggerFile.exists()) {
 				triggerFile.getParentFile().mkdirs();
 				triggerFile.createNewFile();
 			}
 			
 			FileWriter writer = new FileWriter(triggerFile);
 			
-			for(Trigger trigger: triggers.values()){
+			for (Trigger trigger: triggers.values()){
 				writer.write(trigger.getClass().getName() +" " +trigger.getName() +"{\n"+
 						trigger.triggerDataAsString()+"\n"+
 						"}\n");

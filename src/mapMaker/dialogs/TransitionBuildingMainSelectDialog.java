@@ -15,8 +15,8 @@ public class TransitionBuildingMainSelectDialog extends JPanel {
 		
 		unplacedComboBox = new JComboBox<String>();
 		
-		if(comboBoxItems != null && comboBoxItems.length > 0) {
-			for(String item: comboBoxItems) {
+		if (comboBoxItems != null && comboBoxItems.length > 0) {
+			for (String item: comboBoxItems) {
 				unplacedComboBox.addItem(item);
 			}
 		}

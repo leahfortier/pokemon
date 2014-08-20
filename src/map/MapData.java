@@ -62,7 +62,7 @@ public class MapData {
 		walkMap = moveMap.getRGB(0, 0, width, height, null, 0, width);
 		
 		//If map doesn't have an image for areas, create and save an empty image for areas.
-		if(areaM == null)
+		if (areaM == null)
 		{
 			areaM = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			File areaMapFile = new File(file.getPath()+Global.FILE_SLASH+name+"_area.png");
@@ -83,11 +83,11 @@ public class MapData {
 		String fileText = Global.readEntireFile(f, false);
 
 		Matcher m = blockPattern.matcher(fileText);
-		while(m.find()){
+		while (m.find()){
 			String name = m.group(3);
-			if(m.group(1) == null){ //trigger
+			if (m.group(1) == null){ //trigger
 				Scanner in = new Scanner(m.group(4));
-				while(in.hasNext()){
+				while (in.hasNext()){
 					String[] xr = in.next().split("-");
 					String[] yr = in.next().split("-");
 					int x1, x2, y1, y2;
@@ -95,8 +95,8 @@ public class MapData {
 					y1 = Integer.parseInt(yr[0]);
 					x2 = xr.length == 2 ? Integer.parseInt(xr[1]) : x1;
 					y2 = yr.length == 2 ? Integer.parseInt(yr[1]) : y1;
-					for(int x = x1; x<=x2; x++)
-						for(int y = y1; y<=y2; y++)
+					for (int x = x1; x<=x2; x++)
+						for (int y = y1; y<=y2; y++)
 							triggers.put(y*width+x, name);
 				}
 				in.close();
@@ -118,7 +118,7 @@ public class MapData {
 						break;
 					case "TriggerData":
 						TriggerData triggerData = new TriggerData(name, m.group(4));
-						for(Integer loc: triggerData.getPoints(width)) {
+						for (Integer loc: triggerData.getPoints(width)) {
 							triggers.put(loc, name);
 						}
 						triggerData.addData(gameData);
@@ -134,8 +134,8 @@ public class MapData {
 		int y = 0;
 		
 		Matcher m = EntityData.variablePattern.matcher(contents);
-		while(m.find()){
-			switch(m.group(1)){
+		while (m.find()){
+			switch (m.group(1)){
 			case "x":
 				x = Integer.parseInt(m.group(2));
 				break;
@@ -149,42 +149,42 @@ public class MapData {
 	}
 	
 	public int getBgTile(int x, int y){
-		if(x<0 || x>=width || y<0 || y>=height)
+		if (x<0 || x>=width || y<0 || y>=height)
 			return 0;
 		return bgTile[y*width + x];
 	}
 	
 	public int getFgTile(int x, int y){
-		if(x<0 || x>=width || y<0 || y>=height)
+		if (x<0 || x>=width || y<0 || y>=height)
 			return 0;
 		return fgTile[y*width + x];
 	}
 	
 	public WalkType getPassValue(int x, int y){
-		if(x<0 || x>=width || y<0 || y>=height)
+		if (x<0 || x>=width || y<0 || y>=height)
 			return WalkType.NOT_WALKABLE;
 		int val = walkMap[y*width+x]&((1<<24)-1);
-		for(WalkType t: WalkType.values())
-			if(t.value == val)
+		for (WalkType t: WalkType.values())
+			if (t.value == val)
 				return t;
 		return WalkType.NOT_WALKABLE;
 	}
 	
 	public int getAreaName(int x, int y) {
-		if(x<0 || x>=width || y<0 || y>=height || areaMap == null)
+		if (x<0 || x>=width || y<0 || y>=height || areaMap == null)
 			return 0;
 		return areaMap[y*width + x];
 	}
 	
 	public String trigger(CharacterData character) {
 		int val = character.locationY*width + character.locationX;
-		if(triggers.containsKey(val))
+		if (triggers.containsKey(val))
 			return triggers.get(val);
 		return null;
 	}
 	
 	public boolean setCharacterToEntrance(CharacterData character, String entranceName) {
-		if(mapEntrances.containsKey(entranceName)) {
+		if (mapEntrances.containsKey(entranceName)) {
 			int entrance = mapEntrances.get(entranceName);
 			int newY = entrance / width;
 			int newX = entrance - newY * width;
@@ -201,8 +201,8 @@ public class MapData {
 
 	public Entity[][] populateEntities(CharacterData character, GameData gameData) {
 		Entity[][] res = new Entity[width][height];
-		for(EntityData data: entities)
-			if(data.isEntityPresent(character)){
+		for (EntityData data: entities)
+			if (data.isEntityPresent(character)){
 				Entity e = data.getEntity();
 				e.addData(gameData);
 				res[e.charX][e.charY] = e; 

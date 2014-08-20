@@ -209,7 +209,7 @@ public abstract class Trainer implements Team, Serializable
 		setFront(valid.get((int)(Math.random()*valid.size())));
 	}
 	
-	public boolean canSwitch(Battle b, int switchIndex)
+	public boolean canswitch (Battle b, int switchIndex)
 	{
 		// This Pokemon is already out!!
 		if (switchIndex == frontIndex) return false;

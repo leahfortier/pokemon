@@ -37,7 +37,7 @@ public class PlayerEntity extends Entity
 
 	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition)
 	{
-		if(drawOnlyInTransition && transitionTime == 0) return;
+		if (drawOnlyInTransition && transitionTime == 0) return;
 		
 		Dimension d = Global.GAME_SIZE;
 		

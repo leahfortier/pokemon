@@ -55,7 +55,7 @@ public class StartView extends View
 	
 	public void update(int dt, InputControl input, Game game)
 	{
-		switch(state)
+		switch (state)
 		{
 			case DEFAULT:
 				if (message != null)
@@ -139,7 +139,7 @@ public class StartView extends View
 		g.setFont(Global.getFont(30));
 		g.setColor(Color.WHITE);
 		
-		switch(state)
+		switch (state)
 		{
 			case DEFAULT:
 				g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);

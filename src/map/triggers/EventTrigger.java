@@ -31,11 +31,11 @@ public class EventTrigger extends Trigger{
 		needToCreateDialogue = false;
 		
 		Matcher m = dialoguePattern.matcher(contents);
-		while(m.find()){
-			if(m.group(1) != null) {
+		while (m.find()){
+			if (m.group(1) != null) {
 				dialogueName = m.group(2);
 			}
-			if(m.group(3) != null) {
+			if (m.group(3) != null) {
 				createDialogue = true;
 				needToCreateDialogue = true;
 				
@@ -47,7 +47,7 @@ public class EventTrigger extends Trigger{
 				
 				Matcher creationMatcher = dialogueCreationPattern.matcher(m.group(5));
 				
-				while(creationMatcher.find()) {
+				while (creationMatcher.find()) {
 					int val = Integer.parseInt(creationMatcher.group(1));
 					dialogueLines[val] = creationMatcher.group(2);
 					max = Math.max(max, val);
@@ -60,8 +60,8 @@ public class EventTrigger extends Trigger{
 	@Override
 	public void execute(Game game){
 		
-		if(needToCreateDialogue) {
-			for(int i = 0; i < dialogueLines.length; ++i) {
+		if (needToCreateDialogue) {
+			for (int i = 0; i < dialogueLines.length; ++i) {
 				String next = i+1 == dialogueLines.length? "": "next[0]: " +name+"_Dialogue_" +dialogue+String.format("_%02d",i+2);
 				game.data.addDialogue(name+"_Dialogue_" +dialogue+String.format("_%02d",i+1), "text: \""+dialogueLines[i]+"\"\n" +next);
 			}
@@ -70,7 +70,7 @@ public class EventTrigger extends Trigger{
 		}
 		
 		super.execute(game);
-		if(dialogueName != null){
+		if (dialogueName != null){
 			((MapView)game.viewMap.get(ViewMode.MAP_VIEW)).setDialogue(dialogueName);
 		}
 	}
@@ -84,10 +84,10 @@ public class EventTrigger extends Trigger{
 	public String triggerDataAsString() {
 		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
 		
-		if(createDialogue) {
+		if (createDialogue) {
 			ret.append("\tcreateDialogue: " +dialogue +"\n");
 			
-			for(int currDialogue = 0; currDialogue < dialogueLines.length; ++currDialogue) {
+			for (int currDialogue = 0; currDialogue < dialogueLines.length; ++currDialogue) {
 				ret.append("\ttext["+currDialogue+"]: \""+dialogueLines[currDialogue].trim() + "\"\n");
 			}
 		}

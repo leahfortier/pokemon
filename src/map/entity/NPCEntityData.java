@@ -42,8 +42,8 @@ public class NPCEntityData extends EntityData{
 		int val = -1;
 		
 		Matcher m = multiVariablePattern.matcher(contents);
-		while(m.find()){
-			switch(m.group(1)){
+		while (m.find()){
+			switch (m.group(1)){
 			case "startX":
 				x = Integer.parseInt(m.group(3));
 				break;
@@ -90,7 +90,7 @@ public class NPCEntityData extends EntityData{
 			}
 		}
 		
-		if(walkToPlayer == -1 && trainerInfo != null)
+		if (walkToPlayer == -1 && trainerInfo != null)
 			walkToPlayer = 1;
 		
 		firstDialogue = Arrays.copyOf(firstDialogue, FDSize+1);
@@ -129,7 +129,7 @@ public class NPCEntityData extends EntityData{
 	
 	
 	public Entity getEntity(){
-		if(entity == null){
+		if (entity == null){
 			//entity = new NPCEntity(x, y, trigger, path, defaultDirection, spriteIndex);
 			entity = new NPCEntity(name, x, y, trigger, path, defaultDirection, spriteIndex, firstDialogue, secondDialogue, trainerInfo, itemInfo, firstTriggers, secondTriggers, walkToPlayer == 1);
 		}
@@ -145,7 +145,7 @@ public class NPCEntityData extends EntityData{
 		StringBuilder ret = new StringBuilder();
 		ret.append("NPC " +name +"{\n");
 		
-		if(!condition.getOriginalConditionString().equals(""))
+		if (!condition.getOriginalConditionString().equals(""))
 			ret.append("\tcondition: " +condition.getOriginalConditionString() +"\n");
 		
 		ret.append("\tstartX: " +x +"\n");
@@ -156,26 +156,26 @@ public class NPCEntityData extends EntityData{
 		ret.append("\twalkToPlayer: "+ (walkToPlayer==1)+"\n");
 		
 		
-		for(int currDialogue = 0; currDialogue < firstDialogue.length; ++currDialogue) {
+		for (int currDialogue = 0; currDialogue < firstDialogue.length; ++currDialogue) {
 			ret.append("\tfirstDialogue["+currDialogue+"]: \""+ firstDialogue[currDialogue]+"\"\n");
 		}
 		
-		if(secondDialogue != null) {
-			for(int currDialogue = 0; currDialogue < secondDialogue.length; ++currDialogue) {
+		if (secondDialogue != null) {
+			for (int currDialogue = 0; currDialogue < secondDialogue.length; ++currDialogue) {
 				ret.append("\tsecondDialogue["+currDialogue+"]: \""+ secondDialogue[currDialogue]+"\"\n");
 			}
 		}
 		
-		if(itemInfo != null)
+		if (itemInfo != null)
 			ret.append("\tgiveItem: \""+ itemInfo.trim()+"\"\n");
 		
-		if(trainerInfo != null)
+		if (trainerInfo != null)
 			ret.append("\ttrainer: \""+ trainerInfo.trim()+"\"\n");
 		
-		if(firstTriggers != null)
+		if (firstTriggers != null)
 			ret.append("\tfirstTriggers: \""+ firstTriggers.trim()+"\"\n");
 		
-		if(secondTriggers != null)
+		if (secondTriggers != null)
 			ret.append("\tsecondTriggers: \""+ secondTriggers.trim()+"\"\n");
 		
 		ret.append("}\n");

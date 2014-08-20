@@ -195,7 +195,7 @@ Synthesis:
 	PP: 5
 	Type: Grass
 	Cat: Status
-	SelfHealing: switch(b.getWeather().getType())
+	SelfHealing: switch (b.getWeather().getType())
 	{
 		case CLEAR_SKIES:
 			victim.healHealthFraction(1/2.0);
@@ -300,7 +300,7 @@ Solarbeam:
 	Type: Grass
 	Cat: Special
 	MultiTurn: Yes No user.getName()+" began taking in sunlight!"
-	GetPower: switch(b.getWeather().getType())
+	GetPower: switch (b.getWeather().getType())
 	{
 		case SUNNY:
 		case CLEAR_SKIES:
@@ -793,7 +793,7 @@ MorningSun:
 	Name: Morning Sun
 	Desc: The user restores its own HP. The amount of HP regained varies with the weather.
 	PP: 5
-	SelfHealing: switch(b.getWeather().getType())
+	SelfHealing: switch (b.getWeather().getType())
 	{
 		case CLEAR_SKIES:
 			victim.healHealthFraction(1/2.0);
@@ -1123,7 +1123,7 @@ Hurricane:
 	PP: 10
 	Type: Flying
 	Cat: Special
-	GetAcc: switch(b.getWeather().getType())
+	GetAcc: switch (b.getWeather().getType())
 	{
 		case RAINING:
 			return 100;
@@ -1334,7 +1334,7 @@ Swallow:
 		return;
 	}
 	if (e.getTurns() <= 0) Global.error("Stockpile turns should never be nonpositive");
-	switch(e.getTurns())
+	switch (e.getTurns())
 	{
 		case 1:
 			victim.healHealthFraction(1/4.0);
@@ -1512,7 +1512,7 @@ Thunder:
 	Cat: Special
 	Pow: 120
 	Acc: 70
-	GetAcc: switch(b.getWeather().getType())
+	GetAcc: switch (b.getWeather().getType())
 	{
 		case RAINING:
 			return 100;
@@ -1818,7 +1818,7 @@ Gravity:
 	MoveType: Field
 *
 Moonlight:
-	SelfHealing: switch(b.getWeather().getType())
+	SelfHealing: switch (b.getWeather().getType())
 	{
 		case CLEAR_SKIES:
 			victim.healHealthFraction(1/2.0);
@@ -4831,7 +4831,7 @@ HealBell:
 *
 WeatherBall:
 	Name: Weather Ball
-	GetType: switch(b.getWeather().getType())
+	GetType: switch (b.getWeather().getType())
 	{
 		case SUNNY:
 			return Type.FIRE;
@@ -5827,7 +5827,7 @@ RolePlay:
 	AbilityMessage: ActivePokemon other = b.getOtherPokemon(victim.user());
 	return victim.getName()+" copied "+other.getName()+"'s "+other.getAbility().getName()+"!";
 	+++
-	Apply: switch(o.getAbility().getName())
+	Apply: switch (o.getAbility().getName())
 	{
 		case "Wonder Guard":
 		case "Multitype":
@@ -6069,7 +6069,7 @@ Entrainment:
 	+++
 	AbilityMessage: return victim.getName()+" copied "+caster.getName()+"'s "+caster.getAbility().getName()+"!";
 	+++
-	Apply: switch(o.getAbility().getName())
+	Apply: switch (o.getAbility().getName())
 	{
 		case "Truant":
 		case "Multitype":
@@ -6102,7 +6102,7 @@ SimpleBeam:
 	+++
 	AbilityMessage: return victim.getName()+"'s ability was changed to Simple!";
 	+++
-	Apply: switch(o.getAbility().getName())
+	Apply: switch (o.getAbility().getName())
 	{
 		case "Truant":
 		case "Multitype":

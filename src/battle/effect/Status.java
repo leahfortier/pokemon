@@ -67,7 +67,7 @@ public abstract class Status implements Serializable
 	
 	private static Status getStatus(StatusCondition s, ActivePokemon victim)
 	{
-		switch(s)
+		switch (s)
 		{
 			case NONE:
 				return new None();

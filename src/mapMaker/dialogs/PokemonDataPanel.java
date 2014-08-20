@@ -53,14 +53,14 @@ public class PokemonDataPanel extends JPanel {
 			public void changedUpdate(DocumentEvent e) {}
 			public void valueChanged() {
 				String pokemonName = nameTextField.getText().trim();
-				if(pokemonName.length() < 2) {
+				if (pokemonName.length() < 2) {
 					nameTextField.setBackground(new Color(0xFF9494));
 					return;
 				}
 				
 				pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
 				
-				if(!PokemonInfo.isPokemon(pokemonName)) {
+				if (!PokemonInfo.isPokemon(pokemonName)) {
 					nameTextField.setBackground(new Color(0xFF9494));
 				}
 				else {
@@ -96,7 +96,7 @@ public class PokemonDataPanel extends JPanel {
 			public void changedUpdate(DocumentEvent e) {}
 			public void valueChanged() {
 				customMoves[moveComboBox.getSelectedIndex()] = moveTextField.getText().trim();
-				if(!Attack.isAttack(customMoves[moveComboBox.getSelectedIndex()])) {
+				if (!Attack.isAttack(customMoves[moveComboBox.getSelectedIndex()])) {
 					moveTextField.setBackground(new Color(0xFF9494));
 				}
 				else {
@@ -177,27 +177,27 @@ public class PokemonDataPanel extends JPanel {
 	public String getPokemonData () {
 		String pokemonName = nameTextField.getText().trim();
 		
-		if(pokemonName.length() < 2)
+		if (pokemonName.length() < 2)
 			return null;
 		
 		pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
 		
-		if(!PokemonInfo.isPokemon(pokemonName)) {
+		if (!PokemonInfo.isPokemon(pokemonName)) {
 			return null;
 		}
 		
 		String data = "pokemon: "+pokemonName +" " +(String)levelFormattedTextField.getText() +" " + (shinyCheckBox.isSelected()?"Shiny":"");
 		
-		if(moveCheckBox.isSelected()) {
+		if (moveCheckBox.isSelected()) {
 			boolean allValidMoves = true;
 			String moves = "";
-			for(int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) {
+			for (int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) {
 				String move = customMoves[currMove].length() == 0? "None": customMoves[currMove];
 				allValidMoves |= Attack.isAttack(move);
 				moves+= move +(currMove+1 == customMoves.length?"":", ");
 			}
 			
-			if(allValidMoves) {
+			if (allValidMoves) {
 				data += " Moves: "+moves;
 			}
 		}

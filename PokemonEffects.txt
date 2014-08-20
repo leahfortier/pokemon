@@ -344,7 +344,7 @@ RaiseCrits:
 	else if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 	
 	RaiseCrits e = (RaiseCrits)victim.getEffect("RaiseCrits");
-	switch(source)
+	switch (source)
 	{
 		case ATTACK:
 			e.focusEnergy = true;

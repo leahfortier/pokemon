@@ -71,7 +71,7 @@ public class WildBattleTrigger extends Trigger
 	
 	private double convEncounterRate(String s)
 	{
-		switch(s.toLowerCase())
+		switch (s.toLowerCase())
 		{
 			case "verycommon":
 //				return 10;
@@ -141,7 +141,7 @@ public class WildBattleTrigger extends Trigger
 		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
 		ret.append("\tencounterRate: " +encounterRateString +"\n");
 		
-		for(int currPokemon = 0; currPokemon < pokemon.length; ++currPokemon) {
+		for (int currPokemon = 0; currPokemon < pokemon.length; ++currPokemon) {
 			ret.append("\tpokemon: " +pokemon[currPokemon] +" " +lowLevel[currPokemon] +"-" +highLevel[currPokemon] +" " +probability[currPokemon] +"%\n");
 		}
 		

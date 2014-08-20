@@ -102,13 +102,13 @@ public class Bag implements Serializable
 		items = new TreeMap<>();
 		
 		bag = new HashMap<>();
-		for(BagCategory cat : BagCategory.values())
+		for (BagCategory cat : BagCategory.values())
 		{
 			bag.put(cat, new TreeSet<Item>());
 		}
 		
 		battleBag = new HashMap<>();
-		for(BattleBagCategory cat : BattleBagCategory.values())
+		for (BattleBagCategory cat : BattleBagCategory.values())
 		{
 			battleBag.put(cat, new TreeSet<Item>());
 		}
@@ -159,28 +159,28 @@ public class Bag implements Serializable
 	
 	public void addItem(Item i, int amt)
 	{
-		if(items.containsKey(i)) items.put(i, items.get(i) + amt);
+		if (items.containsKey(i)) items.put(i, items.get(i) + amt);
 		else items.put(i, amt);
 		
-		for(Set<Item> set : getAllCategorySets(i)) set.add(i);
+		for (Set<Item> set : getAllCategorySets(i)) set.add(i);
 	}
 	
 	private List<Set<Item>> getAllCategorySets(Item i)
 	{
 		List<Set<Item>> res = new ArrayList<Set<Item>>();
 		res.add(bag.get(i.cat));
-		for(BattleBagCategory c : i.bcat) res.add(battleBag.get(c));
+		for (BattleBagCategory c : i.bcat) res.add(battleBag.get(c));
 		return res;
 	}
 	
 	private void removeItem(Item i)
 	{
-		if(items.containsKey(i)) items.put(i, items.get(i)-1);
+		if (items.containsKey(i)) items.put(i, items.get(i)-1);
 		else Global.error("Can't remove an item you don't have! ("+i.getName()+")");
 
-		if(items.get(i) <= 0)
+		if (items.get(i) <= 0)
 		{
-			for(Set<Item> set : getAllCategorySets(i))
+			for (Set<Item> set : getAllCategorySets(i))
 			{			
 				set.remove(i);
 			}			
@@ -279,7 +279,7 @@ public class Bag implements Serializable
 	
 	public int getQuantity(Item i)
 	{
-		if(items.containsKey(i)) return items.get(i);
+		if (items.containsKey(i)) return items.get(i);
 		
 		return 0;
 	}
@@ -287,10 +287,10 @@ public class Bag implements Serializable
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		for(BagCategory bc : BagCategory.values()) {
+		for (BagCategory bc : BagCategory.values()) {
 			sb.append(bc.name);
 			sb.append("\n");
-			for(Item i : items.keySet())
+			for (Item i : items.keySet())
 			{
 				sb.append('\t');
 				sb.append(i.getName());

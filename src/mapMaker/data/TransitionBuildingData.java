@@ -73,8 +73,8 @@ public class TransitionBuildingData {
 			String name = m.group(2);
 			Trigger trig = GameData.createTrigger(type, name, m.group(3));
 			
-			if(type.equals("Group")) {
-				if(name.endsWith("EastDoor")) {
+			if (type.equals("Group")) {
+				if (name.endsWith("EastDoor")) {
 					groupTriggers[0] = (GroupTrigger)trig;
 				}
 				else if (name.endsWith("WestDoor")) {
@@ -90,10 +90,10 @@ public class TransitionBuildingData {
 					infoTriggerGT = (GroupTrigger)trig;
 				}
 			}
-			else if(type.equals("Event")) {
+			else if (type.equals("Event")) {
 				infoTriggers.add((EventTrigger)trig);
 			}
-			else if(type.equals("MapTransition") && name.matches(TransitionBuildingTransitionNamePattern.pattern())) {
+			else if (type.equals("MapTransition") && name.matches(TransitionBuildingTransitionNamePattern.pattern())) {
 				MapTransitionTrigger transitionTrig = (MapTransitionTrigger)trig;
 				
 				transitionTriggers.put(transitionTrig.mapName +"_"+transitionTrig.mapEntranceName, transitionTrig);
@@ -106,7 +106,7 @@ public class TransitionBuildingData {
 				
 				TransitionBuildingPair pair = getTransitionPair(nameMatcher.group(1).equals("H"), map1, map2, Integer.parseInt(nameMatcher.group(4)));
 				
-				if(transitionTrig.mapName.equals(map1)) {
+				if (transitionTrig.mapName.equals(map1)) {
 					pair.map1Entrance = transitionTrig.mapEntranceName;
 				}
 				else {
@@ -116,19 +116,19 @@ public class TransitionBuildingData {
 		}
 		
 		//Create missing transition group triggers
-		for(int currGroupTrig = 0; currGroupTrig < groupTriggers.length; ++currGroupTrig){
-			if(groupTriggers[currGroupTrig] == null){
+		for (int currGroupTrig = 0; currGroupTrig < groupTriggers.length; ++currGroupTrig){
+			if (groupTriggers[currGroupTrig] == null){
 				groupTriggers[currGroupTrig] = new GroupTrigger("GroupTrigger_TransitionBuilding_"+directions[currGroupTrig]+"Door", "");
 			}
 		}
 		
 		//Create missing info group trigger
-		if(infoTriggerGT == null) {
+		if (infoTriggerGT == null) {
 			infoTriggerGT = new GroupTrigger("GroupTrigger_TransitionBuilding_InformationDesk","");
 		}
 		
 		//Loop through all info triggers and update areas for the maps
-		for(EventTrigger infoTrigger: infoTriggers) {
+		for (EventTrigger infoTrigger: infoTriggers) {
 			
 			Matcher nameMatcher = TransitionBuildingInformationTriggerNamePattern.matcher(infoTrigger.getName());
 			nameMatcher.find();
@@ -146,8 +146,8 @@ public class TransitionBuildingData {
 		infoTriggers.clear();
 		
 		//Collect all incomplete transition pairs
-		for(TransitionBuildingPair pair: allTransitionPairs) {
-			if(pair.map1Entrance == null || pair.map2Entrance == null) {
+		for (TransitionBuildingPair pair: allTransitionPairs) {
+			if (pair.map1Entrance == null || pair.map2Entrance == null) {
 				incompletePairs.add(pair);
 			}
 		}
@@ -156,24 +156,24 @@ public class TransitionBuildingData {
 	
 	private TransitionBuildingPair getTransitionPair(boolean horizontal, String map1, String map2, int pairNumber) {
 		
-		if(!transitionPairsMapping.containsKey(map1)) {
+		if (!transitionPairsMapping.containsKey(map1)) {
 			transitionPairsMapping.put(map1, new HashMap<String,ArrayList<TransitionBuildingPair>>());
 		}
-		if(!transitionPairsMapping.containsKey(map2)){
+		if (!transitionPairsMapping.containsKey(map2)){
 			transitionPairsMapping.put(map2, new HashMap<String,ArrayList<TransitionBuildingPair>>());
 		}
 		
-		if(!transitionPairsMapping.get(map1).containsKey(map2)) {
+		if (!transitionPairsMapping.get(map1).containsKey(map2)) {
 			transitionPairsMapping.get(map1).put(map2, new ArrayList<TransitionBuildingPair>());
 		}
-		if(!transitionPairsMapping.get(map2).containsKey(map1)) {
+		if (!transitionPairsMapping.get(map2).containsKey(map1)) {
 			transitionPairsMapping.get(map2).put(map1, new ArrayList<TransitionBuildingPair>());
 		}
 		
 		String pairName = TransitionBuildingPair.getPairName(horizontal, map1, map2, pairNumber); 
 		ArrayList<TransitionBuildingPair> map1Pairs = transitionPairsMapping.get(map1).get(map2);
-		for(TransitionBuildingPair pair: map1Pairs) {
-			if(pair.getPairName().equals(pairName)) {
+		for (TransitionBuildingPair pair: map1Pairs) {
+			if (pair.getPairName().equals(pairName)) {
 				//System.out.println("Found pair: " +pairName);
 				return pair;
 			}
@@ -194,24 +194,24 @@ public class TransitionBuildingData {
 	
 	private void removeTransitionPair(boolean horizontal, String map1, String map2, int pairNumber) {
 		
-		if(!transitionPairsMapping.containsKey(map1)) {
+		if (!transitionPairsMapping.containsKey(map1)) {
 			transitionPairsMapping.put(map1, new HashMap<String,ArrayList<TransitionBuildingPair>>());
 		}
-		if(!transitionPairsMapping.containsKey(map2)){
+		if (!transitionPairsMapping.containsKey(map2)){
 			transitionPairsMapping.put(map2, new HashMap<String,ArrayList<TransitionBuildingPair>>());
 		}
 		
-		if(!transitionPairsMapping.get(map1).containsKey(map2)) {
+		if (!transitionPairsMapping.get(map1).containsKey(map2)) {
 			transitionPairsMapping.get(map1).put(map2, new ArrayList<TransitionBuildingPair>());
 		}
-		if(!transitionPairsMapping.get(map2).containsKey(map1)) {
+		if (!transitionPairsMapping.get(map2).containsKey(map1)) {
 			transitionPairsMapping.get(map2).put(map1, new ArrayList<TransitionBuildingPair>());
 		}
 		
 		String pairName = TransitionBuildingPair.getPairName(horizontal, map1, map2, pairNumber); 
 		ArrayList<TransitionBuildingPair> map1Pairs = transitionPairsMapping.get(map1).get(map2);
-		for(TransitionBuildingPair pair: map1Pairs) {
-			if(pair.getPairName().equals(pairName)) {
+		for (TransitionBuildingPair pair: map1Pairs) {
+			if (pair.getPairName().equals(pairName)) {
 				//System.out.println("Found pair: " +pairName);
 				map1Pairs.remove(pair);
 				transitionPairsMapping.get(map2).get(map1).remove(pair);
@@ -225,7 +225,7 @@ public class TransitionBuildingData {
 	}
 	
 	public void save() {
-		if(saved) return;
+		if (saved) return;
 		saved = true;
 		
 		FileWriter writer;
@@ -234,13 +234,13 @@ public class TransitionBuildingData {
 			writer.write("#File is auto generated. Please do not edit.\n\n");
 			
 			//Group Trigger
-			for(int currGroupTrigger = 0; currGroupTrigger < groupTriggers.length; ++currGroupTrigger) {
+			for (int currGroupTrigger = 0; currGroupTrigger < groupTriggers.length; ++currGroupTrigger) {
 				writer.write("#Exiting to the "+directions[currGroupTrigger]+" of the "+(currGroupTrigger<2?"Horizontal":"Vertical")+" Transition Building\n");
 				writer.write("GroupTrigger " +groupTriggers[currGroupTrigger].getName() +" {\n" + groupTriggers[currGroupTrigger].triggerDataAsString() + "}\n\n");
 			}
 			
 			//Map Transition Triggers
-			for(MapTransitionTrigger trig: transitionTriggers.values()){
+			for (MapTransitionTrigger trig: transitionTriggers.values()){
 				writer.write("MapTransitionTrigger " +trig.getName() +" {\n" + trig.triggerDataAsString() + "}\n\n");
 			}
 			
@@ -248,7 +248,7 @@ public class TransitionBuildingData {
 			//Info triggers
 			GroupTrigger gt = new GroupTrigger(infoTriggerGT.getName(),"");
 			
-			for(TransitionBuildingPair pair: allTransitionPairs) {
+			for (TransitionBuildingPair pair: allTransitionPairs) {
 				EventTrigger trig = pair.getInfoTrigger();
 				gt.triggers.add(trig.getName());
 				writer.write("EventTrigger " +trig.getName() +" {\n" + trig.triggerDataAsString() + "}\n\n");
@@ -264,14 +264,14 @@ public class TransitionBuildingData {
 			File dialogFile = new File(mapMaker.root.getPath()+MapMaker.FILE_SLASH+TransitionBuildingDialogFile);
 		
 			//Create file if it doesn't exist
-			if(!dialogFile.exists()) {
+			if (!dialogFile.exists()) {
 				dialogFile.getParentFile().mkdirs();
 				dialogFile.createNewFile();
 			}
 			
 			writer = new FileWriter(dialogFile);
 			
-			for(TransitionBuildingPair pair: allTransitionPairs) {
+			for (TransitionBuildingPair pair: allTransitionPairs) {
 				writer.write(pair.getInfoDialog(mapMaker) +"\n\n");
 			}
 			
@@ -300,14 +300,14 @@ public class TransitionBuildingData {
 		
 		int directionStartIndex = 0; //Horizontal
 		
-		if(!horizontal) {
+		if (!horizontal) {
 			directionStartIndex = 2; //Vertical
 		}
 		
 		String conditionString = "condition: " +pair.getConditionString()+"\n"
 				+"global: !"+pair.getGlobalString();
 		
-		if(isMap1Entrance) {
+		if (isMap1Entrance) {
 			pair.map1Entrance = mapEntrance;
 			
 			groupTriggers[directionStartIndex].triggers.add(pairName +"_"+directions[directionStartIndex] +"Door");
@@ -340,14 +340,14 @@ public class TransitionBuildingData {
 		
 		int directionStartIndex = 0; //Horizontal
 		
-		if(!pair.horizontal) {
+		if (!pair.horizontal) {
 			directionStartIndex = 2; //Vertical
 		}
 		
 		String conditionString = "condition: " +pair.getConditionString()+"\n"
 				+"global: !"+pair.getGlobalString();
 		
-		if(pair.map1Entrance == null) {
+		if (pair.map1Entrance == null) {
 			pair.map1Entrance = otherMapEntrance;
 			
 			groupTriggers[directionStartIndex].triggers.add(pairName +"_"+directions[directionStartIndex] +"Door");
@@ -385,11 +385,11 @@ public class TransitionBuildingData {
 		
 		int directionStartIndex = 0; //Horizontal
 		
-		if(!pair.horizontal) {
+		if (!pair.horizontal) {
 			directionStartIndex = 2; //Vertical
 		}
 		
-		if(removeMap1) {
+		if (removeMap1) {
 			groupTriggers[directionStartIndex].triggers.remove(pairName +"_"+directions[directionStartIndex] +"Door");
 			
 			//Remove map transition trigger
@@ -408,7 +408,7 @@ public class TransitionBuildingData {
 			pair.area2 = 0;
 		}
 		
-		if(incompletePairs.contains(pair)){
+		if (incompletePairs.contains(pair)){
 			incompletePairs.remove(pair);
 			removeTransition(pair);
 		}
@@ -430,13 +430,13 @@ public class TransitionBuildingData {
 		transitionTriggers.remove(pair.map1 +"_"+pair.map1Entrance);
 		transitionTriggers.remove(pair.map2 +"_"+pair.map2Entrance);
 		
-		if(pair.horizontal) {
-			for(int currDir = 0; currDir < 2; ++currDir) {
+		if (pair.horizontal) {
+			for (int currDir = 0; currDir < 2; ++currDir) {
 				groupTriggers[currDir].triggers.remove(pairName +"_"+directions[currDir] +"Door");
 			}
 		}
 		else {
-			for(int currDir = 2; currDir < 4; ++currDir) {
+			for (int currDir = 2; currDir < 4; ++currDir) {
 				groupTriggers[currDir].triggers.remove(pairName +"_"+directions[currDir] +"Door");
 			}
 		}
@@ -456,8 +456,8 @@ public class TransitionBuildingData {
 	public TransitionBuildingPair[] getIncompleteTransitionPairsForMap(String mapName) {
 		ArrayList<TransitionBuildingPair> list = new ArrayList<>();
 		
-		for(TransitionBuildingPair pair: incompletePairs) {
-			if((pair.map1.equals(mapName) && pair.map1Entrance == null) ||(pair.map2.equals(mapName) && pair.map2Entrance == null)) {
+		for (TransitionBuildingPair pair: incompletePairs) {
+			if ((pair.map1.equals(mapName) && pair.map1Entrance == null) ||(pair.map2.equals(mapName) && pair.map2Entrance == null)) {
 				list.add(pair);
 			}
 		}

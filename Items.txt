@@ -34,7 +34,7 @@ Bicycle
 	Cat: KEYITEM
 	Desc: A folding Bicycle that enables much faster movement than the Running Shoes.
 	TrainerUse:
-		// TODO: if(Can ride bike) Set the bike as a 'currentlyUsing' item
+		// TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
 		// May need to make this take in info on the route
 		return false;
 		+++
@@ -55,7 +55,7 @@ Fishing Rod
 	Cat: KEYITEM
 	Desc: A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.
 	TrainerUse:
-		// TODO: if(spot in front of player is a fishing spot) Set as 'currentlyUsing'
+		// TODO: if (spot in front of player is a fishing spot) Set as 'currentlyUsing'
 		// May need to make this take in info on the route
 		return false;
 		+++
@@ -1716,7 +1716,7 @@ Elixir
 	Fling: 30
 	PokemonUse:
 		boolean changed = false;
-		for(Move m : p.getMoves())
+		for (Move m : p.getMoves())
 		{
 			changed |= m.increasePP(10);
 		}
@@ -1733,7 +1733,7 @@ Max Elixir
 	Fling: 30
 	PokemonUse:
 		boolean changed = false;
-		for(Move m : p.getMoves())
+		for (Move m : p.getMoves())
 		{
 			changed |= m.increasePP(m.getMaxPP());
 		}
@@ -2245,7 +2245,7 @@ Dive Ball
 	Fling: 30
 	CatchRate:
 		// TODO: How do I see if the user is underwater, surfing, or fishing?
-		if(false) return new double[]{3.5, 0};
+		if (false) return new double[]{3.5, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2258,7 +2258,7 @@ Dusk Ball
 	Fling: 30
 	CatchRate:
 		// TODO: How do I see if the user is in a dark environment?
-		if(false) return new double[]{3.5, 0};
+		if (false) return new double[]{3.5, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2270,7 +2270,7 @@ Fast Ball
 	Price: 200
 	Fling: 30
 	CatchRate:
-		if(o.getStat(Stat.SPEED) >= 100) return new double[]{4, 0};
+		if (o.getStat(Stat.SPEED) >= 100) return new double[]{4, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2297,7 +2297,7 @@ Heal Ball
 		+++
 	AfterCaught:
 		p.healHealthFraction(1);
-		for(Move m : p.getMoves()) m.increasePP(m.getAttack().getPP());
+		for (Move m : p.getMoves()) m.increasePP(m.getAttack().getPP());
 		+++
 *
 Heavy Ball
@@ -2313,9 +2313,9 @@ Heavy Ball
 		double[] res = new double[2];
 		res[0] = 1;
 		
-		if(weight <= 451.5) res[1] = -20;
-		else if(weight <= 661.5) res[1] = 20;
-		else if(weight <= 903.0) res[1] = 30;
+		if (weight <= 451.5) res[1] = -20;
+		else if (weight <= 661.5) res[1] = 20;
+		else if (weight <= 903.0) res[1] = 30;
 		else res[1] = 40;
 		
 		return res;
@@ -2329,9 +2329,9 @@ Level Ball
 	Price: 200
 	Fling: 30
 	CatchRate:
-		if(me.getLevel()/4 > o.getLevel()) return new double[]{8, 0};
-		else if(me.getLevel()/2 > o.getLevel()) return new double[]{4, 0};
-		else if(me.getLevel() > o.getLevel()) return new double[]{2, 0};
+		if (me.getLevel()/4 > o.getLevel()) return new double[]{8, 0};
+		else if (me.getLevel()/2 > o.getLevel()) return new double[]{4, 0};
+		else if (me.getLevel() > o.getLevel()) return new double[]{2, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2343,7 +2343,7 @@ Love Ball
 	Price: 200
 	Fling: 30
 	CatchRate:
-		if(me.getGender() == o.getGender()) return new double[]{8, 0};
+		if (me.getGender() == o.getGender()) return new double[]{8, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2355,7 +2355,7 @@ Lure Ball
 	Price: 200
 	Fling: 30
 	CatchRate:
-		if(false) return new double[]{3, 0};
+		if (false) return new double[]{3, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2403,8 +2403,8 @@ Nest Ball
 	Price: 1000
 	Fling: 30
 	CatchRate:
-		if(o.getLevel() <= 19) return new double[]{3, 0};
-		else if(o.getLevel() <= 29) return new double[]{2, 0};
+		if (o.getLevel() <= 19) return new double[]{3, 0};
+		else if (o.getLevel() <= 29) return new double[]{2, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2416,7 +2416,7 @@ Net Ball
 	Price: 1000
 	Fling: 30
 	CatchRate:
-		if(o.isType(Type.WATER) || o.isType(Type.BUG)) return new double[]{3, 0};
+		if (o.isType(Type.WATER) || o.isType(Type.BUG)) return new double[]{3, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2451,7 +2451,7 @@ Quick Ball
 	Price: 1000
 	Fling: 30
 	CatchRate:
-		if(b.getTurn() == 1) return new double[]{3, 0};
+		if (b.getTurn() == 1) return new double[]{3, 0};
 		else return new double[]{1, 0};
 		+++
 *
@@ -2486,9 +2486,9 @@ Timer Ball
 	Price: 1000
 	Fling: 30
 	CatchRate:
-		if(b.getTurn() <= 10) return new double[]{1, 0};
-		else if(b.getTurn() <= 20) return new double[]{2, 0};
-		else if(b.getTurn() <= 30) return new double[]{3, 0};
+		if (b.getTurn() <= 10) return new double[]{1, 0};
+		else if (b.getTurn() <= 20) return new double[]{2, 0};
+		else if (b.getTurn() <= 30) return new double[]{3, 0};
 		else return new double[]{4, 0};
 		+++
 *
@@ -2573,9 +2573,9 @@ Leppa Berry
 	NGType: FIGHTING
 	NGPow: 60
 	Apply:
-		for(Move m : victim.getMoves())
+		for (Move m : victim.getMoves())
 		{
-			if(m.getPP() == 0)
+			if (m.getPP() == 0)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " restored " + m.getAttack().getName() + "'s PP!");
 				m.increasePP(10);

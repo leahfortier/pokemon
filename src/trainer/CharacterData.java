@@ -90,7 +90,7 @@ public class CharacterData extends Trainer implements Serializable
 	
 	public void giveBadge(int n)
 	{
-		if(!badges[n])
+		if (!badges[n])
 		{
 			numBadges++;
 			badges[n] = true;
@@ -433,14 +433,14 @@ public class CharacterData extends Trainer implements Serializable
 	
 	private void printGlobals() {
 		//List all the globals for this saved character
-		for(String s: definedGlobals) {
+		for (String s: definedGlobals) {
 			System.out.println(s);
 		}
 		System.out.println();
 	}
 	
 	private void updateGlobals (boolean printGlobals) {
-		if(printGlobals) {
+		if (printGlobals) {
 			System.out.println("Old Globals:");
 			printGlobals();
 		}
@@ -450,7 +450,7 @@ public class CharacterData extends Trainer implements Serializable
 		updateGlobals_from_2014_01_30_to_2014_08_14();
 		
 		
-		if(printGlobals) {
+		if (printGlobals) {
 			System.out.println("New Globals:");
 			printGlobals();
 		}
@@ -458,14 +458,14 @@ public class CharacterData extends Trainer implements Serializable
 	
 	private void replaceGlobals(String[][][] globalsToChange)
 	{
-		for(int currGlobal = 0; currGlobal < globalsToChange.length; ++currGlobal) {
+		for (int currGlobal = 0; currGlobal < globalsToChange.length; ++currGlobal) {
 			boolean containsGlobal = false;
-			for(int prevGlobal = 0; prevGlobal < globalsToChange[currGlobal][0].length; ++prevGlobal) {
+			for (int prevGlobal = 0; prevGlobal < globalsToChange[currGlobal][0].length; ++prevGlobal) {
 				containsGlobal |= definedGlobals.remove(globalsToChange[currGlobal][0][prevGlobal]);
 			}
 			
-			if(containsGlobal) {
-				for(int newGlobal = 0; newGlobal < globalsToChange[currGlobal][1].length; ++newGlobal) {
+			if (containsGlobal) {
+				for (int newGlobal = 0; newGlobal < globalsToChange[currGlobal][1].length; ++newGlobal) {
 					addGlobal(globalsToChange[currGlobal][1][newGlobal]);
 				}
 			}
@@ -497,25 +497,25 @@ public class CharacterData extends Trainer implements Serializable
 	private void updateGlobals_from_2014_01_30_to_2014_08_14 () {
 		
 		//If someone was in the Tom Town pokecenter before update.
-		if(definedGlobals.contains("PC_TomTown")) {
+		if (definedGlobals.contains("PC_TomTown")) {
 			previousMapName = "Tom_Town";
 		}
 		
 		//If someone was in the RSA Town pokecenter before update.
-		if(definedGlobals.contains("PC_RSA")) {
+		if (definedGlobals.contains("PC_RSA")) {
 			previousMapName = "RSATown";
 		}
 		
 		//If someone was in the Horizontal Transition Building before update.
-		if(definedGlobals.contains("TBH_DFS") || definedGlobals.contains("TBH_RSA_L")) {
+		if (definedGlobals.contains("TBH_DFS") || definedGlobals.contains("TBH_RSA_L")) {
 			previousMapName = "RSATown";
 			mapEntranceName = "WestDoor";
 		}
-		else if(definedGlobals.contains("TBH_RSA_R") || definedGlobals.contains("TBH_BFM_L")) {
+		else if (definedGlobals.contains("TBH_RSA_R") || definedGlobals.contains("TBH_BFM_L")) {
 			previousMapName = "Bloom_Filter_Meadow";
 			mapEntranceName = "WestDoor";
 		}
-		else if(definedGlobals.contains("TBH_BFM_R") || definedGlobals.contains("TBH_TomTown_L")) {
+		else if (definedGlobals.contains("TBH_BFM_R") || definedGlobals.contains("TBH_TomTown_L")) {
 			previousMapName = "Tom_Town";
 			mapEntranceName = "WestDoor";
 		}

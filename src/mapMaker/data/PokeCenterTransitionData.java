@@ -48,16 +48,16 @@ public class PokeCenterTransitionData {
 			String name = m.group(2);
 			Trigger trig = GameData.createTrigger(type, name, m.group(3));
 			
-			if(type.equals("Group")) {
+			if (type.equals("Group")) {
 				groupTrigger = (GroupTrigger)trig;
 			}
-			else if(type.equals("MapTransition")) {
+			else if (type.equals("MapTransition")) {
 				MapTransitionTrigger transitionTrig = (MapTransitionTrigger)trig;
 				transitionTriggers.put(transitionTrig.mapName +"_"+transitionTrig.mapEntranceName, transitionTrig);
 			}
 		}
 		
-		if(groupTrigger == null) {
+		if (groupTrigger == null) {
 			groupTrigger = new GroupTrigger("GroupTrigger_PokeCenter_Exit","trigger: SetTeleportToLastPokeCenter");
 		}
 	}
@@ -93,7 +93,7 @@ public class PokeCenterTransitionData {
 	}
 
 	public void save() {
-		if(saved) return;
+		if (saved) return;
 		saved = true;
 		
 		FileWriter writer;
@@ -102,7 +102,7 @@ public class PokeCenterTransitionData {
 		
 			writer.write("GroupTrigger " +groupTrigger.getName() +" {\n" + groupTrigger.triggerDataAsString() + "}\n\n");
 			
-			for(String mapTransition: transitionTriggers.keySet()) {
+			for (String mapTransition: transitionTriggers.keySet()) {
 				
 				MapTransitionTrigger trig = transitionTriggers.get(mapTransition);
 				writer.write("MapTransitionTrigger " +trig.getName() +" {\n" + trig.triggerDataAsString() + "}\n\n");

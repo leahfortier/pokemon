@@ -52,6 +52,7 @@ import battle.effect.Weather;
 public abstract class Attack implements Serializable 
 {
 	private static final long serialVersionUID = 1L;
+	
 	private static HashMap<String, Attack> map; // Mappity map
 	private static List<String> moveNames;
 	private static HashSet<String> validMoveTypes;
@@ -74,7 +75,9 @@ public abstract class Attack implements Serializable
 
 	public static enum Category implements Serializable
 	{
-		PHYSICAL(0x23), SPECIAL(0x24), STATUS(0x25);
+		PHYSICAL(0x23), 
+		SPECIAL(0x24), 
+		STATUS(0x25);
 
 		private String name;
 		private int imageNumber;
@@ -1258,7 +1261,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 
-			switch(b.getWeather().getType())
+			switch (b.getWeather().getType())
 			{
 				case CLEAR_SKIES:
 				victim.healHealthFraction(1/2.0);
@@ -1411,7 +1414,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			switch(b.getWeather().getType())
+			switch (b.getWeather().getType())
 			{
 				case SUNNY:
 				case CLEAR_SKIES:
@@ -2121,7 +2124,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 
-			switch(b.getWeather().getType())
+			switch (b.getWeather().getType())
 			{
 				case CLEAR_SKIES:
 				victim.healHealthFraction(1/2.0);
@@ -2614,7 +2617,7 @@ public abstract class Attack implements Serializable
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			switch(b.getWeather().getType())
+			switch (b.getWeather().getType())
 			{
 				case RAINING:
 				return 100;
@@ -2906,7 +2909,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			if (e.getTurns() <= 0) Global.error("Stockpile turns should never be nonpositive");
-			switch(e.getTurns())
+			switch (e.getTurns())
 			{
 				case 1:
 				victim.healHealthFraction(1/4.0);
@@ -3141,7 +3144,7 @@ public abstract class Attack implements Serializable
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			switch(b.getWeather().getType())
+			switch (b.getWeather().getType())
 			{
 				case RAINING:
 				return 100;
@@ -3633,7 +3636,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 
-			switch(b.getWeather().getType())
+			switch (b.getWeather().getType())
 			{
 				case CLEAR_SKIES:
 				victim.healHealthFraction(1/2.0);
@@ -8012,7 +8015,7 @@ public abstract class Attack implements Serializable
 		public Type getType(Battle b, ActivePokemon user)
 		{
 			if (user.hasAbility("Normalize")) return Type.NORMAL;
-			switch(b.getWeather().getType())
+			switch (b.getWeather().getType())
 			{
 				case SUNNY:
 				return Type.FIRE;
@@ -9500,7 +9503,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			switch(o.getAbility().getName())
+			switch (o.getAbility().getName())
 			{
 				case "Wonder Guard":
 				case "Multitype":
@@ -9978,7 +9981,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			switch(o.getAbility().getName())
+			switch (o.getAbility().getName())
 			{
 				case "Truant":
 				case "Multitype":
@@ -10024,7 +10027,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			switch(o.getAbility().getName())
+			switch (o.getAbility().getName())
 			{
 				case "Truant":
 				case "Multitype":

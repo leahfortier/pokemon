@@ -92,7 +92,7 @@ public enum Stat
 		
 		if ((s.user ? p : opp).getMove() != null) list.add((s.user ? p : opp).getAttack()); // User Attack
 		
-		s = applyStatSwitch(list, s);
+		s = applyStatswitch (list, s);
 				
 		// Get the stat and stage
 		int stage = p.getStage(s.index), stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(s);
@@ -124,7 +124,7 @@ public enum Stat
 		return stat;
 	}
 	
-	private static Stat applyStatSwitch(List<Object> list, Stat s)
+	private static Stat applyStatswitch (List<Object> list, Stat s)
 	{
 		for (Object o : list)
 		{

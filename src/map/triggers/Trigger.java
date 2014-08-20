@@ -23,7 +23,7 @@ public abstract class Trigger {
 		
 		globals = new ArrayList<String>();
 		Matcher m = globalPattern.matcher(str);
-		while(m.find()){
+		while (m.find()){
 			globals.add(m.group(1));
 		}
 		
@@ -40,8 +40,8 @@ public abstract class Trigger {
 	}
 	
 	public void execute(Game game) {
-		for(String s: globals){
-			if(s.charAt(0) == '!')
+		for (String s: globals){
+			if (s.charAt(0) == '!')
 				game.charData.removeGlobal(s.substring(1));
 			else game.charData.addGlobal(s);
 		}
@@ -54,11 +54,11 @@ public abstract class Trigger {
 	public String triggerDataAsString() {
 		StringBuilder ret = new StringBuilder();
 		
-		if(!condition.getOriginalConditionString().equals("")) {
+		if (!condition.getOriginalConditionString().equals("")) {
 			ret.append("\tcondition: " +condition.getOriginalConditionString() +"\n");
 		}
 		
-		for(String global: globals) {
+		for (String global: globals) {
 			ret.append("\tglobal: "+ global +"\n");
 		}
 		

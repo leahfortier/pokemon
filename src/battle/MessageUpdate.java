@@ -352,12 +352,12 @@ public class MessageUpdate
 		return updateType == Update.EXIT_BATTLE;
 	}
 	
-	public boolean promptSwitch()
+	public boolean promptswitch ()
 	{
 		return updateType == Update.PROMPT_SWITCH;
 	}
 	
-	public boolean forceSwitch()
+	public boolean forceswitch ()
 	{
 		return updateType == Update.FORCE_SWITCH;
 	}

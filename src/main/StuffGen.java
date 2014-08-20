@@ -497,7 +497,7 @@ public class StuffGen
 			if (!canHave) 
 			{
 				failure += first ? "" : " || ";
-				switch(superClass)
+				switch (superClass)
 				{ 
 					case "PokemonEffect":
 						failure += "victim.hasEffect(\""+name+"\")";
@@ -624,7 +624,7 @@ public class StuffGen
 				String field = moveFields.get(split[0]);
 				if (field == null)
 				{
-					switch(split[0])
+					switch (split[0])
 					{
 						case "ApplyEffects":
 							applyEffects = readFunction(in, line, split[1]);
@@ -1002,7 +1002,7 @@ public class StuffGen
 				String[] split = line.split(":", 2);
 				split[1] = split[1].trim();
 
-				switch(split[0])
+				switch (split[0])
 				{
 					case "Type":
 						if (!effectClasses.containsKey(split[1])) Global.error("Undefined Pokemon Ability Type "+split[1]+". (Effect: "+name+")");
@@ -1216,7 +1216,7 @@ public class StuffGen
 
 		// Read in everything up to the cut off from Item.java
 		String s = readLine(in);
-		while(s != null && !s.endsWith("// EVERYTHING BELOW IS GENERATED +++"))
+		while (s != null && !s.endsWith("// EVERYTHING BELOW IS GENERATED +++"))
 		{
 			orig.append(s); orig.append('\n');
 			s = readLine(in);
@@ -1231,11 +1231,11 @@ public class StuffGen
 		int index = 0;
 		StringBuilder indexOut = new StringBuilder();
 		StringBuilder out = new StringBuilder();
-		while(in.hasNextLine())
+		while (in.hasNextLine())
 		{
 			s = readLine(in);
 
-			if(s.trim().length() == 0 || s.trim().charAt(0) == '#') continue;
+			if (s.trim().length() == 0 || s.trim().charAt(0) == '#') continue;
 
 			HashMap<String, String> fields = new HashMap<>();
 			HashSet<String> interfaces = new HashSet<>();
@@ -1250,27 +1250,27 @@ public class StuffGen
 			// it assumes that that is the only information, otherwise it will read in the following lines,
 			// up to a line which is just "+++", used to include full functions.
 			String field = readLine(in);
-			while(!field.trim().equals("*"))
+			while (!field.trim().equals("*"))
 			{
 				String[] tmp = field.split(":");
 
-				if(tmp.length > 1)
+				if (tmp.length > 1)
 				{
 					// TODO: Put a check to see if the field is valid
 					fields.put(tmp[0].trim(), tmp[1].trim());
 
-					if(tmp[0].trim().equals("Int"))
+					if (tmp[0].trim().equals("Int"))
 					{
 						interfaceString = tmp[1].trim();
 						String[] tmp3 = interfaceString.split(",");
-						for(String t : tmp3) interfaces.add(t.trim());
+						for (String t : tmp3) interfaces.add(t.trim());
 					}
 				}
 				else
 				{
 					StringBuilder func = new StringBuilder();
 					String tmp2 = readLine(in);
-					while(!tmp2.trim().equals("+++"))
+					while (!tmp2.trim().equals("+++"))
 					{
 						func.append(tmp2.trim());
 						
@@ -1631,7 +1631,7 @@ public class StuffGen
 			
 			if (interfaces.contains("TakeDamageEffect"))
 			{
-				if(!fields.containsKey("OnTakeDamage")) Global.error(fields.get("ClassName") + " must have an OnTakeDamage field, since it implements TakeDamageEffect.");
+				if (!fields.containsKey("OnTakeDamage")) Global.error(fields.get("ClassName") + " must have an OnTakeDamage field, since it implements TakeDamageEffect.");
 				else out.append("public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim){"+fields.get("OnTakeDamage")+"}");
 				fields.remove("OnTakeDamage");
 			}
@@ -1715,7 +1715,7 @@ public class StuffGen
 	private static String readLine(Scanner in)
 	{
 		String res = in.nextLine();
-		if(res.length() > 0 && res.charAt(res.length()-1) == '\n') res = res.substring(0, res.length()-1);
+		if (res.length() > 0 && res.charAt(res.length()-1) == '\n') res = res.substring(0, res.length()-1);
 		return res;
 	}
 	

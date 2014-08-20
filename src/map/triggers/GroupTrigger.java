@@ -13,17 +13,17 @@ public class GroupTrigger extends Trigger{
 		super(name, contents);
 		triggers = new ArrayList<>();
 		Matcher m = variablePattern.matcher(contents);
-		while(m.find()){
-			if(m.group(1).equals("trigger"))
+		while (m.find()){
+			if (m.group(1).equals("trigger"))
 				triggers.add(m.group(2));
 		}
 	}
 	@Override
 	public void execute(Game game){
 		super.execute(game);
-		for(String s: triggers){
+		for (String s: triggers){
 			Trigger trig = game.data.getTrigger(s);
-			if(trig != null && trig.isTriggered(game.charData)){
+			if (trig != null && trig.isTriggered(game.charData)){
 				trig.execute(game);
 			}
 		}
@@ -38,7 +38,7 @@ public class GroupTrigger extends Trigger{
 	public String triggerDataAsString() {
 		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
 		
-		for(String trigger: triggers) {
+		for (String trigger: triggers) {
 			ret.append("\ttrigger: " +trigger +"\n");
 		}
 		

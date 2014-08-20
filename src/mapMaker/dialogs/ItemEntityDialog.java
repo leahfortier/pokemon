@@ -47,7 +47,7 @@ public class ItemEntityDialog extends JPanel {
 			  public void checkItem() {
 				  String itemName = itemTextField.getText().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642");
 				  itemName = convertToProperCase(itemName);
-				  if(!Item.exists(itemName)) {
+				  if (!Item.exists(itemName)) {
 					  itemImageLabel.setIcon(null);
 					  itemTextField.setBackground(new Color(0xFF9494));
 					  return;
@@ -128,7 +128,7 @@ public class ItemEntityDialog extends JPanel {
 		
 		String item = getItemName();
 		
-		if(!Item.exists(item))
+		if (!Item.exists(item))
 			return null;
 		
 		return new ItemEntityData(
@@ -143,15 +143,15 @@ public class ItemEntityDialog extends JPanel {
 		StringBuilder s = new StringBuilder();
 		string = string.trim();
 		
-		while(string.length() != 0) {
+		while (string.length() != 0) {
 			s.append(string.substring(0, 1).toUpperCase());
 			string = string.substring(1, string.length());
 			
-			if(string.length() == 0)
+			if (string.length() == 0)
 				break;
 			int index = string.indexOf(' ');
 			
-			if(index == -1) {
+			if (index == -1) {
 				s.append(string.substring(0,string.length()));
 				string = "";
 			}

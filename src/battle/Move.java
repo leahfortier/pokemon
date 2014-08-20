@@ -104,7 +104,7 @@ public class Move implements Serializable
 		
 		maxPP += n*move.getPP()/5;
 		
-		if(maxPP > true_max) maxPP = true_max;
+		if (maxPP > true_max) maxPP = true_max;
 		return true;
 	}
 	

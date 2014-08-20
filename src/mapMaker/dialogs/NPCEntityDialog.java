@@ -170,14 +170,14 @@ public class NPCEntityDialog extends JPanel {
 				
 				TrainerDataDialog dialog = new TrainerDataDialog();
 				
-				if(trainerDataTextArea.getText().trim().length() != 0)
+				if (trainerDataTextArea.getText().trim().length() != 0)
 					dialog.setTrainerData(trainerDataTextArea.getText().trim());
 
 				Object[] options = {"Done", "Cancel"};
 				
 				int results = JOptionPane.showOptionDialog(mapMaker, dialog, "Trainer Data Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 				
-				if(results == JOptionPane.CLOSED_OPTION || results == 1)
+				if (results == JOptionPane.CLOSED_OPTION || results == 1)
 					return;
 				
 				trainerDataTextArea.setText(dialog.getTrainerData());
@@ -313,7 +313,7 @@ public class NPCEntityDialog extends JPanel {
 	private ImageIcon[] getTrainerSprites() {
 		ArrayList<ImageIcon> icons = new ArrayList<>();
 		
-		for(int curr = 0; mapMaker.getTileFromSet("Trainer", 12*curr +4) != null; ++curr) {
+		for (int curr = 0; mapMaker.getTileFromSet("Trainer", 12*curr +4) != null; ++curr) {
 			icons.add(new ImageIcon(mapMaker.getTileFromSet("Trainer", 12*curr +4), ""+curr));
 		}
 		
@@ -329,19 +329,19 @@ public class NPCEntityDialog extends JPanel {
 		conditionTextField.setText(npc.condition.getOriginalConditionString().replace("&"," & ").replace("|"," | "));
 		
 		StringBuilder dialogue = new StringBuilder();
-		for(String currentDialogue: npc.firstDialogue) {
+		for (String currentDialogue: npc.firstDialogue) {
 			dialogue.append(currentDialogue +"\n");
 		}
 		firstDialogueTextArea.setText(dialogue.toString().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642"));
-		if(firstDialogueTextArea.getText().trim().length() == 0) {
+		if (firstDialogueTextArea.getText().trim().length() == 0) {
 			firstDialogueTextArea.setText("I have no dialogue yet.");
 		}
 		
 		
 		dialogue.delete(0, dialogue.length());
 		
-		if(npc.secondDialogue != null){
-			for(String currentDialogue: npc.secondDialogue) {
+		if (npc.secondDialogue != null){
+			for (String currentDialogue: npc.secondDialogue) {
 				dialogue.append(currentDialogue +"\n");
 			}
 			secondDialogueTextArea.setText(dialogue.toString().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642"));

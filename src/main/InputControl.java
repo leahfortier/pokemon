@@ -111,15 +111,15 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	// Gives you the lock. Careful you don't loose that. -1 means unable to aquire lock
 	public int getLock()
 	{
-		if(lock != INVALID_LOCK) return INVALID_LOCK;
-		while((lock = (int)Math.random()*Integer.MAX_VALUE) == -1);
+		if (lock != INVALID_LOCK) return INVALID_LOCK;
+		while ((lock = (int)Math.random()*Integer.MAX_VALUE) == -1);
 		return lock;
 	}
 	
 	// Releases the lock if you have it.
 	public boolean releaseLock(int key)
 	{
-		if(lock != key) return false;
+		if (lock != key) return false;
 		
 		lock = INVALID_LOCK;
 		return true;
@@ -128,7 +128,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	// If there is no lock currently, return the correct value, else return false
 	public boolean isDown(Control c)
 	{
-		if(lock != INVALID_LOCK) return false;
+		if (lock != INVALID_LOCK) return false;
 		return keyMap.get(c).isDown();
 	}
 	
@@ -136,18 +136,18 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	// return false
 	public boolean isDown(Control c, int key)
 	{
-		if(key == INVALID_LOCK || lock == key) return keyMap.get(c).isDown;
+		if (key == INVALID_LOCK || lock == key) return keyMap.get(c).isDown;
 		return false;
 	}
 	
 	public void consumeKey(Control c)
 	{
-		if(lock == INVALID_LOCK) keyMap.get(c).consume();
+		if (lock == INVALID_LOCK) keyMap.get(c).consume();
 	}
 	
 	public void consumeKey(Control c, int key)
 	{
-		if(lock == key) keyMap.get(c).consume();
+		if (lock == key) keyMap.get(c).consume();
 	}
 
 	public void resetKeys()
@@ -230,9 +230,9 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	
 	private boolean isIgnored(char c)
 	{
-		for(char cc : ignoredInputCharacters)
+		for (char cc : ignoredInputCharacters)
 		{
-			if(c == cc) return true;
+			if (c == cc) return true;
 		}
 		
 		return false;

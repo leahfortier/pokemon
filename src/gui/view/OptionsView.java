@@ -26,7 +26,7 @@ public class OptionsView extends View
 
 	public void update(int dt, InputControl input, Game game)
 	{
-		if(input.mouseDown)
+		if (input.mouseDown)
 		{
 			input.consumeMousePress();
 			
@@ -34,7 +34,7 @@ public class OptionsView extends View
 			Global.toggleMusic();
 		}
 		
-		if(input.isDown(Control.ESC))
+		if (input.isDown(Control.ESC))
 		{
 			input.consumeKey(Control.ESC);
 			game.setViewMode(ViewMode.MAP_VIEW);
@@ -56,7 +56,7 @@ public class OptionsView extends View
 		g.setFont(Global.getFont(150));
 		g.drawString("VOLUME", d.width/2 - 245, d.height/4 + 50);
 		
-		if(musicOn)
+		if (musicOn)
 		{
 			g.setColor(Color.GREEN);
 			g.fillRect(d.width/2, d.height/2 - 50, 200, 100);

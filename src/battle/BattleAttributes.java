@@ -241,7 +241,7 @@ public class BattleAttributes implements Serializable
 		else if (val == -1) change = "lowered";
 		else if (val <= -2) change = "sharply lowered";
 		
-		switch(source)
+		switch (source)
 		{
 			case ATTACK:
 				b.addMessage(victim.getName()+"'s "+statName+" was "+change+"!");

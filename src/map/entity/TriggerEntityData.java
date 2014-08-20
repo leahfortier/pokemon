@@ -13,8 +13,8 @@ public class TriggerEntityData extends EntityData{
 		entity = null;
 		
 		Matcher m = variablePattern.matcher(contents);
-		while(m.find()){
-			switch(m.group(1)){
+		while (m.find()){
+			switch (m.group(1)){
 			case "x":
 				x = Integer.parseInt(m.group(2));
 				break;
@@ -37,7 +37,7 @@ public class TriggerEntityData extends EntityData{
 	}
 	
 	public Entity getEntity(){
-		if(entity == null){
+		if (entity == null){
 			entity = new TriggerEntity(x, y, trigger);
 		}
 		return entity;
@@ -48,7 +48,7 @@ public class TriggerEntityData extends EntityData{
 		StringBuilder ret = new StringBuilder();
 		ret.append("Trigger " +name +"{\n");
 		
-		if(!condition.getOriginalConditionString().equals(""))
+		if (!condition.getOriginalConditionString().equals(""))
 			ret.append("\tcondition: " +condition.getOriginalConditionString()+"\n");
 		
 		ret.append("\tx: " +x +"\n");

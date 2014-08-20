@@ -17,8 +17,8 @@ public class ItemEntityData extends EntityData{
 		condition.add("!has"+name, '&');
 		
 		Matcher m = variablePattern.matcher(contents);
-		while(m.find()){
-			switch(m.group(1)){
+		while (m.find()){
+			switch (m.group(1)){
 			case "x":
 				x = Integer.parseInt(m.group(2));
 				break;
@@ -49,7 +49,7 @@ public class ItemEntityData extends EntityData{
 	}
 	
 	public Entity getEntity(){
-		if(entity == null){
+		if (entity == null){
 			entity = new ItemEntity(name, x, y, item);
 		}
 		return entity;
@@ -63,7 +63,7 @@ public class ItemEntityData extends EntityData{
 		StringBuilder ret = new StringBuilder();
 		ret.append("Item " +name +"{\n");
 		
-		if(!placedCondition.equals(""))
+		if (!placedCondition.equals(""))
 			ret.append("\tcondition: " +placedCondition +"\n");
 		
 		ret.append("\tx: " +x +"\n");

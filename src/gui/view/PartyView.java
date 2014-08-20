@@ -71,7 +71,7 @@ public class PartyView extends View
 		buttons = new Button[NUM_BUTTONS];
 		tabButtons = new Button[Trainer.MAX_POKEMON];
 		moveButtons = new Button[Move.MAX_MOVES];
-		for(int i = 0; i < Trainer.MAX_POKEMON; i++) //r u l d
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++) //r u l d
 		{
 			buttons[i] = tabButtons[i] = new Button(39 + i*120, 39, 122, 55, boxHoverAction, 
 					new int[] {i == Trainer.MAX_POKEMON - 1 ? 0 : i + 1, // Right 
@@ -80,7 +80,7 @@ public class PartyView extends View
 							MOVES}); // Down
 		}
 		
-		for(int i = 0; i < Move.MAX_MOVES; i++)
+		for (int i = 0; i < Move.MAX_MOVES; i++)
 		{
 			buttons[MOVES + i] = moveButtons[i] = new Button(426, 266+i*49, 293, 40, boxHoverAction, 
 					new int[] {-1, // Right
@@ -99,7 +99,7 @@ public class PartyView extends View
 	{
 		selectedButton = Button.update(buttons, selectedButton, input);
 		
-		for(int i = 0; i < Trainer.MAX_POKEMON; i++)
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
 		{
 			if (tabButtons[i].isPress())
 			{
@@ -387,7 +387,7 @@ public class PartyView extends View
 			g.translate(-tabButtons[i].x, -tabButtons[i].y);
 		}
 		
-		for(Button b: buttons) b.draw(g);
+		for (Button b: buttons) b.draw(g);
 	}
 	
 	private void updateActiveButtons()

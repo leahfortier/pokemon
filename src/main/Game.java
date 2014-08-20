@@ -118,9 +118,9 @@ public class Game
 	{
 		File file = new File("saves"+Global.FILE_SLASH+"File"+(index+1)+".ser");
 		File preview = new File("saves"+Global.FILE_SLASH+"Preview"+(index+1)+".out");
-		if(file.exists())
+		if (file.exists())
 			file.delete();
-		if(preview.exists())
+		if (preview.exists())
 			preview.delete();
 	}
 	

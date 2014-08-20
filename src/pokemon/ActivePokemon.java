@@ -466,7 +466,7 @@ public class ActivePokemon implements Serializable
 	
 	public boolean breaksTheMold()
 	{
-		switch(getAbility().getName())
+		switch (getAbility().getName())
 		{
 			case "Mold Breaker":
 			case "Turboblaze":

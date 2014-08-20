@@ -42,7 +42,7 @@ public class MapTransitionDialog extends JPanel {
 		String[] mapList = mapMaker.getAvailableMaps();
 		String[] updatedMapList = new String[mapList.length+1];
 		updatedMapList[0] = "";
-		for(int currMap = 0; currMap < mapList.length; ++currMap) {
+		for (int currMap = 0; currMap < mapList.length; ++currMap) {
 			updatedMapList[currMap+1] = mapList[currMap];
 		}
 		
@@ -51,7 +51,7 @@ public class MapTransitionDialog extends JPanel {
 		destinationComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Fill entranceComboBox with available entrances.
-				if(destinationComboBox.getSelectedIndex() == 0) {
+				if (destinationComboBox.getSelectedIndex() == 0) {
 					entranceComboBox.setEnabled(false);
 					entranceComboBox.removeAllItems();
 				}
@@ -61,7 +61,7 @@ public class MapTransitionDialog extends JPanel {
 					
 					String[] mapEntrances = triggerData.getMapEntrancesForMap((String)destinationComboBox.getSelectedItem());
 					
-					for(String entrance: mapEntrances) {
+					for (String entrance: mapEntrances) {
 						entranceComboBox.addItem(entrance);
 					}
 				}
@@ -136,7 +136,7 @@ public class MapTransitionDialog extends JPanel {
 		String destination = getDestination();
 		String entrance = getMapEntrance();
 		
-		if(destination.equals("") || entrance.equals(""))
+		if (destination.equals("") || entrance.equals(""))
 			return null;
 		
 		return new MapTransitionTrigger(name, "", destination, entrance, directionComboBox.getSelectedIndex()-1);
@@ -146,7 +146,7 @@ public class MapTransitionDialog extends JPanel {
 		String destination = getDestination();
 		String entrance = getMapEntrance();
 		
-		if(destination.equals("") || entrance.equals(""))
+		if (destination.equals("") || entrance.equals(""))
 			return null;
 		
 		return new TriggerData(name,

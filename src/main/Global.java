@@ -232,7 +232,7 @@ public class Global
 	
 	public static void preloadMusic(){
 		music = new HashMap<>();
-		for(String song: SONGS)
+		for (String song: SONGS)
 			music.put(song, loadClip(song));
 	}
 	
@@ -243,31 +243,31 @@ public class Global
 	public static void toggleMusic(){
 		muting = !muting;
 		//System.out.println("toggling mute:"+muting + " playing:"+isPlayingMusic);
-		if(muting && isPlayingMusic)
+		if (muting && isPlayingMusic)
 			musicClip.stop();
-		if(!muting && isPlayingMusic)
+		if (!muting && isPlayingMusic)
 			musicClip.start();
-		//if(isPlayingMusic)
+		//if (isPlayingMusic)
 		//	System.out.println("playing:"+musicClip.isActive());
 	}
 
 	public static void startMusic(String name, boolean loop, boolean restart){
 		//System.out.println("trying to start:"+name +" muting:"+muting);
-		if(name.equals(currentlyPlaying) && isPlayingMusic)
+		if (name.equals(currentlyPlaying) && isPlayingMusic)
 			return;
-		if(!music.containsKey(name))
+		if (!music.containsKey(name))
 			music.put(name, loadClip(name));
 		Clip clip = music.get(name);
-		if(loop){
-			if(isPlayingMusic)
+		if (loop){
+			if (isPlayingMusic)
 				stopMusic();
 			isPlayingMusic = true;
 			currentlyPlaying = name;
 			musicClip = clip;
 		}
-		if(restart)
+		if (restart)
 			clip.setFramePosition(0);
-		if(muting)
+		if (muting)
 			return;
 		//System.out.println("sound start muting:"+muting);
 		clip.loop(loop ? Clip.LOOP_CONTINUOUSLY : 1);
@@ -279,10 +279,10 @@ public class Global
 
 	public static void stopMusic()
 	{
-		if(!isPlayingMusic)
+		if (!isPlayingMusic)
 			return;
 		isPlayingMusic = false;
-		if(muting)
+		if (muting)
 			return;
 		musicClip.stop();
 	}

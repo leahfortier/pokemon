@@ -225,7 +225,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	public static PokemonInfo getPokemonInfo(String p)
 	{
 		if (map == null) loadPokemonInfo();
-		if(map.containsKey(p)) return map.get(p);
+		if (map.containsKey(p)) return map.get(p);
 
 		Global.error("No such Pokemon "+p);
 		return null;

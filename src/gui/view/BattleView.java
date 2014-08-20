@@ -479,7 +479,7 @@ public class BattleView extends View
 					{
 						evolveAnimation(g, plyrImg, isEnemy, pkmTiles, px, py);	
 					}
-					else if(animationCatch > 0)
+					else if (animationCatch > 0)
 					{
 						catchAnimation(g, plyrImg, isEnemy, pkmTiles, px, py);	
 					}
@@ -856,7 +856,7 @@ public class BattleView extends View
 		{
 			bagLeftBtn.consumePress();
 			
-			if(bagPage == 0) bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE)-1);
+			if (bagPage == 0) bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE)-1);
 			else bagPage--;
 			
 			setVisualState(state); // To update active buttons
@@ -914,7 +914,7 @@ public class BattleView extends View
 			// Actual switcheroo
 			else
 			{
-				if (player.canSwitch(currentBattle, selectedPokemonTab))
+				if (player.canswitch (currentBattle, selectedPokemonTab))
 				{
 					player.setFront(selectedPokemonTab);
 					currentBattle.enterBattle(player.front());
@@ -1011,7 +1011,7 @@ public class BattleView extends View
 
 	public void update(int dt, InputControl input, Game game) 
 	{
-		switch(state)
+		switch (state)
 		{
 			case MESSAGE:
 			case STAT_GAIN:
@@ -1041,7 +1041,7 @@ public class BattleView extends View
 				break;
 		}
 		
-		switch(update)
+		switch (update)
 		{
 			case LEARN_MOVE:
 				setVisualState(VisualState.LEARN_MOVE_QUESTION);
@@ -1075,7 +1075,7 @@ public class BattleView extends View
 		state = newState;
 		
 		// Update the buttons that should be active
-		switch(state)
+		switch (state)
 		{
 			case BAG:
 			case INVALID_BAG:
@@ -1110,12 +1110,12 @@ public class BattleView extends View
 				if (state != VisualState.USE_ITEM) 
 					pokemonSwitchButton.setActive(list.get(selectedPokemonTab).canFight());
 				
-				for(Button b: pokemonButtons) 
+				for (Button b: pokemonButtons) 
 					b.setForceHover(false);
 				
 				break;
 			case MENU:
-				for(Button b: menuButtons)
+				for (Button b: menuButtons)
 					b.setForceHover(false);
 				
 				break;
@@ -1160,7 +1160,7 @@ public class BattleView extends View
 				{
 					state.setType(newMessage.getType());
 				}
-				if(newMessage.catchUpdate())
+				if (newMessage.catchUpdate())
 				{
 					state.startCatchAnimation(newMessage.getDuration() == -1? -1 : newMessage.getDuration());
 				}
@@ -1308,7 +1308,7 @@ public class BattleView extends View
 		List<Move> moves = plyr.getMoves();
 		for (int y = 0, i = 0; y < 2; y++)
 		{
-			for(int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
+			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
 			{
 				int dx = 22+x*190, dy = 440+21+y*62;
 				g.translate(dx, dy);
@@ -1343,7 +1343,7 @@ public class BattleView extends View
 		g.fillPolygon(rightArrowx, rightArrowy, rightArrowx.length);
 		g.translate(-750, -560);
 		
-		for(int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) moveButtons[i].draw(g);
+		for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) moveButtons[i].draw(g);
 		backBtn.draw(g);
 	}
 	
@@ -1356,7 +1356,7 @@ public class BattleView extends View
 		g.setColor(Color.WHITE);
 		
 		Global.drawWrappedText(g, "What will " + plyr.getName() + " do?", 20, 485, 400);
-		for(Button b: menuButtons)
+		for (Button b: menuButtons)
 			b.draw(g);
 	}
 	
@@ -1492,7 +1492,7 @@ public class BattleView extends View
 			
 			// Write stat names
 			g.setFont(Global.getFont(16));
-			for(int i = 0; i < Stat.NUM_STATS; i++)
+			for (int i = 0; i < Stat.NUM_STATS; i++)
 			{
 				g.setColor(selectedPkm.getNature().getColor(i));
 				g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
@@ -1503,7 +1503,7 @@ public class BattleView extends View
 			g.setFont(Global.getFont(14));
 			
 			int[] statsVal = selectedPkm.getStats();
-			for(int i = 0; i < Stat.NUM_STATS; i++)
+			for (int i = 0; i < Stat.NUM_STATS; i++)
 			{
 				String valStr = "" + statsVal[i];
 				if (i == Stat.HP.index()) valStr = selectedPkm.getHP() + "/" + statsVal[i];
@@ -1633,7 +1633,7 @@ public class BattleView extends View
 		List<Move> moves = learnedPokemon.getMoves();
 		for (int y = 0, i = 0; y < 2; y++)
 		{
-			for(int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
+			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
 			{
 				int dx = 22+x*190, dy = 440+21+y*62;
 				g.translate(dx, dy);
@@ -1742,7 +1742,7 @@ public class BattleView extends View
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
-		switch(state)
+		switch (state)
 		{
 			case BAG:
 			case INVALID_BAG:

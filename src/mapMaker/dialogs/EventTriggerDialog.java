@@ -154,15 +154,15 @@ public class EventTriggerDialog extends JPanel {
 		nameTextField.setText(name);
 		conditionTextArea.setText(trigger.getCondition().getOriginalConditionString().replace("&"," & ").replace("|"," | "));
 		
-		for(String g: trigger.getGlobals()) {
+		for (String g: trigger.getGlobals()) {
 			globalTextArea.append(g+"\n");
 		}
 		
 		dialogueNameTextField.setText(trigger.createDialogue? trigger.dialogue: trigger.dialogueName);
 		
-		if(trigger.createDialogue) {
+		if (trigger.createDialogue) {
 			createCheckBox.setSelected(true);
-			for(String d: trigger.dialogueLines) {
+			for (String d: trigger.dialogueLines) {
 				dialogueTextArea.append(d+"\n");
 			}
 		}
@@ -185,20 +185,20 @@ public class EventTriggerDialog extends JPanel {
 		String[] globals = globalTextArea.getText().trim().length() > 0? globalTextArea.getText().trim().split("\n"): null;
 		String globalsString = "";
 		
-		if(globals != null){
-			for(String global: globals) {
+		if (globals != null){
+			for (String global: globals) {
 				globalsString += "global: "+global.trim() + "\n";
 			}
 		}
 		
 		boolean create = createCheckBox.isSelected();
 		
-		if(create) {
+		if (create) {
 			dialogueString = "createDialogue: " + dialogueName +"\n";
 			
 			String[] dialogueLines = dialogueTextArea.getText().trim().split("\n");
 			
-			for(int currDialogue = 0; currDialogue < dialogueLines.length; ++currDialogue) {
+			for (int currDialogue = 0; currDialogue < dialogueLines.length; ++currDialogue) {
 				dialogueString += "text["+currDialogue+"]: \""+dialogueLines[currDialogue].trim() + "\"\n";
 			}
 			

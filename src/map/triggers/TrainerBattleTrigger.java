@@ -52,11 +52,11 @@ public class TrainerBattleTrigger extends Trigger
 
 				while (params.find())
 				{
-					if(params.group(1) != null) p.setShiny();
-					if(params.group(2) != null)
+					if (params.group(1) != null) p.setShiny();
+					if (params.group(2) != null)
 					{
 						ArrayList<Move> moves = new ArrayList<>();
-						for(int i=0; i<4; ++i)
+						for (int i=0; i<4; ++i)
 						{
 							if (!params.group(3 + i).equals("None"))
 							{
@@ -70,17 +70,17 @@ public class TrainerBattleTrigger extends Trigger
 				pokemon.add(p);
 			}
 	
-			if(m.group(5) != null)
+			if (m.group(5) != null)
 			{
 				trainerName = m.group(6);
 			}
 			
-			if(m.group(7) != null)
+			if (m.group(7) != null)
 			{
 				winGlobal = m.group(8);
 			}
 			
-			if(m.group(9) != null)
+			if (m.group(9) != null)
 			{
 				try
 				{
@@ -94,16 +94,16 @@ public class TrainerBattleTrigger extends Trigger
 		}
 				
 //		System.out.println(trainerName);
-//		for(ActivePokemon p : pokemon)
+//		for (ActivePokemon p : pokemon)
 //		{
 //			System.out.println(p.getName() + " Lv. " + p.getLevel());
-//			for(Move m2 : p.getMoves()) System.out.println(m2.getAttack().getName());
+//			for (Move m2 : p.getMoves()) System.out.println(m2.getAttack().getName());
 //			System.out.println();
 //		}
 //		System.out.println();
 		
 		t = new EnemyTrainer(trainerName, cash);
-		for(ActivePokemon p : pokemon) t.addPokemon(null, p);
+		for (ActivePokemon p : pokemon) t.addPokemon(null, p);
 	}
 
 	public void execute(Game game)

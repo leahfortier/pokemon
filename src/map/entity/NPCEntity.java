@@ -89,12 +89,12 @@ public class NPCEntity extends Entity{
 	@Override
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		super.update(dt, entity, map, input, view);
-		if(waitTime != 0)
+		if (waitTime != 0)
 			waitTime -= dt;
-		if(waitTime < 0)
+		if (waitTime < 0)
 			waitTime = 0;
 		
-		if(transitionTime == 0 && waitTime == 0 && !hasAttention){
+		if (transitionTime == 0 && waitTime == 0 && !hasAttention){
 			String path = this.path;
 			if (tempPath != null)
 			{
@@ -102,9 +102,9 @@ public class NPCEntity extends Entity{
 				//System.out.println(path);
 			}
 			
-			switch(path.charAt(pathIndex)){
+			switch (path.charAt(pathIndex)){
 			case 'r':
-				if(isPassable(map.getPassValue(charX+1, charY)) && entity[charX+1][charY] == null){
+				if (isPassable(map.getPassValue(charX+1, charY)) && entity[charX+1][charY] == null){
 					entity[charX+1][charY] = this;
 					entity[charX][charY] = null;
 					charX++;
@@ -115,7 +115,7 @@ public class NPCEntity extends Entity{
 				transitionDirection = 0;
 				break;
 			case 'u':
-				if(isPassable(map.getPassValue(charX, charY-1)) && entity[charX][charY-1] == null){
+				if (isPassable(map.getPassValue(charX, charY-1)) && entity[charX][charY-1] == null){
 					entity[charX][charY-1] = this;
 					entity[charX][charY] = null;
 					charY--;
@@ -126,7 +126,7 @@ public class NPCEntity extends Entity{
 				transitionDirection = 1;
 				break;
 			case 'l':
-				if(isPassable(map.getPassValue(charX-1, charY)) && entity[charX-1][charY] == null){
+				if (isPassable(map.getPassValue(charX-1, charY)) && entity[charX-1][charY] == null){
 					entity[charX-1][charY] = this;
 					entity[charX][charY] = null;
 					charX--;
@@ -137,7 +137,7 @@ public class NPCEntity extends Entity{
 				transitionDirection = 2;
 				break;
 			case 'd':
-				if(isPassable(map.getPassValue(charX, charY+1)) && entity[charX][charY+1] == null){
+				if (isPassable(map.getPassValue(charX, charY+1)) && entity[charX][charY+1] == null){
 					entity[charX][charY+1] = this;
 					entity[charX][charY] = null;
 					charY++;
@@ -162,7 +162,7 @@ public class NPCEntity extends Entity{
 	
 	public void walkTowards(int steps, int direction) {
 		tempPath = "w";
-		for(int i = 0; i < steps; ++i)
+		for (int i = 0; i < steps; ++i)
 		{
 			tempPath += pathDir[direction];
 		}
@@ -174,7 +174,7 @@ public class NPCEntity extends Entity{
 	@Override
 	protected BufferedImage getFrame(GameData data) {
 		TileSet trainerTiles = data.getTrainerTiles();
-		if(transitionTime > 0)
+		if (transitionTime > 0)
 			return trainerTiles.getTile(12*spriteIndex + 1+transitionDirection+4*(1+runFrame));
 		else return trainerTiles.getTile(12*spriteIndex + 1+transitionDirection);
 	}

@@ -29,7 +29,7 @@ public abstract class BattleEffect extends Effect
 	public static BattleEffect getEffect(String e)
 	{
 		if (map == null) loadEffects();
-		if(map.containsKey(e)) return map.get(e);
+		if (map.containsKey(e)) return map.get(e);
 
 		Global.error("No such Effect "+e);
 		return null;

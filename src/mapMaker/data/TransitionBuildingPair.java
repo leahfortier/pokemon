@@ -41,7 +41,7 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 		
 		int directionStartIndex = 0; //Horizontal
 		
-		if(!horizontal) {
+		if (!horizontal) {
 			directionStartIndex = 2; //Vertical
 		}
 		
@@ -110,7 +110,7 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 
 		int directionStartIndex = 0; //Horizontal
 		
-		if(!horizontal) {
+		if (!horizontal) {
 			directionStartIndex = 2; //Vertical
 		}
 		
@@ -123,11 +123,11 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 		
 		int ret = map1.compareTo(o.map1);
 		
-		if(ret == 0) {
+		if (ret == 0) {
 			ret = map2.compareTo(o.map2);
 		}
 		
-		if(ret == 0){
+		if (ret == 0){
 			ret = pairNumber - o.pairNumber;
 		}
 		

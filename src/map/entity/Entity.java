@@ -33,11 +33,11 @@ public abstract class Entity {
 		charY = y;
 	}
 	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition){
-		if(drawOnlyInTransition && transitionTime == 0)
+		if (drawOnlyInTransition && transitionTime == 0)
 			return;
 		int cx = (int)drawX+Global.TILESIZE*charX;
 		int cy = (int)drawY+Global.TILESIZE*charY;
-		if(transitionTime != 0){
+		if (transitionTime != 0){
 			int len = Global.TILESIZE*(getTransitionTime()-transitionTime)/getTransitionTime();
 			cx += tdx[transitionDirection]*len;
 			cy += tdy[transitionDirection]*len;
@@ -47,9 +47,9 @@ public abstract class Entity {
 		g.drawImage(img, cx-img.getWidth()/2+Global.TILESIZE/2, cy+(Global.TILESIZE-img.getHeight()) - (Global.TILESIZE/2), null);
 	}
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view){
-		if(transitionTime != 0)
+		if (transitionTime != 0)
 			transitionTime += dt;
-		if(transitionTime > getTransitionTime()){
+		if (transitionTime > getTransitionTime()){
 			transitionTime = 0;
 			runFrame = (runFrame+1)%2;
 		}
@@ -57,26 +57,26 @@ public abstract class Entity {
 		
 	}
 	protected boolean isPassable(WalkType type) {
-		if(type == WalkType.WALKABLE)
+		if (type == WalkType.WALKABLE)
 			return true;
 		return false;
 	}
 	protected boolean isPassable(WalkType type, int direction) {
-		switch(type){
+		switch (type){
 		case HOP_RIGHT:
-			if(direction == 0)
+			if (direction == 0)
 				return true;
 			return false;
 		case HOP_UP:
-			if(direction == 1)
+			if (direction == 1)
 				return true;
 			return false;
 		case HOP_LEFT:
-			if(direction == 2)
+			if (direction == 2)
 				return true;
 			return false;
 		case HOP_DOWN:
-			if(direction == 3)
+			if (direction == 3)
 				return true;
 			return false;
 		case NOT_WALKABLE:
@@ -97,7 +97,7 @@ public abstract class Entity {
 	}
 	
 	public boolean isFacing(int x, int y) {
-		if(x != charX && y != charY)
+		if (x != charX && y != charY)
 			return false;
 		int dx = (int) Math.signum(charX - x);
 		int dy = (int) Math.signum(charY - y);

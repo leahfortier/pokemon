@@ -76,12 +76,12 @@ public class WildBattleTriggerEditDialog extends JPanel {
 				
 				Integer[] values = new Integer[selected.size()];
 				selected.toArray(values);
-				for(int currPanel = values.length-1; currPanel >= 0; --currPanel) {
+				for (int currPanel = values.length-1; currPanel >= 0; --currPanel) {
 					wildPokemonPanels.remove(values[currPanel].intValue());
 					pokemonCollectionPanel.remove(values[currPanel].intValue());
 				}
 				
-				for(int currPanel = 0; currPanel < wildPokemonPanels.size(); ++currPanel) {
+				for (int currPanel = 0; currPanel < wildPokemonPanels.size(); ++currPanel) {
 					wildPokemonPanels.get(currPanel).index = currPanel;
 				}
 				
@@ -174,15 +174,15 @@ public class WildBattleTriggerEditDialog extends JPanel {
 	}
 	
 	public void setSelected(int index) {
-		if(selected.contains(index)) {
+		if (selected.contains(index)) {
 			selected.remove(index);
-			if(selected.size() == 0) {
+			if (selected.size() == 0) {
 				removeSelectedButton.setEnabled(false);
 			}
 		}
 		else {
 			selected.add(index);
-			if(selected.size() == 1) {
+			if (selected.size() == 1) {
 				removeSelectedButton.setEnabled(true);
 			}
 		}
@@ -194,14 +194,14 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		
 		nameTextField.setText(trigger.getName());
 		
-		for(int currRate = 0; currRate < encounterRates.length; ++currRate) {
-			if(encounterRates[currRate].toLowerCase().replace(" ","").equals(trigger.encounterRateString.toLowerCase())) {
+		for (int currRate = 0; currRate < encounterRates.length; ++currRate) {
+			if (encounterRates[currRate].toLowerCase().replace(" ","").equals(trigger.encounterRateString.toLowerCase())) {
 				rateComboBox.setSelectedIndex(currRate);
 				break;
 			}
 		}
 		
-		for(int currPokemon = 0; currPokemon < trigger.pokemon.length; ++currPokemon){
+		for (int currPokemon = 0; currPokemon < trigger.pokemon.length; ++currPokemon){
 			WildPokemonDataPanel panel = addPokemonPanel();
 			panel.pokemonTextField.setText(trigger.pokemon[currPokemon]);
 			panel.probabilityFormattedTextField.setValue(trigger.probability[currPokemon]);
@@ -217,7 +217,7 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		
 		int size = wildPokemonPanels.size();
 		
-		if(name.length() == 0 || size == 0)
+		if (name.length() == 0 || size == 0)
 			return null;
 		
 		String[] pokemon = new String[size];
@@ -225,7 +225,7 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		int[] low = new int[size];
 		int[] high = new int[size];
 		
-		for(int currRow = 0; currRow < size; ++currRow) {
+		for (int currRow = 0; currRow < size; ++currRow) {
 
 			WildPokemonDataPanel panel = wildPokemonPanels.get(currRow);
 			pokemon[currRow] = panel.pokemonTextField.getText();
@@ -242,7 +242,7 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		
 		WildBattleTrigger wbt = getTrigger();
 		
-		if(wbt == null)
+		if (wbt == null)
 			return null;
 		
 		return new TriggerData(wbt.getName(), "WildBattle\n"+wbt.triggerDataAsString());

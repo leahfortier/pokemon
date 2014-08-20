@@ -23,7 +23,7 @@ public class TriggerData {
 		points = new ArrayList<point>();
 		
 		Scanner in = new Scanner(contents);
-		while(in.hasNext(integerRangePattern)){ 
+		while (in.hasNext(integerRangePattern)){ 
 			String[] xr = in.next().split("-");
 			String[] yr = in.next().split("-");
 			int x1, x2, y1, y2;
@@ -31,15 +31,15 @@ public class TriggerData {
 			y1 = Integer.parseInt(yr[0]);
 			x2 = xr.length == 2 ? Integer.parseInt(xr[1]) : x1;
 			y2 = yr.length == 2 ? Integer.parseInt(yr[1]) : y1;
-			for(int x = x1; x<=x2; x++)
-				for(int y = y1; y<=y2; y++)
+			for (int x = x1; x<=x2; x++)
+				for (int y = y1; y<=y2; y++)
 					points.add(new point(x, y));
 		}
 		
 		triggerType = in.next();
 		
 		StringBuilder rest = new StringBuilder();
-		while(in.hasNextLine()) {
+		while (in.hasNextLine()) {
 			rest.append(in.nextLine()+"\n");
 		}
 		triggerContents = rest.toString();
@@ -60,7 +60,7 @@ public class TriggerData {
 	public int[] getPoints(int width) {
 		int[] pointsArray = new int[points.size()];
 		
-		for(int currPoint = 0; currPoint < pointsArray.length; ++currPoint) {
+		for (int currPoint = 0; currPoint < pointsArray.length; ++currPoint) {
 			point curr = points.get(currPoint);
 			pointsArray[currPoint] = curr.y * width + curr.x;
 		}
@@ -69,7 +69,7 @@ public class TriggerData {
 	
 	public void updatePoints(int dx, int dy) {
 		
-		for(int currPoint = 0; currPoint < points.size(); ++currPoint) {
+		for (int currPoint = 0; currPoint < points.size(); ++currPoint) {
 			point curr = points.get(currPoint);
 			curr.x += dx;
 			curr.y += dy;
@@ -87,7 +87,7 @@ public class TriggerData {
 		
 		@Override
 		public boolean equals(Object o) {
-			if(!(o instanceof point))
+			if (!(o instanceof point))
 				return false;
 			point p = (point) o;
 			
@@ -97,7 +97,7 @@ public class TriggerData {
 
 	public void addData(GameData gameData) {
 		
-		if(gameData.getTrigger(name) == null)
+		if (gameData.getTrigger(name) == null)
 			gameData.addTrigger(triggerType, name, triggerContents);
 	}
 	
@@ -106,7 +106,7 @@ public class TriggerData {
 		StringBuilder ret = new StringBuilder();
 		ret.append("TriggerData " +name +" {\n");
 		
-		for(point p: points) {
+		for (point p: points) {
 			ret.append("\t" +p.x +" " +p.y +"\n");
 		}
 		

@@ -560,7 +560,7 @@ public class BagView extends View
 			g.translate(-tabButtons[i].x, -tabButtons[i].y);
 		}
 		
-		if(message != null){
+		if (message != null){
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
 			g.setFont(Global.getFont(30));
 			g.setColor(Color.WHITE);

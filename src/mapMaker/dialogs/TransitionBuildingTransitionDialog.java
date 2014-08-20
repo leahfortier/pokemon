@@ -47,7 +47,7 @@ public class TransitionBuildingTransitionDialog extends JPanel {
 		DirectionComboBox.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				if(DirectionComboBox.getSelectedIndex() == 0) {
+				if (DirectionComboBox.getSelectedIndex() == 0) {
 					LeftDirectionLabel.setText("West Map");
 					RightDirectionLabel.setText("East Map");
 				}
@@ -72,7 +72,7 @@ public class TransitionBuildingTransitionDialog extends JPanel {
 				RightMapComboBox.setSelectedIndex(temp);
 				
 				currentOnLeft = !currentOnLeft;
-				if(currentOnLeft){
+				if (currentOnLeft){
 					LeftMapComboBox.setSelectedItem(currentMapName);
 					LeftMapComboBox.setEnabled(false);
 					RightMapComboBox.setEnabled(true);
@@ -89,7 +89,7 @@ public class TransitionBuildingTransitionDialog extends JPanel {
 		String[] mapList = mapMaker.getAvailableMaps();
 		String[] updatedMapList = new String[mapList.length+1];
 		updatedMapList[0] = "";
-		for(int currMap = 0; currMap < mapList.length; ++currMap) {
+		for (int currMap = 0; currMap < mapList.length; ++currMap) {
 			updatedMapList[currMap+1] = mapList[currMap];
 		}
 		
@@ -147,7 +147,7 @@ public class TransitionBuildingTransitionDialog extends JPanel {
 	
 	public TransitionBuildingPair getTransitionPair() {
 		
-		if(LeftMapComboBox.getSelectedIndex() == 0 || RightMapComboBox.getSelectedIndex() == 0)
+		if (LeftMapComboBox.getSelectedIndex() == 0 || RightMapComboBox.getSelectedIndex() == 0)
 			return null;
 		
 		return new TransitionBuildingPair(DirectionComboBox.getSelectedIndex() == 0, (String)RightMapComboBox.getSelectedItem(), (String)LeftMapComboBox.getSelectedItem(), -1);

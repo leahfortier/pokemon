@@ -37,7 +37,7 @@ public enum GrowthRate implements Serializable
 	
 	public static GrowthRate getRate(String rate)
 	{
-		switch(rate)
+		switch (rate)
 		{
 			case "Fast":
 				return FAST;

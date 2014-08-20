@@ -14,7 +14,7 @@ public class ChangeViewTrigger extends Trigger
 	{
 		super(name, contents);
 		Matcher m = variablePattern.matcher(contents);		
-		if(m.find() && m.group(1).equals("view"))
+		if (m.find() && m.group(1).equals("view"))
 		{
 			view = m.group(2);
 		}

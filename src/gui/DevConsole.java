@@ -138,7 +138,7 @@ public class DevConsole
 				boolean shiny = false;
 				
 				pokemonName = in.next();
-				if(!PokemonInfo.isPokemon(pokemonName))
+				if (!PokemonInfo.isPokemon(pokemonName))
 				{
 					System.err.println("Invalid Pokemon: " + pokemonName);
 					return;
@@ -163,7 +163,7 @@ public class DevConsole
 							for (int i = 0; i < 4; ++i)
 							{
 								String s = in.next().trim();
-								if(!Attack.isAttack(s))
+								if (!Attack.isAttack(s))
 								{
 									System.err.println("Invalid move: " + s);
 									return;
@@ -191,8 +191,8 @@ public class DevConsole
 			case "item":
 				String itemName = in.next().replaceAll("_", " ");
 				int amt = 1;
-				if(in.hasNext()) amt = Integer.parseInt(in.next());
-				if(!Item.isItem(itemName))
+				if (in.hasNext()) amt = Integer.parseInt(in.next());
+				if (!Item.isItem(itemName))
 				{
 					System.out.println("Invalid item: " + itemName);
 					return;

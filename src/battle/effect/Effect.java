@@ -29,7 +29,7 @@ public abstract class Effect implements Serializable
 		
 		public Object getSource(Battle b, ActivePokemon caster)
 		{
-			switch(this)
+			switch (this)
 			{
 				case ATTACK:
 					return caster.getAttack();

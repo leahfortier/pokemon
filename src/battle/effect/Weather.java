@@ -59,7 +59,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	
 	public static Weather getWeather(WeatherType weather)
 	{
-		switch(weather)
+		switch (weather)
 		{
 			case CLEAR_SKIES:
 				return new ClearSkies();

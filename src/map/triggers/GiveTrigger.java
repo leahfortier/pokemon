@@ -26,10 +26,10 @@ public class GiveTrigger extends Trigger{
 		itemList = new ArrayList<Item>();
 		
 		Matcher m = variablePattern.matcher(contents);		
-		while(m.find()){
+		while (m.find()){
 			String type = m.group(1);
-			if(type.equals("item"))
-				if(Item.exists(m.group(2)))
+			if (type.equals("item"))
+				if (Item.exists(m.group(2)))
 					itemList.add(Item.getItem(m.group(2)));
 				else
 					Global.error("Invalid item: " + m.group(2));
@@ -41,7 +41,7 @@ public class GiveTrigger extends Trigger{
 		{
 			if (m.group(1) != null)
 			{
-				if(m.group(5) != null) {
+				if (m.group(5) != null) {
 					pokemonList.add(new ActivePokemon(PokemonInfo.getRandomBaseEvolution()));
 					continue;
 				}
@@ -59,12 +59,12 @@ public class GiveTrigger extends Trigger{
 				
 				while (params.find())
 				{
-					if(params.group(1) != null) shiny = true;
-					if(params.group(2) != null)
+					if (params.group(1) != null) shiny = true;
+					if (params.group(2) != null)
 					{
 						setMoves = true;
 						moves = new ArrayList<>();
-						for(int i=0; i<4; ++i)
+						for (int i=0; i<4; ++i)
 						{
 							if (!params.group(3 + i).equals("None"))
 							{
@@ -72,21 +72,21 @@ public class GiveTrigger extends Trigger{
 							}
 						}
 					}
-					if(params.group(7) != null) isEgg = true;
+					if (params.group(7) != null) isEgg = true;
 				}
 				
 				ActivePokemon p;
-				if(isEgg) {
+				if (isEgg) {
 					p = new ActivePokemon(pinfo);
 				}
 				else {
 					p = new ActivePokemon(pinfo, level, false, true);
 				}
 				
-				if(shiny) {
+				if (shiny) {
 					p.setShiny();
 				}
-				if(setMoves) {
+				if (setMoves) {
 					p.setMoves(moves);
 				}
 

@@ -151,7 +151,7 @@ public class MainMenuView extends View
 				break;
 		}
 		
-		switch(state)
+		switch (state)
 		{
 			case CREDITS:
 				Global.startMusic("doubletrouble");
@@ -165,7 +165,7 @@ public class MainMenuView extends View
 
 	public void update(int dt, InputControl input, Game game)
 	{
-		if(!musicStarted){
+		if (!musicStarted){
 			musicStarted = true;
 			Global.startMusic("dancemix");
 		}
@@ -234,7 +234,7 @@ public class MainMenuView extends View
 						break;
 				}
 				
-				if(input.isDown(Control.BACK))
+				if (input.isDown(Control.BACK))
 				{
 					input.consumeKey(Control.BACK);
 					setVisualState(VisualState.MAIN);
@@ -253,7 +253,7 @@ public class MainMenuView extends View
 					case 1:
 					case 2:
 						/*
-						 * if(saveInfo[pressed] != null){ //TODO ask to delete
+						 * if (saveInfo[pressed] != null){ //TODO ask to delete
 						 * first
 						 * 
 						 * }else{
@@ -270,7 +270,7 @@ public class MainMenuView extends View
 						break;
 				}
 				
-				if(input.isDown(Control.BACK))
+				if (input.isDown(Control.BACK))
 				{
 					input.consumeKey(Control.BACK);
 					setVisualState(VisualState.MAIN);
@@ -303,7 +303,7 @@ public class MainMenuView extends View
 						break;
 				}
 				
-				if(input.isDown(Control.BACK))
+				if (input.isDown(Control.BACK))
 				{
 					input.consumeKey(Control.BACK);
 					setVisualState(VisualState.MAIN);
@@ -317,7 +317,7 @@ public class MainMenuView extends View
 				}
 				if (input.isDown(Control.SPACE) || input.isDown(Control.BACK))
 				{
-					if(input.isDown(Control.SPACE)) input.consumeKey(Control.SPACE);
+					if (input.isDown(Control.SPACE)) input.consumeKey(Control.SPACE);
 					else input.consumeKey(Control.BACK);
 					
 					setVisualState(VisualState.MAIN);

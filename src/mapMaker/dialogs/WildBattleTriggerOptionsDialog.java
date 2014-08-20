@@ -37,13 +37,13 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 				
 				TriggerData td = editWildBattleTrigger(null, (JButton)e.getSource());
 				
-				if(td == null)
+				if (td == null)
 					return;
 				
 				wildBattleTriggers.put(td.name, td);
 				comboBox.addItem(td.name);
 				
-				if(wildBattleTriggers.size() == 1) {
+				if (wildBattleTriggers.size() == 1) {
 					btnEdit.setEnabled(true);
 				}
 			}
@@ -62,14 +62,14 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 				
 				TriggerData td = editWildBattleTrigger(trigger, (JButton)e.getSource());
 				
-				if(td == null)
+				if (td == null)
 					return;
 				
 				mapMakerTriggerData.renameTriggerData(trigger, td);
 				
 				comboBox.removeAllItems();
 				String[] items = new String[wildBattleTriggers.size()];
-				for(String item: wildBattleTriggers.keySet().toArray(items)) {
+				for (String item: wildBattleTriggers.keySet().toArray(items)) {
 					comboBox.addItem(item);
 				}
 			}
@@ -104,7 +104,7 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 
 		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
 		
-		if(trigger != null) {
+		if (trigger != null) {
 			dialog.initialize(new WildBattleTrigger(trigger.name, trigger.triggerContents));
 		}
 		
@@ -112,7 +112,7 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 		
 		int results = JOptionPane.showOptionDialog(button, dialog, "Wild Battle Trigger Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
-		if(results == JOptionPane.CLOSED_OPTION || results == 1)
+		if (results == JOptionPane.CLOSED_OPTION || results == 1)
 			return null;
 		
 		TriggerData td = dialog.getTriggerData();
