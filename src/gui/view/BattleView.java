@@ -348,22 +348,22 @@ public class BattleView extends View
 			// Turn white -- didn't catch
 			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7)
 			{
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1-0.7f)));
+				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - 0.7f)));
 				prevScales[3] = 0;
 			}
 			// Transform into Pokemon
 			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3)
 			{
 				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255;
-				prevScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f-.3f)));
+				prevScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
 				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255;
-				newScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f-.3f)));
+				newScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
 			}
 			// Restore color
 			else
 			{
 				newScales[3] = 0;
-				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f-.7f));
+				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f - .7f));
 			}
 			
 			animationCatch -= Global.MS_BETWEEN_FRAMES;
