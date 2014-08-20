@@ -307,8 +307,6 @@ public class BattleView extends View
 		
 		private void catchAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
 		{
-			animationCatch -= Global.MS_BETWEEN_FRAMES;
-			
 			Graphics2D g2d = (Graphics2D)g;
 			float[] prevScales = { 1f, 1f, 1f, 1f };
 			float[] prevOffsets = { 255f, 255f, 255f, 0f };
@@ -322,7 +320,7 @@ public class BattleView extends View
 			// Turn white
 			if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3)
 			{
-				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255*(1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f))/(lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
+				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255*(1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
 				newScales[3] = 0;
 			}
 			// Transform into Pokeball
@@ -337,7 +335,7 @@ public class BattleView extends View
 			else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN)
 			{
 				prevScales[3] = 0;
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
+				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
 			}
 			// Shake
 			else if (animationCatchDuration == -1 || animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN)
@@ -349,7 +347,7 @@ public class BattleView extends View
 			// Turn white -- didn't catch
 			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7)
 			{
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(lifespan - CATCH_SHAKE_ANIMATION_LIFESPAN*(1-0.7f)));
+				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1-0.7f)));
 				prevScales[3] = 0;
 			}
 			// Transform into Pokemon
@@ -366,6 +364,8 @@ public class BattleView extends View
 				newScales[3] = 0;
 				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f-.7f));
 			}
+			
+			animationCatch -= Global.MS_BETWEEN_FRAMES;
 			
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
 			RescaleOp prevOp = new RescaleOp(prevScales, prevOffsets, null);
