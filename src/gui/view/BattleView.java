@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
@@ -367,9 +368,13 @@ public class BattleView extends View
 			
 			animationCatch -= Global.MS_BETWEEN_FRAMES;
 			
+			RenderingHints rh = new RenderingHints(
+		             RenderingHints.KEY_ALPHA_INTERPOLATION,
+		             RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+			
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
-			RescaleOp prevOp = new RescaleOp(prevScales, prevOffsets, null);
-			RescaleOp newOp = new RescaleOp(newScales, newOffsets, null);
+			RescaleOp prevOp = new RescaleOp(prevScales, prevOffsets, rh);
+			RescaleOp newOp = new RescaleOp(newScales, newOffsets, rh);
 			g2d.drawImage(pkBall, newOp, px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight());
 			g2d.drawImage(plyrImg, prevOp, px - plyrImg.getWidth()/2, py - plyrImg.getHeight());
 		}
