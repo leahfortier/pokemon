@@ -1,0 +1,22 @@
+NPC Neighbor_House_NPC_Green_01{
+	startX: 4
+	startY: 4
+	path: w
+	spriteIndex: 17
+	direction: 3
+	walkToPlayer: false
+	firstDialogue[0]: ""
+}
+
+MapEntrance DFS_Town {
+	x: 3
+	y: 6
+}
+
+TriggerData from_Neighbor_House_to_DFS_Town_01{
+	3 7
+	MapTransition
+	nextMap: DFS_Town
+	mapEntrance: NeighborsHouse
+}
+

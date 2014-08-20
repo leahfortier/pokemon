@@ -1,0 +1,6 @@
+MainBackgroundBasic.png		00000001
+MainBackgroundScenic.png	00000002
+MainLogo.png			00000003
+MainButton.png			00000004
+MainButtonSmall.png		00000005
+DFSTownSampleBackground.png 00000006

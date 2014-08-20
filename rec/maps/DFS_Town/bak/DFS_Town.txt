@@ -1,0 +1,144 @@
+TriggerData DFS_to_Maple {
+	74 16
+	MapTransition
+	nextMap: MaplesLab
+	mapEntrance: DFS_Town
+}
+MapEntrance MaplesLab {
+	x:74 
+	y:17
+}
+
+
+TriggerData DFS_Town_to_PlayersHouseDown {
+	85 26
+	MapTransition
+	nextMap: PlayersHouseDown
+	mapEntrance: frontDoor
+}
+MapEntrance PlayersHouse {
+	x:85
+	y:27
+}
+
+
+TriggerData DFS_Town_to_Rival_House {
+	85 14
+	MapTransition
+	nextMap: Rival_House
+	mapEntrance: DFS_Town
+}
+MapEntrance RivalsHouse {
+	x:85
+	y:15
+}
+
+
+TriggerData DFS_Town_to_Neighbor_House {
+	74 26
+	MapTransition
+	nextMap: Neighbor_House
+	mapEntrance: DFS_Town
+}
+MapEntrance NeighborsHouse {
+	x:74
+	y:27
+}
+
+#Group trigger
+DFStoTBH{
+	13 19-20
+}
+
+MapEntrance TBH {
+	x: 14
+	y: 20
+}
+
+TriggerData Edge_1_Wild_Pokemon {
+	17-26 13-16
+	17-23 24-28
+	29-36 18-23
+	33-36 13-17
+	37-39 13-18
+	45-48 16-28
+	WildBattle
+	encounterRate: VeryCommon
+	pokemon: Pidgey 2-4 40%
+	pokemon: Bidoof 2-4 30%
+	pokemon: Sentret 2-4 20%
+	pokemon: Lillipup 2-4 10%
+}
+
+NPC Potion_Giver {
+	startX: 52
+	startY: 16
+	spriteIndex: 2
+	direction: 3
+	
+	firstDialogue[0]: "Here, take this potion. You are going to need it!"
+	secondDialogue[0]: "You can use potions to heal your Pok\u00e9mon!" 
+	giveItem: "item: Potion"
+}
+
+NPC Ball_Giver{
+	startX: 49
+	startY: 24
+	spriteIndex: 3
+	direction: 3
+	walkToPlayer: true 
+	
+	firstDialogue[0]: "Here, take these Pok\u00e9balls. You'll need them to capture Pok\u00e9!"
+	secondDialogue[0]: "You can use Pok\u00e9balls to catch new Pok\u00e9mon!" 
+	giveItem: "item: Pok\u00e9 Ball
+		item: Pok\u00e9 Ball
+		item: Pok\u00e9 Ball
+		item: Pok\u00e9 Ball
+		item: Pok\u00e9 Ball"
+}
+
+NPC Edge1_Trainer_1{
+	startX: 32 
+	startY: 18
+	spriteIndex: 6
+	direction: 0
+	
+	firstDialogue[0]: "My Rattata is in the top percentage of Rattata!"
+	secondDialogue[0]: "I thought Rattata was the very best..." 
+	trainer: 	"name: Youngster Joey
+		cash: 100
+		pokemon: Pidgey 4" 
+}
+
+NPC Edge1_Trainer_2{
+	startX: 30
+	startY: 28
+	spriteIndex: 6
+	direction: 1
+	
+	firstDialogue[0]: "Someone freed the pointer to my Rattata! Was it you?"
+	secondDialogue[0]: "I would have won with my Rattata!" 
+	trainer: 	"name: Youngster Joey
+		cash: 100
+		pokemon: Bidoof 4" 
+}
+
+NPC Edge1_Trainer_3{
+	startX: 19
+	startY: 20
+	path: uudddduu
+	spriteIndex: 6
+	direction: 1
+	
+	firstDialogue[0]: "Rattata!"
+	secondDialogue[0]: "Rattata..." 
+	trainer: 	"name: Youngster Joey
+		cash: 100
+		pokemon: Sentret 4" 
+}
+
+Item DFSParalyzeHeal {
+	x: 31
+	y: 16
+	item: Paralyze_Heal
+}

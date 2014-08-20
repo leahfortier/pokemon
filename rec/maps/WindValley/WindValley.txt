@@ -1,0 +1,15 @@
+MapEntrance TransitionBuildingVSouthDoor01 {
+	x: 26
+	y: 12
+}
+
+TriggerData WindValley_to_TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_SouthDoor {
+	26 11
+	25 11
+	27 11
+	MapTransition
+	global: MapGlobal_TransitionPair01
+	nextMap: TransitionBuildingV
+	mapEntrance: SouthDoor
+}
+

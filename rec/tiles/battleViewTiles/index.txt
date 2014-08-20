@@ -1,0 +1,42 @@
+battleInterface.png	00000001
+MenuSelect.png		00000002
+TextBox.png		00000003
+Pokeball.png		00000004
+
+MenuStat.png		00000005
+
+MenuBagBackground.png			00000010
+MenuBagItemBackground.png		00000011
+MenuBagLastItem1.png			00000012
+MenuBagLastItem2.png			00000013
+MenuBagLastItem3.png			00000014
+MenuBagLastItem4.png			00000015
+MenuBagTab1.png				00000016
+MenuBagTab2.png				00000017
+MenuBagTab3.png				00000018
+MenuBagTab4.png				00000019
+MenuBagText.png				0000001A
+
+
+MenuFightMessageArea.png		00000020
+MenuFightMoveBackground.png		00000021
+MenuFightMoveBox.png			00000022
+MoveCategoryPhysical.png		00000023
+MoveCategorySpecial.png			00000024
+MoveCategoryStatus.png			00000025
+MenuFightMoveSelection.png		00000026
+
+
+MenuPokemonInfoBoxes.png		00000030
+MenuPokemonInfoBoxesFNT.png		00000031
+MenuPokemonMoveBox.png			00000032
+MenuPokemonTab.png			00000033
+MenuPokemonTabBackground.png		00000034
+MenuPokemonTabBackgroundFNT.png		00000035
+MenuPokemonTabSelected.png		00000036
+
+TypeBug.png				00000040TypeDark.png				00000041TypeDragon.png				00000042TypeElectric.png			00000043TypeFighting.png			00000044TypeFire.png				00000045TypeFlying.png				00000046TypeGhost.png				00000047TypeGrass.png				00000048TypeGround.png				00000049TypeIce.png				0000004aTypeNormal.png				0000004bTypePoison.png				0000004cTypePsychic.png				0000004dTypeRock.png				0000004eTypeSteel.png				0000004fTypeWater.png				00000050
+TypeUnknown.png				00000051
+
+
+Background01.png	00000100

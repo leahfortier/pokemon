@@ -1,0 +1,45 @@
+GroupTrigger_TransitionBuilding_EastDoor {
+	11 3
+}
+
+GroupTrigger_TransitionBuilding_WestDoor {
+	1 3
+}
+
+NPC Info_Guy{
+	startX: 6
+	startY: 1
+	path: w
+	spriteIndex: 10
+	direction: 3
+	walkToPlayer: false
+	firstDialogue[0]: ""
+}
+
+NPC BFM_Guy{
+	condition: MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_Bloom_Filter_Meadow&MapGlobal_MapEntrance_WestDoor)|(MapGlobal_PreviousMap_RSATown&MapGlobal_MapEntrance_EastDoor))
+	startX: 2
+	startY: 2
+	path: w
+	spriteIndex: 1
+	direction: 3
+	walkToPlayer: false
+	firstDialogue[0]: "I don't suggest going out there. It's way too buggy!"
+}
+
+Trigger Info_Counter{
+	x: 6
+	y: 2
+	trigger: GroupTrigger_TransitionBuilding_InformationDesk
+}
+
+MapEntrance WestDoor {
+	x: 2
+	y: 3
+}
+
+MapEntrance EastDoor {
+	x: 10
+	y: 3
+}
+

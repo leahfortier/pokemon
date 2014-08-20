@@ -1,0 +1,37 @@
+GT_PlayersHouseDown_to_DFS_Town {
+	5 9
+}
+
+NPC PlayersHouseDown_NPC_Mom_01{
+	startX: 3
+	startY: 4
+	path: w
+	spriteIndex: 13
+	direction: 3
+	walkToPlayer: false
+	firstDialogue[0]: "It's nice when you come to visit, but please get a job."
+}
+
+Trigger PlayersHouseDown_TriggerEntity_PlayersFridge_01{
+	x: 4
+	y: 1
+	trigger: PlayersFridgeTrigger
+}
+
+MapEntrance stairs {
+	x: 9
+	y: 1
+}
+
+MapEntrance DFS_Town {
+	x: 5
+	y: 8
+}
+
+TriggerData PlayersHouseDown_to_PlayersHouseUp {
+	8 1
+	MapTransition
+	nextMap: PlayersHouseUp
+	mapEntrance: stairs
+}
+

@@ -1,0 +1,165 @@
+If you want to add it, load settings file on start up
+	Theme: Basic or Scenic
+	Mute: True or False
+(See Options at the bottom of the document for when to save the file)
+	
+Load mainMenuTiles
+
+if basic theme
+	(0, 0) rectangle 800, 600 
+	color: 68, 123, 184
+	(0, 0) MainBackgroundBasic.png (0x01)
+
+else if scenic theme
+	draw map
+	(0, 0) MainBackgroundScenic.png (0x02)
+	
+(95, 54) MainLogo.png (0x03)
+
+Button locations:
+200, 240	Button 1
+200, 325	Button 2
+200, 410	Button 3
+200, 495	Button 4
+405, 495	Button 5
+
+Button size: (400, 75)
+Small button size: (195, 75)
+
+Main Menu: 
+	for buttons 1-4:
+		(x, y) rectangle (400, 75) 
+			if basic theme: color: 255, 210, 86
+			if scenic theme: color: 68, 123, 184
+		(x, y) MainButton.png (0x04)
+		font: 40
+		(x+200, y+50) text[i] (Centered)
+
+Load Game: 
+	for buttons 1-3
+		(x, y) rectangle (400, 75) 
+			if basic theme: color: 255, 210, 86
+			if scenic theme: color: 68, 123, 184
+		(x, y) MainButton.png (0x04)
+		
+		if save file exists (read preview file for this slot to get information)
+			font: 20
+			(x+16, y+28) "Name:"
+			(x+189, y+28) Player name (Right aligned)
+			(x+210, y+28) "Time:"
+			(x+383, y+28) total time with format H:MM (Right aligned)
+			
+			(x+16, y+58) "Badges:"
+			(x+189, y+58) number of badges (Right aligned)
+			(x+210, y+58) "Pokédex:"
+			(x+383, y+58) number of caught pokémon (Right aligned)
+			
+			Clicked action: if delete has not been pressed
+				load save file and start game
+			else
+				font: 20
+				(x+16, y+28) "Are you sure you want to delete this file?" (wrapped, 30 pixels per line)
+				Options:
+					(x+210, y+58) Yes	
+					(x+299, y+58) No
+				if yes, delete file
+				if no, go back to normal selection (unpress Delete)
+				
+		else
+			font:30
+			(x+200, y+47) "Empty" (Centered)
+			
+			No clicked action
+
+	(200, 495) Button 4:
+		(x, y) rectangle (195, 75)  
+			if basic theme: color: 255, 210, 86
+			if scenic theme: color: 68, 123, 184
+		(x, y) MainButtonSmall.png (0x05)
+		font:30
+		(x+93, 46) "Return" (Centered)
+		Clicked action: go back to main menu	
+
+	(405, 495) Button 5:
+		(x, y) rectangle (195, 75) 
+			if basic theme: color: 255, 210, 86
+			if scenic theme: color: 68, 123, 184
+		(x, y) MainButtonSmall.png (0x05)
+		font:30
+		(x+93, 46) "Delete" (Centered)
+
+		Clicked action: Player can select a file to delete
+			Leah suggested having the hover stroke be red to indicate deleting
+			Do nothing for empty files.
+			if button pressed again, go back to normal selection.
+
+New Game: 
+	for buttons 1-3
+		(x, y) rectangle (400, 75) 
+			if basic theme: color: 255, 210, 86
+			if scenic theme: color: 68, 123, 184
+		(x, y) MainButton.png (0x04)
+		
+		if save file exists (read preview file for this slot to get information)
+			(Same info text from Load Game)
+			font: 20
+			(x+16, y+28) "Name:"
+			(x+189, y+28) Player name (Right aligned)
+			(x+210, y+28) "Time:"
+			(x+383, y+28) total time with format H:MM (Right aligned)
+			
+			(x+16, y+58) "Badges:"
+			(x+189, y+58) number of badges (Right aligned)
+			(x+210, y+58) "Pokédex:"
+			(x+383, y+58) number of caught pokémon (Right aligned)
+			
+			Clicked action: 
+				font: 20
+				(x+16, y+28) "Saving will replace this file."
+				(x+16, y+58) "Proceed anyway?"
+				(Ask group for better wording)
+				Options:
+					(x+210, y+58) Yes	
+					(x+299, y+58) No
+				if yes, do not delete file
+					(Ask group how we want to get player's name)
+					(x+16, y+28) "What is your name?"
+					(x+16, y+58) Display user typing, max 10 characters
+					start new game.
+				if no, go back to normal selection 
+				
+		else
+			font:30
+			(x+200, y+47) "New Save" (Centered)
+			
+			Clicked action:
+				(Ask group how we want to get player's name)
+				(x+16, y+28) "What is your name?"
+				(x+16, y+58) Display user typing, max 10 characters
+				Start a new game
+
+	(200, 495) Button 4:
+		(x, y) rectangle (400, 75) 
+			if basic theme: color: 255, 210, 86
+			if scenic theme: color: 68, 123, 184
+		(x, y) MainButton.png (0x04)
+		font:30
+		(x+200, y+47) "Return (Centered)
+		Clicked action: go back to main menu	
+
+Options: {"Theme", "Mute", "Credits", "Return"} 
+	for buttons 1-4
+		(x, y) rectangle (400, 75) 
+			if basic theme: color: 255, 210, 86
+			if scenic theme: color: 68, 123, 184
+		(x, y) MainButton.png (0x04)
+		font: 30
+		(x+200, y+47) text[i] (Centered)
+	
+	Theme on click:	change to other theme
+	Mute on click: play/stop playing sound
+	Credits on click: Display our names and give credit to GameFreak and Nintendo 
+		(Ask the rest of the group for what else to add)
+	Return on click: go back to main menu
+
+	Save to file after each change

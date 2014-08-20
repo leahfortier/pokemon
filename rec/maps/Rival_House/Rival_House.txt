@@ -1,0 +1,25 @@
+MapEntrance stairs {
+	x: 20
+	y: 6
+}
+
+MapEntrance DFS_Town {
+	x: 15
+	y: 10
+}
+
+TriggerData from_Rival_House_to_DFS_Town_01{
+	15 11
+	MapTransition
+	nextMap: DFS_Town
+	mapEntrance: RivalsHouse
+}
+
+TriggerData from_Rival_House_to_R_House_Up_01{
+	19 6
+	MapTransition
+	nextMap: R_House_Up
+	mapEntrance: stairs
+}
+
+

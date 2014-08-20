@@ -1,0 +1,12 @@
+# This data will be translated into Move.java. A boilerplate abstract class will be written, as
+# well as a subclass for each move. This allows for very easy move hardcoding, and format changes.
+# Format:
+#
+# Name
+# Description
+# Category Type Power Accuracy PP
+#
+Tackle
+A physical attack in which the user charges and slams into the foe with its whole body.
+Physical Normal 50 100 35
+*

@@ -1,0 +1,30 @@
+GT_PlayersHouseDown_to_DFS_Town{
+	5 9
+}
+
+MapEntrance frontDoor {
+	x: 5
+	y: 8
+}
+
+
+MapEntrance stairs {
+	x: 9
+	y: 1
+}
+
+TriggerData PlayersHouseDown_to_PlayersHouseUp {
+	8 1
+	MapTransition
+	nextMap: PlayersHouseUp
+	mapEntrance: stairs
+}
+
+NPC Mom {
+	startX: 3
+	startY: 4
+	path: w
+	spriteIndex: 13
+	direction: 3
+	firstDialogue[0]: "It's nice when you come to visit, but please get a job."
+}

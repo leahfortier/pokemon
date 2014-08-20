@@ -1,0 +1,198 @@
+// The name of each effect and its contents.
+// Blocks are separated by '*'
+// Any function must be terminated by +++ on a line by itself
+// Fields can be specified in any order
+
+Reflect:
+	EffectType: StatChanging
+	NumTurns: 5
+	Modify: return stat*(s == Stat.DEFENSE && !opp.hasAbility("Infiltrator") ? 2 : 1);
+	+++
+	CastMessage: user.getName()+" raised the defense of its team!"
+	SubsideMessage: "The effects of reflect faded."
+	Defog: "The effects of reflect faded."
+	Cast: super.cast(b, caster, victim, source, printCast);
+	if (caster.isHoldingItem(b, "Light Clay")) Effect.getEffect(b.getEffects(victim.user()), "Reflect").setTurns(8);
+	+++
+*
+LightScreen:
+	EffectType: StatChanging
+	NumTurns: 5
+	Modify: return stat*(s == Stat.SP_DEFENSE && !opp.hasAbility("Infiltrator") ? 2 : 1);
+	+++
+	CastMessage: user.getName()+" raised the special defense of its team!"
+	SubsideMessage: "The effects of light screen faded."
+	Defog: "The effects of light screen faded."
+	Cast: super.cast(b, caster, victim, source, printCast);
+	if (caster.isHoldingItem(b, "Light Clay")) Effect.getEffect(b.getEffects(victim.user()), "LightScreen").setTurns(8);
+	+++
+*
+Tailwind:
+	EffectType: StatChanging
+	Modify: return stat*(s == Stat.SPEED ? 2 : 1);
+	+++
+	NumTurns: 4
+	SubsideMessage: "The effects of tailwind faded."
+	CastMessage: user.getName()+" raised the speed of its team!"
+*
+StealthRock:
+	EffectType: Entry
+	Enter: if (victim.hasAbility("Magic Guard")) return;
+	b.addMessage(victim.getName()+" was hurt by stealth rock!");
+	victim.reduceHealthFraction(b, Type.getAdvantage(Type.ROCK, victim, b)/8.0);
+	+++
+	CastMessage: "Floating rocks were scattered all around!"
+	RapidSpin: "The floating rocks spun away!"
+	Defog: "The floating rocks dispersed!"
+*
+ToxicSpikes:
+	EffectType: Entry
+	Field: private int layers;
+	+++
+	Activate: x.layers = 1;
+	+++
+	Enter: if (victim.isLevitating(b)) return;
+	if (victim.isType(Type.POISON))
+	{
+		b.addMessage(victim.getName()+" absorbed the Toxic Spikes!");
+		super.active = false;
+		return;
+	}
+	ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user()); 
+	if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim))
+	{
+		if (layers >= 2) PokemonEffect.getEffect("BadPoison").cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
+		else Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
+	}
+	+++
+	CastMessage: "Toxic spikes were scattered all around!"
+	CanHave
+	Cast: Effect e = Effect.getEffect(b.getEffects(victim.user()), "ToxicSpikes");
+	if (e == null) 
+	{
+		super.cast(b, caster, victim, source, printCast);
+		return;
+	}
+	((ToxicSpikes)e).layers++;
+	b.addMessage(getCastMessage(b, caster, victim));
+	+++
+	RapidSpin: "The toxic spikes dispersed!"
+	Defog: "The toxic spikes dispersed!"
+*
+Spikes:
+	EffectType: Entry
+	Field: private int layers;
+	+++
+	Activate: x.layers = 1;
+	+++
+	Enter: if (victim.isLevitating(b) || victim.hasAbility("Magic Guard")) return;
+	b.addMessage(victim.getName()+" was hurt by spikes!");
+	if (layers == 1) victim.reduceHealthFraction(b, 1/8.0);
+	else if (layers == 2) victim.reduceHealthFraction(b, 1/6.0);
+	else victim.reduceHealthFraction(b, 1/4.0);
+	+++
+	CastMessage: "Spikes were scattered all around!"
+	CanHave
+	Cast: Effect e = Effect.getEffect(b.getEffects(victim.user()), "Spikes");
+	if (e == null) 
+	{
+		super.cast(b, caster, victim, source, printCast);
+		return;
+	}
+	((Spikes)e).layers++;
+	b.addMessage(getCastMessage(b, caster, victim));
+	+++
+	RapidSpin: "The spikes dispersed!"
+	Defog: "The spikes dispersed!"
+*
+Wish:
+	NumTurns: 1
+	NextTurnSubside
+	Field: private String casterName;
+	+++
+	Activate: x.casterName = casterName;
+	+++
+	Subside: if (p.hasEffect("HealBlock")) return;
+	p.healHealthFraction(1/2.0);
+	b.addMessage(casterName+"'s wish came true!", p.getHP(), p.user());
+	+++
+	Cast: casterName = caster.getName();
+	super.cast(b, caster, victim, source, printCast);
+	+++
+*
+LuckyChant:
+	NumTurns: 5
+	CastMsg: "The lucky chant shielded "+victim.getName()+"'s team from critical hits!"
+	SubsideMsg: "The effects of lucky chant wore off."
+*
+FutureSight:
+	NumTurns: 2
+	NextTurnSubside
+	Field: private ActivePokemon theSeeer;
+	+++
+	Activate: x.theSeeer = theSeeer;
+	+++
+	Subside: b.addMessage(p.getName()+" took "+theSeeer.getName()+"'s attack!");
+	theSeeer.setMove(new Move(Attack.getAttack("Future Sight")));
+	theSeeer.getAttack().applyDamage(theSeeer, p, b);
+	+++
+	Cast: theSeeer = caster;
+	super.cast(b, caster, victim, source, printCast);
+	+++
+	CastMessage: theSeeer.getName()+" foresaw an attack!"
+*
+DoomDesire:
+	NumTurns: 2
+	NextTurnSubside
+	Field: private ActivePokemon theSeeer;
+	+++
+	Activate: x.theSeeer = theSeeer;
+	+++
+	Subside: b.addMessage(p.getName()+" took "+theSeeer.getName()+"'s attack!");
+	theSeeer.setMove(new Move(Attack.getAttack("Doom Desire")));
+	theSeeer.getAttack().applyDamage(theSeeer, p, b);
+	+++
+	Cast: theSeeer = caster;
+	super.cast(b, caster, victim, source, printCast);
+	+++
+	CastMessage: theSeeer.getName()+" foresaw an attack!"
+*
+HealSwitch:
+	Field: private String wish;
+	+++
+	Activate: x.wish = wish;
+	+++
+	EffectType: Entry
+	Enter: victim.healHealthFraction(1);
+	victim.removeStatus();
+	b.addMessage(victim.getName()+" health was restored due to the "+wish+"!", victim.getHP(), victim.user());
+	b.addMessage("", StatusCondition.NONE, victim.user());
+	super.active = false;
+	+++
+	Cast: wish = caster.getAttack().getName().equals("Lunar Dance") ? "lunar dance" : "healing wish";
+	super.cast(b, caster, victim, source, printCast);
+	+++
+*
+DeadAlly:
+	NumTurns: 2
+*
+PayDay:
+	EffectType: EndBattle
+	Field: private int coins;
+	+++
+	Cast: PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), "PayDay");
+	b.addMessage(getCastMessage(b, caster, victim));
+	coins = 5*caster.getLevel();
+	if (payday == null) b.getPlayer().addEffect(this);
+	else payday.coins += coins;
+	+++
+	CastMessage: "Coins scattered everywhere!"
+	Activate: x.coins = coins;
+	+++
+	CanHave
+	EndBattle: b.addMessage(player.getName()+" picked up "+coins+" pokedollars!");
+	player.getDatCashMoney(coins);
+	+++
+*
+DoubleMoney:
+*

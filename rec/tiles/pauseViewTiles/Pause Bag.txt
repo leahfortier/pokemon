@@ -1,0 +1,157 @@
+
+Suggested drawing order:
+
+0 0 PauseSelectionBackground.png (0x2)
+
+tab colors:
+Tab 1: (248, 120, 64)
+Tab 2: (232, 184, 40)
+Tab 3: (80, 128, 232)
+Tab 4: (152, 88, 240)
+Tab 5: (168, 232, 72)
+Tab 6: (64, 192, 64)
+Tab 7: (232, 136, 192)
+
+(42, 92) Draw Rectangle 
+	size: (716, 466)
+	color: Selected tab color	
+
+(42, 92) PauseBagTabBackground.png (0x21)
+
+(62, 112) PauseBagTabInfoBoxes.png (0x22)
+
+Item description:
+Have first item displayed when first opened.
+when you click an item, display it in the description and move to buttons underneath.
+
+Buttons: {"Give", "Use", "Discard"}
+Key item: {"Use"} (Ask Max and Leah if others only have use)
+Battle items/other: block out the Use button (Ask Max and Leah)
+
+(430, 132) Item image (centered)
+Font: 20
+(448, 138) Item name
+(726, 138) "x"+amount of item (Right aligned)
+
+Font: 14
+(418, 156) Item description with wrapping (15 pixels lower for new lines)
+
+If only "Use"
+	Font: 20
+	(410, 193) button image (0x27)
+	(573, 218) "Use" (centered)
+
+Button locations
+(410, 193) Button 1
+(518, 193) Button 2
+(628, 193) Button 3
+
+Button sizes (110, 38)
+
+if all buttons
+	(410, 193) multibutton image (0x28)
+
+	for each button 
+		Font: 20
+		(x+54, y+25) button text {"Give", "Use", "Discard"}
+		Ask Max and Leah for what these buttons do exactly
+		Give will always take you to the pokemon side
+		Use may take you to the pokemon side
+		Discard will remove the items
+
+Item list:
+
+Item locations:
+(421, 261) Item 1
+(581, 261) Item 2
+(421, 299) Item 3
+(581, 299) Item 4
+(421, 337) Item 5
+(581, 337) Item 6
+(421, 375) Item 7
+(581, 375) Item 8
+(421, 413) Item 9
+(581, 413) Item 10
+
+Item size (148, 28)
+
+for each item:
+	Font: 12
+	(x, y) Item image background (0x26)
+	(x+14, y+14) Item image (centered)
+	(x+29, y+18) Item name
+	(x+142, y+18) Item amount (right aligned)
+
+Font: 16
+(573, 466) currentPage out of total pages (centered)
+Put arrows on left and right as you did last time.
+
+Party:
+Pokemon locations:
+(72, 122) Pokemon 1
+(72, 191) Pokemon 2
+(72, 260) Pokemon 3
+(72, 329) Pokemon 4
+(72, 398) Pokemon 5
+(72, 467) Pokemon 6
+
+Box size (308, 61)
+
+for each Pokemon location:
+	(x, y) Primary polygon 
+		x: {0, 184, 124, 0}
+		y: {0, 0, 61, 61}
+		color: Primary type color
+	(x, y) Secondary polygon
+		x: {184, 308, 308, 124}
+		y: {0, 0, 61, 61}
+		color: Secondary type color
+	(x, y) background image (0x25)
+
+	(x+30, y+30) Pokemon mini sprite
+	
+	Font: 14
+	(x+50, y+22) Pokemon's name + Gender
+	(x+153, y+22) "Lv" + Pokemon's level
+	(x+293, y+22) Pokemon's status (Right aligned)
+
+	(x+50, y+26) Rectangle (244, 11) color: (Color.black)
+	(x+52, y+28) Rectangle (240, 7) color: (white)
+	(x+52, y+28) Rectangle (240, 7)(when full) color: (Color.green)
+	
+	Font: 12
+	(x+50, y+47) Held item (none if nothing)
+	(x+293, y+47) Current HP out of total HP
+
+	if fainted
+		(x, y) rectangle (308, 61) color: black 30%
+
+
+Move list: (replaces party list) (needs to be finalized)
+	Nothing for now, I'll add this later
+
+Return button
+(410, 500) Button image (0x27)
+Button size (328, 38)
+Font: 20
+(573, 525) "Return" (Centered)
+
+Tabs Locations:
+(42, 42) Tab 1
+(144, 42) Tab 2
+(246, 42) Tab 3
+(348, 42) Tab 4
+(450, 42) Tab 5
+(552, 42) Tab 6
+(654, 42) Tab 7
+
+for each tab:
+	Font: 14
+	(x, y) Rectangle (104, 52) color: tab color
+	if selected
+		(x, y) Tab selected image (0x23)
+	else
+		(x, y) Tab unselected image (0x24)
+	(x+16, y+26) Tab category image (Images located in rec/tiles/bagTiles)
+	(x+30, y+30) Tab category name
+	

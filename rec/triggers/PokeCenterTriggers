@@ -1,0 +1,15 @@
+
+EventTrigger Heal_Trigger {
+	dialogue: NurseJoyDialogue_1
+}
+
+HealPartyTrigger HealParty {}
+LastPokeCenterTrigger SetTeleportToLastPokeCenter {}
+
+EventTrigger Mart_Trigger {
+	dialogue: MartDialogue
+}
+
+EventTrigger PC_Trigger {
+	dialogue: PCDialogue
+}

@@ -1,0 +1,12 @@
+MapEntrance stairs {
+	x: 4
+	y: 2
+}
+
+TriggerData from_R_House_Up_to_Rival_House_01{
+	5 2
+	MapTransition
+	nextMap: Rival_House
+	mapEntrance: stairs
+}
+

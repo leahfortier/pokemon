@@ -1,0 +1,167 @@
+
+Suggested drawing order:
+
+0 0 PauseSelectionBackground.png (0x2)
+
+-Primary background polygon
+	x: {40, 632, 166,  40}
+	y: {93,  93, 559, 559}
+	color: Primary Pokemon color (Unless 6th tab selected, use Secondary color)
+
+-Secondary background polygon
+	x: {633, 759, 759, 167}
+	y: { 93,  93, 559, 559}
+	color: Secondary Pokemon color (Unless 6th tab selected, use Primary color)
+
+if fainted
+	(39, 92) PausePokemonTabBackgroundFainted.png (0x12)
+else
+	(39, 92) PausePokemonTabBackground.png (0x11)
+
+(69, 122) PausePokemonTabInfoBoxes.png (0x13)
+(121, 174) Pokemon tile small (Centered)
+
+
+Font: 20
+(213, 147) Pokemon name +" "  +gender
+(378, 147) "#" + Pokemon number with zero padding (3 digits)
+(459, 147) Pokemon Status
+(525, 147) Pokemon Level
+
+(647, 147) Pokemon Primary Type Image
+(687, 147) Pokemon Secondary Type Image
+(Images currently in battleViewTiles. Probably should be moved to another folder)
+
+Font: 16
+(213, 170) Pokemon's Nature +" Nature"
+(525, 170) "EXP:"
+(718, 170) Pokemon's total exp (right aligned)
+
+(213, 190) Pokemon's characteristic
+(525, 190) "To Next Lv:"
+(718, 190) Exp to next level (right aligned)
+
+(213, 211) Held item name
+
+
+(527, 214) EXP rectangle (when full)
+	(202, 10)
+	color: (51, 102, 204)
+
+
+Font: 16
+(81, 217) Ability name + " - "
+
+Font: 12
+(x, 217) Ability description
+x = End of ability name text
+
+
+(71, 329) HP rectangle (when full)
+	(155, 10)
+	color: Color.green
+
+Font: 16
+(290, 340) "Stat" (right aligned)
+(327, 340) "IV" (right aligned)
+(371, 340) "EV" (right aligned)
+
+
+Being lazy in writing all these so I'm just going to put code
+(x, 360) HP values
+(x, 378) Attack values
+(x, 397) Defense values
+(x, 415) Special Attack values
+(x, 434) Special Defense values
+(x, 452) Speed values
+
+for (int i = 0; i < Stat.NUM_STATS; i++)
+{
+	font: 16
+	(81,   360 + i*18 + (i/2)) Stat.getStat(i, false).getName()
+
+	font: 14
+	(290,   360 + i*18 + (i/2)) Stat value (right aligned)
+	(327,   360 + i*18 + (i/2)) IV value  (right aligned)
+	(371,   360 + i*18 + (i/2)) EV value  (right aligned)
+} 
+
+
+Move locations:
+(426, 266) Move 1
+(426, 315) Move 2
+(426, 364) Move 3
+(426, 413) Move 4
+
+-Move rectangle
+	(293, 40)
+	color: Move's type color
+
+for each move:
+	(x, y) Move rectangle (color: Move's type color)
+	(x, y) PausePokemonMoveBox.png (0x18)
+
+	On hover:
+		Font: 10
+		(x+6, y+11) Move name +" - " + move description with wrapping. 
+		(new lines should be 11 pixels lower.) 
+	else:
+		Font: 14
+		(x+7, y+16) Move name
+		(x+133, y+16) "PP:"
+		(x+205, y+16) current pp +"/" +total pp (right aligned)
+
+		Font: 12
+		(x+7, y+32) "Accuracy:"
+		(x+100, y+32) accuracy value (right aligned) 		
+
+		if power > 0
+			(x+133, y+32) "Power:"
+			(x+205, y+32) Power value (right aligned)
+		Ask Leah about what she wants to do with constant damage moves.
+
+		(x+241, y+18) Move type image	
+		(x+241, y+34) Move category image
+		(Images currently in battleViewTiles. Probably should be moved to another folder)
+
+	Optional if you have extra time
+		If you press space/enter on a move, you can then switch the ordering of the moves
+
+
+Switch button
+	if fainted
+		(69, 493) PausePokemonButtonBoxFainted.png (0x17)
+		Not selectable
+	else
+ 		(69, 493) PausePokemonButtonBox.png (0x16)
+	(227, 518) "Switch!" (Centered)
+
+Return button
+	(414, 493) PausePokemonButtonBox.png (0x16)
+	(566, 518) "Return" (Centered)
+
+
+Tab locations:
+(39, 39)	Tab1
+(159, 39)	Tab2
+(279, 39)	Tab3
+(399, 39)	Tab4
+(519, 39)	Tab5
+(639, 39)	Tab6
+
+-Tab rectangle
+	(122, 55)
+	color: See when used
+
+For each tab
+	(x, y) Tab rectangle (color: Pokemon's primary color)
+
+	if selected
+		(x, y) PausePokemonTabSelected.png (0x14)
+	else
+		(x, y) PausePokemonTabUnselected.png (0x15)
+	Font: 14
+	(x+39, y+39) Pokemon Name 
+	(x+20 , y+27) Pokemon mini sprite image (Centered)
+	if fainted
+		(x, y) Tab rectangle (color: Black with 50% transparency)

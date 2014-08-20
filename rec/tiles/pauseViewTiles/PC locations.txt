@@ -1,0 +1,127 @@
+
+
+(0, 0) background image (0x02)
+
+Box:
+
+(40, 40) box color rectangle (350, 418)
+color (Each box should have its own color, pick one)
+(40, 40) box image (0x31)
+
+Font: 20
+(214, 64) "Box " + box number (Centered)
+
+Pokemon box locations:
+for (i in 0..5)
+	for (j in 0..5)
+		if Pokemon is selected
+			(60 + 54*i, 96 + 54*j) selected pokemon image (0x32)
+		(80 + 54*i, 116 + 54*j) pokemon sprite (centered)
+
+Font: 16
+(215, 433) Current box "/" total boxes (Centered)
+Arrows on either side like bag view
+
+
+Party:
+
+(40, 478) Party box color rectangle (350, 82)
+(40, 478) party box image (0x33)
+
+
+for each pokemon in party
+	if Pokemon is selected
+		(60 + 54*i, 499) selected pokemon image (0x32)
+	(80 + 54*i, 519) pokemon sprite (centered)
+
+
+Description area:
+x: {410, 759, 759, 410}
+y: { 40,  40,  95, 444}
+Primary Color
+
+x: {410, 759, 759, 410}
+y: {445,  96, 501, 501}
+Secondary Color
+
+(410, 40) Description image (0x34)
+
+(479, 109) Pokemon small image (Centered) 
+
+Font: 20
+(541, 82) Pokemon name + gender
+(740, 82) Pokemon level (right aligned)
+
+(541, 110) Pokemon number
+
+(Images in battleViewTiles)
+(669, 97) Primary type image (if multi type)
+(707, 97) Secondary type image (Or primary if single type)
+
+Font: 16
+(540, 135) "EXP:"
+(740, 135) Pokemon's total exp (right aligned)
+
+(540, 156) "To Next Lv:"
+(740, 156) Exp needed to level up (right aligned)
+
+(427, 179) Pokemon ability
+(740, 179) Hold item (right aligned)
+
+(427, 198) nature + " Nature"
+(427, 217) Characteristic
+
+Move locations:
+(421, 238) Move 1
+(590, 238) Move 2
+(421, 277) Move 3
+(590, 277) Move 4
+
+For each move:
+	(x, y) rectangle (159, 31) color: Move type color
+	(x, y) move image (0x35)
+	(x+77, y+20) Move name (centered)
+
+
+(635, 340) "Stat" (right aligned)
+(681, 340) "IV" (right aligned)
+(735, 340) "EV" (right aligned)
+
+Being lazy in writing all these so I'm just going to put code
+(x, 360) HP values
+(x, 378) Attack values
+(x, 397) Defense values
+(x, 415) Special Attack values
+(x, 434) Special Defense values
+(x, 452) Speed values
+
+for (int i = 0; i < Stat.NUM_STATS; i++)
+{
+	font: 16
+	(427,   360 + i*18 + (i/2)) Stat.getStat(i, false).getName()
+
+	font: 14
+	(635,   360 + i*18 + (i/2)) Stat value (right aligned)
+	(681,   360 + i*18 + (i/2)) IV value  (right aligned)
+	(735,   360 + i*18 + (i/2)) EV value  (right aligned)
+} 
+
+Font: 20
+Button Locations:
+(410, 464)
+(526, 464)
+(642, 464)
+
+Button size (118, 38)
+
+Buttons
+(464, 489) "Switch" (centered)
+(584, 489) "Withdraw" or "Deposit depending on which pokemon is selected (centered)
+(699, 489) "Release" (centered)
+
+
+button size: (350, 38)
+
+Return button
+(410, 522) Button image (0x36)
+(584, 546) "Return" (centered)

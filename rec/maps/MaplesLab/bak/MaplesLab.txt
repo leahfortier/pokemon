@@ -1,0 +1,38 @@
+TriggerData Maple_to_DFS {
+	10 16
+	MapTransition
+	nextMap: DFS_Town
+	mapEntrance: MaplesLab
+}
+MapEntrance DFS_Town {
+	x: 10
+	y: 15
+}
+
+
+
+NPC Prof_Maple{
+	startX: 10
+	startY: 1
+	spriteIndex: 7
+	direction: 3
+	
+	firstDialogue[0]: "I am Professor Maple, eh. Welcome to my lab."
+	firstDialogue[1]: "While you are here, let me heal your Pok\u00e9mon."
+	firstDialogue[2]: "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
+	secondDialogue[0]: "How's it goin'? Need to rest up your Pok\u00e9mon a bit?" 
+	
+	giveItem: "item: Syrup"
+	
+	firstTriggers: "trigger: HealParty"
+	secondTriggers: "trigger: HealParty"
+}
+
+NPC MapleAssistant {
+	startX: 5
+	startY: 11
+	spriteIndex: 12
+	direction: 2
+	
+	firstDialogue[0]: "Don't disturb me! I'm doing syrup science!"
+}

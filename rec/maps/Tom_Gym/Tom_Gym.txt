@@ -1,0 +1,57 @@
+NPC Tom_Gym_NPC_Leader_Moore_01{
+	startX: 9
+	startY: 5
+	path: w
+	spriteIndex: 15
+	direction: 3
+	walkToPlayer: false
+	firstDialogue[0]: "My Pokemon pack enough electricity to power the Cray Titan!"
+	secondDialogue[0]: "My data BUS just wasn't large enough! Take this, the Round Badge!"
+	trainer: "name: Leader Moore
+		cash: 1000
+		pokemon: Magnemite 11
+		pokemon: Elekid 11
+		pokemon: Pikachu 14"
+	secondTriggers: "trigger: Badge_0"
+}
+
+NPC Tom_Gym_NPC_Tom_Trainer_01{
+	startX: 7
+	startY: 11
+	path: w
+	spriteIndex: 5
+	direction: 0
+	walkToPlayer: true
+	firstDialogue[0]: "Electric type Pok\u00e9mon are awesome!"
+	secondDialogue[0]: "Electric types are still beter than normal types..."
+	trainer: "name: Gym Trainer
+		cash: 100
+		pokemon: Blitzle 9"
+}
+
+NPC Tom_Gym_NPC_Tom_Trainer_02{
+	startX: 11
+	startY: 9
+	path: w
+	spriteIndex: 5
+	direction: 2
+	walkToPlayer: true
+	firstDialogue[0]: "Pikachu has nothing on my Joltik!"
+	secondDialogue[0]: "Don't think you've won just yet."
+	trainer: "name: Gym Trainer
+		cash: 100
+		pokemon: Joltik 9"
+}
+
+MapEntrance Tom_Town {
+	x: 9
+	y: 15
+}
+
+TriggerData from_Tom_Gym_to_Tom_Town_01 {
+	9 16
+	MapTransition
+	nextMap: Tom_Town
+	mapEntrance: Gym
+}
+

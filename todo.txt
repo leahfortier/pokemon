@@ -1,0 +1,46 @@
+STUFF DAT MUST HAPPEN:
+	Connect mechanics with tha GUI (Tyler/Leah)
+	Battle mechanics (Leah)
+	Battle AI (Jessica/Josh)
+	Storyline (Jessica/Jeb)
+	Data stuff (Max/Leah)
+	Region Design (Jeb)
+	Rendering all the things (Tyler)
+	Graphics 'n stuff (Josh/Jeb)
+	Save files (Jessica/Josh)
+	Item things (Max)
+	Eggs/Breeding 
+	LOTS OF UI DESIGN INCLUDING BUT NOT LIMITED TO: BATTLE, POKEDEX, BAG, START MENU, POKEMON MENU, TRAINER CARD, YADA YADA YADA
+	All dem UMLs (Jeb)
+	Syrup (Leah/Max/Jessica/Josh/Jeb/Tyler)
+	Route Traversal
+	Event Triggers (Josh/Tyler)
+	Story Integration
+	OMG SHOPPING
+	Focus Sash, wut up?
+	Ziggurat Zubat Cave
+	Puns (Leah/Max/Jessica/Josh/Jeb/Tyler)
+	SHEDINJJJAAAAAAAA (Leah)
+	Forcing a move (Leah/Tyler)
+	Preserve dat bad poison (Leah)
+	Failure Messages for moves (Leah)
+	Strategy Guide (Leah)
+	PC (Max)
+	
+OTHER THINGS
+	TYLER - Switching Pokemon/Using an item needs to be able to send messages to the BattleView, 
+	right now you can do these things, but the health/status isn't updated, and there's no message
+	saying that something happened. Also, we need small pokemonTiles.
+	
+	The player should turn in the direction you press, even if the tile is not passable.
+	Can triggers take into account orientation (i.e. only trigger the water dialog when the user is facing the water)?
+	
+Am I allowed to edit this to? (Josh) - YES
+MAP TILES
+	Tyler - I have not seen the map editor yet, but when I was suggesting having multiple
+	grass tiles, the editor should be the one to pick at random which tile to use. Also, going 
+	with your idea of having a two layered tile set, the only thing I can think of that would 
+	go on the background set would be grass tiles. Unless someone else comes up with another 
+	tile that would go in the background set, you could just render the default grass tile for 
+	the map in all locations and then draw the map as usual. Then again, to avoid all of the 
+	unnecessary rendering, I could just get Jeb to add grass tiles to the bottom of all tree tiles. 

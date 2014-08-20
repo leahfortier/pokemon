@@ -1,0 +1,23 @@
+Dialogue intro_dialogue_one{
+	text: "Welcome to the world of Pok\u00e9mon!"
+	next[0]: intro_dialogue_two
+}
+Dialogue intro_dialogue_two{
+	text: "It's filled with many unique creatures, such as this Ditto."
+	next[0]: intro_dialogue_three
+}
+Dialogue intro_dialogue_three{
+	text: "The people of the Hash Map region befriend, travel, and battle with their Pok\u00e9mon."
+	next[0]: intro_dialogue_four
+}
+Dialogue intro_dialogue_four{
+	text: "Oh, have you seen any syrup aboot? Well, never mind..."
+	next[0]: intro_dialogue_five
+}
+Dialogue intro_dialogue_five{
+	text: "I can see quite clearly that you're a boy, so what's your name, eh?"
+	next[0]: intro_dialogue_six
+}
+Dialogue intro_dialogue_six{
+	text: "Are you ready to start your epic adventure? Well, off you go! I'll be seeing you soon!"
+}

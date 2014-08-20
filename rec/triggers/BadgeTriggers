@@ -1,0 +1,86 @@
+# There is probably a better way to do this.
+
+
+BadgeTrigger Badge_0 {
+	condition: !Badge_0
+	global:	Badge_0
+	badgeIndex: 0
+}
+
+
+BadgeTrigger Badge_1 {
+	condition: !Badge_1
+	global:	Badge_1
+	badgeIndex: 1
+}
+
+
+BadgeTrigger Badge_2 {
+	condition: !Badge_2
+	global:	Badge_2
+	badgeIndex: 2
+}
+
+
+BadgeTrigger Badge_3 {
+	condition: !Badge_3
+	global:	Badge_3
+	badgeIndex: 3
+}
+
+
+BadgeTrigger Badge_4 {
+	condition: !Badge_4
+	global:	Badge_4
+	badgeIndex: 4
+}
+
+
+BadgeTrigger Badge_5 {
+	condition: !Badge_5
+	global:	Badge_5
+	badgeIndex: 5
+}
+
+
+BadgeTrigger Badge_6 {
+	condition: !Badge_6
+	global:	Badge_6
+	badgeIndex: 6
+}
+
+
+BadgeTrigger Badge_7 {
+	condition: !Badge_7
+	global:	Badge_7
+	badgeIndex: 7
+}
+
+
+BadgeTrigger Badge_8 {
+	condition: !Badge_8
+	global:	Badge_8
+	badgeIndex: 8
+}
+
+
+BadgeTrigger Badge_9 {
+	condition: !Badge_9
+	global:	Badge_9
+	badgeIndex: 9
+}
+
+
+BadgeTrigger Badge_10 {
+	condition: !Badge_10
+	global:	Badge_10
+	badgeIndex: 10
+}
+
+
+BadgeTrigger Badge_11 {
+	condition: !Badge_11
+	global:	Badge_11
+	badgeIndex: 11
+}
+

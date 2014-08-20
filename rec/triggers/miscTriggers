@@ -1,0 +1,7 @@
+EventTrigger PlayersFridgeTrigger {
+	dialogue: PlayersFridgeDialogue
+}
+
+EventTrigger LockedDoorTrigger {
+	dialogue: LockedDoorDialogue
+}

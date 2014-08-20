@@ -1,0 +1,10 @@
+
+GroupTrigger GT_PlayersHouseDown_to_DFS_Town {
+	trigger: PlayersHouseDown_to_DFS_Town
+	trigger: SetTeleportToLastPokeCenter
+}
+
+MapTransitionTrigger PlayersHouseDown_to_DFS_Town {
+	nextMap: DFS_Town
+	mapEntrance: PlayersHouse
+}

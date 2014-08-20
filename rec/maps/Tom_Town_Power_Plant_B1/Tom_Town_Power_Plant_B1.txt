@@ -1,0 +1,23 @@
+NPC Tom_Town_Power_Plant_B1_NPC_Scientist_01{
+	condition: Badge_0&!VisitedTomTownPowerPlant
+	startX: 12
+	startY: 4
+	path: w
+	spriteIndex: 19
+	direction: 0
+	walkToPlayer: false
+	firstDialogue[0]: "I'm trying my best to stall the reactor meltdown."
+}
+
+MapEntrance FromFloor1 {
+	x: 6
+	y: 9
+}
+
+TriggerData from_Tom_Town_Power_Plant_B1_to_Tom_Town_Power_Plant_02 {
+	5 9
+	MapTransition
+	nextMap: Tom_Town_Power_Plant_F1
+	mapEntrance: FromBasement1
+}
+

@@ -1,0 +1,5 @@
+EventTrigger intro{
+	condition: !intro
+	dialogue: intro_dialogue_one
+	global: intro
+}

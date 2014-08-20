@@ -1,0 +1,11 @@
+TomTowntoTBH_L {
+	53 25-26
+}
+
+TomTown_to_PC {
+	38 31
+}
+
+TomTown_to_Gym {
+	17 31	
+}

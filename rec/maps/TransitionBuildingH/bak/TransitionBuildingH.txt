@@ -1,0 +1,31 @@
+GT_TBH_Out_R{
+	11 4
+}
+GT_TBH_Out_L{
+	1 4
+}
+
+NPC Info_Guy{
+	startX: 6
+	startY: 1
+	direction: 3
+	spriteIndex: 10
+		
+	firstDialogue[0]: ""
+}
+Trigger Info_Counter {
+	x: 6
+	y: 2
+	trigger: Info_Trigger
+}
+
+
+NPC BFM_Guy{
+	condition: TBH_RSA_R&TBH_BFM_L
+	startX: 2
+	startY: 3
+	direction: 3
+	spriteIndex: 1
+	
+	firstDialogue[0]: "I don't suggest going out there. It's way too buggy!"
+}

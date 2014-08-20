@@ -1,0 +1,27 @@
+#This is a dialogue file
+
+Dialogue example_dialogue{
+	text: "This is Dialogue! Press SPACE!!"
+}
+Dialogue test_pretty_water{
+	text: "The water is so nice isn't it?"
+	choice[0]: "Yes very pretty"
+	choice[1]: "Fuck water!"
+	choice[2]: "Huh?"
+	next[0]: test_pretty_water_yes
+	next[1]: test_pretty_water_no
+	trigger[1]: test_to_no_water_map
+	trigger[2]: test_forget_water
+}
+Dialogue test_pretty_water_yes{
+	text: "I KNOW RIGHT!"
+	choice[0]: "Okay"
+}
+Dialogue test_pretty_water_no{
+	text: "FINE!"
+	choice[0]: "..."
+}
+
+Dialogue helloRandomNPC{
+	text: "HI!"
+}

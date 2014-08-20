@@ -1,0 +1,48 @@
+
+Map Maker notes:
+
+
+In the layer drop down (combo box at the top of the map maker) select "AREA_MAP". All the areas on the current map will be displayed to the left. Placing areas is the same process as for map tiles. Select the area, select either single or rectangle, and then click the locations where you want the area. Click the "New Area" button to add a new area. If the area already exists, it will be added to the list, otherwise you will be asked to pick a color for the new area.
+
+
+In the layer drop down select "TRIGGERS". All the available triggers will be listed to the left. Click on one and a dialog box will be displayed asking about specific options for the creation of a new trigger. After filling out the information, simply click on the map to place the trigger. 
+
+
+To edit an already placed trigger, select the "Triggers" tool in the tools list,lick the location of the trigger you want to edit, click the location of the trigger, select the name of the trigger you want to edit, and then select an option from the edit menu: Edit, Move, or Remove. The Edit option will bring up the menu used to create the trigger. The Move option will let you place the trigger at a different location. The Remove option removes the trigger from the map. 
+
+
+To add an Item to the map, click the Item option and a dialog will be displayed. Type a valid item name into the box and verify that the correct item is shown to the left. If no image is displayed, then the name is invalid. The optional condition text field is used if you would like the item to only be on the map at a specific time.
+
+
+To create an NPC, click the NPC option and a dialog will be displayed giving all the available options. You can change the sprite and the direction the sprite is facing. The name field will be the name of the NPC on the map. Multiple NPCs can have the same name, and the map maker will handle the conflicts. The first dialogue text box is where the dialogue that will be displayed when the player first talks to this NPC. Each line will be a new set of text on the screen. The optional Second dialogue text box is where the dialogue that will be displayed every time the user talks to this NPC after first talking with them. It is suggested that all Trainers have a second dialogue as it will be used as the dialogue when the player wins the battle. The "Walk to player" check box sets whether this NPC will walk to the player when they are within sight (5 tiles). Trainers do not need to have the walk to player check box set. If you want the NPC to move, set the path with a string to indicate where you want them to move. The valid movements are "w" for wait, "r" for right one tile, "u" for up one tile, "l" for left one tile, and "d" for down one tile. The condition textfield is an optional and allows the NPC to only be on the map at specific times. If you would like an NPC to be removed from a map the next time it is loaded after the player has talked to the NPC, add the condition "!triggered_NPC_*MapName*_*NPCName*" replacing *MapName* with the current map name and *NPCName with the name field. Second Dialogue is required for this. The trainer data text field is how you specify this NPC as a trainer. You must follow the format below for Trainer Data:
+
+name: *Name*
+cash: *amount*
+pokemon: *PokemonName* *Level* [moves: *Move1* *Move2* *Move3* *Move4*]
+
+The name will be the name displayed when the trainer battle starts. Cash is the amount of money the player receives for defeating this trainer. There can be 1 to 6 pokemon listed, but any more are not considered. The moves field is optional but if you do specify a move set, you will need to specify all 4 moves. Any unlisted move will be empty.
+
+The optional First Triggers text box is where you list all the triggers you want to be triggered when talking to this NPC for the first time (or always if there is no second dialogue). You must follow the format below for First Triggers:
+
+trigger: *TriggerName*
+
+Multiple triggers are allowed, but must be on separate lines. 
+
+The optional Second Triggers text box is where you list all the triggers you want to be triggered when talking to this NPC after first talking with them. This field follows the same format as First Triggers.
+
+The optional Give Items text box is where you list all the items you would like to give the player when talking to this NPC. The items will be given when you first talk to the NPC. You must follow the format below for Give Items:
+
+item: *ItemName*
+
+Multiple items are allowed, but must be on separate lines. 
+
+Multiple NPCs and Items can be placed at the same location. When adding multiple entities to a location, make sure that the conditions for each entity are such that none of them will be true at the same time. The game cannot have multiple entities so only the last one will show up when the map is loaded. 
+
+
+Map entrances are specific locations where a map transition can enter the map. 
+When creating map transitions (or map exits), make sure that the map you want to transition to already has the specific entrance you want to transition to. This will allow the entrance to be listed in the map transition creation drop down. 
+
+
+The Transition Building trigger can be used to create transitions to both the horizontal and vertical transition buildings. The map's areas must be set before creating transition building transitions. If the areas have not been set, the dialogue within the transition building will be invalid and tell the user that they are headed to the Void.
+To create a new transition to another map using the transition building, click the transition building trigger option, click the create button, and then select the options you want. Once the options have been filled, click the place button and place the trigger. Once the transition has been placed, save the map and load the map you want to transition to. Select the Transition Building trigger again and then select the unplaced transition in the drop down list. Click the place button and place the transition. 
+

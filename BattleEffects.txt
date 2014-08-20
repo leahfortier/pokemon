@@ -1,0 +1,108 @@
+// The name of each effect and its contents.
+// Blocks are separated by '*'
+// Any function must be terminated by +++ on a line by itself
+// Fields can be specified in any order
+
+Gravity:
+	NumTurns: 5
+	EffectType: Grounded
+	EffectType: StageChanging
+	StageChange: return s == Stat.EVASION ? stage-2 : stage;
+	+++
+	CastMessage: "Gravity intensified!"
+	Cast: super.cast(b, caster, victim, source, printCast);
+	removeLevitation(b, caster);
+	removeLevitation(b, victim);
+	+++
+	Field: private void removeLevitation(Battle b, ActivePokemon p)
+	{
+		if (p.isSemiInvulnerable() && (p.getAttack().getName().equals("Fly") || p.getAttack().getName().equals("Bounce")))
+		{
+			p.getMove().switchReady(b);
+			b.addMessage(p.getName()+" fell due to the gravity!");
+		}
+		if (p.hasEffect("MagnetRise"))
+		{
+			Effect.removeEffect(p.getEffects(), "MagnetRise");
+			b.addMessage("The effects of "+p.getName()+"'s magnet rise were cancelled due to the gravity!");
+		}
+		if (p.hasEffect("Telekinesis"))
+		{
+			Effect.removeEffect(p.getEffects(), "Telekinesis");
+			b.addMessage("The effects of telekinesis were cancelled due to the gravity!");
+		}
+	}
+	+++
+	SubsideMsg: "The gravity returned to normal."
+	EffectType: BeforeTurn
+	CanAttack: if (p.getAttack().isMoveType("Airborne"))
+	{
+		b.printAttacking(p);
+		b.addMessage("...but it failed!");
+		return false;
+	}
+	return true;
+	+++
+*
+WaterSport:
+	EffectType: PowerChange
+	GetMultiplier: return user.getAttack().getType(b, user) == Type.FIRE ? .33 : 1;
+	+++
+	CastMessage: "Fire's power was weakened!"
+*
+MudSport:
+	EffectType: PowerChange
+	GetMultiplier: return user.getAttack().getType(b, user) == Type.ELECTRIC ? .33 : 1;
+	+++
+	CastMessage: "Electricity's power was weakened!"
+*
+WonderRoom:
+	EffectType: StatSwitch
+	SwitchStat: if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
+	if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
+	return s;
+	+++
+	NumTurns: 5
+	SubsideMessage: "The dimensions of the wonder room returned to normal."
+	CastMessage: user.getName()+" twisted the dimensions to switch defense and special defense!"
+	CanHave
+	Cast: Effect e = Effect.getEffect(b.getEffects(), "WonderRoom");
+	if (e == null)
+	{
+		super.cast(b, caster, victim, source, printCast);
+		return;
+	}
+	b.addMessage(e.getSubsideMessage(caster));
+	Effect.removeEffect(b.getEffects(), "WonderRoom");
+	+++
+*
+TrickRoom:
+	NumTurns: 5
+	SubsideMessage: "The dimensions of the trick room returned to normal."
+	CastMessage: user.getName()+" twisted the dimensions to switch speeds!"
+	CanHave
+	Cast: Effect e = Effect.getEffect(b.getEffects(), "TrickRoom");
+	if (e == null)
+	{
+		super.cast(b, caster, victim, source, printCast);
+		return;
+	}
+	b.addMessage(e.getSubsideMessage(caster));
+	Effect.removeEffect(b.getEffects(), "TrickRoom");
+	+++
+*
+MagicRoom:
+	NumTurns: 5
+	SubsideMessage: "The dimensions of the magic room returned to normal."
+	CastMessage: user.getName()+" twisted the dimensions to prevent using items!"
+	CanHave
+	Cast: Effect e = Effect.getEffect(b.getEffects(), "MagicRoom");
+	if (e == null)
+	{
+		super.cast(b, caster, victim, source, printCast);
+		return;
+	}
+	b.addMessage(e.getSubsideMessage(caster));
+	Effect.removeEffect(b.getEffects(), "MagicRoom");
+	+++
+*

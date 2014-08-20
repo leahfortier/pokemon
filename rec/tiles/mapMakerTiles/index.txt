@@ -1,0 +1,17 @@
+
+
+EntranceTriggerTile.png		0001
+ExitTriggerTile.png		0002
+WildBattleIndicator.png		0003
+TriggerEntity.png		0004
+PokeCenterTriggerTile.png	0005
+TransitionBuildingHTriggerTile.png 0006
+TransitionBuildingVTriggerTile.png 0007
+
+TransitionBuildingHPreviewEast.png 0008
+TransitionBuildingHPreviewWest.png 0009
+TransitionBuildingVPreviewNorth.png 000a
+TransitionBuildingVPreviewSouth.png 000b
+
+EventTrigger.png 000c
+GroupTrigger.png 000d

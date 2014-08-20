@@ -1,0 +1,128 @@
+-Battle Pokemon View
+
+Samples if needed have been posted to our webcourses group.
+
+Also, the move category images and Pokemon type images should probably be moved to another folder instead of the battleViewTiles since they will be used in other interfaces. 
+
+Polygons needed:
+	
+-Pokemon type fill rectangle: 
+	Size: 	(57, 34)
+	Points: (0,0) (57,0) (57,34) (0,34)
+	Color:	Pokemon's primary type color
+
+-Fainted rectangle: 
+	Size: 	(61, 36)
+	Points: (0,0) (61,0) (61,36) (0,36)
+	Color:	Black with 50% transparency
+
+-Primary type tab background polygon:
+	Points:	(0, 0) (348, 0) (5, 344) (0, 344)
+	Color: 	Pokemon's primary type
+
+-Secondary type tab background polygon:
+	Points: (343, 0) (349, 0) (349, 344) (0, 344)
+	Color:	Pokemon's secondary type or primary type color if only one type.
+
+-EXP/HP Bar (when full)
+	Size: 	(137, 10)
+	Points: (0, 0) (137, 0) (137, 10) (0, 10)
+
+-Move rectangle
+	Size: 	(125, 40)
+	Points: (0, 0) (125, 0) (125, 40) (0, 40)
+
+
+Sample draw order (Hopefully to make it easier)
+(415, 440)	MenuFightMessageArea.png (reusing this image) (0x20)
+Message "Pick a Pokémon!"
+Arrow polygon placed in bottom right like before
+
+(0, 160) 	MenuBagBackground.png (reusing this image) (0x11)
+(31, 225)	Primary type tab background color Polygon
+(36, 225)	Secondary type tab background color Polygon
+
+if pokemon has fainted
+	(30, 224) MenuPokemonTabBackgroundFNT.png (0x35)
+	(55, 249) MenuPokemonInfoBoxesFNT.png (0x31)
+else
+	(30, 224) MenuPokemonTabBackground.png (0x34)
+	(55, 249) MenuPokemonInfoBoxes.png (0x30)
+
+Draw all text and information
+Font size of 16
+(62, 269) 	Pokemon's name +" " + gender
+(179, 269) 	Pokemon's status
+(220, 269) 	"Lv" + Pokemon's level
+(285, 269)	Primary type image (or nothing if only one type) 
+(322, 269)	Secondary type image (or primary if only one type) 
+
+Font size of 14
+(62, 288)	Pokemon's ability
+(220, 288)	"EXP"
+(352, 288)	Pokemon's total experience (Right aligned) 
+(62, 307)	Pokemon's held item, if they have one
+(220, 307)	"To Next Lv"
+(352, 307)	Experience needed for the pokemon to level up (Right aligned)
+
+(222, 315)	EXP/HP bar (Filled based of exp needed to level up)
+(57, 341)	EXP/HP bar (Filled based off of current health)
+Both bars may need background colors
+
+Font size 16
+(62, 372)	"HP"
+(62, 393)	"Attack"
+(62, 413)	"Defense"
+(62, 433)	"Sp. Attack"
+(62, 453)	"Sp. Defense"
+(62, 473)	"Speed"
+
+Font size 14 
+(all right aligned)
+(188, 372)	Current health +"/" +total health
+(188, 393)	Pokemon's Attack
+(188, 413)	Pokemon's Defense
+(188, 433)	Pokemon's Sp. Attack
+(188, 453)	Pokemon's Sp. Defense
+(188, 473)	Pokemon's Speed
+
+Font size 20
+(124, 533)	"Select" (Centered aligned in case we wanted to change fonts later)  
+If you don't want to do center alignment, (93, 533)
+
+
+Move locations:
+(228, 359)	Move 1
+(228, 405)	Move 2
+(228, 451)	Move 3
+(228, 497)	Move 4
+
+Font size 14
+for each move
+	(x, y)		Move rectangle with color being move's type color
+	(x, y)		MenuPokemonMoveBox.png (0x32)
+	(x+7, y+17) 	Move name
+	(x+7, y+33)	Move category image
+	(x+118, y+33)	"PP: " +PP left +"/" +Total PP (right aligned)
+
+
+Pokemon tab locations:
+(30, 190)	Tab 1
+(89, 190)	Tab 2
+(148, 190)	Tab 3
+(207, 190)	Tab 4
+(266, 190)	Tab 5
+(325, 190)	Tab 6
+
+for each tab location (Do not display tabs if there is no pokemon in that party slot)
+	(x+2, y+2) Pokemon type fill rectangle with color being the pokemon's primary type
+	if selected
+		(x, y) MenuPokemonTabSelected.png (0x36)
+	else 
+		(x, y) MenuPokemonTab.png (0x33)
+
+	Centered at (x+30, y+18) Pokemon's mini sprite (get Max to download these if he hasn't already)
+	if fainted
+		(x, y) Fainted rectangle (Black with 50% transparency)
+
+

@@ -1,0 +1,23 @@
+#Name used for blank areas
+"Void"						00000000
+
+#Maximum tested area name length:
+#*************************************************
+
+"DFS Town"					ffff220b
+"Edge 1"					ff1a8524
+"Prof. Maple's Lab"			ffd86048
+
+"Pok\u00e9mon Center"		ffe03000
+"Information Center"		ff0059e3
+"House"						ff000000
+
+"RSA Town"					ff6d5d45
+"Bloom Filter Meadow"		ffacd462
+"Tom Town"					ffffff00
+
+"Wind Valley"		ff66ff66
+"Power Plant Floor 1"		ffcccccc
+"Power Plant Floor 2"		ffcbcbcb
+"Power Plant Floor 3"		ffcacaca
+"Power Plant Basement"		ffc9c9c9

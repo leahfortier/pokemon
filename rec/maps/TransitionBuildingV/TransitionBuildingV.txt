@@ -1,0 +1,102 @@
+GroupTrigger_TransitionBuilding_NorthDoor {
+	6 0
+}
+
+GroupTrigger_TransitionBuilding_SouthDoor {
+	6 8
+}
+
+NPC TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01{
+	condition: Badge_0&!VisitedTomTownPowerPlant&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))
+	startX: 3
+	startY: 5
+	path: w
+	spriteIndex: 3
+	direction: 0
+	walkToPlayer: false
+	firstDialogue[0]: "What happened at the power plant? Who is this Team Deadlock?"
+}
+
+NPC TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01{
+	condition: !Badge_0&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))
+	startX: 5
+	startY: 7
+	path: w
+	spriteIndex: 3
+	direction: 0
+	walkToPlayer: false
+	firstDialogue[0]: "I'm amazed how fast Leader Moore defeated my Pidgey!"
+}
+
+NPC TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01{
+	condition: Badge_0&!VisitedTomTownPowerPlant&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))
+	startX: 4
+	startY: 6
+	path: w
+	spriteIndex: 9
+	direction: 1
+	walkToPlayer: false
+	firstDialogue[0]: "Team Deadlock is a big bug in our society."
+}
+
+NPC TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01{
+	condition: !Badge_0&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))
+	startX: 6
+	startY: 7
+	path: w
+	spriteIndex: 9
+	direction: 2
+	walkToPlayer: false
+	firstDialogue[0]: "The Tom Town gym sounds really tough."
+}
+
+NPC TransitionBuildingV_NPC_PoliceOfficer_01{
+	condition: Badge_0&!VisitedTomTownPowerPlant&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))
+	startX: 6
+	startY: 7
+	path: w
+	spriteIndex: 18
+	direction: 1
+	walkToPlayer: false
+	firstDialogue[0]: "There power plant has been taken over by Team Deadlock!"
+	firstDialogue[1]: "Wind Valley is closed off until this matter has been resolved."
+}
+
+NPC TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01{
+	condition: MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))
+	startX: 3
+	startY: 3
+	path: w
+	spriteIndex: 6
+	direction: 3
+	walkToPlayer: false
+	firstDialogue[0]: "Tom Town generates most of the power for all of Hash Map."
+	firstDialogue[1]: "It's all thanks to the Magnemite Power Plant!"
+}
+
+NPC TransitionBuildingV_NPC_Info_Guy_01{
+	startX: 9
+	startY: 4
+	path: w
+	spriteIndex: 10
+	direction: 2
+	walkToPlayer: false
+	firstDialogue[0]: ""
+}
+
+Trigger Info_Counter{
+	x: 8
+	y: 4
+	trigger: GroupTrigger_TransitionBuilding_InformationDesk
+}
+
+MapEntrance NorthDoor {
+	x: 6
+	y: 1
+}
+
+MapEntrance SouthDoor {
+	x: 6
+	y: 7
+}
+

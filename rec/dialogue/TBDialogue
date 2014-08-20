@@ -1,0 +1,12 @@
+
+Dialogue Info_TBH_RSA_DFS_1 {
+	text: "To the east is Edge 1 and to the west is RSA Town."
+}
+
+Dialogue Info_TBH_BFM_RSA_1 {
+	text: "To the east is RSA Town and to the west is Bloom Filter Meadow."
+}
+
+Dialogue Info_TBH_TomTown_BFM_1 {
+	text: "To the east is Bloom Filter Meadow and to the west is Tom Town."
+}

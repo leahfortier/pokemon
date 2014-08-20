@@ -1,0 +1,38 @@
+PauseMenuBackground.png		00000001
+PauseSelectedBackground.png	00000002
+
+PausePokemonTabBackground.png 		00000011
+PausePokemonTabBackgroundFainted.png 	00000012
+PausePokemonTabInfoBoxes.png		00000013
+
+PausePokemonTabSelected.png		00000014
+PausePokemonTabUnselected.png		00000015
+
+PausePokemonButtonBox.png		00000016
+PausePokemonButtonBoxFainted.png	00000017
+	
+PausePokemonMoveBox.png			00000018
+
+
+
+PauseBagTabBackground.png		00000021
+PauseBagTabInfoBoxes.png		00000022
+
+PauseBagTabSelected.png			00000023
+PauseBagTabUnselected.png		00000024
+
+PauseBagPokemonBox.png			00000025
+PauseBagItemBackground.png		00000026
+
+PauseBagButtonBox.png			00000027
+PauseBagMultiButtonBox.png		00000028
+
+
+
+
+PCBoxBackground.png			00000031
+PCPokemonSelectionBox.png		00000032
+PCPartyBackground.png			00000033
+PCDescriptionBackground.png		00000034
+PCMoveBackground.png			00000035
+PCButtonBackground.png			00000036

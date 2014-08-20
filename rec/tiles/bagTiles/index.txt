@@ -1,0 +1,7 @@
+cat_medicine.png 00000001
+cat_balls.png 00000002
+cat_stat.png 00000003
+cat_keyitems.png 00000004
+cat_tms.png 00000005
+cat_berries.png 00000006
+cat_misc.png 00000007

@@ -1,0 +1,55 @@
+NPC RSATown_NPC_Rival_01{
+	startX: 29
+	startY: 21
+	path: llldddrrrrrruuulll
+	spriteIndex: 14
+	direction: 1
+	walkToPlayer: true
+	firstDialogue[0]: "My Riolu is going to punch the normal off your Eevee!"
+	secondDialogue[0]: "..."
+	trainer: "name: Blue
+		cash: 230
+		pokemon: Riolu 5"
+}
+
+MapEntrance PokeCenter01 {
+	x: 25
+	y: 17
+}
+
+MapEntrance TransitionBuildingHEastDoor01 {
+	x: 16
+	y: 20
+}
+
+MapEntrance TransitionBuildingHWestDoor01 {
+	x: 43
+	y: 20
+}
+
+TriggerData RSATown_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_EastDoor {
+	15 20
+	15 19
+	MapTransition
+	global: MapGlobal_TransitionPair01
+	nextMap: TransitionBuildingH
+	mapEntrance: EastDoor
+}
+
+TriggerData RSATown_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_WestDoor {
+	44 20
+	44 19
+	MapTransition
+	global: MapGlobal_TransitionPair01
+	nextMap: TransitionBuildingH
+	mapEntrance: WestDoor
+}
+
+TriggerData from_RSATown_to_PokeCenter_01 {
+	25 16
+	MapTransition
+	global: MapGlobal_toPokeCenterFromEntrance_PokeCenter01
+	nextMap: PokeCenter
+	mapEntrance: FrontDoor
+}
+

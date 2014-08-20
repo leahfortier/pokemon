@@ -1,0 +1,8 @@
+
+ChangeViewTrigger Default_PC {
+	view: PC_VIEW
+}
+
+ChangeViewTrigger Default_Mart {
+	view: MART_VIEW
+}
