@@ -16,7 +16,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.awt.image.RescaleOp;
+import java.awt.image.WritableRaster;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.List;
@@ -305,6 +307,38 @@ public class BattleView extends View
 			}
 		}
 		
+		private BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
+	        
+			ColorModel cm = image.getColorModel();
+			boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+			WritableRaster raster = image.copyData(null);
+			image = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+			
+			int width = image.getWidth();
+	        int height = image.getHeight();
+	        
+	        for (int x = 0; x < width; ++x) 
+	        {
+	            for (int y = 0; y < height; ++y) 
+	            {
+	                int[] pixels = raster.getPixel(x, y, (int[]) null);
+	                
+	                for (int currComponent = 0; currComponent < pixels.length; ++currComponent)
+	                {
+	                	pixels[currComponent] = (int)Math.round(pixels[currComponent] * scale[currComponent] + offset[currComponent]);
+	                	pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
+	                }
+	                if (pixels[3] == 0)
+	                {
+	                	pixels[0] = pixels[1] = pixels[2] = 0;
+	                }
+	                raster.setPixel(x, y, pixels);
+	            }
+	        }
+	        return image;
+	    }
+		
+		
 		private void catchAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
 		{
 			Graphics2D g2d = (Graphics2D)g;
@@ -368,12 +402,15 @@ public class BattleView extends View
 			animationCatch -= Global.MS_BETWEEN_FRAMES;
 
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
-			RescaleOp pokeyOp = new RescaleOp(pokeyScales, pokeyOffsets, null);
-			RescaleOp ballOp = new RescaleOp(ballScales, ballOffsets, null);
+//			RescaleOp pokeyOp = new RescaleOp(pokeyScales, pokeyOffsets, null);
+//			RescaleOp ballOp = new RescaleOp(ballScales, ballOffsets, null);
 //			RescaleOp prevOp = new RescaleOp(new float[] {1,1,1,0f}, new float[] {255,255,255,0}, null);
 //			RescaleOp newOp = new RescaleOp(new float[] {1,1,1,0f}, new float[] {0,0,0,0}, null);
-			g2d.drawImage(pkBall, ballOp, px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight());
-			g2d.drawImage(plyrImg, pokeyOp, px - plyrImg.getWidth()/2, py - plyrImg.getHeight());
+//			g2d.drawImage(pkBall, ballOp, px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight());
+//			g2d.drawImage(plyrImg, pokeyOp, px - plyrImg.getWidth()/2, py - plyrImg.getHeight());
+			
+			g2d.drawImage(colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
+			g2d.drawImage(colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
 		}
 		
 		// hi :)
