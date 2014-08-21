@@ -31,17 +31,6 @@ NPC Tom_Town_NPC_Citizen_02{
 	firstDialogue[0]: "I've never felt a shock like that before! Did it come from our powerplant?"
 }
 
-NPC Tom_Town_NPC_Scientist_03{
-	condition: Badge_0&!VisitedTomTownPowerPlant
-	startX: 32
-	startY: 15
-	path: w
-	spriteIndex: 11
-	direction: 2
-	walkToPlayer: false
-	firstDialogue[0]: "Team Deadlock better not harm the magnemites!"
-}
-
 NPC Tom_Town_NPC_Scientist_01{
 	condition: Badge_0&!VisitedTomTownPowerPlant
 	startX: 28
@@ -51,6 +40,17 @@ NPC Tom_Town_NPC_Scientist_01{
 	direction: 1
 	walkToPlayer: false
 	firstDialogue[0]: "I need to get back in there. The reactor is going to explode!"
+}
+
+NPC Tom_Town_NPC_Scientist_03{
+	condition: Badge_0&!VisitedTomTownPowerPlant
+	startX: 32
+	startY: 15
+	path: w
+	spriteIndex: 11
+	direction: 2
+	walkToPlayer: false
+	firstDialogue[0]: "Team Deadlock better not harm the magnemites!"
 }
 
 NPC Tom_Town_NPC_Citizen_01{
@@ -71,13 +71,13 @@ Trigger Tom_Town_TriggerEntity_MagnemiteFacilityDoor_01{
 	trigger: LockedDoorTrigger
 }
 
-MapEntrance Gym {
-	x: 17
+MapEntrance PokeCenter01 {
+	x: 38
 	y: 32
 }
 
-MapEntrance PokeCenter01 {
-	x: 38
+MapEntrance Gym {
+	x: 17
 	y: 32
 }
 
@@ -113,15 +113,6 @@ TriggerData Tom_Town_to_TransitionBuildingV_between_Tom_Town_and_WindValley_pair
 	mapEntrance: NorthDoor
 }
 
-TriggerData Tom_Town_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_WestDoor {
-	53 26
-	53 25
-	MapTransition
-	global: MapGlobal_TransitionPair01
-	nextMap: TransitionBuildingH
-	mapEntrance: WestDoor
-}
-
 TriggerData Tom_Town_EventTrigger_TomTownPowerPlantExplosionTrigger_01 {
 	20 33
 	20 32
@@ -131,6 +122,15 @@ TriggerData Tom_Town_EventTrigger_TomTownPowerPlantExplosionTrigger_01 {
 	global: TomTownPowerPlantExplosionTriggered
 	createDialogue: TomTownPowerPlantExplosionDialogue
 	text[0]: "Rumble Rumble Rumble"
+}
+
+TriggerData Tom_Town_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_WestDoor {
+	53 26
+	53 25
+	MapTransition
+	global: MapGlobal_TransitionPair01
+	nextMap: TransitionBuildingH
+	mapEntrance: WestDoor
 }
 
 TriggerData from_Tom_Town_to_Tom_Gym_01 {

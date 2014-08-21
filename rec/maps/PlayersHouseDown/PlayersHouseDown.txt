@@ -1,9 +1,9 @@
 GT_PlayersHouseDown_to_DFS_Town {
-	5 9
+	6 9
 }
 
 NPC PlayersHouseDown_NPC_Mom_01{
-	startX: 3
+	startX: 4
 	startY: 4
 	path: w
 	spriteIndex: 13
@@ -13,23 +13,23 @@ NPC PlayersHouseDown_NPC_Mom_01{
 }
 
 Trigger PlayersHouseDown_TriggerEntity_PlayersFridge_01{
-	x: 4
+	x: 5
 	y: 1
 	trigger: PlayersFridgeTrigger
 }
 
 MapEntrance stairs {
-	x: 9
+	x: 10
 	y: 1
 }
 
 MapEntrance DFS_Town {
-	x: 5
+	x: 6
 	y: 8
 }
 
 TriggerData PlayersHouseDown_to_PlayersHouseUp {
-	8 1
+	9 1
 	MapTransition
 	nextMap: PlayersHouseUp
 	mapEntrance: stairs

@@ -22,8 +22,8 @@ NPC Tom_Gym_NPC_Tom_Trainer_01{
 	spriteIndex: 5
 	direction: 0
 	walkToPlayer: true
-	firstDialogue[0]: "Electric type Pok\u00e9mon are awesome!"
-	secondDialogue[0]: "Electric types are still beter than normal types..."
+	firstDialogue[0]: "Watch out, I'm gonna fry your motherboard!"
+	secondDialogue[0]: "Hey! You fried my motherboard!"
 	trainer: "name: Gym Trainer
 		cash: 100
 		pokemon: Blitzle 9"
@@ -36,8 +36,8 @@ NPC Tom_Gym_NPC_Tom_Trainer_02{
 	spriteIndex: 5
 	direction: 2
 	walkToPlayer: true
-	firstDialogue[0]: "Pikachu has nothing on my Joltik!"
-	secondDialogue[0]: "Don't think you've won just yet."
+	firstDialogue[0]: "My Pokemon and I communicate over PCI express!"
+	secondDialogue[0]: "I need more bandwith!"
 	trainer: "name: Gym Trainer
 		cash: 100
 		pokemon: Joltik 9"

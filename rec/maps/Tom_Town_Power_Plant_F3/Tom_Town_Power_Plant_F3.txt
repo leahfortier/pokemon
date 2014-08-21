@@ -33,7 +33,7 @@ NPC Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01{
 	direction: 2
 	walkToPlayer: true
 	firstDialogue[0]: "Wow, you did it! You saved the power plant!"
-	secondDialogue[0]: ""
+	secondDialogue[0]: "Wow, you did it! You saved the power plant!"
 }
 
 NPC Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03{
