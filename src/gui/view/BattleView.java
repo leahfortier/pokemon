@@ -17,7 +17,6 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import java.awt.image.RescaleOp;
 import java.awt.image.WritableRaster;
 import java.util.ArrayDeque;
 import java.util.Iterator;
@@ -307,7 +306,8 @@ public class BattleView extends View
 			}
 		}
 		
-		private BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
+		//TODO Move method to global
+		public BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
 	        
 			ColorModel cm = image.getColorModel();
 			boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -403,13 +403,6 @@ public class BattleView extends View
 
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
 
-//			RescaleOp pokeyOp = new RescaleOp(pokeyScales, pokeyOffsets, null);
-//			RescaleOp ballOp = new RescaleOp(ballScales, ballOffsets, null);
-//			RescaleOp prevOp = new RescaleOp(new float[] {1,1,1,0f}, new float[] {255,255,255,0}, null);
-//			RescaleOp newOp = new RescaleOp(new float[] {1,1,1,0f}, new float[] {0,0,0,0}, null);
-//			g2d.drawImage(pkBall, ballOp, px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight());
-//			g2d.drawImage(plyrImg, pokeyOp, px - plyrImg.getWidth()/2, py - plyrImg.getHeight());
-			
 			g2d.drawImage(colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
 			g2d.drawImage(colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
 		}
@@ -417,40 +410,40 @@ public class BattleView extends View
 		// hi :)
 		private void evolveAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
 		{
-			animationEvolve -= Global.MS_BETWEEN_FRAMES;
-			BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber + (isEnemy^1));
 			Graphics2D g2d = (Graphics2D)g;
 			
-			float[] prevScales = { 1f, 1f, 1f, 1f };
-			float[] prevOffsets = { 255f, 255f, 255f, 0f };
-			float[] newScales = { 1f, 1f, 1f, 1f };
-			float[] newOffsets = { 255f, 255f, 255f, 0f };
+			float[] prevEvolutionScales = { 1f, 1f, 1f, 1f };
+			float[] prevEvolutionOffsets = { 255f, 255f, 255f, 0f };
+			float[] evolutionScales = { 1f, 1f, 1f, 1f };
+			float[] evolutionOffsets = { 255f, 255f, 255f, 0f };
 			
 			// Turn white
 			if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7)
 			{
-				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255*(1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.7f)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f)));
-				newScales[3] = 0;
+				prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255*(1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.7f)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f)));
+				evolutionScales[3] = 0;
 			}
 			// Change form
 			else if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.3)
 			{
-				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255;
-				prevScales[3] = ((animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255;
-				newScales[3] = (1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
+				prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255;
+				prevEvolutionScales[3] = ((animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
+				evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255;
+				evolutionScales[3] = (1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
 			}
 			// Restore color
 			else
 			{
-				prevScales[3] = 0;
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1-0.7f));
+				prevEvolutionScales[3] = 0;
+				evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1-0.7f));
 			}
 			
-			RescaleOp prevOp = new RescaleOp(prevScales, prevOffsets, null);
-			RescaleOp newOp = new RescaleOp(newScales, newOffsets, null);
-			g2d.drawImage(plyrImg, newOp, px-plyrImg.getWidth()/2, py-plyrImg.getHeight());
-			g2d.drawImage(prevEvo, prevOp, px-prevEvo.getWidth()/2, py-prevEvo.getHeight());
+			animationEvolve -= Global.MS_BETWEEN_FRAMES;
+			
+			BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber + (isEnemy^1));
+
+			g2d.drawImage(colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
+			g2d.drawImage(colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
 		}
 		
 		private void drawHealthBar(Graphics g)
