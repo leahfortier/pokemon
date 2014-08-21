@@ -14,10 +14,12 @@
 
 "RSA Town"					ff6d5d45
 "Bloom Filter Meadow"		ffacd462
-"Tom Town"					ffffff00
+"Tomasulo Town"					ffffff00
 
 "Wind Valley"		ff66ff66
 "Power Plant Floor 1"		ffcccccc
 "Power Plant Floor 2"		ffcbcbcb
 "Power Plant Floor 3"		ffcacaca
 "Power Plant Basement"		ffc9c9c9
+"Tomasulo Town Gym"		ffffff33
+"Main"		ffc8c8c8

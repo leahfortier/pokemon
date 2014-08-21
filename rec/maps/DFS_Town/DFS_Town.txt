@@ -21,7 +21,7 @@ NPC DFS_Town_NPC_Green_01{
 	direction: 3
 	walkToPlayer: true
 	firstDialogue[0]: "Hey, you should go talk to Professor Maple first before leaving town."
-	secondDialogue[0]: ""
+	secondDialogue[0]: "Hey, you should go talk to Professor Maple first before leaving town."
 }
 
 NPC DFS_Town_NPC_Potion_Giver_01{
@@ -34,6 +34,20 @@ NPC DFS_Town_NPC_Potion_Giver_01{
 	firstDialogue[0]: "Here, take this potion. You are going to need it!"
 	secondDialogue[0]: "You can use potions to heal your Pok\u00e9mon!"
 	giveItem: "item: Potion"
+}
+
+NPC DFS_Town_NPC_Edge1_Trainer_02{
+	startX: 30
+	startY: 28
+	path: w
+	spriteIndex: 6
+	direction: 1
+	walkToPlayer: true
+	firstDialogue[0]: "Someone freed the pointer to my Rattata! Was it you?"
+	secondDialogue[0]: "I would have won with my Rattata!"
+	trainer: "name: Youngster Joey
+		cash: 100
+		pokemon: Bidoof 4"
 }
 
 NPC DFS_Town_NPC_Ball_Giver_01{
@@ -50,20 +64,6 @@ NPC DFS_Town_NPC_Ball_Giver_01{
 		item: Pok\u00e9 Ball
 		item: Pok\u00e9 Ball
 		item: Pok\u00e9 Ball"
-}
-
-NPC DFS_Town_NPC_Edge1_Trainer_02{
-	startX: 30
-	startY: 28
-	path: w
-	spriteIndex: 6
-	direction: 1
-	walkToPlayer: true
-	firstDialogue[0]: "Someone freed the pointer to my Rattata! Was it you?"
-	secondDialogue[0]: "I would have won with my Rattata!"
-	trainer: "name: Youngster Joey
-		cash: 100
-		pokemon: Bidoof 4"
 }
 
 Item DFS_Town_Item_Paralyze_Heal_01{
@@ -86,18 +86,13 @@ NPC DFS_Town_NPC_Edge1_Trainer_01{
 		pokemon: Pidgey 4"
 }
 
-MapEntrance PlayersHouse {
-	x: 85
-	y: 27
-}
-
 MapEntrance RivalsHouse {
 	x: 85
 	y: 15
 }
 
-MapEntrance NeighborsHouse {
-	x: 74
+MapEntrance PlayersHouse {
+	x: 85
 	y: 27
 }
 
@@ -106,16 +101,37 @@ MapEntrance TransitionBuildingHEastDoor01 {
 	y: 20
 }
 
+MapEntrance NeighborsHouse {
+	x: 74
+	y: 27
+}
+
 MapEntrance MaplesLab {
 	x: 74
 	y: 17
 }
 
-TriggerData from_DFS_Town_to_PlayersHouseDown_01 {
-	85 26
+TriggerData from_DFS_Town_to_Neighbor_House_01 {
+	74 26
 	MapTransition
-	nextMap: PlayersHouseDown
+	nextMap: Neighbor_House
 	mapEntrance: DFS_Town
+}
+
+TriggerData from_DFS_Town_to_MaplesLab_01 {
+	74 16
+	MapTransition
+	nextMap: MaplesLab
+	mapEntrance: DFS_Town
+}
+
+TriggerData DFS_Town_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_EastDoor {
+	13 20
+	13 19
+	MapTransition
+	global: MapGlobal_TransitionPair01
+	nextMap: TransitionBuildingH
+	mapEntrance: EastDoor
 }
 
 TriggerData from_DFS_Town_to_Rival_House_01 {
@@ -347,26 +363,10 @@ TriggerData Edge_1_Wild_Pokemon {
 	pokemon: Lillipup 2-4 10%
 }
 
-TriggerData DFS_Town_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_EastDoor {
-	13 20
-	13 19
+TriggerData from_DFS_Town_to_PlayersHouseDown_01 {
+	85 26
 	MapTransition
-	global: MapGlobal_TransitionPair01
-	nextMap: TransitionBuildingH
-	mapEntrance: EastDoor
-}
-
-TriggerData from_DFS_Town_to_Neighbor_House_01 {
-	74 26
-	MapTransition
-	nextMap: Neighbor_House
-	mapEntrance: DFS_Town
-}
-
-TriggerData from_DFS_Town_to_MaplesLab_01 {
-	74 16
-	MapTransition
-	nextMap: MaplesLab
+	nextMap: PlayersHouseDown
 	mapEntrance: DFS_Town
 }
 

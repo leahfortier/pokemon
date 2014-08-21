@@ -1,9 +1,9 @@
-TriggerData PlayersHouseUp_to_PlayersHouseDown {
-	9 1
-	MapTransition
-	nextMap: PlayersHouseDown
-	mapEntrance: stairs
+Trigger PC{
+	x: 3
+	y: 1
+	trigger: PC_Trigger
 }
+
 MapEntrance stairs {
 	x: 8
 	y: 1
@@ -15,12 +15,11 @@ MapEntrance GameStartLocation {
 }
 
 #intro{ 7 8 }
-
-
-Trigger PC {
-	x: 3
-	y: 1
-	trigger: PC_Trigger
+TriggerData PlayersHouseUp_to_PlayersHouseDown {
+	9 1
+	MapTransition
+	nextMap: PlayersHouseDown
+	mapEntrance: stairs
 }
 
 #NPC TestMomBattle {

@@ -148,7 +148,7 @@ public class NPCEntity extends Entity{
 				transitionDirection = 3;
 				break;
 			case 'w':
-				waitTime = Global.TIME_BETWEEN_TILES;
+				waitTime = getTransitionTime();
 				pathIndex++;
 				break;
 			}

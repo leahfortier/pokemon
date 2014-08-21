@@ -12,6 +12,16 @@ NPC RSATown_NPC_Rival_01{
 		pokemon: Riolu 5"
 }
 
+NPC RSATown_NPC_Guy_01{
+	startX: 20
+	startY: 15
+	path: w
+	spriteIndex: 5
+	direction: 3
+	walkToPlayer: false
+	firstDialogue[0]: "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+}
+
 MapEntrance PokeCenter01 {
 	x: 25
 	y: 17
@@ -25,15 +35,6 @@ MapEntrance TransitionBuildingHEastDoor01 {
 MapEntrance TransitionBuildingHWestDoor01 {
 	x: 43
 	y: 20
-}
-
-TriggerData RSATown_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_EastDoor {
-	15 20
-	15 19
-	MapTransition
-	global: MapGlobal_TransitionPair01
-	nextMap: TransitionBuildingH
-	mapEntrance: EastDoor
 }
 
 TriggerData RSATown_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_WestDoor {
@@ -51,5 +52,14 @@ TriggerData from_RSATown_to_PokeCenter_01 {
 	global: MapGlobal_toPokeCenterFromEntrance_PokeCenter01
 	nextMap: PokeCenter
 	mapEntrance: FrontDoor
+}
+
+TriggerData RSATown_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_EastDoor {
+	15 20
+	15 19
+	MapTransition
+	global: MapGlobal_TransitionPair01
+	nextMap: TransitionBuildingH
+	mapEntrance: EastDoor
 }
 

@@ -1052,12 +1052,14 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	public void mousePressed(MouseEvent e) {
 		if (!toolList.isSelectionEmpty())
 			toolList.getSelectedValue().pressed(e.getX(), e.getY());
+		draw();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (!toolList.isSelectionEmpty())
 			toolList.getSelectedValue().released(e.getX(), e.getY());
+		draw();
 	}
 
 	@Override
