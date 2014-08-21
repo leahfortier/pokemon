@@ -154,20 +154,19 @@ public class MainMenuView extends View
 		switch (state)
 		{
 			case CREDITS:
-				Global.startMusic("doubletrouble");
+				Global.soundPlayer.playMusic("doubletrouble");
 				break;
 			default:
-				Global.startMusic("dancemix");
+				Global.soundPlayer.playMusic("dancemix");
 				break;
 		}
-
 	}
 
 	public void update(int dt, InputControl input, Game game)
 	{
 		if (!musicStarted){
 			musicStarted = true;
-			Global.startMusic("dancemix");
+			Global.soundPlayer.playMusic("dancemix");
 		}
 		int pressed = -1;
 		switch (state)
@@ -290,7 +289,7 @@ public class MainMenuView extends View
 						saveSettings();
 						break;
 					case 1: // mute
-						Global.toggleMusic();
+						Global.soundPlayer.toggleMusic();
 						saveSettings();
 						break;
 					case 2: // credits
@@ -571,8 +570,10 @@ public class MainMenuView extends View
 		{
 			Scanner in = Global.openFile(file);
 			theme = in.nextInt() == 0 ? Theme.BASIC : Theme.SCENIC;
+			
+			// Is muted
 			if (in.nextInt() == 1)
-				Global.toggleMusic();
+				Global.soundPlayer.toggleMusic();
 		}
 		else
 		{
@@ -586,7 +587,7 @@ public class MainMenuView extends View
 		try
 		{
 			PrintStream settingsOut = new PrintStream("saves" + Global.FILE_SLASH + "settings.txt");
-			settingsOut.print((theme == Theme.BASIC ? 0 : 1) + " " + (Global.isMuting() ? 1 : 0));
+			settingsOut.print((theme == Theme.BASIC ? 0 : 1) + " " + (Global.soundPlayer.isMuted() ? 1 : 0));
 			settingsOut.close();
 		}
 		catch (IOException e)

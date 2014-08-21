@@ -19,8 +19,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JOptionPane;
 
+import javazoom.jl.player.Player;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
+import sound.SoundPlayer;
 import battle.Attack;
 import battle.effect.PokemonEffect;
 
@@ -56,8 +58,6 @@ public class Global
 	
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
 	
-	private static final String[] SONGS = {"lalala", "doubletrouble", "dancemix"};
-
 	// Load all game data that doesn't need to be initialized in the OpenGL
 	// context
 	public static void init()
@@ -224,115 +224,8 @@ public class Global
 		return h + 36;
 	}
 
-	private static HashMap<String, Clip> music;
-	private static Clip musicClip;
-	private static boolean isPlayingMusic = false;
-	private static String currentlyPlaying = null;
-	private static boolean muting = false;
+	public static SoundPlayer soundPlayer = new SoundPlayer();
 	
-	public static void preloadMusic(){
-		music = new HashMap<>();
-		for (String song: SONGS)
-			music.put(song, loadClip(song));
-	}
-	
-	public static boolean isMuting() {
-		return muting;
-	}
-	
-	public static void toggleMusic(){
-		muting = !muting;
-		//System.out.println("toggling mute:"+muting + " playing:"+isPlayingMusic);
-		if (muting && isPlayingMusic)
-			musicClip.stop();
-		if (!muting && isPlayingMusic)
-			musicClip.start();
-		//if (isPlayingMusic)
-		//	System.out.println("playing:"+musicClip.isActive());
-	}
-
-	public static void startMusic(String name, boolean loop, boolean restart){
-		//System.out.println("trying to start:"+name +" muting:"+muting);
-		if (name.equals(currentlyPlaying) && isPlayingMusic)
-			return;
-		if (!music.containsKey(name))
-			music.put(name, loadClip(name));
-		Clip clip = music.get(name);
-		if (loop){
-			if (isPlayingMusic)
-				stopMusic();
-			isPlayingMusic = true;
-			currentlyPlaying = name;
-			musicClip = clip;
-		}
-		if (restart)
-			clip.setFramePosition(0);
-		if (muting)
-			return;
-		//System.out.println("sound start muting:"+muting);
-		clip.loop(loop ? Clip.LOOP_CONTINUOUSLY : 1);
-	}
-	public static void startMusic(String name)
-	{
-		startMusic(name, true, false);
-	}
-
-	public static void stopMusic()
-	{
-		if (!isPlayingMusic)
-			return;
-		isPlayingMusic = false;
-		if (muting)
-			return;
-		musicClip.stop();
-	}
-	
-	private static Clip loadClip(String name){
-		File file = new File("rec" + Global.FILE_SLASH + "snd" + Global.FILE_SLASH + name + ".wav");
-		try
-		{
-			AudioInputStream sound = AudioSystem.getAudioInputStream(file);
-			Clip clip = AudioSystem.getClip();
-			clip.open(sound);
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
-			clip.stop();
-			sound.close();
-			return clip;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-		
-		/*try {
-			File file = new File("rec" + Global.FILE_SLASH + "snd" + Global.FILE_SLASH + name + ".mp3");
-			System.out.println(AudioSystem.getAudioFileFormat(file));
-			AudioInputStream in = AudioSystem.getAudioInputStream(file);
-			AudioInputStream din = null;
-			AudioFormat baseFormat = in.getFormat();
-			AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 
-			                                            baseFormat.getSampleRate(),
-			                                            16,
-			                                            baseFormat.getChannels(),
-			                                            baseFormat.getChannels() * 2,
-			                                            baseFormat.getSampleRate(),
-			                                            false);
-			din = AudioSystem.getAudioInputStream(decodedFormat, in);
-			Clip clip = AudioSystem.getClip();
-			clip.open(din);
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
-			in.close();
-			din.close();
-			return clip;
-		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-			System.out.println("trying to load: "+name);
-			e.printStackTrace();
-			System.exit(1);
-		}
-		return null;*/
-	}
-
 	public static int centerX(String s, int x, int fontSize)
 	{
 		return x - s.length() * (fontSize / 2 + 1) / 2;

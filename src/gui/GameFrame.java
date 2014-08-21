@@ -75,7 +75,6 @@ public class GameFrame
 
 		public void run()
 		{
-
 			gui.createBufferStrategy(2);
 			strategy = gui.getBufferStrategy();
 
@@ -89,7 +88,6 @@ public class GameFrame
 			g.dispose();
 			strategy.show();
 
-			Global.preloadMusic();
 			game = new Game();
 
 			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener()

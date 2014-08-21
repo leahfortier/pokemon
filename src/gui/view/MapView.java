@@ -450,6 +450,6 @@ public class MapView extends View{
 	}
 
 	public void movedToFront() {
-		Global.startMusic("lalala");
+		Global.soundPlayer.playMusic("lalala");
 	}
 }

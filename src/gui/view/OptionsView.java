@@ -20,7 +20,7 @@ public class OptionsView extends View
 	
 	public OptionsView()
 	{
-		musicOn = Global.isMuting();
+		musicOn = Global.soundPlayer.isMuted();
 		cr = cb = cg = 0;
 	}
 
@@ -31,7 +31,7 @@ public class OptionsView extends View
 			input.consumeMousePress();
 			
 			musicOn = !musicOn;
-			Global.toggleMusic();
+			Global.soundPlayer.toggleMusic();
 		}
 		
 		if (input.isDown(Control.ESC))

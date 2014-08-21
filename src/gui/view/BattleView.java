@@ -370,8 +370,6 @@ public class BattleView extends View
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
 			RescaleOp pokeyOp = new RescaleOp(pokeyScales, pokeyOffsets, null);
 			RescaleOp ballOp = new RescaleOp(ballScales, ballOffsets, null);
-//			RescaleOp prevOp = new RescaleOp(new float[] {1,1,1,0f}, new float[] {255,255,255,0}, null);
-//			RescaleOp newOp = new RescaleOp(new float[] {1,1,1,0f}, new float[] {0,0,0,0}, null);
 			g2d.drawImage(pkBall, ballOp, px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight());
 			g2d.drawImage(plyrImg, pokeyOp, px - plyrImg.getWidth()/2, py - plyrImg.getHeight());
 		}
