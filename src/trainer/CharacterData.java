@@ -172,7 +172,7 @@ public class CharacterData extends Trainer implements Serializable
 		}
 		
 		// Hatch eggs
-		ActivePokemon.hatch(team);
+		ActivePokemon.hatch(this, team);
 	}
 	
 	public boolean isUsingRepel()
@@ -301,7 +301,7 @@ public class CharacterData extends Trainer implements Serializable
 		if (!pokedex.caught(p.getPokemonInfo().getName()))
 		{
 			if (b != null) b.addMessage(p.getPokemonInfo().getName() + " was registered in the Pok\u00e9dex!");
-			pokedex.setStatus(p, PokedexStatus.CAUGHT);			
+			if (!p.isEgg()) pokedex.setStatus(p, PokedexStatus.CAUGHT);			
 		}
 		
 		if (team.size() < MAX_POKEMON)

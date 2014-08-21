@@ -16,6 +16,8 @@ import main.Global;
 import main.Type;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
+import trainer.CharacterData;
+import trainer.Pokedex;
 import trainer.Pokedex.PokedexStatus;
 import battle.Attack;
 import battle.Battle;
@@ -137,7 +139,7 @@ public class ActivePokemon implements Serializable
 		return "It's making sounds inside! It's going to hatch soon!";
 	}
 	
-	public static void hatch(List<ActivePokemon> team)
+	public static void hatch(CharacterData player, List<ActivePokemon> team)
 	{
 		for (ActivePokemon p : team)
 		{
@@ -146,6 +148,7 @@ public class ActivePokemon implements Serializable
 				// TODO: Show hatch animation
 				p.isEgg = false;
 				p.nickname = p.pokemon.getName();
+				player.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
 				break; // Only one hatch per step
 			}
 		}

@@ -308,10 +308,10 @@ public class BattleView extends View
 		private void catchAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
 		{
 			Graphics2D g2d = (Graphics2D)g;
-			float[] prevScales = { 1f, 1f, 1f, 1f };
-			float[] prevOffsets = { 255f, 255f, 255f, 0f };
-			float[] newScales = { 1f, 1f, 1f, 1f };
-			float[] newOffsets = { 255f, 255f, 255f, 0f };
+			float[] pokeyScales = { 1f, 1f, 1f, 1f };
+			float[] pokeyOffsets = { 255f, 255f, 255f, 0f };
+			float[] ballScales = { 1f, 1f, 1f, 1f };
+			float[] ballOffsets = { 255f, 255f, 255f, 0f };
 			
 			int xOffset = 0;
 			
@@ -320,60 +320,63 @@ public class BattleView extends View
 			// Turn white
 			if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3)
 			{
-				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255*(1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
-				newScales[3] = 0;
+				pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
+				ballScales[3] = 0;
 			}
 			// Transform into Pokeball
-			else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN *.7)
+			else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7)
 		    {
-		       prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255;
-		       prevScales[3] = ((animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-		       newOffsets[0] = newOffsets[1] = newOffsets[2] = 255;
-		       newScales[3] = (1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
+		       pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
+		       pokeyScales[3] = ((animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
+		       ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
+		       ballScales[3] = (1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
 		    }
 			// Restore color
 			else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN)
 			{
-				prevScales[3] = 0;
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
+				pokeyScales[3] = 0;
+				ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
 			}
 			// Shake
 			else if (animationCatchDuration == -1 || animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN)
 			{
-				prevScales[3] = 0;
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 0;
+				pokeyScales[3] = 0;
+				ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 0;
 				xOffset = (int)(10*Math.sin(animationCatch/200.0));
 			}
 			// Turn white -- didn't catch
 			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7)
 			{
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - 0.7f)));
-				prevScales[3] = 0;
+				ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - 0.7f)));
+				pokeyScales[3] = 0;
 			}
 			// Transform into Pokemon
 			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3)
 			{
-				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255;
-				prevScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-				newOffsets[0] = newOffsets[1] = newOffsets[2] = 255;
-				newScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
+				pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
+				pokeyScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
+				ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
+				ballScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
 			}
 			// Restore color
 			else
 			{
-				newScales[3] = 0;
-				prevOffsets[0] = prevOffsets[1] = prevOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f - .7f));
+				ballScales[3] = 0;
+				pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f - .7f));
 			}
 			
 			animationCatch -= Global.MS_BETWEEN_FRAMES;
-			
+
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
-			RescaleOp prevOp = new RescaleOp(prevScales, prevOffsets, null);
-			RescaleOp newOp = new RescaleOp(newScales, newOffsets, null);
-			g2d.drawImage(pkBall, newOp, px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight());
-			g2d.drawImage(plyrImg, prevOp, px - plyrImg.getWidth()/2, py - plyrImg.getHeight());
+			RescaleOp pokeyOp = new RescaleOp(pokeyScales, pokeyOffsets, null);
+			RescaleOp ballOp = new RescaleOp(ballScales, ballOffsets, null);
+//			RescaleOp prevOp = new RescaleOp(new float[] {1,1,1,0f}, new float[] {255,255,255,0}, null);
+//			RescaleOp newOp = new RescaleOp(new float[] {1,1,1,0f}, new float[] {0,0,0,0}, null);
+			g2d.drawImage(pkBall, ballOp, px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight());
+			g2d.drawImage(plyrImg, pokeyOp, px - plyrImg.getWidth()/2, py - plyrImg.getHeight());
 		}
 		
+		// hi :)
 		private void evolveAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
 		{
 			animationEvolve -= Global.MS_BETWEEN_FRAMES;
