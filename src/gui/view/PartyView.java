@@ -1,15 +1,11 @@
 package gui.view;
 
 import gui.Button;
-import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -44,23 +40,6 @@ public class PartyView extends View
 	private int selectedButton;
 	private int switchTabIndex;
 	
-	private ButtonHoverAction boxHoverAction = new ButtonHoverAction()
-	{
-		Stroke lineStroke = new BasicStroke(5f);
-		int time = 0;
-		
-		public void draw(Graphics g, Button button) 
-		{
-			time = (time+1)%80;
-			g.setColor(new Color(0,0,0, 55+150*(Math.abs(time-40))/40));
-			Graphics2D g2d = (Graphics2D)g;
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setStroke(lineStroke);
-			g.drawRect(button.x-2, button.y-2, button.w+3, button.h+4);
-			g2d.setStroke(oldStroke);
-		}
-	};
-	
 	public PartyView(CharacterData data)
 	{
 		charData = data;
@@ -73,7 +52,7 @@ public class PartyView extends View
 		moveButtons = new Button[Move.MAX_MOVES];
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) //r u l d
 		{
-			buttons[i] = tabButtons[i] = new Button(39 + i*120, 39, 122, 55, boxHoverAction, 
+			buttons[i] = tabButtons[i] = new Button(39 + i*120, 39, 122, 55, Button.HoverAction.BOX, 
 					new int[] {i == Trainer.MAX_POKEMON - 1 ? 0 : i + 1, // Right 
 							i < Trainer.MAX_POKEMON ? SWITCH: RETURN, // Up
 							i == 0? Trainer.MAX_POKEMON - 1 : i - 1, // Left
@@ -82,15 +61,15 @@ public class PartyView extends View
 		
 		for (int i = 0; i < Move.MAX_MOVES; i++)
 		{
-			buttons[MOVES + i] = moveButtons[i] = new Button(426, 266+i*49, 293, 40, boxHoverAction, 
+			buttons[MOVES + i] = moveButtons[i] = new Button(426, 266+i*49, 293, 40, Button.HoverAction.BOX, 
 					new int[] {-1, // Right
 							i == 0 ? 0 : MOVES + i - 1, // Up 
 							SWITCH, // Left
 							i == Move.MAX_MOVES - 1 ? RETURN : MOVES + i + 1}); // Down
 		}
 		
-		buttons[10] = switchButton = new Button(69, 493, 317, 38, boxHoverAction, new int[] {RETURN, MOVES + Move.MAX_MOVES - 1, RETURN, 0});
-		buttons[11] = returnButton = new Button(414, 493, 317, 38, boxHoverAction, new int[] {SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0});
+		buttons[10] = switchButton = new Button(69, 493, 317, 38, Button.HoverAction.BOX, new int[] {RETURN, MOVES + Move.MAX_MOVES - 1, RETURN, 0});
+		buttons[11] = returnButton = new Button(414, 493, 317, 38, Button.HoverAction.BOX, new int[] {SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0});
 		updateActiveButtons();
 	}
 
@@ -101,9 +80,8 @@ public class PartyView extends View
 		
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
 		{
-			if (tabButtons[i].isPress())
+			if (tabButtons[i].checkConsumePress())
 			{
-				tabButtons[i].consumePress();
 				if (switchTabIndex != -1)
 				{
 					charData.swapPokemon(i, switchTabIndex);
@@ -116,13 +94,12 @@ public class PartyView extends View
 			}
 		}
 		
-		if (returnButton.isPress())
+		if (returnButton.checkConsumePress())
 		{
-			returnButton.consumePress();
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
-		if (switchButton.isPress())
+		if (switchButton.checkConsumePress())
 		{
 			switchTabIndex = switchTabIndex == -1 ? selectedTab : -1;
 			updateActiveButtons();

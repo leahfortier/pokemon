@@ -1,23 +1,19 @@
 package gui.view;
 
 import gui.Button;
-import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.InputControl.Control;
 import main.Global;
 import main.InputControl;
+import main.InputControl.Control;
 import main.Type;
 import pokemon.PC;
 import pokemon.PokemonInfo;
@@ -33,11 +29,6 @@ public class PokedexView extends View
 	private static final int RETURN = NUM_BUTTONS - 1;
 	private static final int RIGHT_ARROW = NUM_BUTTONS - 2;
 	private static final int LEFT_ARROW = NUM_BUTTONS - 3;
-	
-	private final int[] rightArrowx = {0, 16, 16, 32, 16, 16, 0};
-	private final int[] rightArrowy = {5, 5, 0, 10, 20, 15, 15};
-	private final int[] leftArrowx = {35, 19, 19, 3, 19, 19, 35};
-	private final int[] leftArrowy = {5, 5, 0, 10, 20, 15, 15};
 
 	private Pokedex pokedex;
 	private PokemonInfo selected;
@@ -62,7 +53,7 @@ public class PokedexView extends View
 		{
 			for (int j = 0; j < PC.BOX_WIDTH; j++, k++)
 			{
-				buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, boxHoverAction, 
+				buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, Button.HoverAction.BOX, 
 						new int[] {j == PC.BOX_WIDTH - 1 ? RETURN : k + 1, // Right 
 								i == 0 ? PER_PAGE + j : k - PC.BOX_WIDTH, // Up
 								j == 0 ? RETURN : k - 1, // Left
@@ -70,10 +61,10 @@ public class PokedexView extends View
 			}
 		}
 		
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, boxHoverAction, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, 0});
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, boxHoverAction, new int[] {RETURN, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, 0});
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, Button.HoverAction.BOX, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, 0});
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, Button.HoverAction.BOX, new int[] {RETURN, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, 0});
 		
-		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, boxHoverAction, new int[] {0, -1, RIGHT_ARROW, -1});
+		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, Button.HoverAction.BOX, new int[] {0, -1, RIGHT_ARROW, -1});
 		
 		movedToFront();
 	}
@@ -86,31 +77,27 @@ public class PokedexView extends View
 		{
 			for (int j = 0; j < PC.BOX_WIDTH; j++)
 			{
-				if (boxButtons[i][j].isPress())
+				if (boxButtons[i][j].checkConsumePress())
 				{
-					boxButtons[i][j].consumePress();
 					selected = PokemonInfo.getPokemonInfo(getIndex(j, i) + 1);
 				}
 			}
 		}
 		
-		if (leftButton.isPress())
+		if (leftButton.checkConsumePress())
 		{
-			leftButton.consumePress();
 			if (pageNum == 0) pageNum = NUM_PAGES - 1; 
 			else pageNum--;
 		}
 		
-		if (rightButton.isPress())
+		if (rightButton.checkConsumePress())
 		{
-			rightButton.consumePress();
 			if (pageNum == NUM_PAGES - 1) pageNum = 0;
 			else pageNum++;
 		}
 				
-		if (returnButton.isPress())
+		if (returnButton.checkConsumePress())
 		{
-			returnButton.consumePress();
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
@@ -179,12 +166,7 @@ public class PokedexView extends View
 		s = (pageNum+1)+"/"+NUM_PAGES;
 		g.drawString(s, Global.centerX(s, 215, 20), 433);
 		
-		g.translate(leftButton.x, leftButton.y);
-		g.fillPolygon(leftArrowx, leftArrowy, leftArrowx.length);
-		g.translate(-leftButton.x, -leftButton.y);
-		g.translate(rightButton.x, rightButton.y);
-		g.fillPolygon(rightArrowx, rightArrowy, rightArrowx.length);
-		g.translate(-rightButton.x, -rightButton.y);
+		View.drawArrows(g, leftButton, rightButton);
 		
 		// Seen/Caught
 		g.setColor(Color.RED);
@@ -279,19 +261,4 @@ public class PokedexView extends View
 	{
 		selected = PokemonInfo.getPokemonInfo(1);
 	}
-
-	private ButtonHoverAction boxHoverAction = new ButtonHoverAction()
-	{
-		Stroke lineStroke = new BasicStroke(5f);
-		int time = 0;
-		public void draw(Graphics g, Button button) {
-			time = (time+1)%80;
-			g.setColor(new Color(0,0,0, 55+150*(Math.abs(time-40))/40));
-			Graphics2D g2d = (Graphics2D)g;
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setStroke(lineStroke);
-			g.drawRect(button.x-2, button.y-2, button.w+3, button.h+4);
-			g2d.setStroke(oldStroke);
-		}
-	};
 }

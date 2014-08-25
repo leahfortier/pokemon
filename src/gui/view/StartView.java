@@ -1,22 +1,17 @@
 package gui.view;
 
-import gui.Button;
-import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 
-import pokemon.PokemonInfo;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
+import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
@@ -185,21 +180,4 @@ public class StartView extends View
 		name = "";	
 		ditto = false;
 	}
-	
-	private ButtonHoverAction boxHoverAction = new ButtonHoverAction()
-	{
-		Stroke lineStroke = new BasicStroke(5f);
-		int time = 0;
-		
-		public void draw(Graphics g, Button button) 
-		{
-			time = (time+1)%80;
-			g.setColor(new Color(0,0,0, 55+150*(Math.abs(time-40))/40));
-			Graphics2D g2d = (Graphics2D)g;
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setStroke(lineStroke);
-			g.drawRect(button.x-2, button.y-2, button.w+3, button.h+4);
-			g2d.setStroke(oldStroke);
-		}
-	};
 }

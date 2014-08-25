@@ -1,23 +1,19 @@
 package gui.view;
 
 import gui.Button;
-import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.InputControl.Control;
 import main.Global;
 import main.InputControl;
+import main.InputControl.Control;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.PC;
@@ -36,11 +32,6 @@ public class PCView extends View
 	private static final int RIGHT_ARROW = NUM_BUTTONS - 5;
 	private static final int LEFT_ARROW = NUM_BUTTONS - 6;
 	private static final int PARTY = PC.BOX_HEIGHT*PC.BOX_WIDTH;
-	
-	private final int[] rightArrowx = {0, 16, 16, 32, 16, 16, 0};
-	private final int[] rightArrowy = {5, 5, 0, 10, 20, 15, 15};
-	private final int[] leftArrowx = {35, 19, 19, 3, 19, 19, 35};
-	private final int[] leftArrowy = {5, 5, 0, 10, 20, 15, 15};
 
 	private CharacterData player;
 	private ActivePokemon selected;
@@ -70,7 +61,7 @@ public class PCView extends View
 		{
 			for (int j = 0; j < PC.BOX_WIDTH; j++, k++)
 			{
-				buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, boxHoverAction, 
+				buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, Button.HoverAction.BOX, 
 						new int[] {j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1, // Right 
 								i == 0 ? PARTY + j : k - PC.BOX_WIDTH, // Up
 								j == 0 ? RELEASE : k - 1, // Left
@@ -81,21 +72,21 @@ public class PCView extends View
 		partyButtons = new Button[Trainer.MAX_POKEMON];
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
 		{
-			buttons[PARTY + i] = partyButtons[i] = new Button(60 + 54*i, 499, 40, 40, boxHoverAction,
+			buttons[PARTY + i] = partyButtons[i] = new Button(60 + 54*i, 499, 40, 40, Button.HoverAction.BOX,
 					new int[] {i == Trainer.MAX_POKEMON - 1 ? RETURN : PARTY + i + 1, // Right
 							i < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW, // Up
 							i == 0 ? RETURN : PARTY + i - 1, // Left
 							i}); // Down
 		}
 		
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, boxHoverAction, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, PARTY});
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, boxHoverAction, new int[] {SWITCH, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, PARTY});
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, Button.HoverAction.BOX, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, PARTY});
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, Button.HoverAction.BOX, new int[] {SWITCH, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, PARTY});
 		
-		buttons[SWITCH] = switchButton = new Button(410, 464, 118, 38, boxHoverAction, new int[] {DEPOSIT_WITHDRAW, -1, RIGHT_ARROW, RETURN});
-		buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(526, 464, 118, 38, boxHoverAction, new int[] {RELEASE, -1, SWITCH, RETURN});
-		buttons[RELEASE] = releaseButton = new Button(642, 464, 118, 38, boxHoverAction, new int[] {0, -1, DEPOSIT_WITHDRAW, RETURN});
+		buttons[SWITCH] = switchButton = new Button(410, 464, 118, 38, Button.HoverAction.BOX, new int[] {DEPOSIT_WITHDRAW, -1, RIGHT_ARROW, RETURN});
+		buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(526, 464, 118, 38, Button.HoverAction.BOX, new int[] {RELEASE, -1, SWITCH, RETURN});
+		buttons[RELEASE] = releaseButton = new Button(642, 464, 118, 38, Button.HoverAction.BOX, new int[] {0, -1, DEPOSIT_WITHDRAW, RETURN});
 		
-		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, boxHoverAction, new int[] {0, SWITCH, PARTY + Trainer.MAX_POKEMON - 1, -1});
+		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, Button.HoverAction.BOX, new int[] {0, SWITCH, PARTY + Trainer.MAX_POKEMON - 1, -1});
 		
 		movedToFront();
 	}
@@ -108,9 +99,8 @@ public class PCView extends View
 		{
 			for (int j = 0; j < PC.BOX_WIDTH; j++)
 			{
-				if (boxButtons[i][j].isPress())
+				if (boxButtons[i][j].checkConsumePress())
 				{
-					boxButtons[i][j].consumePress();
 					if (party && depositClicked)
 					{
 						player.getPC().depositPokemon(player, selected, i, j);
@@ -133,9 +123,8 @@ public class PCView extends View
 		
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
 		{
-			if (partyButtons[i].isPress())
+			if (partyButtons[i].checkConsumePress())
 			{
-				partyButtons[i].consumePress();
 				if (party && depositClicked)
 				{
 					depositClicked = false;
@@ -154,30 +143,26 @@ public class PCView extends View
 			}
 		}
 		
-		if (leftButton.isPress())
+		if (leftButton.checkConsumePress())
 		{
-			leftButton.consumePress();
 			player.getPC().prevBox();
 			movedToFront();
 		}
 		
-		if (rightButton.isPress())
+		if (rightButton.checkConsumePress())
 		{
-			rightButton.consumePress();
 			player.getPC().nextBox();
 			movedToFront();
 		}
 		
-		if (switchButton.isPress())
+		if (switchButton.checkConsumePress())
 		{
-			switchButton.consumePress();
 			switchClicked = !switchClicked;
 			updateActiveButtons();
 		}
 		
-		if (depositWithdrawButton.isPress())
+		if (depositWithdrawButton.checkConsumePress())
 		{
-			depositWithdrawButton.consumePress();
 			if (party) // Deposit
 			{
 				if (depositClicked) player.getPC().depositPokemon(player, selected);
@@ -191,16 +176,14 @@ public class PCView extends View
 			}
 		}
 		
-		if (releaseButton.isPress())
+		if (releaseButton.checkConsumePress())
 		{
-			releaseButton.consumePress();
 			player.getPC().releasePokemon(player, selected);
 			movedToFront();
 		}
 		
-		if (returnButton.isPress())
+		if (returnButton.checkConsumePress())
 		{
-			returnButton.consumePress();
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
@@ -257,12 +240,7 @@ public class PCView extends View
 		s = (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes();
 		g.drawString(s, Global.centerX(s, 215, 20), 433);
 		
-		g.translate(leftButton.x, leftButton.y);
-		g.fillPolygon(leftArrowx, leftArrowy, leftArrowx.length);
-		g.translate(-leftButton.x, -leftButton.y);
-		g.translate(rightButton.x, rightButton.y);
-		g.fillPolygon(rightArrowx, rightArrowy, rightArrowx.length);
-		g.translate(-rightButton.x, -rightButton.y);
+		View.drawArrows(g, leftButton, rightButton);
 		
 		// Party
 		g.setColor(Color.RED);
@@ -416,25 +394,10 @@ public class PCView extends View
 	{
 		Color temp = g.getColor();
 		g.setColor(totesBlacks ? Color.BLACK : g.getColor().darker());
-		g.fillRect(b.x, b.y, b.w, b.h);
+		g.fillRect(b.x, b.y, b.width, b.height);
 		g.setColor(temp);
 	}
 
-	private ButtonHoverAction boxHoverAction = new ButtonHoverAction()
-	{
-		Stroke lineStroke = new BasicStroke(5f);
-		int time = 0;
-		public void draw(Graphics g, Button button) {
-			time = (time+1)%80;
-			g.setColor(new Color(0,0,0, 55+150*(Math.abs(time-40))/40));
-			Graphics2D g2d = (Graphics2D)g;
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setStroke(lineStroke);
-			g.drawRect(button.x-2, button.y-2, button.w+3, button.h+4);
-			g2d.setStroke(oldStroke);
-		}
-	};
-	
 	private void updateActiveButtons()
 	{
 		ActivePokemon[][] box = player.getPC().getBoxPokemon();

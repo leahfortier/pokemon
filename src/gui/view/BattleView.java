@@ -1,7 +1,6 @@
 package gui.view;
 
 import gui.Button;
-import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 import item.Bag;
@@ -9,12 +8,10 @@ import item.Bag.BattleBagCategory;
 import item.Item;
 import item.use.PokemonUseItem;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -82,12 +79,6 @@ public class BattleView extends View
 	private static final int[][] secondaryColorx = {{294, 199, 94, 294}, {191, 294, 294, 104}};
 	private static final int[][] secondaryColory = {{0, 0, 105, 105}, {0, 0, 88, 88}};
 	
-	// Polygons for the arrows in the Bag View
-	private static final int[] rightArrowx = {0, 16, 16, 32, 16, 16, 0};
-	private static final int[] rightArrowy = {5, 5, 0, 10, 20, 15, 15};
-	private static final int[] leftArrowx = {35, 19, 19, 3, 19, 19, 35};
-	private static final int[] leftArrowy = {5, 5, 0, 10, 20, 15, 15};
-	
 	// Polygons for Type Colors in the Pokemon View
 	private static final int[] pkmnPrimaryColorx = {0, 349, 5, 0};
 	private static final int[] pkmnPrimaryColory = {0, 0, 344, 344};
@@ -109,8 +100,8 @@ public class BattleView extends View
 	// All the different buttons!!
 	private Button[] moveButtons, bagButtons, menuButtons, pokemonButtons;
 	private Button[] bagTabButtons, pokemonTabButtons;
-	private Button fightBtn, bagBtn, pokemonBtn, runBtn, backBtn;
-	private Button bagRightBtn, bagLeftBtn, bagLastUsedBtn, pokemonSwitchButton;
+	private Button fightBtn, bagBtn, pokemonBtn, runBtn, backButton;
+	private Button bagRightButton, bagLeftButton, bagLastUsedBtn, pokemonSwitchButton;
 	private Button yesButton, noButton, newMoveButton;
 	
 	// Current bag page, bag category, and selected item
@@ -549,46 +540,6 @@ public class BattleView extends View
 		}
 	}
 	
-	private ButtonHoverAction arrowHoverAction = new ButtonHoverAction()
-	{
-		private final int[] tx = {0, 11, 0};
-		private final int[] ty = {0, 12, 23};
-		private int time = 0;
-		
-		public void draw(Graphics g, Button button) 
-		{
-			time = (time + 1)%80;
-			
-			int x = button.x - 10;
-			int y = button.y + button.h/2 - 12;
-			
-			g.translate(x, y);
-			
-			g.setColor(new Color(0, 0, 0, 55 + 200*(Math.abs(time - 40))/40));
-			g.fillPolygon(tx, ty, 3);
-			
-			g.translate(-x, -y);
-		}
-	};
-	
-	private ButtonHoverAction boxHoverAction = new ButtonHoverAction()
-	{
-		private int time = 0;
-		private Stroke lineStroke = new BasicStroke(5f);
-		
-		public void draw(Graphics g, Button button) 
-		{
-			time = (time + 1)%80;
-			
-			g.setColor(new Color(0, 0, 0, 55 + 150*(Math.abs(time - 40))/40));
-			Graphics2D g2d = (Graphics2D)g;
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setStroke(lineStroke);
-			g.drawRect(button.x - 2, button.y - 2, button.w + 3, button.h + 4);
-			g2d.setStroke(oldStroke);
-		}
-	};
-	
 	public BattleView()
 	{
 		playerAnimation = new PokemonAnimationState();
@@ -618,14 +569,14 @@ public class BattleView extends View
 		update = Update.NONE;
 		
 		// Back Button
-		backBtn = new Button(750, 560, 35, 20, null);
+		backButton = new Button(750, 560, 35, 20, null);
 		
 		// Menu Buttons
 		menuButtons = new Button[4];
-		menuButtons[FIGHT_BUTTON] = fightBtn = new Button(452, 473, 609 - 452, 515 - 473, arrowHoverAction, new int[] {BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON});
-		menuButtons[BAG_BUTTON] = bagBtn = new Button(628, 473, 724 - 628, 513 - 473, arrowHoverAction, new int[] {SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON});
-		menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(452, 525, 609 - 452, 571 - 525, arrowHoverAction, new int[] {RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON});
-		menuButtons[RUN_BUTTON] = runBtn = new Button(628, 525, 724 - 628, 571 - 525, arrowHoverAction, new int[] {FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON});
+		menuButtons[FIGHT_BUTTON] = fightBtn = new Button(452, 473, 609 - 452, 515 - 473, Button.HoverAction.ARROW, new int[] {BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON});
+		menuButtons[BAG_BUTTON] = bagBtn = new Button(628, 473, 724 - 628, 513 - 473, Button.HoverAction.ARROW, new int[] {SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON});
+		menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(452, 525, 609 - 452, 571 - 525, Button.HoverAction.ARROW, new int[] {RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON});
+		menuButtons[RUN_BUTTON] = runBtn = new Button(628, 525, 724 - 628, 571 - 525, Button.HoverAction.ARROW, new int[] {FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON});
 		
 		// Move Buttons
 		moveButtons = new Button[Move.MAX_MOVES];
@@ -633,7 +584,7 @@ public class BattleView extends View
 		{
 			for (int x = 0; x < Move.MAX_MOVES/2; x++, i++)
 			{
-				moveButtons[i] = new Button(22 + x*190, 440 + 21 + y*62, 183, 55, boxHoverAction, 
+				moveButtons[i] = new Button(22 + x*190, 440 + 21 + y*62, 183, 55, Button.HoverAction.BOX, 
 						new int[] { (i + 1)%Move.MAX_MOVES, // Right
 									((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up
 									((i - 1) + Move.MAX_MOVES)%Move.MAX_MOVES, // Left
@@ -642,9 +593,9 @@ public class BattleView extends View
 		}
 		
 		// Learn Move Buttons
-		yesButton = new Button(moveButtons[2].x, moveButtons[2].y, moveButtons[2].w, moveButtons[2].h, boxHoverAction);
-		noButton = new Button(moveButtons[3].x, moveButtons[3].y, moveButtons[3].w, moveButtons[3].h, boxHoverAction);
-		newMoveButton = new Button(moveButtons[3].x + moveButtons[3].w + moveButtons[2].x, moveButtons[3].y, moveButtons[3].w, moveButtons[3].h, boxHoverAction);
+		yesButton = new Button(moveButtons[2].x, moveButtons[2].y, moveButtons[2].width, moveButtons[2].height, Button.HoverAction.BOX);
+		noButton = new Button(moveButtons[3].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.HoverAction.BOX);
+		newMoveButton = new Button(moveButtons[3].x + moveButtons[3].width + moveButtons[2].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.HoverAction.BOX);
 		
 		// Bag View Buttons 
 		bagButtons = new Button[NUM_BAG_BUTTONS];
@@ -652,22 +603,22 @@ public class BattleView extends View
 		bagTabButtons = new Button[bagCategories.length];
 		for (int i = 0; i < bagCategories.length; i++)
 		{
-			bagButtons[i] = bagTabButtons[i] = new Button(i*89 + 30, 190, 89, 28, boxHoverAction, 
+			bagButtons[i] = bagTabButtons[i] = new Button(i*89 + 30, 190, 89, 28, Button.HoverAction.BOX, 
 					new int[] { (i + 1)%bagCategories.length, // Right
 								LAST_ITEM_BUTTON, // Up
 								(i - 1 + bagCategories.length)%bagCategories.length, // Left
 								ITEMS }); // Down
 		}
 		
-		bagButtons[BAG_LEFT_BUTTON] = bagLeftBtn = new Button(135, 435, 35, 20, boxHoverAction, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});
-		bagButtons[BAG_RIGHT_BUTTON] = bagRightBtn = new Button(250,435,35,20, boxHoverAction, new int[] {-1, ITEMS + ITEMS_PER_PAGE - 1, BAG_LEFT_BUTTON, LAST_ITEM_BUTTON});
-		bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, boxHoverAction, new int[] {-1, BAG_LEFT_BUTTON, -1, selectedBagTab});
+		bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, Button.HoverAction.BOX, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});
+		bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(250,435,35,20, Button.HoverAction.BOX, new int[] {-1, ITEMS + ITEMS_PER_PAGE - 1, BAG_LEFT_BUTTON, LAST_ITEM_BUTTON});
+		bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, Button.HoverAction.BOX, new int[] {-1, BAG_LEFT_BUTTON, -1, selectedBagTab});
 		
 		for (int y = 0, i = ITEMS; y < ITEMS_PER_PAGE/2; y++)
 		{
 			for (int x = 0; x < 2; x++, i++)
 			{
-				bagButtons[i] = new Button(55 + x*162, 243 + y*38, 148, 28, boxHoverAction, 
+				bagButtons[i] = new Button(55 + x*162, 243 + y*38, 148, 28, Button.HoverAction.BOX, 
 						new int[] { (i + 1 - ITEMS)%ITEMS_PER_PAGE + ITEMS, // Right
 									y == 0 ? selectedBagTab : i - 2, // Up
 									(i - 1 - ITEMS + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS, // Left
@@ -681,14 +632,14 @@ public class BattleView extends View
 		pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
 		{
-			pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, boxHoverAction, 
+			pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, Button.HoverAction.BOX, 
 					new int[] { (i + 1)%Trainer.MAX_POKEMON, // Right
 								POKEMON_SWITCH_BUTTON, // Up
 								(i - 1 + Trainer.MAX_POKEMON)%Trainer.MAX_POKEMON, // Left
 								POKEMON_SWITCH_BUTTON }); // Down
 		}
 		
-		pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, boxHoverAction, new int[]{-1, 0, -1, -1});
+		pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, Button.HoverAction.BOX, new int[]{-1, 0, -1, -1});
 	}
 	
 	// Updates when in the menu state
@@ -698,29 +649,25 @@ public class BattleView extends View
 		selectedButton = Button.update(menuButtons, selectedButton, input);
 		
 		// Show Bag View
-		if (bagBtn.isPress())
+		if (bagBtn.checkConsumePress())
 		{
-			bagBtn.consumePress();
 			setVisualState(VisualState.BAG);
 		}
 		// Show Pokemon View
-		else if (pokemonBtn.isPress())
+		else if (pokemonBtn.checkConsumePress())
 		{
-			pokemonBtn.consumePress();
 			setVisualState(VisualState.POKEMON);
 		}
 		// Attempt escape
-		else if (runBtn.isPress())
+		else if (runBtn.checkConsumePress())
 		{
-			runBtn.consumePress();
 			setVisualState(VisualState.MESSAGE);
 			currentBattle.runAway();
 			cycleMessage(false);
 		}
 		// Show Fight View
-		else if (fightBtn.isPress())
+		else if (fightBtn.checkConsumePress())
 		{
-			fightBtn.consumePress();
 			setVisualState(VisualState.FIGHT);
 			
 			// Move is forced -- don't show menu, but execute the move
@@ -738,7 +685,7 @@ public class BattleView extends View
 	{
 		// Update move buttons and the back button
 		selectedButton = Button.update(moveButtons, selectedButton, input);
-		backBtn.update(input, false, Control.BACK);
+		backButton.update(input, false, Control.BACK);
 		
 		// Get the Pokemon that is attacking and their corresponsing move list
 		ActivePokemon front = currentBattle.getPlayer().front();
@@ -746,9 +693,8 @@ public class BattleView extends View
 		
 		for (int i = 0; i < moves.size(); i++)
 		{
-			if (moveButtons[i].isPress())
+			if (moveButtons[i].checkConsumePress())
 			{
-				moveButtons[i].consumePress();
 				lastMoveUsed = i;
 				
 				// Execute the move if valid
@@ -768,9 +714,8 @@ public class BattleView extends View
 		}
 		
 		// Return to main battle menu
-		if (backBtn.isPress())
+		if (backButton.checkConsumePress())
 		{
-			backBtn.consumePress();
 			setVisualState(VisualState.MENU);
 		}
 	}
@@ -804,14 +749,13 @@ public class BattleView extends View
 	{
 		// Update all bag butons and the back button
 		selectedButton = Button.update(bagButtons, selectedButton, input);
-		backBtn.update(input, false, Control.BACK);
+		backButton.update(input, false, Control.BACK);
 		
 		// Check tabs
 		for (int i = 0; i < bagCategories.length; i++)
 		{
-			if (bagTabButtons[i].isPress())
+			if (bagTabButtons[i].checkConsumePress())
 			{
-				bagTabButtons[i].consumePress();
 				bagPage = 0;
 				selectedBagTab = i;
 				setVisualState(state); // To update active buttons
@@ -827,10 +771,8 @@ public class BattleView extends View
 		for (int i = ITEMS; i < ITEMS + ITEMS_PER_PAGE && iter.hasNext(); i++)
 		{
 			Item item = iter.next();
-			if (bagButtons[i].isPress())
-			{
-				bagButtons[i].consumePress();
-				
+			if (bagButtons[i].checkConsumePress())
+			{				
 				// Pokemon Use Item -- Set item to be selected an change to Pokemon View
 				if (item instanceof PokemonUseItem)
 				{
@@ -856,10 +798,8 @@ public class BattleView extends View
 		}
 		
 		// Selecting the Last Item Used Button
-		if (bagLastUsedBtn.isPress())
+		if (bagLastUsedBtn.checkConsumePress())
 		{
-			bagLastUsedBtn.consumePress();
-			
 			Item lastItemUsed = bag.getLastUsedItem();
 			if (lastItemUsed != Item.getItem("None") && bag.battleUseItem(lastItemUsed, player.front(), currentBattle))
 			{
@@ -875,10 +815,8 @@ public class BattleView extends View
 		}
 		
 		// Next page
-		if (bagRightBtn.isPress())
+		if (bagRightButton.checkConsumePress())
 		{
-			bagRightBtn.consumePress();
-			
 			if (bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE)-1)) bagPage = 0;
 			else bagPage++;
 			
@@ -886,10 +824,8 @@ public class BattleView extends View
 		}
 		
 		// Previous Page
-		if (bagLeftBtn.isPress())
+		if (bagLeftButton.checkConsumePress())
 		{
-			bagLeftBtn.consumePress();
-			
 			if (bagPage == 0) bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE)-1);
 			else bagPage--;
 			
@@ -897,9 +833,8 @@ public class BattleView extends View
 		}
 		
 		// Return to main battle menu
-		if (backBtn.isPress())
+		if (backButton.checkConsumePress())
 		{
-			backBtn.consumePress();
 			setVisualState(VisualState.MENU);
 		}
 	}
@@ -908,24 +843,22 @@ public class BattleView extends View
 	{
 		// Update the buttons
 		selectedButton = Button.update(pokemonButtons, selectedButton, input);
-		backBtn.update(input, false, Control.BACK);
+		backButton.update(input, false, Control.BACK);
 		
 		CharacterData player = currentBattle.getPlayer();
 		List<ActivePokemon> list = player.getTeam();
 		for (int i = 0; i < list.size(); i++)
 		{
-			if (pokemonTabButtons[i].isPress())
+			if (pokemonTabButtons[i].checkConsumePress())
 			{
-				pokemonTabButtons[i].consumePress();
 				selectedPokemonTab = i;
 				setVisualState(state); //to update active buttons
 			}
 		}
 		
 		// Switch Switch Switcheroo
-		if (pokemonSwitchButton.isPress())
+		if (pokemonSwitchButton.checkConsumePress())
 		{
-			pokemonSwitchButton.consumePress();
 			ActivePokemon selectedPkm = list.get(selectedPokemonTab);
 			
 			// Use an item on this Pokemon instead of switching
@@ -968,9 +901,8 @@ public class BattleView extends View
 		}
 
 		// Return to main menu if applicable
-		if (backBtn.isPress())
+		if (backButton.checkConsumePress())
 		{
-			backBtn.consumePress();
 			if (!switchForced) setVisualState(VisualState.MENU);
 		}
 	}
@@ -980,10 +912,8 @@ public class BattleView extends View
 		yesButton.update(input);
 		noButton.update(input);
 		
-		if (noButton.isPress())
+		if (noButton.checkConsumePress())
 		{
-			noButton.consumePress();
-			
 			// This is all done really silly, so we need to do this
 			ArrayDeque<MessageUpdate> messages = currentBattle.getMessages();
 			MessageUpdate message = messages.poll();
@@ -994,9 +924,8 @@ public class BattleView extends View
 			cycleMessage(false);
 		}
 		
-		if (yesButton.isPress())
+		if (yesButton.checkConsumePress())
 		{
-			yesButton.consumePress();
 			setVisualState(VisualState.LEARN_MOVE_DELETE);
 		}
 	}
@@ -1008,9 +937,8 @@ public class BattleView extends View
 		
 		for (int i = 0; i < moveButtons.length; i++)
 		{
-			if (moveButtons[i].isPress())
+			if (moveButtons[i].checkConsumePress())
 			{
-				moveButtons[i].consumePress();
 				learnedPokemon.addMove(currentBattle, learnedMove, i);
 				
 				// This is all done really silly, so we need to do this
@@ -1028,10 +956,8 @@ public class BattleView extends View
 			}
 		}
 		
-		if (newMoveButton.isPress())
+		if (newMoveButton.checkConsumePress())
 		{
-			newMoveButton.consumePress();
-			
 			// This is all done really silly, so we need to do this
 			ArrayDeque<MessageUpdate> messages = currentBattle.getMessages();
 			MessageUpdate message = messages.poll();
@@ -1296,12 +1222,7 @@ public class BattleView extends View
 		g.drawString(pageStr, 210 - 11*pageStr.length()/2, 450);
 		
 		// Left/Right Arrows
-		g.translate(135, 435);
-		g.fillPolygon(leftArrowx, leftArrowy, leftArrowx.length);
-		g.translate(-135, -435);
-		g.translate(250, 435);
-		g.fillPolygon(rightArrowx, rightArrowy, rightArrowx.length);
-		g.translate(-250, -435);
+		View.drawArrows(g, bagLeftButton, bagRightButton);
 		
 		// Last Item Used
 		Item lastUsedItem = currentBattle.getPlayer().getBag().getLastUsedItem();
@@ -1326,12 +1247,10 @@ public class BattleView extends View
 		Global.drawWrappedText(g, msgLine, 440, 485, 350);
 		
 		// Back Arrow
-		g.translate(750, 560);
-		g.fillPolygon(rightArrowx, rightArrowy, rightArrowx.length);
-		g.translate(-750, -560);
+		View.drawArrows(g, null, backButton);
 		
 		for (Button b: bagButtons) b.draw(g);
-		backBtn.draw(g);
+		backButton.draw(g);
 	}
 	
 	private void drawFight(Graphics g, TileSet tiles, ActivePokemon plyr)
@@ -1373,12 +1292,10 @@ public class BattleView extends View
 		g.setFont(Global.getFont(30));
 		Global.drawWrappedText(g, msgLine, 440, 485, 350);
 		
-		g.translate(750, 560);
-		g.fillPolygon(rightArrowx, rightArrowy, rightArrowx.length);
-		g.translate(-750, -560);
+		View.drawArrows(g, null, backButton);
 		
 		for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) moveButtons[i].draw(g);
-		backBtn.draw(g);
+		backButton.draw(g);
 	}
 	
 	private void drawMenu(Graphics g, TileSet tiles, ActivePokemon plyr)
@@ -1611,9 +1528,7 @@ public class BattleView extends View
 		// Draw back arrow when applicable
 		if (!switchForced)
 		{
-			g.translate(750, 560);
-			g.fillPolygon(rightArrowx, rightArrowy, rightArrowx.length);
-			g.translate(-750, -560);
+			View.drawArrows(g, null, backButton);
 		}
 
 		for (int i = 0; i < list.size(); i++)
@@ -1622,7 +1537,7 @@ public class BattleView extends View
 		if (state == VisualState.USE_ITEM || selectedPkm.canFight())
 			pokemonSwitchButton.draw(g);
 		
-		backBtn.draw(g);
+		backButton.draw(g);
 	}
 
 	private void drawLearnMoveQuestion(Graphics g, TileSet tiles)

@@ -1,16 +1,12 @@
 package gui.view;
 
 import gui.Button;
-import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -18,9 +14,9 @@ import java.util.Scanner;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.InputControl.Control;
 import main.Global;
 import main.InputControl;
+import main.InputControl.Control;
 
 public class MainMenuView extends View
 {
@@ -73,23 +69,6 @@ public class MainMenuView extends View
 
 	private SaveInfo[] saveInfo;
 
-	private ButtonHoverAction boxHoverAction = new ButtonHoverAction()
-	{
-		Stroke lineStroke = new BasicStroke(5f);
-		int time = 0;
-
-		public void draw(Graphics g, Button button)
-		{
-			time = (time + 1) % 80;
-			g.setColor(new Color(0, 0, 0, 55 + 150 * (Math.abs(time - 40)) / 40));
-			Graphics2D g2d = (Graphics2D) g;
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setStroke(lineStroke);
-			g.drawRect(button.x - 2, button.y - 2, button.w + 3, button.h + 4);
-			g2d.setStroke(oldStroke);
-		}
-	};
-
 	public MainMenuView()
 	{
 		selectedButton = creditsTime1 = creditsTime2 = 0;
@@ -104,21 +83,21 @@ public class MainMenuView extends View
 		mainButtons = new Button[4];
 		for (int i = 0; i < 4; i++)
 			// r u l d
-			mainButtons[i] = new Button(200, 240 + i * 85, 400, 75, boxHoverAction, new int[] { -1, i == 0 ? 3 : i - 1, -1, i == 3 ? 0 : i + 1 });
+			mainButtons[i] = new Button(200, 240 + i * 85, 400, 75, Button.HoverAction.BOX, new int[] { -1, i == 0 ? 3 : i - 1, -1, i == 3 ? 0 : i + 1 });
 
 		loadButtons = new Button[5];
 		for (int i = 0; i < 3; i++)
-			loadButtons[i] = new Button(200, 240 + i * 85, 400, 75, boxHoverAction, new int[] { -1, i == 0 ? 4 : i - 1, -1, i + 1 });
-		loadButtons[3] = new Button(200, 495, 195, 75, boxHoverAction, new int[] { 4, 2, -1, 0 });
-		loadButtons[4] = new Button(405, 495, 195, 75, boxHoverAction, new int[] { -1, 2, 3, 0 });
+			loadButtons[i] = new Button(200, 240 + i * 85, 400, 75, Button.HoverAction.BOX, new int[] { -1, i == 0 ? 4 : i - 1, -1, i + 1 });
+		loadButtons[3] = new Button(200, 495, 195, 75, Button.HoverAction.BOX, new int[] { 4, 2, -1, 0 });
+		loadButtons[4] = new Button(405, 495, 195, 75, Button.HoverAction.BOX, new int[] { -1, 2, 3, 0 });
 
 		newButtons = new Button[4];
 		for (int i = 0; i < 4; i++)
-			newButtons[i] = new Button(200, 240 + i * 85, 400, 75, boxHoverAction, new int[] { -1, i == 0 ? 3 : i - 1, -1, i == 3 ? 0 : i + 1 });
+			newButtons[i] = new Button(200, 240 + i * 85, 400, 75, Button.HoverAction.BOX, new int[] { -1, i == 0 ? 3 : i - 1, -1, i == 3 ? 0 : i + 1 });
 
 		optionsButtons = new Button[4];
 		for (int i = 0; i < 4; i++)
-			optionsButtons[i] = new Button(200, 240 + i * 85, 400, 75, boxHoverAction, new int[] { -1, i == 0 ? 3 : i - 1, -1, i == 3 ? 0 : i + 1 });
+			optionsButtons[i] = new Button(200, 240 + i * 85, 400, 75, Button.HoverAction.BOX, new int[] { -1, i == 0 ? 3 : i - 1, -1, i == 3 ? 0 : i + 1 });
 		state = VisualState.MAIN;
 		selectedButton = creditsTime1 = creditsTime2 = 0;
 	}
@@ -173,11 +152,11 @@ public class MainMenuView extends View
 		{
 			case MAIN:
 				selectedButton = Button.update(mainButtons, selectedButton, input);
-				if (mainButtons[selectedButton].isPress())
+				if (mainButtons[selectedButton].checkConsumePress())
 				{
-					mainButtons[selectedButton].consumePress();
 					pressed = selectedButton;
 				}
+				
 				switch (pressed)
 				{
 					case 0: // load
@@ -198,11 +177,11 @@ public class MainMenuView extends View
 				break;
 			case LOAD:
 				selectedButton = Button.update(loadButtons, selectedButton, input);
-				if (loadButtons[selectedButton].isPress())
+				if (loadButtons[selectedButton].checkConsumePress())
 				{
-					loadButtons[selectedButton].consumePress();
 					pressed = selectedButton;
 				}
+				
 				switch (pressed)
 				{
 					case 0: // load
@@ -241,11 +220,11 @@ public class MainMenuView extends View
 				break;
 			case NEW:
 				selectedButton = Button.update(newButtons, selectedButton, input);
-				if (newButtons[selectedButton].isPress())
+				if (newButtons[selectedButton].checkConsumePress())
 				{
-					newButtons[selectedButton].consumePress();
 					pressed = selectedButton;
 				}
+				
 				switch (pressed)
 				{
 					case 0: // new
@@ -277,11 +256,11 @@ public class MainMenuView extends View
 				break;
 			case OPTIONS:
 				selectedButton = Button.update(optionsButtons, selectedButton, input);
-				if (optionsButtons[selectedButton].isPress())
+				if (optionsButtons[selectedButton].checkConsumePress())
 				{
-					optionsButtons[selectedButton].consumePress();
 					pressed = selectedButton;
 				}
+				
 				switch (pressed)
 				{
 					case 0: // theme
