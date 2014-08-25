@@ -104,13 +104,13 @@ public class CharacterData extends Trainer implements Serializable
 	
 	private void updateTimePlayed()
 	{
-		seconds += (System.currentTimeMillis()-timeSinceUpdate)/1000;
+		seconds += (System.currentTimeMillis() - timeSinceUpdate)/1000;
 		timeSinceUpdate = System.currentTimeMillis();
 	}
 	
 	public long getTimePlayed()
 	{
-		return seconds + (System.currentTimeMillis()-timeSinceUpdate)/1000;
+		return seconds + (System.currentTimeMillis() - timeSinceUpdate)/1000;
 	}
 	
 	public int getFileNum()
@@ -140,12 +140,12 @@ public class CharacterData extends Trainer implements Serializable
 	private void updateMapGlobals(String prevMap, String newMap, String prevMapEntrance, String newMapEntrance) {
 		
 		//Remove previous map
-		removeGlobal("MapGlobal_PreviousMap_"+previousMapName);
-		removeGlobal("MapGlobal_MapEntrance_"+prevMapEntrance);
+		removeGlobal("MapGlobal_PreviousMap_" + previousMapName);
+		removeGlobal("MapGlobal_MapEntrance_" + prevMapEntrance);
 		
 		//Add current map
-		addGlobal("MapGlobal_PreviousMap_"+prevMap);
-		addGlobal("MapGlobal_MapEntrance_"+newMapEntrance);
+		addGlobal("MapGlobal_PreviousMap_" + prevMap);
+		addGlobal("MapGlobal_MapEntrance_" + newMapEntrance);
 	}
 	
 	// Called when a character steps once in any given direction
@@ -267,11 +267,11 @@ public class CharacterData extends Trainer implements Serializable
 		if (opponent instanceof Trainer)
 		{
 			Trainer opp = (Trainer)opponent;
-			b.addMessage(getName()+" defeated "+opp.getName()+"!");
+			b.addMessage(getName() + " defeated " + opp.getName() + "!");
 			addGlobal(b.getWinGlobal());
 			
 			int datCash = opp.getDatCashMoney()*(hasEffect("DoubleMoney") ? 2 : 1);
-			b.addMessage(getName()+" received "+datCash+" pokedollars for winning! Woo!");
+			b.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
 		}
 		
@@ -363,13 +363,13 @@ public class CharacterData extends Trainer implements Serializable
 			if (Math.random()*65536 > shakeVal)
 			{
 				b.addMessage("", i);
-				b.addMessage("Oh no! "+c.getName()+" broke free!");
+				b.addMessage("Oh no! " + c.getName() + " broke free!");
 				return true;
 			}
 		}
 		
 		b.addMessage("", -1);
-		b.addMessage("Gotcha! "+c.getName()+" was caught!");
+		b.addMessage("Gotcha! " + c.getName() + " was caught!");
 		gainEXP(c, b); 
 		addPokemon(b, c);
 		
@@ -386,17 +386,17 @@ public class CharacterData extends Trainer implements Serializable
 		{
 			updateTimePlayed();
 
-			File saveDir = new File("saves"+Global.FILE_SLASH);
+			File saveDir = new File("saves" + Global.FILE_SLASH);
 			if (!saveDir.exists())
 				saveDir.mkdirs();
 			
-			FileOutputStream fout = new FileOutputStream("saves"+Global.FILE_SLASH+"File" + (fileNum+1) + ".ser");
+			FileOutputStream fout = new FileOutputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
 			ObjectOutputStream out = new ObjectOutputStream(fout);
 			out.writeObject(this);
 			out.close();
 			fout.close();
 			
-			PrintStream prevOut = new PrintStream("saves"+Global.FILE_SLASH+"Preview" + (fileNum+1) + ".out");
+			PrintStream prevOut = new PrintStream("saves" + Global.FILE_SLASH + "Preview" + (fileNum + 1) + ".out");
 			prevOut.print(name + " " + seconds + " " + numBadges + " " + pokedex.numSeen());
 			prevOut.close();
 		}
@@ -411,7 +411,7 @@ public class CharacterData extends Trainer implements Serializable
 		CharacterData loadChar = null;
 		
 		try {
-			FileInputStream fin = new FileInputStream("saves"+Global.FILE_SLASH+"File" + (fileNum+1) + ".ser");
+			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
 			ObjectInputStream in = new ObjectInputStream(fin);
 			loadChar = (CharacterData) in.readObject();
 			in.close();

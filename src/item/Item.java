@@ -68,8 +68,7 @@ import battle.effect.Weather.WeatherType;
 import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 
-public abstract class Item implements Comparable<Item>, Serializable
-{
+public abstract class Item implements Comparable<Item>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private static HashMap<String, Item> map;
@@ -79,26 +78,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 	protected BattleBagCategory[] bcat;
 	protected int price, index;
 
-	public static boolean exists(String s)
-	{
-		if (map == null) loadItems();
+	public static boolean exists(String s) {
+		if (map == null)
+			loadItems();
 
-		if (!map.containsKey(s)) return false;
+		if (!map.containsKey(s))
+			return false;
 		return true;
 	}
 
-	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException
-	{
+	private void readObject(ObjectInputStream ois) throws IOException,
+			ClassNotFoundException {
 		ois.defaultReadObject();
-		synchronized (Item.class)
-		{
-			if (map == null) loadItems();
+		synchronized (Item.class) {
+			if (map == null)
+				loadItems();
 			map.put(this.getName(), this);
 		}
 	}
 
-	public Item()
-	{
+	public Item() {
 		this.name = this.desc = "UNDEFINED";
 		this.cat = BagCategory.MISC;
 		bcat = new BattleBagCategory[0];
@@ -106,105 +105,97 @@ public abstract class Item implements Comparable<Item>, Serializable
 		this.index = 0;
 	}
 
-	public int compareTo(Item o)
-	{
+	public int compareTo(Item o) {
 		return this.name.compareTo(o.name);
 	}
 
-	public boolean isUsable()
-	{
+	public boolean isUsable() {
 		return this instanceof UseItem;
 	}
 
-	public boolean isHoldable()
-	{
+	public boolean isHoldable() {
 		return this instanceof HoldItem;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return this.name;
 	}
 
-	public String getDesc()
-	{
+	public String getDesc() {
 		return this.desc;
 	}
 
-	public int getPrice()
-	{
+	public int getPrice() {
 		return this.price;
 	}
 
-	public int getIndex()
-	{
+	public int getIndex() {
 		return index;
 	}
 
-	public static Item noneItem()
-	{
+	public static Item noneItem() {
 		return getItem("None");
 	}
 
-	public static Item getItem(String m)
-	{
-		if (map == null) loadItems();
-		if (map.containsKey(m)) return map.get(m);
+	public static Item getItem(String m) {
+		if (map == null)
+			loadItems();
+		if (map.containsKey(m))
+			return map.get(m);
 
 		Global.error("No such Item " + m);
 		return null;
 	}
 
-	public static boolean isItem(String m)
-	{
-		if (map == null) loadItems();
-		if (map.containsKey(m)) return true;
+	public static boolean isItem(String m) {
+		if (map == null)
+			loadItems();
+		if (map.containsKey(m))
+			return true;
 		return false;
 	}
 
-	public boolean equals(Object o)
-	{
-		if (!(o instanceof Item)) return false;
+	public boolean equals(Object o) {
+		if (!(o instanceof Item))
+			return false;
 		return (((Item) o).getName().equals(name));
 	}
 
-	public int hashCode()
-	{
+	public int hashCode() {
 		return name.hashCode();
 	}
 
 	/* Helper abstract classes */
 
-	private static abstract class StageIncreaseItem extends Item implements BattleUseItem
-	{
+	private static abstract class StageIncreaseItem extends Item implements
+			BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		public abstract Stat toIncrease();
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		public boolean use(ActivePokemon p, Battle b) {
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b,
+					CastSource.USE_ITEM);
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		public String getSuccessMessage(ActivePokemon p) {
+			return p.getName() + "'s " + toIncrease().getName()
+					+ " was raised!";
 		}
 	}
 
-	private static abstract class TypeEnhancingItem extends Item implements PowerChangeEffect, TypeItem
-	{
+	private static abstract class TypeEnhancingItem extends Item implements
+			PowerChangeEffect, TypeItem {
 		private static final long serialVersionUID = 1L;
 
 		public abstract double getMultiplier();
 
-		public double getMultiplier(Battle b, ActivePokemon me, ActivePokemon o)
-		{
-			if (me.getAttack().isType(b, me, getType()))
-			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(me.getName() + "'s " + this.getName() + " enhanced " + me.getAttack().getName() + "'s power!");
+		public double getMultiplier(Battle b, ActivePokemon me, ActivePokemon o) {
+			if (me.getAttack().isType(b, me, getType())) {
+				if (this instanceof ConsumedItem) {
+					b.addMessage(me.getName() + "'s " + this.getName()
+							+ " enhanced " + me.getAttack().getName()
+							+ "'s power!");
 					me.consumeItem(b);
 				}
 
@@ -215,109 +206,103 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static abstract class StatusConditionRemoveItem extends Item implements PokemonUseItem, BattleUseItem
-	{
+	private static abstract class StatusConditionRemoveItem extends Item
+			implements PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		public abstract StatusCondition toRemove();
 
-		public boolean use(ActivePokemon p)
-		{
-			if (!p.hasStatus(toRemove())) return false;
+		public boolean use(ActivePokemon p) {
+			if (!p.hasStatus(toRemove()))
+				return false;
 
 			p.removeStatus();
 			return true;
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was cured of its status condition!";
 		}
 	}
 
-	private static abstract class EVIncreaseItem extends Item implements PokemonUseItem
-	{
+	private static abstract class EVIncreaseItem extends Item implements
+			PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		public abstract Stat toIncrease();
 
 		public abstract int increaseAmt();
 
-		public boolean use(ActivePokemon p)
-		{
+		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += 10;
 
 			return p.addEVs(toAdd);
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		public String getSuccessMessage(ActivePokemon p) {
+			return p.getName() + "'s " + toIncrease().getName()
+					+ " was raised!";
 		}
 	}
 
-	private static abstract class HealItem extends Item implements PokemonUseItem, BattleUseItem
-	{
+	private static abstract class HealItem extends Item implements
+			PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		public abstract int healAmt();
 
-		public boolean use(ActivePokemon p)
-		{
+		public boolean use(ActivePokemon p) {
 			return p.heal(healAmt()) != 0;
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 	}
 
-	private static abstract class EvolutionItem extends Item implements PokemonUseItem
-	{
+	private static abstract class EvolutionItem extends Item implements
+			PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		private String message;
 
-		public boolean use(ActivePokemon p)
-		{
+		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
-			if (base == null) return false;
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(
+					EvolutionCheck.ITEM, p, this.getName());
+			if (base == null)
+				return false;
 
 			message = p.evolve(null, base);
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return message;
 		}
 	}
 
-	public static abstract class PowerItem extends Item implements StatChangingEffect
-	{
+	public static abstract class PowerItem extends Item implements
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s.equals(Stat.SPEED)) return stat / 2;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s.equals(Stat.SPEED))
+				return stat / 2;
 			return stat;
 		}
 
-		public int[] getEVs(int[] vals)
-		{
+		public int[] getEVs(int[] vals) {
 			vals[toIncrease().index()] += 4;
 			return vals;
 		}
@@ -325,113 +310,117 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public abstract Stat toIncrease();
 	}
 
-	private static abstract class ChoiceItem extends Item implements HoldItem, StatChangingEffect, AttackSelectionEffect
-	{
+	private static abstract class ChoiceItem extends Item implements HoldItem,
+			StatChangingEffect, AttackSelectionEffect {
 		private static final long serialVersionUID = 1L;
 
 		public abstract Stat toIncrease();
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == toIncrease()) stat *= 1.5;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == toIncrease())
+				stat *= 1.5;
 			return stat;
 		}
 
-		public boolean usable(ActivePokemon p, Move m)
-		{
+		public boolean usable(ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
-			if (last == null || m == last) return true;
+			if (last == null || m == last)
+				return true;
 			return false;
 		}
 
-		public String getUnusableMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
+		public String getUnusableMessage(ActivePokemon p) {
+			return p.getName() + "'s " + super.name + " only allows "
+					+ p.getAttributes().getLastMoveUsed().getAttack().getName()
+					+ " to be used!";
 		}
 	}
 
-	private static abstract class TypeDamageStatIncreaseItem extends Item implements HoldItem, ConsumedItem, TakeDamageEffect
-	{
+	private static abstract class TypeDamageStatIncreaseItem extends Item
+			implements HoldItem, ConsumedItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		public abstract Type damageType();
 
 		public abstract Stat toIncrease();
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.getAttack().getType(b, user) == damageType() && victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.HELD_ITEM))
-			{
+		public void takeDamage(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
+			if (user.getAttack().getType(b, user) == damageType()
+					&& victim.getAttributes().modifyStage(victim, victim, 1,
+							toIncrease(), b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
 		}
 	}
 
-	private static abstract class RepelItem extends Item implements HoldItem, TrainerUseItem
-	{
+	private static abstract class RepelItem extends Item implements HoldItem,
+			TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		public abstract int repelSteps();
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public boolean use(Trainer t)
-		{
-			if (!(t instanceof CharacterData)) return false;
+		public boolean use(Trainer t) {
+			if (!(t instanceof CharacterData))
+				return false;
 
 			CharacterData player = (CharacterData) t;
-			if (player.isUsingRepel()) return false;
+			if (player.isUsingRepel())
+				return false;
 
 			player.addRepelSteps(repelSteps());
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!";
+		public String getSuccessMessage(ActivePokemon p) {
+			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps()
+					+ " steps!";
 		}
 	}
 
-	public static abstract class EVDecreaseBerry extends Item implements Berry, PokemonUseItem
-	{
+	public static abstract class EVDecreaseBerry extends Item implements Berry,
+			PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
-		public boolean use(ActivePokemon p)
-		{
+		public boolean use(ActivePokemon p) {
 			int[] vals = new int[Stat.NUM_STATS];
-			if (p.getEV(toDecrease().index()) > 110) vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
-			else vals[toDecrease().index()] -= 10;
+			if (p.getEV(toDecrease().index()) > 110)
+				vals[toDecrease().index()] = 100 - p
+						.getEV(toDecrease().index());
+			else
+				vals[toDecrease().index()] -= 10;
 
 			return p.addEVs(vals);
 		}
 
 		abstract Stat toDecrease();
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
+		public String getSuccessMessage(ActivePokemon p) {
+			return p.getName() + "'s " + toDecrease().getName()
+					+ " was lowered!";
 		}
 	}
 
-	public static abstract class SuperEffectivePowerReduceBerry extends Item implements Berry, OpponentPowerChangeEffect
-	{
+	public static abstract class SuperEffectivePowerReduceBerry extends Item
+			implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
-		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public double getOppMultiplier(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
 			Type t = user.getAttack().getType(b, user);
 
-			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
-			{
-				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1) {
+				b.addMessage(victim.getName() + "'s " + this.name
+						+ " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
 				return .5;
 			}
@@ -442,44 +431,41 @@ public abstract class Item implements Comparable<Item>, Serializable
 		abstract Type getType();
 	}
 
-	public static abstract class HealthTriggeredStageIncreaseBerry extends Item implements HealthTriggeredBerry
-	{
+	public static abstract class HealthTriggeredStageIncreaseBerry extends Item
+			implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
-		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, CastSource.HELD_ITEM))
-			{
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
+			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b,
+					CastSource.HELD_ITEM)) {
 				return true;
 			}
 
 			return false;
 		}
 
-		public double healthTriggerRatio()
-		{
+		public double healthTriggerRatio() {
 			return 1 / 4.0;
 		}
 
 		public abstract Stat toRaise();
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + this.name + " raised its " + toRaise().getName() + "!";
+		public String getSuccessMessage(ActivePokemon p) {
+			return p.getName() + "'s " + this.name + " raised its "
+					+ toRaise().getName() + "!";
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
 			useHealthTriggerBerry(b, user);
 		}
 	}
 
-	public static void loadItems()
-	{
-		if (map != null) return;
+	public static void loadItems() {
+		if (map != null)
+			return;
 		map = new HashMap<>();
 
-		// EVERYTHING BELOW IS GENERATED +++
+		// EVERYTHING BELOW IS GENERATED ###
 		map.put("None", new None());
 		map.put("Syrup", new Syrup());
 		map.put("Bicycle", new Bicycle());
@@ -769,12 +755,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		map.put("Max Repel", new MaxRepel());
 	}
 
-	private static class None extends Item implements HoldItem
-	{
+	private static class None extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public None()
-		{
+		public None() {
 			super.name = "None";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -783,18 +767,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 9001;
 		}
 	}
 
-	private static class Syrup extends Item implements TrainerUseItem
-	{
+	private static class Syrup extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
-		public Syrup()
-		{
+		public Syrup() {
 			super.name = "Syrup";
 			super.cat = BagCategory.KEYITEM;
 			super.bcat = new BattleBagCategory[0];
@@ -803,23 +784,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
-		public boolean use(Trainer t)
-		{
+		public boolean use(Trainer t) {
 			return false;
 		}
 	}
 
-	private static class Bicycle extends Item implements TrainerUseItem
-	{
+	private static class Bicycle extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
-		public Bicycle()
-		{
+		public Bicycle() {
 			super.name = "Bicycle";
 			super.cat = BagCategory.KEYITEM;
 			super.bcat = new BattleBagCategory[0];
@@ -828,24 +805,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
-		public boolean use(Trainer t)
-		{// TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
+		public boolean use(Trainer t) {// TODO: if (Can ride bike) Set the bike
+										// as a 'currentlyUsing' item
 		// May need to make this take in info on the route
 			return false;
 		}
 	}
 
-	private static class Surfboard extends Item implements TrainerUseItem
-	{
+	private static class Surfboard extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
-		public Surfboard()
-		{
+		public Surfboard() {
 			super.name = "Surfboard";
 			super.cat = BagCategory.KEYITEM;
 			super.bcat = new BattleBagCategory[0];
@@ -854,23 +828,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
-		public boolean use(Trainer t)
-		{
+		public boolean use(Trainer t) {
 			return false;
 		}
 	}
 
-	private static class FishingRod extends Item implements TrainerUseItem
-	{
+	private static class FishingRod extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
-		public FishingRod()
-		{
+		public FishingRod() {
 			super.name = "Fishing Rod";
 			super.cat = BagCategory.KEYITEM;
 			super.bcat = new BattleBagCategory[0];
@@ -879,25 +849,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return "Oh! A bite!";
 		}
 
-		public boolean use(Trainer t)
-		{// TODO: if (spot in front of player is a fishing spot) Set as
-			// 'currentlyUsing'
+		public boolean use(Trainer t) {// TODO: if (spot in front of player is a
+										// fishing spot) Set as 'currentlyUsing'
 		// May need to make this take in info on the route
 			return false;
 		}
 	}
 
-	private static class AbsorbBulb extends TypeDamageStatIncreaseItem
-	{
+	private static class AbsorbBulb extends TypeDamageStatIncreaseItem {
 		private static final long serialVersionUID = 1L;
 
-		public AbsorbBulb()
-		{
+		public AbsorbBulb() {
 			super.name = "Absorb Bulb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -906,28 +872,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Type damageType()
-		{
+		public Type damageType() {
 			return Type.WATER;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class AirBalloon extends Item implements HoldItem, ConsumedItem, LevitationEffect, TakeDamageEffect, EntryEffect
-	{
+	private static class AirBalloon extends Item implements HoldItem,
+			ConsumedItem, LevitationEffect, TakeDamageEffect, EntryEffect {
 		private static final long serialVersionUID = 1L;
 
-		public AirBalloon()
-		{
+		public AirBalloon() {
 			super.name = "Air Balloon";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -936,29 +898,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public void enter(Battle b, ActivePokemon victim)
-		{
-			b.addMessage(victim.getName() + " floats with its " + this.name + "!");
+		public void enter(Battle b, ActivePokemon victim) {
+			b.addMessage(victim.getName() + " floats with its " + this.name
+					+ "!");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public void takeDamage(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
 			b.addMessage(victim.getName() + "'s " + this.name + " popped!");
 			victim.consumeItem(b);
 		}
 	}
 
-	private static class AmuletCoin extends Item implements HoldItem, EntryEffect
-	{
+	private static class AmuletCoin extends Item implements HoldItem,
+			EntryEffect {
 		private static final long serialVersionUID = 1L;
 
-		public AmuletCoin()
-		{
+		public AmuletCoin() {
 			super.name = "Amulet Coin";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -967,23 +927,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public void enter(Battle b, ActivePokemon victim)
-		{
-			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		public void enter(Battle b, ActivePokemon victim) {
+			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim,
+					CastSource.HELD_ITEM, false);
 		}
 	}
 
-	private static class BigRoot extends Item implements HoldItem
-	{
+	private static class BigRoot extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BigRoot()
-		{
+		public BigRoot() {
 			super.name = "Big Root";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -992,18 +949,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class BindingBand extends Item implements HoldItem
-	{
+	private static class BindingBand extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BindingBand()
-		{
+		public BindingBand() {
 			super.name = "Binding Band";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1012,18 +966,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BlackSludge extends Item implements HoldItem, EndTurnEffect
-	{
+	private static class BlackSludge extends Item implements HoldItem,
+			EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
-		public BlackSludge()
-		{
+		public BlackSludge() {
 			super.name = "Black Sludge";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1032,33 +984,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (victim.isType(Type.POISON))
-			{
-				if (victim.fullHealth()) return;
+		public void apply(ActivePokemon victim, Battle b) {
+			if (victim.isType(Type.POISON)) {
+				if (victim.fullHealth())
+					return;
 				victim.healHealthFraction(1 / 16.0);
-				b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
-			}
-			else if (!victim.hasAbility("Magic Guard"))
-			{
-				b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
+				b.addMessage(victim.getName() + "'s HP was restored by its "
+						+ this.name + "!", victim.getHP(), victim.user());
+			} else if (!victim.hasAbility("Magic Guard")) {
+				b.addMessage(victim.getName()
+						+ " lost some of its HP due to its " + this.name + "!");
 				victim.reduceHealthFraction(b, 1 / 8.0);
 			}
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BrightPowder extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class BrightPowder extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public BrightPowder()
-		{
+		public BrightPowder() {
 			super.name = "Bright Powder";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1067,24 +1016,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.EVASION) stat *= 1.1;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.EVASION)
+				stat *= 1.1;
 			return stat;
 		}
 	}
 
-	private static class CellBattery extends TypeDamageStatIncreaseItem
-	{
+	private static class CellBattery extends TypeDamageStatIncreaseItem {
 		private static final long serialVersionUID = 1L;
 
-		public CellBattery()
-		{
+		public CellBattery() {
 			super.name = "Cell Battery";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1093,28 +1040,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Type damageType()
-		{
+		public Type damageType() {
 			return Type.ELECTRIC;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class ChoiceBand extends ChoiceItem
-	{
+	private static class ChoiceBand extends ChoiceItem {
 		private static final long serialVersionUID = 1L;
 
-		public ChoiceBand()
-		{
+		public ChoiceBand() {
 			super.name = "Choice Band";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1123,18 +1065,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 	}
 
-	private static class ChoiceScarf extends ChoiceItem
-	{
+	private static class ChoiceScarf extends ChoiceItem {
 		private static final long serialVersionUID = 1L;
 
-		public ChoiceScarf()
-		{
+		public ChoiceScarf() {
 			super.name = "Choice Scarf";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1143,18 +1082,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SPEED;
 		}
 	}
 
-	private static class ChoiceSpecs extends ChoiceItem
-	{
+	private static class ChoiceSpecs extends ChoiceItem {
 		private static final long serialVersionUID = 1L;
 
-		public ChoiceSpecs()
-		{
+		public ChoiceSpecs() {
 			super.name = "Choice Specs";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1163,18 +1099,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 	}
 
-	private static class CleanseTag extends Item implements HoldItem, RepellingEffect
-	{
+	private static class CleanseTag extends Item implements HoldItem,
+			RepellingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public CleanseTag()
-		{
+		public CleanseTag() {
 			super.name = "Cleanse Tag";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1183,23 +1117,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double chance()
-		{
+		public double chance() {
 			return .33;
 		}
 	}
 
-	private static class DampRock extends Item implements HoldItem, WeatherExtendingEffect
-	{
+	private static class DampRock extends Item implements HoldItem,
+			WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public DampRock()
-		{
+		public DampRock() {
 			super.name = "Damp Rock";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1208,23 +1139,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 60;
 		}
 
-		public WeatherType getWeatherType()
-		{
+		public WeatherType getWeatherType() {
 			return WeatherType.RAINING;
 		}
 	}
 
-	private static class HeatRock extends Item implements HoldItem, WeatherExtendingEffect
-	{
+	private static class HeatRock extends Item implements HoldItem,
+			WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public HeatRock()
-		{
+		public HeatRock() {
 			super.name = "Heat Rock";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1233,23 +1161,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 60;
 		}
 
-		public WeatherType getWeatherType()
-		{
+		public WeatherType getWeatherType() {
 			return WeatherType.SUNNY;
 		}
 	}
 
-	private static class IcyRock extends Item implements HoldItem, WeatherExtendingEffect
-	{
+	private static class IcyRock extends Item implements HoldItem,
+			WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public IcyRock()
-		{
+		public IcyRock() {
 			super.name = "Icy Rock";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1258,23 +1183,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 40;
 		}
 
-		public WeatherType getWeatherType()
-		{
+		public WeatherType getWeatherType() {
 			return WeatherType.HAILING;
 		}
 	}
 
-	private static class SmoothRock extends Item implements HoldItem, WeatherExtendingEffect
-	{
+	private static class SmoothRock extends Item implements HoldItem,
+			WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public SmoothRock()
-		{
+		public SmoothRock() {
 			super.name = "Smooth Rock";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1283,23 +1205,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public WeatherType getWeatherType()
-		{
+		public WeatherType getWeatherType() {
 			return WeatherType.SANDSTORM;
 		}
 	}
 
-	private static class EjectButton extends Item implements HoldItem, TakeDamageEffect
-	{
+	private static class EjectButton extends Item implements HoldItem,
+			TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public EjectButton()
-		{
+		public EjectButton() {
 			super.name = "Eject Button";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1308,20 +1227,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public void takeDamage(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
 			Team t = b.getTrainer(victim.user());
-			if (t instanceof WildPokemon) return;
+			if (t instanceof WildPokemon)
+				return;
 
 			Trainer trainer = (Trainer) t;
-			if (!trainer.hasRemainingPokemon()) return;
+			if (!trainer.hasRemainingPokemon())
+				return;
 
-			b.addMessage(victim.getName() + "'s " + this.name + " sent it back to " + trainer.getName() + "!");
+			b.addMessage(victim.getName() + "'s " + this.name
+					+ " sent it back to " + trainer.getName() + "!");
 			victim.consumeItem(b);
 			trainer.switchToRandom();
 			trainer.setAction(Action.SWITCH);
@@ -1330,12 +1251,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class DestinyKnot extends Item implements HoldItem
-	{
+	private static class DestinyKnot extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public DestinyKnot()
-		{
+		public DestinyKnot() {
 			super.name = "Destiny Knot";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1344,18 +1263,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class ExpertBelt extends Item implements HoldItem, PowerChangeEffect
-	{
+	private static class ExpertBelt extends Item implements HoldItem,
+			PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
-		public ExpertBelt()
-		{
+		public ExpertBelt() {
 			super.name = "Expert Belt";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1364,23 +1281,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1 ? 1.2 : 1;
+		public double getMultiplier(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
+			return Type.getAdvantage(user.getAttack().getType(b, user), victim,
+					b) > 1 ? 1.2 : 1;
 		}
 	}
 
-	private static class FlameOrb extends Item implements HoldItem, EndTurnEffect
-	{
+	private static class FlameOrb extends Item implements HoldItem,
+			EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
-		public FlameOrb()
-		{
+		public FlameOrb() {
 			super.name = "Flame Orb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1389,23 +1305,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
+		public void apply(ActivePokemon victim, Battle b) {
+			Status.giveStatus(b, victim, victim, StatusCondition.BURNED,
+					victim.getName() + " was burned by its " + this.name + "!");
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class ToxicOrb extends Item implements HoldItem, EndTurnEffect
-	{
+	private static class ToxicOrb extends Item implements HoldItem,
+			EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
-		public ToxicOrb()
-		{
+		public ToxicOrb() {
 			super.name = "Toxic Orb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1414,27 +1328,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (Status.applies(StatusCondition.POISONED, b, victim, victim))
-			{
-				victim.addEffect(PokemonEffect.getEffect("BadPoison").newInstance());
-				Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
+		public void apply(ActivePokemon victim, Battle b) {
+			if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
+				victim.addEffect(PokemonEffect.getEffect("BadPoison")
+						.newInstance());
+				Status.giveStatus(b, victim, victim, StatusCondition.POISONED,
+						victim.getName() + " was badly poisoned by its "
+								+ this.name + "!");
 			}
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class FloatStone extends Item implements HoldItem
-	{
+	private static class FloatStone extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public FloatStone()
-		{
+		public FloatStone() {
 			super.name = "Float Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1443,18 +1355,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class FocusBand extends Item implements HoldItem, BracingEffect
-	{
+	private static class FocusBand extends Item implements HoldItem,
+			BracingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public FocusBand()
-		{
+		public FocusBand() {
 			super.name = "Focus Band";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1463,28 +1373,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
-		{
+		public boolean isBracing(Battle b, ActivePokemon bracer,
+				boolean fullHealth) {
 			return Math.random() * 100 < 10;
 		}
 
-		public String braceMessage(ActivePokemon bracer)
-		{
+		public String braceMessage(ActivePokemon bracer) {
 			return bracer.getName() + " held on with its " + this.name + "!";
 		}
 	}
 
-	private static class FocusSash extends Item implements HoldItem, ConsumedItem, BracingEffect
-	{
+	private static class FocusSash extends Item implements HoldItem,
+			ConsumedItem, BracingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public FocusSash()
-		{
+		public FocusSash() {
 			super.name = "Focus Sash";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1493,33 +1400,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
-		{
-			if (fullHealth)
-			{
+		public boolean isBracing(Battle b, ActivePokemon bracer,
+				boolean fullHealth) {
+			if (fullHealth) {
 				bracer.consumeItem(b);
 				return true;
 			}
 			return false;
 		}
 
-		public String braceMessage(ActivePokemon bracer)
-		{
+		public String braceMessage(ActivePokemon bracer) {
 			return bracer.getName() + " held on with its " + this.name + "!";
 		}
 	}
 
-	private static class GripClaw extends Item implements HoldItem
-	{
+	private static class GripClaw extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public GripClaw()
-		{
+		public GripClaw() {
 			super.name = "Grip Claw";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1528,18 +1430,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class GriseousOrb extends Item implements HoldItem, PowerChangeEffect
-	{
+	private static class GriseousOrb extends Item implements HoldItem,
+			PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
-		public GriseousOrb()
-		{
+		public GriseousOrb() {
 			super.name = "Griseous Orb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1548,28 +1448,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 60;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isPokemon("Giratina"))
-			{
+		public double getMultiplier(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
+			if (user.isPokemon("Giratina")) {
 				Type t = user.getAttack().getType(b, user);
-				if (t == Type.DRAGON || t == Type.GHOST) return 1.2;
+				if (t == Type.DRAGON || t == Type.GHOST)
+					return 1.2;
 			}
 			return 1;
 		}
 	}
 
-	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect
-	{
+	private static class IronBall extends Item implements HoldItem,
+			GroundedEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public IronBall()
-		{
+		public IronBall() {
 			super.name = "Iron Ball";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1578,24 +1476,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 130;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.SPEED) stat *= .5;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.SPEED)
+				stat *= .5;
 			return stat;
 		}
 	}
 
-	private static class LaggingTail extends Item implements HoldItem, StallingEffect
-	{
+	private static class LaggingTail extends Item implements HoldItem,
+			StallingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public LaggingTail()
-		{
+		public LaggingTail() {
 			super.name = "Lagging Tail";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1604,18 +1501,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class LifeOrb extends Item implements HoldItem, PowerChangeEffect, ApplyDamageEffect
-	{
+	private static class LifeOrb extends Item implements HoldItem,
+			PowerChangeEffect, ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public LifeOrb()
-		{
+		public LifeOrb() {
 			super.name = "Life Orb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1624,30 +1519,29 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public double getMultiplier(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
 			return 5324.0 / 4096.0;
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
-		{
-			if (user.hasAbility("Magic Guard")) return;
+		public void applyEffect(Battle b, ActivePokemon user,
+				ActivePokemon victim, int damage) {
+			if (user.hasAbility("Magic Guard"))
+				return;
 			b.addMessage(user.getName() + " was hurt by its " + this.name + "!");
 			user.reduceHealthFraction(b, .1);
 		}
 	}
 
-	private static class LightBall extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class LightBall extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public LightBall()
-		{
+		public LightBall() {
 			super.name = "Light Ball";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1656,24 +1550,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if ((s == Stat.ATTACK || s == Stat.SP_ATTACK) && p.isPokemon("Pikachu")) stat *= 2;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if ((s == Stat.ATTACK || s == Stat.SP_ATTACK)
+					&& p.isPokemon("Pikachu"))
+				stat *= 2;
 			return stat;
 		}
 	}
 
-	private static class LightClay extends Item implements HoldItem
-	{
+	private static class LightClay extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public LightClay()
-		{
+		public LightClay() {
 			super.name = "Light Clay";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1682,18 +1575,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class LuckyEgg extends Item implements HoldItem
-	{
+	private static class LuckyEgg extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public LuckyEgg()
-		{
+		public LuckyEgg() {
 			super.name = "Lucky Egg";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1702,18 +1592,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class LuckyPunch extends Item implements HoldItem, CritStageEffect
-	{
+	private static class LuckyPunch extends Item implements HoldItem,
+			CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public LuckyPunch()
-		{
+		public LuckyPunch() {
 			super.name = "Lucky Punch";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1722,37 +1610,32 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 40;
 		}
 
-		public int increaseCritStage(ActivePokemon p)
-		{
-			if (p.isPokemon("Chansey")) return 2;
+		public int increaseCritStage(ActivePokemon p) {
+			if (p.isPokemon("Chansey"))
+				return 2;
 			return 0;
 		}
 	}
 
-	private static class MachoBrace extends PowerItem implements HoldItem
-	{
+	private static class MachoBrace extends PowerItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public int[] getEVs(int[] vals)
-		{
+		public int[] getEVs(int[] vals) {
 			for (int i = 0; i < vals.length; i++)
 				vals[i] *= 2;
 			return vals;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			Global.error("toIncrease() method in Macho Brace should never be called.");
 			return null;
 		}
 
-		public MachoBrace()
-		{
+		public MachoBrace() {
 			super.name = "Macho Brace";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1761,20 +1644,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 60;
 		}
 	}
 
-	private static class MentalHerb extends Item implements HoldItem, EndTurnEffect
-	{
+	private static class MentalHerb extends Item implements HoldItem,
+			EndTurnEffect {
 		private static final long serialVersionUID = 1L;
-		String[] effects = { "Infatuated", "Disable", "Taunt", "Encore", "Torment", "Confusion" };
-		String[] messages = { "infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused" };
+		String[] effects = { "Infatuated", "Disable", "Taunt", "Encore",
+				"Torment", "Confusion" };
+		String[] messages = { "infatuated", "disabled",
+				"under the effects of taunt", "under the effects of encore",
+				"under the effects of torment", "confused" };
 
-		public MentalHerb()
-		{
+		public MentalHerb() {
 			super.name = "Mental Herb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1783,34 +1667,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
+		public void apply(ActivePokemon victim, Battle b) {
 			boolean used = false;
-			for (int i = 0; i < effects.length; i++)
-			{
+			for (int i = 0; i < effects.length; i++) {
 				String s = effects[i];
-				if (victim.hasEffect(s))
-				{
+				if (victim.hasEffect(s)) {
 					used = true;
 					victim.getAttributes().removeEffect(s);
-					b.addMessage(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
+					b.addMessage(victim.getName() + " is no longer "
+							+ messages[i] + " due to its " + this.name + "!");
 				}
 			}
-			if (used) victim.consumeItem(b);
+			if (used)
+				victim.consumeItem(b);
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class MetalPowder extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class MetalPowder extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public MetalPowder()
-		{
+		public MetalPowder() {
 			super.name = "Metal Powder";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1819,24 +1700,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.isPokemon("Ditto")) stat *= 1.5;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE)
+					&& p.isPokemon("Ditto"))
+				stat *= 1.5;
 			return stat;
 		}
 	}
 
-	private static class Metronome extends Item implements HoldItem, PowerChangeEffect
-	{
+	private static class Metronome extends Item implements HoldItem,
+			PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
-		public Metronome()
-		{
+		public Metronome() {
 			super.name = "Metronome";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1845,23 +1726,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public double getMultiplier(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
 			return Math.min(2, 1 + .2 * (user.getAttributes().getCount() - 1));
 		}
 	}
 
-	private static class MuscleBand extends Item implements HoldItem, PowerChangeEffect
-	{
+	private static class MuscleBand extends Item implements HoldItem,
+			PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
-		public MuscleBand()
-		{
+		public MuscleBand() {
 			super.name = "Muscle Band";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1870,23 +1749,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttack().getCategory() == Category.PHYSICAL ? 1.1 : 1;
+		public double getMultiplier(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
+			return user.getAttack().getCategory() == Category.PHYSICAL ? 1.1
+					: 1;
 		}
 	}
 
-	private static class PowerAnklet extends PowerItem implements HoldItem
-	{
+	private static class PowerAnklet extends PowerItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public PowerAnklet()
-		{
+		public PowerAnklet() {
 			super.name = "Power Anklet";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1895,23 +1772,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SPEED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 	}
 
-	private static class PowerBand extends PowerItem implements HoldItem
-	{
+	private static class PowerBand extends PowerItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public PowerBand()
-		{
+		public PowerBand() {
 			super.name = "Power Band";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1920,23 +1793,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 	}
 
-	private static class PowerBelt extends PowerItem implements HoldItem
-	{
+	private static class PowerBelt extends PowerItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public PowerBelt()
-		{
+		public PowerBelt() {
 			super.name = "Power Belt";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1945,23 +1814,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.DEFENSE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 	}
 
-	private static class PowerBracer extends PowerItem implements HoldItem
-	{
+	private static class PowerBracer extends PowerItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public PowerBracer()
-		{
+		public PowerBracer() {
 			super.name = "Power Bracer";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1970,23 +1835,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 	}
 
-	private static class PowerLens extends PowerItem implements HoldItem
-	{
+	private static class PowerLens extends PowerItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public PowerLens()
-		{
+		public PowerLens() {
 			super.name = "Power Lens";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -1995,23 +1856,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 	}
 
-	private static class PowerWeight extends PowerItem implements HoldItem
-	{
+	private static class PowerWeight extends PowerItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public PowerWeight()
-		{
+		public PowerWeight() {
 			super.name = "Power Weight";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2020,23 +1877,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.HP;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 	}
 
-	private static class QuickClaw extends Item implements HoldItem
-	{
+	private static class QuickClaw extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public QuickClaw()
-		{
+		public QuickClaw() {
 			super.name = "Quick Claw";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2045,18 +1898,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 	}
 
-	private static class QuickPowder extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class QuickPowder extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public QuickPowder()
-		{
+		public QuickPowder() {
 			super.name = "Quick Powder";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2065,24 +1916,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.SPEED && p.isPokemon("Ditto")) stat *= 1.5;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.SPEED && p.isPokemon("Ditto"))
+				stat *= 1.5;
 			return stat;
 		}
 	}
 
-	private static class RedCard extends Item implements HoldItem, TakeDamageEffect
-	{
+	private static class RedCard extends Item implements HoldItem,
+			TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public RedCard()
-		{
+		public RedCard() {
 			super.name = "Red Card";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2091,20 +1941,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public void takeDamage(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
 			Team t = b.getTrainer(user.user());
-			if (t instanceof WildPokemon) return;
+			if (t instanceof WildPokemon)
+				return;
 
 			Trainer trainer = (Trainer) t;
-			if (!trainer.hasRemainingPokemon()) return;
+			if (!trainer.hasRemainingPokemon())
+				return;
 
-			b.addMessage(victim.getName() + "'s " + this.name + " sent " + user.getName() + " back to " + trainer.getName() + "!");
+			b.addMessage(victim.getName() + "'s " + this.name + " sent "
+					+ user.getName() + " back to " + trainer.getName() + "!");
 			victim.consumeItem(b);
 			trainer.switchToRandom();
 			trainer.setAction(Action.SWITCH);
@@ -2113,12 +1965,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class RingTarget extends Item implements HoldItem
-	{
+	private static class RingTarget extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public RingTarget()
-		{
+		public RingTarget() {
 			super.name = "Ring Target";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2127,18 +1977,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class RockyHelmet extends Item implements HoldItem, PhysicalContactEffect
-	{
+	private static class RockyHelmet extends Item implements HoldItem,
+			PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
-		public RockyHelmet()
-		{
+		public RockyHelmet() {
 			super.name = "Rocky Helmet";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2147,24 +1995,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 60;
 		}
 
-		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+			b.addMessage(user.getName() + " was hurt by " + victim.getName()
+					+ "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1 / 8.0);
 		}
 	}
 
-	private static class SafetyGoggles extends Item implements HoldItem, EffectBlockerEffect, WeatherBlockerEffect
-	{
+	private static class SafetyGoggles extends Item implements HoldItem,
+			EffectBlockerEffect, WeatherBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
-		public SafetyGoggles()
-		{
+		public SafetyGoggles() {
 			super.name = "Safety Goggles";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2173,30 +2019,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (!user.getAttack().isMoveType("Powder")) return true;
-			if (user.getAttack().getCategory() == Category.STATUS) b.addMessage(victim.getName() + "'s " + this.name + " protects it from powder moves!");
+		public boolean validMove(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
+			if (!user.getAttack().isMoveType("Powder"))
+				return true;
+			if (user.getAttack().getCategory() == Category.STATUS)
+				b.addMessage(victim.getName() + "'s " + this.name
+						+ " protects it from powder moves!");
 			return false;
 		}
 
-		public boolean block(WeatherType weather)
-		{
+		public boolean block(WeatherType weather) {
 			return true;
 		}
 	}
 
-	private static class ScopeLens extends Item implements HoldItem, CritStageEffect
-	{
+	private static class ScopeLens extends Item implements HoldItem,
+			CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public ScopeLens()
-		{
+		public ScopeLens() {
 			super.name = "Scope Lens";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2205,23 +2051,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public int increaseCritStage(ActivePokemon p)
-		{
+		public int increaseCritStage(ActivePokemon p) {
 			return 1;
 		}
 	}
 
-	private static class ShedShell extends Item implements HoldItem
-	{
+	private static class ShedShell extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public ShedShell()
-		{
+		public ShedShell() {
 			super.name = "Shed Shell";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2230,18 +2072,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class ShellBell extends Item implements HoldItem, ApplyDamageEffect
-	{
+	private static class ShellBell extends Item implements HoldItem,
+			ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public ShellBell()
-		{
+		public ShellBell() {
 			super.name = "Shell Bell";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2250,26 +2090,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
-		{
-			if (user.fullHealth()) return;
+		public void applyEffect(Battle b, ActivePokemon user,
+				ActivePokemon victim, int damage) {
+			if (user.fullHealth())
+				return;
 			user.heal((int) Math.ceil(damage / 8.0));
 			// TODO: This looks really bad when paired with Explosion
-			b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user.getHP(), user.user());
+			b.addMessage(user.getName() + " restored some HP due to its "
+					+ this.name + "!", user.getHP(), user.user());
 		}
 	}
 
-	private static class SmokeBall extends Item implements HoldItem, DefiniteEscape
-	{
+	private static class SmokeBall extends Item implements HoldItem,
+			DefiniteEscape {
 		private static final long serialVersionUID = 1L;
 
-		public SmokeBall()
-		{
+		public SmokeBall() {
 			super.name = "Smoke Ball";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2278,18 +2118,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Snowball extends TypeDamageStatIncreaseItem
-	{
+	private static class Snowball extends TypeDamageStatIncreaseItem {
 		private static final long serialVersionUID = 1L;
 
-		public Snowball()
-		{
+		public Snowball() {
 			super.name = "Snowball";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2298,28 +2135,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Type damageType()
-		{
+		public Type damageType() {
 			return Type.ICE;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SoulDew extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class SoulDew extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public SoulDew()
-		{
+		public SoulDew() {
 			super.name = "Soul Dew";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2328,24 +2161,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if ((s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE) && (p.isPokemon("Latios") || p.isPokemon("Latias"))) stat *= 1.5;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if ((s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE)
+					&& (p.isPokemon("Latios") || p.isPokemon("Latias")))
+				stat *= 1.5;
 			return stat;
 		}
 	}
 
-	private static class Stick extends Item implements HoldItem, CritStageEffect
-	{
+	private static class Stick extends Item implements HoldItem,
+			CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public Stick()
-		{
+		public Stick() {
 			super.name = "Stick";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2354,25 +2187,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 60;
 		}
 
-		public int increaseCritStage(ActivePokemon p)
-		{
-			if (p.isPokemon("Farfetch'd")) return 2;
+		public int increaseCritStage(ActivePokemon p) {
+			if (p.isPokemon("Farfetch'd"))
+				return 2;
 			return 0;
 		}
 	}
 
-	private static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemCondition
-	{
+	private static class StickyBarb extends Item implements HoldItem,
+			EndTurnEffect, PhysicalContactEffect, ItemCondition {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
-		public StickyBarb()
-		{
+		public StickyBarb() {
 			super.name = "Sticky Barb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2381,54 +2212,54 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " was hurt by its " + this.name + "!");
+		public void apply(ActivePokemon victim, Battle b) {
+			if (victim.hasAbility("Magic Guard"))
+				return;
+			b.addMessage(victim.getName() + " was hurt by its " + this.name
+					+ "!");
 			victim.reduceHealthFraction(b, 1 / 8.0);
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 
-		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (!user.hasAbility("Magic Guard"))
-			{
-				b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (!user.hasAbility("Magic Guard")) {
+				b.addMessage(user.getName() + " was hurt by "
+						+ victim.getName() + "'s " + this.name + "!");
 				user.reduceHealthFraction(b, 1 / 8.0);
 			}
 
-			if (user.isHoldingItem(b) || user.isFainted(b)) return;
-			b.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
+			if (user.isHoldingItem(b) || user.isFainted(b))
+				return;
+			b.addMessage(victim.getName() + "s " + this.name + " latched onto "
+					+ user.getName() + "!");
 
-			if (b.isWildBattle())
-			{
+			if (b.isWildBattle()) {
 				victim.removeItem();
 				user.giveItem(this);
 				return;
 			}
 
 			item = this;
-			PokemonEffect.getEffect("ChangeItem").cast(b, victim, user, CastSource.HELD_ITEM, false);
+			PokemonEffect.getEffect("ChangeItem").cast(b, victim, user,
+					CastSource.HELD_ITEM, false);
 			item = Item.noneItem();
-			PokemonEffect.getEffect("ChangeItem").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			PokemonEffect.getEffect("ChangeItem").cast(b, victim, victim,
+					CastSource.HELD_ITEM, false);
 		}
 
-		public Item getItem()
-		{
+		public Item getItem() {
 			return item;
 		}
 	}
 
-	private static class ThickClub extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class ThickClub extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public ThickClub()
-		{
+		public ThickClub() {
 			super.name = "Thick Club";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2437,24 +2268,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 500;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.ATTACK && (p.isPokemon("Cubone") || p.isPokemon("Marowak"))) stat *= 2;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.ATTACK
+					&& (p.isPokemon("Cubone") || p.isPokemon("Marowak")))
+				stat *= 2;
 			return stat;
 		}
 	}
 
-	private static class WeaknessPolicy extends Item implements HoldItem, TakeDamageEffect
-	{
+	private static class WeaknessPolicy extends Item implements HoldItem,
+			TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public WeaknessPolicy()
-		{
+		public WeaknessPolicy() {
 			super.name = "Weakness Policy";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2463,27 +2294,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1)
-			{
-				victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
-				victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
+		public void takeDamage(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
+			if (Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1) {
+				victim.getAttributes().modifyStage(victim, victim, 2,
+						Stat.ATTACK, b, CastSource.HELD_ITEM);
+				victim.getAttributes().modifyStage(victim, victim, 2,
+						Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
 			}
 		}
 	}
 
-	private static class WhiteHerb extends Item implements HoldItem, StatProtectingEffect
-	{
+	private static class WhiteHerb extends Item implements HoldItem,
+			StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public WhiteHerb()
-		{
+		public WhiteHerb() {
 			super.name = "White Herb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2492,28 +2322,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public boolean prevent(ActivePokemon caster, Stat stat)
-		{
+		public boolean prevent(ActivePokemon caster, Stat stat) {
 			return true;
 		}
 
-		public String preventionMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + this.name + " prevented its stats from being lowered!";
+		public String preventionMessage(ActivePokemon p) {
+			return p.getName() + "'s " + this.name
+					+ " prevented its stats from being lowered!";
 		}
 	}
 
-	private static class WideLens extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class WideLens extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public WideLens()
-		{
+		public WideLens() {
 			super.name = "Wide Lens";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2522,24 +2349,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.ACCURACY) stat *= 1.1;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.ACCURACY)
+				stat *= 1.1;
 			return stat;
 		}
 	}
 
-	private static class WiseGlasses extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class WiseGlasses extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public WiseGlasses()
-		{
+		public WiseGlasses() {
 			super.name = "Wise Glasses";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2548,24 +2374,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.SP_ATTACK) stat *= 1.1;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.SP_ATTACK)
+				stat *= 1.1;
 			return stat;
 		}
 	}
 
-	private static class ZoomLens extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class ZoomLens extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public ZoomLens()
-		{
+		public ZoomLens() {
 			super.name = "Zoom Lens";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2574,24 +2399,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.ACCURACY && !b.isFirstAttack()) stat *= 1.2;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.ACCURACY && !b.isFirstAttack())
+				stat *= 1.2;
 			return stat;
 		}
 	}
 
-	private static class FullIncense extends Item implements HoldItem, StallingEffect
-	{
+	private static class FullIncense extends Item implements HoldItem,
+			StallingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public FullIncense()
-		{
+		public FullIncense() {
 			super.name = "Full Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2600,18 +2424,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class LaxIncense extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class LaxIncense extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public LaxIncense()
-		{
+		public LaxIncense() {
 			super.name = "Lax Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2620,24 +2442,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.EVASION) stat *= 1.1;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.EVASION)
+				stat *= 1.1;
 			return stat;
 		}
 	}
 
-	private static class LuckIncense extends Item implements HoldItem, EntryEffect
-	{
+	private static class LuckIncense extends Item implements HoldItem,
+			EntryEffect {
 		private static final long serialVersionUID = 1L;
 
-		public LuckIncense()
-		{
+		public LuckIncense() {
 			super.name = "Luck Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2646,23 +2467,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public void enter(Battle b, ActivePokemon victim)
-		{
-			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		public void enter(Battle b, ActivePokemon victim) {
+			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim,
+					CastSource.HELD_ITEM, false);
 		}
 	}
 
-	private static class OddIncense extends TypeEnhancingItem implements HoldItem
-	{
+	private static class OddIncense extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public OddIncense()
-		{
+		public OddIncense() {
 			super.name = "Odd Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2671,28 +2490,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class PureIncense extends Item implements HoldItem, RepellingEffect
-	{
+	private static class PureIncense extends Item implements HoldItem,
+			RepellingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public PureIncense()
-		{
+		public PureIncense() {
 			super.name = "Pure Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2701,23 +2516,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public double chance()
-		{
+		public double chance() {
 			return .33;
 		}
 	}
 
-	private static class RockIncense extends TypeEnhancingItem implements HoldItem
-	{
+	private static class RockIncense extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public RockIncense()
-		{
+		public RockIncense() {
 			super.name = "Rock Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2726,28 +2538,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ROCK;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class RoseIncense extends TypeEnhancingItem implements HoldItem
-	{
+	private static class RoseIncense extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public RoseIncense()
-		{
+		public RoseIncense() {
 			super.name = "Rose Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2756,28 +2564,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GRASS;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class SeaIncense extends TypeEnhancingItem implements HoldItem
-	{
+	private static class SeaIncense extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SeaIncense()
-		{
+		public SeaIncense() {
 			super.name = "Sea Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2786,28 +2590,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.WATER;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class WaveIncense extends TypeEnhancingItem implements HoldItem
-	{
+	private static class WaveIncense extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public WaveIncense()
-		{
+		public WaveIncense() {
 			super.name = "Wave Incense";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2816,28 +2616,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.WATER;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class DracoPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class DracoPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public DracoPlate()
-		{
+		public DracoPlate() {
 			super.name = "Draco Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2846,28 +2642,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.DRAGON;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class DreadPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class DreadPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public DreadPlate()
-		{
+		public DreadPlate() {
 			super.name = "Dread Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2876,28 +2668,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.DARK;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class EarthPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class EarthPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public EarthPlate()
-		{
+		public EarthPlate() {
 			super.name = "Earth Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2906,28 +2694,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GROUND;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class FistPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class FistPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public FistPlate()
-		{
+		public FistPlate() {
 			super.name = "Fist Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2936,28 +2720,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class FlamePlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class FlamePlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public FlamePlate()
-		{
+		public FlamePlate() {
 			super.name = "Flame Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2966,28 +2746,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIRE;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class IciclePlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class IciclePlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public IciclePlate()
-		{
+		public IciclePlate() {
 			super.name = "Icicle Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -2996,28 +2772,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ICE;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class InsectPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class InsectPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public InsectPlate()
-		{
+		public InsectPlate() {
 			super.name = "Insect Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3026,28 +2798,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.BUG;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class IronPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class IronPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public IronPlate()
-		{
+		public IronPlate() {
 			super.name = "Iron Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3056,28 +2824,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.STEEL;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class MeadowPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class MeadowPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public MeadowPlate()
-		{
+		public MeadowPlate() {
 			super.name = "Meadow Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3086,28 +2850,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GRASS;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class MindPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class MindPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public MindPlate()
-		{
+		public MindPlate() {
 			super.name = "Mind Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3116,28 +2876,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class SkyPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class SkyPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public SkyPlate()
-		{
+		public SkyPlate() {
 			super.name = "Sky Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3146,28 +2902,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FLYING;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class SplashPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class SplashPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public SplashPlate()
-		{
+		public SplashPlate() {
 			super.name = "Splash Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3176,28 +2928,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.WATER;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class SpookyPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class SpookyPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public SpookyPlate()
-		{
+		public SpookyPlate() {
 			super.name = "Spooky Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3206,28 +2954,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GHOST;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class StonePlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class StonePlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public StonePlate()
-		{
+		public StonePlate() {
 			super.name = "Stone Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3236,28 +2980,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ROCK;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class ToxicPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class ToxicPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public ToxicPlate()
-		{
+		public ToxicPlate() {
 			super.name = "Toxic Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3266,28 +3006,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.POISON;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class ZapPlate extends TypeEnhancingItem implements HoldItem, PlateItem
-	{
+	private static class ZapPlate extends TypeEnhancingItem implements
+			HoldItem, PlateItem {
 		private static final long serialVersionUID = 1L;
 
-		public ZapPlate()
-		{
+		public ZapPlate() {
 			super.name = "Zap Plate";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3296,28 +3032,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ELECTRIC;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 	}
 
-	private static class BurnDrive extends Item implements DriveItem, HoldItem
-	{
+	private static class BurnDrive extends Item implements DriveItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BurnDrive()
-		{
+		public BurnDrive() {
 			super.name = "Burn Drive";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3326,23 +3057,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIRE;
 		}
 	}
 
-	private static class ChillDrive extends Item implements DriveItem, HoldItem
-	{
+	private static class ChillDrive extends Item implements DriveItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public ChillDrive()
-		{
+		public ChillDrive() {
 			super.name = "Chill Drive";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3351,23 +3078,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ICE;
 		}
 	}
 
-	private static class DouseDrive extends Item implements DriveItem, HoldItem
-	{
+	private static class DouseDrive extends Item implements DriveItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public DouseDrive()
-		{
+		public DouseDrive() {
 			super.name = "Douse Drive";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3376,23 +3099,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.WATER;
 		}
 	}
 
-	private static class ShockDrive extends Item implements DriveItem, HoldItem
-	{
+	private static class ShockDrive extends Item implements DriveItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public ShockDrive()
-		{
+		public ShockDrive() {
 			super.name = "Shock Drive";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3401,23 +3120,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = -1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 70;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ELECTRIC;
 		}
 	}
 
-	private static class FireGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class FireGem extends TypeEnhancingItem implements HoldItem,
+			ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public FireGem()
-		{
+		public FireGem() {
 			super.name = "Fire Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3426,28 +3142,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIRE;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class WaterGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class WaterGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public WaterGem()
-		{
+		public WaterGem() {
 			super.name = "Water Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3456,28 +3168,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.WATER;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class ElectricGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class ElectricGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public ElectricGem()
-		{
+		public ElectricGem() {
 			super.name = "Electric Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3486,28 +3194,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ELECTRIC;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class GrassGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class GrassGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public GrassGem()
-		{
+		public GrassGem() {
 			super.name = "Grass Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3516,28 +3220,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GRASS;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class IceGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class IceGem extends TypeEnhancingItem implements HoldItem,
+			ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public IceGem()
-		{
+		public IceGem() {
 			super.name = "Ice Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3546,28 +3246,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ICE;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class FightingGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class FightingGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public FightingGem()
-		{
+		public FightingGem() {
 			super.name = "Fighting Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3576,28 +3272,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class PoisonGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class PoisonGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public PoisonGem()
-		{
+		public PoisonGem() {
 			super.name = "Poison Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3606,28 +3298,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.POISON;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class GroundGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class GroundGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public GroundGem()
-		{
+		public GroundGem() {
 			super.name = "Ground Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3636,28 +3324,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GROUND;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class FlyingGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class FlyingGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public FlyingGem()
-		{
+		public FlyingGem() {
 			super.name = "Flying Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3666,28 +3350,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FLYING;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class PsychicGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class PsychicGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public PsychicGem()
-		{
+		public PsychicGem() {
 			super.name = "Psychic Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3696,28 +3376,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BugGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class BugGem extends TypeEnhancingItem implements HoldItem,
+			ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public BugGem()
-		{
+		public BugGem() {
 			super.name = "Bug Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3726,28 +3402,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.BUG;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class RockGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class RockGem extends TypeEnhancingItem implements HoldItem,
+			ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public RockGem()
-		{
+		public RockGem() {
 			super.name = "Rock Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3756,28 +3428,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ROCK;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class GhostGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class GhostGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public GhostGem()
-		{
+		public GhostGem() {
 			super.name = "Ghost Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3786,28 +3454,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GHOST;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class DragonGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class DragonGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public DragonGem()
-		{
+		public DragonGem() {
 			super.name = "Dragon Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3816,28 +3480,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.DRAGON;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class DarkGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class DarkGem extends TypeEnhancingItem implements HoldItem,
+			ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public DarkGem()
-		{
+		public DarkGem() {
 			super.name = "Dark Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3846,28 +3506,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.DARK;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SteelGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class SteelGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public SteelGem()
-		{
+		public SteelGem() {
 			super.name = "Steel Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3876,28 +3532,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.STEEL;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class NormalGem extends TypeEnhancingItem implements HoldItem, ConsumedItem
-	{
+	private static class NormalGem extends TypeEnhancingItem implements
+			HoldItem, ConsumedItem {
 		private static final long serialVersionUID = 1L;
 
-		public NormalGem()
-		{
+		public NormalGem() {
 			super.name = "Normal Gem";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3906,28 +3558,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.NORMAL;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.5;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Leftovers extends Item implements HoldItem, EndTurnEffect
-	{
+	private static class Leftovers extends Item implements HoldItem,
+			EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
-		public Leftovers()
-		{
+		public Leftovers() {
 			super.name = "Leftovers";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3936,25 +3584,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (victim.fullHealth() || victim.hasEffect("Heal Block")) return;
+		public void apply(ActivePokemon victim, Battle b) {
+			if (victim.fullHealth() || victim.hasEffect("Heal Block"))
+				return;
 			victim.healHealthFraction(1 / 16.0);
-			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored by its "
+					+ this.name + "!", victim.getHP(), victim.user());
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class BlackBelt extends TypeEnhancingItem implements HoldItem
-	{
+	private static class BlackBelt extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BlackBelt()
-		{
+		public BlackBelt() {
 			super.name = "Black Belt";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3963,28 +3610,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BlackGlasses extends TypeEnhancingItem implements HoldItem
-	{
+	private static class BlackGlasses extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BlackGlasses()
-		{
+		public BlackGlasses() {
 			super.name = "Black Glasses";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -3993,28 +3636,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Charcoal extends TypeEnhancingItem implements HoldItem
-	{
+	private static class Charcoal extends TypeEnhancingItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Charcoal()
-		{
+		public Charcoal() {
 			super.name = "Charcoal";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4023,28 +3661,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIRE;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class DragonFang extends TypeEnhancingItem implements HoldItem
-	{
+	private static class DragonFang extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public DragonFang()
-		{
+		public DragonFang() {
 			super.name = "Dragon Fang";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4053,28 +3687,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.DRAGON;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class HardStone extends TypeEnhancingItem implements HoldItem
-	{
+	private static class HardStone extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public HardStone()
-		{
+		public HardStone() {
 			super.name = "Hard Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4083,28 +3713,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ROCK;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Magnet extends TypeEnhancingItem implements HoldItem
-	{
+	private static class Magnet extends TypeEnhancingItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Magnet()
-		{
+		public Magnet() {
 			super.name = "Magnet";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4113,28 +3738,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ELECTRIC;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MetalCoat extends EvolutionItem implements HoldItem, PowerChangeEffect
-	{
+	private static class MetalCoat extends EvolutionItem implements HoldItem,
+			PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
-		public MetalCoat()
-		{
+		public MetalCoat() {
 			super.name = "Metal Coat";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4143,23 +3764,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public double getMultiplier(Battle b, ActivePokemon user,
+				ActivePokemon victim) {
 			return user.getAttack().isType(b, user, Type.STEEL) ? 1.2 : 1;
 		}
 	}
 
-	private static class MiracleSeed extends TypeEnhancingItem implements HoldItem
-	{
+	private static class MiracleSeed extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public MiracleSeed()
-		{
+		public MiracleSeed() {
 			super.name = "Miracle Seed";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4168,28 +3787,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GRASS;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MysticWater extends TypeEnhancingItem implements HoldItem
-	{
+	private static class MysticWater extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public MysticWater()
-		{
+		public MysticWater() {
 			super.name = "Mystic Water";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4198,28 +3813,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.WATER;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class NeverMeltIce extends TypeEnhancingItem implements HoldItem
-	{
+	private static class NeverMeltIce extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public NeverMeltIce()
-		{
+		public NeverMeltIce() {
 			super.name = "NeverMeltIce";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4228,28 +3839,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ICE;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class PoisonBarb extends TypeEnhancingItem implements HoldItem
-	{
+	private static class PoisonBarb extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public PoisonBarb()
-		{
+		public PoisonBarb() {
 			super.name = "Poison Barb";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4258,28 +3865,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.POISON;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SharpBeak extends TypeEnhancingItem implements HoldItem
-	{
+	private static class SharpBeak extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SharpBeak()
-		{
+		public SharpBeak() {
 			super.name = "Sharp Beak";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4288,28 +3891,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FLYING;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SilkScarf extends TypeEnhancingItem implements HoldItem
-	{
+	private static class SilkScarf extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SilkScarf()
-		{
+		public SilkScarf() {
 			super.name = "Silk Scarf";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4318,28 +3917,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.NORMAL;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SilverPowder extends TypeEnhancingItem implements HoldItem
-	{
+	private static class SilverPowder extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SilverPowder()
-		{
+		public SilverPowder() {
 			super.name = "Silver Powder";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4348,28 +3943,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.BUG;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SoftSand extends TypeEnhancingItem implements HoldItem
-	{
+	private static class SoftSand extends TypeEnhancingItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SoftSand()
-		{
+		public SoftSand() {
 			super.name = "Soft Sand";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4378,28 +3968,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GROUND;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SpellTag extends TypeEnhancingItem implements HoldItem
-	{
+	private static class SpellTag extends TypeEnhancingItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SpellTag()
-		{
+		public SpellTag() {
 			super.name = "Spell Tag";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4408,28 +3993,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GHOST;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class TwistedSpoon extends TypeEnhancingItem implements HoldItem
-	{
+	private static class TwistedSpoon extends TypeEnhancingItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public TwistedSpoon()
-		{
+		public TwistedSpoon() {
 			super.name = "Twisted Spoon";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4438,28 +4019,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier()
-		{
+		public double getMultiplier() {
 			return 1.2;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class DawnStone extends EvolutionItem implements HoldItem
-	{
+	private static class DawnStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public DawnStone()
-		{
+		public DawnStone() {
 			super.name = "Dawn Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4468,18 +4044,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 	}
 
-	private static class DeepSeaScale extends EvolutionItem implements HoldItem, StatChangingEffect
-	{
+	private static class DeepSeaScale extends EvolutionItem implements
+			HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public DeepSeaScale()
-		{
+		public DeepSeaScale() {
 			super.name = "DeepSeaScale";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4488,24 +4062,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.SP_DEFENSE && (p.isPokemon("Clamperl") || p.isPokemon("Chinchou") || p.isPokemon("Lanturn"))) stat *= 2;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.SP_DEFENSE
+					&& (p.isPokemon("Clamperl") || p.isPokemon("Chinchou") || p
+							.isPokemon("Lanturn")))
+				stat *= 2;
 			return stat;
 		}
 	}
 
-	private static class DeepSeaTooth extends EvolutionItem implements HoldItem, StatChangingEffect
-	{
+	private static class DeepSeaTooth extends EvolutionItem implements
+			HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public DeepSeaTooth()
-		{
+		public DeepSeaTooth() {
 			super.name = "DeepSeaTooth";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4514,24 +4089,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 90;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if (s == Stat.SP_ATTACK && p.isPokemon("Clamperl")) stat *= 2;
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if (s == Stat.SP_ATTACK && p.isPokemon("Clamperl"))
+				stat *= 2;
 			return stat;
 		}
 	}
 
-	private static class DragonScale extends EvolutionItem implements HoldItem
-	{
+	private static class DragonScale extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public DragonScale()
-		{
+		public DragonScale() {
 			super.name = "Dragon Scale";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4540,18 +4113,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class DubiousDisc extends EvolutionItem implements HoldItem
-	{
+	private static class DubiousDisc extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public DubiousDisc()
-		{
+		public DubiousDisc() {
 			super.name = "Dubious Disc";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4560,18 +4130,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 50;
 		}
 	}
 
-	private static class DuskStone extends EvolutionItem implements HoldItem
-	{
+	private static class DuskStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public DuskStone()
-		{
+		public DuskStone() {
 			super.name = "Dusk Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4580,18 +4147,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 	}
 
-	private static class Electirizer extends EvolutionItem implements HoldItem
-	{
+	private static class Electirizer extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Electirizer()
-		{
+		public Electirizer() {
 			super.name = "Electirizer";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4600,18 +4164,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 	}
 
-	private static class FireStone extends EvolutionItem implements HoldItem
-	{
+	private static class FireStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public FireStone()
-		{
+		public FireStone() {
 			super.name = "Fire Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4620,18 +4181,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class KingsRock extends EvolutionItem implements HoldItem, ApplyDamageEffect
-	{
+	private static class KingsRock extends EvolutionItem implements HoldItem,
+			ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public KingsRock()
-		{
+		public KingsRock() {
 			super.name = "King's Rock";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4640,31 +4199,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
-		{
-			if (Math.random() * 100 < 10)
-			{
+		public void applyEffect(Battle b, ActivePokemon user,
+				ActivePokemon victim, int damage) {
+			if (Math.random() * 100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
-				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
-				{
+				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
-					b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
+					b.addMessage(user.getName() + "'s " + this.name
+							+ " caused " + victim.getName() + " to flinch!");
 				}
 			}
 		}
 	}
 
-	private static class LeafStone extends EvolutionItem implements HoldItem
-	{
+	private static class LeafStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public LeafStone()
-		{
+		public LeafStone() {
 			super.name = "Leaf Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4673,18 +4228,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Magmarizer extends EvolutionItem implements HoldItem
-	{
+	private static class Magmarizer extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Magmarizer()
-		{
+		public Magmarizer() {
 			super.name = "Magmarizer";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4693,18 +4245,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 	}
 
-	private static class MoonStone extends EvolutionItem implements HoldItem
-	{
+	private static class MoonStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public MoonStone()
-		{
+		public MoonStone() {
 			super.name = "Moon Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4713,18 +4262,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class OvalStone extends EvolutionItem implements HoldItem
-	{
+	private static class OvalStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public OvalStone()
-		{
+		public OvalStone() {
 			super.name = "Oval Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4733,18 +4279,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 	}
 
-	private static class Everstone extends Item implements HoldItem
-	{
+	private static class Everstone extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Everstone()
-		{
+		public Everstone() {
 			super.name = "Everstone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4753,18 +4296,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class PrismScale extends EvolutionItem implements HoldItem
-	{
+	private static class PrismScale extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public PrismScale()
-		{
+		public PrismScale() {
 			super.name = "Prism Scale";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4773,18 +4313,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 500;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Protector extends EvolutionItem implements HoldItem
-	{
+	private static class Protector extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Protector()
-		{
+		public Protector() {
 			super.name = "Protector";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4793,18 +4330,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 	}
 
-	private static class RazorClaw extends EvolutionItem implements HoldItem, CritStageEffect
-	{
+	private static class RazorClaw extends EvolutionItem implements HoldItem,
+			CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public RazorClaw()
-		{
+		public RazorClaw() {
 			super.name = "Razor Claw";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4813,23 +4348,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 
-		public int increaseCritStage(ActivePokemon p)
-		{
+		public int increaseCritStage(ActivePokemon p) {
 			return 1;
 		}
 	}
 
-	private static class RazorFang extends EvolutionItem implements HoldItem, ApplyDamageEffect
-	{
+	private static class RazorFang extends EvolutionItem implements HoldItem,
+			ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
-		public RazorFang()
-		{
+		public RazorFang() {
 			super.name = "Razor Fang";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4838,31 +4370,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
-		{
-			if (Math.random() * 100 < 10)
-			{
+		public void applyEffect(Battle b, ActivePokemon user,
+				ActivePokemon victim, int damage) {
+			if (Math.random() * 100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
-				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
-				{
+				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
-					b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
+					b.addMessage(user.getName() + "'s " + this.name
+							+ " caused " + victim.getName() + " to flinch!");
 				}
 			}
 		}
 	}
 
-	private static class ReaperCloth extends EvolutionItem implements HoldItem
-	{
+	private static class ReaperCloth extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public ReaperCloth()
-		{
+		public ReaperCloth() {
 			super.name = "Reaper Cloth";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4871,18 +4399,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 	}
 
-	private static class ShinyStone extends EvolutionItem implements HoldItem
-	{
+	private static class ShinyStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public ShinyStone()
-		{
+		public ShinyStone() {
 			super.name = "Shiny Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4891,18 +4416,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 80;
 		}
 	}
 
-	private static class SunStone extends EvolutionItem implements HoldItem
-	{
+	private static class SunStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SunStone()
-		{
+		public SunStone() {
 			super.name = "Sun Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4911,18 +4433,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class ThunderStone extends EvolutionItem implements HoldItem
-	{
+	private static class ThunderStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public ThunderStone()
-		{
+		public ThunderStone() {
 			super.name = "Thunder Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4931,18 +4450,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class UpGrade extends EvolutionItem implements HoldItem
-	{
+	private static class UpGrade extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public UpGrade()
-		{
+		public UpGrade() {
 			super.name = "Up-Grade";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4951,18 +4467,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class WaterStone extends EvolutionItem implements HoldItem
-	{
+	private static class WaterStone extends EvolutionItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public WaterStone()
-		{
+		public WaterStone() {
 			super.name = "Water Stone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -4971,18 +4484,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Antidote extends StatusConditionRemoveItem implements HoldItem
-	{
+	private static class Antidote extends StatusConditionRemoveItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Antidote()
-		{
+		public Antidote() {
 			super.name = "Antidote";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -4991,23 +4502,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.POISONED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Awakening extends StatusConditionRemoveItem implements HoldItem
-	{
+	private static class Awakening extends StatusConditionRemoveItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Awakening()
-		{
+		public Awakening() {
 			super.name = "Awakening";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5016,23 +4524,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 250;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.ASLEEP;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BurnHeal extends StatusConditionRemoveItem implements HoldItem
-	{
+	private static class BurnHeal extends StatusConditionRemoveItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BurnHeal()
-		{
+		public BurnHeal() {
 			super.name = "Burn Heal";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5041,23 +4546,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 250;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.BURNED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class IceHeal extends StatusConditionRemoveItem implements HoldItem
-	{
+	private static class IceHeal extends StatusConditionRemoveItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public IceHeal()
-		{
+		public IceHeal() {
 			super.name = "Ice Heal";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5066,23 +4568,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 250;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.FROZEN;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class ParalyzeHeal extends StatusConditionRemoveItem implements HoldItem
-	{
+	private static class ParalyzeHeal extends StatusConditionRemoveItem
+			implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public ParalyzeHeal()
-		{
+		public ParalyzeHeal() {
 			super.name = "Paralyze Heal";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5091,23 +4590,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.PARALYZED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class FullHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
-	{
+	private static class FullHeal extends Item implements PokemonUseItem,
+			BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public FullHeal()
-		{
+		public FullHeal() {
 			super.name = "Full Heal";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5116,76 +4612,70 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 250;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p)
-		{
-			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
+		public boolean use(ActivePokemon p) {
+			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED))
+				return false;
 
 			p.removeStatus();
 			return true;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class FullRestore extends Item implements PokemonUseItem, HoldItem, BattleUseItem
-	{
+	private static class FullRestore extends Item implements PokemonUseItem,
+			HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
-		public FullRestore()
-		{
+		public FullRestore() {
 			super.name = "Full Restore";
 			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP, BattleBagCategory.STATUS };
+			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP,
+					BattleBagCategory.STATUS };
 			super.index = 163;
 			super.desc = "A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.";
 			super.price = 3000;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was fully healed!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p)
-		{
-			if (p.hasStatus(StatusCondition.FAINTED)) return false;
-			if (!p.hasStatus() && p.fullHealth()) return false;
+		public boolean use(ActivePokemon p) {
+			if (p.hasStatus(StatusCondition.FAINTED))
+				return false;
+			if (!p.hasStatus() && p.fullHealth())
+				return false;
 
 			p.removeStatus();
 			p.healHealthFraction(1);
 			return true;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem
-	{
+	private static class Elixir extends Item implements PokemonUseItem,
+			BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Elixir()
-		{
+		public Elixir() {
 			super.name = "Elixir";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5194,38 +4684,32 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s PP was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p)
-		{
+		public boolean use(ActivePokemon p) {
 			boolean changed = false;
-			for (Move m : p.getMoves())
-			{
+			for (Move m : p.getMoves()) {
 				changed |= m.increasePP(10);
 			}
 			return changed;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem
-	{
+	private static class MaxElixir extends Item implements PokemonUseItem,
+			BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public MaxElixir()
-		{
+		public MaxElixir() {
 			super.name = "Max Elixir";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5234,40 +4718,33 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 4500;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s PP was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p)
-		{
+		public boolean use(ActivePokemon p) {
 			boolean changed = false;
-			for (Move m : p.getMoves())
-			{
+			for (Move m : p.getMoves()) {
 				changed |= m.increasePP(m.getMaxPP());
 			}
 
 			return changed;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Ether extends Item implements MoveUseItem, HoldItem
-	{
+	private static class Ether extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
-		public Ether()
-		{
+		public Ether() {
 			super.name = "Ether";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5276,30 +4753,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1200;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s " + restore + "'s PP was restored!";
 		}
 
-		public boolean use(Move m)
-		{
+		public boolean use(Move m) {
 			restore = m.getAttack().getName();
 			return m.increasePP(10);
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MaxEther extends Item implements MoveUseItem, HoldItem
-	{
+	private static class MaxEther extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
-		public MaxEther()
-		{
+		public MaxEther() {
 			super.name = "Max Ether";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5308,29 +4780,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2000;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s " + restore + "'s PP was restored!";
 		}
 
-		public boolean use(Move m)
-		{
+		public boolean use(Move m) {
 			restore = m.getAttack().getName();
 			return m.increasePP(m.getMaxPP());
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BerryJuice extends HealItem implements HoldItem
-	{
+	private static class BerryJuice extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BerryJuice()
-		{
+		public BerryJuice() {
 			super.name = "Berry Juice";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5339,23 +4806,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 20;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SweetHeart extends HealItem implements HoldItem
-	{
+	private static class SweetHeart extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SweetHeart()
-		{
+		public SweetHeart() {
 			super.name = "Sweet Heart";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5364,23 +4827,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 20;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Potion extends HealItem implements HoldItem
-	{
+	private static class Potion extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Potion()
-		{
+		public Potion() {
 			super.name = "Potion";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5389,23 +4848,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 20;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class EnergyPowder extends HealItem implements HoldItem
-	{
+	private static class EnergyPowder extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public EnergyPowder()
-		{
+		public EnergyPowder() {
 			super.name = "Energy Powder";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5414,23 +4869,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 500;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 50;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class FreshWater extends HealItem implements HoldItem
-	{
+	private static class FreshWater extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public FreshWater()
-		{
+		public FreshWater() {
 			super.name = "Fresh Water";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5439,23 +4890,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 50;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SuperPotion extends HealItem implements HoldItem
-	{
+	private static class SuperPotion extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SuperPotion()
-		{
+		public SuperPotion() {
 			super.name = "Super Potion";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5464,23 +4911,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 700;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 50;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SodaPop extends HealItem implements HoldItem
-	{
+	private static class SodaPop extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SodaPop()
-		{
+		public SodaPop() {
 			super.name = "Soda Pop";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5489,23 +4932,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 300;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 60;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Lemonade extends HealItem implements HoldItem
-	{
+	private static class Lemonade extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Lemonade()
-		{
+		public Lemonade() {
 			super.name = "Lemonade";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5514,23 +4953,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 350;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 80;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MoomooMilk extends HealItem implements HoldItem
-	{
+	private static class MoomooMilk extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public MoomooMilk()
-		{
+		public MoomooMilk() {
 			super.name = "Moomoo Milk";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5539,23 +4974,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 500;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 1000;
 		}
 	}
 
-	private static class EnergyRoot extends HealItem implements HoldItem
-	{
+	private static class EnergyRoot extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public EnergyRoot()
-		{
+		public EnergyRoot() {
 			super.name = "Energy Root";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5564,23 +4995,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 800;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class HyperPotion extends HealItem implements HoldItem
-	{
+	private static class HyperPotion extends HealItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public HyperPotion()
-		{
+		public HyperPotion() {
 			super.name = "Hyper Potion";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5589,23 +5016,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1200;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MaxPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem
-	{
+	private static class MaxPotion extends Item implements PokemonUseItem,
+			BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public MaxPotion()
-		{
+		public MaxPotion() {
 			super.name = "Max Potion";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -5614,33 +5038,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2500;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p)
-		{
+		public boolean use(ActivePokemon p) {
 			return p.healHealthFraction(1) != 0;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Revive extends Item implements PokemonUseItem, BattleUseItem, HoldItem
-	{
+	private static class Revive extends Item implements PokemonUseItem,
+			BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Revive()
-		{
+		public Revive() {
 			super.name = "Revive";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5649,19 +5068,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1500;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was revived!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p)
-		{
-			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+		public boolean use(ActivePokemon p) {
+			if (!p.hasStatus(StatusCondition.FAINTED))
+				return false;
 
 			p.removeStatus();
 			p.healHealthFraction(.5);
@@ -5669,18 +5086,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return true;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MaxRevive extends Item implements PokemonUseItem, HoldItem
-	{
+	private static class MaxRevive extends Item implements PokemonUseItem,
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public MaxRevive()
-		{
+		public MaxRevive() {
 			super.name = "Max Revive";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5689,14 +5104,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 4000;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was fully revived!";
 		}
 
-		public boolean use(ActivePokemon p)
-		{
-			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+		public boolean use(ActivePokemon p) {
+			if (!p.hasStatus(StatusCondition.FAINTED))
+				return false;
 
 			p.removeStatus();
 			p.healHealthFraction(1);
@@ -5704,18 +5118,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return true;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class RevivalHerb extends Item implements PokemonUseItem, HoldItem
-	{
+	private static class RevivalHerb extends Item implements PokemonUseItem,
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public RevivalHerb()
-		{
+		public RevivalHerb() {
 			super.name = "Revival Herb";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5724,14 +5136,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was fully revived!";
 		}
 
-		public boolean use(ActivePokemon p)
-		{
-			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+		public boolean use(ActivePokemon p) {
+			if (!p.hasStatus(StatusCondition.FAINTED))
+				return false;
 
 			p.removeStatus();
 			p.healHealthFraction(1);
@@ -5739,18 +5150,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return true;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SacredAsh extends Item implements TrainerUseItem, HoldItem, BattleUseItem
-	{
+	private static class SacredAsh extends Item implements TrainerUseItem,
+			HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
-		public SacredAsh()
-		{
+		public SacredAsh() {
 			super.name = "Sacred Ash";
 			super.cat = BagCategory.MEDICINE;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -5759,23 +5168,18 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 4000;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return "All fainted Pok\u00e9mon were fully revived!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use((Trainer) b.getTrainer(p.user()));
 		}
 
-		public boolean use(Trainer t)
-		{
+		public boolean use(Trainer t) {
 			boolean changed = false;
-			for (ActivePokemon p : t.getTeam())
-			{
-				if (p.hasStatus(StatusCondition.FAINTED))
-				{
+			for (ActivePokemon p : t.getTeam()) {
+				if (p.hasStatus(StatusCondition.FAINTED)) {
 					changed = true;
 					p.removeStatus();
 					p.healHealthFraction(1);
@@ -5784,18 +5188,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return changed;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class DireHit extends Item implements BattleUseItem, HoldItem
-	{
+	private static class DireHit extends Item implements BattleUseItem,
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public DireHit()
-		{
+		public DireHit() {
 			super.name = "Dire Hit";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
@@ -5804,32 +5206,29 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 650;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " is getting pumped!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			PokemonEffect crits = PokemonEffect.getEffect("RaiseCrits");
-			if (!crits.applies(b, p, p, CastSource.USE_ITEM)) return false;
+			if (!crits.applies(b, p, p, CastSource.USE_ITEM))
+				return false;
 
 			crits.cast(b, p, p, CastSource.USE_ITEM, false);
 			return true;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class GuardSpec extends Item implements BattleUseItem, HoldItem
-	{
+	private static class GuardSpec extends Item implements BattleUseItem,
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public GuardSpec()
-		{
+		public GuardSpec() {
 			super.name = "Guard Spec.";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
@@ -5838,32 +5237,29 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 700;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " is covered by a veil!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			PokemonEffect gSpesh = PokemonEffect.getEffect("GuardSpecial");
-			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) return false;
+			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM))
+				return false;
 
 			gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
 			return true;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class XAccuracy extends StageIncreaseItem implements HoldItem
-	{
+	private static class XAccuracy extends StageIncreaseItem implements
+			HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public XAccuracy()
-		{
+		public XAccuracy() {
 			super.name = "X Accuracy";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
@@ -5872,23 +5268,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 950;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.ACCURACY;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class XAttack extends StageIncreaseItem implements HoldItem
-	{
+	private static class XAttack extends StageIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public XAttack()
-		{
+		public XAttack() {
 			super.name = "X Attack";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
@@ -5897,23 +5289,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 500;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class XDefend extends StageIncreaseItem implements HoldItem
-	{
+	private static class XDefend extends StageIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public XDefend()
-		{
+		public XDefend() {
 			super.name = "X Defend";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
@@ -5922,23 +5310,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 550;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class XSpDef extends StageIncreaseItem implements HoldItem
-	{
+	private static class XSpDef extends StageIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public XSpDef()
-		{
+		public XSpDef() {
 			super.name = "X Sp. Def";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
@@ -5947,23 +5331,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 350;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class XSpecial extends StageIncreaseItem implements HoldItem
-	{
+	private static class XSpecial extends StageIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public XSpecial()
-		{
+		public XSpecial() {
 			super.name = "X Special";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
@@ -5972,23 +5352,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 350;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class XSpeed extends StageIncreaseItem implements HoldItem
-	{
+	private static class XSpeed extends StageIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public XSpeed()
-		{
+		public XSpeed() {
 			super.name = "X Speed";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
@@ -5997,23 +5373,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 350;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SPEED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Calcium extends EVIncreaseItem implements HoldItem
-	{
+	private static class Calcium extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Calcium()
-		{
+		public Calcium() {
 			super.name = "Calcium";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6022,28 +5394,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Carbos extends EVIncreaseItem implements HoldItem
-	{
+	private static class Carbos extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Carbos()
-		{
+		public Carbos() {
 			super.name = "Carbos";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6052,28 +5419,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SPEED;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class CleverWing extends EVIncreaseItem implements HoldItem
-	{
+	private static class CleverWing extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public CleverWing()
-		{
+		public CleverWing() {
 			super.name = "Clever Wing";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6082,28 +5444,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 20;
 		}
 	}
 
-	private static class HealthWing extends EVIncreaseItem implements HoldItem
-	{
+	private static class HealthWing extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public HealthWing()
-		{
+		public HealthWing() {
 			super.name = "Health Wing";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6112,28 +5469,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.HP;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 20;
 		}
 	}
 
-	private static class HPUp extends EVIncreaseItem implements HoldItem
-	{
+	private static class HPUp extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public HPUp()
-		{
+		public HPUp() {
 			super.name = "HP Up";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6142,28 +5494,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.HP;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class GeniusWing extends EVIncreaseItem implements HoldItem
-	{
+	private static class GeniusWing extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public GeniusWing()
-		{
+		public GeniusWing() {
 			super.name = "Genius Wing";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6172,28 +5519,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 20;
 		}
 	}
 
-	private static class Iron extends EVIncreaseItem implements HoldItem
-	{
+	private static class Iron extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Iron()
-		{
+		public Iron() {
 			super.name = "Iron";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6202,28 +5544,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.DEFENSE;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MuscleWing extends EVIncreaseItem implements HoldItem
-	{
+	private static class MuscleWing extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public MuscleWing()
-		{
+		public MuscleWing() {
 			super.name = "Muscle Wing";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6232,29 +5569,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 20;
 		}
 	}
 
-	private static class PPMax extends Item implements MoveUseItem, HoldItem
-	{
+	private static class PPMax extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private String increase;
 
-		public PPMax()
-		{
+		public PPMax() {
 			super.name = "PP Max";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6263,30 +5595,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s " + increase + "'s Max PP was increased!";
 		}
 
-		public boolean use(Move m)
-		{
+		public boolean use(Move m) {
 			increase = m.getAttack().getName();
 			return m.increaseMaxPP(3);
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class PPUp extends Item implements MoveUseItem, HoldItem
-	{
+	private static class PPUp extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private String increase;
 
-		public PPUp()
-		{
+		public PPUp() {
 			super.name = "PP Up";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6295,29 +5622,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s " + increase + "'s Max PP was increased!";
 		}
 
-		public boolean use(Move m)
-		{
+		public boolean use(Move m) {
 			increase = m.getAttack().getName();
 			return m.increaseMaxPP(1);
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Protein extends EVIncreaseItem implements HoldItem
-	{
+	private static class Protein extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Protein()
-		{
+		public Protein() {
 			super.name = "Protein";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6326,28 +5648,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class RareCandy extends EVIncreaseItem implements HoldItem
-	{
+	private static class RareCandy extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public RareCandy()
-		{
+		public RareCandy() {
 			super.name = "Rare Candy";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6356,33 +5673,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 4800;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return null;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public boolean use(ActivePokemon p)
-		{// TODO: Need Level Up to be implemented
+		public boolean use(ActivePokemon p) {// TODO: Need Level Up to be
+												// implemented
 			return false;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class ResistWing extends EVIncreaseItem implements HoldItem
-	{
+	private static class ResistWing extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public ResistWing()
-		{
+		public ResistWing() {
 			super.name = "Resist Wing";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6391,28 +5703,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.DEFENSE;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 20;
 		}
 	}
 
-	private static class SwiftWing extends EVIncreaseItem implements HoldItem
-	{
+	private static class SwiftWing extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public SwiftWing()
-		{
+		public SwiftWing() {
 			super.name = "Swift Wing";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6421,28 +5728,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SPEED;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 1;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 20;
 		}
 	}
 
-	private static class Zinc extends EVIncreaseItem implements HoldItem
-	{
+	private static class Zinc extends EVIncreaseItem implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Zinc()
-		{
+		public Zinc() {
 			super.name = "Zinc";
 			super.cat = BagCategory.STAT;
 			super.bcat = new BattleBagCategory[0];
@@ -6451,28 +5753,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Stat toIncrease()
-		{
+		public Stat toIncrease() {
 			return Stat.SP_DEFENSE;
 		}
 
-		public int increaseAmt()
-		{
+		public int increaseAmt() {
 			return 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class CherishBall extends Item implements BallItem
-	{
+	private static class CherishBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public CherishBall()
-		{
+		public CherishBall() {
 			super.name = "Cherish Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6481,28 +5778,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class DiveBall extends Item implements BallItem
-	{
+	private static class DiveBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public DiveBall()
-		{
+		public DiveBall() {
 			super.name = "Dive Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6511,29 +5803,38 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{// TODO: How do I see if the user is underwater, surfing, or fishing?
-			if (false) return new double[] { 3.5, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {// TODO:
+																				// How
+																				// do
+																				// I
+																				// see
+																				// if
+																				// the
+																				// user
+																				// is
+																				// underwater,
+																				// surfing,
+																				// or
+																				// fishing?
+			if (false)
+				return new double[] { 3.5, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class DuskBall extends Item implements BallItem
-	{
+	private static class DuskBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public DuskBall()
-		{
+		public DuskBall() {
 			super.name = "Dusk Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6542,29 +5843,38 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{// TODO: How do I see if the user is in a dark environment?
-			if (false) return new double[] { 3.5, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {// TODO:
+																				// How
+																				// do
+																				// I
+																				// see
+																				// if
+																				// the
+																				// user
+																				// is
+																				// in
+																				// a
+																				// dark
+																				// environment?
+			if (false)
+				return new double[] { 3.5, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class FastBall extends Item implements BallItem
-	{
+	private static class FastBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public FastBall()
-		{
+		public FastBall() {
 			super.name = "Fast Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6573,29 +5883,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (o.getStat(Stat.SPEED) >= 100) return new double[] { 4, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (o.getStat(Stat.SPEED) >= 100)
+				return new double[] { 4, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class GreatBall extends Item implements BallItem
-	{
+	private static class GreatBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public GreatBall()
-		{
+		public GreatBall() {
 			super.name = "Great Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6604,28 +5911,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 600;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 1.5, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class HealBall extends Item implements BallItem
-	{
+	private static class HealBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public HealBall()
-		{
+		public HealBall() {
 			super.name = "Heal Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6634,30 +5936,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 300;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			p.healHealthFraction(1);
 			for (Move m : p.getMoves())
 				m.increasePP(m.getAttack().getPP());
 		}
 	}
 
-	private static class HeavyBall extends Item implements BallItem
-	{
+	private static class HeavyBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public HeavyBall()
-		{
+		public HeavyBall() {
 			super.name = "Heavy Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6666,38 +5963,37 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			double weight = o.getWeight(b);
 
 			double[] res = new double[2];
 			res[0] = 1;
 
-			if (weight <= 451.5) res[1] = -20;
-			else if (weight <= 661.5) res[1] = 20;
-			else if (weight <= 903.0) res[1] = 30;
-			else res[1] = 40;
+			if (weight <= 451.5)
+				res[1] = -20;
+			else if (weight <= 661.5)
+				res[1] = 20;
+			else if (weight <= 903.0)
+				res[1] = 30;
+			else
+				res[1] = 40;
 
 			return res;
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class LevelBall extends Item implements BallItem
-	{
+	private static class LevelBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public LevelBall()
-		{
+		public LevelBall() {
 			super.name = "Level Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6706,31 +6002,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (me.getLevel() / 4 > o.getLevel()) return new double[] { 8, 0 };
-			else if (me.getLevel() / 2 > o.getLevel()) return new double[] { 4, 0 };
-			else if (me.getLevel() > o.getLevel()) return new double[] { 2, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (me.getLevel() / 4 > o.getLevel())
+				return new double[] { 8, 0 };
+			else if (me.getLevel() / 2 > o.getLevel())
+				return new double[] { 4, 0 };
+			else if (me.getLevel() > o.getLevel())
+				return new double[] { 2, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class LoveBall extends Item implements BallItem
-	{
+	private static class LoveBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public LoveBall()
-		{
+		public LoveBall() {
 			super.name = "Love Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6739,29 +6034,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (me.getGender() == o.getGender()) return new double[] { 8, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (me.getGender() == o.getGender())
+				return new double[] { 8, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class LureBall extends Item implements BallItem
-	{
+	private static class LureBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public LureBall()
-		{
+		public LureBall() {
 			super.name = "Lure Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6770,29 +6062,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (false) return new double[] { 3, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (false)
+				return new double[] { 3, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class LuxuryBall extends Item implements BallItem
-	{
+	private static class LuxuryBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public LuxuryBall()
-		{
+		public LuxuryBall() {
 			super.name = "Luxury Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6801,28 +6090,29 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{// : Booring. We should change it up.
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {// :
+																				// Booring.
+																				// We
+																				// should
+																				// change
+																				// it
+																				// up.
 			return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class MasterBall extends Item implements BallItem
-	{
+	private static class MasterBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public MasterBall()
-		{
+		public MasterBall() {
 			super.name = "Master Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6831,28 +6121,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 0;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 255, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class MoonBall extends Item implements BallItem
-	{
+	private static class MoonBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public MoonBall()
-		{
+		public MoonBall() {
 			super.name = "Moon Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6861,30 +6146,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			Evolution ev = o.getPokemonInfo().getEvolution();
-			if (ev.getEvolution(EvolutionCheck.ITEM, o, "Moon Stone") != null) return new double[] { 4, 0 };
-			else return new double[] { 1, 0 };
+			if (ev.getEvolution(EvolutionCheck.ITEM, o, "Moon Stone") != null)
+				return new double[] { 4, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class NestBall extends Item implements BallItem
-	{
+	private static class NestBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public NestBall()
-		{
+		public NestBall() {
 			super.name = "Nest Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6893,30 +6175,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (o.getLevel() <= 19) return new double[] { 3, 0 };
-			else if (o.getLevel() <= 29) return new double[] { 2, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (o.getLevel() <= 19)
+				return new double[] { 3, 0 };
+			else if (o.getLevel() <= 29)
+				return new double[] { 2, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class NetBall extends Item implements BallItem
-	{
+	private static class NetBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public NetBall()
-		{
+		public NetBall() {
 			super.name = "Net Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6925,29 +6205,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (o.isType(Type.WATER) || o.isType(Type.BUG)) return new double[] { 3, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (o.isType(Type.WATER) || o.isType(Type.BUG))
+				return new double[] { 3, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class PokeBall extends Item implements BallItem
-	{
+	private static class PokeBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public PokeBall()
-		{
+		public PokeBall() {
 			super.name = "Pok\u00e9 Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6956,28 +6233,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class PremierBall extends Item implements BallItem
-	{
+	private static class PremierBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public PremierBall()
-		{
+		public PremierBall() {
 			super.name = "Premier Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -6986,28 +6258,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class QuickBall extends Item implements BallItem
-	{
+	private static class QuickBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public QuickBall()
-		{
+		public QuickBall() {
 			super.name = "Quick Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -7016,29 +6283,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (b.getTurn() == 1) return new double[] { 3, 0 };
-			else return new double[] { 1, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (b.getTurn() == 1)
+				return new double[] { 3, 0 };
+			else
+				return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class RepeatBall extends Item implements BallItem
-	{
+	private static class RepeatBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public RepeatBall()
-		{
+		public RepeatBall() {
 			super.name = "Repeat Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -7047,29 +6311,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (b.getPlayer().getPokedex().caught(o.getName())) return new double[] { 3, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (b.getPlayer().getPokedex().caught(o.getName()))
+				return new double[] { 3, 0 };
 			return new double[] { 1, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class SafariBall extends Item implements BallItem
-	{
+	private static class SafariBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public SafariBall()
-		{
+		public SafariBall() {
 			super.name = "Safari Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -7078,28 +6338,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 0;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 0;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 1.5, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class TimerBall extends Item implements BallItem
-	{
+	private static class TimerBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public TimerBall()
-		{
+		public TimerBall() {
 			super.name = "Timer Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -7108,31 +6363,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			if (b.getTurn() <= 10) return new double[] { 1, 0 };
-			else if (b.getTurn() <= 20) return new double[] { 2, 0 };
-			else if (b.getTurn() <= 30) return new double[] { 3, 0 };
-			else return new double[] { 4, 0 };
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (b.getTurn() <= 10)
+				return new double[] { 1, 0 };
+			else if (b.getTurn() <= 20)
+				return new double[] { 2, 0 };
+			else if (b.getTurn() <= 30)
+				return new double[] { 3, 0 };
+			else
+				return new double[] { 4, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class UltraBall extends Item implements BallItem
-	{
+	private static class UltraBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
-		public UltraBall()
-		{
+		public UltraBall() {
 			super.name = "Ultra Ball";
 			super.cat = BagCategory.BALL;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
@@ -7141,28 +6395,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		{
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 2, 0 };
 		}
 
-		public void afterCaught(ActivePokemon p)
-		{
+		public void afterCaught(ActivePokemon p) {
 			return;
 		}
 	}
 
-	private static class CheriBerry extends StatusConditionRemoveItem implements StatusBerry
-	{
+	private static class CheriBerry extends StatusConditionRemoveItem implements
+			StatusBerry {
 		private static final long serialVersionUID = 1L;
 
-		public CheriBerry()
-		{
+		public CheriBerry() {
 			super.name = "Cheri Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -7171,38 +6421,34 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.PARALYZED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FIRE;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
-			if (use(user, b)) b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+			if (use(user, b))
+				b.addMessage(getSuccessMessage(user), user.getStatus()
+						.getType(), user.user());
 		}
 	}
 
-	private static class ChestoBerry extends StatusConditionRemoveItem implements StatusBerry
-	{
+	private static class ChestoBerry extends StatusConditionRemoveItem
+			implements StatusBerry {
 		private static final long serialVersionUID = 1L;
 
-		public ChestoBerry()
-		{
+		public ChestoBerry() {
 			super.name = "Chesto Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -7211,38 +6457,34 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.ASLEEP;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.WATER;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
-			if (use(user, b)) b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+			if (use(user, b))
+				b.addMessage(getSuccessMessage(user), user.getStatus()
+						.getType(), user.user());
 		}
 	}
 
-	private static class PechaBerry extends StatusConditionRemoveItem implements StatusBerry
-	{
+	private static class PechaBerry extends StatusConditionRemoveItem implements
+			StatusBerry {
 		private static final long serialVersionUID = 1L;
 
-		public PechaBerry()
-		{
+		public PechaBerry() {
 			super.name = "Pecha Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -7251,38 +6493,34 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.POISONED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.ELECTRIC;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
-			if (use(user, b)) b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+			if (use(user, b))
+				b.addMessage(getSuccessMessage(user), user.getStatus()
+						.getType(), user.user());
 		}
 	}
 
-	private static class RawstBerry extends StatusConditionRemoveItem implements StatusBerry
-	{
+	private static class RawstBerry extends StatusConditionRemoveItem implements
+			StatusBerry {
 		private static final long serialVersionUID = 1L;
 
-		public RawstBerry()
-		{
+		public RawstBerry() {
 			super.name = "Rawst Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -7291,38 +6529,34 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.BURNED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GRASS;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
-			if (use(user, b)) b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+			if (use(user, b))
+				b.addMessage(getSuccessMessage(user), user.getStatus()
+						.getType(), user.user());
 		}
 	}
 
-	private static class AspearBerry extends StatusConditionRemoveItem implements StatusBerry
-	{
+	private static class AspearBerry extends StatusConditionRemoveItem
+			implements StatusBerry {
 		private static final long serialVersionUID = 1L;
 
-		public AspearBerry()
-		{
+		public AspearBerry() {
 			super.name = "Aspear Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -7331,39 +6565,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public StatusCondition toRemove()
-		{
+		public StatusCondition toRemove() {
 			return StatusCondition.FROZEN;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GRASS;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
-			if (use(user, b)) b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+			if (use(user, b))
+				b.addMessage(getSuccessMessage(user), user.getStatus()
+						.getType(), user.user());
 		}
 	}
 
-	private static class LeppaBerry extends Item implements EndTurnEffect, MoveUseItem, GainableEffectBerry
-	{
+	private static class LeppaBerry extends Item implements EndTurnEffect,
+			MoveUseItem, GainableEffectBerry {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
-		public LeppaBerry()
-		{
+		public LeppaBerry() {
 			super.name = "Leppa Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -7372,18 +6602,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s " + restore + "'s PP was restored!";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			for (Move m : victim.getMoves())
-			{
-				if (m.getPP() == 0)
-				{
-					b.addMessage(victim.getName() + "'s " + this.name + " restored " + m.getAttack().getName() + "'s PP!");
+		public void apply(ActivePokemon victim, Battle b) {
+			for (Move m : victim.getMoves()) {
+				if (m.getPP() == 0) {
+					b.addMessage(victim.getName() + "'s " + this.name
+							+ " restored " + m.getAttack().getName() + "'s PP!");
 					m.increasePP(10);
 					victim.consumeItem(b);
 					break;
@@ -7391,53 +6618,47 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 		}
 
-		public boolean use(Move m)
-		{
+		public boolean use(Move m) {
 			restore = m.getAttack().getName();
 			return m.increasePP(10);
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FIGHTING;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
 			List<Move> list = new ArrayList<>();
-			for (Move m : user.getMoves())
-			{
-				if (m.getPP() < m.getMaxPP())
-				{
+			for (Move m : user.getMoves()) {
+				if (m.getPP() < m.getMaxPP()) {
 					list.add(m);
 				}
 			}
 
 			int size = list.size();
-			if (size == 0) return;
+			if (size == 0)
+				return;
 
 			Move m = list.get((int) (Math.random() * size));
 			m.increasePP(10);
-			b.addMessage(user.getName() + "'s " + this.name + " restored " + m.getAttack().getName() + "'s PP!");
+			b.addMessage(user.getName() + "'s " + this.name + " restored "
+					+ m.getAttack().getName() + "'s PP!");
 		}
 	}
 
-	private static class OranBerry extends HealItem implements HealthTriggeredBerry
-	{
+	private static class OranBerry extends HealItem implements
+			HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
-		public OranBerry()
-		{
+		public OranBerry() {
 			super.name = "Oran Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -7446,52 +6667,46 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public int healAmt()
-		{
+		public int healAmt() {
 			return 10;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.POISON;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
-		{
-			if (user.fullHealth()) return false;
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
+			if (user.fullHealth())
+				return false;
 
 			user.heal(10);
-			b.addMessage(user.getName() + " was healed by its " + this.name + "!", user.getHP(), user.user());
+			b.addMessage(user.getName() + " was healed by its " + this.name
+					+ "!", user.getHP(), user.user());
 			return true;
 		}
 
-		public double healthTriggerRatio()
-		{
+		public double healthTriggerRatio() {
 			return 1 / 3.0;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
 			useHealthTriggerBerry(b, user);
 		}
 	}
 
-	private static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry
-	{
+	private static class PersimBerry extends Item implements BattleUseItem,
+			GainableEffectBerry {
 		private static final long serialVersionUID = 1L;
 
-		public PersimBerry()
-		{
+		public PersimBerry() {
 			super.name = "Persim Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -7500,15 +6715,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " snapped out of its confusion!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
-			if (p.hasEffect("Confusion"))
-			{
+		public boolean use(ActivePokemon p, Battle b) {
+			if (p.hasEffect("Confusion")) {
 				p.getAttributes().removeEffect("Confusion");
 				return true;
 			}
@@ -7516,36 +6728,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return false;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GROUND;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
-			if (use(user, b))
-			{
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+			if (use(user, b)) {
 				b.addMessage(getSuccessMessage(user));
 			}
 		}
 	}
 
-	private static class LumBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
-	{
+	private static class LumBerry extends Item implements PokemonUseItem,
+			BattleUseItem, StatusBerry {
 		private static final long serialVersionUID = 1L;
 
-		public LumBerry()
-		{
+		public LumBerry() {
 			super.name = "Lum Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
@@ -7554,51 +6760,46 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p)
-		{
-			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
+		public boolean use(ActivePokemon p) {
+			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED))
+				return false;
 
 			p.removeStatus();
 			return true;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FLYING;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
-			if (use(user, b)) b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+			if (use(user, b))
+				b.addMessage(getSuccessMessage(user), user.getStatus()
+						.getType(), user.user());
 		}
 	}
 
-	private static class SitrusBerry extends Item implements PokemonUseItem, BattleUseItem, HealthTriggeredBerry
-	{
+	private static class SitrusBerry extends Item implements PokemonUseItem,
+			BattleUseItem, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
-		public SitrusBerry()
-		{
+		public SitrusBerry() {
 			super.name = "Sitrus Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
@@ -7607,62 +6808,53 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p)
-		{
+		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
+		public boolean use(ActivePokemon p, Battle b) {
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p)
-		{
+		public boolean use(ActivePokemon p) {
 			return p.healHealthFraction(1 / 4.0) != 0;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.PSYCHIC;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
-		{
-			if (user.fullHealth()) return false;
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
+			if (user.fullHealth())
+				return false;
 
 			user.healHealthFraction(1 / 4.0);
-			b.addMessage(user.getName() + " was healed by its " + this.name + "!", user.getHP(), user.user());
+			b.addMessage(user.getName() + " was healed by its " + this.name
+					+ "!", user.getHP(), user.user());
 			return true;
 		}
 
-		public double healthTriggerRatio()
-		{
+		public double healthTriggerRatio() {
 			return 1 / 2.0;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
 			useHealthTriggerBerry(b, user);
 		}
 	}
 
-	private static class RazzBerry extends Item implements Berry
-	{
+	private static class RazzBerry extends Item implements Berry {
 		private static final long serialVersionUID = 1L;
 
-		public RazzBerry()
-		{
+		public RazzBerry() {
 			super.name = "Razz Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7671,28 +6863,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 60000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.STEEL;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class PomegBerry extends EVDecreaseBerry
-	{
+	private static class PomegBerry extends EVDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public PomegBerry()
-		{
+		public PomegBerry() {
 			super.name = "Pomeg Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7701,33 +6888,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toDecrease()
-		{
+		public Stat toDecrease() {
 			return Stat.HP;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.ICE;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 70;
 		}
 	}
 
-	private static class KelpsyBerry extends EVDecreaseBerry
-	{
+	private static class KelpsyBerry extends EVDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public KelpsyBerry()
-		{
+		public KelpsyBerry() {
 			super.name = "Kelpsy Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7736,33 +6917,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toDecrease()
-		{
+		public Stat toDecrease() {
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FIGHTING;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 70;
 		}
 	}
 
-	private static class QualotBerry extends EVDecreaseBerry
-	{
+	private static class QualotBerry extends EVDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public QualotBerry()
-		{
+		public QualotBerry() {
 			super.name = "Qualot Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7771,33 +6946,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toDecrease()
-		{
+		public Stat toDecrease() {
 			return Stat.DEFENSE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.POISON;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 70;
 		}
 	}
 
-	private static class HondewBerry extends EVDecreaseBerry
-	{
+	private static class HondewBerry extends EVDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public HondewBerry()
-		{
+		public HondewBerry() {
 			super.name = "Hondew Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7806,33 +6975,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toDecrease()
-		{
+		public Stat toDecrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GROUND;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 70;
 		}
 	}
 
-	private static class GrepaBerry extends EVDecreaseBerry
-	{
+	private static class GrepaBerry extends EVDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public GrepaBerry()
-		{
+		public GrepaBerry() {
 			super.name = "Grepa Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7841,33 +7004,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toDecrease()
-		{
+		public Stat toDecrease() {
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FLYING;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 70;
 		}
 	}
 
-	private static class TamatoBerry extends EVDecreaseBerry
-	{
+	private static class TamatoBerry extends EVDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public TamatoBerry()
-		{
+		public TamatoBerry() {
 			super.name = "Tamato Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7876,33 +7033,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toDecrease()
-		{
+		public Stat toDecrease() {
 			return Stat.SPEED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.PSYCHIC;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 70;
 		}
 	}
 
-	private static class OccaBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class OccaBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public OccaBerry()
-		{
+		public OccaBerry() {
 			super.name = "Occa Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7911,33 +7062,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIRE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FIRE;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class PasshoBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class PasshoBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public PasshoBerry()
-		{
+		public PasshoBerry() {
 			super.name = "Passho Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7946,33 +7091,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.WATER;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.WATER;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class WacanBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class WacanBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public WacanBerry()
-		{
+		public WacanBerry() {
 			super.name = "Wacan Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -7981,33 +7120,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ELECTRIC;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.ELECTRIC;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class RindoBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class RindoBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public RindoBerry()
-		{
+		public RindoBerry() {
 			super.name = "Rindo Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8016,33 +7149,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GRASS;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GRASS;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class YacheBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class YacheBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public YacheBerry()
-		{
+		public YacheBerry() {
 			super.name = "Yache Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8051,33 +7178,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ICE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.ICE;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class ChopleBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class ChopleBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public ChopleBerry()
-		{
+		public ChopleBerry() {
 			super.name = "Chople Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8086,33 +7207,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FIGHTING;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FIGHTING;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class KebiaBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class KebiaBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public KebiaBerry()
-		{
+		public KebiaBerry() {
 			super.name = "Kebia Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8121,33 +7236,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.POISON;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.POISON;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class ShucaBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class ShucaBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public ShucaBerry()
-		{
+		public ShucaBerry() {
 			super.name = "Shuca Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8156,33 +7265,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GROUND;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GROUND;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class CobaBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class CobaBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public CobaBerry()
-		{
+		public CobaBerry() {
 			super.name = "Coba Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8191,33 +7294,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.FLYING;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FLYING;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class PayapaBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class PayapaBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public PayapaBerry()
-		{
+		public PayapaBerry() {
 			super.name = "Payapa Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8226,33 +7323,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.PSYCHIC;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.PSYCHIC;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class TangaBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class TangaBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public TangaBerry()
-		{
+		public TangaBerry() {
 			super.name = "Tanga Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8261,33 +7352,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.BUG;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.BUG;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class ChartiBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class ChartiBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public ChartiBerry()
-		{
+		public ChartiBerry() {
 			super.name = "Charti Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8296,33 +7381,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.ROCK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.ROCK;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class KasibBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class KasibBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public KasibBerry()
-		{
+		public KasibBerry() {
 			super.name = "Kasib Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8331,33 +7410,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.GHOST;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GHOST;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class HabanBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class HabanBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public HabanBerry()
-		{
+		public HabanBerry() {
 			super.name = "Haban Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8366,33 +7439,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.DRAGON;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.DRAGON;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class ColburBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class ColburBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public ColburBerry()
-		{
+		public ColburBerry() {
 			super.name = "Colbur Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8401,33 +7468,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.DARK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.DARK;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class BabiriBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class BabiriBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public BabiriBerry()
-		{
+		public BabiriBerry() {
 			super.name = "Babiri Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8436,33 +7497,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.STEEL;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.STEEL;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class ChilanBerry extends SuperEffectivePowerReduceBerry
-	{
+	private static class ChilanBerry extends SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
-		public ChilanBerry()
-		{
+		public ChilanBerry() {
 			super.name = "Chilan Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8471,33 +7526,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
+		public Type getType() {
 			return Type.NORMAL;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.NORMAL;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 60;
 		}
 	}
 
-	private static class LiechiBerry extends HealthTriggeredStageIncreaseBerry
-	{
+	private static class LiechiBerry extends HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public LiechiBerry()
-		{
+		public LiechiBerry() {
 			super.name = "Liechi Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8506,33 +7555,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
+		public Stat toRaise() {
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GRASS;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 80;
 		}
 	}
 
-	private static class GanlonBerry extends HealthTriggeredStageIncreaseBerry
-	{
+	private static class GanlonBerry extends HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public GanlonBerry()
-		{
+		public GanlonBerry() {
 			super.name = "Ganlon Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8541,33 +7584,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
+		public Stat toRaise() {
 			return Stat.DEFENSE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.ICE;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 80;
 		}
 	}
 
-	private static class SalacBerry extends HealthTriggeredStageIncreaseBerry
-	{
+	private static class SalacBerry extends HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public SalacBerry()
-		{
+		public SalacBerry() {
 			super.name = "Salac Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8576,33 +7613,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
+		public Stat toRaise() {
 			return Stat.SPEED;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FIGHTING;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 80;
 		}
 	}
 
-	private static class PetayaBerry extends HealthTriggeredStageIncreaseBerry
-	{
+	private static class PetayaBerry extends HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public PetayaBerry()
-		{
+		public PetayaBerry() {
 			super.name = "Petaya Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8611,33 +7642,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
+		public Stat toRaise() {
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.POISON;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 80;
 		}
 	}
 
-	private static class ApicotBerry extends HealthTriggeredStageIncreaseBerry
-	{
+	private static class ApicotBerry extends HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
-		public ApicotBerry()
-		{
+		public ApicotBerry() {
 			super.name = "Apicot Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8646,33 +7671,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
+		public Stat toRaise() {
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.GROUND;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 80;
 		}
 	}
 
-	private static class LansatBerry extends Item implements HealthTriggeredBerry
-	{
+	private static class LansatBerry extends Item implements
+			HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
-		public LansatBerry()
-		{
+		public LansatBerry() {
 			super.name = "Lansat Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8681,45 +7701,40 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.FLYING;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 80;
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
-		{
-			PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
-			b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
+			PokemonEffect.getEffect("RaiseCrits").cast(b, user, user,
+					CastSource.HELD_ITEM, false);
+			b.addMessage(user.getName() + " is getting pumped due to its "
+					+ this.name + "!");
 			return true;
 		}
 
-		public double healthTriggerRatio()
-		{
+		public double healthTriggerRatio() {
 			return 1 / 4.0;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
 			useHealthTriggerBerry(b, user);
 		}
 	}
 
-	private static class StarfBerry extends Item implements HealthTriggeredBerry
-	{
+	private static class StarfBerry extends Item implements
+			HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
-		public StarfBerry()
-		{
+		public StarfBerry() {
 			super.name = "Starf Berry";
 			super.cat = BagCategory.BERRY;
 			super.bcat = new BattleBagCategory[0];
@@ -8728,59 +7743,52 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 10;
 		}
 
-		public Type naturalGiftType()
-		{
+		public Type naturalGiftType() {
 			return Type.PSYCHIC;
 		}
 
-		public int naturalGiftPower()
-		{
+		public int naturalGiftPower() {
 			return 80;
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
-		{
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
 			int rand = (int) (Math.random() * (Stat.NUM_BATTLE_STATS + 1));
 
 			// Raise crit
-			if (rand == Stat.NUM_BATTLE_STATS)
-			{
-				PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
-				b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
+			if (rand == Stat.NUM_BATTLE_STATS) {
+				PokemonEffect.getEffect("RaiseCrits").cast(b, user, user,
+						CastSource.HELD_ITEM, false);
+				b.addMessage(user.getName() + " is getting pumped due to its "
+						+ this.name + "!");
 				return true;
 			}
 
 			// Raise random battle stat
-			if (user.getAttributes().modifyStage(user, user, 1, Stat.getStat(rand, true), b, CastSource.HELD_ITEM))
-			{
+			if (user.getAttributes().modifyStage(user, user, 1,
+					Stat.getStat(rand, true), b, CastSource.HELD_ITEM)) {
 				return true;
 			}
 
 			return false;
 		}
 
-		public double healthTriggerRatio()
-		{
+		public double healthTriggerRatio() {
 			return 1 / 4.0;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp)
-		{
+		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
 			useHealthTriggerBerry(b, user);
 		}
 	}
 
-	private static class CometShard extends Item implements HoldItem
-	{
+	private static class CometShard extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public CometShard()
-		{
+		public CometShard() {
 			super.name = "Comet Shard";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8789,18 +7797,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 120000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class TinyMushroom extends Item implements HoldItem
-	{
+	private static class TinyMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public TinyMushroom()
-		{
+		public TinyMushroom() {
 			super.name = "Tiny Mushroom";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8809,18 +7814,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 500;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BigMushroom extends Item implements HoldItem
-	{
+	private static class BigMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BigMushroom()
-		{
+		public BigMushroom() {
 			super.name = "Big Mushroom";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8829,18 +7831,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 5000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BalmMushroom extends Item implements HoldItem
-	{
+	private static class BalmMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BalmMushroom()
-		{
+		public BalmMushroom() {
 			super.name = "Balm Mushroom";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8849,18 +7848,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 50000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Nugget extends Item implements HoldItem
-	{
+	private static class Nugget extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Nugget()
-		{
+		public Nugget() {
 			super.name = "Nugget";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8869,18 +7865,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BigNugget extends Item implements HoldItem
-	{
+	private static class BigNugget extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BigNugget()
-		{
+		public BigNugget() {
 			super.name = "Big Nugget";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8889,18 +7882,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 60000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Pearl extends Item implements HoldItem
-	{
+	private static class Pearl extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Pearl()
-		{
+		public Pearl() {
 			super.name = "Pearl";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8909,18 +7899,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 1400;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class BigPearl extends Item implements HoldItem
-	{
+	private static class BigPearl extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public BigPearl()
-		{
+		public BigPearl() {
 			super.name = "Big Pearl";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8929,18 +7916,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 7500;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Stardust extends Item implements HoldItem
-	{
+	private static class Stardust extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Stardust()
-		{
+		public Stardust() {
 			super.name = "Stardust";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8949,18 +7933,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 2000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class StarPiece extends Item implements HoldItem
-	{
+	private static class StarPiece extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public StarPiece()
-		{
+		public StarPiece() {
 			super.name = "Star Piece";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8969,18 +7950,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class RareBone extends Item implements HoldItem
-	{
+	private static class RareBone extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public RareBone()
-		{
+		public RareBone() {
 			super.name = "Rare Bone";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -8989,18 +7967,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10000;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 100;
 		}
 	}
 
-	private static class Honey extends Item implements HoldItem
-	{
+	private static class Honey extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public Honey()
-		{
+		public Honey() {
 			super.name = "Honey";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -9009,18 +7984,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Eviolite extends Item implements HoldItem, StatChangingEffect
-	{
+	private static class Eviolite extends Item implements HoldItem,
+			StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public Eviolite()
-		{
+		public Eviolite() {
 			super.name = "Eviolite";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -9029,24 +8002,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 40;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.getPokemonInfo().getEvolution().canEvolve()) return (int) (1.5 * stat);
+		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
+				Battle b) {
+			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE)
+					&& p.getPokemonInfo().getEvolution().canEvolve())
+				return (int) (1.5 * stat);
 			return stat;
 		}
 	}
 
-	private static class HeartScale extends Item implements HoldItem
-	{
+	private static class HeartScale extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		public HeartScale()
-		{
+		public HeartScale() {
 			super.name = "Heart Scale";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -9055,18 +8027,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class Repel extends RepelItem
-	{
+	private static class Repel extends RepelItem {
 		private static final long serialVersionUID = 1L;
 
-		public Repel()
-		{
+		public Repel() {
 			super.name = "Repel";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -9075,23 +8044,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 350;
 		}
 
-		public int repelSteps()
-		{
+		public int repelSteps() {
 			return 100;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class SuperRepel extends RepelItem
-	{
+	private static class SuperRepel extends RepelItem {
 		private static final long serialVersionUID = 1L;
 
-		public SuperRepel()
-		{
+		public SuperRepel() {
 			super.name = "Super Repel";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -9100,23 +8065,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 500;
 		}
 
-		public int repelSteps()
-		{
+		public int repelSteps() {
 			return 200;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}
 
-	private static class MaxRepel extends RepelItem
-	{
+	private static class MaxRepel extends RepelItem {
 		private static final long serialVersionUID = 1L;
 
-		public MaxRepel()
-		{
+		public MaxRepel() {
 			super.name = "Max Repel";
 			super.cat = BagCategory.MISC;
 			super.bcat = new BattleBagCategory[0];
@@ -9125,13 +8086,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 700;
 		}
 
-		public int repelSteps()
-		{
+		public int repelSteps() {
 			return 250;
 		}
 
-		public int flingDamage()
-		{
+		public int flingDamage() {
 			return 30;
 		}
 	}

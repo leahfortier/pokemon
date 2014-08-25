@@ -313,8 +313,8 @@ public class NPCEntityDialog extends JPanel {
 	private ImageIcon[] getTrainerSprites() {
 		ArrayList<ImageIcon> icons = new ArrayList<>();
 		
-		for (int curr = 0; mapMaker.getTileFromSet("Trainer", 12*curr +4) != null; ++curr) {
-			icons.add(new ImageIcon(mapMaker.getTileFromSet("Trainer", 12*curr +4), ""+curr));
+		for (int curr = 0; mapMaker.getTileFromSet("Trainer", 12*curr + 4) != null; ++curr) {
+			icons.add(new ImageIcon(mapMaker.getTileFromSet("Trainer", 12*curr + 4), "" + curr));
 		}
 		
 		ImageIcon[] imageIcons = new ImageIcon[icons.size()];
@@ -359,7 +359,7 @@ public class NPCEntityDialog extends JPanel {
 	
 	public NPCEntityData getNPC() {
 		return new NPCEntityData(nameTextField.getText(),
-				"condition: "+conditionTextField.getText().trim().replaceAll("\\s+", ""),
+				"condition: " + conditionTextField.getText().trim().replaceAll("\\s + ", ""),
 				-1, 
 				-1, 
 				null, 

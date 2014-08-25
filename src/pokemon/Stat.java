@@ -88,7 +88,7 @@ public enum Stat
 		// Effects that manipulate stats
 		List<Object> list = b.getEffectsList(p);
 		
-//		System.out.println(s.getName()+" "+user+" "+p.getName()+" "+(user ? p : opp).getName());
+//		System.out.println(s.getName() + " " + user + " " + p.getName() + " " + (user ? p : opp).getName());
 		
 		if ((s.user ? p : opp).getMove() != null) list.add((s.user ? p : opp).getAttack()); // User Attack
 		
@@ -108,7 +108,7 @@ public enum Stat
 		 
 		stat = applyStatChange(list, stat, s, p, opp, b);
 		
-//		System.out.println(p.getName()+" "+s.name+" Stat Change: "+temp+" -> "+stat);
+//		System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 		
 		return stat;
 	}
@@ -149,7 +149,7 @@ public enum Stat
 		// Let's keep everything in bounds, okay!
 		stage = Math.max(-1*MAX_STAT_CHANGES, Math.min(stage, MAX_STAT_CHANGES));
 		
-//		System.out.println(p.getName()+" "+s.getName()+" Stage: "+temp+" -> "+stage);
+//		System.out.println(p.getName() + " " + s.getName() + " Stage: " + temp + " -> " + stage);
 		
 		// Evasion stages are inverted
 		return s == EVASION ? stage*-1 : stage;
@@ -165,7 +165,7 @@ public enum Stat
 			if (s.index == index) return s;
 		}
 		
-		Global.error("Incorrect stat index "+index);
+		Global.error("Incorrect stat index " + index);
 		return null;
 	}
 }

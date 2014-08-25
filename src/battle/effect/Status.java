@@ -84,7 +84,7 @@ public abstract class Status implements Serializable
 			case ASLEEP:
 				return new Asleep(victim);
 			default:
-				Global.error("No such Status Condition "+s);
+				Global.error("No such Status Condition " + s);
 				return null;
 		}
 	}
@@ -146,7 +146,7 @@ public abstract class Status implements Serializable
 		{
 			if (((PokemonUseItem)item).use(victim))
 			{
-				b.addMessage(victim.getName()+"'s "+item.getName()+" cured it of its status condition!", StatusCondition.NONE, victim.user());
+				b.addMessage(victim.getName() + "'s " + item.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 				victim.consumeItem(b);				
 			}
 		}
@@ -207,12 +207,12 @@ public abstract class Status implements Serializable
 		
 		public String getCastMessage(ActivePokemon p)
 		{
-			return p.getName()+" fainted!";
+			return p.getName() + " fainted!";
 		}
 		
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
-			return abilify.getName()+"'s "+abilify.getAbility().getName()+" caused "+victim.getName()+" to faint!";
+			return abilify.getName() + "'s " + abilify.getAbility().getName() + " caused " + victim.getName() + " to faint!";
 		}
 	}
 	
@@ -229,7 +229,7 @@ public abstract class Status implements Serializable
 		{
 			if (Math.random()*100 < 25)
 			{
-				b.addMessage(p.getName()+" is fully paralyzed!");
+				b.addMessage(p.getName() + " is fully paralyzed!");
 				return false;
 			}
 			return true;
@@ -237,12 +237,12 @@ public abstract class Status implements Serializable
 		
 		public String getCastMessage(ActivePokemon p)
 		{
-			return p.getName()+" was paralyzed!";
+			return p.getName() + " was paralyzed!";
 		}
 		
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
-			return abilify.getName()+"'s "+abilify.getAbility().getName()+" paralyzed "+victim.getName()+"!";
+			return abilify.getName() + "'s " + abilify.getAbility().getName() + " paralyzed " + victim.getName() + "!";
 		}
 		
 		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
@@ -267,12 +267,12 @@ public abstract class Status implements Serializable
 			{
 				if  (victim.fullHealth() || victim.hasEffect("Heal Block")) return;
 				victim.healHealthFraction(1/8.0);
-				b.addMessage(victim.getName()+"'s Poison Heal restored its health!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s Poison Heal restored its health!", victim.getHP(), victim.user());
 				return;
 			}
 			
 			PokemonEffect e = victim.getEffect("BadPoison");
-			b.addMessage(victim.getName()+" was hurt by its poison!");
+			b.addMessage(victim.getName() + " was hurt by its poison!");
 			victim.reduceHealthFraction(b, e == null ? 1/8.0 : e.getTurns()/16.0);
 		}
 		
@@ -283,12 +283,12 @@ public abstract class Status implements Serializable
 		
 		public String getCastMessage(ActivePokemon p)
 		{
-			return p.getName()+" was "+(p.hasEffect("BadPoison") ? "badly " : "")+"poisoned!";
+			return p.getName() + " was " + (p.hasEffect("BadPoison") ? "badly " : "") + "poisoned!";
 		}
 		
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
-			return abilify.getName()+"'s "+abilify.getAbility().getName()+(victim.hasEffect("BadPoison") ? " badly " : " ")+"poisoned "+victim.getName()+"!";
+			return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect("BadPoison") ? " badly " : " ") + "poisoned " + victim.getName() + "!";
 		}
 	}
 	
@@ -299,7 +299,7 @@ public abstract class Status implements Serializable
 		
 		public Asleep(ActivePokemon victim)
 		{
-			numTurns = (int)(Math.random()*3)+1;
+			numTurns = (int)(Math.random()*3) + 1;
 			super.type = StatusCondition.ASLEEP;
 			if (victim.hasAbility("Early Bird")) numTurns /= 2;
 		}
@@ -319,24 +319,24 @@ public abstract class Status implements Serializable
 		{
 			if (numTurns == 0)
 			{
-				b.addMessage(p.getName()+" woke up!", StatusCondition.NONE, p.user());
+				b.addMessage(p.getName() + " woke up!", StatusCondition.NONE, p.user());
 				p.removeStatus();
 				return true;
 			}
 			
 			numTurns--;
-			b.addMessage(p.getName()+" is fast asleep...");
+			b.addMessage(p.getName() + " is fast asleep...");
 			return p.getAttack().isMoveType("AsleepUser");
 		}
 		
 		public String getCastMessage(ActivePokemon p)
 		{
-			return p.getName()+" fell asleep!";
+			return p.getName() + " fell asleep!";
 		}
 		
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
-			return abilify.getName()+"'s "+abilify.getAbility().getName()+" caused "+victim.getName()+" to fall asleep!";
+			return abilify.getName() + "'s " + abilify.getAbility().getName() + " caused " + victim.getName() + " to fall asleep!";
 		}
 		
 		public void setTurns(int turns)
@@ -357,7 +357,7 @@ public abstract class Status implements Serializable
 		public void apply(ActivePokemon victim, Battle b) 
 		{
 			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName()+" was hurt by its burn!");
+			b.addMessage(victim.getName() + " was hurt by its burn!");
 			victim.reduceHealthFraction(b, victim.hasAbility("Heatproof") ? 1/16.0 : 1/8.0);
 		}
 		
@@ -368,12 +368,12 @@ public abstract class Status implements Serializable
 		
 		public String getCastMessage(ActivePokemon p)
 		{
-			return p.getName()+" was burned!";
+			return p.getName() + " was burned!";
 		}
 		
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
-			return abilify.getName()+"'s "+abilify.getAbility().getName()+" burned "+victim.getName()+"!";
+			return abilify.getName() + "'s " + abilify.getAbility().getName() + " burned " + victim.getName() + "!";
 		}
 		
 		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
@@ -396,22 +396,22 @@ public abstract class Status implements Serializable
 			// 20% chance to thaw out each turn
 			if (Math.random()*100 < 20 || p.getAttack().isMoveType("Defrost"))
 			{
-				b.addMessage(p.getName()+" thawed out!", StatusCondition.NONE, p.user());
+				b.addMessage(p.getName() + " thawed out!", StatusCondition.NONE, p.user());
 				p.removeStatus();
 				return true;
 			}
-			b.addMessage(p.getName()+" is frozen solid!");
+			b.addMessage(p.getName() + " is frozen solid!");
 			return false;
 		}
 		
 		public String getCastMessage(ActivePokemon p)
 		{
-			return p.getName()+" was frozen!";
+			return p.getName() + " was frozen!";
 		}
 		
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
-			return abilify.getName()+"'s "+abilify.getAbility().getName()+" froze "+victim.getName()+"!";
+			return abilify.getName() + "'s " + abilify.getAbility().getName() + " froze " + victim.getName() + "!";
 		}
 	}
 }

@@ -31,7 +31,7 @@ public class GroupTrigger extends Trigger{
 	
 	@Override
 	public String toString() {
-		return "GroupTrigger: "+name+" triggers: "+triggers.toString();
+		return "GroupTrigger: " + name + " triggers: " + triggers.toString();
 	}
 	
 	@Override

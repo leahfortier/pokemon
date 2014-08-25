@@ -211,7 +211,7 @@ public class ActivePokemon implements Serializable
 			stats[i] = Stat.getStat(i, level, pokemon.getStat(i), IVs[i], EVs[i], nature.getNatureVal(i));
 		}
 		
-		hp += stats[Stat.HP.index()]-prevHP;
+		hp += stats[Stat.HP.index()] - prevHP;
 	}
 	
 	private Type computeHiddenType()
@@ -326,12 +326,12 @@ public class ActivePokemon implements Serializable
 	{
 		if (level == MAX_LEVEL) return 0;
 		
-		return GrowthRate.getEXP(pokemon.getGrowthRate(), level+1)-totalEXP;
+		return GrowthRate.getEXP(pokemon.getGrowthRate(), level + 1) - totalEXP;
 	}
 	
 	public float expRatio()
 	{
-		return 1.0f-(float)expToNextLevel()/(GrowthRate.getEXP(pokemon.getGrowthRate(), level+1)-GrowthRate.getEXP(pokemon.getGrowthRate(), level));
+		return 1.0f - (float)expToNextLevel()/(GrowthRate.getEXP(pokemon.getGrowthRate(), level + 1) - GrowthRate.getEXP(pokemon.getGrowthRate(), level));
 	}
 	
 	public void gainEXP(Battle b, int gain, ActivePokemon dead)
@@ -340,7 +340,7 @@ public class ActivePokemon implements Serializable
 		
 		// Add EXP
 		totalEXP += gain;
-		b.addMessage(nickname+" gained "+gain+" EXP points!");
+		b.addMessage(nickname + " gained " + gain + " EXP points!");
 		if (front) b.addMessage("", Math.min(1, expRatio()));
 		
 		// Add EVs
@@ -350,7 +350,7 @@ public class ActivePokemon implements Serializable
 		addEVs(vals);
 		
 		// Level up if applicable
-		while (totalEXP >= GrowthRate.getEXP(pokemon.getGrowthRate(), level+1))
+		while (totalEXP >= GrowthRate.getEXP(pokemon.getGrowthRate(), level + 1))
 		{
 			levelUp(b);
 		}
@@ -364,7 +364,7 @@ public class ActivePokemon implements Serializable
 		
 		// Grow to the next level
 		level++;
-		if (print) b.addMessage(nickname+" grew to level "+level+"!");
+		if (print) b.addMessage(nickname + " grew to level " + level + "!");
 		if (print && front) b.addMessage("", level, Math.min(1, expRatio()));
 		
 		// Change stats 
@@ -393,7 +393,7 @@ public class ActivePokemon implements Serializable
 		ability = Ability.evolutionAssign(this, ev.getEvolution());
 		
 		String name = nickname;
-		if (print) b.addMessage(nickname+" is evolving!");			
+		if (print) b.addMessage(nickname + " is evolving!");			
 		pokemon = ev.getEvolution();
 		if (print) b.getPlayer().getPokedex().setStatus(this, PokedexStatus.CAUGHT);
 		
@@ -410,7 +410,7 @@ public class ActivePokemon implements Serializable
 		if (print && front) b.addMessage("", hp, stats[Stat.HP.index()], playerPokemon);
 		if (print && front) b.addMessage("", pokemon, shiny, true, playerPokemon);
 		
-		String message = name+" evolved into "+pokemon.getName()+"!";
+		String message = name + " evolved into " + pokemon.getName() + "!";
 		if (print) b.addMessage(message);
 		if (print && front) b.addMessage("", hp, gain, stats, playerPokemon);
 		
@@ -560,19 +560,19 @@ public class ActivePokemon implements Serializable
 			if (vals[i] > 0 && EVs[i] < Stat.MAX_STAT_EVS)
 			{
 				added = true;
-				EVs[i] = Math.min(Stat.MAX_STAT_EVS, EVs[i]+vals[i]); // Don't exceed stat EV amount
+				EVs[i] = Math.min(Stat.MAX_STAT_EVS, EVs[i] + vals[i]); // Don't exceed stat EV amount
 				
 				// Don't exceed total EV amount
 				if (totalEVs() > Stat.MAX_EVS) 
 				{
-					EVs[i] -= (Stat.MAX_EVS-totalEVs());
+					EVs[i] -= (Stat.MAX_EVS - totalEVs());
 					break;
 				}
 			}
 			else if (vals[i] < 0 && EVs[i] > 0)
 			{
 				added = true;
-				EVs[i] = Math.max(0, EVs[i]+vals[i]); // Don't drop below zero
+				EVs[i] = Math.max(0, EVs[i] + vals[i]); // Don't drop below zero
 			}
 		}
 		
@@ -670,7 +670,7 @@ public class ActivePokemon implements Serializable
 		{
 			Status.die(this);
 			b.addMessage("", hp, playerPokemon);
-			b.addMessage(nickname+" fainted!", StatusCondition.FAINTED, playerPokemon);
+			b.addMessage(nickname + " fainted!", StatusCondition.FAINTED, playerPokemon);
 			
 			ActivePokemon murderer = b.getOtherPokemon(playerPokemon);
 			
@@ -701,7 +701,7 @@ public class ActivePokemon implements Serializable
 		for (PokemonEffect e : getEffects())
 		{
 			if (!e.isActive()) continue;
-			if (e instanceof TrappingEffect) return nickname+" cannot be recalled at this time!";
+			if (e instanceof TrappingEffect) return nickname + " cannot be recalled at this time!";
 		}
 		
 		// The opponent has an ability that prevents escape
@@ -801,7 +801,7 @@ public class ActivePokemon implements Serializable
 		boolean fullHealth = fullHealth();
 		
 		// Reduce HP, record damage, and check if fainted
-		int prev = hp, taken = prev - (hp = Math.max(0, hp-amount));
+		int prev = hp, taken = prev - (hp = Math.max(0, hp - amount));
 		attributes.takeDamage(taken);
 		
 		// Enduring the hit
@@ -822,7 +822,7 @@ public class ActivePokemon implements Serializable
 		// Check if the Pokemon fainted and also handle Focus Punch
 		if (hasEffect("Focusing"))
 		{
-			b.addMessage(nickname+" lost its focus and couldn't move!");
+			b.addMessage(nickname + " lost its focus and couldn't move!");
 			attributes.removeEffect("Focusing");
 			addEffect(PokemonEffect.getEffect("Flinch"));		
 		}
@@ -858,7 +858,7 @@ public class ActivePokemon implements Serializable
 		if (hasStatus(StatusCondition.FAINTED)) return 0;
 		
 		int prev = hp;
-		hp = Math.min(getStat(Stat.HP), hp+amount);
+		hp = Math.min(getStat(Stat.HP), hp + amount);
 		return hp - prev;
 	}
 	
@@ -879,13 +879,13 @@ public class ActivePokemon implements Serializable
 	{
 		if (victim.hasAbility("Liquid Ooze"))
 		{
-			b.addMessage(victim.getName()+"'s Liquid Ooze caused "+nickname+" to lose health instead!");
+			b.addMessage(victim.getName() + "'s Liquid Ooze caused " + nickname + " to lose health instead!");
 			reduceHealth(b, amount);
 			return;
 		}
 		
 		if (isHoldingItem(b, "Big Root")) amount *= 1.3;
-		if (print) b.addMessage(victim.getName()+"'s health was sapped!");
+		if (print) b.addMessage(victim.getName() + "'s health was sapped!");
 		if (!hasEffect("HealBlock")) heal(amount);
 		b.addMessage("", victim.hp, victim.user());
 		b.addMessage("", hp, user());
@@ -933,7 +933,7 @@ public class ActivePokemon implements Serializable
 		if (other.hasAbility("Pickup") && !other.isHoldingItem(b))
 		{
 			other.giveItem((HoldItem)consumed);
-			b.addMessage(other.getName()+" picked up "+getName()+"'s "+consumed.getName()+"!");
+			b.addMessage(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
 		}
 	}
 	

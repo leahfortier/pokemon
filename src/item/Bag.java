@@ -175,8 +175,8 @@ public class Bag implements Serializable
 	
 	private void removeItem(Item i)
 	{
-		if (items.containsKey(i)) items.put(i, items.get(i)-1);
-		else Global.error("Can't remove an item you don't have! ("+i.getName()+")");
+		if (items.containsKey(i)) items.put(i, items.get(i) - 1);
+		else Global.error("Can't remove an item you don't have! (" + i.getName() + ")");
 
 		if (items.get(i) <= 0)
 		{
@@ -190,7 +190,7 @@ public class Bag implements Serializable
 	
 	public boolean useItem(Item i, Trainer t)
 	{
-		if (items.get(i) <= 0) Global.error("You can't use that item ("+i.getName()+") as you do not have no more.");
+		if (items.get(i) <= 0) Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
 		
 		boolean res = false;
 		if (i instanceof TrainerUseItem) 
@@ -226,7 +226,7 @@ public class Bag implements Serializable
 	
 	public boolean battleUseItem(Item i, ActivePokemon p, Battle b)
 	{
-		if (items.get(i) <= 0) Global.error("You can't use that item ("+i.getName()+") as you do not have no more.");
+		if (items.get(i) <= 0) Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
 		
 		boolean res = false;
 		
@@ -298,6 +298,6 @@ public class Bag implements Serializable
 			}
 		}
 		
-		return sb.substring(0, sb.length()-1);
+		return sb.substring(0, sb.length() - 1);
 	}
 }

@@ -21,14 +21,14 @@ public enum GrowthRate implements Serializable
 			case SLOW:
 				return (int)(1.25*Math.pow(level, 3));
 			case ERRATIC:
-				if (level <= 50) return (int)(.02*Math.pow(level, 3)*(100-level));
-				if (level <= 68) return (int)(.01*Math.pow(level, 3)*(150-level));
-				if (level <= 98) return (int)(Math.pow(level, 3)*((1911-10*level)/3.0));
-				return (int)(.01*Math.pow(level, 3)*(160-level));
+				if (level <= 50) return (int)(.02*Math.pow(level, 3)*(100 - level));
+				if (level <= 68) return (int)(.01*Math.pow(level, 3)*(150 - level));
+				if (level <= 98) return (int)(Math.pow(level, 3)*((1911 - 10*level)/3.0));
+				return (int)(.01*Math.pow(level, 3)*(160 - level));
 			case FLUCTUATING:
-				if (level <= 15) return (int)(.02*Math.pow(level, 3)*(((level+1)/3.0)+24));
-				if (level <= 36) return (int)(.02*Math.pow(level, 3)*(level+14));
-				return (int)(.02*Math.pow(level, 3)*(level/2.0+32));
+				if (level <= 15) return (int)(.02*Math.pow(level, 3)*(((level + 1)/3.0) + 24));
+				if (level <= 36) return (int)(.02*Math.pow(level, 3)*(level + 14));
+				return (int)(.02*Math.pow(level, 3)*(level/2.0 + 32));
 			default:
 				Global.error("SOMETHING WENT FUCKING CRAZY WITH DEM GROWTHRATES");
 				return -1; // UNNECCESSARY, JAVA
@@ -52,7 +52,7 @@ public enum GrowthRate implements Serializable
 			case "Fluctuating":
 				return FLUCTUATING;
 			default:
-				Global.error("Invalid Growth Rate "+rate);
+				Global.error("Invalid Growth Rate " + rate);
 				return null;
 		}
 	}

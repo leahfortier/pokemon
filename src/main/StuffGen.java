@@ -14,14 +14,14 @@ import battle.Attack;
 
 public class StuffGen 
 {
-	private static String POKEMON_EFFECT_PATH = "src"+Global.FILE_SLASH+"battle"+Global.FILE_SLASH+"effect"+Global.FILE_SLASH+"PokemonEffect.java";
-	private static String TEAM_EFFECT_PATH = "src"+Global.FILE_SLASH+"battle"+Global.FILE_SLASH+"effect"+Global.FILE_SLASH+"TeamEffect.java";
-	private static String BATTLE_EFFECT_PATH = "src"+Global.FILE_SLASH+"battle"+Global.FILE_SLASH+"effect"+Global.FILE_SLASH+"BattleEffect.java";
-	private static String MOVE_PATH = "src"+Global.FILE_SLASH+"battle"+Global.FILE_SLASH+"Attack.java";
-	private static String ABILITY_PATH = "src"+Global.FILE_SLASH+"pokemon"+Global.FILE_SLASH+"Ability.java";
+	private static String POKEMON_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "PokemonEffect.java";
+	private static String TEAM_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "TeamEffect.java";
+	private static String BATTLE_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "BattleEffect.java";
+	private static String MOVE_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "Attack.java";
+	private static String ABILITY_PATH = "src" + Global.FILE_SLASH + "pokemon" + Global.FILE_SLASH + "Ability.java";
 	
-	private static String ITEM_PATH = "src"+Global.FILE_SLASH+"item"+Global.FILE_SLASH+"Item.java", 
-			ITEM_TILES_PATH = "rec"+Global.FILE_SLASH+"tiles"+Global.FILE_SLASH+"itemTiles"+Global.FILE_SLASH;
+	private static String ITEM_PATH = "src" + Global.FILE_SLASH + "item" + Global.FILE_SLASH + "Item.java", 
+			ITEM_TILES_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "itemTiles" + Global.FILE_SLASH;
 	
 	private static HashMap<String, String> moveFields = new HashMap<String, String>();
 	private static HashMap<String, String> effectClasses = new HashMap<String, String>();
@@ -103,10 +103,59 @@ public class StuffGen
 	}
 	
 	private static ArrayList<File> files;
+	
+	private static void plus()
+	{
+		files = new ArrayList<File>();
+		addFiles(new File("C:\\Users\\leahf_000\\Documents\\Pokemon++\\src"));
+		
+		for (File f : files)
+		{
+			Pattern p = Pattern.compile("[^ +\t]\\ + [^ +=]");
+			StringBuilder out = new StringBuilder();
+			
+			Scanner in = null;
+			try
+			{
+				in = new Scanner(f);
+			}
+			catch (FileNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			
+			while (in.hasNext())
+			{
+				String line = in.nextLine();
+				
+				if (!line.contains("Pattern.compile"))
+				{
+					Matcher m = p.matcher(line);
+					
+					while (m.find())
+					{
+						String group = m.group();
+						String replace = m.group().replace("+", " + ");
+						
+						line = line.replace(group, replace);
+						System.out.println(line);
+					}
+				}
+				
+				out.append(line + "\n");
+			}
+			
+			out = new StringBuilder(out.substring(0, out.length() - 1));
+			
+			printToFile(f.getAbsolutePath(), out);
+//			System.out.println(f.getAbsolutePath() + "\n" + out);
+		}
+	}
+	
 	private static void longestString()
 	{
 		files = new ArrayList<File>();
-		go(new File("C:\\Users\\!\\Documents\\GitHub\\Pokemon\\src"));
+		addFiles(new File("C:\\Users\\!\\Documents\\GitHub\\Pokemon\\src"));
 		
 		String max = "";
 		for (File f : files)
@@ -139,7 +188,7 @@ public class StuffGen
 		System.out.println(max.length() + " " + max);
 	}
 	
-	private static void go(File f)
+	private static void addFiles(File f)
 	{
 		File[] list = f.listFiles();
 
@@ -151,7 +200,7 @@ public class StuffGen
 			}
 			else
 			{
-				go(list[i]);
+				addFiles(list[i]);
 			}
 		}
 	}
@@ -207,11 +256,11 @@ public class StuffGen
 		if (type.equals("Multi"))
 		{
 			int x = in.nextInt();
-			out.println(type+" "+x);
+			out.println(type + " " + x);
 			for (int i = 0; i < x; i++) readEvolution(in, out);
 			return;
 		}
-		out.println(type+" "+in.nextLine());
+		out.println(type + " " + in.nextLine());
 	}
 	
 	private static void readHoldItems(Scanner in, PrintStream out)
@@ -229,8 +278,8 @@ public class StuffGen
 		while (effects.hasNext())
 		{
 			String line = effects.nextLine();
-			out.append(line+"\n");
-			if (line.contains("// EVERYTHING BELOW IS GENERATED +++")) break;
+			out.append(line + "\n");
+			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) break;
 		}
 		effects.close();
 		
@@ -238,12 +287,12 @@ public class StuffGen
 		while (in.hasNext())
 		{
 			String line = in.nextLine().trim();
-			while (in.hasNext() && (line.equals("") || line.charAt(line.length()-1) != ':'))
+			while (in.hasNext() && (line.equals("") || line.charAt(line.length() - 1) != ':'))
 			{
 				line = in.nextLine().trim();
 			}
 			
-			String name = line.substring(0, line.length()-1);
+			String name = line.substring(0, line.length() - 1);
 			
 			boolean canHave = false, first = true, nextTurnSubside = false, implemented = false;
 			String interfaces = "", castMsg = "", applyMsg = "", subsideMsg = "", apply = "", rapidSpin = "", 
@@ -264,8 +313,8 @@ public class StuffGen
 				switch (split[0])
 				{
 					case "EffectType":
-						if (!effectClasses.containsKey(split[1])) Global.error("Undefined Pokemon Effect Type "+split[1]+". (Effect: "+name+")");
-						interfaces += (implemented ? ", " : "implements ")+effectClasses.get(split[1]);
+						if (!effectClasses.containsKey(split[1])) Global.error("Undefined Pokemon Effect Type " + split[1] + ". (Effect: " + name + ")");
+						interfaces += (implemented ? ", " : "implements ") + effectClasses.get(split[1]);
 						implemented = true;
 						break;
 					case "CanHave":
@@ -287,7 +336,7 @@ public class StuffGen
 						prevent = writeFunction("boolean prevent(ActivePokemon caster, Stat stat)", prevent);
 						break;
 					case "PreventMessage":
-						preventMessage = writeFunction("String preventionMessage(ActivePokemon p)", "\t\t\treturn "+split[1]+";\n");
+						preventMessage = writeFunction("String preventionMessage(ActivePokemon p)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "SwitchStat":
 						statSwitch = readFunction(in, line, split[1]);
@@ -317,17 +366,17 @@ public class StuffGen
 					case "FailType":
 						for (String type : split[1].split(" ")) 
 						{
-							failure += (first ? "" : " || ")+"victim.isType(Type."+type.toUpperCase()+")";
+							failure += (first ? "" : " || ") + "victim.isType(Type." + type.toUpperCase() + ")";
 							first = false;
 						}
 						break;
 					case "FailAbility":
-						failure += (first ? "" : " || ")+"(victim.hasAbility(\""+split[1]+"\") && !caster.breaksTheMold())";
+						failure += (first ? "" : " || ") + "(victim.hasAbility(\"" + split[1] + "\") && !caster.breaksTheMold())";
 						first = false;
 						break;
 					case "FailCondition":
 					case "OtherFail":
-						failure += (first ? "" : " || ")+split[1];
+						failure += (first ? "" : " || ") + split[1];
 						first = false;
 						break;
 					case "FailMessage":
@@ -341,15 +390,15 @@ public class StuffGen
 						break;
 					case "CastMessage":
 					case "CastMsg":
-						castMsg = writeFunction("String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)", "\t\t\treturn "+split[1]+";\n");
+						castMsg = writeFunction("String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "ApplyMessage":
 					case "ApplyMsg":
-						applyMsg = writeFunction("String getApplyMessage(ActivePokemon user, ActivePokemon victim)", "\t\t\treturn "+split[1]+";\n");
+						applyMsg = writeFunction("String getApplyMessage(ActivePokemon user, ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "SubsideMessage":
 					case "SubsideMsg":
-						subsideMsg = writeFunction("String getSubsideMessage(ActivePokemon victim)", "\t\t\treturn "+split[1]+";\n");
+						subsideMsg = writeFunction("String getSubsideMessage(ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "TurnsActive":
 					case "NumTurns":
@@ -368,7 +417,7 @@ public class StuffGen
 						break;
 					case "PartialTrap":
 						apply = "\t\t\tif (victim.hasAbility(\"Magic Guard\")) return;\n";
-						apply += "\t\t\tb.addMessage("+split[1]+");\n";
+						apply += "\t\t\tb.addMessage(" + split[1] + ");\n";
 						apply += "\t\t\tvictim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, \"Binding Band\") ? 1/8.0 : 1/16.0);\n";
 						apply = writeFunction("void apply(ActivePokemon victim, Battle b)", apply);
 						cast = "\t\t\tsuper.cast(b, caster, victim, source, printCast);\n";
@@ -384,14 +433,14 @@ public class StuffGen
 						opposingCanAttack = writeFunction("boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)", opposingCanAttack);
 						break;
 					case "RapidSpin":
-						interfaces += (implemented ? ", " : "implements ")+"RapidSpinRelease";
+						interfaces += (implemented ? ", " : "implements ") + "RapidSpinRelease";
 						implemented = true;
-						rapidSpin = writeFunction("String getReleaseMessage(ActivePokemon user)", "\t\t\treturn "+split[1]+";\n");						
+						rapidSpin = writeFunction("String getReleaseMessage(ActivePokemon user)", "\t\t\treturn " + split[1] + ";\n");						
 						break;
 					case "Defog":
-						interfaces += (implemented ? ", " : "implements ")+"DefogRelease";
+						interfaces += (implemented ? ", " : "implements ") + "DefogRelease";
 						implemented = true;
-						defog = writeFunction("String getDefogReleaseMessage(ActivePokemon victim)", "\t\t\treturn "+split[1]+";\n");
+						defog = writeFunction("String getDefogReleaseMessage(ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "IncreaseCritStage":
 						increaseCrits = readFunction(in, line, split[1]);
@@ -406,7 +455,7 @@ public class StuffGen
 						brace = writeFunction("boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)", brace);
 						break;
 					case "BraceMessage":
-						braceMessage = writeFunction("String braceMessage(ActivePokemon bracer)", "\t\t\treturn "+split[1]+";\n");
+						braceMessage = writeFunction("String braceMessage(ActivePokemon bracer)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "Modify":
 						statChanging = readFunction(in, line, split[1]);
@@ -417,14 +466,14 @@ public class StuffGen
 						statusPrevent = writeFunction("boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status)", statusPrevent);
 						break;
 					case "StatusPreventMessage":
-						statusPreventMessage = writeFunction("String preventionMessage(ActivePokemon victim)", "\t\t\treturn "+split[1]+";\n");
+						statusPreventMessage = writeFunction("String preventionMessage(ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "Field":
 						extraFields += readFunction(in, line, split[1], 2);
 						break;
 					case "Activate":
 						activate = readFunction(in, line, split[1]);
-						activate = writeFunction(name+" newInstance()", "\t\t\t"+name+" x = ("+name+")(new "+name+"().activate());\n"+activate+"\t\t\treturn x;\n");
+						activate = writeFunction(name + " newInstance()", "\t\t\t" + name + " x = (" + name + ")(new " + name + "().activate());\n" + activate + "\t\t\treturn x;\n");
 						break;
 					case "Subside":
 						subside = readFunction(in, line, split[1]);
@@ -459,9 +508,9 @@ public class StuffGen
 						deathwish = writeFunction("void deathwish(Battle b, ActivePokemon dead, ActivePokemon murderer)", deathwish);
 						break;
 					case "Integer":
-						integer = writeFunction("int getAmount()", "\t\t\treturn "+split[1]+";\n");
-						integer += writeFunction("void decrease(int amount)", "\t\t\t"+split[1]+" -= amount;\n");
-						integer += writeFunction("void increase(int amount)", "\t\t\t"+split[1]+" += amount;\n");
+						integer = writeFunction("int getAmount()", "\t\t\treturn " + split[1] + ";\n");
+						integer += writeFunction("void decrease(int amount)", "\t\t\t" + split[1] + " -= amount;\n");
+						integer += writeFunction("void increase(int amount)", "\t\t\t" + split[1] + " += amount;\n");
 						break;
 					case "ValidMove":
 						effectBlocker = readFunction(in, line, split[1]);
@@ -473,24 +522,24 @@ public class StuffGen
 						break;
 					case "UnusableMsg":
 					case "UnusableMessage":
-						unusableMsg = writeFunction("String getUnusableMessage(ActivePokemon p)", "\t\t\treturn "+split[1]+";\n");
+						unusableMsg = writeFunction("String getUnusableMessage(ActivePokemon p)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					default:
-						Global.error(split[0]+" is not a valid pokemon effect field declaration (Effect: "+name+")"); // SUCKS TO SUCK
+						Global.error(split[0] + " is not a valid pokemon effect field declaration (Effect: " + name + ")"); // SUCKS TO SUCK
 				}
 				
 				line = in.nextLine().trim();
 			}
-			classes.append("\tprivate static class "+name+" extends "+superClass+" "+interfaces+"\n\t{\n");
+			classes.append("\tprivate static class " + name + " extends " + superClass + " " + interfaces + "\n\t{\n");
 			classes.append("\t\tprivate static final long serialVersionUID = 1L;\n");
-			classes.append(extraFields+(extraFields.length() > 0 ? "\n" : ""));
-			classes.append("\t\tpublic "+name+"()\n\t\t{\n");
-			classes.append("\t\t\tsuper(\""+name+"\", "+minTurns+", "+maxTurns+", "+nextTurnSubside+");\n");
+			classes.append(extraFields + (extraFields.length() > 0 ? "\n" : ""));
+			classes.append("\t\tpublic " + name + "()\n\t\t{\n");
+			classes.append("\t\t\tsuper(\"" + name + "\", " + minTurns + ", " + maxTurns + ", " + nextTurnSubside + ");\n");
 			classes.append("\t\t}\n");
 			
 			// Add newInstance() method
 			if (activate.length() > 0) classes.append(activate);
-			else classes.append(writeFunction(name+" newInstance()", "\t\t\treturn ("+name+")(new "+name+"().activate());\n"));
+			else classes.append(writeFunction(name + " newInstance()", "\t\t\treturn (" + name + ")(new " + name + "().activate());\n"));
 			
 			// Create applies method
 			if (!canHave) 
@@ -499,13 +548,13 @@ public class StuffGen
 				switch (superClass)
 				{ 
 					case "PokemonEffect":
-						failure += "victim.hasEffect(\""+name+"\")";
+						failure += "victim.hasEffect(\"" + name + "\")";
 						break;
 					case "TeamEffect":
-						failure += "Effect.hasEffect(b.getEffects(victim.user()), \""+name+"\")";
+						failure += "Effect.hasEffect(b.getEffects(victim.user()), \"" + name + "\")";
 						break;
 					case "BattleEffect":
-						failure += "Effect.hasEffect(b.getEffects(), \""+name+"\")";
+						failure += "Effect.hasEffect(b.getEffects(), \"" + name + "\")";
 						break;
 					default:
 						Global.error("YO WHAT THE FUCK INCORRECT SUPERCLASS");
@@ -515,7 +564,7 @@ public class StuffGen
 			
 			if (failure.length() > 0)
 			{
-				classes.append(writeFunction("boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)", "\t\t\treturn !("+failure+");\n"));
+				classes.append(writeFunction("boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)", "\t\t\treturn !(" + failure + ");\n"));
 			}
 
 			classes.append(apply);
@@ -559,12 +608,12 @@ public class StuffGen
 			classes.append(increaseCrits);
 			
 			classes.append("\t}\n\n");
-			out.append("\t\tmap.put(\""+name+"\", new "+name+"());\n");
+			out.append("\t\tmap.put(\"" + name + "\", new " + name + "());\n");
 		}
 		
 		out.append("\t}\n\n");
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n\n"); // DON'T DO IT
-		out.append(classes+"}");
+		out.append(classes + "}");
 		printToFile(output, out);
 	}
 	
@@ -590,8 +639,8 @@ public class StuffGen
 		while (moves.hasNext())
 		{
 			String line = moves.nextLine();
-			out.append(line+"\n");
-			if (line.contains("// EVERYTHING BELOW IS GENERATED +++")) break;
+			out.append(line + "\n");
+			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) break;
 		}
 		moves.close();
 		temp.append(out);
@@ -600,12 +649,12 @@ public class StuffGen
 		while (in.hasNext())
 		{
 			String line = in.nextLine().trim();
-			while (in.hasNext() && (line.equals("") || line.charAt(line.length()-1) != ':'))
+			while (in.hasNext() && (line.equals("") || line.charAt(line.length() - 1) != ':'))
 			{
 				line = in.nextLine().trim();
 			}
 			
-			String className = line.substring(0, line.length()-1);
+			String className = line.substring(0, line.length() - 1);
 			
 			line = in.nextLine().trim();
 			String applyEffects = "", recoil = "", selfHealing = "", interfaces = "", fields = "", getPower = "",
@@ -639,17 +688,17 @@ public class StuffGen
 							break;
 						case "FixedDamage":
 							applyDamage = "\t\t\tif (super.zeroAdvantage(b, me, o)) return -1;\n";
-							applyDamage += "\t\t\treturn b.applyDamage(o, "+split[1]+");\n";
+							applyDamage += "\t\t\treturn b.applyDamage(o, " + split[1] + ");\n";
 							applyDamage = writeFunction("int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)", applyDamage);
 							break;
 						case "SwitchStat":
-							interfaces += (implemented ? ", " : "implements ")+"StatSwitchingEffect";
+							interfaces += (implemented ? ", " : "implements ") + "StatSwitchingEffect";
 							implemented = true;
 							statSwitch = readFunction(in, line, split[1]);
 							statSwitch = writeFunction("Stat switchStat(Stat s)", statSwitch);
 							break;
 						case "StageChange":
-							interfaces += (implemented ? ", " : "implements ")+"StageChangingEffect";
+							interfaces += (implemented ? ", " : "implements ") + "StageChangingEffect";
 							implemented = true;
 							stageChange = readFunction(in, line, split[1]);
 							stageChange = writeFunction("int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user)", stageChange);
@@ -667,67 +716,67 @@ public class StuffGen
 							break;
 						case "MultiStrike":
 							applyDamage = "\t\t\tif (super.zeroAdvantage(b, me, o)) return -1;\n";
-							applyDamage += "\t\t\tint damage = 0, hits = (int)(Math.random()*("+mcsplit[1]+"-"+mcsplit[0]+"+1))+"+mcsplit[0]+";\n";
+							applyDamage += "\t\t\tint damage = 0, hits = (int)(Math.random()*(" + mcsplit[1] + " - " + mcsplit[0] + " + 1)) + " + mcsplit[0] + ";\n";
 							if (mcsplit[1].equals("5")) applyDamage += "\t\t\tif (me.hasAbility(\"Skill Link\")) hits = 5;\n";
 							applyDamage += "\t\t\tfor (int i = 1; i <= hits; i++)\n\t\t\t{\n";
-							applyDamage += "\t\t\t\tb.addMessage(\"Hit \"+i+\"!\");\n";
+							applyDamage += "\t\t\t\tb.addMessage(\"Hit \" + i + \"!\");\n";
 							applyDamage += "\t\t\t\tdamage += super.applyDamage(me, o, b);\n\t\t\t}\n";
-							applyDamage += "\t\t\tb.addMessage(\"Hit \"+hits+\" times!\");\n";
+							applyDamage += "\t\t\tb.addMessage(\"Hit \" + hits + \" times!\");\n";
 							applyDamage += "\t\t\treturn damage;\n";
 							applyDamage = writeFunction("int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)", applyDamage);
 							break;
 						case "Recoil":
-							interfaces += (implemented ? ", " : "implements ")+"RecoilMove";
+							interfaces += (implemented ? ", " : "implements ") + "RecoilMove";
 							implemented = true;
 							String recoilDamage = "";
 							if (!className.equals("Struggle")) recoil = "\t\t\tif (user.hasAbility(\"Rock Head\") || user.hasAbility(\"Magic Guard\")) return;\n";
-							recoil += "\t\t\tb.addMessage(user.getName()+\" was hurt by recoil!\");\n";
+							recoil += "\t\t\tb.addMessage(user.getName() + \" was hurt by recoil!\");\n";
 							recoil += "\t\t\tb.applyDamage(user, recoilDamage(user, damage));\n";
-							try { recoilDamage = "\t\t\treturn (int)Math.ceil(damage/"+Integer.parseInt(split[1])+".0);\n"; }
+							try { recoilDamage = "\t\t\treturn (int)Math.ceil(damage/" + Integer.parseInt(split[1]) + ".0);\n"; }
 							catch(NumberFormatException ex) { recoilDamage = readFunction(in, line, split[1]); }
-							extraFields += "\t\tprivate int recoilDamage(ActivePokemon user, int damage)\n\t\t{\n"+recoilDamage+"\t\t}\n";
+							extraFields += "\t\tprivate int recoilDamage(ActivePokemon user, int damage)\n\t\t{\n" + recoilDamage + "\t\t}\n";
 							recoil = writeFunction("void applyRecoil(Battle b, ActivePokemon user, int damage)", recoil);
 							break;
 						case "CrashDamage":
-							interfaces += (implemented ? ", " : "implements ")+"CrashDamageMove";
+							interfaces += (implemented ? ", " : "implements ") + "CrashDamageMove";
 							implemented = true;
-							crashDamage = "\t\t\tb.addMessage(user.getName()+\" kept going and crashed!\");\n";
-							crashDamage += "\t\t\tb.applyDamage(user, user.getStat(Stat.HP)/"+split[1]+");\n";
+							crashDamage = "\t\t\tb.addMessage(user.getName() + \" kept going and crashed!\");\n";
+							crashDamage += "\t\t\tb.applyDamage(user, user.getStat(Stat.HP)/" + split[1] + ");\n";
 							crashDamage = writeFunction("void crash(Battle b, ActivePokemon user)", crashDamage);
 							break;
 						case "SelfHealing":
 							fields += "\t\t\tsuper.selfTarget = true;\n";
-							interfaces += (implemented ? ", " : "implements ")+"SelfHealingMove";
+							interfaces += (implemented ? ", " : "implements ") + "SelfHealingMove";
 							implemented = true;
 							selfTarget = true;
 							selfHealing = "\t\t\tif (victim.fullHealth() || victim.hasEffect(\"HealBlock\"))\n\t\t\t{\n\t\t\t\tb.addMessage(\"...but it failed!\");\n\t\t\t\treturn;\n\t\t\t}\n\n";
-							try { selfHealing += "\t\t\tvictim.healHealthFraction(1/"+Integer.parseInt(split[1])+".0);\n"; }
+							try { selfHealing += "\t\t\tvictim.healHealthFraction(1/" + Integer.parseInt(split[1]) + ".0);\n"; }
 							catch(NumberFormatException ex) { selfHealing += readFunction(in, line, split[1]); }
-							selfHealing += "\t\t\tb.addMessage(victim.getName()+\"'s health was restored!\", victim.getHP(), victim.user());\n";
+							selfHealing += "\t\t\tb.addMessage(victim.getName() + \"'s health was restored!\", victim.getHP(), victim.user());\n";
 							selfHealing = writeFunction("void heal(ActivePokemon user, ActivePokemon victim, Battle b)", selfHealing);
 							break;
 						case "ChangeType":
-							interfaces += (implemented ? ", " : "implements ")+"ChangeTypeMove";
+							interfaces += (implemented ? ", " : "implements ") + "ChangeTypeMove";
 							implemented = true;
 							changeType = readFunction(in, line, split[1]);
 							changeType = writeFunction("Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)", changeType);
 							break;
 						case "AbilityChange":
-							interfaces += (implemented ? ", " : "implements ")+"ChangeAbilityMove";
+							interfaces += (implemented ? ", " : "implements ") + "ChangeAbilityMove";
 							implemented = true;
 							changeAbility = readFunction(in, line, split[1]);
 							changeAbility = writeFunction("Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)", changeAbility);
 							break;
 						case "SwitchItems":
-							interfaces += (implemented ? ", " : "implements ")+"ItemCondition";
+							interfaces += (implemented ? ", " : "implements ") + "ItemCondition";
 							implemented = true;
 							line = in.nextLine().trim();
 							extraFields += "\t\tprivate Item item;\n";
-							applyEffects = "\t\t\tif ("+split[1]+")\n\t\t\t{\n";
+							applyEffects = "\t\t\tif (" + split[1] + ")\n\t\t\t{\n";
 							applyEffects += "\t\t\t\tif (super.category == Category.STATUS) b.addMessage(\"...but it failed!\");\n";
 							applyEffects += "\t\t\t\treturn;\n\t\t\t}\n\n";
 							applyEffects += "\t\t\tItem userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);\n";
-							applyEffects += "\t\t\tb.addMessage("+line+");\n\n";
+							applyEffects += "\t\t\tb.addMessage(" + line + ");\n\n";
 							applyEffects += "\t\t\tif (b.isWildBattle())\n\t\t\t{\n";
 							applyEffects += "\t\t\t\tuser.giveItem((HoldItem)victimItem);\n";
 							applyEffects += "\t\t\t\tvictim.giveItem((HoldItem)userItem);\n";
@@ -741,7 +790,7 @@ public class StuffGen
 							fields += "\t\t\tsuper.effects.add(Effect.getEffect(\"ChangeItem\", EffectType.POKEMON));\n";
 							break;
 						case "GetItem":
-							interfaces += (implemented ? ", " : "implements ")+"ItemCondition";
+							interfaces += (implemented ? ", " : "implements ") + "ItemCondition";
 							implemented = true;
 							getItem = readFunction(in, line, split[1]);
 							getItem = writeFunction("Item getItem()", getItem);
@@ -756,39 +805,39 @@ public class StuffGen
 							applyEffects += "\t\t\t\tif (super.category == Category.STATUS) b.addMessage(\"...but it failed!\");\n";
 							applyEffects += "\t\t\t\treturn;\n\t\t\t}\n\n";
 							applyEffects += "\t\t\tif (victim.hasAbility(\"Suction Cups\") && !user.breaksTheMold())\n\t\t\t{\n";
-							applyEffects += "\t\t\t\tb.addMessage(victim.getName()+\"'s Suction Cups prevents it from switching!\");\n";
+							applyEffects += "\t\t\t\tb.addMessage(victim.getName() + \"'s Suction Cups prevents it from switching!\");\n";
 							applyEffects += "\t\t\t\treturn;\n\t\t\t}\n\n";
-							applyEffects += "\t\t\tb.addMessage("+split[1]+");\n";
+							applyEffects += "\t\t\tb.addMessage(" + split[1] + ");\n";
 							applyEffects += "\t\t\ttrainer.switchToRandom();\n";
 							applyEffects += "\t\t\tvictim = trainer.front();\n";
-							applyEffects += "\t\t\tb.enterBattle(victim, \"...and \"+victim.getName()+\" was dragged out!\");\n";
+							applyEffects += "\t\t\tb.enterBattle(victim, \"...and \" + victim.getName() + \" was dragged out!\");\n";
 							applyEffects = writeFunction("void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)", applyEffects);
 							break;
 						case "SelfSwitching":
-							if (!split[1].equals("True")) Global.error("SelfSwitching must be true (Move "+name+")");
+							if (!split[1].equals("True")) Global.error("SelfSwitching must be true (Move " + name + ")");
 							applyEffects = "\t\t\tTeam t = b.getTrainer(user.user());\n";
 							applyEffects += "\t\t\tif (t instanceof WildPokemon)\n\t\t\t{\n";
-							applyEffects += "\t\t\t\tb.addMessage(user.getName()+\" left the battle!\");\n";
+							applyEffects += "\t\t\t\tb.addMessage(user.getName() + \" left the battle!\");\n";
 							applyEffects += "\t\t\t\tb.addMessage(\" \", MessageUpdate.Update.EXIT_BATTLE);\n";
 							applyEffects += "\t\t\t\treturn;\n\t\t\t}\n\n";
 							applyEffects += "\t\t\tTrainer trainer = (Trainer)t;\n";
 							applyEffects += "\t\t\tif (!trainer.hasRemainingPokemon()) return;\n\n";
-							applyEffects += "\t\t\tb.addMessage(user.getName()+\" went back to \"+trainer.getName()+\"!\");\n";
+							applyEffects += "\t\t\tb.addMessage(user.getName() + \" went back to \" + trainer.getName() + \"!\");\n";
 							applyEffects += "\t\t\ttrainer.switchToRandom(); // TODO: Prompt a legit switch fo user\n";
 							applyEffects += "\t\t\tuser = trainer.front();\n";
-							applyEffects += "\t\t\tb.enterBattle(user, trainer.getName()+\" sent out \"+user.getName()+\"!\");\n";
+							applyEffects += "\t\t\tb.enterBattle(user, trainer.getName() + \" sent out \" + user.getName() + \"!\");\n";
 							applyEffects = writeFunction("void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)", applyEffects);
 							break;
 						case "MultiTurn":
-							interfaces += (implemented ? ", " : "implements ")+"MultiTurnMove";
+							interfaces += (implemented ? ", " : "implements ") + "MultiTurnMove";
 							implemented = true;
 							mcsplit = split[1].split(" ", 3);
-							charge = "\t\t\tb.addMessage("+mcsplit[2]+");\n";
-							multiTurn += writeFunction("boolean chargesFirst()", "\t\t\treturn "+(mcsplit[0].equals("Yes"))+";\n");
-							multiTurn += writeFunction("boolean semiInvulnerability()", "\t\t\treturn "+(mcsplit[1].equals("Yes"))+";\n");
+							charge = "\t\t\tb.addMessage(" + mcsplit[2] + ");\n";
+							multiTurn += writeFunction("boolean chargesFirst()", "\t\t\treturn " + (mcsplit[0].equals("Yes")) + ";\n");
+							multiTurn += writeFunction("boolean semiInvulnerability()", "\t\t\treturn " + (mcsplit[1].equals("Yes")) + ";\n");
 							break;
 						case "Charge":
-							if (charge.length() == 0) Global.error("Charge function must be written after MultiTurn (Effect "+name+")");
+							if (charge.length() == 0) Global.error("Charge function must be written after MultiTurn (Effect " + name + ")");
 							charge += readFunction(in, line, split[1]);
 							break;
 						case "GetPower":
@@ -814,7 +863,7 @@ public class StuffGen
 							physicalContact = split[1].toLowerCase();
 							break;
 						default:
-							Global.error(split[0]+" is not a valid move field declaration (Move: "+name+")"); // SUCKS TO SUCK
+							Global.error(split[0] + " is not a valid move field declaration (Move: " + name + ")"); // SUCKS TO SUCK
 							break;
 					}
 				}
@@ -823,7 +872,7 @@ public class StuffGen
 					switch (field)
 					{
 						case "effects":
-							fields += "\t\t\tsuper."+field+".add(Effect.getEffect(\""+mcsplit[1]+"\", EffectType."+mcsplit[0].toUpperCase()+"));\n"; // WE'RE LISTS SO WE'RE SPECIAL AND IMPORTANT OBVIOUSLY LOVE DAT ADD
+							fields += "\t\t\tsuper." + field + ".add(Effect.getEffect(\"" + mcsplit[1] + "\", EffectType." + mcsplit[0].toUpperCase() + "));\n"; // WE'RE LISTS SO WE'RE SPECIAL AND IMPORTANT OBVIOUSLY LOVE DAT ADD
 							break;
 						case "moveTypes":
 							Attack.validMoveType(split[1]);
@@ -834,7 +883,7 @@ public class StuffGen
 								applyDamage = "\t\t\tif (me.getLevel() < o.getLevel())\n\t\t\t{\n";
 								applyDamage += "\t\t\t\tb.addMessage(\"...but it failed!\");\n\t\t\t\treturn -1;\n\t\t\t}\n\n";
 								applyDamage += "\t\t\tif (o.hasAbility(\"Sturdy\") && !me.breaksTheMold())\n\t\t\t{\n";
-								applyDamage += "\t\t\t\tb.addMessage(o.getName()+\"'s Sturdy prevents OHKO moves!\");\n\t\t\t\treturn -1;\n\t\t\t}\n\n";
+								applyDamage += "\t\t\t\tb.addMessage(o.getName() + \"'s Sturdy prevents OHKO moves!\");\n\t\t\t\treturn -1;\n\t\t\t}\n\n";
 								applyDamage += "\t\t\tif (super.zeroAdvantage(b, me, o)) return -1;\n";
 								applyDamage += "\t\t\tb.addMessage(\"It's a One-Hit KO!\");\n";
 								applyDamage += "\t\t\treturn b.applyDamage(o, o.getHP());\n";
@@ -842,53 +891,53 @@ public class StuffGen
 								getAcc = "\t\t\treturn super.accuracy + (me.getLevel() - o.getLevel());\n";
 								getAcc = writeFunction("int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)", getAcc);
 							}
-							fields += "\t\t\tsuper."+field+".add(\""+split[1]+"\");\n"; // WE'RE LISTS SO WE'RE SPECIAL AND IMPORTANT OBVIOUSLY LOVE DAT ADD
+							fields += "\t\t\tsuper." + field + ".add(\"" + split[1] + "\");\n"; // WE'RE LISTS SO WE'RE SPECIAL AND IMPORTANT OBVIOUSLY LOVE DAT ADD
 							break;
 						case "selfTarget":
-							fields += "\t\t\tsuper."+field+" = true;\n";
+							fields += "\t\t\tsuper." + field + " = true;\n";
 							selfTarget = true;
-							if (!split[1].equals("True")) Global.error("SelfTarget must be True if specified (Move: "+name+")");
+							if (!split[1].equals("True")) Global.error("SelfTarget must be True if specified (Move: " + name + ")");
 							break;
 						case "printCast":
-							fields += "\t\t\tsuper."+field+" = false;\n";
-							if (!split[1].equals("False")) Global.error("PrintCast must be False if specified (Move: "+name+")");
+							fields += "\t\t\tsuper." + field + " = false;\n";
+							if (!split[1].equals("False")) Global.error("PrintCast must be False if specified (Move: " + name + ")");
 							break;
 						case "pp":
 							pp = split[1];
 							break;
 						case "desc":
-							desc = "\""+split[1]+"\"";
+							desc = "\"" + split[1] + "\"";
 							break;
 						case "power":
 							power = true;
-							fields += "\t\t\tsuper."+field+" = "+split[1]+";\n"; // DON'T QUOTE ME I'M JUST AN INTEGER!
+							fields += "\t\t\tsuper." + field + " = " + split[1] + ";\n"; // DON'T QUOTE ME I'M JUST AN INTEGER!
 							break;
 						case "accuracy":
 							accuracy = true;
 						case "priority":
 						case "effectChance":
-							fields += "\t\t\tsuper."+field+" = "+split[1]+";\n"; // DON'T QUOTE ME I'M JUST AN INTEGER!
+							fields += "\t\t\tsuper." + field + " = " + split[1] + ";\n"; // DON'T QUOTE ME I'M JUST AN INTEGER!
 							break;
 						case "type":
-							type = "Type."+split[1].toUpperCase();
+							type = "Type." + split[1].toUpperCase();
 							break;
 						case "category":
-							category = "Category."+split[1].toUpperCase();
+							category = "Category." + split[1].toUpperCase();
 							break;
 						case "status":
-							fields += "\t\t\tsuper.status = StatusCondition."+split[1].toUpperCase()+";\n";
+							fields += "\t\t\tsuper.status = StatusCondition." + split[1].toUpperCase() + ";\n";
 							break;
 						case "statChanges":
 							for (int i = 0, index = 1; i < Integer.parseInt(mcsplit[0]); i++)   
 							{
-								fields += "\t\t\tsuper.statChanges[Stat."+mcsplit[index++].toUpperCase()+".index()] = "+mcsplit[index++]+";\n";
+								fields += "\t\t\tsuper.statChanges[Stat." + mcsplit[index++].toUpperCase() + ".index()] = " + mcsplit[index++] + ";\n";
 							}
 							break;
 						case "name":
 							name = split[1];
 							break;
 						default:
-							fields += "\t\t\tsuper."+field+" = \""+split[1]+"\";\n"; // QUOTEY MCQUOTESTER
+							fields += "\t\t\tsuper." + field + " = \"" + split[1] + "\";\n"; // QUOTEY MCQUOTESTER
 							break;
 					}
 				}
@@ -896,17 +945,17 @@ public class StuffGen
 			}
 			
 			if (charge.length() > 0) charge = writeFunction("void charge(ActivePokemon user, Battle b)", charge);
-			if (physicalContact.length() > 0 && !physicalContact.equals("true") && !physicalContact.equals("false")) Global.error("True and false are the only valid fields for physical contact (Move "+name+")");
-			if (physicalContact.length() > 0 && category.contains("STATUS")) Global.error("Status moves never make physical contact (Move "+name+")");
-			if (physicalContact.equals("true") && category.contains("PHYSICAL")) Global.error("Physical moves have implied physical contact (Move "+name+")");
-			if (physicalContact.equals("false") && category.contains("SPECIAL")) Global.error("Special moves have implied no physical contact (Move "+name+")");
+			if (physicalContact.length() > 0 && !physicalContact.equals("true") && !physicalContact.equals("false")) Global.error("True and false are the only valid fields for physical contact (Move " + name + ")");
+			if (physicalContact.length() > 0 && category.contains("STATUS")) Global.error("Status moves never make physical contact (Move " + name + ")");
+			if (physicalContact.equals("true") && category.contains("PHYSICAL")) Global.error("Physical moves have implied physical contact (Move " + name + ")");
+			if (physicalContact.equals("false") && category.contains("SPECIAL")) Global.error("Special moves have implied no physical contact (Move " + name + ")");
 			if (physicalContact.equals("true") || (category.contains("PHYSICAL") && !physicalContact.equals("false"))) fields += "\t\t\tsuper.moveTypes.add(\"PhysicalContact\");\n";
 			
-			classes.append("\tprivate static class "+className+" extends Attack "+interfaces+"\n\t{\n");
+			classes.append("\tprivate static class " + className + " extends Attack " + interfaces + "\n\t{\n");
 			classes.append("\t\tprivate static final long serialVersionUID = 1L;\n");
-			classes.append(extraFields+(extraFields.length() > 0 ? "\n" : ""));
-			classes.append("\t\tpublic "+className+"()\n\t\t{\n");
-			classes.append("\t\t\tsuper(\""+name+"\", "+desc+", "+pp+", "+type+", "+category+");\n");
+			classes.append(extraFields + (extraFields.length() > 0 ? "\n" : ""));
+			classes.append("\t\tpublic " + className + "()\n\t\t{\n");
+			classes.append("\t\t\tsuper(\"" + name + "\", " + desc + ", " + pp + ", " + type + ", " + category + ");\n");
 			classes.append(fields);
 			classes.append("\t\t}\n");
 			 
@@ -933,10 +982,10 @@ public class StuffGen
 			classes.append(getItem);
 			
 			classes.append("\t}\n\n");
-			out.append("\t\tmap.put(\""+name+"\", new "+className+"());\n");
+			out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");
 			
-			if (category.contains("STATUS") && (power || getPower.length() > 0 || applyDamage.length() > 0)) Global.error("Status moves should not have a power (Move "+name+")");
-			if (!category.contains("STATUS") && !power && getPower.length() == 0 && applyDamage.length() == 0 && apply.length() == 0) System.err.println(name+" does not have a power.");
+			if (category.contains("STATUS") && (power || getPower.length() > 0 || applyDamage.length() > 0)) Global.error("Status moves should not have a power (Move " + name + ")");
+			if (!category.contains("STATUS") && !power && getPower.length() == 0 && applyDamage.length() == 0 && apply.length() == 0) System.err.println(name + " does not have a power.");
 			if (!selfTarget && !fieldMove && !bouncy && !accuracy && getAcc.length() == 0 
 					&& !name.equals("Struggle") && !name.equals("ConfusionDamage")
 					&& !name.equals("Aerial Ace") && !name.equals("Swift") 
@@ -951,13 +1000,13 @@ public class StuffGen
 					&& !name.equals("Block") && !name.equals("Aura Sphere")
 					&& !name.equals("Spider Web") && !name.equals("Sketch")
 					&& !name.equals("Defog") && !name.equals("Bestow")
-					&& !name.equals("Perish Song")) System.err.println(name+" does not have accuracy.");
+					&& !name.equals("Perish Song")) System.err.println(name + " does not have accuracy.");
 		}
 		
 		out.append("\n\t\tfor (String s : map.keySet()) moveNames.add(s);\n");
 		out.append("\t}\n\n");
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n\n"); // DON'T DO IT
-		out.append(classes+"}");
+		out.append(classes + "}");
 		printToFile(MOVE_PATH, out);
 	}
 	
@@ -968,8 +1017,8 @@ public class StuffGen
 		while (abilities.hasNext())
 		{
 			String line = abilities.nextLine();
-			out.append(line+"\n");
-			if (line.contains("// EVERYTHING BELOW IS GENERATED +++")) break;
+			out.append(line + "\n");
+			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) break;
 		}
 		abilities.close();
 		temp.append(out);
@@ -978,12 +1027,12 @@ public class StuffGen
 		while (in.hasNext())
 		{
 			String line = in.nextLine().trim();
-			while (in.hasNext() && (line.equals("") || line.charAt(line.length()-1) != ':'))
+			while (in.hasNext() && (line.equals("") || line.charAt(line.length() - 1) != ':'))
 			{
 				line = in.nextLine().trim();
 			}
 			
-			String className = line.substring(0, line.length()-1);
+			String className = line.substring(0, line.length() - 1);
 			
 			line = in.nextLine().trim();
 			String name = className, desc = "", interfaces = "", extraFields = "", getMultiplier = "",
@@ -1004,8 +1053,8 @@ public class StuffGen
 				switch (split[0])
 				{
 					case "Type":
-						if (!effectClasses.containsKey(split[1])) Global.error("Undefined Pokemon Ability Type "+split[1]+". (Effect: "+name+")");
-						interfaces += (implemented ? ", " : "implements ")+effectClasses.get(split[1]);
+						if (!effectClasses.containsKey(split[1])) Global.error("Undefined Pokemon Ability Type " + split[1] + ". (Effect: " + name + ")");
+						interfaces += (implemented ? ", " : "implements ") + effectClasses.get(split[1]);
 						implemented = true;
 						break;
 					case "GetMultiplier":
@@ -1019,10 +1068,10 @@ public class StuffGen
 						break;
 					case "Activate":
 						activate = readFunction(in, line, split[1]);
-						activate = writeFunction(className+" newInstance()", "\t\t\t"+className+" x = ("+className+")(new "+className+"().activate());\n"+activate+"\t\t\treturn x;\n");
+						activate = writeFunction(className + " newInstance()", "\t\t\t" + className + " x = (" + className + ")(new " + className + "().activate());\n" + activate + "\t\t\treturn x;\n");
 						break;
 					case "Desc":
-						desc = "\""+split[1]+"\"";
+						desc = "\"" + split[1] + "\"";
 						break;
 					case "Modify":
 						statChanging = "\t\t\tif (!s.user() && opp.breaksTheMold()) return stat;\n";
@@ -1060,7 +1109,7 @@ public class StuffGen
 					case "Trapped":
 						trapped = readFunction(in, line, split[1]);
 						trapped = writeFunction("boolean isTrapped(Battle b, ActivePokemon p)", trapped);
-						trapMessage = "\t\t\treturn trapper.getName()+\"'s \"+this.getName()+\" prevents \"+escaper.getName()+\" from escaping!\";\n";
+						trapMessage = "\t\t\treturn trapper.getName() + \"'s \" + this.getName() + \" prevents \" + escaper.getName() + \" from escaping!\";\n";
 						trapMessage = writeFunction("String trappingMessage(ActivePokemon escaper, ActivePokemon trapper)", trapMessage);
 						break;
 					case "Bracing":
@@ -1068,7 +1117,7 @@ public class StuffGen
 						brace = writeFunction("boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)", brace);
 						break;
 					case "BraceMessage":
-						braceMessage = writeFunction("String braceMessage(ActivePokemon bracer)", "\t\t\treturn "+split[1]+";\n");
+						braceMessage = writeFunction("String braceMessage(ActivePokemon bracer)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "Apply":
 						apply = readFunction(in, line, split[1]);
@@ -1109,7 +1158,7 @@ public class StuffGen
 						prevent = writeFunction("boolean prevent(ActivePokemon caster, Stat stat)", prevent);
 						break;
 					case "PreventMessage":
-						preventMessage = writeFunction("String preventionMessage(ActivePokemon p)", "\t\t\treturn "+split[1]+";\n");
+						preventMessage = writeFunction("String preventionMessage(ActivePokemon p)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "StatusPrevent":
 						statusPrevent = "\t\t\tif (caster.breaksTheMold()) return false;\n";
@@ -1117,7 +1166,7 @@ public class StuffGen
 						statusPrevent = writeFunction("boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status)", statusPrevent);
 						break;
 					case "StatusPreventMessage":
-						statusPreventMessage = writeFunction("String preventionMessage(ActivePokemon victim)", "\t\t\treturn "+split[1]+";\n");
+						statusPreventMessage = writeFunction("String preventionMessage(ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "StageChange":
 						stageChange = "\t\t\tif (!s.user() && opp.breaksTheMold()) return stage;\n";
@@ -1148,21 +1197,21 @@ public class StuffGen
 						extraFields += readFunction(in, line, split[1], 2);
 						break;
 					default:
-						Global.error(split[0]+" is not a valid ability field declaration (Ability: "+name+")"); // SUCKS TO SUCK
+						Global.error(split[0] + " is not a valid ability field declaration (Ability: " + name + ")"); // SUCKS TO SUCK
 						break;
 				}
 				line = in.nextLine().trim();
 			}
 			
-			classes.append("\tprivate static class "+className+" extends Ability "+interfaces+"\n\t{\n");
+			classes.append("\tprivate static class " + className + " extends Ability " + interfaces + "\n\t{\n");
 			classes.append("\t\tprivate static final long serialVersionUID = 1L;\n");
-			classes.append(extraFields+(extraFields.length() > 0 ? "\n" : ""));
-			classes.append("\t\tpublic "+className+"()\n\t\t{\n");
-			classes.append("\t\t\tsuper(\""+name+"\", "+desc+");\n\t\t}\n");
+			classes.append(extraFields + (extraFields.length() > 0 ? "\n" : ""));
+			classes.append("\t\tpublic " + className + "()\n\t\t{\n");
+			classes.append("\t\t\tsuper(\"" + name + "\", " + desc + ");\n\t\t}\n");
 			
 			// Add newInstance() method
 			if (activate.length() > 0) classes.append(activate);
-			else classes.append(writeFunction(className+" newInstance()", "\t\t\treturn ("+className+")(new "+className+"().activate());\n"));
+			else classes.append(writeFunction(className + " newInstance()", "\t\t\treturn (" + className + ")(new " + className + "().activate());\n"));
 			 
 			// Additional methods
 			classes.append(getMultiplier);
@@ -1198,13 +1247,13 @@ public class StuffGen
 			classes.append(weatherBlock);
 			
 			classes.append("\t}\n\n");
-			out.append("\t\tmap.put(\""+name+"\", new "+className+"());\n");
+			out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");
 		}
 		
 		out.append("\n\t\tfor (String s : map.keySet()) abilityNames.add(s);\n");
 		out.append("\t}\n\n");
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n\n"); // DON'T DO IT
-		out.append(classes+"}");
+		out.append(classes + "}");
 		printToFile(ABILITY_PATH, out);
 	}
 	
@@ -1215,7 +1264,7 @@ public class StuffGen
 
 		// Read in everything up to the cut off from Item.java
 		String s = readLine(in);
-		while (s != null && !s.endsWith("// EVERYTHING BELOW IS GENERATED +++"))
+		while (s != null && !s.endsWith("// EVERYTHING BELOW IS GENERATED ###"))
 		{
 			orig.append(s); orig.append('\n');
 			s = readLine(in);
@@ -1247,7 +1296,7 @@ public class StuffGen
 			
 			// Reads Key/Value pairs. If there is info on the same line as the key in the input,
 			// it assumes that that is the only information, otherwise it will read in the following lines,
-			// up to a line which is just "+++", used to include full functions.
+			// up to a line which is just "###", used to include full functions.
 			String field = readLine(in);
 			while (!field.trim().equals("*"))
 			{
@@ -1269,7 +1318,7 @@ public class StuffGen
 				{
 					StringBuilder func = new StringBuilder();
 					String tmp2 = readLine(in);
-					while (!tmp2.trim().equals("+++"))
+					while (!tmp2.trim().equals("###"))
 					{
 						func.append(tmp2.trim());
 						
@@ -1280,7 +1329,7 @@ public class StuffGen
 						tmp2 = readLine(in);
 					}
 
-					fields.put(tmp[0].trim(), func.toString()+" ");
+					fields.put(tmp[0].trim(), func.toString() + " ");
 				}
 
 				field = readLine(in);
@@ -1323,12 +1372,12 @@ public class StuffGen
 				String[] tmp = fields.get("BattleCat").trim().split(",");
 				for (String tmp2 : tmp)
 					out.append("BattleBagCategory." + tmp2 + ",");
-				out.deleteCharAt(out.length()-1);
+				out.deleteCharAt(out.length() - 1);
 				out.append("};");
 			}
 			
 			File ftmp = new File(ITEM_TILES_PATH + fields.get("ClassName").toLowerCase() + ".png");
-			if (!ftmp.exists()) System.err.println("Image for " + fields.get("Name") + " does not exist.");
+			if (!ftmp.exists()) System.err.println("Image for " + fields.get("Name") + " does not exist." + ftmp.getAbsolutePath());
 			
 			String base16idx = Integer.toString(index, 16);
 			while (base16idx.length() < 8) base16idx = "0" + base16idx;
@@ -1345,7 +1394,7 @@ public class StuffGen
 			if (fields.containsKey("SuccessMessage"))
 			{
 				successMsg = true;
-				out.append("public String getSuccessMessage(ActivePokemon p){ return "+fields.get("SuccessMessage")+"; }");
+				out.append("public String getSuccessMessage(ActivePokemon p){ return " + fields.get("SuccessMessage") + "; }");
 				fields.remove("SuccessMessage");
 			}
 			
@@ -1359,14 +1408,14 @@ public class StuffGen
 			if (fields.get("Ext").equals("StatusConditionRemoveItem"))
 			{
 				if (!fields.containsKey("ToRemove")) Global.error(fields.get("ClassName") + " must have a toRemove method, since it implements StatusConditionRemoveItem.");
-				else out.append("public StatusCondition toRemove(){return StatusCondition." + fields.get("ToRemove")+";}");
+				else out.append("public StatusCondition toRemove(){return StatusCondition." + fields.get("ToRemove") + ";}");
 				fields.remove("ToRemove");
 			}
 
 			if (fields.get("Ext").equals("HealItem"))
 			{
 				if (!fields.containsKey("HealAmt")) Global.error(fields.get("ClassName") + " must have an healAmt method, since it implements HealItem.");
-				else out.append("public int healAmt(){return " + fields.get("HealAmt")+";}");
+				else out.append("public int healAmt(){return " + fields.get("HealAmt") + ";}");
 				fields.remove("HealAmt");
 			}
 			
@@ -1374,7 +1423,7 @@ public class StuffGen
 			if (fields.get("Ext").equals("TypeEnhancingItem"))
 			{
 				if (!fields.containsKey("Type")) Global.error(fields.get("ClassName") + " must have a getType method, since it implements HoldItem.");
-				else out.append("public Type getType(){return Type." + fields.get("Type")+";}");
+				else out.append("public Type getType(){return Type." + fields.get("Type") + ";}");
 				fields.remove("Type");
 			}
 			
@@ -1386,7 +1435,7 @@ public class StuffGen
 				{
 					out.append("public Stat toIncrease(){return ");
 					if (fields.get("ToIncrease").equals("null")) out.append("null");
-					else out.append("Stat."+fields.get("ToIncrease"));
+					else out.append("Stat." + fields.get("ToIncrease"));
 					out.append(";}");
 				}
 				fields.remove("ToIncrease");
@@ -1396,7 +1445,7 @@ public class StuffGen
 			if (fields.get("Ext").equals("EVIncreaseItem"))
 			{
 				if (!fields.containsKey("IncreaseAmt")) Global.error(fields.get("ClassName") + " must have an increaseAmt method, since it implements EVIncreaseItem.");
-				else out.append("public int increaseAmt(){return " + fields.get("IncreaseAmt")+";}");
+				else out.append("public int increaseAmt(){return " + fields.get("IncreaseAmt") + ";}");
 				fields.remove("IncreaseAmt");
 			}
 			
@@ -1450,7 +1499,7 @@ public class StuffGen
 			if (fields.get("Ext").equals("TypeEnhancingItem"))
 			{
 				if (!fields.containsKey("Multiplier")) Global.error(fields.get("ClassName") + " must have a getMultiplier method, since it implements TypeEnhancingItem.");
-				else out.append("public double getMultiplier(){return " + fields.get("Multiplier")+";}");
+				else out.append("public double getMultiplier(){return " + fields.get("Multiplier") + ";}");
 				fields.remove("Multiplier");
 			}
 			
@@ -1458,7 +1507,7 @@ public class StuffGen
 			if (interfaces.contains("EndTurnEffect"))
 			{
 				if (!fields.containsKey("Apply")) Global.error(fields.get("ClassName") + " must have an apply method, since it implements EndTurnEffect.");
-				else out.append("public void apply(ActivePokemon victim, Battle b){" + fields.get("Apply")+"}");
+				else out.append("public void apply(ActivePokemon victim, Battle b){" + fields.get("Apply") + "}");
 				fields.remove("Apply");
 			}
 
@@ -1477,14 +1526,14 @@ public class StuffGen
 			
 			// If it's a Use, we need a use method, but allow it to be overwritten if specified (allows subclasses of some ACs to override their use method)
 			if (interfaces.contains("PokemonUseItem") && !fields.containsKey("PokemonUse")) Global.error(fields.get("ClassName") + " must have a use method, since it implements PokemonUseItem.");
-			if (fields.containsKey("PokemonUse")) out.append("public boolean use(ActivePokemon p){" + fields.get("PokemonUse")+"}");
+			if (fields.containsKey("PokemonUse")) out.append("public boolean use(ActivePokemon p){" + fields.get("PokemonUse") + "}");
 			fields.remove("PokemonUse");
 			
 			// If it's a TrainerUseItem, we need a use method that takes in a trainer
 			if (interfaces.contains("TrainerUseItem"))
 			{
 				if (!fields.containsKey("TrainerUse")) Global.error(fields.get("ClassName") + " must have a use method, since it implements TrainerUseItem.");
-				else out.append("public boolean use(Trainer t){" + fields.get("TrainerUse")+"}");
+				else out.append("public boolean use(Trainer t){" + fields.get("TrainerUse") + "}");
 				fields.remove("TrainerUse");
 			}
 			
@@ -1492,7 +1541,7 @@ public class StuffGen
 			if (interfaces.contains("MoveUseItem"))
 			{
 				if (!fields.containsKey("MoveUse")) Global.error(fields.get("ClassName") + " must have a use method, since it implements MoveUseItem.");
-				else out.append("public boolean use(Move m){" + fields.get("MoveUse")+"}");
+				else out.append("public boolean use(Move m){" + fields.get("MoveUse") + "}");
 				fields.remove("MoveUse");
 			}
 			
@@ -1500,45 +1549,45 @@ public class StuffGen
 			if (interfaces.contains("HoldItem"))
 			{
 				if (!fields.containsKey("Fling")) Global.error(fields.get("ClassName") + " must have a flingDamage method, since it implements HoldItem.");
-				else out.append("public int flingDamage(){return " + fields.get("Fling")+";}");
+				else out.append("public int flingDamage(){return " + fields.get("Fling") + ";}");
 				fields.remove("Fling");
 			}
 			// Some things have extensions that are HoldItems and this is easier than special casing all of these
 			else if (fields.containsKey("Fling"))
 			{
-				out.append("public int flingDamage(){return " + fields.get("Fling")+";}");
+				out.append("public int flingDamage(){return " + fields.get("Fling") + ";}");
 				fields.remove("Fling");
 			}
 			
 			if (interfaces.contains("StatChangingEffect"))
 			{
 				if (!fields.containsKey("ModifyStat")) Global.error(fields.get("ClassName") + " must have a ModifyStat field, since it implements StatChangingEffect.");
-				else out.append("public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b){"+fields.get("ModifyStat")+"}");
+				else out.append("public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b){" + fields.get("ModifyStat") + "}");
 				fields.remove("ModifyStat");
 			}
 			
 			if (interfaces.contains("WeatherExtendingEffect"))
 			{
 				if (!fields.containsKey("WeatherType")) Global.error(fields.get("ClassName") + " must have a WeatherType field, since it implements WeatherExtendingEffect.");
-				else out.append("public WeatherType getWeatherType(){ return WeatherType."+fields.get("WeatherType").toUpperCase()+"; }");
+				else out.append("public WeatherType getWeatherType(){ return WeatherType." + fields.get("WeatherType").toUpperCase() + "; }");
 				fields.remove("WeatherType");
 			}
 			
 			if (interfaces.contains("CritStageEffect"))
 			{
 				if (!fields.containsKey("IncreaseCritStage")) Global.error(fields.get("ClassName") + " must have a WeatherType field, since it implements CritStageEffect.");
-				else out.append("public int increaseCritStage(ActivePokemon p){ "+fields.get("IncreaseCritStage")+"}");
+				else out.append("public int increaseCritStage(ActivePokemon p){ " + fields.get("IncreaseCritStage") + "}");
 				fields.remove("IncreaseCritStage");
 			}
 			
 			if (interfaces.contains("AttackSelectionEffect"))
 			{
 				if (!fields.containsKey("Usable")) Global.error(fields.get("ClassName") + " must have a Usable field, since it implements AttackSelectionEffect.");
-				else out.append("public boolean usable(ActivePokemon p, Move m){ "+fields.get("Usable")+"}");
+				else out.append("public boolean usable(ActivePokemon p, Move m){ " + fields.get("Usable") + "}");
 				fields.remove("Usable");
 				
 				if (!fields.containsKey("UnusableMessage")) Global.error(fields.get("ClassName") + " must have a UnusableMessage field, since it implements AttackSelectionEffect.");
-				else out.append("public String getUnusableMessage(ActivePokemon p){ "+fields.get("UnusableMessage")+"}");
+				else out.append("public String getUnusableMessage(ActivePokemon p){ " + fields.get("UnusableMessage") + "}");
 				fields.remove("UnusableMessage");
 			}
 			
@@ -1546,12 +1595,12 @@ public class StuffGen
 			if (interfaces.contains("BallItem"))
 			{
 				if (!fields.containsKey("CatchRate")) Global.error(fields.get("ClassName") + " must have an catchRate method, since it implements BallItem.");
-				else out.append("public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b){" + fields.get("CatchRate")+"}");
+				else out.append("public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b){" + fields.get("CatchRate") + "}");
 				fields.remove("CatchRate");
 				
 				// If an AfterCaught field is not present, just make an empty one (doesn't matter)
 				if (!fields.containsKey("AfterCaught")) out.append("public void afterCaught(ActivePokemon p){return;}");
-				else out.append("public void afterCaught(ActivePokemon p){"+fields.get("AfterCaught")+"}");
+				else out.append("public void afterCaught(ActivePokemon p){" + fields.get("AfterCaught") + "}");
 				fields.remove("AfterCaught");
 			}
 						
@@ -1559,39 +1608,39 @@ public class StuffGen
 			if (interfaceString.contains("Berry") || (fields.get("Ext").contains("Berry")))
 			{
 				if (!fields.containsKey("NGType")) Global.error(fields.get("ClassName") + " must have a naturalGiftType method, since it implements Berry.");
-				else out.append("public Type naturalGiftType(){return Type." + fields.get("NGType")+";}");
+				else out.append("public Type naturalGiftType(){return Type." + fields.get("NGType") + ";}");
 				fields.remove("NGType");
 				
 				if (!fields.containsKey("NGPow")) Global.error(fields.get("ClassName") + " must have a naturalGiftPower method, since it implements Berry.");
-				else out.append("public int naturalGiftPower(){return " + fields.get("NGPow")+";}");
+				else out.append("public int naturalGiftPower(){return " + fields.get("NGPow") + ";}");
 				fields.remove("NGPow");
 			}
 			
 			if (interfaces.contains("PowerChangeEffect"))
 			{
 				if (!fields.containsKey("PCMultiplier")) Global.error(fields.get("ClassName") + " must have a PCMultiplier field, since it implements PowerChangeEffect.");
-				else out.append("public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim){"+fields.get("PCMultiplier")+"}");
+				else out.append("public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim){" + fields.get("PCMultiplier") + "}");
 				fields.remove("PCMultiplier");
 			}
 			
 			if (interfaces.contains("EntryEffect"))
 			{
 				if (!fields.containsKey("Enter")) Global.error(fields.get("ClassName") + " must have a enter method, since it implements EntryEffect.");
-				else out.append("public void enter(Battle b, ActivePokemon victim){"+fields.get("Enter")+"}");
+				else out.append("public void enter(Battle b, ActivePokemon victim){" + fields.get("Enter") + "}");
 				fields.remove("Enter");
 			}
 
 			if (interfaces.contains("EffectBlockerEffect"))
 			{
 				if (!fields.containsKey("ValidMove")) Global.error(fields.get("ClassName") + " must have a ValidMove method, since it implements EffectBlockerEffect.");
-				else out.append("public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim){"+fields.get("ValidMove")+"}");
+				else out.append("public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim){" + fields.get("ValidMove") + "}");
 				fields.remove("ValidMove");
 			}
 			
 			if (interfaces.contains("WeatherBlockerEffect"))
 			{
 				if (!fields.containsKey("WeatherBlock")) Global.error(fields.get("ClassName") + " must have a WeatherBlock method, since it implements WeatherBlockerEffect.");
-				else out.append("public boolean block(WeatherType weather){"+fields.get("WeatherBlock")+"}");
+				else out.append("public boolean block(WeatherType weather){" + fields.get("WeatherBlock") + "}");
 				fields.remove("WeatherBlock");
 			}
 			
@@ -1599,7 +1648,7 @@ public class StuffGen
 			if (interfaces.contains("DriveItem"))
 			{
 				if (!fields.containsKey("Type")) Global.error(fields.get("ClassName") + " must have a getType method, since it implements DriveItem.");
-				else out.append("public Type getType(){return Type." + fields.get("Type")+";}");
+				else out.append("public Type getType(){return Type." + fields.get("Type") + ";}");
 				fields.remove("Type");
 			}
 			
@@ -1613,57 +1662,57 @@ public class StuffGen
 			if (interfaces.contains("BracingEffect"))
 			{
 				if (!fields.containsKey("Bracing")) Global.error(fields.get("ClassName") + " must have a isBracing method, since it implements BracingEffect.");
-				else out.append("public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth){"+fields.get("Bracing")+"}");
+				else out.append("public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth){" + fields.get("Bracing") + "}");
 				fields.remove("Bracing");
 				
 				if (!fields.containsKey("BraceMessage")) Global.error(fields.get("ClassName") + " must have a braceMessage method, since it implements BracingEffect.");
-				else out.append("public String braceMessage(ActivePokemon bracer){"+fields.get("BraceMessage")+"}");
+				else out.append("public String braceMessage(ActivePokemon bracer){" + fields.get("BraceMessage") + "}");
 				fields.remove("BraceMessage");
 			}
 			
 			if (interfaces.contains("ApplyDamageEffect"))
 			{
 				if (!fields.containsKey("OnApplyDamage")) Global.error(fields.get("ClassName") + " must have an OnApplyDamage field, since it implements ApplyDamageEffect.");
-				else out.append("public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage){"+fields.get("OnApplyDamage")+"}");
+				else out.append("public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage){" + fields.get("OnApplyDamage") + "}");
 				fields.remove("OnApplyDamage");
 			}
 			
 			if (interfaces.contains("TakeDamageEffect"))
 			{
 				if (!fields.containsKey("OnTakeDamage")) Global.error(fields.get("ClassName") + " must have an OnTakeDamage field, since it implements TakeDamageEffect.");
-				else out.append("public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim){"+fields.get("OnTakeDamage")+"}");
+				else out.append("public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim){" + fields.get("OnTakeDamage") + "}");
 				fields.remove("OnTakeDamage");
 			}
 			
 			if (interfaces.contains("PhysicalContactEffect"))
 			{
 				if (!fields.containsKey("OnContact")) Global.error(fields.get("ClassName") + " must have an OnContact field, since it implements PhysicalContactEffect.");
-				else out.append("public void contact(Battle b, ActivePokemon user, ActivePokemon victim){"+fields.get("OnContact")+"}");
+				else out.append("public void contact(Battle b, ActivePokemon user, ActivePokemon victim){" + fields.get("OnContact") + "}");
 				fields.remove("OnContact");
 			}
 			
 			if (interfaces.contains("StatProtectingEffect"))
 			{
 				if (!fields.containsKey("StatProtect")) Global.error(fields.get("ClassName") + " must have an StatProtect field, since it implements PhysicalContactEffect.");
-				else out.append("public boolean prevent(ActivePokemon caster, Stat stat){"+fields.get("StatProtect")+"}");
+				else out.append("public boolean prevent(ActivePokemon caster, Stat stat){" + fields.get("StatProtect") + "}");
 				fields.remove("StatProtect");
 				
 				if (!fields.containsKey("StatProtectMessage")) Global.error(fields.get("ClassName") + " must have an StatProtectMessage field, since it implements PhysicalContactEffect.");
-				else out.append("public String preventionMessage(ActivePokemon p){"+fields.get("StatProtectMessage")+"}");
+				else out.append("public String preventionMessage(ActivePokemon p){" + fields.get("StatProtectMessage") + "}");
 				fields.remove("StatProtectMessage");
 			}
 
 			if (interfaces.contains("ItemCondition"))
 			{
 				if (!fields.containsKey("GetItem")) Global.error(fields.get("ClassName") + " must have a GetItem field, since it implements ItemCondition.");
-				else out.append("public Item getItem(){"+fields.get("GetItem")+"}");
+				else out.append("public Item getItem(){" + fields.get("GetItem") + "}");
 				fields.remove("GetItem");
 			}
 			
 			if (interfaces.contains("GainableEffectBerry"))
 			{
 				if (!fields.containsKey("GainEffect")) Global.error(fields.get("ClassName") + " must have a GainEffect field, since it implements GainableEffectBerry.");
-				else out.append("public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp){"+fields.get("GainEffect")+"}");
+				else out.append("public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp){" + fields.get("GainEffect") + "}");
 				fields.remove("GainEffect");
 			}
 			
@@ -1675,11 +1724,11 @@ public class StuffGen
 			if (interfaces.contains("HealthTriggeredBerry"))
 			{
 				if (!fields.containsKey("HealthTrigger")) Global.error(fields.get("ClassName") + " must have a HealthTrigger field, since it implements HealthTriggeredBerry.");
-				else out.append("public boolean useHealthTriggerBerry(Battle b, ActivePokemon user){"+fields.get("HealthTrigger")+"}");
+				else out.append("public boolean useHealthTriggerBerry(Battle b, ActivePokemon user){" + fields.get("HealthTrigger") + "}");
 				fields.remove("HealthTrigger");
 				
 				if (!fields.containsKey("HealthTriggerRatio")) Global.error(fields.get("ClassName") + " must have a HealthTriggerRatio field, since it implements HealthTriggeredBerry.");
-				else out.append("public double healthTriggerRatio(){"+fields.get("HealthTriggerRatio")+"}");
+				else out.append("public double healthTriggerRatio(){" + fields.get("HealthTriggerRatio") + "}");
 				fields.remove("HealthTriggerRatio");
 				
 				out.append("public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp){ useHealthTriggerBerry(b, user); }");
@@ -1714,7 +1763,7 @@ public class StuffGen
 	private static String readLine(Scanner in)
 	{
 		String res = in.nextLine();
-		if (res.length() > 0 && res.charAt(res.length()-1) == '\n') res = res.substring(0, res.length()-1);
+		if (res.length() > 0 && res.charAt(res.length() - 1) == '\n') res = res.substring(0, res.length() - 1);
 		return res;
 	}
 	
@@ -1746,7 +1795,7 @@ public class StuffGen
 		}
 		catch (FileNotFoundException ex)
 		{
-			Global.error(fileName+" not found");
+			Global.error(fileName + " not found");
 		}
 		return in;
 	}
@@ -1759,12 +1808,12 @@ public class StuffGen
 	public static String readFunction(Scanner in, String line, String curLine, int tabs)
 	{
 		String s = "";
-		if (curLine.length() > 0) s = addTabs(tabs)+curLine+"\n";
+		if (curLine.length() > 0) s = addTabs(tabs) + curLine + "\n";
 		line = in.nextLine().trim();
-		while (in.hasNext() && !line.equals("+++")) 
+		while (in.hasNext() && !line.equals("###")) 
 		{
 			if (line.contains("}") && !line.contains("{")) tabs--;
-			s += addTabs(tabs)+line+"\n";
+			s += addTabs(tabs) + line + "\n";
 			if (line.contains("{") && !line.contains("}")) tabs++;
 			line = in.nextLine().trim();
 		}
@@ -1773,6 +1822,6 @@ public class StuffGen
 	
 	public static String writeFunction(String header, String body)
 	{
-		return "\n\t\tpublic "+header+"\n\t\t{\n"+body+"\t\t}\n";
+		return "\n\t\tpublic " + header + "\n\t\t{\n" + body + "\t\t}\n";
 	}
 }

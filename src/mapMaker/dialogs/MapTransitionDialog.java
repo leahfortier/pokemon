@@ -40,10 +40,10 @@ public class MapTransitionDialog extends JPanel {
 		
 		//Fill combo boxes with available maps.
 		String[] mapList = mapMaker.getAvailableMaps();
-		String[] updatedMapList = new String[mapList.length+1];
+		String[] updatedMapList = new String[mapList.length + 1];
 		updatedMapList[0] = "";
 		for (int currMap = 0; currMap < mapList.length; ++currMap) {
-			updatedMapList[currMap+1] = mapList[currMap];
+			updatedMapList[currMap + 1] = mapList[currMap];
 		}
 		
 		destinationComboBox = new JComboBox<String>(updatedMapList);
@@ -139,7 +139,7 @@ public class MapTransitionDialog extends JPanel {
 		if (destination.equals("") || entrance.equals(""))
 			return null;
 		
-		return new MapTransitionTrigger(name, "", destination, entrance, directionComboBox.getSelectedIndex()-1);
+		return new MapTransitionTrigger(name, "", destination, entrance, directionComboBox.getSelectedIndex() - 1);
 	}
 	
 	public TriggerData getTriggerData(String name) {
@@ -153,7 +153,7 @@ public class MapTransitionDialog extends JPanel {
 				"MapTransition\n" +
 				"\tnextMap: " +destination +"\n"+
 				"\tmapEntrance: " +entrance +"\n"+
-				(directionComboBox.getSelectedIndex() == 0? "": "\tdirection: " +(directionComboBox.getSelectedIndex()-1)) +"\n"
+				(directionComboBox.getSelectedIndex() == 0? "": "\tdirection: " +(directionComboBox.getSelectedIndex() - 1)) +"\n"
 				);
 	}
 }

@@ -14,8 +14,6 @@ import battle.effect.ForceMoveEffect;
 import battle.effect.MultiTurnMove;
 import battle.effect.PokemonEffect;
 
-
-
 public class Move implements Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -85,14 +83,14 @@ public class Move implements Serializable
 	
 	public int reducePP(int reduce)
 	{
-		return pp - (pp = Math.max(0, pp-reduce));
+		return pp - (pp = Math.max(0, pp - reduce));
 	}
 	
 	public boolean increasePP(int n)
 	{
 		if (maxPP == pp) return false;
 		
-		pp = Math.min(maxPP, pp+10);
+		pp = Math.min(maxPP, pp + 10);
 		return true;
 	}
 	
@@ -176,7 +174,7 @@ public class Move implements Serializable
 	{
 		if (m.getPP() == 0)
 		{
-			b.addMessage(p.getName()+" is out of PP for "+m.move.getName()+"!");
+			b.addMessage(p.getName() + " is out of PP for " + m.move.getName() + "!");
 			return false;
 		}
 		
@@ -219,7 +217,7 @@ public class Move implements Serializable
 		range[0] = move[0];
 		for (int i = 1; i < move.length; i++)
 		{
-			range[i] = move[i] + range[i-1];
+			range[i] = move[i] + range[i - 1];
 		}
 		
 		int value = (int) (Math.random()*range[range.length - 1]);

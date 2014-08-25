@@ -81,7 +81,7 @@ public class TriggerEntityDialog extends JPanel {
 			return null;
 		return new TriggerEntityData(
 				nameTextField.getText(),
-				"condition: "+conditionTextField.getText().trim().replace(" ", ""),
+				"condition: " + conditionTextField.getText().trim().replace(" ", ""),
 				triggerTextField.getText(),
 				-1,
 				-1);

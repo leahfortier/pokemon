@@ -6,42 +6,48 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class TriggerData {
-
+public class TriggerData 
+{
 	public static final Pattern integerRangePattern = Pattern.compile("\\d+(?:-\\d+)?");
 
 	public String name;
 	
-	public ArrayList<point> points;
+	public ArrayList<Point> points;
 	
 	public String triggerType;
 	public String triggerContents;
 	
-	public TriggerData(String name, String contents) {
+	public TriggerData(String name, String contents) 
+	{
 		this.name = name;
 		
-		points = new ArrayList<point>();
+		points = new ArrayList<Point>();
 		
 		Scanner in = new Scanner(contents);
-		while (in.hasNext(integerRangePattern)){ 
+		while (in.hasNext(integerRangePattern))
+		{ 
 			String[] xr = in.next().split("-");
 			String[] yr = in.next().split("-");
-			int x1, x2, y1, y2;
-			x1 = Integer.parseInt(xr[0]);
-			y1 = Integer.parseInt(yr[0]);
-			x2 = xr.length == 2 ? Integer.parseInt(xr[1]) : x1;
-			y2 = yr.length == 2 ? Integer.parseInt(yr[1]) : y1;
+		
+			int x1 = Integer.parseInt(xr[0]);
+			int y1 = Integer.parseInt(yr[0]);
+			int x2 = xr.length == 2 ? Integer.parseInt(xr[1]) : x1;
+			int y2 = yr.length == 2 ? Integer.parseInt(yr[1]) : y1;
+			
 			for (int x = x1; x<=x2; x++)
 				for (int y = y1; y<=y2; y++)
-					points.add(new point(x, y));
+					points.add(new Point(x, y));
 		}
 		
 		triggerType = in.next();
 		
 		StringBuilder rest = new StringBuilder();
-		while (in.hasNextLine()) {
-			rest.append(in.nextLine()+"\n");
+		
+		while (in.hasNextLine()) 
+		{
+			rest.append(in.nextLine() + "\n");
 		}
+		
 		triggerContents = rest.toString();
 		
 		in.close();
@@ -49,73 +55,83 @@ public class TriggerData {
 		//System.out.println(name +"\n"+ triggerType +"\n" +triggerContents);
 	}
 	
-	public void addPoint(int x, int y) {
-		points.add(new point(x, y));
+	public void addPoint(int x, int y) 
+	{
+		points.add(new Point(x, y));
 	}
 	
-	public void removePoint(int x, int y) {
-		points.remove(new point(x, y));
+	public void removePoint(int x, int y) 
+	{
+		points.remove(new Point(x, y));
 	}
 	
-	public int[] getPoints(int width) {
+	public int[] getPoints(int width) 
+	{
 		int[] pointsArray = new int[points.size()];
 		
-		for (int currPoint = 0; currPoint < pointsArray.length; ++currPoint) {
-			point curr = points.get(currPoint);
-			pointsArray[currPoint] = curr.y * width + curr.x;
+		for (int currPoint = 0; currPoint < pointsArray.length; ++currPoint) 
+		{
+			Point curr = points.get(currPoint);
+			pointsArray[currPoint] = curr.y*width + curr.x;
 		}
+		
 		return pointsArray;
 	}
 	
-	public void updatePoints(int dx, int dy) {
+	public void updatePoints(int dx, int dy) 
+	{
 		
-		for (int currPoint = 0; currPoint < points.size(); ++currPoint) {
-			point curr = points.get(currPoint);
+		for (int currPoint = 0; currPoint < points.size(); ++currPoint) 
+		{
+			Point curr = points.get(currPoint);
 			curr.x += dx;
 			curr.y += dy;
 		}
 	}
 	
-	class point {
+	class Point 
+	{
 		public int x;
 		public int y;
 		
-		public point (int x, int y) {
+		public Point (int x, int y) 
+		{
 			this.x = x;
 			this.y = y;
 		}
 		
-		@Override
-		public boolean equals(Object o) {
-			if (!(o instanceof point))
+		public boolean equals(Object o) 
+		{
+			if (!(o instanceof Point))
 				return false;
-			point p = (point) o;
+		
+			Point p = (Point) o;
 			
 			return p.x == x && p.y == y;
 		}
 	}
 
-	public void addData(GameData gameData) {
-		
+	public void addData(GameData gameData) 
+	{	
 		if (gameData.getTrigger(name) == null)
 			gameData.addTrigger(triggerType, name, triggerContents);
 	}
 	
-	public String triggerDataAsString() {
-		
+	public String triggerDataAsString() 
+	{	
 		StringBuilder ret = new StringBuilder();
-		ret.append("TriggerData " +name +" {\n");
+		ret.append("TriggerData " + name + " {\n");
 		
-		for (point p: points) {
-			ret.append("\t" +p.x +" " +p.y +"\n");
+		for (Point p: points) 
+		{
+			ret.append("\t" + p.x + " " + p.y + "\n");
 		}
 		
-		ret.append("\t" +triggerType +"\n");
-		ret.append("\t"+ triggerContents.trim()+"\n");
+		ret.append("\t" + triggerType + "\n");
+		ret.append("\t" + triggerContents.trim() + "\n");
 		ret.append("}\n");
 		
 		return ret.toString();
-		
 	}
 }
 

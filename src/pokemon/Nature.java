@@ -20,8 +20,8 @@ public class Nature implements Serializable
 	
 	public Nature()
 	{
-		beneficial = (int)(Math.random()*5+1);
-		hindering = (int)(Math.random()*5+1);
+		beneficial = (int)(Math.random()*5 + 1);
+		hindering = (int)(Math.random()*5 + 1);
 		name = natures[beneficial][hindering];
 	}
 	

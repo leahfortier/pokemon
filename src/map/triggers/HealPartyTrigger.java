@@ -15,6 +15,6 @@ public class HealPartyTrigger extends Trigger{
 	}
 	@Override
 	public String toString() {
-		return "HealPartyTrigger: "+name;
+		return "HealPartyTrigger: " + name;
 	}
 }

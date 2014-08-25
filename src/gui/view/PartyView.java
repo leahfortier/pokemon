@@ -61,7 +61,7 @@ public class PartyView extends View
 		
 		for (int i = 0; i < Move.MAX_MOVES; i++)
 		{
-			buttons[MOVES + i] = moveButtons[i] = new Button(426, 266+i*49, 293, 40, Button.HoverAction.BOX, 
+			buttons[MOVES + i] = moveButtons[i] = new Button(426, 266 + i*49, 293, 40, Button.HoverAction.BOX, 
 					new int[] {-1, // Right
 							i == 0 ? 0 : MOVES + i - 1, // Up 
 							SWITCH, // Left
@@ -173,7 +173,7 @@ public class PartyView extends View
 			g.drawString(selectedPkm.getStatus().getType().getName(), 459, 147);
 			
 			// Level
-			g.drawString("Lv"+selectedPkm.getLevel(), 525, 147);
+			g.drawString("Lv" + selectedPkm.getLevel(), 525, 147);
 			
 			// Type Tiles
 			if (type[1].equals(Type.NONE))
@@ -215,7 +215,7 @@ public class PartyView extends View
 			StringBuilder dStr = new StringBuilder();
 			String[] discriptionSplit = selectedPkm.getActualAbility().getDescription().split(" ");
 
-			while (dIndex < discriptionSplit.length && dWidth+ (dStr.length()+discriptionSplit[dIndex].length()+1)*4 < 300)
+			while (dIndex < discriptionSplit.length && dWidth+ (dStr.length() + discriptionSplit[dIndex].length() + 1)*4 < 300)
 			{
 				dStr.append(" " + discriptionSplit[dIndex]);
 				dIndex++;
@@ -223,7 +223,7 @@ public class PartyView extends View
 			
 			g.drawString(dStr.toString(), dWidth, 272);
 			dStr = new StringBuilder();
-			while (dIndex < discriptionSplit.length) dStr.append(discriptionSplit[dIndex++]+" ");
+			while (dIndex < discriptionSplit.length) dStr.append(discriptionSplit[dIndex++] + " ");
 			g.drawString(dStr.toString(), 81, 290);
 			
 			// EXP Bar
@@ -245,7 +245,7 @@ public class PartyView extends View
 			for (int i = 0; i < Stat.NUM_STATS; i++)
 			{
 				g.setColor(selectedPkm.getNature().getColor(i));
-				g.drawString(Stat.getStat(i, false).getName(), 80, 19*i+358);
+				g.drawString(Stat.getStat(i, false).getName(), 80, 19*i + 358);
 			}
 			
 			int[] stats = selectedPkm.getStats();
@@ -282,7 +282,7 @@ public class PartyView extends View
 				if (selectedButton == MOVES + i)
 				{
 					g.setFont(Global.getFont(10));
-					Global.drawWrappedText(g, move.getAttack().getName()+" - "+move.getAttack().getDescription(), 
+					Global.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 
 							6, 11, 280, 6, 11);
 				}
 				else

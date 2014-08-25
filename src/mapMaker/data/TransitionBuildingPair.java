@@ -29,12 +29,12 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 	@Override
 	public String toString() {
 		return "TransitionBuildingPair:\n" +
-				"Map1: " +map1 +" entrance: "+map1Entrance +" area: " +area1 +"\n" +
-				"Map2: " +map2 +" entrance: "+map2Entrance +" area: " +area2 +"\n";
+				"Map1: " +map1 +" entrance: " + map1Entrance +" area: " +area1 +"\n" +
+				"Map2: " +map2 +" entrance: " + map2Entrance +" area: " +area2 +"\n";
 	}
 	
 	public String getGlobalString() {
-		return "MapGlobal_TransitionPair"+String.format("%02d",pairNumber);
+		return "MapGlobal_TransitionPair" + String.format("%02d",pairNumber);
 	}
 	
 	public String getConditionString() {
@@ -45,7 +45,7 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 			directionStartIndex = 2; //Vertical
 		}
 		
-		return getGlobalString()+"&((MapGlobal_PreviousMap_"+map2+"&MapGlobal_MapEntrance_"+ TransitionBuildingData.directions[directionStartIndex+1]+"Door)|(MapGlobal_PreviousMap_"+map1+"&MapGlobal_MapEntrance_"+ TransitionBuildingData.directions[directionStartIndex]+"Door))";
+		return getGlobalString() + "&((MapGlobal_PreviousMap_" + map2 + "&MapGlobal_MapEntrance_"+ TransitionBuildingData.directions[directionStartIndex + 1] + "Door)|(MapGlobal_PreviousMap_" + map1 + "&MapGlobal_MapEntrance_"+ TransitionBuildingData.directions[directionStartIndex] + "Door))";
 	}
 	
 	public String getPairName() {
@@ -97,13 +97,13 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 	
 	public String getInfoDialog(MapMaker mapMaker) {
 		
-		return "Dialogue "+getInfoDialogName() +" {\n"+
+		return "Dialogue " + getInfoDialogName() +" {\n"+
 				"\ttext: \"" +getInfoDialogString(mapMaker) +"\"\n"+
 				"}";
 	}
 	
 	public String getInfoDialogName() {
-		return getInfoTriggerName()+"_Dialogue";
+		return getInfoTriggerName() + "_Dialogue";
 	}
 	
 	public String getInfoDialogString(MapMaker mapMaker) {
@@ -114,7 +114,7 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 			directionStartIndex = 2; //Vertical
 		}
 		
-		return "To the " +TransitionBuildingData.directions[directionStartIndex].toLowerCase()+" is "+ mapMaker.getAreaForIndex(area1) +" and to the "+TransitionBuildingData.directions[directionStartIndex+1].toLowerCase()+" is "+mapMaker.getAreaForIndex(area2)+".";
+		return "To the " +TransitionBuildingData.directions[directionStartIndex].toLowerCase() + " is "+ mapMaker.getAreaForIndex(area1) +" and to the " + TransitionBuildingData.directions[directionStartIndex + 1].toLowerCase() + " is " + mapMaker.getAreaForIndex(area2) + ".";
 	}
 	
 	//Sort first by map1, then by map2, then by pair number

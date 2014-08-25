@@ -127,7 +127,7 @@ public class PlayerEntity extends Entity
 						if (entity[x][y] instanceof NPCEntity && ((NPCEntity)entity[x][y]).isTrainer())
 							trainerTrigger = entity[x][y].getTrigger();
 						entity[x][y].getAttention(dir);
-						charData.direction = transitionDirection = (dir+2)%tdx.length;
+						charData.direction = transitionDirection = (dir + 2)%tdx.length;
 						stalled = false;
 					}
 				}
@@ -171,8 +171,8 @@ public class PlayerEntity extends Entity
 	{
 		TileSet trainerTiles = data.getTrainerTiles();
 		if (transitionTime > 0)
-			return trainerTiles.getTile(1+transitionDirection+4*(1+runFrame));
-		return trainerTiles.getTile(1+transitionDirection);
+			return trainerTiles.getTile(1 + transitionDirection + 4*(1 + runFrame));
+		return trainerTiles.getTile(1 + transitionDirection);
 	}
 
 	public float[] getDrawLocation(Dimension d) 
@@ -181,8 +181,8 @@ public class PlayerEntity extends Entity
 		if (transitionTime > 0)
 		{
 			float len = Math.max(0f, (Global.TIME_BETWEEN_TILES - (float)transitionTime/*-dt*/)/Global.TIME_BETWEEN_TILES);
-			res[0] = d.width/2 - (charData.locationX+tdx[transitionDirection]*len)*Global.TILESIZE;
-			res[1] = d.height/2 - (charData.locationY+tdy[transitionDirection]*len)*Global.TILESIZE;
+			res[0] = d.width/2 - (charData.locationX + tdx[transitionDirection]*len)*Global.TILESIZE;
+			res[1] = d.height/2 - (charData.locationY + tdy[transitionDirection]*len)*Global.TILESIZE;
 		}
 		else
 		{

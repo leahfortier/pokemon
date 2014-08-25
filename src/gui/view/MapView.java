@@ -67,34 +67,36 @@ public class MapView extends View{
 		areaDisplayTime = 0;
 		
 		menuButtons = new Button[8];
-		for (int i = 0; i<menuButtons.length; i++) //RIGHT, UP, LEFT, DOWN
-			menuButtons[i] = new Button(558, 72*i+10, 240, 70, Button.HoverAction.ARROW, new int[]{-1, i==0?7:i-1, -1, i==7?0:i+1});
+		for (int i = 0; i < menuButtons.length; i++) //RIGHT, UP, LEFT, DOWN
+			menuButtons[i] = new Button(558, 72*i + 10, 240, 70, Button.HoverAction.ARROW, new int[] {-1, i==0 ? 7 : i - 1, -1, i==7 ? 0 : i + 1});
 	}
 	
 	public void draw(Graphics g, GameData data) 
 	{
-		g.setColor(Color.black);
+		g.setColor(Color.BLACK);
 		g.fillRect(0,0,Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
 		TileSet mapTiles = data.getMapTiles();
 		
-		for (int y = startY; y<endY; y++)
+		for (int y = startY; y < endY; y++)
 		{
-			for (int x = startX; x<endX; x++)
+			for (int x = startX; x < endX; x++)
 			{
 				int bgTile = currentMap.getBgTile(x,y);
-				int dx = (int) (drawX)+x*Global.TILESIZE;
-				int dy = (int) (drawY)+y*Global.TILESIZE;
-				if ((bgTile>>24) != 0){
+				int dx = (int) (drawX) + x*Global.TILESIZE;
+				int dy = (int) (drawY) + y*Global.TILESIZE;
+				
+				if ((bgTile>>24) != 0)
+				{
 					BufferedImage img = mapTiles.getTile(bgTile);
-					g.drawImage(img, dx+(Global.TILESIZE-img.getWidth()), dy+(Global.TILESIZE-img.getHeight()), null);
+					g.drawImage(img, dx + (Global.TILESIZE - img.getWidth()), dy + (Global.TILESIZE - img.getHeight()), null);
 				}
 			}
 		}
 		
-		for (int y = startY; y<endY; y++)
+		for (int y = startY; y < endY; y++)
 		{
-			for (int x = startX; x<endX; x++)
+			for (int x = startX; x < endX; x++)
 			{
 				int dx = (int) (drawX) + x*Global.TILESIZE;
 				int dy = (int) (drawY) + y*Global.TILESIZE;
@@ -103,10 +105,10 @@ public class MapView extends View{
 				if ((fgTile>>24) != 0)
 				{
 					BufferedImage img = mapTiles.getTile(fgTile);
-					g.drawImage(img, dx+(Global.TILESIZE-img.getWidth()), dy+(Global.TILESIZE-img.getHeight()), null);
+					g.drawImage(img, dx + (Global.TILESIZE - img.getWidth()), dy + (Global.TILESIZE - img.getHeight()), null);
 				}
 				
-				for (int d = 0; d<ddx.length; d++)
+				for (int d = 0; d < ddx.length; d++)
 				{
 					int nx, ny;
 					nx = ddx[d] + x;
@@ -153,12 +155,12 @@ public class MapView extends View{
 			}
 			
 			//Black border
-			g.setColor(Color.black);
-			g.fillRect(0, yValue, width+(2*graySize), height+(2*graySize));
+			g.setColor(Color.BLACK);
+			g.fillRect(0, yValue, width + (2*graySize), height + (2*graySize));
 			
 			//Gray border
 			g.setColor(new Color(0x333333));
-			g.fillRect(borderSize, yValue+borderSize, width + (2*graySize) - (2*borderSize), height + (2*graySize) - (2*borderSize));
+			g.fillRect(borderSize, yValue + borderSize, width + (2*graySize) - (2*borderSize), height + (2*graySize) - (2*borderSize));
 			
 			//Lighter gray inside
 			g.setColor(new Color(0x666666));
@@ -178,17 +180,17 @@ public class MapView extends View{
 		g.setColor(new Color(0,0,0, 64));
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		g.setColor(new Color(50,50,255, 128));
-		for (int i = 0; i<rainHeight.length; i++)
+		for (int i = 0; i < rainHeight.length; i++)
 			if (rainHeight[i] != 0){
-				g.drawRect(i*2, rainHeight[i]-40, 1, 40);
+				g.drawRect(i*2, rainHeight[i] - 40, 1, 40);
 				rainHeight[i] += 50;
-				if (rainHeight[i] > Global.GAME_SIZE.height+40)
+				if (rainHeight[i] > Global.GAME_SIZE.height + 40)
 					rainHeight[i] = 0;
 			}
-		for (int i = 0; i<50; i++){
+		for (int i = 0; i < 50; i++){
 				int x = rand.nextInt(rainHeight.length);
 				if (rainHeight[x] == 0)
-					rainHeight[x] = 1+rand.nextInt(40);
+					rainHeight[x] = 1 + rand.nextInt(40);
 			}
 		
 		if (rand.nextInt(80) == 0 || (lightningFrame > 80 && rand.nextInt(4) == 0)){
@@ -197,7 +199,7 @@ public class MapView extends View{
 		if (lightningFrame > 0){
 			g.setColor(new Color(255,255,255, lightningFrame));
 			g.fillRect(0,0,Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-			lightningFrame = 7*lightningFrame/8-1;
+			lightningFrame = 7*lightningFrame/8 - 1;
 		}else lightningFrame = 0;
 		*/
 		
@@ -220,9 +222,9 @@ public class MapView extends View{
 						break;
 				
 					if (i1 == dialogueSelection)
-						g.fillOval(50, h+i1*36, 10, 10);
+						g.fillOval(50, h + i1*36, 10, 10);
 					
-					g.drawString(choice, 80, h+(i1++)*36);
+					g.drawString(choice, 80, h + (i1++)*36);
 				}
 				break;
 			case MENU:
@@ -232,8 +234,8 @@ public class MapView extends View{
 				g.setFont(Global.getFont(40));
 				g.setColor(Color.black);
 				
-				for (int i = 0; i<menuText.length; i++)
-					g.drawString(menuText[i], 558, 59+72*i);
+				for (int i = 0; i < menuText.length; i++)
+					g.drawString(menuText[i], 558, 59 + 72*i);
 				
 				for (Button b: menuButtons)
 					b.draw(g);
@@ -340,7 +342,7 @@ public class MapView extends View{
 			case MENU:
 				selectedButton = Button.update(menuButtons, selectedButton, input);
 				int clicked = -1;
-				for (int i = 0; i<menuButtons.length; i++){
+				for (int i = 0; i < menuButtons.length; i++){
 					if (menuButtons[i].checkConsumePress()){
 						clicked = i;
 					}
@@ -399,8 +401,8 @@ public class MapView extends View{
 		
 		startX = (int) (-drawX/Global.TILESIZE);
 		startY = (int) (-drawY/Global.TILESIZE);
-		endX = startX+tilesX+6;
-		endY = startY+tilesY+6;
+		endX = startX + tilesX + 6;
+		endY = startY + tilesY + 6;
 		
 		//Check for any NPCs facing the player
 		if (!playerEntity.isStalled() && state == VisualState.MAP)
@@ -422,7 +424,7 @@ public class MapView extends View{
 						{
 							playerEntity.stall();
 							npc.setDirection(dir);
-							npc.walkTowards(dist-1, dir);
+							npc.walkTowards(dist - 1, dir);
 						}
 					}
 				}

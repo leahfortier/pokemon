@@ -37,7 +37,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		if (map == null) loadEffects();
 		if (map.containsKey(e)) return map.get(e);
 
-		Global.error("No such Effect "+e);
+		Global.error("No such Effect " + e);
 		return null;
 	}
 
@@ -47,7 +47,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		if (map != null) return;
 		map = new HashMap<>();
 		
-		// EVERYTHING BELOW IS GENERATED +++
+		// EVERYTHING BELOW IS GENERATED ###
 
 		// List all of the effects we are loading
 		map.put("Reflect", new Reflect());
@@ -94,7 +94,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getName()+" raised the defense of its team!";
+			return user.getName() + " raised the defense of its team!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim)
@@ -139,7 +139,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getName()+" raised the special defense of its team!";
+			return user.getName() + " raised the special defense of its team!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim)
@@ -178,7 +178,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getName()+" raised the speed of its team!";
+			return user.getName() + " raised the speed of its team!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim)
@@ -223,7 +223,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName()+" was hurt by stealth rock!");
+			b.addMessage(victim.getName() + " was hurt by stealth rock!");
 			victim.reduceHealthFraction(b, Type.getAdvantage(Type.ROCK, victim, b)/8.0);
 		}
 
@@ -277,7 +277,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 			if (victim.isLevitating(b)) return;
 			if (victim.isType(Type.POISON))
 			{
-				b.addMessage(victim.getName()+" absorbed the Toxic Spikes!");
+				b.addMessage(victim.getName() + " absorbed the Toxic Spikes!");
 				super.active = false;
 				return;
 			}
@@ -337,7 +337,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			if (victim.isLevitating(b) || victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName()+" was hurt by spikes!");
+			b.addMessage(victim.getName() + " was hurt by spikes!");
 			if (layers == 1) victim.reduceHealthFraction(b, 1/8.0);
 			else if (layers == 2) victim.reduceHealthFraction(b, 1/6.0);
 			else victim.reduceHealthFraction(b, 1/4.0);
@@ -381,7 +381,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			if (p.hasEffect("HealBlock")) return;
 			p.healHealthFraction(1/2.0);
-			b.addMessage(casterName+"'s wish came true!", p.getHP(), p.user());
+			b.addMessage(casterName + "'s wish came true!", p.getHP(), p.user());
 		}
 	}
 
@@ -405,7 +405,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return "The lucky chant shielded "+victim.getName()+"'s team from critical hits!";
+			return "The lucky chant shielded " + victim.getName() + "'s team from critical hits!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim)
@@ -444,12 +444,12 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return theSeeer.getName()+" foresaw an attack!";
+			return theSeeer.getName() + " foresaw an attack!";
 		}
 
 		public void subside(Battle b, ActivePokemon p)
 		{
-			b.addMessage(p.getName()+" took "+theSeeer.getName()+"'s attack!");
+			b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			theSeeer.setMove(new Move(Attack.getAttack("Future Sight")));
 			theSeeer.getAttack().applyDamage(theSeeer, p, b);
 		}
@@ -485,12 +485,12 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return theSeeer.getName()+" foresaw an attack!";
+			return theSeeer.getName() + " foresaw an attack!";
 		}
 
 		public void subside(Battle b, ActivePokemon p)
 		{
-			b.addMessage(p.getName()+" took "+theSeeer.getName()+"'s attack!");
+			b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			theSeeer.setMove(new Move(Attack.getAttack("Doom Desire")));
 			theSeeer.getAttack().applyDamage(theSeeer, p, b);
 		}
@@ -528,7 +528,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			victim.healHealthFraction(1);
 			victim.removeStatus();
-			b.addMessage(victim.getName()+" health was restored due to the "+wish+"!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim.getHP(), victim.user());
 			b.addMessage("", StatusCondition.NONE, victim.user());
 			super.active = false;
 		}
@@ -586,7 +586,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p)
 		{
-			b.addMessage(player.getName()+" picked up "+coins+" pokedollars!");
+			b.addMessage(player.getName() + " picked up " + coins + " pokedollars!");
 			player.getDatCashMoney(coins);
 		}
 	}

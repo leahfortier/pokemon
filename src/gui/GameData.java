@@ -24,9 +24,9 @@ import map.triggers.WildBattleTrigger;
 public class GameData
 {
 	public static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
-	public static final Pattern triggerBlockPattern = Pattern
-			.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}");
+	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}");
 	public static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)");
+	
 	public static final String DATA_LOCATION = "rec" + Global.FILE_SLASH;
 	private HashMap<String, MapData> maps;
 	private HashMap<Integer, String> areas;
@@ -60,7 +60,7 @@ public class GameData
 		File indexFile = new File("rec" + Global.FILE_SLASH + "maps" + Global.FILE_SLASH + "areaIndex.txt");
 		if (!indexFile.exists())
 		{
-			System.err.println("Failed to find map area index file: "+indexFile.getName() +".");
+			System.err.println("Failed to find map area index file: " + indexFile.getName() +".");
 			return;
 		}
 		
@@ -110,7 +110,7 @@ public class GameData
 			{
 				String name = m.group(1);
 				addDialogue(name, m.group(2));
-				// System.out.println("Dialogue: "+name + " " + m.group(2));
+				// System.out.println("Dialogue: " + name + " " + m.group(2));
 			}
 		}
 	}

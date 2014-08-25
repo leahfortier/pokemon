@@ -76,7 +76,7 @@ public class WildBattleTriggerEditDialog extends JPanel {
 				
 				Integer[] values = new Integer[selected.size()];
 				selected.toArray(values);
-				for (int currPanel = values.length-1; currPanel >= 0; --currPanel) {
+				for (int currPanel = values.length - 1; currPanel >= 0; --currPanel) {
 					wildPokemonPanels.remove(values[currPanel].intValue());
 					pokemonCollectionPanel.remove(values[currPanel].intValue());
 				}
@@ -245,7 +245,6 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		if (wbt == null)
 			return null;
 		
-		return new TriggerData(wbt.getName(), "WildBattle\n"+wbt.triggerDataAsString());
+		return new TriggerData(wbt.getName(), "WildBattle\n" + wbt.triggerDataAsString());
 	}
 }
-	

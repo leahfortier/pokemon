@@ -39,7 +39,7 @@ public abstract class Effect implements Serializable
 					return caster.getHeldItem(b);
 					
 				default:
-					Global.error("Cannot get source for CastSource."+this.name()+".");
+					Global.error("Cannot get source for CastSource." + this.name() + ".");
 					return null;
 			}
 		}
@@ -47,7 +47,7 @@ public abstract class Effect implements Serializable
 	
 	public Effect(String s, int min, int max, boolean sub)
 	{
-		if ((min == -1 && max != -1) || (min != -1 && max == -1)) Global.error("Incorrect min/max turns for effect "+s);
+		if ((min == -1 && max != -1) || (min != -1 && max == -1)) Global.error("Incorrect min/max turns for effect " + s);
 		
 		name = s;
 		minTurns = min;
@@ -59,7 +59,7 @@ public abstract class Effect implements Serializable
 	
 	protected Effect activate() 
 	{
-		numTurns = minTurns == -1 ? -1 : (int)(Math.random()*(maxTurns-minTurns+1))+minTurns;
+		numTurns = minTurns == -1 ? -1 : (int)(Math.random()*(maxTurns-minTurns + 1)) + minTurns;
 		active = true;
 		return this;
 	}
@@ -117,7 +117,7 @@ public abstract class Effect implements Serializable
 	
 	public void decrement(Battle b, ActivePokemon victim)
 	{
-		if (numTurns == 0) Global.error("Number of turns should never be zero before the decrement!! (Effect: "+name+")");
+		if (numTurns == 0) Global.error("Number of turns should never be zero before the decrement!! (Effect: " + name + ")");
 		
 		// -1 indicates a permanent effect
 		if (numTurns != -1) numTurns--;
@@ -183,6 +183,6 @@ public abstract class Effect implements Serializable
 	
 	public String toString()
 	{
-		return name+" "+getTurns();
+		return name + " " + getTurns();
 	}
 }

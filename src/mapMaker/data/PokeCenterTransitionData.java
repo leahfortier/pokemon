@@ -16,7 +16,7 @@ import mapMaker.MapMaker;
 
 public class PokeCenterTransitionData {
 	
-	public static final String pokeCenterTransitionTriggersFile = MapMaker.recFolderNme +MapMaker.FILE_SLASH +"triggers"+MapMaker.FILE_SLASH+"PokeCenterTransitionTriggers";
+	public static final String pokeCenterTransitionTriggersFile = MapMaker.recFolderNme +MapMaker.FILE_SLASH +"triggers" + MapMaker.FILE_SLASH + "PokeCenterTransitionTriggers";
 	
 	GroupTrigger groupTrigger;
 	HashMap<String, MapTransitionTrigger> transitionTriggers;
@@ -38,7 +38,7 @@ public class PokeCenterTransitionData {
 	
 	private void readTransitions() {
 		
-		pokeCenterTransitionFile = new File(mapMaker.root.getPath()+MapMaker.FILE_SLASH+pokeCenterTransitionTriggersFile);
+		pokeCenterTransitionFile = new File(mapMaker.root.getPath() + MapMaker.FILE_SLASH + pokeCenterTransitionTriggersFile);
 		
 		String fileText = Global.readEntireFile(pokeCenterTransitionFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
@@ -53,7 +53,7 @@ public class PokeCenterTransitionData {
 			}
 			else if (type.equals("MapTransition")) {
 				MapTransitionTrigger transitionTrig = (MapTransitionTrigger)trig;
-				transitionTriggers.put(transitionTrig.mapName +"_"+transitionTrig.mapEntranceName, transitionTrig);
+				transitionTriggers.put(transitionTrig.mapName +"_" + transitionTrig.mapEntranceName, transitionTrig);
 			}
 		}
 		
@@ -65,31 +65,31 @@ public class PokeCenterTransitionData {
 	public void add(String mapName, String entrance) {
 		saved = false;
 		
-		String name = "from_PokeCenter_to_"+mapName+"_at_"+entrance;
+		String name = "from_PokeCenter_to_" + mapName + "_at_" + entrance;
 		
 		String globalString = "MapGlobal_toPokeCenterFromEntrance_" +entrance;
 		
-		String conditionString = "MapGlobal_PreviousMap_"+mapName +"&"+globalString;
+		String conditionString = "MapGlobal_PreviousMap_" + mapName +"&" + globalString;
 		
-		String contents = "condition: "+conditionString +"\n"+
+		String contents = "condition: " + conditionString +"\n"+
 				"global: !"+ globalString +"\n" +
 				"nextMap: " +mapName +"\n"+
 				"mapEntrance: " +entrance;
 		
 		MapTransitionTrigger transitionTrig = new MapTransitionTrigger(name, contents); 
-		transitionTriggers.put(transitionTrig.mapName +"_"+transitionTrig.mapEntranceName, transitionTrig);
+		transitionTriggers.put(transitionTrig.mapName +"_" + transitionTrig.mapEntranceName, transitionTrig);
 		
-		groupTrigger.triggers.add(groupTrigger.triggers.size()-1, transitionTrig.getName());
+		groupTrigger.triggers.add(groupTrigger.triggers.size() - 1, transitionTrig.getName());
 	}
 	
 	public void remove(String mapName, String entrance) {
 		saved = false;
 		
-		String name = "from_PokeCenter_to_"+mapName+"_at_"+entrance;
+		String name = "from_PokeCenter_to_" + mapName + "_at_" + entrance;
 		
 		groupTrigger.triggers.remove(name);
 		
-		transitionTriggers.remove(mapName +"_"+entrance);
+		transitionTriggers.remove(mapName +"_" + entrance);
 	}
 
 	public void save() {

@@ -6,7 +6,7 @@
 #	BattleCat: *BattleBagCategory*, comma separate for multiple
 #	Price: (leave out for -1, or unsellable)
 #	Apply:
-#		Function ending in "+++" on a new line
+#		Function ending in "###" on a new line
 # * // End this item
 # // Any field not on the same line as its declarer (i.e. Apply) is considered a function	
 # // TODO:
@@ -26,7 +26,7 @@ Syrup
 	Desc: A mysterious bottle of syrup. Maybe it will be useful some day.
 	TrainerUse:
 		return false;
-		+++
+		###
 	SuccessMessage: ""
 *
 Bicycle
@@ -37,7 +37,7 @@ Bicycle
 		// TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
 		// May need to make this take in info on the route
 		return false;
-		+++
+		###
 	SuccessMessage: ""
 *
 # TODO: DOESN'T DO SHIT
@@ -47,7 +47,7 @@ Surfboard
 	Desc: A fancy shmancy surfboard that lets you be RADICAL DUDE!
 	TrainerUse:
 		return false;
-		+++
+		###
 	SuccessMessage: ""
 *
 Fishing Rod
@@ -58,7 +58,7 @@ Fishing Rod
 		// TODO: if (spot in front of player is a fishing spot) Set as 'currentlyUsing'
 		// May need to make this take in info on the route
 		return false;
-		+++
+		###
 	SuccessMessage: "Oh! A bite!"
 *
 # HoldItems
@@ -79,11 +79,11 @@ Air Balloon
 	Fling: 10
 	Enter:
 		b.addMessage(victim.getName() + " floats with its " + this.name + "!");
-		+++
+		###
 	OnTakeDamage:
 		b.addMessage(victim.getName() + "'s " + this.name + " popped!");
 		victim.consumeItem(b);
-		+++
+		###
 *
 Amulet Coin
 	Int: HoldItem, EntryEffect
@@ -93,7 +93,7 @@ Amulet Coin
 	Fling: 30
 	Enter:
 		TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
-		+++
+		###
 *
 Big Root
 	Int: HoldItem
@@ -127,7 +127,7 @@ Black Sludge
 			b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
 		}
-		+++
+		###
 *
 Bright Powder
 	Int: HoldItem, StatChangingEffect
@@ -138,7 +138,7 @@ Bright Powder
 	ModifyStat:
 		if (s == Stat.EVASION) stat *= 1.1;
 		return stat;
-		+++
+		###
 *
 Cell Battery
 	Ext: TypeDamageStatIncreaseItem
@@ -229,7 +229,7 @@ Eject Button
 		trainer.setAction(Action.SWITCH);
 		victim = trainer.front();
 		b.enterBattle(victim, victim.getName() + " was sent out!");
-		+++
+		###
 *
 Destiny Knot
 	Int: HoldItem
@@ -246,7 +246,7 @@ Expert Belt
 	Fling: 10
 	PCMultiplier:
 		return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1 ? 1.2 : 1;
-		+++
+		###
 *
 Flame Orb
 	Int: HoldItem, EndTurnEffect
@@ -256,7 +256,7 @@ Flame Orb
 	Fling: 10
 	Apply:
 		Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
-		+++
+		###
 *
 Toxic Orb
 	Int: HoldItem, EndTurnEffect
@@ -270,7 +270,7 @@ Toxic Orb
 			victim.addEffect(PokemonEffect.getEffect("BadPoison").newInstance());
 			Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 		}
-		+++
+		###
 *
 Float Stone
 	Int: HoldItem
@@ -301,7 +301,7 @@ Focus Sash
 			return true;
 		}
 		return false;
-		+++
+		###
 	BraceMessage: return bracer.getName() + " held on with its " + this.name + "!";
 *
 Grip Claw
@@ -324,7 +324,7 @@ Griseous Orb
 			if (t == Type.DRAGON || t == Type.GHOST) return 1.2;	
 		}
 		return 1;
-		+++
+		###
 *
 Iron Ball
 	Int: HoldItem, GroundedEffect, StatChangingEffect
@@ -335,7 +335,7 @@ Iron Ball
 	ModifyStat:
 		if (s == Stat.SPEED) stat *= .5;
 		return stat;
-		+++
+		###
 *
 Lagging Tail
 	Int: HoldItem, StallingEffect
@@ -352,12 +352,12 @@ Life Orb
 	Fling: 30
 	PCMultiplier:
 		return 5324.0/4096.0;
-		+++
+		###
 	OnApplyDamage:
 		if (user.hasAbility("Magic Guard")) return;
 		b.addMessage(user.getName() + " was hurt by its " + this.name + "!");
 		user.reduceHealthFraction(b, .1);
-		+++
+		###
 *
 # TODO: UNFINISHED - Should cause PAR on fling
 Light Ball
@@ -369,7 +369,7 @@ Light Ball
 	ModifyStat:
 		if ((s == Stat.ATTACK || s == Stat.SP_ATTACK) && p.isPokemon("Pikachu")) stat *= 2;
 		return stat;
-		+++
+		###
 *
 Light Clay
 	Int: HoldItem
@@ -394,7 +394,7 @@ Lucky Punch
 	IncreaseCritStage:
 		if (p.isPokemon("Chansey")) return 2;
 		return 0;
-		+++
+		###
 *
 Macho Brace
 	Int: HoldItem
@@ -415,7 +415,7 @@ Macho Brace
 			Global.error("toIncrease() method in Macho Brace should never be called.");
 			return null;
 		}
-		+++
+		###
 *
 Mental Herb
 	Int: HoldItem, EndTurnEffect
@@ -426,7 +426,7 @@ Mental Herb
 	Field:
 		String[] effects = {"Infatuated", "Disable", "Taunt", "Encore", "Torment", "Confusion"};
 		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused"};
-		+++
+		###
 	Apply:
 		boolean used = false;
 		for (int i = 0; i < effects.length; i++)
@@ -440,7 +440,7 @@ Mental Herb
 			}
 		}
 		if (used) victim.consumeItem(b);
-		+++
+		###
 *
 Metal Powder
 	Int: HoldItem, StatChangingEffect
@@ -451,7 +451,7 @@ Metal Powder
 	ModifyStat:
 		if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.isPokemon("Ditto")) stat *= 1.5;
 		return stat;
-		+++
+		###
 *
 Metronome
 	Int: HoldItem, PowerChangeEffect
@@ -461,7 +461,7 @@ Metronome
 	Fling: 30
 	PCMultiplier:
 		return Math.min(2, 1 + .2*(user.getAttributes().getCount() - 1));
-		+++
+		###
 *
 Muscle Band
 	Int: HoldItem, PowerChangeEffect
@@ -471,7 +471,7 @@ Muscle Band
 	Fling: 10
 	PCMultiplier:
 		return user.getAttack().getCategory() == Category.PHYSICAL ? 1.1 : 1;
-		+++
+		###
 *
 Power Anklet
 	Int: HoldItem
@@ -543,7 +543,7 @@ Quick Powder
 	ModifyStat:
 		if (s == Stat.SPEED && p.isPokemon("Ditto")) stat *= 1.5;
 		return stat;
-		+++
+		###
 *
 Red Card
 	Int: HoldItem, TakeDamageEffect
@@ -564,7 +564,7 @@ Red Card
 		trainer.setAction(Action.SWITCH);
 		user = trainer.front();
 		b.enterBattle(user, user.getName() + " was sent out!");
-		+++
+		###
 *
 Ring Target
 	Int: HoldItem
@@ -582,7 +582,7 @@ Rocky Helmet
 	OnContact:
 		b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 		user.reduceHealthFraction(b, 1/8.0);
-		+++
+		###
 *
 Safety Goggles
 	Int: HoldItem, EffectBlockerEffect, WeatherBlockerEffect
@@ -594,7 +594,7 @@ Safety Goggles
 		if (!user.getAttack().isMoveType("Powder")) return true;
 		if (user.getAttack().getCategory() == Category.STATUS) b.addMessage(victim.getName() + "'s " + this.name + " protects it from powder moves!");
 		return false;
-		+++
+		###
 	WeatherBlock: return true;
 *
 Scope Lens
@@ -623,7 +623,7 @@ Shell Bell
 		user.heal((int)Math.ceil(damage/8.0));
 		// TODO: This looks really bad when paired with Explosion
 		b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user.getHP(), user.user());
-		+++
+		###
 *
 Smoke Ball
 	Int: HoldItem, DefiniteEscape
@@ -650,7 +650,7 @@ Soul Dew
 	ModifyStat:
 		if ((s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE) && (p.isPokemon("Latios") || p.isPokemon("Latias"))) stat *= 1.5;
 		return stat;
-		+++
+		###
 *
 Stick
 	Int: HoldItem, CritStageEffect
@@ -661,7 +661,7 @@ Stick
 	IncreaseCritStage:
 		if (p.isPokemon("Farfetch'd")) return 2;
 		return 0;
-		+++
+		###
 *
 Sticky Barb
 	Int: HoldItem, EndTurnEffect, PhysicalContactEffect, ItemCondition
@@ -673,7 +673,7 @@ Sticky Barb
 		if (victim.hasAbility("Magic Guard")) return;
 		b.addMessage(victim.getName() + " was hurt by its " + this.name + "!");
 		victim.reduceHealthFraction(b, 1/8.0);
-		+++
+		###
 	OnContact:
 		if (!user.hasAbility("Magic Guard"))
 		{
@@ -695,7 +695,7 @@ Sticky Barb
 		PokemonEffect.getEffect("ChangeItem").cast(b, victim, user, CastSource.HELD_ITEM, false);
 		item = Item.noneItem();
 		PokemonEffect.getEffect("ChangeItem").cast(b, victim, victim, CastSource.HELD_ITEM, false);
-		+++
+		###
 	GetItem: return item;
 	Field: private Item item;
 *
@@ -708,7 +708,7 @@ Thick Club
 	ModifyStat:
 		if (s == Stat.ATTACK && (p.isPokemon("Cubone") || p.isPokemon("Marowak"))) stat *= 2;
 		return stat;
-		+++
+		###
 *
 Weakness Policy
 	Int: HoldItem, TakeDamageEffect
@@ -722,7 +722,7 @@ Weakness Policy
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
 		}
-		+++
+		###
 *
 # NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
 White Herb
@@ -733,10 +733,10 @@ White Herb
 	Fling: 10
 	StatProtect:
 		return true;
-		+++
+		###
 	StatProtectMessage:
 		return p.getName() + "'s " + this.name + " prevented its stats from being lowered!";
-		+++
+		###
 *
 Wide Lens
 	Int: HoldItem, StatChangingEffect
@@ -747,7 +747,7 @@ Wide Lens
 	ModifyStat:
 		if (s == Stat.ACCURACY) stat *= 1.1;
 		return stat;
-		+++
+		###
 *
 Wise Glasses
 	Int: HoldItem, StatChangingEffect
@@ -758,7 +758,7 @@ Wise Glasses
 	ModifyStat:
 		if (s == Stat.SP_ATTACK) stat *= 1.1;
 		return stat;
-		+++
+		###
 *
 Zoom Lens
 	Int: HoldItem, StatChangingEffect
@@ -769,7 +769,7 @@ Zoom Lens
 	ModifyStat:
 		if (s == Stat.ACCURACY && !b.isFirstAttack()) stat *= 1.2;
 		return stat;
-		+++
+		###
 *
 Full Incense
 	Int: HoldItem, StallingEffect
@@ -787,7 +787,7 @@ Lax Incense
 	ModifyStat:
 		if (s == Stat.EVASION) stat *= 1.1;
 		return stat;
-		+++
+		###
 *
 Luck Incense
 	Int: HoldItem, EntryEffect
@@ -797,7 +797,7 @@ Luck Incense
 	Fling: 10
 	Enter:
 		TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
-		+++
+		###
 *
 Odd Incense
 	Int: HoldItem
@@ -1223,7 +1223,7 @@ Leftovers
 		if (victim.fullHealth() || victim.hasEffect("Heal Block")) return;
 		victim.healHealthFraction(1/16.0);
 		b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
-		+++
+		###
 	Price: 200
 	Fling: 10
 *
@@ -1296,7 +1296,7 @@ Metal Coat
 	Fling: 30
 	PCMultiplier:
 		return user.getAttack().isType(b, user, Type.STEEL) ? 1.2 : 1;
-		+++
+		###
 *
 Miracle Seed
 	Int: HoldItem
@@ -1416,7 +1416,7 @@ DeepSeaScale
 	ModifyStat:
 		if (s == Stat.SP_DEFENSE && (p.isPokemon("Clamperl") || p.isPokemon("Chinchou") || p.isPokemon("Lanturn"))) stat *= 2;
 		return stat;
-		+++
+		###
 *
 DeepSeaTooth
 	Int: HoldItem, StatChangingEffect
@@ -1428,7 +1428,7 @@ DeepSeaTooth
 	ModifyStat:
 		if (s == Stat.SP_ATTACK && p.isPokemon("Clamperl")) stat *= 2;
 		return stat;
-		+++
+		###
 *
 Dragon Scale
 	Int: HoldItem
@@ -1489,7 +1489,7 @@ KingsRock
 				b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 			}
 		}
-		+++
+		###
 *
 Leaf Stone
 	Int: HoldItem
@@ -1572,7 +1572,7 @@ Razor Fang
 				b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 			}
 		}
-		+++
+		###
 *
 Reaper Cloth
 	Int: HoldItem
@@ -1687,7 +1687,7 @@ Full Heal
 		
 		p.removeStatus();
 		return true;
-		+++
+		###
 	SuccessMessage: p.getName() + " was cured of its status condition!"
 *
 Full Restore
@@ -1704,7 +1704,7 @@ Full Restore
 		p.removeStatus();
 		p.healHealthFraction(1);
 		return true;
-		+++
+		###
 	SuccessMessage: p.getName() + " was fully healed!"
 *
 Elixir
@@ -1721,7 +1721,7 @@ Elixir
 			changed |= m.increasePP(10);
 		}
 		return changed;
-		+++
+		###
 	SuccessMessage: p.getName() + "'s PP was restored!"
 *
 Max Elixir
@@ -1739,7 +1739,7 @@ Max Elixir
 		}
 
 		return changed;
-		+++
+		###
 	SuccessMessage: p.getName() + "'s PP was restored!"
 *
 # TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
@@ -1753,7 +1753,7 @@ Ether
 	MoveUse:
 		restore = m.getAttack().getName();
 		return m.increasePP(10);
-		+++
+		###
 	Field: private String restore;
 	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
 *
@@ -1768,7 +1768,7 @@ Max Ether
 	MoveUse:
 		restore = m.getAttack().getName();
 		return m.increasePP(m.getMaxPP());
-		+++
+		###
 	Field: private String restore;
 	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
 *
@@ -1892,7 +1892,7 @@ Max Potion
 	Fling: 30
 	PokemonUse:
 		return p.healHealthFraction(1) != 0;
-		+++
+		###
 	SuccessMessage: p.getName() + "'s health was restored!"
 *
 Revive
@@ -1909,7 +1909,7 @@ Revive
 		p.healHealthFraction(.5);
 		
 		return true;
-		+++
+		###
 	SuccessMessage: p.getName() + " was revived!"
 *
 Max Revive
@@ -1926,7 +1926,7 @@ Max Revive
 		p.healHealthFraction(1);
 		
 		return true;
-		+++
+		###
 	SuccessMessage: p.getName() + " was fully revived!"
 *
 Revival Herb
@@ -1943,7 +1943,7 @@ Revival Herb
 		p.healHealthFraction(1);
 		
 		return true;
-		+++
+		###
 	SuccessMessage: p.getName() + " was fully revived!"
 *
 Sacred Ash
@@ -1965,7 +1965,7 @@ Sacred Ash
 			}
 		}
 		return changed;
-		+++
+		###
 	BattleUse: return use((Trainer)b.getTrainer(p.user()));
 	SuccessMessage: "All fainted Pok\u00e9mon were fully revived!"
 *
@@ -1982,7 +1982,7 @@ Dire Hit
 
 		crits.cast(b, p, p, CastSource.USE_ITEM, false);
 		return true;
-		+++
+		###
 	SuccessMessage: p.getName() + " is getting pumped!"
 *
 GuardSpec
@@ -1999,7 +1999,7 @@ GuardSpec
 
 		gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
 		return true;
-		+++
+		###
 	SuccessMessage: p.getName() + " is covered by a veil!"
 *
 X Accuracy
@@ -2150,7 +2150,7 @@ PP Max
 	MoveUse:
 		increase = m.getAttack().getName();
 		return m.increaseMaxPP(3);
-		+++
+		###
 	Price: 9800
 	Fling: 30
 	Field: private String increase;
@@ -2163,7 +2163,7 @@ PP Up
 	MoveUse:
 		increase = m.getAttack().getName();
 		return m.increaseMaxPP(1);
-		+++
+		###
 	Price: 9800
 	Fling: 30
 	Field: private String increase;
@@ -2189,7 +2189,7 @@ Rare Candy
 	PokemonUse:
 		// TODO: Need Level Up to be implemented
 		return false;
-		+++
+		###
 	Price: 4800
 	Fling: 30
 *
@@ -2234,7 +2234,7 @@ Cherish Ball
 	Fling: 30
 	CatchRate:
 		return new double[]{1, 0};
-		+++
+		###
 *
 Dive Ball
 	Int: BallItem
@@ -2247,7 +2247,7 @@ Dive Ball
 		// TODO: How do I see if the user is underwater, surfing, or fishing?
 		if (false) return new double[]{3.5, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 Dusk Ball
 	Int: BallItem
@@ -2260,7 +2260,7 @@ Dusk Ball
 		// TODO: How do I see if the user is in a dark environment?
 		if (false) return new double[]{3.5, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 Fast Ball
 	Int: BallItem
@@ -2272,7 +2272,7 @@ Fast Ball
 	CatchRate:
 		if (o.getStat(Stat.SPEED) >= 100) return new double[]{4, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 Great Ball
 	Int: BallItem
@@ -2283,7 +2283,7 @@ Great Ball
 	Fling: 30
 	CatchRate:
 		return new double[]{1.5, 0};
-		+++
+		###
 *
 Heal Ball
 	Int: BallItem
@@ -2294,11 +2294,11 @@ Heal Ball
 	Fling: 30
 	CatchRate:
 		return new double[]{1, 0};
-		+++
+		###
 	AfterCaught:
 		p.healHealthFraction(1);
 		for (Move m : p.getMoves()) m.increasePP(m.getAttack().getPP());
-		+++
+		###
 *
 Heavy Ball
 	Int: BallItem
@@ -2319,7 +2319,7 @@ Heavy Ball
 		else res[1] = 40;
 		
 		return res;
-		+++
+		###
 *
 Level Ball
 	Int: BallItem
@@ -2333,7 +2333,7 @@ Level Ball
 		else if (me.getLevel()/2 > o.getLevel()) return new double[]{4, 0};
 		else if (me.getLevel() > o.getLevel()) return new double[]{2, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 Love Ball
 	Int: BallItem
@@ -2345,7 +2345,7 @@ Love Ball
 	CatchRate:
 		if (me.getGender() == o.getGender()) return new double[]{8, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 Lure Ball
 	Int: BallItem
@@ -2357,7 +2357,7 @@ Lure Ball
 	CatchRate:
 		if (false) return new double[]{3, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 Luxury Ball
 	Int: BallItem
@@ -2369,7 +2369,7 @@ Luxury Ball
 	CatchRate:
 		// : Booring. We should change it up.
 		return new double[]{1, 0};
-		+++
+		###
 *
 Master Ball
 	Int: BallItem
@@ -2380,7 +2380,7 @@ Master Ball
 	Fling: 30
 	CatchRate:
 		return new double[]{255, 0};
-		+++
+		###
 *
 Moon Ball
 	Int: BallItem
@@ -2393,7 +2393,7 @@ Moon Ball
 		Evolution ev = o.getPokemonInfo().getEvolution();
 		if (ev.getEvolution(EvolutionCheck.ITEM, o, "Moon Stone") != null) return new double[] { 4, 0 };
 		else return new double[] { 1, 0 };
-		+++
+		###
 *
 Nest Ball
 	Int: BallItem
@@ -2406,7 +2406,7 @@ Nest Ball
 		if (o.getLevel() <= 19) return new double[]{3, 0};
 		else if (o.getLevel() <= 29) return new double[]{2, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 Net Ball
 	Int: BallItem
@@ -2418,7 +2418,7 @@ Net Ball
 	CatchRate:
 		if (o.isType(Type.WATER) || o.isType(Type.BUG)) return new double[]{3, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 PokeBall
 	Int: BallItem
@@ -2430,7 +2430,7 @@ PokeBall
 	Fling: 30
 	CatchRate:
 		return new double[]{1, 0};
-		+++
+		###
 *
 Premier Ball
 	Int: BallItem
@@ -2441,7 +2441,7 @@ Premier Ball
 	Fling: 30
 	CatchRate:
 		return new double[]{1, 0};
-		+++
+		###
 *
 Quick Ball
 	Int: BallItem
@@ -2453,7 +2453,7 @@ Quick Ball
 	CatchRate:
 		if (b.getTurn() == 1) return new double[]{3, 0};
 		else return new double[]{1, 0};
-		+++
+		###
 *
 Repeat Ball
 	Int: BallItem
@@ -2465,7 +2465,7 @@ Repeat Ball
 	CatchRate:
 		if (b.getPlayer().getPokedex().caught(o.getName())) return new double[] { 3, 0 };
 		return new double[] { 1, 0 };				
-		+++
+		###
 *
 Safari Ball
 	Int: BallItem
@@ -2476,7 +2476,7 @@ Safari Ball
 	Fling: 0
 	CatchRate:
 		return new double[]{1.5, 0};
-		+++
+		###
 *
 Timer Ball
 	Int: BallItem
@@ -2490,7 +2490,7 @@ Timer Ball
 		else if (b.getTurn() <= 20) return new double[]{2, 0};
 		else if (b.getTurn() <= 30) return new double[]{3, 0};
 		else return new double[]{4, 0};
-		+++
+		###
 *
 Ultra Ball
 	Int: BallItem
@@ -2501,7 +2501,7 @@ Ultra Ball
 	Fling: 30
 	CatchRate:
 		return new double[]{2, 0};
-		+++
+		###
 *
 Cheri Berry
 	Int: StatusBerry
@@ -2583,7 +2583,7 @@ Leppa Berry
 				break;
 			}
 		}
-		+++
+		###
 	GainEffect:
 		List<Move> list = new ArrayList<>();
 		for (Move m : user.getMoves())
@@ -2600,11 +2600,11 @@ Leppa Berry
 		Move m = list.get((int)(Math.random()*size));
 		m.increasePP(10);
 		b.addMessage(user.getName() + "'s " + this.name + " restored " + m.getAttack().getName() + "'s PP!");
-		+++
+		###
 	MoveUse:
 		restore = m.getAttack().getName();
 		return m.increasePP(10);
-		+++
+		###
 	Field: private String restore;
 	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
 *
@@ -2625,7 +2625,7 @@ Oran Berry
 		user.heal(10);
 		b.addMessage(user.getName() + " was healed by its " + this.name + "!", user.getHP(), user.user());
 		return true;
-		+++
+		###
 	HealAmt: 10
 *
 Persim Berry
@@ -2645,13 +2645,13 @@ Persim Berry
 		}
 		
 		return false;
-		+++
+		###
 	GainEffect:
 		if (use(user, b))
 		{
 			b.addMessage(getSuccessMessage(user));
 		}
-		+++
+		###
 	SuccessMessage: p.getName() + " snapped out of its confusion!"
 *
 Lum Berry
@@ -2668,7 +2668,7 @@ Lum Berry
 		
 		p.removeStatus();
 		return true;
-		+++
+		###
 	SuccessMessage: p.getName() + " was cured of its status condition!"
 *
 Sitrus Berry
@@ -2687,10 +2687,10 @@ Sitrus Berry
 		user.healHealthFraction(1/4.0);
 		b.addMessage(user.getName() + " was healed by its " + this.name + "!", user.getHP(), user.user());
 		return true;
-		+++
+		###
 	PokemonUse:
 		return p.healHealthFraction(1/4.0) != 0;
-		+++
+		###
 	SuccessMessage: p.getName() + "'s health was restored!"
 *
 Razz Berry
@@ -2995,7 +2995,7 @@ Lansat Berry
 		PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
 		b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
 		return true;
-		+++
+		###
 *
 Starf Berry
 	Int: HealthTriggeredBerry
@@ -3024,7 +3024,7 @@ Starf Berry
 		}
 
 		return false;
-		+++
+		###
 *
 # Other Items
 Comet Shard
@@ -3121,7 +3121,7 @@ Eviolite
 	ModifyStat:
 		if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.getPokemonInfo().getEvolution().canEvolve()) return (int)(1.5*stat);
 		return stat;
-		+++
+		###
 *
 Heart Scale
 	Int: HoldItem

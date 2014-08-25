@@ -58,7 +58,8 @@ public class WildBattleTrigger extends Trigger
 		}		
 	}
 	
-	public WildBattleTrigger(String name, int[] probability, int[] lowLevel, int[] highLevel, String[] pokemon, String encounterRate) {
+	public WildBattleTrigger(String name, int[] probability, int[] lowLevel, int[] highLevel, String[] pokemon, String encounterRate) 
+	{
 		super(name, "");
 		
 		this.probability = probability;
@@ -137,12 +138,14 @@ public class WildBattleTrigger extends Trigger
 		return null;
 	}
 	
-	public String triggerDataAsString() {
+	public String triggerDataAsString() 
+	{
 		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
-		ret.append("\tencounterRate: " +encounterRateString +"\n");
+		ret.append("\tencounterRate: " + encounterRateString + "\n");
 		
-		for (int currPokemon = 0; currPokemon < pokemon.length; ++currPokemon) {
-			ret.append("\tpokemon: " +pokemon[currPokemon] +" " +lowLevel[currPokemon] +"-" +highLevel[currPokemon] +" " +probability[currPokemon] +"%\n");
+		for (int currPokemon = 0; currPokemon < pokemon.length; ++currPokemon) 
+		{
+			ret.append("\tpokemon: " + pokemon[currPokemon] + " " + lowLevel[currPokemon] + "-" + highLevel[currPokemon] +" " + probability[currPokemon] + "%\n");
 		}
 		
 		return ret.toString();

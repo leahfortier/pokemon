@@ -21,8 +21,8 @@ import javax.swing.event.DocumentListener;
 import map.entity.ItemEntityData;
 import mapMaker.MapMaker;
 
-public class ItemEntityDialog extends JPanel {
-
+public class ItemEntityDialog extends JPanel 
+{
 	private static final long serialVersionUID = 7469923865936465388L;
 
 	private JTextField itemTextField;
@@ -31,8 +31,8 @@ public class ItemEntityDialog extends JPanel {
 	private JScrollPane scrollPane;
 	private JTextArea conditionTextArea;
 	
-	public ItemEntityDialog (MapMaker givenMapMaker) {
-		
+	public ItemEntityDialog (MapMaker givenMapMaker) 
+	{		
 		mapMaker = givenMapMaker;
 		
 		JLabel itemLabel = new JLabel("Item");
@@ -40,11 +40,13 @@ public class ItemEntityDialog extends JPanel {
 		itemTextField = new JTextField();
 		itemTextField.setColumns(10);
 		
-		itemTextField.getDocument().addDocumentListener(new DocumentListener() {
+		itemTextField.getDocument().addDocumentListener(new DocumentListener() 
+		{
 			  public void changedUpdate(DocumentEvent e) { checkItem(); }
 			  public void removeUpdate(DocumentEvent e) { checkItem(); }
 			  public void insertUpdate(DocumentEvent e) { checkItem(); }
-			  public void checkItem() {
+			  public void checkItem() 
+			  {
 				  String itemName = itemTextField.getText().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642");
 				  itemName = convertToProperCase(itemName);
 				  if (!Item.exists(itemName)) {
@@ -64,7 +66,6 @@ public class ItemEntityDialog extends JPanel {
 		itemImageLabel.setHorizontalAlignment(JLabel.CENTER);
 		itemImageLabel.setVerticalAlignment(JLabel.CENTER);
         
-
 		JLabel conditionLabel = new JLabel("Condition");
 		
 		scrollPane = new JScrollPane();
@@ -89,6 +90,7 @@ public class ItemEntityDialog extends JPanel {
 								.addComponent(conditionLabel)))
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 259, GroupLayout.PREFERRED_SIZE)))
 		);
+		
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -106,26 +108,28 @@ public class ItemEntityDialog extends JPanel {
 					.addGap(12)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
 		);
+		
 		setLayout(groupLayout);
 	}
 	
-	public void setItem(ItemEntityData item) {
-		
+	public void setItem(ItemEntityData item) 
+	{
 		itemTextField.setText(item.getItem().replace('_', ' '));
-		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|"," | "));
+		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
 		int index = Item.getItem(itemTextField.getText().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642")).getIndex();
 		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
 	}
 	
-	public String getItemName() {
+	public String getItemName() 
+	{
 		String itemName = itemTextField.getText().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642");
 		itemName = convertToProperCase(itemName);
 		return itemName;
 	}
 	
-	public ItemEntityData getItem(String name) {
-		
+	public ItemEntityData getItem(String name) 
+	{		
 		String item = getItemName();
 		
 		if (!Item.exists(item))
@@ -133,34 +137,39 @@ public class ItemEntityDialog extends JPanel {
 		
 		return new ItemEntityData(
 				name, 
-				"condition: "+conditionTextArea.getText().trim().replace(" ", ""), 
+				"condition: " + conditionTextArea.getText().trim().replace(" ", ""), 
 				item.replace(' ', '_'), 
 				-1, 
 				-1);
 	}
 	
-	public String convertToProperCase(String string) {
+	public String convertToProperCase(String string) 
+	{
 		StringBuilder s = new StringBuilder();
 		string = string.trim();
 		
-		while (string.length() != 0) {
+		while (string.length() != 0) 
+		{
 			s.append(string.substring(0, 1).toUpperCase());
 			string = string.substring(1, string.length());
 			
 			if (string.length() == 0)
 				break;
+			
 			int index = string.indexOf(' ');
 			
-			if (index == -1) {
+			if (index == -1) 
+			{
 				s.append(string.substring(0,string.length()));
 				string = "";
 			}
-			else {
+			else 
+			{
 				s.append(string.substring(0,index) +" ");
-				string = string.substring(index+1, string.length());
+				string = string.substring(index + 1, string.length());
 			}
-			
 		}
+		
 		return s.toString();
 	}
 }

@@ -14,12 +14,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.JOptionPane;
 
-import javazoom.jl.player.Player;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
 import sound.SoundPlayer;
@@ -235,7 +231,7 @@ public class Global
 	{
 		TextLayout layout = new TextLayout(s, g.getFont(), g.getFontMetrics(g.getFont()).getFontRenderContext());
 		float location = (float) layout.getBounds().getWidth()/2;  
-        layout.draw(((Graphics2D)g), (float)x-location, (float)y);
+        layout.draw(((Graphics2D)g), (float)x - location, (float)y);
 	}
 
 	public static int rightX(String s, int x, int fontSize)
@@ -247,7 +243,7 @@ public class Global
 	{
 		TextLayout layout = new TextLayout(s, g.getFont(), g.getFontMetrics(g.getFont()).getFontRenderContext());
 		float location = (float) layout.getBounds().getWidth();  
-        layout.draw(((Graphics2D)g), (float)x-location, (float)y);
+        layout.draw(((Graphics2D)g), (float)x - location, (float)y);
 	}
 	
 	public static Color getHPColor(double ratio)

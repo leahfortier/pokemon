@@ -21,8 +21,8 @@ import javax.swing.text.NumberFormatter;
 
 import map.triggers.TrainerBattleTrigger;
 
-public class TrainerDataDialog extends JPanel {
-	
+public class TrainerDataDialog extends JPanel 
+{	
 	private static final long serialVersionUID = 4995985841899035558L;
 	
 	private JTextField nameTextField;
@@ -37,8 +37,8 @@ public class TrainerDataDialog extends JPanel {
 	private JButton moveDownButton;
 	private JButton moveUpButton;
 	
-	public TrainerDataDialog() {
-		
+	public TrainerDataDialog() 
+	{	
 		pokemonPanels = new ArrayList<>();
 		selected = new HashSet<>();
 		
@@ -59,22 +59,19 @@ public class TrainerDataDialog extends JPanel {
 		cashFormattedTextField.setValue(100);
 		
 		JLabel lblPokemon = new JLabel("Pokemon");
-		
 		JLabel lblShiny = new JLabel("Shiny");
-		
 		JLabel lblCustomMoves = new JLabel("Custom Moves");
-		
 		JLabel lblMove = new JLabel("Move");
-		
 		JLabel lblLevel = new JLabel("Level");
 		//PokemonPanel.setLayout(new BoxLayout(PokemonPanel, BoxLayout.X_AXIS));
 		
 		JSeparator separator = new JSeparator();
 		
 		addPokemonButton = new JButton("Add Pokemon");
-		addPokemonButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+		addPokemonButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
 				addPokemonPanel();
 			}
 		});
@@ -82,17 +79,21 @@ public class TrainerDataDialog extends JPanel {
 		JLabel lblSelect = new JLabel("Select");
 		
 		removeSelectedButton = new JButton("Remove Selected");
-		removeSelectedButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		removeSelectedButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
 				
 				Integer[] values = new Integer[selected.size()];
 				selected.toArray(values);
-				for (int currPanel = values.length-1; currPanel >= 0; --currPanel) {
+				for (int currPanel = values.length - 1; currPanel >= 0; --currPanel) 
+				{
 					PokemonPanel.remove(values[currPanel].intValue());
 					pokemonPanels.remove(values[currPanel].intValue());
 				}
 				
-				for (int currPanel = 0; currPanel < pokemonPanels.size(); ++currPanel) {
+				for (int currPanel = 0; currPanel < pokemonPanels.size(); ++currPanel) 
+				{
 					pokemonPanels.get(currPanel).index = currPanel;
 				}
 				
@@ -105,11 +106,14 @@ public class TrainerDataDialog extends JPanel {
 				PokemonPanel.repaint(50L);
 			}
 		});
+		
 		removeSelectedButton.setEnabled(false);
 		
 		moveUpButton = new JButton("Move Up");
-		moveUpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		moveUpButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
 				if (selected.contains(0))
 					return;
 				
@@ -118,29 +122,34 @@ public class TrainerDataDialog extends JPanel {
 				Integer[] values = new Integer[selected.size()];
 				selected.toArray(values);
 				Arrays.sort(values);
-				for (int currPanel = 0; currPanel < values.length; ++currPanel) {
-					
-					selected.add(values[currPanel]-1);
+				
+				for (int currPanel = 0; currPanel < values.length; ++currPanel) 
+				{
+					selected.add(values[currPanel] - 1);
 					selected.remove(values[currPanel]);
 					
-					Collections.swap(pokemonPanels, values[currPanel], values[currPanel]-1);
+					Collections.swap(pokemonPanels, values[currPanel], values[currPanel] - 1);
 				}
 				
-				for (int currPanel = 0; currPanel < pokemonPanels.size(); ++currPanel) {
+				for (int currPanel = 0; currPanel < pokemonPanels.size(); ++currPanel) 
+				{
 					pokemonPanels.get(currPanel).index = currPanel;
 					PokemonPanel.add(pokemonPanels.get(currPanel));
 				}
+				
 				PokemonPanel.validate();
 				PokemonPanel.repaint(50L);
 			}
 		});
+		
 		moveUpButton.setEnabled(false);
 		
-		
 		moveDownButton = new JButton("Move Down");
-		moveDownButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (selected.contains(pokemonPanels.size()-1))
+		moveDownButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				if (selected.contains(pokemonPanels.size() - 1))
 					return;
 				
 				PokemonPanel.removeAll();
@@ -148,22 +157,26 @@ public class TrainerDataDialog extends JPanel {
 				Integer[] values = new Integer[selected.size()];
 				selected.toArray(values);
 				Arrays.sort(values);
-				for (int currPanel = values.length-1; currPanel >=0 ; --currPanel) {
-					
-					selected.add(values[currPanel]+1);
+				
+				for (int currPanel = values.length - 1; currPanel >=0 ; --currPanel) 
+				{
+					selected.add(values[currPanel] + 1);
 					selected.remove(values[currPanel]);
 					
-					Collections.swap(pokemonPanels, values[currPanel], values[currPanel]+1);
+					Collections.swap(pokemonPanels, values[currPanel], values[currPanel] + 1);
 				}
 				
-				for (int currPanel = 0; currPanel < pokemonPanels.size(); ++currPanel) {
+				for (int currPanel = 0; currPanel < pokemonPanels.size(); ++currPanel) 
+				{
 					pokemonPanels.get(currPanel).index = currPanel;
 					PokemonPanel.add(pokemonPanels.get(currPanel));
 				}
+				
 				PokemonPanel.validate();
 				PokemonPanel.repaint(50L);
 			}
 		});
+		
 		moveDownButton.setEnabled(false);
 		
 		PokemonPanel = new JPanel();
@@ -215,6 +228,7 @@ public class TrainerDataDialog extends JPanel {
 									.addComponent(moveDownButton, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
 								.addComponent(moveUpButton, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)))))
 		);
+		
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -247,21 +261,27 @@ public class TrainerDataDialog extends JPanel {
 						.addComponent(moveDownButton)
 						.addComponent(moveUpButton)))
 		);
+		
 		setLayout(groupLayout);
 	}
 	
-	public void setSelected(int index) {
-		if (selected.contains(index)) {
+	public void setSelected(int index) 
+	{
+		if (selected.contains(index)) 
+		{
 			selected.remove(index);
-			if (selected.size() == 0) {
+			if (selected.size() == 0) 
+			{
 				removeSelectedButton.setEnabled(false);
 				moveDownButton.setEnabled(false);
 				moveUpButton.setEnabled(false);
 			}
 		}
-		else {
+		else 
+		{
 			selected.add(index);
-			if (selected.size() == 1) {
+			if (selected.size() == 1) 
+			{
 				removeSelectedButton.setEnabled(true);
 				moveDownButton.setEnabled(true);
 				moveUpButton.setEnabled(true);
@@ -269,19 +289,23 @@ public class TrainerDataDialog extends JPanel {
 		}
 	}
 	
-	private PokemonDataPanel addPokemonPanel() {
+	private PokemonDataPanel addPokemonPanel() 
+	{
 		PokemonDataPanel panel = new PokemonDataPanel(TrainerDataDialog.this, pokemonPanels.size());
 		pokemonPanels.add(panel);
 		PokemonPanel.add(panel);
 		PokemonPanel.validate();
 		
-		if (pokemonPanels.size() == 6) {
+		if (pokemonPanels.size() == 6) 
+		{
 			addPokemonButton.setEnabled(false);
 		}
+		
 		return panel;
 	}
 	
-	public void setTrainerData(String contents) {
+	public void setTrainerData(String contents) 
+	{
 		
 		Matcher m = TrainerBattleTrigger.eventTriggerPattern.matcher(contents);
 		while (m.find())
@@ -303,7 +327,7 @@ public class TrainerDataDialog extends JPanel {
 						panel.moveCheckBox.setSelected(true);
 						panel.moveComboBox.setEnabled(true);
 						panel.moveTextField.setEnabled(true);
-						for (int i=0; i<4; ++i)
+						for (int i = 0; i < 4; ++i)
 						{
 							if (!params.group(3 + i).equals("None"))
 							{
@@ -318,11 +342,15 @@ public class TrainerDataDialog extends JPanel {
 			{
 				nameTextField.setText(m.group(6));
 			}
+			
 			if (m.group(9) != null)
 			{
-				try {
+				try 
+				{
 					cashFormattedTextField.setValue(Integer.parseInt(m.group(10)));
-				} catch (NumberFormatException e) {
+				}
+				catch (NumberFormatException e) 
+				{
 					cashFormattedTextField.setValue(100);
 				}
 			}
@@ -330,21 +358,22 @@ public class TrainerDataDialog extends JPanel {
 		
 	}
 	
-	public String getTrainerData() {
-		
+	public String getTrainerData() 
+	{	
 		StringBuilder data = new StringBuilder();
 		
 		data.append("name: " + nameTextField.getText().trim() +"\n");
-		data.append("cash: " + (""+cashFormattedTextField.getValue()).trim() +"\n");
+		data.append("cash: " + ("" + cashFormattedTextField.getValue()).trim() +"\n");
 		
-		for (PokemonDataPanel panel: pokemonPanels) {
+		for (PokemonDataPanel panel: pokemonPanels) 
+		{
 			String pokemonData = panel.getPokemonData();
-			if (pokemonData != null) {
+			if (pokemonData != null) 
+			{
 				data.append(pokemonData +"\n");
 			}
 		}
 		
 		return data.toString().trim();
 	}
-	
 }

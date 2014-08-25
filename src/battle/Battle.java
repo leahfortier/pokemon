@@ -69,13 +69,13 @@ public class Battle
 		if (opponent instanceof Trainer)
 		{
 			((Trainer) opponent).enterBattle();
-			addMessage(((Trainer)opponent).getName()+" wants to fight!");
+			addMessage(((Trainer)opponent).getName() + " wants to fight!");
 			((Trainer)opponent).setAction(Action.FIGHT);
 			enterBattle(opponent.front());
 		}
 		else
 		{
-			enterBattle(opponent.front(), "Wild "+opponent.front().getName()+" appeared!");
+			enterBattle(opponent.front(), "Wild " + opponent.front().getName() + " appeared!");
 		}
 		
 		enterBattle(player.front());
@@ -216,20 +216,20 @@ public class Battle
 		deadUser();
 		deadOpponent();
 		
-		for (PokemonEffect e : player.front().getEffects()) System.out.println("P "+e);
-		for (PokemonEffect e : opponent.front().getEffects()) System.out.println("O "+e);
+		for (PokemonEffect e : player.front().getEffects()) System.out.println("P " + e);
+		for (PokemonEffect e : opponent.front().getEffects()) System.out.println("O " + e);
 		
-		for (TeamEffect e : player.getEffects()) System.out.println("P "+e);
-		for (TeamEffect e : opponent.getEffects()) System.out.println("O "+e);
+		for (TeamEffect e : player.getEffects()) System.out.println("P " + e);
+		for (TeamEffect e : opponent.getEffects()) System.out.println("O " + e);
 		
-		for (BattleEffect e : getEffects()) System.out.println("B "+e);
-		if (weather.getType() != Weather.WeatherType.CLEAR_SKIES) System.out.println("W "+weather);
+		for (BattleEffect e : getEffects()) System.out.println("B " + e);
+		if (weather.getType() != Weather.WeatherType.CLEAR_SKIES) System.out.println("W " + weather);
 		
-		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? player.front().getName()+" " : "")+player.front().getStage(i)+(i == 6 ? "\n" : " "));
-		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? opponent.front().getName()+" " : "")+opponent.front().getStage(i)+(i == 6 ? "\n" : " "));
+		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? player.front().getName() + " " : "") + player.front().getStage(i) + (i == 6 ? "\n" : " "));
+		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? opponent.front().getName() + " " : "") + opponent.front().getStage(i) + (i == 6 ? "\n" : " "));
 		
-		System.out.println(player.front().getName()+" "+player.front().getAbility().getName()+" "+player.front().getHeldItem(this).getName());
-		System.out.println(opponent.front().getName()+" "+opponent.front().getAbility().getName()+" "+opponent.front().getHeldItem(this).getName());
+		System.out.println(player.front().getName() + " " + player.front().getAbility().getName() + " " + player.front().getHeldItem(this).getName());
+		System.out.println(opponent.front().getName() + " " + opponent.front().getAbility().getName() + " " + opponent.front().getHeldItem(this).getName());
 	}
 	
 	// Handles events that occur at the beginning of each turn. Returns the two Pokemon currently in battle
@@ -292,14 +292,14 @@ public class Battle
 		}
 		
 		// Blackout -- you're fucked
-		addMessage(player.getName()+" is out of usable Pok\u00e9mon! "+player.getName()+" blacked out!");
+		addMessage(player.getName() + " is out of usable Pok\u00e9mon! " + player.getName() + " blacked out!");
 		
 		// Sucks to suck
 		if (opponent instanceof Trainer)
 		{
 			Trainer opp = (Trainer)opponent;
 			int cashMoney = player.sucksToSuck(opp.getDatCashMoney());
-			addMessage(opp.getName()+" rummaged through the pockets of your passed out body and stole "+cashMoney+" pokedollars!!!");
+			addMessage(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!");
 		}
 		
 		player.healAll();
@@ -336,8 +336,8 @@ public class Battle
 	public void enterBattle(ActivePokemon enterer)
 	{
 		String enterMessage = "";
-		if (enterer.user()) enterMessage = "Go! "+enterer.getName()+"!";
-		else if (opponent instanceof Trainer) enterMessage = ((Trainer)opponent).getName()+" sent out "+enterer.getName()+"!";
+		if (enterer.user()) enterMessage = "Go! " + enterer.getName() + "!";
+		else if (opponent instanceof Trainer) enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
 		
 		enterBattle(enterer, enterMessage, true);
 	}
@@ -488,7 +488,7 @@ public class Battle
 			}
 			else
 			{
-				addMessage(me.getName()+"'s attack missed!");
+				addMessage(me.getName() + "'s attack missed!");
 				if (me.getAttack() instanceof CrashDamageMove) ((CrashDamageMove)me.getAttack()).crash(this, me);
 			}			
 		}
@@ -506,7 +506,7 @@ public class Battle
 	
 	public void printAttacking(ActivePokemon p)
 	{
-		addMessage((p.user() ? "" : "Enemy ")+p.getName()+" used "+p.getAttack().getName()+"!");
+		addMessage((p.user() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
 		reduce = true;
 	}
 	
@@ -565,7 +565,7 @@ public class Battle
 	
 	public int damageCalc(ActivePokemon me, ActivePokemon o)
 	{
-		int level = me.getLevel(), power = me.getAttack().getPower(this, me, o), random = (int)(Math.random()*16)+85;
+		int level = me.getLevel(), power = me.getAttack().getPower(this, me, o), random = (int)(Math.random()*16) + 85;
 		int attackStat = Stat.getStat(me.getAttack().getCategory() == Attack.Category.PHYSICAL ? Stat.ATTACK : Stat.SP_ATTACK, me, o, this);
 		int defenseStat = Stat.getStat(me.getAttack().getCategory() == Attack.Category.PHYSICAL ? Stat.DEFENSE : Stat.SP_DEFENSE, o, me, this);
 		double stab = Type.getSTAB(this, me), adv = Type.getAdvantage(me.getAttack().getType(this, me), o, this);
@@ -602,7 +602,7 @@ public class Battle
 			}			
 		}
 		
-//		System.out.println(me.getName()+" Modifier: "+modifier);
+//		System.out.println(me.getName() + " Modifier: " + modifier);
 		return modifier;
 	}
 	
@@ -641,7 +641,7 @@ public class Battle
 			addMessage("It's a critical hit!!");
 			if (o.hasAbility("Anger Point"))
 			{
-				addMessage(o.getName()+"'s Anger Point raised its attack to the max!");
+				addMessage(o.getName() + "'s Anger Point raised its attack to the max!");
 				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 			}
 			
@@ -735,12 +735,12 @@ public class Battle
 		boolean pQuick = plyr.isHoldingItem(this, "Quick Claw"), oQuick = opp.isHoldingItem(this, "Quick Claw");
 		if (pQuick && !oQuick && Math.random() < .2)
 		{
-			addMessage(plyr.getName()+"'s Quick Claw allowed it to strike first!");
+			addMessage(plyr.getName() + "'s Quick Claw allowed it to strike first!");
 			return true;
 		}
 		if (oQuick && !pQuick && Math.random() < .2)
 		{
-			addMessage(opp.getName()+"'s Quick Claw allowed it to strike first!");
+			addMessage(opp.getName() + "'s Quick Claw allowed it to strike first!");
 			return false;
 		}		
 		

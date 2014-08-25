@@ -14,7 +14,7 @@ public class ItemEntityData extends EntityData{
 		
 		entity = null;
 		placedCondition = condition.getOriginalConditionString();
-		condition.add("!has"+name, '&');
+		condition.add("!has" + name, '&');
 		
 		Matcher m = variablePattern.matcher(contents);
 		while (m.find()){
@@ -41,7 +41,7 @@ public class ItemEntityData extends EntityData{
 		
 		entity = null;
 		placedCondition = condition.getOriginalConditionString();
-		condition.add("!has"+name, '&');
+		condition.add("!has" + name, '&');
 		
 		this.x = x;
 		this.y = y;
@@ -68,7 +68,7 @@ public class ItemEntityData extends EntityData{
 		
 		ret.append("\tx: " +x +"\n");
 		ret.append("\ty: " +y +"\n");
-		ret.append("\titem: "+ item+"\n");
+		ret.append("\titem: "+ item + "\n");
 		ret.append("}\n");
 		
 		return ret.toString();

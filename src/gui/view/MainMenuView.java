@@ -350,17 +350,17 @@ public class MainMenuView extends View
 				g.setFont(Global.getFont(40));
 				for (int i = 0; i < 4; i++)
 				{
-					g.translate(200, 240 + i * 85);
+					g.translate(mainButtons[i].x, mainButtons[i].y);
 
 					g.setColor(themeColor);
-					g.fillRect(0, 0, 400, 75);
+					g.fillRect(0, 0, mainButtons[i].width, mainButtons[i].height);
 
 					g.drawImage(tiles.getTile(0x04), 0, 0, null);
 
 					g.setColor(Color.black);
-					g.drawString(mainStrings[i], 200 - 20 * mainStrings[i].length() / 2, 50);
+					g.drawString(mainStrings[i], 200 - 20*mainStrings[i].length()/2, 50);
 
-					g.translate(-200, -(240 + i * 85));
+					g.translate(-mainButtons[i].x, -mainButtons[i].y);
 				}
 
 				for (Button b : mainButtons)
@@ -369,9 +369,10 @@ public class MainMenuView extends View
 			case LOAD:
 				for (int i = 0; i < 3; i++)
 				{
-					g.translate(200, 240 + i * 85);
+					g.translate(loadButtons[i].x, loadButtons[i].y);
+					
 					g.setColor(themeColor);
-					g.fillRect(0, 0, 400, 75);
+					g.fillRect(0, 0, loadButtons[i].width, loadButtons[i].height);
 					g.drawImage(tiles.getTile(0x04), 0, 0, null);
 
 					g.setColor(Color.black);
@@ -401,14 +402,14 @@ public class MainMenuView extends View
 						g.drawString("Empty", 165, 47);
 					}
 
-					g.translate(-200, -(240 + i * 85));
+					g.translate(-loadButtons[i].x, -loadButtons[i].y);
 				}
 
 				g.setFont(Global.getFont(30));
 				g.setColor(themeColor);
 				g.fillRect(200, 495, 195, 75);
 				g.drawImage(tiles.getTile(0x05), 200, 495, null);
-				g.setColor(Color.black);
+				g.setColor(Color.BLACK);
 				g.drawString("Return", 293 - 50, 541);
 
 				g.setFont(Global.getFont(30));
@@ -424,12 +425,12 @@ public class MainMenuView extends View
 			case NEW:
 				for (int i = 0; i < 3; i++)
 				{
-					g.translate(200, 240 + i * 85);
+					g.translate(newButtons[i].x, newButtons[i].y);
 					g.setColor(themeColor);
-					g.fillRect(0, 0, 400, 75);
+					g.fillRect(0, 0, newButtons[i].width, newButtons[i].height);
 					g.drawImage(tiles.getTile(0x04), 0, 0, null);
 
-					g.setColor(Color.black);
+					g.setColor(Color.BLACK);
 					SaveInfo info = saveInfo[i];
 					if (info != null)
 					{
@@ -456,7 +457,7 @@ public class MainMenuView extends View
 						g.drawString("New Save", 140, 47);
 					}
 
-					g.translate(-200, -(240 + i * 85));
+					g.translate(-newButtons[i].x, -newButtons[i].y);
 				}
 
 				g.setFont(Global.getFont(40));
@@ -475,17 +476,17 @@ public class MainMenuView extends View
 				g.setFont(Global.getFont(40));
 				for (int i = 0; i < 4; i++)
 				{
-					g.translate(200, 240 + i * 85);
+					g.translate(optionsButtons[i].x, optionsButtons[i].y);
 
 					g.setColor(themeColor);
-					g.fillRect(0, 0, 400, 75);
+					g.fillRect(0, 0, optionsButtons[i].width, optionsButtons[i].height);
 
 					g.drawImage(tiles.getTile(0x04), 0, 0, null);
 
 					g.setColor(Color.black);
 					g.drawString(optionsStrings[i], 200 - 20 * optionsStrings[i].length() / 2, 50);
 
-					g.translate(-200, -(240 + i * 85));
+					g.translate(-optionsButtons[i].x, -optionsButtons[i].y);
 				}
 
 				for (Button b : optionsButtons)
@@ -499,19 +500,19 @@ public class MainMenuView extends View
 				g.setFont(Global.getFont(512));
 				g.drawString(creditsHoz, d.width - creditsTime2, d.height - 30);
 
-				g.setColor(Color.black);
+				g.setColor(Color.BLACK);
 				g.setFont(Global.getFont(40));
 				for (int i = 1; i < creditsText.length; i++)
 				{
 					if (creditsText[i - 1].equals(""))
 					{
 						g.setFont(Global.getFont(40));
-						g.drawString(creditsText[i], d.width / 2 - 22 * creditsText[i].length() / 2, i * 40 + d.height - creditsTime1 / 5);
+						g.drawString(creditsText[i], d.width/2 - 22*creditsText[i].length()/2, i*40 + d.height - creditsTime1/5);
 					}
 					else
 					{
 						g.setFont(Global.getFont(30));
-						g.drawString(creditsText[i], d.width / 2 - 16 * creditsText[i].length() / 2, i * 40 + d.height - creditsTime1 / 5);
+						g.drawString(creditsText[i], d.width/2 - 16 * creditsText[i].length()/2, i*40 + d.height - creditsTime1/5);
 					}
 				}
 				g.setClip(0, 0, d.width, d.height);

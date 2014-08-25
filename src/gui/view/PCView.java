@@ -313,11 +313,11 @@ public class PCView extends View
 			g.setFont(Global.getFont(16));
 			
 			g.drawString("EXP:", 540, 135);
-			s = selected.getTotalEXP()+"";
+			s = selected.getTotalEXP() + "";
 			g.drawString(s, Global.rightX(s, 740, 16), 135);
 			
 			g.drawString("To Next Lv:", 540, 156);
-			s = selected.expToNextLevel()+"";
+			s = selected.expToNextLevel() + "";
 			g.drawString(s, Global.rightX(s, 740, 16), 156);
 			
 			g.drawString(selected.getAbility().getName(), 427, 179);
@@ -325,7 +325,7 @@ public class PCView extends View
 			s = selected.getActualHeldItem().getName();
 			g.drawString(s, Global.rightX(s, 740, 16), 179);
 			
-			g.drawString(selected.getNature().getName()+" Nature", 427, 198);
+			g.drawString(selected.getNature().getName() + " Nature", 427, 198);
 			g.drawString(selected.getCharacteristic(), 427, 217);
 			
 			List<Move> moves = selected.getActualMoves();
@@ -357,9 +357,9 @@ public class PCView extends View
 				
 				g.setFont(Global.getFont(14));
 				g.setColor(Color.BLACK);
-				g.drawString(stats[i]+"", Global.rightX(stats[i]+"", 635, 14), 360 + i*18 + i/2);
-				g.drawString(ivs[i]+"", Global.rightX(ivs[i]+"", 681, 14), 360 + i*18 + i/2);
-				g.drawString(evs[i]+"", Global.rightX(evs[i]+"", 735, 14), 360 + i*18 + i/2);
+				g.drawString(stats[i] + "", Global.rightX(stats[i] + "", 635, 14), 360 + i*18 + i/2);
+				g.drawString(ivs[i] + "", Global.rightX(ivs[i] + "", 681, 14), 360 + i*18 + i/2);
+				g.drawString(evs[i] + "", Global.rightX(evs[i] + "", 735, 14), 360 + i*18 + i/2);
 			}
 		}
 		

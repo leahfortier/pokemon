@@ -61,8 +61,8 @@ public class PokedexView extends View
 			}
 		}
 		
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, Button.HoverAction.BOX, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, 0});
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, Button.HoverAction.BOX, new int[] {RETURN, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, 0});
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, Button.HoverAction.BOX, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1, -1, 0});
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, Button.HoverAction.BOX, new int[] {RETURN, PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2, LEFT_ARROW, 0});
 		
 		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, Button.HoverAction.BOX, new int[] {0, -1, RIGHT_ARROW, -1});
 		
@@ -149,7 +149,7 @@ public class PokedexView extends View
 					}
 					
 					BufferedImage pkmImg = partyTiles.getTile(number);
-					g.drawImage(pkmImg, 20-pkmImg.getWidth()/2, 20-pkmImg.getHeight()/2, null);
+					g.drawImage(pkmImg, 20 - pkmImg.getWidth()/2, 20 - pkmImg.getHeight()/2, null);
 					
 					if (pokedex.getStatus(p.getName()) == PokedexStatus.CAUGHT)
 					{
@@ -163,7 +163,7 @@ public class PokedexView extends View
 		
 		g.setColor(Color.BLACK);
 		g.setFont(Global.getFont(16));
-		s = (pageNum+1)+"/"+NUM_PAGES;
+		s = (pageNum + 1) + "/" + NUM_PAGES;
 		g.drawString(s, Global.centerX(s, 215, 20), 433);
 		
 		View.drawArrows(g, leftButton, rightButton);
@@ -175,8 +175,8 @@ public class PokedexView extends View
 		
 		g.setColor(Color.BLACK);
 		g.setFont(Global.getFont(20));
-		g.drawString("Seen: "+pokedex.numSeen(), 70, 524);
-		g.drawString("Caught: "+pokedex.numCaught(), 70 + 54*3, 524);
+		g.drawString("Seen: " + pokedex.numSeen(), 70, 524);
+		g.drawString("Caught: " + pokedex.numCaught(), 70 + 54*3, 524);
 		
 		// Description
 		PokedexStatus status = pokedex.getStatus(selected.getName());
@@ -200,13 +200,13 @@ public class PokedexView extends View
 		{
 			BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageNumber(false));
 			pkmImg.setRGB(0, 0, 0);
-			g.drawImage(pkmImg, 479-pkmImg.getWidth()/2, 109-pkmImg.getHeight()/2, null);
+			g.drawImage(pkmImg, 479 - pkmImg.getWidth()/2, 109 - pkmImg.getHeight()/2, null);
 		}
 		
 		g.setColor(Color.BLACK);
 		g.setFont(Global.getFont(20));
 		g.drawString(status == PokedexStatus.NOT_SEEN ? "?????" : selected.getName(), 541, 82);
-		s = "#"+String.format("%03d", selected.getNumber());
+		s = "#" + String.format("%03d", selected.getNumber());
 		g.drawString(s, Global.rightX(s, 740, 20), 82);
 		
 		if (status != PokedexStatus.NOT_SEEN)
@@ -215,11 +215,11 @@ public class PokedexView extends View
 			g.drawString("Type:", 541, 110);
 			
 			g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 596, 98, null);
-			if (type[1] != Type.NONE) g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 596 + 707-669, 98, null);
+			if (type[1] != Type.NONE) g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 596 + 707 - 669, 98, null);
 			
 			g.drawString((status == PokedexStatus.SEEN ? "???" : selected.getClassification()) + " Pok\u00e9mon", 427, 179);
-			g.drawString("Height: "+(status == PokedexStatus.SEEN ? "???'??\"" : String.format("%d'%02d\"", selected.getHeight()/12, selected.getHeight()%12)), 427, 198);
-			g.drawString("Weight: "+(status == PokedexStatus.SEEN ? "???.?" : selected.getWeight())+" lbs", 427, 217);
+			g.drawString("Height: " + (status == PokedexStatus.SEEN ? "???'??\"" : String.format("%d'%02d\"", selected.getHeight()/12, selected.getHeight()%12)), 427, 198);
+			g.drawString("Weight: " + (status == PokedexStatus.SEEN ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
 			if (status == PokedexStatus.CAUGHT) Global.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350, 10, 21);
 			
@@ -238,7 +238,7 @@ public class PokedexView extends View
 		if (status != PokedexStatus.NOT_SEEN)
 		{
 			BufferedImage pkmImg = partyTiles.getTile(selected.getNumber());
-			for (int i = 0; i < 3; i++) g.drawImage(pkmImg, 464 + 120*i -pkmImg.getWidth()/2, 478-pkmImg.getHeight()/2, null);			
+			for (int i = 0; i < 3; i++) g.drawImage(pkmImg, 464 + 120*i - pkmImg.getWidth()/2, 478 - pkmImg.getHeight()/2, null);			
 		}
 		
 		g.drawImage(tiles.getTile(0x36), 410, 522, null);

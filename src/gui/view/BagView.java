@@ -405,7 +405,7 @@ public class BagView extends View
 				g.drawImage(tiles.getTile(0x26), 0,0, null);
 				
 				BufferedImage img = itemTiles.getTile(item.getIndex());
-				g.drawImage(img, 14-img.getWidth()/2, 14-img.getHeight()/2, null);
+				g.drawImage(img, 14 - img.getWidth()/2, 14-img.getHeight()/2, null);
 				
 				g.drawString(item.getName(), 29, 18);
 				

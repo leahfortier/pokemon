@@ -8,7 +8,8 @@ import main.Game;
 import map.Condition;
 import trainer.CharacterData;
 
-public abstract class Trigger {
+public abstract class Trigger 
+{
 	private static final Pattern globalPattern = Pattern.compile("global:\\s*([!]?\\w+)");
 	protected static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*([\\w ]+)", Pattern.UNICODE_CHARACTER_CLASS);
 	
@@ -16,17 +17,19 @@ public abstract class Trigger {
 	protected ArrayList<String> globals;
 	protected Condition condition;
 	
-	protected Trigger(String name, String str){
+	protected Trigger(String name, String str)
+	{
 		this.name = name;
 		
 		condition = new Condition(str);
 		
 		globals = new ArrayList<String>();
 		Matcher m = globalPattern.matcher(str);
-		while (m.find()){
+	
+		while (m.find())
+		{
 			globals.add(m.group(1));
-		}
-		
+		}		
 	}
 	
 	/**
@@ -35,41 +38,50 @@ public abstract class Trigger {
 	 * @param data
 	 * @return
 	 */
-	public boolean isTriggered(CharacterData data){
+	public boolean isTriggered(CharacterData data)
+	{
 		return condition.isTrue(data);
 	}
 	
-	public void execute(Game game) {
-		for (String s: globals){
+	public void execute(Game game) 
+	{
+		for (String s: globals)
+		{
 			if (s.charAt(0) == '!')
 				game.charData.removeGlobal(s.substring(1));
 			else game.charData.addGlobal(s);
 		}
 	}
-	public String getName(){
+	
+	public String getName()
+	{
 		return name;
 	}
 	
-	
-	public String triggerDataAsString() {
+	public String triggerDataAsString() 
+	{
 		StringBuilder ret = new StringBuilder();
 		
-		if (!condition.getOriginalConditionString().equals("")) {
-			ret.append("\tcondition: " +condition.getOriginalConditionString() +"\n");
+		if (!condition.getOriginalConditionString().equals("")) 
+		{
+			ret.append("\tcondition: " + condition.getOriginalConditionString() + "\n");
 		}
 		
-		for (String global: globals) {
-			ret.append("\tglobal: "+ global +"\n");
+		for (String global: globals) 
+		{
+			ret.append("\tglobal: " + global + "\n");
 		}
 		
 		return ret.toString();
 	}
 	
-	public Condition getCondition() {
+	public Condition getCondition() 
+	{
 		return condition;
 	}
 	
-	public ArrayList<String> getGlobals() {
+	public ArrayList<String> getGlobals() 
+	{
 		return globals;
 	}
 }

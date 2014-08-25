@@ -20,7 +20,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		
 		private WeatherType()
 		{
-			name = name().charAt(0)+name().substring(1).toLowerCase();
+			name = name().charAt(0) + name().substring(1).toLowerCase();
 		}
 		
 		public String getName()
@@ -72,7 +72,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			case HAILING:
 				return new Hailing();
 			default:
-				Global.error("No such WeatherType "+weather.getName());
+				Global.error("No such WeatherType " + weather.getName());
 				return null;
 		}
 	}
@@ -217,7 +217,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			if (ability instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)ability).block(type)) return;
 			if (item instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)item).block(type)) return;
 			
-			b.addMessage(p.getName()+" is buffeted by the sandstorm!");
+			b.addMessage(p.getName() + " is buffeted by the sandstorm!");
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 		
@@ -278,7 +278,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			if (ability instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)ability).block(type)) return;
 			if (item instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)item).block(type)) return;
 			
-			b.addMessage(p.getName()+" is buffeted by the hail!");
+			b.addMessage(p.getName() + " is buffeted by the hail!");
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 		

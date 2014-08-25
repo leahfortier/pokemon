@@ -10,20 +10,23 @@ import map.DialogueSequence;
 import map.MapData;
 import map.triggers.Trigger;
 
-public class ItemEntity extends Entity{
+public class ItemEntity extends Entity
+{
 	private String trigger;
 	private boolean hasTriggered;
 	private String name;
 	private String item;
 	private boolean dataCreated;
 	
-	public ItemEntity(int x, int y, String trigger) {
+	public ItemEntity(int x, int y, String trigger) 
+	{
 		super(x, y);
 		this.trigger = trigger;
 		hasTriggered = false;
 	}
 
-	public ItemEntity(String name, int x, int y, String item) {
+	public ItemEntity(String name, int x, int y, String item) 
+	{
 		super(x,y);
 		this.name = name;
 		this.trigger = name;
@@ -32,8 +35,8 @@ public class ItemEntity extends Entity{
 		dataCreated = false;
 	}
 
-	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
+	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) 
+	{
 		super.update(dt, entity, map, input, view);
 		if (hasTriggered)
 		{
@@ -41,54 +44,58 @@ public class ItemEntity extends Entity{
 		}
 	}
 
-	@Override
-	protected BufferedImage getFrame(GameData data) {
+	protected BufferedImage getFrame(GameData data) 
+	{
 		return data.getTrainerTiles().getTile(0);
 	}
 
-	@Override
-	public String getTrigger() {
+	public String getTrigger() 
+	{
 		return trigger;
 	}
 
-	@Override
-	public int getTransitionTime() {
+	public int getTransitionTime() 
+	{
 		return 0;
 	}
 
-	@Override
-	public void getAttention(int d) {
+	public void getAttention(int d) 
+	{
 		hasTriggered = true;
 	}
 	
-	@Override
 	public void addData(GameData data)
 	{
 		if (dataCreated)
 			return;
-		//TODO add support for multiple items.
-		//TODO add support for multiple placements of the same item on the same map
+		
+		// TODO: add support for multiple items.
+		// TODO: add support for multiple placements of the same item on the same map
 		//		Add numbers to the end of entity name and condition?
 		
 		Trigger eventTrigger = data.getTrigger(name);
 		if (eventTrigger == null)
-			data.addTrigger("Event", name, "condition: !has"+name +" \n" +
-										   "global: has"+name+" \n" +								   
-										   "dialogue: "+name
+			data.addTrigger("Event", name, "condition: !has" + name +" \n" +
+										   "global: has" + name + " \n" +								   
+										   "dialogue: " + name
 										   );
 		
-		String itemTriggerName = "Item_"+item.replace("\u00e9","e");
+		String itemTriggerName = "Item_" + item.replace("\u00e9","e");
 		String itemName = item.replace("_", " ");
-		boolean vowelStart = (""+item.charAt(0)).matches("[AEIOU]");
+		boolean vowelStart = ("" + item.charAt(0)).matches("[AEIOU]");
 		DialogueSequence d = data.getDialogue(name);
+		
 		if (d == null)
-			data.addDialogue(name, "text: \"You found a"+(vowelStart?"n":"") +" " + itemName +"!\" \n" +
-									"trigger[0]: "+itemTriggerName
+		{
+			data.addDialogue(name, "text: \"You found a" + (vowelStart ? "n" : "") + " " + itemName + "!\" \n" +
+									"trigger[0]: " + itemTriggerName
 									);
+		}
 		
 		Trigger itemTrigger = data.getTrigger(itemTriggerName);
+		
 		if (itemTrigger == null)
-			data.addTrigger("Give", itemTriggerName, "item: "+itemName);
+			data.addTrigger("Give", itemTriggerName, "item: " + itemName);
 		
 //		System.out.println(name);
 //		System.out.println(itemTriggerName);
@@ -99,8 +106,8 @@ public class ItemEntity extends Entity{
 		dataCreated = true;
 	}
 	
-	@Override
-	public String toString() {
-		return "Name: " +name +" Item:" +item;
+	public String toString() 
+	{
+		return "Name: " + name + " Item:" + item;
 	}
 }

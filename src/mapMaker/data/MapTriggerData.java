@@ -14,7 +14,7 @@ import mapMaker.MapMaker;
 
 public class MapTriggerData {
 	
-	public static final String mapTriggersFilePath = MapMaker.recFolderNme +MapMaker.FILE_SLASH +"triggers"+MapMaker.FILE_SLASH;
+	public static final String mapTriggersFilePath = MapMaker.recFolderNme +MapMaker.FILE_SLASH +"triggers" + MapMaker.FILE_SLASH;
 	public static final String mapFileNameExtension = "_Triggers";
 	
 	private boolean saved;
@@ -39,7 +39,7 @@ public class MapTriggerData {
 	
 	private void readTriggers() {
 
-		triggerFile = new File(mapMaker.root.getPath()+MapMaker.FILE_SLASH+mapTriggersFilePath+currentMap+mapFileNameExtension);
+		triggerFile = new File(mapMaker.root.getPath() + MapMaker.FILE_SLASH + mapTriggersFilePath + currentMap + mapFileNameExtension);
 		if (!triggerFile.exists())
 			return;
 		
@@ -73,7 +73,7 @@ public class MapTriggerData {
 			
 			for (Trigger trigger: triggers.values()){
 				writer.write(trigger.getClass().getName() +" " +trigger.getName() +"{\n"+
-						trigger.triggerDataAsString()+"\n"+
+						trigger.triggerDataAsString() + "\n"+
 						"}\n");
 			}
 			

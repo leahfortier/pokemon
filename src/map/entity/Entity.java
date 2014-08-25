@@ -35,23 +35,23 @@ public abstract class Entity {
 	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition){
 		if (drawOnlyInTransition && transitionTime == 0)
 			return;
-		int cx = (int)drawX+Global.TILESIZE*charX;
-		int cy = (int)drawY+Global.TILESIZE*charY;
+		int cx = (int)drawX + Global.TILESIZE*charX;
+		int cy = (int)drawY + Global.TILESIZE*charY;
 		if (transitionTime != 0){
-			int len = Global.TILESIZE*(getTransitionTime()-transitionTime)/getTransitionTime();
+			int len = Global.TILESIZE*(getTransitionTime() - transitionTime)/getTransitionTime();
 			cx += tdx[transitionDirection]*len;
 			cy += tdy[transitionDirection]*len;
 			//System.out.println(transitionTime +" " +len +" " +cx +" " + cy);
 		}
 		BufferedImage img = getFrame(data);
-		g.drawImage(img, cx-img.getWidth()/2+Global.TILESIZE/2, cy+(Global.TILESIZE-img.getHeight()) - (Global.TILESIZE/2), null);
+		g.drawImage(img, cx - img.getWidth()/2 + Global.TILESIZE/2, cy + (Global.TILESIZE - img.getHeight()) - (Global.TILESIZE/2), null);
 	}
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view){
 		if (transitionTime != 0)
 			transitionTime += dt;
 		if (transitionTime > getTransitionTime()){
 			transitionTime = 0;
-			runFrame = (runFrame+1)%2;
+			runFrame = (runFrame + 1)%2;
 		}
 		
 		

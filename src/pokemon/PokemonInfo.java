@@ -227,14 +227,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		if (map == null) loadPokemonInfo();
 		if (map.containsKey(p)) return map.get(p);
 
-		Global.error("No such Pokemon "+p);
+		Global.error("No such Pokemon " + p);
 		return null;
 	}
 	
 	public static PokemonInfo getPokemonInfo(int index)
 	{
 		if (info == null) loadPokemonInfo();
-		if (index <= 0 || index > NUM_POKEMON) Global.error("No such Pokemon Number "+index); 
+		if (index <= 0 || index > NUM_POKEMON) Global.error("No such Pokemon Number " + index); 
 
 		return info[index];
 	}
@@ -306,11 +306,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			int num = in.nextInt();
 			in.nextLine();
 			info[num] = new PokemonInfo(num, in.nextLine().trim(), sixIntArray(in),
-					in.nextInt(), in.nextLine().trim()+in.nextLine().trim(), in.next(), in.next(), 
+					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.next(), in.next(), 
 					createLevelUpMoves(in), in.nextInt(), sixIntArray(in), Evolution.readEvolution(in),
-					WildHoldItem.createList(in), in.nextInt(), in.nextLine().trim()+in.nextLine().trim(), 
+					WildHoldItem.createList(in), in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), 
 					in.nextLine().trim(), in.nextLine().trim(), in.nextInt(), in.nextDouble(), 
-					in.nextLine().trim(), in.nextInt(), in.nextLine().trim()+in.nextLine().trim(), in.nextLine().trim());
+					in.nextLine().trim(), in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim());
 			map.put(info[num].getName(), info[num]);
 		}
 		
@@ -334,7 +334,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			if (!lum.containsKey(level)) lum.put(level, new ArrayList<String>());
 			lum.get(level).add(in.nextLine().trim());
 			
-			String name = lum.get(level).get(lum.get(level).size()-1);
+			String name = lum.get(level).get(lum.get(level).size() - 1);
 			if (GameFrame.GENERATE_STUFF) Attack.getAttack(name);
 		}
 		return lum;

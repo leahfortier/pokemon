@@ -31,7 +31,7 @@ public abstract class BattleEffect extends Effect
 		if (map == null) loadEffects();
 		if (map.containsKey(e)) return map.get(e);
 
-		Global.error("No such Effect "+e);
+		Global.error("No such Effect " + e);
 		return null;
 	}
 
@@ -47,7 +47,7 @@ public abstract class BattleEffect extends Effect
 		map.put("Sandstorm", Weather.getWeather(Weather.WeatherType.SANDSTORM));
 		map.put("Hailing", Weather.getWeather(Weather.WeatherType.HAILING));
 		
-		// EVERYTHING BELOW IS GENERATED +++
+		// EVERYTHING BELOW IS GENERATED ###
 
 		// List all of the effects we are loading
 		map.put("Gravity", new Gravity());
@@ -68,12 +68,12 @@ public abstract class BattleEffect extends Effect
 			if (p.isSemiInvulnerable() && (p.getAttack().getName().equals("Fly") || p.getAttack().getName().equals("Bounce")))
 			{
 				p.getMove().switchReady(b);
-				b.addMessage(p.getName()+" fell due to the gravity!");
+				b.addMessage(p.getName() + " fell due to the gravity!");
 			}
 			if (p.hasEffect("MagnetRise"))
 			{
 				Effect.removeEffect(p.getEffects(), "MagnetRise");
-				b.addMessage("The effects of "+p.getName()+"'s magnet rise were cancelled due to the gravity!");
+				b.addMessage("The effects of " + p.getName() + "'s magnet rise were cancelled due to the gravity!");
 			}
 			if (p.hasEffect("Telekinesis"))
 			{
@@ -127,7 +127,7 @@ public abstract class BattleEffect extends Effect
 
 		public int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user)
 		{
-			return s == Stat.EVASION ? stage-2 : stage;
+			return s == Stat.EVASION ? stage - 2 : stage;
 		}
 	}
 
@@ -216,7 +216,7 @@ public abstract class BattleEffect extends Effect
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getName()+" twisted the dimensions to switch defense and special defense!";
+			return user.getName() + " twisted the dimensions to switch defense and special defense!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim)
@@ -259,7 +259,7 @@ public abstract class BattleEffect extends Effect
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getName()+" twisted the dimensions to switch speeds!";
+			return user.getName() + " twisted the dimensions to switch speeds!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim)
@@ -295,7 +295,7 @@ public abstract class BattleEffect extends Effect
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getName()+" twisted the dimensions to prevent using items!";
+			return user.getName() + " twisted the dimensions to prevent using items!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim)

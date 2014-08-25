@@ -186,7 +186,7 @@ public class PokemonDataPanel extends JPanel {
 			return null;
 		}
 		
-		String data = "pokemon: "+pokemonName +" " +(String)levelFormattedTextField.getText() +" " + (shinyCheckBox.isSelected()?"Shiny":"");
+		String data = "pokemon: " + pokemonName +" " +(String)levelFormattedTextField.getText() +" " + (shinyCheckBox.isSelected()?"Shiny":"");
 		
 		if (moveCheckBox.isSelected()) {
 			boolean allValidMoves = true;
@@ -194,11 +194,11 @@ public class PokemonDataPanel extends JPanel {
 			for (int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) {
 				String move = customMoves[currMove].length() == 0? "None": customMoves[currMove];
 				allValidMoves |= Attack.isAttack(move);
-				moves+= move +(currMove+1 == customMoves.length?"":", ");
+				moves+= move +(currMove + 1 == customMoves.length?"":", ");
 			}
 			
 			if (allValidMoves) {
-				data += " Moves: "+moves;
+				data += " Moves: " + moves;
 			}
 		}
 		

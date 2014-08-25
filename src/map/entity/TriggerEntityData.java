@@ -49,11 +49,11 @@ public class TriggerEntityData extends EntityData{
 		ret.append("Trigger " +name +"{\n");
 		
 		if (!condition.getOriginalConditionString().equals(""))
-			ret.append("\tcondition: " +condition.getOriginalConditionString()+"\n");
+			ret.append("\tcondition: " +condition.getOriginalConditionString() + "\n");
 		
 		ret.append("\tx: " +x +"\n");
 		ret.append("\ty: " +y +"\n");
-		ret.append("\ttrigger: "+ trigger+"\n");
+		ret.append("\ttrigger: "+ trigger + "\n");
 		ret.append("}\n");
 		return ret.toString();
 	}

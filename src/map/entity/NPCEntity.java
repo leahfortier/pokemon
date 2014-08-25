@@ -10,8 +10,8 @@ import main.Global;
 import main.InputControl;
 import map.MapData;
 
-public class NPCEntity extends Entity{
-	
+public class NPCEntity extends Entity
+{	
 	public static final int NPC_SIGHT_DISTANCE = 5;
 	
 	private String trigger;
@@ -41,7 +41,8 @@ public class NPCEntity extends Entity{
 	private boolean dataCreated;
 	
 	//Unused
-	public NPCEntity(int x, int y, String trigger, String path, int direction, int index) {
+	public NPCEntity(int x, int y, String trigger, String path, int direction, int index) 
+	{
 		super(x, y);
 		this.trigger = trigger;
 		this.path = path;
@@ -57,7 +58,8 @@ public class NPCEntity extends Entity{
 		dataCreated = true;
 	}
 	
-	public NPCEntity(String name, int x, int y, String trigger, String path, int direction, int index, String[] firstDialogue, String[] secondDialogue, String trainerInfo, String itemInfo, String firstTriggers, String secondTriggers, boolean walkToPlayer) {
+	public NPCEntity(String name, int x, int y, String trigger, String path, int direction, int index, String[] firstDialogue, String[] secondDialogue, String trainerInfo, String itemInfo, String firstTriggers, String secondTriggers, boolean walkToPlayer) 
+	{
 		super(x, y);
 		this.name = name;
 		this.trigger = trigger;
@@ -85,16 +87,18 @@ public class NPCEntity extends Entity{
 		dataCreated = firstDialogue.length == 0;
 	}
 	
-
-	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
+	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) 
+	{
 		super.update(dt, entity, map, input, view);
+		
 		if (waitTime != 0)
 			waitTime -= dt;
+		
 		if (waitTime < 0)
 			waitTime = 0;
 		
-		if (transitionTime == 0 && waitTime == 0 && !hasAttention){
+		if (transitionTime == 0 && waitTime == 0 && !hasAttention)
+		{
 			String path = this.path;
 			if (tempPath != null)
 			{
@@ -102,56 +106,66 @@ public class NPCEntity extends Entity{
 				//System.out.println(path);
 			}
 			
-			switch (path.charAt(pathIndex)){
-			case 'r':
-				if (isPassable(map.getPassValue(charX+1, charY)) && entity[charX+1][charY] == null){
-					entity[charX+1][charY] = this;
-					entity[charX][charY] = null;
-					charX++;
-					transitionTime = 1;
-					waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+			switch (path.charAt(pathIndex))
+			{
+				case 'r':
+					if (isPassable(map.getPassValue(charX + 1, charY)) && entity[charX + 1][charY] == null)
+					{
+						entity[charX + 1][charY] = this;
+						entity[charX][charY] = null;
+						charX++;
+						transitionTime = 1;
+						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						pathIndex++;
+					}
+					
+					transitionDirection = 0;
+					break;
+				case 'u':
+					if (isPassable(map.getPassValue(charX, charY - 1)) && entity[charX][charY - 1] == null)
+					{
+						entity[charX][charY - 1] = this;
+						entity[charX][charY] = null;
+						charY--;
+						transitionTime = 1;
+						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						pathIndex++;
+					}
+					
+					transitionDirection = 1;
+					break;
+				case 'l':
+					if (isPassable(map.getPassValue(charX - 1, charY)) && entity[charX - 1][charY] == null)
+					{
+						entity[charX - 1][charY] = this;
+						entity[charX][charY] = null;
+						charX--;
+						transitionTime = 1;
+						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						pathIndex++;
+					}
+					
+					transitionDirection = 2;
+					break;
+				case 'd':
+					if (isPassable(map.getPassValue(charX, charY + 1)) && entity[charX][charY + 1] == null)
+					{
+						entity[charX][charY + 1] = this;
+						entity[charX][charY] = null;
+						charY++;
+						transitionTime = 1;
+						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						pathIndex++;
+					}
+					
+					transitionDirection = 3;
+					break;
+				case 'w':
+					waitTime = getTransitionTime();
 					pathIndex++;
-				}
-				transitionDirection = 0;
-				break;
-			case 'u':
-				if (isPassable(map.getPassValue(charX, charY-1)) && entity[charX][charY-1] == null){
-					entity[charX][charY-1] = this;
-					entity[charX][charY] = null;
-					charY--;
-					transitionTime = 1;
-					waitTime = 5*Global.TIME_BETWEEN_TILES/4;
-					pathIndex++;
-				}
-				transitionDirection = 1;
-				break;
-			case 'l':
-				if (isPassable(map.getPassValue(charX-1, charY)) && entity[charX-1][charY] == null){
-					entity[charX-1][charY] = this;
-					entity[charX][charY] = null;
-					charX--;
-					transitionTime = 1;
-					waitTime = 5*Global.TIME_BETWEEN_TILES/4;
-					pathIndex++;
-				}
-				transitionDirection = 2;
-				break;
-			case 'd':
-				if (isPassable(map.getPassValue(charX, charY+1)) && entity[charX][charY+1] == null){
-					entity[charX][charY+1] = this;
-					entity[charX][charY] = null;
-					charY++;
-					transitionTime = 1;
-					waitTime = 5*Global.TIME_BETWEEN_TILES/4;
-					pathIndex++;
-				}
-				transitionDirection = 3;
-				break;
-			case 'w':
-				waitTime = getTransitionTime();
-				pathIndex++;
-				break;
+					break;
 			}
+			
 			pathIndex %= path.length();
 			if (pathIndex == 0 && tempPath != null)
 			{
@@ -160,67 +174,77 @@ public class NPCEntity extends Entity{
 		}
 	}
 	
-	public void walkTowards(int steps, int direction) {
+	public void walkTowards(int steps, int direction) 
+	{
 		tempPath = "w";
 		for (int i = 0; i < steps; ++i)
 		{
 			tempPath += pathDir[direction];
 		}
+		
 		pathIndex = 0;
 		walkingToPlayer = true;
 	}
 	
-
-	@Override
-	protected BufferedImage getFrame(GameData data) {
+	protected BufferedImage getFrame(GameData data) 
+	{
 		TileSet trainerTiles = data.getTrainerTiles();
 		if (transitionTime > 0)
-			return trainerTiles.getTile(12*spriteIndex + 1+transitionDirection+4*(1+runFrame));
-		else return trainerTiles.getTile(12*spriteIndex + 1+transitionDirection);
+			return trainerTiles.getTile(12*spriteIndex + 1 + transitionDirection + 4*(1 + runFrame));
+		
+		else 
+			return trainerTiles.getTile(12*spriteIndex + 1 + transitionDirection);
 	}
 
-	@Override
-	public String getTrigger() {
+	public String getTrigger() 
+	{
 		return trigger;
 	}
 
-	@Override
-	public int getTransitionTime() {
+	public int getTransitionTime() 
+	{
 		return Global.TIME_BETWEEN_TILES*2;
 	}
 
-	@Override
-	public void getAttention(int d) {
+	public void getAttention(int d) 
+	{
 		transitionDirection = d;
 		hasAttention = true;
 	}
 	
-	public boolean getWalkToPlayer(){
+	public boolean getWalkToPlayer()
+	{
 		return walkToPlayer;
 	}
 	
-	public boolean getWalkingToPlayer(){
+	public boolean getWalkingToPlayer()
+	{
 		return walkingToPlayer;
 	}
 	
 	//TODO: create NPCTrainerEntity
-	public String getWalkTrigger() {
-		return walkToPlayer?name+"_T1":"";
+	public String getWalkTrigger() 
+	{
+		return walkToPlayer?name + "_T1":"";
 	}
 	
-	public String getFirstTrigger() {
-		return name+"_T1";
+	public String getFirstTrigger() 
+	{
+		return name + "_T1";
 	}
 	
-	public String getSecondTrigger() {
-		return secondDialogue.length > 0 ? name+"_T2": null;
+	public String getSecondTrigger() 
+	{
+		return secondDialogue.length > 0 ? name + "_T2": null;
 	}
 	
-	public boolean isTrainer() {
+	public boolean isTrainer() 
+	{
 		return trainer;
 	}
 	
-	public void reset() {
+	public void reset() 
+	{
 		charX = defaultX;
 		charY = defaultY;
 		waitTime = 0;
@@ -231,7 +255,6 @@ public class NPCEntity extends Entity{
 		tempPath = null;
 	}
 	
-	@Override
 	public void addData(GameData data)
 	{
 		if (dataCreated)
@@ -240,105 +263,105 @@ public class NPCEntity extends Entity{
 		//If NPC is a trainer, add trainer battle trigger.
 		if (trainer)
 		{
-			data.addTrigger("TrainerBattle", name+"_Battle", "winGlobal: triggered_"+name +"\n" + trainerInfo);
+			data.addTrigger("TrainerBattle", name + "_Battle", "winGlobal: triggered_" + name +"\n" + trainerInfo);
 		}
 		
 		//If NPC gives items, add give item trigger
 		if (itemInfo!= null)
 		{
-			data.addTrigger("Give", name+"_items", itemInfo);
+			data.addTrigger("Give", name + "_items", itemInfo);
 		}
 		
 		//Create group trigger for initial encounter.
-		data.addTrigger("Group", name+"_GT1", 
+		data.addTrigger("Group", name + "_GT1", 
 			
 			//Add all additional triggers
-			firstTriggers+"\n" +
+			firstTriggers + "\n" +
 			
 			//If trainer, battle at the end of first dialogue.
 			(trainer? 
-				"trigger: "+name+"_Battle":
+				"trigger: " + name + "_Battle":
 				""
 			) +
 					
 			//If not a trainer and is giving items, add to end of dialogue.
 			(!trainer && itemInfo != null?
-				"trigger: "+name+"_items":
+				"trigger: " + name + "_items":
 				""
 			)
 		);
 		
 		//Create group trigger for additional encounters.
-		data.addTrigger("Group", name+"_GT2", 
+		data.addTrigger("Group", name + "_GT2", 
 			
 			//Add all additional triggers
 			secondTriggers +"\n"+
 
 			//If trainer and giving items, add to end of dialogue.
 			(trainer && itemInfo != null?
-				"trigger: "+name+"_items":
+				"trigger: " + name + "_items":
 				""
 			)
 		);
 		
 		//Create event trigger to bring up first dialogue.
-		trigger = name+"_T1";
-		data.addTrigger("Event", name+"_T1", 
-			"condition: !triggered_"+name +" \n" +
-			(trainer || secondDialogue.length == 0?"":("global: triggered_"+name+" \n")) + 			   
-			"dialogue: "+name +"_T1_D1"
+		trigger = name + "_T1";
+		data.addTrigger("Event", name + "_T1", 
+			"condition: !triggered_" + name +" \n" +
+			(trainer || secondDialogue.length == 0?"":("global: triggered_" + name + " \n")) + 			   
+			"dialogue: " + name +"_T1_D1"
 		);
 		
 		//Add all first dialogue sequences. Call group trigger on last dialogue.
 		for (int i = 0; i < firstDialogue.length; ++i)
 		{
-			data.addDialogue(name+"_T1_D"+(i+1), 
-				"text: \""+ firstDialogue[i]+"\" \n" +
+			data.addDialogue(name + "_T1_D" + (i + 1), 
+				"text: \""+ firstDialogue[i] + "\" \n" +
 
 				//If not the last dialogue, transition to the next dialogue in the sequence
 				//Else, add the triggers
-				(i+1 != firstDialogue.length? 
+				(i + 1 != firstDialogue.length? 
 						
 					//Move to each dialogue
-					"next[0]: "+name+"_T1_D"+(i+2):
+					"next[0]: " + name + "_T1_D" + (i + 2):
 						
 					//End of dialogue, add triggers
-					"trigger[0]: "+name+"_GT1"
+					"trigger[0]: " + name + "_GT1"
 				)
 			);
 		}
 		
 		//If different dialogue for first and second encounter, create group trigger and second dialogue trigger
-		if (secondDialogue.length > 0 )
+		if (secondDialogue.length > 0)
 		{
 			//Create and set group trigger to initiate multiple encounters.
-			trigger = name+"_GT";
-			data.addTrigger("Group", name+"_GT", 
-				"trigger: " +name+"_T2\n"+
-				"trigger: " +name+"_T1"
+			trigger = name + "_GT";
+			data.addTrigger("Group", name + "_GT", 
+				"trigger: " +name + "_T2\n"+
+				"trigger: " +name + "_T1"
 			);
 					
 			//Create event trigger to bring up second dialogue.
-			data.addTrigger("Event", name+"_T2", 
-				"condition: triggered_"+name +" \n" +
-				"dialogue: "+name +"_T2_D1"
+			data.addTrigger("Event", name + "_T2", 
+				"condition: triggered_" + name +" \n" +
+				"dialogue: " + name +"_T2_D1"
 			);
 			
 			//Add all second dialogue sequences. Call group trigger on last dialogue.
 			for (int i = 0; i < secondDialogue.length; ++i)
 			{
-				data.addDialogue(name+"_T2_D"+(i+1), 
-					"text: \""+ secondDialogue[i]+"\" \n" +
+				data.addDialogue(name + "_T2_D" + (i + 1), 
+					"text: \""+ secondDialogue[i] + "\" \n" +
 					
 					//If not the last dialogue, transition to the next dialogue in the sequence
 					//Else, add the triggers
-					(i+1 != secondDialogue.length? 
+					(i + 1 != secondDialogue.length? 
 							
 						//Move to each dialogue
-						"next[0]: "+name+"_T2_D"+(i+2):
+						"next[0]: " + name + "_T2_D" + (i + 2):
 							
 						//End of dialogue, add triggers
-						"trigger[0]: " +name+"_GT2"
+						"trigger[0]: " +name + "_GT2"
 					)
 				);
 			}

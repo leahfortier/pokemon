@@ -87,10 +87,10 @@ public class TransitionBuildingTransitionDialog extends JPanel {
 		
 		//Fill combo boxes with available maps.
 		String[] mapList = mapMaker.getAvailableMaps();
-		String[] updatedMapList = new String[mapList.length+1];
+		String[] updatedMapList = new String[mapList.length + 1];
 		updatedMapList[0] = "";
 		for (int currMap = 0; currMap < mapList.length; ++currMap) {
-			updatedMapList[currMap+1] = mapList[currMap];
+			updatedMapList[currMap + 1] = mapList[currMap];
 		}
 		
 		LeftMapComboBox = new JComboBox<String>(updatedMapList);

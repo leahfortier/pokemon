@@ -168,7 +168,7 @@ public enum Type implements Serializable
 		{
 			if (t.hiddenIndex == hiddenIndex) return t;
 		}
-		Global.error("Invalid hidden type index "+hiddenIndex);
+		Global.error("Invalid hidden type index " + hiddenIndex);
 		return null;
 	}
 }

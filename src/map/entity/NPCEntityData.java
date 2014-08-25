@@ -93,12 +93,12 @@ public class NPCEntityData extends EntityData{
 		if (walkToPlayer == -1 && trainerInfo != null)
 			walkToPlayer = 1;
 		
-		firstDialogue = Arrays.copyOf(firstDialogue, FDSize+1);
-		if (firstDialogue.length == 0 || (firstDialogue.length > 0 && firstDialogue[0] == null && FDSize>-1)) 
+		firstDialogue = Arrays.copyOf(firstDialogue, FDSize + 1);
+		if (firstDialogue.length == 0 || (firstDialogue.length > 0 && firstDialogue[0] == null && FDSize > -1)) 
 			Global.error("firstDialogue missing for NPC " +name +".");
 		
-		secondDialogue = Arrays.copyOf(secondDialogue, SDSize+1);
-		if (secondDialogue.length > 0 && secondDialogue[0] == null && FDSize>-1) 
+		secondDialogue = Arrays.copyOf(secondDialogue, SDSize + 1);
+		if (secondDialogue.length > 0 && secondDialogue[0] == null && FDSize > -1) 
 			Global.error("secondDialogue missing for NPC " +name +".");
 		
 		//if (firstDialogue.length > 0) System.out.println(Arrays.toString(firstDialogue));
@@ -150,33 +150,33 @@ public class NPCEntityData extends EntityData{
 		
 		ret.append("\tstartX: " +x +"\n");
 		ret.append("\tstartY: " +y +"\n");
-		ret.append("\tpath: "+ path+"\n");
-		ret.append("\tspriteIndex: "+ spriteIndex+"\n");
-		ret.append("\tdirection: "+ defaultDirection+"\n");
-		ret.append("\twalkToPlayer: "+ (walkToPlayer==1)+"\n");
+		ret.append("\tpath: "+ path + "\n");
+		ret.append("\tspriteIndex: "+ spriteIndex + "\n");
+		ret.append("\tdirection: "+ defaultDirection + "\n");
+		ret.append("\twalkToPlayer: "+ (walkToPlayer==1) + "\n");
 		
 		
 		for (int currDialogue = 0; currDialogue < firstDialogue.length; ++currDialogue) {
-			ret.append("\tfirstDialogue["+currDialogue+"]: \""+ firstDialogue[currDialogue]+"\"\n");
+			ret.append("\tfirstDialogue[" + currDialogue + "]: \""+ firstDialogue[currDialogue] + "\"\n");
 		}
 		
 		if (secondDialogue != null) {
 			for (int currDialogue = 0; currDialogue < secondDialogue.length; ++currDialogue) {
-				ret.append("\tsecondDialogue["+currDialogue+"]: \""+ secondDialogue[currDialogue]+"\"\n");
+				ret.append("\tsecondDialogue[" + currDialogue + "]: \""+ secondDialogue[currDialogue] + "\"\n");
 			}
 		}
 		
 		if (itemInfo != null)
-			ret.append("\tgiveItem: \""+ itemInfo.trim()+"\"\n");
+			ret.append("\tgiveItem: \""+ itemInfo.trim() + "\"\n");
 		
 		if (trainerInfo != null)
-			ret.append("\ttrainer: \""+ trainerInfo.trim()+"\"\n");
+			ret.append("\ttrainer: \""+ trainerInfo.trim() + "\"\n");
 		
 		if (firstTriggers != null)
-			ret.append("\tfirstTriggers: \""+ firstTriggers.trim()+"\"\n");
+			ret.append("\tfirstTriggers: \""+ firstTriggers.trim() + "\"\n");
 		
 		if (secondTriggers != null)
-			ret.append("\tsecondTriggers: \""+ secondTriggers.trim()+"\"\n");
+			ret.append("\tsecondTriggers: \""+ secondTriggers.trim() + "\"\n");
 		
 		ret.append("}\n");
 		

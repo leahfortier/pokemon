@@ -103,7 +103,7 @@ public abstract class Ability implements Serializable
 	public static Ability assign(PokemonInfo p)
 	{
 		String[] abilities = p.getAbilities();
-		if (abilities[0].equals("None")) Global.error("First ability should not be none (Pokemon "+p.getName()+")");
+		if (abilities[0].equals("None")) Global.error("First ability should not be none (Pokemon " + p.getName() + ")");
 		if (abilities[1].equals("None")) return getAbility(abilities[0]).newInstance();
 		return getAbility(abilities[Math.random() < .5 ? 0 : 1]).newInstance();
 	}
@@ -124,7 +124,7 @@ public abstract class Ability implements Serializable
 	
 	private static Ability getOtherAbility(PokemonInfo p, String ability)
 	{
-		if (!p.hasAbility(ability)) Global.error("Incorrect ability "+ability+" for "+p.getName()+".");
+		if (!p.hasAbility(ability)) Global.error("Incorrect ability " + ability + " for " + p.getName() + ".");
 		
 		String[] abilities = p.getAbilities();
 		return getAbility(abilities[0].equals(ability) ? abilities[1] : abilities[0]); 
@@ -137,9 +137,9 @@ public abstract class Ability implements Serializable
 		if (map == null) loadAbilities();
 		if (map.containsKey(m)) return map.get(m);
 
-		if (GameFrame.GENERATE_STUFF) Global.error("No such Ability "+m);
+		if (GameFrame.GENERATE_STUFF) Global.error("No such Ability " + m);
 		
-		System.err.println("No such Ability "+m);
+		System.err.println("No such Ability " + m);
 		return new None();
 	}
 	
@@ -150,7 +150,7 @@ public abstract class Ability implements Serializable
 		map = new HashMap<>();
 		abilityNames = new ArrayList<>();
 
-		// EVERYTHING BELOW IS GENERATED +++
+		// EVERYTHING BELOW IS GENERATED ###
 
 		// List all of the abilities we are loading
 		map.put("None", new None());
@@ -405,7 +405,7 @@ public abstract class Ability implements Serializable
 		{
 			if (b.getWeather().getType() == WeatherType.SUNNY)
 			{
-				b.addMessage(victim.getName()+" lost some of its HP due to its "+this.name+"!");
+				b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
 		}
@@ -448,7 +448,7 @@ public abstract class Ability implements Serializable
 			if (b.getWeather().getType() == WeatherType.RAINING)
 			{
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName()+"'s HP was restored due to its "+this.name+"!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
 			}
 		}
 	}
@@ -490,7 +490,7 @@ public abstract class Ability implements Serializable
 		{
 			if (victim.hasStatus() && (int)(Math.random()*3) == 0)
 			{
-				b.addMessage(victim.getName()+"'s "+this.name+" cured it of its status condition!", StatusCondition.NONE, victim.user());
+				b.addMessage(victim.getName() + "'s " + this.name + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 				victim.removeStatus();
 			}
 		}
@@ -588,7 +588,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon p)
 		{
-			return p.getName()+"'s Keen Eye prevents its accuracy from being lowered!";
+			return p.getName() + "'s Keen Eye prevents its accuracy from being lowered!";
 		}
 	}
 
@@ -608,7 +608,7 @@ public abstract class Ability implements Serializable
 		public int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user)
 		{
 			if (!s.user() && opp.breaksTheMold()) return stage;
-			return s == Stat.EVASION && p.hasEffect("Confusion") ? stage+1 : stage;
+			return s == Stat.EVASION && p.hasEffect("Confusion") ? stage + 1 : stage;
 		}
 	}
 
@@ -693,7 +693,7 @@ public abstract class Ability implements Serializable
 
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+"'s "+this.name+" makes it immune to Electric type moves!");
+			b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Electric type moves!");
 			victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 		}
 	}
@@ -714,7 +714,7 @@ public abstract class Ability implements Serializable
 		public int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user)
 		{
 			if (!s.user() && opp.breaksTheMold()) return stage;
-			return s == Stat.EVASION && b.getWeather().getType() == WeatherType.SANDSTORM ? stage+1 : stage;
+			return s == Stat.EVASION && b.getWeather().getType() == WeatherType.SANDSTORM ? stage + 1 : stage;
 		}
 	}
 
@@ -802,7 +802,7 @@ public abstract class Ability implements Serializable
 				if (e.applies(b, victim, user, CastSource.ABILITY))
 				{
 					user.addEffect(e.newInstance());
-					b.addMessage(victim.getName()+"'s "+this.name+" infatuated "+user.getName()+"!");
+					b.addMessage(victim.getName() + "'s " + this.name + " infatuated " + user.getName() + "!");
 				}
 			}
 		}
@@ -856,7 +856,7 @@ public abstract class Ability implements Serializable
 
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+"'s "+this.name+" makes it immune to Fire type moves!");
+			b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Fire type moves!");
 			activated = true;
 		}
 	}
@@ -877,7 +877,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getWeather(WeatherType.SUNNY).newInstance());
-			b.addMessage(victim.getName()+"'s "+this.name+" made the sunlight turn harsh!");
+			b.addMessage(victim.getName() + "'s " + this.name + " made the sunlight turn harsh!");
 		}
 	}
 
@@ -897,7 +897,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			if (other.isHoldingItem(b)) b.addMessage(victim.getName()+"'s "+this.name+" alerted it to "+other.getName()+"'s "+other.getHeldItem(b).getName()+"!");
+			if (other.isHoldingItem(b)) b.addMessage(victim.getName() + "'s " + this.name + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
 		}
 	}
 
@@ -950,7 +950,7 @@ public abstract class Ability implements Serializable
 				if (flinch.applies(b, user, victim, CastSource.ABILITY))
 				{
 					flinch.cast(b, user, victim, CastSource.ABILITY, false);
-					b.addMessage(user.getName()+"'s "+this.name+" caused "+victim.getName()+" to flinch!");
+					b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 				}
 			}
 		}
@@ -1004,11 +1004,11 @@ public abstract class Ability implements Serializable
 			if (b.getWeather().getType() == WeatherType.RAINING)
 			{
 				victim.healHealthFraction(1/8.0);
-				b.addMessage(victim.getName()+"'s HP was restored due to its "+this.name+"!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
 			}
 			else if (b.getWeather().getType() == WeatherType.SUNNY)
 			{
-				b.addMessage(victim.getName()+" lost some of its HP due to its "+this.name+"!");
+				b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
 		}
@@ -1021,7 +1021,7 @@ public abstract class Ability implements Serializable
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName()+"'s HP was restored due to its "+this.name+"!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
 		}
 	}
 
@@ -1045,7 +1045,7 @@ public abstract class Ability implements Serializable
 
 		public String trappingMessage(ActivePokemon escaper, ActivePokemon trapper)
 		{
-			return trapper.getName()+"'s "+this.getName()+" prevents "+escaper.getName()+" from escaping!";
+			return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
 		}
 	}
 
@@ -1089,7 +1089,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon victim)
 		{
-			return victim.getName()+"'s Limber prevents paralysis!";
+			return victim.getName() + "'s Limber prevents paralysis!";
 		}
 	}
 
@@ -1111,7 +1111,7 @@ public abstract class Ability implements Serializable
 			if (p.getAttack().getName().equals("Selfdestruct") || p.getAttack().getName().equals("Explosion"))
 			{
 				b.printAttacking(p);
-				b.addMessage(p.getName()+"'s "+this.name+" prevents "+p.getAttack().getName()+" from being used!");
+				b.addMessage(p.getName() + "'s " + this.name + " prevents " + p.getAttack().getName() + " from being used!");
 				return false;
 			}
 			return true;
@@ -1123,7 +1123,7 @@ public abstract class Ability implements Serializable
 			if (p.getAttack().getName().equals("Selfdestruct") || p.getAttack().getName().equals("Explosion"))
 			{
 				b.printAttacking(p);
-				b.addMessage(opp.getName()+"'s "+this.name+" prevents "+p.getAttack().getName()+" from being used!");
+				b.addMessage(opp.getName() + "'s " + this.name + " prevents " + p.getAttack().getName() + " from being used!");
 				return false;
 			}
 			return true;
@@ -1146,7 +1146,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getWeather(WeatherType.CLEAR_SKIES));
-			b.addMessage(victim.getName()+"'s "+this.name+" eliminated the weather!");
+			b.addMessage(victim.getName() + "'s " + this.name + " eliminated the weather!");
 		}
 	}
 
@@ -1171,7 +1171,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon victim)
 		{
-			return victim.getName()+"'s Vital Spirit prevents sleep!";
+			return victim.getName() + "'s Vital Spirit prevents sleep!";
 		}
 	}
 
@@ -1196,7 +1196,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon victim)
 		{
-			return victim.getName()+"'s Insomnia prevents sleep!";
+			return victim.getName() + "'s Insomnia prevents sleep!";
 		}
 	}
 
@@ -1235,7 +1235,7 @@ public abstract class Ability implements Serializable
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName()+"'s HP was restored due to its "+this.name+"!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
 		}
 	}
 
@@ -1302,7 +1302,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon p)
 		{
-			return p.getName()+"'s Clear Body prevents its stats from being lowered!";
+			return p.getName() + "'s Clear Body prevents its stats from being lowered!";
 		}
 	}
 
@@ -1354,7 +1354,7 @@ public abstract class Ability implements Serializable
 
 		public String braceMessage(ActivePokemon bracer)
 		{
-			return bracer.getName()+"'s Sturdy endured the hit!";
+			return bracer.getName() + "'s Sturdy endured the hit!";
 		}
 	}
 
@@ -1392,7 +1392,7 @@ public abstract class Ability implements Serializable
 
 		public String trappingMessage(ActivePokemon escaper, ActivePokemon trapper)
 		{
-			return trapper.getName()+"'s "+this.getName()+" prevents "+escaper.getName()+" from escaping!";
+			return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
 		}
 	}
 
@@ -1481,7 +1481,7 @@ public abstract class Ability implements Serializable
 			if (b.getWeather().getType() == WeatherType.RAINING && victim.hasStatus())
 			{
 				victim.removeStatus();
-				b.addMessage(victim.getName()+"'s "+this.name+" cured it of its status condition!", StatusCondition.NONE, victim.user());
+				b.addMessage(victim.getName() + "'s " + this.name + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 			}
 		}
 	}
@@ -1573,7 +1573,7 @@ public abstract class Ability implements Serializable
 				else if (pow == best) besties.add(m.getAttack().getName());
 			}
 			String warn = best == -1 ? other.getMoves().get((int)(Math.random()*other.getMoves().size())).getAttack().getName() : besties.get((int)(Math.random()*besties.size()));
-			b.addMessage(victim.getName()+"'s "+this.name+" alerted it to "+other.getName()+"'s "+warn+"!");
+			b.addMessage(victim.getName() + "'s " + this.name + " alerted it to " + other.getName() + "'s " + warn + "!");
 		}
 	}
 
@@ -1598,7 +1598,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon p)
 		{
-			return p.getName()+"'s Hyper Cutter prevents its attack from being lowered!";
+			return p.getName() + "'s Hyper Cutter prevents its attack from being lowered!";
 		}
 	}
 
@@ -1621,7 +1621,7 @@ public abstract class Ability implements Serializable
 			if (p.getAttack().isMoveType("SoundBased"))
 			{
 				b.printAttacking(p);
-				b.addMessage(opp.getName()+"'s "+this.name+" makes it immune to sound based moves!");
+				b.addMessage(opp.getName() + "'s " + this.name + " makes it immune to sound based moves!");
 				return false;
 			}
 			return true;
@@ -1720,7 +1720,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon victim)
 		{
-			return victim.getName()+"'s Leaf Guard prevents status conditions!";
+			return victim.getName() + "'s Leaf Guard prevents status conditions!";
 		}
 	}
 
@@ -1778,7 +1778,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon victim)
 		{
-			return victim.getName()+"'s Water Veil prevents burns!";
+			return victim.getName() + "'s Water Veil prevents burns!";
 		}
 	}
 
@@ -1920,7 +1920,7 @@ public abstract class Ability implements Serializable
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName()+"'s HP was restored due to its "+this.name+"!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
 		}
 	}
 
@@ -1971,7 +1971,7 @@ public abstract class Ability implements Serializable
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			return victim.getName()+" traced "+other.getName()+"'s "+other.getAbility().getName()+"!";
+			return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
 	}
 
@@ -2017,7 +2017,7 @@ public abstract class Ability implements Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+" is exerting pressure!");
+			b.addMessage(victim.getName() + " is exerting pressure!");
 		}
 	}
 
@@ -2042,7 +2042,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon victim)
 		{
-			return victim.getName()+"'s Immunity prevents it from being poisoned!";
+			return victim.getName() + "'s Immunity prevents it from being poisoned!";
 		}
 	}
 
@@ -2062,7 +2062,7 @@ public abstract class Ability implements Serializable
 		public int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user)
 		{
 			if (!s.user() && opp.breaksTheMold()) return stage;
-			return s == Stat.EVASION && b.getWeather().getType() == WeatherType.HAILING ? stage+1 : stage;
+			return s == Stat.EVASION && b.getWeather().getType() == WeatherType.HAILING ? stage + 1 : stage;
 		}
 	}
 
@@ -2231,7 +2231,7 @@ public abstract class Ability implements Serializable
 
 		public String trappingMessage(ActivePokemon escaper, ActivePokemon trapper)
 		{
-			return trapper.getName()+"'s "+this.getName()+" prevents "+escaper.getName()+" from escaping!";
+			return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
 		}
 	}
 
@@ -2275,7 +2275,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon victim)
 		{
-			return victim.getName()+"'s Magma Armor prevents freezing!";
+			return victim.getName() + "'s Magma Armor prevents freezing!";
 		}
 	}
 
@@ -2323,7 +2323,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getWeather(WeatherType.SANDSTORM).newInstance());
-			b.addMessage(victim.getName()+"'s "+this.name+" whipped up a sand storm!");
+			b.addMessage(victim.getName() + "'s " + this.name + " whipped up a sand storm!");
 		}
 	}
 
@@ -2387,7 +2387,7 @@ public abstract class Ability implements Serializable
 		{
 			if (lazyface)
 			{
-				b.addMessage(p.getName()+" is loafing around!");
+				b.addMessage(p.getName() + " is loafing around!");
 				return false;
 			}
 			return true;
@@ -2414,7 +2414,7 @@ public abstract class Ability implements Serializable
 			if (Type.getAdvantage(p.getAttack().getType(b, p), opp, b) > 1) return true;
 			if (p.getAttack().getType(b, p) == Type.NONE) return true;
 			b.printAttacking(p);
-			b.addMessage(opp.getName()+"'s "+this.name+" makes it immune to "+p.getAttack().getName()+"!");
+			b.addMessage(opp.getName() + "'s " + this.name + " makes it immune to " + p.getAttack().getName() + "!");
 			return false;
 		}
 	}
@@ -2481,7 +2481,7 @@ public abstract class Ability implements Serializable
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			b.addMessage(user.getName()+" was hurt by "+victim.getName()+"'s "+this.name+"!");
+			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 		}
 	}
@@ -2527,7 +2527,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon p)
 		{
-			return p.getName()+"'s White Smoke prevents its stats from being lowered!";
+			return p.getName() + "'s White Smoke prevents its stats from being lowered!";
 		}
 	}
 
@@ -2570,7 +2570,7 @@ public abstract class Ability implements Serializable
 			{
 				if (Type.getAdvantage(m.getAttack().getType(b, other), victim, b) > 1 || m.getAttack().isMoveType("OneHitKO"))
 				{
-					b.addMessage(victim.getName()+"'s "+this.name+" made it shudder!");
+					b.addMessage(victim.getName() + "'s " + this.name + " made it shudder!");
 					break;
 				}
 			}
@@ -2597,7 +2597,7 @@ public abstract class Ability implements Serializable
 
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+"'s "+this.name+" makes it immune to Water type moves!");
+			b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Water type moves!");
 			victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 		}
 	}
@@ -2653,7 +2653,7 @@ public abstract class Ability implements Serializable
 			if (b.getWeather().getType() == WeatherType.HAILING)
 			{
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName()+"'s HP was restored due to its "+this.name+"!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
 			}
 		}
 
@@ -2693,7 +2693,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getWeather(WeatherType.RAINING).newInstance());
-			b.addMessage(victim.getName()+"'s "+this.name+" started a downpour!");
+			b.addMessage(victim.getName() + "'s " + this.name + " started a downpour!");
 		}
 	}
 
@@ -2713,7 +2713,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getWeather(WeatherType.CLEAR_SKIES));
-			b.addMessage(victim.getName()+"'s "+this.name+" eliminated the weather!");
+			b.addMessage(victim.getName() + "'s " + this.name + " eliminated the weather!");
 		}
 	}
 
@@ -2767,7 +2767,7 @@ public abstract class Ability implements Serializable
 		{
 			if (victim.isFainted(b))
 			{
-				b.addMessage(user.getName()+" was hurt by "+victim.getName()+"'s "+this.name+"!");
+				b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 				user.reduceHealthFraction(b, 1/4.0);
 			}
 		}
@@ -2834,7 +2834,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getWeather(WeatherType.HAILING).newInstance());
-			b.addMessage(victim.getName()+"'s "+this.name+" caused it to hail!");
+			b.addMessage(victim.getName() + "'s " + this.name + " caused it to hail!");
 		}
 	}
 
@@ -2858,7 +2858,7 @@ public abstract class Ability implements Serializable
 
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+"'s "+this.name+" makes it immune to Electric type moves!");
+			b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Electric type moves!");
 			victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 		}
 	}
@@ -2907,7 +2907,7 @@ public abstract class Ability implements Serializable
 				if (disable.applies(b, victim, user, CastSource.ABILITY))
 				{
 					disable.cast(b, victim, user, CastSource.ABILITY, false);
-					b.addMessage(victim.getName()+"'s "+this.name+" disabled "+user.getName()+"'s "+user.getAttack().getName());
+					b.addMessage(victim.getName() + "'s " + this.name + " disabled " + user.getName() + "'s " + user.getAttack().getName());
 				}
 			}
 		}
@@ -2964,7 +2964,7 @@ public abstract class Ability implements Serializable
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			if (other.hasStatus(StatusCondition.ASLEEP))
 			{
-				b.addMessage(other.getName()+" was hurt by "+victim.getName()+"'s "+this.name+"!");
+				b.addMessage(other.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 				other.reduceHealthFraction(b, 1/8.0);
 			}
 		}
@@ -3029,7 +3029,7 @@ public abstract class Ability implements Serializable
 
 		public String preventionMessage(ActivePokemon p)
 		{
-			return p.getName()+"'s Big Pecks prevents its defense from being lowered!";
+			return p.getName() + "'s Big Pecks prevents its defense from being lowered!";
 		}
 	}
 
@@ -3114,7 +3114,7 @@ public abstract class Ability implements Serializable
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return victim.getName()+"'s ability was changed to Mummy!";
+			return victim.getName() + "'s ability was changed to Mummy!";
 		}
 	}
 
@@ -3208,7 +3208,7 @@ public abstract class Ability implements Serializable
 			if (!activated) return;
 			activated = false;
 			victim.setNickname(actualName);
-			b.addMessage(actualName+"'s Illusion was broken!");
+			b.addMessage(actualName + "'s Illusion was broken!");
 			b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
 			b.addMessage("", actualName, victim.user());
 			b.addMessage("", victim.getType(), victim.user());
@@ -3255,7 +3255,7 @@ public abstract class Ability implements Serializable
 
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+"'s "+this.name+" makes it immune to Grass type moves!");
+			b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Grass type moves!");
 			victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 	}
@@ -3275,7 +3275,7 @@ public abstract class Ability implements Serializable
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			b.addMessage(user.getName()+" was hurt by "+victim.getName()+"'s "+this.name+"!");
+			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 		}
 	}
@@ -3295,7 +3295,7 @@ public abstract class Ability implements Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+" breaks the mold!");
+			b.addMessage(victim.getName() + " breaks the mold!");
 		}
 	}
 
@@ -3314,7 +3314,7 @@ public abstract class Ability implements Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+" is radiating a bursting aura!");
+			b.addMessage(victim.getName() + " is radiating a bursting aura!");
 		}
 	}
 
@@ -3333,7 +3333,7 @@ public abstract class Ability implements Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+" is radiating a blazing aura!");
+			b.addMessage(victim.getName() + " is radiating a blazing aura!");
 		}
 	}
 
@@ -3418,7 +3418,7 @@ public abstract class Ability implements Serializable
 			if (victim.isFainted(b) || !user.isHoldingItem(b) || victim.isHoldingItem(b) || b.getTrainer(victim.user()) instanceof WildPokemon || user.hasAbility("Sticky Hold")) return;
 			
 			Item stolen = user.getHeldItem(b);
-			b.addMessage(victim.getName()+" stole "+user.getName()+"'s "+stolen.getName()+"!");
+			b.addMessage(victim.getName() + " stole " + user.getName() + "'s " + stolen.getName() + "!");
 			
 			if (b.isWildBattle())
 			{
@@ -3460,7 +3460,7 @@ public abstract class Ability implements Serializable
 			if (restored instanceof Berry && (b.getWeather().getType() == WeatherType.SUNNY || Math.random() < .5))
 			{
 				victim.giveItem((HoldItem)restored);
-				b.addMessage(victim.getName()+"'s "+this.name+" restored its "+restored.getName()+"!");
+				b.addMessage(victim.getName() + "'s " + this.name + " restored its " + restored.getName() + "!");
 			}
 		}
 	}
@@ -3502,7 +3502,7 @@ public abstract class Ability implements Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			b.addMessage(victim.getName()+"'s "+this.name+" made "+b.getOtherPokemon(victim.user()).getName()+" too nervous to eat berries!");
+			b.addMessage(victim.getName() + "'s " + this.name + " made " + b.getOtherPokemon(victim.user()).getName() + " too nervous to eat berries!");
 		}
 	}
 

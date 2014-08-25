@@ -47,7 +47,7 @@ public abstract class Evolution implements Serializable
 				for (int i = 0; i < evolutions.length; i++) evolutions[i] = readEvolution(in);
 				return new MultipleEvolution(evolutions);
 			default:
-				Global.error("Undefined Evolution Type "+type);
+				Global.error("Undefined Evolution Type " + type);
 				return null; // THIS SHOULDN'T EVEN GET CALLED BECAUSE I JUST DID A SYSTEM.EXIT(0) WOOOO JAVA
 		}
 	}

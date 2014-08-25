@@ -817,7 +817,7 @@ public class BattleView extends View
 		// Next page
 		if (bagRightButton.checkConsumePress())
 		{
-			if (bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE)-1)) bagPage = 0;
+			if (bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1)) bagPage = 0;
 			else bagPage++;
 			
 			setVisualState(state); // To update active buttons
@@ -826,7 +826,7 @@ public class BattleView extends View
 		// Previous Page
 		if (bagLeftButton.checkConsumePress())
 		{
-			if (bagPage == 0) bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE)-1);
+			if (bagPage == 0) bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1);
 			else bagPage--;
 			
 			setVisualState(state); // To update active buttons
@@ -1263,7 +1263,7 @@ public class BattleView extends View
 		{
 			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
 			{
-				int dx = 22+x*190, dy = 440+21+y*62;
+				int dx = 22 + x*190, dy = 440 + 21 + y*62;
 				g.translate(dx, dy);
 				
 				Move move = moves.get(i);
@@ -1320,7 +1320,7 @@ public class BattleView extends View
 			g.setFont(Global.getFont(16));
 			g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 			
-			String s = (statGains[i] < 0 ? "" : "+") + statGains[i];
+			String s = (statGains[i] < 0 ? "" : " + ") + statGains[i];
 			g.drawString(s, Global.rightX(s, 206, 16), 314 + i*21);
 			
 			s = newStats[i] + "";
@@ -1480,8 +1480,8 @@ public class BattleView extends View
 				g.drawString(move.getAttack().getName(), 7, 17);
 				
 				// Draw PP amount
-				String ppStr = "PP: "+move.getPP()+"/"+move.getMaxPP();
-				g.drawString(ppStr, 118-ppStr.length()*8, 33);
+				String ppStr = "PP: " + move.getPP() + "/" + move.getMaxPP();
+				g.drawString(ppStr, 118 - ppStr.length()*8, 33);
 				
 				BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
 				g.drawImage(categoryImage, 7, 21, null);
@@ -1503,8 +1503,8 @@ public class BattleView extends View
 			// Draw tab
 			g.setColor(pkm.getActualType()[0].getColor());
 			g.fillRect(32 + i*59, 192, 59, 34);
-			if (i == selectedPokemonTab) g.drawImage(tiles.getTile(0x36), 30+i*59, 190, null);
-			else g.drawImage(tiles.getTile(0x33), 30+i*59, 190, null);
+			if (i == selectedPokemonTab) g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
+			else g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);
 			
 			// Draw Pokemon Image
 			BufferedImage img = partyTiles.getTile(pkm.getPokemonInfo().getNumber());
@@ -1584,7 +1584,7 @@ public class BattleView extends View
 		{
 			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
 			{
-				int dx = 22+x*190, dy = 440+21+y*62;
+				int dx = 22 + x*190, dy = 440 + 21 + y*62;
 				g.translate(dx, dy);
 				
 				Move move = moves.get(i);

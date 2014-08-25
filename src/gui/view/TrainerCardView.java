@@ -46,7 +46,7 @@ public class TrainerCardView extends View
 		
 		y += 100;
 		
-		g.drawString("$$$" + charData.getDatCashMoney()+" money in da bank.", x, y);
+		g.drawString("$$$" + charData.getDatCashMoney() + " money in da bank.", x, y);
 		
 		y += 100;
 		g.setFont(Global.getFont(40));

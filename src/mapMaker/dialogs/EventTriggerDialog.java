@@ -155,7 +155,7 @@ public class EventTriggerDialog extends JPanel {
 		conditionTextArea.setText(trigger.getCondition().getOriginalConditionString().replace("&"," & ").replace("|"," | "));
 		
 		for (String g: trigger.getGlobals()) {
-			globalTextArea.append(g+"\n");
+			globalTextArea.append(g + "\n");
 		}
 		
 		dialogueNameTextField.setText(trigger.createDialogue? trigger.dialogue: trigger.dialogueName);
@@ -163,7 +163,7 @@ public class EventTriggerDialog extends JPanel {
 		if (trigger.createDialogue) {
 			createCheckBox.setSelected(true);
 			for (String d: trigger.dialogueLines) {
-				dialogueTextArea.append(d+"\n");
+				dialogueTextArea.append(d + "\n");
 			}
 		}
 		
@@ -177,7 +177,7 @@ public class EventTriggerDialog extends JPanel {
 	public EventTrigger getEventTrigger(String name) {
 		
 		String dialogueName = dialogueNameTextField.getText().trim().replace(' ', '_');
-		String dialogueString = dialogueName.length() > 0? "dialogue: "+dialogueName:"";
+		String dialogueString = dialogueName.length() > 0? "dialogue: " + dialogueName:"";
 		
 		String condition = conditionTextArea.getText().trim().replace(" ","");
 		String conditionString = condition.length() > 0?"condition: " +condition:"";
@@ -187,7 +187,7 @@ public class EventTriggerDialog extends JPanel {
 		
 		if (globals != null){
 			for (String global: globals) {
-				globalsString += "global: "+global.trim() + "\n";
+				globalsString += "global: " + global.trim() + "\n";
 			}
 		}
 		
@@ -199,7 +199,7 @@ public class EventTriggerDialog extends JPanel {
 			String[] dialogueLines = dialogueTextArea.getText().trim().split("\n");
 			
 			for (int currDialogue = 0; currDialogue < dialogueLines.length; ++currDialogue) {
-				dialogueString += "text["+currDialogue+"]: \""+dialogueLines[currDialogue].trim() + "\"\n";
+				dialogueString += "text[" + currDialogue + "]: \"" + dialogueLines[currDialogue].trim() + "\"\n";
 			}
 			
 			String contents = conditionString +"\n" + globalsString +"\n" + dialogueString;
@@ -214,6 +214,6 @@ public class EventTriggerDialog extends JPanel {
 	public TriggerData getTriggerData(String name) {
 		
 		EventTrigger eventTrigger = getEventTrigger(name);
-		return new TriggerData(name, "Event\n"+eventTrigger.triggerDataAsString());
+		return new TriggerData(name, "Event\n" + eventTrigger.triggerDataAsString());
 	}
 }

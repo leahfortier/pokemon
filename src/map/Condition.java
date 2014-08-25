@@ -7,76 +7,112 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Condition {
+public class Condition 
+{
 	private static final Pattern conditionPattern = Pattern.compile("condition:\\s*(\\S+)");
 	private static final Pattern functionPattern = Pattern.compile("(\\w+)|([()&|!])");
+	
 	/*
 	 * postfixed boolean function
 	 */
 	private ArrayList<String> condition;
 	private String originalConditionString;
 	
-	public Condition(String str){
-		
+	public Condition(String str)
+	{	
 		originalConditionString = "";
 		condition = new ArrayList<>();
 		Matcher conditionMatcher = conditionPattern.matcher(str);
 		
-		if (conditionMatcher.find()){
-			
+		if (conditionMatcher.find())
+		{	
 			String function = conditionMatcher.group(1);
 			Matcher m = functionPattern.matcher(function);
 			Stack<String> stack = new Stack<>();
 			
-			while (m.find()){
+			while (m.find())
+			{
 				String s = m.group();
 				originalConditionString += s;
-				if (s.equals("(")){
+				
+				if (s.equals("("))
+				{
 					stack.push(s);
-				}else if (s.equals(")")){
+				}
+				else if (s.equals(")"))
+				{
 					while (!stack.peek().equals("("))
 						condition.add(stack.pop());
+					
 					stack.pop();
-				}else if (s.equals("&")){
+				}
+				else if (s.equals("&"))
+				{
 					while (!stack.isEmpty() && stack.peek().equals("!"))
 						condition.add(stack.pop());
+					
 					stack.push(s);
-				}else if (s.equals("|")){
+				}
+				else if (s.equals("|"))
+				{
 					while (!stack.isEmpty() && (stack.peek().equals("&") || stack.peek().equals("!")))
 						condition.add(stack.pop());
+				
 					stack.push(s);
-				}else if (s.equals("!")){
+				}
+				else if (s.equals("!"))
+				{
 					stack.push(s);
-				}else{
+				}
+				else
+				{
 					condition.add(s);
 				}
 			}
+			
 			while (!stack.isEmpty())
 				condition.add(stack.pop());
-		}else condition.add("true");
+		}
+		else condition.add("true");
 	}
 	
-	public boolean isTrue(CharacterData data){
+	public boolean isTrue(CharacterData data)
+	{
 		Stack<Boolean> stack = new Stack<>();
-		for (String s: condition){
-			if (s.equals("&")){
+		for (String s: condition)
+		{
+			if (s.equals("&"))
+			{
 				boolean v1 = stack.pop();
 				boolean v2 = stack.pop();
+			
 				stack.push(v1&&v2);
-			}else if (s.equals("|")){
+			}
+			else if (s.equals("|"))
+			{
 				boolean v1 = stack.pop();
 				boolean v2 = stack.pop();
+			
 				stack.push(v1||v2);
-			}else if (s.equals("!")){
+			}
+			else if (s.equals("!"))
+			{
 				stack.push(!stack.pop());
-			}else if (s.equals("true")){
+			}
+			else if (s.equals("true"))
+			{
 				stack.push(true);
-			}else if (s.equals("false")){
+			}
+			else if (s.equals("false"))
+			{
 				stack.push(false);
-			}else{
+			}
+			else
+			{
 				stack.push(data.globalsContain(s));
 			}
 		}
+		
 		return stack.pop();
 	}
 	
@@ -85,12 +121,12 @@ public class Condition {
 		if (op != '&' && op != '|')
 			return false;
 		
-		originalConditionString = (originalConditionString.length() == 0? "":"("+originalConditionString+")" +op) +global;
+		originalConditionString = (originalConditionString.length() == 0 ? "" : "(" + originalConditionString + ")" +op) +global;
 		
 		boolean negate = false;
 		if (global.charAt(0) == '!')
 		{
-			global = global.substring(1,global.length());
+			global = global.substring(1, global.length());
 			negate = true;
 		}
 		
@@ -104,8 +140,10 @@ public class Condition {
 		condition.add(global);
 		if (negate)
 			condition.add("!");
+		
 		if (!noOp)
-			condition.add(""+op);
+			condition.add("" + op);
+		
 		return true;
 	}
 	
@@ -114,7 +152,8 @@ public class Condition {
 		return condition.toString();
 	}
 	
-	public String getOriginalConditionString() {
+	public String getOriginalConditionString() 
+	{
 		return originalConditionString;
 	}
 }

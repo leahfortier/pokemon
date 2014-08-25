@@ -222,7 +222,7 @@ public class BattleAttributes implements Serializable
 		// Too High
 		if (stages[index] == Stat.MAX_STAT_CHANGES && val > 0)
 		{
-			if (print) b.addMessage(victim.getName()+"'s "+statName+" cannot be raised any higher!");
+			if (print) b.addMessage(victim.getName() + "'s " + statName + " cannot be raised any higher!");
 			return false;
 		}
 		
@@ -230,12 +230,12 @@ public class BattleAttributes implements Serializable
 		if (stages[index] == -1*Stat.MAX_STAT_CHANGES && val < 0)
 		{
 			// THIS LOW
-			if (print) b.addMessage(victim.getName()+"'s "+statName+" cannot be lowered any further!");
+			if (print) b.addMessage(victim.getName() + "'s " + statName + " cannot be lowered any further!");
 			return false;
 		}
 		
 		
-		String change = "", victimName = caster == victim ? "its" : victim.getName()+"'s";
+		String change = "", victimName = caster == victim ? "its" : victim.getName() + "'s";
 		if (val >= 2) change =  "sharply raised";
 		else if (val == 1) change = "raised";
 		else if (val == -1) change = "lowered";
@@ -244,13 +244,13 @@ public class BattleAttributes implements Serializable
 		switch (source)
 		{
 			case ATTACK:
-				b.addMessage(victim.getName()+"'s "+statName+" was "+change+"!");
+				b.addMessage(victim.getName() + "'s " + statName + " was " + change + "!");
 				break;
 			case ABILITY:
-				b.addMessage(caster.getName()+"'s "+caster.getAbility().getName()+" "+change+" "+victimName+" "+statName+"!");
+				b.addMessage(caster.getName() + "'s " + caster.getAbility().getName() + " " + change + " " + victimName + " " + statName + "!");
 				break;
 			case HELD_ITEM:
-				b.addMessage(caster.getName()+"'s "+caster.getHeldItem(b).getName()+" "+change+" "+victimName+" "+statName+"!");
+				b.addMessage(caster.getName() + "'s " + caster.getHeldItem(b).getName() + " " + change + " " + victimName + " " + statName + "!");
 				break;
 			case USE_ITEM:
 				break; // Don't print anything for these, they will be handled manually
@@ -268,7 +268,7 @@ public class BattleAttributes implements Serializable
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
 		if (val < 0 && caster != victim && victim.hasAbility("Defiant") && modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.ABILITY))
 		{
-			b.addMessage(victim.getName()+"'s Defiant sharply raised its attack!");
+			b.addMessage(victim.getName() + "'s Defiant sharply raised its attack!");
 		}
 		
 		return true;
