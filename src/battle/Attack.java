@@ -498,8 +498,8 @@ public abstract class Attack implements Serializable
 		map.put("Aqua Tail", new AquaTail());
 		map.put("Skull Bash", new SkullBash());
 		map.put("Iron Defense", new IronDefense());
-		map.put("Rain Dance", new RainDance());
 		map.put("Hydro Pump", new HydroPump());
+		map.put("Rain Dance", new RainDance());
 		map.put("Sunny Day", new SunnyDay());
 		map.put("Sandstorm", new Sandstorm());
 		map.put("Hail", new Hail());
@@ -1163,7 +1163,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -1190,7 +1190,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, recoilDamage(user, damage));
@@ -1248,7 +1248,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -1620,7 +1620,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -1869,17 +1869,6 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class RainDance extends Attack 
-	{
-		private static final long serialVersionUID = 1L;
-		public RainDance()
-		{
-			super("Rain Dance", "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, Category.STATUS);
-			super.effects.add(Effect.getEffect("Raining", EffectType.BATTLE));
-			super.moveTypes.add("Field");
-		}
-	}
-
 	private static class HydroPump extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
@@ -1891,6 +1880,17 @@ public abstract class Attack implements Serializable
 		}
 	}
 
+	private static class RainDance extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+		public RainDance()
+		{
+			super("Rain Dance", "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, Category.STATUS);
+			super.effects.add(Effect.getEffect("RAINING", EffectType.BATTLE));
+			super.moveTypes.add("Field");
+		}
+	}
+
 	private static class SunnyDay extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
@@ -1898,7 +1898,7 @@ public abstract class Attack implements Serializable
 		{
 			super("Sunny Day", "The user intensifies the sun for five turns, powering up Fire-type moves.", 5, Type.FIRE, Category.STATUS);
 			super.moveTypes.add("Field");
-			super.effects.add(Effect.getEffect("Sunny", EffectType.BATTLE));
+			super.effects.add(Effect.getEffect("SUNNY", EffectType.BATTLE));
 		}
 	}
 
@@ -1909,7 +1909,7 @@ public abstract class Attack implements Serializable
 		{
 			super("Sandstorm", "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", 10, Type.ROCK, Category.STATUS);
 			super.moveTypes.add("Field");
-			super.effects.add(Effect.getEffect("Sandstorm", EffectType.BATTLE));
+			super.effects.add(Effect.getEffect("SANDSTORM", EffectType.BATTLE));
 		}
 	}
 
@@ -1920,7 +1920,7 @@ public abstract class Attack implements Serializable
 		{
 			super("Hail", "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.", 10, Type.ICE, Category.STATUS);
 			super.moveTypes.add("Field");
-			super.effects.add(Effect.getEffect("Hailing", EffectType.BATTLE));
+			super.effects.add(Effect.getEffect("HAILING", EffectType.BATTLE));
 		}
 	}
 
@@ -4769,7 +4769,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -5432,7 +5432,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -6295,7 +6295,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -8310,7 +8310,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -8444,7 +8444,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -9101,7 +9101,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -10230,7 +10230,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");

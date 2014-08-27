@@ -1529,7 +1529,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, int damage) {
+				ActivePokemon victim, Integer damage) {
 			if (user.hasAbility("Magic Guard"))
 				return;
 			b.addMessage(user.getName() + " was hurt by its " + this.name + "!");
@@ -2095,7 +2095,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, int damage) {
+				ActivePokemon victim, Integer damage) {
 			if (user.fullHealth())
 				return;
 			user.heal((int) Math.ceil(damage / 8.0));
@@ -4204,7 +4204,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, int damage) {
+				ActivePokemon victim, Integer damage) {
 			if (Math.random() * 100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
@@ -4375,7 +4375,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, int damage) {
+				ActivePokemon victim, Integer damage) {
 			if (Math.random() * 100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {

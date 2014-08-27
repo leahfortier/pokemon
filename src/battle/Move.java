@@ -105,16 +105,24 @@ public class Move implements Serializable
 		return true;
 	}
 	
-	public static Move selectMove(Battle b, ActivePokemon p) 
+	public static Move selectOpponentMove(Battle b, ActivePokemon p) 
 	{
-		if (forceMove(p)) return p.getMove();
+		if (forceMove(b, p)) 
+		{
+			return p.getMove();
+		}
+		
 		List<Move> usable = getUsableMoves(b, p);
-		if (usable.size() == 0) return new Move(Attack.getAttack("Struggle"));
+		if (usable.size() == 0)
+		{
+			return new Move(Attack.getAttack("Struggle"));	
+		}
+		
 		return moveAI(b, p, usable);
 	}
 	
 	// Returns true if a move should be forced (move will already be selected for the Pokemon), and false if not 
-	public static boolean forceMove(ActivePokemon p)
+	public static boolean forceMove(Battle b, ActivePokemon p)
 	{
 		// Forced moves
 		for (PokemonEffect e : p.getEffects())
@@ -134,6 +142,12 @@ public class Move implements Serializable
 			if (!m.chargesFirst() && p.getMove().ready) return true;
 		}
 		
+		if (p.user() && getUsableMoves(b, p).size() == 0)
+		{
+			p.setMove(new Move(Attack.getAttack("Struggle")));
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -141,9 +155,28 @@ public class Move implements Serializable
 	private static List<Move> getUsableMoves(Battle b, ActivePokemon p)
 	{
 		List<Move> usable = new ArrayList<Move>();
-		for (Move m : p.getMoves()) 
+		for (Move m : p.getMoves())
 		{
-			if (m.getPP() > 0) usable.add(m); // Dat PP Check
+			if (validMove(b, p, m, false))
+			{
+				usable.add(m);
+			}
+		}
+		
+		return usable;
+	}
+	
+	// Will return whether or not p can execute m
+	// if selecting is true: if yes (to above line), it will set m to be p's move, if no, the battle should display why
+	public static boolean validMove(Battle b, ActivePokemon p, Move m, boolean selecting)
+	{
+		// Invalid if PP is zero
+		if (m.getPP() == 0)
+		{
+			if (selecting)
+				b.addMessage(p.getName() + " is out of PP for " + m.move.getName() + "!");
+			
+			return false;
 		}
 		
 		// BUT WHAT IF YOU HAVE A CONDITION THAT PREVENTS YOU FROM USING THAT MOVE?!!?! THEN WHAT?!!?!!
@@ -152,56 +185,30 @@ public class Move implements Serializable
 		{
 			if (Effect.isInactiveEffect(o)) 
 				continue;
-			
-			if (o instanceof AttackSelectionEffect)
-			{
-				AttackSelectionEffect a = (AttackSelectionEffect)o;
-				for (int i = 0; i < usable.size(); i++)
-				{
-					if (!a.usable(p, usable.get(i)))
-					{
-						usable.remove(i--); // THAT'S WHAT
-					}
-				}
-			}
-		}
-		
-		return usable;
-	}
-	
-	// Will return whether or not p can execute m
-	// if yes, it will set m to be p's move, if no, the battle should display why
-	public static boolean validMove(ActivePokemon p, Move m, Battle b)
-	{
-		if (m.getPP() == 0)
-		{
-			b.addMessage(p.getName() + " is out of PP for " + m.move.getName() + "!");
-			return false;
-		}
-		
-		Object[] list = b.getEffectsList(p);
-		for (Object o : list)
-		{
-			if (Effect.isInactiveEffect(o)) 
-				continue;
 			 
 			if (o instanceof AttackSelectionEffect)
 			{
-				AttackSelectionEffect a = (AttackSelectionEffect)o;
-				if (!a.usable(p, m))
+				AttackSelectionEffect attackSelectionEffect = (AttackSelectionEffect)o;
+				if (!attackSelectionEffect.usable(p, m))
 				{
-					b.addMessage(a.getUnusableMessage(p));
+					if (selecting)
+						b.addMessage(attackSelectionEffect.getUnusableMessage(p));
+					
+					// THAT'S WHAT
 					return false;					
 				}
 			}
 		}
 		
-		p.setMove(m);
+		// Set the move if selecting
+		if (selecting) 
+			p.setMove(m);
+		
 		return true;
 	}
 	
 	
-	//AI Stuffffff
+	// AI Stuffffff
 	private static Move moveAI(Battle b, ActivePokemon p, List<Move> usable)
 	{
 		ActivePokemon opp = b.getOtherPokemon(p.user());

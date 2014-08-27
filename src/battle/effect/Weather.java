@@ -14,18 +14,22 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	
 	public static enum WeatherType
 	{
-		CLEAR_SKIES, SUNNY, RAINING, SANDSTORM, HAILING;
+		CLEAR_SKIES(Type.NORMAL), 
+		SUNNY(Type.FIRE), 
+		RAINING(Type.WATER), 
+		SANDSTORM(Type.ROCK), 
+		HAILING(Type.ICE);
 		
-		private String name;
+		private Type element;
 		
-		private WeatherType()
+		private WeatherType(Type element)
 		{
-			name = name().charAt(0) + name().substring(1).toLowerCase();
+			this.element = element;
 		}
 		
-		public String getName()
+		public Type getElement()
 		{
-			return name;
+			return element;
 		}
 	}
 	
@@ -33,7 +37,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	
 	public Weather(WeatherType weather)
 	{
-		super(weather.getName(), -1, -1, true);
+		super(weather.toString(), -1, -1, true);
 		type = weather;
 	}
 	
@@ -72,7 +76,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			case HAILING:
 				return new Hailing();
 			default:
-				Global.error("No such WeatherType " + weather.getName());
+				Global.error("No such WeatherType " + weather.toString());
 				return null;
 		}
 	}

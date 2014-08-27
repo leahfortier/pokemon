@@ -1218,6 +1218,7 @@ Pickup:
 	Type: EndBattle
 	EndBattle: if (!p.isHoldingItem(b) && Math.random() < .1)
 	{
+		// TODO: THIS SHOULDN'T JUST BE LEFTOVER IT SHOULD BE MORE FUN STUFF
 		p.giveItem((HoldItem)Item.getItem("Leftovers"));
 	}
 	###

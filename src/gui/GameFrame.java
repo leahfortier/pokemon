@@ -31,6 +31,9 @@ public class GameFrame
 		{
 			new StuffGen();
 			PokemonInfo.loadPokemonInfo();
+			
+			System.out.println("GEN GEN GEN");
+			
 			return;
 		}
 

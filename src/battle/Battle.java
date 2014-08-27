@@ -236,7 +236,7 @@ public class Battle
 	private void startTurn()
 	{
 		ActivePokemon plyr = player.front(), opp = opponent.front(); 
-		opp.setMove(Move.selectMove(this, opp));
+		opp.setMove(Move.selectOpponentMove(this, opp));
 
 		turn++;
 		plyr.getAttributes().resetDamageTaken();
@@ -508,6 +508,10 @@ public class Battle
 		me.getAttributes().setLastMoveUsed();
 		if (reduce) me.getMove().reducePP(o.hasAbility("Pressure") ? 2 : 1);
 		me.getAttributes().setAttacking(false);
+		
+		// Hopefully this doesn't mess anything up but update type at the end of each attack
+		addMessage("", me.getType(this), me.user());
+		addMessage("", o.getType(this), o.user());
 	}
 	
 	public void printAttacking(ActivePokemon p)

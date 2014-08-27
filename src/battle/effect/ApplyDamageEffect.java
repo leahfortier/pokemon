@@ -10,5 +10,5 @@ public interface ApplyDamageEffect
 	// user: The user of that attack, the one who is probably implementing this effect
 	// victim: The Pokemon that received the attack
 	// damage: The amount of damage that was dealt to victim by the user
-	public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage);
+	public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage);
 }

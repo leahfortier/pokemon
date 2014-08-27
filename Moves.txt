@@ -601,15 +601,6 @@ IronDefense:
 	Type: Steel
 	PP: 15
 *
-RainDance:
-	Name: Rain Dance
-	Desc: The user summons a heavy rain that falls for five turns, powering up Water-type moves.
-	Type: Water
-	Cat: Status
-	PP: 5
-	Effect: Battle Raining
-	MoveType: Field
-*
 HydroPump:
 	Name: Hydro Pump
 	Type: Water
@@ -619,6 +610,15 @@ HydroPump:
 	Acc: 80
 	Cat: Special
 *
+RainDance:
+	Name: Rain Dance
+	Desc: The user summons a heavy rain that falls for five turns, powering up Water-type moves.
+	Type: Water
+	Cat: Status
+	PP: 5
+	Effect: Battle RAINING
+	MoveType: Field
+*
 SunnyDay:
 	Name: Sunny Day
 	Desc: The user intensifies the sun for five turns, powering up Fire-type moves.
@@ -626,7 +626,7 @@ SunnyDay:
 	Type: Fire
 	Cat: Status
 	MoveType: Field
-	Effect: Battle Sunny
+	Effect: Battle SUNNY
 *
 Sandstorm:
 	Desc: A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.
@@ -634,7 +634,7 @@ Sandstorm:
 	Type: Rock
 	Cat: Status
 	MoveType: Field
-	Effect: Battle Sandstorm
+	Effect: Battle SANDSTORM
 *
 Hail:
 	Desc: The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.
@@ -642,7 +642,7 @@ Hail:
 	Type: Ice
 	Cat: Status
 	MoveType: Field
-	Effect: Battle Hailing
+	Effect: Battle HAILING
 *
 PetalDance:
 	Name: Petal Dance

@@ -601,6 +601,12 @@ public class ActivePokemon implements Serializable
 			return new Type[] {Type.NORMAL, Type.NONE};
 		}
 		
+		if (hasAbility("Forecast"))
+		{
+			System.out.println(getName() + " has Forecast");			
+			return new Type[] { b.getWeather().getType().getElement(), Type.NONE};
+		}
+		
 		// Check if the Pokemon has had its type changed during the battle
 		PokemonEffect changeType = getEffect("ChangeType");
 		if (changeType != null) 

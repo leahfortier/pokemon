@@ -264,22 +264,28 @@ public class Global
 		
 		for (Object invokee : invokees)
 		{
-			if (invokee.getClass().equals(className))
+			// If the invokee is an instance of the class we are checking, do the things and stuff
+			if (className.isInstance(invokee))
 			{
+				// If this is an inactive effect, we don't want to do anything with it
 				if (Effect.isInactiveEffect(invokee)) 
 				{
 					continue;
 				}
 				
+				// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
 				if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold())
 				{
 					continue;
 				}
 				
+				// YEAH TRY CATCH BLOCKS ARE THE GREATEST
 				try 
 				{
+					// Don't want to do this more than once because that would be totes inefficientz
 					if (parameterTypes == null)
 					{
+						// Get the parameter types -- THIS IS WHY WE HAVE TO DO INTEGER INSTEAD OF INT
 						parameterTypes = new Class<?>[parameterValues.length];
 						for (int i = 0; i < parameterTypes.length; i++)	
 						{
@@ -287,13 +293,17 @@ public class Global
 						}
 					}
 					
+					// Create and invoke the method -- THIS IS SO COOL THANK YOU MARCOD OF THE SEA
 					Method method = className.getMethod(methodName, parameterTypes);
 					Object returnValue = method.invoke(invokee, parameterValues);
+					
+					// If we're just checking for a specific boolean, we can cut out early
 					if (isCheck && (boolean)returnValue == check)
 					{
 						return invokee;
 					}
 					
+					// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
 					if (p != null && p.isFainted(b))
 					{
 						return invokee;
@@ -303,7 +313,8 @@ public class Global
 					{
 						return invokee;
 					}
-				} 
+				}
+				// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
 				catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
 				{
 					Global.error("No such method " + methodName + " in class " + className.getName() + " or could not invoke such method.");
@@ -311,6 +322,7 @@ public class Global
 			}	
 		}
 		
+		// We didn't find what we were looking for
 		return null;
 	}
 	
@@ -326,13 +338,13 @@ public class Global
 	}
 	
 	// Used for calling methods that are void
-	public static <T> Object invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	public static <T> void invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+		Global.invoke(false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
-	public static <T> Object invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+		Global.invoke(false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 }

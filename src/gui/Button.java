@@ -27,7 +27,7 @@ public class Button
 		y = yy;
 		width = ww;
 		height = hh;
-		hoverAction = ha.hoverAction;
+		hoverAction = ha == null ? null : ha.hoverAction;
 		hover = press = forceHover = false;
 		active = true;
 		transition = trans;

@@ -735,7 +735,7 @@ public class StuffGen
 							try { recoilDamage = "\t\t\treturn (int)Math.ceil(damage/" + Integer.parseInt(split[1]) + ".0);\n"; }
 							catch(NumberFormatException ex) { recoilDamage = readFunction(in, line, split[1]); }
 							extraFields += "\t\tprivate int recoilDamage(ActivePokemon user, int damage)\n\t\t{\n" + recoilDamage + "\t\t}\n";
-							recoil = writeFunction("void applyRecoil(Battle b, ActivePokemon user, int damage)", recoil);
+							recoil = writeFunction("void applyRecoil(Battle b, ActivePokemon user, Integer damage)", recoil);
 							break;
 						case "CrashDamage":
 							interfaces += (implemented ? ", " : "implements ") + "CrashDamageMove";
@@ -1125,7 +1125,7 @@ public class StuffGen
 						break;
 					case "Effect":
 						applyEffect = readFunction(in, line, split[1]);
-						applyEffect = writeFunction("void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)", applyEffect);
+						applyEffect = writeFunction("void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)", applyEffect);
 						break;
 					case "TakeDamage":
 						takeDamage = readFunction(in, line, split[1]);
@@ -1673,7 +1673,7 @@ public class StuffGen
 			if (interfaces.contains("ApplyDamageEffect"))
 			{
 				if (!fields.containsKey("OnApplyDamage")) Global.error(fields.get("ClassName") + " must have an OnApplyDamage field, since it implements ApplyDamageEffect.");
-				else out.append("public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage){" + fields.get("OnApplyDamage") + "}");
+				else out.append("public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage){" + fields.get("OnApplyDamage") + "}");
 				fields.remove("OnApplyDamage");
 			}
 			

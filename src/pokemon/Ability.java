@@ -319,8 +319,7 @@ public abstract class Ability implements Serializable
 		map.put("Multitype", new Multitype());
 		map.put("Forecast", new Forecast());
 
-		for (String s : map.keySet()) 
-			abilityNames.add(s);
+		for (String s : map.keySet()) abilityNames.add(s);
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -955,7 +954,7 @@ public abstract class Ability implements Serializable
 			return (Stench)(new Stench().activate());
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
 			if (Math.random()*100 < 10)
 			{
@@ -3059,7 +3058,7 @@ public abstract class Ability implements Serializable
 			return (PoisonTouch)(new PoisonTouch().activate());
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
 			if (Math.random()*100 < 30)
 			{
