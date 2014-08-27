@@ -209,7 +209,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		
 		public void buffet(ActivePokemon p, Battle b)
 		{
-			if (p.isType(Type.ROCK) || p.isType(Type.STEEL) || p.isType(Type.GROUND)) return;
+			if (p.isType(b, Type.ROCK) || p.isType(b, Type.STEEL) || p.isType(b, Type.GROUND)) return;
 			
 			Ability ability = p.getAbility();
 			Item item = p.getHeldItem(b);
@@ -238,7 +238,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		
 		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			return (int)(stat*(s == Stat.SP_DEFENSE && p.isType(Type.ROCK) ? 1.5 : 1));
+			return (int)(stat*(s == Stat.SP_DEFENSE && p.isType(b, Type.ROCK) ? 1.5 : 1));
 		}
 	}
 	
@@ -270,13 +270,16 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		
 		public void buffet(ActivePokemon p, Battle b)
 		{
-			if (p.isType(Type.ICE)) return;
+			if (p.isType(b, Type.ICE)) 
+				return;
 			
 			Ability ability = p.getAbility();
-			Item item = p.getHeldItem(b);
+			if (ability instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)ability).block(type)) 
+				return;
 			
-			if (ability instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)ability).block(type)) return;
-			if (item instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)item).block(type)) return;
+			Item item = p.getHeldItem(b);
+			if (item instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)item).block(type)) 
+				return;
 			
 			b.addMessage(p.getName() + " is buffeted by the hail!");
 			p.reduceHealthFraction(b, 1/16.0);

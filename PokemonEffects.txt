@@ -6,7 +6,7 @@
 LeechSeed:
 	EffectType: EndTurn
 	FailTypes: Grass
-	FailMessage: if (victim.isType(Type.GRASS)) return "It doesn't affect " + victim.getName() + "!";
+	FailMessage: if (victim.isType(b, Type.GRASS)) return "It doesn't affect " + victim.getName() + "!";
 	if (victim.hasEffect("LeechSeed")) return victim.getName() + " is already seeded!";
 	###
 	CastMessage: victim.getName() + " was seeded!"
@@ -129,7 +129,7 @@ Protecting:
 	OpposingCanAttack: if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType("ProtectPiercing")) return true;
 	b.printAttacking(p);
 	b.addMessage(opp.getName() + " is protecting itself!");
-	if (p.getAttack() instanceof CrashDamageMove) ((CrashDamageMove)p.getAttack()).crash(b, p);
+	Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 	return false;
 	###
 	Cast: if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
@@ -147,7 +147,7 @@ QuickGuard:
 	OpposingCanAttack: if (p.getAttack().isSelfTarget() || p.getAttack().getName().equals("Feint") || p.getAttack().getPriority(b, p) <= 0) return true;
 	b.printAttacking(p);
 	b.addMessage(opp.getName() + " is protecting itself!");
-	if (p.getAttack() instanceof CrashDamageMove) ((CrashDamageMove)p.getAttack()).crash(b, p);
+	Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 	return false;
 	###
 	Cast: if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
@@ -390,7 +390,7 @@ ChangeType:
 	###
 	CastMessage: victim.getName() + " was changed to " + type[0].getName() + (type[1] == Type.NONE ? "" : "/" + type[1].getName()) + " type!!"
 	CanHave
-	Subside: b.addMessage("", p.getType(), p.user());
+	Subside: b.addMessage("", p.getType(b), p.user());
 	###
 *
 ChangeAbility:
@@ -727,7 +727,7 @@ Transformed:
 	type = transformee.getPokemonInfo().getType();
 	super.cast(b, caster, victim, source, printCast);
 	b.addMessage("", transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user());
-	b.addMessage("", victim.getType(), victim.user());
+	b.addMessage("", victim.getType(b), victim.user());
 	###
 	FailCondition: b.getOtherPokemon(victim.user()).hasEffect("Transformed")
 	EffectType: MoveListCondition
@@ -919,7 +919,7 @@ PerishSong:
 	NumTurns: 3
 	FailAbility: Soundproof
 	EffectType: Passable
-	FailMessage: if (victim.hasAbility("Soundproof")) return victim.getName() + "'s Soundproof makes it immune to sound based moves!";
+	FailMessage: if (victim.hasAbility("Soundproof")) return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
 	###
 	CastMessage: "All Pokemon hearing this song will faint in three turns!"
 	EffectType: EndTurn

@@ -985,7 +985,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void apply(ActivePokemon victim, Battle b) {
-			if (victim.isType(Type.POISON)) {
+			if (victim.isType(b, Type.POISON)) {
 				if (victim.fullHealth())
 					return;
 				victim.healHealthFraction(1 / 16.0);
@@ -6210,7 +6210,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.isType(Type.WATER) || o.isType(Type.BUG))
+			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG))
 				return new double[] { 3, 0 };
 			else
 				return new double[] { 1, 0 };

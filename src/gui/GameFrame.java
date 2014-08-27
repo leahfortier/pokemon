@@ -19,8 +19,8 @@ import pokemon.PokemonInfo;
 
 public class GameFrame
 {
-	// public static boolean GENERATE_STUFF = true;
-	public static boolean GENERATE_STUFF = false;
+	 public static boolean GENERATE_STUFF = true;
+//	public static boolean GENERATE_STUFF = false;
 	public static boolean DEV_MODE = true;
 
 	private static JFrame frame;

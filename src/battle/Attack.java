@@ -253,8 +253,15 @@ public abstract class Attack implements Serializable
 		if (category == Category.STATUS && !isMoveType("Field") && !isMoveType("NoMagicCoat"))
 		{
 			String bouncy = "";
-			if (o.hasEffect("MagicCoat")) bouncy = "Coat";
-			else if (o.hasAbility("Magic Bounce") && !me.breaksTheMold()) bouncy = "Bounce";
+			if (o.hasEffect("MagicCoat"))
+			{
+				bouncy = "Coat";
+			}
+			else if (o.hasAbility("Magic Bounce") && !me.breaksTheMold()) 
+			{
+				bouncy = "Bounce";
+			}
+			
 			if (bouncy.length() > 0)
 			{
 				b.addMessage(o.getName() + "'s Magic " + bouncy + " reflected " + me.getName() + "'s move!");
@@ -271,10 +278,12 @@ public abstract class Attack implements Serializable
 		if (Math.random()*100 >= chance) return false;
 		
 		// Check the opponents effects and see if it will prevent effects from occuring
-		List<Object> list = b.getEffectsList(o);
+		Object[] list = b.getEffectsList(o);
 		for (Object obj : list)
 		{
-			if (obj instanceof Effect && !((Effect)obj).isActive()) continue;
+			if (Effect.isInactiveEffect(obj)) 
+				continue;
+			
 			if (obj instanceof EffectBlockerEffect && !((EffectBlockerEffect)obj).validMove(b, me, o)) return false;
 		}
 		
@@ -286,10 +295,14 @@ public abstract class Attack implements Serializable
 	
 	private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp)
 	{
-		if (Type.getAdvantage(p.getAttack().getType(b, p), opp, b) > 0) return false;
+		if (Type.getAdvantage(p.getAttack().getType(b, p), opp, b) > 0) 
+		{
+			return false;
+		}
 		
-		b.addMessage("It doesn't affect " + opp.getName() + "!");
-		if (p.getAttack() instanceof CrashDamageMove) ((CrashDamageMove)p.getAttack()).crash(b, p);
+		b.addMessage("It doesn't affect " + opp.getName() + "!");		
+		Global.invoke(new Object[] { p.getAttack() }, CrashDamageMove.class, "crash", b, p);
+		
 		return true;
 	}
 	
@@ -297,7 +310,10 @@ public abstract class Attack implements Serializable
 	// Returns false if the move was unsuccessful due to zero type advantage
 	public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 	{
-		if (zeroAdvantage(b, me, o)) return -1;
+		if (zeroAdvantage(b, me, o)) 
+		{
+			return -1;
+		}
 		
 		// Print Advantage
 		double adv = Type.getAdvantage(me.getAttack().getType(b, me), o, b);
@@ -313,28 +329,35 @@ public abstract class Attack implements Serializable
 		Ability userAbility = me.getAbility(), oppAbility = o.getAbility();
 		Item userItem = me.getHeldItem(b), oppItem = o.getHeldItem(b);
 		
+		Object[] invokees = new Object[] {userAbility, userItem};
+		
 		// Apply a damage effect
-		if (userAbility instanceof ApplyDamageEffect) ((ApplyDamageEffect)userAbility).applyEffect(b, me, o, damage);
-		if (userItem instanceof ApplyDamageEffect) ((ApplyDamageEffect)userItem).applyEffect(b, me, o, damage);
+		Global.invoke(invokees, ApplyDamageEffect.class, "applyEffect", b, me, o, damage);
 		
 		// Take Recoil Damage
-		if (this instanceof RecoilMove) ((RecoilMove)this).applyRecoil(b, me, damage);
+		Global.invoke(new Object[] {this}, RecoilMove.class, "applyRecoil", b, me, damage);
 	
-		if (me.isFainted(b)) return damage;
+		if (me.isFainted(b))
+		{
+			return damage;
+		}
 		
 		// Sap the Health
-		if (isMoveType("SapHealth")) me.sapHealth(o, (int)Math.ceil(damage/2.0), b, true);
+		if (isMoveType("SapHealth")) 
+		{
+			me.sapHealth(o, (int)Math.ceil(damage/2.0), b, true);
+		}
+		
+		invokees = new Object[] {oppAbility, oppItem};
 		
 		// Abilities and items that apply when a Pokemon makes physical contact with them
 		if (isMoveType("PhysicalContact"))
 		{
-			if (oppAbility instanceof PhysicalContactEffect) ((PhysicalContactEffect)oppAbility).contact(b, me, o);
-			if (oppItem instanceof PhysicalContactEffect) ((PhysicalContactEffect)oppItem).contact(b, me, o);
+			Global.invoke(invokees, PhysicalContactEffect.class, "contact", b, me, o);
 		}
 		
 		// Effects that apply to the opponent when they take damage
-		if (oppAbility instanceof TakeDamageEffect) ((TakeDamageEffect)oppAbility).takeDamage(b, me, o);
-		if (oppItem instanceof TakeDamageEffect) ((TakeDamageEffect)oppItem).takeDamage(b, me, o);
+		Global.invoke(invokees, TakeDamageEffect.class, "takeDamage", b, me, o);
 		
 		return damage;
 	}
@@ -361,7 +384,7 @@ public abstract class Attack implements Serializable
 		for (Effect e : effects)
 		{
 			if (e.applies(b, user, victim, CastSource.ATTACK)) e.cast(b, user, victim, CastSource.ATTACK, canPrintCast());
-			else if (canPrintFail()) b.addMessage(e.getFailMessage(user, victim, victim.user()));
+			else if (canPrintFail()) b.addMessage(e.getFailMessage(b, user, victim, victim.user()));
 		}
 		
 		// Heal yourself!!
@@ -2558,8 +2581,9 @@ public abstract class Attack implements Serializable
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			if (victim.getType()[0].equals(Type.FLYING)) return new Type[] {victim.getType()[1], Type.NONE};
-			if (victim.getType()[1].equals(Type.FLYING)) return new Type[] {victim.getType()[0], Type.NONE};
+			Type[] type = victim.getType(b);
+			if (type[0].equals(Type.FLYING)) return new Type[] {type[1], Type.NONE};
+			if (type[1].equals(Type.FLYING)) return new Type[] {type[0], Type.NONE};
 			return null;
 		}
 	}
@@ -5244,7 +5268,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (me.isType(Type.GHOST))
+			if (me.isType(b, Type.GHOST))
 			{
 				if (effects.get(0).applies(b, me, o, CastSource.ATTACK)) effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
 				else b.addMessage("...but it failed!");
@@ -5998,8 +6022,8 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			Type[] type = me.getType();
-			if (o.isType(type[0]) || (type[1] != Type.NONE && o.isType(type[1]))) super.apply(me, o, b);
+			Type[] type = me.getType(b);
+			if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) super.apply(me, o, b);
 			else b.addMessage("...but it failed!");
 		}
 	}
@@ -6848,7 +6872,7 @@ public abstract class Attack implements Serializable
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return b.getOtherPokemon(caster.user()).getType().clone();
+			return b.getOtherPokemon(caster.user()).getType(b).clone();
 		}
 	}
 
@@ -7233,7 +7257,7 @@ public abstract class Attack implements Serializable
 		{
 			for (Move m : me.getMoves())
 			{
-				if (!me.isType(m.getAttack().getType(b, me)))
+				if (!me.isType(b, m.getAttack().getType(b, me)))
 				{
 					super.apply(me, o, b);
 					return;
@@ -7248,7 +7272,7 @@ public abstract class Attack implements Serializable
 			for (Move m : victim.getMoves())
 			{
 				Type t = m.getAttack().getType(b, victim);
-				if (!victim.isType(t)) types.add(t);
+				if (!victim.isType(b, t)) types.add(t);
 			}
 			return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 		}
@@ -7257,13 +7281,13 @@ public abstract class Attack implements Serializable
 	private static class Conversion2 extends Attack implements ChangeTypeMove
 	{
 		private static final long serialVersionUID = 1L;
-		private List<Type> getResistances(ActivePokemon victim, Type attacking)
+		private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b)
 		{
 			List<Type> types = new ArrayList<>();
 			for (Type t : Type.values())
-			{
-				if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(t)) types.add(t);
-			}
+			if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(b, t))
+			types.add(t);
+			
 			return types;
 		}
 
@@ -7278,7 +7302,7 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Move m = o.getAttributes().getLastMoveUsed();
-			if (m == null || getResistances(me, m.getAttack().getType(b, o)).size() == 0)
+			if (m == null || getResistances(me, m.getAttack().getType(b, o), b).size() == 0)
 			{
 				b.addMessage("...but it failed!");
 				return;
@@ -7289,7 +7313,7 @@ public abstract class Attack implements Serializable
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getAttack().getType(b, other));
+			List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getAttack().getType(b, other), b);
 			return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 		}
 	}

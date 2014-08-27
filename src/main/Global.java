@@ -11,15 +11,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
 import pokemon.Ability;
+import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import sound.SoundPlayer;
 import battle.Attack;
+import battle.Battle;
+import battle.effect.Effect;
 import battle.effect.PokemonEffect;
 
 // Loads and maintains game data.
@@ -251,5 +256,83 @@ public class Global
 		if (ratio < 0.25) return Color.RED;
 		else if (ratio < 0.5) return Color.YELLOW;
 		return Color.GREEN;
+	} 
+	
+	private static <T> Object invoke(boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
+	{
+		Class<?>[] parameterTypes = null;
+		
+		for (Object invokee : invokees)
+		{
+			if (invokee.getClass().equals(className))
+			{
+				if (Effect.isInactiveEffect(invokee)) 
+				{
+					continue;
+				}
+				
+				if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold())
+				{
+					continue;
+				}
+				
+				try 
+				{
+					if (parameterTypes == null)
+					{
+						parameterTypes = new Class<?>[parameterValues.length];
+						for (int i = 0; i < parameterTypes.length; i++)	
+						{
+							parameterTypes[i] = parameterValues[i].getClass();
+						}
+					}
+					
+					Method method = className.getMethod(methodName, parameterTypes);
+					Object returnValue = method.invoke(invokee, parameterValues);
+					if (isCheck && (boolean)returnValue == check)
+					{
+						return invokee;
+					}
+					
+					if (p != null && p.isFainted(b))
+					{
+						return invokee;
+					}
+					
+					if (opp != null && opp.isFainted(b))
+					{
+						return invokee;
+					}
+				} 
+				catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+				{
+					Global.error("No such method " + methodName + " in class " + className.getName() + " or could not invoke such method.");
+				}
+			}	
+		}
+		
+		return null;
+	}
+	
+	// Used for calling methods that return booleans
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
+	}
+	
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(true, check, b, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void
+	public static <T> Object invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	public static <T> Object invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 }

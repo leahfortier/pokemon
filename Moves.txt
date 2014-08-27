@@ -1079,8 +1079,9 @@ Roost:
 		user.getEffect("ChangeType").setTurns(1);
 	}
 	###
-	ChangeType: if (victim.getType()[0].equals(Type.FLYING)) return new Type[] {victim.getType()[1], Type.NONE};
-	if (victim.getType()[1].equals(Type.FLYING)) return new Type[] {victim.getType()[0], Type.NONE};
+	ChangeType: Type[] type = victim.getType(b);
+	if (type[0].equals(Type.FLYING)) return new Type[] {type[1], Type.NONE};
+	if (type[1].equals(Type.FLYING)) return new Type[] {type[0], Type.NONE};
 	return null;
 	###
 	Field: private boolean healFail;
@@ -2930,7 +2931,7 @@ Curse:
 	Type: Ghost
 	Effect: Pokemon Curse
 	StatChange: 3 Attack 1 Defense 1 Speed -1
-	Apply: if (me.isType(Type.GHOST))
+	Apply: if (me.isType(b, Type.GHOST))
 	{
 		if (effects.get(0).applies(b, me, o, CastSource.ATTACK)) effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
 		else b.addMessage("...but it failed!");
@@ -3438,8 +3439,8 @@ Synchronoise:
 	Cat: Special
 	Acc: 100
 	Pow: 70
-	Apply: Type[] type = me.getType();
-	if (o.isType(type[0]) || (type[1] != Type.NONE && o.isType(type[1]))) super.apply(me, o, b);
+	Apply: Type[] type = me.getType(b);
+	if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) super.apply(me, o, b);
 	else b.addMessage("...but it failed!");
 	###
 *
@@ -3992,7 +3993,7 @@ ReflectType:
 	Cat: Status
 	SelfTarget: True
 	Effect: Pokemon ChangeType
-	ChangeType: return b.getOtherPokemon(caster.user()).getType().clone();
+	ChangeType: return b.getOtherPokemon(caster.user()).getType(b).clone();
 	###
 	MoveType: NonSnatchable
 *
@@ -4263,7 +4264,7 @@ Conversion:
 	SelfTarget: True
 	Apply: for (Move m : me.getMoves())
 	{
-		if (!me.isType(m.getAttack().getType(b, me)))
+		if (!me.isType(b, m.getAttack().getType(b, me)))
 		{
 			super.apply(me, o, b);
 			return;
@@ -4275,7 +4276,7 @@ Conversion:
 	for (Move m : victim.getMoves())
 	{
 		Type t = m.getAttack().getType(b, victim); 
-		if (!victim.isType(t)) types.add(t);
+		if (!victim.isType(b, t)) types.add(t);
 	}
 	return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 	###
@@ -4290,7 +4291,7 @@ Conversion2:
 	Cat: Status
 	SelfTarget: True
 	Apply: Move m = o.getAttributes().getLastMoveUsed();
-	if (m == null || getResistances(me, m.getAttack().getType(b, o)).size() == 0)
+	if (m == null || getResistances(me, m.getAttack().getType(b, o), b).size() == 0)
 	{
 		b.addMessage("...but it failed!");
 		return;
@@ -4299,16 +4300,16 @@ Conversion2:
 	###
 	Effect: Pokemon ChangeType
 	ChangeType: ActivePokemon other = b.getOtherPokemon(victim.user());
-	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getAttack().getType(b, other));
+	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getAttack().getType(b, other), b);
 	return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 	###
-	Field: private List<Type> getResistances(ActivePokemon victim, Type attacking)
+	Field: private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b)
 	{
 		List<Type> types = new ArrayList<>();
 		for (Type t : Type.values())
-		{
-			if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(t)) types.add(t);
-		}
+			if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(b, t))
+				types.add(t);
+				
 		return types;
 	}
 	###

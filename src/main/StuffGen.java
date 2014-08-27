@@ -366,7 +366,7 @@ public class StuffGen
 					case "FailType":
 						for (String type : split[1].split(" ")) 
 						{
-							failure += (first ? "" : " || ") + "victim.isType(Type." + type.toUpperCase() + ")";
+							failure += (first ? "" : " || ") + "victim.isType(b, Type." + type.toUpperCase() + ")";
 							first = false;
 						}
 						break;
@@ -381,8 +381,8 @@ public class StuffGen
 						break;
 					case "FailMessage":
 						failMessage = readFunction(in, line, split[1]);
-						failMessage += "\t\t\treturn super.getFailMessage(user, victim, team);\n";
-						failMessage = writeFunction("String getFailMessage(ActivePokemon user, ActivePokemon victim, boolean team)", failMessage);
+						failMessage += "\t\t\treturn super.getFailMessage(b, user, victim, team);\n";
+						failMessage = writeFunction("String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)", failMessage);
 						break;
 					case "Cast":
 						cast = readFunction(in, line, split[1]);

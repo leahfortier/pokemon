@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import main.Type;
-
 import pokemon.ActivePokemon;
 import battle.effect.AttackSelectionEffect;
 import battle.effect.Effect;
@@ -148,10 +147,12 @@ public class Move implements Serializable
 		}
 		
 		// BUT WHAT IF YOU HAVE A CONDITION THAT PREVENTS YOU FROM USING THAT MOVE?!!?! THEN WHAT?!!?!!
-		List<Object> list = b.getEffectsList(p);
+		Object[] list = b.getEffectsList(p);
 		for (Object o : list)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			
 			if (o instanceof AttackSelectionEffect)
 			{
 				AttackSelectionEffect a = (AttackSelectionEffect)o;
@@ -178,10 +179,12 @@ public class Move implements Serializable
 			return false;
 		}
 		
-		List<Object> list = b.getEffectsList(p);
+		Object[] list = b.getEffectsList(p);
 		for (Object o : list)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue; 
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			 
 			if (o instanceof AttackSelectionEffect)
 			{
 				AttackSelectionEffect a = (AttackSelectionEffect)o;
