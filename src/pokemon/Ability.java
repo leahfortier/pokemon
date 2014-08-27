@@ -1359,7 +1359,7 @@ public abstract class Ability implements Serializable
 			return (Sturdy)(new Sturdy().activate());
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
+		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
 		{
 			return fullHealth;
 		}
@@ -3494,6 +3494,7 @@ public abstract class Ability implements Serializable
 		{
 			if (!p.isHoldingItem(b) && Math.random() < .1)
 			{
+				// TODO: THIS SHOULDN'T JUST BE LEFTOVER IT SHOULD BE MORE FUN STUFF
 				p.giveItem((HoldItem)Item.getItem("Leftovers"));
 			}
 		}

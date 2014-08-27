@@ -1378,7 +1378,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer,
-				boolean fullHealth) {
+				Boolean fullHealth) {
 			return Math.random() * 100 < 10;
 		}
 
@@ -1405,7 +1405,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer,
-				boolean fullHealth) {
+				Boolean fullHealth) {
 			if (fullHealth) {
 				bracer.consumeItem(b);
 				return true;

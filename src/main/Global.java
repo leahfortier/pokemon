@@ -313,6 +313,12 @@ public class Global
 					{
 						return invokee;
 					}
+					
+					// Not a boolean return check, but we are checking the return value -- das what we want, das what we need, das what we crave
+					if (!isCheck && check)
+					{
+						return returnValue;
+					}
 				}
 				// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
 				catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
@@ -327,14 +333,27 @@ public class Global
 	}
 	
 	// Used for calling methods that return booleans
+	public static <T> Object checkInvoke(boolean check, Battle b, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(true, check, b, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that return booleans and also exit early is p or opp are fainted
 	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
 		return Global.invoke(true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 	
+	// Used for calling methods that return booleans where mold breaker may be a factor to check
 	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
 		return Global.invoke(true, check, b, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
+	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(false, true, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void
@@ -343,6 +362,7 @@ public class Global
 		Global.invoke(false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
+	// Used for calling methods that are void where mold breaker may be a factor to check
 	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
 		Global.invoke(false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);

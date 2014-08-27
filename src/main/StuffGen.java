@@ -90,6 +90,7 @@ public class StuffGen
 		effectClasses.put("Stalling", "StallingEffect");
 		effectClasses.put("DefiniteEscape", "DefiniteEscape");
 		effectClasses.put("CritStage", "CritStageEffect");
+		effectClasses.put("CritBlocker", "CritBlockerEffect");
 	}
 	
 	public StuffGen()
@@ -100,175 +101,6 @@ public class StuffGen
 		battleEffectGen();
 		abilityGen();
 		itemGen();
-	}
-	
-	private static ArrayList<File> files;
-	
-	private static void plus()
-	{
-		files = new ArrayList<File>();
-		addFiles(new File("C:\\Users\\leahf_000\\Documents\\Pokemon++\\src"));
-		
-		for (File f : files)
-		{
-			Pattern p = Pattern.compile("[^ +\t]\\ + [^ +=]");
-			StringBuilder out = new StringBuilder();
-			
-			Scanner in = null;
-			try
-			{
-				in = new Scanner(f);
-			}
-			catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			
-			while (in.hasNext())
-			{
-				String line = in.nextLine();
-				
-				if (!line.contains("Pattern.compile"))
-				{
-					Matcher m = p.matcher(line);
-					
-					while (m.find())
-					{
-						String group = m.group();
-						String replace = m.group().replace("+", " + ");
-						
-						line = line.replace(group, replace);
-						System.out.println(line);
-					}
-				}
-				
-				out.append(line + "\n");
-			}
-			
-			out = new StringBuilder(out.substring(0, out.length() - 1));
-			
-			printToFile(f.getAbsolutePath(), out);
-//			System.out.println(f.getAbsolutePath() + "\n" + out);
-		}
-	}
-	
-	private static void longestString()
-	{
-		files = new ArrayList<File>();
-		addFiles(new File("C:\\Users\\!\\Documents\\GitHub\\Pokemon\\src"));
-		
-		String max = "";
-		for (File f : files)
-		{
-			Pattern p = Pattern.compile("addMessage[^,]*;");
-			
-			Scanner in = null;
-			try
-			{
-				in = new Scanner(f);
-			}
-			catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			
-			while (in.hasNext())
-			{
-				String line = in.nextLine();
-				Matcher m = p.matcher(line);
-				while (m.find())
-				{
-					String temp = line.substring(m.start() + 11, m.end() - 2);
-					if (temp.length() > max.length())
-						max = temp;
-				}
-			}
-		}
-		
-		System.out.println(max.length() + " " + max);
-	}
-	
-	private static void addFiles(File f)
-	{
-		File[] list = f.listFiles();
-
-		for (int i = 0; i < list.length; i++)
-		{
-			if (list[i].isFile())
-			{
-				files.add(list[i]);
-			}
-			else
-			{
-				addFiles(list[i]);
-			}
-		}
-	}
-	
-	// Used for editing pokemoninfo.txt
-	private static void pokemonInfoStuff()
-	{
-		Scanner in = openFile("pokemoninfo.txt");
-		PrintStream out = null;
-		try {
-			out = new PrintStream("out.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		while (in.hasNext())
-		{
-			out.println(in.nextLine()); // Num
-			out.println(in.nextLine()); // Name
-			out.println(in.nextLine()); // Base Stats
-			out.println(in.nextLine()); // Base Exp
-			out.println(in.nextLine()); // Growth Rate
-			out.println(in.nextLine()); // Type1 Type2			
-			readMoves(in, out); // Level Up Moves
-			out.println(in.nextLine()); // Catch Rate
-			out.println(in.nextLine()); // EVs
-			readEvolution(in, out); // Evolution  
-			readHoldItems(in, out); // Wild Items
-			out.println(in.nextLine()); // Male Ratio
-			out.println(in.nextLine()); // Ability 1
-			out.println(in.nextLine()); // Ability 2
-			out.println(in.nextLine()); // Classification
-			out.println(in.nextLine()); // Height Weight FlavorText
-			out.println(in.nextLine()); // Egg Steps
-			out.println(in.nextLine()); // Egg Group 1
-			out.println(in.nextLine()); // Egg Group 2
-			
-			out.println(in.nextLine()); // New Line
-		}
-	}
-	
-	private static void readMoves(Scanner in, PrintStream out)
-	{
-		int numMoves = in.nextInt();
-		out.println(numMoves); // Number of Moves 
-		in.nextLine();
-		for (int i = 0; i < numMoves; i++) out.println(in.nextLine()); // Each move and level
-	}
-	
-	private static void readEvolution(Scanner in, PrintStream out)
-	{
-		String type = in.next();
-		if (type.equals("Multi"))
-		{
-			int x = in.nextInt();
-			out.println(type + " " + x);
-			for (int i = 0; i < x; i++) readEvolution(in, out);
-			return;
-		}
-		out.println(type + " " + in.nextLine());
-	}
-	
-	private static void readHoldItems(Scanner in, PrintStream out)
-	{
-		int num = in.nextInt();
-		out.println(num);
-		in.nextLine();
-		for (int i = 0; i < num; i++) out.println(in.nextLine());
 	}
 	
 	private static void effectGen(String input, String output, String superClass)
@@ -302,7 +134,7 @@ public class StuffGen
 					statSwitch = "", getPokemon = "", effectBlocker = "", integer = "", failMessage = "", decTurns = "",
 					defog = "", prevent = "", preventMessage = "", opposingCanAttack = "", getAbility = "",
 					deathwish = "", statusPrevent = "", statusPreventMessage = "", brace = "", braceMessage = "",
-					getItem = "", getMoveList = "", getStat = "", endBattle = "", increaseCrits = "";
+					getItem = "", getMoveList = "", getStat = "", endBattle = "", increaseCrits = "", critBlocker = "";
 			
 			line = in.nextLine().trim();
 			while (in.hasNextLine() && !line.equals("*"))
@@ -362,7 +194,6 @@ public class StuffGen
 						stageChange = readFunction(in, line, split[1]);
 						stageChange = writeFunction("int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user)", stageChange);
 						break;
-					case "FailTypes":
 					case "FailType":
 						for (String type : split[1].split(" ")) 
 						{
@@ -375,7 +206,6 @@ public class StuffGen
 						first = false;
 						break;
 					case "FailCondition":
-					case "OtherFail":
 						failure += (first ? "" : " || ") + split[1];
 						first = false;
 						break;
@@ -389,18 +219,14 @@ public class StuffGen
 						cast = writeFunction("void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)", cast);
 						break;
 					case "CastMessage":
-					case "CastMsg":
 						castMsg = writeFunction("String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "ApplyMessage":
-					case "ApplyMsg":
 						applyMsg = writeFunction("String getApplyMessage(ActivePokemon user, ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
 					case "SubsideMessage":
-					case "SubsideMsg":
 						subsideMsg = writeFunction("String getSubsideMessage(ActivePokemon victim)", "\t\t\treturn " + split[1] + ";\n");
 						break;
-					case "TurnsActive":
 					case "NumTurns":
 						minTurns = split[1];
 						maxTurns = split[1];
@@ -446,13 +272,17 @@ public class StuffGen
 						increaseCrits = readFunction(in, line, split[1]);
 						increaseCrits = writeFunction("int increaseCritStage(ActivePokemon p)", increaseCrits);
 						break;
+					case "CritBlocker":
+						critBlocker = readFunction(in, line, split[1]);
+						critBlocker = writeFunction("boolean blockCrits()", critBlocker);
+						break;
 					case "EndBattle":
 						endBattle = readFunction(in, line, split[1]);
 						endBattle = writeFunction("void afterBattle(Trainer player, Battle b, ActivePokemon p)", endBattle);
 						break;
 					case "Bracing":
 						brace = readFunction(in, line, split[1]);
-						brace = writeFunction("boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)", brace);
+						brace = writeFunction("boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)", brace);
 						break;
 					case "BraceMessage":
 						braceMessage = writeFunction("String braceMessage(ActivePokemon bracer)", "\t\t\treturn " + split[1] + ";\n");
@@ -520,7 +350,6 @@ public class StuffGen
 						usable = readFunction(in, line, split[1]);
 						usable = writeFunction("boolean usable(ActivePokemon p, Move m)", usable);
 						break;
-					case "UnusableMsg":
 					case "UnusableMessage":
 						unusableMsg = writeFunction("String getUnusableMessage(ActivePokemon p)", "\t\t\treturn " + split[1] + ";\n");
 						break;
@@ -606,6 +435,7 @@ public class StuffGen
 			classes.append(getStat);
 			classes.append(endBattle);
 			classes.append(increaseCrits);
+			classes.append(critBlocker);
 			
 			classes.append("\t}\n\n");
 			out.append("\t\tmap.put(\"" + name + "\", new " + name + "());\n");
@@ -614,6 +444,7 @@ public class StuffGen
 		out.append("\t}\n\n");
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n\n"); // DON'T DO IT
 		out.append(classes + "}");
+		
 		printToFile(output, out);
 	}
 	
@@ -841,11 +672,9 @@ public class StuffGen
 							charge += readFunction(in, line, split[1]);
 							break;
 						case "GetPower":
-						case "GetPow":
 							getPower = readFunction(in, line, split[1]);
 							getPower = writeFunction("int getPower(Battle b, ActivePokemon me, ActivePokemon o)", getPower);
 							break;
-						case "GetAcc":
 						case "GetAccuracy":
 							getAcc = readFunction(in, line, split[1]);
 							getAcc = writeFunction("int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)", getAcc);
@@ -944,12 +773,20 @@ public class StuffGen
 				line = in.nextLine().trim();
 			}
 			
-			if (charge.length() > 0) charge = writeFunction("void charge(ActivePokemon user, Battle b)", charge);
+			if (charge.length() > 0) 
+			{
+				charge = writeFunction("void charge(ActivePokemon user, Battle b)", charge);
+			}
+			
 			if (physicalContact.length() > 0 && !physicalContact.equals("true") && !physicalContact.equals("false")) Global.error("True and false are the only valid fields for physical contact (Move " + name + ")");
 			if (physicalContact.length() > 0 && category.contains("STATUS")) Global.error("Status moves never make physical contact (Move " + name + ")");
 			if (physicalContact.equals("true") && category.contains("PHYSICAL")) Global.error("Physical moves have implied physical contact (Move " + name + ")");
 			if (physicalContact.equals("false") && category.contains("SPECIAL")) Global.error("Special moves have implied no physical contact (Move " + name + ")");
-			if (physicalContact.equals("true") || (category.contains("PHYSICAL") && !physicalContact.equals("false"))) fields += "\t\t\tsuper.moveTypes.add(\"PhysicalContact\");\n";
+			
+			if (physicalContact.equals("true") || (category.contains("PHYSICAL") && !physicalContact.equals("false")))
+			{
+				fields += "\t\t\tsuper.moveTypes.add(\"PhysicalContact\");\n";
+			}
 			
 			classes.append("\tprivate static class " + className + " extends Attack " + interfaces + "\n\t{\n");
 			classes.append("\t\tprivate static final long serialVersionUID = 1L;\n");
@@ -1114,7 +951,7 @@ public class StuffGen
 						break;
 					case "Bracing":
 						brace = readFunction(in, line, split[1]);
-						brace = writeFunction("boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)", brace);
+						brace = writeFunction("boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)", brace);
 						break;
 					case "BraceMessage":
 						braceMessage = writeFunction("String braceMessage(ActivePokemon bracer)", "\t\t\treturn " + split[1] + ";\n");
@@ -1662,7 +1499,7 @@ public class StuffGen
 			if (interfaces.contains("BracingEffect"))
 			{
 				if (!fields.containsKey("Bracing")) Global.error(fields.get("ClassName") + " must have a isBracing method, since it implements BracingEffect.");
-				else out.append("public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth){" + fields.get("Bracing") + "}");
+				else out.append("public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth){" + fields.get("Bracing") + "}");
 				fields.remove("Bracing");
 				
 				if (!fields.containsKey("BraceMessage")) Global.error(fields.get("ClassName") + " must have a braceMessage method, since it implements BracingEffect.");
@@ -1743,6 +1580,7 @@ public class StuffGen
 			fields.remove("Price");
 			fields.remove("Desc");
 			fields.remove("BattleCat");
+			
 			for (String entry : fields.keySet())
 			{
 				if (entry.equals("ClassName")) continue;
@@ -1763,14 +1601,22 @@ public class StuffGen
 	private static String readLine(Scanner in)
 	{
 		String res = in.nextLine();
-		if (res.length() > 0 && res.charAt(res.length() - 1) == '\n') res = res.substring(0, res.length() - 1);
+		
+		if (res.length() > 0 && res.charAt(res.length() - 1) == '\n') 
+		{
+			res = res.substring(0, res.length() - 1);
+		}
+		
 		return res;
 	}
 	
 	private static String addTabs(int tabs)
 	{
 		String s = "";
-		for (int i = 0; i < tabs; i++) s += "\t";
+		
+		for (int i = 0; i < tabs; i++) 
+			s += "\t";
+		
 		return s;
 	}
 	
@@ -1797,6 +1643,7 @@ public class StuffGen
 		{
 			Global.error(fileName + " not found");
 		}
+		
 		return in;
 	}
 	
@@ -1808,20 +1655,199 @@ public class StuffGen
 	public static String readFunction(Scanner in, String line, String curLine, int tabs)
 	{
 		String s = "";
-		if (curLine.length() > 0) s = addTabs(tabs) + curLine + "\n";
+		if (curLine.length() > 0) 
+			s = addTabs(tabs) + curLine + "\n";
+		
 		line = in.nextLine().trim();
+		
 		while (in.hasNext() && !line.equals("###")) 
 		{
-			if (line.contains("}") && !line.contains("{")) tabs--;
+			if (line.contains("}") && !line.contains("{")) 
+				tabs--;
+			
 			s += addTabs(tabs) + line + "\n";
-			if (line.contains("{") && !line.contains("}")) tabs++;
+			
+			if (line.contains("{") && !line.contains("}")) 
+				tabs++;
+			
 			line = in.nextLine().trim();
 		}
+		
 		return s;
 	}
 	
 	public static String writeFunction(String header, String body)
 	{
 		return "\n\t\tpublic " + header + "\n\t\t{\n" + body + "\t\t}\n";
+	}
+	
+	// Stuff that shouldn't necessarily be in this file and isn't really used but has nowhere else to live
+	private static ArrayList<File> files;
+	
+	private static void plus()
+	{
+		files = new ArrayList<File>();
+		addFiles(new File("C:\\Users\\leahf_000\\Documents\\Pokemon++\\src"));
+		
+		for (File f : files)
+		{
+			Pattern p = Pattern.compile("[^ +\t]\\ + [^ +=]");
+			StringBuilder out = new StringBuilder();
+			
+			Scanner in = null;
+			try
+			{
+				in = new Scanner(f);
+			}
+			catch (FileNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			
+			while (in.hasNext())
+			{
+				String line = in.nextLine();
+				
+				if (!line.contains("Pattern.compile"))
+				{
+					Matcher m = p.matcher(line);
+					
+					while (m.find())
+					{
+						String group = m.group();
+						String replace = m.group().replace("+", " + ");
+						
+						line = line.replace(group, replace);
+						System.out.println(line);
+					}
+				}
+				
+				out.append(line + "\n");
+			}
+			
+			out = new StringBuilder(out.substring(0, out.length() - 1));
+			
+			printToFile(f.getAbsolutePath(), out);
+//			System.out.println(f.getAbsolutePath() + "\n" + out);
+		}
+	}
+	
+	private static void longestString()
+	{
+		files = new ArrayList<File>();
+		addFiles(new File("C:\\Users\\!\\Documents\\GitHub\\Pokemon\\src"));
+		
+		String max = "";
+		for (File f : files)
+		{
+			Pattern p = Pattern.compile("addMessage[^,]*;");
+			
+			Scanner in = null;
+			try
+			{
+				in = new Scanner(f);
+			}
+			catch (FileNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			
+			while (in.hasNext())
+			{
+				String line = in.nextLine();
+				Matcher m = p.matcher(line);
+				while (m.find())
+				{
+					String temp = line.substring(m.start() + 11, m.end() - 2);
+					if (temp.length() > max.length())
+						max = temp;
+				}
+			}
+		}
+		
+		System.out.println(max.length() + " " + max);
+	}
+	
+	private static void addFiles(File f)
+	{
+		File[] list = f.listFiles();
+
+		for (int i = 0; i < list.length; i++)
+		{
+			if (list[i].isFile())
+			{
+				files.add(list[i]);
+			}
+			else
+			{
+				addFiles(list[i]);
+			}
+		}
+	}
+	
+	// Used for editing pokemoninfo.txt
+	private static void pokemonInfoStuff()
+	{
+		Scanner in = openFile("pokemoninfo.txt");
+		PrintStream out = null;
+		try {
+			out = new PrintStream("out.txt");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		while (in.hasNext())
+		{
+			out.println(in.nextLine()); // Num
+			out.println(in.nextLine()); // Name
+			out.println(in.nextLine()); // Base Stats
+			out.println(in.nextLine()); // Base Exp
+			out.println(in.nextLine()); // Growth Rate
+			out.println(in.nextLine()); // Type1 Type2			
+			readMoves(in, out); // Level Up Moves
+			out.println(in.nextLine()); // Catch Rate
+			out.println(in.nextLine()); // EVs
+			readEvolution(in, out); // Evolution  
+			readHoldItems(in, out); // Wild Items
+			out.println(in.nextLine()); // Male Ratio
+			out.println(in.nextLine()); // Ability 1
+			out.println(in.nextLine()); // Ability 2
+			out.println(in.nextLine()); // Classification
+			out.println(in.nextLine()); // Height Weight FlavorText
+			out.println(in.nextLine()); // Egg Steps
+			out.println(in.nextLine()); // Egg Group 1
+			out.println(in.nextLine()); // Egg Group 2
+			
+			out.println(in.nextLine()); // New Line
+		}
+	}
+	
+	private static void readMoves(Scanner in, PrintStream out)
+	{
+		int numMoves = in.nextInt();
+		out.println(numMoves); // Number of Moves 
+		in.nextLine();
+		for (int i = 0; i < numMoves; i++) out.println(in.nextLine()); // Each move and level
+	}
+	
+	private static void readEvolution(Scanner in, PrintStream out)
+	{
+		String type = in.next();
+		if (type.equals("Multi"))
+		{
+			int x = in.nextInt();
+			out.println(type + " " + x);
+			for (int i = 0; i < x; i++) readEvolution(in, out);
+			return;
+		}
+		out.println(type + " " + in.nextLine());
+	}
+	
+	private static void readHoldItems(Scanner in, PrintStream out)
+	{
+		int num = in.nextInt();
+		out.println(num);
+		in.nextLine();
+		for (int i = 0; i < num; i++) out.println(in.nextLine());
 	}
 }

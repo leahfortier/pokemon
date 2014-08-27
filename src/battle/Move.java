@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import main.Global;
 import main.Type;
 import pokemon.ActivePokemon;
 import battle.effect.AttackSelectionEffect;
@@ -19,18 +20,20 @@ public class Move implements Serializable
 
 	public static final int MAX_MOVES = 4;
 	
-	private Attack move;
+	private Attack attack;
 	private int maxPP;
 	private int pp;
 	private boolean ready;
 	private boolean used;
 	
-	public Move(Attack m)
+	public Move(Attack attack)
 	{
-		move = m;
-		maxPP = move.getPP();
+		this.attack = attack;
+		
+		maxPP = attack.getPP();
 		pp = maxPP;
-		ready = m instanceof MultiTurnMove ? ((MultiTurnMove)m).chargesFirst() : true;
+		
+		ready = attack instanceof MultiTurnMove ? ((MultiTurnMove)attack).chargesFirst() : true;
 		used = false;
 	}
 	
@@ -52,12 +55,12 @@ public class Move implements Serializable
 	
 	public void switchReady(Battle b)
 	{
-		if (move.isMultiTurn(b)) ready = !ready;
+		if (attack.isMultiTurn(b)) ready = !ready;
 	}
 	
 	public Attack getAttack()
 	{
-		return move;
+		return attack;
 	}
 	
 	public void use()
@@ -95,11 +98,11 @@ public class Move implements Serializable
 	
 	public boolean increaseMaxPP(int n)
 	{
-		int true_max = move.getPP() + 3*move.getPP()/5;
+		int true_max = attack.getPP() + 3*attack.getPP()/5;
 		
 		if (maxPP == true_max) return false;
 		
-		maxPP += n*move.getPP()/5;
+		maxPP += n*attack.getPP()/5;
 		
 		if (maxPP > true_max) maxPP = true_max;
 		return true;
@@ -125,21 +128,29 @@ public class Move implements Serializable
 	public static boolean forceMove(Battle b, ActivePokemon p)
 	{
 		// Forced moves
-		for (PokemonEffect e : p.getEffects())
+		Object forcedMove = Global.getInvoke(p.getEffects().toArray(), ForceMoveEffect.class, "getMove");
+		if (forcedMove != null)
 		{
-			if (e instanceof ForceMoveEffect) 
-			{
-				p.setMove(((ForceMoveEffect)e).getMove());
-				return true;
-			}
+			p.setMove((Move)forcedMove);
+			return true;
 		}
 		
 		// Force second turn of a Multi-Turn Move
 		if (p.getMove() != null && p.getAttack() instanceof MultiTurnMove)
 		{
-			MultiTurnMove m = (MultiTurnMove)p.getAttack();
-			if (m.chargesFirst() && !p.getMove().ready) return true;  
-			if (!m.chargesFirst() && p.getMove().ready) return true;
+			MultiTurnMove multiTurnMove = (MultiTurnMove)p.getAttack();
+			boolean chargesFirst = multiTurnMove.chargesFirst();
+			boolean isReady = p.getMove().isReady();
+			
+			if (chargesFirst && !isReady)
+			{
+				return true;
+			}
+			
+			if (!chargesFirst && isReady)
+			{
+				return true;
+			}
 		}
 		
 		if (p.user() && getUsableMoves(b, p).size() == 0)
@@ -174,30 +185,22 @@ public class Move implements Serializable
 		if (m.getPP() == 0)
 		{
 			if (selecting)
-				b.addMessage(p.getName() + " is out of PP for " + m.move.getName() + "!");
+				b.addMessage(p.getName() + " is out of PP for " + m.attack.getName() + "!");
 			
 			return false;
 		}
 		
 		// BUT WHAT IF YOU HAVE A CONDITION THAT PREVENTS YOU FROM USING THAT MOVE?!!?! THEN WHAT?!!?!!
-		Object[] list = b.getEffectsList(p);
-		for (Object o : list)
+		Object unusable = Global.checkInvoke(false, b, b.getEffectsList(p), AttackSelectionEffect.class, "usable", p, m);
+		if (unusable != null)
 		{
-			if (Effect.isInactiveEffect(o)) 
-				continue;
-			 
-			if (o instanceof AttackSelectionEffect)
+			if (selecting)
 			{
-				AttackSelectionEffect attackSelectionEffect = (AttackSelectionEffect)o;
-				if (!attackSelectionEffect.usable(p, m))
-				{
-					if (selecting)
-						b.addMessage(attackSelectionEffect.getUnusableMessage(p));
-					
-					// THAT'S WHAT
-					return false;					
-				}
+				b.addMessage(((AttackSelectionEffect)unusable).getUnusableMessage(p));
 			}
+			
+			// THAT'S WHAT
+			return false;
 		}
 		
 		// Set the move if selecting

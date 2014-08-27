@@ -694,7 +694,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return user.getName() + " braced itself!";
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
+		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
 		{
 			return true;
 		}

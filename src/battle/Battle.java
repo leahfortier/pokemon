@@ -25,6 +25,7 @@ import battle.MessageUpdate.Update;
 import battle.effect.BattleEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.CrashDamageMove;
+import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
 import battle.effect.Effect;
@@ -627,6 +628,17 @@ public class Battle
 	
 	private int criticalHit(ActivePokemon me, ActivePokemon o)
 	{
+//		List<Object> listsies = new ArrayList<Object>();
+//		listsies.addAll(opponent.getEffects());
+//		listsies.add(me.getAttack());
+//		listsies.add(o.getAbility());
+//		
+//		Object blockCrits = Global.checkInvoke(true, this, me, listsies.toArray(), CritBlockerEffect.class, "blockCrits");
+//		if (blockCrits != null)
+//		{
+//			return 1;
+//		}
+		
 		if (opponent.hasEffect("LuckyChant")) 
 			return 1;
 		
@@ -698,7 +710,11 @@ public class Battle
 	// This is where BeforeTurnEffects are handled
 	private boolean ableToAttack(ActivePokemon p, ActivePokemon opp)
 	{
-		if (p.isFainted(this) || opp.isFainted(this)) return false;
+		// Dead Pokemon can't attack and it's not nice to attack a deady
+		if (p.isFainted(this) || opp.isFainted(this))
+		{
+			return false;
+		}
 		
 		// Loop through all tha effects and do them checks
 		Object[] invokees = getEffectsList(p);
