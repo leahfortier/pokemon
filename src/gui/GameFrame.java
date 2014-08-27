@@ -19,8 +19,8 @@ import pokemon.PokemonInfo;
 
 public class GameFrame
 {
-	 public static boolean GENERATE_STUFF = true;
-//	public static boolean GENERATE_STUFF = false;
+//	 public static boolean GENERATE_STUFF = true;
+	public static boolean GENERATE_STUFF = false;
 	public static boolean DEV_MODE = true;
 
 	private static JFrame frame;
@@ -60,7 +60,7 @@ public class GameFrame
 		private InputControl control;
 		private BufferStrategy strategy;
 
-		DevConsole console;
+		private DevConsole console;
 
 		public GameLoop(Canvas canvas)
 		{
@@ -96,7 +96,6 @@ public class GameFrame
 				long fpsTime = 0;
 				long prevTime = System.currentTimeMillis();
 
-				@Override
 				public void actionPerformed(ActionEvent e)
 				{
 					long time = System.currentTimeMillis();
@@ -113,6 +112,7 @@ public class GameFrame
 					drawFrame((int) dt);
 				}
 			});
+			
 			fpsTimer.setCoalesce(true);
 			fpsTimer.start();
 		}
