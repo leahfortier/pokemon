@@ -410,6 +410,8 @@ public class CharacterData extends Trainer implements Serializable
 	public CharacterData load(){
 		CharacterData loadChar = null;
 		
+		updateSerVariables();
+		
 		try {
 			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
 			ObjectInputStream in = new ObjectInputStream(fin);
@@ -429,6 +431,121 @@ public class CharacterData extends Trainer implements Serializable
 		loadChar.updateGlobals(false);
 		
 		return loadChar;
+	}
+	
+	private void updateSerVariables() 
+	{
+		try {
+			//Replace bytes of renamed variable name
+			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
+			byte[] bytes = new byte[fin.available()];
+			fin.read(bytes);
+			fin.close();
+			
+			boolean edited = false;
+			
+			byte[][][] variablesToUpdate = new byte[][][] {
+					
+					//Move.move to Move.attack
+					{
+						//Move.move: 00 04 6D 6F 76 65
+						//extra: 00 04 75 73 65 64 4C 00 04 6D 6F 76 65 74
+						{0x00, 0x04, 0x75, 0x73, 0x65, 0x64, 0x4C, 0x00, 0x04, 0x6D, 0x6F, 0x76, 0x65, 0x74},
+						//Move.attack: 00 06 61 74 74 61 63 6B
+						//extra: 00 04 75 73 65 64 4C 00 06 61 74 74 61 63 6B 74
+						{0x00, 0x04, 0x75, 0x73, 0x65, 0x64, 0x4C, 0x00, 0x06, 0x61, 0x74, 0x74, 0x61, 0x63, 0x6B, 0x74}
+					}
+					//next
+			};
+			
+			for(int currVariable = 0; currVariable < variablesToUpdate.length; ++currVariable)
+			{
+				byte[] newBytes = updateSerVariables(bytes, variablesToUpdate[currVariable][0], variablesToUpdate[currVariable][1]);
+				if(newBytes != null) 
+				{
+					bytes = newBytes;
+					edited = true;
+				}
+			}
+
+			//Replacement was found, resave the file.
+			if(edited) 
+			{
+				FileOutputStream out = new FileOutputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
+				out.write(bytes);
+				out.close();
+			}
+		} 
+		catch (IOException ex)
+		{
+			Global.error("Couldn't update Move variable name.");
+		}
+	}
+	
+	private byte[] updateSerVariables(byte[] bytes, byte[] find, byte[] replace)
+	{
+		boolean edited = false;
+		
+		StringBuilder findString = new StringBuilder();
+		for(byte b: find) 
+		{
+			findString.append((char)b);
+		}
+		
+		StringBuilder replaceString = new StringBuilder();
+		for(byte b: replace) 
+		{
+			replaceString.append((char)b);
+		}
+		
+		//Loop through the entire array of bytes.
+		for (int curr = 0; curr< bytes.length; ++curr) 
+		{
+			//Search the bytes for the search array.
+			int currLoc;
+			for (currLoc = 0; currLoc < find.length && currLoc < bytes.length && bytes[curr+currLoc] == find[currLoc]; ++currLoc);
+			
+			//If searched the entire search array, location was found.
+			if(currLoc == find.length)
+			{
+				System.out.println("Updating Serializable variable: " +findString.toString() +" with: "+replaceString.toString());
+				edited = true;
+				
+				//Make a copy of the bytes with the new length.
+				int dif = replace.length - find.length;
+				
+				//Move the end of the array over by the difference in the find and replace arrays.
+				//If difference is smaller, move bytes before copying the array.
+				if (dif < 0)
+				{
+					for(int newPos = bytes.length-1; newPos > curr; --newPos)
+					{
+						bytes[newPos+dif] = bytes[newPos];
+					}
+				}
+				
+				//Update the size of the bytes array.
+				bytes = Arrays.copyOf(bytes, bytes.length + dif);
+				
+				//Move the end of the array over by the difference in the find and replace arrays.
+				//If difference is larger, move bytes after copying the array. 
+				if(dif > 0)
+				{
+					for(int newPos = bytes.length-1; newPos > curr; --newPos)
+					{
+						bytes[newPos] = bytes[newPos-dif];
+					}
+				}
+				
+				//Add the replace array.
+				for(int newPos = 0; newPos < replace.length; ++newPos)
+				{
+					bytes[newPos+curr] = replace[newPos];
+				}
+			}
+		}
+		
+		return edited? bytes: null;
 	}
 	
 	private void printGlobals() 
