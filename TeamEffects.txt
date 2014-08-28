@@ -52,7 +52,7 @@ ToxicSpikes:
 	Activate: x.layers = 1;
 	###
 	Enter: if (victim.isLevitating(b)) return;
-	if (victim.isType(Type.POISON))
+	if (victim.isType(b, Type.POISON))
 	{
 		b.addMessage(victim.getName() + " absorbed the Toxic Spikes!");
 		super.active = false;
@@ -122,8 +122,8 @@ Wish:
 *
 LuckyChant:
 	NumTurns: 5
-	CastMsg: "The lucky chant shielded " + victim.getName() + "'s team from critical hits!"
-	SubsideMsg: "The effects of lucky chant wore off."
+	CastMessage: "The lucky chant shielded " + victim.getName() + "'s team from critical hits!"
+	SubsideMessage: "The effects of lucky chant wore off."
 *
 FutureSight:
 	NumTurns: 2

@@ -401,7 +401,7 @@ Oblivious:
 MagnetPull:
 	Name: Magnet Pull
 	Type: OpponentTrapping
-	Trapped: return p.isType(Type.STEEL);
+	Trapped: return p.isType(b, Type.STEEL);
 	###
 	Desc: Prevents Steel-type Pok\u00e9mon from escaping.
 *
@@ -847,7 +847,7 @@ ColorChange:
 	Name: Color Change
 	Type: TakeDamage
 	TakeDamage: Type t = user.getAttack().getType(b, user);
-	if (!victim.isType(t))
+	if (!victim.isType(b, t))
 	{
 		type = t;
 		PokemonEffect.getEffect("ChangeType").cast(b, victim, victim, CastSource.ABILITY, true);
@@ -1094,7 +1094,7 @@ Illusion:
 	victim.setNickname(illusion.getName()); // TODO: Find a better workaround for this, the Illusion name is appearing in the Switch Pokemon menu
 	b.addMessage("", illusion.getPokemonInfo(), illusion.isShiny(), false, victim.user());
 	b.addMessage("", illusion.getName(), victim.user());
-	b.addMessage("", illusion.getType(), victim.user());
+	b.addMessage("", illusion.getType(b), victim.user());
 	b.addMessage("", illusion.getGender(), victim.user());
 	###
 	Type: SwitchOut
@@ -1108,7 +1108,7 @@ Illusion:
 	b.addMessage(actualName + "'s Illusion was broken!");
 	b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
 	b.addMessage("", actualName, victim.user());
-	b.addMessage("", victim.getType(), victim.user());
+	b.addMessage("", victim.getType(b), victim.user());
 	b.addMessage("", victim.getGender(), victim.user());
 	###
 	Desc: Comes out disguised as the Pok\u00e9mon in back.
@@ -1218,6 +1218,7 @@ Pickup:
 	Type: EndBattle
 	EndBattle: if (!p.isHoldingItem(b) && Math.random() < .1)
 	{
+		// TODO: THIS SHOULDN'T JUST BE LEFTOVER IT SHOULD BE MORE FUN STUFF
 		p.giveItem((HoldItem)Item.getItem("Leftovers"));
 	}
 	###
@@ -1240,5 +1241,11 @@ HoneyGather:
 	Desc: The Pok\u00e9mon may gather Honey from somewhere.
 *
 Gluttony:
-	Desc: Makes the Pokémon use a held Berry earlier than usual.
+	Desc: Makes the Pok\u00e9mon use a held Berry earlier than usual.
+*
+Multitype:
+	Desc: Changes type to match the held Plate.
+*
+Forecast:
+	Desc: Changes with the weather.
 *

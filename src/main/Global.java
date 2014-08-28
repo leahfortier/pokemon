@@ -11,15 +11,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
 import pokemon.Ability;
+import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import sound.SoundPlayer;
 import battle.Attack;
+import battle.Battle;
+import battle.effect.Effect;
 import battle.effect.PokemonEffect;
 
 // Loads and maintains game data.
@@ -251,5 +256,115 @@ public class Global
 		if (ratio < 0.25) return Color.RED;
 		else if (ratio < 0.5) return Color.YELLOW;
 		return Color.GREEN;
+	} 
+	
+	private static <T> Object invoke(boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
+	{
+		Class<?>[] parameterTypes = null;
+		
+		for (Object invokee : invokees)
+		{
+			// If the invokee is an instance of the class we are checking, do the things and stuff
+			if (className.isInstance(invokee))
+			{
+				// If this is an inactive effect, we don't want to do anything with it
+				if (Effect.isInactiveEffect(invokee)) 
+				{
+					continue;
+				}
+				
+				// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+				if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold())
+				{
+					continue;
+				}
+				
+				// YEAH TRY CATCH BLOCKS ARE THE GREATEST
+				try 
+				{
+					// Don't want to do this more than once because that would be totes inefficientz
+					if (parameterTypes == null)
+					{
+						// Get the parameter types -- THIS IS WHY WE HAVE TO DO INTEGER INSTEAD OF INT
+						parameterTypes = new Class<?>[parameterValues.length];
+						for (int i = 0; i < parameterTypes.length; i++)	
+						{
+							parameterTypes[i] = parameterValues[i].getClass();
+						}
+					}
+					
+					// Create and invoke the method -- THIS IS SO COOL THANK YOU MARCOD OF THE SEA
+					Method method = className.getMethod(methodName, parameterTypes);
+					Object returnValue = method.invoke(invokee, parameterValues);
+					
+					// If we're just checking for a specific boolean, we can cut out early
+					if (isCheck && (boolean)returnValue == check)
+					{
+						return invokee;
+					}
+					
+					// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
+					if (p != null && p.isFainted(b))
+					{
+						return invokee;
+					}
+					
+					if (opp != null && opp.isFainted(b))
+					{
+						return invokee;
+					}
+					
+					// Not a boolean return check, but we are checking the return value -- das what we want, das what we need, das what we crave
+					if (!isCheck && check)
+					{
+						return returnValue;
+					}
+				}
+				// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
+				catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+				{
+					Global.error("No such method " + methodName + " in class " + className.getName() + " or could not invoke such method.");
+				}
+			}	
+		}
+		
+		// We didn't find what we were looking for
+		return null;
+	}
+	
+	// Used for calling methods that return booleans
+	public static <T> Object checkInvoke(boolean check, Battle b, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(true, check, b, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that return booleans and also exit early is p or opp are fainted
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that return booleans where mold breaker may be a factor to check
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(true, check, b, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
+	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(false, true, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void
+	public static <T> void invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		Global.invoke(false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void where mold breaker may be a factor to check
+	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		Global.invoke(false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 }

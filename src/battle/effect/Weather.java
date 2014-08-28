@@ -14,18 +14,22 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	
 	public static enum WeatherType
 	{
-		CLEAR_SKIES, SUNNY, RAINING, SANDSTORM, HAILING;
+		CLEAR_SKIES(Type.NORMAL), 
+		SUNNY(Type.FIRE), 
+		RAINING(Type.WATER), 
+		SANDSTORM(Type.ROCK), 
+		HAILING(Type.ICE);
 		
-		private String name;
+		private Type element;
 		
-		private WeatherType()
+		private WeatherType(Type element)
 		{
-			name = name().charAt(0) + name().substring(1).toLowerCase();
+			this.element = element;
 		}
 		
-		public String getName()
+		public Type getElement()
 		{
-			return name;
+			return element;
 		}
 	}
 	
@@ -33,7 +37,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	
 	public Weather(WeatherType weather)
 	{
-		super(weather.getName(), -1, -1, true);
+		super(weather.toString(), -1, -1, true);
 		type = weather;
 	}
 	
@@ -72,7 +76,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			case HAILING:
 				return new Hailing();
 			default:
-				Global.error("No such WeatherType " + weather.getName());
+				Global.error("No such WeatherType " + weather.toString());
 				return null;
 		}
 	}
@@ -209,7 +213,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		
 		public void buffet(ActivePokemon p, Battle b)
 		{
-			if (p.isType(Type.ROCK) || p.isType(Type.STEEL) || p.isType(Type.GROUND)) return;
+			if (p.isType(b, Type.ROCK) || p.isType(b, Type.STEEL) || p.isType(b, Type.GROUND)) return;
 			
 			Ability ability = p.getAbility();
 			Item item = p.getHeldItem(b);
@@ -238,7 +242,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		
 		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			return (int)(stat*(s == Stat.SP_DEFENSE && p.isType(Type.ROCK) ? 1.5 : 1));
+			return (int)(stat*(s == Stat.SP_DEFENSE && p.isType(b, Type.ROCK) ? 1.5 : 1));
 		}
 	}
 	
@@ -270,13 +274,16 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		
 		public void buffet(ActivePokemon p, Battle b)
 		{
-			if (p.isType(Type.ICE)) return;
+			if (p.isType(b, Type.ICE)) 
+				return;
 			
 			Ability ability = p.getAbility();
-			Item item = p.getHeldItem(b);
+			if (ability instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)ability).block(type)) 
+				return;
 			
-			if (ability instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)ability).block(type)) return;
-			if (item instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)item).block(type)) return;
+			Item item = p.getHeldItem(b);
+			if (item instanceof WeatherBlockerEffect && ((WeatherBlockerEffect)item).block(type)) 
+				return;
 			
 			b.addMessage(p.getName() + " is buffeted by the hail!");
 			p.reduceHealthFraction(b, 1/16.0);

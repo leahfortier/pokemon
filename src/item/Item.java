@@ -985,7 +985,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void apply(ActivePokemon victim, Battle b) {
-			if (victim.isType(Type.POISON)) {
+			if (victim.isType(b, Type.POISON)) {
 				if (victim.fullHealth())
 					return;
 				victim.healHealthFraction(1 / 16.0);
@@ -1378,7 +1378,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer,
-				boolean fullHealth) {
+				Boolean fullHealth) {
 			return Math.random() * 100 < 10;
 		}
 
@@ -1405,7 +1405,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer,
-				boolean fullHealth) {
+				Boolean fullHealth) {
 			if (fullHealth) {
 				bracer.consumeItem(b);
 				return true;
@@ -1529,7 +1529,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, int damage) {
+				ActivePokemon victim, Integer damage) {
 			if (user.hasAbility("Magic Guard"))
 				return;
 			b.addMessage(user.getName() + " was hurt by its " + this.name + "!");
@@ -2095,7 +2095,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, int damage) {
+				ActivePokemon victim, Integer damage) {
 			if (user.fullHealth())
 				return;
 			user.heal((int) Math.ceil(damage / 8.0));
@@ -4204,7 +4204,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, int damage) {
+				ActivePokemon victim, Integer damage) {
 			if (Math.random() * 100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
@@ -4375,7 +4375,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, int damage) {
+				ActivePokemon victim, Integer damage) {
 			if (Math.random() * 100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
@@ -6210,7 +6210,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.isType(Type.WATER) || o.isType(Type.BUG))
+			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG))
 				return new double[] { 3, 0 };
 			else
 				return new double[] { 1, 0 };

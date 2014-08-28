@@ -44,3 +44,21 @@ MAP TILES
 	tile that would go in the background set, you could just render the default grass tile for 
 	the map in all locations and then draw the map as usual. Then again, to avoid all of the 
 	unnecessary rendering, I could just get Jeb to add grass tiles to the bottom of all tree tiles. 
+	
+FINISH MULTITYPE AND FORECAST
+Look into rewriting MoldBreaker because it sucks
+
+Things to test:
+	Multitype
+	Forecast
+	
+pokemoninfo.txt changes:
+	LEVEL 100 FLYING BULBASAUR
+	Bye Bye Butterfree
+	Attack.java: The diff is too large to show here.
+	METRONOME, GRAVITY, MIMIC
+	FIDDY PERCENT
+	Substitute seems like a good place to stop
+	ALL MOVES ARE DONE BESIDES THE ONES I SKIPPED
+	force switch, leafeon, b
+	Stat Gains when leveling up/evolving

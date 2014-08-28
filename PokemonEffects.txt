@@ -5,8 +5,8 @@
 
 LeechSeed:
 	EffectType: EndTurn
-	FailTypes: Grass
-	FailMessage: if (victim.isType(Type.GRASS)) return "It doesn't affect " + victim.getName() + "!";
+	FailType: Grass
+	FailMessage: if (victim.isType(b, Type.GRASS)) return "It doesn't affect " + victim.getName() + "!";
 	if (victim.hasEffect("LeechSeed")) return victim.getName() + " is already seeded!";
 	###
 	CastMessage: victim.getName() + " was seeded!"
@@ -34,7 +34,7 @@ BadPoison:
 Flinch:
 	EffectType: BeforeTurn
 	FailAbility: Inner Focus
-	OtherFail: !b.isFirstAttack()
+	FailCondition: !b.isFirstAttack()
 	CastMessage: victim.getName() + " flinched!"
 	CanAttack: return false;
 	###
@@ -129,7 +129,7 @@ Protecting:
 	OpposingCanAttack: if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType("ProtectPiercing")) return true;
 	b.printAttacking(p);
 	b.addMessage(opp.getName() + " is protecting itself!");
-	if (p.getAttack() instanceof CrashDamageMove) ((CrashDamageMove)p.getAttack()).crash(b, p);
+	Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 	return false;
 	###
 	Cast: if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
@@ -147,7 +147,7 @@ QuickGuard:
 	OpposingCanAttack: if (p.getAttack().isSelfTarget() || p.getAttack().getName().equals("Feint") || p.getAttack().getPriority(b, p) <= 0) return true;
 	b.printAttacking(p);
 	b.addMessage(opp.getName() + " is protecting itself!");
-	if (p.getAttack() instanceof CrashDamageMove) ((CrashDamageMove)p.getAttack()).crash(b, p);
+	Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 	return false;
 	###
 	Cast: if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
@@ -237,7 +237,7 @@ SelfConfusion:
 *
 Safeguard:
 	CastMessage: user.getName() + " is covered by a veil!"
-	SubsideMsg: "The effects of " + victim.getName() + "'s Safeguard faded."
+	SubsideMessage: "The effects of " + victim.getName() + "'s Safeguard faded."
 	NumTurns: 5
 	Defog: "The effects of " + victim.getName() + "'s Safeguard faded."
 	EffectType: StatusPrevention
@@ -246,7 +246,7 @@ Safeguard:
 	StatusPreventMessage: "Safeguard protects " + victim.getName() + " from status conditions!"
 *
 GuardSpecial:
-	SubsideMsg: "The effects of " + victim.getName() + "'s Guard Special faded."
+	SubsideMessage: "The effects of " + victim.getName() + "'s Guard Special faded."
 	NumTurns: 5
 	EffectType: StatusPrevention
 	StatusPrevent: return !caster.hasAbility("Infiltrator");
@@ -259,14 +259,14 @@ Encore:
 	Field: private Move move;
 	###
 	NumTurns: 3
-	SubsideMsg: "The effects of " + victim.getName() + "'s encore faded."
+	SubsideMessage: "The effects of " + victim.getName() + "'s encore faded."
 	GetMove: return move;
 	###
 	Usable: return move.getAttack().getName().equals(m.getAttack().getName());
 	###
-	UnusableMsg: "Only " + move.getAttack().getName() + " can be used right now!"
+	UnusableMessage: "Only " + move.getAttack().getName() + " can be used right now!"
 	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType("Encoreless")
-	CastMsg: victim.getName() + " got an encore!"
+	CastMessage: victim.getName() + " got an encore!"
 	Cast: move = victim.getAttributes().getLastMoveUsed();
 	super.cast(b, caster, victim, source, printCast);
 	###
@@ -296,7 +296,7 @@ Disable:
 	###
 	Usable: return !disabled.getAttack().getName().equals(m.getAttack().getName());
 	###
-	UnusableMsg: disabled.getAttack().getName() + " is disabled!"
+	UnusableMessage: disabled.getAttack().getName() + " is disabled!"
 	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0
 	EffectType: BeforeTurn
 	CanAttack: turns--;
@@ -310,8 +310,8 @@ Disable:
 	###
 	ShouldSubside: return turns == 0;
 	###
-	SubsideMsg: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
-	CastMsg: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
+	SubsideMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
+	CastMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
 	Cast: disabled = victim.getAttributes().getLastMoveUsed();
 	super.cast(b, caster, victim, source, printCast);
 	###
@@ -338,7 +338,7 @@ RaiseCrits:
 	return stage;
 	###
 	FailCondition: source == CastSource.USE_ITEM && victim.hasEffect("RaiseCrits") && ((RaiseCrits)victim.getEffect("RaiseCrits")).direHit
-	CastMsg: victim.getName() + " is getting pumped!"
+	CastMessage: victim.getName() + " is getting pumped!"
 	CanHave
 	Cast: if (!victim.hasEffect("RaiseCrits")) super.cast(b, caster, victim, source, printCast);
 	else if (printCast) b.addMessage(getCastMessage(b, caster, victim));
@@ -390,7 +390,7 @@ ChangeType:
 	###
 	CastMessage: victim.getName() + " was changed to " + type[0].getName() + (type[1] == Type.NONE ? "" : "/" + type[1].getName()) + " type!!"
 	CanHave
-	Subside: b.addMessage("", p.getType(), p.user());
+	Subside: b.addMessage("", p.getType(b), p.user());
 	###
 *
 ChangeAbility:
@@ -471,7 +471,7 @@ Mimic:
 	mimicMove = new Move(m);
 	super.cast(b, caster, victim, source, printCast);
 	###
-	CastMsg: victim.getName() + " learned " + mimicMove.getAttack().getName() + "!"
+	CastMessage: victim.getName() + " learned " + mimicMove.getAttack().getName() + "!"
 	Activate: x.mimicMove = mimicMove;
 	###
 *
@@ -485,10 +485,10 @@ Imprison:
 	for (Move m : caster.getMoves()) unableMoves.add(m.getAttack().getName());
 	super.cast(b, caster, victim, source, printCast);
 	###
-	CastMsg: user.getName() + " sealed " + victim.getName() + "'s moves!"
+	CastMessage: user.getName() + " sealed " + victim.getName() + "'s moves!"
 	Usable: return !unableMoves.contains(m.getAttack().getName());
 	###
-	UnusableMsg: "No!! You are imprisoned!!!"
+	UnusableMessage: "No!! You are imprisoned!!!"
 	EffectType: BeforeTurn
 	CanAttack: if (unableMoves.contains(p.getAttack().getName()))
 	{
@@ -521,7 +521,7 @@ Torment:
 	EffectType: AttackSelection
 	Usable: return (p.getAttributes().getLastMoveUsed() == null || !p.getAttributes().getLastMoveUsed().getAttack().getName().equals(m.getAttack().getName()));
 	###
-	UnusableMsg: p.getName() + " cannot use the same move twice in a row!"
+	UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
 	EffectType: BeforeTurn
 	CanAttack: if (!usable(p, p.getMove()))
 	{
@@ -538,7 +538,7 @@ Taunt:
 	EffectType: AttackSelection
 	Usable: return m.getAttack().getCategory() != Attack.Category.STATUS;
 	###
-	UnusableMsg: "No!! Not while you're under the effects of taunt!!"
+	UnusableMessage: "No!! Not while you're under the effects of taunt!!"
 	EffectType: BeforeTurn
 	CanAttack: if (!usable(p, p.getMove()))
 	{
@@ -624,7 +624,7 @@ Yawn:
 	FailCondition: !Status.applies(StatusCondition.ASLEEP, b, caster, victim)
 	Subside: Status.giveStatus(b, b.getOtherPokemon(p.user()), p, StatusCondition.ASLEEP);
 	###
-	CastMsg: victim.getName() + " grew drowsy!"
+	CastMessage: victim.getName() + " grew drowsy!"
 *
 MagnetRise:
 	EffectType: Levitation
@@ -636,7 +636,7 @@ MagnetRise:
 *
 Uproar:
 	NumTurns: 3
-	SubsideMsg: "The uproar ended."
+	SubsideMessage: "The uproar ended."
 	Cast: uproar = victim.getMove();
 	super.cast(b, caster, victim, source, printCast);
 	ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user());
@@ -658,10 +658,10 @@ Uproar:
 	EffectType: ForceMove
 	GetMove: return uproar;
 	###
-	CastMsg: user.getName() + " started an uproar!"
+	CastMessage: user.getName() + " started an uproar!"
 	Usable: return m.getAttack().getName().equals("Uproar");
 	###
-	UnusableMsg: "Only Uproar can be used right now!"
+	UnusableMessage: "Only Uproar can be used right now!"
 	EffectType: AttackSelection
 	EffectType: EndTurn
 	Apply: if (uproar.getPP() == 0) active = false; // If uproar runs out of PP, the effect immediately ends
@@ -686,7 +686,7 @@ Nightmare:
 	###
 	ShouldSubside: return !victim.hasStatus(StatusCondition.ASLEEP);
 	###
-	CastMsg: victim.getName() + " began having a nightmare!"
+	CastMessage: victim.getName() + " began having a nightmare!"
 *
 Charge:
 	NumTurns: 2
@@ -713,8 +713,9 @@ Transformed:
 	x.stats = stats;
 	x.type = type;
 	###
-	CastMsg: victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!"
-	Cast: ActivePokemon transformee = b.getOtherPokemon(victim.user());
+	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!"
+	Cast: 
+	ActivePokemon transformee = b.getOtherPokemon(victim.user());
 	stats = new int[Stat.NUM_STATS];
 	for (int i = 0; i < stats.length; i++)
 	{
@@ -727,7 +728,7 @@ Transformed:
 	type = transformee.getPokemonInfo().getType();
 	super.cast(b, caster, victim, source, printCast);
 	b.addMessage("", transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user());
-	b.addMessage("", victim.getType(), victim.user());
+	b.addMessage("", victim.getType(b), victim.user());
 	###
 	FailCondition: b.getOtherPokemon(victim.user()).hasEffect("Transformed")
 	EffectType: MoveListCondition
@@ -750,7 +751,7 @@ Substitute:
 	###
 	Integer: hp
 	EffectType: Passable
-	CastMsg: victim.getName() + " put in a substitute!"
+	CastMessage: victim.getName() + " put in a substitute!"
 	Cast: hp = victim.reduceHealthFraction(b, .25) + 1;
 	super.cast(b, caster, victim, source, printCast);
 	b.addMessage("", victim.getHP(), victim.user());
@@ -773,7 +774,7 @@ Mist:
 	PreventMessage: "The mist prevents stat reductions!"
 *
 MagicCoat:
-	CastMsg: user.getName() + " shrouded itself with a magic coat!"
+	CastMessage: user.getName() + " shrouded itself with a magic coat!"
 	NumTurns: 1
 *
 Bide:
@@ -919,7 +920,7 @@ PerishSong:
 	NumTurns: 3
 	FailAbility: Soundproof
 	EffectType: Passable
-	FailMessage: if (victim.hasAbility("Soundproof")) return victim.getName() + "'s Soundproof makes it immune to sound based moves!";
+	FailMessage: if (victim.hasAbility("Soundproof")) return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
 	###
 	CastMessage: "All Pokemon hearing this song will faint in three turns!"
 	EffectType: EndTurn

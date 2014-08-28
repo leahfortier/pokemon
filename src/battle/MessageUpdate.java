@@ -113,14 +113,14 @@ public class MessageUpdate
 	}
 	
 	// Switch update!
-	public MessageUpdate(String m, ActivePokemon p)
+	public MessageUpdate(String m, ActivePokemon p, Battle b)
 	{
 		this(m);
 		playerTarget = p.user();
 		switchPokemon = true;
 		hp = p.getHP();
 		status = p.getStatus().getType();
-		type = p.getType();
+		type = p.getType(b);
 		shiny = p.isShiny();
 		pokemon = p.getPokemonInfo();
 		name = p.getName();

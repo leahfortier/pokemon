@@ -103,8 +103,12 @@ public abstract class Ability implements Serializable
 	public static Ability assign(PokemonInfo p)
 	{
 		String[] abilities = p.getAbilities();
-		if (abilities[0].equals("None")) Global.error("First ability should not be none (Pokemon " + p.getName() + ")");
-		if (abilities[1].equals("None")) return getAbility(abilities[0]).newInstance();
+		if (abilities[0].equals("None")) 
+			Global.error("First ability should not be none (Pokemon " + p.getName() + ")");
+		
+		if (abilities[1].equals("None")) 
+			return getAbility(abilities[0]).newInstance();
+		
 		return getAbility(abilities[Math.random() < .5 ? 0 : 1]).newInstance();
 	}
 	
@@ -134,10 +138,14 @@ public abstract class Ability implements Serializable
 	
 	public static Ability getAbility(String m)
 	{
-		if (map == null) loadAbilities();
-		if (map.containsKey(m)) return map.get(m);
+		if (map == null) 
+			loadAbilities();
+		
+		if (map.containsKey(m)) 
+			return map.get(m);
 
-		if (GameFrame.GENERATE_STUFF) Global.error("No such Ability " + m);
+		if (GameFrame.GENERATE_STUFF) 
+			Global.error("No such Ability " + m);
 		
 		System.err.println("No such Ability " + m);
 		return new None();
@@ -146,7 +154,9 @@ public abstract class Ability implements Serializable
 	// Create and load the Ability map if it doesn't already exist
 	public static void loadAbilities() 
 	{
-		if (map != null) return;
+		if (map != null) 
+			return;
+		
 		map = new HashMap<>();
 		abilityNames = new ArrayList<>();
 
@@ -306,6 +316,8 @@ public abstract class Ability implements Serializable
 		map.put("Unnerve", new Unnerve());
 		map.put("Honey Gather", new HoneyGather());
 		map.put("Gluttony", new Gluttony());
+		map.put("Multitype", new Multitype());
+		map.put("Forecast", new Forecast());
 
 		for (String s : map.keySet()) abilityNames.add(s);
 	}
@@ -942,7 +954,7 @@ public abstract class Ability implements Serializable
 			return (Stench)(new Stench().activate());
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
 			if (Math.random()*100 < 10)
 			{
@@ -1347,7 +1359,7 @@ public abstract class Ability implements Serializable
 			return (Sturdy)(new Sturdy().activate());
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
+		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
 		{
 			return fullHealth;
 		}
@@ -1387,7 +1399,7 @@ public abstract class Ability implements Serializable
 
 		public boolean isTrapped(Battle b, ActivePokemon p)
 		{
-			return p.isType(Type.STEEL);
+			return p.isType(b, Type.STEEL);
 		}
 
 		public String trappingMessage(ActivePokemon escaper, ActivePokemon trapper)
@@ -2627,7 +2639,7 @@ public abstract class Ability implements Serializable
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			Type t = user.getAttack().getType(b, user);
-			if (!victim.isType(t))
+			if (!victim.isType(b, t))
 			{
 				type = t;
 				PokemonEffect.getEffect("ChangeType").cast(b, victim, victim, CastSource.ABILITY, true);
@@ -3046,7 +3058,7 @@ public abstract class Ability implements Serializable
 			return (PoisonTouch)(new PoisonTouch().activate());
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
 			if (Math.random()*100 < 30)
 			{
@@ -3193,7 +3205,7 @@ public abstract class Ability implements Serializable
 			victim.setNickname(illusion.getName()); // TODO: Find a better workaround for this, the Illusion name is appearing in the Switch Pokemon menu
 			b.addMessage("", illusion.getPokemonInfo(), illusion.isShiny(), false, victim.user());
 			b.addMessage("", illusion.getName(), victim.user());
-			b.addMessage("", illusion.getType(), victim.user());
+			b.addMessage("", illusion.getType(b), victim.user());
 			b.addMessage("", illusion.getGender(), victim.user());
 		}
 
@@ -3211,7 +3223,7 @@ public abstract class Ability implements Serializable
 			b.addMessage(actualName + "'s Illusion was broken!");
 			b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
 			b.addMessage("", actualName, victim.user());
-			b.addMessage("", victim.getType(), victim.user());
+			b.addMessage("", victim.getType(b), victim.user());
 			b.addMessage("", victim.getGender(), victim.user());
 		}
 	}
@@ -3482,6 +3494,7 @@ public abstract class Ability implements Serializable
 		{
 			if (!p.isHoldingItem(b) && Math.random() < .1)
 			{
+				// TODO: THIS SHOULDN'T JUST BE LEFTOVER IT SHOULD BE MORE FUN STUFF
 				p.giveItem((HoldItem)Item.getItem("Leftovers"));
 			}
 		}
@@ -3534,12 +3547,40 @@ public abstract class Ability implements Serializable
 		private static final long serialVersionUID = 1L;
 		public Gluttony()
 		{
-			super("Gluttony", "Makes the Pokémon use a held Berry earlier than usual.");
+			super("Gluttony", "Makes the Pok\u00e9mon use a held Berry earlier than usual.");
 		}
 
 		public Gluttony newInstance()
 		{
 			return (Gluttony)(new Gluttony().activate());
+		}
+	}
+
+	private static class Multitype extends Ability 
+	{
+		private static final long serialVersionUID = 1L;
+		public Multitype()
+		{
+			super("Multitype", "Changes type to match the held Plate.");
+		}
+
+		public Multitype newInstance()
+		{
+			return (Multitype)(new Multitype().activate());
+		}
+	}
+
+	private static class Forecast extends Ability 
+	{
+		private static final long serialVersionUID = 1L;
+		public Forecast()
+		{
+			super("Forecast", "Changes with the weather.");
+		}
+
+		public Forecast newInstance()
+		{
+			return (Forecast)(new Forecast().activate());
 		}
 	}
 

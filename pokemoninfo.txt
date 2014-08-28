@@ -21,7 +21,7 @@ Grass Poison
 37 Solarbeam
 45
 0 0 0 1 0 0 
-Level 2 6
+Level 2 16
 1
 5 Miracle Seed
 87
@@ -6229,7 +6229,7 @@ Level 178 25
 0
 50
 Synchronize
-Early Bird
+Magic Bounce
 Little Bird 
 8 4.4 It picks food from cactus plants, deftly avoiding buds and spines. It seems to skip about to move.
 5120
@@ -6266,7 +6266,7 @@ None
 0
 50
 Synchronize
-Early Bird
+Magic Bounce
 Mystic 
 59 33.1 This odd Pok\u00e9mon can see both the past and the future. It eyes the sun's movement all day.
 5120
@@ -14190,8 +14190,8 @@ Grass Poison
 7 Water Sport
 10 Stun Spore
 13 Mega Drain
-17 Bullet Seed
 15 Leech Seed
+17 Bullet Seed
 255
 0 0 0 1 0 0 
 Item 315  Leaf Stone

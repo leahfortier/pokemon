@@ -116,7 +116,7 @@ Black Sludge
 	Price: 200
 	Fling: 30
 	Apply:
-		if (victim.isType(Type.POISON))
+		if (victim.isType(b, Type.POISON))
 		{
 			if (victim.fullHealth()) return;
 			victim.healHealthFraction(1/16.0);
@@ -2416,7 +2416,7 @@ Net Ball
 	Price: 1000
 	Fling: 30
 	CatchRate:
-		if (o.isType(Type.WATER) || o.isType(Type.BUG)) return new double[]{3, 0};
+		if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) return new double[]{3, 0};
 		else return new double[]{1, 0};
 		###
 *

@@ -25,6 +25,7 @@ import battle.MessageUpdate.Update;
 import battle.effect.BattleEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.CrashDamageMove;
+import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
 import battle.effect.Effect;
@@ -154,7 +155,7 @@ public class Battle
 	
 	public void addMessage(String message, ActivePokemon p)
 	{
-		messages.add(new MessageUpdate(message, p));
+		messages.add(new MessageUpdate(message, p, this));
 	}
 	
 	public void addMessage(String message, Update update)
@@ -236,7 +237,7 @@ public class Battle
 	private void startTurn()
 	{
 		ActivePokemon plyr = player.front(), opp = opponent.front(); 
-		opp.setMove(Move.selectMove(this, opp));
+		opp.setMove(Move.selectOpponentMove(this, opp));
 
 		turn++;
 		plyr.getAttributes().resetDamageTaken();
@@ -357,10 +358,12 @@ public class Battle
 		
 		if (reset) enterer.resetAttributes();
 		enterer.getAttributes().setUsed(true);
-		List<Object> list = getEffectsList(enterer);
+		Object[] list = getEffectsList(enterer);
 		for (Object o : list)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			
 			if (o instanceof EntryEffect) ((EntryEffect)o).enter(this, enterer);
 		}
 		
@@ -453,8 +456,12 @@ public class Battle
 		// Apply each effect
 		for (Object o : list)
 		{
-			if (me.isFainted(this)) break;
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
+			if (me.isFainted(this)) 
+				break;
+			
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			
 			if (o instanceof EndTurnEffect) ((EndTurnEffect)o).apply(me, this);
 		}
 		me.isFainted(this);
@@ -489,7 +496,7 @@ public class Battle
 			else
 			{
 				addMessage(me.getName() + "'s attack missed!");
-				if (me.getAttack() instanceof CrashDamageMove) ((CrashDamageMove)me.getAttack()).crash(this, me);
+				Global.invoke(new Object[] {me.getAttack()}, CrashDamageMove.class, "crash", this, me);
 			}			
 		}
 		
@@ -502,6 +509,10 @@ public class Battle
 		me.getAttributes().setLastMoveUsed();
 		if (reduce) me.getMove().reducePP(o.hasAbility("Pressure") ? 2 : 1);
 		me.getAttributes().setAttacking(false);
+		
+		// Hopefully this doesn't mess anything up but update type at the end of each attack
+		addMessage("", me.getType(this), me.user());
+		addMessage("", o.getType(this), o.user());
 	}
 	
 	public void printAttacking(ActivePokemon p)
@@ -534,7 +545,7 @@ public class Battle
 		return team ? player.getEffects() : opponent.getEffects();
 	}
 	
-	public List<Object> getEffectsList(ActivePokemon p)
+	public Object[] getEffectsList(ActivePokemon p)
 	{
 		List<Object> list = new ArrayList<>();
 		list.addAll(p.getEffects());
@@ -544,7 +555,8 @@ public class Battle
 		list.add(p.getAbility());
 		list.add(p.getHeldItem(this));
 		list.add(weather);
-		return list;
+		
+		return list.toArray();
 	}
 	
 	public Team getTrainer(boolean team)
@@ -583,10 +595,12 @@ public class Battle
 		double modifier = 1;
 		
 		// User effects that effect user power
-		List<Object> list = getEffectsList(me);
+		Object[] list = getEffectsList(me);
 		for (Object obj : list)
 		{
-			if (obj instanceof Effect && !((Effect)obj).isActive()) continue;
+			if (Effect.isInactiveEffect(obj)) 
+				continue;
+			
 			if (obj instanceof PowerChangeEffect) modifier *= ((PowerChangeEffect)obj).getMultiplier(this, me, o);
 		}
 		
@@ -614,15 +628,31 @@ public class Battle
 	
 	private int criticalHit(ActivePokemon me, ActivePokemon o)
 	{
-		if (opponent.hasEffect("LuckyChant")) return 1;
-		if (me.getAttack().isMoveType("CannotCrit")) return 1;
-		if ((o.hasAbility("Shell Armor") || o.hasAbility("Battle Armor")) && !me.breaksTheMold()) return 1;
+//		List<Object> listsies = new ArrayList<Object>();
+//		listsies.addAll(opponent.getEffects());
+//		listsies.add(me.getAttack());
+//		listsies.add(o.getAbility());
+//		
+//		Object blockCrits = Global.checkInvoke(true, this, me, listsies.toArray(), CritBlockerEffect.class, "blockCrits");
+//		if (blockCrits != null)
+//		{
+//			return 1;
+//		}
+		
+		if (opponent.hasEffect("LuckyChant")) 
+			return 1;
+		
+		if (me.getAttack().isMoveType("CannotCrit")) 
+			return 1;
+		
+		if ((o.hasAbility("Shell Armor") || o.hasAbility("Battle Armor")) && !me.breaksTheMold()) 
+			return 1;
 		
 		int stage = 1;
 		Item i = me.getHeldItem(this);
-		CritStageEffect e = (CritStageEffect)me.getEffect("RaiseCrits");
+		CritStageEffect critStageEffect = (CritStageEffect)me.getEffect("RaiseCrits");
 		
-		if (me.hasEffect("RaiseCrits")) stage += e.increaseCritStage(me);
+		if (me.hasEffect("RaiseCrits")) stage += critStageEffect.increaseCritStage(me);
 		if (me.getAttack().isMoveType("HighCritRatio")) stage++;
 		if (me.hasAbility("Super Luck")) stage++;
 		if (i instanceof CritStageEffect) stage += ((CritStageEffect)i).increaseCritStage(me);
@@ -680,24 +710,28 @@ public class Battle
 	// This is where BeforeTurnEffects are handled
 	private boolean ableToAttack(ActivePokemon p, ActivePokemon opp)
 	{
-		if (p.isFainted(this) || opp.isFainted(this)) return false;
+		// Dead Pokemon can't attack and it's not nice to attack a deady
+		if (p.isFainted(this) || opp.isFainted(this))
+		{
+			return false;
+		}
 		
 		// Loop through all tha effects and do them checks
-		List<Object> list = getEffectsList(p);
-		for (Object o : list)
+		Object[] invokees = getEffectsList(p);
+		
+		// False because we're checking if they 'cannot attack' from the 'canAttack' method
+		Object cannotAttack = Global.checkInvoke(false, this, p, opp, invokees, BeforeTurnEffect.class, "canAttack", p, opp, this);
+		if (cannotAttack != null)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
-			if (o instanceof BeforeTurnEffect && !((BeforeTurnEffect)o).canAttack(p, opp, this)) return false;
-			if (p.isFainted(this) || opp.isFainted(this)) return false;
+			return false;
 		}
 		
 		// Opponents effects that prevent you from attacking
-		list = getEffectsList(opp);
-		for (Object o : list)
+		invokees = getEffectsList(opp);
+		cannotAttack = Global.checkInvoke(false, this, p, opp, invokees, OpposingBeforeTurnEffect.class, "opposingCanAttack", p, opp, this);
+		if (cannotAttack != null)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
-			if (o instanceof OpposingBeforeTurnEffect && !((OpposingBeforeTurnEffect)o).opposingCanAttack(p, opp, this)) return false;
-			if (p.isFainted(this) || opp.isFainted(this)) return false;
+			return false;
 		}
 		
 		// Multi-turn Moves

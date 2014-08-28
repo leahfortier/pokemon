@@ -52,31 +52,32 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private String eggGroup1;
 	private String eggGroup2;
 	
-	public PokemonInfo (int num, String name, int[] bStats, int bExp, String gRate, String t1, String t2, 
-			TreeMap<Integer, List<String>> luMoves, int cRate, int[] gEVs, Evolution evo, List<WildHoldItem> items, 
-			int gRatio, String ab1, String ab2, String classif, int height, double weight, String flavText,
-			int steps, String group1, String group2)
+	public PokemonInfo (int number, String name, int[] baseStats, int baseExp, String growthRate, 
+			String type1, String type2, TreeMap<Integer, List<String>> levelUpMoves, int catchRate, 
+			int[] givenEVs, Evolution evolution, List<WildHoldItem> wildHoldItems, int genderRatio, 
+			String ability1, String ability2, String classification, int height, double weight, 
+			String flavorText, int eggSteps, String eggGroup1, String eggGroup2)
 	{	
-		number = num;
+		this.number = number;
 		this.name = name;
-		baseStats = bStats;
-		baseExp = bExp;
-		growthRate = GrowthRate.getRate(gRate);
-		type = new Type[] {Type.valueOf(t1.toUpperCase()), Type.valueOf(t2.toUpperCase())};
-		levelUpMoves = luMoves;
-		catchRate = cRate;
-		givenEVs = gEVs;
-		evolution = evo;
-		wildHoldItems = items;
-		abilities = new String[] {ab1, ab2};
-		maleRatio = gRatio;
-		classification = classif;
+		this.baseStats = baseStats;
+		this.baseExp = baseExp;
+		this.growthRate = GrowthRate.getRate(growthRate);
+		this.type = new Type[] {Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase())};
+		this.levelUpMoves = levelUpMoves;
+		this.catchRate = catchRate;
+		this.givenEVs = givenEVs;
+		this.evolution = evolution;
+		this.wildHoldItems = wildHoldItems;
+		this.abilities = new String[] {ability1, ability2};
+		this.maleRatio = genderRatio;
+		this.classification = classification;
 		this.height = height;
 		this.weight = weight;
-		flavorText = flavText;
-		eggSteps = steps;
-		eggGroup1 = group1;
-		eggGroup2 = group2;
+		this.flavorText = flavorText;
+		this.eggSteps = eggSteps;
+		this.eggGroup1 = eggGroup1;
+		this.eggGroup2 = eggGroup2;
 		
 		verifyAbilities();
 	}
@@ -87,9 +88,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		{
 			for (int i = 0; i < 2; i++)
 			{
-				if (abilities[i].equals("Gluttony")
-						|| abilities[i].equals("Multitype")
-						|| abilities[i].equals("Forecast")) continue;
 				Ability.getAbility(abilities[i]);				
 			}
 		}

@@ -9,7 +9,8 @@ import main.Global;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
-public class MP3Player extends Thread {
+public class MP3Player extends Thread 
+{
 	private String mp3FileName;
 	private Player player;
 	private boolean loop;

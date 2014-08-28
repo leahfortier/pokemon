@@ -275,7 +275,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			if (victim.isLevitating(b)) return;
-			if (victim.isType(Type.POISON))
+			if (victim.isType(b, Type.POISON))
 			{
 				b.addMessage(victim.getName() + " absorbed the Toxic Spikes!");
 				super.active = false;

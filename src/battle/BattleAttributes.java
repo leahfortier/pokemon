@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.Global;
-
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
@@ -207,10 +206,12 @@ public class BattleAttributes implements Serializable
 		// Effects that prevent stat reductions caused by the opponent
 		if (val < 0 && caster != victim)
 		{
-			List<Object> list = b.getEffectsList(victim);
+			Object[] list = b.getEffectsList(victim);
 			for (Object o : list)
 			{
-				if (o instanceof Effect && !((Effect)o).isActive()) continue;
+				if (Effect.isInactiveEffect(o)) 
+					continue;
+				
 				if (o instanceof StatProtectingEffect && ((StatProtectingEffect)o).prevent(caster, stat))
 				{
 					if (print) b.addMessage(((StatProtectingEffect)o).preventionMessage(victim)); 

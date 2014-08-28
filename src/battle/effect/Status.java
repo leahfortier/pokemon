@@ -5,7 +5,6 @@ import item.berry.StatusBerry;
 import item.use.PokemonUseItem;
 
 import java.io.Serializable;
-import java.util.List;
 
 import main.Global;
 import main.Type;
@@ -53,10 +52,12 @@ public abstract class Status implements Serializable
 	
 	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 	{
-		List<Object> list = b.getEffectsList(victim);
+		Object[] list = b.getEffectsList(victim);
 		for (Object o : list)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			
 			if (o instanceof StatusPreventionEffect && ((StatusPreventionEffect) o).preventStatus(b, user, victim, type)) 
 			{
 				return ((StatusPreventionEffect)o).preventionMessage(victim);
@@ -97,10 +98,12 @@ public abstract class Status implements Serializable
 	protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 	{
 		if (victim.hasStatus()) return false;
-		List<Object> list = b.getEffectsList(victim);
+		Object[] list = b.getEffectsList(victim);
 		for (Object o : list)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			
 			if (o instanceof StatusPreventionEffect && ((StatusPreventionEffect) o).preventStatus(b, caster, victim, type)) return false; 
 		}
 		return true;
@@ -278,7 +281,7 @@ public abstract class Status implements Serializable
 		
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return super.applies(b, caster, victim) && !victim.isType(Type.POISON);
+			return super.applies(b, caster, victim) && !victim.isType(b, Type.POISON);
 		}
 		
 		public String getCastMessage(ActivePokemon p)
@@ -363,7 +366,7 @@ public abstract class Status implements Serializable
 		
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return super.applies(b, caster, victim) && !victim.isType(Type.FIRE);
+			return super.applies(b, caster, victim) && !victim.isType(b, Type.FIRE);
 		}
 		
 		public String getCastMessage(ActivePokemon p)

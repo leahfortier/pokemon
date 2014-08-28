@@ -33,7 +33,7 @@ Gravity:
 		}
 	}
 	###
-	SubsideMsg: "The gravity returned to normal."
+	SubsideMessage: "The gravity returned to normal."
 	EffectType: BeforeTurn
 	CanAttack: if (p.getAttack().isMoveType("Airborne"))
 	{

@@ -1,7 +1,5 @@
 package pokemon;
 
-import java.util.List;
-
 import main.Global;
 import battle.Battle;
 import battle.effect.Effect;
@@ -86,13 +84,16 @@ public enum Stat
 	public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
 	{
 		// Effects that manipulate stats
-		List<Object> list = b.getEffectsList(p);
+		Object[] list = b.getEffectsList(p);
 		
 //		System.out.println(s.getName() + " " + user + " " + p.getName() + " " + (user ? p : opp).getName());
 		
-		if ((s.user ? p : opp).getMove() != null) list.add((s.user ? p : opp).getAttack()); // User Attack
+		if ((s.user ? p : opp).getMove() != null) 
+		{
+			list = new Object[] {list, (s.user ? p : opp).getAttack()}; // User Attack
+		}
 		
-		s = applyStatswitch (list, s);
+		s = applyStatSwitch(list, s);
 				
 		// Get the stat and stage
 		int stage = p.getStage(s.index), stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(s);
@@ -114,32 +115,45 @@ public enum Stat
 	}
 	
 	// Applies stat changes to each for each item in list
-	private static int applyStatChange(List<Object> list, int stat, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
+	private static int applyStatChange(Object[] list, int stat, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
 	{
 		for (Object o : list)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
-			if (o instanceof StatChangingEffect) stat = ((StatChangingEffect)o).modify(stat, p, opp, s, b);
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			
+			if (o instanceof StatChangingEffect)
+			{
+				stat = ((StatChangingEffect)o).modify(stat, p, opp, s, b);
+			}
 		}
 		return stat;
 	}
 	
-	private static Stat applyStatswitch (List<Object> list, Stat s)
+	private static Stat applyStatSwitch(Object[] list, Stat s)
 	{
 		for (Object o : list)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
-			if (o instanceof StatSwitchingEffect) s = ((StatSwitchingEffect)o).switchStat(s);
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			
+			if (o instanceof StatSwitchingEffect) 
+			{
+				s = ((StatSwitchingEffect)o).switchStat(s);
+			}
 		}
+		
 		return s; 
 	}
 	
-	private static int applyStageChange(List<Object> list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user, int stage)
+	private static int applyStageChange(Object[] list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user, int stage)
 	{
 		int temp = stage;
 		for (Object o : list)
 		{
-			if (o instanceof Effect && !((Effect)o).isActive()) continue;
+			if (Effect.isInactiveEffect(o)) 
+				continue;
+			
 			if (o instanceof StageChangingEffect) stage = ((StageChangingEffect)o).adjustStage(stage, s, p, opp, b, user);
 		}
 		

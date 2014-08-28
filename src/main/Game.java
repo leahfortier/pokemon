@@ -54,8 +54,6 @@ public class Game
 	{
 		charData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo("Eevee"), 1, false, true));
 		charData.front().giveItem((HoldItem)Item.getItem("Oran Berry"));
-		
-		//charData.addPokemon(null, new ActivePokemon(PokemonInfo.getRandomBaseEvolution()));
 	}
 
 	public void update(int dt, InputControl input) 

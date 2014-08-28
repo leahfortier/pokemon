@@ -110,6 +110,11 @@ public abstract class Effect implements Serializable
 		return false;
 	}
 	
+	public static boolean isInactiveEffect(Object o)
+	{
+		return o instanceof Effect && !((Effect)o).isActive();
+	}
+	
 	public void deactivate()
 	{
 		active = false;
@@ -150,7 +155,7 @@ public abstract class Effect implements Serializable
 		return "";
 	}
 	
-	public String getFailMessage(ActivePokemon user, ActivePokemon victim, boolean team)
+	public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
 	{
 		return "...but it failed!";
 	}

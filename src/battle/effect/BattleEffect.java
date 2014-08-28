@@ -41,11 +41,10 @@ public abstract class BattleEffect extends Effect
 		if (map != null) return;
 		map = new HashMap<>();
 		
-		map.put("Clear_skies", Weather.getWeather(Weather.WeatherType.CLEAR_SKIES));
-		map.put("Raining", Weather.getWeather(Weather.WeatherType.RAINING));
-		map.put("Sunny", Weather.getWeather(Weather.WeatherType.SUNNY));
-		map.put("Sandstorm", Weather.getWeather(Weather.WeatherType.SANDSTORM));
-		map.put("Hailing", Weather.getWeather(Weather.WeatherType.HAILING));
+		for (Weather.WeatherType weatherType : Weather.WeatherType.values())
+		{
+			map.put(weatherType.toString(), Weather.getWeather(weatherType));
+		}
 		
 		// EVERYTHING BELOW IS GENERATED ###
 

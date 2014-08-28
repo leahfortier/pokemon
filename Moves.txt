@@ -3,7 +3,6 @@
 // Also, homegroups are really stupid, but if you would like to join ours, here you go: wA43yC8BU2
 
 Tackle:
-	Name: Tackle
 	Pow: 35
 	Acc: 95
 	PP: 35
@@ -31,7 +30,7 @@ ThunderWave:
 	Desc: A weak electric charge is launched at the target. It causes paralysis if it hits.
 	PP: 20
 	Status: Paralyzed
-	ApplyEffects: if (super.zeroAdvantage(b, user, victim)) b.addMessage("It doesn't affect "+victim.getName()+"!");
+	ApplyEffects: if (super.zeroAdvantage(b, user, victim)) b.addMessage("It doesn't affect " + victim.getName() + "!");
 	else if (Ability.blockDamage(b, user, victim)) return;
 	else super.applyEffects(b, user, victim);
 	###
@@ -299,7 +298,7 @@ Solarbeam:
 	Acc: 100
 	Type: Grass
 	Cat: Special
-	MultiTurn: Yes No user.getName()+" began taking in sunlight!"
+	MultiTurn: Yes No user.getName() + " began taking in sunlight!"
 	GetPower: switch (b.getWeather().getType())
 	{
 		case SUNNY:
@@ -335,7 +334,7 @@ Fly:
 	Type: Flying
 	Cat: Physical
 	MoveType: SleepTalkFail
-	MultiTurn: Yes Yes user.getName()+" flew up high!"
+	MultiTurn: Yes Yes user.getName() + " flew up high!"
 	MoveType: Airborne
 *
 FireSpin:
@@ -588,7 +587,7 @@ SkullBash:
 	Acc: 100
 	Type: Normal
 	Cat: Physical
-	MultiTurn: Yes No user.getName()+" lowered its head!"
+	MultiTurn: Yes No user.getName() + " lowered its head!"
 	Charge: user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, CastSource.ATTACK);
 	###
 *
@@ -601,15 +600,6 @@ IronDefense:
 	Type: Steel
 	PP: 15
 *
-RainDance:
-	Name: Rain Dance
-	Desc: The user summons a heavy rain that falls for five turns, powering up Water-type moves.
-	Type: Water
-	Cat: Status
-	PP: 5
-	Effect: Battle Raining
-	MoveType: Field
-*
 HydroPump:
 	Name: Hydro Pump
 	Type: Water
@@ -619,6 +609,15 @@ HydroPump:
 	Acc: 80
 	Cat: Special
 *
+RainDance:
+	Name: Rain Dance
+	Desc: The user summons a heavy rain that falls for five turns, powering up Water-type moves.
+	Type: Water
+	Cat: Status
+	PP: 5
+	Effect: Battle RAINING
+	MoveType: Field
+*
 SunnyDay:
 	Name: Sunny Day
 	Desc: The user intensifies the sun for five turns, powering up Fire-type moves.
@@ -626,7 +625,7 @@ SunnyDay:
 	Type: Fire
 	Cat: Status
 	MoveType: Field
-	Effect: Battle Sunny
+	Effect: Battle SUNNY
 *
 Sandstorm:
 	Desc: A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.
@@ -634,7 +633,7 @@ Sandstorm:
 	Type: Rock
 	Cat: Status
 	MoveType: Field
-	Effect: Battle Sandstorm
+	Effect: Battle SANDSTORM
 *
 Hail:
 	Desc: The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.
@@ -642,7 +641,7 @@ Hail:
 	Type: Ice
 	Cat: Status
 	MoveType: Field
-	Effect: Battle Hailing
+	Effect: Battle HAILING
 *
 PetalDance:
 	Name: Petal Dance
@@ -674,7 +673,7 @@ HyperBeam:
 	Type: Normal
 	Acc: 90
 	Pow: 150
-	MultiTurn: No No user.getName()+" must recharge!"
+	MultiTurn: No No user.getName() + " must recharge!"
 *
 StringShot:
 	Name: String Shot
@@ -696,7 +695,7 @@ BugBite:
 	ApplyEffects: Item i = victim.getHeldItem(b);
 	if (i instanceof Berry)
 	{
-		b.addMessage(user.getName()+" ate "+victim.getName()+"'s "+i.getName()+"!");
+		b.addMessage(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!");
 		victim.consumeItem(b);
 		
 		if (i instanceof GainableEffectBerry)
@@ -1079,8 +1078,9 @@ Roost:
 		user.getEffect("ChangeType").setTurns(1);
 	}
 	###
-	ChangeType: if (victim.getType()[0].equals(Type.FLYING)) return new Type[] {victim.getType()[1], Type.NONE};
-	if (victim.getType()[1].equals(Type.FLYING)) return new Type[] {victim.getType()[0], Type.NONE};
+	ChangeType: Type[] type = victim.getType(b);
+	if (type[0].equals(Type.FLYING)) return new Type[] {type[1], Type.NONE};
+	if (type[1].equals(Type.FLYING)) return new Type[] {type[0], Type.NONE};
 	return null;
 	###
 	Field: private boolean healFail;
@@ -1123,7 +1123,7 @@ Hurricane:
 	PP: 10
 	Type: Flying
 	Cat: Special
-	GetAcc: switch (b.getWeather().getType())
+	GetAccuracy: switch (b.getWeather().getType())
 	{
 		case RAINING:
 			return 100;
@@ -1236,7 +1236,7 @@ Pluck:
 	ApplyEffects: Item i = victim.getHeldItem(b);
 	if (i instanceof Berry)
 	{
-		b.addMessage(user.getName()+" ate "+victim.getName()+"'s "+i.getName()+"!");
+		b.addMessage(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!");
 		victim.consumeItem(b);
 		
 		if (i instanceof GainableEffectBerry)
@@ -1512,7 +1512,7 @@ Thunder:
 	Cat: Special
 	Pow: 120
 	Acc: 70
-	GetAcc: switch (b.getWeather().getType())
+	GetAccuracy: switch (b.getWeather().getType())
 	{
 		case RAINING:
 			return 100;
@@ -1771,7 +1771,7 @@ WakeUpSlap:
 	###
 	ApplyEffects: if (victim.hasStatus(StatusCondition.ASLEEP))
 	{
-		b.addMessage(victim.getName()+" woke up!", StatusCondition.NONE, victim.user());
+		b.addMessage(victim.getName() + " woke up!", StatusCondition.NONE, victim.user());
 		victim.removeStatus();
 	}
 	###
@@ -2021,7 +2021,7 @@ Acrobatics:
 	Acc: 100
 	Cat: Physical
 	Type: Flying
-	GetPow: return super.power*(me.isHoldingItem(b) ? 1 : 2);
+	GetPower: return super.power*(me.isHoldingItem(b) ? 1 : 2);
 	###
 *
 Absorb:
@@ -2045,7 +2045,7 @@ MegaDrain:
 *
 NaturalGift:
 	PP: 15
-	GetPow: return ((Berry)me.getHeldItem(b)).naturalGiftPower();
+	GetPower: return ((Berry)me.getHeldItem(b)).naturalGiftPower();
 	###
 	GetType: Item i = user.getHeldItem(b);
 	if (i instanceof Berry) return ((Berry)i).naturalGiftType();
@@ -2211,12 +2211,12 @@ Magnitude:
 	private int index;
 	###
 	PhysicalContact: False
-	GetPow: return powers[index];
+	GetPower: return powers[index];
 	###
 	StartTurn: // TODO: There is a small bug that if two Pokemon both use Magnitude in the same turn, it will always be the same index -- We can probably overlook this because its super situational and no one really cares that much but still
 	index = Global.getPercentageIndex(chances);
 	###
-	Apply: b.addMessage("Magnitude "+(index+4)+"!");
+	Apply: b.addMessage("Magnitude " + (index + 4) + "!");
 	super.apply(me, o, b);
 	###
 *
@@ -2237,7 +2237,7 @@ Dig:
 	Cat: Physical
 	Acc: 100
 	Pow: 80
-	MultiTurn: Yes Yes user.getName()+" went underground!"
+	MultiTurn: Yes Yes user.getName() + " went underground!"
 	MoveType: SleepTalkFail
 *
 Earthquake:
@@ -2369,7 +2369,7 @@ PsychUp:
 	Cat: Status
 	Type: Normal
 	ApplyEffects: for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) user.getAttributes().setStage(i, victim.getStage(i));
-	b.addMessage(user.getName()+" copied "+victim.getName()+"'s stat changes!");
+	b.addMessage(user.getName() + " copied " + victim.getName() + "'s stat changes!");
 	###
 	MoveType: NoMagicCoat
 	MoveType: ProtectPiercing
@@ -2413,7 +2413,7 @@ Covet:
 	Cat: Physical
 	Desc: The user endearingly approaches the target, then steals the target's held item.
 	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility("Sticky Hold")
-	user.getName()+" stole "+victim.getName()+"'s "+victimItem.getName()+"!"
+	user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 LowKick:
 	Name: Low Kick
@@ -2422,7 +2422,7 @@ LowKick:
 	Acc: 100
 	PP: 20
 	Type: Fighting
-	GetPow: double weight = o.getWeight(b);
+	GetPower: double weight = o.getWeight(b);
 	if (weight < 22) return 20;
 	if (weight < 55) return 40;
 	if (weight < 110) return 60;
@@ -2473,7 +2473,7 @@ Punishment:
 	Desc: This attack's power increases the more the target has powered up with stat changes.
 	PP: 5
 	Pow: 60
-	GetPow: return (int)Math.min(super.power + 20*me.getAttributes().totalStatIncreases(), 200);
+	GetPower: return (int)Math.min(super.power + 20*me.getAttributes().totalStatIncreases(), 200);
 	###
 	Type: Dark
 	Cat: Physical
@@ -2508,7 +2508,7 @@ Reversal:
 	Acc: 100
 	Cat: Physical
 	Type: Fighting
-	GetPow: double ratio = me.getHPRatio();
+	GetPower: double ratio = me.getHPRatio();
 	if (ratio > .7) return 20;
 	if (ratio > .35) return 40;
 	if (ratio > .2) return 80;
@@ -2566,7 +2566,7 @@ BellyDrum:
 		b.addMessage("...but it failed!");
 		return;
 	}
-	b.addMessage(user.getName()+" cut its own HP and maximized its attack!");
+	b.addMessage(user.getName() + " cut its own HP and maximized its attack!");
 	user.reduceHealthFraction(b, 1/2.0);
 	user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 	###
@@ -2724,7 +2724,7 @@ WringOut:
 	Acc: 100
 	Cat: Special
 	Type: Normal
-	GetPow: return (int)(120*o.getHPRatio());
+	GetPower: return (int)(120*o.getHPRatio());
 	###
 	PhysicalContact: True
 *
@@ -2777,7 +2777,7 @@ Hex:
 	Acc: 100
 	Cat: Special
 	Type: Ghost
-	GetPow: return o.hasStatus() ? super.power*2 : super.power;
+	GetPower: return o.hasStatus() ? super.power*2 : super.power;
 	###
 *
 SludgeWave:
@@ -2871,7 +2871,7 @@ Steamroller:
 	Pow: 65
 	Effect: Pokemon Flinch
 	EffChance: 30
-	GetPow: return o.hasEffect("UsedMinimize") ? super.power*2 : super.power;
+	GetPower: return o.hasEffect("UsedMinimize") ? super.power*2 : super.power;
 	###
 *
 HeavySlam:
@@ -2881,7 +2881,7 @@ HeavySlam:
 	Type: Steel
 	Cat: Physical
 	Acc: 100
-	GetPow: double ratio = o.getWeight(b)/me.getWeight(b);
+	GetPower: double ratio = o.getWeight(b)/me.getWeight(b);
 	if (ratio > .5) return 40;
 	if (ratio > .33) return 60;
 	if (ratio > .25) return 80;
@@ -2912,7 +2912,7 @@ FlameCharge:
 *
 Bounce:
 	Desc: The user bounces up high, then drops on the target on the second turn. It may also leave the target with paralysis.
-	MultiTurn: Yes Yes user.getName()+" sprang up!"
+	MultiTurn: Yes Yes user.getName() + " sprang up!"
 	Type: Flying
 	Cat: Physical
 	PP: 5
@@ -2930,7 +2930,7 @@ Curse:
 	Type: Ghost
 	Effect: Pokemon Curse
 	StatChange: 3 Attack 1 Defense 1 Speed -1
-	Apply: if (me.isType(Type.GHOST))
+	Apply: if (me.isType(b, Type.GHOST))
 	{
 		if (effects.get(0).applies(b, me, o, CastSource.ATTACK)) effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
 		else b.addMessage("...but it failed!");
@@ -2978,7 +2978,7 @@ HealPulse:
 		return;
 	}
 	victim.healHealthFraction(1/2.0);
-	b.addMessage(victim.getName()+"'s health was restored!", victim.getHP(), victim.user());
+	b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
 	###
 *
 MetalSound:
@@ -3131,7 +3131,7 @@ Brine:
 	Cat: Special
 	Acc: 100
 	Pow: 65
-	GetPow: return me.getHPRatio() < .5 ? 2*super.power : super.power;
+	GetPower: return me.getHPRatio() < .5 ? 2*super.power : super.power;
 	###
 *
 Dive:
@@ -3142,7 +3142,7 @@ Dive:
 	Acc: 100
 	MoveType: SleepTalkFail
 	Type: Water
-	MultiTurn: Yes Yes user.getName()+" hid underwater!"
+	MultiTurn: Yes Yes user.getName() + " hid underwater!"
 *
 IceBeam:
 	Desc: The target is struck with an icy-cold beam of energy. It may also freeze the target solid.
@@ -3308,7 +3308,7 @@ Spite:
 		b.addMessage("...but it failed!");
 		return;
 	}
-	b.addMessage(victim.getName()+"'s "+last.getAttack().getName()+"'s PP was reduced by "+last.reducePP(4)+"!");
+	b.addMessage(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 	###
 *
 NightShade:
@@ -3348,7 +3348,7 @@ DreamEater:
 	###
 	ApplyDamage: int damage = super.applyDamage(me, o, b);
 	if (!me.hasEffect("HealBlock")) me.heal((int)(damage*.5*(me.isHoldingItem(b, "Big Root") ? 1.3 : 1)));
-	b.addMessage(o.getName()+"'s dream was eaten!");
+	b.addMessage(o.getName() + "'s dream was eaten!");
 	b.addMessage("", o.getHP(), o.user());
 	b.addMessage("", me.getHP(), me.user());
 	return damage;
@@ -3438,8 +3438,8 @@ Synchronoise:
 	Cat: Special
 	Acc: 100
 	Pow: 70
-	Apply: Type[] type = me.getType();
-	if (o.isType(type[0]) || (type[1] != Type.NONE && o.isType(type[1]))) super.apply(me, o, b);
+	Apply: Type[] type = me.getType(b);
+	if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) super.apply(me, o, b);
 	else b.addMessage("...but it failed!");
 	###
 *
@@ -3495,7 +3495,7 @@ Flail:
 	Acc: 100
 	Cat: Physical
 	Type: Normal
-	GetPow: double ratio = me.getHPRatio();
+	GetPower: double ratio = me.getHPRatio();
 	if (ratio > .7) return 20;
 	if (ratio > .35) return 40;
 	if (ratio > .2) return 80;
@@ -3669,12 +3669,12 @@ BrickBreak:
 	Cat: Physical
 	ApplyEffects: if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), "Reflect"))
 	{
-		b.addMessage(user.getName()+" broke the reflect barrier!");
+		b.addMessage(user.getName() + " broke the reflect barrier!");
 		Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), "Reflect");
 	}
 	if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), "LightScreen"))
 	{
-		b.addMessage(user.getName()+" broke the light screen barrier!");
+		b.addMessage(user.getName() + " broke the light screen barrier!");
 		Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), "LightScreen");
 	}
 	###
@@ -3859,7 +3859,7 @@ Refresh:
 	ApplyEffects: if (user.hasStatus())
 	{
 		user.removeStatus();
-		b.addMessage(user.getName()+" cured itself of its status condition!", StatusCondition.NONE, user.user());
+		b.addMessage(user.getName() + " cured itself of its status condition!", StatusCondition.NONE, user.user());
 		return;
 	}
 	b.addMessage("...but it failed!");
@@ -3992,7 +3992,7 @@ ReflectType:
 	Cat: Status
 	SelfTarget: True
 	Effect: Pokemon ChangeType
-	ChangeType: return b.getOtherPokemon(caster.user()).getType().clone();
+	ChangeType: return b.getOtherPokemon(caster.user()).getType(b).clone();
 	###
 	MoveType: NonSnatchable
 *
@@ -4016,7 +4016,7 @@ PowerSwap:
 	temp = user.getAttributes().getStage(Stat.SP_ATTACK.index());
 	user.getAttributes().setStage(Stat.SP_ATTACK.index(), victim.getAttributes().getStage(Stat.SP_ATTACK.index()));
 	victim.getAttributes().setStage(Stat.SP_ATTACK.index(), temp);
-	b.addMessage(user.getName()+" swapped its stats with "+victim.getName()+"!");
+	b.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
 	###
 	MoveType: NoMagicCoat
 *
@@ -4033,7 +4033,7 @@ GuardSwap:
 	temp = user.getAttributes().getStage(Stat.SP_DEFENSE.index());
 	user.getAttributes().setStage(Stat.SP_DEFENSE.index(), victim.getAttributes().getStage(Stat.SP_DEFENSE.index()));
 	victim.getAttributes().setStage(Stat.SP_DEFENSE.index(), temp);
-	b.addMessage(user.getName()+" swapped its stats with "+victim.getName()+"!");
+	b.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
 	###
 	MoveType: NoMagicCoat
 *
@@ -4086,7 +4086,7 @@ RazorWind:
 	Acc: 100
 	MoveType: HighCritRatio
 	Pow: 80
-	MultiTurn: Yes No user.getName()+" whipped up a whirlwind!"
+	MultiTurn: Yes No user.getName() + " whipped up a whirlwind!"
 *
 LovelyKiss:
 	Name: Lovely Kiss
@@ -4149,7 +4149,7 @@ Blizzard:
 	Cat: Special
 	Status: Frozen
 	EffChance: 10
-	GetAcc: if (b.getWeather().getType() == Weather.WeatherType.HAILING) return 100;
+	GetAccuracy: if (b.getWeather().getType() == Weather.WeatherType.HAILING) return 100;
 	return super.accuracy;
 	###
 *
@@ -4188,7 +4188,7 @@ GigaImpact:
 	Pow: 150
 	Acc: 90
 	Cat: Physical
-	MultiTurn: No No user.getName()+" must recharge!"
+	MultiTurn: No No user.getName() + " must recharge!"
 	Type: Normal
 *
 Splash:
@@ -4236,7 +4236,7 @@ TrumpCard:
 	Type: Normal
 	PhysicalContact: True
 	Cat: Special
-	GetPow: int pp = me.getMove().getPP();
+	GetPower: int pp = me.getMove().getPP();
 	if (pp == 1) return 190;
 	if (pp == 2) return 75;
 	if (pp == 3) return 60;
@@ -4263,7 +4263,7 @@ Conversion:
 	SelfTarget: True
 	Apply: for (Move m : me.getMoves())
 	{
-		if (!me.isType(m.getAttack().getType(b, me)))
+		if (!me.isType(b, m.getAttack().getType(b, me)))
 		{
 			super.apply(me, o, b);
 			return;
@@ -4275,7 +4275,7 @@ Conversion:
 	for (Move m : victim.getMoves())
 	{
 		Type t = m.getAttack().getType(b, victim); 
-		if (!victim.isType(t)) types.add(t);
+		if (!victim.isType(b, t)) types.add(t);
 	}
 	return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 	###
@@ -4290,7 +4290,7 @@ Conversion2:
 	Cat: Status
 	SelfTarget: True
 	Apply: Move m = o.getAttributes().getLastMoveUsed();
-	if (m == null || getResistances(me, m.getAttack().getType(b, o)).size() == 0)
+	if (m == null || getResistances(me, m.getAttack().getType(b, o), b).size() == 0)
 	{
 		b.addMessage("...but it failed!");
 		return;
@@ -4299,16 +4299,16 @@ Conversion2:
 	###
 	Effect: Pokemon ChangeType
 	ChangeType: ActivePokemon other = b.getOtherPokemon(victim.user());
-	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getAttack().getType(b, other));
+	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getAttack().getType(b, other), b);
 	return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 	###
-	Field: private List<Type> getResistances(ActivePokemon victim, Type attacking)
+	Field: private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b)
 	{
 		List<Type> types = new ArrayList<>();
 		for (Type t : Type.values())
-		{
-			if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(t)) types.add(t);
-		}
+			if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(b, t))
+				types.add(t);
+				
 		return types;
 	}
 	###
@@ -4433,7 +4433,7 @@ SkyAttack:
 	MoveType: HighCritRatio
 	Effect: Pokemon Flinch
 	EffChance: 30
-	MultiTurn: Yes No user.getName()+" started glowing!"
+	MultiTurn: Yes No user.getName() + " started glowing!"
 	Type: Flying
 *
 DragonRush:
@@ -4471,7 +4471,7 @@ Eruption:
 	Acc: 100
 	Cat: Special
 	Type: Fire
-	GetPow: return (int)(me.getHPRatio()*150);
+	GetPower: return (int)(me.getHPRatio()*150);
 	###
 *
 Charm: 
@@ -4603,7 +4603,7 @@ Psywave:
 	Type: Psychic
 	Cat: Special
 	Acc: 80
-	FixedDamage: (int)Math.max(1, ((int)(Math.random()*11)+5)*me.getLevel()/10.0)
+	FixedDamage: (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0)
 *
 PainSplit:
 	Name: Pain Split
@@ -4611,10 +4611,10 @@ PainSplit:
 	PP: 20
 	Type: Normal
 	Cat: Status
-	ApplyEffects: int share = (user.getHP()+victim.getHP())/2;
+	ApplyEffects: int share = (user.getHP() + victim.getHP())/2;
 	user.setHP(share);
 	victim.setHP(share);
-	b.addMessage(user.getName()+" and "+victim.getName()+" split their pain!", user.getHP(), user.user());
+	b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user.getHP(), user.user());
 	b.addMessage("", victim.getHP(), victim.user());
 	###
 	MoveType: NoMagicCoat
@@ -4700,7 +4700,7 @@ BeatUp:
 		if (p.hasStatus()) continue;
 		Move temp = p.getMove();
 		p.setMove(new Move(Attack.getAttack("Beat Up")));
-		b.addMessage(p.getName()+"'s attack!");
+		b.addMessage(p.getName() + "'s attack!");
 		super.applyDamage(p, o, b);
 		p.setMove(temp);
 	}
@@ -4725,7 +4725,7 @@ Present:
 	Cat: Physical
 	Acc: 90
 	PhysicalContact: False
-	GetPow: double random = Math.random()*80;
+	GetPower: double random = Math.random()*80;
 	if (random < 40) return 40;
 	if (random < 70) return 80;
 	return 120;
@@ -4741,7 +4741,7 @@ Present:
 		return;
 	}
 	o.healHealthFraction(1/4.0);
-	b.addMessage(o.getName()+"'s health was restored!", o.getHP(), o.user());
+	b.addMessage(o.getName() + "'s health was restored!", o.getHP(), o.user());
 	###
 *
 SteelWing:
@@ -4778,8 +4778,8 @@ Sketch:
 		if (moves.get(i).getAttack().getName().equals("Sketch"))
 		{
 			moves.add(i, new Move(copy.getAttack()));
-			moves.remove(i+1);
-			b.addMessage(me.getName()+" learned "+moves.get(i).getAttack().getName()+"!");
+			moves.remove(i + 1);
+			b.addMessage(me.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 		}
 	}
 	###
@@ -4797,12 +4797,12 @@ TripleKick:
 	for (hits = 1; hits <= 3; hits++)
 	{
 		super.power = pow*hits;
-		b.addMessage("Hit "+hits+"!");
+		b.addMessage("Hit " + hits + "!");
 		damage += super.applyDamage(me, o, b);
 		if (hits < 3 && !b.accuracyCheck(me, o)) break;
 	}
 	if (hits > 3) hits = 3;
-	b.addMessage("Hit "+hits+" times!");
+	b.addMessage("Hit " + hits + " times!");
 	super.power = pow;
 	return damage;
 	###
@@ -4845,7 +4845,7 @@ WeatherBall:
 			return Type.NORMAL;
 	}
 	###
-	GetPow: return super.power*(b.getWeather().getType() == Weather.WeatherType.CLEAR_SKIES ? 1 : 2);
+	GetPower: return super.power*(b.getWeather().getType() == Weather.WeatherType.CLEAR_SKIES ? 1 : 2);
 	###
 	Pow: 50
 	Acc: 100
@@ -4913,7 +4913,7 @@ Thief:
 	Cat: Physical
 	Acc: 100
 	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility("Sticky Hold")
-	user.getName()+" stole "+victim.getName()+"'s "+victimItem.getName()+"!"
+	user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 	MoveType: Assistless
 *
 Attract:
@@ -4957,7 +4957,7 @@ Smellingsalt:
 	###
 	ApplyEffects: if (victim.hasStatus(StatusCondition.PARALYZED))
 	{
-		b.addMessage(victim.getName()+" was cured from its paralysis!", StatusCondition.NONE, victim.user());
+		b.addMessage(victim.getName() + " was cured from its paralysis!", StatusCondition.NONE, victim.user());
 		victim.removeStatus();
 	}
 	###
@@ -5040,7 +5040,7 @@ WaterSpout:
 	Acc: 100
 	Cat: Special
 	Type: Water
-	GetPow: return (int)(me.getHPRatio()*150);
+	GetPower: return (int)(me.getHPRatio()*150);
 	###
 *
 TeeterDance:
@@ -5144,7 +5144,7 @@ Facade:
 	PP: 20
 	Type: Normal
 	Pow: 70
-	GetPow: return super.power*(me.hasStatus() ? 2 : 1);
+	GetPower: return super.power*(me.hasStatus() ? 2 : 1);
 	###
 	Acc: 100
 	Cat: Physical
@@ -5210,7 +5210,7 @@ RockWrecker:
 	Cat: Physical
 	Acc: 90
 	Pow: 150
-	MultiTurn: No No user.getName()+" must recharge!"
+	MultiTurn: No No user.getName() + " must recharge!"
 	PhysicalContact: False
 *
 TrickRoom:
@@ -5231,7 +5231,7 @@ RoarOfTime:
 	Cat: Special
 	Acc: 90
 	Pow: 150
-	MultiTurn: No No user.getName()+" must recharge!"
+	MultiTurn: No No user.getName() + " must recharge!"
 *
 SpacialRend:
 	Name: Spacial Rend
@@ -5260,7 +5260,7 @@ CrushGrip:
 	Type: Normal
 	Acc: 100
 	Cat: Physical
-	GetPow: return (int)Math.min(1, (120*o.getHPRatio()));
+	GetPower: return (int)Math.min(1, (120*o.getHPRatio()));
 	###
 *
 ShadowForce:
@@ -5271,7 +5271,7 @@ ShadowForce:
 	Cat: Physical
 	Acc: 100
 	Pow: 120
-	MultiTurn: Yes Yes user.getName()+" disappeared!"
+	MultiTurn: Yes Yes user.getName() + " disappeared!"
 	MoveType: ProtectPiercing
 	MoveType: SleepTalkFail
 *
@@ -5288,7 +5288,7 @@ HeartSwap:
 		user.getAttributes().setStage(i, victim.getAttributes().getStage(i));
 		victim.getAttributes().setStage(i, temp);
 	}
-	b.addMessage(user.getName()+" swapped its stats with "+victim.getName()+"!");
+	b.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
 	###
 	MoveType: NoMagicCoat
 *	
@@ -5345,7 +5345,7 @@ Incinerate:
 	ApplyEffects: Item heldItem = victim.getHeldItem(b);
 	if (heldItem instanceof Berry)
 	{
-		b.addMessage(victim.getName()+"'s "+heldItem.getName()+" was burned!");
+		b.addMessage(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 		victim.consumeItem(b);
 	}
 	###
@@ -5367,7 +5367,7 @@ HeatCrash:
 	Cat: Physical
 	Acc: 100
 	Type: Fire
-	GetPow: double ratio = o.getWeight(b)/me.getWeight(b);
+	GetPower: double ratio = o.getWeight(b)/me.getWeight(b);
 	if (ratio > .5) return 40;
 	if (ratio > .33) return 60;
 	if (ratio > .25) return 80;
@@ -5383,7 +5383,7 @@ GrassKnot:
 	Cat: Special
 	PhysicalContact: True
 	Acc: 100
-	GetPow: double weight = o.getWeight(b);
+	GetPower: double weight = o.getWeight(b);
 	if (weight < 22) return 20;
 	if (weight < 55) return 40;
 	if (weight < 110) return 60;
@@ -5585,7 +5585,7 @@ FusionFlare:
 	Acc: 100
 	Cat: Special
 	Type: Fire
-	GetPow: return super.power*(!b.isFirstAttack() && o.getAttack().getName().equals("Fusion Bolt") ? 2 : 1);
+	GetPower: return super.power*(!b.isFirstAttack() && o.getAttack().getName().equals("Fusion Bolt") ? 2 : 1);
 	###
 *
 FusionBolt:
@@ -5597,7 +5597,7 @@ FusionBolt:
 	PhysicalContact: False
 	Cat: Physical
 	Acc: 100
-	GetPow: return super.power*(!b.isFirstAttack() && o.getAttack().getName().equals("Fusion Flare") ? 2 : 1);
+	GetPower: return super.power*(!b.isFirstAttack() && o.getAttack().getName().equals("Fusion Flare") ? 2 : 1);
 	###
 *
 BlueFlare:
@@ -5672,7 +5672,7 @@ Fling:
 	Type: Dark
 	Acc: 100
 	Cat: Physical
-	GetPow: return 1; // TODO: FLING DAMAGE
+	GetPower: return 1; // TODO: FLING DAMAGE
 	###
 	Apply: if (me.hasEffect("Embargo"))
 	{
@@ -5729,7 +5729,7 @@ GastroAcid:
 	Type: Poison
 	Cat: Status
 	Acc: 100
-	AbilityMessage: return caster.getName()+" suppressed "+victim.getName()+"'s ability!";
+	AbilityMessage: return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
 	###
 *
 HealingWish:
@@ -5761,7 +5761,7 @@ Roar:
 	Cat: Status
 	MoveType: SubstitutePiercing
 	Acc: 100
-	ExitBattle: victim.getName()+" fled in fear!"
+	ExitBattle: victim.getName() + " fled in fear!"
 	Priority: -6
 	MoveType: SoundBased
 *
@@ -5782,7 +5782,7 @@ Retaliate:
 	Cat: Physical
 	Acc: 100
 	Pow: 70
-	GetPow: return super.power*(Effect.hasEffect(b.getEffects(me.user()), "DeadAlly") ? 2 : 1);
+	GetPower: return super.power*(Effect.hasEffect(b.getEffects(me.user()), "DeadAlly") ? 2 : 1);
 	###
 *
 CircleThrow:
@@ -5793,7 +5793,7 @@ CircleThrow:
 	Cat: Physical
 	Acc: 90
 	Pow: 60
-	ExitBattle: victim.getName()+" was thrown away!"
+	ExitBattle: victim.getName() + " was thrown away!"
 	Priority: -6
 	MoveType: Assistless
 *
@@ -5808,7 +5808,7 @@ Teleport:
 		b.addMessage("...but it failed!");
 		return;
 	}
-	b.addMessage(user.getName()+" teleported out of battle!");
+	b.addMessage(user.getName() + " teleported out of battle!");
 	b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 	###
 *
@@ -5825,7 +5825,7 @@ RolePlay:
 	AbilityChange: return b.getOtherPokemon(victim.user()).getAbility().newInstance();
 	###
 	AbilityMessage: ActivePokemon other = b.getOtherPokemon(victim.user());
-	return victim.getName()+" copied "+other.getName()+"'s "+other.getAbility().getName()+"!";
+	return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 	###
 	Apply: switch (o.getAbility().getName())
 	{
@@ -5846,10 +5846,10 @@ KnockOff:
 	Cat: Physical
 	Acc: 100
 	Pow: 65
-	GetPow: return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
+	GetPower: return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
 	###
 	ApplyEffects: if (!victim.isHoldingItem(b) || victim.hasAbility("Sticky Hold")) return;
-	b.addMessage(user.getName()+" knocked off "+victim.getName()+"'s "+victim.getHeldItem(b).getName()+"!");
+	b.addMessage(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 	super.applyEffects(b, user, victim);
 	###
 	GetItem: return Item.noneItem();
@@ -5862,7 +5862,7 @@ Whirlwind:
 	Type: Normal
 	Cat: Status
 	Acc: 100
-	ExitBattle: victim.getName()+" blew away!"
+	ExitBattle: victim.getName() + " blew away!"
 	MoveType: SubstitutePiercing
 	Priority: -6
 *
@@ -5872,7 +5872,7 @@ Bestow:
 	Type: Normal
 	Cat: Status
 	SwitchItems: !user.isHoldingItem(b) || victim.isHoldingItem(b)
-	user.getName()+" gave "+victim.getName()+" its "+userItem.getName()+"!"
+	user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!"
 	MoveType: Metronomeless
 *
 Switcheroo:
@@ -5882,7 +5882,7 @@ Switcheroo:
 	Cat: Status
 	Acc: 100
 	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility("Sticky Hold") || victim.hasAbility("Sticky Hold")
-	user.getName()+" switched items with "+victim.getName()+"!"
+	user.getName() + " switched items with " + victim.getName() + "!"
 	MoveType: Assistless
 	MoveType: Metronomeless
 *	
@@ -5893,7 +5893,7 @@ Trick:
 	Acc: 100
 	Cat: Status
 	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility("Sticky Hold") || victim.hasAbility("Sticky Hold")
-	user.getName()+" switched items with "+victim.getName()+"!"
+	user.getName() + " switched items with " + victim.getName() + "!"
 	MoveType: Assistless
 	MoveType: Metronomeless
 *
@@ -5942,7 +5942,7 @@ Recycle:
 	}
 	Item restored = ((ItemCondition)consumed).getItem();
 	victim.giveItem((HoldItem)restored);
-	b.addMessage(victim.getName()+"'s "+restored.getName()+" was restored!");
+	b.addMessage(victim.getName() + "'s " + restored.getName() + " was restored!");
 	###
 	SelfTarget: True
 *
@@ -5965,7 +5965,7 @@ BatonPass:
 	ApplyEffects: Team t = b.getTrainer(user.user());
 	if (t instanceof WildPokemon)
 	{
-		b.addMessage(user.getName()+" left the battle!");
+		b.addMessage(user.getName() + " left the battle!");
 		b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 		return;
 	}
@@ -5977,7 +5977,7 @@ BatonPass:
 		return;
 	}
 	
-	b.addMessage(user.getName()+" went back to "+trainer.getName()+"!");
+	b.addMessage(user.getName() + " went back to " + trainer.getName() + "!");
 	trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
 	
 	ActivePokemon next = trainer.front();
@@ -5992,7 +5992,7 @@ BatonPass:
 	}
 	
 	user = next;
-	b.enterBattle(user, trainer.getName()+" sent out "+user.getName()+"!", false);
+	b.enterBattle(user, trainer.getName() + " sent out " + user.getName() + "!", false);
 	###
 	SelfTarget: True
 *
@@ -6017,7 +6017,7 @@ DragonTail:
 	Cat: Physical
 	Acc: 90
 	Pow: 60
-	ExitBattle: victim.getName()+" was slapped away!"
+	ExitBattle: victim.getName() + " was slapped away!"
 	Priority: -6
 	MoveType: Assistless
 *
@@ -6028,7 +6028,7 @@ FoulPlay:
 	Type: Dark
 	Acc: 100
 	Cat: Physical
-	GetPow: double ratio = (double)Stat.getStat(Stat.ATTACK, me, o, b)/Stat.getStat(Stat.ATTACK, o, me, b);
+	GetPower: double ratio = (double)Stat.getStat(Stat.ATTACK, me, o, b)/Stat.getStat(Stat.ATTACK, o, me, b);
 	if (ratio > .5) return 40;
 	if (ratio > .33) return 60;
 	if (ratio > .25) return 80;
@@ -6055,7 +6055,7 @@ NaturePower:
 	Apply: // TODO: Battle environments
 	me.callNewMove(b, o, new Move(Attack.getAttack("Tri Attack")));
 	###
-	GetAcc: return Attack.getAttack("Tri Attack").getAccuracy(b, me, o);
+	GetAccuracy: return Attack.getAttack("Tri Attack").getAccuracy(b, me, o);
 	###
 *
 Entrainment:
@@ -6067,7 +6067,7 @@ Entrainment:
 	Effect: Pokemon ChangeAbility
 	AbilityChange: return caster.getAbility().newInstance();
 	###
-	AbilityMessage: return victim.getName()+" copied "+caster.getName()+"'s "+caster.getAbility().getName()+"!";
+	AbilityMessage: return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
 	###
 	Apply: switch (o.getAbility().getName())
 	{
@@ -6100,7 +6100,7 @@ SimpleBeam:
 	Effect: Pokemon ChangeAbility
 	AbilityChange: return Ability.getAbility("Simple").newInstance();
 	###
-	AbilityMessage: return victim.getName()+"'s ability was changed to Simple!";
+	AbilityMessage: return victim.getName() + "'s ability was changed to Simple!";
 	###
 	Apply: switch (o.getAbility().getName())
 	{
@@ -6126,7 +6126,7 @@ SkillSwap:
 	Effect: Pokemon ChangeAbility
 	AbilityChange: return ability;
 	###
-	AbilityMessage: return victim.getName()+"'s ability was changed to "+ability.getName()+"!";
+	AbilityMessage: return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
 	###
 	ApplyEffects: if (victim.hasAbility("Wonder Guard") || victim.hasAbility("Multitype"))
 	{

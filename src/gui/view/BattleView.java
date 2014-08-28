@@ -147,7 +147,7 @@ public class BattleView extends View
 		
 		private void resetVals(ActivePokemon p)
 		{
-			resetVals(p.getHP(), p.getStatus().getType(), p.getType(), p.isShiny(), p.getPokemonInfo(), 
+			resetVals(p.getHP(), p.getStatus().getType(), p.getType(currentBattle), p.isShiny(), p.getPokemonInfo(), 
 					p.getName(), p.getStat(Stat.HP), p.getLevel(), p.getGender(), p.expRatio());
 		}
 		
@@ -671,7 +671,7 @@ public class BattleView extends View
 			setVisualState(VisualState.FIGHT);
 			
 			// Move is forced -- don't show menu, but execute the move
-			if (Move.forceMove(currentBattle.getPlayer().front()))
+			if (Move.forceMove(currentBattle, currentBattle.getPlayer().front()))
 			{
 				currentBattle.getPlayer().performAction(currentBattle, Action.FIGHT);
 				setVisualState(VisualState.MESSAGE);
@@ -698,7 +698,7 @@ public class BattleView extends View
 				lastMoveUsed = i;
 				
 				// Execute the move if valid
-				if (Move.validMove(front, moves.get(i), currentBattle))
+				if (Move.validMove(currentBattle, front, moves.get(i), true))
 				{
 					currentBattle.getPlayer().performAction(currentBattle, Action.FIGHT);
 					setVisualState(VisualState.MESSAGE);

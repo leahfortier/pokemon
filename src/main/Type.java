@@ -49,7 +49,7 @@ public enum Type implements Serializable
 	
 	public static double getAdvantage(Type moveType, ActivePokemon p, Battle b)
 	{
-		Type[] pType = p.getType();
+		Type[] pType = p.getType(b);
 		int t1 = pType[0].index, t2 = pType[1].index, index = moveType.index;
 		
 		// Pokemon holding Ring Target lose their immunities
@@ -99,9 +99,10 @@ public enum Type implements Serializable
 	
 	public static double getSTAB(Battle b, ActivePokemon p)
 	{
-		Type[] pType = p.getType();
-		Type aType = p.getAttack().getType(b, p);
-		return pType[0] ==  aType|| pType[1] == aType ? (p.hasAbility("Adaptability") ? 2 : 1.5) : 1; 
+		Type[] pokemonType = p.getType(b);
+		Type attackType = p.getAttack().getType(b, p);
+		
+		return pokemonType[0] ==  attackType|| pokemonType[1] == attackType ? (p.hasAbility("Adaptability") ? 2 : 1.5) : 1; 
 	}
 
 	private int index;

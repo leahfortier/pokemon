@@ -253,8 +253,15 @@ public abstract class Attack implements Serializable
 		if (category == Category.STATUS && !isMoveType("Field") && !isMoveType("NoMagicCoat"))
 		{
 			String bouncy = "";
-			if (o.hasEffect("MagicCoat")) bouncy = "Coat";
-			else if (o.hasAbility("Magic Bounce") && !me.breaksTheMold()) bouncy = "Bounce";
+			if (o.hasEffect("MagicCoat"))
+			{
+				bouncy = "Coat";
+			}
+			else if (o.hasAbility("Magic Bounce") && !me.breaksTheMold()) 
+			{
+				bouncy = "Bounce";
+			}
+			
 			if (bouncy.length() > 0)
 			{
 				b.addMessage(o.getName() + "'s Magic " + bouncy + " reflected " + me.getName() + "'s move!");
@@ -271,10 +278,12 @@ public abstract class Attack implements Serializable
 		if (Math.random()*100 >= chance) return false;
 		
 		// Check the opponents effects and see if it will prevent effects from occuring
-		List<Object> list = b.getEffectsList(o);
+		Object[] list = b.getEffectsList(o);
 		for (Object obj : list)
 		{
-			if (obj instanceof Effect && !((Effect)obj).isActive()) continue;
+			if (Effect.isInactiveEffect(obj)) 
+				continue;
+			
 			if (obj instanceof EffectBlockerEffect && !((EffectBlockerEffect)obj).validMove(b, me, o)) return false;
 		}
 		
@@ -286,10 +295,14 @@ public abstract class Attack implements Serializable
 	
 	private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp)
 	{
-		if (Type.getAdvantage(p.getAttack().getType(b, p), opp, b) > 0) return false;
+		if (Type.getAdvantage(p.getAttack().getType(b, p), opp, b) > 0) 
+		{
+			return false;
+		}
 		
-		b.addMessage("It doesn't affect " + opp.getName() + "!");
-		if (p.getAttack() instanceof CrashDamageMove) ((CrashDamageMove)p.getAttack()).crash(b, p);
+		b.addMessage("It doesn't affect " + opp.getName() + "!");		
+		Global.invoke(new Object[] { p.getAttack() }, CrashDamageMove.class, "crash", b, p);
+		
 		return true;
 	}
 	
@@ -297,7 +310,10 @@ public abstract class Attack implements Serializable
 	// Returns false if the move was unsuccessful due to zero type advantage
 	public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 	{
-		if (zeroAdvantage(b, me, o)) return -1;
+		if (zeroAdvantage(b, me, o)) 
+		{
+			return -1;
+		}
 		
 		// Print Advantage
 		double adv = Type.getAdvantage(me.getAttack().getType(b, me), o, b);
@@ -313,28 +329,35 @@ public abstract class Attack implements Serializable
 		Ability userAbility = me.getAbility(), oppAbility = o.getAbility();
 		Item userItem = me.getHeldItem(b), oppItem = o.getHeldItem(b);
 		
+		Object[] invokees = new Object[] {userAbility, userItem};
+		
 		// Apply a damage effect
-		if (userAbility instanceof ApplyDamageEffect) ((ApplyDamageEffect)userAbility).applyEffect(b, me, o, damage);
-		if (userItem instanceof ApplyDamageEffect) ((ApplyDamageEffect)userItem).applyEffect(b, me, o, damage);
+		Global.invoke(invokees, ApplyDamageEffect.class, "applyEffect", b, me, o, damage);
 		
 		// Take Recoil Damage
-		if (this instanceof RecoilMove) ((RecoilMove)this).applyRecoil(b, me, damage);
+		Global.invoke(new Object[] {this}, RecoilMove.class, "applyRecoil", b, me, damage);
 	
-		if (me.isFainted(b)) return damage;
+		if (me.isFainted(b))
+		{
+			return damage;
+		}
 		
 		// Sap the Health
-		if (isMoveType("SapHealth")) me.sapHealth(o, (int)Math.ceil(damage/2.0), b, true);
+		if (isMoveType("SapHealth")) 
+		{
+			me.sapHealth(o, (int)Math.ceil(damage/2.0), b, true);
+		}
+		
+		invokees = new Object[] {oppAbility, oppItem};
 		
 		// Abilities and items that apply when a Pokemon makes physical contact with them
 		if (isMoveType("PhysicalContact"))
 		{
-			if (oppAbility instanceof PhysicalContactEffect) ((PhysicalContactEffect)oppAbility).contact(b, me, o);
-			if (oppItem instanceof PhysicalContactEffect) ((PhysicalContactEffect)oppItem).contact(b, me, o);
+			Global.invoke(invokees, PhysicalContactEffect.class, "contact", b, me, o);
 		}
 		
 		// Effects that apply to the opponent when they take damage
-		if (oppAbility instanceof TakeDamageEffect) ((TakeDamageEffect)oppAbility).takeDamage(b, me, o);
-		if (oppItem instanceof TakeDamageEffect) ((TakeDamageEffect)oppItem).takeDamage(b, me, o);
+		Global.invoke(invokees, TakeDamageEffect.class, "takeDamage", b, me, o);
 		
 		return damage;
 	}
@@ -361,7 +384,7 @@ public abstract class Attack implements Serializable
 		for (Effect e : effects)
 		{
 			if (e.applies(b, user, victim, CastSource.ATTACK)) e.cast(b, user, victim, CastSource.ATTACK, canPrintCast());
-			else if (canPrintFail()) b.addMessage(e.getFailMessage(user, victim, victim.user()));
+			else if (canPrintFail()) b.addMessage(e.getFailMessage(b, user, victim, victim.user()));
 		}
 		
 		// Heal yourself!!
@@ -475,8 +498,8 @@ public abstract class Attack implements Serializable
 		map.put("Aqua Tail", new AquaTail());
 		map.put("Skull Bash", new SkullBash());
 		map.put("Iron Defense", new IronDefense());
-		map.put("Rain Dance", new RainDance());
 		map.put("Hydro Pump", new HydroPump());
+		map.put("Rain Dance", new RainDance());
 		map.put("Sunny Day", new SunnyDay());
 		map.put("Sandstorm", new Sandstorm());
 		map.put("Hail", new Hail());
@@ -1007,7 +1030,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (super.zeroAdvantage(b, user, victim)) b.addMessage("It doesn't affect "+victim.getName()+"!");
+			if (super.zeroAdvantage(b, user, victim)) b.addMessage("It doesn't affect " + victim.getName() + "!");
 			else if (Ability.blockDamage(b, user, victim)) return;
 			else super.applyEffects(b, user, victim);
 		}
@@ -1140,7 +1163,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -1167,7 +1190,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, recoilDamage(user, damage));
@@ -1225,7 +1248,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -1446,7 +1469,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" began taking in sunlight!");
+			b.addMessage(user.getName() + " began taking in sunlight!");
 		}
 	}
 
@@ -1488,7 +1511,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" flew up high!");
+			b.addMessage(user.getName() + " flew up high!");
 		}
 	}
 
@@ -1597,7 +1620,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -1830,7 +1853,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" lowered its head!");
+			b.addMessage(user.getName() + " lowered its head!");
 			user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, CastSource.ATTACK);
 		}
 	}
@@ -1846,17 +1869,6 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class RainDance extends Attack 
-	{
-		private static final long serialVersionUID = 1L;
-		public RainDance()
-		{
-			super("Rain Dance", "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, Category.STATUS);
-			super.effects.add(Effect.getEffect("Raining", EffectType.BATTLE));
-			super.moveTypes.add("Field");
-		}
-	}
-
 	private static class HydroPump extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
@@ -1868,6 +1880,17 @@ public abstract class Attack implements Serializable
 		}
 	}
 
+	private static class RainDance extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+		public RainDance()
+		{
+			super("Rain Dance", "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, Category.STATUS);
+			super.effects.add(Effect.getEffect("RAINING", EffectType.BATTLE));
+			super.moveTypes.add("Field");
+		}
+	}
+
 	private static class SunnyDay extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
@@ -1875,7 +1898,7 @@ public abstract class Attack implements Serializable
 		{
 			super("Sunny Day", "The user intensifies the sun for five turns, powering up Fire-type moves.", 5, Type.FIRE, Category.STATUS);
 			super.moveTypes.add("Field");
-			super.effects.add(Effect.getEffect("Sunny", EffectType.BATTLE));
+			super.effects.add(Effect.getEffect("SUNNY", EffectType.BATTLE));
 		}
 	}
 
@@ -1886,7 +1909,7 @@ public abstract class Attack implements Serializable
 		{
 			super("Sandstorm", "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", 10, Type.ROCK, Category.STATUS);
 			super.moveTypes.add("Field");
-			super.effects.add(Effect.getEffect("Sandstorm", EffectType.BATTLE));
+			super.effects.add(Effect.getEffect("SANDSTORM", EffectType.BATTLE));
 		}
 	}
 
@@ -1897,7 +1920,7 @@ public abstract class Attack implements Serializable
 		{
 			super("Hail", "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.", 10, Type.ICE, Category.STATUS);
 			super.moveTypes.add("Field");
-			super.effects.add(Effect.getEffect("Hailing", EffectType.BATTLE));
+			super.effects.add(Effect.getEffect("HAILING", EffectType.BATTLE));
 		}
 	}
 
@@ -1951,7 +1974,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" must recharge!");
+			b.addMessage(user.getName() + " must recharge!");
 		}
 	}
 
@@ -1982,7 +2005,7 @@ public abstract class Attack implements Serializable
 			Item i = victim.getHeldItem(b);
 			if (i instanceof Berry)
 			{
-				b.addMessage(user.getName()+" ate "+victim.getName()+"'s "+i.getName()+"!");
+				b.addMessage(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!");
 				victim.consumeItem(b);
 				
 				if (i instanceof GainableEffectBerry)
@@ -2558,8 +2581,9 @@ public abstract class Attack implements Serializable
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			if (victim.getType()[0].equals(Type.FLYING)) return new Type[] {victim.getType()[1], Type.NONE};
-			if (victim.getType()[1].equals(Type.FLYING)) return new Type[] {victim.getType()[0], Type.NONE};
+			Type[] type = victim.getType(b);
+			if (type[0].equals(Type.FLYING)) return new Type[] {type[1], Type.NONE};
+			if (type[1].equals(Type.FLYING)) return new Type[] {type[0], Type.NONE};
 			return null;
 		}
 	}
@@ -2770,7 +2794,7 @@ public abstract class Attack implements Serializable
 			Item i = victim.getHeldItem(b);
 			if (i instanceof Berry)
 			{
-				b.addMessage(user.getName()+" ate "+victim.getName()+"'s "+i.getName()+"!");
+				b.addMessage(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!");
 				victim.consumeItem(b);
 				
 				if (i instanceof GainableEffectBerry)
@@ -3553,7 +3577,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.hasStatus(StatusCondition.ASLEEP))
 			{
-				b.addMessage(victim.getName()+" woke up!", StatusCondition.NONE, victim.user());
+				b.addMessage(victim.getName() + " woke up!", StatusCondition.NONE, victim.user());
 				victim.removeStatus();
 			}
 		}
@@ -4174,7 +4198,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			b.addMessage("Magnitude "+(index+4)+"!");
+			b.addMessage("Magnitude " + (index + 4) + "!");
 			super.apply(me, o, b);
 		}
 
@@ -4221,7 +4245,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" went underground!");
+			b.addMessage(user.getName() + " went underground!");
 		}
 	}
 
@@ -4426,7 +4450,7 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) user.getAttributes().setStage(i, victim.getStage(i));
-			b.addMessage(user.getName()+" copied "+victim.getName()+"'s stat changes!");
+			b.addMessage(user.getName() + " copied " + victim.getName() + "'s stat changes!");
 		}
 	}
 
@@ -4491,7 +4515,7 @@ public abstract class Attack implements Serializable
 			}
 
 			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			b.addMessage(user.getName()+" stole "+victim.getName()+"'s "+victimItem.getName()+"!");
+			b.addMessage(user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!");
 
 			if (b.isWildBattle())
 			{
@@ -4723,7 +4747,7 @@ public abstract class Attack implements Serializable
 				b.addMessage("...but it failed!");
 				return;
 			}
-			b.addMessage(user.getName()+" cut its own HP and maximized its attack!");
+			b.addMessage(user.getName() + " cut its own HP and maximized its attack!");
 			user.reduceHealthFraction(b, 1/2.0);
 			user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 		}
@@ -4745,7 +4769,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -5224,7 +5248,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" sprang up!");
+			b.addMessage(user.getName() + " sprang up!");
 		}
 	}
 
@@ -5244,7 +5268,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (me.isType(Type.GHOST))
+			if (me.isType(b, Type.GHOST))
 			{
 				if (effects.get(0).applies(b, me, o, CastSource.ATTACK)) effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
 				else b.addMessage("...but it failed!");
@@ -5316,7 +5340,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			victim.healHealthFraction(1/2.0);
-			b.addMessage(victim.getName()+"'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
 		}
 	}
 
@@ -5408,7 +5432,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -5561,7 +5585,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" hid underwater!");
+			b.addMessage(user.getName() + " hid underwater!");
 		}
 	}
 
@@ -5823,7 +5847,7 @@ public abstract class Attack implements Serializable
 				b.addMessage("...but it failed!");
 				return;
 			}
-			b.addMessage(victim.getName()+"'s "+last.getAttack().getName()+"'s PP was reduced by "+last.reducePP(4)+"!");
+			b.addMessage(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 		}
 	}
 
@@ -5870,7 +5894,7 @@ public abstract class Attack implements Serializable
 		{
 			int damage = super.applyDamage(me, o, b);
 			if (!me.hasEffect("HealBlock")) me.heal((int)(damage*.5*(me.isHoldingItem(b, "Big Root") ? 1.3 : 1)));
-			b.addMessage(o.getName()+"'s dream was eaten!");
+			b.addMessage(o.getName() + "'s dream was eaten!");
 			b.addMessage("", o.getHP(), o.user());
 			b.addMessage("", me.getHP(), me.user());
 			return damage;
@@ -5998,8 +6022,8 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			Type[] type = me.getType();
-			if (o.isType(type[0]) || (type[1] != Type.NONE && o.isType(type[1]))) super.apply(me, o, b);
+			Type[] type = me.getType(b);
+			if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) super.apply(me, o, b);
 			else b.addMessage("...but it failed!");
 		}
 	}
@@ -6271,7 +6295,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -6389,12 +6413,12 @@ public abstract class Attack implements Serializable
 		{
 			if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), "Reflect"))
 			{
-				b.addMessage(user.getName()+" broke the reflect barrier!");
+				b.addMessage(user.getName() + " broke the reflect barrier!");
 				Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), "Reflect");
 			}
 			if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), "LightScreen"))
 			{
-				b.addMessage(user.getName()+" broke the light screen barrier!");
+				b.addMessage(user.getName() + " broke the light screen barrier!");
 				Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), "LightScreen");
 			}
 		}
@@ -6651,7 +6675,7 @@ public abstract class Attack implements Serializable
 			if (user.hasStatus())
 			{
 				user.removeStatus();
-				b.addMessage(user.getName()+" cured itself of its status condition!", StatusCondition.NONE, user.user());
+				b.addMessage(user.getName() + " cured itself of its status condition!", StatusCondition.NONE, user.user());
 				return;
 			}
 			b.addMessage("...but it failed!");
@@ -6848,7 +6872,7 @@ public abstract class Attack implements Serializable
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return b.getOtherPokemon(caster.user()).getType().clone();
+			return b.getOtherPokemon(caster.user()).getType(b).clone();
 		}
 	}
 
@@ -6879,7 +6903,7 @@ public abstract class Attack implements Serializable
 			temp = user.getAttributes().getStage(Stat.SP_ATTACK.index());
 			user.getAttributes().setStage(Stat.SP_ATTACK.index(), victim.getAttributes().getStage(Stat.SP_ATTACK.index()));
 			victim.getAttributes().setStage(Stat.SP_ATTACK.index(), temp);
-			b.addMessage(user.getName()+" swapped its stats with "+victim.getName()+"!");
+			b.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		}
 	}
 
@@ -6901,7 +6925,7 @@ public abstract class Attack implements Serializable
 			temp = user.getAttributes().getStage(Stat.SP_DEFENSE.index());
 			user.getAttributes().setStage(Stat.SP_DEFENSE.index(), victim.getAttributes().getStage(Stat.SP_DEFENSE.index()));
 			victim.getAttributes().setStage(Stat.SP_DEFENSE.index(), temp);
-			b.addMessage(user.getName()+" swapped its stats with "+victim.getName()+"!");
+			b.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		}
 	}
 
@@ -6980,7 +7004,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" whipped up a whirlwind!");
+			b.addMessage(user.getName() + " whipped up a whirlwind!");
 		}
 	}
 
@@ -7129,7 +7153,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" must recharge!");
+			b.addMessage(user.getName() + " must recharge!");
 		}
 	}
 
@@ -7233,7 +7257,7 @@ public abstract class Attack implements Serializable
 		{
 			for (Move m : me.getMoves())
 			{
-				if (!me.isType(m.getAttack().getType(b, me)))
+				if (!me.isType(b, m.getAttack().getType(b, me)))
 				{
 					super.apply(me, o, b);
 					return;
@@ -7248,7 +7272,7 @@ public abstract class Attack implements Serializable
 			for (Move m : victim.getMoves())
 			{
 				Type t = m.getAttack().getType(b, victim);
-				if (!victim.isType(t)) types.add(t);
+				if (!victim.isType(b, t)) types.add(t);
 			}
 			return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 		}
@@ -7257,13 +7281,13 @@ public abstract class Attack implements Serializable
 	private static class Conversion2 extends Attack implements ChangeTypeMove
 	{
 		private static final long serialVersionUID = 1L;
-		private List<Type> getResistances(ActivePokemon victim, Type attacking)
+		private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b)
 		{
 			List<Type> types = new ArrayList<>();
 			for (Type t : Type.values())
-			{
-				if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(t)) types.add(t);
-			}
+			if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(b, t))
+			types.add(t);
+			
 			return types;
 		}
 
@@ -7278,7 +7302,7 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Move m = o.getAttributes().getLastMoveUsed();
-			if (m == null || getResistances(me, m.getAttack().getType(b, o)).size() == 0)
+			if (m == null || getResistances(me, m.getAttack().getType(b, o), b).size() == 0)
 			{
 				b.addMessage("...but it failed!");
 				return;
@@ -7289,7 +7313,7 @@ public abstract class Attack implements Serializable
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getAttack().getType(b, other));
+			List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getAttack().getType(b, other), b);
 			return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 		}
 	}
@@ -7454,7 +7478,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" started glowing!");
+			b.addMessage(user.getName() + " started glowing!");
 		}
 	}
 
@@ -7694,7 +7718,7 @@ public abstract class Attack implements Serializable
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			if (super.zeroAdvantage(b, me, o)) return -1;
-			return b.applyDamage(o, (int)Math.max(1, ((int)(Math.random()*11)+5)*me.getLevel()/10.0));
+			return b.applyDamage(o, (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0));
 		}
 	}
 
@@ -7709,10 +7733,10 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			int share = (user.getHP()+victim.getHP())/2;
+			int share = (user.getHP() + victim.getHP())/2;
 			user.setHP(share);
 			victim.setHP(share);
-			b.addMessage(user.getName()+" and "+victim.getName()+" split their pain!", user.getHP(), user.user());
+			b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user.getHP(), user.user());
 			b.addMessage("", victim.getHP(), victim.user());
 		}
 	}
@@ -7824,7 +7848,7 @@ public abstract class Attack implements Serializable
 				if (p.hasStatus()) continue;
 				Move temp = p.getMove();
 				p.setMove(new Move(Attack.getAttack("Beat Up")));
-				b.addMessage(p.getName()+"'s attack!");
+				b.addMessage(p.getName() + "'s attack!");
 				super.applyDamage(p, o, b);
 				p.setMove(temp);
 			}
@@ -7874,7 +7898,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			o.healHealthFraction(1/4.0);
-			b.addMessage(o.getName()+"'s health was restored!", o.getHP(), o.user());
+			b.addMessage(o.getName() + "'s health was restored!", o.getHP(), o.user());
 		}
 	}
 
@@ -7920,8 +7944,8 @@ public abstract class Attack implements Serializable
 				if (moves.get(i).getAttack().getName().equals("Sketch"))
 				{
 					moves.add(i, new Move(copy.getAttack()));
-					moves.remove(i+1);
-					b.addMessage(me.getName()+" learned "+moves.get(i).getAttack().getName()+"!");
+					moves.remove(i + 1);
+					b.addMessage(me.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 				}
 			}
 		}
@@ -7945,12 +7969,12 @@ public abstract class Attack implements Serializable
 			for (hits = 1; hits <= 3; hits++)
 			{
 				super.power = pow*hits;
-				b.addMessage("Hit "+hits+"!");
+				b.addMessage("Hit " + hits + "!");
 				damage += super.applyDamage(me, o, b);
 				if (hits < 3 && !b.accuracyCheck(me, o)) break;
 			}
 			if (hits > 3) hits = 3;
-			b.addMessage("Hit "+hits+" times!");
+			b.addMessage("Hit " + hits + " times!");
 			super.power = pow;
 			return damage;
 		}
@@ -8117,7 +8141,7 @@ public abstract class Attack implements Serializable
 			}
 
 			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			b.addMessage(user.getName()+" stole "+victim.getName()+"'s "+victimItem.getName()+"!");
+			b.addMessage(user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!");
 
 			if (b.isWildBattle())
 			{
@@ -8205,7 +8229,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.hasStatus(StatusCondition.PARALYZED))
 			{
-				b.addMessage(victim.getName()+" was cured from its paralysis!", StatusCondition.NONE, victim.user());
+				b.addMessage(victim.getName() + " was cured from its paralysis!", StatusCondition.NONE, victim.user());
 				victim.removeStatus();
 			}
 		}
@@ -8286,7 +8310,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -8420,7 +8444,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -8595,7 +8619,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" must recharge!");
+			b.addMessage(user.getName() + " must recharge!");
 		}
 	}
 
@@ -8633,7 +8657,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" must recharge!");
+			b.addMessage(user.getName() + " must recharge!");
 		}
 	}
 
@@ -8702,7 +8726,7 @@ public abstract class Attack implements Serializable
 
 		public void charge(ActivePokemon user, Battle b)
 		{
-			b.addMessage(user.getName()+" disappeared!");
+			b.addMessage(user.getName() + " disappeared!");
 		}
 	}
 
@@ -8724,7 +8748,7 @@ public abstract class Attack implements Serializable
 				user.getAttributes().setStage(i, victim.getAttributes().getStage(i));
 				victim.getAttributes().setStage(i, temp);
 			}
-			b.addMessage(user.getName()+" swapped its stats with "+victim.getName()+"!");
+			b.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		}
 	}
 
@@ -8799,7 +8823,7 @@ public abstract class Attack implements Serializable
 			Item heldItem = victim.getHeldItem(b);
 			if (heldItem instanceof Berry)
 			{
-				b.addMessage(victim.getName()+"'s "+heldItem.getName()+" was burned!");
+				b.addMessage(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 				victim.consumeItem(b);
 			}
 		}
@@ -9077,7 +9101,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");
@@ -9339,7 +9363,7 @@ public abstract class Attack implements Serializable
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return caster.getName()+" suppressed "+victim.getName()+"'s ability!";
+			return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
 		}
 	}
 
@@ -9396,7 +9420,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 
-			b.addMessage(victim.getName()+" fled in fear!");
+			b.addMessage(victim.getName() + " fled in fear!");
 			trainer.switchToRandom();
 			victim = trainer.front();
 			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
@@ -9461,7 +9485,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 
-			b.addMessage(victim.getName()+" was thrown away!");
+			b.addMessage(victim.getName() + " was thrown away!");
 			trainer.switchToRandom();
 			victim = trainer.front();
 			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
@@ -9484,7 +9508,7 @@ public abstract class Attack implements Serializable
 				b.addMessage("...but it failed!");
 				return;
 			}
-			b.addMessage(user.getName()+" teleported out of battle!");
+			b.addMessage(user.getName() + " teleported out of battle!");
 			b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 		}
 	}
@@ -9522,7 +9546,7 @@ public abstract class Attack implements Serializable
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			return victim.getName()+" copied "+other.getName()+"'s "+other.getAbility().getName()+"!";
+			return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
 	}
 
@@ -9541,7 +9565,7 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (!victim.isHoldingItem(b) || victim.hasAbility("Sticky Hold")) return;
-			b.addMessage(user.getName()+" knocked off "+victim.getName()+"'s "+victim.getHeldItem(b).getName()+"!");
+			b.addMessage(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 			super.applyEffects(b, user, victim);
 		}
 
@@ -9582,7 +9606,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 
-			b.addMessage(victim.getName()+" blew away!");
+			b.addMessage(victim.getName() + " blew away!");
 			trainer.switchToRandom();
 			victim = trainer.front();
 			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
@@ -9610,7 +9634,7 @@ public abstract class Attack implements Serializable
 			}
 
 			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			b.addMessage(user.getName()+" gave "+victim.getName()+" its "+userItem.getName()+"!");
+			b.addMessage(user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!");
 
 			if (b.isWildBattle())
 			{
@@ -9654,7 +9678,7 @@ public abstract class Attack implements Serializable
 			}
 
 			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			b.addMessage(user.getName()+" switched items with "+victim.getName()+"!");
+			b.addMessage(user.getName() + " switched items with " + victim.getName() + "!");
 
 			if (b.isWildBattle())
 			{
@@ -9698,7 +9722,7 @@ public abstract class Attack implements Serializable
 			}
 
 			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			b.addMessage(user.getName()+" switched items with "+victim.getName()+"!");
+			b.addMessage(user.getName() + " switched items with " + victim.getName() + "!");
 
 			if (b.isWildBattle())
 			{
@@ -9782,7 +9806,7 @@ public abstract class Attack implements Serializable
 			}
 			Item restored = ((ItemCondition)consumed).getItem();
 			victim.giveItem((HoldItem)restored);
-			b.addMessage(victim.getName()+"'s "+restored.getName()+" was restored!");
+			b.addMessage(victim.getName() + "'s " + restored.getName() + " was restored!");
 		}
 	}
 
@@ -9831,7 +9855,7 @@ public abstract class Attack implements Serializable
 			Team t = b.getTrainer(user.user());
 			if (t instanceof WildPokemon)
 			{
-				b.addMessage(user.getName()+" left the battle!");
+				b.addMessage(user.getName() + " left the battle!");
 				b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 				return;
 			}
@@ -9843,7 +9867,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			b.addMessage(user.getName()+" went back to "+trainer.getName()+"!");
+			b.addMessage(user.getName() + " went back to " + trainer.getName() + "!");
 			trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
 			
 			ActivePokemon next = trainer.front();
@@ -9858,7 +9882,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			user = next;
-			b.enterBattle(user, trainer.getName()+" sent out "+user.getName()+"!", false);
+			b.enterBattle(user, trainer.getName() + " sent out " + user.getName() + "!", false);
 		}
 	}
 
@@ -9908,7 +9932,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 
-			b.addMessage(victim.getName()+" was slapped away!");
+			b.addMessage(victim.getName() + " was slapped away!");
 			trainer.switchToRandom();
 			victim = trainer.front();
 			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
@@ -9999,7 +10023,7 @@ public abstract class Attack implements Serializable
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return victim.getName()+" copied "+caster.getName()+"'s "+caster.getAbility().getName()+"!";
+			return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
 		}
 	}
 
@@ -10045,7 +10069,7 @@ public abstract class Attack implements Serializable
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return victim.getName()+"'s ability was changed to Simple!";
+			return victim.getName() + "'s ability was changed to Simple!";
 		}
 	}
 
@@ -10084,7 +10108,7 @@ public abstract class Attack implements Serializable
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return victim.getName()+"'s ability was changed to "+ability.getName()+"!";
+			return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
 		}
 	}
 
@@ -10206,7 +10230,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add("PhysicalContact");
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage)
+		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by recoil!");

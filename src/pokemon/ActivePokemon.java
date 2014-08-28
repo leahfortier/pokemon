@@ -5,6 +5,7 @@ import item.Item.PowerItem;
 import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
 import item.hold.HoldItem;
+import item.hold.PlateItem;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -400,7 +401,7 @@ public class ActivePokemon implements Serializable
 		// Set name if it was not given a nickname
 		if (sameName) nickname = pokemon.getName();
 		if (print && front) b.addMessage("", nickname, playerPokemon);
-		if (print && front) b.addMessage("", getType(), playerPokemon);
+		if (print && front) b.addMessage("", getType(b), playerPokemon);
 		
 		// Change stats
 		int[] prevStats = stats.clone(), gain = new int[Stat.NUM_STATS];
@@ -467,6 +468,7 @@ public class ActivePokemon implements Serializable
 		setMove(temp);
 	}
 	
+	// Pangoro breaks the mold!
 	public boolean breaksTheMold()
 	{
 		switch (getAbility().getName())
@@ -525,9 +527,9 @@ public class ActivePokemon implements Serializable
 	public boolean hasMove(String name)
 	{
 		for (Move m : getMoves())
-		{
-			if (m.getAttack().getName().equals(name)) return true;
-		}
+			if (m.getAttack().getName().equals(name)) 
+				return true;
+
 		return false;
 	}
 	
@@ -552,7 +554,8 @@ public class ActivePokemon implements Serializable
 	// Adds Effort Values to a Pokemon, returns true if they were successfully added
 	public boolean addEVs(int[] vals)
 	{
-		if (totalEVs() == Stat.MAX_EVS) return false;
+		if (totalEVs() == Stat.MAX_EVS) 
+			return false;
 		
 		boolean added = false;
 		for (int i = 0; i < EVs.length; i++)
@@ -585,19 +588,40 @@ public class ActivePokemon implements Serializable
 		return pokemon.getType();
 	}
 	
-	public Type[] getType() 
+	public Type[] getType(Battle b) 
 	{
+		if (hasAbility("Multitype"))
+		{
+			Item item = getHeldItem(b);
+			if (item instanceof PlateItem)
+			{
+				return new Type[] {((PlateItem)item).getType(), Type.NONE};
+			}
+			
+			return new Type[] {Type.NORMAL, Type.NONE};
+		}
+		
+		if (hasAbility("Forecast"))
+		{
+			System.out.println(getName() + " has Forecast");			
+			return new Type[] { b.getWeather().getType().getElement(), Type.NONE};
+		}
+		
 		// Check if the Pokemon has had its type changed during the battle
-		PokemonEffect e = getEffect("ChangeType");
-		if (e != null) return ((TypeCondition)e).getType();
-		e = getEffect("Transformed");
-		if (e != null) return ((TypeCondition)e).getType();
-		return pokemon.getType();
+		PokemonEffect changeType = getEffect("ChangeType");
+		if (changeType != null) 
+			return ((TypeCondition)changeType).getType();
+		
+		PokemonEffect transformed = getEffect("Transformed");
+		if (transformed != null) 
+			return ((TypeCondition)transformed).getType();
+		
+		return getActualType();
 	}
 	
-	public boolean isType(Type type)
+	public boolean isType(Battle b, Type type)
 	{
-		Type[] types = getType();
+		Type[] types = getType(b);
 		return types[0].equals(type) || types[1].equals(type); 
 	}
 	
@@ -767,17 +791,16 @@ public class ActivePokemon implements Serializable
 	// Returns null if the Pokemon is not bracing, and the associated effect if it is
 	private BracingEffect bracing(Battle b, boolean fullHealth)
 	{
-		BracingEffect e = (BracingEffect)getEffect("Bracing");
-		if (e != null) return e;
+		BracingEffect bracingEffect = (BracingEffect)getEffect("Bracing");
+		if (bracingEffect != null) 
+		{
+			return bracingEffect;
+		}
 		
-		Ability a = getAbility();
-		if (a instanceof BracingEffect && ((BracingEffect)a).isBracing(b, this, fullHealth)
-				&& !b.getOtherPokemon(playerPokemon).breaksTheMold()) return (BracingEffect)a;
+		Object[] invokees = new Object[] {getAbility(), getHeldItem(b)};
+		bracingEffect = (BracingEffect)Global.checkInvoke(true, b, b.getOtherPokemon(user()), invokees, BracingEffect.class, "isBracing", b, this, fullHealth);
 		
-		Item i = getHeldItem(b);
-		if (i instanceof BracingEffect && ((BracingEffect)i).isBracing(b, this, fullHealth)) return (BracingEffect)i;
-		
-		return null;
+		return bracingEffect;
 	}
 	
 	// Reduces hp by amount, returns the actual amount of hp that was reduced
@@ -897,10 +920,12 @@ public class ActivePokemon implements Serializable
 		boolean levitation = false;
 		
 		// Check effects that cause user to be grounded/levitating -- Grounded effect overrules Levitation effect
-		List<Object> effects = b.getEffectsList(this);
+		Object[] effects = b.getEffectsList(this);
 		for (Object e : effects)
 		{
-			if (e instanceof Effect && !((Effect)e).isActive()) continue;
+			if (Effect.isInactiveEffect(e)) 
+				continue;
+			
 			if (e instanceof GroundedEffect) return false;
 			if (e instanceof LevitationEffect) levitation = true;
 		}
@@ -911,7 +936,7 @@ public class ActivePokemon implements Serializable
 		if (hasAbility("Levitate") && !b.getOtherPokemon(playerPokemon).breaksTheMold()) return true;
 		
 		// Flyahs gon' Fly
-		return isType(Type.FLYING);
+		return isType(b, Type.FLYING);
 	}
 
 	public void giveItem(HoldItem i)
@@ -944,22 +969,30 @@ public class ActivePokemon implements Serializable
 	
 	public Item getHeldItem(Battle b)
 	{
-		if (hasAbility("Klutz")) return Item.noneItem();
-		if (b.hasEffect("MagicRoom")) return Item.noneItem();
-		if (hasEffect("Embargo")) return Item.noneItem();
+		if (b == null)
+		{
+			return getActualHeldItem();
+		}
+		
+		if (hasAbility("Klutz") || b.hasEffect("MagicRoom") || hasEffect("Embargo")) 
+		{
+			return Item.noneItem();
+		}
 		
 		// Check if the Pokemon has had its item changed during the battle
-		PokemonEffect e = getEffect("ChangeItem");
-		Item item = e == null ? (Item)heldItem : ((ItemCondition)e).getItem();
+		PokemonEffect changeItem = getEffect("ChangeItem");
+		Item item = changeItem == null ? getActualHeldItem() : ((ItemCondition)changeItem).getItem();
 		
-		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility("Unnerve")) return Item.noneItem();
+		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility("Unnerve"))
+		{
+			return Item.noneItem();
+		}
 		
 		return item;
 	}
 	
 	public boolean isHoldingItem(Battle b, String itemName)
 	{
-		if (b == null) return getActualHeldItem() == Item.getItem(itemName);
 		return getHeldItem(b) == Item.getItem(itemName);
 	}
 	
@@ -986,9 +1019,13 @@ public class ActivePokemon implements Serializable
 	public double getWeight(Battle b)
 	{
 		int halfAmount = hasAbility("Light Metal") && !b.getOtherPokemon(playerPokemon).breaksTheMold() ? 1 : 0;
-		if (isHoldingItem(b, "Float Stone")) halfAmount++;
-		PokemonEffect e = getEffect("HalfWeight");
-		if (e != null) halfAmount += ((IntegerCondition)e).getAmount();
+		if (isHoldingItem(b, "Float Stone")) 
+			halfAmount++;
+		
+		PokemonEffect halfWeight = getEffect("HalfWeight");
+		if (halfWeight != null) 
+			halfAmount += ((IntegerCondition)halfWeight).getAmount();
+		
 		return pokemon.getWeight()/Math.pow(2, halfAmount);
 	}
 }
