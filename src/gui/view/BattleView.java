@@ -881,7 +881,7 @@ public class BattleView extends View
 			// Actual switcheroo
 			else
 			{
-				if (player.canswitch (currentBattle, selectedPokemonTab))
+				if (player.canSwitch (currentBattle, selectedPokemonTab))
 				{
 					player.setFront(selectedPokemonTab);
 					currentBattle.enterBattle(player.front());
