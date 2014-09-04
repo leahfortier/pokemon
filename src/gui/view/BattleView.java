@@ -699,6 +699,7 @@ public class BattleView extends View
 			input.consumeKey(Control.L);
 			logPage = 0;
 			logMessages = currentBattle.getPlayer().getLogMessages();
+			
 			if (logMessages.size() / LOGS_PER_PAGE > 0)
 			{
 				selectedButton = LOG_RIGHT_BUTTON;
@@ -706,7 +707,10 @@ public class BattleView extends View
 				selectedButton = Button.update(logButtons, selectedButton, input);
 			}
 			else
+			{
 				logRightButton.setActive(false);
+			}
+			
 			logLeftButton.setActive(false);
 			setVisualState(VisualState.LOG_VIEW);
 		}

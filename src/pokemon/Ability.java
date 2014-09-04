@@ -89,17 +89,22 @@ public abstract class Ability implements Serializable
 	// Abilities that block damage
 	public static boolean blockDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 	{
-		if (user.breaksTheMold()) return false;
+		if (user.breaksTheMold())
+		{
+			return false;
+		}
 		
 		Ability a = victim.getAbility();
 		if (a instanceof DamageBlocker)
 		{
-			if (((DamageBlocker)a).block(user.getAttack().getType(b, user), victim))
+			DamageBlocker blockityBlock = (DamageBlocker)a;
+			if (blockityBlock.block(user.getAttack().getType(b, user), victim))
 			{
-				((DamageBlocker)a).alternateEffect(b, victim);
+				blockityBlock.alternateEffect(b, victim);
 				return true;
 			}
 		}
+		
 		return false;
 	}
 	
