@@ -1300,7 +1300,8 @@ public class BattleView extends View
 		View.drawArrows(g, bagLeftButton, bagRightButton);
 		
 		// Last Item Used
-		Item lastUsedItem = currentBattle.getPlayer().getBag().getLastUsedItem();
+		Bag bag = currentBattle.getPlayer().getBag();
+		Item lastUsedItem = bag.getLastUsedItem();
 		if (lastUsedItem != Item.getItem("None"))
 		{
 			g.translate(214, 517);
@@ -1311,6 +1312,9 @@ public class BattleView extends View
 			g.drawImage(img, 14 - img.getWidth()/2, 14 - img.getHeight()/2, null);
 
 			g.drawString(lastUsedItem.getName(), 28, 19);
+			
+			String countStr = "x" + bag.getQuantity(lastUsedItem);
+			g.drawString(countStr, 140 - countStr.length()*6, 19);
 
 			g.translate(-214, -517);
 		}
