@@ -18,7 +18,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 {
 	public enum Control
 	{
-		UP, DOWN, LEFT, RIGHT, ESC, SPACE, BACK, CONSOLE, ENTER
+		UP, DOWN, LEFT, RIGHT, ESC, SPACE, BACK, CONSOLE, ENTER, L
 	}
 		
 	public class Key
@@ -61,7 +61,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		}
 	}
 
-	private Key downKey, upKey, leftKey, rightKey, escKey, spaceKey, backKey, consoleKey, enterKey;
+	private Key downKey, upKey, leftKey, rightKey, escKey, spaceKey, backKey, consoleKey, enterKey, lKey;
 	public int mouseX, mouseY;
 	public boolean mouseDown;
 	private Key[] keyList;
@@ -86,8 +86,9 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		backKey = new Key(KeyEvent.VK_BACK_SPACE);
 		consoleKey = new Key(KeyEvent.VK_BACK_QUOTE);
 		enterKey = new Key(KeyEvent.VK_ENTER);
+		lKey = new Key(KeyEvent.VK_L);
 		
-		keyList = new Key[] { downKey, upKey, leftKey, rightKey, escKey, spaceKey, backKey, consoleKey, enterKey };
+		keyList = new Key[] { downKey, upKey, leftKey, rightKey, escKey, spaceKey, backKey, consoleKey, enterKey, lKey};
 		keyMap = new HashMap<>();
 		keyMap.put(Control.UP, upKey);
 		keyMap.put(Control.DOWN, downKey);
@@ -98,6 +99,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		keyMap.put(Control.BACK, backKey);
 		keyMap.put(Control.CONSOLE, consoleKey);
 		keyMap.put(Control.ENTER, enterKey);
+		keyMap.put(Control.L, lKey);
 		
 		// Ignored during text capture (not added to captureText)
 		ignoredInputCharacters = new char[]{KeyEvent.VK_BACK_SPACE, KeyEvent.VK_ENTER, KeyEvent.VK_ESCAPE};

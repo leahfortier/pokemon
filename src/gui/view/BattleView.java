@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
@@ -59,6 +60,10 @@ public class BattleView extends View
 	private static final int BAG_RIGHT_BUTTON = NUM_BAG_BUTTONS - 2;
 	private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
 	
+	private static final int LOG_LEFT_BUTTON = 0;
+	private static final int LOG_RIGHT_BUTTON = 1;
+	private static final int LOGS_PER_PAGE = 23;
+	
 	// Swicth Button in Pokemon View Button Index
 	private static final int POKEMON_SWITCH_BUTTON = Trainer.MAX_POKEMON;
 	
@@ -99,10 +104,11 @@ public class BattleView extends View
 	
 	// All the different buttons!!
 	private Button[] moveButtons, bagButtons, menuButtons, pokemonButtons;
-	private Button[] bagTabButtons, pokemonTabButtons;
+	private Button[] bagTabButtons, pokemonTabButtons, logButtons;
 	private Button fightBtn, bagBtn, pokemonBtn, runBtn, backButton;
 	private Button bagRightButton, bagLeftButton, bagLastUsedBtn, pokemonSwitchButton;
 	private Button yesButton, noButton, newMoveButton;
+	private Button logLeftButton, logRightButton;
 	
 	// Current bag page, bag category, and selected item
 	private int bagPage;
@@ -112,6 +118,9 @@ public class BattleView extends View
 	// Current selected tab in Pokemon view and whether or not a switch is forced
 	private int selectedPokemonTab;
 	private boolean switchForced;
+	
+	private int logPage;
+	private ArrayList<String> logMessages;
 	
 	// The last move that a Pokemon used
 	private int lastMoveUsed;
@@ -129,7 +138,7 @@ public class BattleView extends View
 	{
 		MESSAGE, BAG, INVALID_BAG, FIGHT, INVALID_FIGHT, POKEMON, 
 		INVALID_POKEMON, MENU, LEARN_MOVE_QUESTION, LEARN_MOVE_DELETE,
-		USE_ITEM, STAT_GAIN;
+		USE_ITEM, STAT_GAIN, LOG_VIEW
 	};
 	
 	// Handles animation and keeps track of the current state
@@ -573,7 +582,7 @@ public class BattleView extends View
 		
 		// Menu Buttons
 		menuButtons = new Button[4];
-		menuButtons[FIGHT_BUTTON] = fightBtn = new Button(452, 473, 609 - 452, 515 - 473, Button.HoverAction.ARROW, new int[] {BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON});
+		menuButtons[FIGHT_BUTTON] = fightBtn = new Button(452, 473, 609 - 452, 515 - 473, Button.HoverAction.ARROW, new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON});
 		menuButtons[BAG_BUTTON] = bagBtn = new Button(628, 473, 724 - 628, 513 - 473, Button.HoverAction.ARROW, new int[] {SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON});
 		menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(452, 525, 609 - 452, 571 - 525, Button.HoverAction.ARROW, new int[] {RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON});
 		menuButtons[RUN_BUTTON] = runBtn = new Button(628, 525, 724 - 628, 571 - 525, Button.HoverAction.ARROW, new int[] {FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON});
@@ -640,6 +649,13 @@ public class BattleView extends View
 		}
 		
 		pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, Button.HoverAction.BOX, new int[]{-1, 0, -1, -1});
+	
+		logLeftButton = new Button(150, 550, 35, 20, Button.HoverAction.BOX, new int[] {LOG_RIGHT_BUTTON, -1, -1, -1});
+		logRightButton = new Button(200, 550, 35, 20, Button.HoverAction.BOX, new int[] {-1, -1, LOG_LEFT_BUTTON, -1});
+		logButtons = new Button[] {logLeftButton, logRightButton};
+		
+		
+		currentBattle.getPlayer().clearLogMessages();
 	}
 	
 	// Updates when in the menu state
@@ -677,6 +693,22 @@ public class BattleView extends View
 				setVisualState(VisualState.MESSAGE);
 				cycleMessage(false);
 			}
+		}
+		else if (input.isDown(Control.L))
+		{
+			input.consumeKey(Control.L);
+			logPage = 0;
+			logMessages = currentBattle.getPlayer().getLogMessages();
+			if (logMessages.size() / LOGS_PER_PAGE > 0)
+			{
+				selectedButton = LOG_RIGHT_BUTTON;
+				logRightButton.setActive(true);
+				selectedButton = Button.update(logButtons, selectedButton, input);
+			}
+			else
+				logRightButton.setActive(false);
+			logLeftButton.setActive(false);
+			setVisualState(VisualState.LOG_VIEW);
 		}
 	}
 	
@@ -968,6 +1000,43 @@ public class BattleView extends View
 			cycleMessage(false);
 		}
 	}
+	
+	public void updateLog(InputControl input)
+	{
+		selectedButton = Button.update(logButtons, selectedButton, input);
+		//logLeftButton.update(input);
+		//logRightButton.update(input);
+		backButton.update(input, false, Control.BACK);
+		
+		int maxLogPage = logMessages.size() / LOGS_PER_PAGE;
+		
+		if (logLeftButton.checkConsumePress())
+		{
+			selectedButton = LOG_LEFT_BUTTON;
+			logRightButton.setForceHover(false);
+			logPage = Math.max(0, logPage - 1);
+		}
+		if (logRightButton.checkConsumePress())
+		{
+			selectedButton = LOG_RIGHT_BUTTON;
+			logLeftButton.setForceHover(false);
+			logPage = Math.min(maxLogPage, logPage + 1);
+			
+		}
+		
+		logLeftButton.setActive(logPage > 0);
+		logRightButton.setActive(logPage < maxLogPage);
+		
+		if (logPage == 0 && maxLogPage > 0)
+			selectedButton = LOG_RIGHT_BUTTON;
+		else if (logPage == maxLogPage)
+			selectedButton = LOG_LEFT_BUTTON;
+		
+		if (backButton.checkConsumePress())
+		{
+			setVisualState(VisualState.MENU);
+		}
+	}
 
 	public void update(int dt, InputControl input, Game game) 
 	{
@@ -998,6 +1067,9 @@ public class BattleView extends View
 				break;
 			case LEARN_MOVE_DELETE:
 				updateLearnMoveDelete(input);
+				break;
+			case LOG_VIEW:
+				updateLog(input);
 				break;
 		}
 		
@@ -1079,6 +1151,7 @@ public class BattleView extends View
 					b.setForceHover(false);
 				
 				break;
+			case LOG_VIEW:
 			default:
 				break;
 		}
@@ -1089,11 +1162,13 @@ public class BattleView extends View
 		if (!updated) setVisualState(VisualState.MENU);
 		
 		Queue<MessageUpdate> messages = currentBattle.getMessages();
+		
 		if (!messages.isEmpty())
 		{
 			if (updated && messages.peek().getMessage().length() != 0) return;
 			
 			MessageUpdate newMessage = messages.remove();
+			currentBattle.getPlayer().addLogMessage(newMessage);
 			
 			PokemonAnimationState state = newMessage.target() ? playerAnimation : enemyAnimation;
 			if (newMessage.switchUpdate())
@@ -1225,7 +1300,8 @@ public class BattleView extends View
 		View.drawArrows(g, bagLeftButton, bagRightButton);
 		
 		// Last Item Used
-		Item lastUsedItem = currentBattle.getPlayer().getBag().getLastUsedItem();
+		Bag bag = currentBattle.getPlayer().getBag();
+		Item lastUsedItem = bag.getLastUsedItem();
 		if (lastUsedItem != Item.getItem("None"))
 		{
 			g.translate(214, 517);
@@ -1236,6 +1312,9 @@ public class BattleView extends View
 			g.drawImage(img, 14 - img.getWidth()/2, 14 - img.getHeight()/2, null);
 
 			g.drawString(lastUsedItem.getName(), 28, 19);
+			
+			String countStr = "x" + bag.getQuantity(lastUsedItem);
+			g.drawString(countStr, 140 - countStr.length()*6, 19);
 
 			g.translate(-214, -517);
 		}
@@ -1294,7 +1373,8 @@ public class BattleView extends View
 		
 		View.drawArrows(g, null, backButton);
 		
-		for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) moveButtons[i].draw(g);
+		for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) 
+			moveButtons[i].draw(g);
 		backButton.draw(g);
 	}
 	
@@ -1639,6 +1719,36 @@ public class BattleView extends View
 		newMoveButton.draw(g);
 	}
 	
+	public void drawLog(Graphics g, TileSet tiles, CharacterData characterData)
+	{
+		g.drawImage(tiles.getTile(0x10), 0, 160, null);
+
+		int start = logMessages.size() - 1 - logPage * LOGS_PER_PAGE;
+		start = Math.max(0, start);
+		
+		int y = 200;
+		g.setColor(Color.WHITE);
+		g.setFont(Global.getFont(12));
+		for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15)
+			g.drawString(logMessages.get(i), 25, y);
+		
+		View.drawArrows(g, logLeftButton, logRightButton);
+		logLeftButton.draw(g);
+		logRightButton.draw(g);
+
+		// Draw Message Box
+		g.drawImage(tiles.getTile(0x20), 415, 440, null);
+				
+		g.setColor(Color.BLACK);
+		g.setFont(Global.getFont(40));
+		g.drawString("Bob Loblaw's", 440, 500);
+		g.drawString("Log Blog", 440, 550);
+		
+		// Draw back arrow when applicable
+		View.drawArrows(g, null, backButton);
+		backButton.draw(g);
+	}
+	
 	public void draw(Graphics g, GameData data) 
 	{
 		Dimension d = Global.GAME_SIZE;
@@ -1720,6 +1830,8 @@ public class BattleView extends View
 			case LEARN_MOVE_DELETE:
 				drawLearnMoveDelete(g, tiles);
 				break;
+			case LOG_VIEW:
+				drawLog(g, tiles, currentBattle.getPlayer());
 		}
 	}
 
