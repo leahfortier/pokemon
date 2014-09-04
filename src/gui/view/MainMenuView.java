@@ -581,7 +581,7 @@ public class MainMenuView extends View
 		return (l/(3600) + ":" + String.format("%02d", ((l%3600)/60)));
 	}
 
-	public void movedToFront()
+	public void movedToFront(Game game)
 	{
 		setVisualState(VisualState.MAIN);
 		updateSaveData();

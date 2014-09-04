@@ -4,6 +4,7 @@ Dialogue NurseJoyDialogue_1 {
 }
 Dialogue NurseJoyDialogue_2 {
 	text: "Let me heal your Pok\u00e9mon for you!"
+	trigger[0]: PokeCenterSound
 	next[0]: NurseJoyDialogue_3
 }
 Dialogue NurseJoyDialogue_3 {

@@ -88,7 +88,8 @@ public class PCView extends View
 		
 		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, Button.HoverAction.BOX, new int[] {0, SWITCH, PARTY + Trainer.MAX_POKEMON - 1, -1});
 		
-		movedToFront();
+		party = true;
+		selected = player.front();
 	}
 	
 	public void update(int dt, InputControl input, Game game)
@@ -146,13 +147,13 @@ public class PCView extends View
 		if (leftButton.checkConsumePress())
 		{
 			player.getPC().prevBox();
-			movedToFront();
+			movedToFront(game);
 		}
 		
 		if (rightButton.checkConsumePress())
 		{
 			player.getPC().nextBox();
-			movedToFront();
+			movedToFront(game);
 		}
 		
 		if (switchButton.checkConsumePress())
@@ -179,7 +180,7 @@ public class PCView extends View
 		if (releaseButton.checkConsumePress())
 		{
 			player.getPC().releasePokemon(player, selected);
-			movedToFront();
+			movedToFront(game);
 		}
 		
 		if (returnButton.checkConsumePress())
@@ -383,7 +384,7 @@ public class PCView extends View
 		return Game.ViewMode.PC_VIEW;
 	}
 
-	public void movedToFront() 
+	public void movedToFront(Game game) 
 	{
 		party = true;
 		selected = player.front();

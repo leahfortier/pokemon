@@ -45,7 +45,6 @@ public class StartView extends View
 	public StartView(CharacterData data)
 	{
 		player = data;
-		movedToFront();
 	}
 	
 	public void update(int dt, InputControl input, Game game)
@@ -170,7 +169,7 @@ public class StartView extends View
 		return ViewMode.START_VIEW;
 	}
 
-	public void movedToFront() 
+	public void movedToFront(Game game) 
 	{
 		state = State.DEFAULT;
 		
@@ -179,5 +178,7 @@ public class StartView extends View
 		
 		name = "";	
 		ditto = false;
+		
+		Global.soundPlayer.playMusic("04-welcome-to-the-world-of-pokemon");
 	}
 }

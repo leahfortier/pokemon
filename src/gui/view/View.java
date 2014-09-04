@@ -12,7 +12,7 @@ public abstract class View
 	public abstract void update(int dt, InputControl input, Game game);
 	public abstract void draw(Graphics g, GameData data);
 	public abstract Game.ViewMode getViewModel();
-	public abstract void movedToFront();
+	public abstract void movedToFront(Game game);
 	
 	private static final int[] rightArrowx = {0, 16, 16, 32, 16, 16, 0};
 	private static final int[] rightArrowy = {5, 5, 0, 10, 20, 15, 15};

@@ -3,6 +3,10 @@ EventTrigger Heal_Trigger {
 	dialogue: NurseJoyDialogue_1
 }
 
+SoundTrigger PokeCenterSound {
+	effectName: dundundundundun
+}
+
 HealPartyTrigger HealParty {}
 LastPokeCenterTrigger SetTeleportToLastPokeCenter {}
 

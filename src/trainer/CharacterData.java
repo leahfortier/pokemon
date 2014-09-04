@@ -434,7 +434,7 @@ public class CharacterData extends Trainer implements Serializable
 	public CharacterData load(){
 		CharacterData loadChar = null;
 		
-		updateSerVariables();
+		//updateSerVariables();
 		
 		try {
 			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");

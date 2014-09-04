@@ -146,7 +146,7 @@ public class BagView extends View
 		
 		buttons[RETURN] = returnButton = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] {PARTY, LEFT_ARROW, PARTY, selectedTab});
 		
-		movedToFront();
+		movedToFront(null);
 	}
 	
 	private void addUseMessages(boolean success, ActivePokemon p)
@@ -567,7 +567,7 @@ public class BagView extends View
 		updateActiveButtons();
 	}
 
-	public void movedToFront()
+	public void movedToFront(Game game)
 	{
 		changeCategory(0);
 	}

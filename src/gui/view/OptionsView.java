@@ -89,6 +89,6 @@ public class OptionsView extends View
 		return ViewMode.OPTIONS_VIEW;
 	}
 
-	public void movedToFront(){}
+	public void movedToFront(Game game){}
 
 }

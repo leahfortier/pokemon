@@ -66,7 +66,7 @@ public class PokedexView extends View
 		
 		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, Button.HoverAction.BOX, new int[] {0, -1, RIGHT_ARROW, -1});
 		
-		movedToFront();
+		selected = PokemonInfo.getPokemonInfo(1);
 	}
 	
 	public void update(int dt, InputControl input, Game game)
@@ -257,7 +257,7 @@ public class PokedexView extends View
 		return Game.ViewMode.POKEDEX_VIEW;
 	}
 
-	public void movedToFront() 
+	public void movedToFront(Game game) 
 	{
 		selected = PokemonInfo.getPokemonInfo(1);
 	}

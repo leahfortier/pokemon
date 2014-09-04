@@ -110,8 +110,6 @@ public class MartView extends View
 		
 		setSelectedItem(forSaleItems.get(0));
 		updateActiveButtons();
-		
-		movedToFront();
 	}
 
 	public void update(int dt, InputControl input, Game game)
@@ -392,7 +390,7 @@ public class MartView extends View
 		return ViewMode.MART_VIEW;
 	}
 
-	public void movedToFront() { }
+	public void movedToFront(Game game) { }
 	
 	private int totalPages()
 	{ 

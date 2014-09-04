@@ -63,6 +63,6 @@ public class TrainerCardView extends View
 		return ViewMode.TRAINER_CARD_VIEW;
 	}
 
-	public void movedToFront() {}
+	public void movedToFront(Game game) {}
 	
 }

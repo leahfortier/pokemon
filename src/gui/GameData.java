@@ -17,6 +17,7 @@ import map.triggers.GroupTrigger;
 import map.triggers.HealPartyTrigger;
 import map.triggers.LastPokeCenterTrigger;
 import map.triggers.MapTransitionTrigger;
+import map.triggers.SoundTrigger;
 import map.triggers.TrainerBattleTrigger;
 import map.triggers.Trigger;
 import map.triggers.WildBattleTrigger;
@@ -24,8 +25,9 @@ import map.triggers.WildBattleTrigger;
 public class GameData
 {
 	public static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
-	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}");
-	public static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)");
+	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}");
+	public static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*((?:(?:[()&|!\\w]+\\s*:\\s*)?[\\w-]+\\s*,?\\s*)+)?");
+	public static final Pattern areaSoundConditionPattern = Pattern.compile("(?:([()&|!\\w]+)\\s*:\\s*)?([\\w-]+)");
 	
 	public static final String DATA_LOCATION = "rec" + Global.FILE_SLASH;
 	private HashMap<String, MapData> maps;
@@ -37,9 +39,9 @@ public class GameData
 	public GameData()
 	{
 		loadTiles();
+		loadTriggers();
 		loadAreas();
 		loadDialogue();
-		loadTriggers();
 		loadMaps();
 	}
 
@@ -57,6 +59,7 @@ public class GameData
 	private void loadAreas()
 	{
 		areas = new HashMap<>();
+		
 		File indexFile = new File("rec" + Global.FILE_SLASH + "maps" + Global.FILE_SLASH + "areaIndex.txt");
 		if (!indexFile.exists())
 		{
@@ -71,6 +74,31 @@ public class GameData
 			String areaName = m.group(1);
 			int value = (int) Long.parseLong(m.group(2), 16);
 			areas.put(value, areaName);
+			
+			if(m.group(3) != null)
+			{
+				//GroupTrigger areaGroupTrigger = new GroupTrigger("GroupTrigger_AreaSound_for_"+areaName, "");
+				StringBuilder groupTriggers = new StringBuilder();
+				String areaNameDisplay = areaName.replace(' ', '_').replaceAll("\\W", "");
+				
+				Matcher areaSoundMatcher = areaSoundConditionPattern.matcher(m.group(3));
+				while(areaSoundMatcher.find())
+				{
+					String condition = areaSoundMatcher.group(1);
+					String musicName = areaSoundMatcher.group(2);
+					String soundTriggerName = "SoundTrigger_AreaSound_for_"+areaNameDisplay+"_MusicName_"+musicName;
+					
+					//System.out.println(condition +"\n" +musicName);
+					
+					addTrigger("Sound", soundTriggerName, (condition != null? "condition: "+condition: "") + "\nmusicName: "+musicName);
+					groupTriggers.append("trigger: "+soundTriggerName +"\n");
+				}
+				
+				addTrigger("Group", "GroupTrigger_AreaSound_for_"+areaNameDisplay, groupTriggers.toString());
+				
+				//musicForAreas.put(areaName, m.group(3));
+				//System.out.println(m.group(3));
+			}
 			//System.out.println("Area " +areaName +" loaded.");
 		}
 	}
@@ -142,7 +170,7 @@ public class GameData
 	{
 		return areas.containsKey(color)? areas.get(color): areas.get(0);
 	}
-
+	
 	public Trigger getTrigger(String name)
 	{
 		return triggers.get(name);
@@ -192,6 +220,9 @@ public class GameData
 				break;
 			case "ChangeView":
 				trig = new ChangeViewTrigger(name, contents);
+				break;
+			case "Sound":
+				trig = new SoundTrigger(name, contents);
 				break;
 			default:
 				Global.error("Invalid trigger type " + type + ".");

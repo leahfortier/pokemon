@@ -62,7 +62,7 @@ public class Game
 		{
 			input.resetKeys();
 			currentView = viewMap.get(currentViewMode);
-			currentView.movedToFront();
+			currentView.movedToFront(this);
 		}
 		currentView.update(dt, input, this);
 	}

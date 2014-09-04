@@ -1217,6 +1217,7 @@ public class BattleView extends View
 				}
 				if (newMessage.levelUpdate())
 				{
+					Global.soundPlayer.playSoundEffect("Pokemon-Level-Up-Notification");
 					state.setLevel(newMessage.getLevel());
 				}
 				if (newMessage.nameUpdate())
@@ -1844,9 +1845,19 @@ public class BattleView extends View
 		return ViewMode.BATTLE_VIEW;
 	}
 
-	public void movedToFront() 
+	public void movedToFront(Game game) 
 	{
 		System.out.println("moved to front cycle started");
 		cycleMessage(false);
+		
+		if(currentBattle.isWildBattle())
+		{
+			Global.soundPlayer.playMusic("09-wild-pokemon-battle-theme");
+		}
+		else
+		{
+			//TODO get trainer battle music
+			Global.soundPlayer.playMusic("22-trainer-battle-theme-1");
+		}
 	}
 }

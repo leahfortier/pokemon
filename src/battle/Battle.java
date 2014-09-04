@@ -317,6 +317,17 @@ public class Battle
 		// You have achieved total victory
 		if (opponent.blackout())
 		{
+			//TODO send message to notify battle view of victory and play music then.
+			if(isWildBattle())
+			{
+				Global.soundPlayer.playMusic("10-wild-pokemon-defeated");
+			}
+			else
+			{
+				//TODO get trainer win music
+				Global.soundPlayer.playMusic("23-trainer-defeated");
+			}
+			
 			player.winBattle(this, opponent);
 			
 			// WE'RE DONE HERE

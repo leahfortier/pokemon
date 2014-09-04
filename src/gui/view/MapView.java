@@ -21,12 +21,14 @@ import map.MapData;
 import map.entity.Entity;
 import map.entity.NPCEntity;
 import map.entity.PlayerEntity;
+import map.triggers.Trigger;
 import trainer.CharacterData;
 
 public class MapView extends View{
 	public String currentMapName;
 	public String currentAreaName;
 	public MapData currentMap;
+	public Trigger currentMusicTrigger;
 	public String queuedDialogueName;
 	
 	private Entity[][] entities;
@@ -295,7 +297,10 @@ public class MapView extends View{
 			//System.out.println(character.areaName);
 			
 			//Queue to play new area's music.
-			//If we ever support that.
+			currentMusicTrigger = game.data.getTrigger("GroupTrigger_AreaSound_for_"+currentAreaName.replace(' ', '_').replaceAll("\\W", ""));
+			//System.out.println(currentMusicTrigger);
+			
+			playAreaMusic(game);
 		}
 		
 		
@@ -324,7 +329,7 @@ public class MapView extends View{
 						dialogueSelection += currentDialogue.next.length;
 					dialogueSelection %= currentDialogue.next.length;
 				}
-				if (input.isDown(Control.SPACE)){
+				if (input.isDown(Control.SPACE) && !Global.soundPlayer.soundEffectIsPlaying()){
 					input.consumeKey(Control.SPACE);
 					currentDialogue.choose(dialogueSelection, this, game);
 					
@@ -425,6 +430,16 @@ public class MapView extends View{
 							playerEntity.stall();
 							npc.setDirection(dir);
 							npc.walkTowards(dist - 1, dir);
+							
+							if(npc.isTrainer())
+							{
+								//TODO get trainer spotted music
+								Global.soundPlayer.playMusic("21-trainer-challenge-theme-1");
+							}
+							else
+							{
+								
+							}
 						}
 					}
 				}
@@ -452,6 +467,18 @@ public class MapView extends View{
 			state = VisualState.MESSAGE;
 		}
 	}
+	
+	public void playAreaMusic(Game game)
+	{
+		if(currentMusicTrigger != null)
+		{
+			currentMusicTrigger.execute(game);
+		}
+		else
+		{
+			Global.soundPlayer.playMusic("lalala");
+		}
+	}
 
 	public Game.ViewMode getViewModel() 
 	{
@@ -474,8 +501,8 @@ public class MapView extends View{
 		removeQueue.add(e);
 	}
 
-	public void movedToFront() 
+	public void movedToFront(Game game) 
 	{
-		Global.soundPlayer.playMusic("lalala");
+		playAreaMusic(game);
 	}
 }

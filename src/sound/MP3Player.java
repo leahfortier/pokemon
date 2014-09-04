@@ -19,7 +19,12 @@ public class MP3Player extends Thread
 	{
 		this.mp3FileName = mp3FileName;
 		loop = false;
-		player = null;
+		
+		try 
+		{
+			player = new Player(loadMP3File(mp3FileName));
+		}
+		catch (JavaLayerException e) {}
 	}
 		
 	public void setLoop(boolean loop)
@@ -33,8 +38,12 @@ public class MP3Player extends Thread
 		{
 			try 
 			{
-				player = new Player(loadMP3File(mp3FileName));
 				player.play();
+
+				if (this.loop)
+				{
+					player = new Player(loadMP3File(mp3FileName));
+				}
 			}
 			catch (JavaLayerException e) 
 			{

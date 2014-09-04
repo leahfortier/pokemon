@@ -390,7 +390,7 @@ public class PartyView extends View
 		return ViewMode.PARTY_VIEW;
 	}
 
-	public void movedToFront() 
+	public void movedToFront(Game game) 
 	{
 		selectedTab = 0;
 		selectedButton = 0;

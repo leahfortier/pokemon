@@ -27,12 +27,15 @@ public class PlayerEntity extends Entity
 	private String trainerTrigger;
 	private boolean stalled;
 	
+	private boolean justCreated; 
+	
 	public PlayerEntity(CharacterData data)
 	{
 		super(data.locationX, data.locationY);
 		charData = data;
-		justMoved = false;
+		justMoved = true;
 		stalled = false;
+		justCreated = true;
 	}
 
 	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition)
@@ -62,7 +65,7 @@ public class PlayerEntity extends Entity
 		}
 		npcTrigger = null;
 		boolean spacePressed = false;
-		if (transitionTime == 0)
+		if (transitionTime == 0 && !justMoved)
 		{
 			if (input.isDown(Control.SPACE))
 			{
@@ -134,7 +137,8 @@ public class PlayerEntity extends Entity
 			}
 		}
 		
-		justMoved = transitionTime == 1;
+		justMoved = transitionTime == 1 || justCreated;
+		justCreated = false;
 	}
 	
 	public void triggerCheck(Game game, MapData map)

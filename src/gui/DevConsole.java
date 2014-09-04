@@ -109,9 +109,9 @@ public class DevConsole
 			return;
 		}
 
-		String curr = in.next();
-
-		game.charData.addGlobal(curr);
+		String global = in.next();
+		System.out.println("Adding global \""+global+"\".");
+		game.charData.addGlobal(global);
 	}
 
 	private void give(Game game, Scanner in)
