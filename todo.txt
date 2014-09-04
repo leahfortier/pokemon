@@ -44,13 +44,27 @@ MAP TILES
 	tile that would go in the background set, you could just render the default grass tile for 
 	the map in all locations and then draw the map as usual. Then again, to avoid all of the 
 	unnecessary rendering, I could just get Jeb to add grass tiles to the bottom of all tree tiles. 
-	
-FINISH MULTITYPE AND FORECAST
+
 Look into rewriting MoldBreaker because it sucks
+Semi-invulnerable moves shouldn't get a menu in between turns
 
 Things to test:
-	Multitype
-	Forecast
+	BracingEffect
+	CrashDamageEffect
+	StageChangingEffect: 
+		if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stage;
+	OpposingBeforeTurnAttack: 
+		if (this instanceof Ability && p.breaksTheMold()) return true;
+	StatChangingEffect: 
+		if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stat;
+	StatusPreventionEffect: 
+		if (this instanceof Ability && caster.breaksTheMold()) return false;
+	OpponentPowerChangeEffect:
+		if (this instanceof Ability && user.breaksTheMold()) return 1;
+	EffectBlockerEffect: 
+		if (this instanceof Ability && user.breaksTheMold()) return true;
+	StatProtectingEffect:
+		if (this instanceof Ability && caster.breaksTheMold()) return false;
 	
 pokemoninfo.txt changes:
 	LEVEL 100 FLYING BULBASAUR

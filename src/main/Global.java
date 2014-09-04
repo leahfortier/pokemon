@@ -258,9 +258,15 @@ public class Global
 		return Color.GREEN;
 	} 
 	
-	private static <T> Object invoke(boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
+	private static <T> Object invoke(int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
 	{
 		Class<?>[] parameterTypes = null;
+		
+		Object returnValue = null;
+		if (updateIndex != -1)
+		{
+			returnValue = parameterValues[updateIndex];
+		}
 		
 		for (Object invokee : invokees)
 		{
@@ -295,10 +301,10 @@ public class Global
 					
 					// Create and invoke the method -- THIS IS SO COOL THANK YOU MARCOD OF THE SEA
 					Method method = className.getMethod(methodName, parameterTypes);
-					Object returnValue = method.invoke(invokee, parameterValues);
+					Object methodReturn = method.invoke(invokee, parameterValues);
 					
 					// If we're just checking for a specific boolean, we can cut out early
-					if (isCheck && (boolean)returnValue == check)
+					if (isCheck && (boolean)methodReturn == check)
 					{
 						return invokee;
 					}
@@ -317,7 +323,13 @@ public class Global
 					// Not a boolean return check, but we are checking the return value -- das what we want, das what we need, das what we crave
 					if (!isCheck && check)
 					{
-						return returnValue;
+						return methodReturn;
+					}
+					
+					if (updateIndex != -1)
+					{
+						parameterValues[updateIndex] = methodReturn;
+						returnValue = methodReturn;
 					}
 				}
 				// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
@@ -329,42 +341,60 @@ public class Global
 		}
 		
 		// We didn't find what we were looking for
-		return null;
+		return returnValue;
 	}
 	
 	// Used for calling methods that return booleans
-	public static <T> Object checkInvoke(boolean check, Battle b, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	public static <T> Object checkInvoke(boolean check, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(true, check, b, null, null, null, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, true, check, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans and also exit early is p or opp are fainted
 	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans where mold breaker may be a factor to check
-	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(true, check, b, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
 	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(false, true, null, null, null, null, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, false, true, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
+	public static <T> Object getInvoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(-1, false, true, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want to continuously update the return value of -- it will return this value that you want so badly
+	public static <T> Object updateInvoke(int updateIndex, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(updateIndex, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want to continuously update the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
+	public static <T> Object updateInvoke(int updateIndex, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(updateIndex, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void
 	public static <T> void invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		Global.invoke(false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+		Global.invoke(-1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where mold breaker may be a factor to check
 	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		Global.invoke(false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+		Global.invoke(-1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 }

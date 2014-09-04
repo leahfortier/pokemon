@@ -1,5 +1,8 @@
 package item.hold;
 
-import item.use.TypeItem;
+import main.Type;
 
-public interface DriveItem extends TypeItem {}
+public interface DriveItem extends HoldItem
+{
+	public Type getType();
+}

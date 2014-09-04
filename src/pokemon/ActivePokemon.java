@@ -1,11 +1,11 @@
 package pokemon;
 
 import item.Item;
-import item.Item.PowerItem;
 import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
 import item.hold.HoldItem;
 import item.hold.PlateItem;
+import item.hold.PowerItem;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -798,7 +798,7 @@ public class ActivePokemon implements Serializable
 		}
 		
 		Object[] invokees = new Object[] {getAbility(), getHeldItem(b)};
-		bracingEffect = (BracingEffect)Global.checkInvoke(true, b, b.getOtherPokemon(user()), invokees, BracingEffect.class, "isBracing", b, this, fullHealth);
+		bracingEffect = (BracingEffect)Global.checkInvoke(true, b.getOtherPokemon(user()), invokees, BracingEffect.class, "isBracing", b, this, fullHealth);
 		
 		return bracingEffect;
 	}

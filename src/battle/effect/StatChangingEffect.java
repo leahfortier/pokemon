@@ -12,5 +12,5 @@ public interface StatChangingEffect
 	// s: The stat that is being altered
 	// b: The current battle
 	// Return: The modified value of stat, if stat was not altered, just return stat
-	public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b);
+	public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b);
 }

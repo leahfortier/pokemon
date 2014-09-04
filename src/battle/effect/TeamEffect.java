@@ -49,7 +49,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		
 		// EVERYTHING BELOW IS GENERATED ###
 
-		// List all of the effects we are loading
+		// List all of the classes we are loading
 		map.put("Reflect", new Reflect());
 		map.put("LightScreen", new LightScreen());
 		map.put("Tailwind", new Tailwind());
@@ -71,6 +71,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 	private static class Reflect extends TeamEffect implements StatChangingEffect, DefogRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Reflect()
 		{
 			super("Reflect", 5, 5, false);
@@ -102,8 +103,9 @@ public abstract class TeamEffect extends Effect implements Serializable
 			return "The effects of reflect faded.";
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
+			int stat = statValue;
 			return stat*(s == Stat.DEFENSE && !opp.hasAbility("Infiltrator") ? 2 : 1);
 		}
 
@@ -116,6 +118,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 	private static class LightScreen extends TeamEffect implements StatChangingEffect, DefogRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public LightScreen()
 		{
 			super("LightScreen", 5, 5, false);
@@ -147,8 +150,9 @@ public abstract class TeamEffect extends Effect implements Serializable
 			return "The effects of light screen faded.";
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
+			int stat = statValue;
 			return stat*(s == Stat.SP_DEFENSE && !opp.hasAbility("Infiltrator") ? 2 : 1);
 		}
 
@@ -161,6 +165,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 	private static class Tailwind extends TeamEffect implements StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Tailwind()
 		{
 			super("Tailwind", 4, 4, false);
@@ -186,8 +191,9 @@ public abstract class TeamEffect extends Effect implements Serializable
 			return "The effects of tailwind faded.";
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
+			int stat = statValue;
 			return stat*(s == Stat.SPEED ? 2 : 1);
 		}
 	}
@@ -195,6 +201,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 	private static class StealthRock extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public StealthRock()
 		{
 			super("StealthRock", -1, -1, false);
@@ -215,16 +222,16 @@ public abstract class TeamEffect extends Effect implements Serializable
 			return "Floating rocks were scattered all around!";
 		}
 
-		public String getReleaseMessage(ActivePokemon user)
-		{
-			return "The floating rocks spun away!";
-		}
-
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			if (victim.hasAbility("Magic Guard")) return;
 			b.addMessage(victim.getName() + " was hurt by stealth rock!");
 			victim.reduceHealthFraction(b, Type.getAdvantage(Type.ROCK, victim, b)/8.0);
+		}
+
+		public String getReleaseMessage(ActivePokemon user)
+		{
+			return "The floating rocks spun away!";
 		}
 
 		public String getDefogReleaseMessage(ActivePokemon victim)
@@ -267,11 +274,6 @@ public abstract class TeamEffect extends Effect implements Serializable
 			return "Toxic spikes were scattered all around!";
 		}
 
-		public String getReleaseMessage(ActivePokemon user)
-		{
-			return "The toxic spikes dispersed!";
-		}
-
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			if (victim.isLevitating(b)) return;
@@ -287,6 +289,11 @@ public abstract class TeamEffect extends Effect implements Serializable
 				if (layers >= 2) PokemonEffect.getEffect("BadPoison").cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
 				else Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
 			}
+		}
+
+		public String getReleaseMessage(ActivePokemon user)
+		{
+			return "The toxic spikes dispersed!";
 		}
 
 		public String getDefogReleaseMessage(ActivePokemon victim)
@@ -329,11 +336,6 @@ public abstract class TeamEffect extends Effect implements Serializable
 			return "Spikes were scattered all around!";
 		}
 
-		public String getReleaseMessage(ActivePokemon user)
-		{
-			return "The spikes dispersed!";
-		}
-
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			if (victim.isLevitating(b) || victim.hasAbility("Magic Guard")) return;
@@ -341,6 +343,11 @@ public abstract class TeamEffect extends Effect implements Serializable
 			if (layers == 1) victim.reduceHealthFraction(b, 1/8.0);
 			else if (layers == 2) victim.reduceHealthFraction(b, 1/6.0);
 			else victim.reduceHealthFraction(b, 1/4.0);
+		}
+
+		public String getReleaseMessage(ActivePokemon user)
+		{
+			return "The spikes dispersed!";
 		}
 
 		public String getDefogReleaseMessage(ActivePokemon victim)
@@ -388,6 +395,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 	private static class LuckyChant extends TeamEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public LuckyChant()
 		{
 			super("LuckyChant", 5, 5, false);
@@ -537,6 +545,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 	private static class DeadAlly extends TeamEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public DeadAlly()
 		{
 			super("DeadAlly", 2, 2, false);
@@ -594,6 +603,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 	private static class DoubleMoney extends TeamEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public DoubleMoney()
 		{
 			super("DoubleMoney", -1, -1, false);
@@ -609,5 +619,4 @@ public abstract class TeamEffect extends Effect implements Serializable
 			return !(Effect.hasEffect(b.getEffects(victim.user()), "DoubleMoney"));
 		}
 	}
-
 }

@@ -1,0 +1,1080 @@
+Override:
+	ApplyEffects:
+		Header: void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+Override:
+	Apply:
+		Header: void apply(ActivePokemon me, ActivePokemon o, Battle b)
+	*
+***
+Override:
+	ApplyDamage:
+		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+	*
+***
+Override:
+	FixedDamage:
+		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		Body: 
+		if (super.zeroAdvantage(b, me, o)) 
+		{
+			return -1;
+		}
+		
+		return b.applyDamage(o, {0});
+		###
+	*
+***
+Override:
+	GetPow:
+		Header: int getPower(Battle b, ActivePokemon me, ActivePokemon o)
+	*
+***
+Override:
+	GetPriority:
+		Header: int getPriority(Battle b, ActivePokemon me)
+	*
+***
+Override:
+	GetAccuracy:
+		Header: int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
+	*
+***
+Override:
+	GetType:
+		Header: Type getType(Battle b, ActivePokemon user)
+		Begin:
+		if (user.hasAbility("Normalize")) 
+		{
+			return Type.NORMAL;
+		}
+		
+		###
+	*
+***
+RecoilMove:
+	Recoil:
+		Header: void applyRecoil(Battle b, ActivePokemon user, Integer damage)
+		Try: 
+		if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+		b.addMessage(user.getName() + " was hurt by recoil!");
+		b.applyDamage(user, (int)Math.ceil(damage/{0}.0));
+		###
+	*
+***
+SelfHealingMove:
+	SelfHealing:
+		Header: void heal(ActivePokemon user, ActivePokemon victim, Battle b)
+		Begin:
+		if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+		{
+			b.addMessage("...but it failed!");
+			return;
+		}
+		
+		###
+		End:
+		
+		b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+		###
+		Try:
+		victim.healHealthFraction(1/{0}.0);
+		###
+		AddMapField: SelfTarget: True
+	*
+***
+MultiTurnMove:
+	ChargeFirst:
+		Header: boolean chargesFirst()
+		Body: 
+		return {0};
+		###
+	*
+	SemiInv:
+		Header: boolean semiInvulnerability()
+		Body:
+		return {0};
+		###
+	*
+	Charge:
+		Header: void charge(ActivePokemon user, Battle b)
+		Optional: True
+		Begin:
+		b.addMessage(getChargeMessage(user));
+		###
+	*
+	ChargeMessage:
+		Header: String getChargeMessage(ActivePokemon user)
+		Body:
+		return {0};
+		###
+	*
+***
+Override:
+	IsMultiTurn:
+		Header: boolean isMultiTurn(Battle b)
+	*
+***
+Override:
+	MultiStrike:
+		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		Body:
+		if (super.zeroAdvantage(b, me, o)) 
+		{
+			return -1;
+		}
+		
+		int minHits = {1};
+		int maxHits = {2};
+		
+		int damage = 0;
+		int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+		
+		if (maxHits == 5 && me.hasAbility("Skill Link")) 
+		{
+			hits = 5;
+		}
+		
+		for (int i = 1; i <= hits; i++)
+		{
+			b.addMessage("Hit " + i + "!");
+			damage += super.applyDamage(me, o, b);
+		}
+		
+		b.addMessage("Hit " + hits + " times!");
+		return damage;
+		###
+	*
+***
+ChangeTypeMove:
+	ChangeType:
+		Header: Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
+	*
+***
+Override:
+	StartTurn:
+		Header: void startTurn(Battle b, ActivePokemon me)
+	*
+***
+Override:
+	SwitchItems:
+		Header: void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+		Body:
+		if ({0})
+		{
+			if (super.category == Category.STATUS) 
+			{
+				b.addMessage("...but it failed!");
+			}
+			
+			return;
+		}
+
+		Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
+		b.addMessage(getSwitchMessage(user, userItem, victim, victimItem));
+
+		if (b.isWildBattle())
+		{
+			user.giveItem((HoldItem)victimItem);
+			victim.giveItem((HoldItem)userItem);
+			return;
+		}
+
+		item = userItem;
+		super.applyEffects(b, user, victim);
+		item = victimItem;
+		super.applyEffects(b, user, user);
+		###
+		AddMapField: Effect: Pokemon ChangeItem
+		AddInterface: ItemCondition
+		AddMapField: Field:
+		private Item item;
+		###
+		AddMapField: GetItem:
+		return item;
+		###
+	*
+***
+Override:
+	SwitchMessage:
+		Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
+		Body:
+		return {0};
+		###
+	*
+***
+Override:
+	OHKO:
+		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		Body:
+		if (me.getLevel() < o.getLevel())
+		{
+			b.addMessage("...but it failed!");
+			return -1;
+		}
+
+		if (o.hasAbility("Sturdy") && !me.breaksTheMold())
+		{
+			b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
+			return -1;
+		}
+
+		if (super.zeroAdvantage(b, me, o)) 
+		{
+			return -1;
+		}
+		
+		b.addMessage("It's a One-Hit KO!");
+		return b.applyDamage(o, o.getHP());
+		###
+		AddMapField: MoveType: OneHitKO
+		AddMapField: OHKO2: True
+	*
+***
+Override:
+	OHKO2:
+		Header: int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
+		Body:
+		return super.accuracy + (me.getLevel() - o.getLevel());
+		###
+	*
+***
+StatSwitchingEffect:
+	SwitchStat:
+		Header: Stat switchStat(Stat s)
+	*
+***
+CrashDamageMove:
+	CrashDamage:
+		Header: void crash(Battle b, ActivePokemon user)
+		Body:
+		b.addMessage(user.getName() + " kept going and crashed!");
+		b.applyDamage(user, user.getStat(Stat.HP)/{0});
+		###
+	*
+***
+StageChangingEffect:
+	StageChange:
+		Header: int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
+	*
+***
+IgnoreStageEffect
+	IgnoreStage: 
+		Header: boolean ignoreStage(Stat s)
+		Optional: True
+		Default:
+		return !s.user();
+		###
+	*
+***
+ChangeAbilityMove:
+	AbilityChange:
+		Header: Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)
+	*
+	AbilityMessage:
+		Header: String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
+	*
+***
+Override:
+	ExitBattle:
+		Header: void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+		Body:
+		Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
+		if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
+		{
+			if (super.category == Category.STATUS) b.addMessage("...but it failed!");
+			return;
+		}
+
+		if (victim.hasAbility("Suction Cups") && !user.breaksTheMold())
+		{
+			b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
+			return;
+		}
+
+		b.addMessage({0});
+		trainer.switchToRandom();
+		victim = trainer.front();
+		b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+		###
+	*
+***
+Override:
+	SelfSwitching:
+		Header: void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+		Body:
+		Team t = b.getTrainer(user.user());
+		if (t instanceof WildPokemon)
+		{
+			b.addMessage(user.getName() + " left the battle!");
+			b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
+			return;
+		}
+
+		Trainer trainer = (Trainer)t;
+		if (!trainer.hasRemainingPokemon()) return;
+
+		b.addMessage(user.getName() + " went back to " + trainer.getName() + "!");
+		trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
+		user = trainer.front();
+		b.enterBattle(user, trainer.getName() + " sent out " + user.getName() + "!");
+		###
+	*
+***
+EndTurnEffect:
+	ApplyEndTurn:
+		Header: void apply(ActivePokemon victim, Battle b)
+	*
+***
+BeforeTurnEffect:
+	CanAttack:
+		Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+	*
+***
+OpposingBeforeTurnEffect:
+	OpposingCanAttack:
+		Header: boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+	*
+***
+TrappingEffect:
+***
+OpponentTrappingEffect:
+	Trapped:
+		Header: boolean isTrapped(Battle b, ActivePokemon p)
+	*
+	TrappingMessage:
+		Header: String trappingMessage(ActivePokemon escaper, ActivePokemon trapper)
+		Optional: True
+		Default:
+		return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
+		###
+	*
+***
+Override:
+	PartialTrap:
+		Header: String getPartialTrapMessage(ActivePokemon victim)
+		Body: 
+		return {0};
+		###
+		AddMapField: Cast:
+		super.cast(b, caster, victim, source, printCast);
+		if (caster.isHoldingItem(b, "Grip Claw")) setTurns(5);
+		###
+		AddMapField: ApplyEndTurn:
+		if (victim.hasAbility("Magic Guard")) return;
+		b.addMessage(getPartialTrapMessage(victim));
+		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+		###
+	*
+***
+Override:
+	Cast:
+		Header: void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+	*
+***
+Override:
+	CastMessage:
+		Header: String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		Body:
+		return {0};
+		###
+	*
+***
+Override:
+	SubsideMessage:
+		Header: String getSubsideMessage(ActivePokemon victim)
+		Body:
+		return {0};
+		###
+	*
+***
+RapidSpinRelease:
+	RapidSpin:
+		Header: String getReleaseMessage(ActivePokemon user)
+		Body:
+		return {0};
+		###
+	*
+***
+StatChangingEffect:
+	ModifyStat:
+		Header: int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		Begin: 
+		int stat = statValue;
+		###
+	*
+***
+MoveCondition:
+	GetMove:
+		Header: Move getMove()
+	*
+***
+ForceMoveEffect:
+	GetMove:
+		Header: Move getMove()
+	*
+***
+Override:
+	Subside:
+		Header: void subside(Battle b, ActivePokemon p)
+	*
+***
+AttackSelectionEffect:
+	Usable:
+		Header: boolean usable(ActivePokemon p, Move m)
+	*
+	UnusableMessage:
+		Header: String getUnusableMessage(ActivePokemon p)
+		Body: 
+		return {0};
+		###
+	*
+***
+Override:
+	ShouldSubside:
+		Header: boolean shouldSubside(Battle b, ActivePokemon victim)
+	*
+***
+EntryEffect:
+	Enter:
+		Header: void enter(Battle b, ActivePokemon victim)
+	*
+***
+TypeCondition:
+	GetTypeCondition:	
+		Header: Type[] getType()
+	*
+***
+Override:
+	GetTurns:
+		Header: int getTurns()
+	*
+***
+StatusPreventionEffect:
+	StatusPrevent:
+		Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status)
+	*
+	StatusPreventMessage:
+		Header: String preventionMessage(ActivePokemon victim)
+		Body:
+		return {0};
+		###
+	*
+***
+PowerChangeEffect:
+	GetMultiplier:
+		Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+OpponentPowerChangeEffect:
+	GetOppMultiplier:
+		Header: double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+IntegerCondition:
+	GetAmount:
+		Header: int getAmount()
+		Body:
+		return {0};
+		###
+	*
+	DecreaseAmount:
+		Header: void decrease(int amount)
+		Body:
+		{0} -= amount;
+		###
+	*
+	IncreaseAmount:
+		Header: void increase(int amount)
+		Body:
+		{0} += amount;
+		###
+	*
+***
+EffectBlockerEffect:
+	ValidMove:
+		Header: boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+StatProtectingEffect:
+	StatProtect:
+		Header: boolean prevent(ActivePokemon caster, Stat stat)
+	*
+	StatProtectMessage:
+		Header: String preventionMessage(ActivePokemon p)
+		Body:
+		return {0};
+		###
+	*
+***
+FaintEffect:
+	Deathwish:
+		Header: void deathwish(Battle b, ActivePokemon dead, ActivePokemon murderer)
+	*
+***
+PassableEffect:
+***
+Override:
+	FailMessage:
+		Header: String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		End:
+		return super.getFailMessage(b, user, victim, team);
+		###
+	*
+***
+DefogRelease:
+	Defog:
+		Header: String getDefogReleaseMessage(ActivePokemon victim)
+		Body:
+		return {0};
+		###
+	*
+***
+AbilityCondition:
+	GetAbility:
+		Header: Ability getAbility()
+	*
+***
+ItemCondition:
+	GetItem:
+		Header: Item getItem()
+	*
+***
+BracingEffect:
+	Bracing:
+		Header: boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
+	*
+	BraceMessage:
+		Header: String braceMessage(ActivePokemon bracer)
+		Body:
+		return {0};
+		###
+	*
+***
+MoveListCondition:
+	GetMoveList:
+		Header: List<Move> getMoveList(ActivePokemon p, List<Move> moves)
+	*
+***
+StatsCondition:
+	GetStat:
+		Header: int getStat(Stat stat)
+	*
+***
+CritStageEffect:
+	IncreaseCritStage:
+		Header: int increaseCritStage(ActivePokemon p)
+	*
+***
+LevitationEffect:
+***
+GroundedEffect:
+***
+EndBattleEffect:
+	EndBattle:
+		Header: void afterBattle(Trainer player, Battle b, ActivePokemon p)
+	*
+***
+PhysicalContactEffect:
+	Contact:
+		Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+DamageBlocker:
+	Block:
+		Header: boolean block(Type attacking, ActivePokemon victim)
+	*
+	AlternateEffect:
+		Header: void alternateEffect(Battle b, ActivePokemon victim)
+	*
+***
+WeatherBlockerEffect:
+	WeatherBlock:
+		Header: boolean block(WeatherType weather)
+	*
+***
+ApplyDamageEffect:
+	OnApplyDamage:
+		Header: void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+	*
+***
+ModifyStageValueEffect:
+	ModifyStageValue:
+		Header: int modifyStageValue(int modVal)
+	*
+***
+SwitchOutEffect:
+	SwitchOut:
+		Header: void switchOut(ActivePokemon switchee)
+	*
+***
+TakeDamageEffect:
+	OnTakeDamage:
+		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+StallingEffect:
+***
+DefiniteEscape:
+***
+HoldItem:
+	Fling:
+		Header: int flingDamage()
+		Body:
+		return {0};
+		###
+	*
+***
+TrainerUseItem:
+	TrainerUse:
+		Header: boolean use(Trainer t)
+	*
+***
+PokemonUseItem:
+	PokemonUse:
+		Header: boolean use(ActivePokemon p)
+	*
+***
+BattleUseItem:
+	BattleUse:
+		Header: boolean use(ActivePokemon p, Battle b)
+		Optional: True
+		Default:
+		return use(p);
+		###
+	*
+***
+MoveUseItem:
+	MoveUse:
+		Header: boolean use(Move m)
+	*
+***
+Override:
+	IncreaseStat:
+		Header: Stat toIncrease()
+		Body:
+		return Stat.{00};
+		###
+	*
+***
+Override:
+	TypeTakeDamageStatIncrease:
+		Header: Type damageType()
+		Body:
+		return Type.{00};
+		###
+		AddMapField: OnTakeDamage:
+		if (user.getAttack().getType(b, user) == damageType() && victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.HELD_ITEM))
+		{
+			victim.consumeItem(b);
+		}
+		###
+		AddInterface: HoldItem
+		AddInterface: ConsumedItem
+		AddInterface: TakeDamageEffect
+	*
+***
+ConsumedItem:
+***
+Override:
+	ChoiceItem:
+		Header: Stat toIncrease()
+		Body:
+		return Stat.{00};
+		###
+		AddInterface: StatChangingEffect
+		AddMapField: ModifyStat:
+		if (s == toIncrease())
+		{
+			stat *= 1.5;
+		}
+		
+		return stat;
+		###
+		AddInterface: AttackSelectionEffect
+		AddMapField: Usable:
+		Move last = p.getAttributes().getLastMoveUsed();
+		if (last == null || m == last)
+		{
+			return true;
+		}
+		
+		return false;
+		###
+		AddMapField: UnusableMessage: p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!"
+		AddInterface: HoldItem
+		AddMapField: Fling: 10
+	*
+***
+RepellingEffect:
+	RepelChance:
+		Header: double chance()
+		Body:
+		return {0};
+		###
+	*
+***
+WeatherExtendingEffect:
+	WeatherType:
+		Header: WeatherType getWeatherType()
+		Body:
+		return WeatherType.{00};
+		###
+	*
+***
+PowerItem:
+	GetEVs:
+		Header: int[] getEVs(int[] vals)
+		Optional: True
+		Default:
+		vals[toIncrease().index()] += 4;
+		return vals;
+		###
+	*
+	ModifyStat:
+		Header: int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		Optional: True
+		Default:
+		if (s.equals(Stat.SPEED))
+		{
+			return stat / 2;
+		}
+		
+		return stat;
+		###
+	*
+	PowerStat:
+		Header: Stat toIncrease()
+		Optional: True
+		Default:
+		Global.error("toIncrease() method in " + super.name +" is unimplemented.");
+		return null;
+		###
+		AddInterface: Hidden-HoldItem
+	*
+***
+Override:
+	EnhanceType:
+		Header: Type getType()
+		Body:
+		return Type.{00};
+		###
+	*
+***
+Override:
+	TypeEnhanceMultiplier:
+		Header: double getMultiplier()
+		Body:
+		return {0};
+		###
+		AddInterface: PowerChangeEffect
+		AddMapField: GetMultiplier:
+		if (user.getAttack().isType(b, user, getType()))
+		{
+			if (this instanceof ConsumedItem)
+			{
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
+			}
+
+			return getMultiplier();
+		}
+
+		return 1;
+		###
+	*
+***
+PlateItem:
+	PlateType:
+		Header: Type getType()
+		Body:
+		return Type.{00};
+		###
+		AddInterface: Hidden-HoldItem
+		AddMapField: Price: 1000
+		AddMapField: Fling: 90
+		AddMapField: Cat: MISC
+	*
+	GetMultiplier:
+		Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		Optional: True
+		Default:
+		if (user.getAttack().isType(b, user, getType()))
+		{
+			return 1.2;
+		}
+
+		return 1;
+		###
+	*
+***
+DriveItem:
+	DriveType:
+		Header: Type getType()
+		Body:
+		return Type.{00};
+		###
+		AddInterface: Hidden-HoldItem
+		AddMapField: Fling: 70
+		AddMapField: Price: 1000
+		AddMapField: Cat: MISC
+	*
+***
+Override:
+	EvolutionItem:
+		Header: BaseEvolution getBaseEvolution(ActivePokemon p)
+		Body: 
+		Evolution ev = p.getPokemonInfo().getEvolution();
+		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+		return base;
+		###
+		AddInterface: PokemonUseItem
+		AddMapField: Field:
+		private String message;
+		###
+		AddMapField: SuccessMessage: message
+		AddMapField: PokemonUse:
+		BaseEvolution base = getBaseEvolution(p);
+		if (base == null)
+			return false;
+
+		message = p.evolve(null, base);
+		return true;
+		###
+	*
+***
+Override:
+	StatusRemove:
+		Header: StatusCondition toRemove()
+		Body:
+		return StatusCondition.{00};
+		###
+		AddInterface: PokemonUseItem
+		AddInterface: BattleUseItem
+		AddMapField: PokemonUse:
+		if (!p.hasStatus(toRemove()))
+		{
+			return false;
+		}
+
+		p.removeStatus();
+		return true;
+		###
+		AddMapField: SuccessMessage: p.getName() + " was cured of its status condition!"
+	*
+***
+Override:
+	HealAmt:
+		Header: int healAmount()
+		Body:
+		return {0};
+		###
+		AddInterface: PokemonUseItem
+		AddInterface: BattleUseItem
+		AddMapField: PokemonUse:
+		return p.heal(healAmount()) != 0;
+		###
+		AddMapField: SuccessMessage: p.getName() + "'s health was restored!"
+	*
+***
+Override:
+	StageIncrease:
+		Header: Stat toIncrease()
+		Body:
+		return Stat.{00};
+		###
+		AddInterface: BattleUseItem
+		AddMapField: BattleUse:
+		return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		###
+		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
+	*
+***
+Override:
+	EVIncrease:
+		Header: Stat toIncrease()
+		Body:
+		return Stat.{00};
+		###
+		AddInterface: PokemonUseItem
+		AddMapField: PokemonUse:
+		int[] toAdd = new int[Stat.NUM_STATS];
+		toAdd[toIncrease().index()] += increaseAmount();
+
+		return p.addEVs(toAdd);
+		###
+		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
+	*
+***
+Override:
+	EVIncreaseAmt:
+		Header: int increaseAmount()
+		Body:
+		return {0};
+		###
+	*
+***
+BallItem:
+	CatchRate:
+		Header: double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		Try:
+		return new double[] {{0}, 0};
+		###
+		AddMapField: Cat: BALL
+		AddMapField: BattleCat: BALL
+	*
+	AfterCaught:
+		Header: void afterCaught(ActivePokemon p)
+		Optional: True
+		Default:
+		###
+	*
+***
+Override:
+	EVDecreaseBerry:
+		Header: Stat toDecrease()
+		Body:
+		return Stat.{00};
+		###
+		AddInterface: Berry
+		AddInterface: PokemonUseItem
+		AddMapField: PokemonUse:
+		int[] vals = new int[Stat.NUM_STATS];
+		if (p.getEV(toDecrease().index()) > 110)
+			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+		else
+			vals[toDecrease().index()] -= 10;
+
+		return p.addEVs(vals);
+		###
+		AddMapField: SuccessMessage: p.getName() + "'s " + toDecrease().getName() + " was lowered!"
+	*
+***
+Override:
+	SuperEffectivePowerReduceBerryType:
+		Header: Type getType()
+		Body:
+		return Type.{00};
+		###
+		AddInterface: Berry
+		AddInterface: OpponentPowerChangeEffect
+		AddMapField: GetOppMultiplier:
+		Type t = user.getAttack().getType(b, user);
+
+		if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+		{
+			b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+			victim.consumeItem(b);
+			return .5;
+		}
+
+		return 1;
+		###
+	*
+***
+Override:
+	HealthTriggeredStageIncreaseBerryStat:
+		Header: Stat toRaise()
+		Body:
+		return Stat.{00};
+		###
+		AddInterface: HealthTriggeredBerry
+		AddMapField: HealthTrigger:
+		if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, CastSource.HELD_ITEM))
+		{
+			return true;
+		}
+
+		return false;
+		###
+		AddMapField: HealthTriggerRatio: 4
+	*
+***
+StatusBerry:
+	GainEffect:
+		Header: void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		Optional: True
+		Default:
+		if (use(user, b))
+		{
+			b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+		}
+		###
+		AddInterface: Hidden-Berry
+	*
+***
+GainableEffectBerry:
+	GainEffect:
+		Header: void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		AddInterface: Hidden-Berry
+	*
+***
+HealthTriggeredBerry:
+	HealthTrigger:
+		Header: boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		AddInterface: Hidden-GainableEffectBerry
+		AddMapField: GainEffect:
+		useHealthTriggerBerry(b, user);
+		###
+	*
+	HealthTriggerRatio:
+		Header: double healthTriggerRatio()
+		Try:
+		return 1/{0}.0;
+		###
+	*
+***
+Berry:
+	NGPow:
+		Header: int naturalGiftPower()
+		Body:
+		return {0};
+		###
+		AddMapField: Cat: BERRY
+		AddInterface: Hidden-HoldItem
+		AddMapField: Fling: 10
+	*
+	NGType:
+		Header: Type naturalGiftType()
+		Body:
+		return Type.{00};
+		###
+	*
+***
+Override:
+	RepelSteps:
+		Header: int repelSteps()
+		Body:
+		return {0};
+		###
+		AddInterface: HoldItem
+		AddMapField: Fling: 30
+		AddInterface: TrainerUseItem
+		AddMapField: TrainerUse:
+		if (!(t instanceof CharacterData))
+		{
+			Global.error("Only the character should be using a Repel item");
+		}
+
+		CharacterData player = (CharacterData) t;
+		if (player.isUsingRepel())
+		{
+			return false;
+		}
+
+		player.addRepelSteps(repelSteps());
+		return true;
+		###
+		AddMapField: SuccessMessage: "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!"
+		AddMapField: Cat: MISC
+	*
+***
+Override:
+	SuccessMessage:
+		Header: String getSuccessMessage(ActivePokemon p)
+		Body:
+		return {0};
+		###
+	*
+***

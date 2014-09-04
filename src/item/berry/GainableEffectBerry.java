@@ -5,5 +5,5 @@ import battle.Battle;
 
 public interface GainableEffectBerry extends Berry
 {
-	public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp);
+	public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp);
 }

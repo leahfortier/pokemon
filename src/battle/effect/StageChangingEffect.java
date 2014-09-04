@@ -6,5 +6,5 @@ import pokemon.Stat;
 
 public interface StageChangingEffect 
 {
-	public int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user);
+	public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b);
 }

@@ -1,3 +1,5 @@
 package item.berry;
 
-public interface StatusBerry extends GainableEffectBerry {}
+import item.use.PokemonUseItem;
+
+public interface StatusBerry extends GainableEffectBerry, PokemonUseItem {}

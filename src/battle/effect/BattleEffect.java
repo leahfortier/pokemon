@@ -48,7 +48,7 @@ public abstract class BattleEffect extends Effect
 		
 		// EVERYTHING BELOW IS GENERATED ###
 
-		// List all of the effects we are loading
+		// List all of the classes we are loading
 		map.put("Gravity", new Gravity());
 		map.put("WaterSport", new WaterSport());
 		map.put("MudSport", new MudSport());
@@ -96,17 +96,6 @@ public abstract class BattleEffect extends Effect
 			return !(Effect.hasEffect(b.getEffects(), "Gravity"));
 		}
 
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			if (p.getAttack().isMoveType("Airborne"))
-			{
-				b.printAttacking(p);
-				b.addMessage("...but it failed!");
-				return false;
-			}
-			return true;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -124,15 +113,27 @@ public abstract class BattleEffect extends Effect
 			return "The gravity returned to normal.";
 		}
 
-		public int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user)
+		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
 		{
 			return s == Stat.EVASION ? stage - 2 : stage;
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			if (p.getAttack().isMoveType("Airborne"))
+			{
+				b.printAttacking(p);
+				b.addMessage("...but it failed!");
+				return false;
+			}
+			return true;
 		}
 	}
 
 	private static class WaterSport extends BattleEffect implements PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public WaterSport()
 		{
 			super("WaterSport", -1, -1, false);
@@ -162,6 +163,7 @@ public abstract class BattleEffect extends Effect
 	private static class MudSport extends BattleEffect implements PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public MudSport()
 		{
 			super("MudSport", -1, -1, false);
@@ -191,6 +193,7 @@ public abstract class BattleEffect extends Effect
 	private static class WonderRoom extends BattleEffect implements StatSwitchingEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public WonderRoom()
 		{
 			super("WonderRoom", 5, 5, false);
@@ -234,6 +237,7 @@ public abstract class BattleEffect extends Effect
 	private static class TrickRoom extends BattleEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public TrickRoom()
 		{
 			super("TrickRoom", 5, 5, false);
@@ -270,6 +274,7 @@ public abstract class BattleEffect extends Effect
 	private static class MagicRoom extends BattleEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public MagicRoom()
 		{
 			super("MagicRoom", 5, 5, false);
@@ -302,5 +307,4 @@ public abstract class BattleEffect extends Effect
 			return "The dimensions of the magic room returned to normal.";
 		}
 	}
-
 }

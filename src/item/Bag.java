@@ -39,7 +39,7 @@ public class Bag implements Serializable
 		MEDICINE("Medicine", new Color(248, 120, 64), 0x1), 
 		BALL("Balls", new Color(232, 184, 40), 0x2), 
 		STAT("Stat", new Color(80, 128, 232), 0x3), 
-		KEYITEM("KeyItems", new Color(152, 88, 240), 0x4), 
+		KEY_ITEM("KeyItems", new Color(152, 88, 240), 0x4), 
 		TM("TMs", new Color(168, 232, 72), 0x5), 
 		BERRY("Berries", new Color(64, 192, 64), 0x6), 
 		MISC("Misc", new Color(232, 136, 192), 0x7);

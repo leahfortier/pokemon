@@ -2,7 +2,7 @@ package pokemon;
 
 import main.Global;
 import battle.Battle;
-import battle.effect.Effect;
+import battle.effect.IgnoreStageEffect;
 import battle.effect.StageChangingEffect;
 import battle.effect.StatChangingEffect;
 import battle.effect.StatSwitchingEffect;
@@ -84,86 +84,67 @@ public enum Stat
 	public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
 	{
 		// Effects that manipulate stats
-		Object[] list = b.getEffectsList(p);
+		Object[] list;
 		
-//		System.out.println(s.getName() + " " + user + " " + p.getName() + " " + (user ? p : opp).getName());
-		
-		if ((s.user ? p : opp).getMove() != null) 
+		ActivePokemon attacking = s.user ? p : opp;
+		if (attacking.getMove() != null) 
 		{
-			list = new Object[] {list, (s.user ? p : opp).getAttack()}; // User Attack
+			// User's attack
+			list = b.getEffectsList(p, attacking.getAttack());
 		}
-		
-		s = applyStatSwitch(list, s);
-				
-		// Get the stat and stage
-		int stage = p.getStage(s.index), stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(s);
-		
-		int temp = stat;
+		else
+		{
+			list = b.getEffectsList(p);
+		}
+	
+		// TODO: Test this
+		s = (Stat)Global.updateInvoke(0, list, StatSwitchingEffect.class, "switchStat", s);
 		
 		// Apply stage changes
-		stage = applyStageChange(list, s, p, opp, b, s.user, stage);
+		int stage = getStage(list, s, p, opp, b);
+		int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(s);
+		
+//		int temp = stat;
 		
 		// Modify stat based off stage
 		if (stage > 0) stat *= ((s.modifier + stage)/s.modifier);
 	    else if (stage < 0) stat *= (s.modifier/(s.modifier - stage));
-		 
-		stat = applyStatChange(list, stat, s, p, opp, b);
+		
+		// TODO: Test this
+		ActivePokemon moldBreaker  = s.user ? null : opp;
+		
+		// Applies stat changes to each for each item in list
+		stat = (int)Global.updateInvoke(0, moldBreaker, list, StatChangingEffect.class, "modify", stat, p, opp, s, b);
 		
 //		System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 		
 		return stat;
 	}
 	
-	// Applies stat changes to each for each item in list
-	private static int applyStatChange(Object[] list, int stat, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
+	private static int getStage(Object[] list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
 	{
-		for (Object o : list)
-		{
-			if (Effect.isInactiveEffect(o)) 
-				continue;
-			
-			if (o instanceof StatChangingEffect)
-			{
-				stat = ((StatChangingEffect)o).modify(stat, p, opp, s, b);
-			}
-		}
-		return stat;
-	}
-	
-	private static Stat applyStatSwitch(Object[] list, Stat s)
-	{
-		for (Object o : list)
-		{
-			if (Effect.isInactiveEffect(o)) 
-				continue;
-			
-			if (o instanceof StatSwitchingEffect) 
-			{
-				s = ((StatSwitchingEffect)o).switchStat(s);
-			}
-		}
+		int stage = p.getStage(s.index);
 		
-		return s; 
-	}
-	
-	private static int applyStageChange(Object[] list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user, int stage)
-	{
-		int temp = stage;
-		for (Object o : list)
-		{
-			if (Effect.isInactiveEffect(o)) 
-				continue;
-			
-			if (o instanceof StageChangingEffect) stage = ((StageChangingEffect)o).adjustStage(stage, s, p, opp, b, user);
-		}
+//		int temp = stage;
 		
-		// Unaware removes user's stage changes
-		if (opp.hasAbility("Unaware") && !(s.user && p.breaksTheMold())) stage = 0;
+		// Update the stage due to effects
+		ActivePokemon moldBreaker = s.user ? null : opp;
+		stage = (int)Global.updateInvoke(0, moldBreaker, list, StageChangingEffect.class, "adjustStage", stage, s, p, opp, b);
+		
+//		int temp2 = stage;
+		
+		// Effects that completely ignore stage changes TODO: Test this more thoroughly moldbreaker-wise though I think it is just p
+		list = new Object[] { opp.getAbility(), (s.user ? p : opp).getAttack() };
+		Object ignoreStage = Global.checkInvoke(true, p, list, IgnoreStageEffect.class, "ignoreStage", s);
+		if (ignoreStage != null)
+		{
+			stage = 0;
+		}
 		
 		// Let's keep everything in bounds, okay!
 		stage = Math.max(-1*MAX_STAT_CHANGES, Math.min(stage, MAX_STAT_CHANGES));
 		
-//		System.out.println(p.getName() + " " + s.getName() + " Stage: " + temp + " -> " + stage);
+//		System.out.println(p.getName() + " " + s.getName() + " Stage: " + temp + " -> " + temp2 + " -> " + stage);
 		
 		// Evasion stages are inverted
 		return s == EVASION ? stage*-1 : stage;

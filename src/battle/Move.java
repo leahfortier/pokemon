@@ -9,10 +9,8 @@ import main.Global;
 import main.Type;
 import pokemon.ActivePokemon;
 import battle.effect.AttackSelectionEffect;
-import battle.effect.Effect;
 import battle.effect.ForceMoveEffect;
 import battle.effect.MultiTurnMove;
-import battle.effect.PokemonEffect;
 
 public class Move implements Serializable
 {
@@ -191,7 +189,7 @@ public class Move implements Serializable
 		}
 		
 		// BUT WHAT IF YOU HAVE A CONDITION THAT PREVENTS YOU FROM USING THAT MOVE?!!?! THEN WHAT?!!?!!
-		Object unusable = Global.checkInvoke(false, b, b.getEffectsList(p), AttackSelectionEffect.class, "usable", p, m);
+		Object unusable = Global.checkInvoke(false, b.getEffectsList(p), AttackSelectionEffect.class, "usable", p, m);
 		if (unusable != null)
 		{
 			if (selecting)

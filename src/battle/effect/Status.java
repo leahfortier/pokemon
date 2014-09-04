@@ -248,7 +248,7 @@ public abstract class Status implements Serializable
 			return abilify.getName() + "'s " + abilify.getAbility().getName() + " paralyzed " + victim.getName() + "!";
 		}
 		
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			return (int)(stat*(s == Stat.SPEED && !p.hasAbility("Quick Feet") ? .25 : 1));
 		}
@@ -379,7 +379,7 @@ public abstract class Status implements Serializable
 			return abilify.getName() + "'s " + abilify.getAbility().getName() + " burned " + victim.getName() + "!";
 		}
 		
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			return (int)(stat*(s == Stat.ATTACK && !p.hasAbility("Guts") ? .5 : 1));
 		}

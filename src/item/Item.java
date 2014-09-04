@@ -10,12 +10,12 @@ import item.hold.ConsumedItem;
 import item.hold.DriveItem;
 import item.hold.HoldItem;
 import item.hold.PlateItem;
+import item.hold.PowerItem;
 import item.use.BallItem;
 import item.use.BattleUseItem;
 import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
 import item.use.TrainerUseItem;
-import item.use.TypeItem;
 import item.use.UseItem;
 
 import java.io.IOException;
@@ -68,76 +68,99 @@ import battle.effect.Weather.WeatherType;
 import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 
-public abstract class Item implements Comparable<Item>, Serializable {
+public abstract class Item implements Comparable<Item>, Serializable
+{
 	private static final long serialVersionUID = 1L;
 
 	private static HashMap<String, Item> map;
 
 	protected String name, desc;
 	protected BagCategory cat;
-	protected BattleBagCategory[] bcat;
+	protected List<BattleBagCategory> bcat;
 	protected int price, index;
 
-	public static boolean exists(String s) {
+	public static boolean exists(String s)
+	{
 		if (map == null)
 			loadItems();
 
-		if (!map.containsKey(s))
-			return false;
-		return true;
+		return map.containsKey(s);
 	}
 
-	private void readObject(ObjectInputStream ois) throws IOException,
-			ClassNotFoundException {
+	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException
+	{
 		ois.defaultReadObject();
-		synchronized (Item.class) {
+		synchronized (Item.class)
+		{
 			if (map == null)
 				loadItems();
+			
 			map.put(this.getName(), this);
 		}
 	}
+	
+	public Item(String name, String description, BagCategory category, int index)
+	{
+		this.name = name;
+		this.desc = description;
+		this.cat = category;
+		this.index = index;
+		
+		this.bcat = new ArrayList<>();
+		this.price = -1;
+	}
 
-	public Item() {
+	public Item()
+	{
 		this.name = this.desc = "UNDEFINED";
 		this.cat = BagCategory.MISC;
-		bcat = new BattleBagCategory[0];
+		bcat = new ArrayList<>();
 		this.price = -1;
 		this.index = 0;
 	}
 
-	public int compareTo(Item o) {
+	public int compareTo(Item o)
+	{
 		return this.name.compareTo(o.name);
 	}
 
-	public boolean isUsable() {
+	public boolean isUsable()
+	{
 		return this instanceof UseItem;
 	}
 
-	public boolean isHoldable() {
+	public boolean isHoldable()
+	{
 		return this instanceof HoldItem;
 	}
 
-	public String getName() {
+	public String getName()
+	{
 		return this.name;
 	}
 
-	public String getDesc() {
+	public String getDesc()
+	{
 		return this.desc;
 	}
 
-	public int getPrice() {
+	public int getPrice()
+	{
 		return this.price;
 	}
 
-	public int getIndex() {
+	public int getIndex()
+	{
 		return index;
 	}
 
-	public static Item noneItem() {
+	public static Item noneItem()
+	{
 		return getItem("None");
 	}
 
-	public static Item getItem(String m) {
+	public static Item getItem(String m)
+	{
 		if (map == null)
 			loadItems();
 		if (map.containsKey(m))
@@ -147,7 +170,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return null;
 	}
 
-	public static boolean isItem(String m) {
+	public static boolean isItem(String m)
+	{
 		if (map == null)
 			loadItems();
 		if (map.containsKey(m))
@@ -155,317 +179,27 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return false;
 	}
 
-	public boolean equals(Object o) {
+	public boolean equals(Object o)
+	{
 		if (!(o instanceof Item))
 			return false;
 		return (((Item) o).getName().equals(name));
 	}
 
-	public int hashCode() {
+	public int hashCode()
+	{
 		return name.hashCode();
 	}
 
-	/* Helper abstract classes */
-
-	private static abstract class StageIncreaseItem extends Item implements
-			BattleUseItem {
-		private static final long serialVersionUID = 1L;
-
-		public abstract Stat toIncrease();
-
-		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b,
-					CastSource.USE_ITEM);
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName()
-					+ " was raised!";
-		}
-	}
-
-	private static abstract class TypeEnhancingItem extends Item implements
-			PowerChangeEffect, TypeItem {
-		private static final long serialVersionUID = 1L;
-
-		public abstract double getMultiplier();
-
-		public double getMultiplier(Battle b, ActivePokemon me, ActivePokemon o) {
-			if (me.getAttack().isType(b, me, getType())) {
-				if (this instanceof ConsumedItem) {
-					b.addMessage(me.getName() + "'s " + this.getName()
-							+ " enhanced " + me.getAttack().getName()
-							+ "'s power!");
-					me.consumeItem(b);
-				}
-
-				return getMultiplier();
-			}
-
-			return 1;
-		}
-	}
-
-	private static abstract class StatusConditionRemoveItem extends Item
-			implements PokemonUseItem, BattleUseItem {
-		private static final long serialVersionUID = 1L;
-
-		public abstract StatusCondition toRemove();
-
-		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove()))
-				return false;
-
-			p.removeStatus();
-			return true;
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
-			return use(p);
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was cured of its status condition!";
-		}
-	}
-
-	private static abstract class EVIncreaseItem extends Item implements
-			PokemonUseItem {
-		private static final long serialVersionUID = 1L;
-
-		public abstract Stat toIncrease();
-
-		public abstract int increaseAmt();
-
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += 10;
-
-			return p.addEVs(toAdd);
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName()
-					+ " was raised!";
-		}
-	}
-
-	private static abstract class HealItem extends Item implements
-			PokemonUseItem, BattleUseItem {
-		private static final long serialVersionUID = 1L;
-
-		public abstract int healAmt();
-
-		public boolean use(ActivePokemon p) {
-			return p.heal(healAmt()) != 0;
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
-			return use(p);
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-	}
-
-	private static abstract class EvolutionItem extends Item implements
-			PokemonUseItem {
-		private static final long serialVersionUID = 1L;
-
-		private String message;
-
-		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(
-					EvolutionCheck.ITEM, p, this.getName());
-			if (base == null)
-				return false;
-
-			message = p.evolve(null, base);
-			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
-		}
-	}
-
-	public static abstract class PowerItem extends Item implements
-			StatChangingEffect {
-		private static final long serialVersionUID = 1L;
-
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s.equals(Stat.SPEED))
-				return stat / 2;
-			return stat;
-		}
-
-		public int[] getEVs(int[] vals) {
-			vals[toIncrease().index()] += 4;
-			return vals;
-		}
-
-		public abstract Stat toIncrease();
-	}
-
-	private static abstract class ChoiceItem extends Item implements HoldItem,
-			StatChangingEffect, AttackSelectionEffect {
-		private static final long serialVersionUID = 1L;
-
-		public abstract Stat toIncrease();
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == toIncrease())
-				stat *= 1.5;
-			return stat;
-		}
-
-		public boolean usable(ActivePokemon p, Move m) {
-			Move last = p.getAttributes().getLastMoveUsed();
-			if (last == null || m == last)
-				return true;
-			return false;
-		}
-
-		public String getUnusableMessage(ActivePokemon p) {
-			return p.getName() + "'s " + super.name + " only allows "
-					+ p.getAttributes().getLastMoveUsed().getAttack().getName()
-					+ " to be used!";
-		}
-	}
-
-	private static abstract class TypeDamageStatIncreaseItem extends Item
-			implements HoldItem, ConsumedItem, TakeDamageEffect {
-		private static final long serialVersionUID = 1L;
-
-		public abstract Type damageType();
-
-		public abstract Stat toIncrease();
-
-		public void takeDamage(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			if (user.getAttack().getType(b, user) == damageType()
-					&& victim.getAttributes().modifyStage(victim, victim, 1,
-							toIncrease(), b, CastSource.HELD_ITEM)) {
-				victim.consumeItem(b);
-			}
-		}
-	}
-
-	private static abstract class RepelItem extends Item implements HoldItem,
-			TrainerUseItem {
-		private static final long serialVersionUID = 1L;
-
-		public abstract int repelSteps();
-
-		public int flingDamage() {
-			return 30;
-		}
-
-		public boolean use(Trainer t) {
-			if (!(t instanceof CharacterData))
-				return false;
-
-			CharacterData player = (CharacterData) t;
-			if (player.isUsingRepel())
-				return false;
-
-			player.addRepelSteps(repelSteps());
-			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps()
-					+ " steps!";
-		}
-	}
-
-	public static abstract class EVDecreaseBerry extends Item implements Berry,
-			PokemonUseItem {
-		private static final long serialVersionUID = 1L;
-
-		public boolean use(ActivePokemon p) {
-			int[] vals = new int[Stat.NUM_STATS];
-			if (p.getEV(toDecrease().index()) > 110)
-				vals[toDecrease().index()] = 100 - p
-						.getEV(toDecrease().index());
-			else
-				vals[toDecrease().index()] -= 10;
-
-			return p.addEVs(vals);
-		}
-
-		abstract Stat toDecrease();
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName()
-					+ " was lowered!";
-		}
-	}
-
-	public static abstract class SuperEffectivePowerReduceBerry extends Item
-			implements Berry, OpponentPowerChangeEffect {
-		private static final long serialVersionUID = 1L;
-
-		public double getOppMultiplier(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			Type t = user.getAttack().getType(b, user);
-
-			if (t == getType() && Type.getAdvantage(t, victim, b) > 1) {
-				b.addMessage(victim.getName() + "'s " + this.name
-						+ " decreased " + user.getName() + "'s attack!");
-				victim.consumeItem(b);
-				return .5;
-			}
-
-			return 1;
-		}
-
-		abstract Type getType();
-	}
-
-	public static abstract class HealthTriggeredStageIncreaseBerry extends Item
-			implements HealthTriggeredBerry {
-		private static final long serialVersionUID = 1L;
-
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b,
-					CastSource.HELD_ITEM)) {
-				return true;
-			}
-
-			return false;
-		}
-
-		public double healthTriggerRatio() {
-			return 1 / 4.0;
-		}
-
-		public abstract Stat toRaise();
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + this.name + " raised its "
-					+ toRaise().getName() + "!";
-		}
-
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			useHealthTriggerBerry(b, user);
-		}
-	}
-
-	public static void loadItems() {
+	public static void loadItems()
+	{
 		if (map != null)
 			return;
 		map = new HashMap<>();
 
 		// EVERYTHING BELOW IS GENERATED ###
+
+		// List all of the classes we are loading
 		map.put("None", new None());
 		map.put("Syrup", new Syrup());
 		map.put("Bicycle", new Bicycle());
@@ -755,494 +489,583 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		map.put("Max Repel", new MaxRepel());
 	}
 
-	private static class None extends Item implements HoldItem {
+	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
+
+	private static class None extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public None() {
-			super.name = "None";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 0;
-			super.desc = "YOU SHUOLDN'T SEE THIS";
+		public None()
+		{
+			super("None", "YOU SHUOLDN'T SEE THIS", BagCategory.MISC, 0);
 			super.price = -1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 9001;
 		}
 	}
 
-	private static class Syrup extends Item implements TrainerUseItem {
+	private static class Syrup extends Item implements TrainerUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Syrup() {
-			super.name = "Syrup";
-			super.cat = BagCategory.KEYITEM;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 1;
-			super.desc = "A mysterious bottle of syrup. Maybe it will be useful some day.";
-			super.price = -1;
+		public Syrup()
+		{
+			super("Syrup", "A mysterious bottle of syrup. Maybe it will be useful some day.", BagCategory.KEY_ITEM, 1);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return "";
 		}
 
-		public boolean use(Trainer t) {
+		public boolean use(Trainer t)
+		{
 			return false;
 		}
 	}
 
-	private static class Bicycle extends Item implements TrainerUseItem {
+	private static class Bicycle extends Item implements TrainerUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Bicycle() {
-			super.name = "Bicycle";
-			super.cat = BagCategory.KEYITEM;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 2;
-			super.desc = "A folding Bicycle that enables much faster movement than the Running Shoes.";
-			super.price = -1;
+		public Bicycle()
+		{
+			super("Bicycle", "A folding Bicycle that enables much faster movement than the Running Shoes.", BagCategory.KEY_ITEM, 2);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return "";
 		}
 
-		public boolean use(Trainer t) {// TODO: if (Can ride bike) Set the bike
-										// as a 'currentlyUsing' item
-		// May need to make this take in info on the route
+		public boolean use(Trainer t)
+		{
+			// TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
+			// May need to make this take in info on the route
 			return false;
 		}
 	}
 
-	private static class Surfboard extends Item implements TrainerUseItem {
+	private static class Surfboard extends Item implements TrainerUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Surfboard() {
-			super.name = "Surfboard";
-			super.cat = BagCategory.KEYITEM;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 3;
-			super.desc = "A fancy shmancy surfboard that lets you be RADICAL DUDE!";
-			super.price = -1;
+		public Surfboard()
+		{
+			super("Surfboard", "A fancy shmancy surfboard that lets you be RADICAL DUDE!", BagCategory.KEY_ITEM, 3);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return "";
 		}
 
-		public boolean use(Trainer t) {
+		public boolean use(Trainer t)
+		{
 			return false;
 		}
 	}
 
-	private static class FishingRod extends Item implements TrainerUseItem {
+	private static class FishingRod extends Item implements TrainerUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FishingRod() {
-			super.name = "Fishing Rod";
-			super.cat = BagCategory.KEYITEM;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 4;
-			super.desc = "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.";
-			super.price = -1;
+		public FishingRod()
+		{
+			super("Fishing Rod", "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.", BagCategory.KEY_ITEM, 4);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return "Oh! A bite!";
 		}
 
-		public boolean use(Trainer t) {// TODO: if (spot in front of player is a
-										// fishing spot) Set as 'currentlyUsing'
-		// May need to make this take in info on the route
+		public boolean use(Trainer t)
+		{
+			// TODO: if (spot in front of player is a fishing spot) Set as 'currentlyUsing'
+			// May need to make this take in info on the route
 			return false;
 		}
 	}
 
-	private static class AbsorbBulb extends TypeDamageStatIncreaseItem {
+	private static class AbsorbBulb extends Item implements HoldItem, ConsumedItem, TakeDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public AbsorbBulb() {
-			super.name = "Absorb Bulb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 5;
-			super.desc = "A consumable bulb. If the holder is hit by a Water-type move, its Sp. Atk will rise.";
+		public AbsorbBulb()
+		{
+			super("Absorb Bulb", "A consumable bulb. If the holder is hit by a Water-type move, its Sp. Atk will rise.", BagCategory.MISC, 5);
 			super.price = 200;
 		}
 
-		public Type damageType() {
-			return Type.WATER;
-		}
-
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage() {
+		public Type damageType()
+		{
+			return Type.WATER;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().getType(b, user) == damageType() && victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.HELD_ITEM))
+			{
+				victim.consumeItem(b);
+			}
 		}
 	}
 
-	private static class AirBalloon extends Item implements HoldItem,
-			ConsumedItem, LevitationEffect, TakeDamageEffect, EntryEffect {
+	private static class AirBalloon extends Item implements HoldItem, ConsumedItem, LevitationEffect, TakeDamageEffect, EntryEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public AirBalloon() {
-			super.name = "Air Balloon";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 6;
-			super.desc = "When held by a Pok\u00e9mon, the Pok\u00e9mon will float into the air. When the holder is attacked, this item will burst.";
+		public AirBalloon()
+		{
+			super("Air Balloon", "When held by a Pok\u00e9mon, the Pok\u00e9mon will float into the air. When the holder is attacked, this item will burst.", BagCategory.MISC, 6);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + " floats with its " + this.name
-					+ "!");
-		}
-
-		public void takeDamage(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
 			b.addMessage(victim.getName() + "'s " + this.name + " popped!");
 			victim.consumeItem(b);
 		}
+
+		public void enter(Battle b, ActivePokemon victim)
+		{
+			b.addMessage(victim.getName() + " floats with its " + this.name + "!");
+		}
 	}
 
-	private static class AmuletCoin extends Item implements HoldItem,
-			EntryEffect {
+	private static class AmuletCoin extends Item implements HoldItem, EntryEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public AmuletCoin() {
-			super.name = "Amulet Coin";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 7;
-			super.desc = "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.";
+		public AmuletCoin()
+		{
+			super("Amulet Coin", "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 7);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim,
-					CastSource.HELD_ITEM, false);
+		public void enter(Battle b, ActivePokemon victim)
+		{
+			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 	}
 
-	private static class BigRoot extends Item implements HoldItem {
+	private static class BigRoot extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BigRoot() {
-			super.name = "Big Root";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 8;
-			super.desc = "A Pok\u00e9mon held item that boosts the power of HP-stealing moves to let the holder recover more HP.";
+		public BigRoot()
+		{
+			super("Big Root", "A Pok\u00e9mon held item that boosts the power of HP-stealing moves to let the holder recover more HP.", BagCategory.MISC, 8);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class BindingBand extends Item implements HoldItem {
+	private static class BindingBand extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BindingBand() {
-			super.name = "Binding Band";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 9;
-			super.desc = "This item, when attached to a Pok\u00e9mon, increases damage caused by moves that constrict the opponent.";
+		public BindingBand()
+		{
+			super("Binding Band", "This item, when attached to a Pok\u00e9mon, increases damage caused by moves that constrict the opponent.", BagCategory.MISC, 9);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class BlackSludge extends Item implements HoldItem,
-			EndTurnEffect {
+	private static class BlackSludge extends Item implements HoldItem, EndTurnEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BlackSludge() {
-			super.name = "Black Sludge";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 10;
-			super.desc = "A held item that gradually restores the HP of Poison-type Pok\u00e9mon. It inflicts damage on all other types.";
+		public BlackSludge()
+		{
+			super("Black Sludge", "A held item that gradually restores the HP of Poison-type Pok\u00e9mon. It inflicts damage on all other types.", BagCategory.MISC, 10);
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b) {
-			if (victim.isType(b, Type.POISON)) {
-				if (victim.fullHealth())
-					return;
-				victim.healHealthFraction(1 / 16.0);
-				b.addMessage(victim.getName() + "'s HP was restored by its "
-						+ this.name + "!", victim.getHP(), victim.user());
-			} else if (!victim.hasAbility("Magic Guard")) {
-				b.addMessage(victim.getName()
-						+ " lost some of its HP due to its " + this.name + "!");
-				victim.reduceHealthFraction(b, 1 / 8.0);
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.isType(b, Type.POISON))
+			{
+				if (victim.fullHealth()) return;
+				victim.healHealthFraction(1/16.0);
+				b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+			}
+			else if (!victim.hasAbility("Magic Guard"))
+			{
+				b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
+				victim.reduceHealthFraction(b, 1/8.0);
 			}
 		}
-
-		public int flingDamage() {
-			return 30;
-		}
 	}
 
-	private static class BrightPowder extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class BrightPowder extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BrightPowder() {
-			super.name = "Bright Powder";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 11;
-			super.desc = "An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opponent's accuracy.";
+		public BrightPowder()
+		{
+			super("Bright Powder", "An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opponent's accuracy.", BagCategory.MISC, 11);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.EVASION)
-				stat *= 1.1;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.EVASION) stat *= 1.1;
 			return stat;
 		}
 	}
 
-	private static class CellBattery extends TypeDamageStatIncreaseItem {
+	private static class CellBattery extends Item implements HoldItem, ConsumedItem, TakeDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public CellBattery() {
-			super.name = "Cell Battery";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 12;
-			super.desc = "A consumable battery. If the holder is hit by an Electric-type move, its Attack will rise.";
+		public CellBattery()
+		{
+			super("Cell Battery", "A consumable battery. If the holder is hit by an Electric-type move, its Attack will rise.", BagCategory.MISC, 12);
 			super.price = 200;
 		}
 
-		public Type damageType() {
+		public Stat toIncrease()
+		{
+			return Stat.ATTACK;
+		}
+
+		public Type damageType()
+		{
 			return Type.ELECTRIC;
 		}
 
-		public Stat toIncrease() {
-			return Stat.ATTACK;
+		public int flingDamage()
+		{
+			return 30;
 		}
 
-		public int flingDamage() {
-			return 30;
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().getType(b, user) == damageType() && victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.HELD_ITEM))
+			{
+				victim.consumeItem(b);
+			}
 		}
 	}
 
-	private static class ChoiceBand extends ChoiceItem {
+	private static class ChoiceBand extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ChoiceBand() {
-			super.name = "Choice Band";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 13;
-			super.desc = "An item to be held by a Pok\u00e9mon. This headband ups Attack, but allows the use of only one of its moves.";
+		public ChoiceBand()
+		{
+			super("Choice Band", "An item to be held by a Pok\u00e9mon. This headband ups Attack, but allows the use of only one of its moves.", BagCategory.MISC, 13);
 			super.price = 100;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.ATTACK;
 		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == toIncrease())
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
+		}
+
+		public boolean usable(ActivePokemon p, Move m)
+		{
+			Move last = p.getAttributes().getLastMoveUsed();
+			if (last == null || m == last)
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		public String getUnusableMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
 	}
 
-	private static class ChoiceScarf extends ChoiceItem {
+	private static class ChoiceScarf extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ChoiceScarf() {
-			super.name = "Choice Scarf";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 14;
-			super.desc = "An item to be held by a Pok\u00e9mon. This scarf boosts Speed, but allows the use of only one of its moves.";
+		public ChoiceScarf()
+		{
+			super("Choice Scarf", "An item to be held by a Pok\u00e9mon. This scarf boosts Speed, but allows the use of only one of its moves.", BagCategory.MISC, 14);
 			super.price = 200;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SPEED;
 		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == toIncrease())
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
+		}
+
+		public boolean usable(ActivePokemon p, Move m)
+		{
+			Move last = p.getAttributes().getLastMoveUsed();
+			if (last == null || m == last)
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		public String getUnusableMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
 	}
 
-	private static class ChoiceSpecs extends ChoiceItem {
+	private static class ChoiceSpecs extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ChoiceSpecs() {
-			super.name = "Choice Specs";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 15;
-			super.desc = "An item to be held by a Pok\u00e9mon. These distinctive glasses boost Sp. Atk but allow the use of only one of its moves.";
+		public ChoiceSpecs()
+		{
+			super("Choice Specs", "An item to be held by a Pok\u00e9mon. These distinctive glasses boost Sp. Atk but allow the use of only one of its moves.", BagCategory.MISC, 15);
 			super.price = 200;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SP_ATTACK;
 		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == toIncrease())
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
+		}
+
+		public boolean usable(ActivePokemon p, Move m)
+		{
+			Move last = p.getAttributes().getLastMoveUsed();
+			if (last == null || m == last)
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		public String getUnusableMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
 	}
 
-	private static class CleanseTag extends Item implements HoldItem,
-			RepellingEffect {
+	private static class CleanseTag extends Item implements HoldItem, RepellingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public CleanseTag() {
-			super.name = "Cleanse Tag";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 16;
-			super.desc = "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.";
+		public CleanseTag()
+		{
+			super("Cleanse Tag", "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 16);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public double chance() {
+		public double chance()
+		{
 			return .33;
 		}
 	}
 
-	private static class DampRock extends Item implements HoldItem,
-			WeatherExtendingEffect {
+	private static class DampRock extends Item implements HoldItem, WeatherExtendingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DampRock() {
-			super.name = "Damp Rock";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 17;
-			super.desc = "A Pok\u00e9mon held item that extends the duration of the move Rain Dance used by the holder.";
+		public DampRock()
+		{
+			super("Damp Rock", "A Pok\u00e9mon held item that extends the duration of the move Rain Dance used by the holder.", BagCategory.MISC, 17);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 60;
 		}
 
-		public WeatherType getWeatherType() {
+		public WeatherType getWeatherType()
+		{
 			return WeatherType.RAINING;
 		}
 	}
 
-	private static class HeatRock extends Item implements HoldItem,
-			WeatherExtendingEffect {
+	private static class HeatRock extends Item implements HoldItem, WeatherExtendingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public HeatRock() {
-			super.name = "Heat Rock";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 18;
-			super.desc = "A Pok\u00e9mon held item that extends the duration of the move Sunny Day used by the holder.";
+		public HeatRock()
+		{
+			super("Heat Rock", "A Pok\u00e9mon held item that extends the duration of the move Sunny Day used by the holder.", BagCategory.MISC, 18);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 60;
 		}
 
-		public WeatherType getWeatherType() {
+		public WeatherType getWeatherType()
+		{
 			return WeatherType.SUNNY;
 		}
 	}
 
-	private static class IcyRock extends Item implements HoldItem,
-			WeatherExtendingEffect {
+	private static class IcyRock extends Item implements HoldItem, WeatherExtendingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public IcyRock() {
-			super.name = "Icy Rock";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 19;
-			super.desc = "A Pok\u00e9mon held item that extends the duration of the move Hail used by the holder.";
+		public IcyRock()
+		{
+			super("Icy Rock", "A Pok\u00e9mon held item that extends the duration of the move Hail used by the holder.", BagCategory.MISC, 19);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 40;
 		}
 
-		public WeatherType getWeatherType() {
+		public WeatherType getWeatherType()
+		{
 			return WeatherType.HAILING;
 		}
 	}
 
-	private static class SmoothRock extends Item implements HoldItem,
-			WeatherExtendingEffect {
+	private static class SmoothRock extends Item implements HoldItem, WeatherExtendingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SmoothRock() {
-			super.name = "Smooth Rock";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 20;
-			super.desc = "A Pok\u00e9mon held item that extends the duration of the move Sandstorm used by the holder.";
+		public SmoothRock()
+		{
+			super("Smooth Rock", "A Pok\u00e9mon held item that extends the duration of the move Sandstorm used by the holder.", BagCategory.MISC, 20);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public WeatherType getWeatherType() {
+		public WeatherType getWeatherType()
+		{
 			return WeatherType.SANDSTORM;
 		}
 	}
 
-	private static class EjectButton extends Item implements HoldItem,
-			TakeDamageEffect {
+	private static class EjectButton extends Item implements HoldItem, TakeDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public EjectButton() {
-			super.name = "Eject Button";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 21;
-			super.desc = "If the holder is hit by an attack, it will switch with another Pok\u00e9mon in your party.";
+		public EjectButton()
+		{
+			super("Eject Button", "If the holder is hit by an attack, it will switch with another Pok\u00e9mon in your party.", BagCategory.MISC, 21);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
 			Team t = b.getTrainer(victim.user());
-			if (t instanceof WildPokemon)
-				return;
-
-			Trainer trainer = (Trainer) t;
-			if (!trainer.hasRemainingPokemon())
-				return;
-
-			b.addMessage(victim.getName() + "'s " + this.name
-					+ " sent it back to " + trainer.getName() + "!");
+			if (t instanceof WildPokemon) return;
+			
+			Trainer trainer = (Trainer)t;
+			if (!trainer.hasRemainingPokemon()) return;
+			
+			b.addMessage(victim.getName() + "'s " + this.name + " sent it back to " + trainer.getName() + "!");
 			victim.consumeItem(b);
 			trainer.switchToRandom();
 			trainer.setAction(Action.SWITCH);
@@ -1251,712 +1074,774 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DestinyKnot extends Item implements HoldItem {
+	private static class DestinyKnot extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DestinyKnot() {
-			super.name = "Destiny Knot";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 22;
-			super.desc = "A long, thin, bright-red string to be held by a Pok\u00e9mon. If the holder becomes infatuated, the foe does too.";
+		public DestinyKnot()
+		{
+			super("Destiny Knot", "A long, thin, bright-red string to be held by a Pok\u00e9mon. If the holder becomes infatuated, the foe does too.", BagCategory.MISC, 22);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class ExpertBelt extends Item implements HoldItem,
-			PowerChangeEffect {
+	private static class ExpertBelt extends Item implements HoldItem, PowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ExpertBelt() {
-			super.name = "Expert Belt";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 23;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a well-worn belt that slightly boosts the power of supereffective moves.";
+		public ExpertBelt()
+		{
+			super("Expert Belt", "An item to be held by a Pok\u00e9mon. It is a well-worn belt that slightly boosts the power of supereffective moves.", BagCategory.MISC, 23);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			return Type.getAdvantage(user.getAttack().getType(b, user), victim,
-					b) > 1 ? 1.2 : 1;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1 ? 1.2 : 1;
 		}
 	}
 
-	private static class FlameOrb extends Item implements HoldItem,
-			EndTurnEffect {
+	private static class FlameOrb extends Item implements HoldItem, EndTurnEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FlameOrb() {
-			super.name = "Flame Orb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 24;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.";
+		public FlameOrb()
+		{
+			super("Flame Orb", "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.", BagCategory.MISC, 24);
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b) {
-			Status.giveStatus(b, victim, victim, StatusCondition.BURNED,
-					victim.getName() + " was burned by its " + this.name + "!");
-		}
-
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
+		}
 	}
 
-	private static class ToxicOrb extends Item implements HoldItem,
-			EndTurnEffect {
+	private static class ToxicOrb extends Item implements HoldItem, EndTurnEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ToxicOrb() {
-			super.name = "Toxic Orb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 25;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.";
+		public ToxicOrb()
+		{
+			super("Toxic Orb", "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.", BagCategory.MISC, 25);
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b) {
-			if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
-				victim.addEffect(PokemonEffect.getEffect("BadPoison")
-						.newInstance());
-				Status.giveStatus(b, victim, victim, StatusCondition.POISONED,
-						victim.getName() + " was badly poisoned by its "
-								+ this.name + "!");
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (Status.applies(StatusCondition.POISONED, b, victim, victim))
+			{
+				victim.addEffect(PokemonEffect.getEffect("BadPoison").newInstance());
+				Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 			}
 		}
-
-		public int flingDamage() {
-			return 10;
-		}
 	}
 
-	private static class FloatStone extends Item implements HoldItem {
+	private static class FloatStone extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FloatStone() {
-			super.name = "Float Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 26;
-			super.desc = "This item, when attached to a Pok\u00e9mon, halves the Pok\u00e9mon's weight for use with attacks that deal with weight";
+		public FloatStone()
+		{
+			super("Float Stone", "This item, when attached to a Pok\u00e9mon, halves the Pok\u00e9mon's weight for use with attacks that deal with weight", BagCategory.MISC, 26);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class FocusBand extends Item implements HoldItem,
-			BracingEffect {
+	private static class FocusBand extends Item implements HoldItem, BracingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FocusBand() {
-			super.name = "Focus Band";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 27;
-			super.desc = "An item to be held by a Pok\u00e9mon. The holder may endure a potential KO attack, leaving it with just 1 HP.";
+		public FocusBand()
+		{
+			super("Focus Band", "An item to be held by a Pok\u00e9mon. The holder may endure a potential KO attack, leaving it with just 1 HP.", BagCategory.MISC, 27);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer,
-				Boolean fullHealth) {
-			return Math.random() * 100 < 10;
+		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
+		{
+			return Math.random()*100 < 10;
 		}
 
-		public String braceMessage(ActivePokemon bracer) {
+		public String braceMessage(ActivePokemon bracer)
+		{
 			return bracer.getName() + " held on with its " + this.name + "!";
 		}
 	}
 
-	private static class FocusSash extends Item implements HoldItem,
-			ConsumedItem, BracingEffect {
+	private static class FocusSash extends Item implements HoldItem, ConsumedItem, BracingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FocusSash() {
-			super.name = "Focus Sash";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 28;
-			super.desc = "An item to be held by a Pok\u00e9mon. If it has full HP, the holder will endure one potential KO attack, leaving 1 HP.";
+		public FocusSash()
+		{
+			super("Focus Sash", "An item to be held by a Pok\u00e9mon. If it has full HP, the holder will endure one potential KO attack, leaving 1 HP.", BagCategory.MISC, 28);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer,
-				Boolean fullHealth) {
-			if (fullHealth) {
+		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
+		{
+			if (fullHealth)
+			{
 				bracer.consumeItem(b);
 				return true;
 			}
 			return false;
 		}
 
-		public String braceMessage(ActivePokemon bracer) {
+		public String braceMessage(ActivePokemon bracer)
+		{
 			return bracer.getName() + " held on with its " + this.name + "!";
 		}
 	}
 
-	private static class GripClaw extends Item implements HoldItem {
+	private static class GripClaw extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GripClaw() {
-			super.name = "Grip Claw";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 29;
-			super.desc = "A Pok\u00e9mon held item that extends the duration of multiturn attacks like Bind and Wrap.";
+		public GripClaw()
+		{
+			super("Grip Claw", "A Pok\u00e9mon held item that extends the duration of multiturn attacks like Bind and Wrap.", BagCategory.MISC, 29);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class GriseousOrb extends Item implements HoldItem,
-			PowerChangeEffect {
+	private static class GriseousOrb extends Item implements HoldItem, PowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GriseousOrb() {
-			super.name = "Griseous Orb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 30;
-			super.desc = "A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.";
+		public GriseousOrb()
+		{
+			super("Griseous Orb", "A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.", BagCategory.MISC, 30);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 60;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			if (user.isPokemon("Giratina")) {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.isPokemon("Giratina"))
+			{
 				Type t = user.getAttack().getType(b, user);
-				if (t == Type.DRAGON || t == Type.GHOST)
-					return 1.2;
+				if (t == Type.DRAGON || t == Type.GHOST) return 1.2;
 			}
 			return 1;
 		}
 	}
 
-	private static class IronBall extends Item implements HoldItem,
-			GroundedEffect, StatChangingEffect {
+	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public IronBall() {
-			super.name = "Iron Ball";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 31;
-			super.desc = "A Pok\u00e9mon held item that cuts Speed. It makes Flying-type and levitating holders susceptible to Ground moves.";
+		public IronBall()
+		{
+			super("Iron Ball", "A Pok\u00e9mon held item that cuts Speed. It makes Flying-type and levitating holders susceptible to Ground moves.", BagCategory.MISC, 31);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 130;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.SPEED)
-				stat *= .5;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.SPEED) stat *= .5;
 			return stat;
 		}
 	}
 
-	private static class LaggingTail extends Item implements HoldItem,
-			StallingEffect {
+	private static class LaggingTail extends Item implements HoldItem, StallingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LaggingTail() {
-			super.name = "Lagging Tail";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 32;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is tremendously heavy and makes the holder move slower than usual.";
+		public LaggingTail()
+		{
+			super("Lagging Tail", "An item to be held by a Pok\u00e9mon. It is tremendously heavy and makes the holder move slower than usual.", BagCategory.MISC, 32);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class LifeOrb extends Item implements HoldItem,
-			PowerChangeEffect, ApplyDamageEffect {
+	private static class LifeOrb extends Item implements HoldItem, PowerChangeEffect, ApplyDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LifeOrb() {
-			super.name = "Life Orb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 33;
-			super.desc = "An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.";
+		public LifeOrb()
+		{
+			super("Life Orb", "An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.", BagCategory.MISC, 33);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			return 5324.0 / 4096.0;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return 5324.0/4096.0;
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, Integer damage) {
-			if (user.hasAbility("Magic Guard"))
-				return;
+		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+		{
+			if (user.hasAbility("Magic Guard")) return;
 			b.addMessage(user.getName() + " was hurt by its " + this.name + "!");
 			user.reduceHealthFraction(b, .1);
 		}
 	}
 
-	private static class LightBall extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class LightBall extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LightBall() {
-			super.name = "Light Ball";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 34;
-			super.desc = "An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.";
+		public LightBall()
+		{
+			super("Light Ball", "An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.", BagCategory.MISC, 34);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if ((s == Stat.ATTACK || s == Stat.SP_ATTACK)
-					&& p.isPokemon("Pikachu"))
-				stat *= 2;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if ((s == Stat.ATTACK || s == Stat.SP_ATTACK) && p.isPokemon("Pikachu")) stat *= 2;
 			return stat;
 		}
 	}
 
-	private static class LightClay extends Item implements HoldItem {
+	private static class LightClay extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LightClay() {
-			super.name = "Light Clay";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 35;
-			super.desc = "A Pok\u00e9mon held item that extends the duration of barrier moves like Light Screen and Reflect used by the holder.";
+		public LightClay()
+		{
+			super("Light Clay", "A Pok\u00e9mon held item that extends the duration of barrier moves like Light Screen and Reflect used by the holder.", BagCategory.MISC, 35);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class LuckyEgg extends Item implements HoldItem {
+	private static class LuckyEgg extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LuckyEgg() {
-			super.name = "Lucky Egg";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 36;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is an egg filled with happiness that earns extra Exp. Points in battle.";
+		public LuckyEgg()
+		{
+			super("Lucky Egg", "An item to be held by a Pok\u00e9mon. It is an egg filled with happiness that earns extra Exp. Points in battle.", BagCategory.MISC, 36);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class LuckyPunch extends Item implements HoldItem,
-			CritStageEffect {
+	private static class LuckyPunch extends Item implements HoldItem, CritStageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LuckyPunch() {
-			super.name = "Lucky Punch";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 37;
-			super.desc = "An item to be held by Chansey. It is a pair of gloves that boosts Chansey's critical-hit ratio.";
+		public LuckyPunch()
+		{
+			super("Lucky Punch", "An item to be held by Chansey. It is a pair of gloves that boosts Chansey's critical-hit ratio.", BagCategory.MISC, 37);
 			super.price = 10;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 40;
 		}
 
-		public int increaseCritStage(ActivePokemon p) {
-			if (p.isPokemon("Chansey"))
-				return 2;
+		public int increaseCritStage(ActivePokemon p)
+		{
+			if (p.isPokemon("Chansey")) return 2;
 			return 0;
 		}
 	}
 
-	private static class MachoBrace extends PowerItem implements HoldItem {
+	private static class MachoBrace extends Item implements PowerItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public int[] getEVs(int[] vals) {
-			for (int i = 0; i < vals.length; i++)
-				vals[i] *= 2;
-			return vals;
-		}
-
-		public Stat toIncrease() {
-			Global.error("toIncrease() method in Macho Brace should never be called.");
-			return null;
-		}
-
-		public MachoBrace() {
-			super.name = "Macho Brace";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 38;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.";
+		public MachoBrace()
+		{
+			super("Macho Brace", "An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.", BagCategory.MISC, 38);
 			super.price = 3000;
 		}
 
-		public int flingDamage() {
+		public int[] getEVs(int[] vals)
+		{
+			for (int i = 0; i < vals.length; i++)
+			{
+				vals[i] *= 2;
+			}
+			
+			return vals;
+		}
+
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			if (s.equals(Stat.SPEED))
+			{
+				return stat / 2;
+			}
+			
+			return stat;
+		}
+
+		public Stat toIncrease()
+		{
+			Global.error("toIncrease() method in " + super.name +" is unimplemented.");
+			return null;
+		}
+
+		public int flingDamage()
+		{
 			return 60;
 		}
 	}
 
-	private static class MentalHerb extends Item implements HoldItem,
-			EndTurnEffect {
+	private static class MentalHerb extends Item implements HoldItem, EndTurnEffect
+	{
 		private static final long serialVersionUID = 1L;
-		String[] effects = { "Infatuated", "Disable", "Taunt", "Encore",
-				"Torment", "Confusion" };
-		String[] messages = { "infatuated", "disabled",
-				"under the effects of taunt", "under the effects of encore",
-				"under the effects of torment", "confused" };
+		String[] effects = {"Infatuated", "Disable", "Taunt", "Encore", "Torment", "Confusion"};
+		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused"};
 
-		public MentalHerb() {
-			super.name = "Mental Herb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 39;
-			super.desc = "An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.";
+		public MentalHerb()
+		{
+			super("Mental Herb", "An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.", BagCategory.MISC, 39);
 			super.price = 100;
 		}
 
-		public void apply(ActivePokemon victim, Battle b) {
-			boolean used = false;
-			for (int i = 0; i < effects.length; i++) {
-				String s = effects[i];
-				if (victim.hasEffect(s)) {
-					used = true;
-					victim.getAttributes().removeEffect(s);
-					b.addMessage(victim.getName() + " is no longer "
-							+ messages[i] + " due to its " + this.name + "!");
-				}
-			}
-			if (used)
-				victim.consumeItem(b);
+		public int flingDamage()
+		{
+			return 10;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			boolean used = false;
+			for (int i = 0; i < effects.length; i++)
+			{
+				String s = effects[i];
+				if (victim.hasEffect(s))
+				{
+					used = true;
+					victim.getAttributes().removeEffect(s);
+					b.addMessage(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
+				}
+			}
+			if (used) victim.consumeItem(b);
 		}
 	}
 
-	private static class MetalPowder extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class MetalPowder extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MetalPowder() {
-			super.name = "Metal Powder";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 40;
-			super.desc = "When this item is held by a Ditto, the holder's initial Defence & Special Defence stats are increased by 50%";
+		public MetalPowder()
+		{
+			super("Metal Powder", "When this item is held by a Ditto, the holder's initial Defence & Special Defence stats are increased by 50%", BagCategory.MISC, 40);
 			super.price = 10;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE)
-					&& p.isPokemon("Ditto"))
-				stat *= 1.5;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.isPokemon("Ditto")) stat *= 1.5;
 			return stat;
 		}
 	}
 
-	private static class Metronome extends Item implements HoldItem,
-			PowerChangeEffect {
+	private static class Metronome extends Item implements HoldItem, PowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Metronome() {
-			super.name = "Metronome";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 41;
-			super.desc = "A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.";
+		public Metronome()
+		{
+			super("Metronome", "A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.", BagCategory.MISC, 41);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			return Math.min(2, 1 + .2 * (user.getAttributes().getCount() - 1));
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return Math.min(2, 1 + .2*(user.getAttributes().getCount() - 1));
 		}
 	}
 
-	private static class MuscleBand extends Item implements HoldItem,
-			PowerChangeEffect {
+	private static class MuscleBand extends Item implements HoldItem, PowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MuscleBand() {
-			super.name = "Muscle Band";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 42;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a headband that slightly boosts the power of physical moves.";
+		public MuscleBand()
+		{
+			super("Muscle Band", "An item to be held by a Pok\u00e9mon. It is a headband that slightly boosts the power of physical moves.", BagCategory.MISC, 42);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			return user.getAttack().getCategory() == Category.PHYSICAL ? 1.1
-					: 1;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return user.getAttack().getCategory() == Category.PHYSICAL ? 1.1 : 1;
 		}
 	}
 
-	private static class PowerAnklet extends PowerItem implements HoldItem {
+	private static class PowerAnklet extends Item implements PowerItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PowerAnklet() {
-			super.name = "Power Anklet";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 43;
-			super.desc = "A Pok\u00e9mon held item that promotes Speed gain on leveling, but reduces the Speed stat.";
+		public PowerAnklet()
+		{
+			super("Power Anklet", "A Pok\u00e9mon held item that promotes Speed gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 43);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public int[] getEVs(int[] vals)
+		{
+			vals[toIncrease().index()] += 4;
+			return vals;
+		}
+
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			if (s.equals(Stat.SPEED))
+			{
+				return stat / 2;
+			}
+			
+			return stat;
+		}
+
+		public Stat toIncrease()
+		{
 			return Stat.SPEED;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 70;
 		}
 	}
 
-	private static class PowerBand extends PowerItem implements HoldItem {
+	private static class PowerBand extends Item implements PowerItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PowerBand() {
-			super.name = "Power Band";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 44;
-			super.desc = "A Pok\u00e9mon held item that promotes Sp. Def gain on leveling, but reduces the Speed stat.";
+		public PowerBand()
+		{
+			super("Power Band", "A Pok\u00e9mon held item that promotes Sp. Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 44);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public int[] getEVs(int[] vals)
+		{
+			vals[toIncrease().index()] += 4;
+			return vals;
+		}
+
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			if (s.equals(Stat.SPEED))
+			{
+				return stat / 2;
+			}
+			
+			return stat;
+		}
+
+		public Stat toIncrease()
+		{
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 70;
 		}
 	}
 
-	private static class PowerBelt extends PowerItem implements HoldItem {
+	private static class PowerBelt extends Item implements PowerItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PowerBelt() {
-			super.name = "Power Belt";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 45;
-			super.desc = "A Pok\u00e9mon held item that promotes Def gain on leveling, but reduces the Speed stat.";
+		public PowerBelt()
+		{
+			super("Power Belt", "A Pok\u00e9mon held item that promotes Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 45);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public int[] getEVs(int[] vals)
+		{
+			vals[toIncrease().index()] += 4;
+			return vals;
+		}
+
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			if (s.equals(Stat.SPEED))
+			{
+				return stat / 2;
+			}
+			
+			return stat;
+		}
+
+		public Stat toIncrease()
+		{
 			return Stat.DEFENSE;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 70;
 		}
 	}
 
-	private static class PowerBracer extends PowerItem implements HoldItem {
+	private static class PowerBracer extends Item implements PowerItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PowerBracer() {
-			super.name = "Power Bracer";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 46;
-			super.desc = "A Pok\u00e9mon held item that promotes Att gain on leveling, but reduces the Speed stat.";
+		public PowerBracer()
+		{
+			super("Power Bracer", "A Pok\u00e9mon held item that promotes Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 46);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public int[] getEVs(int[] vals)
+		{
+			vals[toIncrease().index()] += 4;
+			return vals;
+		}
+
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			if (s.equals(Stat.SPEED))
+			{
+				return stat / 2;
+			}
+			
+			return stat;
+		}
+
+		public Stat toIncrease()
+		{
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 70;
 		}
 	}
 
-	private static class PowerLens extends PowerItem implements HoldItem {
+	private static class PowerLens extends Item implements PowerItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PowerLens() {
-			super.name = "Power Lens";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 47;
-			super.desc = "A Pok\u00e9mon held item that promotes Sp. Att gain on leveling, but reduces the Speed stat.";
+		public PowerLens()
+		{
+			super("Power Lens", "A Pok\u00e9mon held item that promotes Sp. Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 47);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public int[] getEVs(int[] vals)
+		{
+			vals[toIncrease().index()] += 4;
+			return vals;
+		}
+
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			if (s.equals(Stat.SPEED))
+			{
+				return stat / 2;
+			}
+			
+			return stat;
+		}
+
+		public Stat toIncrease()
+		{
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 70;
 		}
 	}
 
-	private static class PowerWeight extends PowerItem implements HoldItem {
+	private static class PowerWeight extends Item implements PowerItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PowerWeight() {
-			super.name = "Power Weight";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 48;
-			super.desc = "A Pok\u00e9mon held item that promotes HP gain on leveling, but reduces the Speed stat.";
+		public PowerWeight()
+		{
+			super("Power Weight", "A Pok\u00e9mon held item that promotes HP gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 48);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public int[] getEVs(int[] vals)
+		{
+			vals[toIncrease().index()] += 4;
+			return vals;
+		}
+
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			if (s.equals(Stat.SPEED))
+			{
+				return stat / 2;
+			}
+			
+			return stat;
+		}
+
+		public Stat toIncrease()
+		{
 			return Stat.HP;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 70;
 		}
 	}
 
-	private static class QuickClaw extends Item implements HoldItem {
+	private static class QuickClaw extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public QuickClaw() {
-			super.name = "Quick Claw";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 49;
-			super.desc = "An item to be held by a Pok\u00e9mon. A light, sharp claw that lets the bearer move first occasionally.";
+		public QuickClaw()
+		{
+			super("Quick Claw", "An item to be held by a Pok\u00e9mon. A light, sharp claw that lets the bearer move first occasionally.", BagCategory.MISC, 49);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 80;
 		}
 	}
 
-	private static class QuickPowder extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class QuickPowder extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public QuickPowder() {
-			super.name = "Quick Powder";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 50;
-			super.desc = "An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.";
+		public QuickPowder()
+		{
+			super("Quick Powder", "An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.", BagCategory.MISC, 50);
 			super.price = 10;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.SPEED && p.isPokemon("Ditto"))
-				stat *= 1.5;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.SPEED && p.isPokemon("Ditto")) stat *= 1.5;
 			return stat;
 		}
 	}
 
-	private static class RedCard extends Item implements HoldItem,
-			TakeDamageEffect {
+	private static class RedCard extends Item implements HoldItem, TakeDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RedCard() {
-			super.name = "Red Card";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 51;
-			super.desc = "A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.";
+		public RedCard()
+		{
+			super("Red Card", "A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.", BagCategory.MISC, 51);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
 			Team t = b.getTrainer(user.user());
-			if (t instanceof WildPokemon)
-				return;
-
-			Trainer trainer = (Trainer) t;
-			if (!trainer.hasRemainingPokemon())
-				return;
-
-			b.addMessage(victim.getName() + "'s " + this.name + " sent "
-					+ user.getName() + " back to " + trainer.getName() + "!");
+			if (t instanceof WildPokemon) return;
+			
+			Trainer trainer = (Trainer)t;
+			if (!trainer.hasRemainingPokemon()) return;
+			
+			b.addMessage(victim.getName() + "'s " + this.name + " sent " + user.getName() + " back to " + trainer.getName() + "!");
 			victim.consumeItem(b);
 			trainer.switchToRandom();
 			trainer.setAction(Action.SWITCH);
@@ -1965,3221 +1850,4690 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RingTarget extends Item implements HoldItem {
+	private static class RingTarget extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RingTarget() {
-			super.name = "Ring Target";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 52;
-			super.desc = "Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.";
+		public RingTarget()
+		{
+			super("Ring Target", "Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.", BagCategory.MISC, 52);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class RockyHelmet extends Item implements HoldItem,
-			PhysicalContactEffect {
+	private static class RockyHelmet extends Item implements HoldItem, PhysicalContactEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RockyHelmet() {
-			super.name = "Rocky Helmet";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 53;
-			super.desc = "If the holder of this item takes damage, the attacker will also be damaged upon contact.";
+		public RockyHelmet()
+		{
+			super("Rocky Helmet", "If the holder of this item takes damage, the attacker will also be damaged upon contact.", BagCategory.MISC, 53);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 60;
 		}
 
-		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			b.addMessage(user.getName() + " was hurt by " + victim.getName()
-					+ "'s " + this.name + "!");
-			user.reduceHealthFraction(b, 1 / 8.0);
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+			user.reduceHealthFraction(b, 1/8.0);
 		}
 	}
 
-	private static class SafetyGoggles extends Item implements HoldItem,
-			EffectBlockerEffect, WeatherBlockerEffect {
+	private static class SafetyGoggles extends Item implements HoldItem, EffectBlockerEffect, WeatherBlockerEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SafetyGoggles() {
-			super.name = "Safety Goggles";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 54;
-			super.desc = "An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.";
+		public SafetyGoggles()
+		{
+			super("Safety Goggles", "An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.", BagCategory.MISC, 54);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public boolean validMove(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			if (!user.getAttack().isMoveType("Powder"))
-				return true;
-			if (user.getAttack().getCategory() == Category.STATUS)
-				b.addMessage(victim.getName() + "'s " + this.name
-						+ " protects it from powder moves!");
+		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (!user.getAttack().isMoveType("Powder")) return true;
+			if (user.getAttack().getCategory() == Category.STATUS) b.addMessage(victim.getName() + "'s " + this.name + " protects it from powder moves!");
 			return false;
 		}
 
-		public boolean block(WeatherType weather) {
+		public boolean block(WeatherType weather)
+		{
 			return true;
 		}
 	}
 
-	private static class ScopeLens extends Item implements HoldItem,
-			CritStageEffect {
+	private static class ScopeLens extends Item implements HoldItem, CritStageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ScopeLens() {
-			super.name = "Scope Lens";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 55;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.";
+		public ScopeLens()
+		{
+			super("Scope Lens", "An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.", BagCategory.MISC, 55);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public int increaseCritStage(ActivePokemon p) {
+		public int increaseCritStage(ActivePokemon p)
+		{
 			return 1;
 		}
 	}
 
-	private static class ShedShell extends Item implements HoldItem {
+	private static class ShedShell extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ShedShell() {
-			super.name = "Shed Shell";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 56;
-			super.desc = "A tough, discarded carapace to be held by a Pok\u00e9mon. It enables the holder to switch with a waiting Pok\u00e9mon in battle.";
+		public ShedShell()
+		{
+			super("Shed Shell", "A tough, discarded carapace to be held by a Pok\u00e9mon. It enables the holder to switch with a waiting Pok\u00e9mon in battle.", BagCategory.MISC, 56);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class ShellBell extends Item implements HoldItem,
-			ApplyDamageEffect {
+	private static class ShellBell extends Item implements HoldItem, ApplyDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ShellBell() {
-			super.name = "Shell Bell";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 57;
-			super.desc = "An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.";
+		public ShellBell()
+		{
+			super("Shell Bell", "An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.", BagCategory.MISC, 57);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, Integer damage) {
-			if (user.fullHealth())
-				return;
-			user.heal((int) Math.ceil(damage / 8.0));
+		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+		{
+			if (user.fullHealth()) return;
+			user.heal((int)Math.ceil(damage/8.0));
 			// TODO: This looks really bad when paired with Explosion
-			b.addMessage(user.getName() + " restored some HP due to its "
-					+ this.name + "!", user.getHP(), user.user());
+			b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user.getHP(), user.user());
 		}
 	}
 
-	private static class SmokeBall extends Item implements HoldItem,
-			DefiniteEscape {
+	private static class SmokeBall extends Item implements HoldItem, DefiniteEscape
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SmokeBall() {
-			super.name = "Smoke Ball";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 58;
-			super.desc = "An item to be held by a Pok\u00e9mon. It enables the holder to flee from any wild Pok\u00e9mon without fail.";
+		public SmokeBall()
+		{
+			super("Smoke Ball", "An item to be held by a Pok\u00e9mon. It enables the holder to flee from any wild Pok\u00e9mon without fail.", BagCategory.MISC, 58);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Snowball extends TypeDamageStatIncreaseItem {
+	private static class Snowball extends Item implements HoldItem, ConsumedItem, TakeDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Snowball() {
-			super.name = "Snowball";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 59;
-			super.desc = "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.";
+		public Snowball()
+		{
+			super("Snowball", "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.", BagCategory.MISC, 59);
 			super.price = 200;
 		}
 
-		public Type damageType() {
-			return Type.ICE;
-		}
-
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage() {
+		public Type damageType()
+		{
+			return Type.ICE;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().getType(b, user) == damageType() && victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.HELD_ITEM))
+			{
+				victim.consumeItem(b);
+			}
 		}
 	}
 
-	private static class SoulDew extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class SoulDew extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SoulDew() {
-			super.name = "Soul Dew";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 60;
-			super.desc = "If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.";
+		public SoulDew()
+		{
+			super("Soul Dew", "If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.", BagCategory.MISC, 60);
 			super.price = 10;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if ((s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE)
-					&& (p.isPokemon("Latios") || p.isPokemon("Latias")))
-				stat *= 1.5;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if ((s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE) && (p.isPokemon("Latios") || p.isPokemon("Latias"))) stat *= 1.5;
 			return stat;
 		}
 	}
 
-	private static class Stick extends Item implements HoldItem,
-			CritStageEffect {
+	private static class Stick extends Item implements HoldItem, CritStageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Stick() {
-			super.name = "Stick";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 61;
-			super.desc = "An item to be held by Farfetch'd. It is a very long and stiff stalk of leek that boosts the critical-hit ratio.";
+		public Stick()
+		{
+			super("Stick", "An item to be held by Farfetch'd. It is a very long and stiff stalk of leek that boosts the critical-hit ratio.", BagCategory.MISC, 61);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 60;
 		}
 
-		public int increaseCritStage(ActivePokemon p) {
-			if (p.isPokemon("Farfetch'd"))
-				return 2;
+		public int increaseCritStage(ActivePokemon p)
+		{
+			if (p.isPokemon("Farfetch'd")) return 2;
 			return 0;
 		}
 	}
 
-	private static class StickyBarb extends Item implements HoldItem,
-			EndTurnEffect, PhysicalContactEffect, ItemCondition {
+	private static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemCondition
+	{
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
-		public StickyBarb() {
-			super.name = "Sticky Barb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 62;
-			super.desc = "A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.";
+		public StickyBarb()
+		{
+			super("Sticky Barb", "A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.", BagCategory.MISC, 62);
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b) {
-			if (victim.hasAbility("Magic Guard"))
-				return;
-			b.addMessage(victim.getName() + " was hurt by its " + this.name
-					+ "!");
-			victim.reduceHealthFraction(b, 1 / 8.0);
-		}
-
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 80;
 		}
 
-		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!user.hasAbility("Magic Guard")) {
-				b.addMessage(user.getName() + " was hurt by "
-						+ victim.getName() + "'s " + this.name + "!");
-				user.reduceHealthFraction(b, 1 / 8.0);
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(victim.getName() + " was hurt by its " + this.name + "!");
+			victim.reduceHealthFraction(b, 1/8.0);
+		}
+
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (!user.hasAbility("Magic Guard"))
+			{
+				b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+				user.reduceHealthFraction(b, 1/8.0);
 			}
-
-			if (user.isHoldingItem(b) || user.isFainted(b))
-				return;
-			b.addMessage(victim.getName() + "s " + this.name + " latched onto "
-					+ user.getName() + "!");
-
-			if (b.isWildBattle()) {
+			
+			if (user.isHoldingItem(b) || user.isFainted(b)) return;
+			b.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
+			
+			if (b.isWildBattle())
+			{
 				victim.removeItem();
 				user.giveItem(this);
 				return;
 			}
-
+			
 			item = this;
-			PokemonEffect.getEffect("ChangeItem").cast(b, victim, user,
-					CastSource.HELD_ITEM, false);
+			PokemonEffect.getEffect("ChangeItem").cast(b, victim, user, CastSource.HELD_ITEM, false);
 			item = Item.noneItem();
-			PokemonEffect.getEffect("ChangeItem").cast(b, victim, victim,
-					CastSource.HELD_ITEM, false);
+			PokemonEffect.getEffect("ChangeItem").cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 
-		public Item getItem() {
+		public Item getItem()
+		{
 			return item;
 		}
 	}
 
-	private static class ThickClub extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class ThickClub extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ThickClub() {
-			super.name = "Thick Club";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 63;
-			super.desc = "An item to be held by Cubone or Marowak. It is a hard bone of some sort that boosts the Attack stat.";
+		public ThickClub()
+		{
+			super("Thick Club", "An item to be held by Cubone or Marowak. It is a hard bone of some sort that boosts the Attack stat.", BagCategory.MISC, 63);
 			super.price = 500;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.ATTACK
-					&& (p.isPokemon("Cubone") || p.isPokemon("Marowak")))
-				stat *= 2;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.ATTACK && (p.isPokemon("Cubone") || p.isPokemon("Marowak"))) stat *= 2;
 			return stat;
 		}
 	}
 
-	private static class WeaknessPolicy extends Item implements HoldItem,
-			TakeDamageEffect {
+	private static class WeaknessPolicy extends Item implements HoldItem, TakeDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public WeaknessPolicy() {
-			super.name = "Weakness Policy";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 64;
-			super.desc = "An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.";
+		public WeaknessPolicy()
+		{
+			super("Weakness Policy", "An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.", BagCategory.MISC, 64);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
-			if (Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1) {
-				victim.getAttributes().modifyStage(victim, victim, 2,
-						Stat.ATTACK, b, CastSource.HELD_ITEM);
-				victim.getAttributes().modifyStage(victim, victim, 2,
-						Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1)
+			{
+				victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
+				victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
 			}
 		}
 	}
 
-	private static class WhiteHerb extends Item implements HoldItem,
-			StatProtectingEffect {
+	private static class WhiteHerb extends Item implements HoldItem, StatProtectingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public WhiteHerb() {
-			super.name = "White Herb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 65;
-			super.desc = "An item to be held by a Pok\u00e9mon. It restores any lowered stat in battle. It can be used only once.";
+		public WhiteHerb()
+		{
+			super("White Herb", "An item to be held by a Pok\u00e9mon. It restores any lowered stat in battle. It can be used only once.", BagCategory.MISC, 65);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public boolean prevent(ActivePokemon caster, Stat stat) {
+		public boolean prevent(ActivePokemon caster, Stat stat)
+		{
 			return true;
 		}
 
-		public String preventionMessage(ActivePokemon p) {
-			return p.getName() + "'s " + this.name
-					+ " prevented its stats from being lowered!";
+		public String preventionMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + this.name + " prevented its stats from being lowered!";
 		}
 	}
 
-	private static class WideLens extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class WideLens extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public WideLens() {
-			super.name = "Wide Lens";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 66;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a magnifying lens that slightly boosts the accuracy of moves.";
+		public WideLens()
+		{
+			super("Wide Lens", "An item to be held by a Pok\u00e9mon. It is a magnifying lens that slightly boosts the accuracy of moves.", BagCategory.MISC, 66);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.ACCURACY)
-				stat *= 1.1;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.ACCURACY) stat *= 1.1;
 			return stat;
 		}
 	}
 
-	private static class WiseGlasses extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class WiseGlasses extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public WiseGlasses() {
-			super.name = "Wise Glasses";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 67;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a thick pair of glasses that slightly boosts the power of special moves.";
+		public WiseGlasses()
+		{
+			super("Wise Glasses", "An item to be held by a Pok\u00e9mon. It is a thick pair of glasses that slightly boosts the power of special moves.", BagCategory.MISC, 67);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.SP_ATTACK)
-				stat *= 1.1;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.SP_ATTACK) stat *= 1.1;
 			return stat;
 		}
 	}
 
-	private static class ZoomLens extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class ZoomLens extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ZoomLens() {
-			super.name = "Zoom Lens";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 68;
-			super.desc = "An item to be held by a Pok\u00e9mon. If the holder moves after its target, its accuracy will be boosted.";
+		public ZoomLens()
+		{
+			super("Zoom Lens", "An item to be held by a Pok\u00e9mon. If the holder moves after its target, its accuracy will be boosted.", BagCategory.MISC, 68);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.ACCURACY && !b.isFirstAttack())
-				stat *= 1.2;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.ACCURACY && !b.isFirstAttack()) stat *= 1.2;
 			return stat;
 		}
 	}
 
-	private static class FullIncense extends Item implements HoldItem,
-			StallingEffect {
+	private static class FullIncense extends Item implements HoldItem, StallingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FullIncense() {
-			super.name = "Full Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 69;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.";
+		public FullIncense()
+		{
+			super("Full Incense", "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.", BagCategory.MISC, 69);
 			super.price = 9600;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class LaxIncense extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class LaxIncense extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LaxIncense() {
-			super.name = "Lax Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 70;
-			super.desc = "An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.";
+		public LaxIncense()
+		{
+			super("Lax Incense", "An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.", BagCategory.MISC, 70);
 			super.price = 9600;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.EVASION)
-				stat *= 1.1;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.EVASION) stat *= 1.1;
 			return stat;
 		}
 	}
 
-	private static class LuckIncense extends Item implements HoldItem,
-			EntryEffect {
+	private static class LuckIncense extends Item implements HoldItem, EntryEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LuckIncense() {
-			super.name = "Luck Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 71;
-			super.desc = "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.";
+		public LuckIncense()
+		{
+			super("Luck Incense", "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 71);
 			super.price = 9600;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim,
-					CastSource.HELD_ITEM, false);
+		public void enter(Battle b, ActivePokemon victim)
+		{
+			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 	}
 
-	private static class OddIncense extends TypeEnhancingItem implements
-			HoldItem {
+	private static class OddIncense extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public OddIncense() {
-			super.name = "Odd Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 72;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.";
+		public OddIncense()
+		{
+			super("Odd Incense", "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.", BagCategory.MISC, 72);
 			super.price = 9600;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class PureIncense extends Item implements HoldItem,
-			RepellingEffect {
+	private static class PureIncense extends Item implements HoldItem, RepellingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PureIncense() {
-			super.name = "Pure Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 73;
-			super.desc = "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.";
+		public PureIncense()
+		{
+			super("Pure Incense", "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 73);
 			super.price = 9600;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
 
-		public double chance() {
+		public double chance()
+		{
 			return .33;
 		}
 	}
 
-	private static class RockIncense extends TypeEnhancingItem implements
-			HoldItem {
+	private static class RockIncense extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RockIncense() {
-			super.name = "Rock Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 74;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.";
+		public RockIncense()
+		{
+			super("Rock Incense", "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.", BagCategory.MISC, 74);
 			super.price = 9600;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ROCK;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class RoseIncense extends TypeEnhancingItem implements
-			HoldItem {
+	private static class RoseIncense extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RoseIncense() {
-			super.name = "Rose Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 75;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.";
+		public RoseIncense()
+		{
+			super("Rose Incense", "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.", BagCategory.MISC, 75);
 			super.price = 9600;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GRASS;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class SeaIncense extends TypeEnhancingItem implements
-			HoldItem {
+	private static class SeaIncense extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SeaIncense() {
-			super.name = "Sea Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 76;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.";
+		public SeaIncense()
+		{
+			super("Sea Incense", "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 76);
 			super.price = 9600;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.WATER;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class WaveIncense extends TypeEnhancingItem implements
-			HoldItem {
+	private static class WaveIncense extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public WaveIncense() {
-			super.name = "Wave Incense";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 77;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.";
+		public WaveIncense()
+		{
+			super("Wave Incense", "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 77);
 			super.price = 9600;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.WATER;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class DracoPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class DracoPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DracoPlate() {
-			super.name = "Draco Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 78;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dragon-type moves.";
+		public DracoPlate()
+		{
+			super("Draco Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dragon-type moves.", BagCategory.MISC, 78);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.DRAGON;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class DreadPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class DreadPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DreadPlate() {
-			super.name = "Dread Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 79;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dark-type moves.";
+		public DreadPlate()
+		{
+			super("Dread Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dark-type moves.", BagCategory.MISC, 79);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.DARK;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class EarthPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class EarthPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public EarthPlate() {
-			super.name = "Earth Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 80;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ground-type moves.";
+		public EarthPlate()
+		{
+			super("Earth Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ground-type moves.", BagCategory.MISC, 80);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GROUND;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class FistPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class FistPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FistPlate() {
-			super.name = "Fist Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 81;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fighting-type moves.";
+		public FistPlate()
+		{
+			super("Fist Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fighting-type moves.", BagCategory.MISC, 81);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class FlamePlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class FlamePlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FlamePlate() {
-			super.name = "Flame Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 82;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fire-type moves.";
+		public FlamePlate()
+		{
+			super("Flame Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fire-type moves.", BagCategory.MISC, 82);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FIRE;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class IciclePlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class IciclePlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public IciclePlate() {
-			super.name = "Icicle Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 83;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ice-type moves.";
+		public IciclePlate()
+		{
+			super("Icicle Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ice-type moves.", BagCategory.MISC, 83);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ICE;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class InsectPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class InsectPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public InsectPlate() {
-			super.name = "Insect Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 84;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Bug-type moves.";
+		public InsectPlate()
+		{
+			super("Insect Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Bug-type moves.", BagCategory.MISC, 84);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.BUG;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class IronPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class IronPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public IronPlate() {
-			super.name = "Iron Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 85;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Steel-type moves.";
+		public IronPlate()
+		{
+			super("Iron Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Steel-type moves.", BagCategory.MISC, 85);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.STEEL;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class MeadowPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class MeadowPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MeadowPlate() {
-			super.name = "Meadow Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 86;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Grass-type moves.";
+		public MeadowPlate()
+		{
+			super("Meadow Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Grass-type moves.", BagCategory.MISC, 86);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GRASS;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class MindPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class MindPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MindPlate() {
-			super.name = "Mind Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 87;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Psychic-type moves.";
+		public MindPlate()
+		{
+			super("Mind Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Psychic-type moves.", BagCategory.MISC, 87);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class SkyPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class SkyPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SkyPlate() {
-			super.name = "Sky Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 88;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Flying-type moves.";
+		public SkyPlate()
+		{
+			super("Sky Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Flying-type moves.", BagCategory.MISC, 88);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FLYING;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class SplashPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class SplashPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SplashPlate() {
-			super.name = "Splash Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 89;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Water-type moves.";
+		public SplashPlate()
+		{
+			super("Splash Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Water-type moves.", BagCategory.MISC, 89);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.WATER;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class SpookyPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class SpookyPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SpookyPlate() {
-			super.name = "Spooky Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 90;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ghost-type moves.";
+		public SpookyPlate()
+		{
+			super("Spooky Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ghost-type moves.", BagCategory.MISC, 90);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GHOST;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class StonePlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class StonePlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public StonePlate() {
-			super.name = "Stone Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 91;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Rock-type moves.";
+		public StonePlate()
+		{
+			super("Stone Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Rock-type moves.", BagCategory.MISC, 91);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ROCK;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class ToxicPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class ToxicPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ToxicPlate() {
-			super.name = "Toxic Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 92;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Poison-type moves.";
+		public ToxicPlate()
+		{
+			super("Toxic Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Poison-type moves.", BagCategory.MISC, 92);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.POISON;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class ZapPlate extends TypeEnhancingItem implements
-			HoldItem, PlateItem {
+	private static class ZapPlate extends Item implements PlateItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ZapPlate() {
-			super.name = "Zap Plate";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 93;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Electric-type moves.";
+		public ZapPlate()
+		{
+			super("Zap Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Electric-type moves.", BagCategory.MISC, 93);
 			super.price = 1000;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ELECTRIC;
 		}
 
-		public double getMultiplier() {
-			return 1.2;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 90;
 		}
 	}
 
-	private static class BurnDrive extends Item implements DriveItem, HoldItem {
+	private static class BurnDrive extends Item implements DriveItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BurnDrive() {
-			super.name = "Burn Drive";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 94;
-			super.desc = "A cassette to be held by Genesect. It changes Techno Blast to a Fire-type move.";
-			super.price = -1;
+		public BurnDrive()
+		{
+			super("Burn Drive", "A cassette to be held by Genesect. It changes Techno Blast to a Fire-type move.", BagCategory.MISC, 94);
+			super.price = 1000;
 		}
 
-		public int flingDamage() {
-			return 70;
-		}
-
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FIRE;
+		}
+
+		public int flingDamage()
+		{
+			return 70;
 		}
 	}
 
-	private static class ChillDrive extends Item implements DriveItem, HoldItem {
+	private static class ChillDrive extends Item implements DriveItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ChillDrive() {
-			super.name = "Chill Drive";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 95;
-			super.desc = "A cassette to be held by Genesect. It changes Techno Blast to an Ice-type move.";
-			super.price = -1;
+		public ChillDrive()
+		{
+			super("Chill Drive", "A cassette to be held by Genesect. It changes Techno Blast to an Ice-type move.", BagCategory.MISC, 95);
+			super.price = 1000;
 		}
 
-		public int flingDamage() {
-			return 70;
-		}
-
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ICE;
 		}
-	}
 
-	private static class DouseDrive extends Item implements DriveItem, HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public DouseDrive() {
-			super.name = "Douse Drive";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 96;
-			super.desc = "A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.";
-			super.price = -1;
-		}
-
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 70;
 		}
+	}
 
-		public Type getType() {
+	private static class DouseDrive extends Item implements DriveItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public DouseDrive()
+		{
+			super("Douse Drive", "A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.", BagCategory.MISC, 96);
+			super.price = 1000;
+		}
+
+		public Type getType()
+		{
 			return Type.WATER;
 		}
-	}
 
-	private static class ShockDrive extends Item implements DriveItem, HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public ShockDrive() {
-			super.name = "Shock Drive";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 97;
-			super.desc = "A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.";
-			super.price = -1;
-		}
-
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 70;
 		}
+	}
 
-		public Type getType() {
+	private static class ShockDrive extends Item implements DriveItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ShockDrive()
+		{
+			super("Shock Drive", "A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.", BagCategory.MISC, 97);
+			super.price = 1000;
+		}
+
+		public Type getType()
+		{
 			return Type.ELECTRIC;
+		}
+
+		public int flingDamage()
+		{
+			return 70;
 		}
 	}
 
-	private static class FireGem extends TypeEnhancingItem implements HoldItem,
-			ConsumedItem {
+	private static class FireGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FireGem() {
-			super.name = "Fire Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 98;
-			super.desc = "A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.";
+		public FireGem()
+		{
+			super("Fire Gem", "A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.", BagCategory.MISC, 98);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FIRE;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class WaterGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class WaterGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public WaterGem() {
-			super.name = "Water Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 99;
-			super.desc = "A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.";
+		public WaterGem()
+		{
+			super("Water Gem", "A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.", BagCategory.MISC, 99);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.WATER;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class ElectricGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class ElectricGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ElectricGem() {
-			super.name = "Electric Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 100;
-			super.desc = "A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.";
+		public ElectricGem()
+		{
+			super("Electric Gem", "A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.", BagCategory.MISC, 100);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ELECTRIC;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class GrassGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class GrassGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GrassGem() {
-			super.name = "Grass Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 101;
-			super.desc = "A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.";
+		public GrassGem()
+		{
+			super("Grass Gem", "A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.", BagCategory.MISC, 101);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GRASS;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class IceGem extends TypeEnhancingItem implements HoldItem,
-			ConsumedItem {
+	private static class IceGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public IceGem() {
-			super.name = "Ice Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 102;
-			super.desc = "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.";
+		public IceGem()
+		{
+			super("Ice Gem", "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.", BagCategory.MISC, 102);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ICE;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class FightingGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class FightingGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FightingGem() {
-			super.name = "Fighting Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 103;
-			super.desc = "A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.";
+		public FightingGem()
+		{
+			super("Fighting Gem", "A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.", BagCategory.MISC, 103);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class PoisonGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class PoisonGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PoisonGem() {
-			super.name = "Poison Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 104;
-			super.desc = "A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.";
+		public PoisonGem()
+		{
+			super("Poison Gem", "A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.", BagCategory.MISC, 104);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.POISON;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class GroundGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class GroundGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GroundGem() {
-			super.name = "Ground Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 105;
-			super.desc = "A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.";
+		public GroundGem()
+		{
+			super("Ground Gem", "A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.", BagCategory.MISC, 105);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GROUND;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class FlyingGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class FlyingGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FlyingGem() {
-			super.name = "Flying Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 106;
-			super.desc = "A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.";
+		public FlyingGem()
+		{
+			super("Flying Gem", "A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.", BagCategory.MISC, 106);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FLYING;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class PsychicGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class PsychicGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PsychicGem() {
-			super.name = "Psychic Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 107;
-			super.desc = "A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.";
+		public PsychicGem()
+		{
+			super("Psychic Gem", "A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.", BagCategory.MISC, 107);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class BugGem extends TypeEnhancingItem implements HoldItem,
-			ConsumedItem {
+	private static class BugGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BugGem() {
-			super.name = "Bug Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 108;
-			super.desc = "A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.";
+		public BugGem()
+		{
+			super("Bug Gem", "A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.", BagCategory.MISC, 108);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.BUG;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class RockGem extends TypeEnhancingItem implements HoldItem,
-			ConsumedItem {
+	private static class RockGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RockGem() {
-			super.name = "Rock Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 109;
-			super.desc = "A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.";
+		public RockGem()
+		{
+			super("Rock Gem", "A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.", BagCategory.MISC, 109);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ROCK;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class GhostGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class GhostGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GhostGem() {
-			super.name = "Ghost Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 110;
-			super.desc = "A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.";
+		public GhostGem()
+		{
+			super("Ghost Gem", "A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.", BagCategory.MISC, 110);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GHOST;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class DragonGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class DragonGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DragonGem() {
-			super.name = "Dragon Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 111;
-			super.desc = "A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.";
+		public DragonGem()
+		{
+			super("Dragon Gem", "A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.", BagCategory.MISC, 111);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.DRAGON;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class DarkGem extends TypeEnhancingItem implements HoldItem,
-			ConsumedItem {
+	private static class DarkGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DarkGem() {
-			super.name = "Dark Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 112;
-			super.desc = "A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.";
+		public DarkGem()
+		{
+			super("Dark Gem", "A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.", BagCategory.MISC, 112);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.DARK;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class SteelGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class SteelGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SteelGem() {
-			super.name = "Steel Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 113;
-			super.desc = "A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.";
+		public SteelGem()
+		{
+			super("Steel Gem", "A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.", BagCategory.MISC, 113);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.STEEL;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class NormalGem extends TypeEnhancingItem implements
-			HoldItem, ConsumedItem {
+	private static class NormalGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public NormalGem() {
-			super.name = "Normal Gem";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 114;
-			super.desc = "A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.";
+		public NormalGem()
+		{
+			super("Normal Gem", "A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.", BagCategory.MISC, 114);
 			super.price = 100;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.NORMAL;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.5;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Leftovers extends Item implements HoldItem,
-			EndTurnEffect {
+	private static class Leftovers extends Item implements HoldItem, EndTurnEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Leftovers() {
-			super.name = "Leftovers";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 115;
-			super.desc = "An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.";
+		public Leftovers()
+		{
+			super("Leftovers", "An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.", BagCategory.MISC, 115);
 			super.price = 200;
 		}
 
-		public void apply(ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect("Heal Block"))
-				return;
-			victim.healHealthFraction(1 / 16.0);
-			b.addMessage(victim.getName() + "'s HP was restored by its "
-					+ this.name + "!", victim.getHP(), victim.user());
-		}
-
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.fullHealth() || victim.hasEffect("Heal Block")) return;
+			victim.healHealthFraction(1/16.0);
+			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+		}
 	}
 
-	private static class BlackBelt extends TypeEnhancingItem implements
-			HoldItem {
+	private static class BlackBelt extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BlackBelt() {
-			super.name = "Black Belt";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 116;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.";
+		public BlackBelt()
+		{
+			super("Black Belt", "An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.", BagCategory.MISC, 116);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class BlackGlasses extends TypeEnhancingItem implements
-			HoldItem {
+	private static class BlackGlasses extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BlackGlasses() {
-			super.name = "Black Glasses";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 117;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.";
+		public BlackGlasses()
+		{
+			super("Black Glasses", "An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.", BagCategory.MISC, 117);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Charcoal extends TypeEnhancingItem implements HoldItem {
+	private static class Charcoal extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Charcoal() {
-			super.name = "Charcoal";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 118;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.";
+		public Charcoal()
+		{
+			super("Charcoal", "An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.", BagCategory.MISC, 118);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FIRE;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class DragonFang extends TypeEnhancingItem implements
-			HoldItem {
+	private static class DragonFang extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DragonFang() {
-			super.name = "Dragon Fang";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 119;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.";
+		public DragonFang()
+		{
+			super("Dragon Fang", "An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.", BagCategory.MISC, 119);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.DRAGON;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class HardStone extends TypeEnhancingItem implements
-			HoldItem {
+	private static class HardStone extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public HardStone() {
-			super.name = "Hard Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 120;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.";
+		public HardStone()
+		{
+			super("Hard Stone", "An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.", BagCategory.MISC, 120);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ROCK;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Magnet extends TypeEnhancingItem implements HoldItem {
+	private static class Magnet extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Magnet() {
-			super.name = "Magnet";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 121;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.";
+		public Magnet()
+		{
+			super("Magnet", "An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.", BagCategory.MISC, 121);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ELECTRIC;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class MetalCoat extends EvolutionItem implements HoldItem,
-			PowerChangeEffect {
+	private static class MetalCoat extends Item implements PokemonUseItem, HoldItem, PowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public MetalCoat() {
-			super.name = "Metal Coat";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 122;
-			super.desc = "A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.";
+		public MetalCoat()
+		{
+			super("Metal Coat", "A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.", BagCategory.MISC, 122);
 			super.price = 9800;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user,
-				ActivePokemon victim) {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
 			return user.getAttack().isType(b, user, Type.STEEL) ? 1.2 : 1;
 		}
 	}
 
-	private static class MiracleSeed extends TypeEnhancingItem implements
-			HoldItem {
+	private static class MiracleSeed extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MiracleSeed() {
-			super.name = "Miracle Seed";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 123;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.";
+		public MiracleSeed()
+		{
+			super("Miracle Seed", "An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.", BagCategory.MISC, 123);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GRASS;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class MysticWater extends TypeEnhancingItem implements
-			HoldItem {
+	private static class MysticWater extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MysticWater() {
-			super.name = "Mystic Water";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 124;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.";
+		public MysticWater()
+		{
+			super("Mystic Water", "An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.", BagCategory.MISC, 124);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.WATER;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class NeverMeltIce extends TypeEnhancingItem implements
-			HoldItem {
+	private static class NeverMeltIce extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public NeverMeltIce() {
-			super.name = "NeverMeltIce";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 125;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.";
+		public NeverMeltIce()
+		{
+			super("NeverMeltIce", "An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.", BagCategory.MISC, 125);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ICE;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class PoisonBarb extends TypeEnhancingItem implements
-			HoldItem {
+	private static class PoisonBarb extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PoisonBarb() {
-			super.name = "Poison Barb";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 126;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.";
+		public PoisonBarb()
+		{
+			super("Poison Barb", "An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.", BagCategory.MISC, 126);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.POISON;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class SharpBeak extends TypeEnhancingItem implements
-			HoldItem {
+	private static class SharpBeak extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SharpBeak() {
-			super.name = "Sharp Beak";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 127;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.";
+		public SharpBeak()
+		{
+			super("Sharp Beak", "An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.", BagCategory.MISC, 127);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.FLYING;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class SilkScarf extends TypeEnhancingItem implements
-			HoldItem {
+	private static class SilkScarf extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SilkScarf() {
-			super.name = "Silk Scarf";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 128;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.";
+		public SilkScarf()
+		{
+			super("Silk Scarf", "An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.", BagCategory.MISC, 128);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.NORMAL;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class SilverPowder extends TypeEnhancingItem implements
-			HoldItem {
+	private static class SilverPowder extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SilverPowder() {
-			super.name = "Silver Powder";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 129;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.";
+		public SilverPowder()
+		{
+			super("Silver Powder", "An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.", BagCategory.MISC, 129);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.BUG;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class SoftSand extends TypeEnhancingItem implements HoldItem {
+	private static class SoftSand extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SoftSand() {
-			super.name = "Soft Sand";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 130;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.";
+		public SoftSand()
+		{
+			super("Soft Sand", "An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.", BagCategory.MISC, 130);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GROUND;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class SpellTag extends TypeEnhancingItem implements HoldItem {
+	private static class SpellTag extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SpellTag() {
-			super.name = "Spell Tag";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 131;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.";
+		public SpellTag()
+		{
+			super("Spell Tag", "An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.", BagCategory.MISC, 131);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GHOST;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class TwistedSpoon extends TypeEnhancingItem implements
-			HoldItem {
+	private static class TwistedSpoon extends Item implements PowerChangeEffect, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public TwistedSpoon() {
-			super.name = "Twisted Spoon";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 132;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.";
+		public TwistedSpoon()
+		{
+			super("Twisted Spoon", "An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.", BagCategory.MISC, 132);
 			super.price = 9800;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier() {
+		public double getMultiplier()
+		{
 			return 1.2;
 		}
 
-		public int flingDamage() {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.getAttack().isType(b, user, getType()))
+			{
+				if (this instanceof ConsumedItem)
+				{
+					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+					user.consumeItem(b);
+				}
+				
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class DawnStone extends EvolutionItem implements HoldItem {
+	private static class DawnStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public DawnStone() {
-			super.name = "Dawn Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 133;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It sparkles like eyes.";
+		public DawnStone()
+		{
+			super("Dawn Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It sparkles like eyes.", BagCategory.MISC, 133);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 80;
 		}
 	}
 
-	private static class DeepSeaScale extends EvolutionItem implements
-			HoldItem, StatChangingEffect {
+	private static class DeepSeaScale extends Item implements PokemonUseItem, HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public DeepSeaScale() {
-			super.name = "DeepSeaScale";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 134;
-			super.desc = "An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.";
+		public DeepSeaScale()
+		{
+			super("DeepSeaScale", "An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.", BagCategory.MISC, 134);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.SP_DEFENSE
-					&& (p.isPokemon("Clamperl") || p.isPokemon("Chinchou") || p
-							.isPokemon("Lanturn")))
-				stat *= 2;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.SP_DEFENSE && (p.isPokemon("Clamperl") || p.isPokemon("Chinchou") || p.isPokemon("Lanturn"))) stat *= 2;
 			return stat;
 		}
 	}
 
-	private static class DeepSeaTooth extends EvolutionItem implements
-			HoldItem, StatChangingEffect {
+	private static class DeepSeaTooth extends Item implements PokemonUseItem, HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public DeepSeaTooth() {
-			super.name = "DeepSeaTooth";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 135;
-			super.desc = "An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.";
+		public DeepSeaTooth()
+		{
+			super("DeepSeaTooth", "An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.", BagCategory.MISC, 135);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 90;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if (s == Stat.SP_ATTACK && p.isPokemon("Clamperl"))
-				stat *= 2;
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (s == Stat.SP_ATTACK && p.isPokemon("Clamperl")) stat *= 2;
 			return stat;
 		}
 	}
 
-	private static class DragonScale extends EvolutionItem implements HoldItem {
+	private static class DragonScale extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public DragonScale() {
-			super.name = "Dragon Scale";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 136;
-			super.desc = "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.";
+		public DragonScale()
+		{
+			super("Dragon Scale", "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC, 136);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class DubiousDisc extends EvolutionItem implements HoldItem {
+	private static class DubiousDisc extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public DubiousDisc() {
-			super.name = "Dubious Disc";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 137;
-			super.desc = "A transparent device overflowing with dubious data. Its producer is unknown.";
+		public DubiousDisc()
+		{
+			super("Dubious Disc", "A transparent device overflowing with dubious data. Its producer is unknown.", BagCategory.MISC, 137);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 50;
 		}
 	}
 
-	private static class DuskStone extends EvolutionItem implements HoldItem {
+	private static class DuskStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public DuskStone() {
-			super.name = "Dusk Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 138;
-			super.desc = "A peculiar stone that makes certain species of Pokémon evolve. It is as dark as dark can be.";
+		public DuskStone()
+		{
+			super("Dusk Stone", "A peculiar stone that makes certain species of Pokémon evolve. It is as dark as dark can be.", BagCategory.MISC, 138);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 80;
 		}
 	}
 
-	private static class Electirizer extends EvolutionItem implements HoldItem {
+	private static class Electirizer extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public Electirizer() {
-			super.name = "Electirizer";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 139;
-			super.desc = "A box packed with a tremendous amount of electric energy. It is loved by a certain Pok\u00e9mon.";
+		public Electirizer()
+		{
+			super("Electirizer", "A box packed with a tremendous amount of electric energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 139);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 80;
 		}
 	}
 
-	private static class FireStone extends EvolutionItem implements HoldItem {
+	private static class FireStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public FireStone() {
-			super.name = "Fire Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 140;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.";
+		public FireStone()
+		{
+			super("Fire Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.", BagCategory.MISC, 140);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class KingsRock extends EvolutionItem implements HoldItem,
-			ApplyDamageEffect {
+	private static class KingsRock extends Item implements PokemonUseItem, HoldItem, ApplyDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public KingsRock() {
-			super.name = "King's Rock";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 141;
-			super.desc = "An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.";
+		public KingsRock()
+		{
+			super("King's Rock", "An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.", BagCategory.MISC, 141);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, Integer damage) {
-			if (Math.random() * 100 < 10) {
+		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+		{
+			if (Math.random()*100 < 10)
+			{
 				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
-				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
+				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
+				{
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
-					b.addMessage(user.getName() + "'s " + this.name
-							+ " caused " + victim.getName() + " to flinch!");
+					b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 				}
 			}
 		}
 	}
 
-	private static class LeafStone extends EvolutionItem implements HoldItem {
+	private static class LeafStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public LeafStone() {
-			super.name = "Leaf Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 142;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.";
+		public LeafStone()
+		{
+			super("Leaf Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.", BagCategory.MISC, 142);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Magmarizer extends EvolutionItem implements HoldItem {
+	private static class Magmarizer extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public Magmarizer() {
-			super.name = "Magmarizer";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 143;
-			super.desc = "A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.";
+		public Magmarizer()
+		{
+			super("Magmarizer", "A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 143);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 80;
 		}
 	}
 
-	private static class MoonStone extends EvolutionItem implements HoldItem {
+	private static class MoonStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public MoonStone() {
-			super.name = "Moon Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 144;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.";
+		public MoonStone()
+		{
+			super("Moon Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.", BagCategory.MISC, 144);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class OvalStone extends EvolutionItem implements HoldItem {
+	private static class OvalStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public OvalStone() {
-			super.name = "Oval Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 145;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.";
+		public OvalStone()
+		{
+			super("Oval Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.", BagCategory.MISC, 145);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 80;
 		}
 	}
 
-	private static class Everstone extends Item implements HoldItem {
+	private static class Everstone extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Everstone() {
-			super.name = "Everstone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 146;
-			super.desc = "An item to be held by a Pok\u00e9mon. The Pok\u00e9mon holding this peculiar stone is prevented from evolving.";
+		public Everstone()
+		{
+			super("Everstone", "An item to be held by a Pok\u00e9mon. The Pok\u00e9mon holding this peculiar stone is prevented from evolving.", BagCategory.MISC, 146);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class PrismScale extends EvolutionItem implements HoldItem {
+	private static class PrismScale extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public PrismScale() {
-			super.name = "Prism Scale";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 147;
-			super.desc = "A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.";
+		public PrismScale()
+		{
+			super("Prism Scale", "A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.", BagCategory.MISC, 147);
 			super.price = 500;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Protector extends EvolutionItem implements HoldItem {
+	private static class Protector extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public Protector() {
-			super.name = "Protector";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 148;
-			super.desc = "A protective item of some sort. It is extremely stiff and heavy. It is loved by a certain Pok\u00e9mon.";
+		public Protector()
+		{
+			super("Protector", "A protective item of some sort. It is extremely stiff and heavy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 148);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 80;
 		}
 	}
 
-	private static class RazorClaw extends EvolutionItem implements HoldItem,
-			CritStageEffect {
+	private static class RazorClaw extends Item implements PokemonUseItem, HoldItem, CritStageEffect
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public RazorClaw() {
-			super.name = "Razor Claw";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 149;
-			super.desc = "An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.";
+		public RazorClaw()
+		{
+			super("Razor Claw", "An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.", BagCategory.MISC, 149);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 80;
 		}
 
-		public int increaseCritStage(ActivePokemon p) {
+		public int increaseCritStage(ActivePokemon p)
+		{
 			return 1;
 		}
 	}
 
-	private static class RazorFang extends EvolutionItem implements HoldItem,
-			ApplyDamageEffect {
+	private static class RazorFang extends Item implements PokemonUseItem, HoldItem, ApplyDamageEffect
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public RazorFang() {
-			super.name = "Razor Fang";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 150;
-			super.desc = "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`";
+		public RazorFang()
+		{
+			super("Razor Fang", "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`", BagCategory.MISC, 150);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user,
-				ActivePokemon victim, Integer damage) {
-			if (Math.random() * 100 < 10) {
+		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+		{
+			if (Math.random()*100 < 10)
+			{
 				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
-				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
+				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
+				{
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
-					b.addMessage(user.getName() + "'s " + this.name
-							+ " caused " + victim.getName() + " to flinch!");
+					b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 				}
 			}
 		}
 	}
 
-	private static class ReaperCloth extends EvolutionItem implements HoldItem {
+	private static class ReaperCloth extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public ReaperCloth() {
-			super.name = "Reaper Cloth";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 151;
-			super.desc = "A cloth imbued with horrifyingly strong spiritual energy. It is loved by a certain Pok\u00e9mon.";
+		public ReaperCloth()
+		{
+			super("Reaper Cloth", "A cloth imbued with horrifyingly strong spiritual energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 151);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 10;
 		}
 	}
 
-	private static class ShinyStone extends EvolutionItem implements HoldItem {
+	private static class ShinyStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public ShinyStone() {
-			super.name = "Shiny Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 152;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It shines with a dazzling light.";
+		public ShinyStone()
+		{
+			super("Shiny Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It shines with a dazzling light.", BagCategory.MISC, 152);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 80;
 		}
 	}
 
-	private static class SunStone extends EvolutionItem implements HoldItem {
+	private static class SunStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public SunStone() {
-			super.name = "Sun Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 153;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.";
+		public SunStone()
+		{
+			super("Sun Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.", BagCategory.MISC, 153);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class ThunderStone extends EvolutionItem implements HoldItem {
+	private static class ThunderStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public ThunderStone() {
-			super.name = "Thunder Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 154;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.";
+		public ThunderStone()
+		{
+			super("Thunder Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.", BagCategory.MISC, 154);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class UpGrade extends EvolutionItem implements HoldItem {
+	private static class UpGrade extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public UpGrade() {
-			super.name = "Up-Grade";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 155;
-			super.desc = "A transparent device filled with all sorts of data. It was produced by Silph Co.";
+		public UpGrade()
+		{
+			super("Up-Grade", "A transparent device filled with all sorts of data. It was produced by Silph Co.", BagCategory.MISC, 155);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class WaterStone extends EvolutionItem implements HoldItem {
+	private static class WaterStone extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
-		public WaterStone() {
-			super.name = "Water Stone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 156;
-			super.desc = "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.";
+		public WaterStone()
+		{
+			super("Water Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.", BagCategory.MISC, 156);
 			super.price = 2100;
 		}
 
-		public int flingDamage() {
+		public BaseEvolution getBaseEvolution(ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+			return base;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return message;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			BaseEvolution base = getBaseEvolution(p);
+			if (base == null)
+			return false;
+			
+			message = p.evolve(null, base);
+			return true;
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Antidote extends StatusConditionRemoveItem implements
-			HoldItem {
+	private static class Antidote extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Antidote() {
-			super.name = "Antidote";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 157;
-			super.desc = "A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.";
+		public Antidote()
+		{
+			super("Antidote", "A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.", BagCategory.MEDICINE, 157);
 			super.price = 100;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
+		public StatusCondition toRemove()
+		{
 			return StatusCondition.POISONED;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class Awakening extends StatusConditionRemoveItem implements
-			HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public Awakening() {
-			super.name = "Awakening";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 158;
-			super.desc = "A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.";
-			super.price = 250;
-		}
-
-		public StatusCondition toRemove() {
-			return StatusCondition.ASLEEP;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class BurnHeal extends StatusConditionRemoveItem implements
-			HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public BurnHeal() {
-			super.name = "Burn Heal";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 159;
-			super.desc = "A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.";
-			super.price = 250;
-		}
-
-		public StatusCondition toRemove() {
-			return StatusCondition.BURNED;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class IceHeal extends StatusConditionRemoveItem implements
-			HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public IceHeal() {
-			super.name = "Ice Heal";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 160;
-			super.desc = "A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.";
-			super.price = 250;
-		}
-
-		public StatusCondition toRemove() {
-			return StatusCondition.FROZEN;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class ParalyzeHeal extends StatusConditionRemoveItem
-			implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public ParalyzeHeal() {
-			super.name = "Paralyze Heal";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 161;
-			super.desc = "A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.";
-			super.price = 200;
-		}
-
-		public StatusCondition toRemove() {
-			return StatusCondition.PARALYZED;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class FullHeal extends Item implements PokemonUseItem,
-			BattleUseItem, HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public FullHeal() {
-			super.name = "Full Heal";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 162;
-			super.desc = "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.";
-			super.price = 250;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b) {
-			return use(p);
-		}
-
-		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED))
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
 				return false;
-
+			}
+			
 			p.removeStatus();
 			return true;
 		}
 
-		public int flingDamage() {
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class FullRestore extends Item implements PokemonUseItem,
-			HoldItem, BattleUseItem {
+	private static class Awakening extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FullRestore() {
-			super.name = "Full Restore";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP,
-					BattleBagCategory.STATUS };
-			super.index = 163;
-			super.desc = "A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.";
-			super.price = 3000;
+		public Awakening()
+		{
+			super("Awakening", "A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE, 158);
+			super.price = 250;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was fully healed!";
+		public StatusCondition toRemove()
+		{
+			return StatusCondition.ASLEEP;
 		}
 
-		public boolean use(ActivePokemon p, Battle b) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (p.hasStatus(StatusCondition.FAINTED))
-				return false;
-			if (!p.hasStatus() && p.fullHealth())
-				return false;
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
 
+	private static class BurnHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public BurnHeal()
+		{
+			super("Burn Heal", "A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.", BagCategory.MEDICINE, 159);
+			super.price = 250;
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public StatusCondition toRemove()
+		{
+			return StatusCondition.BURNED;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class IceHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public IceHeal()
+		{
+			super("Ice Heal", "A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE, 160);
+			super.price = 250;
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public StatusCondition toRemove()
+		{
+			return StatusCondition.FROZEN;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class ParalyzeHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ParalyzeHeal()
+		{
+			super("Paralyze Heal", "A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.", BagCategory.MEDICINE, 161);
+			super.price = 200;
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public StatusCondition toRemove()
+		{
+			return StatusCondition.PARALYZED;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class FullHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public FullHeal()
+		{
+			super("Full Heal", "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 162);
+			super.price = 250;
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
+			
+			p.removeStatus();
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class FullRestore extends Item implements PokemonUseItem, HoldItem, BattleUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public FullRestore()
+		{
+			super("Full Restore", "A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 163);
+			super.price = 3000;
+			super.bcat.add(BattleBagCategory.HPPP);
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was fully healed!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			if (p.hasStatus(StatusCondition.FAINTED)) return false;
+			if (!p.hasStatus() && p.fullHealth()) return false;
+			
 			p.removeStatus();
 			p.healHealthFraction(1);
 			return true;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
 		}
 	}
 
-	private static class Elixir extends Item implements PokemonUseItem,
-			BattleUseItem, HoldItem {
+	private static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Elixir() {
-			super.name = "Elixir";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 164;
-			super.desc = "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.";
+		public Elixir()
+		{
+			super("Elixir", "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 164);
 			super.price = 3000;
+			super.bcat.add(BattleBagCategory.HPPP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + "'s PP was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b) {
-			return use(p);
-		}
-
-		public boolean use(ActivePokemon p) {
+		public boolean use(ActivePokemon p)
+		{
 			boolean changed = false;
-			for (Move m : p.getMoves()) {
+			for (Move m : p.getMoves())
+			{
 				changed |= m.increasePP(10);
 			}
 			return changed;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class MaxElixir extends Item implements PokemonUseItem,
-			BattleUseItem, HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public MaxElixir() {
-			super.name = "Max Elixir";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 165;
-			super.desc = "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.";
-			super.price = 4500;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP was restored!";
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
+		public boolean use(ActivePokemon p, Battle b)
+		{
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p) {
-			boolean changed = false;
-			for (Move m : p.getMoves()) {
-				changed |= m.increasePP(m.getMaxPP());
-			}
-
-			return changed;
-		}
-
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Ether extends Item implements MoveUseItem, HoldItem {
+	private static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public MaxElixir()
+		{
+			super("Max Elixir", "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 165);
+			super.price = 4500;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s PP was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			boolean changed = false;
+			for (Move m : p.getMoves())
+			{
+				changed |= m.increasePP(m.getMaxPP());
+			}
+			
+			return changed;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class Ether extends Item implements MoveUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
-		public Ether() {
-			super.name = "Ether";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 166;
-			super.desc = "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.";
+		public Ether()
+		{
+			super("Ether", "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.", BagCategory.MEDICINE, 166);
 			super.price = 1200;
+			super.bcat.add(BattleBagCategory.HPPP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + "'s " + restore + "'s PP was restored!";
 		}
 
-		public boolean use(Move m) {
+		public boolean use(Move m)
+		{
 			restore = m.getAttack().getName();
 			return m.increasePP(10);
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class MaxEther extends Item implements MoveUseItem, HoldItem {
+	private static class MaxEther extends Item implements MoveUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
-		public MaxEther() {
-			super.name = "Max Ether";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 167;
-			super.desc = "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.";
+		public MaxEther()
+		{
+			super("Max Ether", "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.", BagCategory.MEDICINE, 167);
 			super.price = 2000;
+			super.bcat.add(BattleBagCategory.HPPP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + "'s " + restore + "'s PP was restored!";
 		}
 
-		public boolean use(Move m) {
+		public boolean use(Move m)
+		{
 			restore = m.getAttack().getName();
 			return m.increasePP(m.getMaxPP());
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class BerryJuice extends HealItem implements HoldItem {
+	private static class BerryJuice extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BerryJuice() {
-			super.name = "Berry Juice";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 168;
-			super.desc = "A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.";
+		public BerryJuice()
+		{
+			super("Berry Juice", "A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 168);
 			super.price = 100;
+			super.bcat.add(BattleBagCategory.HPPP);
 		}
 
-		public int healAmt() {
+		public int healAmount()
+		{
 			return 20;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class SweetHeart extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public SweetHeart() {
-			super.name = "Sweet Heart";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 169;
-			super.desc = "Very sweet chocolate. It restores the HP of one Pok\u00e9mon by only 20 points.";
-			super.price = 100;
-		}
-
-		public int healAmt() {
-			return 20;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class Potion extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public Potion() {
-			super.name = "Potion";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 170;
-			super.desc = "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.";
-			super.price = 100;
-		}
-
-		public int healAmt() {
-			return 20;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class EnergyPowder extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public EnergyPowder() {
-			super.name = "Energy Powder";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 171;
-			super.desc = "A very bitter medicine powder. It restores the HP of one Pok\u00e9mon by 50 points.";
-			super.price = 500;
-		}
-
-		public int healAmt() {
-			return 50;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class FreshWater extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public FreshWater() {
-			super.name = "Fresh Water";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 172;
-			super.desc = "Water with a high mineral content. It restores the HP of one Pok\u00e9mon by 50 points.";
-			super.price = 200;
-		}
-
-		public int healAmt() {
-			return 50;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class SuperPotion extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public SuperPotion() {
-			super.name = "Super Potion";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 173;
-			super.desc = "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 50 points.";
-			super.price = 700;
-		}
-
-		public int healAmt() {
-			return 50;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class SodaPop extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public SodaPop() {
-			super.name = "Soda Pop";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 174;
-			super.desc = "A fizzy soda drink. It restores the HP of one Pok\u00e9mon by 60 points.";
-			super.price = 300;
-		}
-
-		public int healAmt() {
-			return 60;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class Lemonade extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public Lemonade() {
-			super.name = "Lemonade";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 175;
-			super.desc = "A very sweet drink. It restores the HP of one Pok\u00e9mon by 80 points.";
-			super.price = 350;
-		}
-
-		public int healAmt() {
-			return 80;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class MoomooMilk extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public MoomooMilk() {
-			super.name = "Moomoo Milk";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 176;
-			super.desc = "Milk with a very high nutrition content. It restores the HP of one Pok\u00e9mon by 100 points.";
-			super.price = 500;
-		}
-
-		public int healAmt() {
-			return 100;
-		}
-
-		public int flingDamage() {
-			return 1000;
-		}
-	}
-
-	private static class EnergyRoot extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public EnergyRoot() {
-			super.name = "Energy Root";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 177;
-			super.desc = "A very bitter root. It restores the HP of one Pok\u00e9mon by 200 points.";
-			super.price = 800;
-		}
-
-		public int healAmt() {
-			return 200;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class HyperPotion extends HealItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public HyperPotion() {
-			super.name = "Hyper Potion";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 178;
-			super.desc = "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 200 points.";
-			super.price = 1200;
-		}
-
-		public int healAmt() {
-			return 200;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class MaxPotion extends Item implements PokemonUseItem,
-			BattleUseItem, HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public MaxPotion() {
-			super.name = "Max Potion";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 179;
-			super.desc = "A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.";
-			super.price = 2500;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b) {
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p) {
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class SweetHeart extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public SweetHeart()
+		{
+			super("Sweet Heart", "Very sweet chocolate. It restores the HP of one Pok\u00e9mon by only 20 points.", BagCategory.MEDICINE, 169);
+			super.price = 100;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 20;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class Potion extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Potion()
+		{
+			super("Potion", "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 170);
+			super.price = 100;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 20;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class EnergyPowder extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public EnergyPowder()
+		{
+			super("Energy Powder", "A very bitter medicine powder. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 171);
+			super.price = 500;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 50;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class FreshWater extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public FreshWater()
+		{
+			super("Fresh Water", "Water with a high mineral content. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 172);
+			super.price = 200;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 50;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class SuperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public SuperPotion()
+		{
+			super("Super Potion", "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 173);
+			super.price = 700;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 50;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class SodaPop extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public SodaPop()
+		{
+			super("Soda Pop", "A fizzy soda drink. It restores the HP of one Pok\u00e9mon by 60 points.", BagCategory.MEDICINE, 174);
+			super.price = 300;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 60;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class Lemonade extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Lemonade()
+		{
+			super("Lemonade", "A very sweet drink. It restores the HP of one Pok\u00e9mon by 80 points.", BagCategory.MEDICINE, 175);
+			super.price = 350;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 80;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class MoomooMilk extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public MoomooMilk()
+		{
+			super("Moomoo Milk", "Milk with a very high nutrition content. It restores the HP of one Pok\u00e9mon by 100 points.", BagCategory.MEDICINE, 176);
+			super.price = 500;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 100;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class EnergyRoot extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public EnergyRoot()
+		{
+			super("Energy Root", "A very bitter root. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 177);
+			super.price = 800;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 200;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class HyperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public HyperPotion()
+		{
+			super("Hyper Potion", "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 178);
+			super.price = 1200;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public int healAmount()
+		{
+			return 200;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class MaxPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public MaxPotion()
+		{
+			super("Max Potion", "A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.", BagCategory.MEDICINE, 179);
+			super.price = 2500;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
 			return p.healHealthFraction(1) != 0;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class Revive extends Item implements PokemonUseItem,
-			BattleUseItem, HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public Revive() {
-			super.name = "Revive";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 180;
-			super.desc = "A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.";
-			super.price = 1500;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was revived!";
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
+		public boolean use(ActivePokemon p, Battle b)
+		{
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(StatusCondition.FAINTED))
-				return false;
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
 
+	private static class Revive extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Revive()
+		{
+			super("Revive", "A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE, 180);
+			super.price = 1500;
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was revived!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+			
 			p.removeStatus();
 			p.healHealthFraction(.5);
-
+			
 			return true;
 		}
 
-		public int flingDamage() {
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class MaxRevive extends Item implements PokemonUseItem,
-			HoldItem {
+	private static class MaxRevive extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MaxRevive() {
-			super.name = "Max Revive";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 181;
-			super.desc = "A medicine that revives a fainted Pok\u00e9mon. It fully restores the Pok\u00e9mon's HP.";
+		public MaxRevive()
+		{
+			super("Max Revive", "A medicine that revives a fainted Pok\u00e9mon. It fully restores the Pok\u00e9mon's HP.", BagCategory.MEDICINE, 181);
 			super.price = 4000;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + " was fully revived!";
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(StatusCondition.FAINTED))
-				return false;
-
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+			
 			p.removeStatus();
 			p.healHealthFraction(1);
-
+			
 			return true;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class RevivalHerb extends Item implements PokemonUseItem,
-			HoldItem {
+	private static class RevivalHerb extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RevivalHerb() {
-			super.name = "Revival Herb";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 182;
-			super.desc = "A very bitter medicinal herb. It revives a fainted Pok\u00e9mon, fully restoring its HP.";
+		public RevivalHerb()
+		{
+			super("Revival Herb", "A very bitter medicinal herb. It revives a fainted Pok\u00e9mon, fully restoring its HP.", BagCategory.MEDICINE, 182);
 			super.price = 2800;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + " was fully revived!";
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(StatusCondition.FAINTED))
-				return false;
-
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+			
 			p.removeStatus();
 			p.healHealthFraction(1);
-
+			
 			return true;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class SacredAsh extends Item implements TrainerUseItem,
-			HoldItem, BattleUseItem {
+	private static class SacredAsh extends Item implements TrainerUseItem, HoldItem, BattleUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SacredAsh() {
-			super.name = "Sacred Ash";
-			super.cat = BagCategory.MEDICINE;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 183;
-			super.desc = "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.";
+		public SacredAsh()
+		{
+			super("Sacred Ash", "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE, 183);
 			super.price = 4000;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return "All fainted Pok\u00e9mon were fully revived!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b) {
-			return use((Trainer) b.getTrainer(p.user()));
-		}
-
-		public boolean use(Trainer t) {
+		public boolean use(Trainer t)
+		{
 			boolean changed = false;
-			for (ActivePokemon p : t.getTeam()) {
-				if (p.hasStatus(StatusCondition.FAINTED)) {
+			for (ActivePokemon p : t.getTeam())
+			{
+				if (p.hasStatus(StatusCondition.FAINTED))
+				{
 					changed = true;
 					p.removeStatus();
 					p.healHealthFraction(1);
@@ -5188,1429 +6542,1643 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return changed;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use((Trainer)b.getTrainer(p.user()));
 		}
 	}
 
-	private static class DireHit extends Item implements BattleUseItem,
-			HoldItem {
+	private static class DireHit extends Item implements BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DireHit() {
-			super.name = "Dire Hit";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
-			super.index = 184;
-			super.desc = "It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.";
+		public DireHit()
+		{
+			super("Dire Hit", "It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 184);
 			super.price = 650;
+			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + " is getting pumped!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b) {
+		public boolean use(ActivePokemon p, Battle b)
+		{
 			PokemonEffect crits = PokemonEffect.getEffect("RaiseCrits");
-			if (!crits.applies(b, p, p, CastSource.USE_ITEM))
-				return false;
-
+			if (!crits.applies(b, p, p, CastSource.USE_ITEM)) return false;
+			
 			crits.cast(b, p, p, CastSource.USE_ITEM, false);
 			return true;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class GuardSpec extends Item implements BattleUseItem,
-			HoldItem {
+	private static class GuardSpec extends Item implements BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GuardSpec() {
-			super.name = "Guard Spec.";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
-			super.index = 185;
-			super.desc = "An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.";
+		public GuardSpec()
+		{
+			super("Guard Spec.", "An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.", BagCategory.STAT, 185);
 			super.price = 700;
+			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + " is covered by a veil!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b) {
+		public boolean use(ActivePokemon p, Battle b)
+		{
 			PokemonEffect gSpesh = PokemonEffect.getEffect("GuardSpecial");
-			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM))
-				return false;
-
+			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) return false;
+			
 			gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
 			return true;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class XAccuracy extends StageIncreaseItem implements
-			HoldItem {
+	private static class XAccuracy extends Item implements BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public XAccuracy() {
-			super.name = "X Accuracy";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
-			super.index = 186;
-			super.desc = "An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.";
+		public XAccuracy()
+		{
+			super("X Accuracy", "An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 186);
 			super.price = 950;
+			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.ACCURACY;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class XAttack extends StageIncreaseItem implements HoldItem {
+	private static class XAttack extends Item implements BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public XAttack() {
-			super.name = "X Attack";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
-			super.index = 187;
-			super.desc = "An item that raises the Attack stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.";
+		public XAttack()
+		{
+			super("X Attack", "An item that raises the Attack stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 187);
 			super.price = 500;
+			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class XDefend extends StageIncreaseItem implements HoldItem {
+	private static class XDefend extends Item implements BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public XDefend() {
-			super.name = "X Defend";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
-			super.index = 188;
-			super.desc = "An item that raises the Defense stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.";
+		public XDefend()
+		{
+			super("X Defend", "An item that raises the Defense stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 188);
 			super.price = 550;
+			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class XSpDef extends StageIncreaseItem implements HoldItem {
+	private static class XSpDef extends Item implements BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public XSpDef() {
-			super.name = "X Sp. Def";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
-			super.index = 189;
-			super.desc = "An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.";
+		public XSpDef()
+		{
+			super("X Sp. Def", "An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 189);
 			super.price = 350;
+			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class XSpecial extends StageIncreaseItem implements HoldItem {
+	private static class XSpecial extends Item implements BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public XSpecial() {
-			super.name = "X Special";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
-			super.index = 190;
-			super.desc = "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.";
+		public XSpecial()
+		{
+			super("X Special", "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 190);
 			super.price = 350;
+			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class XSpeed extends StageIncreaseItem implements HoldItem {
+	private static class XSpeed extends Item implements BattleUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public XSpeed() {
-			super.name = "X Speed";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BATTLE };
-			super.index = 191;
-			super.desc = "An item that raises the Speed stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.";
+		public XSpeed()
+		{
+			super("X Speed", "An item that raises the Speed stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 191);
 			super.price = 350;
+			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SPEED;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Calcium extends EVIncreaseItem implements HoldItem {
+	private static class Calcium extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Calcium() {
-			super.name = "Calcium";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 192;
-			super.desc = "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Atk (Special Attack) stat of a single Pok\u00e9mon.";
+		public Calcium()
+		{
+			super("Calcium", "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Atk (Special Attack) stat of a single Pok\u00e9mon.", BagCategory.STAT, 192);
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SP_ATTACK;
 		}
 
-		public int increaseAmt() {
-			return 1;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class Carbos extends EVIncreaseItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public Carbos() {
-			super.name = "Carbos";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 193;
-			super.desc = "A nutritious drink for Pok\u00e9mon. It raises the base Speed stat of a single Pok\u00e9mon.";
-			super.price = 9800;
-		}
-
-		public Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
-		public int increaseAmt() {
-			return 1;
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-	}
-
-	private static class CleverWing extends EVIncreaseItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public CleverWing() {
-			super.name = "Clever Wing";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 194;
-			super.desc = "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Def stat of a single Pok\u00e9mon.";
-			super.price = 3000;
-		}
-
-		public Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public int increaseAmt() {
-			return 1;
-		}
-
-		public int flingDamage() {
-			return 20;
-		}
-	}
-
-	private static class HealthWing extends EVIncreaseItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public HealthWing() {
-			super.name = "Health Wing";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 195;
-			super.desc = "An item for use on a Pok\u00e9mon. It slightly increases the base HP of a single Pok\u00e9mon.";
-			super.price = 3000;
-		}
-
-		public Stat toIncrease() {
-			return Stat.HP;
-		}
-
-		public int increaseAmt() {
-			return 1;
-		}
-
-		public int flingDamage() {
-			return 20;
-		}
-	}
-
-	private static class HPUp extends EVIncreaseItem implements HoldItem {
-		private static final long serialVersionUID = 1L;
-
-		public HPUp() {
-			super.name = "HP Up";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 196;
-			super.desc = "A nutritious drink for Pok\u00e9mon. It raises the base HP of a single Pok\u00e9mon.";
-			super.price = 9800;
-		}
-
-		public Stat toIncrease() {
-			return Stat.HP;
-		}
-
-		public int increaseAmt() {
+		public int increaseAmount()
+		{
 			return 10;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class GeniusWing extends EVIncreaseItem implements HoldItem {
+	private static class Carbos extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GeniusWing() {
-			super.name = "Genius Wing";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 197;
-			super.desc = "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Atk stat of a single Pok\u00e9mon.";
+		public Carbos()
+		{
+			super("Carbos", "A nutritious drink for Pok\u00e9mon. It raises the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT, 193);
+			super.price = 9800;
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.SPEED;
+		}
+
+		public int increaseAmount()
+		{
+			return 10;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class CleverWing extends Item implements PokemonUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public CleverWing()
+		{
+			super("Clever Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Def stat of a single Pok\u00e9mon.", BagCategory.STAT, 194);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SP_ATTACK;
 		}
 
-		public int increaseAmt() {
+		public int increaseAmount()
+		{
 			return 1;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
 			return 20;
 		}
 	}
 
-	private static class Iron extends EVIncreaseItem implements HoldItem {
+	private static class HealthWing extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Iron() {
-			super.name = "Iron";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 198;
-			super.desc = "A nutritious drink for Pok\u00e9mon. It raises the base Defense stat of a single Pok\u00e9mon.";
+		public HealthWing()
+		{
+			super("Health Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 195);
+			super.price = 3000;
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.HP;
+		}
+
+		public int increaseAmount()
+		{
+			return 1;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
+			return 20;
+		}
+	}
+
+	private static class HPUp extends Item implements PokemonUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public HPUp()
+		{
+			super("HP Up", "A nutritious drink for Pok\u00e9mon. It raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 196);
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
+			return Stat.HP;
+		}
+
+		public int increaseAmount()
+		{
+			return 10;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+	}
+
+	private static class GeniusWing extends Item implements PokemonUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public GeniusWing()
+		{
+			super("Genius Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Atk stat of a single Pok\u00e9mon.", BagCategory.STAT, 197);
+			super.price = 3000;
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.SP_ATTACK;
+		}
+
+		public int increaseAmount()
+		{
+			return 1;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
+			return 20;
+		}
+	}
+
+	private static class Iron extends Item implements PokemonUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Iron()
+		{
+			super("Iron", "A nutritious drink for Pok\u00e9mon. It raises the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 198);
+			super.price = 9800;
+		}
+
+		public Stat toIncrease()
+		{
 			return Stat.DEFENSE;
 		}
 
-		public int increaseAmt() {
+		public int increaseAmount()
+		{
 			return 10;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class MuscleWing extends EVIncreaseItem implements HoldItem {
+	private static class MuscleWing extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MuscleWing() {
-			super.name = "Muscle Wing";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 199;
-			super.desc = "An item for use on a Pok\u00e9mon. It slightly increases the base Attack stat of a single Pok\u00e9mon.";
+		public MuscleWing()
+		{
+			super("Muscle Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 199);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.ATTACK;
 		}
 
-		public int increaseAmt() {
+		public int increaseAmount()
+		{
 			return 1;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
 			return 20;
 		}
 	}
 
-	private static class PPMax extends Item implements MoveUseItem, HoldItem {
+	private static class PPMax extends Item implements MoveUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
-		private String increase;
-
-		public PPMax() {
-			super.name = "PP Max";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 200;
-			super.desc = "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.";
+private String increase;
+		public PPMax()
+		{
+			super("PP Max", "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 200);
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + "'s " + increase + "'s Max PP was increased!";
 		}
 
-		public boolean use(Move m) {
+		public boolean use(Move m)
+		{
 			increase = m.getAttack().getName();
 			return m.increaseMaxPP(3);
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class PPUp extends Item implements MoveUseItem, HoldItem {
+	private static class PPUp extends Item implements MoveUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 		private String increase;
 
-		public PPUp() {
-			super.name = "PP Up";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 201;
-			super.desc = "It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.";
+		public PPUp()
+		{
+			super("PP Up", "It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 201);
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + "'s " + increase + "'s Max PP was increased!";
 		}
 
-		public boolean use(Move m) {
+		public boolean use(Move m)
+		{
 			increase = m.getAttack().getName();
 			return m.increaseMaxPP(1);
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Protein extends EVIncreaseItem implements HoldItem {
+	private static class Protein extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Protein() {
-			super.name = "Protein";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 202;
-			super.desc = "A nutritious drink for Pok\u00e9mon. It raises the base Attack stat of a single Pok\u00e9mon.";
+		public Protein()
+		{
+			super("Protein", "A nutritious drink for Pok\u00e9mon. It raises the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 202);
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.ATTACK;
 		}
 
-		public int increaseAmt() {
+		public int increaseAmount()
+		{
 			return 10;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class RareCandy extends EVIncreaseItem implements HoldItem {
+	private static class RareCandy extends Item implements HoldItem, PokemonUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RareCandy() {
-			super.name = "Rare Candy";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 203;
-			super.desc = "A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.";
+		public RareCandy()
+		{
+			super("Rare Candy", "A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.", BagCategory.STAT, 203);
 			super.price = 4800;
 		}
 
-		public Stat toIncrease() {
-			return null;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " gained a level!";
 		}
 
-		public int increaseAmt() {
-			return 1;
-		}
-
-		public boolean use(ActivePokemon p) {// TODO: Need Level Up to be
-												// implemented
-			return false;
-		}
-
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			// TODO: Need Level Up to be implemented -- also handle the messafe accordingly
+			return false;
 		}
 	}
 
-	private static class ResistWing extends EVIncreaseItem implements HoldItem {
+	private static class ResistWing extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ResistWing() {
-			super.name = "Resist Wing";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 204;
-			super.desc = "An item for use on a Pok\u00e9mon. It slightly increases the base Defense stat of a single Pok\u00e9mon.";
+		public ResistWing()
+		{
+			super("Resist Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 204);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.DEFENSE;
 		}
 
-		public int increaseAmt() {
+		public int increaseAmount()
+		{
 			return 1;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
 			return 20;
 		}
 	}
 
-	private static class SwiftWing extends EVIncreaseItem implements HoldItem {
+	private static class SwiftWing extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SwiftWing() {
-			super.name = "Swift Wing";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 205;
-			super.desc = "An item for use on a Pok\u00e9mon. It slightly increases the base Speed stat of a single Pok\u00e9mon.";
+		public SwiftWing()
+		{
+			super("Swift Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT, 205);
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SPEED;
 		}
 
-		public int increaseAmt() {
+		public int increaseAmount()
+		{
 			return 1;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
 			return 20;
 		}
 	}
 
-	private static class Zinc extends EVIncreaseItem implements HoldItem {
+	private static class Zinc extends Item implements PokemonUseItem, HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Zinc() {
-			super.name = "Zinc";
-			super.cat = BagCategory.STAT;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 206;
-			super.desc = "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Def (Special Defense) stat of a single Pok\u00e9mon.";
+		public Zinc()
+		{
+			super("Zinc", "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Def (Special Defense) stat of a single Pok\u00e9mon.", BagCategory.STAT, 206);
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
+		public Stat toIncrease()
+		{
 			return Stat.SP_DEFENSE;
 		}
 
-		public int increaseAmt() {
+		public int increaseAmount()
+		{
 			return 10;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class CherishBall extends Item implements BallItem {
+	private static class CherishBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public CherishBall() {
-			super.name = "Cherish Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 207;
-			super.desc = "A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.";
+		public CherishBall()
+		{
+			super("Cherish Ball", "A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.", BagCategory.BALL, 207);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class DiveBall extends Item implements BallItem {
+	private static class DiveBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DiveBall() {
-			super.name = "Dive Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 208;
-			super.desc = "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.";
+		public DiveBall()
+		{
+			super("Dive Ball", "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.", BagCategory.BALL, 208);
 			super.price = 1000;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			// TODO: How do I see if the user is underwater, surfing, or fishing?
+			if (false) return new double[] {3.5, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {// TODO:
-																				// How
-																				// do
-																				// I
-																				// see
-																				// if
-																				// the
-																				// user
-																				// is
-																				// underwater,
-																				// surfing,
-																				// or
-																				// fishing?
-			if (false)
-				return new double[] { 3.5, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class DuskBall extends Item implements BallItem {
+	private static class DuskBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public DuskBall() {
-			super.name = "Dusk Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 209;
-			super.desc = "A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.";
+		public DuskBall()
+		{
+			super("Dusk Ball", "A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.", BagCategory.BALL, 209);
 			super.price = 1000;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			// TODO: How do I see if the user is in a dark environment?
+			if (false) return new double[] {3.5, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {// TODO:
-																				// How
-																				// do
-																				// I
-																				// see
-																				// if
-																				// the
-																				// user
-																				// is
-																				// in
-																				// a
-																				// dark
-																				// environment?
-			if (false)
-				return new double[] { 3.5, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class FastBall extends Item implements BallItem {
+	private static class FastBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public FastBall() {
-			super.name = "Fast Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 210;
-			super.desc = "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.";
+		public FastBall()
+		{
+			super("Fast Ball", "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.", BagCategory.BALL, 210);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (o.getStat(Stat.SPEED) >= 100) return new double[] {4, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getStat(Stat.SPEED) >= 100)
-				return new double[] { 4, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class GreatBall extends Item implements BallItem {
+	private static class GreatBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GreatBall() {
-			super.name = "Great Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 211;
-			super.desc = "A good, high-performance Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.";
+		public GreatBall()
+		{
+			super("Great Ball", "A good, high-performance Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.", BagCategory.BALL, 211);
 			super.price = 600;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {1.5, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1.5, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class HealBall extends Item implements BallItem {
+	private static class HealBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public HealBall() {
-			super.name = "Heal Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 212;
-			super.desc = "A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.";
+		public HealBall()
+		{
+			super("Heal Ball", "A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.", BagCategory.BALL, 212);
 			super.price = 300;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
+		public void afterCaught(ActivePokemon p)
+		{
 			p.healHealthFraction(1);
-			for (Move m : p.getMoves())
-				m.increasePP(m.getAttack().getPP());
+			for (Move m : p.getMoves()) m.increasePP(m.getAttack().getPP());
 		}
 	}
 
-	private static class HeavyBall extends Item implements BallItem {
+	private static class HeavyBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public HeavyBall() {
-			super.name = "Heavy Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 213;
-			super.desc = "A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.";
+		public HeavyBall()
+		{
+			super("Heavy Ball", "A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.", BagCategory.BALL, 213);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
 			double weight = o.getWeight(b);
-
+			
 			double[] res = new double[2];
 			res[0] = 1;
-
-			if (weight <= 451.5)
-				res[1] = -20;
-			else if (weight <= 661.5)
-				res[1] = 20;
-			else if (weight <= 903.0)
-				res[1] = 30;
-			else
-				res[1] = 40;
-
+			
+			if (weight <= 451.5) res[1] = -20;
+			else if (weight <= 661.5) res[1] = 20;
+			else if (weight <= 903.0) res[1] = 30;
+			else res[1] = 40;
+			
 			return res;
 		}
 
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class LevelBall extends Item implements BallItem {
+	private static class LevelBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LevelBall() {
-			super.name = "Level Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 214;
-			super.desc = "A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.";
+		public LevelBall()
+		{
+			super("Level Ball", "A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.", BagCategory.BALL, 214);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (me.getLevel()/4 > o.getLevel()) return new double[] {8, 0};
+			else if (me.getLevel()/2 > o.getLevel()) return new double[] {4, 0};
+			else if (me.getLevel() > o.getLevel()) return new double[] {2, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.getLevel() / 4 > o.getLevel())
-				return new double[] { 8, 0 };
-			else if (me.getLevel() / 2 > o.getLevel())
-				return new double[] { 4, 0 };
-			else if (me.getLevel() > o.getLevel())
-				return new double[] { 2, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class LoveBall extends Item implements BallItem {
+	private static class LoveBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LoveBall() {
-			super.name = "Love Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 215;
-			super.desc = "Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.";
+		public LoveBall()
+		{
+			super("Love Ball", "Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.", BagCategory.BALL, 215);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (me.getGender() == o.getGender()) return new double[] {8, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.getGender() == o.getGender())
-				return new double[] { 8, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class LureBall extends Item implements BallItem {
+	private static class LureBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LureBall() {
-			super.name = "Lure Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 216;
-			super.desc = "A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.";
+		public LureBall()
+		{
+			super("Lure Ball", "A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.", BagCategory.BALL, 216);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (false) return new double[] {3, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (false)
-				return new double[] { 3, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class LuxuryBall extends Item implements BallItem {
+	private static class LuxuryBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LuxuryBall() {
-			super.name = "Luxury Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 217;
-			super.desc = "A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.";
+		public LuxuryBall()
+		{
+			super("Luxury Ball", "A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.", BagCategory.BALL, 217);
 			super.price = 1000;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {// :
-																				// Booring.
-																				// We
-																				// should
-																				// change
-																				// it
-																				// up.
-			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
+			// TODO: Make this item do something more interesting
 		}
 	}
 
-	private static class MasterBall extends Item implements BallItem {
+	private static class MasterBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MasterBall() {
-			super.name = "Master Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 218;
-			super.desc = "The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.";
+		public MasterBall()
+		{
+			super("Master Ball", "The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.", BagCategory.BALL, 218);
 			super.price = 0;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {255, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 255, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class MoonBall extends Item implements BallItem {
+	private static class MoonBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MoonBall() {
-			super.name = "Moon Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 219;
-			super.desc = "A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.";
+		public MoonBall()
+		{
+			super("Moon Ball", "A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.", BagCategory.BALL, 219);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
 			Evolution ev = o.getPokemonInfo().getEvolution();
-			if (ev.getEvolution(EvolutionCheck.ITEM, o, "Moon Stone") != null)
-				return new double[] { 4, 0 };
-			else
-				return new double[] { 1, 0 };
+			if (ev.getEvolution(EvolutionCheck.ITEM, o, "Moon Stone") != null) return new double[] {4, 0};
+			else return new double[] {1, 0};
 		}
 
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class NestBall extends Item implements BallItem {
+	private static class NestBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public NestBall() {
-			super.name = "Nest Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 220;
-			super.desc = "A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.";
+		public NestBall()
+		{
+			super("Nest Ball", "A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.", BagCategory.BALL, 220);
 			super.price = 1000;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (o.getLevel() <= 19) return new double[] {3, 0};
+			else if (o.getLevel() <= 29) return new double[] {2, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getLevel() <= 19)
-				return new double[] { 3, 0 };
-			else if (o.getLevel() <= 29)
-				return new double[] { 2, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class NetBall extends Item implements BallItem {
+	private static class NetBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public NetBall() {
-			super.name = "Net Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 221;
-			super.desc = "A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.";
+		public NetBall()
+		{
+			super("Net Ball", "A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.", BagCategory.BALL, 221);
 			super.price = 1000;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) return new double[] {3, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG))
-				return new double[] { 3, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class PokeBall extends Item implements BallItem {
+	private static class PokeBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PokeBall() {
-			super.name = "Pok\u00e9 Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 222;
-			super.desc = "A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.";
+		public PokeBall()
+		{
+			super("Pok\u00e9 Ball", "A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.", BagCategory.BALL, 222);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class PremierBall extends Item implements BallItem {
+	private static class PremierBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PremierBall() {
-			super.name = "Premier Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 223;
-			super.desc = "A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.";
+		public PremierBall()
+		{
+			super("Premier Ball", "A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.", BagCategory.BALL, 223);
 			super.price = 200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class QuickBall extends Item implements BallItem {
+	private static class QuickBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public QuickBall() {
-			super.name = "Quick Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 224;
-			super.desc = "A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.";
+		public QuickBall()
+		{
+			super("Quick Ball", "A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.", BagCategory.BALL, 224);
 			super.price = 1000;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (b.getTurn() == 1) return new double[] {3, 0};
+			else return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getTurn() == 1)
-				return new double[] { 3, 0 };
-			else
-				return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class RepeatBall extends Item implements BallItem {
+	private static class RepeatBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RepeatBall() {
-			super.name = "Repeat Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 225;
-			super.desc = "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.";
+		public RepeatBall()
+		{
+			super("Repeat Ball", "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.", BagCategory.BALL, 225);
 			super.price = 1000;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (b.getPlayer().getPokedex().caught(o.getName())) return new double[] {3, 0};
+			return new double[] {1, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getPlayer().getPokedex().caught(o.getName()))
-				return new double[] { 3, 0 };
-			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class SafariBall extends Item implements BallItem {
+	private static class SafariBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SafariBall() {
-			super.name = "Safari Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 226;
-			super.desc = "A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.";
-			super.price = 0;
+		public SafariBall()
+		{
+			super("Safari Ball", "A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.", BagCategory.BALL, 226);
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 0;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {1.5, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1.5, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class TimerBall extends Item implements BallItem {
+	private static class TimerBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public TimerBall() {
-			super.name = "Timer Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 227;
-			super.desc = "A somewhat different Ball that becomes progressively better the more turns there are in a battle.";
+		public TimerBall()
+		{
+			super("Timer Ball", "A somewhat different Ball that becomes progressively better the more turns there are in a battle.", BagCategory.BALL, 227);
 			super.price = 1000;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (b.getTurn() <= 10) return new double[] {1, 0};
+			else if (b.getTurn() <= 20) return new double[] {2, 0};
+			else if (b.getTurn() <= 30) return new double[] {3, 0};
+			else return new double[] {4, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getTurn() <= 10)
-				return new double[] { 1, 0 };
-			else if (b.getTurn() <= 20)
-				return new double[] { 2, 0 };
-			else if (b.getTurn() <= 30)
-				return new double[] { 3, 0 };
-			else
-				return new double[] { 4, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class UltraBall extends Item implements BallItem {
+	private static class UltraBall extends Item implements BallItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public UltraBall() {
-			super.name = "Ultra Ball";
-			super.cat = BagCategory.BALL;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.BALL };
-			super.index = 228;
-			super.desc = "An ultra-performance Ball that provides a higher Pok\u00e9mon catch rate than a Great Ball.";
+		public UltraBall()
+		{
+			super("Ultra Ball", "An ultra-performance Ball that provides a higher Pok\u00e9mon catch rate than a Great Ball.", BagCategory.BALL, 228);
 			super.price = 1200;
+			super.bcat.add(BattleBagCategory.BALL);
 		}
 
-		public int flingDamage() {
-			return 30;
+		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			return new double[] {2, 0};
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 2, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			return;
+		public void afterCaught(ActivePokemon p)
+		{
 		}
 	}
 
-	private static class CheriBerry extends StatusConditionRemoveItem implements
-			StatusBerry {
+	private static class CheriBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	{
 		private static final long serialVersionUID = 1L;
 
-		public CheriBerry() {
-			super.name = "Cheri Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 229;
-			super.desc = "If held by a Pok\u00e9mon, it recovers from paralysis.";
+		public CheriBerry()
+		{
+			super("Cheri Berry", "If held by a Pok\u00e9mon, it recovers from paralysis.", BagCategory.BERRY, 229);
 			super.price = 20;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
+		public StatusCondition toRemove()
+		{
 			return StatusCondition.PARALYZED;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
 		}
 
-		public Type naturalGiftType() {
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			if (use(user, b))
+			{
+				b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+			}
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
 			return Type.FIRE;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
-		}
-
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			if (use(user, b))
-				b.addMessage(getSuccessMessage(user), user.getStatus()
-						.getType(), user.user());
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class ChestoBerry extends StatusConditionRemoveItem
-			implements StatusBerry {
+	private static class ChestoBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ChestoBerry() {
-			super.name = "Chesto Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 230;
-			super.desc = "If held by a Pok\u00e9mon, it recovers from sleep.";
+		public ChestoBerry()
+		{
+			super("Chesto Berry", "If held by a Pok\u00e9mon, it recovers from sleep.", BagCategory.BERRY, 230);
 			super.price = 20;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
+		public StatusCondition toRemove()
+		{
 			return StatusCondition.ASLEEP;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
 		}
 
-		public Type naturalGiftType() {
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			if (use(user, b))
+			{
+				b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+			}
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
 			return Type.WATER;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
-		}
-
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			if (use(user, b))
-				b.addMessage(getSuccessMessage(user), user.getStatus()
-						.getType(), user.user());
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class PechaBerry extends StatusConditionRemoveItem implements
-			StatusBerry {
+	private static class PechaBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PechaBerry() {
-			super.name = "Pecha Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 231;
-			super.desc = "If held by a Pok\u00e9mon, it recovers from poison.";
+		public PechaBerry()
+		{
+			super("Pecha Berry", "If held by a Pok\u00e9mon, it recovers from poison.", BagCategory.BERRY, 231);
 			super.price = 20;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
+		public StatusCondition toRemove()
+		{
 			return StatusCondition.POISONED;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
 		}
 
-		public Type naturalGiftType() {
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			if (use(user, b))
+			{
+				b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+			}
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
 			return Type.ELECTRIC;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
-		}
-
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			if (use(user, b))
-				b.addMessage(getSuccessMessage(user), user.getStatus()
-						.getType(), user.user());
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class RawstBerry extends StatusConditionRemoveItem implements
-			StatusBerry {
+	private static class RawstBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RawstBerry() {
-			super.name = "Rawst Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 232;
-			super.desc = "If held by a Pok\u00e9mon, it recovers from a burn.";
+		public RawstBerry()
+		{
+			super("Rawst Berry", "If held by a Pok\u00e9mon, it recovers from a burn.", BagCategory.BERRY, 232);
 			super.price = 20;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
+		public StatusCondition toRemove()
+		{
 			return StatusCondition.BURNED;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
 		}
 
-		public Type naturalGiftType() {
-			return Type.GRASS;
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
 		}
 
-		public int naturalGiftPower() {
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			if (use(user, b))
+			{
+				b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+			}
+		}
+
+		public int naturalGiftPower()
+		{
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			if (use(user, b))
-				b.addMessage(getSuccessMessage(user), user.getStatus()
-						.getType(), user.user());
+		public Type naturalGiftType()
+		{
+			return Type.GRASS;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class AspearBerry extends StatusConditionRemoveItem
-			implements StatusBerry {
+	private static class AspearBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	{
 		private static final long serialVersionUID = 1L;
 
-		public AspearBerry() {
-			super.name = "Aspear Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 233;
-			super.desc = "If held by a Pok\u00e9mon, it defrosts it.";
+		public AspearBerry()
+		{
+			super("Aspear Berry", "If held by a Pok\u00e9mon, it defrosts it.", BagCategory.BERRY, 233);
 			super.price = 20;
+			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
+		public StatusCondition toRemove()
+		{
 			return StatusCondition.FROZEN;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
 		}
 
-		public Type naturalGiftType() {
-			return Type.GRASS;
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			return true;
 		}
 
-		public int naturalGiftPower() {
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			if (use(user, b))
+			{
+				b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+			}
+		}
+
+		public int naturalGiftPower()
+		{
 			return 60;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			if (use(user, b))
-				b.addMessage(getSuccessMessage(user), user.getStatus()
-						.getType(), user.user());
+		public Type naturalGiftType()
+		{
+			return Type.GRASS;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class LeppaBerry extends Item implements EndTurnEffect,
-			MoveUseItem, GainableEffectBerry {
+	private static class LeppaBerry extends Item implements EndTurnEffect, MoveUseItem, GainableEffectBerry
+	{
 		private static final long serialVersionUID = 1L;
-		private String restore;
-
-		public LeppaBerry() {
-			super.name = "Leppa Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 234;
-			super.desc = "If held by a Pok\u00e9mon, it restores a move's PP by 10.";
+private String restore;
+		public LeppaBerry()
+		{
+			super("Leppa Berry", "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 234);
 			super.price = 20;
+			super.bcat.add(BattleBagCategory.HPPP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getSuccessMessage(ActivePokemon p)
+		{
 			return p.getName() + "'s " + restore + "'s PP was restored!";
 		}
 
-		public void apply(ActivePokemon victim, Battle b) {
-			for (Move m : victim.getMoves()) {
-				if (m.getPP() == 0) {
-					b.addMessage(victim.getName() + "'s " + this.name
-							+ " restored " + m.getAttack().getName() + "'s PP!");
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			for (Move m : victim.getMoves())
+			{
+				if (m.getPP() == 0)
+				{
+					b.addMessage(victim.getName() + "'s " + this.name + " restored " + m.getAttack().getName() + "'s PP!");
 					m.increasePP(10);
 					victim.consumeItem(b);
 					break;
@@ -6618,1480 +8186,2063 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 		}
 
-		public boolean use(Move m) {
+		public boolean use(Move m)
+		{
 			restore = m.getAttack().getName();
 			return m.increasePP(10);
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.FIGHTING;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
 			List<Move> list = new ArrayList<>();
-			for (Move m : user.getMoves()) {
-				if (m.getPP() < m.getMaxPP()) {
+			for (Move m : user.getMoves())
+			{
+				if (m.getPP() < m.getMaxPP())
+				{
 					list.add(m);
 				}
 			}
-
+			
 			int size = list.size();
-			if (size == 0)
-				return;
-
-			Move m = list.get((int) (Math.random() * size));
+			if (size == 0) return;
+			
+			Move m = list.get((int)(Math.random()*size));
 			m.increasePP(10);
-			b.addMessage(user.getName() + "'s " + this.name + " restored "
-					+ m.getAttack().getName() + "'s PP!");
-		}
-	}
-
-	private static class OranBerry extends HealItem implements
-			HealthTriggeredBerry {
-		private static final long serialVersionUID = 1L;
-
-		public OranBerry() {
-			super.name = "Oran Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 235;
-			super.desc = "If held by a Pok\u00e9mon, it heals the user by just 10 HP.";
-			super.price = 20;
+			b.addMessage(user.getName() + "'s " + this.name + " restored " + m.getAttack().getName() + "'s PP!");
 		}
 
-		public int healAmt() {
-			return 10;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.POISON;
-		}
-
-		public int naturalGiftPower() {
+		public int naturalGiftPower()
+		{
 			return 60;
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
-			if (user.fullHealth())
-				return false;
-
-			user.heal(10);
-			b.addMessage(user.getName() + " was healed by its " + this.name
-					+ "!", user.getHP(), user.user());
-			return true;
+		public Type naturalGiftType()
+		{
+			return Type.FIGHTING;
 		}
 
-		public double healthTriggerRatio() {
-			return 1 / 3.0;
-		}
-
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			useHealthTriggerBerry(b, user);
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class PersimBerry extends Item implements BattleUseItem,
-			GainableEffectBerry {
+	private static class OranBerry extends Item implements PokemonUseItem, BattleUseItem, HealthTriggeredBerry
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PersimBerry() {
-			super.name = "Persim Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 236;
-			super.desc = "If held by a Pok\u00e9mon, it recovers from confusion.";
+		public OranBerry()
+		{
+			super("Oran Berry", "If held by a Pok\u00e9mon, it heals the user by just 10 HP.", BagCategory.BERRY, 235);
 			super.price = 20;
+			super.bcat.add(BattleBagCategory.HPPP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " snapped out of its confusion!";
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
-			if (p.hasEffect("Confusion")) {
-				p.getAttributes().removeEffect("Confusion");
-				return true;
-			}
-
-			return false;
-		}
-
-		public int flingDamage() {
+		public int healAmount()
+		{
 			return 10;
 		}
 
-		public Type naturalGiftType() {
-			return Type.GROUND;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
 		}
 
-		public int naturalGiftPower() {
-			return 60;
+		public boolean use(ActivePokemon p)
+		{
+			return p.heal(healAmount()) != 0;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			if (use(user, b)) {
-				b.addMessage(getSuccessMessage(user));
-			}
-		}
-	}
-
-	private static class LumBerry extends Item implements PokemonUseItem,
-			BattleUseItem, StatusBerry {
-		private static final long serialVersionUID = 1L;
-
-		public LumBerry() {
-			super.name = "Lum Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.STATUS };
-			super.index = 237;
-			super.desc = "If held by a Pok\u00e9mon, it recovers from any status problem.";
-			super.price = 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was cured of its status condition!";
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
+		public boolean use(ActivePokemon p, Battle b)
+		{
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED))
-				return false;
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			if (user.fullHealth()) return false;
+			
+			user.heal(10);
+			b.addMessage(user.getName() + " was healed by its " + this.name + "!", user.getHP(), user.user());
+			return true;
+		}
 
+		public double healthTriggerRatio()
+		{
+			return 1/3.0;
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.POISON;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public PersimBerry()
+		{
+			super("Persim Berry", "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 236);
+			super.price = 20;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " snapped out of its confusion!";
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			if (p.hasEffect("Confusion"))
+			{
+				p.getAttributes().removeEffect("Confusion");
+				return true;
+			}
+			
+			return false;
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			if (use(user, b))
+			{
+				b.addMessage(getSuccessMessage(user));
+			}
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.GROUND;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class LumBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public LumBerry()
+		{
+			super("Lum Berry", "If held by a Pok\u00e9mon, it recovers from any status problem.", BagCategory.BERRY, 237);
+			super.price = 20;
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
+			
 			p.removeStatus();
 			return true;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.FLYING;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			if (use(user, b))
-				b.addMessage(getSuccessMessage(user), user.getStatus()
-						.getType(), user.user());
-		}
-	}
-
-	private static class SitrusBerry extends Item implements PokemonUseItem,
-			BattleUseItem, HealthTriggeredBerry {
-		private static final long serialVersionUID = 1L;
-
-		public SitrusBerry() {
-			super.name = "Sitrus Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[] { BattleBagCategory.HPPP };
-			super.index = 238;
-			super.desc = "If held by a Pok\u00e9mon, it heals the user by a little.";
-			super.price = 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
+		public boolean use(ActivePokemon p, Battle b)
+		{
 			return use(p);
 		}
 
-		public boolean use(ActivePokemon p) {
-			return p.healHealthFraction(1 / 4.0) != 0;
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			if (use(user, b))
+			{
+				b.addMessage(getSuccessMessage(user), user.getStatus().getType(), user.user());
+			}
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.PSYCHIC;
-		}
-
-		public int naturalGiftPower() {
+		public int naturalGiftPower()
+		{
 			return 60;
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
-			if (user.fullHealth())
-				return false;
+		public Type naturalGiftType()
+		{
+			return Type.FLYING;
+		}
 
-			user.healHealthFraction(1 / 4.0);
-			b.addMessage(user.getName() + " was healed by its " + this.name
-					+ "!", user.getHP(), user.user());
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class SitrusBerry extends Item implements PokemonUseItem, BattleUseItem, HealthTriggeredBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public SitrusBerry()
+		{
+			super("Sitrus Berry", "If held by a Pok\u00e9mon, it heals the user by a little.", BagCategory.BERRY, 238);
+			super.price = 20;
+			super.bcat.add(BattleBagCategory.HPPP);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s health was restored!";
+		}
+
+		public boolean use(ActivePokemon p)
+		{
+			return p.healHealthFraction(1/4.0) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(p);
+		}
+
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			if (user.fullHealth()) return false;
+			
+			user.healHealthFraction(1/4.0);
+			b.addMessage(user.getName() + " was healed by its " + this.name + "!", user.getHP(), user.user());
 			return true;
 		}
 
-		public double healthTriggerRatio() {
-			return 1 / 2.0;
+		public double healthTriggerRatio()
+		{
+			return 1/2.0;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
 			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.PSYCHIC;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class RazzBerry extends Item implements Berry {
+	private static class RazzBerry extends Item implements Berry
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RazzBerry() {
-			super.name = "Razz Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 239;
-			super.desc = "A very valuable berry. Useful for aquiring value.";
+		public RazzBerry()
+		{
+			super("Razz Berry", "A very valuable berry. Useful for aquiring value.", BagCategory.BERRY, 239);
 			super.price = 60000;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public int naturalGiftPower()
+		{
+			return 60;
 		}
 
-		public Type naturalGiftType() {
+		public Type naturalGiftType()
+		{
 			return Type.STEEL;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class PomegBerry extends EVDecreaseBerry {
+	private static class PomegBerry extends Item implements Berry, PokemonUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public PomegBerry() {
-			super.name = "Pomeg Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 240;
-			super.desc = "Using it on a Pok\u00e9mon lowers its base HP.";
+		public PomegBerry()
+		{
+			super("Pomeg Berry", "Using it on a Pok\u00e9mon lowers its base HP.", BagCategory.BERRY, 240);
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
+		public Stat toDecrease()
+		{
 			return Stat.HP;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
 		}
 
-		public Type naturalGiftType() {
+		public int naturalGiftPower()
+		{
+			return 70;
+		}
+
+		public Type naturalGiftType()
+		{
 			return Type.ICE;
 		}
 
-		public int naturalGiftPower() {
-			return 70;
+		public boolean use(ActivePokemon p)
+		{
+			int[] vals = new int[Stat.NUM_STATS];
+			if (p.getEV(toDecrease().index()) > 110)
+			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			else
+			vals[toDecrease().index()] -= 10;
+			
+			return p.addEVs(vals);
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class KelpsyBerry extends EVDecreaseBerry {
+	private static class KelpsyBerry extends Item implements Berry, PokemonUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public KelpsyBerry() {
-			super.name = "Kelpsy Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 241;
-			super.desc = "Using it on a Pok\u00e9mon lowers its base Attack stat.";
+		public KelpsyBerry()
+		{
+			super("Kelpsy Berry", "Using it on a Pok\u00e9mon lowers its base Attack stat.", BagCategory.BERRY, 241);
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
+		public Stat toDecrease()
+		{
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
 		}
 
-		public Type naturalGiftType() {
+		public int naturalGiftPower()
+		{
+			return 70;
+		}
+
+		public Type naturalGiftType()
+		{
 			return Type.FIGHTING;
 		}
 
-		public int naturalGiftPower() {
-			return 70;
+		public boolean use(ActivePokemon p)
+		{
+			int[] vals = new int[Stat.NUM_STATS];
+			if (p.getEV(toDecrease().index()) > 110)
+			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			else
+			vals[toDecrease().index()] -= 10;
+			
+			return p.addEVs(vals);
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class QualotBerry extends EVDecreaseBerry {
+	private static class QualotBerry extends Item implements Berry, PokemonUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public QualotBerry() {
-			super.name = "Qualot Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 242;
-			super.desc = "Using it on a Pok\u00e9mon lowers its base Defense stat.";
+		public QualotBerry()
+		{
+			super("Qualot Berry", "Using it on a Pok\u00e9mon lowers its base Defense stat.", BagCategory.BERRY, 242);
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
+		public Stat toDecrease()
+		{
 			return Stat.DEFENSE;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
 		}
 
-		public Type naturalGiftType() {
+		public int naturalGiftPower()
+		{
+			return 70;
+		}
+
+		public Type naturalGiftType()
+		{
 			return Type.POISON;
 		}
 
-		public int naturalGiftPower() {
-			return 70;
+		public boolean use(ActivePokemon p)
+		{
+			int[] vals = new int[Stat.NUM_STATS];
+			if (p.getEV(toDecrease().index()) > 110)
+			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			else
+			vals[toDecrease().index()] -= 10;
+			
+			return p.addEVs(vals);
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class HondewBerry extends EVDecreaseBerry {
+	private static class HondewBerry extends Item implements Berry, PokemonUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public HondewBerry() {
-			super.name = "Hondew Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 243;
-			super.desc = "Using it on a Pok\u00e9mon lowers its base Sp. Atk stat.";
+		public HondewBerry()
+		{
+			super("Hondew Berry", "Using it on a Pok\u00e9mon lowers its base Sp. Atk stat.", BagCategory.BERRY, 243);
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
+		public Stat toDecrease()
+		{
 			return Stat.SP_ATTACK;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
 		}
 
-		public Type naturalGiftType() {
+		public int naturalGiftPower()
+		{
+			return 70;
+		}
+
+		public Type naturalGiftType()
+		{
 			return Type.GROUND;
 		}
 
-		public int naturalGiftPower() {
-			return 70;
+		public boolean use(ActivePokemon p)
+		{
+			int[] vals = new int[Stat.NUM_STATS];
+			if (p.getEV(toDecrease().index()) > 110)
+			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			else
+			vals[toDecrease().index()] -= 10;
+			
+			return p.addEVs(vals);
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class GrepaBerry extends EVDecreaseBerry {
+	private static class GrepaBerry extends Item implements Berry, PokemonUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public GrepaBerry() {
-			super.name = "Grepa Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 244;
-			super.desc = "Using it on a Pok\u00e9mon lowers its base Sp. Def stat.";
+		public GrepaBerry()
+		{
+			super("Grepa Berry", "Using it on a Pok\u00e9mon lowers its base Sp. Def stat.", BagCategory.BERRY, 244);
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
+		public Stat toDecrease()
+		{
 			return Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
 		}
 
-		public Type naturalGiftType() {
+		public int naturalGiftPower()
+		{
+			return 70;
+		}
+
+		public Type naturalGiftType()
+		{
 			return Type.FLYING;
 		}
 
-		public int naturalGiftPower() {
-			return 70;
+		public boolean use(ActivePokemon p)
+		{
+			int[] vals = new int[Stat.NUM_STATS];
+			if (p.getEV(toDecrease().index()) > 110)
+			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			else
+			vals[toDecrease().index()] -= 10;
+			
+			return p.addEVs(vals);
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class TamatoBerry extends EVDecreaseBerry {
+	private static class TamatoBerry extends Item implements Berry, PokemonUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public TamatoBerry() {
-			super.name = "Tamato Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 245;
-			super.desc = "Using it on a Pok\u00e9mon lowers its base Speed.";
+		public TamatoBerry()
+		{
+			super("Tamato Berry", "Using it on a Pok\u00e9mon lowers its base Speed.", BagCategory.BERRY, 245);
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
+		public Stat toDecrease()
+		{
 			return Stat.SPEED;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
 		}
 
-		public Type naturalGiftType() {
-			return Type.PSYCHIC;
-		}
-
-		public int naturalGiftPower() {
+		public int naturalGiftPower()
+		{
 			return 70;
 		}
-	}
 
-	private static class OccaBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public OccaBerry() {
-			super.name = "Occa Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 246;
-			super.desc = "Weakens a supereffective Fire-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.FIRE;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.FIRE;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class PasshoBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public PasshoBerry() {
-			super.name = "Passho Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 247;
-			super.desc = "Weakens a supereffective Water-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.WATER;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.WATER;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class WacanBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public WacanBerry() {
-			super.name = "Wacan Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 248;
-			super.desc = "Weakens a supereffective Electric-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.ELECTRIC;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.ELECTRIC;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class RindoBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public RindoBerry() {
-			super.name = "Rindo Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 249;
-			super.desc = "Weakens a supereffective Grass-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.GRASS;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.GRASS;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class YacheBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public YacheBerry() {
-			super.name = "Yache Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 250;
-			super.desc = "Weakens a supereffective Ice-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.ICE;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.ICE;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class ChopleBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public ChopleBerry() {
-			super.name = "Chople Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 251;
-			super.desc = "Weakens a supereffective Fighting-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.FIGHTING;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.FIGHTING;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class KebiaBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public KebiaBerry() {
-			super.name = "Kebia Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 252;
-			super.desc = "Weakens a supereffective Poison-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.POISON;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.POISON;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class ShucaBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public ShucaBerry() {
-			super.name = "Shuca Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 253;
-			super.desc = "Weakens a supereffective Ground-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.GROUND;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.GROUND;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class CobaBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public CobaBerry() {
-			super.name = "Coba Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 254;
-			super.desc = "Weakens a supereffective Flying-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
-			return Type.FLYING;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.FLYING;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class PayapaBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public PayapaBerry() {
-			super.name = "Payapa Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 255;
-			super.desc = "Weakens a supereffective Psychic-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
-		}
-
-		public Type getType() {
+		public Type naturalGiftType()
+		{
 			return Type.PSYCHIC;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public boolean use(ActivePokemon p)
+		{
+			int[] vals = new int[Stat.NUM_STATS];
+			if (p.getEV(toDecrease().index()) > 110)
+			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			else
+			vals[toDecrease().index()] -= 10;
+			
+			return p.addEVs(vals);
 		}
 
-		public Type naturalGiftType() {
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class OccaBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public OccaBerry()
+		{
+			super("Occa Berry", "Weakens a supereffective Fire-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 246);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.FIRE;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.FIRE;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class PasshoBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public PasshoBerry()
+		{
+			super("Passho Berry", "Weakens a supereffective Water-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 247);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.WATER;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.WATER;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class WacanBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public WacanBerry()
+		{
+			super("Wacan Berry", "Weakens a supereffective Electric-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 248);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.ELECTRIC;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.ELECTRIC;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class RindoBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public RindoBerry()
+		{
+			super("Rindo Berry", "Weakens a supereffective Grass-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 249);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.GRASS;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.GRASS;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class YacheBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public YacheBerry()
+		{
+			super("Yache Berry", "Weakens a supereffective Ice-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 250);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.ICE;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.ICE;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class ChopleBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ChopleBerry()
+		{
+			super("Chople Berry", "Weakens a supereffective Fighting-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 251);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.FIGHTING;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.FIGHTING;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class KebiaBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public KebiaBerry()
+		{
+			super("Kebia Berry", "Weakens a supereffective Poison-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 252);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.POISON;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.POISON;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class ShucaBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ShucaBerry()
+		{
+			super("Shuca Berry", "Weakens a supereffective Ground-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 253);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.GROUND;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.GROUND;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class CobaBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public CobaBerry()
+		{
+			super("Coba Berry", "Weakens a supereffective Flying-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 254);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
+			return Type.FLYING;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.FLYING;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class PayapaBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public PayapaBerry()
+		{
+			super("Payapa Berry", "Weakens a supereffective Psychic-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 255);
+			super.price = 20;
+		}
+
+		public Type getType()
+		{
 			return Type.PSYCHIC;
 		}
 
-		public int naturalGiftPower() {
+		public int naturalGiftPower()
+		{
 			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.PSYCHIC;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class TangaBerry extends SuperEffectivePowerReduceBerry {
+	private static class TangaBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public TangaBerry() {
-			super.name = "Tanga Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 256;
-			super.desc = "Weakens a supereffective Bug-type attack against the holding Pok\u00e9mon.";
+		public TangaBerry()
+		{
+			super("Tanga Berry", "Weakens a supereffective Bug-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 256);
 			super.price = 20;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.BUG;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public int naturalGiftPower()
+		{
+			return 60;
 		}
 
-		public Type naturalGiftType() {
+		public Type naturalGiftType()
+		{
 			return Type.BUG;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class ChartiBerry extends SuperEffectivePowerReduceBerry {
+	private static class ChartiBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ChartiBerry() {
-			super.name = "Charti Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 257;
-			super.desc = "Weakens a supereffective Rock-type attack against the holding Pok\u00e9mon.";
+		public ChartiBerry()
+		{
+			super("Charti Berry", "Weakens a supereffective Rock-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 257);
 			super.price = 20;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.ROCK;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public int naturalGiftPower()
+		{
+			return 60;
 		}
 
-		public Type naturalGiftType() {
+		public Type naturalGiftType()
+		{
 			return Type.ROCK;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class KasibBerry extends SuperEffectivePowerReduceBerry {
+	private static class KasibBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public KasibBerry() {
-			super.name = "Kasib Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 258;
-			super.desc = "Weakens a supereffective Ghost-type attack against the holding Pok\u00e9mon.";
+		public KasibBerry()
+		{
+			super("Kasib Berry", "Weakens a supereffective Ghost-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 258);
 			super.price = 20;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.GHOST;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public int naturalGiftPower()
+		{
+			return 60;
 		}
 
-		public Type naturalGiftType() {
+		public Type naturalGiftType()
+		{
 			return Type.GHOST;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class HabanBerry extends SuperEffectivePowerReduceBerry {
+	private static class HabanBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public HabanBerry() {
-			super.name = "Haban Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 259;
-			super.desc = "Weakens a supereffective Dragon-type attack against the holding Pok\u00e9mon.";
+		public HabanBerry()
+		{
+			super("Haban Berry", "Weakens a supereffective Dragon-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 259);
 			super.price = 20;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.DRAGON;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public int naturalGiftPower()
+		{
+			return 60;
 		}
 
-		public Type naturalGiftType() {
+		public Type naturalGiftType()
+		{
 			return Type.DRAGON;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class ColburBerry extends SuperEffectivePowerReduceBerry {
+	private static class ColburBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public ColburBerry() {
-			super.name = "Colbur Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 260;
-			super.desc = "Weakens a supereffective Dark-type attack against the holding Pok\u00e9mon.";
+		public ColburBerry()
+		{
+			super("Colbur Berry", "Weakens a supereffective Dark-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 260);
 			super.price = 20;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.DARK;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public int naturalGiftPower()
+		{
+			return 60;
 		}
 
-		public Type naturalGiftType() {
+		public Type naturalGiftType()
+		{
 			return Type.DARK;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class BabiriBerry extends SuperEffectivePowerReduceBerry {
+	private static class BabiriBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BabiriBerry() {
-			super.name = "Babiri Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 261;
-			super.desc = "Weakens a supereffective Steel-type attack against the holding Pok\u00e9mon.";
+		public BabiriBerry()
+		{
+			super("Babiri Berry", "Weakens a supereffective Steel-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 261);
 			super.price = 20;
 		}
 
-		public Type getType() {
+		public Type getType()
+		{
 			return Type.STEEL;
 		}
 
-		public int flingDamage() {
-			return 10;
+		public int naturalGiftPower()
+		{
+			return 60;
 		}
 
-		public Type naturalGiftType() {
+		public Type naturalGiftType()
+		{
 			return Type.STEEL;
 		}
 
-		public int naturalGiftPower() {
-			return 60;
-		}
-	}
-
-	private static class ChilanBerry extends SuperEffectivePowerReduceBerry {
-		private static final long serialVersionUID = 1L;
-
-		public ChilanBerry() {
-			super.name = "Chilan Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 262;
-			super.desc = "Weakens a supereffective Normal-type attack against the holding Pok\u00e9mon.";
-			super.price = 20;
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
 		}
 
-		public Type getType() {
-			return Type.NORMAL;
-		}
-
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 10;
 		}
-
-		public Type naturalGiftType() {
-			return Type.NORMAL;
-		}
-
-		public int naturalGiftPower() {
-			return 60;
-		}
 	}
 
-	private static class LiechiBerry extends HealthTriggeredStageIncreaseBerry {
+	private static class ChilanBerry extends Item implements Berry, OpponentPowerChangeEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public LiechiBerry() {
-			super.name = "Liechi Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 263;
-			super.desc = "If held by a Pok\u00e9mon, it raises its Attack stat in a pinch.";
+		public ChilanBerry()
+		{
+			super("Chilan Berry", "Weakens a supereffective Normal-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 262);
 			super.price = 20;
 		}
 
-		public Stat toRaise() {
+		public Type getType()
+		{
+			return Type.NORMAL;
+		}
+
+		public int naturalGiftPower()
+		{
+			return 60;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.NORMAL;
+		}
+
+		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			Type t = user.getAttack().getType(b, user);
+			
+			if (t == getType() && Type.getAdvantage(t, victim, b) > 1)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+				victim.consumeItem(b);
+				return .5;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class LiechiBerry extends Item implements HealthTriggeredBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public LiechiBerry()
+		{
+			super("Liechi Berry", "If held by a Pok\u00e9mon, it raises its Attack stat in a pinch.", BagCategory.BERRY, 263);
+			super.price = 20;
+		}
+
+		public Stat toRaise()
+		{
 			return Stat.ATTACK;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.GRASS;
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-	}
-
-	private static class GanlonBerry extends HealthTriggeredStageIncreaseBerry {
-		private static final long serialVersionUID = 1L;
-
-		public GanlonBerry() {
-			super.name = "Ganlon Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 264;
-			super.desc = "If held by a Pok\u00e9mon, it raises its Defense stat in a pinch.";
-			super.price = 20;
-		}
-
-		public Stat toRaise() {
-			return Stat.DEFENSE;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.ICE;
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-	}
-
-	private static class SalacBerry extends HealthTriggeredStageIncreaseBerry {
-		private static final long serialVersionUID = 1L;
-
-		public SalacBerry() {
-			super.name = "Salac Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 265;
-			super.desc = "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.";
-			super.price = 20;
-		}
-
-		public Stat toRaise() {
-			return Stat.SPEED;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.FIGHTING;
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-	}
-
-	private static class PetayaBerry extends HealthTriggeredStageIncreaseBerry {
-		private static final long serialVersionUID = 1L;
-
-		public PetayaBerry() {
-			super.name = "Petaya Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 266;
-			super.desc = "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.";
-			super.price = 20;
-		}
-
-		public Stat toRaise() {
-			return Stat.SP_ATTACK;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.POISON;
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-	}
-
-	private static class ApicotBerry extends HealthTriggeredStageIncreaseBerry {
-		private static final long serialVersionUID = 1L;
-
-		public ApicotBerry() {
-			super.name = "Apicot Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 267;
-			super.desc = "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.";
-			super.price = 20;
-		}
-
-		public Stat toRaise() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.GROUND;
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-	}
-
-	private static class LansatBerry extends Item implements
-			HealthTriggeredBerry {
-		private static final long serialVersionUID = 1L;
-
-		public LansatBerry() {
-			super.name = "Lansat Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 268;
-			super.desc = "If held by a Pok\u00e9mon, it raises its critical-hit ratio in a pinch.";
-			super.price = 20;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.FLYING;
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
-			PokemonEffect.getEffect("RaiseCrits").cast(b, user, user,
-					CastSource.HELD_ITEM, false);
-			b.addMessage(user.getName() + " is getting pumped due to its "
-					+ this.name + "!");
-			return true;
-		}
-
-		public double healthTriggerRatio() {
-			return 1 / 4.0;
-		}
-
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
-			useHealthTriggerBerry(b, user);
-		}
-	}
-
-	private static class StarfBerry extends Item implements
-			HealthTriggeredBerry {
-		private static final long serialVersionUID = 1L;
-
-		public StarfBerry() {
-			super.name = "Starf Berry";
-			super.cat = BagCategory.BERRY;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 269;
-			super.desc = "If held by a Pok\u00e9mon, it raises a random stat in a pinch.";
-			super.price = 20;
-		}
-
-		public int flingDamage() {
-			return 10;
-		}
-
-		public Type naturalGiftType() {
-			return Type.PSYCHIC;
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user) {
-			int rand = (int) (Math.random() * (Stat.NUM_BATTLE_STATS + 1));
-
-			// Raise crit
-			if (rand == Stat.NUM_BATTLE_STATS) {
-				PokemonEffect.getEffect("RaiseCrits").cast(b, user, user,
-						CastSource.HELD_ITEM, false);
-				b.addMessage(user.getName() + " is getting pumped due to its "
-						+ this.name + "!");
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, CastSource.HELD_ITEM))
+			{
 				return true;
 			}
-
-			// Raise random battle stat
-			if (user.getAttributes().modifyStage(user, user, 1,
-					Stat.getStat(rand, true), b, CastSource.HELD_ITEM)) {
-				return true;
-			}
-
+			
 			return false;
 		}
 
-		public double healthTriggerRatio() {
-			return 1 / 4.0;
+		public double healthTriggerRatio()
+		{
+			return 1/4.0;
 		}
 
-		public void useBerry(Battle b, ActivePokemon user, ActivePokemon opp) {
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
 			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 80;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.GRASS;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class CometShard extends Item implements HoldItem {
+	private static class GanlonBerry extends Item implements HealthTriggeredBerry
+	{
 		private static final long serialVersionUID = 1L;
 
-		public CometShard() {
-			super.name = "Comet Shard";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 270;
-			super.desc = "A shard which fell to the ground when a comet approached. A maniac will buy it for a high price.";
+		public GanlonBerry()
+		{
+			super("Ganlon Berry", "If held by a Pok\u00e9mon, it raises its Defense stat in a pinch.", BagCategory.BERRY, 264);
+			super.price = 20;
+		}
+
+		public Stat toRaise()
+		{
+			return Stat.DEFENSE;
+		}
+
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, CastSource.HELD_ITEM))
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		public double healthTriggerRatio()
+		{
+			return 1/4.0;
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 80;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.ICE;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class SalacBerry extends Item implements HealthTriggeredBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public SalacBerry()
+		{
+			super("Salac Berry", "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 265);
+			super.price = 20;
+		}
+
+		public Stat toRaise()
+		{
+			return Stat.SPEED;
+		}
+
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, CastSource.HELD_ITEM))
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		public double healthTriggerRatio()
+		{
+			return 1/4.0;
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 80;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.FIGHTING;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class PetayaBerry extends Item implements HealthTriggeredBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public PetayaBerry()
+		{
+			super("Petaya Berry", "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 266);
+			super.price = 20;
+		}
+
+		public Stat toRaise()
+		{
+			return Stat.SP_ATTACK;
+		}
+
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, CastSource.HELD_ITEM))
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		public double healthTriggerRatio()
+		{
+			return 1/4.0;
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 80;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.POISON;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class ApicotBerry extends Item implements HealthTriggeredBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ApicotBerry()
+		{
+			super("Apicot Berry", "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 267);
+			super.price = 20;
+		}
+
+		public Stat toRaise()
+		{
+			return Stat.SP_DEFENSE;
+		}
+
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, CastSource.HELD_ITEM))
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		public double healthTriggerRatio()
+		{
+			return 1/4.0;
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 80;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.GROUND;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class LansatBerry extends Item implements HealthTriggeredBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public LansatBerry()
+		{
+			super("Lansat Berry", "If held by a Pok\u00e9mon, it raises its critical-hit ratio in a pinch.", BagCategory.BERRY, 268);
+			super.price = 20;
+		}
+
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
+			b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
+			return true;
+		}
+
+		public double healthTriggerRatio()
+		{
+			return 1/4.0;
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 80;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.FLYING;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class StarfBerry extends Item implements HealthTriggeredBerry
+	{
+		private static final long serialVersionUID = 1L;
+
+		public StarfBerry()
+		{
+			super("Starf Berry", "If held by a Pok\u00e9mon, it raises a random stat in a pinch.", BagCategory.BERRY, 269);
+			super.price = 20;
+		}
+
+		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
+		{
+			int rand = (int)(Math.random()*(Stat.NUM_BATTLE_STATS + 1));
+			
+			// Raise crit
+			if (rand == Stat.NUM_BATTLE_STATS)
+			{
+				PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
+				b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
+				return true;
+			}
+			
+			// Raise random battle stat
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.getStat(rand, true), b, CastSource.HELD_ITEM))
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		public double healthTriggerRatio()
+		{
+			return 1/4.0;
+		}
+
+		public void gainBerryEffect(Battle b, ActivePokemon user, ActivePokemon opp)
+		{
+			useHealthTriggerBerry(b, user);
+		}
+
+		public int naturalGiftPower()
+		{
+			return 80;
+		}
+
+		public Type naturalGiftType()
+		{
+			return Type.PSYCHIC;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+	}
+
+	private static class CometShard extends Item implements HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public CometShard()
+		{
+			super("Comet Shard", "A shard which fell to the ground when a comet approached. A maniac will buy it for a high price.", BagCategory.MISC, 270);
 			super.price = 120000;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class TinyMushroom extends Item implements HoldItem {
+	private static class TinyMushroom extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public TinyMushroom() {
-			super.name = "Tiny Mushroom";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 271;
-			super.desc = "A small and rare mushroom. It is sought after by collectors.";
+		public TinyMushroom()
+		{
+			super("Tiny Mushroom", "A small and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 271);
 			super.price = 500;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class BigMushroom extends Item implements HoldItem {
+	private static class BigMushroom extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BigMushroom() {
-			super.name = "Big Mushroom";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 272;
-			super.desc = "A large and rare mushroom. It is sought after by collectors.";
+		public BigMushroom()
+		{
+			super("Big Mushroom", "A large and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 272);
 			super.price = 5000;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class BalmMushroom extends Item implements HoldItem {
+	private static class BalmMushroom extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BalmMushroom() {
-			super.name = "Balm Mushroom";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 273;
-			super.desc = "A rare mushroom which gives off a nice fragrance. A maniac will buy it for a high price.";
+		public BalmMushroom()
+		{
+			super("Balm Mushroom", "A rare mushroom which gives off a nice fragrance. A maniac will buy it for a high price.", BagCategory.MISC, 273);
 			super.price = 50000;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Nugget extends Item implements HoldItem {
+	private static class Nugget extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Nugget() {
-			super.name = "Nugget";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 274;
-			super.desc = "A nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.";
+		public Nugget()
+		{
+			super("Nugget", "A nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.", BagCategory.MISC, 274);
 			super.price = 10000;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class BigNugget extends Item implements HoldItem {
+	private static class BigNugget extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BigNugget() {
-			super.name = "Big Nugget";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 275;
-			super.desc = "A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.";
+		public BigNugget()
+		{
+			super("Big Nugget", "A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.", BagCategory.MISC, 275);
 			super.price = 60000;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Pearl extends Item implements HoldItem {
+	private static class Pearl extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Pearl() {
-			super.name = "Pearl";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 276;
-			super.desc = "A somewhat-small pearl that sparkles in a pretty silver color. It can be sold cheaply to shops.";
+		public Pearl()
+		{
+			super("Pearl", "A somewhat-small pearl that sparkles in a pretty silver color. It can be sold cheaply to shops.", BagCategory.MISC, 276);
 			super.price = 1400;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class BigPearl extends Item implements HoldItem {
+	private static class BigPearl extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public BigPearl() {
-			super.name = "Big Pearl";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 277;
-			super.desc = "A quite-large pearl that sparkles in a pretty silver color. It can be sold at a high price to shops.";
+		public BigPearl()
+		{
+			super("Big Pearl", "A quite-large pearl that sparkles in a pretty silver color. It can be sold at a high price to shops.", BagCategory.MISC, 277);
 			super.price = 7500;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Stardust extends Item implements HoldItem {
+	private static class Stardust extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Stardust() {
-			super.name = "Stardust";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 278;
-			super.desc = "Lovely, red-colored sand with a loose, silky feel. It can be sold at a high price to shops.";
+		public Stardust()
+		{
+			super("Stardust", "Lovely, red-colored sand with a loose, silky feel. It can be sold at a high price to shops.", BagCategory.MISC, 278);
 			super.price = 2000;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class StarPiece extends Item implements HoldItem {
+	private static class StarPiece extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public StarPiece() {
-			super.name = "Star Piece";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 279;
-			super.desc = "A shard of a pretty gem that sparkles in a red color. It can be sold at a high price to shops.";
+		public StarPiece()
+		{
+			super("Star Piece", "A shard of a pretty gem that sparkles in a red color. It can be sold at a high price to shops.", BagCategory.MISC, 279);
 			super.price = 9800;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class RareBone extends Item implements HoldItem {
+	private static class RareBone extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public RareBone() {
-			super.name = "Rare Bone";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 280;
-			super.desc = "A bone that is extremely valuable for Pokémon archeology. It can be sold for a high price to shops.";
+		public RareBone()
+		{
+			super("Rare Bone", "A bone that is extremely valuable for Pokémon archeology. It can be sold for a high price to shops.", BagCategory.MISC, 280);
 			super.price = 10000;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 100;
 		}
 	}
 
-	private static class Honey extends Item implements HoldItem {
+	private static class Honey extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Honey() {
-			super.name = "Honey";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 281;
-			super.desc = "A sweet honey with a lush aroma that attracts wild Pokémon when it is used in grass, caves, or on special trees.";
+		public Honey()
+		{
+			super("Honey", "A sweet honey with a lush aroma that attracts wild Pokémon when it is used in grass, caves, or on special trees.", BagCategory.MISC, 281);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Eviolite extends Item implements HoldItem,
-			StatChangingEffect {
+	private static class Eviolite extends Item implements HoldItem, StatChangingEffect
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Eviolite() {
-			super.name = "Eviolite";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 282;
-			super.desc = "A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pokémon that can still evolve.";
+		public Eviolite()
+		{
+			super("Eviolite", "A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pokémon that can still evolve.", BagCategory.MISC, 282);
 			super.price = 200;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 40;
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s,
-				Battle b) {
-			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE)
-					&& p.getPokemonInfo().getEvolution().canEvolve())
-				return (int) (1.5 * stat);
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.getPokemonInfo().getEvolution().canEvolve()) return (int)(1.5*stat);
 			return stat;
 		}
 	}
 
-	private static class HeartScale extends Item implements HoldItem {
+	private static class HeartScale extends Item implements HoldItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public HeartScale() {
-			super.name = "Heart Scale";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 283;
-			super.desc = "A pretty, heart-shaped scale that is extremely rare. It glows faintly in the colors of the rainbow.";
+		public HeartScale()
+		{
+			super("Heart Scale", "A pretty, heart-shaped scale that is extremely rare. It glows faintly in the colors of the rainbow.", BagCategory.MISC, 283);
 			super.price = 100;
 		}
 
-		public int flingDamage() {
+		public int flingDamage()
+		{
 			return 30;
 		}
 	}
 
-	private static class Repel extends RepelItem {
+	private static class Repel extends Item implements HoldItem, TrainerUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public Repel() {
-			super.name = "Repel";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 284;
-			super.desc = "An item that prevents weak wild Pok\u00e9mon from appearing for 100 steps after its use.";
+		public Repel()
+		{
+			super("Repel", "An item that prevents weak wild Pok\u00e9mon from appearing for 100 steps after its use.", BagCategory.MISC, 284);
 			super.price = 350;
 		}
 
-		public int repelSteps() {
+		public int repelSteps()
+		{
 			return 100;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!";
+		}
+
+		public int flingDamage()
+		{
 			return 30;
+		}
+
+		public boolean use(Trainer t)
+		{
+			if (!(t instanceof CharacterData))
+			{
+				Global.error("Only the character should be using a Repel item");
+			}
+			
+			CharacterData player = (CharacterData) t;
+			if (player.isUsingRepel())
+			{
+				return false;
+			}
+			
+			player.addRepelSteps(repelSteps());
+			return true;
 		}
 	}
 
-	private static class SuperRepel extends RepelItem {
+	private static class SuperRepel extends Item implements HoldItem, TrainerUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public SuperRepel() {
-			super.name = "Super Repel";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 285;
-			super.desc = "An item that prevents weak wild Pokémon from appearing for 200 steps after its use.";
+		public SuperRepel()
+		{
+			super("Super Repel", "An item that prevents weak wild Pokémon from appearing for 200 steps after its use.", BagCategory.MISC, 285);
 			super.price = 500;
 		}
 
-		public int repelSteps() {
+		public int repelSteps()
+		{
 			return 200;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!";
+		}
+
+		public int flingDamage()
+		{
 			return 30;
+		}
+
+		public boolean use(Trainer t)
+		{
+			if (!(t instanceof CharacterData))
+			{
+				Global.error("Only the character should be using a Repel item");
+			}
+			
+			CharacterData player = (CharacterData) t;
+			if (player.isUsingRepel())
+			{
+				return false;
+			}
+			
+			player.addRepelSteps(repelSteps());
+			return true;
 		}
 	}
 
-	private static class MaxRepel extends RepelItem {
+	private static class MaxRepel extends Item implements HoldItem, TrainerUseItem
+	{
 		private static final long serialVersionUID = 1L;
 
-		public MaxRepel() {
-			super.name = "Max Repel";
-			super.cat = BagCategory.MISC;
-			super.bcat = new BattleBagCategory[0];
-			super.index = 286;
-			super.desc = "An item that prevents weak wild Pokémon from appearing for 250 steps after its use.";
+		public MaxRepel()
+		{
+			super("Max Repel", "An item that prevents weak wild Pokémon from appearing for 250 steps after its use.", BagCategory.MISC, 286);
 			super.price = 700;
 		}
 
-		public int repelSteps() {
+		public int repelSteps()
+		{
 			return 250;
 		}
 
-		public int flingDamage() {
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!";
+		}
+
+		public int flingDamage()
+		{
 			return 30;
+		}
+
+		public boolean use(Trainer t)
+		{
+			if (!(t instanceof CharacterData))
+			{
+				Global.error("Only the character should be using a Repel item");
+			}
+			
+			CharacterData player = (CharacterData) t;
+			if (player.isUsingRepel())
+			{
+				return false;
+			}
+			
+			player.addRepelSteps(repelSteps());
+			return true;
 		}
 	}
 }

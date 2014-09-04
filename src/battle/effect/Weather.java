@@ -55,7 +55,11 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	private int getTurns(Battle b, ActivePokemon caster)
 	{
 		Item i = caster.getHeldItem(b);
-		if (i instanceof WeatherExtendingEffect && type == ((WeatherExtendingEffect)i).getWeatherType()) return 8;
+		if (i instanceof WeatherExtendingEffect && type == ((WeatherExtendingEffect)i).getWeatherType()) 
+		{
+			return 8;
+		}
+		
 		return 5;
 	}
 	
@@ -127,14 +131,15 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return "The rain stopped.";
 		}
 		
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
 			{
 				Type t = p.getAttack().getType(b, p); 
 				if (t == Type.WATER) return (int)(stat*1.5);
-				if (t == Type.FIRE) return (int)(stat*.5);				
+				if (t == Type.FIRE) return (int)(stat*.5);
 			}
+			
 			return stat;
 		}
 		
@@ -173,7 +178,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return "The sunlight faded.";
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
 			{
@@ -240,7 +245,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return b.getWeather().getType() != Weather.WeatherType.SANDSTORM;
 		}
 		
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			return (int)(stat*(s == Stat.SP_DEFENSE && p.isType(b, Type.ROCK) ? 1.5 : 1));
 		}

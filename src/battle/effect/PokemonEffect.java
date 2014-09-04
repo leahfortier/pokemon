@@ -60,7 +60,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		
 		// EVERYTHING BELOW IS GENERATED ###
 
-		// List all of the effects we are loading
+		// List all of the classes we are loading
 		map.put("LeechSeed", new LeechSeed());
 		map.put("BadPoison", new BadPoison());
 		map.put("Flinch", new Flinch());
@@ -131,6 +131,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class LeechSeed extends PokemonEffect implements EndTurnEffect, RapidSpinRelease, PassableEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public LeechSeed()
 		{
 			super("LeechSeed", -1, -1, false);
@@ -146,21 +147,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.isType(b, Type.GRASS) || victim.hasEffect("LeechSeed"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + "'s health was sapped!");
-			b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false);
-		}
-
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return victim.getName() + " was seeded!";
-		}
-
-		public String getReleaseMessage(ActivePokemon user)
-		{
-			return user.getName() + " was released from leech seed!";
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
@@ -168,6 +157,18 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (victim.isType(b, Type.GRASS)) return "It doesn't affect " + victim.getName() + "!";
 			if (victim.hasEffect("LeechSeed")) return victim.getName() + " is already seeded!";
 			return super.getFailMessage(b, user, victim, team);
+		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(victim.getName() + "'s health was sapped!");
+			b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false);
+		}
+
+		public String getReleaseMessage(ActivePokemon user)
+		{
+			return user.getName() + " was released from leech seed!";
 		}
 	}
 
@@ -191,11 +192,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(!Status.applies(StatusCondition.POISONED, b, caster, victim));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			turns++;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -206,11 +202,17 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return turns;
 		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			turns++;
+		}
 	}
 
 	private static class Flinch extends PokemonEffect implements BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Flinch()
 		{
 			super("Flinch", 1, 1, false);
@@ -226,11 +228,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !((victim.hasAbility("Inner Focus") && !caster.breaksTheMold()) || !b.isFirstAttack() || victim.hasEffect("Flinch"));
 		}
 
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			return false;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -244,11 +241,17 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return victim.getName() + " flinched!";
 		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			return false;
+		}
 	}
 
 	private static class FireSpin extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public FireSpin()
 		{
 			super("FireSpin", 4, 5, true);
@@ -264,11 +267,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("FireSpin"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public String getPartialTrapMessage(ActivePokemon victim)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " is hurt by fire spin!");
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			return victim.getName() + " is hurt by fire spin!";
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -287,6 +288,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped by fire spin.";
 		}
 
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(getPartialTrapMessage(victim));
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+		}
+
 		public String getReleaseMessage(ActivePokemon user)
 		{
 			return user.getName() + " was released from fire spin!";
@@ -296,6 +304,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class MagmaStorm extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public MagmaStorm()
 		{
 			super("MagmaStorm", 4, 5, true);
@@ -311,11 +320,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("MagmaStorm"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public String getPartialTrapMessage(ActivePokemon victim)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " is hurt by magma storm!");
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			return victim.getName() + " is hurt by magma storm!";
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -334,6 +341,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped by magma storm.";
 		}
 
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(getPartialTrapMessage(victim));
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+		}
+
 		public String getReleaseMessage(ActivePokemon user)
 		{
 			return user.getName() + " was released from magma storm!";
@@ -343,6 +357,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Clamped extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Clamped()
 		{
 			super("Clamped", 4, 5, true);
@@ -358,11 +373,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("Clamped"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public String getPartialTrapMessage(ActivePokemon victim)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " is hurt by clamp!");
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			return victim.getName() + " is hurt by clamp!";
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -381,6 +394,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped by clamp.";
 		}
 
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(getPartialTrapMessage(victim));
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+		}
+
 		public String getReleaseMessage(ActivePokemon user)
 		{
 			return user.getName() + " was released from clamp!";
@@ -390,6 +410,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Whirlpool extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Whirlpool()
 		{
 			super("Whirlpool", 4, 5, true);
@@ -405,11 +426,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("Whirlpool"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public String getPartialTrapMessage(ActivePokemon victim)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " is hurt by whirlpool!");
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			return victim.getName() + " is hurt by whirlpool!";
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -428,6 +447,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped by whirlpool.";
 		}
 
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(getPartialTrapMessage(victim));
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+		}
+
 		public String getReleaseMessage(ActivePokemon user)
 		{
 			return user.getName() + " was released from whirlpool!";
@@ -437,6 +463,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Wrapped extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Wrapped()
 		{
 			super("Wrapped", 4, 5, true);
@@ -452,11 +479,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("Wrapped"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public String getPartialTrapMessage(ActivePokemon victim)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " is hurt by wrap!");
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			return victim.getName() + " is hurt by wrap!";
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -475,6 +500,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " was freed from wrap.";
 		}
 
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(getPartialTrapMessage(victim));
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+		}
+
 		public String getReleaseMessage(ActivePokemon user)
 		{
 			return user.getName() + " was released from wrap!";
@@ -484,6 +516,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Binded extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Binded()
 		{
 			super("Binded", 4, 5, true);
@@ -499,11 +532,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("Binded"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public String getPartialTrapMessage(ActivePokemon victim)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " is hurt by bind!");
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			return victim.getName() + " is hurt by bind!";
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -522,6 +553,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " was freed from bind.";
 		}
 
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(getPartialTrapMessage(victim));
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+		}
+
 		public String getReleaseMessage(ActivePokemon user)
 		{
 			return user.getName() + " was released from bind!";
@@ -531,6 +569,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class SandTomb extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public SandTomb()
 		{
 			super("SandTomb", 4, 5, true);
@@ -546,11 +585,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("SandTomb"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public String getPartialTrapMessage(ActivePokemon victim)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " is hurt by sand tomb!");
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			return victim.getName() + " is hurt by sand tomb!";
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -569,6 +606,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped from sand tomb.";
 		}
 
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(getPartialTrapMessage(victim));
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+		}
+
 		public String getReleaseMessage(ActivePokemon user)
 		{
 			return user.getName() + " was released from sand tomb!";
@@ -578,6 +622,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Protecting extends PokemonEffect implements OpposingBeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Protecting()
 		{
 			super("Protecting", 1, 1, false);
@@ -593,15 +638,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("Protecting"));
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType("ProtectPiercing")) return true;
-			b.printAttacking(p);
-			b.addMessage(opp.getName() + " is protecting itself!");
-			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
-			return false;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
@@ -616,11 +652,21 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return victim.getName() + " protected itself!";
 		}
+
+		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType("ProtectPiercing")) return true;
+			b.printAttacking(p);
+			b.addMessage(opp.getName() + " is protecting itself!");
+			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			return false;
+		}
 	}
 
 	private static class QuickGuard extends PokemonEffect implements OpposingBeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public QuickGuard()
 		{
 			super("QuickGuard", 1, 1, false);
@@ -636,15 +682,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("QuickGuard"));
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			if (p.getAttack().isSelfTarget() || p.getAttack().getName().equals("Feint") || p.getAttack().getPriority(b, p) <= 0) return true;
-			b.printAttacking(p);
-			b.addMessage(opp.getName() + " is protecting itself!");
-			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
-			return false;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
@@ -659,11 +696,21 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return victim.getName() + " protected itself!";
 		}
+
+		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			if (p.getAttack().isSelfTarget() || p.getAttack().getName().equals("Feint") || p.getAttack().getPriority(b, p) <= 0) return true;
+			b.printAttacking(p);
+			b.addMessage(opp.getName() + " is protecting itself!");
+			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			return false;
+		}
 	}
 
 	private static class Bracing extends PokemonEffect implements BracingEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Bracing()
 		{
 			super("Bracing", 1, 1, false);
@@ -727,28 +774,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !((victim.hasAbility("Own Tempo") && !caster.breaksTheMold()) || victim.hasEffect("Confusion"));
 		}
 
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			if (turns == 0)
-			{
-				b.addMessage(p.getName() + " snapped out of its confusion!");
-				super.active = false;
-				return true;
-			}
-			turns--;
-			b.addMessage(p.getName() + " is confused!");
-			if (Math.random()*100 < 50)
-			{
-				b.addMessage("It hurt itself in confusion!");
-				Move temp = p.getMove();
-				p.setMove(new Move(Attack.getAttack("ConfusionDamage")));
-				b.applyDamage(p, b.damageCalc(p, p));
-				p.setMove(temp);
-				return false;
-			}
-			return true;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -770,6 +795,28 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (victim.hasEffect("Confusion")) return victim.getName() + " is already confused!";
 			if (victim.hasAbility("Own Tempo")) return victim.getName() + "'s Own Tempo prevents confusion!";
 			return super.getFailMessage(b, user, victim, team);
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			if (turns == 0)
+			{
+				b.addMessage(p.getName() + " snapped out of its confusion!");
+				super.active = false;
+				return true;
+			}
+			turns--;
+			b.addMessage(p.getName() + " is confused!");
+			if (Math.random()*100 < 50)
+			{
+				b.addMessage("It hurt itself in confusion!");
+				Move temp = p.getMove();
+				p.setMove(new Move(Attack.getAttack("ConfusionDamage")));
+				b.applyDamage(p, b.damageCalc(p, p));
+				p.setMove(temp);
+				return false;
+			}
+			return true;
 		}
 	}
 
@@ -801,11 +848,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			super.cast(b, caster, victim, source, printCast);
 		}
 
-		public Move getMove()
-		{
-			return move;
-		}
-
 		public void subside(Battle b, ActivePokemon p)
 		{
 			Confusion c = new Confusion();
@@ -815,11 +857,17 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				p.addEffect(c);
 			}
 		}
+
+		public Move getMove()
+		{
+			return move;
+		}
 	}
 
-	private static class Safeguard extends PokemonEffect implements DefogRelease, StatusPreventionEffect
+	private static class Safeguard extends PokemonEffect implements StatusPreventionEffect, DefogRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Safeguard()
 		{
 			super("Safeguard", 5, 5, false);
@@ -864,6 +912,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class GuardSpecial extends PokemonEffect implements StatusPreventionEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public GuardSpecial()
 		{
 			super("GuardSpecial", 5, 5, false);
@@ -917,22 +966,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType("Encoreless") || victim.hasEffect("Encore"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (move.getPP() == 0) active = false; // If the move runs out of PP, Encore immediately ends
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			if (!p.getAttack().getName().equals(move.getAttack().getName()))
-			{
-				b.printAttacking(p);
-				b.addMessage("...but it failed!");
-				return false;
-			}
-			return true;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			move = victim.getAttributes().getLastMoveUsed();
@@ -949,11 +982,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return "The effects of " + victim.getName() + "'s encore faded.";
 		}
 
-		public Move getMove()
-		{
-			return move;
-		}
-
 		public boolean usable(ActivePokemon p, Move m)
 		{
 			return move.getAttack().getName().equals(m.getAttack().getName());
@@ -962,6 +990,27 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public String getUnusableMessage(ActivePokemon p)
 		{
 			return "Only " + move.getAttack().getName() + " can be used right now!";
+		}
+
+		public Move getMove()
+		{
+			return move;
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			if (!p.getAttack().getName().equals(move.getAttack().getName()))
+			{
+				b.printAttacking(p);
+				b.addMessage("...but it failed!");
+				return false;
+			}
+			return true;
+		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (move.getPP() == 0) active = false; // If the move runs out of PP, Encore immediately ends
 		}
 	}
 
@@ -989,18 +1038,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.hasEffect("Disable"));
 		}
 
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			turns--;
-			if (p.getAttack().getName().equals(disabled.getAttack().getName()))
-			{
-				b.printAttacking(p);
-				b.addMessage(p.getAttack().getName() + " is disabled!");
-				return false;
-			}
-			return true;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			disabled = victim.getAttributes().getLastMoveUsed();
@@ -1017,9 +1054,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!";
 		}
 
-		public Move getMove()
+		public boolean shouldSubside(Battle b, ActivePokemon victim)
 		{
-			return disabled;
+			return turns == 0;
+		}
+
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		{
+			if (victim.hasEffect("Disable")) return victim.getName() + " is already disabled!";
+			return super.getFailMessage(b, user, victim, team);
 		}
 
 		public boolean usable(ActivePokemon p, Move m)
@@ -1032,15 +1075,21 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return disabled.getAttack().getName() + " is disabled!";
 		}
 
-		public boolean shouldSubside(Battle b, ActivePokemon victim)
+		public Move getMove()
 		{
-			return turns == 0;
+			return disabled;
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			if (victim.hasEffect("Disable")) return victim.getName() + " is already disabled!";
-			return super.getFailMessage(b, user, victim, team);
+			turns--;
+			if (p.getAttack().getName().equals(disabled.getAttack().getName()))
+			{
+				b.printAttacking(p);
+				b.addMessage(p.getAttack().getName() + " is disabled!");
+				return false;
+			}
+			return true;
 		}
 	}
 
@@ -1234,11 +1283,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return x;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (!victim.getAttributes().getLastMoveUsed().getAttack().getName().equals("Stockpile")) active = false;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			if (!victim.hasEffect("Stockpile")) super.cast(b, caster, victim, source, printCast);
@@ -1263,7 +1307,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return turns;
 		}
 
-		public int adjustStage(int stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b, boolean user)
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (!victim.getAttributes().getLastMoveUsed().getAttack().getName().equals("Stockpile")) active = false;
+		}
+
+		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
 		{
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? stage + turns : stage;
 		}
@@ -1272,6 +1321,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class UsedDefenseCurl extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public UsedDefenseCurl()
 		{
 			super("UsedDefenseCurl", -1, -1, false);
@@ -1291,6 +1341,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class UsedMinimize extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public UsedMinimize()
 		{
 			super("UsedMinimize", -1, -1, false);
@@ -1381,17 +1432,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("Imprison"));
 		}
 
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			if (unableMoves.contains(p.getAttack().getName()))
-			{
-				b.printAttacking(p);
-				b.addMessage("...but it failed!");
-				return false;
-			}
-			return true;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			unableMoves = new ArrayList<>();
@@ -1413,11 +1453,23 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return "No!! You are imprisoned!!!";
 		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			if (unableMoves.contains(p.getAttack().getName()))
+			{
+				b.printAttacking(p);
+				b.addMessage("...but it failed!");
+				return false;
+			}
+			return true;
+		}
 	}
 
 	private static class Trapped extends PokemonEffect implements TrappingEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Trapped()
 		{
 			super("Trapped", -1, -1, false);
@@ -1442,6 +1494,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Foresight extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Foresight()
 		{
 			super("Foresight", -1, -1, false);
@@ -1467,6 +1520,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class MiracleEye extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public MiracleEye()
 		{
 			super("MiracleEye", -1, -1, false);
@@ -1492,6 +1546,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Torment extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Torment()
 		{
 			super("Torment", -1, -1, false);
@@ -1505,17 +1560,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
 			return !(victim.hasEffect("Torment"));
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			if (!usable(p, p.getMove()))
-			{
-				b.printAttacking(p);
-				b.addMessage("...but it failed!");
-				return false;
-			}
-			return true;
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1532,11 +1576,23 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return p.getName() + " cannot use the same move twice in a row!";
 		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			if (!usable(p, p.getMove()))
+			{
+				b.printAttacking(p);
+				b.addMessage("...but it failed!");
+				return false;
+			}
+			return true;
+		}
 	}
 
 	private static class Taunt extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Taunt()
 		{
 			super("Taunt", 3, 3, false);
@@ -1550,17 +1606,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
 			return !(victim.hasEffect("Taunt"));
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			if (!usable(p, p.getMove()))
-			{
-				b.printAttacking(p);
-				b.addMessage("...but it failed!");
-				return false;
-			}
-			return true;
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1582,11 +1627,23 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return "No!! Not while you're under the effects of taunt!!";
 		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			if (!usable(p, p.getMove()))
+			{
+				b.printAttacking(p);
+				b.addMessage("...but it failed!");
+				return false;
+			}
+			return true;
+		}
 	}
 
 	private static class LockOn extends PokemonEffect implements PassableEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public LockOn()
 		{
 			super("LockOn", 2, 2, false);
@@ -1611,6 +1668,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Telekinesis extends PokemonEffect implements LevitationEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Telekinesis()
 		{
 			super("Telekinesis", 3, 3, false);
@@ -1640,6 +1698,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Ingrain()
 		{
 			super("Ingrain", -1, -1, false);
@@ -1653,14 +1712,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
 			return !(victim.hasEffect("Ingrain"));
-		}
-
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock")) return;
-			int healAmount = victim.healHealthFraction(1/16.0);
-			if (victim.isHoldingItem(b, "Big Root")) victim.heal((int)(healAmount*.3));
-			b.addMessage(victim.getName() + " restored some HP due to ingrain!", victim.getHP(), victim.user());
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -1682,11 +1733,20 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return victim.getName() + " planted its roots!";
 		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.fullHealth() || victim.hasEffect("HealBlock")) return;
+			int healAmount = victim.healHealthFraction(1/16.0);
+			if (victim.isHoldingItem(b, "Big Root")) victim.heal((int)(healAmount*.3));
+			b.addMessage(victim.getName() + " restored some HP due to ingrain!", victim.getHP(), victim.user());
+		}
 	}
 
 	private static class Grounded extends PokemonEffect implements GroundedEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Grounded()
 		{
 			super("Grounded", -1, -1, false);
@@ -1726,6 +1786,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Curse extends PokemonEffect implements EndTurnEffect, PassableEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Curse()
 		{
 			super("Curse", -1, -1, false);
@@ -1741,13 +1802,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("Curse"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " was hurt by the curse!");
-			victim.reduceHealthFraction(b, 1/4.0);
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -1758,11 +1812,19 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return user.getName() + " cut its own HP and put a curse on " + victim.getName() + "!";
 		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(victim.getName() + " was hurt by the curse!");
+			victim.reduceHealthFraction(b, 1/4.0);
+		}
 	}
 
 	private static class Yawn extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Yawn()
 		{
 			super("Yawn", 2, 2, false);
@@ -1792,6 +1854,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class MagnetRise extends PokemonEffect implements LevitationEffect, PassableEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public MagnetRise()
 		{
 			super("MagnetRise", 5, 5, false);
@@ -1840,11 +1903,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("Uproar"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (uproar.getPP() == 0) active = false; // If uproar runs out of PP, the effect immediately ends
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			uproar = victim.getMove();
@@ -1886,11 +1944,17 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return "Only Uproar can be used right now!";
 		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (uproar.getPP() == 0) active = false; // If uproar runs out of PP, the effect immediately ends
+		}
 	}
 
 	private static class AquaRing extends PokemonEffect implements PassableEffect, EndTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public AquaRing()
 		{
 			super("AquaRing", -1, -1, false);
@@ -1906,6 +1970,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect("AquaRing"));
 		}
 
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return user.getName() + " surrounded itself with a veil of water!";
+		}
+
 		public void apply(ActivePokemon victim, Battle b)
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock")) return;
@@ -1913,16 +1982,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (victim.isHoldingItem(b, "Big Root")) victim.heal((int)(healAmount*.3));
 			b.addMessage(victim.getName() + " restored some HP due to aqua ring!", victim.getHP(), victim.user());
 		}
-
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getName() + " surrounded itself with a veil of water!";
-		}
 	}
 
 	private static class Nightmare extends PokemonEffect implements EndTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Nightmare()
 		{
 			super("Nightmare", -1, -1, false);
@@ -1938,13 +2003,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(!victim.hasStatus(StatusCondition.ASLEEP) || victim.hasEffect("Nightmare"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			if (victim.hasAbility("Magic Guard")) return;
-			b.addMessage(victim.getName() + " was hurt by its nightmare!");
-			victim.reduceHealthFraction(b, 1/4.0);
-		}
-
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return victim.getName() + " began having a nightmare!";
@@ -1954,11 +2012,19 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return !victim.hasStatus(StatusCondition.ASLEEP);
 		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			if (victim.hasAbility("Magic Guard")) return;
+			b.addMessage(victim.getName() + " was hurt by its nightmare!");
+			victim.reduceHealthFraction(b, 1/4.0);
+		}
 	}
 
 	private static class Charge extends PokemonEffect implements PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Charge()
 		{
 			super("Charge", 2, 2, false);
@@ -1983,6 +2049,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Focusing extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Focusing()
 		{
 			super("Focusing", 1, 1, false);
@@ -2007,6 +2074,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class FiddyPercentStronger extends PokemonEffect implements PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public FiddyPercentStronger()
 		{
 			super("FiddyPercentStronger", 1, 1, false);
@@ -2077,11 +2145,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!";
 		}
 
-		public Type[] getType()
-		{
-			return type;
-		}
-
 		public List<Move> getMoveList(ActivePokemon p, List<Move> moves)
 		{
 			PokemonEffect mimic = p.getEffect("Mimic");
@@ -2092,6 +2155,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public int getStat(Stat stat)
 		{
 			return stats[stat.index()];
+		}
+
+		public Type[] getType()
+		{
+			return type;
 		}
 	}
 
@@ -2152,9 +2220,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class Mist extends PokemonEffect implements DefogRelease, StatProtectingEffect
+	private static class Mist extends PokemonEffect implements StatProtectingEffect, DefogRelease
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Mist()
 		{
 			super("Mist", 5, 5, false);
@@ -2199,6 +2268,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class MagicCoat extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public MagicCoat()
 		{
 			super("MagicCoat", 1, 1, false);
@@ -2220,7 +2290,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class Bide extends PokemonEffect implements ForceMoveEffect, IntegerCondition, EndTurnEffect
+	private static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, IntegerCondition
 	{
 		private static final long serialVersionUID = 1L;
 		private Move move;
@@ -2239,11 +2309,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			x.turns = 1;
 			x.damage = 0;
 			return x;
-		}
-
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			increase(victim.getAttributes().getDamageTaken());
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -2275,14 +2340,19 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return user.getName() + " is storing energy!";
 		}
 
+		public int getTurns()
+		{
+			return turns;
+		}
+
 		public Move getMove()
 		{
 			return move;
 		}
 
-		public int getTurns()
+		public void apply(ActivePokemon victim, Battle b)
 		{
-			return turns;
+			increase(victim.getAttributes().getDamageTaken());
 		}
 
 		public int getAmount()
@@ -2344,6 +2414,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class PowerTrick extends PokemonEffect implements PassableEffect, StatSwitchingEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public PowerTrick()
 		{
 			super("PowerTrick", -1, -1, false);
@@ -2382,6 +2453,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class PowerSplit extends PokemonEffect implements StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public PowerSplit()
 		{
 			super("PowerSplit", -1, -1, false);
@@ -2402,8 +2474,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return user.getName() + " split the power!";
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
+			int stat = statValue;
 			if (s == Stat.ATTACK) return (p.getStat(Stat.ATTACK) + opp.getStat(Stat.ATTACK))/2;
 			if (s == Stat.SP_ATTACK) return (p.getStat(Stat.SP_ATTACK) + opp.getStat(Stat.SP_ATTACK))/2;
 			return stat;
@@ -2413,6 +2486,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class GuardSplit extends PokemonEffect implements StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public GuardSplit()
 		{
 			super("GuardSplit", -1, -1, false);
@@ -2433,8 +2507,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return user.getName() + " split the defense!";
 		}
 
-		public int modify(int stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
+			int stat = statValue;
 			if (s == Stat.DEFENSE) return (p.getStat(Stat.DEFENSE) + opp.getStat(Stat.DEFENSE))/2;
 			if (s == Stat.SP_DEFENSE) return (p.getStat(Stat.SP_DEFENSE) + opp.getStat(Stat.SP_DEFENSE))/2;
 			return stat;
@@ -2444,6 +2519,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class HealBlock extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public HealBlock()
 		{
 			super("HealBlock", 5, 5, false);
@@ -2473,6 +2549,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Infatuated extends PokemonEffect implements BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Infatuated()
 		{
 			super("Infatuated", -1, -1, false);
@@ -2486,14 +2563,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
 			return !((victim.hasAbility("Oblivious") && !caster.breaksTheMold()) || !Gender.oppositeGenders(caster, victim) || victim.hasEffect("Infatuated"));
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		{
-			b.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
-			if (Math.random() < .5) return true;
-			b.addMessage(p.getName() + "'s infatuation kept it from attacking!");
-			return false;
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -2516,11 +2585,20 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (Gender.oppositeGenders(user, victim) && victim.hasAbility("Oblivious")) return victim.getName() + "'s Oblivious prevents infatuation!";
 			return super.getFailMessage(b, user, victim, team);
 		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			b.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
+			if (Math.random() < .5) return true;
+			b.addMessage(p.getName() + "'s infatuation kept it from attacking!");
+			return false;
+		}
 	}
 
 	private static class Snatch extends PokemonEffect 
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Snatch()
 		{
 			super("Snatch", 1, 1, false);
@@ -2540,6 +2618,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Grudge extends PokemonEffect implements FaintEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Grudge()
 		{
 			super("Grudge", -1, -1, false);
@@ -2573,6 +2652,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class DestinyBond extends PokemonEffect implements FaintEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public DestinyBond()
 		{
 			super("DestinyBond", -1, -1, false);
@@ -2606,6 +2686,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class PerishSong extends PokemonEffect implements PassableEffect, EndTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public PerishSong()
 		{
 			super("PerishSong", 3, 3, false);
@@ -2621,12 +2702,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !((victim.hasAbility("Soundproof") && !caster.breaksTheMold()) || victim.hasEffect("PerishSong"));
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
-		{
-			b.addMessage(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
-			if (super.numTurns == 1) victim.reduceHealthFraction(b, 1);
-		}
-
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return "All Pokemon hearing this song will faint in three turns!";
@@ -2637,11 +2712,18 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (victim.hasAbility("Soundproof")) return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
 			return super.getFailMessage(b, user, victim, team);
 		}
+
+		public void apply(ActivePokemon victim, Battle b)
+		{
+			b.addMessage(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
+			if (super.numTurns == 1) victim.reduceHealthFraction(b, 1);
+		}
 	}
 
 	private static class Embargo extends PokemonEffect implements PassableEffect
 	{
 		private static final long serialVersionUID = 1L;
+
 		public Embargo()
 		{
 			super("Embargo", 5, 5, false);
@@ -2698,5 +2780,4 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return consumed;
 		}
 	}
-
 }

@@ -25,7 +25,6 @@ import battle.MessageUpdate.Update;
 import battle.effect.BattleEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.CrashDamageMove;
-import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
 import battle.effect.Effect;
@@ -201,7 +200,7 @@ public class Battle
 	public void fight()
 	{
 		startTurn();
-		
+
 		boolean playerFirst = speedPriority(player.front(), opponent.front());
 		
 		firstAttacking = true;
@@ -416,7 +415,7 @@ public class Battle
 			{
 				effects.remove(i--);
 				e.subside(this, p);
-				if (p.isFainted(this)) return;
+				if (p != null && p.isFainted(this)) return;
 				continue;
 			}
 			
@@ -426,7 +425,7 @@ public class Battle
 			{
 				effects.remove(i--);
 				e.subside(this, p);
-				if (p.isFainted(this)) return;
+				if (p != null && p.isFainted(this)) return;
 			}
 		}
 	}
@@ -545,7 +544,7 @@ public class Battle
 		return team ? player.getEffects() : opponent.getEffects();
 	}
 	
-	public Object[] getEffectsList(ActivePokemon p)
+	public Object[] getEffectsList(ActivePokemon p, Object... additionalItems)
 	{
 		List<Object> list = new ArrayList<>();
 		list.addAll(p.getEffects());
@@ -555,6 +554,11 @@ public class Battle
 		list.add(p.getAbility());
 		list.add(p.getHeldItem(this));
 		list.add(weather);
+		
+		for (Object additionalItem : additionalItems)
+		{
+			list.add(additionalItem);
+		}
 		
 		return list.toArray();
 	}
@@ -701,7 +705,8 @@ public class Battle
 		if (o.hasEffect("Telekinesis")) return true;
 		
 		int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
-		int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this), evasion = Stat.getStat(Stat.EVASION, o, me, this);
+		int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this);
+		int evasion = Stat.getStat(Stat.EVASION, o, me, this);
 		
 		return Math.random()*100 < moveAccuracy*((double)accuracy/(double)evasion);
 	}
