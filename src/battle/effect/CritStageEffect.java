@@ -4,5 +4,5 @@ import pokemon.ActivePokemon;
 
 public interface CritStageEffect
 {
-	public int increaseCritStage(ActivePokemon p);
+	public int increaseCritStage(Integer stage, ActivePokemon p);
 }

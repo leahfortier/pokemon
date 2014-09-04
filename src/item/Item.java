@@ -1409,10 +1409,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 40;
 		}
 
-		public int increaseCritStage(ActivePokemon p)
+		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
-			if (p.isPokemon("Chansey")) return 2;
-			return 0;
+			if (p.isPokemon("Chansey"))
+			{
+				return stage + 2;
+			}
+			
+			return stage;
 		}
 	}
 
@@ -1931,9 +1935,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
-		public int increaseCritStage(ActivePokemon p)
+		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
-			return 1;
+			return stage + 1;
 		}
 	}
 
@@ -2065,9 +2069,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 60;
 		}
 
-		public int increaseCritStage(ActivePokemon p)
+		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
-			if (p.isPokemon("Farfetch'd")) return 2;
+			if (p.isPokemon("Farfetch'd"))
+			{
+				return stage + 2;
+			}
+			
 			return 0;
 		}
 	}
@@ -4155,7 +4163,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4619,7 +4629,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4658,7 +4670,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4704,7 +4718,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4750,7 +4766,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4789,7 +4807,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4828,7 +4848,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4867,7 +4889,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4906,7 +4930,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4945,7 +4971,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -4997,7 +5025,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5036,7 +5066,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5075,7 +5107,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5114,7 +5148,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5169,7 +5205,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5208,7 +5246,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5247,7 +5287,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5258,9 +5300,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 80;
 		}
 
-		public int increaseCritStage(ActivePokemon p)
+		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
-			return 1;
+			return stage + 1;
 		}
 	}
 
@@ -5291,7 +5333,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5343,7 +5387,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5382,7 +5428,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5421,7 +5469,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5460,7 +5510,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5499,7 +5551,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -5538,7 +5592,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			BaseEvolution base = getBaseEvolution(p);
 			if (base == null)
-			return false;
+			{
+				return false;
+			}
 			
 			message = p.evolve(null, base);
 			return true;
@@ -6572,7 +6628,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			PokemonEffect crits = PokemonEffect.getEffect("RaiseCrits");
-			if (!crits.applies(b, p, p, CastSource.USE_ITEM)) return false;
+			if (!crits.applies(b, p, p, CastSource.USE_ITEM))
+			{
+				return false;
+			}
 			
 			crits.cast(b, p, p, CastSource.USE_ITEM, false);
 			return true;

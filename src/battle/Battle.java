@@ -1,7 +1,5 @@
 package battle;
 
-import item.Item;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,7 @@ import battle.MessageUpdate.Update;
 import battle.effect.BattleEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.CrashDamageMove;
+import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
 import battle.effect.Effect;
@@ -315,7 +314,7 @@ public class Battle
 		// Gain dat EXP
 		player.gainEXP(dead, this); 
 		
-		// You have acheived total victory
+		// You have achieved total victory
 		if (opponent.blackout())
 		{
 			player.winBattle(this, opponent);
@@ -630,44 +629,23 @@ public class Battle
 		return p.reduceHealth(this, damage);
 	}
 	
+	private static int[] critsicles = { 16, 8, 4, 3, 2 };
 	private int criticalHit(ActivePokemon me, ActivePokemon o)
 	{
-//		List<Object> listsies = new ArrayList<Object>();
-//		listsies.addAll(opponent.getEffects());
-//		listsies.add(me.getAttack());
-//		listsies.add(o.getAbility());
-//		
-//		Object blockCrits = Global.checkInvoke(true, this, me, listsies.toArray(), CritBlockerEffect.class, "blockCrits");
-//		if (blockCrits != null)
-//		{
-//			return 1;
-//		}
-		
-		if (opponent.hasEffect("LuckyChant")) 
+		Object[] listsies = this.getEffectsList(o, me.getAttack());
+		Object blockCrits = Global.checkInvoke(true, me, listsies, CritBlockerEffect.class, "blockCrits");
+		if (blockCrits != null)
+		{
 			return 1;
+		}
 		
-		if (me.getAttack().isMoveType("CannotCrit")) 
-			return 1;
-		
-		if ((o.hasAbility("Shell Armor") || o.hasAbility("Battle Armor")) && !me.breaksTheMold()) 
-			return 1;
-		
+		// Increase crit stage and such
 		int stage = 1;
-		Item i = me.getHeldItem(this);
-		CritStageEffect critStageEffect = (CritStageEffect)me.getEffect("RaiseCrits");
+		listsies = this.getEffectsList(me);
+		stage = (int)Global.updateInvoke(0, listsies, CritStageEffect.class, "increaseCritStage", stage, me);
+		stage = Math.min(stage, critsicles.length); // Max it out, yo
 		
-		if (me.hasEffect("RaiseCrits")) stage += critStageEffect.increaseCritStage(me);
-		if (me.getAttack().isMoveType("HighCritRatio")) stage++;
-		if (me.hasAbility("Super Luck")) stage++;
-		if (i instanceof CritStageEffect) stage += ((CritStageEffect)i).increaseCritStage(me);
-		
-		boolean crit = false;
-		if (me.getAttack().isMoveType("AlwaysCrit")) crit = true;
-		else if (stage == 1 && Math.random()*16 < 1) crit = true;
-		else if (stage == 2 && Math.random()*8 < 1) crit = true;
-		else if (stage == 3 && Math.random()*4 < 1) crit = true;
-		else if (stage == 4 && Math.random()*3 < 1) crit = true;
-		else if (stage >= 5 && Math.random()*2 < 1) crit = true;
+		boolean crit = me.getAttack().isMoveType("AlwaysCrit") && Math.random()*critsicles[stage - 1] < 1;
 		
 		// Crit yo pants
 		if (crit)

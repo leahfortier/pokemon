@@ -87,15 +87,7 @@ public enum Stat
 		Object[] list;
 		
 		ActivePokemon attacking = s.user ? p : opp;
-		if (attacking.getMove() != null) 
-		{
-			// User's attack
-			list = b.getEffectsList(p, attacking.getAttack());
-		}
-		else
-		{
-			list = b.getEffectsList(p);
-		}
+		list = b.getEffectsList(p, attacking.getAttack());
 	
 		// TODO: Test this
 		s = (Stat)Global.updateInvoke(0, list, StatSwitchingEffect.class, "switchStat", s);
@@ -133,8 +125,10 @@ public enum Stat
 		
 //		int temp2 = stage;
 		
+		ActivePokemon attacking = s.user ? p : opp;
+		
 		// Effects that completely ignore stage changes TODO: Test this more thoroughly moldbreaker-wise though I think it is just p
-		list = new Object[] { opp.getAbility(), (s.user ? p : opp).getAttack() };
+		list = new Object[] { opp.getAbility(), attacking.getAttack() };
 		Object ignoreStage = Global.checkInvoke(true, p, list, IgnoreStageEffect.class, "ignoreStage", s);
 		if (ignoreStage != null)
 		{

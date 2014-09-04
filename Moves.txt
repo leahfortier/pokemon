@@ -162,7 +162,7 @@ Razor Leaf:
 	Pow: 55
 	Acc: 95
 	Type: Grass
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Cat: Physical
 	PhysicalContact: False
 *
@@ -292,7 +292,7 @@ Slash:
 	PP: 20
 	Type: Normal
 	Cat: Physical
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 *
 Tail Whip:
 	Desc: The user wags its tail cutely, making opposing Pok\u00e9mon less wary and lowering their Defense stat.
@@ -386,7 +386,7 @@ Shadow Claw:
 	Type: Ghost
 	Pow: 70
 	Acc: 100
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	PP: 15
 	Desc: The user slashes with a sharp claw made from shadows. Critical hits land more easily.
 	Cat: Physical
@@ -557,7 +557,7 @@ ConfusionDamage:
 	Pow: 40
 	Type: None
 	Desc: None
-	MoveType: CannotCrit
+	Int: CritBlockerEffect
 	Cat: Physical
 	PP: 1
 *
@@ -1250,7 +1250,7 @@ Drill Run:
 	Type: Ground
 	Cat: Physical
 	PP: 10
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 *
 Wrap:
 	Desc: A long body or vines are used to wrap and squeeze the target for four to five turns.
@@ -1604,7 +1604,7 @@ Poison Tail:
 	Desc: The user hits the target with its tail. It may also poison the target. Critical hits land more easily.
 	PP: 25
 	Pow: 50
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Acc: 100
 	Cat: Physical
 	Type: Poison
@@ -1970,7 +1970,7 @@ Air Cutter:
 	PP: 25
 	Pow: 55
 	Acc: 95
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Cat: Special
 	Type: Flying
 *
@@ -2070,7 +2070,7 @@ Spore:
 *
 Cross Poison:
 	Desc: A slashing attack with a poisonous blade that may also leave the target poisoned. Critical hits land more easily.
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Status: Poisoned
 	EffChance: 10
 	Type: Poison
@@ -2249,7 +2249,7 @@ Night Slash:
 	Acc: 100
 	Cat: Physical
 	Type: Dark
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 *
 Tri Attack:
 	Desc: The user strikes with a simultaneous three-beam attack. May also burn, freeze, or leave the target with paralysis.
@@ -2407,7 +2407,7 @@ Low Kick:
 Karate Chop:
 	Desc: The target is attacked with a sharp chop. Critical hits land more easily.
 	PP: 25
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Acc: 100
 	Pow: 50
 	Type: Fighting
@@ -2436,7 +2436,7 @@ Cross Chop:
 	Pow: 100
 	Acc: 80
 	Cat: Physical
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Type: Fighting
 *
 Punishment:
@@ -2614,7 +2614,7 @@ Ingrain:
 Psycho Cut:
 	Desc: The user tears at the target with blades formed by psychic power. Critical hits land more easily.
 	PP: 20
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Type: Psychic
 	Cat: Physical
 	Acc: 100
@@ -2721,7 +2721,7 @@ Leaf Blade:
 	Pow: 90
 	Cat: Physical
 	Acc: 100
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 *
 Constrict:
 	Desc: The target is attacked with long, creeping tentacles or vines. It may also lower the target's Speed stat.
@@ -2815,7 +2815,7 @@ Stone Edge:
 	Acc: 80
 	Cat: Physical
 	Pow: 100
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	PhysicalContact: False
 *
 Steamroller:
@@ -3425,7 +3425,7 @@ Crabhammer:
 	Cat: Physical
 	Acc: 90
 	Pow: 90
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 *
 Flail:
 	Desc: The user flails about aimlessly to attack. It becomes more powerful the less HP the user has.
@@ -3630,7 +3630,7 @@ Blaze Kick:
 	Cat: Physical
 	Acc: 90
 	Pow: 85
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Status: Burned
 	EffChance: 10
 *
@@ -3985,12 +3985,12 @@ Substitute:
 Razor Wind:
 	Desc: A two-turn attack. Blades of wind hit opposing Pok\u00e9mon on the second turn. Critical hits land more easily.
 	PP: 10
-	MoveType: SleepTalkFail, HighCritRatio
+	MoveType: SleepTalkFail
 	Type: Normal
 	Cat: Special
 	Acc: 100
 	Pow: 80
-	Int: MultiTurnMove
+	Int: MultiTurnMove, CritStageEffect
 	ChargeMessage: user.getName() + " whipped up a whirlwind!"
 	SemiInv: false
 	ChargeFirst: true
@@ -4325,14 +4325,14 @@ Block:
 Sky Attack:
 	Desc: A second-turn attack move where critical hits land more easily. It may also make the target flinch.
 	PP: 5
-	MoveType: SleepTalkFail, HighCritRatio
+	MoveType: SleepTalkFail
 	Pow: 140
 	Acc: 90
 	PhysicalContact: False
 	Cat: Physical
 	Effect: Pokemon Flinch
 	EffChance: 30
-	Int: MultiTurnMove
+	Int: MultiTurnMove, CritStageEffect
 	ChargeFirst: true
 	SemiInv: false
 	ChargeMessage: user.getName() + " started glowing!"
@@ -4753,7 +4753,7 @@ Aeroblast:
 	Cat: Special
 	Acc: 95
 	Pow: 100
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 *
 Sacred Fire:
 	Desc: The target is razed with a mystical fire of great intensity. It may also leave the target with a burn.
@@ -5050,7 +5050,7 @@ Attack Order:
 	Type: Bug
 	Cat: Physical
 	Pow: 90
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Acc: 100
 	PhysicalContact: False
 *
@@ -5114,7 +5114,7 @@ Spacial Rend:
 	Pow: 100
 	Acc: 95
 	Cat: Special
-	MoveType: HighCritRatio
+	Int: CritStageEffect
 	Type: Dragon
 *
 Magma Storm:

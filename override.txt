@@ -564,7 +564,11 @@ StatsCondition:
 ***
 CritStageEffect:
 	IncreaseCritStage:
-		Header: int increaseCritStage(ActivePokemon p)
+		Header: int increaseCritStage(Integer stage, ActivePokemon p)
+		Optional: True
+		Default:
+		return stage + 1;
+		###
 	*
 ***
 LevitationEffect:
@@ -837,7 +841,9 @@ Override:
 		AddMapField: PokemonUse:
 		BaseEvolution base = getBaseEvolution(p);
 		if (base == null)
+		{
 			return false;
+		}
 
 		message = p.evolve(null, base);
 		return true;
@@ -1075,6 +1081,15 @@ Override:
 		Header: String getSuccessMessage(ActivePokemon p)
 		Body:
 		return {0};
+		###
+	*
+***
+CritBlockerEffect:
+	BlockCrits:
+		Header: boolean blockCrits()
+		Optional: True
+		Default:
+		return true;
 		###
 	*
 ***

@@ -23,6 +23,8 @@ import battle.effect.BracingEffect;
 import battle.effect.ChangeAbilityMove;
 import battle.effect.ChangeTypeMove;
 import battle.effect.CrashDamageMove;
+import battle.effect.CritBlockerEffect;
+import battle.effect.CritStageEffect;
 import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
 import battle.effect.Effect.CastSource;
@@ -1468,7 +1470,7 @@ public abstract class Ability implements Serializable
 
 		public boolean ignoreStage(Stat s)
 		{
-			return !s.user();
+			return s == Stat.ATTACK || s == Stat.SP_ATTACK || s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 	}
 
@@ -1551,7 +1553,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class ShellArmor extends Ability 
+	private static class ShellArmor extends Ability implements CritBlockerEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1564,9 +1566,14 @@ public abstract class Ability implements Serializable
 		{
 			return (ShellArmor)(new ShellArmor().activate());
 		}
+
+		public boolean blockCrits()
+		{
+			return true;
+		}
 	}
 
-	private static class BattleArmor extends Ability 
+	private static class BattleArmor extends Ability implements CritBlockerEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1578,6 +1585,11 @@ public abstract class Ability implements Serializable
 		public BattleArmor newInstance()
 		{
 			return (BattleArmor)(new BattleArmor().activate());
+		}
+
+		public boolean blockCrits()
+		{
+			return true;
 		}
 	}
 
@@ -2294,7 +2306,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class SuperLuck extends Ability 
+	private static class SuperLuck extends Ability implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2306,6 +2318,11 @@ public abstract class Ability implements Serializable
 		public SuperLuck newInstance()
 		{
 			return (SuperLuck)(new SuperLuck().activate());
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 

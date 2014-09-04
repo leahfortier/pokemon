@@ -469,9 +469,11 @@ Hydration:
 *
 Shell Armor:
 	Desc: The Pok\u00e9mon is protected against critical hits.
+	Int: CritBlockerEffect
 *
 Battle Armor:
 	Desc: The Pok\u00e9mon is protected against critical hits.
+	Int: CritBlockerEffect
 *
 Skill Link:
 	Desc: Increases the frequency of multi-strike moves.
@@ -738,6 +740,7 @@ Magic Bounce:
 *
 Super Luck:
 	Desc: Heightens the critical-hit ratios of moves.
+	Int: CritStageEffect
 *
 Shadow Tag:
 	Desc: Prevents the foe from escaping.

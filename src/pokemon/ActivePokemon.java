@@ -520,7 +520,13 @@ public class ActivePokemon implements Serializable
 	
 	public Attack getAttack()
 	{
-		return attributes.getMove().getAttack();
+		Move m = attributes.getMove();
+		if (m == null)
+		{
+			return null;
+		}
+		
+		return m.getAttack();
 	}
 	
 	// Returns whether or not this Pokemon knows this move already

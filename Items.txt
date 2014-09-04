@@ -400,8 +400,12 @@ Lucky Punch
 	Price: 10
 	Fling: 40
 	IncreaseCritStage:
-		if (p.isPokemon("Chansey")) return 2;
-		return 0;
+		if (p.isPokemon("Chansey")) 
+		{
+			return stage + 2;
+		}
+		
+		return stage;
 		###
 *
 Macho Brace
@@ -611,7 +615,6 @@ Scope Lens
 	Desc: An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.
 	Price: 200
 	Fling: 30
-	IncreaseCritStage: return 1;
 *
 Shed Shell
 	Int: HoldItem
@@ -666,7 +669,11 @@ Stick
 	Price: 200
 	Fling: 60
 	IncreaseCritStage:
-		if (p.isPokemon("Farfetch'd")) return 2;
+		if (p.isPokemon("Farfetch'd")) 
+		{
+			return stage + 2;
+		}
+		
 		return 0;
 		###
 *
@@ -1434,7 +1441,6 @@ Razor Claw
 	Desc: An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.
 	Price: 2100
 	Fling: 80
-	IncreaseCritStage: return 1;
 *
 Razor Fang
 	Int: HoldItem, ApplyDamageEffect
@@ -1846,7 +1852,10 @@ Dire Hit
 	Fling: 30
 	BattleUse:
 		PokemonEffect crits = PokemonEffect.getEffect("RaiseCrits");
-		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) return false;
+		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) 
+		{
+			return false;
+		}
 
 		crits.cast(b, p, p, CastSource.USE_ITEM, false);
 		return true;

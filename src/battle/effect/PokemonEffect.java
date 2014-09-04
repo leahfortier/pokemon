@@ -1124,17 +1124,17 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (!victim.hasEffect("RaiseCrits")) super.cast(b, caster, victim, source, printCast);
 			else if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 			
-			RaiseCrits e = (RaiseCrits)victim.getEffect("RaiseCrits");
+			RaiseCrits critsies = (RaiseCrits)victim.getEffect("RaiseCrits");
 			switch (source)
 			{
 				case ATTACK:
-				e.focusEnergy = true;
+				critsies.focusEnergy = true;
 				break;
 				case USE_ITEM:
-				e.direHit = true;
+				critsies.direHit = true;
 				break;
 				case HELD_ITEM:
-				e.berrylicious = true;
+				critsies.berrylicious = true;
 				break;
 				default:
 				Global.error("Unknown source for RaiseCrits effect.");
@@ -1146,14 +1146,31 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is getting pumped!";
 		}
 
-		public int increaseCritStage(ActivePokemon p)
+		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
-			int stage = 0;
-			if (focusEnergy) stage++;
-			if (direHit) stage++;
-			if (berrylicious) stage++;
-			if (stage == 0) Global.error("RaiseCrits effect is not actually raising crits.");
-			return stage;
+			int critStage = 0;
+			
+			if (focusEnergy)
+			{
+				critStage++;
+			}
+			
+			if (direHit)
+			{
+				critStage++;
+			}
+			
+			if (berrylicious)
+			{
+				critStage++;
+			}
+			
+			if (critStage == 0)
+			{
+				Global.error("RaiseCrits effect is not actually raising crits.");
+			}
+			
+			return critStage + stage;
 		}
 	}
 
@@ -1249,8 +1266,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			ability = ((ChangeAbilityMove)source.getSource(b, caster)).getAbility(b, caster, victim);
-			message = ((ChangeAbilityMove)source.getSource(b, caster)).getMessage(b, caster, victim);
+			ChangeAbilityMove changey = (ChangeAbilityMove)source.getSource(b, caster);
+			ability = changey.getAbility(b, caster, victim);
+			message = changey.getMessage(b, caster, victim);
+			
 			while (victim.getAttributes().removeEffect("ChangeAbility"));
 			super.cast(b, caster, victim, source, printCast);
 		}

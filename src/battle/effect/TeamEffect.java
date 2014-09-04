@@ -392,7 +392,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class LuckyChant extends TeamEffect 
+	private static class LuckyChant extends TeamEffect implements CritBlockerEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -419,6 +419,11 @@ public abstract class TeamEffect extends Effect implements Serializable
 		public String getSubsideMessage(ActivePokemon victim)
 		{
 			return "The effects of lucky chant wore off.";
+		}
+
+		public boolean blockCrits()
+		{
+			return true;
 		}
 	}
 

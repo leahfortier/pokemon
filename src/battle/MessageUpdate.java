@@ -32,8 +32,15 @@ public class MessageUpdate
 	
 	public static enum Update 
 	{
-		NONE, EXIT_BATTLE, PROMPT_SWITCH, FORCE_SWITCH, LEARN_MOVE, STAT_GAIN, 
-		ENTER_NAME, APPEND_TO_NAME, SHOW_POKEMON;
+		NONE, 
+		EXIT_BATTLE, 
+		PROMPT_SWITCH, 
+		FORCE_SWITCH, 
+		LEARN_MOVE, 
+		STAT_GAIN, 
+		ENTER_NAME, 
+		APPEND_TO_NAME, 
+		SHOW_POKEMON;
 	}
 	
 	public MessageUpdate(String m)

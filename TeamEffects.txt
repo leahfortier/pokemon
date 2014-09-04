@@ -155,6 +155,7 @@ LuckyChant:
 	NumTurns: 5
 	CastMessage: "The lucky chant shielded " + victim.getName() + "'s team from critical hits!"
 	SubsideMessage: "The effects of lucky chant wore off."
+	Int: CritBlockerEffect
 *
 FutureSight:
 	NumTurns: 2

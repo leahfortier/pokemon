@@ -28,6 +28,8 @@ import battle.effect.ApplyDamageEffect;
 import battle.effect.ChangeAbilityMove;
 import battle.effect.ChangeTypeMove;
 import battle.effect.CrashDamageMove;
+import battle.effect.CritBlockerEffect;
+import battle.effect.CritStageEffect;
 import battle.effect.DefogRelease;
 import battle.effect.Effect;
 import battle.effect.Effect.CastSource;
@@ -1205,7 +1207,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class RazorLeaf extends Attack 
+	private static class RazorLeaf extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1214,7 +1216,11 @@ public abstract class Attack implements Serializable
 			super("Razor Leaf", "Sharp-edged leaves are launched to slash at the opposing team. Critical hits land more easily.", 25, Type.GRASS, Category.PHYSICAL);
 			super.power = 55;
 			super.accuracy = 95;
-			super.moveTypes.add("HighCritRatio");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -1421,7 +1427,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Slash extends Attack 
+	private static class Slash extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1430,8 +1436,12 @@ public abstract class Attack implements Serializable
 			super("Slash", "The target is attacked with a slash of claws or blades. Critical hits land more easily.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -1590,7 +1600,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class ShadowClaw extends Attack 
+	private static class ShadowClaw extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1599,8 +1609,12 @@ public abstract class Attack implements Serializable
 			super("Shadow Claw", "The user slashes with a sharp claw made from shadows. Critical hits land more easily.", 15, Type.GHOST, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -1844,7 +1858,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class ConfusionDamage extends Attack 
+	private static class ConfusionDamage extends Attack implements CritBlockerEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1852,8 +1866,12 @@ public abstract class Attack implements Serializable
 		{
 			super("ConfusionDamage", "None", 1, Type.NONE, Category.PHYSICAL);
 			super.power = 40;
-			super.moveTypes.add("CannotCrit");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public boolean blockCrits()
+		{
+			return true;
 		}
 	}
 
@@ -2978,7 +2996,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class DrillRun extends Attack 
+	private static class DrillRun extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2987,8 +3005,12 @@ public abstract class Attack implements Serializable
 			super("Drill Run", "The user crashes into its target while rotating its body like a drill. Critical hits land more easily.", 10, Type.GROUND, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 95;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -3560,7 +3582,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class PoisonTail extends Attack 
+	private static class PoisonTail extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3571,8 +3593,12 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 			super.effectChance = 10;
 			super.status = StatusCondition.POISONED;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -4184,7 +4210,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class AirCutter extends Attack 
+	private static class AirCutter extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4193,7 +4219,11 @@ public abstract class Attack implements Serializable
 			super("Air Cutter", "The user launches razor-like wind to slash the opposing team. Critical hits land more easily.", 25, Type.FLYING, Category.SPECIAL);
 			super.power = 55;
 			super.accuracy = 95;
-			super.moveTypes.add("HighCritRatio");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -4340,7 +4370,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class CrossPoison extends Attack 
+	private static class CrossPoison extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4351,8 +4381,12 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 			super.effectChance = 10;
 			super.status = StatusCondition.POISONED;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -4628,7 +4662,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class NightSlash extends Attack 
+	private static class NightSlash extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4637,8 +4671,12 @@ public abstract class Attack implements Serializable
 			super("Night Slash", "The user slashes the target the instant an opportunity arises. Critical hits land more easily.", 15, Type.DARK, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -4907,7 +4945,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class KarateChop extends Attack 
+	private static class KarateChop extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4916,8 +4954,12 @@ public abstract class Attack implements Serializable
 			super("Karate Chop", "The target is attacked with a sharp chop. Critical hits land more easily.", 25, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -4956,7 +4998,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class CrossChop extends Attack 
+	private static class CrossChop extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4965,8 +5007,12 @@ public abstract class Attack implements Serializable
 			super("Cross Chop", "The user delivers a double chop with its forearms crossed. Critical hits land more easily.", 5, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 80;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -5228,7 +5274,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class PsychoCut extends Attack 
+	private static class PsychoCut extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5237,7 +5283,11 @@ public abstract class Attack implements Serializable
 			super("Psycho Cut", "The user tears at the target with blades formed by psychic power. Critical hits land more easily.", 20, Type.PSYCHIC, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.moveTypes.add("HighCritRatio");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -5382,7 +5432,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class LeafBlade extends Attack 
+	private static class LeafBlade extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5391,8 +5441,12 @@ public abstract class Attack implements Serializable
 			super("Leaf Blade", "The user handles a sharp leaf like a sword and attacks by cutting its target. Critical hits land more easily.", 15, Type.GRASS, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 100;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -5544,7 +5598,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class StoneEdge extends Attack 
+	private static class StoneEdge extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5553,7 +5607,11 @@ public abstract class Attack implements Serializable
 			super("Stone Edge", "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.", 5, Type.ROCK, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 80;
-			super.moveTypes.add("HighCritRatio");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -6627,7 +6685,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Crabhammer extends Attack 
+	private static class Crabhammer extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6636,8 +6694,12 @@ public abstract class Attack implements Serializable
 			super("Crabhammer", "The target is hammered with a large pincer. Critical hits land more easily.", 10, Type.WATER, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 90;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -7033,7 +7095,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class BlazeKick extends Attack 
+	private static class BlazeKick extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -7044,8 +7106,12 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 			super.effectChance = 10;
 			super.status = StatusCondition.BURNED;
-			super.moveTypes.add("HighCritRatio");
 			super.moveTypes.add("PhysicalContact");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -7618,7 +7684,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class RazorWind extends Attack implements MultiTurnMove
+	private static class RazorWind extends Attack implements MultiTurnMove, CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -7628,7 +7694,6 @@ public abstract class Attack implements Serializable
 			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add("SleepTalkFail");
-			super.moveTypes.add("HighCritRatio");
 		}
 
 		public boolean chargesFirst()
@@ -7649,6 +7714,11 @@ public abstract class Attack implements Serializable
 		public String getChargeMessage(ActivePokemon user)
 		{
 			return user.getName() + " whipped up a whirlwind!";
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -8125,7 +8195,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class SkyAttack extends Attack implements MultiTurnMove
+	private static class SkyAttack extends Attack implements MultiTurnMove, CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -8137,7 +8207,6 @@ public abstract class Attack implements Serializable
 			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add("SleepTalkFail");
-			super.moveTypes.add("HighCritRatio");
 		}
 
 		public boolean chargesFirst()
@@ -8158,6 +8227,11 @@ public abstract class Attack implements Serializable
 		public String getChargeMessage(ActivePokemon user)
 		{
 			return user.getName() + " started glowing!";
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -8781,7 +8855,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Aeroblast extends Attack 
+	private static class Aeroblast extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -8790,7 +8864,11 @@ public abstract class Attack implements Serializable
 			super("Aeroblast", "A vortex of air is shot at the target to inflict damage. Critical hits land more easily.", 5, Type.FLYING, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 95;
-			super.moveTypes.add("HighCritRatio");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -9308,7 +9386,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class AttackOrder extends Attack 
+	private static class AttackOrder extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -9317,7 +9395,11 @@ public abstract class Attack implements Serializable
 			super("Attack Order", "The user calls out its underlings to pummel the target. Critical hits land more easily.", 15, Type.BUG, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 100;
-			super.moveTypes.add("HighCritRatio");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
@@ -9458,7 +9540,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class SpacialRend extends Attack 
+	private static class SpacialRend extends Attack implements CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -9467,7 +9549,11 @@ public abstract class Attack implements Serializable
 			super("Spacial Rend", "The user tears the target along with the space around it. Critical hits land more easily.", 5, Type.DRAGON, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 95;
-			super.moveTypes.add("HighCritRatio");
+		}
+
+		public int increaseCritStage(Integer stage, ActivePokemon p)
+		{
+			return stage + 1;
 		}
 	}
 
