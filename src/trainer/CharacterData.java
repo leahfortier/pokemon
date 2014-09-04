@@ -11,6 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -21,6 +23,7 @@ import pokemon.PC;
 import pokemon.Stat;
 import trainer.Pokedex.PokedexStatus;
 import battle.Battle;
+import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
 import battle.effect.EndBattleEffect;
 import battle.effect.TeamEffect;
@@ -56,16 +59,18 @@ public class CharacterData extends Trainer implements Serializable
 	private String lastPCMap;
 	private String lastPCMapEntrance;
 	
-	
 	private Pokedex pokedex;
 	private PC pc;
 	private boolean[] badges;
 	private int repelSteps;
+	
+	private ArrayList<String> logMessages;
 
 	public CharacterData()
 	{
 		super(DEFAULT_NAME, START_MONEY);
 		definedGlobals = new HashSet<>();
+		logMessages = new ArrayList<>();
 		
 		pokedex = new Pokedex();
 		pc = new PC();
@@ -377,6 +382,25 @@ public class CharacterData extends Trainer implements Serializable
 		return true;
 	}
 	
+	public void addLogMessage(MessageUpdate messageUpdate)
+	{
+		String messageString = messageUpdate.getMessage().trim();
+		if (messageString.equals(""))
+			return;
+		
+		logMessages.add("-" + messageString);
+	}
+	
+	public void clearLogMessages()
+	{
+		logMessages.clear();
+	}
+	
+	public ArrayList<String> getLogMessages() 
+	{
+		return logMessages;
+	}
+	
 	public void save(){
 		
 		//printGlobals();
@@ -416,6 +440,7 @@ public class CharacterData extends Trainer implements Serializable
 			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
 			ObjectInputStream in = new ObjectInputStream(fin);
 			loadChar = (CharacterData) in.readObject();
+			loadChar.logMessages = new ArrayList<>();
 			in.close();
 			fin.close();
 		}
