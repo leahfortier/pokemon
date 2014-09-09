@@ -636,7 +636,11 @@ public class Battle
 	
 	public int applyDamage(ActivePokemon p, int damage)
 	{
-		if (Ability.blockDamage(this, getOtherPokemon(p.user()), p)) return 0;
+		if (Ability.blockDamage(this, getOtherPokemon(p.user()), p)) 
+		{
+			return 0;
+		}
+		
 		return p.reduceHealth(this, damage);
 	}
 	

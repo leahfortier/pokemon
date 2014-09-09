@@ -51,18 +51,18 @@ Semi-invulnerable moves shouldn't get a menu in between turns
 Things to test:
 	BracingEffect
 	CrashDamageEffect
+	EffectBlockerEffect
+	EndBattleEffect
+	StatusPreventionEffect
+	
 	StageChangingEffect: 
 		if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stage;
 	OpposingBeforeTurnAttack: 
 		if (this instanceof Ability && p.breaksTheMold()) return true;
 	StatChangingEffect: 
 		if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stat;
-	StatusPreventionEffect: 
-		if (this instanceof Ability && caster.breaksTheMold()) return false;
 	OpponentPowerChangeEffect:
 		if (this instanceof Ability && user.breaksTheMold()) return 1;
-	EffectBlockerEffect: 
-		if (this instanceof Ability && user.breaksTheMold()) return true;
 	StatProtectingEffect:
 		if (this instanceof Ability && caster.breaksTheMold()) return false;
 	

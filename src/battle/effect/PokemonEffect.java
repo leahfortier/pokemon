@@ -152,11 +152,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " was seeded!";
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (victim.isType(b, Type.GRASS)) return "It doesn't affect " + victim.getName() + "!";
 			if (victim.hasEffect("LeechSeed")) return victim.getName() + " is already seeded!";
-			return super.getFailMessage(b, user, victim, team);
+			return super.getFailMessage(b, user, victim);
 		}
 
 		public void apply(ActivePokemon victim, Battle b)
@@ -642,9 +642,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
+			
 			super.cast(b, caster, victim, source, printCast);
 		}
 
@@ -686,7 +687,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
 			super.cast(b, caster, victim, source, printCast);
@@ -730,9 +731,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
+			
 			super.cast(b, caster, victim, source, printCast);
 		}
 
@@ -790,11 +792,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " became confused!";
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (victim.hasEffect("Confusion")) return victim.getName() + " is already confused!";
 			if (victim.hasAbility("Own Tempo")) return victim.getName() + "'s Own Tempo prevents confusion!";
-			return super.getFailMessage(b, user, victim, team);
+			return super.getFailMessage(b, user, victim);
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
@@ -1002,7 +1004,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (!p.getAttack().getName().equals(move.getAttack().getName()))
 			{
 				b.printAttacking(p);
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
 			}
 			return true;
@@ -1059,10 +1061,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return turns == 0;
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (victim.hasEffect("Disable")) return victim.getName() + " is already disabled!";
-			return super.getFailMessage(b, user, victim, team);
+			return super.getFailMessage(b, user, victim);
 		}
 
 		public boolean usable(ActivePokemon p, Move m)
@@ -1304,7 +1306,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			if (!victim.hasEffect("Stockpile")) super.cast(b, caster, victim, source, printCast);
+			if (!victim.hasEffect("Stockpile"))
+			{
+				super.cast(b, caster, victim, source, printCast);
+			}
+			
 			Stockpile stockpile = (Stockpile)victim.getEffect("Stockpile");
 			if (stockpile.turns < 3)
 			{
@@ -1312,7 +1318,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				stockpile.turns++;
 				return;
 			}
-			b.addMessage("...but it failed!");
+			
+			b.addMessage(this.getFailMessage(b, caster, victim));
 		}
 
 		public void subside(Battle b, ActivePokemon p)
@@ -1403,11 +1410,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			Attack m = other.getAttributes().getLastMoveUsed() == null ? null : other.getAttributes().getLastMoveUsed().getAttack();
+			
 			if (m == null || victim.hasMove(m.getName()) || m.isMoveType("Mimicless"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
+			
 			mimicMove = new Move(m);
 			super.cast(b, caster, victim, source, printCast);
 		}
@@ -1478,7 +1487,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (unableMoves.contains(p.getAttack().getName()))
 			{
 				b.printAttacking(p);
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
 			}
 			return true;
@@ -1601,7 +1610,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (!usable(p, p.getMove()))
 			{
 				b.printAttacking(p);
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
 			}
 			return true;
@@ -1652,7 +1661,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			if (!usable(p, p.getMove()))
 			{
 				b.printAttacking(p);
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
 			}
 			return true;
@@ -2233,8 +2242,16 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType("Field") || user.getAttack().isMoveType("SubstitutePiercing")) return true;
-			if (user.getAttack().getCategory() == Category.STATUS) b.addMessage("...but it failed!");
+			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType("Field") || user.getAttack().isMoveType("SubstitutePiercing"))
+			{
+				return true;
+			}
+			
+			if (user.getAttack().getCategory() == Category.STATUS)
+			{
+				b.addMessage(this.getFailMessage(b, user, victim));
+			}
+			
 			return false;
 		}
 	}
@@ -2348,8 +2365,14 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			}
 			
 			b.addMessage(victim.getName() + " released energy!");
-			if (e.damage == 0) b.addMessage("...but it failed!");
-			else b.applyDamage(b.getOtherPokemon(victim.user()), 2*e.damage);
+			if (e.damage == 0)
+			{
+				b.addMessage(this.getFailMessage(b, caster, victim));
+			}
+			else
+			{
+				b.applyDamage(b.getOtherPokemon(victim.user()), 2*e.damage);
+			}
 			
 			victim.getAttributes().removeEffect("Bide");
 		}
@@ -2599,10 +2622,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " fell in love!";
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (Gender.oppositeGenders(user, victim) && victim.hasAbility("Oblivious")) return victim.getName() + "'s Oblivious prevents infatuation!";
-			return super.getFailMessage(b, user, victim, team);
+			return super.getFailMessage(b, user, victim);
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
@@ -2726,10 +2749,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return "All Pokemon hearing this song will faint in three turns!";
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (victim.hasAbility("Soundproof")) return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
-			return super.getFailMessage(b, user, victim, team);
+			return super.getFailMessage(b, user, victim);
 		}
 
 		public void apply(ActivePokemon victim, Battle b)

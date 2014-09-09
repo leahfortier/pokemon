@@ -152,9 +152,10 @@ Protecting:
 	Cast: 
 	if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(this.getFailMessage(b, caster, victim));
 		return;
 	}
+	
 	super.cast(b, caster, victim, source, printCast);
 	###
 	CastMessage: victim.getName() + " protected itself!"
@@ -172,7 +173,7 @@ QuickGuard:
 	Cast: 
 	if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(this.getFailMessage(b, caster, victim));
 		return;
 	}
 	super.cast(b, caster, victim, source, printCast);
@@ -184,9 +185,10 @@ Bracing:
 	Cast: 
 	if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(this.getFailMessage(b, caster, victim));
 		return;
 	}
+	
 	super.cast(b, caster, victim, source, printCast);
 	###
 	CastMessage: user.getName() + " braced itself!"
@@ -313,7 +315,7 @@ Encore:
 	if (!p.getAttack().getName().equals(move.getAttack().getName()))
 	{
 		b.printAttacking(p);
-		b.addMessage("...but it failed!");
+		b.addMessage(this.getFailMessage(b, p, opp));
 		return false;
 	}
 	return true;
@@ -505,7 +507,11 @@ Stockpile:
 	###
 	CanHave: True
 	Cast: 
-	if (!victim.hasEffect("Stockpile")) super.cast(b, caster, victim, source, printCast);
+	if (!victim.hasEffect("Stockpile")) 
+	{
+		super.cast(b, caster, victim, source, printCast);
+	}
+	
 	Stockpile stockpile = (Stockpile)victim.getEffect("Stockpile");
 	if (stockpile.turns < 3)
 	{
@@ -513,7 +519,8 @@ Stockpile:
 		stockpile.turns++;
 		return;
 	}
-	b.addMessage("...but it failed!");
+	
+	b.addMessage(this.getFailMessage(b, caster, victim));
 	###
 	StageChange: 
 	return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? stage + turns : stage;
@@ -552,11 +559,13 @@ Mimic:
 	Cast: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	Attack m = other.getAttributes().getLastMoveUsed() == null ? null : other.getAttributes().getLastMoveUsed().getAttack();
+	
 	if (m == null || victim.hasMove(m.getName()) || m.isMoveType("Mimicless"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(this.getFailMessage(b, caster, victim));
 		return;
 	}
+	
 	mimicMove = new Move(m);
 	super.cast(b, caster, victim, source, printCast);
 	###
@@ -587,7 +596,7 @@ Imprison:
 	if (unableMoves.contains(p.getAttack().getName()))
 	{
 		b.printAttacking(p);
-		b.addMessage("...but it failed!");
+		b.addMessage(this.getFailMessage(b, p, opp));
 		return false;
 	}
 	return true;
@@ -623,7 +632,7 @@ Torment:
 	if (!usable(p, p.getMove()))
 	{
 		b.printAttacking(p);
-		b.addMessage("...but it failed!");
+		b.addMessage(this.getFailMessage(b, p, opp));
 		return false;
 	}
 	return true;
@@ -641,7 +650,7 @@ Taunt:
 	if (!usable(p, p.getMove()))
 	{
 		b.printAttacking(p);
-		b.addMessage("...but it failed!");
+		b.addMessage(this.getFailMessage(b, p, opp));
 		return false;
 	}
 	return true;
@@ -872,8 +881,16 @@ Substitute:
 	###
 	FailCondition: victim.getHPRatio() <= .25 || victim.getStat(Stat.HP) <= 3
 	ValidMove: 
-	if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType("Field") || user.getAttack().isMoveType("SubstitutePiercing")) return true;
-	if (user.getAttack().getCategory() == Category.STATUS) b.addMessage("...but it failed!");
+	if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType("Field") || user.getAttack().isMoveType("SubstitutePiercing")) 
+	{
+		return true;
+	}
+	
+	if (user.getAttack().getCategory() == Category.STATUS) 
+	{
+		b.addMessage(this.getFailMessage(b, user, victim));
+	}
+	
 	return false;
 	###
 *	
@@ -931,8 +948,14 @@ Bide:
 	}
 	
 	b.addMessage(victim.getName() + " released energy!");
-	if (e.damage == 0) b.addMessage("...but it failed!");
-	else b.applyDamage(b.getOtherPokemon(victim.user()), 2*e.damage);
+	if (e.damage == 0) 
+	{
+		b.addMessage(this.getFailMessage(b, caster, victim));
+	}
+	else 
+	{
+		b.applyDamage(b.getOtherPokemon(victim.user()), 2*e.damage);
+	}
 	
 	victim.getAttributes().removeEffect("Bide");
 	###

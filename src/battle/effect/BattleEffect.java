@@ -123,7 +123,7 @@ public abstract class BattleEffect extends Effect
 			if (p.getAttack().isMoveType("Airborne"))
 			{
 				b.printAttacking(p);
-				b.addMessage("...but it failed!");
+				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
 			}
 			return true;

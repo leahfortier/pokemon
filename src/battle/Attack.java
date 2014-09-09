@@ -194,10 +194,11 @@ public abstract class Attack implements Serializable
 	public boolean isMoveType(String type)
 	{
 		validMoveType(type);
+		
 		for (String s : moveTypes)
-		{
-			if (s.equals(type)) return true;
-		}
+			if (s.equals(type)) 
+				return true;
+		
 		return false;
 	}
 	
@@ -279,14 +280,12 @@ public abstract class Attack implements Serializable
 		int chance = effectChance*(me.hasAbility("Serene Grace") ? 2 : 1); 
 		if (Math.random()*100 >= chance) return false;
 		
-		// Check the opponents effects and see if it will prevent effects from occuring
+		// Check the opponents effects and see if it will prevent effects from occurring
 		Object[] list = b.getEffectsList(o);
-		for (Object obj : list)
+		Object checkeroo = Global.checkInvoke(false, me, list, EffectBlockerEffect.class, "validMove", b, me, o);
+		if (checkeroo != null)
 		{
-			if (Effect.isInactiveEffect(obj)) 
-				continue;
-			
-			if (obj instanceof EffectBlockerEffect && !((EffectBlockerEffect)obj).validMove(b, me, o)) return false;
+			return false;
 		}
 		
 		// Sheer Force prevents the user from having secondary effects for its moves
@@ -309,7 +308,7 @@ public abstract class Attack implements Serializable
 	}
 	
 	// Physical and Special moves -- do dat damage!
-	// Returns false if the move was unsuccessful due to zero type advantage
+	// Returns -1 if the move was unsuccessful due to zero type advantage
 	public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 	{
 		if (zeroAdvantage(b, me, o)) 
@@ -386,7 +385,7 @@ public abstract class Attack implements Serializable
 		for (Effect e : effects)
 		{
 			if (e.applies(b, user, victim, CastSource.ATTACK)) e.cast(b, user, victim, CastSource.ATTACK, canPrintCast());
-			else if (canPrintFail()) b.addMessage(e.getFailMessage(b, user, victim, victim.user()));
+			else if (canPrintFail()) b.addMessage(e.getFailMessage(b, user, victim));
 		}
 		
 		// Heal yourself!!
@@ -1295,7 +1294,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -1335,7 +1334,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -2245,7 +2244,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -2296,8 +2295,14 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (Gender.oppositeGenders(user, victim)) super.applyEffects(b, user, victim);
-			else b.addMessage("...but it failed!");
+			if (Gender.oppositeGenders(user, victim))
+			{
+				super.applyEffects(b, user, victim);
+			}
+			else
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			}
 		}
 	}
 
@@ -2643,12 +2648,17 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o)) return;
-			if (me.getHP() >= o.getHP())
+			if (super.zeroAdvantage(b, me, o))
 			{
-				b.addMessage("...but it failed!");
 				return;
 			}
+			
+			if (me.getHP() >= o.getHP())
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return;
+			}
+			
 			b.applyDamage(o, o.getHP() - me.getHP());
 		}
 	}
@@ -2739,7 +2749,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -2791,9 +2801,10 @@ public abstract class Attack implements Serializable
 			Move mirror = o.getAttributes().getLastMoveUsed();
 			if (mirror == null || mirror.getAttack().getName().equals("Mirror Move") ||	mirror.getAttack().getName().equals("Copycat"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			me.callNewMove(b, o, new Move(mirror.getAttack()));
 		}
 	}
@@ -2858,9 +2869,10 @@ public abstract class Attack implements Serializable
 		{
 			if (o.getMove().getAttack().getCategory() == Category.STATUS)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			super.apply(me, o, b);
 		}
 	}
@@ -3093,9 +3105,10 @@ public abstract class Attack implements Serializable
 		{
 			if (!me.hasEffect("Stockpile"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			super.apply(me, o, b);
 		}
 
@@ -3121,17 +3134,22 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
 			PokemonEffect e = user.getEffect("Stockpile");
 			if (e  == null)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
-			if (e.getTurns() <= 0) Global.error("Stockpile turns should never be nonpositive");
+			
+			if (e.getTurns() <= 0)
+			{
+				Global.error("Stockpile turns should never be nonpositive");
+			}
+			
 			switch (e.getTurns())
 			{
 				case 1:
@@ -3722,7 +3740,7 @@ public abstract class Attack implements Serializable
 		{
 			if (me.getLevel() < o.getLevel())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return -1;
 			}
 			
@@ -3952,7 +3970,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -4145,7 +4163,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasAbility("Insomnia") || victim.hasAbility("Vital Spirit") || victim.hasStatus(StatusCondition.ASLEEP))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -4158,7 +4176,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -4294,13 +4312,24 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getHeldItem(b) instanceof Berry) user.consumeItem(b);
+			// This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
+			if (user.getHeldItem(b) instanceof Berry)
+			{
+				user.consumeItem(b);
+			}
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (me.getHeldItem(b) instanceof Berry) super.apply(me, o, b);
-			else b.addMessage("...but it failed!");
+			// Attack normally if holding a Berry, otherwise throw an error
+			if (me.getHeldItem(b) instanceof Berry)
+			{
+				super.apply(me, o, b);
+			}
+			else
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			}
 		}
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
@@ -4637,7 +4666,7 @@ public abstract class Attack implements Serializable
 		{
 			if (me.getLevel() < o.getLevel())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return -1;
 			}
 			
@@ -4718,8 +4747,15 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (!me.getAttributes().isFirstTurn()) b.addMessage("...but it failed!");
-			else super.apply(me, o, b);
+			// Only works on the first turn
+			if (me.getAttributes().isFirstTurn())
+			{
+				super.apply(me, o, b);
+			}
+			else
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			}
 		}
 	}
 
@@ -4889,7 +4925,7 @@ public abstract class Attack implements Serializable
 			{
 				if (super.category == Category.STATUS)
 				{
-					b.addMessage("...but it failed!");
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				}
 				
 				return;
@@ -5154,11 +5190,14 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// Fails if attack is already maxed or if you have less than half your health to give up
 			if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHP() < user.getStat(Stat.HP)/2.0)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
+			// Maximization station
 			b.addMessage(user.getName() + " cut its own HP and maximized its attack!");
 			user.reduceHealthFraction(b, 1/2.0);
 			user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
@@ -5741,12 +5780,21 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Different effects based on the type of the user
 			if (me.isType(b, Type.GHOST))
 			{
-				if (effects.get(0).applies(b, me, o, CastSource.ATTACK)) effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
-				else b.addMessage("...but it failed!");
+				// Manually apply the effect if it applies
+				if (effects.get(0).applies(b, me, o, CastSource.ATTACK))
+				{
+					effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
+				}
+				else
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
 				return;
 			}
+			
 			me.modifyStages(b, me, statChanges, CastSource.ATTACK);
 		}
 	}
@@ -5791,7 +5839,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -5812,11 +5860,12 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealPulse"))
+			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			victim.healHealthFraction(1/2.0);
 			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
 		}
@@ -6127,7 +6176,7 @@ public abstract class Attack implements Serializable
 		{
 			if (me.getLevel() < o.getLevel())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return -1;
 			}
 			
@@ -6397,11 +6446,14 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			Move last = victim.getAttributes().getLastMoveUsed();
+			
+			// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
 			if (last == null || last.getPP() == 0 || !victim.hasMove(last.getAttack().getName()))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			b.addMessage(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 		}
 	}
@@ -6454,21 +6506,37 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Cannot eat daydreams
 			if (!o.hasStatus(StatusCondition.ASLEEP))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			super.apply(me, o, b);
 		}
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Deal damage to the target
 			int damage = super.applyDamage(me, o, b);
-			if (!me.hasEffect("HealBlock")) me.heal((int)(damage*.5*(me.isHoldingItem(b, "Big Root") ? 1.3 : 1)));
+			
+			// Healers gon' heal
+			if (!me.hasEffect("HealBlock"))
+			{
+				int healAmount = (int)(damage*.5);
+				if (me.isHoldingItem(b, "Big Root"))
+				{
+					healAmount *= 1.3;
+				}
+				
+				me.heal(healAmount);
+			}
+			
 			b.addMessage(o.getName() + "'s dream was eaten!");
 			b.addMessage("", o.getHP(), o.user());
 			b.addMessage("", me.getHP(), me.user());
+			
 			return damage;
 		}
 	}
@@ -6594,8 +6662,16 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Type[] type = me.getType(b);
-			if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) super.apply(me, o, b);
-			else b.addMessage("...but it failed!");
+			
+			// Like this is literally the stupidest move ever like srsly what is wrong with the creators
+			if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1])))
+			{
+				super.apply(me, o, b);
+			}
+			else
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			}
 		}
 	}
 
@@ -6660,7 +6736,7 @@ public abstract class Attack implements Serializable
 		{
 			if (me.getLevel() < o.getLevel())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return -1;
 			}
 			
@@ -6770,11 +6846,14 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			int damageTaken = me.getAttributes().getDamageTaken();
-			if (damageTaken == 0 || o.getMove().getAttack().getCategory() != Category.SPECIAL)
+			
+			// Fails if no damage to reflect or if the opponent isn't using a special attack
+			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.SPECIAL)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			if (super.zeroAdvantage(b, me, o)) return;
 			b.applyDamage(o, damageTaken*2);
 		}
@@ -6797,11 +6876,14 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			int damageTaken = me.getAttributes().getDamageTaken();
-			if (damageTaken == 0 || o.getMove().getAttack().getCategory() != Category.PHYSICAL)
+			
+			// Fails is no damage to reflect or if the opponent isn't using a physical attack
+			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.PHYSICAL)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			if (super.zeroAdvantage(b, me, o)) return;
 			b.applyDamage(o, damageTaken*2);
 		}
@@ -7333,11 +7415,13 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (!b.isFirstAttack() || o.getAttack().getCategory() == Category.STATUS)
+			// Fails if it is the second turn or the opponent is using a status move
+			if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().getCategory() == Category.STATUS)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			me.addEffect(PokemonEffect.getEffect("FiddyPercentStronger"));
 			me.callNewMove(b, o, new Move(o.getAttack()));
 			me.getAttributes().removeEffect("FiddyPercentStronger");
@@ -7362,7 +7446,8 @@ public abstract class Attack implements Serializable
 				b.addMessage(user.getName() + " cured itself of its status condition!", StatusCondition.NONE, user.user());
 				return;
 			}
-			b.addMessage("...but it failed!");
+			
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		}
 	}
 
@@ -7441,7 +7526,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -7648,9 +7733,10 @@ public abstract class Attack implements Serializable
 			Move mirror = o.getAttributes().getLastMoveUsed();
 			if (mirror == null || mirror.getAttack().getName().equals("Mirror Move") || mirror.getAttack().getName().equals("Copycat"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			me.callNewMove(b, o, new Move(mirror.getAttack()));
 		}
 	}
@@ -7931,10 +8017,14 @@ public abstract class Attack implements Serializable
 		{
 			for (Move m : me.getMoves())
 			{
-				if (m.getAttack().getName().equals("Last Resort")) continue;
+				if (m.getAttack().getName().equals("Last Resort"))
+				{
+					continue;
+				}
+				
 				if (!m.used())
 				{
-					b.addMessage("...but it failed!");
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 					return;
 				}
 			}
@@ -7998,7 +8088,8 @@ public abstract class Attack implements Serializable
 					return;
 				}
 			}
-			b.addMessage("...but it failed!");
+			
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -8007,8 +8098,12 @@ public abstract class Attack implements Serializable
 			for (Move m : victim.getMoves())
 			{
 				Type t = m.getAttack().getType(b, victim);
-				if (!victim.isType(b, t)) types.add(t);
+				if (!victim.isType(b, t))
+				{
+					types.add(t);
+				}
 			}
+			
 			return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 		}
 	}
@@ -8039,9 +8134,10 @@ public abstract class Attack implements Serializable
 			Move m = o.getAttributes().getLastMoveUsed();
 			if (m == null || getResistances(me, m.getAttack().getType(b, o), b).size() == 0)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			super.apply(me, o, b);
 		}
 
@@ -8142,9 +8238,10 @@ public abstract class Attack implements Serializable
 		{
 			if (!me.hasStatus(StatusCondition.ASLEEP))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			super.apply(me, o, b);
 		}
 	}
@@ -8167,19 +8264,25 @@ public abstract class Attack implements Serializable
 		{
 			if (!me.hasStatus(StatusCondition.ASLEEP))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			List<Move> moves = new ArrayList<>();
 			for (Move m : me.getMoves())
 			{
-				if (!m.getAttack().isMoveType("SleepTalkFail")) moves.add(m);
+				if (!m.getAttack().isMoveType("SleepTalkFail"))
+				{
+					moves.add(m);
+				}
 			}
+			
 			if (moves.size() == 0)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			me.callNewMove(b, o, moves.get((int)(Math.random()*moves.size())));
 		}
 	}
@@ -8338,9 +8441,10 @@ public abstract class Attack implements Serializable
 		{
 			if (!user.hasStatus() || !Status.giveStatus(b, user, victim, user.getStatus().getType()))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			user.removeStatus();
 		}
 	}
@@ -8673,11 +8777,13 @@ public abstract class Attack implements Serializable
 				super.applyDamage(me, o, b);
 				return;
 			}
+			
 			if (o.fullHealth() || o.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			o.healHealthFraction(1/4.0);
 			b.addMessage(o.getName() + "'s health was restored!", o.getHP(), o.user());
 		}
@@ -8726,9 +8832,10 @@ public abstract class Attack implements Serializable
 			Move copy = o.getAttributes().getLastMoveUsed();
 			if (copy == null || copy.getAttack().getName().equals("Struggle") || me.hasEffect("Transformed"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			List<Move> moves = me.getMoves();
 			for (int i = 0; i < moves.size(); i++)
 			{
@@ -8737,6 +8844,7 @@ public abstract class Attack implements Serializable
 					moves.add(i, new Move(copy.getAttack()));
 					moves.remove(i + 1);
 					b.addMessage(me.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
+					break;
 				}
 			}
 		}
@@ -8786,7 +8894,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -8947,7 +9055,7 @@ public abstract class Attack implements Serializable
 			{
 				if (super.category == Category.STATUS)
 				{
-					b.addMessage("...but it failed!");
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				}
 				
 				return;
@@ -9094,17 +9202,26 @@ public abstract class Attack implements Serializable
 			List<Attack> attacks = new ArrayList<>();
 			for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
 			{
-				if (p == b.getTrainer(me.user()).front()) continue;
+				if (p == b.getTrainer(me.user()).front())
+				{
+					continue;
+				}
+				
 				for (Move m : p.getMoves())
 				{
-					if (!m.getAttack().isMoveType("Assistless")) attacks.add(m.getAttack());
+					if (!m.getAttack().isMoveType("Assistless"))
+					{
+						attacks.add(m.getAttack());
+					}
 				}
 			}
+			
 			if (attacks.size() == 0)
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			me.callNewMove(b, o, new Move(attacks.get((int)(Math.random()*attacks.size()))));
 		}
 	}
@@ -9124,10 +9241,15 @@ public abstract class Attack implements Serializable
 			int damageTaken = me.getAttributes().getDamageTaken();
 			if (damageTaken == 0 || b.isFirstAttack())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
-			if (super.zeroAdvantage(b, me, o)) return;
+			
+			if (super.zeroAdvantage(b, me, o))
+			{
+				return;
+			}
+			
 			b.applyDamage(o, (int)(damageTaken*1.5));
 		}
 	}
@@ -9376,7 +9498,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -9932,19 +10054,20 @@ public abstract class Attack implements Serializable
 		{
 			for (int i = 0; i < victim.getEffects().size(); i++)
 			{
-				PokemonEffect e = victim.getEffects().get(i);
-				if (e.isActive() && e instanceof DefogRelease)
+				PokemonEffect fogglyBoggly = victim.getEffects().get(i);
+				if (fogglyBoggly.isActive() && fogglyBoggly instanceof DefogRelease)
 				{
-					b.addMessage(((DefogRelease)e).getDefogReleaseMessage(victim));
+					b.addMessage(((DefogRelease)fogglyBoggly).getDefogReleaseMessage(victim));
 					victim.getEffects().remove(i--);
 				}
 			}
+			
 			for (int i = 0; i < b.getEffects(victim.user()).size(); i++)
 			{
-				TeamEffect e = b.getEffects(victim.user()).get(i);
-				if (e.isActive() && e instanceof DefogRelease)
+				TeamEffect fogglyBoggly = b.getEffects(victim.user()).get(i);
+				if (fogglyBoggly.isActive() && fogglyBoggly instanceof DefogRelease)
 				{
-					b.addMessage(((DefogRelease)e).getDefogReleaseMessage(victim));
+					b.addMessage(((DefogRelease)fogglyBoggly).getDefogReleaseMessage(victim));
 					b.getEffects(victim.user()).remove(i--);
 				}
 			}
@@ -10243,9 +10366,10 @@ public abstract class Attack implements Serializable
 		{
 			if (me.hasEffect("Embargo"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			super.apply(me, o, b);
 		}
 
@@ -10379,7 +10503,10 @@ public abstract class Attack implements Serializable
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
 			{
-				if (super.category == Category.STATUS) b.addMessage("...but it failed!");
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
 				return;
 			}
 			
@@ -10446,7 +10573,10 @@ public abstract class Attack implements Serializable
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
 			{
-				if (super.category == Category.STATUS) b.addMessage("...but it failed!");
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
 				return;
 			}
 			
@@ -10477,9 +10607,10 @@ public abstract class Attack implements Serializable
 		{
 			if (!b.isWildBattle())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			b.addMessage(user.getName() + " teleported out of battle!");
 			b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 		}
@@ -10504,7 +10635,7 @@ public abstract class Attack implements Serializable
 			{
 				case "Wonder Guard":
 				case "Multitype":
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				break;
 				default:
 				super.apply(me, o, b);
@@ -10571,7 +10702,10 @@ public abstract class Attack implements Serializable
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
 			{
-				if (super.category == Category.STATUS) b.addMessage("...but it failed!");
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
 				return;
 			}
 			
@@ -10606,7 +10740,7 @@ public abstract class Attack implements Serializable
 			{
 				if (super.category == Category.STATUS)
 				{
-					b.addMessage("...but it failed!");
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				}
 				
 				return;
@@ -10659,7 +10793,7 @@ public abstract class Attack implements Serializable
 			{
 				if (super.category == Category.STATUS)
 				{
-					b.addMessage("...but it failed!");
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				}
 				
 				return;
@@ -10712,7 +10846,7 @@ public abstract class Attack implements Serializable
 			{
 				if (super.category == Category.STATUS)
 				{
-					b.addMessage("...but it failed!");
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				}
 				
 				return;
@@ -10806,9 +10940,10 @@ public abstract class Attack implements Serializable
 			PokemonEffect consumed = victim.getEffect("ConsumedItem");
 			if (consumed == null || victim.isHoldingItem(b))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
+			
 			Item restored = ((ItemCondition)consumed).getItem();
 			victim.giveItem((HoldItem)restored);
 			b.addMessage(victim.getName() + "'s " + restored.getName() + " was restored!");
@@ -10870,7 +11005,7 @@ public abstract class Attack implements Serializable
 			Trainer trainer = (Trainer)t;
 			if (!trainer.hasRemainingPokemon())
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
@@ -10931,7 +11066,10 @@ public abstract class Attack implements Serializable
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
 			{
-				if (super.category == Category.STATUS) b.addMessage("...but it failed!");
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
 				return;
 			}
 			
@@ -11022,7 +11160,7 @@ public abstract class Attack implements Serializable
 			{
 				case "Truant":
 				case "Multitype":
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				break;
 				default:
 				super.apply(me, o, b);
@@ -11070,7 +11208,7 @@ public abstract class Attack implements Serializable
 			{
 				case "Truant":
 				case "Multitype":
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				break;
 				default:
 				super.apply(me, o, b);
@@ -11105,7 +11243,7 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.hasAbility("Wonder Guard") || victim.hasAbility("Multitype"))
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			

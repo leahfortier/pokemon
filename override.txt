@@ -69,7 +69,7 @@ SelfHealingMove:
 		Begin:
 		if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 		{
-			b.addMessage("...but it failed!");
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 		
@@ -165,7 +165,7 @@ Override:
 		{
 			if (super.category == Category.STATUS) 
 			{
-				b.addMessage("...but it failed!");
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			}
 			
 			return;
@@ -210,7 +210,7 @@ Override:
 		Body:
 		if (me.getLevel() < o.getLevel())
 		{
-			b.addMessage("...but it failed!");
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return -1;
 		}
 
@@ -283,7 +283,10 @@ Override:
 		Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 		if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
 		{
-			if (super.category == Category.STATUS) b.addMessage("...but it failed!");
+			if (super.category == Category.STATUS) 
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			}
 			return;
 		}
 
@@ -517,9 +520,9 @@ PassableEffect:
 ***
 Override:
 	FailMessage:
-		Header: String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+		Header: String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		End:
-		return super.getFailMessage(b, user, victim, team);
+		return super.getFailMessage(b, user, victim);
 		###
 	*
 ***

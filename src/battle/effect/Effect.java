@@ -9,6 +9,8 @@ import battle.Battle;
 
 public abstract class Effect implements Serializable
 {
+	public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
+	
 	private static final long serialVersionUID = 1L;
 	
 	protected String name;
@@ -155,9 +157,9 @@ public abstract class Effect implements Serializable
 		return "";
 	}
 	
-	public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, boolean team)
+	public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 	{
-		return "...but it failed!";
+		return DEFAULT_FAIL_MESSAGE;
 	}
 	
 	public String getSubsideMessage(ActivePokemon p)

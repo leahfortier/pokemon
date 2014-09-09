@@ -827,8 +827,14 @@ Captivate:
 	PP: 20
 	StatChange: 1 Sp_attack -2
 	ApplyEffects: 
-	if (Gender.oppositeGenders(user, victim)) super.applyEffects(b, user, victim);
-	else b.addMessage("...but it failed!");
+	if (Gender.oppositeGenders(user, victim)) 
+	{
+		super.applyEffects(b, user, victim);
+	}
+	else 
+	{
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+	}
 	###
 *
 Bug Buzz:
@@ -1006,12 +1012,17 @@ Endeavor:
 	PP: 5
 	Acc: 100
 	Apply: 
-	if (super.zeroAdvantage(b, me, o)) return;
-	if (me.getHP() >= o.getHP())
+	if (super.zeroAdvantage(b, me, o)) 
 	{
-		b.addMessage("...but it failed!");
 		return;
 	}
+	
+	if (me.getHP() >= o.getHP())
+	{
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		return;
+	}
+	
 	b.applyDamage(o, o.getHP() - me.getHP());
 	###
 *
@@ -1106,9 +1117,10 @@ Mirror Move:
 	Move mirror = o.getAttributes().getLastMoveUsed();
 	if (mirror == null || mirror.getAttack().getName().equals("Mirror Move") ||	mirror.getAttack().getName().equals("Copycat"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	me.callNewMove(b, o, new Move(mirror.getAttack()));
 	###
 *
@@ -1155,9 +1167,10 @@ Sucker Punch:
 	Apply: 
 	if (o.getMove().getAttack().getCategory() == Category.STATUS)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	super.apply(me, o, b);
 	###
 *
@@ -1305,9 +1318,10 @@ Spit Up:
 	Apply: 
 	if (!me.hasEffect("Stockpile"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	super.apply(me, o, b);
 	###
 	GetPow: 
@@ -1325,10 +1339,15 @@ Swallow:
 	PokemonEffect e = user.getEffect("Stockpile");
 	if (e  == null)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
-	if (e.getTurns() <= 0) Global.error("Stockpile turns should never be nonpositive");
+	
+	if (e.getTurns() <= 0) 
+	{
+		Global.error("Stockpile turns should never be nonpositive");
+	}
+	
 	switch (e.getTurns())
 	{
 		case 1:
@@ -1928,7 +1947,7 @@ Rest:
 	ApplyEffects: 
 	if (victim.fullHealth() || victim.hasAbility("Insomnia") || victim.hasAbility("Vital Spirit") || victim.hasStatus(StatusCondition.ASLEEP))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -2030,11 +2049,22 @@ Natural Gift:
 	Type: Normal
 	Acc: 100
 	ApplyEffects: 
-	if (user.getHeldItem(b) instanceof Berry) user.consumeItem(b);
+	// This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
+	if (user.getHeldItem(b) instanceof Berry) 
+	{
+		user.consumeItem(b);
+	}
 	###
-	Apply: 
-	if (me.getHeldItem(b) instanceof Berry) super.apply(me, o, b);
-	else b.addMessage("...but it failed!");
+	Apply:
+	// Attack normally if holding a Berry, otherwise throw an error
+	if (me.getHeldItem(b) instanceof Berry) 
+	{
+		super.apply(me, o, b);
+	}
+	else 
+	{
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+	}
 	###
 *
 Giga Drain:
@@ -2277,8 +2307,15 @@ Fake Out:
 	Pow: 40
 	Effect: Pokemon Flinch
 	Apply: 
-	if (!me.getAttributes().isFirstTurn()) b.addMessage("...but it failed!");
-	else super.apply(me, o, b);
+	// Only works on the first turn
+	if (me.getAttributes().isFirstTurn()) 
+	{
+		super.apply(me, o, b);
+	}
+	else 
+	{
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+	}
 	###
 *
 Faint Attack:
@@ -2530,11 +2567,14 @@ Belly Drum:
 	Type: Normal
 	SelfTarget: True
 	ApplyEffects: 
+	// Fails if attack is already maxed or if you have less than half your health to give up
 	if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHP() < user.getStat(Stat.HP)/2.0)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
+	// Maximization station
 	b.addMessage(user.getName() + " cut its own HP and maximized its attack!");
 	user.reduceHealthFraction(b, 1/2.0);
 	user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
@@ -2889,12 +2929,21 @@ Curse:
 	Effect: Pokemon Curse
 	StatChange: 3 Attack 1 Defense 1 Speed -1
 	Apply: 
+	// Different effects based on the type of the user
 	if (me.isType(b, Type.GHOST))
 	{
-		if (effects.get(0).applies(b, me, o, CastSource.ATTACK)) effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
-		else b.addMessage("...but it failed!");
+		// Manually apply the effect if it applies
+		if (effects.get(0).applies(b, me, o, CastSource.ATTACK)) 
+		{
+			effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
+		}
+		else 
+		{
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		}
 		return;
 	}
+	
 	me.modifyStages(b, me, statChanges, CastSource.ATTACK);
 	###
 	MoveType: ProtectPiercing, SubstitutePiercing
@@ -2930,11 +2979,12 @@ Heal Pulse:
 	Type: Psychic
 	Cat: Status
 	ApplyEffects: 
-	if (victim.fullHealth() || victim.hasEffect("HealPulse"))
+	if (victim.fullHealth() || victim.hasEffect("HealBlock"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	victim.healHealthFraction(1/2.0);
 	b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
 	###
@@ -3244,11 +3294,14 @@ Spite:
 	Type: Ghost
 	ApplyEffects: 
 	Move last = victim.getAttributes().getLastMoveUsed();
+	
+	// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
 	if (last == null || last.getPP() == 0 || !victim.hasMove(last.getAttack().getName()))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	b.addMessage(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 	###
 *
@@ -3278,19 +3331,35 @@ Dream Eater:
 	Cat: Special
 	Type: Psychic
 	Apply: 
+	// Cannot eat daydreams
 	if (!o.hasStatus(StatusCondition.ASLEEP))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	super.apply(me, o, b);
 	###
 	ApplyDamage: 
+	// Deal damage to the target
 	int damage = super.applyDamage(me, o, b);
-	if (!me.hasEffect("HealBlock")) me.heal((int)(damage*.5*(me.isHoldingItem(b, "Big Root") ? 1.3 : 1)));
+	
+	// Healers gon' heal
+	if (!me.hasEffect("HealBlock"))
+	{
+		int healAmount = (int)(damage*.5);
+		if (me.isHoldingItem(b, "Big Root"))
+		{
+			healAmount *= 1.3;
+		}
+		
+		me.heal(healAmount);
+	}
+	
 	b.addMessage(o.getName() + "'s dream was eaten!");
 	b.addMessage("", o.getHP(), o.user());
 	b.addMessage("", me.getHP(), me.user());
+	
 	return damage;
 	###
 *
@@ -3376,8 +3445,16 @@ Synchronoise:
 	Pow: 70
 	Apply: 
 	Type[] type = me.getType(b);
-	if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) super.apply(me, o, b);
-	else b.addMessage("...but it failed!");
+	
+	// Like this is literally the stupidest move ever like srsly what is wrong with the creators
+	if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) 
+	{
+		super.apply(me, o, b);
+	}
+	else 
+	{
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+	}
 	###
 *
 Psyshock:
@@ -3473,11 +3550,14 @@ Mirror Coat:
 	MoveType: Assistless, Metronomeless
 	Apply: 
 	int damageTaken = me.getAttributes().getDamageTaken();
-	if (damageTaken == 0 || o.getMove().getAttack().getCategory() != Category.SPECIAL)
+	
+	// Fails if no damage to reflect or if the opponent isn't using a special attack
+	if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.SPECIAL)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	if (super.zeroAdvantage(b, me, o)) return;
 	b.applyDamage(o, damageTaken*2);
 	###
@@ -3492,11 +3572,14 @@ Counter:
 	Priority: -5
 	Apply: 
 	int damageTaken = me.getAttributes().getDamageTaken();
-	if (damageTaken == 0 || o.getMove().getAttack().getCategory() != Category.PHYSICAL)
+	
+	// Fails is no damage to reflect or if the opponent isn't using a physical attack
+	if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.PHYSICAL)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	if (super.zeroAdvantage(b, me, o)) return;
 	b.applyDamage(o, damageTaken*2);
 	###
@@ -3755,12 +3838,14 @@ Me First:
 	Cat: Status
 	Type: Normal
 	MoveType: SleepTalkFail, Assistless, NoMagicCoat
-	Apply: 
-	if (!b.isFirstAttack() || o.getAttack().getCategory() == Category.STATUS)
+	Apply:
+	// Fails if it is the second turn or the opponent is using a status move
+	if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().getCategory() == Category.STATUS)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	me.addEffect(PokemonEffect.getEffect("FiddyPercentStronger"));
 	me.callNewMove(b, o, new Move(o.getAttack()));
 	me.getAttributes().removeEffect("FiddyPercentStronger");
@@ -3779,7 +3864,8 @@ Refresh:
 		b.addMessage(user.getName() + " cured itself of its status condition!", StatusCondition.NONE, user.user());
 		return;
 	}
-	b.addMessage("...but it failed!");
+	
+	b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 	###
 *
 Power Whip:
@@ -3959,9 +4045,10 @@ Copycat:
 	Move mirror = o.getAttributes().getLastMoveUsed();
 	if (mirror == null || mirror.getAttack().getName().equals("Mirror Move") || mirror.getAttack().getName().equals("Copycat"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	me.callNewMove(b, o, new Move(mirror.getAttack()));
 	###
 *
@@ -4124,10 +4211,14 @@ Last Resort:
 	Apply: 
 	for (Move m : me.getMoves())
 	{
-		if (m.getAttack().getName().equals("Last Resort")) continue;
+		if (m.getAttack().getName().equals("Last Resort")) 
+		{
+			continue;
+		}
+		
 		if (!m.used())
 		{
-			b.addMessage("...but it failed!");
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 	}
@@ -4174,7 +4265,8 @@ Conversion:
 			return;
 		}
 	}
-	b.addMessage("...but it failed!");
+	
+	b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 	###
 	Int: ChangeTypeMove
 	ChangeType: 
@@ -4182,8 +4274,12 @@ Conversion:
 	for (Move m : victim.getMoves())
 	{
 		Type t = m.getAttack().getType(b, victim); 
-		if (!victim.isType(b, t)) types.add(t);
+		if (!victim.isType(b, t)) 
+		{
+			types.add(t);
+		}
 	}
+	
 	return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
 	###
 	Effect: Pokemon ChangeType
@@ -4200,9 +4296,10 @@ Conversion 2:
 	Move m = o.getAttributes().getLastMoveUsed();
 	if (m == null || getResistances(me, m.getAttack().getType(b, o), b).size() == 0)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	super.apply(me, o, b);
 	###
 	Effect: Pokemon ChangeType
@@ -4284,9 +4381,10 @@ Snore:
 	Apply: 
 	if (!me.hasStatus(StatusCondition.ASLEEP))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	super.apply(me, o, b);
 	###
 *
@@ -4299,19 +4397,25 @@ Sleep Talk:
 	Apply: 
 	if (!me.hasStatus(StatusCondition.ASLEEP))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	List<Move> moves = new ArrayList<>();
 	for (Move m : me.getMoves())
 	{
-		if (!m.getAttack().isMoveType("SleepTalkFail")) moves.add(m);
+		if (!m.getAttack().isMoveType("SleepTalkFail")) 
+		{
+			moves.add(m);
+		}
 	}
+	
 	if (moves.size() == 0)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	me.callNewMove(b, o, moves.get((int)(Math.random()*moves.size())));
 	###
 *
@@ -4406,9 +4510,10 @@ Psycho Shift:
 	ApplyEffects: 
 	if (!user.hasStatus() || !Status.giveStatus(b, user, victim, user.getStatus().getType()))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	user.removeStatus();
 	###
 *	
@@ -4630,11 +4735,13 @@ Present:
 		super.applyDamage(me, o, b);
 		return;
 	}
+	
 	if (o.fullHealth() || o.hasEffect("HealBlock"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	o.healHealthFraction(1/4.0);
 	b.addMessage(o.getName() + "'s health was restored!", o.getHP(), o.user());
 	###
@@ -4660,9 +4767,10 @@ Sketch:
 	Move copy = o.getAttributes().getLastMoveUsed();
 	if (copy == null || copy.getAttack().getName().equals("Struggle") || me.hasEffect("Transformed"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	List<Move> moves = me.getMoves();
 	for (int i = 0; i < moves.size(); i++)
 	{
@@ -4671,6 +4779,7 @@ Sketch:
 			moves.add(i, new Move(copy.getAttack()));
 			moves.remove(i + 1);
 			b.addMessage(me.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
+			break;
 		}
 	}
 	###
@@ -4859,17 +4968,26 @@ Assist:
 	List<Attack> attacks = new ArrayList<>();
 	for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
 	{
-		if (p == b.getTrainer(me.user()).front()) continue;
+		if (p == b.getTrainer(me.user()).front()) 
+		{
+			continue;
+		}
+		
 		for (Move m : p.getMoves())
 		{
-			if (!m.getAttack().isMoveType("Assistless")) attacks.add(m.getAttack());
+			if (!m.getAttack().isMoveType("Assistless")) 
+			{
+				attacks.add(m.getAttack());
+			}
 		}
 	}
+	
 	if (attacks.size() == 0)
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	me.callNewMove(b, o, new Move(attacks.get((int)(Math.random()*attacks.size()))));
 	###
 *
@@ -4884,10 +5002,15 @@ Metal Burst:
 	int damageTaken = me.getAttributes().getDamageTaken();
 	if (damageTaken == 0 || b.isFirstAttack())
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
-	if (super.zeroAdvantage(b, me, o)) return;
+	
+	if (super.zeroAdvantage(b, me, o)) 
+	{
+		return;
+	}
+	
 	b.applyDamage(o, (int)(damageTaken*1.5));
 	###
 *
@@ -5340,19 +5463,20 @@ Defog:
 	ApplyEffects: 
 	for (int i = 0; i < victim.getEffects().size(); i++)
 	{
-		PokemonEffect e = victim.getEffects().get(i);
-		if (e.isActive() && e instanceof DefogRelease)
+		PokemonEffect fogglyBoggly = victim.getEffects().get(i);
+		if (fogglyBoggly.isActive() && fogglyBoggly instanceof DefogRelease)
 		{
-			b.addMessage(((DefogRelease)e).getDefogReleaseMessage(victim));
+			b.addMessage(((DefogRelease)fogglyBoggly).getDefogReleaseMessage(victim));
 			victim.getEffects().remove(i--);
 		}
 	}
+	
 	for (int i = 0; i < b.getEffects(victim.user()).size(); i++)
 	{
-		TeamEffect e = b.getEffects(victim.user()).get(i);
-		if (e.isActive() && e instanceof DefogRelease)
+		TeamEffect fogglyBoggly = b.getEffects(victim.user()).get(i);
+		if (fogglyBoggly.isActive() && fogglyBoggly instanceof DefogRelease)
 		{
-			b.addMessage(((DefogRelease)e).getDefogReleaseMessage(victim));
+			b.addMessage(((DefogRelease)fogglyBoggly).getDefogReleaseMessage(victim));
 			b.getEffects(victim.user()).remove(i--);
 		}
 	}
@@ -5536,9 +5660,10 @@ Fling:
 	Apply: 
 	if (me.hasEffect("Embargo"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	super.apply(me, o, b);
 	###
 *
@@ -5660,9 +5785,10 @@ Teleport:
 	ApplyEffects: 
 	if (!b.isWildBattle())
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	b.addMessage(user.getName() + " teleported out of battle!");
 	b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 	###
@@ -5688,7 +5814,7 @@ Role Play:
 	{
 		case "Wonder Guard":
 		case "Multitype":
-			b.addMessage("...but it failed!");
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			break;
 		default:
 			super.apply(me, o, b);
@@ -5795,9 +5921,10 @@ Recycle:
 	PokemonEffect consumed = victim.getEffect("ConsumedItem");
 	if (consumed == null || victim.isHoldingItem(b))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
+	
 	Item restored = ((ItemCondition)consumed).getItem();
 	victim.giveItem((HoldItem)restored);
 	b.addMessage(victim.getName() + "'s " + restored.getName() + " was restored!");
@@ -5830,7 +5957,7 @@ Baton Pass:
 	Trainer trainer = (Trainer)t;
 	if (!trainer.hasRemainingPokemon())
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -5932,7 +6059,7 @@ Entrainment:
 	{
 		case "Truant":
 		case "Multitype":
-			b.addMessage("...but it failed!");
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			break;
 		default:
 			super.apply(me, o, b);
@@ -5967,7 +6094,7 @@ Simple Beam:
 	{
 		case "Truant":
 		case "Multitype":
-			b.addMessage("...but it failed!");
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			break;
 		default:
 			super.apply(me, o, b);
@@ -5994,7 +6121,7 @@ Skill Swap:
 	ApplyEffects: 
 	if (victim.hasAbility("Wonder Guard") || victim.hasAbility("Multitype"))
 	{
-		b.addMessage("...but it failed!");
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	

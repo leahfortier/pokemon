@@ -53,17 +53,13 @@ public abstract class Status implements Serializable
 	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 	{
 		Object[] list = b.getEffectsList(victim);
-		for (Object o : list)
+		Object statusPrevent = Global.getInvoke(user, list, StatusPreventionEffect.class, "preventStatus", b, user, victim, type);
+		if (statusPrevent != null)
 		{
-			if (Effect.isInactiveEffect(o)) 
-				continue;
-			
-			if (o instanceof StatusPreventionEffect && ((StatusPreventionEffect) o).preventStatus(b, user, victim, type)) 
-			{
-				return ((StatusPreventionEffect)o).preventionMessage(victim);
-			}
+			return ((StatusPreventionEffect)statusPrevent).preventionMessage(victim); 
 		}
-		return "...but it failed!";
+		
+		return Effect.DEFAULT_FAIL_MESSAGE;
 	}
 	
 	private static Status getStatus(StatusCondition s, ActivePokemon victim)

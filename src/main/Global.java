@@ -260,6 +260,17 @@ public class Global
 	
 	private static <T> Object invoke(int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
 	{
+		// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
+		if (p != null && p.isFainted(b))
+		{
+			return null;
+		}
+		
+		if (opp != null && opp.isFainted(b))
+		{
+			return null;
+		}
+		
 		Class<?>[] parameterTypes = null;
 		
 		Object returnValue = null;

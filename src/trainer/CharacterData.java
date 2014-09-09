@@ -11,13 +11,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import main.Global;
-import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.PC;
 import pokemon.Stat;
@@ -26,7 +24,6 @@ import battle.Battle;
 import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
 import battle.effect.EndBattleEffect;
-import battle.effect.TeamEffect;
 
 
 public class CharacterData extends Trainer implements Serializable
@@ -280,16 +277,11 @@ public class CharacterData extends Trainer implements Serializable
 			getDatCashMoney(datCash);
 		}
 		
-		for (TeamEffect e : getEffects())
-		{
-			if (!e.isActive()) continue;
-			if (e instanceof EndBattleEffect) ((EndBattleEffect)e).afterBattle(this, b, front());
-		}
+		Global.invoke(getEffects().toArray(), EndBattleEffect.class, "afterBattle", this, b, front());
 		
 		for (ActivePokemon p : team)
 		{
-			Ability a = p.getAbility();
-			if (a instanceof EndBattleEffect) ((EndBattleEffect)a).afterBattle(this, b, p);
+			Global.invoke(new Object[] {p.getAbility()}, EndBattleEffect.class, "afterBattle", this, b, p);
 		}
 		
 		setFront();
