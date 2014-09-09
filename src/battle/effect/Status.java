@@ -93,15 +93,18 @@ public abstract class Status implements Serializable
 	
 	protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 	{
-		if (victim.hasStatus()) return false;
-		Object[] list = b.getEffectsList(victim);
-		for (Object o : list)
+		if (victim.hasStatus())
 		{
-			if (Effect.isInactiveEffect(o)) 
-				continue;
-			
-			if (o instanceof StatusPreventionEffect && ((StatusPreventionEffect) o).preventStatus(b, caster, victim, type)) return false; 
+			return false;
 		}
+		
+		Object[] list = b.getEffectsList(victim);
+		Object preventStatus = Global.checkInvoke(true, caster, list, StatusPreventionEffect.class, "preventStatus", b, caster, victim, type);
+		if (preventStatus != null)
+		{
+			return false;
+		}
+		
 		return true;
 	}
 	
@@ -224,6 +227,12 @@ public abstract class Status implements Serializable
 			super.type = StatusCondition.PARALYZED;
 		}
 		
+		// Electric-type Pokemon cannot be paralyzed
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
+		{
+			return super.applies(b, caster, victim) && !victim.isType(b, Type.ELECTRIC);
+		}
+		
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) 
 		{
 			if (Math.random()*100 < 25)
@@ -275,6 +284,7 @@ public abstract class Status implements Serializable
 			victim.reduceHealthFraction(b, e == null ? 1/8.0 : e.getTurns()/16.0);
 		}
 		
+		// Poison-type Pokemon cannot be poisoned
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			return super.applies(b, caster, victim) && !victim.isType(b, Type.POISON);
@@ -302,7 +312,8 @@ public abstract class Status implements Serializable
 			super.type = StatusCondition.ASLEEP;
 			if (victim.hasAbility("Early Bird")) numTurns /= 2;
 		}
-		
+
+		// No one can be asleep while Uproar is in effect by either Pokemon
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			return super.applies(b, caster, victim) && !caster.hasEffect("Uproar") && !victim.hasEffect("Uproar");
@@ -360,6 +371,7 @@ public abstract class Status implements Serializable
 			victim.reduceHealthFraction(b, victim.hasAbility("Heatproof") ? 1/16.0 : 1/8.0);
 		}
 		
+		// Fire-type Pokemon cannot be burned
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			return super.applies(b, caster, victim) && !victim.isType(b, Type.FIRE);
@@ -390,6 +402,12 @@ public abstract class Status implements Serializable
 			super.type = StatusCondition.FROZEN;
 		}
 		
+		// Ice-type Pokemon cannot be frozen
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
+		{
+			return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE);
+		}
+		
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) 
 		{
 			// 20% chance to thaw out each turn
@@ -399,6 +417,7 @@ public abstract class Status implements Serializable
 				p.removeStatus();
 				return true;
 			}
+			
 			b.addMessage(p.getName() + " is frozen solid!");
 			return false;
 		}

@@ -454,7 +454,7 @@ public abstract class Attack implements Serializable
 		map.put("Growl", new Growl());
 		map.put("Scratch", new Scratch());
 		map.put("Vine Whip", new VineWhip());
-		map.put("Sonicboom", new Sonicboom());
+		map.put("Sonic Boom", new SonicBoom());
 		map.put("Smokescreen", new Smokescreen());
 		map.put("Take Down", new TakeDown());
 		map.put("Struggle", new Struggle());
@@ -472,7 +472,7 @@ public abstract class Attack implements Serializable
 		map.put("Bite", new Bite());
 		map.put("Slash", new Slash());
 		map.put("Tail Whip", new TailWhip());
-		map.put("Solarbeam", new Solarbeam());
+		map.put("Solar Beam", new SolarBeam());
 		map.put("Flamethrower", new Flamethrower());
 		map.put("Fly", new Fly());
 		map.put("Fire Spin", new FireSpin());
@@ -537,12 +537,12 @@ public abstract class Attack implements Serializable
 		map.put("Assurance", new Assurance());
 		map.put("Poison Jab", new PoisonJab());
 		map.put("Endeavor", new Endeavor());
-		map.put("Sand-attack", new SandAttack());
+		map.put("Sand Attack", new SandAttack());
 		map.put("Quick Attack", new QuickAttack());
 		map.put("Twister", new Twister());
-		map.put("Featherdance", new Featherdance());
+		map.put("Feather Dance", new FeatherDance());
 		map.put("Roost", new Roost());
-		map.put("Thundershock", new Thundershock());
+		map.put("Thunder Shock", new ThunderShock());
 		map.put("Mirror Move", new MirrorMove());
 		map.put("Hurricane", new Hurricane());
 		map.put("Hyper Fang", new HyperFang());
@@ -599,7 +599,7 @@ public abstract class Attack implements Serializable
 		map.put("Megahorn", new Megahorn());
 		map.put("Pound", new Pound());
 		map.put("Sing", new Sing());
-		map.put("Doubleslap", new Doubleslap());
+		map.put("Double Slap", new DoubleSlap());
 		map.put("Wish", new Wish());
 		map.put("Minimize", new Minimize());
 		map.put("Wake-up Slap", new WakeUpSlap());
@@ -649,7 +649,7 @@ public abstract class Attack implements Serializable
 		map.put("Night Slash", new NightSlash());
 		map.put("Tri Attack", new TriAttack());
 		map.put("Fake Out", new FakeOut());
-		map.put("Faint Attack", new FaintAttack());
+		map.put("Feint Attack", new FeintAttack());
 		map.put("Taunt", new Taunt());
 		map.put("Pay Day", new PayDay());
 		map.put("Power Gem", new PowerGem());
@@ -669,13 +669,13 @@ public abstract class Attack implements Serializable
 		map.put("Close Combat", new CloseCombat());
 		map.put("Flame Wheel", new FlameWheel());
 		map.put("Reversal", new Reversal());
-		map.put("Extremespeed", new Extremespeed());
+		map.put("Extreme Speed", new ExtremeSpeed());
 		map.put("Hypnosis", new Hypnosis());
-		map.put("Bubblebeam", new Bubblebeam());
+		map.put("Bubble Beam", new BubbleBeam());
 		map.put("Mud Shot", new MudShot());
 		map.put("Belly Drum", new BellyDrum());
 		map.put("Submission", new Submission());
-		map.put("Dynamicpunch", new Dynamicpunch());
+		map.put("Dynamic Punch", new DynamicPunch());
 		map.put("Mind Reader", new MindReader());
 		map.put("Lock-on", new LockOn());
 		map.put("Kinesis", new Kinesis());
@@ -753,12 +753,12 @@ public abstract class Attack implements Serializable
 		map.put("Shadow Punch", new ShadowPunch());
 		map.put("Bind", new Bind());
 		map.put("Rock Tomb", new RockTomb());
-		map.put("Dragonbreath", new Dragonbreath());
+		map.put("Dragon Breath", new DragonBreath());
 		map.put("Iron Tail", new IronTail());
 		map.put("Meditate", new Meditate());
 		map.put("Synchronoise", new Synchronoise());
 		map.put("Psyshock", new Psyshock());
-		map.put("Vicegrip", new Vicegrip());
+		map.put("Vice Grip", new ViceGrip());
 		map.put("Metal Claw", new MetalClaw());
 		map.put("Guillotine", new Guillotine());
 		map.put("Crabhammer", new Crabhammer());
@@ -777,14 +777,14 @@ public abstract class Attack implements Serializable
 		map.put("Rolling Kick", new RollingKick());
 		map.put("Jump Kick", new JumpKick());
 		map.put("Brick Break", new BrickBreak());
-		map.put("Hi Jump Kick", new HiJumpKick());
+		map.put("High Jump Kick", new HighJumpKick());
 		map.put("Blaze Kick", new BlazeKick());
 		map.put("Mega Kick", new MegaKick());
 		map.put("Comet Punch", new CometPunch());
 		map.put("Mach Punch", new MachPunch());
 		map.put("Bullet Punch", new BulletPunch());
 		map.put("Vacuum Wave", new VacuumWave());
-		map.put("Thunderpunch", new Thunderpunch());
+		map.put("Thunder Punch", new ThunderPunch());
 		map.put("Ice Punch", new IcePunch());
 		map.put("Fire Punch", new FirePunch());
 		map.put("Sky Uppercut", new SkyUppercut());
@@ -796,13 +796,14 @@ public abstract class Attack implements Serializable
 		map.put("Smog", new Smog());
 		map.put("Clear Smog", new ClearSmog());
 		map.put("Hammer Arm", new HammerArm());
-		map.put("Softboiled", new Softboiled());
-		map.put("Ancientpower", new Ancientpower());
+		map.put("Soft-Boiled", new SoftBoiled());
+		map.put("Ancient Power", new AncientPower());
 		map.put("Tickle", new Tickle());
 		map.put("Dizzy Punch", new DizzyPunch());
 		map.put("Outrage", new Outrage());
 		map.put("Dragon Dance", new DragonDance());
 		map.put("Dragon Pulse", new DragonPulse());
+		map.put("Draco Meteor", new DracoMeteor());
 		map.put("Waterfall", new Waterfall());
 		map.put("Reflect Type", new ReflectType());
 		map.put("Magical Leaf", new MagicalLeaf());
@@ -851,7 +852,7 @@ public abstract class Attack implements Serializable
 		map.put("Ominous Wind", new OminousWind());
 		map.put("Cotton Spore", new CottonSpore());
 		map.put("Cotton Guard", new CottonGuard());
-		map.put("Grasswhistle", new Grasswhistle());
+		map.put("Grass Whistle", new GrassWhistle());
 		map.put("Torment", new Torment());
 		map.put("Hidden Power", new HiddenPower());
 		map.put("Psywave", new Psywave());
@@ -881,7 +882,7 @@ public abstract class Attack implements Serializable
 		map.put("Attract", new Attract());
 		map.put("Force Palm", new ForcePalm());
 		map.put("Arm Thrust", new ArmThrust());
-		map.put("Smellingsalt", new Smellingsalt());
+		map.put("Smelling Salts", new SmellingSalts());
 		map.put("Assist", new Assist());
 		map.put("Metal Burst", new MetalBurst());
 		map.put("Wild Charge", new WildCharge());
@@ -922,6 +923,7 @@ public abstract class Attack implements Serializable
 		map.put("Scald", new Scald());
 		map.put("Drain Punch", new DrainPunch());
 		map.put("Storm Throw", new StormThrow());
+		map.put("Frost Breath", new FrostBreath());
 		map.put("Rock Smash", new RockSmash());
 		map.put("Rock Climb", new RockClimb());
 		map.put("Night Daze", new NightDaze());
@@ -942,7 +944,7 @@ public abstract class Attack implements Serializable
 		map.put("Glaciate", new Glaciate());
 		map.put("Techno Blast", new TechnoBlast());
 		map.put("Explosion", new Explosion());
-		map.put("Selfdestruct", new Selfdestruct());
+		map.put("Self-Destruct", new SelfDestruct());
 		map.put("Fling", new Fling());
 		map.put("Freeze Shock", new FreezeShock());
 		map.put("Secret Power", new SecretPower());
@@ -1124,20 +1126,20 @@ public abstract class Attack implements Serializable
 
 		public VineWhip()
 		{
-			super("Vine Whip", "The target is struck with slender, whiplike vines to inflict damage.", 15, Type.GRASS, Category.PHYSICAL);
-			super.power = 35;
+			super("Vine Whip", "The target is struck with slender, whiplike vines to inflict damage.", 25, Type.GRASS, Category.PHYSICAL);
+			super.power = 45;
 			super.accuracy = 100;
 			super.moveTypes.add("PhysicalContact");
 		}
 	}
 
-	private static class Sonicboom extends Attack 
+	private static class SonicBoom extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Sonicboom()
+		public SonicBoom()
 		{
-			super("Sonicboom", "The target is hit with a destructive shock wave that always inflicts 20 HP damage.", 20, Type.NORMAL, Category.SPECIAL);
+			super("Sonic Boom", "The target is hit with a destructive shock wave that always inflicts 20 HP damage.", 20, Type.NORMAL, Category.SPECIAL);
 			super.accuracy = 90;
 		}
 
@@ -1241,10 +1243,16 @@ public abstract class Attack implements Serializable
 
 		public Growth()
 		{
-			super("Growth", "The user's body grows all at once, raising the Attack and Sp. Atk stats.", 40, Type.NORMAL, Category.STATUS);
+			super("Growth", "The user's body grows all at once, raising the Attack and Sp. Atk stats.", 20, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.SP_ATTACK.index()] = 1;
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			// TODO: In intense sunlight should raise by two each
+			super.applyEffects(b, user, victim);
 		}
 	}
 
@@ -1456,13 +1464,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Solarbeam extends Attack implements MultiTurnMove
+	private static class SolarBeam extends Attack implements MultiTurnMove
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Solarbeam()
+		public SolarBeam()
 		{
-			super("Solarbeam", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", 10, Type.GRASS, Category.SPECIAL);
+			super("Solar Beam", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", 10, Type.GRASS, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add("SleepTalkFail");
@@ -1518,7 +1526,7 @@ public abstract class Attack implements Serializable
 		public Flamethrower()
 		{
 			super("Flamethrower", "The target is scorched with an intense blast of fire. It may also leave the target with a burn.", 15, Type.FIRE, Category.SPECIAL);
-			super.power = 95;
+			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
 			super.status = StatusCondition.BURNED;
@@ -1623,7 +1631,7 @@ public abstract class Attack implements Serializable
 
 		public AirSlash()
 		{
-			super("Air Slash", "The user attacks with a blade of air that slices even the sky. It may also make the target flinch.", 20, Type.FLYING, Category.SPECIAL);
+			super("Air Slash", "The user attacks with a blade of air that slices even the sky. It may also make the target flinch.", 15, Type.FLYING, Category.SPECIAL);
 			super.power = 75;
 			super.accuracy = 95;
 			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
@@ -1651,7 +1659,7 @@ public abstract class Attack implements Serializable
 		public HeatWave()
 		{
 			super("Heat Wave", "The user attacks by exhaling hot breath on the opposing team. It may also leave targets with a burn.", 10, Type.FIRE, Category.SPECIAL);
-			super.power = 100;
+			super.power = 95;
 			super.accuracy = 90;
 			super.effectChance = 10;
 			super.status = StatusCondition.BURNED;
@@ -1701,7 +1709,7 @@ public abstract class Attack implements Serializable
 		public Bubble()
 		{
 			super("Bubble", "A spray of countless bubbles is jetted at the opposing team. It may also lower the targets' Speed stats.", 30, Type.WATER, Category.SPECIAL);
-			super.power = 20;
+			super.power = 40;
 			super.accuracy = 100;
 			super.effectChance = 10;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -1905,8 +1913,8 @@ public abstract class Attack implements Serializable
 
 		public SkullBash()
 		{
-			super("Skull Bash", "The user tucks in its head to raise its Defense in the first turn, then rams the target on the next turn.", 15, Type.NORMAL, Category.PHYSICAL);
-			super.power = 100;
+			super("Skull Bash", "The user tucks in its head to raise its Defense in the first turn, then rams the target on the next turn.", 10, Type.NORMAL, Category.PHYSICAL);
+			super.power = 130;
 			super.accuracy = 100;
 			super.moveTypes.add("SleepTalkFail");
 			super.moveTypes.add("PhysicalContact");
@@ -1953,7 +1961,7 @@ public abstract class Attack implements Serializable
 		public HydroPump()
 		{
 			super("Hydro Pump", "The target is blasted by a huge volume of water launched under great pressure.", 5, Type.WATER, Category.SPECIAL);
-			super.power = 120;
+			super.power = 110;
 			super.accuracy = 80;
 		}
 	}
@@ -2555,8 +2563,8 @@ public abstract class Attack implements Serializable
 		public PinMissile()
 		{
 			super("Pin Missile", "Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.", 20, Type.BUG, Category.PHYSICAL);
-			super.power = 14;
-			super.accuracy = 85;
+			super.power = 25;
+			super.accuracy = 95;
 		}
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
@@ -2607,7 +2615,7 @@ public abstract class Attack implements Serializable
 		public Assurance()
 		{
 			super("Assurance", "If the target has already taken some damage in the same turn, this attack's power is doubled.", 10, Type.DARK, Category.PHYSICAL);
-			super.power = 50;
+			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add("PhysicalContact");
 		}
@@ -2669,7 +2677,7 @@ public abstract class Attack implements Serializable
 
 		public SandAttack()
 		{
-			super("Sand-attack", "Sand is hurled in the target's face, reducing its accuracy.", 15, Type.GROUND, Category.STATUS);
+			super("Sand Attack", "Sand is hurled in the target's face, reducing its accuracy.", 15, Type.GROUND, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ACCURACY.index()] = -1;
 		}
@@ -2710,13 +2718,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Featherdance extends Attack 
+	private static class FeatherDance extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Featherdance()
+		public FeatherDance()
 		{
-			super("Featherdance", "The user covers the target's body with a mass of down that harshly lowers its Attack stat.", 15, Type.FLYING, Category.STATUS);
+			super("Feather Dance", "The user covers the target's body with a mass of down that harshly lowers its Attack stat.", 15, Type.FLYING, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ATTACK.index()] = -2;
 		}
@@ -2768,13 +2776,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Thundershock extends Attack 
+	private static class ThunderShock extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Thundershock()
+		public ThunderShock()
 		{
-			super("Thundershock", "A jolt of electricity is hurled at the target to inflict damage. It may also leave the target with paralysis.", 30, Type.ELECTRIC, Category.SPECIAL);
+			super("Thunder Shock", "A jolt of electricity is hurled at the target to inflict damage. It may also leave the target with paralysis.", 30, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -2816,7 +2824,7 @@ public abstract class Attack implements Serializable
 		public Hurricane()
 		{
 			super("Hurricane", "The user attacks by wrapping its opponent in a fierce wind that flies up into the sky. It may also confuse the target.", 10, Type.FLYING, Category.SPECIAL);
-			super.power = 120;
+			super.power = 110;
 			super.accuracy = 70;
 			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
 			super.effectChance = 30;
@@ -2825,6 +2833,7 @@ public abstract class Attack implements Serializable
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 		{
+			// TODO: Should have double power when opponent is in the air
 			switch (b.getWeather().getType())
 			{
 				case RAINING:
@@ -3047,7 +3056,7 @@ public abstract class Attack implements Serializable
 		public Glare()
 		{
 			super("Glare", "The user intimidates the target with the pattern on its belly to cause paralysis.", 30, Type.NORMAL, Category.STATUS);
-			super.accuracy = 90;
+			super.accuracy = 100;
 			super.status = StatusCondition.PARALYZED;
 		}
 	}
@@ -3235,7 +3244,7 @@ public abstract class Attack implements Serializable
 		{
 			super("Gunk Shot", "The user shoots filthy garbage at the target to attack. It may also poison the target.", 5, Type.POISON, Category.PHYSICAL);
 			super.power = 120;
-			super.accuracy = 70;
+			super.accuracy = 80;
 			super.effectChance = 30;
 			super.status = StatusCondition.POISONED;
 		}
@@ -3393,7 +3402,7 @@ public abstract class Attack implements Serializable
 		public Thunder()
 		{
 			super("Thunder", "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.", 10, Type.ELECTRIC, Category.SPECIAL);
-			super.power = 120;
+			super.power = 110;
 			super.accuracy = 70;
 			super.effectChance = 30;
 			super.status = StatusCondition.PARALYZED;
@@ -3804,13 +3813,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Doubleslap extends Attack 
+	private static class DoubleSlap extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Doubleslap()
+		public DoubleSlap()
 		{
-			super("Doubleslap", "The target is slapped repeatedly, back and forth, two to five times in a row.", 10, Type.NORMAL, Category.PHYSICAL);
+			super("Double Slap", "The target is slapped repeatedly, back and forth, two to five times in a row.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 85;
 			super.moveTypes.add("PhysicalContact");
@@ -3877,7 +3886,7 @@ public abstract class Attack implements Serializable
 		public WakeUpSlap()
 		{
 			super("Wake-up Slap", "This attack inflicts big damage on a sleeping target. It also wakes the target up, however.", 10, Type.FIGHTING, Category.PHYSICAL);
-			super.power = 60;
+			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add("PhysicalContact");
 		}
@@ -3974,6 +3983,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
+			// TODO: Need to change type of this move to fairy type along with charm and sweet kiss
 			switch (b.getWeather().getType())
 			{
 				case CLEAR_SKIES:
@@ -4035,8 +4045,8 @@ public abstract class Attack implements Serializable
 		public MeteorMash()
 		{
 			super("Meteor Mash", "The target is hit with a hard punch fired like a meteor. It may also raise the user's Attack.", 10, Type.STEEL, Category.PHYSICAL);
-			super.power = 100;
-			super.accuracy = 85;
+			super.power = 90;
+			super.accuracy = 90;
 			super.effectChance = 20;
 			super.moveTypes.add("Punching");
 			super.selfTarget = true;
@@ -4066,7 +4076,7 @@ public abstract class Attack implements Serializable
 		public WillOWisp()
 		{
 			super("Will-o-wisp", "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", 15, Type.FIRE, Category.STATUS);
-			super.accuracy = 75;
+			super.accuracy = 85;
 			super.status = StatusCondition.BURNED;
 		}
 
@@ -4101,7 +4111,7 @@ public abstract class Attack implements Serializable
 
 		public Extrasensory()
 		{
-			super("Extrasensory", "The user attacks with an odd, unseeable power. It may also make the target flinch.", 30, Type.PSYCHIC, Category.SPECIAL);
+			super("Extrasensory", "The user attacks with an odd, unseeable power. It may also make the target flinch.", 20, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
@@ -4116,7 +4126,7 @@ public abstract class Attack implements Serializable
 		public FireBlast()
 		{
 			super("Fire Blast", "The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.", 5, Type.FIRE, Category.SPECIAL);
-			super.power = 120;
+			super.power = 110;
 			super.accuracy = 85;
 			super.effectChance = 10;
 			super.status = StatusCondition.BURNED;
@@ -4235,7 +4245,7 @@ public abstract class Attack implements Serializable
 		public AirCutter()
 		{
 			super("Air Cutter", "The user launches razor-like wind to slash the opposing team. Critical hits land more easily.", 25, Type.FLYING, Category.SPECIAL);
-			super.power = 55;
+			super.power = 60;
 			super.accuracy = 95;
 		}
 
@@ -4646,7 +4656,11 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Dig")) return super.power*2;
+			if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Dig"))
+			{
+				return super.power*2;
+			}
+			
 			return super.power;
 		}
 	}
@@ -4759,13 +4773,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class FaintAttack extends Attack 
+	private static class FeintAttack extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public FaintAttack()
+		public FeintAttack()
 		{
-			super("Faint Attack", "The user approaches the target disarmingly, then throws a sucker punch. It hits without fail.", 20, Type.DARK, Category.PHYSICAL);
+			super("Feint Attack", "The user approaches the target disarmingly, then throws a sucker punch. It hits without fail.", 20, Type.DARK, Category.PHYSICAL);
 			super.power = 60;
 			super.moveTypes.add("PhysicalContact");
 		}
@@ -4805,7 +4819,7 @@ public abstract class Attack implements Serializable
 		public PowerGem()
 		{
 			super("Power Gem", "The user attacks with a ray of light that sparkles as if it were made of gemstones.", 20, Type.ROCK, Category.SPECIAL);
-			super.power = 70;
+			super.power = 80;
 			super.accuracy = 100;
 		}
 	}
@@ -4885,7 +4899,6 @@ public abstract class Attack implements Serializable
 			super("Wonder Room", "The user creates a bizarre area in which Pok\u00e9mon's Defense and Sp. Def stats are swapped for five turns.", 10, Type.PSYCHIC, Category.STATUS);
 			super.effects.add(Effect.getEffect("WonderRoom", EffectType.BATTLE));
 			super.moveTypes.add("Field");
-			super.priority = -7;
 		}
 	}
 
@@ -4910,7 +4923,7 @@ public abstract class Attack implements Serializable
 
 		public Covet()
 		{
-			super("Covet", "The user endearingly approaches the target, then steals the target's held item.", 40, Type.NORMAL, Category.PHYSICAL);
+			super("Covet", "The user endearingly approaches the target, then steals the target's held item.", 25, Type.NORMAL, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect("ChangeItem", EffectType.POKEMON));
@@ -5125,13 +5138,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Extremespeed extends Attack 
+	private static class ExtremeSpeed extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Extremespeed()
+		public ExtremeSpeed()
 		{
-			super("Extremespeed", "The user charges the target at blinding speed. This attack always goes before any other move.", 5, Type.NORMAL, Category.PHYSICAL);
+			super("Extreme Speed", "The user charges the target at blinding speed. This attack always goes before any other move.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.priority = 2;
@@ -5151,13 +5164,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Bubblebeam extends Attack 
+	private static class BubbleBeam extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Bubblebeam()
+		public BubbleBeam()
 		{
-			super("Bubblebeam", "A spray of bubbles is forcefully ejected at the opposing team. It may also lower their Speed stats.", 20, Type.WATER, Category.SPECIAL);
+			super("Bubble Beam", "A spray of bubbles is forcefully ejected at the opposing team. It may also lower their Speed stats.", 20, Type.WATER, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -5224,13 +5237,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Dynamicpunch extends Attack 
+	private static class DynamicPunch extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Dynamicpunch()
+		public DynamicPunch()
 		{
-			super("Dynamicpunch", "The user punches the target with full, concentrated power. It confuses the target if it hits.", 5, Type.FIGHTING, Category.PHYSICAL);
+			super("Dynamic Punch", "The user punches the target with full, concentrated power. It confuses the target if it hits.", 5, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 50;
 			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
@@ -5283,7 +5296,7 @@ public abstract class Attack implements Serializable
 
 		public Barrier()
 		{
-			super("Barrier", "The user throws up a sturdy wall that sharply raises its Defense stat.", 30, Type.PSYCHIC, Category.STATUS);
+			super("Barrier", "The user throws up a sturdy wall that sharply raises its Defense stat.", 20, Type.PSYCHIC, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 2;
 		}
@@ -5337,7 +5350,7 @@ public abstract class Attack implements Serializable
 		public FutureSight()
 		{
 			super("Future Sight", "Two turns after this move is used, a hunk of psychic energy attacks the target.", 10, Type.PSYCHIC, Category.SPECIAL);
-			super.power = 100;
+			super.power = 120;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect("FutureSight", EffectType.TEAM));
 		}
@@ -5386,7 +5399,7 @@ public abstract class Attack implements Serializable
 		public LowSweep()
 		{
 			super("Low Sweep", "The user attacks the target's legs swiftly, reducing the target's Speed stat.", 20, Type.FIGHTING, Category.PHYSICAL);
-			super.power = 60;
+			super.power = 65;
 			super.accuracy = 100;
 			super.statChanges[Stat.SPEED.index()] = -1;
 			super.moveTypes.add("PhysicalContact");
@@ -5464,7 +5477,7 @@ public abstract class Attack implements Serializable
 		public LeafStorm()
 		{
 			super("Leaf Storm", "The user whips up a storm of leaves around the target. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.GRASS, Category.SPECIAL);
-			super.power = 140;
+			super.power = 130;
 			super.accuracy = 90;
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_ATTACK.index()] = -2;
@@ -5511,7 +5524,7 @@ public abstract class Attack implements Serializable
 		public Hex()
 		{
 			super("Hex", "This relentless attack does massive damage to a target affected by status problems.", 10, Type.GHOST, Category.SPECIAL);
-			super.power = 50;
+			super.power = 65;
 			super.accuracy = 100;
 		}
 
@@ -6154,7 +6167,7 @@ public abstract class Attack implements Serializable
 		public IceBeam()
 		{
 			super("Ice Beam", "The target is struck with an icy-cold beam of energy. It may also freeze the target solid.", 10, Type.ICE, Category.SPECIAL);
-			super.power = 95;
+			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
 			super.status = StatusCondition.FROZEN;
@@ -6208,7 +6221,7 @@ public abstract class Attack implements Serializable
 		public PoisonGas()
 		{
 			super("Poison Gas", "A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon. It may poison those hit.", 40, Type.POISON, Category.STATUS);
-			super.accuracy = 80;
+			super.accuracy = 90;
 			super.status = StatusCondition.POISONED;
 		}
 	}
@@ -6247,7 +6260,7 @@ public abstract class Attack implements Serializable
 
 		public AcidArmor()
 		{
-			super("Acid Armor", "The user alters its cellular structure to liquefy itself, sharply raising its Defense stat.", 40, Type.POISON, Category.STATUS);
+			super("Acid Armor", "The user alters its cellular structure to liquefy itself, sharply raising its Defense stat.", 20, Type.POISON, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 2;
 		}
@@ -6424,7 +6437,7 @@ public abstract class Attack implements Serializable
 		public Lick()
 		{
 			super("Lick", "The target is licked with a long tongue, causing damage. It may also leave the target with paralysis.", 30, Type.GHOST, Category.PHYSICAL);
-			super.power = 20;
+			super.power = 30;
 			super.accuracy = 100;
 			super.effectChance = 30;
 			super.status = StatusCondition.PARALYZED;
@@ -6601,19 +6614,19 @@ public abstract class Attack implements Serializable
 		public RockTomb()
 		{
 			super("Rock Tomb", "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.", 10, Type.ROCK, Category.PHYSICAL);
-			super.power = 50;
-			super.accuracy = 80;
+			super.power = 60;
+			super.accuracy = 95;
 			super.statChanges[Stat.SPEED.index()] = -1;
 		}
 	}
 
-	private static class Dragonbreath extends Attack 
+	private static class DragonBreath extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Dragonbreath()
+		public DragonBreath()
 		{
-			super("Dragonbreath", "The user exhales a mighty gust that inflicts damage. It may also leave the target with paralysis.", 20, Type.DRAGON, Category.SPECIAL);
+			super("Dragon Breath", "The user exhales a mighty gust that inflicts damage. It may also leave the target with paralysis.", 20, Type.DRAGON, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -6655,7 +6668,7 @@ public abstract class Attack implements Serializable
 		public Synchronoise()
 		{
 			super("Synchronoise", "Using an odd shock wave, the user inflicts damage on any Pok\u00e9mon of the same type in the area around it.", 15, Type.PSYCHIC, Category.SPECIAL);
-			super.power = 70;
+			super.power = 120;
 			super.accuracy = 100;
 		}
 
@@ -6692,13 +6705,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Vicegrip extends Attack 
+	private static class ViceGrip extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Vicegrip()
+		public ViceGrip()
 		{
-			super("Vicegrip", "The target is gripped and squeezed from both sides to inflict damage.", 30, Type.NORMAL, Category.PHYSICAL);
+			super("Vice Grip", "The target is gripped and squeezed from both sides to inflict damage.", 30, Type.NORMAL, Category.PHYSICAL);
 			super.power = 55;
 			super.accuracy = 100;
 			super.moveTypes.add("PhysicalContact");
@@ -6768,7 +6781,7 @@ public abstract class Attack implements Serializable
 		public Crabhammer()
 		{
 			super("Crabhammer", "The target is hammered with a large pincer. Critical hits land more easily.", 10, Type.WATER, Category.PHYSICAL);
-			super.power = 90;
+			super.power = 100;
 			super.accuracy = 90;
 			super.moveTypes.add("PhysicalContact");
 		}
@@ -7157,13 +7170,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class HiJumpKick extends Attack implements CrashDamageMove
+	private static class HighJumpKick extends Attack implements CrashDamageMove
 	{
 		private static final long serialVersionUID = 1L;
 
-		public HiJumpKick()
+		public HighJumpKick()
 		{
-			super("Hi Jump Kick", "The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super("High Jump Kick", "The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 130;
 			super.accuracy = 90;
 			super.moveTypes.add("Airborne");
@@ -7294,13 +7307,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Thunderpunch extends Attack 
+	private static class ThunderPunch extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Thunderpunch()
+		public ThunderPunch()
 		{
-			super("Thunderpunch", "The target is punched with an electrified fist. It may also leave the target with paralysis.", 15, Type.ELECTRIC, Category.PHYSICAL);
+			super("Thunder Punch", "The target is punched with an electrified fist. It may also leave the target with paralysis.", 15, Type.ELECTRIC, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -7471,7 +7484,7 @@ public abstract class Attack implements Serializable
 		public Smog()
 		{
 			super("Smog", "The target is attacked with a discharge of filthy gases. It may also poison the target.", 20, Type.POISON, Category.SPECIAL);
-			super.power = 20;
+			super.power = 30;
 			super.accuracy = 70;
 			super.effectChance = 40;
 			super.status = StatusCondition.POISONED;
@@ -7512,13 +7525,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Softboiled extends Attack implements SelfHealingMove
+	private static class SoftBoiled extends Attack implements SelfHealingMove
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Softboiled()
+		public SoftBoiled()
 		{
-			super("Softboiled", "The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.", 10, Type.NORMAL, Category.STATUS);
+			super("Soft-Boiled", "The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.", 10, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
@@ -7536,13 +7549,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Ancientpower extends Attack 
+	private static class AncientPower extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Ancientpower()
+		public AncientPower()
 		{
-			super("Ancientpower", "The user attacks with a prehistoric power. It may also raise all the user's stats at once.", 5, Type.ROCK, Category.SPECIAL);
+			super("Ancient Power", "The user attacks with a prehistoric power. It may also raise all the user's stats at once.", 5, Type.ROCK, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -7621,8 +7634,22 @@ public abstract class Attack implements Serializable
 		public DragonPulse()
 		{
 			super("Dragon Pulse", "The target is attacked with a shock wave generated by the user's gaping mouth.", 10, Type.DRAGON, Category.SPECIAL);
-			super.power = 90;
+			super.power = 85;
 			super.accuracy = 100;
+		}
+	}
+
+	private static class DracoMeteor extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public DracoMeteor()
+		{
+			super("Draco Meteor", "Comets are summoned down from the sky onto the target. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.DRAGON, Category.SPECIAL);
+			super.power = 130;
+			super.accuracy = 90;
+			super.selfTarget = true;
+			super.statChanges[Stat.SP_ATTACK.index()] = -2;
 		}
 	}
 
@@ -7888,7 +7915,7 @@ public abstract class Attack implements Serializable
 		public Blizzard()
 		{
 			super("Blizzard", "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.", 5, Type.ICE, Category.SPECIAL);
-			super.power = 120;
+			super.power = 110;
 			super.accuracy = 70;
 			super.effectChance = 10;
 			super.status = StatusCondition.FROZEN;
@@ -8060,7 +8087,7 @@ public abstract class Attack implements Serializable
 		public MuddyWater()
 		{
 			super("Muddy Water", "The user attacks by shooting muddy water at the opposing team. It may also lower the targets' accuracy.", 10, Type.WATER, Category.SPECIAL);
-			super.power = 95;
+			super.power = 90;
 			super.accuracy = 85;
 			super.effectChance = 30;
 			super.statChanges[Stat.ACCURACY.index()] = -1;
@@ -8225,7 +8252,7 @@ public abstract class Attack implements Serializable
 		public Snore()
 		{
 			super("Snore", "An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.", 15, Type.NORMAL, Category.SPECIAL);
-			super.power = 40;
+			super.power = 50;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
 			super.effectChance = 30;
@@ -8360,7 +8387,7 @@ public abstract class Attack implements Serializable
 		public AuraSphere()
 		{
 			super("Aura Sphere", "The user looses a blast of aura power from deep within its body at the target. This move is certain to hit.", 20, Type.FIGHTING, Category.SPECIAL);
-			super.power = 90;
+			super.power = 80;
 		}
 	}
 
@@ -8434,7 +8461,7 @@ public abstract class Attack implements Serializable
 		public PsychoShift()
 		{
 			super("Psycho Shift", "Using its psychic power of suggestion, the user transfers its status problems to the target.", 10, Type.PSYCHIC, Category.STATUS);
-			super.accuracy = 90;
+			super.accuracy = 100;
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -8531,13 +8558,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Grasswhistle extends Attack 
+	private static class GrassWhistle extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Grasswhistle()
+		public GrassWhistle()
 		{
-			super("Grasswhistle", "The user plays a pleasant melody that lulls the target into a deep sleep.", 15, Type.GRASS, Category.STATUS);
+			super("Grass Whistle", "The user plays a pleasant melody that lulls the target into a deep sleep.", 15, Type.GRASS, Category.STATUS);
 			super.accuracy = 55;
 			super.status = StatusCondition.ASLEEP;
 			super.moveTypes.add("SoundBased");
@@ -8564,12 +8591,8 @@ public abstract class Attack implements Serializable
 		public HiddenPower()
 		{
 			super("Hidden Power", "A unique attack that varies in type and intensity depending on the Pok\u00e9mon using it.", 15, Type.NORMAL, Category.SPECIAL);
+			super.power = 60;
 			super.accuracy = 100;
-		}
-
-		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
-		{
-			return me.getHiddenPower();
 		}
 
 		public Type getType(Battle b, ActivePokemon user)
@@ -8579,7 +8602,7 @@ public abstract class Attack implements Serializable
 				return Type.NORMAL;
 			}
 			
-			return user.getHiddenType();
+			return user.getHiddenPowerType();
 		}
 	}
 
@@ -8590,7 +8613,7 @@ public abstract class Attack implements Serializable
 		public Psywave()
 		{
 			super("Psywave", "The target is attacked with an odd psychic wave. The attack varies in intensity.", 15, Type.PSYCHIC, Category.SPECIAL);
-			super.accuracy = 80;
+			super.accuracy = 100;
 		}
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
@@ -8664,7 +8687,7 @@ public abstract class Attack implements Serializable
 		public StruggleBug()
 		{
 			super("Struggle Bug", "While resisting, the user attacks the opposing Pok\u00e9mon. The targets' Sp. Atk stat is reduced.", 20, Type.BUG, Category.SPECIAL);
-			super.power = 30;
+			super.power = 50;
 			super.accuracy = 100;
 			super.statChanges[Stat.SP_ATTACK.index()] = -1;
 		}
@@ -9013,7 +9036,7 @@ public abstract class Attack implements Serializable
 		public EnergyBall()
 		{
 			super("Energy Ball", "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.", 10, Type.GRASS, Category.SPECIAL);
-			super.power = 80;
+			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
 			super.statChanges[Stat.SP_DEFENSE.index()] = -1;
@@ -9157,14 +9180,14 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Smellingsalt extends Attack 
+	private static class SmellingSalts extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Smellingsalt()
+		public SmellingSalts()
 		{
-			super("Smellingsalt", "This attack inflicts double damage on a target with paralysis. It also cures the target's paralysis, however.", 10, Type.NORMAL, Category.PHYSICAL);
-			super.power = 60;
+			super("Smelling Salts", "This attack inflicts double damage on a target with paralysis. It also cures the target's paralysis, however.", 10, Type.NORMAL, Category.PHYSICAL);
+			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add("PhysicalContact");
 		}
@@ -9532,10 +9555,9 @@ public abstract class Attack implements Serializable
 		public Chatter()
 		{
 			super("Chatter", "The user attacks using a sound wave based on words it has learned. It may also confuse the target.", 20, Type.FLYING, Category.SPECIAL);
-			super.power = 60;
+			super.power = 65;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
-			super.effectChance = 15;
 			super.moveTypes.add("SoundBased");
 			super.moveTypes.add("Mimicless");
 			super.moveTypes.add("Assistless");
@@ -9686,7 +9708,7 @@ public abstract class Attack implements Serializable
 		public MagmaStorm()
 		{
 			super("Magma Storm", "The target becomes trapped within a maelstrom of fire that rages for four to five turns.", 5, Type.FIRE, Category.SPECIAL);
-			super.power = 120;
+			super.power = 100;
 			super.accuracy = 75;
 			super.effects.add(Effect.getEffect("MagmaStorm", EffectType.POKEMON));
 		}
@@ -9845,6 +9867,8 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			Item heldItem = victim.getHeldItem(b);
+			
+			// TODO: Should also burn the victim's gems
 			if (heldItem instanceof Berry)
 			{
 				b.addMessage(victim.getName() + "'s " + heldItem.getName() + " was burned!");
@@ -9860,7 +9884,7 @@ public abstract class Attack implements Serializable
 		public Overheat()
 		{
 			super("Overheat", "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.FIRE, Category.SPECIAL);
-			super.power = 140;
+			super.power = 130;
 			super.accuracy = 90;
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_ATTACK.index()] = -2;
@@ -9948,10 +9972,23 @@ public abstract class Attack implements Serializable
 		public StormThrow()
 		{
 			super("Storm Throw", "The user strikes the target with a fierce blow. This attack always results in a critical hit.", 10, Type.FIGHTING, Category.PHYSICAL);
-			super.power = 40;
+			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add("AlwaysCrit");
 			super.moveTypes.add("PhysicalContact");
+		}
+	}
+
+	private static class FrostBreath extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public FrostBreath()
+		{
+			super("Frost Breath", "The user blows a cold breath on the target. This attack always results in a critical hit.", 10, Type.ICE, Category.SPECIAL);
+			super.power = 60;
+			super.accuracy = 90;
+			super.moveTypes.add("AlwaysCrit");
 		}
 	}
 
@@ -10308,7 +10345,7 @@ public abstract class Attack implements Serializable
 		public TechnoBlast()
 		{
 			super("Techno Blast", "The user fires a beam of light at its target. The type changes depending on the Drive the user holds.", 5, Type.NORMAL, Category.SPECIAL);
-			super.power = 85;
+			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add("Metronomeless");
 		}
@@ -10339,13 +10376,13 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Selfdestruct extends Attack 
+	private static class SelfDestruct extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Selfdestruct()
+		public SelfDestruct()
 		{
-			super("Selfdestruct", "The user attacks everything around it by causing an explosion. The user faints upon using this move.", 5, Type.NORMAL, Category.PHYSICAL);
+			super("Self-Destruct", "The user attacks everything around it by causing an explosion. The user faints upon using this move.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 200;
 			super.accuracy = 100;
 			super.moveTypes.add("UserFaints");
@@ -10660,7 +10697,7 @@ public abstract class Attack implements Serializable
 
 		public KnockOff()
 		{
-			super("Knock Off", "The user slaps down the target's held item, preventing that item from being used in the battle.", 20, Type.DARK, Category.PHYSICAL);
+			super("Knock Off", "The user slaps down the target's held item, preventing that item from being used in the battle.", 25, Type.DARK, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect("ChangeItem", EffectType.POKEMON));
@@ -11187,7 +11224,6 @@ public abstract class Attack implements Serializable
 			super("Magic Room", "The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.", 10, Type.PSYCHIC, Category.STATUS);
 			super.effects.add(Effect.getEffect("MagicRoom", EffectType.BATTLE));
 			super.moveTypes.add("Field");
-			super.priority = -7;
 		}
 	}
 
@@ -11366,7 +11402,7 @@ public abstract class Attack implements Serializable
 		public Surf()
 		{
 			super("Surf", "It swamps the area around the user with a giant wave. It can also be used for crossing water.", 15, Type.WATER, Category.SPECIAL);
-			super.power = 95;
+			super.power = 90;
 			super.accuracy = 100;
 		}
 	}

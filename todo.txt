@@ -48,6 +48,10 @@ MAP TILES
 Look into rewriting MoldBreaker because it sucks
 Semi-invulnerable moves shouldn't get a menu in between turns
 
+Look at differences in Roar and other exit battle moves
+
+Ask Josh if High Jump Kick will still fit everywhere since it is now the longest move name
+
 Things to test:
 	BracingEffect
 	CrashDamageEffect

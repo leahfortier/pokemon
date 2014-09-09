@@ -76,8 +76,7 @@ public class ActivePokemon implements Serializable
 	private String characteristic;
 	private boolean shiny;
 	private BattleAttributes attributes;
-	private Type hiddenType;
-	private int hiddenPower;
+	private Type hiddenPowerType;
 	private boolean isEgg;
 	private int eggSteps;
 
@@ -102,8 +101,7 @@ public class ActivePokemon implements Serializable
 		shiny = wild ? (int)(Math.random()*8192) == 13 : false;
 		setMoves();
 		ability = Ability.assign(pokemon);
-		hiddenType = computeHiddenType();
-		hiddenPower = computeHiddenPower();
+		hiddenPowerType = computeHiddenPowerType();
 		heldItem = wild ? WildHoldItem.getWildHoldItem(pokemon.getWildItems()) : (HoldItem)Item.noneItem();
 		isEgg = false;
 		eggSteps = 0;
@@ -215,28 +213,16 @@ public class ActivePokemon implements Serializable
 		hp += stats[Stat.HP.index()] - prevHP;
 	}
 	
-	private Type computeHiddenType()
+	private Type computeHiddenPowerType()
 	{
 		return Type.getHiddenType(((IVs[Stat.HP.index()]%2 + 2*(IVs[Stat.ATTACK.index()]%2) 
 				+ 4*(IVs[Stat.DEFENSE.index()]%2) + 8*(IVs[Stat.SPEED.index()]%2) 
 				+ 16*(IVs[Stat.SP_ATTACK.index()]%2) + 32*(IVs[Stat.SP_DEFENSE.index()]%2))*15)/63);
 	}
 	
-	private int computeHiddenPower()
+	public Type getHiddenPowerType()
 	{
-		return (IVs[Stat.HP.index()]%2 + 2*(IVs[Stat.ATTACK.index()]%2) 
-				+ 4*(IVs[Stat.DEFENSE.index()]%2) + 8*(IVs[Stat.SPEED.index()]%2) 
-				+ 16*(IVs[Stat.SP_ATTACK.index()]%2) + 32*(IVs[Stat.SP_DEFENSE.index()]%2)*40)/63 + 30;
-	}
-	
-	public Type getHiddenType()
-	{
-		return hiddenType;
-	}
-	
-	public int getHiddenPower()
-	{
-		return hiddenPower;
+		return hiddenPowerType;
 	}
 	
 	public String getCharacteristic()

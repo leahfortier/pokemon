@@ -18,7 +18,7 @@ Grass Poison
 27 Double-edge
 31 Seed Bomb
 33 Synthesis
-37 Solarbeam
+37 Solar Beam
 45
 0 0 0 1 0 0 
 Level 2 16
@@ -55,7 +55,7 @@ Grass Poison
 31 Double-edge
 36 Seed Bomb
 39 Synthesis
-44 Solarbeam
+44 Solar Beam
 45
 0 0 0 1 1 0 
 Level 3 32
@@ -94,7 +94,7 @@ Grass Poison
 32 Petal Dance
 39 Seed Bomb
 45 Synthesis
-53 Solarbeam
+53 Solar Beam
 45
 0 0 0 2 1 0 
 None
@@ -496,12 +496,12 @@ Medium Slow
 Normal Flying
 14
 0 Tackle
-5 Sand-attack
+5 Sand Attack
 9 Gust
 13 Quick Attack
 17 Whirlwind
 21 Twister
-25 Featherdance
+25 Feather Dance
 29 Agility
 33 Wing Attack
 37 Roost
@@ -530,14 +530,14 @@ Medium Slow
 Normal Flying
 16
 0 Tackle
-0 Sand-attack
+0 Sand Attack
 0 Gust
-5 Sand-attack
+5 Sand Attack
 9 Gust
 13 Quick Attack
 17 Whirlwind
 22 Twister
-27 Featherdance
+27 Feather Dance
 32 Agility
 37 Wing Attack
 42 Roost
@@ -566,15 +566,15 @@ Medium Slow
 Normal Flying
 17
 0 Tackle
-0 Sand-attack
+0 Sand Attack
 0 Gust
 0 Quick Attack
-5 Sand-attack
+5 Sand Attack
 9 Gust
 13 Quick Attack
 17 Whirlwind
 22 Twister
-27 Featherdance
+27 Feather Dance
 32 Agility
 38 Wing Attack
 44 Roost
@@ -823,7 +823,7 @@ Medium Fast
 Electric None
 14
 0 Growl
-0 Thundershock
+0 Thunder Shock
 5 Tail Whip
 10 Thunder Wave
 13 Quick Attack
@@ -858,7 +858,7 @@ Raichu
 Medium Fast
 Electric None
 4
-0 Thundershock
+0 Thunder Shock
 0 Tail Whip
 0 Quick Attack
 0 Thunderbolt
@@ -885,7 +885,7 @@ Ground None
 13
 0 Scratch
 3 Defense Curl
-7 Sand-attack
+7 Sand Attack
 9 Poison Sting
 13 Rapid Spin
 15 Swift
@@ -919,9 +919,9 @@ Ground None
 16
 0 Scratch
 0 Defense Curl
-0 Sand-attack
+0 Sand Attack
 3 Defense Curl
-7 Sand-attack
+7 Sand Attack
 9 Poison Sting
 13 Rapid Spin
 15 Swift
@@ -1147,7 +1147,7 @@ Normal None
 0 Growl
 4 Encore
 7 Sing
-10 Doubleslap
+10 Double Slap
 13 Defense Curl
 16 Wish
 19 Minimize
@@ -1187,7 +1187,7 @@ Fast
 Normal None
 4
 0 Sing
-0 Doubleslap
+0 Double Slap
 0 Minimize
 0 Metronome
 25
@@ -1283,7 +1283,7 @@ Normal None
 13 Disable
 17 Round
 21 Rollout
-25 Doubleslap
+25 Double Slap
 29 Rest
 33 Body Slam
 37 Gyro Ball
@@ -1315,7 +1315,7 @@ Normal None
 0 Sing
 0 Disable
 0 Defense Curl
-0 Doubleslap
+0 Double Slap
 50
 3 0 0 0 0 0 
 None
@@ -1477,7 +1477,7 @@ Grass Poison
 0 Stun Spore
 0 Poison Powder
 53 Petal Dance
-65 Solarbeam
+65 Solar Beam
 45
 0 0 0 3 0 0 
 None
@@ -1648,7 +1648,7 @@ Medium Fast
 Ground None
 14
 0 Scratch
-0 Sand-attack
+0 Sand Attack
 4 Growl
 7 Astonish
 12 Mud-slap
@@ -1685,7 +1685,7 @@ Ground None
 0 Night Slash
 0 Tri Attack
 0 Scratch
-0 Sand-attack
+0 Sand Attack
 0 Growl
 4 Growl
 7 Astonish
@@ -1727,7 +1727,7 @@ Normal None
 9 Fake Out
 14 Fury Swipes
 17 Screech
-22 Faint Attack
+22 Feint Attack
 25 Taunt
 30 Pay Day
 33 Slash
@@ -1767,7 +1767,7 @@ Normal None
 9 Fake Out
 14 Fury Swipes
 17 Screech
-22 Faint Attack
+22 Feint Attack
 25 Taunt
 32 Power Gem
 37 Slash
@@ -1988,7 +1988,7 @@ Fire None
 0 Roar
 0 Fire Fang
 0 Odor Sleuth
-39 Extremespeed
+39 Extreme Speed
 75
 0 2 0 0 0 0 
 None
@@ -2014,10 +2014,10 @@ Water None
 5 Bubble
 8 Hypnosis
 11 Water Gun
-15 Doubleslap
+15 Double Slap
 18 Rain Dance
 21 Body Slam
-25 Bubblebeam
+25 Bubble Beam
 28 Mud Shot
 31 Belly Drum
 35 Wake-up Slap
@@ -2049,10 +2049,10 @@ Water None
 5 Bubble
 8 Hypnosis
 11 Water Gun
-15 Doubleslap
+15 Double Slap
 18 Rain Dance
 21 Body Slam
-27 Bubblebeam
+27 Bubble Beam
 32 Mud Shot
 37 Belly Drum
 43 Wake-up Slap
@@ -2081,11 +2081,11 @@ Poliwrath
 Medium Slow
 Water Fighting
 7
-0 Bubblebeam
+0 Bubble Beam
 0 Hypnosis
-0 Doubleslap
+0 Double Slap
 0 Submission
-32 Dynamicpunch
+32 Dynamic Punch
 43 Mind Reader
 53 Circle Throw
 45
@@ -2218,7 +2218,7 @@ Fighting None
 37 Wake-up Slap
 43 Cross Chop
 46 Scary Face
-49 Dynamicpunch
+49 Dynamic Punch
 180
 0 1 0 0 0 0 
 Level 67 28
@@ -2255,7 +2255,7 @@ Fighting None
 40 Wake-up Slap
 44 Cross Chop
 51 Scary Face
-55 Dynamicpunch
+55 Dynamic Punch
 90
 0 2 0 0 0 0 
 Item 68  Focus Band
@@ -2293,7 +2293,7 @@ Fighting None
 40 Wake-up Slap
 44 Cross Chop
 51 Scary Face
-55 Dynamicpunch
+55 Dynamic Punch
 45
 0 3 0 0 0 0 
 None
@@ -2418,7 +2418,7 @@ Water Poison
 8 Constrict
 12 Acid
 15 Toxic Spikes
-19 Bubblebeam
+19 Bubble Beam
 22 Wrap
 26 Acid Spray
 29 Barrier
@@ -2457,7 +2457,7 @@ Water Poison
 8 Constrict
 12 Acid
 15 Toxic Spikes
-19 Bubblebeam
+19 Bubble Beam
 22 Wrap
 26 Acid Spray
 29 Barrier
@@ -2498,7 +2498,7 @@ Rock Ground
 18 Rollout
 22 Rock Blast
 25 Smack Down
-29 Selfdestruct
+29 Self-Destruct
 32 Bulldoze
 36 Stealth Rock
 39 Earthquake
@@ -2538,7 +2538,7 @@ Rock Ground
 18 Rollout
 22 Rock Blast
 27 Smack Down
-31 Selfdestruct
+31 Self-Destruct
 36 Bulldoze
 42 Stealth Rock
 47 Earthquake
@@ -2578,7 +2578,7 @@ Rock Ground
 18 Steamroller
 22 Rock Blast
 27 Smack Down
-31 Selfdestruct
+31 Self-Destruct
 36 Bulldoze
 42 Stealth Rock
 47 Earthquake
@@ -2765,9 +2765,9 @@ Electric Steel
 16
 0 Metal Sound
 0 Tackle
-6 Thundershock
+6 Thunder Shock
 11 Supersonic
-14 Sonicboom
+14 Sonic Boom
 17 Thunder Wave
 22 Spark
 27 Electro Ball
@@ -2804,11 +2804,11 @@ Electric Steel
 0 Tri Attack
 0 Metal Sound
 0 Tackle
-0 Thundershock
+0 Thunder Shock
 0 Supersonic
-6 Thundershock
+6 Thunder Shock
 11 Supersonic
-14 Sonicboom
+14 Sonic Boom
 17 Thunder Wave
 22 Spark
 27 Electro Ball
@@ -2844,7 +2844,7 @@ Normal Flying
 18
 0 Poison Jab
 0 Peck
-0 Sand-attack
+0 Sand Attack
 0 Leer
 0 Fury Cutter
 7 Fury Attack
@@ -3303,7 +3303,7 @@ Rock Ground
 30 Rock Polish
 33 Slam
 38 Stealth Rock
-41 Dragonbreath
+41 Dragon Breath
 46 Curse
 49 Iron Tail
 54 Sand Tomb
@@ -3410,10 +3410,10 @@ Water None
 15
 0 Mud Sport
 0 Bubble
-5 Vicegrip
+5 Vice Grip
 9 Leer
 11 Harden
-15 Bubblebeam
+15 Bubble Beam
 19 Mud Shot
 21 Metal Claw
 25 Stomp
@@ -3445,12 +3445,12 @@ Water None
 17
 0 Mud Sport
 0 Bubble
-0 Vicegrip
+0 Vice Grip
 0 Leer
-5 Vicegrip
+5 Vice Grip
 9 Leer
 11 Harden
-15 Bubblebeam
+15 Bubble Beam
 19 Mud Shot
 21 Metal Claw
 25 Stomp
@@ -3482,14 +3482,14 @@ Electric None
 15
 0 Charge
 5 Tackle
-8 Sonicboom
+8 Sonic Boom
 12 Spark
 15 Rollout
 19 Screech
 22 Charge Beam
 26 Light Screen
 29 Electro Ball
-33 Selfdestruct
+33 Self-Destruct
 36 Swift
 40 Magnet Rise
 43 Gyro Ball
@@ -3517,17 +3517,17 @@ Electric None
 18
 0 Charge
 0 Tackle
-0 Sonicboom
+0 Sonic Boom
 0 Spark
 5 Tackle
-8 Sonicboom
+8 Sonic Boom
 12 Spark
 15 Rollout
 19 Screech
 22 Charge Beam
 26 Light Screen
 29 Electro Ball
-35 Selfdestruct
+35 Self-Destruct
 40 Swift
 46 Magnet Rise
 51 Gyro Ball
@@ -3565,7 +3565,7 @@ Grass Psychic
 27 Sleep Powder
 33 Giga Drain
 37 Natural Gift
-43 Solarbeam
+43 Solar Beam
 47 Psychic
 53 Bestow
 90
@@ -3700,7 +3700,7 @@ Fighting None
 17 Brick Break
 21 Focus Energy
 25 Feint
-29 Hi Jump Kick
+29 High Jump Kick
 33 Mind Reader
 37 Foresight
 41 Low Kick
@@ -3738,7 +3738,7 @@ Fighting None
 21 Feint
 26 Vacuum Wave
 31 Quick Guard
-36 Thunderpunch
+36 Thunder Punch
 36 Ice Punch
 36 Fire Punch
 41 Sky Uppercut
@@ -3809,7 +3809,7 @@ Poison None
 10 Smokescreen
 15 Assurance
 19 Clear Smog
-24 Selfdestruct
+24 Self-Destruct
 28 Sludge
 33 Haze
 37 Gyro Ball
@@ -3846,7 +3846,7 @@ Poison None
 10 Smokescreen
 15 Assurance
 19 Clear Smog
-24 Selfdestruct
+24 Self-Destruct
 28 Sludge
 33 Haze
 39 Double Hit
@@ -3953,8 +3953,8 @@ Normal None
 0 Growl
 5 Tail Whip
 9 Refresh
-12 Doubleslap
-16 Softboiled
+12 Double Slap
+16 Soft-Boiled
 20 Bestow
 23 Minimize
 27 Take Down
@@ -3998,7 +3998,7 @@ Grass None
 26 Mega Drain
 29 Stun Spore
 33 Knock Off
-36 Ancientpower
+36 Ancient Power
 40 Natural Gift
 43 Slam
 47 Tickle
@@ -4006,7 +4006,7 @@ Grass None
 54 Power Whip
 45
 0 0 1 0 0 0 
-Move 465  AncientPower
+Move 465  Ancient Power
 0
 50
 Chlorophyll
@@ -4064,7 +4064,7 @@ Water None
 8 Leer
 11 Water Gun
 14 Focus Energy
-18 Bubblebeam
+18 Bubble Beam
 23 Agility
 26 Twister
 30 Brine
@@ -4100,7 +4100,7 @@ Water None
 8 Leer
 11 Water Gun
 14 Focus Energy
-18 Bubblebeam
+18 Bubble Beam
 23 Agility
 26 Twister
 30 Brine
@@ -4205,7 +4205,7 @@ Water None
 15 Recover
 19 Camouflage
 24 Swift
-28 Bubblebeam
+28 Bubble Beam
 33 Minimize
 37 Gyro Ball
 42 Light Screen
@@ -4271,7 +4271,7 @@ Psychic None
 4 Copycat
 8 Meditate
 11 Encore
-15 Doubleslap
+15 Double Slap
 18 Mimic
 22 Light Screen
 22 Reflect
@@ -4349,7 +4349,7 @@ Ice Psychic
 5 Lick
 8 Lovely Kiss
 11 Powder Snow
-15 Doubleslap
+15 Double Slap
 18 Ice Punch
 21 Heart Stamp
 25 Mean Look
@@ -4383,14 +4383,14 @@ Electric None
 14
 0 Quick Attack
 0 Leer
-0 Thundershock
-6 Thundershock
+0 Thunder Shock
+6 Thunder Shock
 11 Low Kick
 16 Swift
 21 Shock Wave
 26 Light Screen
 32 Electro Ball
-38 Thunderpunch
+38 Thunder Punch
 44 Discharge
 50 Thunderbolt
 56 Screech
@@ -4422,7 +4422,7 @@ Fire None
 0 Ember
 6 Ember
 11 Smokescreen
-16 Faint Attack
+16 Feint Attack
 21 Fire Spin
 26 Confuse Ray
 32 Flame Burst
@@ -4453,7 +4453,7 @@ Pinsir
 Slow
 Bug None
 14
-0 Vicegrip
+0 Vice Grip
 0 Focus Energy
 4 Bind
 8 Seismic Toss
@@ -4635,7 +4635,7 @@ Normal None
 10
 0 Tail Whip
 0 Tackle
-8 Sand-attack
+8 Sand Attack
 15 Growl
 22 Quick Attack
 29 Bite
@@ -4673,7 +4673,7 @@ Water None
 13
 0 Tail Whip
 0 Tackle
-8 Sand-attack
+8 Sand Attack
 15 Water Gun
 22 Quick Attack
 29 Bite
@@ -4706,8 +4706,8 @@ Electric None
 13
 0 Tail Whip
 0 Tackle
-8 Sand-attack
-15 Thundershock
+8 Sand Attack
+15 Thunder Shock
 22 Quick Attack
 29 Double Kick
 36 Pin Missile
@@ -4739,7 +4739,7 @@ Fire None
 13
 0 Tail Whip
 0 Tackle
-8 Sand-attack
+8 Sand Attack
 15 Ember
 22 Quick Attack
 29 Bite
@@ -4815,7 +4815,7 @@ Rock Water
 25 Mud Shot
 28 Brine
 34 Protect
-37 Ancientpower
+37 Ancient Power
 43 Tickle
 46 Rock Blast
 52 Shell Smash
@@ -4850,7 +4850,7 @@ Rock Water
 25 Mud Shot
 28 Brine
 34 Protect
-37 Ancientpower
+37 Ancient Power
 40 Spike Cannon
 48 Tickle
 56 Rock Blast
@@ -4881,12 +4881,12 @@ Rock Water
 6 Absorb
 11 Leer
 16 Mud Shot
-21 Sand-attack
+21 Sand Attack
 26 Endure
 31 Aqua Jet
 36 Mega Drain
 41 Metal Sound
-46 Ancientpower
+46 Ancient Power
 51 Wring Out
 45
 0 0 1 0 0 0 
@@ -4916,13 +4916,13 @@ Rock Water
 6 Absorb
 11 Leer
 16 Mud Shot
-21 Sand-attack
+21 Sand Attack
 26 Endure
 31 Aqua Jet
 36 Mega Drain
 40 Slash
 45 Metal Sound
-54 Ancientpower
+54 Ancient Power
 63 Wring Out
 72 Night Slash
 45
@@ -4954,7 +4954,7 @@ Rock Flying
 0 Scary Face
 9 Roar
 17 Agility
-25 Ancientpower
+25 Ancient Power
 33 Crunch
 41 Take Down
 49 Sky Drop
@@ -5024,7 +5024,7 @@ Ice Flying
 8 Mist
 15 Ice Shard
 22 Mind Reader
-29 Ancientpower
+29 Ancient Power
 36 Agility
 43 Ice Beam
 50 Reflect
@@ -5054,11 +5054,11 @@ Slow
 Electric Flying
 14
 0 Peck
-0 Thundershock
+0 Thunder Shock
 8 Thunder Wave
 15 Detect
 22 Pluck
-29 Ancientpower
+29 Ancient Power
 36 Charge
 43 Agility
 50 Discharge
@@ -5092,13 +5092,13 @@ Fire Flying
 8 Fire Spin
 15 Agility
 22 Endure
-29 Ancientpower
+29 Ancient Power
 36 Flamethrower
 43 Safeguard
 50 Air Slash
 57 Roost
 64 Heat Wave
-71 Solarbeam
+71 Solar Beam
 78 Sky Attack
 85 Sunny Day
 3
@@ -5195,7 +5195,7 @@ Slow
 Dragon Flying
 21
 0 Fire Punch
-0 Thunderpunch
+0 Thunder Punch
 0 Roost
 0 Wrap
 0 Leer
@@ -5282,7 +5282,7 @@ Psychic None
 20 Metronome
 30 Psychic
 40 Barrier
-50 Ancientpower
+50 Ancient Power
 60 Amnesia
 70 Me First
 80 Baton Pass
@@ -5322,7 +5322,7 @@ Grass None
 34 Body Slam
 39 Safeguard
 42 Aromatherapy
-45 Solarbeam
+45 Solar Beam
 45
 0 0 0 0 1 0 
 Level 153 16
@@ -5359,7 +5359,7 @@ Grass None
 40 Body Slam
 46 Safeguard
 50 Aromatherapy
-54 Solarbeam
+54 Solar Beam
 45
 0 0 1 0 1 0 
 Level 154 32
@@ -5397,7 +5397,7 @@ Grass None
 46 Body Slam
 54 Safeguard
 60 Aromatherapy
-66 Solarbeam
+66 Solar Beam
 45
 0 0 1 0 2 0 
 None
@@ -5981,7 +5981,7 @@ Water Electric
 20 Spark
 23 Take Down
 28 Electro Ball
-31 Bubblebeam
+31 Bubble Beam
 34 Signal Beam
 39 Discharge
 42 Aqua Ring
@@ -6022,7 +6022,7 @@ Water Electric
 27 Swallow
 27 Spit Up
 30 Electro Ball
-35 Bubblebeam
+35 Bubble Beam
 40 Signal Beam
 47 Discharge
 52 Aqua Ring
@@ -6050,7 +6050,7 @@ Pichu
 Medium Fast
 Electric None
 6
-0 Thundershock
+0 Thunder Shock
 0 Charm
 5 Tail Whip
 10 Thunder Wave
@@ -6143,12 +6143,12 @@ Normal None
 21 Captivate
 25 Bestow
 29 Wish
-33 Ancientpower
+33 Ancient Power
 37 Safeguard
 41 Baton Pass
 45 Double-edge
 49 Last Resort
-53 Softboiled
+53 Soft-Boiled
 190
 0 0 0 0 1 0 
 Item 176  Sun Stone
@@ -6181,12 +6181,12 @@ Normal Flying
 21 Captivate
 25 Bestow
 29 Wish
-33 Ancientpower
+33 Ancient Power
 37 Safeguard
 41 Baton Pass
 45 Double-edge
 49 Last Resort
-53 Softboiled
+53 Soft-Boiled
 75
 0 0 0 0 2 0 
 Item 468  Shiny Stone
@@ -6282,7 +6282,7 @@ Electric None
 13
 0 Tackle
 5 Growl
-10 Thundershock
+10 Thunder Shock
 14 Thunder Wave
 19 Cotton Spore
 23 Charge
@@ -6315,9 +6315,9 @@ Electric None
 15
 0 Tackle
 0 Growl
-0 Thundershock
+0 Thunder Shock
 5 Growl
-10 Thundershock
+10 Thunder Shock
 14 Thunder Wave
 20 Cotton Spore
 25 Charge
@@ -6351,14 +6351,14 @@ Electric None
 0 Fire Punch
 0 Tackle
 0 Growl
-0 Thundershock
+0 Thunder Shock
 0 Thunder Wave
 5 Growl
-10 Thundershock
+10 Thunder Shock
 14 Thunder Wave
 20 Cotton Spore
 25 Charge
-30 Thunderpunch
+30 Thunder Punch
 33 Electro Ball
 40 Cotton Guard
 48 Discharge
@@ -6418,7 +6418,7 @@ Water None
 7 Tail Whip
 10 Water Gun
 15 Rollout
-18 Bubblebeam
+18 Bubble Beam
 23 Aqua Ring
 27 Double-edge
 32 Rain Dance
@@ -6452,7 +6452,7 @@ Water None
 7 Tail Whip
 10 Water Gun
 15 Rollout
-20 Bubblebeam
+20 Bubble Beam
 27 Aqua Ring
 33 Double-edge
 40 Rain Dance
@@ -6488,7 +6488,7 @@ Rock None
 14 Rock Throw
 17 Mimic
 22 Block
-25 Faint Attack
+25 Feint Attack
 30 Rock Tomb
 33 Rock Slide
 38 Slam
@@ -6515,9 +6515,9 @@ Politoed
 Medium Slow
 Water None
 7
-0 Bubblebeam
+0 Bubble Beam
 0 Hypnosis
-0 Doubleslap
+0 Double Slap
 0 Perish Song
 27 Swagger
 37 Bounce
@@ -6665,7 +6665,7 @@ Normal None
 14
 0 Scratch
 0 Tail Whip
-4 Sand-attack
+4 Sand Attack
 8 Astonish
 11 Baton Pass
 15 Tickle
@@ -6701,7 +6701,7 @@ Grass None
 0 Growth
 5 Mega Drain
 9 Ingrain
-13 Grasswhistle
+13 Grass Whistle
 17 Leech Seed
 21 Endeavor
 25 Bullet Seed
@@ -6736,14 +6736,14 @@ Grass None
 0 Growth
 5 Mega Drain
 9 Ingrain
-13 Grasswhistle
+13 Grass Whistle
 17 Leech Seed
 21 Endeavor
 25 Bullet Seed
 29 Razor Leaf
 33 Petal Dance
 37 Sunny Day
-41 Solarbeam
+41 Solar Beam
 45 Leaf Storm
 120
 0 0 0 2 0 0 
@@ -6769,12 +6769,12 @@ Bug Flying
 0 Foresight
 6 Quick Attack
 11 Double Team
-14 Sonicboom
+14 Sonic Boom
 17 Detect
 22 Supersonic
 27 Uproar
 30 Pursuit
-33 Ancientpower
+33 Ancient Power
 38 Hypnosis
 43 Wing Attack
 46 Screech
@@ -6783,7 +6783,7 @@ Bug Flying
 57 Bug Buzz
 75
 0 0 0 0 0 1 
-Move 469  Ancientpower
+Move 469  Ancient Power
 1
 5 Wide Lens
 50
@@ -6871,7 +6871,7 @@ Psychic None
 13
 0 Tail Whip
 0 Tackle
-8 Sand-attack
+8 Sand Attack
 15 Confusion
 22 Quick Attack
 29 Swift
@@ -6904,11 +6904,11 @@ Dark None
 13
 0 Tail Whip
 0 Tackle
-8 Sand-attack
+8 Sand Attack
 15 Pursuit
 22 Quick Attack
 29 Confuse Ray
-36 Faint Attack
+36 Feint Attack
 43 Assurance
 50 Last Resort
 57 Mean Look
@@ -6943,7 +6943,7 @@ Dark Flying
 21 Night Shade
 25 Assurance
 31 Taunt
-35 Faint Attack
+35 Feint Attack
 41 Mean Look
 45 Foul Play
 51 Tailwind
@@ -7127,7 +7127,7 @@ Bug None
 14
 0 Tackle
 0 Protect
-6 Selfdestruct
+6 Self-Destruct
 9 Bug Bite
 12 Take Down
 17 Rapid Spin
@@ -7162,9 +7162,9 @@ Bug Steel
 0 Toxic Spikes
 0 Tackle
 0 Protect
-0 Selfdestruct
+0 Self-Destruct
 0 Bug Bite
-6 Selfdestruct
+6 Self-Destruct
 9 Bug Bite
 12 Take Down
 17 Rapid Spin
@@ -7212,7 +7212,7 @@ Normal None
 33 Roost
 38 Take Down
 43 Coil
-48 Ancientpower
+48 Ancient Power
 53 Dig
 58 Endeavor
 63 Flail
@@ -7237,12 +7237,12 @@ Medium Slow
 Ground Flying
 14
 0 Poison Sting
-5 Sand-attack
+5 Sand Attack
 9 Harden
 12 Knock Off
 16 Quick Attack
 20 Fury Cutter
-23 Faint Attack
+23 Feint Attack
 27 Acrobatics
 31 Screech
 34 Slash
@@ -7287,7 +7287,7 @@ Steel Ground
 30 Autotomize
 33 Slam
 38 Stealth Rock
-41 Dragonbreath
+41 Dragon Breath
 46 Curse
 49 Iron Tail
 54 Crunch
@@ -7536,7 +7536,7 @@ Dark Ice
 0 Taunt
 8 Quick Attack
 10 Screech
-14 Faint Attack
+14 Feint Attack
 21 Fury Swipes
 24 Agility
 28 Icy Wind
@@ -7574,7 +7574,7 @@ Normal None
 0 Lick
 0 Fake Tears
 8 Fury Swipes
-15 Faint Attack
+15 Feint Attack
 22 Sweet Scent
 29 Slash
 36 Charm
@@ -7611,7 +7611,7 @@ Normal None
 0 Lick
 0 Fake Tears
 8 Fury Swipes
-15 Faint Attack
+15 Feint Attack
 22 Sweet Scent
 29 Slash
 38 Scary Face
@@ -7646,7 +7646,7 @@ Fire None
 14 Harden
 19 Recover
 23 Flame Burst
-28 Ancientpower
+28 Ancient Power
 32 Amnesia
 37 Lava Plume
 41 Rock Slide
@@ -7682,7 +7682,7 @@ Fire Rock
 14 Harden
 19 Recover
 23 Flame Burst
-28 Ancientpower
+28 Ancient Power
 32 Amnesia
 37 Lava Plume
 38 Shell Smash
@@ -7745,7 +7745,7 @@ Piloswine
 Slow
 Ice Ground
 18
-0 Ancientpower
+0 Ancient Power
 0 Peck
 0 Odor Sleuth
 0 Mud Sport
@@ -7765,7 +7765,7 @@ Ice Ground
 65 Amnesia
 75
 1 1 0 0 0 0 
-Move 473  Ancientpower
+Move 473  Ancient Power
 2
 50 Aspear Berry
 5 NeverMeltIce
@@ -7791,9 +7791,9 @@ Water Rock
 13 Recover
 16 Refresh
 20 Rock Blast
-25 Bubblebeam
+25 Bubble Beam
 28 Lucky Chant
-32 Ancientpower
+32 Ancient Power
 37 Aqua Ring
 40 Spike Cannon
 44 Power Gem
@@ -7824,7 +7824,7 @@ Water None
 6 Lock-on
 10 Psybeam
 14 Aurora Beam
-19 Bubblebeam
+19 Bubble Beam
 23 Focus Energy
 27 Bullet Seed
 32 Water Pulse
@@ -7861,7 +7861,7 @@ Water None
 6 Constrict
 10 Psybeam
 14 Aurora Beam
-19 Bubblebeam
+19 Bubble Beam
 23 Focus Energy
 25 Octazooka
 29 Bullet Seed
@@ -7917,9 +7917,9 @@ Water Flying
 0 Tackle
 0 Bubble
 0 Supersonic
-0 Bubblebeam
+0 Bubble Beam
 4 Supersonic
-10 Bubblebeam
+10 Bubble Beam
 13 Headbutt
 19 Agility
 22 Wing Attack
@@ -7951,7 +7951,7 @@ Steel Flying
 15
 0 Leer
 0 Peck
-6 Sand-attack
+6 Sand Attack
 9 Swift
 12 Agility
 17 Fury Attack
@@ -7994,7 +7994,7 @@ Dark Fire
 20 Odor Sleuth
 25 Beat Up
 28 Fire Fang
-32 Faint Attack
+32 Feint Attack
 37 Embargo
 40 Foul Play
 44 Flamethrower
@@ -8033,7 +8033,7 @@ Dark Fire
 20 Odor Sleuth
 26 Beat Up
 30 Fire Fang
-35 Faint Attack
+35 Feint Attack
 41 Embargo
 45 Foul Play
 50 Flamethrower
@@ -8069,7 +8069,7 @@ Water Dragon
 8 Leer
 11 Water Gun
 14 Focus Energy
-18 Bubblebeam
+18 Bubble Beam
 23 Agility
 26 Twister
 30 Brine
@@ -8210,7 +8210,7 @@ Normal None
 7 Astonish
 10 Hypnosis
 13 Stomp
-16 Sand-attack
+16 Sand Attack
 21 Take Down
 23 Confuse Ray
 27 Calm Mind
@@ -8370,13 +8370,13 @@ Electric None
 13
 0 Quick Attack
 0 Leer
-6 Thundershock
+6 Thunder Shock
 11 Low Kick
 16 Swift
 21 Shock Wave
 26 Light Screen
 31 Electro Ball
-36 Thunderpunch
+36 Thunder Punch
 41 Discharge
 46 Thunderbolt
 51 Screech
@@ -8407,7 +8407,7 @@ Fire None
 0 Leer
 7 Ember
 10 Smokescreen
-16 Faint Attack
+16 Feint Attack
 19 Fire Spin
 25 Confuse Ray
 28 Flame Burst
@@ -8477,8 +8477,8 @@ Normal None
 0 Growl
 5 Tail Whip
 9 Refresh
-12 Doubleslap
-16 Softboiled
+12 Double Slap
+16 Soft-Boiled
 20 Bestow
 23 Minimize
 27 Take Down
@@ -8513,7 +8513,7 @@ Electric None
 14
 0 Bite
 0 Leer
-8 Thundershock
+8 Thunder Shock
 15 Roar
 22 Quick Attack
 29 Spark
@@ -8581,7 +8581,7 @@ Water None
 14
 0 Bite
 0 Leer
-8 Bubblebeam
+8 Bubble Beam
 15 Rain Dance
 22 Gust
 29 Aurora Beam
@@ -8735,7 +8735,7 @@ Psychic Flying
 37 Hydro Pump
 43 Aeroblast
 50 Punishment
-57 Ancientpower
+57 Ancient Power
 65 Safeguard
 71 Recover
 79 Future Sight
@@ -8771,7 +8771,7 @@ Fire Flying
 37 Fire Blast
 43 Sacred Fire
 50 Punishment
-57 Ancientpower
+57 Ancient Power
 65 Safeguard
 71 Recover
 79 Future Sight
@@ -8805,7 +8805,7 @@ Psychic Grass
 0 Heal Bell
 10 Safeguard
 19 Magical Leaf
-28 Ancientpower
+28 Ancient Power
 37 Baton Pass
 46 Natural Gift
 55 Heal Block
@@ -8945,7 +8945,7 @@ Fire None
 7 Focus Energy
 10 Ember
 16 Peck
-19 Sand-attack
+19 Sand Attack
 25 Fire Spin
 28 Quick Attack
 34 Slash
@@ -8980,7 +8980,7 @@ Fire Fighting
 13 Ember
 16 Double Kick
 17 Peck
-21 Sand-attack
+21 Sand Attack
 28 Bulk Up
 32 Quick Attack
 39 Slash
@@ -9009,7 +9009,7 @@ Medium Slow
 Fire Fighting
 18
 0 Fire Punch
-0 Hi Jump Kick
+0 High Jump Kick
 0 Scratch
 0 Growl
 0 Focus Energy
@@ -9018,7 +9018,7 @@ Fire Fighting
 13 Ember
 16 Double Kick
 17 Peck
-21 Sand-attack
+21 Sand Attack
 28 Bulk Up
 32 Quick Attack
 36 Blaze Kick
@@ -9155,7 +9155,7 @@ Dark None
 14
 0 Tackle
 5 Howl
-9 Sand-attack
+9 Sand Attack
 13 Bite
 17 Odor Sleuth
 21 Roar
@@ -9190,10 +9190,10 @@ Dark None
 17
 0 Tackle
 0 Howl
-0 Sand-attack
+0 Sand Attack
 0 Bite
 5 Howl
-9 Sand-attack
+9 Sand Attack
 13 Bite
 17 Odor Sleuth
 22 Roar
@@ -9230,7 +9230,7 @@ Normal None
 0 Growl
 5 Tail Whip
 9 Headbutt
-13 Sand-attack
+13 Sand Attack
 17 Odor Sleuth
 21 Mud Sport
 25 Pin Missile
@@ -9268,7 +9268,7 @@ Normal None
 0 Headbutt
 5 Tail Whip
 9 Headbutt
-13 Sand-attack
+13 Sand Attack
 17 Odor Sleuth
 23 Mud Sport
 29 Fury Swipes
@@ -9445,7 +9445,7 @@ Water Grass
 11 Mist
 15 Natural Gift
 19 Mega Drain
-25 Bubblebeam
+25 Bubble Beam
 31 Zen Headbutt
 37 Rain Dance
 45 Energy Ball
@@ -9476,7 +9476,7 @@ Water Grass
 11 Fake Out
 15 Fury Swipes
 19 Water Sport
-25 Bubblebeam
+25 Bubble Beam
 31 Zen Headbutt
 37 Uproar
 45 Hydro Pump
@@ -9558,7 +9558,7 @@ Grass Dark
 13 Nature Power
 19 Fake Out
 25 Torment
-31 Faint Attack
+31 Feint Attack
 37 Razor Wind
 43 Swagger
 49 Extrasensory
@@ -9582,7 +9582,7 @@ Shiftry
 Medium Slow
 Grass Dark
 6
-0 Faint Attack
+0 Feint Attack
 0 Whirlwind
 0 Nasty Plot
 0 Razor Leaf
@@ -9863,7 +9863,7 @@ Bug Water
 7 Quick Attack
 13 Sweet Scent
 19 Water Sport
-25 Bubblebeam
+25 Bubble Beam
 31 Agility
 37 Mist
 37 Haze
@@ -9973,7 +9973,7 @@ Grass Fighting
 33 Sky Uppercut
 37 Mind Reader
 41 Seed Bomb
-45 Dynamicpunch
+45 Dynamic Punch
 90
 0 2 0 0 0 0 
 None
@@ -9999,7 +9999,7 @@ Normal None
 0 Yawn
 7 Encore
 13 Slack Off
-19 Faint Attack
+19 Feint Attack
 25 Amnesia
 31 Covet
 37 Chip Away
@@ -10064,7 +10064,7 @@ Normal None
 0 Slack Off
 7 Encore
 13 Slack Off
-19 Faint Attack
+19 Feint Attack
 25 Amnesia
 31 Covet
 36 Swagger
@@ -10097,7 +10097,7 @@ Bug Ground
 0 Scratch
 0 Harden
 5 Leech Life
-9 Sand-attack
+9 Sand Attack
 14 Fury Swipes
 19 Mind Reader
 25 False Swipe
@@ -10128,9 +10128,9 @@ Bug Flying
 0 Scratch
 0 Harden
 0 Leech Life
-0 Sand-attack
+0 Sand Attack
 5 Leech Life
-9 Sand-attack
+9 Sand Attack
 14 Fury Swipes
 19 Mind Reader
 20 Double Team
@@ -10164,7 +10164,7 @@ Bug Ghost
 0 Scratch
 0 Harden
 5 Leech Life
-9 Sand-attack
+9 Sand Attack
 14 Fury Swipes
 19 Mind Reader
 25 Spite
@@ -10307,13 +10307,13 @@ Fighting None
 17
 0 Tackle
 0 Focus Energy
-4 Sand-attack
+4 Sand Attack
 7 Arm Thrust
 10 Vital Throw
 13 Fake Out
 16 Whirlwind
 19 Knock Off
-22 Smellingsalt
+22 Smelling Salts
 25 Belly Drum
 28 Force Palm
 31 Seismic Toss
@@ -10345,15 +10345,15 @@ Fighting None
 0 Brine
 0 Tackle
 0 Focus Energy
-0 Sand-attack
+0 Sand Attack
 0 Arm Thrust
-4 Sand-attack
+4 Sand Attack
 7 Arm Thrust
 10 Vital Throw
 13 Fake Out
 16 Whirlwind
 19 Knock Off
-22 Smellingsalt
+22 Smelling Salts
 27 Belly Drum
 32 Force Palm
 37 Seismic Toss
@@ -10451,11 +10451,11 @@ Normal None
 4 Foresight
 8 Attract
 11 Sing
-15 Doubleslap
+15 Double Slap
 18 Copycat
 22 Assist
 25 Charm
-29 Faint Attack
+29 Feint Attack
 32 Wake-up Slap
 36 Covet
 39 Heal Bell
@@ -10486,7 +10486,7 @@ Normal None
 0 Fake Out
 0 Attract
 0 Sing
-0 Doubleslap
+0 Double Slap
 60
 1 0 0 0 0 1 
 None
@@ -10519,7 +10519,7 @@ Dark Ghost
 22 Detect
 25 Shadow Sneak
 29 Knock Off
-32 Faint Attack
+32 Feint Attack
 36 Punishment
 39 Shadow Claw
 43 Power Gem
@@ -10552,8 +10552,8 @@ Steel None
 6 Fake Tears
 11 Bite
 16 Sweet Scent
-21 Vicegrip
-26 Faint Attack
+21 Vice Grip
+26 Feint Attack
 31 Baton Pass
 36 Crunch
 41 Iron Defense
@@ -10709,7 +10709,7 @@ Fighting Psychic
 22 Feint
 25 Calm Mind
 29 Force Palm
-32 Hi Jump Kick
+32 High Jump Kick
 36 Psych Up
 39 Acupressure
 43 Power Trick
@@ -10736,7 +10736,7 @@ Medium Fast
 Fighting Psychic
 21
 0 Fire Punch
-0 Thunderpunch
+0 Thunder Punch
 0 Ice Punch
 0 Bide
 0 Meditate
@@ -10750,7 +10750,7 @@ Fighting Psychic
 22 Feint
 25 Calm Mind
 29 Force Palm
-32 Hi Jump Kick
+32 High Jump Kick
 36 Psych Up
 42 Acupressure
 49 Power Trick
@@ -10996,7 +10996,7 @@ Grass Poison
 13 Mega Drain
 16 Leech Seed
 19 Magical Leaf
-22 Grasswhistle
+22 Grass Whistle
 25 Giga Drain
 28 Toxic Spikes
 31 Sweet Scent
@@ -11440,7 +11440,7 @@ Normal None
 0 Tackle
 5 Uproar
 10 Copycat
-14 Faint Attack
+14 Feint Attack
 19 Psybeam
 23 Hypnosis
 28 Dizzy Punch
@@ -11472,8 +11472,8 @@ Medium Slow
 Ground None
 12
 0 Bite
-9 Sand-attack
-17 Faint Attack
+9 Sand Attack
+17 Feint Attack
 25 Sand Tomb
 33 Crunch
 41 Dig
@@ -11504,15 +11504,15 @@ Vibrava
 Medium Slow
 Ground Dragon
 12
-0 Sonicboom
-0 Sand-attack
-0 Faint Attack
+0 Sonic Boom
+0 Sand Attack
+0 Feint Attack
 0 Sand Tomb
-9 Sand-attack
-17 Faint Attack
+9 Sand Attack
+17 Feint Attack
 25 Sand Tomb
 33 Supersonic
-35 Dragonbreath
+35 Dragon Breath
 41 Screech
 49 Sandstorm
 57 Hyper Beam
@@ -11536,15 +11536,15 @@ Flygon
 Medium Slow
 Ground Dragon
 14
-0 Sonicboom
-0 Sand-attack
-0 Faint Attack
+0 Sonic Boom
+0 Sand Attack
+0 Feint Attack
 0 Sand Tomb
-9 Sand-attack
-17 Faint Attack
+9 Sand Attack
+17 Feint Attack
 25 Sand Tomb
 33 Supersonic
-35 Dragonbreath
+35 Dragon Breath
 41 Screech
 45 Dragon Claw
 49 Sandstorm
@@ -11575,10 +11575,10 @@ Grass None
 5 Absorb
 9 Growth
 13 Leech Seed
-17 Sand-attack
+17 Sand Attack
 21 Pin Missile
 25 Ingrain
-29 Faint Attack
+29 Feint Attack
 33 Spikes
 37 Sucker Punch
 41 Payback
@@ -11616,10 +11616,10 @@ Grass Dark
 5 Absorb
 9 Growth
 13 Leech Seed
-17 Sand-attack
+17 Sand Attack
 21 Pin Missile
 25 Ingrain
-29 Faint Attack
+29 Feint Attack
 35 Spikes
 41 Sucker Punch
 47 Payback
@@ -11695,7 +11695,7 @@ Dragon Flying
 23 Mist
 28 Take Down
 32 Natural Gift
-35 Dragonbreath
+35 Dragon Breath
 39 Dragon Dance
 46 Cotton Guard
 54 Refresh
@@ -11839,7 +11839,7 @@ Rock Psychic
 34 Cosmic Power
 42 Heal Block
 45 Rock Slide
-53 Solarbeam
+53 Solar Beam
 56 Explosion
 64 Wonder Room
 45
@@ -11938,9 +11938,9 @@ Water None
 13
 0 Bubble
 7 Harden
-10 Vicegrip
+10 Vice Grip
 13 Leer
-20 Bubblebeam
+20 Bubble Beam
 23 Protect
 26 Knock Off
 32 Taunt
@@ -11971,12 +11971,12 @@ Water Dark
 17
 0 Bubble
 0 Harden
-0 Vicegrip
+0 Vice Grip
 0 Leer
 7 Harden
-10 Vicegrip
+10 Vice Grip
 13 Leer
-20 Bubblebeam
+20 Bubble Beam
 23 Protect
 26 Knock Off
 30 Swift
@@ -12012,8 +12012,8 @@ Ground Psychic
 11 Mud-slap
 15 Psybeam
 18 Rock Tomb
-21 Selfdestruct
-26 Ancientpower
+21 Self-Destruct
+26 Ancient Power
 31 Power Trick
 34 Sandstorm
 37 Cosmic Power
@@ -12052,8 +12052,8 @@ Ground Psychic
 11 Mud-slap
 15 Psybeam
 18 Rock Tomb
-21 Selfdestruct
-26 Ancientpower
+21 Self-Destruct
+26 Ancient Power
 31 Power Trick
 34 Sandstorm
 36 Hyper Beam
@@ -12091,7 +12091,7 @@ Rock Grass
 22 Confuse Ray
 29 Amnesia
 36 Gastro Acid
-43 Ancientpower
+43 Ancient Power
 50 Energy Ball
 57 Stockpile
 57 Spit Up
@@ -12126,7 +12126,7 @@ Rock Grass
 15 Ingrain
 22 Confuse Ray
 29 Amnesia
-36 Ancientpower
+36 Ancient Power
 46 Gastro Acid
 56 Energy Ball
 66 Stockpile
@@ -12160,7 +12160,7 @@ Rock Bug
 13 Water Gun
 19 Metal Claw
 25 Protect
-31 Ancientpower
+31 Ancient Power
 37 Fury Cutter
 43 Slash
 49 Rock Blast
@@ -12194,7 +12194,7 @@ Rock Bug
 13 Water Gun
 19 Metal Claw
 25 Protect
-31 Ancientpower
+31 Ancient Power
 37 Fury Cutter
 46 Slash
 55 Rock Blast
@@ -12316,7 +12316,7 @@ Normal None
 0 Lick
 0 Scratch
 4 Bind
-7 Faint Attack
+7 Feint Attack
 10 Fury Swipes
 14 Feint
 18 Psybeam
@@ -12326,7 +12326,7 @@ Normal None
 37 Substitute
 43 Sucker Punch
 49 Shadow Claw
-55 Ancientpower
+55 Ancient Power
 58 Synchronoise
 200
 0 0 0 0 1 0 
@@ -12356,7 +12356,7 @@ Ghost None
 16 Spite
 20 Shadow Sneak
 23 Will-o-wisp
-28 Faint Attack
+28 Feint Attack
 31 Hex
 35 Shadow Ball
 38 Sucker Punch
@@ -12395,7 +12395,7 @@ Ghost None
 16 Spite
 20 Shadow Sneak
 23 Will-o-wisp
-28 Faint Attack
+28 Feint Attack
 31 Hex
 35 Shadow Ball
 42 Sucker Punch
@@ -12463,7 +12463,7 @@ Ghost None
 21
 0 Fire Punch
 0 Ice Punch
-0 Thunderpunch
+0 Thunder Punch
 0 Gravity
 0 Bind
 0 Leer
@@ -12518,7 +12518,7 @@ Grass Flying
 47 Leaf Tornado
 51 Air Slash
 57 Bestow
-61 Solarbeam
+61 Solar Beam
 67 Natural Gift
 71 Leaf Storm
 200
@@ -12918,7 +12918,7 @@ Water Rock
 22 Yawn
 29 Take Down
 36 Mud Sport
-43 Ancientpower
+43 Ancient Power
 50 Double-edge
 57 Dive
 64 Rest
@@ -12986,7 +12986,7 @@ Dragon None
 16 Headbutt
 20 Focus Energy
 25 Ember
-31 Dragonbreath
+31 Dragon Breath
 35 Zen Headbutt
 40 Scary Face
 46 Crunch
@@ -13024,7 +13024,7 @@ Dragon None
 20 Focus Energy
 25 Ember
 30 Protect
-32 Dragonbreath
+32 Dragon Breath
 37 Zen Headbutt
 43 Scary Face
 50 Crunch
@@ -13064,7 +13064,7 @@ Dragon Flying
 20 Focus Energy
 25 Ember
 30 Protect
-32 Dragonbreath
+32 Dragon Breath
 37 Zen Headbutt
 43 Scary Face
 50 Fly
@@ -13194,7 +13194,7 @@ Rock None
 9 Rock Throw
 17 Curse
 25 Superpower
-33 Ancientpower
+33 Ancient Power
 41 Iron Defense
 49 Charge Beam
 57 Lock-on
@@ -13227,7 +13227,7 @@ Ice None
 9 Icy Wind
 17 Curse
 25 Superpower
-33 Ancientpower
+33 Ancient Power
 41 Amnesia
 49 Charge Beam
 57 Lock-on
@@ -13260,7 +13260,7 @@ Steel None
 9 Metal Claw
 17 Curse
 25 Superpower
-33 Ancientpower
+33 Ancient Power
 41 Iron Defense
 41 Amnesia
 49 Charge Beam
@@ -13294,7 +13294,7 @@ Dragon Psychic
 5 Wish
 10 Tailwind
 15 Safeguard
-20 Dragonbreath
+20 Dragon Breath
 25 Water Sport
 30 Refresh
 35 Mist Ball
@@ -13332,7 +13332,7 @@ Dragon Psychic
 5 Heal Block
 10 Tailwind
 15 Safeguard
-20 Dragonbreath
+20 Dragon Breath
 25 Protect
 30 Refresh
 35 Luster Purge
@@ -13372,7 +13372,7 @@ Water None
 20 Muddy Water
 30 Aqua Ring
 35 Ice Beam
-45 Ancientpower
+45 Ancient Power
 50 Water Spout
 60 Calm Mind
 65 Aqua Tail
@@ -13405,12 +13405,12 @@ Ground None
 20 Hammer Arm
 30 Rest
 35 Earthquake
-45 Ancientpower
+45 Ancient Power
 50 Eruption
 60 Bulk Up
 65 Earth Power
 75 Fissure
-80 Solarbeam
+80 Solar Beam
 90 Fire Blast
 5
 0 3 0 0 0 0 
@@ -13438,11 +13438,11 @@ Dragon Flying
 20 Hyper Voice
 30 Rest
 35 Air Slash
-45 Ancientpower
+45 Ancient Power
 50 Outrage
 60 Dragon Dance
 65 Fly
-75 Extremespeed
+75 Extreme Speed
 80 Hyper Beam
 90 Dragon Pulse
 3
@@ -13753,7 +13753,7 @@ Water None
 8 Bubble
 11 Water Sport
 15 Peck
-18 Bubblebeam
+18 Bubble Beam
 22 Bide
 25 Fury Attack
 29 Brine
@@ -13789,7 +13789,7 @@ Water None
 11 Water Sport
 15 Peck
 16 Metal Claw
-19 Bubblebeam
+19 Bubble Beam
 24 Bide
 28 Fury Attack
 33 Brine
@@ -13826,7 +13826,7 @@ Water Steel
 11 Swords Dance
 15 Peck
 16 Metal Claw
-19 Bubblebeam
+19 Bubble Beam
 24 Swagger
 28 Fury Attack
 33 Brine
@@ -14248,7 +14248,7 @@ Rock None
 19 Scary Face
 24 Assurance
 28 Chip Away
-33 Ancientpower
+33 Ancient Power
 37 Zen Headbutt
 42 Screech
 46 Head Smash
@@ -14281,7 +14281,7 @@ Rock None
 24 Assurance
 28 Chip Away
 30 Endeavor
-36 Ancientpower
+36 Ancient Power
 43 Zen Headbutt
 51 Screech
 58 Head Smash
@@ -14312,7 +14312,7 @@ Rock Steel
 15 Take Down
 19 Iron Defense
 24 Swagger
-28 Ancientpower
+28 Ancient Power
 33 Endure
 37 Metal Burst
 42 Iron Head
@@ -14346,7 +14346,7 @@ Rock Steel
 15 Take Down
 19 Iron Defense
 24 Swagger
-28 Ancientpower
+28 Ancient Power
 30 Block
 36 Endure
 43 Metal Burst
@@ -14562,7 +14562,7 @@ Buizel
 Medium Fast
 Water None
 12
-0 Sonicboom
+0 Sonic Boom
 0 Growl
 0 Water Sport
 3 Quick Attack
@@ -14596,7 +14596,7 @@ Medium Fast
 Water None
 15
 0 Ice Fang
-0 Sonicboom
+0 Sonic Boom
 0 Growl
 0 Water Sport
 0 Quick Attack
@@ -14640,7 +14640,7 @@ Grass None
 22 Sunny Day
 28 Giga Drain
 31 Take Down
-37 Solarbeam
+37 Solar Beam
 40 Lucky Chant
 190
 0 0 0 1 0 0 
@@ -14674,7 +14674,7 @@ Grass None
 25 Petal Dance
 30 Giga Drain
 35 Take Down
-43 Solarbeam
+43 Solar Beam
 48 Lucky Chant
 75
 0 0 0 2 0 0 
@@ -14762,9 +14762,9 @@ Normal None
 16
 0 Scratch
 0 Tail Whip
-0 Sand-attack
+0 Sand Attack
 0 Astonish
-4 Sand-attack
+4 Sand Attack
 8 Astonish
 11 Baton Pass
 15 Tickle
@@ -15005,7 +15005,7 @@ Normal None
 5 Scratch
 8 Growl
 13 Hypnosis
-17 Faint Attack
+17 Feint Attack
 20 Fury Swipes
 25 Charm
 29 Assist
@@ -15041,7 +15041,7 @@ Normal None
 5 Scratch
 8 Growl
 13 Hypnosis
-17 Faint Attack
+17 Feint Attack
 20 Fury Swipes
 25 Charm
 29 Assist
@@ -15180,7 +15180,7 @@ Steel Psychic
 30 Safeguard
 35 Gyro Ball
 37 Future Sight
-41 Faint Attack
+41 Feint Attack
 49 Payback
 52 Heal Block
 54 Heavy Slam
@@ -15220,7 +15220,7 @@ Steel Psychic
 33 Block
 38 Gyro Ball
 43 Future Sight
-50 Faint Attack
+50 Feint Attack
 61 Payback
 67 Heal Block
 72 Heavy Slam
@@ -15252,7 +15252,7 @@ Rock None
 14 Rock Throw
 17 Mimic
 22 Block
-25 Faint Attack
+25 Feint Attack
 30 Rock Tomb
 33 Rock Slide
 38 Slam
@@ -15284,7 +15284,7 @@ Psychic None
 4 Copycat
 8 Meditate
 11 Encore
-15 Doubleslap
+15 Double Slap
 18 Mimic
 22 Light Screen
 22 Reflect
@@ -15358,7 +15358,7 @@ Normal Flying
 41 Roost
 45 Uproar
 49 Synchronoise
-53 Featherdance
+53 Feather Dance
 57 Hyper Voice
 30
 0 1 0 0 0 0 
@@ -15386,7 +15386,7 @@ Ghost Dark
 0 Confuse Ray
 0 Spite
 0 Shadow Sneak
-7 Faint Attack
+7 Feint Attack
 13 Hypnosis
 19 Dream Eater
 25 Ominous Wind
@@ -15415,7 +15415,7 @@ Slow
 Dragon Ground
 10
 0 Tackle
-3 Sand-attack
+3 Sand Attack
 7 Dragon Rage
 13 Sandstorm
 15 Take Down
@@ -15446,8 +15446,8 @@ Slow
 Dragon Ground
 12
 0 Tackle
-0 Sand-attack
-3 Sand-attack
+0 Sand Attack
+3 Sand Attack
 7 Dragon Rage
 13 Sandstorm
 15 Take Down
@@ -15480,10 +15480,10 @@ Dragon Ground
 16
 0 Fire Fang
 0 Tackle
-0 Sand-attack
+0 Sand Attack
 0 Dragon Rage
 0 Sandstorm
-3 Sand-attack
+3 Sand Attack
 7 Dragon Rage
 13 Sandstorm
 15 Take Down
@@ -15602,7 +15602,7 @@ Fighting Steel
 51 Aura Sphere
 55 Close Combat
 60 Dragon Pulse
-65 Extremespeed
+65 Extreme Speed
 45
 0 1 0 1 0 0 
 None
@@ -15624,7 +15624,7 @@ Slow
 Ground None
 11
 0 Tackle
-0 Sand-attack
+0 Sand Attack
 7 Bite
 13 Yawn
 19 Take Down
@@ -15658,7 +15658,7 @@ Ground None
 0 Fire Fang
 0 Thunder Fang
 0 Tackle
-0 Sand-attack
+0 Sand Attack
 0 Bite
 0 Yawn
 7 Bite
@@ -15769,7 +15769,7 @@ Poison Fighting
 8 Poison Sting
 10 Taunt
 15 Pursuit
-17 Faint Attack
+17 Feint Attack
 22 Revenge
 24 Swagger
 29 Mud Bomb
@@ -15807,7 +15807,7 @@ Poison Fighting
 8 Poison Sting
 10 Taunt
 15 Pursuit
-17 Faint Attack
+17 Feint Attack
 22 Revenge
 24 Swagger
 29 Mud Bomb
@@ -15844,7 +15844,7 @@ Grass None
 11 Vine Whip
 17 Sweet Scent
 21 Ingrain
-27 Faint Attack
+27 Feint Attack
 31 Leaf Tornado
 37 Stockpile
 37 Spit Up
@@ -15947,7 +15947,7 @@ Water Flying
 0 Tackle
 0 Bubble
 4 Supersonic
-10 Bubblebeam
+10 Bubble Beam
 13 Headbutt
 19 Agility
 22 Wing Attack
@@ -15981,7 +15981,7 @@ Grass Ice
 0 Leer
 5 Razor Leaf
 9 Icy Wind
-13 Grasswhistle
+13 Grass Whistle
 17 Swagger
 21 Mist
 26 Ice Shard
@@ -16017,7 +16017,7 @@ Grass Ice
 0 Icy Wind
 5 Razor Leaf
 9 Icy Wind
-13 Grasswhistle
+13 Grass Whistle
 17 Swagger
 21 Mist
 26 Ice Shard
@@ -16055,7 +16055,7 @@ Dark Ice
 0 Quick Attack
 8 Quick Attack
 10 Screech
-14 Faint Attack
+14 Feint Attack
 21 Fury Swipes
 24 Nasty Plot
 28 Icy Wind
@@ -16091,11 +16091,11 @@ Electric Steel
 0 Barrier
 0 Metal Sound
 0 Tackle
-0 Thundershock
+0 Thunder Shock
 0 Supersonic
-6 Thundershock
+6 Thunder Shock
 11 Supersonic
-14 Sonicboom
+14 Sonic Boom
 17 Thunder Wave
 22 Spark
 27 Electro Ball
@@ -16216,7 +16216,7 @@ Grass None
 26 Mega Drain
 29 Stun Spore
 33 Knock Off
-36 Ancientpower
+36 Ancient Power
 40 Natural Gift
 43 Slam
 47 Tickle
@@ -16246,15 +16246,15 @@ Electric None
 0 Fire Punch
 0 Quick Attack
 0 Leer
-0 Thundershock
+0 Thunder Shock
 0 Low Kick
-6 Thundershock
+6 Thunder Shock
 11 Low Kick
 16 Swift
 21 Shock Wave
 26 Light Screen
 32 Electro Ball
-38 Thunderpunch
+38 Thunder Punch
 44 Discharge
 50 Thunderbolt
 56 Screech
@@ -16282,14 +16282,14 @@ Magmortar
 Medium Fast
 Fire None
 17
-0 Thunderpunch
+0 Thunder Punch
 0 Smog
 0 Leer
 0 Ember
 0 Smokescreen
 6 Ember
 11 Smokescreen
-16 Faint Attack
+16 Feint Attack
 21 Fire Spin
 26 Confuse Ray
 32 Flame Burst
@@ -16322,7 +16322,7 @@ Fast
 Normal Flying
 4
 0 Sky Attack
-0 Extremespeed
+0 Extreme Speed
 0 Aura Sphere
 0 Air Slash
 30
@@ -16353,12 +16353,12 @@ Bug Flying
 0 Double Team
 6 Quick Attack
 11 Double Team
-14 Sonicboom
+14 Sonic Boom
 17 Detect
 22 Supersonic
 27 Uproar
 30 Pursuit
-33 Ancientpower
+33 Ancient Power
 38 Feint
 43 Slash
 46 Screech
@@ -16389,14 +16389,14 @@ Grass None
 0 Tail Whip
 0 Tackle
 0 Leech Seed
-8 Sand-attack
+8 Sand Attack
 15 Razor Leaf
 22 Quick Attack
 29 Synthesis
 36 Magical Leaf
 43 Giga Drain
 50 Last Resort
-57 Grasswhistle
+57 Grass Whistle
 64 Sunny Day
 71 Leaf Blade
 78 Swords Dance
@@ -16422,7 +16422,7 @@ Ice None
 13
 0 Tail Whip
 0 Tackle
-8 Sand-attack
+8 Sand Attack
 15 Icy Wind
 22 Quick Attack
 29 Bite
@@ -16457,15 +16457,15 @@ Ground Flying
 0 Ice Fang
 0 Fire Fang
 0 Poison Jab
-0 Sand-attack
+0 Sand Attack
 0 Harden
 0 Knock Off
-5 Sand-attack
+5 Sand Attack
 9 Harden
 12 Knock Off
 16 Quick Attack
 20 Fury Cutter
-23 Faint Attack
+23 Feint Attack
 27 Acrobatics
 31 Screech
 34 Night Slash
@@ -16494,7 +16494,7 @@ Mamoswine
 Slow
 Ice Ground
 18
-0 Ancientpower
+0 Ancient Power
 0 Peck
 0 Odor Sleuth
 0 Mud Sport
@@ -16651,7 +16651,7 @@ Ghost None
 21
 0 Fire Punch
 0 Ice Punch
-0 Thunderpunch
+0 Thunder Punch
 0 Gravity
 0 Bind
 0 Leer
@@ -16732,7 +16732,7 @@ Electric Ghost
 0 Trick
 0 Astonish
 0 Thunder Wave
-0 Thundershock
+0 Thunder Shock
 0 Confuse Ray
 8 Uproar
 15 Double Team
@@ -16859,10 +16859,10 @@ Dialga
 Slow
 Steel Dragon
 13
-0 Dragonbreath
+0 Dragon Breath
 0 Scary Face
 6 Metal Claw
-10 Ancientpower
+10 Ancient Power
 15 Slash
 19 Power Gem
 24 Metal Burst
@@ -16892,10 +16892,10 @@ Palkia
 Slow
 Water Dragon
 13
-0 Dragonbreath
+0 Dragon Breath
 0 Scary Face
 6 Water Pulse
-10 Ancientpower
+10 Ancient Power
 15 Slash
 19 Power Gem
 24 Aqua Tail
@@ -16925,7 +16925,7 @@ Heatran
 Slow
 Fire Steel
 13
-0 Ancientpower
+0 Ancient Power
 9 Leer
 17 Fire Fang
 25 Metal Sound
@@ -16960,7 +16960,7 @@ Normal None
 14
 0 Fire Punch
 0 Ice Punch
-0 Thunderpunch
+0 Thunder Punch
 0 Dizzy Punch
 0 Knock Off
 0 Confuse Ray
@@ -16992,10 +16992,10 @@ Giratina
 Slow
 Ghost Dragon
 13
-0 Dragonbreath
+0 Dragon Breath
 0 Scary Face
 6 Ominous Wind
-10 Ancientpower
+10 Ancient Power
 15 Slash
 19 Shadow Sneak
 24 Destiny Bond
@@ -17061,7 +17061,7 @@ Water None
 0 Water Sport
 9 Charm
 16 Supersonic
-24 Bubblebeam
+24 Bubble Beam
 31 Acid Armor
 39 Whirlpool
 46 Water Pulse
@@ -17093,7 +17093,7 @@ Water None
 0 Water Sport
 9 Charm
 16 Supersonic
-24 Bubblebeam
+24 Bubble Beam
 31 Acid Armor
 39 Whirlpool
 46 Water Pulse
@@ -17125,7 +17125,7 @@ Dark None
 0 Disable
 11 Quick Attack
 20 Hypnosis
-29 Faint Attack
+29 Feint Attack
 38 Nightmare
 47 Double Team
 57 Haze
@@ -17193,7 +17193,7 @@ Normal None
 10 Gravity
 20 Earth Power
 30 Hyper Voice
-40 Extremespeed
+40 Extreme Speed
 50 Refresh
 60 Future Sight
 70 Recover
@@ -17609,7 +17609,7 @@ Normal None
 6 Bite
 8 Bide
 11 Detect
-13 Sand-attack
+13 Sand Attack
 16 Crunch
 18 Hypnosis
 21 Super Fang
@@ -17647,7 +17647,7 @@ Normal None
 6 Bite
 8 Bide
 11 Detect
-13 Sand-attack
+13 Sand Attack
 16 Crunch
 18 Hypnosis
 20 Confuse Ray
@@ -17787,7 +17787,7 @@ Dark None
 0 Scratch
 3 Growl
 6 Assist
-10 Sand-attack
+10 Sand Attack
 12 Fury Swipes
 15 Pursuit
 19 Torment
@@ -17823,10 +17823,10 @@ Dark None
 0 Scratch
 0 Growl
 0 Assist
-0 Sand-attack
+0 Sand Attack
 3 Growl
 6 Assist
-10 Sand-attack
+10 Sand Attack
 12 Fury Swipes
 15 Pursuit
 19 Torment
@@ -18119,7 +18119,7 @@ Normal Flying
 25 Taunt
 29 Air Slash
 32 Razor Wind
-36 Featherdance
+36 Feather Dance
 39 Swagger
 43 Facade
 46 Tailwind
@@ -18157,7 +18157,7 @@ Normal Flying
 27 Taunt
 32 Air Slash
 36 Razor Wind
-41 Featherdance
+41 Feather Dance
 45 Swagger
 50 Facade
 54 Tailwind
@@ -18195,7 +18195,7 @@ Normal Flying
 27 Taunt
 33 Air Slash
 38 Razor Wind
-44 Featherdance
+44 Feather Dance
 49 Swagger
 55 Facade
 60 Tailwind
@@ -18293,7 +18293,7 @@ Rock None
 13
 0 Tackle
 4 Harden
-7 Sand-attack
+7 Sand Attack
 10 Headbutt
 14 Rock Blast
 17 Mud-slap
@@ -18328,10 +18328,10 @@ Rock None
 17
 0 Tackle
 0 Harden
-0 Sand-attack
+0 Sand Attack
 0 Headbutt
 4 Harden
-7 Sand-attack
+7 Sand Attack
 10 Headbutt
 14 Rock Blast
 17 Mud-slap
@@ -18367,10 +18367,10 @@ Rock None
 17
 0 Tackle
 0 Harden
-0 Sand-attack
+0 Sand Attack
 0 Headbutt
 4 Harden
-7 Sand-attack
+7 Sand Attack
 10 Headbutt
 14 Rock Blast
 17 Mud-slap
@@ -18552,7 +18552,7 @@ Normal None
 0 Growl
 0 Wish
 5 Refresh
-10 Doubleslap
+10 Double Slap
 15 Attract
 20 Secret Power
 25 Entrainment
@@ -18594,7 +18594,7 @@ Fighting None
 24 Chip Away
 28 Bulk Up
 31 Rock Slide
-34 Dynamicpunch
+34 Dynamic Punch
 37 Scary Face
 40 Hammer Arm
 43 Stone Edge
@@ -18632,7 +18632,7 @@ Fighting None
 24 Chip Away
 29 Bulk Up
 33 Rock Slide
-37 Dynamicpunch
+37 Dynamic Punch
 41 Scary Face
 45 Hammer Arm
 49 Stone Edge
@@ -18670,7 +18670,7 @@ Fighting None
 24 Chip Away
 29 Bulk Up
 33 Rock Slide
-37 Dynamicpunch
+37 Dynamic Punch
 41 Scary Face
 45 Hammer Arm
 49 Stone Edge
@@ -18700,7 +18700,7 @@ Water None
 0 Growl
 5 Supersonic
 9 Round
-12 Bubblebeam
+12 Bubble Beam
 16 Mud Shot
 20 Aqua Ring
 23 Uproar
@@ -18738,7 +18738,7 @@ Water Ground
 0 Round
 5 Supersonic
 9 Round
-12 Bubblebeam
+12 Bubble Beam
 16 Mud Shot
 20 Aqua Ring
 23 Uproar
@@ -18776,7 +18776,7 @@ Water Ground
 0 Round
 5 Supersonic
 9 Round
-12 Bubblebeam
+12 Bubble Beam
 16 Mud Shot
 20 Aqua Ring
 23 Uproar
@@ -18913,7 +18913,7 @@ Swadloon
 Medium Slow
 Bug Grass
 6
-0 Grasswhistle
+0 Grass Whistle
 0 Tackle
 0 String Shot
 0 Bug Bite
@@ -19106,7 +19106,7 @@ Grass None
 37 Cotton Guard
 40 Sunny Day
 44 Endeavor
-46 Solarbeam
+46 Solar Beam
 190
 0 0 0 0 0 1 
 Item 547  Sun Stone
@@ -19258,7 +19258,7 @@ Ground Dark
 0 Leer
 0 Rage
 4 Bite
-7 Sand-attack
+7 Sand Attack
 10 Torment
 13 Sand Tomb
 16 Assurance
@@ -19295,9 +19295,9 @@ Ground Dark
 0 Leer
 0 Rage
 0 Bite
-0 Sand-attack
+0 Sand Attack
 4 Bite
-7 Sand-attack
+7 Sand Attack
 10 Torment
 13 Sand Tomb
 16 Assurance
@@ -19334,9 +19334,9 @@ Ground Dark
 0 Leer
 0 Rage
 0 Bite
-0 Sand-attack
+0 Sand Attack
 4 Bite
-7 Sand-attack
+7 Sand Attack
 10 Torment
 13 Sand Tomb
 16 Assurance
@@ -19463,7 +19463,7 @@ Grass None
 38 Petal Dance
 42 Sucker Punch
 45 Sunny Day
-50 Solarbeam
+50 Solar Beam
 55 Cotton Guard
 57 Wood Hammer
 255
@@ -19490,8 +19490,8 @@ Bug Rock
 0 Fury Cutter
 5 Rock Blast
 7 Withdraw
-11 Sand-attack
-13 Faint Attack
+11 Sand Attack
+13 Feint Attack
 17 Smack Down
 19 Rock Polish
 23 Bug Bite
@@ -19527,11 +19527,11 @@ Bug Rock
 0 Shell Smash
 0 Rock Blast
 0 Withdraw
-0 Sand-attack
+0 Sand Attack
 5 Rock Blast
 7 Withdraw
-11 Sand-attack
-13 Faint Attack
+11 Sand Attack
+13 Feint Attack
 17 Smack Down
 19 Rock Polish
 23 Bug Bite
@@ -19566,14 +19566,14 @@ Dark Fighting
 16
 0 Leer
 0 Low Kick
-5 Sand-attack
-9 Faint Attack
+5 Sand Attack
+9 Feint Attack
 12 Headbutt
 16 Swagger
 20 Brick Break
 23 Payback
 27 Chip Away
-31 Hi Jump Kick
+31 High Jump Kick
 34 Scary Face
 38 Crunch
 42 Facade
@@ -19603,16 +19603,16 @@ Dark Fighting
 18
 0 Leer
 0 Low Kick
-0 Sand-attack
-0 Faint Attack
-5 Sand-attack
-9 Faint Attack
+0 Sand Attack
+0 Feint Attack
+5 Sand Attack
+9 Feint Attack
 12 Headbutt
 16 Swagger
 20 Brick Break
 23 Payback
 27 Chip Away
-31 Hi Jump Kick
+31 High Jump Kick
 34 Scary Face
 38 Crunch
 45 Facade
@@ -19759,7 +19759,7 @@ Water Rock
 8 Bite
 11 Protect
 15 Aqua Jet
-18 Ancientpower
+18 Ancient Power
 21 Crunch
 25 Iron Defense
 28 Brine
@@ -19798,7 +19798,7 @@ Water Rock
 8 Bite
 11 Protect
 15 Aqua Jet
-18 Ancientpower
+18 Ancient Power
 21 Crunch
 25 Iron Defense
 28 Brine
@@ -19836,11 +19836,11 @@ Rock Flying
 8 Double Team
 11 Scary Face
 15 Pluck
-18 Ancientpower
+18 Ancient Power
 21 Agility
 25 Quick Guard
 28 Acrobatics
-31 Dragonbreath
+31 Dragon Breath
 35 Crunch
 38 Endeavor
 41 U-turn
@@ -19875,11 +19875,11 @@ Rock Flying
 8 Double Team
 11 Scary Face
 15 Pluck
-18 Ancientpower
+18 Ancient Power
 21 Agility
 25 Quick Guard
 28 Acrobatics
-31 Dragonbreath
+31 Dragon Breath
 35 Crunch
 40 Endeavor
 45 U-turn
@@ -19911,7 +19911,7 @@ Poison None
 3 Recycle
 7 Toxic Spikes
 12 Acid Spray
-14 Doubleslap
+14 Double Slap
 18 Sludge
 23 Stockpile
 23 Swallow
@@ -19951,7 +19951,7 @@ Poison None
 3 Recycle
 7 Toxic Spikes
 12 Acid Spray
-14 Doubleslap
+14 Double Slap
 18 Sludge
 23 Stockpile
 23 Swallow
@@ -19990,7 +19990,7 @@ Dark None
 5 Pursuit
 9 Fake Tears
 13 Fury Swipes
-17 Faint Attack
+17 Feint Attack
 21 Scary Face
 25 Taunt
 29 Foul Play
@@ -20029,7 +20029,7 @@ Dark None
 5 Pursuit
 9 Hone Claws
 13 Fury Swipes
-17 Faint Attack
+17 Feint Attack
 21 Scary Face
 25 Taunt
 29 Foul Play
@@ -20065,7 +20065,7 @@ Normal None
 3 Growl
 7 Covet
 9 Tickle
-13 Doubleslap
+13 Double Slap
 15 Encore
 19 Swift
 21 Sing
@@ -20130,10 +20130,10 @@ Psychic None
 3 Confusion
 7 Tickle
 10 Fake Tears
-14 Doubleslap
+14 Double Slap
 16 Psybeam
 19 Embargo
-24 Faint Attack
+24 Feint Attack
 25 Psyshock
 28 Flatter
 31 Future Sight
@@ -20170,10 +20170,10 @@ Psychic None
 3 Confusion
 7 Tickle
 10 Fake Tears
-14 Doubleslap
+14 Double Slap
 16 Psybeam
 19 Embargo
-24 Faint Attack
+24 Feint Attack
 25 Psyshock
 28 Flatter
 31 Future Sight
@@ -20210,10 +20210,10 @@ Psychic None
 3 Confusion
 7 Tickle
 10 Fake Tears
-14 Doubleslap
+14 Double Slap
 16 Psybeam
 19 Embargo
-24 Faint Attack
+24 Feint Attack
 25 Psyshock
 28 Flatter
 31 Future Sight
@@ -20367,8 +20367,8 @@ Water Flying
 9 Wing Attack
 13 Water Pulse
 15 Aerial Ace
-19 Bubblebeam
-21 Featherdance
+19 Bubble Beam
+21 Feather Dance
 24 Aqua Ring
 27 Air Slash
 30 Roost
@@ -20405,8 +20405,8 @@ Water Flying
 9 Wing Attack
 13 Water Pulse
 15 Aerial Ace
-19 Bubblebeam
-21 Featherdance
+19 Bubble Beam
+21 Feather Dance
 24 Aqua Ring
 27 Air Slash
 30 Roost
@@ -20549,10 +20549,10 @@ Normal Grass
 0 Tackle
 0 Camouflage
 4 Growl
-7 Sand-attack
+7 Sand Attack
 10 Double Kick
 13 Leech Seed
-16 Faint Attack
+16 Feint Attack
 20 Take Down
 24 Jump Kick
 28 Aromatherapy
@@ -20560,7 +20560,7 @@ Normal Grass
 36 Charm
 41 Nature Power
 46 Double-edge
-51 Solarbeam
+51 Solar Beam
 190
 0 0 0 0 0 1 
 Level 586 34
@@ -20585,12 +20585,12 @@ Normal Grass
 0 Tackle
 0 Camouflage
 0 Growl
-0 Sand-attack
+0 Sand Attack
 4 Growl
-7 Sand-attack
+7 Sand Attack
 10 Double Kick
 13 Leech Seed
-16 Faint Attack
+16 Feint Attack
 20 Take Down
 24 Jump Kick
 28 Aromatherapy
@@ -20599,7 +20599,7 @@ Normal Grass
 37 Horn Leech
 44 Nature Power
 52 Double-edge
-60 Solarbeam
+60 Solar Beam
 75
 0 2 0 0 0 0 
 None
@@ -20620,7 +20620,7 @@ Emolga
 Medium Fast
 Electric Flying
 15
-0 Thundershock
+0 Thunder Shock
 4 Quick Attack
 7 Tail Whip
 10 Charge
@@ -20735,13 +20735,13 @@ Grass Poison
 12 Bide
 15 Mega Drain
 18 Ingrain
-20 Faint Attack
+20 Feint Attack
 24 Sweet Scent
 28 Giga Drain
 32 Toxic
 35 Synthesis
 39 Clear Smog
-43 Solarbeam
+43 Solar Beam
 45 Sludge Bomb
 50 Spore
 190
@@ -20776,13 +20776,13 @@ Grass Poison
 12 Bide
 15 Mega Drain
 18 Ingrain
-20 Faint Attack
+20 Feint Attack
 24 Sweet Scent
 28 Giga Drain
 32 Toxic
 35 Synthesis
 43 Clear Smog
-49 Solarbeam
+49 Solar Beam
 54 Sludge Bomb
 62 Spore
 75
@@ -20812,7 +20812,7 @@ Water Ghost
 0 Water Sport
 5 Absorb
 9 Night Shade
-13 Bubblebeam
+13 Bubble Beam
 17 Recover
 22 Water Pulse
 27 Ominous Wind
@@ -20848,7 +20848,7 @@ Water Ghost
 0 Night Shade
 5 Absorb
 9 Night Shade
-13 Bubblebeam
+13 Bubble Beam
 17 Recover
 22 Water Pulse
 27 Ominous Wind
@@ -20882,7 +20882,7 @@ Water None
 0 Water Sport
 5 Aqua Ring
 9 Aqua Jet
-13 Doubleslap
+13 Double Slap
 17 Heal Pulse
 21 Protect
 25 Water Pulse
@@ -20998,7 +20998,7 @@ Grass Steel
 26 Iron Defense
 30 Mirror Shot
 35 Ingrain
-38 Selfdestruct
+38 Self-Destruct
 43 Iron Head
 47 Payback
 52 Flash Cannon
@@ -21037,7 +21037,7 @@ Grass Steel
 26 Iron Defense
 30 Mirror Shot
 35 Ingrain
-38 Selfdestruct
+38 Self-Destruct
 40 Power Whip
 46 Iron Head
 53 Payback
@@ -21064,9 +21064,9 @@ Klink
 Medium Slow
 Steel None
 15
-0 Vicegrip
+0 Vice Grip
 6 Charge
-11 Thundershock
+11 Thunder Shock
 16 Gear Grind
 21 Bind
 26 Charge Beam
@@ -21099,12 +21099,12 @@ Klang
 Medium Slow
 Steel None
 18
-0 Vicegrip
+0 Vice Grip
 0 Charge
-0 Thundershock
+0 Thunder Shock
 0 Gear Grind
 6 Charge
-11 Thundershock
+11 Thunder Shock
 16 Gear Grind
 21 Bind
 26 Charge Beam
@@ -21137,12 +21137,12 @@ Klinklang
 Medium Slow
 Steel None
 18
-0 Vicegrip
+0 Vice Grip
 0 Charge
-0 Thundershock
+0 Thunder Shock
 0 Gear Grind
 6 Charge
-11 Thundershock
+11 Thunder Shock
 16 Gear Grind
 21 Bind
 25 Charge Beam
@@ -21644,7 +21644,7 @@ Ice None
 41 Slash
 45 Confuse Ray
 49 Recover
-53 Solarbeam
+53 Solar Beam
 57 Night Slash
 61 Sheer Cold
 25
@@ -21744,7 +21744,7 @@ Ground Electric
 0 Mud-slap
 0 Mud Sport
 5 Bide
-9 Thundershock
+9 Thunder Shock
 13 Mud Shot
 17 Camouflage
 21 Mud Bomb
@@ -21781,7 +21781,7 @@ Fighting None
 5 Meditate
 9 Detect
 13 Fake Out
-17 Doubleslap
+17 Double Slap
 21 Swift
 25 Calm Mind
 29 Force Palm
@@ -21790,7 +21790,7 @@ Fighting None
 41 U-turn
 45 Quick Guard
 49 Bounce
-53 Hi Jump Kick
+53 High Jump Kick
 57 Reversal
 61 Aura Sphere
 180
@@ -21820,7 +21820,7 @@ Fighting None
 5 Meditate
 9 Detect
 13 Fake Out
-17 Doubleslap
+17 Double Slap
 21 Swift
 25 Calm Mind
 29 Force Palm
@@ -21829,7 +21829,7 @@ Fighting None
 41 U-turn
 45 Quick Guard
 49 Bounce
-56 Hi Jump Kick
+56 High Jump Kick
 63 Reversal
 70 Aura Sphere
 45
@@ -21898,7 +21898,7 @@ Ground Ghost
 17 Iron Defense
 21 Mega Punch
 25 Magnitude
-30 Dynamicpunch
+30 Dynamic Punch
 35 Night Shade
 40 Curse
 45 Earthquake
@@ -21935,7 +21935,7 @@ Ground Ghost
 17 Iron Defense
 21 Mega Punch
 25 Magnitude
-30 Dynamicpunch
+30 Dynamic Punch
 35 Night Shade
 40 Curse
 43 Heavy Slam
@@ -21967,7 +21967,7 @@ Dark Steel
 6 Leer
 9 Fury Cutter
 14 Torment
-17 Faint Attack
+17 Feint Attack
 22 Scary Face
 25 Metal Claw
 30 Slash
@@ -22007,7 +22007,7 @@ Dark Steel
 6 Leer
 9 Fury Cutter
 14 Torment
-17 Faint Attack
+17 Feint Attack
 22 Scary Face
 25 Metal Claw
 30 Slash
@@ -22154,7 +22154,7 @@ Dark Flying
 10 Pluck
 14 Nasty Plot
 19 Flatter
-23 Faint Attack
+23 Feint Attack
 28 Punishment
 32 Defog
 37 Tailwind
@@ -22192,7 +22192,7 @@ Dark Flying
 10 Pluck
 14 Nasty Plot
 19 Flatter
-23 Faint Attack
+23 Feint Attack
 28 Punishment
 32 Defog
 37 Tailwind
@@ -22260,8 +22260,8 @@ Durant
 Medium Fast
 Bug Steel
 15
-0 Vicegrip
-0 Sand-attack
+0 Vice Grip
+0 Sand Attack
 6 Fury Cutter
 11 Bite
 16 Agility
@@ -22300,7 +22300,7 @@ Dark Dragon
 4 Focus Energy
 9 Bite
 12 Headbutt
-17 Dragonbreath
+17 Dragon Breath
 20 Roar
 25 Crunch
 28 Slam
@@ -22338,7 +22338,7 @@ Dark Dragon
 4 Focus Energy
 9 Bite
 12 Headbutt
-17 Dragonbreath
+17 Dragon Breath
 20 Roar
 25 Crunch
 28 Slam
@@ -22376,7 +22376,7 @@ Dark Dragon
 4 Focus Energy
 9 Bite
 12 Headbutt
-17 Dragonbreath
+17 Dragon Breath
 20 Roar
 25 Crunch
 28 Slam
@@ -22616,7 +22616,7 @@ Electric Flying
 17
 0 Uproar
 0 Astonish
-0 Thundershock
+0 Thunder Shock
 7 Swagger
 13 Bite
 19 Revenge
@@ -22654,9 +22654,9 @@ Dragon Fire
 0 Fire Fang
 0 Dragon Rage
 8 Imprison
-15 Ancientpower
+15 Ancient Power
 22 Flamethrower
-29 Dragonbreath
+29 Dragon Breath
 36 Slash
 43 Extrasensory
 50 Fusion Flare
@@ -22690,9 +22690,9 @@ Dragon Electric
 0 Thunder Fang
 0 Dragon Rage
 8 Imprison
-15 Ancientpower
+15 Ancient Power
 22 Thunderbolt
-29 Dragonbreath
+29 Dragon Breath
 36 Slash
 43 Zen Headbutt
 50 Fusion Bolt
@@ -22763,9 +22763,9 @@ Dragon Ice
 0 Icy Wind
 0 Dragon Rage
 8 Imprison
-15 Ancientpower
+15 Ancient Power
 22 Ice Beam
-29 Dragonbreath
+29 Dragon Breath
 36 Slash
 43 Scary Face
 50 Glaciate
@@ -22798,7 +22798,7 @@ Water Fighting
 0 Aqua Jet
 0 Leer
 7 Double Kick
-13 Bubblebeam
+13 Bubble Beam
 19 Take Down
 25 Icy Wind
 31 Retaliate
@@ -22883,7 +22883,7 @@ Bug Steel
 62 Simple Beam
 66 Zap Cannon
 73 Hyper Beam
-77 Selfdestruct
+77 Self-Destruct
 3
 0 1 0 1 0 1 
 None

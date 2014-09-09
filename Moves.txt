@@ -110,14 +110,14 @@ Scratch:
 	Cat: Physical
 *
 Vine Whip:
-	Pow: 35
-	PP: 15
+	Pow: 45
+	PP: 25
 	Acc: 100
 	Desc: The target is struck with slender, whiplike vines to inflict damage.
 	Type: Grass
 	Cat: Physical
 *
-Sonicboom:
+Sonic Boom:
 	Acc: 90
 	Type: Normal
 	Desc: The target is hit with a destructive shock wave that always inflicts 20 HP damage.
@@ -180,7 +180,11 @@ Growth:
 	SelfTarget: True
 	StatChange: 2 Attack 1 Sp_Attack 1
 	Type: Normal
-	PP: 40
+	ApplyEffects:
+	// TODO: In intense sunlight should raise by two each
+	super.applyEffects(b, user, victim);
+	###
+	PP: 20
 *
 Double-edge:
 	ClassName: DoubleEdge
@@ -302,7 +306,7 @@ Tail Whip:
 	Acc: 100
 	StatChange: 1 Defense -1
 *
-Solarbeam:
+Solar Beam:
 	Desc: A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.
 	PP: 10
 	Pow: 120
@@ -338,7 +342,7 @@ Flamethrower:
 	Type: Fire
 	Cat: Special
 	PP: 15
-	Pow: 95
+	Pow: 90
 	Acc: 100
 	Status: Burned
 	EffChance: 10
@@ -393,7 +397,7 @@ Shadow Claw:
 *
 Air Slash:
 	Type: Flying
-	PP: 20
+	PP: 15
 	Cat: Special
 	Desc: The user attacks with a blade of air that slices even the sky. It may also make the target flinch.
 	Pow: 75
@@ -410,7 +414,7 @@ Wing Attack:
 	Acc: 100
 *
 Heat Wave:
-	Pow: 100
+	Pow: 95
 	Acc: 90
 	PP: 10
 	Desc: The user attacks by exhaling hot breath on the opposing team. It may also leave targets with a burn.
@@ -444,7 +448,7 @@ Flash Cannon:
 Bubble:
 	Type: Water
 	PP: 30
-	Pow: 20
+	Pow: 40
 	Acc: 100
 	Cat: Special
 	Desc: A spray of countless bubbles is jetted at the opposing team. It may also lower the targets' Speed stats.
@@ -579,9 +583,9 @@ Aqua Tail:
 *
 Skull Bash:
 	Desc: The user tucks in its head to raise its Defense in the first turn, then rams the target on the next turn.
-	PP: 15
+	PP: 10
 	MoveType: SleepTalkFail
-	Pow: 100
+	Pow: 130
 	Acc: 100
 	Type: Normal
 	Cat: Physical
@@ -605,7 +609,7 @@ Hydro Pump:
 	Type: Water
 	Desc: The target is blasted by a huge volume of water launched under great pressure.
 	PP: 5
-	Pow: 120
+	Pow: 110
 	Acc: 80
 	Cat: Special
 *
@@ -967,8 +971,8 @@ Toxic Spikes:
 Pin Missile:
 	Desc: Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.
 	PP: 20
-	Pow: 14
-	Acc: 85
+	Pow: 25
+	Acc: 95
 	MultiStrike: 2 5
 	Type: Bug
 	Cat: Physical
@@ -987,7 +991,7 @@ Assurance:
 	Desc: If the target has already taken some damage in the same turn, this attack's power is doubled.
 	PP: 10
 	Cat: Physical
-	Pow: 50
+	Pow: 60
 	Acc: 100
 	GetPow: 
 	if (me.getAttributes().hasTakenDamage()) return super.power*2;
@@ -1026,8 +1030,7 @@ Endeavor:
 	b.applyDamage(o, o.getHP() - me.getHP());
 	###
 *
-Sand-attack:
-	ClassName: SandAttack
+Sand Attack:
 	Desc: Sand is hurled in the target's face, reducing its accuracy.
 	PP: 15
 	Acc: 100
@@ -1059,7 +1062,7 @@ Twister:
 	return super.power;
 	###
 *
-Featherdance:
+Feather Dance:
 	Desc: The user covers the target's body with a mass of down that harshly lowers its Attack stat.
 	PP: 15
 	Type: Flying
@@ -1097,7 +1100,7 @@ Roost:
 	private boolean healFail;
 	###
 *
-Thundershock:
+Thunder Shock:
 	PP: 30
 	Desc: A jolt of electricity is hurled at the target to inflict damage. It may also leave the target with paralysis.
 	Type: Electric
@@ -1126,12 +1129,13 @@ Mirror Move:
 *
 Hurricane:
 	Desc: The user attacks by wrapping its opponent in a fierce wind that flies up into the sky. It may also confuse the target.
-	Pow: 120
+	Pow: 110
 	Acc: 70
 	PP: 10
 	Type: Flying
 	Cat: Special
 	GetAccuracy: 
+	// TODO: Should have double power when opponent is in the air
 	switch (b.getWeather().getType())
 	{
 		case RAINING:
@@ -1279,7 +1283,7 @@ Glare:
 	PP: 30
 	Type: Normal
 	Cat: Status
-	Acc: 90
+	Acc: 100
 	Status: Paralyzed
 *
 Screech:
@@ -1406,7 +1410,7 @@ Gunk Shot:
 	Desc: The user shoots filthy garbage at the target to attack. It may also poison the target.
 	PP: 5
 	Pow: 120
-	Acc: 70
+	Acc: 80
 	PhysicalContact: False
 	Cat: Physical
 	Status: Poisoned
@@ -1517,7 +1521,7 @@ Thunder:
 	PP: 10
 	Type: Electric
 	Cat: Special
-	Pow: 120
+	Pow: 110
 	Acc: 70
 	GetAccuracy: 
 	switch (b.getWeather().getType())
@@ -1729,7 +1733,7 @@ Sing:
 	Cat: Status
 	MoveType: SoundBased
 *
-Doubleslap:
+Double Slap:
 	Desc: The target is slapped repeatedly, back and forth, two to five times in a row.
 	MultiStrike: 2 5
 	Type: Normal
@@ -1759,7 +1763,7 @@ Wake-up Slap:
 	ClassName: WakeUpSlap
 	Desc: This attack inflicts big damage on a sleeping target. It also wakes the target up, however.
 	PP: 10
-	Pow: 60
+	Pow: 70
 	Acc: 100
 	Cat: Physical
 	Type: Fighting
@@ -1813,6 +1817,7 @@ Gravity:
 Moonlight:
 	Int: SelfHealingMove
 	SelfHealing: 
+	// TODO: Need to change type of this move to fairy type along with charm and sweet kiss
 	switch (b.getWeather().getType())
 	{
 		case CLEAR_SKIES:
@@ -1858,8 +1863,8 @@ Mimic:
 Meteor Mash:
 	Desc: The target is hit with a hard punch fired like a meteor. It may also raise the user's Attack.
 	PP: 10
-	Pow: 100
-	Acc: 85
+	Pow: 90
+	Acc: 90
 	Type: Steel
 	MoveType: Punching
 	Cat: Physical
@@ -1880,7 +1885,7 @@ Will-o-wisp:
 	ClassName: WillOWisp
 	Status: Burned
 	PP: 15
-	Acc: 75
+	Acc: 85
 	Type: Fire
 	Cat: Status
 	ApplyEffects: 
@@ -1901,7 +1906,7 @@ Payback:
 *
 Extrasensory:
 	Desc: The user attacks with an odd, unseeable power. It may also make the target flinch.
-	PP: 30
+	PP: 20
 	Type: Psychic
 	Cat: Special
 	Acc: 100
@@ -1912,7 +1917,7 @@ Extrasensory:
 Fire Blast:
 	Desc: The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.
 	PP: 5
-	Pow: 120
+	Pow: 110
 	Acc: 85
 	Type: Fire
 	Status: Burned
@@ -1987,7 +1992,7 @@ Astonish:
 Air Cutter:
 	Desc: The user launches razor-like wind to slash the opposing team. Critical hits land more easily.
 	PP: 25
-	Pow: 55
+	Pow: 60
 	Acc: 95
 	Int: CritStageEffect
 	Cat: Special
@@ -2259,7 +2264,11 @@ Earthquake:
 	PhysicalContact: False
 	MoveType: HitDig
 	GetPow: 
-	if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Dig")) return super.power*2;
+	if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Dig")) 
+	{
+		return super.power*2;
+	}
+	
 	return super.power;
 	###
 *
@@ -2318,7 +2327,7 @@ Fake Out:
 	}
 	###
 *
-Faint Attack:
+Feint Attack:
 	Desc: The user approaches the target disarmingly, then throws a sucker punch. It hits without fail.
 	PP: 20
 	Cat: Physical
@@ -2350,7 +2359,7 @@ Power Gem:
 	PP: 20
 	Type: Rock
 	Cat: Special
-	Pow: 70
+	Pow: 80
 	Acc: 100
 *
 Water Sport:
@@ -2403,7 +2412,6 @@ Wonder Room:
 	Effect: Battle WonderRoom
 	MoveType: Field
 	Type: Psychic
-	Priority: -7
 *
 Aqua Jet:
 	Type: Water
@@ -2418,7 +2426,7 @@ Covet:
 	Pow: 60
 	MoveType: Metronomeless, Assistless
 	Acc: 100
-	PP: 40
+	PP: 25 	
 	Type: Normal
 	Cat: Physical
 	Desc: The user endearingly approaches the target, then steals the target's held item.
@@ -2524,7 +2532,7 @@ Reversal:
 	return 200;
 	###
 *
-Extremespeed:
+Extreme Speed:
 	Desc: The user charges the target at blinding speed. This attack always goes before any other move.
 	PP: 5
 	Priority: 2
@@ -2541,7 +2549,7 @@ Hypnosis:
 	Cat: Status
 	Status: Asleep
 *
-Bubblebeam:
+Bubble Beam:
 	Desc: A spray of bubbles is forcefully ejected at the opposing team. It may also lower their Speed stats.
 	StatChange: 1 Speed -1
 	EffChance: 10
@@ -2590,7 +2598,7 @@ Submission:
 	Acc: 80
 	Cat: Physical
 *
-Dynamicpunch:
+Dynamic Punch:
 	Desc: The user punches the target with full, concentrated power. It confuses the target if it hits.
 	PP: 5
 	Pow: 100
@@ -2631,7 +2639,7 @@ Barrier:
 	Desc: The user throws up a sturdy wall that sharply raises its Defense stat.
 	StatChange: 1 Defense 2
 	SelfTarget: True
-	PP: 30
+	PP: 20
 	Cat: Status
 	Type: Psychic
 *
@@ -2671,7 +2679,7 @@ Future Sight:
 	Apply: 
 	super.applyEffects(b, me, o); // Don't apply damage just yet!!
 	###
-	Pow: 100
+	Pow: 120
 *
 Doom Desire:
 	Desc: Two turns after this move is used, the user blasts the target with a concentrated bundle of light.
@@ -2699,7 +2707,7 @@ Low Sweep:
 	Type: Fighting
 	Acc: 100
 	Cat: Physical
-	Pow: 60
+	Pow: 65
 	StatChange: 1 Speed -1
 *
 Revenge:
@@ -2748,7 +2756,7 @@ Leaf Storm:
 	Desc: The user whips up a storm of leaves around the target. The attack's recoil harshly reduces the user's Sp. Atk stat.
 	PP: 5
 	Type: Grass
-	Pow: 140
+	Pow: 130
 	Acc: 90
 	Cat: Special
 	SelfTarget: True
@@ -2776,7 +2784,7 @@ Constrict:
 Hex:
 	Desc: This relentless attack does massive damage to a target affected by status problems.
 	PP: 10
-	Pow: 50
+	Pow: 65
 	Acc: 100
 	Cat: Special
 	Type: Ghost
@@ -3152,7 +3160,7 @@ Ice Beam:
 	Type: Ice
 	Cat: Special
 	Acc: 100
-	Pow: 95
+	Pow: 90
 	Status: Frozen
 	EffChance: 10
 *
@@ -3167,7 +3175,7 @@ Sheer Cold:
 Poison Gas:
 	Desc: A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon. It may poison those hit.
 	PP: 40
-	Acc: 80
+	Acc: 90
 	Type: Poison
 	Cat: Status
 	Status: Poisoned
@@ -3194,7 +3202,7 @@ Sludge Bomb:
 *
 Acid Armor:
 	Desc: The user alters its cellular structure to liquefy itself, sharply raising its Defense stat.
-	PP: 40
+	PP: 20
 	StatChange: 1 Defense 2
 	SelfTarget: True
 	Type: Poison
@@ -3281,7 +3289,7 @@ Lick:
 	Type: Ghost
 	Cat: Physical
 	Acc: 100
-	Pow: 20
+	Pow: 30
 	Status: Paralyzed
 	EffChance: 30
 *
@@ -3403,12 +3411,12 @@ Rock Tomb:
 	PP: 10
 	Type: Rock
 	Cat: Physical
-	Acc: 80
-	Pow: 50
+	Acc: 95
+	Pow: 60
 	StatChange: 1 Speed -1
 	PhysicalContact: False
 *
-Dragonbreath:
+Dragon Breath:
 	Desc: The user exhales a mighty gust that inflicts damage. It may also leave the target with paralysis.
 	PP: 20
 	Type: Dragon
@@ -3442,7 +3450,7 @@ Synchronoise:
 	PP: 15
 	Cat: Special
 	Acc: 100
-	Pow: 70
+	Pow: 120
 	Apply: 
 	Type[] type = me.getType(b);
 	
@@ -3469,7 +3477,7 @@ Psyshock:
 	return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 	###
 *
-Vicegrip:
+Vice Grip:
 	Desc: The target is gripped and squeezed from both sides to inflict damage.
 	PP: 30
 	Type: Normal
@@ -3501,7 +3509,7 @@ Crabhammer:
 	Type: Water
 	Cat: Physical
 	Acc: 90
-	Pow: 90
+	Pow: 100
 	Int: CritStageEffect
 *
 Flail:
@@ -3695,7 +3703,7 @@ Brick Break:
 	}
 	###
 *
-Hi Jump Kick:
+High Jump Kick:
 	Desc: The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.
 	PP: 10
 	Type: Fighting
@@ -3763,7 +3771,7 @@ Vacuum Wave:
 	PP: 30
 	Type: Fighting
 *
-Thunderpunch:
+Thunder Punch:
 	Desc: The target is punched with an electrified fist. It may also leave the target with paralysis.
 	PP: 15
 	Type: Electric
@@ -3879,7 +3887,7 @@ Power Whip:
 Smog:
 	Desc: The target is attacked with a discharge of filthy gases. It may also poison the target.
 	PP: 20
-	Pow: 20
+	Pow: 30
 	Acc: 70
 	Cat: Special
 	Type: Poison
@@ -3909,7 +3917,8 @@ Hammer Arm:
 	StatChange: 1 Speed -1
 	SelfTarget: True
 *
-Softboiled:
+Soft-Boiled:
+	ClassName: SoftBoiled
 	Desc: The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.
 	PP: 10
 	Type: Normal
@@ -3917,7 +3926,7 @@ Softboiled:
 	SelfHealing: 2
 	Int: SelfHealingMove
 *
-Ancientpower:
+Ancient Power:
 	Desc: The user attacks with a prehistoric power. It may also raise all the user's stats at once.
 	PP: 5
 	Pow: 60
@@ -3968,9 +3977,19 @@ Dragon Dance:
 Dragon Pulse:
 	Desc: The target is attacked with a shock wave generated by the user's gaping mouth.
 	PP: 10
-	Pow: 90
+	Pow: 85
 	Acc: 100
 	Type: Dragon
+	Cat: Special
+*
+Draco Meteor:
+	Type: Dragon
+	Desc: Comets are summoned down from the sky onto the target. The attack's recoil harshly reduces the user's Sp. Atk stat.
+	PP: 5
+	Pow: 130
+	Acc: 90
+	SelfTarget: True
+	StatChange: 1 Sp_Attack -2
 	Cat: Special
 *
 Waterfall:
@@ -4134,7 +4153,7 @@ Avalanche:
 Blizzard:
 	Desc: A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.
 	PP: 5
-	Pow: 120
+	Pow: 110
 	Acc: 70
 	Type: Ice
 	Cat: Special
@@ -4245,7 +4264,7 @@ Muddy Water:
 	PP: 10
 	Type: Water
 	Acc: 85
-	Pow: 95
+	Pow: 90
 	Cat: Special
 	StatChange: 1 Accuracy -1
 	EffChance: 30
@@ -4371,7 +4390,7 @@ Rock Slide:
 Snore:
 	Desc: An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.
 	PP: 15
-	Pow: 40
+	Pow: 50
 	Acc: 100
 	Cat: Special
 	Type: Normal
@@ -4457,7 +4476,7 @@ Aura Sphere:
 	PP: 20
 	Type: Fighting
 	Cat: Special
-	Pow: 90
+	Pow: 80
 *
 Psystrike:
 	Desc: The user materializes an odd psychic wave to attack the target. This attack does physical damage.
@@ -4506,7 +4525,7 @@ Psycho Shift:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	Acc: 90
+	Acc: 100
 	ApplyEffects: 
 	if (!user.hasStatus() || !Status.giveStatus(b, user, victim, user.getStatus().getType()))
 	{
@@ -4568,7 +4587,7 @@ Cotton Guard:
 	StatChange: 1 Defense 3
 	SelfTarget: True
 *
-Grasswhistle:
+Grass Whistle:
 	Desc: The user plays a pleasant melody that lulls the target into a deep sleep.
 	PP: 15
 	Type: Grass
@@ -4593,18 +4612,16 @@ Hidden Power:
 	Cat: Special
 	Acc: 100
 	GetType: 
-	return user.getHiddenType();
+	return user.getHiddenPowerType();
 	###
-	GetPow: 
-	return me.getHiddenPower();
-	###
+	Pow: 60
 *
 Psywave:
 	Desc: The target is attacked with an odd psychic wave. The attack varies in intensity.
 	PP: 15
 	Type: Psychic
 	Cat: Special
-	Acc: 80
+	Acc: 100
 	FixedDamage: (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0)
 *
 Pain Split:
@@ -4650,7 +4667,7 @@ Struggle Bug:
 	Cat: Special
 	Acc: 100
 	StatChange: 1 Sp_Attack -1
-	Pow: 30
+	Pow: 50
 *
 Power Trick:
 	Desc: The user employs its psychic power to switch its Attack with its Defense stat.
@@ -4886,7 +4903,7 @@ Heal Block:
 Energy Ball:
 	Desc: The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.
 	PP: 10
-	Pow: 80
+	Pow: 90
 	Type: Grass
 	Cat: Special
 	Acc: 100
@@ -4940,13 +4957,13 @@ Arm Thrust:
 	Pow: 15
 	MultiStrike: 2 5
 *
-Smellingsalt:
+Smelling Salts:
 	Desc: This attack inflicts double damage on a target with paralysis. It also cures the target's paralysis, however.
 	PP: 10
 	Cat: Physical
 	Acc: 100
 	Type: Normal
-	Pow: 60
+	Pow: 70
 	GetPow: 
 	return super.power*(o.hasStatus(StatusCondition.PARALYZED) ? 2 : 1);
 	###
@@ -5181,10 +5198,9 @@ Chatter:
 	Desc: The user attacks using a sound wave based on words it has learned. It may also confuse the target.
 	PP: 20
 	Type: Flying
-	Pow: 60
+	Pow: 65
 	Cat: Special
 	Effect: Pokemon Confusion
-	EffChance: 15
 	Acc: 100
 	MoveType: SoundBased, Mimicless, Assistless, Metronomeless, SleepTalkFail
 *
@@ -5243,7 +5259,7 @@ Spacial Rend:
 Magma Storm:
 	Desc: The target becomes trapped within a maelstrom of fire that rages for four to five turns.
 	PP: 5
-	Pow: 120
+	Pow: 100
 	Acc: 75
 	Cat: Special
 	Type: Fire
@@ -5338,6 +5354,8 @@ Incinerate:
 	Pow: 60
 	ApplyEffects: 
 	Item heldItem = victim.getHeldItem(b);
+	
+	// TODO: Should also burn the victim's gems
 	if (heldItem instanceof Berry)
 	{
 		b.addMessage(victim.getName() + "'s " + heldItem.getName() + " was burned!");
@@ -5348,7 +5366,7 @@ Incinerate:
 Overheat:
 	Desc: The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.
 	PP: 5
-	Pow: 140
+	Pow: 130
 	Cat: Special
 	Acc: 90
 	Type: Fire
@@ -5409,11 +5427,20 @@ Drain Punch:
 Storm Throw:
 	Desc: The user strikes the target with a fierce blow. This attack always results in a critical hit.
 	PP: 10
-	Pow: 40
+	Pow: 60
 	Acc: 100
 	Type: Fighting
 	Cat: Physical
 	MoveType: AlwaysCrit
+*
+Frost Breath:
+	Desc: The user blows a cold breath on the target. This attack always results in a critical hit.
+	PP: 10
+	Type: Ice
+	Cat: Special
+	MoveType: AlwaysCrit
+	Pow: 60
+	Acc: 90
 *
 Rock Smash:
 	Desc: The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat.
@@ -5622,7 +5649,7 @@ Techno Blast:
 	if (i instanceof DriveItem) return ((DriveItem)i).getType();
 	return super.type;
 	###
-	Pow: 85
+	Pow: 120
 	Acc: 100
 	Cat: Special
 	MoveType: Metronomeless
@@ -5637,7 +5664,8 @@ Explosion:
 	Pow: 250
 	MoveType: UserFaints
 *
-Selfdestruct:
+Self-Destruct:
+	ClassName: SelfDestruct
 	Desc: The user attacks everything around it by causing an explosion. The user faints upon using this move.
 	PP: 5
 	Type: Normal
@@ -5823,7 +5851,7 @@ Role Play:
 *
 Knock Off:
 	Desc: The user slaps down the target's held item, preventing that item from being used in the battle.
-	PP: 20
+	PP: 25
 	Type: Dark
 	Cat: Physical
 	Acc: 100
@@ -6071,7 +6099,6 @@ Magic Room:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	Priority: -7
 	Effect: Battle MagicRoom
 	MoveType: Field
 *
@@ -6188,7 +6215,7 @@ Surf:
 	Desc: It swamps the area around the user with a giant wave. It can also be used for crossing water.
 	PP: 15
 	Type: Water
-	Pow: 95
+	Pow: 90
 	Acc: 100
 	Cat: Special	
 *

@@ -290,9 +290,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility("Magic Guard"))
+			{
+				return;
+			}
+			
 			b.addMessage(getPartialTrapMessage(victim));
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			
+			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/6.0 : 1/8.0);
 		}
 
 		public String getReleaseMessage(ActivePokemon user)
@@ -343,9 +349,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility("Magic Guard"))
+			{
+				return;
+			}
+			
 			b.addMessage(getPartialTrapMessage(victim));
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			
+			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/6.0 : 1/8.0);
 		}
 
 		public String getReleaseMessage(ActivePokemon user)
@@ -396,9 +408,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility("Magic Guard"))
+			{
+				return;
+			}
+			
 			b.addMessage(getPartialTrapMessage(victim));
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			
+			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/6.0 : 1/8.0);
 		}
 
 		public String getReleaseMessage(ActivePokemon user)
@@ -449,9 +467,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility("Magic Guard"))
+			{
+				return;
+			}
+			
 			b.addMessage(getPartialTrapMessage(victim));
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			
+			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/6.0 : 1/8.0);
 		}
 
 		public String getReleaseMessage(ActivePokemon user)
@@ -502,9 +526,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility("Magic Guard"))
+			{
+				return;
+			}
+			
 			b.addMessage(getPartialTrapMessage(victim));
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			
+			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/6.0 : 1/8.0);
 		}
 
 		public String getReleaseMessage(ActivePokemon user)
@@ -555,9 +585,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility("Magic Guard"))
+			{
+				return;
+			}
+			
 			b.addMessage(getPartialTrapMessage(victim));
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			
+			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/6.0 : 1/8.0);
 		}
 
 		public String getReleaseMessage(ActivePokemon user)
@@ -608,9 +644,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility("Magic Guard"))
+			{
+				return;
+			}
+			
 			b.addMessage(getPartialTrapMessage(victim));
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/8.0 : 1/16.0);
+			
+			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/6.0 : 1/8.0);
 		}
 
 		public String getReleaseMessage(ActivePokemon user)
