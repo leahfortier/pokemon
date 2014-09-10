@@ -361,7 +361,7 @@ public class Global
 		return Global.invoke(-1, true, check, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
-	// Used for calling methods that return booleans and also exit early is p or opp are fainted
+	// Used for calling methods that return booleans and also exit early if p or opp are fainted
 	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
 		return Global.invoke(-1, true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
@@ -407,5 +407,11 @@ public class Global
 	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
 		Global.invoke(-1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void where you need to split early if an activePokemon is deadsies
+	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		Global.invoke(-1, false, false, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 }

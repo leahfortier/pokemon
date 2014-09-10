@@ -50,7 +50,7 @@ Gravity:
 	###
 	SubsideMessage: "The gravity returned to normal."
 	CanAttack: 
-	if (p.getAttack().isMoveType("Airborne"))
+	if (p.getAttack().isMoveType(MoveType.AIRBORNE))
 	{
 		b.printAttacking(p);
 		b.addMessage(this.getFailMessage(b, p, opp));

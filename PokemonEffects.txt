@@ -143,10 +143,15 @@ Protecting:
 	Int: OpposingBeforeTurnEffect
 	NumTurns: 1
 	OpposingCanAttack: 
-	if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType("ProtectPiercing")) return true;
+	if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING)) 
+	{
+		return true;
+	}
+	
 	b.printAttacking(p);
 	b.addMessage(opp.getName() + " is protecting itself!");
 	Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+	
 	return false;
 	###
 	Cast: 
@@ -302,7 +307,7 @@ Encore:
 	return move.getAttack().getName().equals(m.getAttack().getName());
 	###
 	UnusableMessage: "Only " + move.getAttack().getName() + " can be used right now!"
-	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType("Encoreless")
+	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS)
 	CastMessage: victim.getName() + " got an encore!"
 	Cast: 
 	move = victim.getAttributes().getLastMoveUsed();
@@ -560,7 +565,7 @@ Mimic:
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	Attack m = other.getAttributes().getLastMoveUsed() == null ? null : other.getAttributes().getLastMoveUsed().getAttack();
 	
-	if (m == null || victim.hasMove(m.getName()) || m.isMoveType("Mimicless"))
+	if (m == null || victim.hasMove(m.getName()) || m.isMoveType(MoveType.MIMICLESS))
 	{
 		b.addMessage(this.getFailMessage(b, caster, victim));
 		return;
@@ -881,7 +886,7 @@ Substitute:
 	###
 	FailCondition: victim.getHPRatio() <= .25 || victim.getStat(Stat.HP) <= 3
 	ValidMove: 
-	if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType("Field") || user.getAttack().isMoveType("SubstitutePiercing")) 
+	if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING))
 	{
 		return true;
 	}

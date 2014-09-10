@@ -15,6 +15,7 @@ import main.Type;
 import trainer.Trainer;
 import trainer.WildPokemon;
 import battle.Attack.Category;
+import battle.Attack.MoveType;
 import battle.Battle;
 import battle.Move;
 import battle.effect.ApplyDamageEffect;
@@ -1705,7 +1706,7 @@ public abstract class Ability implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			if (p.getAttack().isMoveType("SoundBased"))
+			if (p.getAttack().isMoveType(MoveType.SOUND_BASED))
 			{
 				b.printAttacking(p);
 				b.addMessage(opp.getName() + "'s " + this.name + " makes it immune to sound based moves!");
@@ -1751,7 +1752,7 @@ public abstract class Ability implements Serializable
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getAttack().isMoveType("Punching") ? 1.2 : 1;
+			return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
 		}
 	}
 
@@ -2517,6 +2518,7 @@ public abstract class Ability implements Serializable
 				b.addMessage(p.getName() + " is loafing around!");
 				return false;
 			}
+			
 			return true;
 		}
 	}
@@ -2703,7 +2705,7 @@ public abstract class Ability implements Serializable
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			for (Move m : other.getMoves())
 			{
-				if (Type.getAdvantage(m.getAttack().getType(b, other), victim, b) > 1 || m.getAttack().isMoveType("OneHitKO"))
+				if (Type.getAdvantage(m.getAttack().getType(b, other), victim, b) > 1 || m.getAttack().isMoveType(MoveType.ONE_HIT_KO))
 				{
 					b.addMessage(victim.getName() + "'s " + this.name + " made it shudder!");
 					break;

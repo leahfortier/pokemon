@@ -57,7 +57,9 @@ Things to test:
 	CrashDamageEffect
 	EffectBlockerEffect
 	EndBattleEffect
+	EndTurnEffect
 	StatusPreventionEffect
+	WeatherBlockerEffect
 	
 	StageChangingEffect: 
 		if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stage;

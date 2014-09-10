@@ -228,7 +228,7 @@ Override:
 		b.addMessage("It's a One-Hit KO!");
 		return b.applyDamage(o, o.getHP());
 		###
-		AddMapField: MoveType: OneHitKO
+		AddMapField: MoveType: One_Hit_KO
 		AddMapField: OHKO2: True
 	*
 ***

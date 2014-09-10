@@ -1032,7 +1032,7 @@ public class StuffGen
 			
 			if (physicalContact)
 			{
-				constructor.append("super.moveTypes.add(\"PhysicalContact\");\n");
+				constructor.append("super.moveTypes.add(MoveType.PHYSICAL_CONTACT);\n");
 			}
 		}
 

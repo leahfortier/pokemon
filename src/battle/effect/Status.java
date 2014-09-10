@@ -10,6 +10,7 @@ import main.Global;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import battle.Attack.MoveType;
 import battle.Battle;
 
 public abstract class Status implements Serializable
@@ -336,7 +337,7 @@ public abstract class Status implements Serializable
 			
 			numTurns--;
 			b.addMessage(p.getName() + " is fast asleep...");
-			return p.getAttack().isMoveType("AsleepUser");
+			return p.getAttack().isMoveType(MoveType.ASLEEP_USER);
 		}
 		
 		public String getCastMessage(ActivePokemon p)
@@ -393,6 +394,7 @@ public abstract class Status implements Serializable
 		}
 	}
 	
+	// TODO: Does not handle being defrosted when hit by a fire-type move -- should be a TakeDamageEffect or something to that nature
 	private static class Frozen extends Status implements BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
@@ -402,7 +404,7 @@ public abstract class Status implements Serializable
 			super.type = StatusCondition.FROZEN;
 		}
 		
-		// Ice-type Pokemon cannot be frozen
+		// Ice-type Pokemon cannot be frozen TODO: Cannot be frozen during intense sunlight
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE);
@@ -411,7 +413,7 @@ public abstract class Status implements Serializable
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) 
 		{
 			// 20% chance to thaw out each turn
-			if (Math.random()*100 < 20 || p.getAttack().isMoveType("Defrost"))
+			if (Math.random()*100 < 20 || p.getAttack().isMoveType(MoveType.DEFROST))
 			{
 				b.addMessage(p.getName() + " thawed out!", StatusCondition.NONE, p.user());
 				p.removeStatus();

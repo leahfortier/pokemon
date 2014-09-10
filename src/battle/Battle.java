@@ -19,6 +19,7 @@ import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
 import battle.Attack.Category;
+import battle.Attack.MoveType;
 import battle.MessageUpdate.Update;
 import battle.effect.BattleEffect;
 import battle.effect.BeforeTurnEffect;
@@ -421,21 +422,24 @@ public class Battle
 		for (int i = 0; i < effects.size(); i++)
 		{
 			Effect e = effects.get(i);
-			if (!e.isActive()) 
+			
+			boolean inactive = !e.isActive();
+			if (!inactive)
 			{
-				effects.remove(i--);
-				e.subside(this, p);
-				if (p != null && p.isFainted(this)) return;
-				continue;
+				e.decrement(this, p);
+				inactive = !e.isActive() && !e.nextTurnSubside();  
 			}
 			
-			e.decrement(this, p);
-			
-			if (!e.isActive() && !e.nextTurnSubside())
+			if (inactive)
 			{
 				effects.remove(i--);
 				e.subside(this, p);
-				if (p != null && p.isFainted(this)) return;
+				
+				// I think this is pretty much just for Future Sight...
+				if (p != null && p.isFainted(this))
+				{
+					return;
+				}
 			}
 		}
 	}
@@ -461,18 +465,10 @@ public class Battle
 		list.add(me.getStatus());
 		list.add(me.getAbility());
 		list.add(me.getHeldItem(this));
+		list.add(getEffects(me.user()));
 		
-		// Apply each effect
-		for (Object o : list)
-		{
-			if (me.isFainted(this)) 
-				break;
-			
-			if (Effect.isInactiveEffect(o)) 
-				continue;
-			
-			if (o instanceof EndTurnEffect) ((EndTurnEffect)o).apply(me, this);
-		}
+		Global.invoke(this, me, null, list.toArray(), EndTurnEffect.class, "apply", me, this);
+		
 		me.isFainted(this);
 		
 		// No longer the first turn anymore
@@ -660,7 +656,7 @@ public class Battle
 		stage = (int)Global.updateInvoke(0, listsies, CritStageEffect.class, "increaseCritStage", stage, me);
 		stage = Math.min(stage, critsicles.length); // Max it out, yo
 		
-		boolean crit = me.getAttack().isMoveType("AlwaysCrit") && Math.random()*critsicles[stage - 1] < 1;
+		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || Math.random()*critsicles[stage - 1] < 1;
 		
 		// Crit yo pants
 		if (crit)
@@ -681,21 +677,38 @@ public class Battle
 	public boolean accuracyCheck(ActivePokemon me, ActivePokemon o)
 	{
 		// Self-Target moves and Field moves don't miss
-		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == Category.STATUS) return true;
-		if (me.getAttack().isMoveType("Field")) return true;
-		if (me.hasEffect("LockOn")) return true;
-		if ((me.hasAbility("No Guard") || o.hasAbility("No Guard")) && !me.getAttack().isMoveType("OneHitKO")) return true;
+		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == Category.STATUS) 
+		{
+			return true;
+		}
+		
+		if (me.getAttack().isMoveType(MoveType.FIELD)) 
+		{
+			return true;
+		}
+		if (me.hasEffect("LockOn")) 
+		{
+			return true;
+		}
+		
+		if ((me.hasAbility("No Guard") || o.hasAbility("No Guard")) && !me.getAttack().isMoveType(MoveType.ONE_HIT_KO)) 
+		{
+			return true;
+		}
 		
 		// Semi-invulnerable moves
 		if (o.isSemiInvulnerable() 
-				&& !(me.getAttack().isMoveType("HitFly") && o.getAttack().getName().equals("Fly") || o.getAttack().getName().equals("Bounce"))
-				&& !(me.getAttack().isMoveType("HitDig") && o.getAttack().getName().equals("Dig")) 
-				&& !(me.getAttack().isMoveType("HitDive") && o.getAttack().getName().equals("Dive"))) 
+				&& !(me.getAttack().isMoveType(MoveType.HIT_FLY) && o.getAttack().getName().equals("Fly") || o.getAttack().getName().equals("Bounce"))
+				&& !(me.getAttack().isMoveType(MoveType.HIT_DIG) && o.getAttack().getName().equals("Dig")) 
+				&& !(me.getAttack().isMoveType(MoveType.HIT_DIVE) && o.getAttack().getName().equals("Dive"))) 
 		{
 			return false;
 		}
 		
-		if (o.hasEffect("Telekinesis")) return true;
+		if (o.hasEffect("Telekinesis")) 
+		{
+			return true;
+		}
 		
 		int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
 		int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this);

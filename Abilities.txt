@@ -516,7 +516,7 @@ Soundproof:
 	Desc: Gives full immunity to all sound-based moves.
 	Int: OpposingBeforeTurnEffect
 	OpposingCanAttack: 
-	if (p.getAttack().isMoveType("SoundBased"))
+	if (p.getAttack().isMoveType(MoveType.SOUND_BASED))
 	{
 		b.printAttacking(p);
 		b.addMessage(opp.getName() + "'s " + this.name + " makes it immune to sound based moves!");
@@ -535,7 +535,7 @@ Reckless:
 Iron Fist:
 	Desc: Boosts the power of punching moves.
 	GetMultiplier: 
-	return user.getAttack().isMoveType("Punching") ? 1.2 : 1;
+	return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
 	###
 	Int: PowerChangeEffect
 *
@@ -807,6 +807,7 @@ Truant:
 		b.addMessage(p.getName() + " is loafing around!");
 		return false;
 	}
+	
 	return true;
 	###
 *
@@ -873,7 +874,7 @@ Anticipation:
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	for (Move m : other.getMoves())
 	{
-		if (Type.getAdvantage(m.getAttack().getType(b, other), victim, b) > 1 || m.getAttack().isMoveType("OneHitKO"))
+		if (Type.getAdvantage(m.getAttack().getType(b, other), victim, b) > 1 || m.getAttack().isMoveType(MoveType.ONE_HIT_KO))
 		{
 			b.addMessage(victim.getName() + "'s " + this.name + " made it shudder!");
 			break;

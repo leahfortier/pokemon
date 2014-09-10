@@ -7,6 +7,7 @@ import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.Battle;
+import battle.Attack.MoveType;
 
 public abstract class BattleEffect extends Effect 
 {
@@ -120,7 +121,7 @@ public abstract class BattleEffect extends Effect
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			if (p.getAttack().isMoveType("Airborne"))
+			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
 			{
 				b.printAttacking(p);
 				b.addMessage(this.getFailMessage(b, p, opp));

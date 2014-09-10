@@ -38,6 +38,7 @@ import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
 import battle.Attack.Category;
+import battle.Attack.MoveType;
 import battle.Battle;
 import battle.Move;
 import battle.effect.ApplyDamageEffect;
@@ -1909,8 +1910,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (!user.getAttack().isMoveType("Powder")) return true;
-			if (user.getAttack().getCategory() == Category.STATUS) b.addMessage(victim.getName() + "'s " + this.name + " protects it from powder moves!");
+			if (!user.getAttack().isMoveType(MoveType.POWDER))
+			{
+				return true;
+			}
+			
+			if (user.getAttack().getCategory() == Category.STATUS)
+			{
+				b.addMessage(victim.getName() + "'s " + this.name + " protects it from powder moves!");
+			}
+			
 			return false;
 		}
 

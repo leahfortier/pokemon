@@ -124,13 +124,22 @@ public abstract class Effect implements Serializable
 	
 	public void decrement(Battle b, ActivePokemon victim)
 	{
-		if (numTurns == 0) Global.error("Number of turns should never be zero before the decrement!! (Effect: " + name + ")");
+		if (numTurns == 0) 
+		{
+			Global.error("Number of turns should never be zero before the decrement!! (Effect: " + name + ")");
+		}
 		
 		// -1 indicates a permanent effect
-		if (numTurns != -1) numTurns--;
+		if (numTurns != -1)
+		{
+			numTurns--;
+		}
 		
 		// All done with this effect! If it's time to subside, do it
-		if (shouldSubside(b, victim)) active = false;
+		if (shouldSubside(b, victim))
+		{
+			active = false;
+		}
 	}
 	
 	// Should be overriden by subclasses as deemed appropriate

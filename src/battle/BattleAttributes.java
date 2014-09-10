@@ -8,6 +8,7 @@ import main.Global;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import battle.Attack.MoveType;
 import battle.effect.Effect;
 import battle.effect.Effect.CastSource;
 import battle.effect.ModifyStageValueEffect;
@@ -109,9 +110,18 @@ public class BattleAttributes implements Serializable
 	// Increment count if the pokemon uses the same move twice in a row
 	public void count()
 	{
-		if (lastMoveUsed == null) counter = 1;
-		else if (selected.getAttack().getName().equals(lastMoveUsed.getAttack().getName())) counter++;
-		else counter = 1;
+		if (lastMoveUsed == null) 
+		{
+			counter = 1;
+		}
+		else if (selected.getAttack().getName().equals(lastMoveUsed.getAttack().getName()))
+		{
+			counter++;
+		}
+		else
+		{
+			counter = 1;
+		}
 	}
 	
 	public void resetCount()
@@ -136,8 +146,14 @@ public class BattleAttributes implements Serializable
 	
 	public void decay()
 	{
-		if (selected.getAttack().isMoveType("SuccessiveDecay")) successionDecayRate *= .5;
-		else successionDecayRate = 1;
+		if (selected.getAttack().isMoveType(MoveType.SUCCESSIVE_DECAY)) 
+		{
+			successionDecayRate *= .5;
+		}
+		else
+		{
+			successionDecayRate = 1;
+		}
 	}
 	
 	public Move getMove() 

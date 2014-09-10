@@ -596,15 +596,23 @@ Rocky Helmet
 		user.reduceHealthFraction(b, 1/8.0);
 		###
 *
-Safety Goggles
+Safety Goggles:
 	Int: HoldItem, EffectBlockerEffect, WeatherBlockerEffect
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.
 	Price: 200
 	Fling: 30
 	ValidMove:
-		if (!user.getAttack().isMoveType("Powder")) return true;
-		if (user.getAttack().getCategory() == Category.STATUS) b.addMessage(victim.getName() + "'s " + this.name + " protects it from powder moves!");
+		if (!user.getAttack().isMoveType(MoveType.POWDER)) 
+		{
+			return true;
+		}
+		
+		if (user.getAttack().getCategory() == Category.STATUS) 
+		{
+			b.addMessage(victim.getName() + "'s " + this.name + " protects it from powder moves!");
+		}
+		
 		return false;
 		###
 	WeatherBlock: return true;

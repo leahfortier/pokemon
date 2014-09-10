@@ -15,6 +15,7 @@ import pokemon.Gender;
 import pokemon.Stat;
 import battle.Attack;
 import battle.Attack.Category;
+import battle.Attack.MoveType;
 import battle.Battle;
 import battle.Move;
 import battle.effect.Status.StatusCondition;
@@ -698,10 +699,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType("ProtectPiercing")) return true;
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING))
+			{
+				return true;
+			}
+			
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
 			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			
 			return false;
 		}
 	}
@@ -1007,7 +1013,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
-			return !(victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType("Encoreless") || victim.hasEffect("Encore"));
+			return !(victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS) || victim.hasEffect("Encore"));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -1453,7 +1459,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			Attack m = other.getAttributes().getLastMoveUsed() == null ? null : other.getAttributes().getLastMoveUsed().getAttack();
 			
-			if (m == null || victim.hasMove(m.getName()) || m.isMoveType("Mimicless"))
+			if (m == null || victim.hasMove(m.getName()) || m.isMoveType(MoveType.MIMICLESS))
 			{
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
@@ -2284,7 +2290,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType("Field") || user.getAttack().isMoveType("SubstitutePiercing"))
+			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING))
 			{
 				return true;
 			}
