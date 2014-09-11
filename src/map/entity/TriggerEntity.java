@@ -44,7 +44,6 @@ public class TriggerEntity extends Entity{
 	}
 	
 	@Override
-	public void addData(GameData data){
-		
-	}
+	public void addData(GameData data){ }
+	public void reset() { }
 }

@@ -64,6 +64,11 @@ public class ItemEntity extends Entity
 		hasTriggered = true;
 	}
 	
+	public void reset()
+	{
+		hasTriggered = false;
+	}
+	
 	public void addData(GameData data)
 	{
 		if (dataCreated)
@@ -80,7 +85,7 @@ public class ItemEntity extends Entity
 										   "dialogue: " + name
 										   );
 		
-		String itemTriggerName = "Item_" + item.replace("\u00e9","e");
+		String itemTriggerName = "Item_" + item.replaceAll("\u00e9|\\\\u00e9", "e").replaceAll("\u2640|\\\\u2640", "O").replaceAll("\u2642|\\\\u2642", "O").replaceAll("[.'-]", "");
 		String itemName = item.replace("_", " ");
 		boolean vowelStart = ("" + item.charAt(0)).matches("[AEIOU]");
 		DialogueSequence d = data.getDialogue(name);

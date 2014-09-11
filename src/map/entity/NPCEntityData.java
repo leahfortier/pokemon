@@ -133,9 +133,6 @@ public class NPCEntityData extends EntityData{
 			//entity = new NPCEntity(x, y, trigger, path, defaultDirection, spriteIndex);
 			entity = new NPCEntity(name, x, y, trigger, path, defaultDirection, spriteIndex, firstDialogue, secondDialogue, trainerInfo, itemInfo, firstTriggers, secondTriggers, walkToPlayer == 1);
 		}
-		else {
-			entity.reset();
-		}
 		return entity;
 	}
 	

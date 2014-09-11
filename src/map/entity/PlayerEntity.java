@@ -222,4 +222,5 @@ public class PlayerEntity extends Entity
 	}
 	
 	public void addData(GameData gameData) {}
+	public void reset() {}
 }

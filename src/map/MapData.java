@@ -115,7 +115,6 @@ public class MapData
 			if (m.group(1) == null)
 			{
 				Scanner in = new Scanner(m.group(4));
-				
 				while (in.hasNext())
 				{
 					String[] xr = in.next().split("-");
@@ -260,6 +259,7 @@ public class MapData
 			if (data.isEntityPresent(character))
 			{
 				Entity e = data.getEntity();
+				e.reset();
 				e.addData(gameData);
 				res[e.charX][e.charY] = e; 
 			}
