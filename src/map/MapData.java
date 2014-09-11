@@ -34,7 +34,9 @@ public class MapData
 		HOP_DOWN(0x00FF00), 
 		HOP_UP(0xFF0000), 
 		HOP_LEFT(0xFFFF00), 
-		HOP_RIGHT(0x00FFFF);
+		HOP_RIGHT(0x00FFFF),
+		STAIRS_UP_RIGHT(0xFF00FF),
+		STAIRS_UP_LEFT(0xFFC800);
 		
 		int value;
 		
@@ -58,7 +60,6 @@ public class MapData
 		BufferedImage bgMap, fgMap, moveMap, areaM = null;
 		
 		String beginFilePath = file.getPath() + Global.FILE_SLASH + name;
-		
 		try 
 		{	
 			bgMap = ImageIO.read(new File(beginFilePath + "_bg.png"));
