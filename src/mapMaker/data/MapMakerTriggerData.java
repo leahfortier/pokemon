@@ -1228,7 +1228,7 @@ public class MapMakerTriggerData {
 		
 		do 
 		{
-			itemEntityName = String.format("%s_Item_%s_%02d",currentMapName, itemType.replaceAll("\u00e9|\\\\u00e9", "e").replaceAll("\u2640|\\\\u2640", "O").replaceAll("\u2642|\\\\u2642", "O"), number++);
+			itemEntityName = String.format("%s_Item_%s_%02d",currentMapName, itemType.replaceAll("\u00e9|\\\\u00e9", "e").replaceAll("\u2640|\\\\u2640", "O").replaceAll("\u2642|\\\\u2642", "O").replaceAll("[.'-]", ""), number++);
 		} 
 		while (entityNames.contains(itemEntityName));
 		

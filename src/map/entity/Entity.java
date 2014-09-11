@@ -112,4 +112,5 @@ public abstract class Entity {
 	public abstract int getTransitionTime();
 	public abstract void getAttention(int d);
 	public abstract void addData(GameData gameData);
+	public abstract void reset();
 }

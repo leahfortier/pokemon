@@ -11,7 +11,7 @@ import trainer.CharacterData;
 public abstract class Trigger 
 {
 	private static final Pattern globalPattern = Pattern.compile("global:\\s*([!]?\\w+)");
-	protected static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*([\\w -]+)", Pattern.UNICODE_CHARACTER_CLASS);
+	protected static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*([\\w -.']+)", Pattern.UNICODE_CHARACTER_CLASS);
 	
 	protected String name;
 	protected ArrayList<String> globals;
