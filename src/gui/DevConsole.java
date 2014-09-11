@@ -89,6 +89,10 @@ public class DevConsole
 			case "global":
 				global(game, in);
 				break;
+			case "Tele":
+			case "Teleport":
+				transition(game, in);
+				break;
 			default:
 				;
 		}
@@ -96,16 +100,46 @@ public class DevConsole
 		in.close();
 	}
 	
+	private void transition(Game game, Scanner in)
+	{
+		if (game.charData == null) 
+		{
+			System.err.println("Can't teleport before loading a player!");
+			return;
+		}
+		if (!in.hasNext())
+		{
+			System.err.println("Teleport to which map?");
+			return;
+		}
+		
+		String mapName = in.next();
+		String mapEntrance = null;
+		
+		if (in.hasNext())
+		{
+			mapEntrance = in.next();
+		}
+		
+		System.out.println("Teleporting Player to map " + mapName +" and to " +(mapEntrance == null? "location (0,0)": "map entrance "+mapEntrance) +".");
+		game.charData.setMap(mapName, mapEntrance);
+		
+		if (mapEntrance != null) 
+		{
+			game.data.getMap(mapName).setCharacterToEntrance(game.charData, mapEntrance);
+		}
+	}
+	
 	private void global(Game game, Scanner in) 
 	{
+		if (game.charData == null) 
+		{
+			System.err.println("Can't give before loading a player!");
+			return;
+		}
 		if (!in.hasNext())
 		{
 			System.err.println("Add what global?");
-			return;
-		}
-		if (game.charData == null) 
-		{
-			System.err.println("Can't give before loading a player!.");
 			return;
 		}
 
