@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import main.Global;
+import main.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import battle.effect.AttackSelectionEffect;
@@ -116,7 +117,7 @@ public class Move implements Serializable
 		List<Move> usable = getUsableMoves(b, p);
 		if (usable.size() == 0)
 		{
-			return new Move(Attack.getAttack("Struggle"));	
+			return new Move(Attack.getAttack(Namesies.STRUGGLE_ATTACK));	
 		}
 		
 		return moveAI(b, p, usable);
@@ -153,7 +154,7 @@ public class Move implements Serializable
 		
 		if (p.user() && getUsableMoves(b, p).size() == 0)
 		{
-			p.setMove(new Move(Attack.getAttack("Struggle")));
+			p.setMove(new Move(Attack.getAttack(Namesies.STRUGGLE_ATTACK)));
 			return true;
 		}
 		

@@ -45,7 +45,7 @@ Override:
 	GetType:
 		Header: Type getType(Battle b, ActivePokemon user)
 		Begin:
-		if (user.hasAbility("Normalize")) 
+		if (user.hasAbility(Namesies.NORMALIZE_ABILITY)) 
 		{
 			return Type.NORMAL;
 		}
@@ -57,7 +57,11 @@ RecoilMove:
 	Recoil:
 		Header: void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		Try: 
-		if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+		if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
+		{
+			return;
+		}
+		
 		b.addMessage(user.getName() + " was hurt by recoil!");
 		b.applyDamage(user, (int)Math.ceil(damage/{0}.0));
 		###
@@ -67,7 +71,7 @@ SelfHealingMove:
 	SelfHealing:
 		Header: void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		Begin:
-		if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 		{
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
@@ -131,7 +135,7 @@ Override:
 		int damage = 0;
 		int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 		
-		if (maxHits == 5 && me.hasAbility("Skill Link")) 
+		if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY)) 
 		{
 			hits = 5;
 		}
@@ -214,7 +218,7 @@ Override:
 			return -1;
 		}
 
-		if (o.hasAbility("Sturdy") && !me.breaksTheMold())
+		if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 		{
 			b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
 			return -1;
@@ -281,7 +285,7 @@ Override:
 		Header: void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		Body:
 		Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-		if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
+		if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 		{
 			if (super.category == Category.STATUS) 
 			{
@@ -290,7 +294,7 @@ Override:
 			return;
 		}
 
-		if (victim.hasAbility("Suction Cups") && !user.breaksTheMold())
+		if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 		{
 			b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
 			return;
@@ -362,10 +366,10 @@ Override:
 		###
 		AddMapField: Cast:
 		super.cast(b, caster, victim, source, printCast);
-		if (caster.isHoldingItem(b, "Grip Claw")) setTurns(5);
+		if (caster.isHoldingItem(b, Namesies.GRIP_CLAW_ITEM)) setTurns(5);
 		###
 		AddMapField: ApplyEndTurn:
-		if (victim.hasAbility("Magic Guard")) 
+		if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
 		{
 			return;
 		}
@@ -373,7 +377,7 @@ Override:
 		b.addMessage(getPartialTrapMessage(victim));
 		
 		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, "Binding Band") ? 1/6.0 : 1/8.0);
+		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
 		###
 	*
 ***
@@ -604,7 +608,7 @@ DamageBlocker:
 ***
 WeatherBlockerEffect:
 	WeatherBlock:
-		Header: boolean block(WeatherType weather)
+		Header: boolean block(Namesies weather)
 	*
 ***
 ApplyDamageEffect:
@@ -730,9 +734,9 @@ RepellingEffect:
 ***
 WeatherExtendingEffect:
 	WeatherType:
-		Header: WeatherType getWeatherType()
+		Header: Namesies getWeatherType()
 		Body:
-		return WeatherType.{00};
+		return Namesies.{00}_EFFECT;
 		###
 	*
 ***

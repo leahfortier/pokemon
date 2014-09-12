@@ -50,6 +50,9 @@ Semi-invulnerable moves shouldn't get a menu in between turns
 
 Look at differences in Roar and other exit battle moves
 
+Bracing effect isn't working -- Roilu used and it still crit it's pants
+Multiturn turn moves need to be reset when pokemon is called back -- Dragonair needed to recharge on the first turn of the next battle after using hyper beam
+
 Ask Josh if High Jump Kick will still fit everywhere since it is now the longest move name
 
 Things to test:

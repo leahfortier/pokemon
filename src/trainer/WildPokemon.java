@@ -3,6 +3,7 @@ package trainer;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.Namesies;
 import pokemon.ActivePokemon;
 import battle.effect.Effect;
 import battle.effect.TeamEffect;
@@ -38,7 +39,7 @@ public class WildPokemon implements Opponent
 		p.getAttributes().setUsed(true);
 	}
 	
-	public boolean hasEffect(String effect)
+	public boolean hasEffect(Namesies effect)
 	{
 		return Effect.hasEffect(effects, effect);
 	}

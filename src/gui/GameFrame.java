@@ -1,5 +1,7 @@
 package gui;
 
+import item.Item;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,11 +12,16 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import battle.Attack;
+import battle.effect.BattleEffect;
+import battle.effect.PokemonEffect;
+import battle.effect.TeamEffect;
 import main.Game;
 import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
 import main.StuffGen;
+import pokemon.Ability;
 import pokemon.PokemonInfo;
 
 public class GameFrame
@@ -30,7 +37,15 @@ public class GameFrame
 		if (GENERATE_STUFF)
 		{
 			new StuffGen();
+			
+			// Make sure these don't throw any errors
 			PokemonInfo.loadPokemonInfo();
+			Attack.loadMoves();
+			PokemonEffect.loadEffects();
+			TeamEffect.loadEffects();
+			BattleEffect.loadEffects();
+			Ability.loadAbilities();
+			Item.loadItems();
 			
 			System.out.println("GEN GEN GEN");
 			

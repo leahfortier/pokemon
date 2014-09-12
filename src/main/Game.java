@@ -53,7 +53,7 @@ public class Game
 	public void addCharStuff()
 	{
 		charData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo("Eevee"), 1, false, true));
-		charData.front().giveItem((HoldItem)Item.getItem("Oran Berry"));
+		charData.front().giveItem((HoldItem)Item.getItem(Namesies.ORAN_BERRY_ITEM));
 	}
 
 	public void update(int dt, InputControl input) 

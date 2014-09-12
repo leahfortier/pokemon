@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import main.Global;
+import main.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
@@ -65,7 +66,6 @@ import battle.effect.Status;
 import battle.effect.Status.StatusCondition;
 import battle.effect.TakeDamageEffect;
 import battle.effect.TeamEffect;
-import battle.effect.Weather.WeatherType;
 import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 
@@ -80,14 +80,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	protected List<BattleBagCategory> bcat;
 	protected int price, index;
 
-	public static boolean exists(String s)
-	{
-		if (map == null)
-			loadItems();
-
-		return map.containsKey(s);
-	}
-
 	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException
 	{
 		ois.defaultReadObject();
@@ -100,24 +92,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 	
-	public Item(String name, String description, BagCategory category, int index)
+	public Item(Namesies name, String description, BagCategory category, int index)
 	{
-		this.name = name;
+		this.name = name.getName();
 		this.desc = description;
 		this.cat = category;
 		this.index = index;
 		
 		this.bcat = new ArrayList<>();
 		this.price = -1;
-	}
-
-	public Item()
-	{
-		this.name = this.desc = "UNDEFINED";
-		this.cat = BagCategory.MISC;
-		bcat = new ArrayList<>();
-		this.price = -1;
-		this.index = 0;
 	}
 
 	public int compareTo(Item o)
@@ -157,26 +140,38 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 	public static Item noneItem()
 	{
-		return getItem("None");
+		return getItem(Namesies.NONE_ITEM);
 	}
 
-	public static Item getItem(String m)
+	// SRSLY DON'T CALL THIS UNLESS YOU'RE READING IT FROM A FILE OR THE DEV CONSOLE OR SOMETHING LIKE THAT I SWEAR TO GOD THIS IS NOT A JOKE FUCK YOU
+	public static Item getItemFromName(String m)
 	{
-		if (map == null)
-			loadItems();
-		if (map.containsKey(m))
+		if (isItem(m))
+		{
 			return map.get(m);
+		}
 
 		Global.error("No such Item " + m);
-		return null;
+		return null;		
+	}
+	
+	public static Item getItem(Namesies m)
+	{
+		return getItemFromName(m.getName());
 	}
 
 	public static boolean isItem(String m)
 	{
 		if (map == null)
+		{
 			loadItems();
+		}
+		
 		if (map.containsKey(m))
+		{
 			return true;
+		}
+		
 		return false;
 	}
 
@@ -498,7 +493,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public None()
 		{
-			super("None", "YOU SHUOLDN'T SEE THIS", BagCategory.MISC, 0);
+			super(Namesies.NONE_ITEM, "YOU SHUOLDN'T SEE THIS", BagCategory.MISC, 0);
 			super.price = -1;
 		}
 
@@ -514,7 +509,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Syrup()
 		{
-			super("Syrup", "A mysterious bottle of syrup. Maybe it will be useful some day.", BagCategory.KEY_ITEM, 1);
+			super(Namesies.SYRUP_ITEM, "A mysterious bottle of syrup. Maybe it will be useful some day.", BagCategory.KEY_ITEM, 1);
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -534,7 +529,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Bicycle()
 		{
-			super("Bicycle", "A folding Bicycle that enables much faster movement than the Running Shoes.", BagCategory.KEY_ITEM, 2);
+			super(Namesies.BICYCLE_ITEM, "A folding Bicycle that enables much faster movement than the Running Shoes.", BagCategory.KEY_ITEM, 2);
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -556,7 +551,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Surfboard()
 		{
-			super("Surfboard", "A fancy shmancy surfboard that lets you be RADICAL DUDE!", BagCategory.KEY_ITEM, 3);
+			super(Namesies.SURFBOARD_ITEM, "A fancy shmancy surfboard that lets you be RADICAL DUDE!", BagCategory.KEY_ITEM, 3);
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -576,7 +571,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FishingRod()
 		{
-			super("Fishing Rod", "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.", BagCategory.KEY_ITEM, 4);
+			super(Namesies.FISHING_ROD_ITEM, "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.", BagCategory.KEY_ITEM, 4);
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -598,7 +593,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public AbsorbBulb()
 		{
-			super("Absorb Bulb", "A consumable bulb. If the holder is hit by a Water-type move, its Sp. Atk will rise.", BagCategory.MISC, 5);
+			super(Namesies.ABSORB_BULB_ITEM, "A consumable bulb. If the holder is hit by a Water-type move, its Sp. Atk will rise.", BagCategory.MISC, 5);
 			super.price = 200;
 		}
 
@@ -632,7 +627,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public AirBalloon()
 		{
-			super("Air Balloon", "When held by a Pok\u00e9mon, the Pok\u00e9mon will float into the air. When the holder is attacked, this item will burst.", BagCategory.MISC, 6);
+			super(Namesies.AIR_BALLOON_ITEM, "When held by a Pok\u00e9mon, the Pok\u00e9mon will float into the air. When the holder is attacked, this item will burst.", BagCategory.MISC, 6);
 			super.price = 200;
 		}
 
@@ -659,7 +654,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public AmuletCoin()
 		{
-			super("Amulet Coin", "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 7);
+			super(Namesies.AMULET_COIN_ITEM, "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 7);
 			super.price = 100;
 		}
 
@@ -670,7 +665,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 	}
 
@@ -680,7 +675,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BigRoot()
 		{
-			super("Big Root", "A Pok\u00e9mon held item that boosts the power of HP-stealing moves to let the holder recover more HP.", BagCategory.MISC, 8);
+			super(Namesies.BIG_ROOT_ITEM, "A Pok\u00e9mon held item that boosts the power of HP-stealing moves to let the holder recover more HP.", BagCategory.MISC, 8);
 			super.price = 200;
 		}
 
@@ -696,7 +691,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BindingBand()
 		{
-			super("Binding Band", "This item, when attached to a Pok\u00e9mon, increases damage caused by moves that constrict the opponent.", BagCategory.MISC, 9);
+			super(Namesies.BINDING_BAND_ITEM, "This item, when attached to a Pok\u00e9mon, increases damage caused by moves that constrict the opponent.", BagCategory.MISC, 9);
 			super.price = 200;
 		}
 
@@ -712,7 +707,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BlackSludge()
 		{
-			super("Black Sludge", "A held item that gradually restores the HP of Poison-type Pok\u00e9mon. It inflicts damage on all other types.", BagCategory.MISC, 10);
+			super(Namesies.BLACK_SLUDGE_ITEM, "A held item that gradually restores the HP of Poison-type Pok\u00e9mon. It inflicts damage on all other types.", BagCategory.MISC, 10);
 			super.price = 200;
 		}
 
@@ -729,7 +724,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				victim.healHealthFraction(1/16.0);
 				b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
 			}
-			else if (!victim.hasAbility("Magic Guard"))
+			else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
 				b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
@@ -743,7 +738,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BrightPowder()
 		{
-			super("Bright Powder", "An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opponent's accuracy.", BagCategory.MISC, 11);
+			super(Namesies.BRIGHT_POWDER_ITEM, "An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opponent's accuracy.", BagCategory.MISC, 11);
 			super.price = 100;
 		}
 
@@ -766,7 +761,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public CellBattery()
 		{
-			super("Cell Battery", "A consumable battery. If the holder is hit by an Electric-type move, its Attack will rise.", BagCategory.MISC, 12);
+			super(Namesies.CELL_BATTERY_ITEM, "A consumable battery. If the holder is hit by an Electric-type move, its Attack will rise.", BagCategory.MISC, 12);
 			super.price = 200;
 		}
 
@@ -800,7 +795,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ChoiceBand()
 		{
-			super("Choice Band", "An item to be held by a Pok\u00e9mon. This headband ups Attack, but allows the use of only one of its moves.", BagCategory.MISC, 13);
+			super(Namesies.CHOICE_BAND_ITEM, "An item to be held by a Pok\u00e9mon. This headband ups Attack, but allows the use of only one of its moves.", BagCategory.MISC, 13);
 			super.price = 100;
 		}
 
@@ -848,7 +843,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ChoiceScarf()
 		{
-			super("Choice Scarf", "An item to be held by a Pok\u00e9mon. This scarf boosts Speed, but allows the use of only one of its moves.", BagCategory.MISC, 14);
+			super(Namesies.CHOICE_SCARF_ITEM, "An item to be held by a Pok\u00e9mon. This scarf boosts Speed, but allows the use of only one of its moves.", BagCategory.MISC, 14);
 			super.price = 200;
 		}
 
@@ -896,7 +891,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ChoiceSpecs()
 		{
-			super("Choice Specs", "An item to be held by a Pok\u00e9mon. These distinctive glasses boost Sp. Atk but allow the use of only one of its moves.", BagCategory.MISC, 15);
+			super(Namesies.CHOICE_SPECS_ITEM, "An item to be held by a Pok\u00e9mon. These distinctive glasses boost Sp. Atk but allow the use of only one of its moves.", BagCategory.MISC, 15);
 			super.price = 200;
 		}
 
@@ -944,7 +939,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public CleanseTag()
 		{
-			super("Cleanse Tag", "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 16);
+			super(Namesies.CLEANSE_TAG_ITEM, "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 16);
 			super.price = 200;
 		}
 
@@ -965,7 +960,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DampRock()
 		{
-			super("Damp Rock", "A Pok\u00e9mon held item that extends the duration of the move Rain Dance used by the holder.", BagCategory.MISC, 17);
+			super(Namesies.DAMP_ROCK_ITEM, "A Pok\u00e9mon held item that extends the duration of the move Rain Dance used by the holder.", BagCategory.MISC, 17);
 			super.price = 200;
 		}
 
@@ -974,9 +969,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 60;
 		}
 
-		public WeatherType getWeatherType()
+		public Namesies getWeatherType()
 		{
-			return WeatherType.RAINING;
+			return Namesies.RAINING_EFFECT;
 		}
 	}
 
@@ -986,7 +981,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HeatRock()
 		{
-			super("Heat Rock", "A Pok\u00e9mon held item that extends the duration of the move Sunny Day used by the holder.", BagCategory.MISC, 18);
+			super(Namesies.HEAT_ROCK_ITEM, "A Pok\u00e9mon held item that extends the duration of the move Sunny Day used by the holder.", BagCategory.MISC, 18);
 			super.price = 200;
 		}
 
@@ -995,9 +990,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 60;
 		}
 
-		public WeatherType getWeatherType()
+		public Namesies getWeatherType()
 		{
-			return WeatherType.SUNNY;
+			return Namesies.SUNNY_EFFECT;
 		}
 	}
 
@@ -1007,7 +1002,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IcyRock()
 		{
-			super("Icy Rock", "A Pok\u00e9mon held item that extends the duration of the move Hail used by the holder.", BagCategory.MISC, 19);
+			super(Namesies.ICY_ROCK_ITEM, "A Pok\u00e9mon held item that extends the duration of the move Hail used by the holder.", BagCategory.MISC, 19);
 			super.price = 200;
 		}
 
@@ -1016,9 +1011,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 40;
 		}
 
-		public WeatherType getWeatherType()
+		public Namesies getWeatherType()
 		{
-			return WeatherType.HAILING;
+			return Namesies.HAILING_EFFECT;
 		}
 	}
 
@@ -1028,7 +1023,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SmoothRock()
 		{
-			super("Smooth Rock", "A Pok\u00e9mon held item that extends the duration of the move Sandstorm used by the holder.", BagCategory.MISC, 20);
+			super(Namesies.SMOOTH_ROCK_ITEM, "A Pok\u00e9mon held item that extends the duration of the move Sandstorm used by the holder.", BagCategory.MISC, 20);
 			super.price = 200;
 		}
 
@@ -1037,9 +1032,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public WeatherType getWeatherType()
+		public Namesies getWeatherType()
 		{
-			return WeatherType.SANDSTORM;
+			return Namesies.SANDSTORM_EFFECT;
 		}
 	}
 
@@ -1049,7 +1044,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public EjectButton()
 		{
-			super("Eject Button", "If the holder is hit by an attack, it will switch with another Pok\u00e9mon in your party.", BagCategory.MISC, 21);
+			super(Namesies.EJECT_BUTTON_ITEM, "If the holder is hit by an attack, it will switch with another Pok\u00e9mon in your party.", BagCategory.MISC, 21);
 			super.price = 200;
 		}
 
@@ -1081,7 +1076,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DestinyKnot()
 		{
-			super("Destiny Knot", "A long, thin, bright-red string to be held by a Pok\u00e9mon. If the holder becomes infatuated, the foe does too.", BagCategory.MISC, 22);
+			super(Namesies.DESTINY_KNOT_ITEM, "A long, thin, bright-red string to be held by a Pok\u00e9mon. If the holder becomes infatuated, the foe does too.", BagCategory.MISC, 22);
 			super.price = 200;
 		}
 
@@ -1097,7 +1092,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ExpertBelt()
 		{
-			super("Expert Belt", "An item to be held by a Pok\u00e9mon. It is a well-worn belt that slightly boosts the power of supereffective moves.", BagCategory.MISC, 23);
+			super(Namesies.EXPERT_BELT_ITEM, "An item to be held by a Pok\u00e9mon. It is a well-worn belt that slightly boosts the power of supereffective moves.", BagCategory.MISC, 23);
 			super.price = 200;
 		}
 
@@ -1118,7 +1113,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FlameOrb()
 		{
-			super("Flame Orb", "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.", BagCategory.MISC, 24);
+			super(Namesies.FLAME_ORB_ITEM, "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.", BagCategory.MISC, 24);
 			super.price = 200;
 		}
 
@@ -1139,7 +1134,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ToxicOrb()
 		{
-			super("Toxic Orb", "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.", BagCategory.MISC, 25);
+			super(Namesies.TOXIC_ORB_ITEM, "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.", BagCategory.MISC, 25);
 			super.price = 200;
 		}
 
@@ -1152,7 +1147,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (Status.applies(StatusCondition.POISONED, b, victim, victim))
 			{
-				victim.addEffect(PokemonEffect.getEffect("BadPoison").newInstance());
+				victim.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
 				Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 			}
 		}
@@ -1164,7 +1159,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FloatStone()
 		{
-			super("Float Stone", "This item, when attached to a Pok\u00e9mon, halves the Pok\u00e9mon's weight for use with attacks that deal with weight", BagCategory.MISC, 26);
+			super(Namesies.FLOAT_STONE_ITEM, "This item, when attached to a Pok\u00e9mon, halves the Pok\u00e9mon's weight for use with attacks that deal with weight", BagCategory.MISC, 26);
 			super.price = 200;
 		}
 
@@ -1180,7 +1175,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FocusBand()
 		{
-			super("Focus Band", "An item to be held by a Pok\u00e9mon. The holder may endure a potential KO attack, leaving it with just 1 HP.", BagCategory.MISC, 27);
+			super(Namesies.FOCUS_BAND_ITEM, "An item to be held by a Pok\u00e9mon. The holder may endure a potential KO attack, leaving it with just 1 HP.", BagCategory.MISC, 27);
 			super.price = 200;
 		}
 
@@ -1206,7 +1201,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FocusSash()
 		{
-			super("Focus Sash", "An item to be held by a Pok\u00e9mon. If it has full HP, the holder will endure one potential KO attack, leaving 1 HP.", BagCategory.MISC, 28);
+			super(Namesies.FOCUS_SASH_ITEM, "An item to be held by a Pok\u00e9mon. If it has full HP, the holder will endure one potential KO attack, leaving 1 HP.", BagCategory.MISC, 28);
 			super.price = 200;
 		}
 
@@ -1237,7 +1232,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GripClaw()
 		{
-			super("Grip Claw", "A Pok\u00e9mon held item that extends the duration of multiturn attacks like Bind and Wrap.", BagCategory.MISC, 29);
+			super(Namesies.GRIP_CLAW_ITEM, "A Pok\u00e9mon held item that extends the duration of multiturn attacks like Bind and Wrap.", BagCategory.MISC, 29);
 			super.price = 200;
 		}
 
@@ -1253,7 +1248,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GriseousOrb()
 		{
-			super("Griseous Orb", "A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.", BagCategory.MISC, 30);
+			super(Namesies.GRISEOUS_ORB_ITEM, "A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.", BagCategory.MISC, 30);
 			super.price = 200;
 		}
 
@@ -1279,7 +1274,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IronBall()
 		{
-			super("Iron Ball", "A Pok\u00e9mon held item that cuts Speed. It makes Flying-type and levitating holders susceptible to Ground moves.", BagCategory.MISC, 31);
+			super(Namesies.IRON_BALL_ITEM, "A Pok\u00e9mon held item that cuts Speed. It makes Flying-type and levitating holders susceptible to Ground moves.", BagCategory.MISC, 31);
 			super.price = 200;
 		}
 
@@ -1302,7 +1297,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LaggingTail()
 		{
-			super("Lagging Tail", "An item to be held by a Pok\u00e9mon. It is tremendously heavy and makes the holder move slower than usual.", BagCategory.MISC, 32);
+			super(Namesies.LAGGING_TAIL_ITEM, "An item to be held by a Pok\u00e9mon. It is tremendously heavy and makes the holder move slower than usual.", BagCategory.MISC, 32);
 			super.price = 200;
 		}
 
@@ -1318,7 +1313,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LifeOrb()
 		{
-			super("Life Orb", "An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.", BagCategory.MISC, 33);
+			super(Namesies.LIFE_ORB_ITEM, "An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.", BagCategory.MISC, 33);
 			super.price = 200;
 		}
 
@@ -1334,7 +1329,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
-			if (user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by its " + this.name + "!");
 			user.reduceHealthFraction(b, .1);
 		}
@@ -1346,7 +1345,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LightBall()
 		{
-			super("Light Ball", "An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.", BagCategory.MISC, 34);
+			super(Namesies.LIGHT_BALL_ITEM, "An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.", BagCategory.MISC, 34);
 			super.price = 100;
 		}
 
@@ -1369,7 +1368,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LightClay()
 		{
-			super("Light Clay", "A Pok\u00e9mon held item that extends the duration of barrier moves like Light Screen and Reflect used by the holder.", BagCategory.MISC, 35);
+			super(Namesies.LIGHT_CLAY_ITEM, "A Pok\u00e9mon held item that extends the duration of barrier moves like Light Screen and Reflect used by the holder.", BagCategory.MISC, 35);
 			super.price = 200;
 		}
 
@@ -1385,7 +1384,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LuckyEgg()
 		{
-			super("Lucky Egg", "An item to be held by a Pok\u00e9mon. It is an egg filled with happiness that earns extra Exp. Points in battle.", BagCategory.MISC, 36);
+			super(Namesies.LUCKY_EGG_ITEM, "An item to be held by a Pok\u00e9mon. It is an egg filled with happiness that earns extra Exp. Points in battle.", BagCategory.MISC, 36);
 			super.price = 200;
 		}
 
@@ -1401,7 +1400,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LuckyPunch()
 		{
-			super("Lucky Punch", "An item to be held by Chansey. It is a pair of gloves that boosts Chansey's critical-hit ratio.", BagCategory.MISC, 37);
+			super(Namesies.LUCKY_PUNCH_ITEM, "An item to be held by Chansey. It is a pair of gloves that boosts Chansey's critical-hit ratio.", BagCategory.MISC, 37);
 			super.price = 10;
 		}
 
@@ -1427,7 +1426,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MachoBrace()
 		{
-			super("Macho Brace", "An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.", BagCategory.MISC, 38);
+			super(Namesies.MACHO_BRACE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.", BagCategory.MISC, 38);
 			super.price = 3000;
 		}
 
@@ -1466,12 +1465,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class MentalHerb extends Item implements HoldItem, EndTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
-		String[] effects = {"Infatuated", "Disable", "Taunt", "Encore", "Torment", "Confusion"};
+		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT};
 		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused"};
 
 		public MentalHerb()
 		{
-			super("Mental Herb", "An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.", BagCategory.MISC, 39);
+			super(Namesies.MENTAL_HERB_ITEM, "An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.", BagCategory.MISC, 39);
 			super.price = 100;
 		}
 
@@ -1485,7 +1484,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			boolean used = false;
 			for (int i = 0; i < effects.length; i++)
 			{
-				String s = effects[i];
+				Namesies s = effects[i];
 				if (victim.hasEffect(s))
 				{
 					used = true;
@@ -1503,7 +1502,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MetalPowder()
 		{
-			super("Metal Powder", "When this item is held by a Ditto, the holder's initial Defence & Special Defence stats are increased by 50%", BagCategory.MISC, 40);
+			super(Namesies.METAL_POWDER_ITEM, "When this item is held by a Ditto, the holder's initial Defence & Special Defence stats are increased by 50%", BagCategory.MISC, 40);
 			super.price = 10;
 		}
 
@@ -1526,7 +1525,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Metronome()
 		{
-			super("Metronome", "A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.", BagCategory.MISC, 41);
+			super(Namesies.METRONOME_ITEM, "A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.", BagCategory.MISC, 41);
 			super.price = 200;
 		}
 
@@ -1547,7 +1546,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MuscleBand()
 		{
-			super("Muscle Band", "An item to be held by a Pok\u00e9mon. It is a headband that slightly boosts the power of physical moves.", BagCategory.MISC, 42);
+			super(Namesies.MUSCLE_BAND_ITEM, "An item to be held by a Pok\u00e9mon. It is a headband that slightly boosts the power of physical moves.", BagCategory.MISC, 42);
 			super.price = 200;
 		}
 
@@ -1568,7 +1567,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PowerAnklet()
 		{
-			super("Power Anklet", "A Pok\u00e9mon held item that promotes Speed gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 43);
+			super(Namesies.POWER_ANKLET_ITEM, "A Pok\u00e9mon held item that promotes Speed gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 43);
 			super.price = 3000;
 		}
 
@@ -1605,7 +1604,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PowerBand()
 		{
-			super("Power Band", "A Pok\u00e9mon held item that promotes Sp. Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 44);
+			super(Namesies.POWER_BAND_ITEM, "A Pok\u00e9mon held item that promotes Sp. Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 44);
 			super.price = 3000;
 		}
 
@@ -1642,7 +1641,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PowerBelt()
 		{
-			super("Power Belt", "A Pok\u00e9mon held item that promotes Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 45);
+			super(Namesies.POWER_BELT_ITEM, "A Pok\u00e9mon held item that promotes Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 45);
 			super.price = 3000;
 		}
 
@@ -1679,7 +1678,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PowerBracer()
 		{
-			super("Power Bracer", "A Pok\u00e9mon held item that promotes Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 46);
+			super(Namesies.POWER_BRACER_ITEM, "A Pok\u00e9mon held item that promotes Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 46);
 			super.price = 3000;
 		}
 
@@ -1716,7 +1715,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PowerLens()
 		{
-			super("Power Lens", "A Pok\u00e9mon held item that promotes Sp. Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 47);
+			super(Namesies.POWER_LENS_ITEM, "A Pok\u00e9mon held item that promotes Sp. Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 47);
 			super.price = 3000;
 		}
 
@@ -1753,7 +1752,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PowerWeight()
 		{
-			super("Power Weight", "A Pok\u00e9mon held item that promotes HP gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 48);
+			super(Namesies.POWER_WEIGHT_ITEM, "A Pok\u00e9mon held item that promotes HP gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 48);
 			super.price = 3000;
 		}
 
@@ -1790,7 +1789,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public QuickClaw()
 		{
-			super("Quick Claw", "An item to be held by a Pok\u00e9mon. A light, sharp claw that lets the bearer move first occasionally.", BagCategory.MISC, 49);
+			super(Namesies.QUICK_CLAW_ITEM, "An item to be held by a Pok\u00e9mon. A light, sharp claw that lets the bearer move first occasionally.", BagCategory.MISC, 49);
 			super.price = 100;
 		}
 
@@ -1806,7 +1805,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public QuickPowder()
 		{
-			super("Quick Powder", "An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.", BagCategory.MISC, 50);
+			super(Namesies.QUICK_POWDER_ITEM, "An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.", BagCategory.MISC, 50);
 			super.price = 10;
 		}
 
@@ -1818,6 +1817,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
+			// TODO: Need to do a namesies-like thing for Pokemon as well
 			if (s == Stat.SPEED && p.isPokemon("Ditto")) stat *= 1.5;
 			return stat;
 		}
@@ -1829,7 +1829,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RedCard()
 		{
-			super("Red Card", "A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.", BagCategory.MISC, 51);
+			super(Namesies.RED_CARD_ITEM, "A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.", BagCategory.MISC, 51);
 			super.price = 200;
 		}
 
@@ -1861,7 +1861,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RingTarget()
 		{
-			super("Ring Target", "Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.", BagCategory.MISC, 52);
+			super(Namesies.RING_TARGET_ITEM, "Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.", BagCategory.MISC, 52);
 			super.price = 200;
 		}
 
@@ -1877,7 +1877,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RockyHelmet()
 		{
-			super("Rocky Helmet", "If the holder of this item takes damage, the attacker will also be damaged upon contact.", BagCategory.MISC, 53);
+			super(Namesies.ROCKY_HELMET_ITEM, "If the holder of this item takes damage, the attacker will also be damaged upon contact.", BagCategory.MISC, 53);
 			super.price = 200;
 		}
 
@@ -1899,7 +1899,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SafetyGoggles()
 		{
-			super("Safety Goggles", "An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.", BagCategory.MISC, 54);
+			super(Namesies.SAFETY_GOGGLES_ITEM, "An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.", BagCategory.MISC, 54);
 			super.price = 200;
 		}
 
@@ -1923,7 +1923,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return false;
 		}
 
-		public boolean block(WeatherType weather)
+		public boolean block(Namesies weather)
 		{
 			return true;
 		}
@@ -1935,7 +1935,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ScopeLens()
 		{
-			super("Scope Lens", "An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.", BagCategory.MISC, 55);
+			super(Namesies.SCOPE_LENS_ITEM, "An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.", BagCategory.MISC, 55);
 			super.price = 200;
 		}
 
@@ -1956,7 +1956,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ShedShell()
 		{
-			super("Shed Shell", "A tough, discarded carapace to be held by a Pok\u00e9mon. It enables the holder to switch with a waiting Pok\u00e9mon in battle.", BagCategory.MISC, 56);
+			super(Namesies.SHED_SHELL_ITEM, "A tough, discarded carapace to be held by a Pok\u00e9mon. It enables the holder to switch with a waiting Pok\u00e9mon in battle.", BagCategory.MISC, 56);
 			super.price = 100;
 		}
 
@@ -1972,7 +1972,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ShellBell()
 		{
-			super("Shell Bell", "An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.", BagCategory.MISC, 57);
+			super(Namesies.SHELL_BELL_ITEM, "An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.", BagCategory.MISC, 57);
 			super.price = 200;
 		}
 
@@ -1996,7 +1996,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SmokeBall()
 		{
-			super("Smoke Ball", "An item to be held by a Pok\u00e9mon. It enables the holder to flee from any wild Pok\u00e9mon without fail.", BagCategory.MISC, 58);
+			super(Namesies.SMOKE_BALL_ITEM, "An item to be held by a Pok\u00e9mon. It enables the holder to flee from any wild Pok\u00e9mon without fail.", BagCategory.MISC, 58);
 			super.price = 200;
 		}
 
@@ -2012,7 +2012,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Snowball()
 		{
-			super("Snowball", "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.", BagCategory.MISC, 59);
+			super(Namesies.SNOWBALL_ITEM, "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.", BagCategory.MISC, 59);
 			super.price = 200;
 		}
 
@@ -2046,7 +2046,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SoulDew()
 		{
-			super("Soul Dew", "If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.", BagCategory.MISC, 60);
+			super(Namesies.SOUL_DEW_ITEM, "If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.", BagCategory.MISC, 60);
 			super.price = 10;
 		}
 
@@ -2069,7 +2069,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Stick()
 		{
-			super("Stick", "An item to be held by Farfetch'd. It is a very long and stiff stalk of leek that boosts the critical-hit ratio.", BagCategory.MISC, 61);
+			super(Namesies.STICK_ITEM, "An item to be held by Farfetch'd. It is a very long and stiff stalk of leek that boosts the critical-hit ratio.", BagCategory.MISC, 61);
 			super.price = 200;
 		}
 
@@ -2096,7 +2096,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public StickyBarb()
 		{
-			super("Sticky Barb", "A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.", BagCategory.MISC, 62);
+			super(Namesies.STICKY_BARB_ITEM, "A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.", BagCategory.MISC, 62);
 			super.price = 200;
 		}
 
@@ -2107,14 +2107,18 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(victim.getName() + " was hurt by its " + this.name + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (!user.hasAbility("Magic Guard"))
+			if (!user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
 				b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 				user.reduceHealthFraction(b, 1/8.0);
@@ -2131,9 +2135,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			item = this;
-			PokemonEffect.getEffect("ChangeItem").cast(b, victim, user, CastSource.HELD_ITEM, false);
+			PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.HELD_ITEM, false);
 			item = Item.noneItem();
-			PokemonEffect.getEffect("ChangeItem").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 
 		public Item getItem()
@@ -2148,7 +2152,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ThickClub()
 		{
-			super("Thick Club", "An item to be held by Cubone or Marowak. It is a hard bone of some sort that boosts the Attack stat.", BagCategory.MISC, 63);
+			super(Namesies.THICK_CLUB_ITEM, "An item to be held by Cubone or Marowak. It is a hard bone of some sort that boosts the Attack stat.", BagCategory.MISC, 63);
 			super.price = 500;
 		}
 
@@ -2171,7 +2175,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WeaknessPolicy()
 		{
-			super("Weakness Policy", "An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.", BagCategory.MISC, 64);
+			super(Namesies.WEAKNESS_POLICY_ITEM, "An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.", BagCategory.MISC, 64);
 			super.price = 200;
 		}
 
@@ -2196,7 +2200,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WhiteHerb()
 		{
-			super("White Herb", "An item to be held by a Pok\u00e9mon. It restores any lowered stat in battle. It can be used only once.", BagCategory.MISC, 65);
+			super(Namesies.WHITE_HERB_ITEM, "An item to be held by a Pok\u00e9mon. It restores any lowered stat in battle. It can be used only once.", BagCategory.MISC, 65);
 			super.price = 100;
 		}
 
@@ -2222,7 +2226,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WideLens()
 		{
-			super("Wide Lens", "An item to be held by a Pok\u00e9mon. It is a magnifying lens that slightly boosts the accuracy of moves.", BagCategory.MISC, 66);
+			super(Namesies.WIDE_LENS_ITEM, "An item to be held by a Pok\u00e9mon. It is a magnifying lens that slightly boosts the accuracy of moves.", BagCategory.MISC, 66);
 			super.price = 200;
 		}
 
@@ -2245,7 +2249,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WiseGlasses()
 		{
-			super("Wise Glasses", "An item to be held by a Pok\u00e9mon. It is a thick pair of glasses that slightly boosts the power of special moves.", BagCategory.MISC, 67);
+			super(Namesies.WISE_GLASSES_ITEM, "An item to be held by a Pok\u00e9mon. It is a thick pair of glasses that slightly boosts the power of special moves.", BagCategory.MISC, 67);
 			super.price = 200;
 		}
 
@@ -2268,7 +2272,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ZoomLens()
 		{
-			super("Zoom Lens", "An item to be held by a Pok\u00e9mon. If the holder moves after its target, its accuracy will be boosted.", BagCategory.MISC, 68);
+			super(Namesies.ZOOM_LENS_ITEM, "An item to be held by a Pok\u00e9mon. If the holder moves after its target, its accuracy will be boosted.", BagCategory.MISC, 68);
 			super.price = 200;
 		}
 
@@ -2291,7 +2295,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FullIncense()
 		{
-			super("Full Incense", "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.", BagCategory.MISC, 69);
+			super(Namesies.FULL_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.", BagCategory.MISC, 69);
 			super.price = 9600;
 		}
 
@@ -2307,7 +2311,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LaxIncense()
 		{
-			super("Lax Incense", "An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.", BagCategory.MISC, 70);
+			super(Namesies.LAX_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.", BagCategory.MISC, 70);
 			super.price = 9600;
 		}
 
@@ -2330,7 +2334,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LuckIncense()
 		{
-			super("Luck Incense", "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 71);
+			super(Namesies.LUCK_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 71);
 			super.price = 9600;
 		}
 
@@ -2341,7 +2345,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 	}
 
@@ -2351,7 +2355,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public OddIncense()
 		{
-			super("Odd Incense", "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.", BagCategory.MISC, 72);
+			super(Namesies.ODD_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.", BagCategory.MISC, 72);
 			super.price = 9600;
 		}
 
@@ -2393,7 +2397,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PureIncense()
 		{
-			super("Pure Incense", "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 73);
+			super(Namesies.PURE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 73);
 			super.price = 9600;
 		}
 
@@ -2414,7 +2418,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RockIncense()
 		{
-			super("Rock Incense", "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.", BagCategory.MISC, 74);
+			super(Namesies.ROCK_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.", BagCategory.MISC, 74);
 			super.price = 9600;
 		}
 
@@ -2456,7 +2460,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RoseIncense()
 		{
-			super("Rose Incense", "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.", BagCategory.MISC, 75);
+			super(Namesies.ROSE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.", BagCategory.MISC, 75);
 			super.price = 9600;
 		}
 
@@ -2498,7 +2502,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SeaIncense()
 		{
-			super("Sea Incense", "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 76);
+			super(Namesies.SEA_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 76);
 			super.price = 9600;
 		}
 
@@ -2540,7 +2544,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WaveIncense()
 		{
-			super("Wave Incense", "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 77);
+			super(Namesies.WAVE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 77);
 			super.price = 9600;
 		}
 
@@ -2582,7 +2586,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DracoPlate()
 		{
-			super("Draco Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dragon-type moves.", BagCategory.MISC, 78);
+			super(Namesies.DRACO_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dragon-type moves.", BagCategory.MISC, 78);
 			super.price = 1000;
 		}
 
@@ -2613,7 +2617,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DreadPlate()
 		{
-			super("Dread Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dark-type moves.", BagCategory.MISC, 79);
+			super(Namesies.DREAD_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dark-type moves.", BagCategory.MISC, 79);
 			super.price = 1000;
 		}
 
@@ -2644,7 +2648,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public EarthPlate()
 		{
-			super("Earth Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ground-type moves.", BagCategory.MISC, 80);
+			super(Namesies.EARTH_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ground-type moves.", BagCategory.MISC, 80);
 			super.price = 1000;
 		}
 
@@ -2675,7 +2679,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FistPlate()
 		{
-			super("Fist Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fighting-type moves.", BagCategory.MISC, 81);
+			super(Namesies.FIST_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fighting-type moves.", BagCategory.MISC, 81);
 			super.price = 1000;
 		}
 
@@ -2706,7 +2710,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FlamePlate()
 		{
-			super("Flame Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fire-type moves.", BagCategory.MISC, 82);
+			super(Namesies.FLAME_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fire-type moves.", BagCategory.MISC, 82);
 			super.price = 1000;
 		}
 
@@ -2737,7 +2741,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IciclePlate()
 		{
-			super("Icicle Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ice-type moves.", BagCategory.MISC, 83);
+			super(Namesies.ICICLE_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ice-type moves.", BagCategory.MISC, 83);
 			super.price = 1000;
 		}
 
@@ -2768,7 +2772,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public InsectPlate()
 		{
-			super("Insect Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Bug-type moves.", BagCategory.MISC, 84);
+			super(Namesies.INSECT_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Bug-type moves.", BagCategory.MISC, 84);
 			super.price = 1000;
 		}
 
@@ -2799,7 +2803,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IronPlate()
 		{
-			super("Iron Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Steel-type moves.", BagCategory.MISC, 85);
+			super(Namesies.IRON_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Steel-type moves.", BagCategory.MISC, 85);
 			super.price = 1000;
 		}
 
@@ -2830,7 +2834,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MeadowPlate()
 		{
-			super("Meadow Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Grass-type moves.", BagCategory.MISC, 86);
+			super(Namesies.MEADOW_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Grass-type moves.", BagCategory.MISC, 86);
 			super.price = 1000;
 		}
 
@@ -2861,7 +2865,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MindPlate()
 		{
-			super("Mind Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Psychic-type moves.", BagCategory.MISC, 87);
+			super(Namesies.MIND_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Psychic-type moves.", BagCategory.MISC, 87);
 			super.price = 1000;
 		}
 
@@ -2892,7 +2896,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SkyPlate()
 		{
-			super("Sky Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Flying-type moves.", BagCategory.MISC, 88);
+			super(Namesies.SKY_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Flying-type moves.", BagCategory.MISC, 88);
 			super.price = 1000;
 		}
 
@@ -2923,7 +2927,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SplashPlate()
 		{
-			super("Splash Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Water-type moves.", BagCategory.MISC, 89);
+			super(Namesies.SPLASH_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Water-type moves.", BagCategory.MISC, 89);
 			super.price = 1000;
 		}
 
@@ -2954,7 +2958,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SpookyPlate()
 		{
-			super("Spooky Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ghost-type moves.", BagCategory.MISC, 90);
+			super(Namesies.SPOOKY_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ghost-type moves.", BagCategory.MISC, 90);
 			super.price = 1000;
 		}
 
@@ -2985,7 +2989,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public StonePlate()
 		{
-			super("Stone Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Rock-type moves.", BagCategory.MISC, 91);
+			super(Namesies.STONE_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Rock-type moves.", BagCategory.MISC, 91);
 			super.price = 1000;
 		}
 
@@ -3016,7 +3020,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ToxicPlate()
 		{
-			super("Toxic Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Poison-type moves.", BagCategory.MISC, 92);
+			super(Namesies.TOXIC_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Poison-type moves.", BagCategory.MISC, 92);
 			super.price = 1000;
 		}
 
@@ -3047,7 +3051,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ZapPlate()
 		{
-			super("Zap Plate", "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Electric-type moves.", BagCategory.MISC, 93);
+			super(Namesies.ZAP_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Electric-type moves.", BagCategory.MISC, 93);
 			super.price = 1000;
 		}
 
@@ -3078,7 +3082,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BurnDrive()
 		{
-			super("Burn Drive", "A cassette to be held by Genesect. It changes Techno Blast to a Fire-type move.", BagCategory.MISC, 94);
+			super(Namesies.BURN_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to a Fire-type move.", BagCategory.MISC, 94);
 			super.price = 1000;
 		}
 
@@ -3099,7 +3103,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ChillDrive()
 		{
-			super("Chill Drive", "A cassette to be held by Genesect. It changes Techno Blast to an Ice-type move.", BagCategory.MISC, 95);
+			super(Namesies.CHILL_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to an Ice-type move.", BagCategory.MISC, 95);
 			super.price = 1000;
 		}
 
@@ -3120,7 +3124,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DouseDrive()
 		{
-			super("Douse Drive", "A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.", BagCategory.MISC, 96);
+			super(Namesies.DOUSE_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.", BagCategory.MISC, 96);
 			super.price = 1000;
 		}
 
@@ -3141,7 +3145,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ShockDrive()
 		{
-			super("Shock Drive", "A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.", BagCategory.MISC, 97);
+			super(Namesies.SHOCK_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.", BagCategory.MISC, 97);
 			super.price = 1000;
 		}
 
@@ -3162,7 +3166,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FireGem()
 		{
-			super("Fire Gem", "A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.", BagCategory.MISC, 98);
+			super(Namesies.FIRE_GEM_ITEM, "A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.", BagCategory.MISC, 98);
 			super.price = 100;
 		}
 
@@ -3204,7 +3208,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WaterGem()
 		{
-			super("Water Gem", "A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.", BagCategory.MISC, 99);
+			super(Namesies.WATER_GEM_ITEM, "A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.", BagCategory.MISC, 99);
 			super.price = 100;
 		}
 
@@ -3246,7 +3250,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ElectricGem()
 		{
-			super("Electric Gem", "A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.", BagCategory.MISC, 100);
+			super(Namesies.ELECTRIC_GEM_ITEM, "A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.", BagCategory.MISC, 100);
 			super.price = 100;
 		}
 
@@ -3288,7 +3292,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GrassGem()
 		{
-			super("Grass Gem", "A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.", BagCategory.MISC, 101);
+			super(Namesies.GRASS_GEM_ITEM, "A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.", BagCategory.MISC, 101);
 			super.price = 100;
 		}
 
@@ -3330,7 +3334,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IceGem()
 		{
-			super("Ice Gem", "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.", BagCategory.MISC, 102);
+			super(Namesies.ICE_GEM_ITEM, "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.", BagCategory.MISC, 102);
 			super.price = 100;
 		}
 
@@ -3372,7 +3376,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FightingGem()
 		{
-			super("Fighting Gem", "A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.", BagCategory.MISC, 103);
+			super(Namesies.FIGHTING_GEM_ITEM, "A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.", BagCategory.MISC, 103);
 			super.price = 100;
 		}
 
@@ -3414,7 +3418,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PoisonGem()
 		{
-			super("Poison Gem", "A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.", BagCategory.MISC, 104);
+			super(Namesies.POISON_GEM_ITEM, "A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.", BagCategory.MISC, 104);
 			super.price = 100;
 		}
 
@@ -3456,7 +3460,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GroundGem()
 		{
-			super("Ground Gem", "A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.", BagCategory.MISC, 105);
+			super(Namesies.GROUND_GEM_ITEM, "A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.", BagCategory.MISC, 105);
 			super.price = 100;
 		}
 
@@ -3498,7 +3502,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FlyingGem()
 		{
-			super("Flying Gem", "A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.", BagCategory.MISC, 106);
+			super(Namesies.FLYING_GEM_ITEM, "A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.", BagCategory.MISC, 106);
 			super.price = 100;
 		}
 
@@ -3540,7 +3544,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PsychicGem()
 		{
-			super("Psychic Gem", "A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.", BagCategory.MISC, 107);
+			super(Namesies.PSYCHIC_GEM_ITEM, "A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.", BagCategory.MISC, 107);
 			super.price = 100;
 		}
 
@@ -3582,7 +3586,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BugGem()
 		{
-			super("Bug Gem", "A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.", BagCategory.MISC, 108);
+			super(Namesies.BUG_GEM_ITEM, "A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.", BagCategory.MISC, 108);
 			super.price = 100;
 		}
 
@@ -3624,7 +3628,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RockGem()
 		{
-			super("Rock Gem", "A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.", BagCategory.MISC, 109);
+			super(Namesies.ROCK_GEM_ITEM, "A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.", BagCategory.MISC, 109);
 			super.price = 100;
 		}
 
@@ -3666,7 +3670,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GhostGem()
 		{
-			super("Ghost Gem", "A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.", BagCategory.MISC, 110);
+			super(Namesies.GHOST_GEM_ITEM, "A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.", BagCategory.MISC, 110);
 			super.price = 100;
 		}
 
@@ -3708,7 +3712,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DragonGem()
 		{
-			super("Dragon Gem", "A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.", BagCategory.MISC, 111);
+			super(Namesies.DRAGON_GEM_ITEM, "A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.", BagCategory.MISC, 111);
 			super.price = 100;
 		}
 
@@ -3750,7 +3754,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DarkGem()
 		{
-			super("Dark Gem", "A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.", BagCategory.MISC, 112);
+			super(Namesies.DARK_GEM_ITEM, "A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.", BagCategory.MISC, 112);
 			super.price = 100;
 		}
 
@@ -3792,7 +3796,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SteelGem()
 		{
-			super("Steel Gem", "A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.", BagCategory.MISC, 113);
+			super(Namesies.STEEL_GEM_ITEM, "A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.", BagCategory.MISC, 113);
 			super.price = 100;
 		}
 
@@ -3834,7 +3838,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public NormalGem()
 		{
-			super("Normal Gem", "A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.", BagCategory.MISC, 114);
+			super(Namesies.NORMAL_GEM_ITEM, "A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.", BagCategory.MISC, 114);
 			super.price = 100;
 		}
 
@@ -3876,7 +3880,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Leftovers()
 		{
-			super("Leftovers", "An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.", BagCategory.MISC, 115);
+			super(Namesies.LEFTOVERS_ITEM, "An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.", BagCategory.MISC, 115);
 			super.price = 200;
 		}
 
@@ -3887,7 +3891,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("Heal Block")) return;
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+			{
+				return;
+			}
+			
 			victim.healHealthFraction(1/16.0);
 			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
 		}
@@ -3899,7 +3907,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BlackBelt()
 		{
-			super("Black Belt", "An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.", BagCategory.MISC, 116);
+			super(Namesies.BLACK_BELT_ITEM, "An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.", BagCategory.MISC, 116);
 			super.price = 9800;
 		}
 
@@ -3941,7 +3949,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BlackGlasses()
 		{
-			super("Black Glasses", "An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.", BagCategory.MISC, 117);
+			super(Namesies.BLACK_GLASSES_ITEM, "An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.", BagCategory.MISC, 117);
 			super.price = 9800;
 		}
 
@@ -3983,7 +3991,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Charcoal()
 		{
-			super("Charcoal", "An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.", BagCategory.MISC, 118);
+			super(Namesies.CHARCOAL_ITEM, "An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.", BagCategory.MISC, 118);
 			super.price = 9800;
 		}
 
@@ -4025,7 +4033,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DragonFang()
 		{
-			super("Dragon Fang", "An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.", BagCategory.MISC, 119);
+			super(Namesies.DRAGON_FANG_ITEM, "An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.", BagCategory.MISC, 119);
 			super.price = 9800;
 		}
 
@@ -4067,7 +4075,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HardStone()
 		{
-			super("Hard Stone", "An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.", BagCategory.MISC, 120);
+			super(Namesies.HARD_STONE_ITEM, "An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.", BagCategory.MISC, 120);
 			super.price = 9800;
 		}
 
@@ -4109,7 +4117,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Magnet()
 		{
-			super("Magnet", "An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.", BagCategory.MISC, 121);
+			super(Namesies.MAGNET_ITEM, "An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.", BagCategory.MISC, 121);
 			super.price = 9800;
 		}
 
@@ -4152,7 +4160,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MetalCoat()
 		{
-			super("Metal Coat", "A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.", BagCategory.MISC, 122);
+			super(Namesies.METAL_COAT_ITEM, "A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.", BagCategory.MISC, 122);
 			super.price = 9800;
 		}
 
@@ -4197,7 +4205,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MiracleSeed()
 		{
-			super("Miracle Seed", "An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.", BagCategory.MISC, 123);
+			super(Namesies.MIRACLE_SEED_ITEM, "An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.", BagCategory.MISC, 123);
 			super.price = 9800;
 		}
 
@@ -4239,7 +4247,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MysticWater()
 		{
-			super("Mystic Water", "An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.", BagCategory.MISC, 124);
+			super(Namesies.MYSTIC_WATER_ITEM, "An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.", BagCategory.MISC, 124);
 			super.price = 9800;
 		}
 
@@ -4281,7 +4289,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public NeverMeltIce()
 		{
-			super("NeverMeltIce", "An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.", BagCategory.MISC, 125);
+			super(Namesies.NEVER_MELT_ICE_ITEM, "An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.", BagCategory.MISC, 125);
 			super.price = 9800;
 		}
 
@@ -4323,7 +4331,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PoisonBarb()
 		{
-			super("Poison Barb", "An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.", BagCategory.MISC, 126);
+			super(Namesies.POISON_BARB_ITEM, "An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.", BagCategory.MISC, 126);
 			super.price = 9800;
 		}
 
@@ -4365,7 +4373,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SharpBeak()
 		{
-			super("Sharp Beak", "An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.", BagCategory.MISC, 127);
+			super(Namesies.SHARP_BEAK_ITEM, "An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.", BagCategory.MISC, 127);
 			super.price = 9800;
 		}
 
@@ -4407,7 +4415,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SilkScarf()
 		{
-			super("Silk Scarf", "An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.", BagCategory.MISC, 128);
+			super(Namesies.SILK_SCARF_ITEM, "An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.", BagCategory.MISC, 128);
 			super.price = 9800;
 		}
 
@@ -4449,7 +4457,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SilverPowder()
 		{
-			super("Silver Powder", "An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.", BagCategory.MISC, 129);
+			super(Namesies.SILVER_POWDER_ITEM, "An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.", BagCategory.MISC, 129);
 			super.price = 9800;
 		}
 
@@ -4491,7 +4499,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SoftSand()
 		{
-			super("Soft Sand", "An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.", BagCategory.MISC, 130);
+			super(Namesies.SOFT_SAND_ITEM, "An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.", BagCategory.MISC, 130);
 			super.price = 9800;
 		}
 
@@ -4533,7 +4541,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SpellTag()
 		{
-			super("Spell Tag", "An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.", BagCategory.MISC, 131);
+			super(Namesies.SPELL_TAG_ITEM, "An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.", BagCategory.MISC, 131);
 			super.price = 9800;
 		}
 
@@ -4575,7 +4583,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public TwistedSpoon()
 		{
-			super("Twisted Spoon", "An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.", BagCategory.MISC, 132);
+			super(Namesies.TWISTED_SPOON_ITEM, "An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.", BagCategory.MISC, 132);
 			super.price = 9800;
 		}
 
@@ -4618,7 +4626,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DawnStone()
 		{
-			super("Dawn Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It sparkles like eyes.", BagCategory.MISC, 133);
+			super(Namesies.DAWN_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It sparkles like eyes.", BagCategory.MISC, 133);
 			super.price = 2100;
 		}
 
@@ -4659,7 +4667,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DeepSeaScale()
 		{
-			super("DeepSeaScale", "An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.", BagCategory.MISC, 134);
+			super(Namesies.DEEP_SEA_SCALE_ITEM, "An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.", BagCategory.MISC, 134);
 			super.price = 200;
 		}
 
@@ -4707,7 +4715,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DeepSeaTooth()
 		{
-			super("DeepSeaTooth", "An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.", BagCategory.MISC, 135);
+			super(Namesies.DEEP_SEA_TOOTH_ITEM, "An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.", BagCategory.MISC, 135);
 			super.price = 200;
 		}
 
@@ -4755,7 +4763,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DragonScale()
 		{
-			super("Dragon Scale", "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC, 136);
+			super(Namesies.DRAGON_SCALE_ITEM, "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC, 136);
 			super.price = 2100;
 		}
 
@@ -4796,7 +4804,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DubiousDisc()
 		{
-			super("Dubious Disc", "A transparent device overflowing with dubious data. Its producer is unknown.", BagCategory.MISC, 137);
+			super(Namesies.DUBIOUS_DISC_ITEM, "A transparent device overflowing with dubious data. Its producer is unknown.", BagCategory.MISC, 137);
 			super.price = 2100;
 		}
 
@@ -4837,7 +4845,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DuskStone()
 		{
-			super("Dusk Stone", "A peculiar stone that makes certain species of Pokémon evolve. It is as dark as dark can be.", BagCategory.MISC, 138);
+			super(Namesies.DUSK_STONE_ITEM, "A peculiar stone that makes certain species of Pokémon evolve. It is as dark as dark can be.", BagCategory.MISC, 138);
 			super.price = 2100;
 		}
 
@@ -4878,7 +4886,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Electirizer()
 		{
-			super("Electirizer", "A box packed with a tremendous amount of electric energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 139);
+			super(Namesies.ELECTIRIZER_ITEM, "A box packed with a tremendous amount of electric energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 139);
 			super.price = 2100;
 		}
 
@@ -4919,7 +4927,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FireStone()
 		{
-			super("Fire Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.", BagCategory.MISC, 140);
+			super(Namesies.FIRE_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.", BagCategory.MISC, 140);
 			super.price = 2100;
 		}
 
@@ -4960,7 +4968,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public KingsRock()
 		{
-			super("King's Rock", "An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.", BagCategory.MISC, 141);
+			super(Namesies.KINGS_ROCK_ITEM, "An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.", BagCategory.MISC, 141);
 			super.price = 100;
 		}
 
@@ -4997,7 +5005,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (Math.random()*100 < 10)
 			{
-				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
+				PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
 				{
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
@@ -5014,7 +5022,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LeafStone()
 		{
-			super("Leaf Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.", BagCategory.MISC, 142);
+			super(Namesies.LEAF_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.", BagCategory.MISC, 142);
 			super.price = 2100;
 		}
 
@@ -5055,7 +5063,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Magmarizer()
 		{
-			super("Magmarizer", "A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 143);
+			super(Namesies.MAGMARIZER_ITEM, "A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 143);
 			super.price = 2100;
 		}
 
@@ -5096,7 +5104,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MoonStone()
 		{
-			super("Moon Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.", BagCategory.MISC, 144);
+			super(Namesies.MOON_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.", BagCategory.MISC, 144);
 			super.price = 2100;
 		}
 
@@ -5137,7 +5145,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public OvalStone()
 		{
-			super("Oval Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.", BagCategory.MISC, 145);
+			super(Namesies.OVAL_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.", BagCategory.MISC, 145);
 			super.price = 2100;
 		}
 
@@ -5177,7 +5185,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Everstone()
 		{
-			super("Everstone", "An item to be held by a Pok\u00e9mon. The Pok\u00e9mon holding this peculiar stone is prevented from evolving.", BagCategory.MISC, 146);
+			super(Namesies.EVERSTONE_ITEM, "An item to be held by a Pok\u00e9mon. The Pok\u00e9mon holding this peculiar stone is prevented from evolving.", BagCategory.MISC, 146);
 			super.price = 200;
 		}
 
@@ -5194,7 +5202,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PrismScale()
 		{
-			super("Prism Scale", "A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.", BagCategory.MISC, 147);
+			super(Namesies.PRISM_SCALE_ITEM, "A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.", BagCategory.MISC, 147);
 			super.price = 500;
 		}
 
@@ -5235,7 +5243,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Protector()
 		{
-			super("Protector", "A protective item of some sort. It is extremely stiff and heavy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 148);
+			super(Namesies.PROTECTOR_ITEM, "A protective item of some sort. It is extremely stiff and heavy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 148);
 			super.price = 2100;
 		}
 
@@ -5276,7 +5284,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RazorClaw()
 		{
-			super("Razor Claw", "An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.", BagCategory.MISC, 149);
+			super(Namesies.RAZOR_CLAW_ITEM, "An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.", BagCategory.MISC, 149);
 			super.price = 2100;
 		}
 
@@ -5322,7 +5330,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RazorFang()
 		{
-			super("Razor Fang", "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`", BagCategory.MISC, 150);
+			super(Namesies.RAZOR_FANG_ITEM, "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`", BagCategory.MISC, 150);
 			super.price = 2100;
 		}
 
@@ -5359,7 +5367,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (Math.random()*100 < 10)
 			{
-				PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
+				PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
 				{
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
@@ -5376,7 +5384,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ReaperCloth()
 		{
-			super("Reaper Cloth", "A cloth imbued with horrifyingly strong spiritual energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 151);
+			super(Namesies.REAPER_CLOTH_ITEM, "A cloth imbued with horrifyingly strong spiritual energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 151);
 			super.price = 2100;
 		}
 
@@ -5417,7 +5425,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ShinyStone()
 		{
-			super("Shiny Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It shines with a dazzling light.", BagCategory.MISC, 152);
+			super(Namesies.SHINY_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It shines with a dazzling light.", BagCategory.MISC, 152);
 			super.price = 2100;
 		}
 
@@ -5458,7 +5466,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SunStone()
 		{
-			super("Sun Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.", BagCategory.MISC, 153);
+			super(Namesies.SUN_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.", BagCategory.MISC, 153);
 			super.price = 2100;
 		}
 
@@ -5499,7 +5507,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ThunderStone()
 		{
-			super("Thunder Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.", BagCategory.MISC, 154);
+			super(Namesies.THUNDER_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.", BagCategory.MISC, 154);
 			super.price = 2100;
 		}
 
@@ -5540,7 +5548,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public UpGrade()
 		{
-			super("Up-Grade", "A transparent device filled with all sorts of data. It was produced by Silph Co.", BagCategory.MISC, 155);
+			super(Namesies.UP_GRADE_ITEM, "A transparent device filled with all sorts of data. It was produced by Silph Co.", BagCategory.MISC, 155);
 			super.price = 2100;
 		}
 
@@ -5581,7 +5589,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WaterStone()
 		{
-			super("Water Stone", "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.", BagCategory.MISC, 156);
+			super(Namesies.WATER_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.", BagCategory.MISC, 156);
 			super.price = 2100;
 		}
 
@@ -5621,7 +5629,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Antidote()
 		{
-			super("Antidote", "A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.", BagCategory.MEDICINE, 157);
+			super(Namesies.ANTIDOTE_ITEM, "A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.", BagCategory.MEDICINE, 157);
 			super.price = 100;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5664,7 +5672,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Awakening()
 		{
-			super("Awakening", "A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE, 158);
+			super(Namesies.AWAKENING_ITEM, "A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE, 158);
 			super.price = 250;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5707,7 +5715,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BurnHeal()
 		{
-			super("Burn Heal", "A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.", BagCategory.MEDICINE, 159);
+			super(Namesies.BURN_HEAL_ITEM, "A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.", BagCategory.MEDICINE, 159);
 			super.price = 250;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5750,7 +5758,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IceHeal()
 		{
-			super("Ice Heal", "A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE, 160);
+			super(Namesies.ICE_HEAL_ITEM, "A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE, 160);
 			super.price = 250;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5793,7 +5801,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ParalyzeHeal()
 		{
-			super("Paralyze Heal", "A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.", BagCategory.MEDICINE, 161);
+			super(Namesies.PARALYZE_HEAL_ITEM, "A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.", BagCategory.MEDICINE, 161);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5836,7 +5844,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FullHeal()
 		{
-			super("Full Heal", "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 162);
+			super(Namesies.FULL_HEAL_ITEM, "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 162);
 			super.price = 250;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5871,7 +5879,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FullRestore()
 		{
-			super("Full Restore", "A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 163);
+			super(Namesies.FULL_RESTORE_ITEM, "A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 163);
 			super.price = 3000;
 			super.bcat.add(BattleBagCategory.HPPP);
 			super.bcat.add(BattleBagCategory.STATUS);
@@ -5909,7 +5917,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Elixir()
 		{
-			super("Elixir", "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 164);
+			super(Namesies.ELIXIR_ITEM, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 164);
 			super.price = 3000;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -5946,7 +5954,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MaxElixir()
 		{
-			super("Max Elixir", "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 165);
+			super(Namesies.MAX_ELIXIR_ITEM, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 165);
 			super.price = 4500;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -5985,7 +5993,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Ether()
 		{
-			super("Ether", "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.", BagCategory.MEDICINE, 166);
+			super(Namesies.ETHER_ITEM, "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.", BagCategory.MEDICINE, 166);
 			super.price = 1200;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6014,7 +6022,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MaxEther()
 		{
-			super("Max Ether", "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.", BagCategory.MEDICINE, 167);
+			super(Namesies.MAX_ETHER_ITEM, "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.", BagCategory.MEDICINE, 167);
 			super.price = 2000;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6042,7 +6050,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BerryJuice()
 		{
-			super("Berry Juice", "A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 168);
+			super(Namesies.BERRY_JUICE_ITEM, "A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 168);
 			super.price = 100;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6079,7 +6087,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SweetHeart()
 		{
-			super("Sweet Heart", "Very sweet chocolate. It restores the HP of one Pok\u00e9mon by only 20 points.", BagCategory.MEDICINE, 169);
+			super(Namesies.SWEET_HEART_ITEM, "Very sweet chocolate. It restores the HP of one Pok\u00e9mon by only 20 points.", BagCategory.MEDICINE, 169);
 			super.price = 100;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6116,7 +6124,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Potion()
 		{
-			super("Potion", "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 170);
+			super(Namesies.POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 170);
 			super.price = 100;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6153,7 +6161,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public EnergyPowder()
 		{
-			super("Energy Powder", "A very bitter medicine powder. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 171);
+			super(Namesies.ENERGY_POWDER_ITEM, "A very bitter medicine powder. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 171);
 			super.price = 500;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6190,7 +6198,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FreshWater()
 		{
-			super("Fresh Water", "Water with a high mineral content. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 172);
+			super(Namesies.FRESH_WATER_ITEM, "Water with a high mineral content. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 172);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6227,7 +6235,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SuperPotion()
 		{
-			super("Super Potion", "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 173);
+			super(Namesies.SUPER_POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 173);
 			super.price = 700;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6264,7 +6272,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SodaPop()
 		{
-			super("Soda Pop", "A fizzy soda drink. It restores the HP of one Pok\u00e9mon by 60 points.", BagCategory.MEDICINE, 174);
+			super(Namesies.SODA_POP_ITEM, "A fizzy soda drink. It restores the HP of one Pok\u00e9mon by 60 points.", BagCategory.MEDICINE, 174);
 			super.price = 300;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6301,7 +6309,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Lemonade()
 		{
-			super("Lemonade", "A very sweet drink. It restores the HP of one Pok\u00e9mon by 80 points.", BagCategory.MEDICINE, 175);
+			super(Namesies.LEMONADE_ITEM, "A very sweet drink. It restores the HP of one Pok\u00e9mon by 80 points.", BagCategory.MEDICINE, 175);
 			super.price = 350;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6338,7 +6346,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MoomooMilk()
 		{
-			super("Moomoo Milk", "Milk with a very high nutrition content. It restores the HP of one Pok\u00e9mon by 100 points.", BagCategory.MEDICINE, 176);
+			super(Namesies.MOOMOO_MILK_ITEM, "Milk with a very high nutrition content. It restores the HP of one Pok\u00e9mon by 100 points.", BagCategory.MEDICINE, 176);
 			super.price = 500;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6375,7 +6383,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public EnergyRoot()
 		{
-			super("Energy Root", "A very bitter root. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 177);
+			super(Namesies.ENERGY_ROOT_ITEM, "A very bitter root. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 177);
 			super.price = 800;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6412,7 +6420,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HyperPotion()
 		{
-			super("Hyper Potion", "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 178);
+			super(Namesies.HYPER_POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 178);
 			super.price = 1200;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6449,7 +6457,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MaxPotion()
 		{
-			super("Max Potion", "A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.", BagCategory.MEDICINE, 179);
+			super(Namesies.MAX_POTION_ITEM, "A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.", BagCategory.MEDICINE, 179);
 			super.price = 2500;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -6481,7 +6489,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Revive()
 		{
-			super("Revive", "A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE, 180);
+			super(Namesies.REVIVE_ITEM, "A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE, 180);
 			super.price = 1500;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -6518,7 +6526,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MaxRevive()
 		{
-			super("Max Revive", "A medicine that revives a fainted Pok\u00e9mon. It fully restores the Pok\u00e9mon's HP.", BagCategory.MEDICINE, 181);
+			super(Namesies.MAX_REVIVE_ITEM, "A medicine that revives a fainted Pok\u00e9mon. It fully restores the Pok\u00e9mon's HP.", BagCategory.MEDICINE, 181);
 			super.price = 4000;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -6550,7 +6558,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RevivalHerb()
 		{
-			super("Revival Herb", "A very bitter medicinal herb. It revives a fainted Pok\u00e9mon, fully restoring its HP.", BagCategory.MEDICINE, 182);
+			super(Namesies.REVIVAL_HERB_ITEM, "A very bitter medicinal herb. It revives a fainted Pok\u00e9mon, fully restoring its HP.", BagCategory.MEDICINE, 182);
 			super.price = 2800;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -6582,7 +6590,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SacredAsh()
 		{
-			super("Sacred Ash", "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE, 183);
+			super(Namesies.SACRED_ASH_ITEM, "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE, 183);
 			super.price = 4000;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -6624,7 +6632,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DireHit()
 		{
-			super("Dire Hit", "It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 184);
+			super(Namesies.DIRE_HIT_ITEM, "It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 184);
 			super.price = 650;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6636,7 +6644,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			PokemonEffect crits = PokemonEffect.getEffect("RaiseCrits");
+			PokemonEffect crits = PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT);
 			if (!crits.applies(b, p, p, CastSource.USE_ITEM))
 			{
 				return false;
@@ -6658,7 +6666,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GuardSpec()
 		{
-			super("Guard Spec.", "An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.", BagCategory.STAT, 185);
+			super(Namesies.GUARD_SPEC_ITEM, "An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.", BagCategory.STAT, 185);
 			super.price = 700;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6670,7 +6678,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			PokemonEffect gSpesh = PokemonEffect.getEffect("GuardSpecial");
+			PokemonEffect gSpesh = PokemonEffect.getEffect(Namesies.GUARD_SPECIAL_EFFECT);
 			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) return false;
 			
 			gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
@@ -6689,7 +6697,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public XAccuracy()
 		{
-			super("X Accuracy", "An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 186);
+			super(Namesies.XACCURACY_ITEM, "An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 186);
 			super.price = 950;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6721,7 +6729,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public XAttack()
 		{
-			super("X Attack", "An item that raises the Attack stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 187);
+			super(Namesies.XATTACK_ITEM, "An item that raises the Attack stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 187);
 			super.price = 500;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6753,7 +6761,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public XDefend()
 		{
-			super("X Defend", "An item that raises the Defense stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 188);
+			super(Namesies.XDEFEND_ITEM, "An item that raises the Defense stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 188);
 			super.price = 550;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6785,7 +6793,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public XSpDef()
 		{
-			super("X Sp. Def", "An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 189);
+			super(Namesies.XSP_DEF_ITEM, "An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 189);
 			super.price = 350;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6817,7 +6825,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public XSpecial()
 		{
-			super("X Special", "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 190);
+			super(Namesies.XSPECIAL_ITEM, "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 190);
 			super.price = 350;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6849,7 +6857,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public XSpeed()
 		{
-			super("X Speed", "An item that raises the Speed stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 191);
+			super(Namesies.XSPEED_ITEM, "An item that raises the Speed stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 191);
 			super.price = 350;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6881,7 +6889,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Calcium()
 		{
-			super("Calcium", "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Atk (Special Attack) stat of a single Pok\u00e9mon.", BagCategory.STAT, 192);
+			super(Namesies.CALCIUM_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Atk (Special Attack) stat of a single Pok\u00e9mon.", BagCategory.STAT, 192);
 			super.price = 9800;
 		}
 
@@ -6920,7 +6928,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Carbos()
 		{
-			super("Carbos", "A nutritious drink for Pok\u00e9mon. It raises the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT, 193);
+			super(Namesies.CARBOS_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT, 193);
 			super.price = 9800;
 		}
 
@@ -6959,7 +6967,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public CleverWing()
 		{
-			super("Clever Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Def stat of a single Pok\u00e9mon.", BagCategory.STAT, 194);
+			super(Namesies.CLEVER_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Def stat of a single Pok\u00e9mon.", BagCategory.STAT, 194);
 			super.price = 3000;
 		}
 
@@ -6998,7 +7006,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HealthWing()
 		{
-			super("Health Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 195);
+			super(Namesies.HEALTH_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 195);
 			super.price = 3000;
 		}
 
@@ -7037,7 +7045,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HPUp()
 		{
-			super("HP Up", "A nutritious drink for Pok\u00e9mon. It raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 196);
+			super(Namesies.HPUP_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 196);
 			super.price = 9800;
 		}
 
@@ -7076,7 +7084,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GeniusWing()
 		{
-			super("Genius Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Atk stat of a single Pok\u00e9mon.", BagCategory.STAT, 197);
+			super(Namesies.GENIUS_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Atk stat of a single Pok\u00e9mon.", BagCategory.STAT, 197);
 			super.price = 3000;
 		}
 
@@ -7115,7 +7123,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Iron()
 		{
-			super("Iron", "A nutritious drink for Pok\u00e9mon. It raises the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 198);
+			super(Namesies.IRON_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 198);
 			super.price = 9800;
 		}
 
@@ -7154,7 +7162,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MuscleWing()
 		{
-			super("Muscle Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 199);
+			super(Namesies.MUSCLE_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 199);
 			super.price = 3000;
 		}
 
@@ -7193,7 +7201,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 private String increase;
 		public PPMax()
 		{
-			super("PP Max", "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 200);
+			super(Namesies.PPMAX_ITEM, "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 200);
 			super.price = 9800;
 		}
 
@@ -7221,7 +7229,7 @@ private String increase;
 
 		public PPUp()
 		{
-			super("PP Up", "It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 201);
+			super(Namesies.PPUP_ITEM, "It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 201);
 			super.price = 9800;
 		}
 
@@ -7248,7 +7256,7 @@ private String increase;
 
 		public Protein()
 		{
-			super("Protein", "A nutritious drink for Pok\u00e9mon. It raises the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 202);
+			super(Namesies.PROTEIN_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 202);
 			super.price = 9800;
 		}
 
@@ -7287,7 +7295,7 @@ private String increase;
 
 		public RareCandy()
 		{
-			super("Rare Candy", "A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.", BagCategory.STAT, 203);
+			super(Namesies.RARE_CANDY_ITEM, "A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.", BagCategory.STAT, 203);
 			super.price = 4800;
 		}
 
@@ -7314,7 +7322,7 @@ private String increase;
 
 		public ResistWing()
 		{
-			super("Resist Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 204);
+			super(Namesies.RESIST_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 204);
 			super.price = 3000;
 		}
 
@@ -7353,7 +7361,7 @@ private String increase;
 
 		public SwiftWing()
 		{
-			super("Swift Wing", "An item for use on a Pok\u00e9mon. It slightly increases the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT, 205);
+			super(Namesies.SWIFT_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT, 205);
 			super.price = 3000;
 		}
 
@@ -7392,7 +7400,7 @@ private String increase;
 
 		public Zinc()
 		{
-			super("Zinc", "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Def (Special Defense) stat of a single Pok\u00e9mon.", BagCategory.STAT, 206);
+			super(Namesies.ZINC_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Def (Special Defense) stat of a single Pok\u00e9mon.", BagCategory.STAT, 206);
 			super.price = 9800;
 		}
 
@@ -7431,7 +7439,7 @@ private String increase;
 
 		public CherishBall()
 		{
-			super("Cherish Ball", "A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.", BagCategory.BALL, 207);
+			super(Namesies.CHERISH_BALL_ITEM, "A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.", BagCategory.BALL, 207);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7452,7 +7460,7 @@ private String increase;
 
 		public DiveBall()
 		{
-			super("Dive Ball", "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.", BagCategory.BALL, 208);
+			super(Namesies.DIVE_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.", BagCategory.BALL, 208);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7475,7 +7483,7 @@ private String increase;
 
 		public DuskBall()
 		{
-			super("Dusk Ball", "A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.", BagCategory.BALL, 209);
+			super(Namesies.DUSK_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.", BagCategory.BALL, 209);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7498,7 +7506,7 @@ private String increase;
 
 		public FastBall()
 		{
-			super("Fast Ball", "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.", BagCategory.BALL, 210);
+			super(Namesies.FAST_BALL_ITEM, "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.", BagCategory.BALL, 210);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7520,7 +7528,7 @@ private String increase;
 
 		public GreatBall()
 		{
-			super("Great Ball", "A good, high-performance Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.", BagCategory.BALL, 211);
+			super(Namesies.GREAT_BALL_ITEM, "A good, high-performance Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.", BagCategory.BALL, 211);
 			super.price = 600;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7541,7 +7549,7 @@ private String increase;
 
 		public HealBall()
 		{
-			super("Heal Ball", "A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.", BagCategory.BALL, 212);
+			super(Namesies.HEAL_BALL_ITEM, "A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.", BagCategory.BALL, 212);
 			super.price = 300;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7564,7 +7572,7 @@ private String increase;
 
 		public HeavyBall()
 		{
-			super("Heavy Ball", "A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.", BagCategory.BALL, 213);
+			super(Namesies.HEAVY_BALL_ITEM, "A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.", BagCategory.BALL, 213);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7595,7 +7603,7 @@ private String increase;
 
 		public LevelBall()
 		{
-			super("Level Ball", "A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.", BagCategory.BALL, 214);
+			super(Namesies.LEVEL_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.", BagCategory.BALL, 214);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7619,7 +7627,7 @@ private String increase;
 
 		public LoveBall()
 		{
-			super("Love Ball", "Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.", BagCategory.BALL, 215);
+			super(Namesies.LOVE_BALL_ITEM, "Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.", BagCategory.BALL, 215);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7641,7 +7649,7 @@ private String increase;
 
 		public LureBall()
 		{
-			super("Lure Ball", "A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.", BagCategory.BALL, 216);
+			super(Namesies.LURE_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.", BagCategory.BALL, 216);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7663,7 +7671,7 @@ private String increase;
 
 		public LuxuryBall()
 		{
-			super("Luxury Ball", "A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.", BagCategory.BALL, 217);
+			super(Namesies.LUXURY_BALL_ITEM, "A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.", BagCategory.BALL, 217);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7685,7 +7693,7 @@ private String increase;
 
 		public MasterBall()
 		{
-			super("Master Ball", "The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.", BagCategory.BALL, 218);
+			super(Namesies.MASTER_BALL_ITEM, "The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.", BagCategory.BALL, 218);
 			super.price = 0;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7706,7 +7714,7 @@ private String increase;
 
 		public MoonBall()
 		{
-			super("Moon Ball", "A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.", BagCategory.BALL, 219);
+			super(Namesies.MOON_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.", BagCategory.BALL, 219);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7729,7 +7737,7 @@ private String increase;
 
 		public NestBall()
 		{
-			super("Nest Ball", "A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.", BagCategory.BALL, 220);
+			super(Namesies.NEST_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.", BagCategory.BALL, 220);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7752,7 +7760,7 @@ private String increase;
 
 		public NetBall()
 		{
-			super("Net Ball", "A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.", BagCategory.BALL, 221);
+			super(Namesies.NET_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.", BagCategory.BALL, 221);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7774,7 +7782,7 @@ private String increase;
 
 		public PokeBall()
 		{
-			super("Pok\u00e9 Ball", "A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.", BagCategory.BALL, 222);
+			super(Namesies.POKE_BALL_ITEM, "A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.", BagCategory.BALL, 222);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7795,7 +7803,7 @@ private String increase;
 
 		public PremierBall()
 		{
-			super("Premier Ball", "A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.", BagCategory.BALL, 223);
+			super(Namesies.PREMIER_BALL_ITEM, "A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.", BagCategory.BALL, 223);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7816,7 +7824,7 @@ private String increase;
 
 		public QuickBall()
 		{
-			super("Quick Ball", "A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.", BagCategory.BALL, 224);
+			super(Namesies.QUICK_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.", BagCategory.BALL, 224);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7838,7 +7846,7 @@ private String increase;
 
 		public RepeatBall()
 		{
-			super("Repeat Ball", "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.", BagCategory.BALL, 225);
+			super(Namesies.REPEAT_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.", BagCategory.BALL, 225);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7860,7 +7868,7 @@ private String increase;
 
 		public SafariBall()
 		{
-			super("Safari Ball", "A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.", BagCategory.BALL, 226);
+			super(Namesies.SAFARI_BALL_ITEM, "A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.", BagCategory.BALL, 226);
 			super.bcat.add(BattleBagCategory.BALL);
 		}
 
@@ -7880,7 +7888,7 @@ private String increase;
 
 		public TimerBall()
 		{
-			super("Timer Ball", "A somewhat different Ball that becomes progressively better the more turns there are in a battle.", BagCategory.BALL, 227);
+			super(Namesies.TIMER_BALL_ITEM, "A somewhat different Ball that becomes progressively better the more turns there are in a battle.", BagCategory.BALL, 227);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7904,7 +7912,7 @@ private String increase;
 
 		public UltraBall()
 		{
-			super("Ultra Ball", "An ultra-performance Ball that provides a higher Pok\u00e9mon catch rate than a Great Ball.", BagCategory.BALL, 228);
+			super(Namesies.ULTRA_BALL_ITEM, "An ultra-performance Ball that provides a higher Pok\u00e9mon catch rate than a Great Ball.", BagCategory.BALL, 228);
 			super.price = 1200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7925,7 +7933,7 @@ private String increase;
 
 		public CheriBerry()
 		{
-			super("Cheri Berry", "If held by a Pok\u00e9mon, it recovers from paralysis.", BagCategory.BERRY, 229);
+			super(Namesies.CHERI_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from paralysis.", BagCategory.BERRY, 229);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -7986,7 +7994,7 @@ private String increase;
 
 		public ChestoBerry()
 		{
-			super("Chesto Berry", "If held by a Pok\u00e9mon, it recovers from sleep.", BagCategory.BERRY, 230);
+			super(Namesies.CHESTO_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from sleep.", BagCategory.BERRY, 230);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8047,7 +8055,7 @@ private String increase;
 
 		public PechaBerry()
 		{
-			super("Pecha Berry", "If held by a Pok\u00e9mon, it recovers from poison.", BagCategory.BERRY, 231);
+			super(Namesies.PECHA_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from poison.", BagCategory.BERRY, 231);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8108,7 +8116,7 @@ private String increase;
 
 		public RawstBerry()
 		{
-			super("Rawst Berry", "If held by a Pok\u00e9mon, it recovers from a burn.", BagCategory.BERRY, 232);
+			super(Namesies.RAWST_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from a burn.", BagCategory.BERRY, 232);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8169,7 +8177,7 @@ private String increase;
 
 		public AspearBerry()
 		{
-			super("Aspear Berry", "If held by a Pok\u00e9mon, it defrosts it.", BagCategory.BERRY, 233);
+			super(Namesies.ASPEAR_BERRY_ITEM, "If held by a Pok\u00e9mon, it defrosts it.", BagCategory.BERRY, 233);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8230,7 +8238,7 @@ private String increase;
 private String restore;
 		public LeppaBerry()
 		{
-			super("Leppa Berry", "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 234);
+			super(Namesies.LEPPA_BERRY_ITEM, "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 234);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -8301,7 +8309,7 @@ private String restore;
 
 		public OranBerry()
 		{
-			super("Oran Berry", "If held by a Pok\u00e9mon, it heals the user by just 10 HP.", BagCategory.BERRY, 235);
+			super(Namesies.ORAN_BERRY_ITEM, "If held by a Pok\u00e9mon, it heals the user by just 10 HP.", BagCategory.BERRY, 235);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -8367,7 +8375,7 @@ private String restore;
 
 		public PersimBerry()
 		{
-			super("Persim Berry", "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 236);
+			super(Namesies.PERSIM_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 236);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -8379,9 +8387,9 @@ private String restore;
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			if (p.hasEffect("Confusion"))
+			if (p.hasEffect(Namesies.CONFUSION_EFFECT))
 			{
-				p.getAttributes().removeEffect("Confusion");
+				p.getAttributes().removeEffect(Namesies.CONFUSION_EFFECT);
 				return true;
 			}
 			
@@ -8418,7 +8426,7 @@ private String restore;
 
 		public LumBerry()
 		{
-			super("Lum Berry", "If held by a Pok\u00e9mon, it recovers from any status problem.", BagCategory.BERRY, 237);
+			super(Namesies.LUM_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from any status problem.", BagCategory.BERRY, 237);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8471,7 +8479,7 @@ private String restore;
 
 		public SitrusBerry()
 		{
-			super("Sitrus Berry", "If held by a Pok\u00e9mon, it heals the user by a little.", BagCategory.BERRY, 238);
+			super(Namesies.SITRUS_BERRY_ITEM, "If held by a Pok\u00e9mon, it heals the user by a little.", BagCategory.BERRY, 238);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.HPPP);
 		}
@@ -8532,7 +8540,7 @@ private String restore;
 
 		public RazzBerry()
 		{
-			super("Razz Berry", "A very valuable berry. Useful for aquiring value.", BagCategory.BERRY, 239);
+			super(Namesies.RAZZ_BERRY_ITEM, "A very valuable berry. Useful for aquiring value.", BagCategory.BERRY, 239);
 			super.price = 60000;
 		}
 
@@ -8558,7 +8566,7 @@ private String restore;
 
 		public PomegBerry()
 		{
-			super("Pomeg Berry", "Using it on a Pok\u00e9mon lowers its base HP.", BagCategory.BERRY, 240);
+			super(Namesies.POMEG_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base HP.", BagCategory.BERRY, 240);
 			super.price = 20;
 		}
 
@@ -8605,7 +8613,7 @@ private String restore;
 
 		public KelpsyBerry()
 		{
-			super("Kelpsy Berry", "Using it on a Pok\u00e9mon lowers its base Attack stat.", BagCategory.BERRY, 241);
+			super(Namesies.KELPSY_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Attack stat.", BagCategory.BERRY, 241);
 			super.price = 20;
 		}
 
@@ -8652,7 +8660,7 @@ private String restore;
 
 		public QualotBerry()
 		{
-			super("Qualot Berry", "Using it on a Pok\u00e9mon lowers its base Defense stat.", BagCategory.BERRY, 242);
+			super(Namesies.QUALOT_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Defense stat.", BagCategory.BERRY, 242);
 			super.price = 20;
 		}
 
@@ -8699,7 +8707,7 @@ private String restore;
 
 		public HondewBerry()
 		{
-			super("Hondew Berry", "Using it on a Pok\u00e9mon lowers its base Sp. Atk stat.", BagCategory.BERRY, 243);
+			super(Namesies.HONDEW_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Sp. Atk stat.", BagCategory.BERRY, 243);
 			super.price = 20;
 		}
 
@@ -8746,7 +8754,7 @@ private String restore;
 
 		public GrepaBerry()
 		{
-			super("Grepa Berry", "Using it on a Pok\u00e9mon lowers its base Sp. Def stat.", BagCategory.BERRY, 244);
+			super(Namesies.GREPA_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Sp. Def stat.", BagCategory.BERRY, 244);
 			super.price = 20;
 		}
 
@@ -8793,7 +8801,7 @@ private String restore;
 
 		public TamatoBerry()
 		{
-			super("Tamato Berry", "Using it on a Pok\u00e9mon lowers its base Speed.", BagCategory.BERRY, 245);
+			super(Namesies.TAMATO_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Speed.", BagCategory.BERRY, 245);
 			super.price = 20;
 		}
 
@@ -8840,7 +8848,7 @@ private String restore;
 
 		public OccaBerry()
 		{
-			super("Occa Berry", "Weakens a supereffective Fire-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 246);
+			super(Namesies.OCCA_BERRY_ITEM, "Weakens a supereffective Fire-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 246);
 			super.price = 20;
 		}
 
@@ -8885,7 +8893,7 @@ private String restore;
 
 		public PasshoBerry()
 		{
-			super("Passho Berry", "Weakens a supereffective Water-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 247);
+			super(Namesies.PASSHO_BERRY_ITEM, "Weakens a supereffective Water-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 247);
 			super.price = 20;
 		}
 
@@ -8930,7 +8938,7 @@ private String restore;
 
 		public WacanBerry()
 		{
-			super("Wacan Berry", "Weakens a supereffective Electric-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 248);
+			super(Namesies.WACAN_BERRY_ITEM, "Weakens a supereffective Electric-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 248);
 			super.price = 20;
 		}
 
@@ -8975,7 +8983,7 @@ private String restore;
 
 		public RindoBerry()
 		{
-			super("Rindo Berry", "Weakens a supereffective Grass-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 249);
+			super(Namesies.RINDO_BERRY_ITEM, "Weakens a supereffective Grass-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 249);
 			super.price = 20;
 		}
 
@@ -9020,7 +9028,7 @@ private String restore;
 
 		public YacheBerry()
 		{
-			super("Yache Berry", "Weakens a supereffective Ice-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 250);
+			super(Namesies.YACHE_BERRY_ITEM, "Weakens a supereffective Ice-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 250);
 			super.price = 20;
 		}
 
@@ -9065,7 +9073,7 @@ private String restore;
 
 		public ChopleBerry()
 		{
-			super("Chople Berry", "Weakens a supereffective Fighting-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 251);
+			super(Namesies.CHOPLE_BERRY_ITEM, "Weakens a supereffective Fighting-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 251);
 			super.price = 20;
 		}
 
@@ -9110,7 +9118,7 @@ private String restore;
 
 		public KebiaBerry()
 		{
-			super("Kebia Berry", "Weakens a supereffective Poison-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 252);
+			super(Namesies.KEBIA_BERRY_ITEM, "Weakens a supereffective Poison-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 252);
 			super.price = 20;
 		}
 
@@ -9155,7 +9163,7 @@ private String restore;
 
 		public ShucaBerry()
 		{
-			super("Shuca Berry", "Weakens a supereffective Ground-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 253);
+			super(Namesies.SHUCA_BERRY_ITEM, "Weakens a supereffective Ground-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 253);
 			super.price = 20;
 		}
 
@@ -9200,7 +9208,7 @@ private String restore;
 
 		public CobaBerry()
 		{
-			super("Coba Berry", "Weakens a supereffective Flying-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 254);
+			super(Namesies.COBA_BERRY_ITEM, "Weakens a supereffective Flying-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 254);
 			super.price = 20;
 		}
 
@@ -9245,7 +9253,7 @@ private String restore;
 
 		public PayapaBerry()
 		{
-			super("Payapa Berry", "Weakens a supereffective Psychic-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 255);
+			super(Namesies.PAYAPA_BERRY_ITEM, "Weakens a supereffective Psychic-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 255);
 			super.price = 20;
 		}
 
@@ -9290,7 +9298,7 @@ private String restore;
 
 		public TangaBerry()
 		{
-			super("Tanga Berry", "Weakens a supereffective Bug-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 256);
+			super(Namesies.TANGA_BERRY_ITEM, "Weakens a supereffective Bug-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 256);
 			super.price = 20;
 		}
 
@@ -9335,7 +9343,7 @@ private String restore;
 
 		public ChartiBerry()
 		{
-			super("Charti Berry", "Weakens a supereffective Rock-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 257);
+			super(Namesies.CHARTI_BERRY_ITEM, "Weakens a supereffective Rock-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 257);
 			super.price = 20;
 		}
 
@@ -9380,7 +9388,7 @@ private String restore;
 
 		public KasibBerry()
 		{
-			super("Kasib Berry", "Weakens a supereffective Ghost-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 258);
+			super(Namesies.KASIB_BERRY_ITEM, "Weakens a supereffective Ghost-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 258);
 			super.price = 20;
 		}
 
@@ -9425,7 +9433,7 @@ private String restore;
 
 		public HabanBerry()
 		{
-			super("Haban Berry", "Weakens a supereffective Dragon-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 259);
+			super(Namesies.HABAN_BERRY_ITEM, "Weakens a supereffective Dragon-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 259);
 			super.price = 20;
 		}
 
@@ -9470,7 +9478,7 @@ private String restore;
 
 		public ColburBerry()
 		{
-			super("Colbur Berry", "Weakens a supereffective Dark-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 260);
+			super(Namesies.COLBUR_BERRY_ITEM, "Weakens a supereffective Dark-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 260);
 			super.price = 20;
 		}
 
@@ -9515,7 +9523,7 @@ private String restore;
 
 		public BabiriBerry()
 		{
-			super("Babiri Berry", "Weakens a supereffective Steel-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 261);
+			super(Namesies.BABIRI_BERRY_ITEM, "Weakens a supereffective Steel-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 261);
 			super.price = 20;
 		}
 
@@ -9560,7 +9568,7 @@ private String restore;
 
 		public ChilanBerry()
 		{
-			super("Chilan Berry", "Weakens a supereffective Normal-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 262);
+			super(Namesies.CHILAN_BERRY_ITEM, "Weakens a supereffective Normal-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 262);
 			super.price = 20;
 		}
 
@@ -9605,7 +9613,7 @@ private String restore;
 
 		public LiechiBerry()
 		{
-			super("Liechi Berry", "If held by a Pok\u00e9mon, it raises its Attack stat in a pinch.", BagCategory.BERRY, 263);
+			super(Namesies.LIECHI_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Attack stat in a pinch.", BagCategory.BERRY, 263);
 			super.price = 20;
 		}
 
@@ -9656,7 +9664,7 @@ private String restore;
 
 		public GanlonBerry()
 		{
-			super("Ganlon Berry", "If held by a Pok\u00e9mon, it raises its Defense stat in a pinch.", BagCategory.BERRY, 264);
+			super(Namesies.GANLON_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Defense stat in a pinch.", BagCategory.BERRY, 264);
 			super.price = 20;
 		}
 
@@ -9707,7 +9715,7 @@ private String restore;
 
 		public SalacBerry()
 		{
-			super("Salac Berry", "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 265);
+			super(Namesies.SALAC_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 265);
 			super.price = 20;
 		}
 
@@ -9758,7 +9766,7 @@ private String restore;
 
 		public PetayaBerry()
 		{
-			super("Petaya Berry", "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 266);
+			super(Namesies.PETAYA_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 266);
 			super.price = 20;
 		}
 
@@ -9809,7 +9817,7 @@ private String restore;
 
 		public ApicotBerry()
 		{
-			super("Apicot Berry", "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 267);
+			super(Namesies.APICOT_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 267);
 			super.price = 20;
 		}
 
@@ -9860,13 +9868,13 @@ private String restore;
 
 		public LansatBerry()
 		{
-			super("Lansat Berry", "If held by a Pok\u00e9mon, it raises its critical-hit ratio in a pinch.", BagCategory.BERRY, 268);
+			super(Namesies.LANSAT_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its critical-hit ratio in a pinch.", BagCategory.BERRY, 268);
 			super.price = 20;
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
 		{
-			PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
+			PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, CastSource.HELD_ITEM, false);
 			b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
 			return true;
 		}
@@ -9903,7 +9911,7 @@ private String restore;
 
 		public StarfBerry()
 		{
-			super("Starf Berry", "If held by a Pok\u00e9mon, it raises a random stat in a pinch.", BagCategory.BERRY, 269);
+			super(Namesies.STARF_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises a random stat in a pinch.", BagCategory.BERRY, 269);
 			super.price = 20;
 		}
 
@@ -9914,7 +9922,7 @@ private String restore;
 			// Raise crit
 			if (rand == Stat.NUM_BATTLE_STATS)
 			{
-				PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
+				PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, CastSource.HELD_ITEM, false);
 				b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
 				return true;
 			}
@@ -9960,7 +9968,7 @@ private String restore;
 
 		public CometShard()
 		{
-			super("Comet Shard", "A shard which fell to the ground when a comet approached. A maniac will buy it for a high price.", BagCategory.MISC, 270);
+			super(Namesies.COMET_SHARD_ITEM, "A shard which fell to the ground when a comet approached. A maniac will buy it for a high price.", BagCategory.MISC, 270);
 			super.price = 120000;
 		}
 
@@ -9976,7 +9984,7 @@ private String restore;
 
 		public TinyMushroom()
 		{
-			super("Tiny Mushroom", "A small and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 271);
+			super(Namesies.TINY_MUSHROOM_ITEM, "A small and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 271);
 			super.price = 500;
 		}
 
@@ -9992,7 +10000,7 @@ private String restore;
 
 		public BigMushroom()
 		{
-			super("Big Mushroom", "A large and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 272);
+			super(Namesies.BIG_MUSHROOM_ITEM, "A large and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 272);
 			super.price = 5000;
 		}
 
@@ -10008,7 +10016,7 @@ private String restore;
 
 		public BalmMushroom()
 		{
-			super("Balm Mushroom", "A rare mushroom which gives off a nice fragrance. A maniac will buy it for a high price.", BagCategory.MISC, 273);
+			super(Namesies.BALM_MUSHROOM_ITEM, "A rare mushroom which gives off a nice fragrance. A maniac will buy it for a high price.", BagCategory.MISC, 273);
 			super.price = 50000;
 		}
 
@@ -10024,7 +10032,7 @@ private String restore;
 
 		public Nugget()
 		{
-			super("Nugget", "A nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.", BagCategory.MISC, 274);
+			super(Namesies.NUGGET_ITEM, "A nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.", BagCategory.MISC, 274);
 			super.price = 10000;
 		}
 
@@ -10040,7 +10048,7 @@ private String restore;
 
 		public BigNugget()
 		{
-			super("Big Nugget", "A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.", BagCategory.MISC, 275);
+			super(Namesies.BIG_NUGGET_ITEM, "A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.", BagCategory.MISC, 275);
 			super.price = 60000;
 		}
 
@@ -10056,7 +10064,7 @@ private String restore;
 
 		public Pearl()
 		{
-			super("Pearl", "A somewhat-small pearl that sparkles in a pretty silver color. It can be sold cheaply to shops.", BagCategory.MISC, 276);
+			super(Namesies.PEARL_ITEM, "A somewhat-small pearl that sparkles in a pretty silver color. It can be sold cheaply to shops.", BagCategory.MISC, 276);
 			super.price = 1400;
 		}
 
@@ -10072,7 +10080,7 @@ private String restore;
 
 		public BigPearl()
 		{
-			super("Big Pearl", "A quite-large pearl that sparkles in a pretty silver color. It can be sold at a high price to shops.", BagCategory.MISC, 277);
+			super(Namesies.BIG_PEARL_ITEM, "A quite-large pearl that sparkles in a pretty silver color. It can be sold at a high price to shops.", BagCategory.MISC, 277);
 			super.price = 7500;
 		}
 
@@ -10088,7 +10096,7 @@ private String restore;
 
 		public Stardust()
 		{
-			super("Stardust", "Lovely, red-colored sand with a loose, silky feel. It can be sold at a high price to shops.", BagCategory.MISC, 278);
+			super(Namesies.STARDUST_ITEM, "Lovely, red-colored sand with a loose, silky feel. It can be sold at a high price to shops.", BagCategory.MISC, 278);
 			super.price = 2000;
 		}
 
@@ -10104,7 +10112,7 @@ private String restore;
 
 		public StarPiece()
 		{
-			super("Star Piece", "A shard of a pretty gem that sparkles in a red color. It can be sold at a high price to shops.", BagCategory.MISC, 279);
+			super(Namesies.STAR_PIECE_ITEM, "A shard of a pretty gem that sparkles in a red color. It can be sold at a high price to shops.", BagCategory.MISC, 279);
 			super.price = 9800;
 		}
 
@@ -10120,7 +10128,7 @@ private String restore;
 
 		public RareBone()
 		{
-			super("Rare Bone", "A bone that is extremely valuable for Pokémon archeology. It can be sold for a high price to shops.", BagCategory.MISC, 280);
+			super(Namesies.RARE_BONE_ITEM, "A bone that is extremely valuable for Pokémon archeology. It can be sold for a high price to shops.", BagCategory.MISC, 280);
 			super.price = 10000;
 		}
 
@@ -10136,7 +10144,7 @@ private String restore;
 
 		public Honey()
 		{
-			super("Honey", "A sweet honey with a lush aroma that attracts wild Pokémon when it is used in grass, caves, or on special trees.", BagCategory.MISC, 281);
+			super(Namesies.HONEY_ITEM, "A sweet honey with a lush aroma that attracts wild Pokémon when it is used in grass, caves, or on special trees.", BagCategory.MISC, 281);
 			super.price = 100;
 		}
 
@@ -10152,7 +10160,7 @@ private String restore;
 
 		public Eviolite()
 		{
-			super("Eviolite", "A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pokémon that can still evolve.", BagCategory.MISC, 282);
+			super(Namesies.EVIOLITE_ITEM, "A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pokémon that can still evolve.", BagCategory.MISC, 282);
 			super.price = 200;
 		}
 
@@ -10175,7 +10183,7 @@ private String restore;
 
 		public HeartScale()
 		{
-			super("Heart Scale", "A pretty, heart-shaped scale that is extremely rare. It glows faintly in the colors of the rainbow.", BagCategory.MISC, 283);
+			super(Namesies.HEART_SCALE_ITEM, "A pretty, heart-shaped scale that is extremely rare. It glows faintly in the colors of the rainbow.", BagCategory.MISC, 283);
 			super.price = 100;
 		}
 
@@ -10191,7 +10199,7 @@ private String restore;
 
 		public Repel()
 		{
-			super("Repel", "An item that prevents weak wild Pok\u00e9mon from appearing for 100 steps after its use.", BagCategory.MISC, 284);
+			super(Namesies.REPEL_ITEM, "An item that prevents weak wild Pok\u00e9mon from appearing for 100 steps after its use.", BagCategory.MISC, 284);
 			super.price = 350;
 		}
 
@@ -10234,7 +10242,7 @@ private String restore;
 
 		public SuperRepel()
 		{
-			super("Super Repel", "An item that prevents weak wild Pokémon from appearing for 200 steps after its use.", BagCategory.MISC, 285);
+			super(Namesies.SUPER_REPEL_ITEM, "An item that prevents weak wild Pokémon from appearing for 200 steps after its use.", BagCategory.MISC, 285);
 			super.price = 500;
 		}
 
@@ -10277,7 +10285,7 @@ private String restore;
 
 		public MaxRepel()
 		{
-			super("Max Repel", "An item that prevents weak wild Pokémon from appearing for 250 steps after its use.", BagCategory.MISC, 286);
+			super(Namesies.MAX_REPEL_ITEM, "An item that prevents weak wild Pokémon from appearing for 250 steps after its use.", BagCategory.MISC, 286);
 			super.price = 700;
 		}
 

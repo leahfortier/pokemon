@@ -17,34 +17,41 @@ public class StuffGen
 	private static String POKEMON_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "PokemonEffect.java";
 	private static String TEAM_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "TeamEffect.java";
 	private static String BATTLE_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "BattleEffect.java";
+	private static String WEATHER_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "Weather.java";
 	private static String MOVE_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "Attack.java";
 	private static String ABILITY_PATH = "src" + Global.FILE_SLASH + "pokemon" + Global.FILE_SLASH + "Ability.java";
+	private static String NAMESIES_PATH = "src" + Global.FILE_SLASH + "main" + Global.FILE_SLASH + "Namesies.java";
 	
 	private static String ITEM_PATH = "src" + Global.FILE_SLASH + "item" + Global.FILE_SLASH + "Item.java", 
 			ITEM_TILES_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "itemTiles" + Global.FILE_SLASH;
 	
 	private enum Generator
 	{
-		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", false),
-		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", true),
-		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", true),
-		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", true),
-		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", true),
-		ITEM_GEN("Items.txt", ITEM_PATH, "Item", false);
+		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", "Attack", false, true),
+		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", "Effect", true, true),
+		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", "Effect", true, true),
+		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", "Effect", true, true),
+		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", "Effect", true, true),
+		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", "Ability", true, true),
+		ITEM_GEN("Items.txt", ITEM_PATH, "Item", "Item", false, true);
 		
 		private String inputPath;
 		private String outputPath;
 		private String superClass;
+		private String appendsies;
 		private boolean activate;
+		private boolean mappity;
 		
 		private String temp;
 		
-		private Generator(String inputPath, String outputPath, String superClass, boolean activate)
+		private Generator(String inputPath, String outputPath, String superClass, String appendsies, boolean activate, boolean mappity)
 		{
 			this.inputPath = inputPath;
 			this.outputPath = outputPath;
 			this.superClass = superClass;
+			this.appendsies = appendsies;
 			this.activate = activate;
+			this.mappity = mappity;
 			
 			this.temp = this.inputPath.substring(0, this.inputPath.length() - 3) + "temp";
 			System.out.println(temp);
@@ -56,14 +63,65 @@ public class StuffGen
 		}
 	}
 	
+	private static StringBuilder namesies;
+	private static boolean firstNamesies;
+	
 	public StuffGen()
 	{
 		readFormat();
+		
+		namesies = new StringBuilder();
+		firstNamesies = true;
 		
 		for (Generator generator : Generator.values())
 		{
 			generator.generate();
 		}
+		
+		writeNamesies();
+	}
+	
+	private static void writeNamesies()
+	{
+		Scanner original = openFile(NAMESIES_PATH);
+		StringBuilder out = new StringBuilder();
+		
+		boolean canPrint = true;
+		boolean outputNamesies = false;
+		
+		while (original.hasNext())
+		{
+			String line = original.nextLine();
+			
+			if (line.contains("// EVERYTHING ABOVE IS GENERATED ###"))
+			{
+				if (!outputNamesies || canPrint)
+				{
+					Global.error("Should not see everything above generated line until after the namesies have been printed");
+				}
+				
+				canPrint = true;
+			}
+			
+			if (canPrint)
+			{
+				out.append(line + "\n");	
+			}
+			
+			if (line.contains("// EVERYTHING BELOW IS GENERATED ###"))
+			{
+				if (outputNamesies)
+				{
+					Global.error("Everything generated line should not be repeated.");
+				}
+				
+				out.append(namesies + ";\n\n");
+				outputNamesies = true;
+				canPrint = false;
+			}
+		}
+		
+		printToFile(NAMESIES_PATH, out);
 	}
 	
 	private static void superGen(Generator gen)
@@ -107,7 +165,6 @@ public class StuffGen
 			String name = line.replace(":", "");
 			
 			HashMap<String, String> fields = new HashMap<>();
-			fields.put("Name", name);
 			
 			while (in.hasNextLine())
 			{
@@ -138,6 +195,12 @@ public class StuffGen
 			
 			String className = fields.get("ClassName");
 			
+			String enumName = Namesies.getNamesies(className, gen.appendsies);
+			fields.put("Namesies", className);
+			
+			namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
+			firstNamesies = false;
+			
 			fields.put("Index", index + "");
 			
 			// NumTurns matches to both MinTurns and MaxTurns
@@ -150,12 +213,9 @@ public class StuffGen
 				fields.remove("NumTurns");
 			}
 			
-			out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");
-			
-			// Breaksies
-			if (fields.get("Name").equals("Pure Incense"))
+			if (gen.mappity)
 			{
-//				break;
+				out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");	
 			}
 
 			List<String> interfaces = new ArrayList<>();
@@ -245,7 +305,11 @@ public class StuffGen
 				break;
 		}
 		
-		out.append("\t}\n\n");
+		if (gen.mappity)
+		{
+			out.append("\t}\n\n");	
+		}
+		
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n"); // DON'T DO IT
 		out.append(classes + "}");
 		
@@ -750,7 +814,19 @@ public class StuffGen
 				break;
 			case "Enum":
 				String enumType = splitInfo[index++];
-				value = enumType + "." + fieldValue.toUpperCase();
+				
+				if (enumType.equals("Namesies"))
+				{
+					String appendsies = splitInfo[index++];
+					value = Namesies.getNamesies(fieldValue, appendsies);
+				}
+				else
+				{
+					value = fieldValue.toUpperCase();	
+				}
+				
+				value = enumType + "." + value;
+				
 				break;
 			case "Function":
 				String functionName = splitInfo[index++];

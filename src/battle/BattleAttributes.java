@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.Global;
+import main.Namesies;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
@@ -171,18 +172,18 @@ public class BattleAttributes implements Serializable
 		effects.add(e.newInstance());
 	}
 	
-	public boolean removeEffect(String effect)
+	public boolean removeEffect(Namesies effect)
 	{
 		return Effect.removeEffect(effects, effect);
 	}
 	
 	// Returns null if the Pokemon is not under the effects of the input effect, otherwise returns the Effect
-	public PokemonEffect getEffect(String effect)
+	public PokemonEffect getEffect(Namesies effect)
 	{
 		return (PokemonEffect)(Effect.getEffect(effects, effect));
 	}
 	
-	public boolean hasEffect(String effect)
+	public boolean hasEffect(Namesies effect)
 	{
 		return Effect.hasEffect(effects, effect);
 	}
@@ -283,9 +284,9 @@ public class BattleAttributes implements Serializable
 		stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
 		
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
-		if (val < 0 && caster != victim && victim.hasAbility("Defiant") && modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.ABILITY))
+		if (val < 0 && caster != victim && victim.hasAbility(Namesies.DEFIANT_ABILITY) && modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.ABILITY))
 		{
-			b.addMessage(victim.getName() + "'s Defiant sharply raised its attack!");
+			b.addMessage(victim.getName() + "'s " + Namesies.DEFIANT_ABILITY.getName() + " sharply raised its attack!");
 		}
 		
 		return true;

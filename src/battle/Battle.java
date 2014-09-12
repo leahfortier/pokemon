@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.Global;
+import main.Namesies;
 import main.Type;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
@@ -63,7 +64,7 @@ public class Battle
 		escapeAttempts = 0;
 		firstAttacking = false;
 		messages = new ArrayDeque<>();
-		weather = Weather.getWeather(Weather.WeatherType.CLEAR_SKIES);
+		weather = Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT);
 		player.enterBattle();
 		
 		if (opponent instanceof Trainer)
@@ -192,7 +193,7 @@ public class Battle
 		messages.add(new MessageUpdate(message, p, move));
 	}
 	
-	public boolean hasEffect(String effect)
+	public boolean hasEffect(Namesies effect)
 	{
 		return Effect.hasEffect(effects, effect);
 	}
@@ -223,7 +224,7 @@ public class Battle
 		for (TeamEffect e : opponent.getEffects()) System.out.println("O " + e);
 		
 		for (BattleEffect e : getEffects()) System.out.println("B " + e);
-		if (weather.getType() != Weather.WeatherType.CLEAR_SKIES) System.out.println("W " + weather);
+		if (weather.namesies() != Namesies.CLEAR_SKIES_EFFECT) System.out.println("W " + weather);
 		
 		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? player.front().getName() + " " : "") + player.front().getStage(i) + (i == 6 ? "\n" : " "));
 		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? opponent.front().getName() + " " : "") + opponent.front().getStage(i) + (i == 6 ? "\n" : " "));
@@ -449,7 +450,7 @@ public class Battle
 		if (!weather.isActive())
 		{
 			addMessage(weather.getSubsideMessage(player.front()));
-			weather = Weather.getWeather(Weather.WeatherType.CLEAR_SKIES);
+			weather = Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT);
 			return;
 		}
 		
@@ -507,12 +508,17 @@ public class Battle
 		
 		if (!success)
 		{
-			me.getAttributes().removeEffect("SelfConfusion");
+			me.getAttributes().removeEffect(Namesies.SELF_CONFUSION_EFFECT);
 			me.getAttributes().resetCount();
 		}
 		
 		me.getAttributes().setLastMoveUsed();
-		if (reduce) me.getMove().reducePP(o.hasAbility("Pressure") ? 2 : 1);
+		
+		if (reduce) 
+		{
+			me.getMove().reducePP(o.hasAbility(Namesies.PRESSURE_ABILITY) ? 2 : 1);
+		}
+		
 		me.getAttributes().setAttacking(false);
 		
 		// Hopefully this doesn't mess anything up but update type at the end of each attack
@@ -662,13 +668,13 @@ public class Battle
 		if (crit)
 		{
 			addMessage("It's a critical hit!!");
-			if (o.hasAbility("Anger Point"))
+			if (o.hasAbility(Namesies.ANGER_POINT_ABILITY))
 			{
 				addMessage(o.getName() + "'s Anger Point raised its attack to the max!");
 				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 			}
 			
-			return me.hasAbility("Sniper") ? 3 : 2;
+			return me.hasAbility(Namesies.SNIPER_ABILITY) ? 3 : 2;
 		}
 		
 		return 1;
@@ -676,6 +682,7 @@ public class Battle
 	
 	public boolean accuracyCheck(ActivePokemon me, ActivePokemon o)
 	{
+		// TODO: Find a way to generalize all these stupid ifs
 		// Self-Target moves and Field moves don't miss
 		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == Category.STATUS) 
 		{
@@ -686,12 +693,14 @@ public class Battle
 		{
 			return true;
 		}
-		if (me.hasEffect("LockOn")) 
+		
+		if (me.hasEffect(Namesies.LOCK_ON_EFFECT)) 
 		{
 			return true;
 		}
 		
-		if ((me.hasAbility("No Guard") || o.hasAbility("No Guard")) && !me.getAttack().isMoveType(MoveType.ONE_HIT_KO)) 
+		if ((me.hasAbility(Namesies.NO_GUARD_ABILITY) || o.hasAbility(Namesies.NO_GUARD_ABILITY)) 
+				&& !me.getAttack().isMoveType(MoveType.ONE_HIT_KO)) 
 		{
 			return true;
 		}
@@ -705,7 +714,7 @@ public class Battle
 			return false;
 		}
 		
-		if (o.hasEffect("Telekinesis")) 
+		if (o.hasEffect(Namesies.TELEKINESIS_EFFECT)) 
 		{
 			return true;
 		}
@@ -763,9 +772,14 @@ public class Battle
 		if (isFighting(p.user()))
 		{
 			int priority = p.getAttack().getPriority(this, p);
-			if (p.getAttack().getCategory() == Category.STATUS && p.hasAbility("Prankster")) priority++;
+			if (p.getAttack().getCategory() == Category.STATUS && p.hasAbility(Namesies.PRANKSTER_ABILITY))	
+			{
+				priority++;
+			}
+			
 			return priority;
 		}
+		
 		return ((Trainer)getTrainer(p.user())).getAction().getPriority();
 	}
 	
@@ -777,20 +791,20 @@ public class Battle
 		if (pPriority != oPriority) return pPriority > oPriority;
 		
 		// Quick Claw gives holder a 20% chance of striking first within its priority bracket
-		boolean pQuick = plyr.isHoldingItem(this, "Quick Claw"), oQuick = opp.isHoldingItem(this, "Quick Claw");
+		boolean pQuick = plyr.isHoldingItem(this, Namesies.QUICK_CLAW_ITEM), oQuick = opp.isHoldingItem(this, Namesies.QUICK_CLAW_ITEM);
 		if (pQuick && !oQuick && Math.random() < .2)
 		{
-			addMessage(plyr.getName() + "'s Quick Claw allowed it to strike first!");
+			addMessage(plyr.getName() + "'s " + Namesies.QUICK_CLAW_ITEM.getName() + " allowed it to strike first!");
 			return true;
 		}
 		if (oQuick && !pQuick && Math.random() < .2)
 		{
-			addMessage(opp.getName() + "'s Quick Claw allowed it to strike first!");
+			addMessage(opp.getName() + "'s " + Namesies.QUICK_CLAW_ITEM.getName() + " allowed it to strike first!");
 			return false;
 		}		
 		
 		// Trick Room makes the slower Pokemon go first
-		boolean reverse = hasEffect("TrickRoom");
+		boolean reverse = hasEffect(Namesies.TRICK_ROOM_EFFECT);
 		
 		// Pokemon that are stalling go last, if both are stalling, the slower one goes first
 		boolean pStall = plyr.isStalling(this), oStall = opp.isStalling(this);

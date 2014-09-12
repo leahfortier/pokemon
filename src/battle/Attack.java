@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import main.Global;
+import main.Namesies;
 import main.Type;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
@@ -47,7 +48,6 @@ import battle.effect.Status;
 import battle.effect.Status.StatusCondition;
 import battle.effect.TakeDamageEffect;
 import battle.effect.TeamEffect;
-import battle.effect.Weather;
 
 public abstract class Attack implements Serializable 
 {
@@ -56,6 +56,7 @@ public abstract class Attack implements Serializable
 	private static HashMap<String, Attack> map; // Mappity map
 	private static List<String> moveNames;
 
+	protected Namesies namesies;
 	protected String name;
 	protected String description;
 	protected int power;
@@ -127,9 +128,10 @@ public abstract class Attack implements Serializable
 		USER_FAINTS
 	}
 
-	public Attack(String s, String d, int p, Type t, Category cat) 
+	public Attack(Namesies s, String d, int p, Type t, Category cat) 
 	{
-		name = s;
+		namesies = s;
+		name = s.getName();
 		description = d;
 		pp = p;
 		type = t;
@@ -224,6 +226,11 @@ public abstract class Attack implements Serializable
 		return pp;
 	}
 	
+	public Namesies namesies()
+	{
+		return namesies;
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -260,7 +267,7 @@ public abstract class Attack implements Serializable
 	
 	public Type getType(Battle b, ActivePokemon user)	
 	{
-		if (user.hasAbility("Normalize")) 
+		if (user.hasAbility(Namesies.NORMALIZE_ABILITY)) 
 		{
 			return Type.NORMAL;
 		}
@@ -291,10 +298,11 @@ public abstract class Attack implements Serializable
 	
 	private ActivePokemon getTarget(Battle b, ActivePokemon me, ActivePokemon o)
 	{
+		// TODO: This stuff shouldn't be hardcoded in here
 		if (selfTarget)
 		{
 			// Snatch steals self-target moves
-			if (category == Category.STATUS && !isMoveType(MoveType.NON_SNATCHABLE) && o.hasEffect("Snatch"))
+			if (category == Category.STATUS && !isMoveType(MoveType.NON_SNATCHABLE) && o.hasEffect(Namesies.SNATCH_EFFECT))
 			{
 				b.addMessage(o.getName() + " snatched " + me.getName() + "'s move!");
 				return o;
@@ -306,11 +314,11 @@ public abstract class Attack implements Serializable
 		if (category == Category.STATUS && !isMoveType(MoveType.FIELD) && !isMoveType(MoveType.NO_MAGIC_COAT))
 		{
 			String bouncy = "";
-			if (o.hasEffect("MagicCoat"))
+			if (o.hasEffect(Namesies.MAGIC_COAT_EFFECT))
 			{
 				bouncy = "Coat";
 			}
-			else if (o.hasAbility("Magic Bounce") && !me.breaksTheMold()) 
+			else if (o.hasAbility(Namesies.MAGIC_BOUNCE_ABILITY) && !me.breaksTheMold()) 
 			{
 				bouncy = "Bounce";
 			}
@@ -327,8 +335,11 @@ public abstract class Attack implements Serializable
 	
 	private boolean canApplyEffects(Battle b, ActivePokemon me, ActivePokemon o)
 	{
-		int chance = effectChance*(me.hasAbility("Serene Grace") ? 2 : 1); 
-		if (Math.random()*100 >= chance) return false;
+		int chance = effectChance*(me.hasAbility(Namesies.SERENE_GRACE_ABILITY) ? 2 : 1); 
+		if (Math.random()*100 >= chance) 
+		{
+			return false;
+		}
 		
 		// Check the opponents effects and see if it will prevent effects from occurring
 		Object[] list = b.getEffectsList(o);
@@ -339,7 +350,10 @@ public abstract class Attack implements Serializable
 		}
 		
 		// Sheer Force prevents the user from having secondary effects for its moves
-		if (me.hasAbility("Sheer Force") && me.getAttack().hasSecondaryEffects()) return false;
+		if (me.hasAbility(Namesies.SHEER_FORCE_ABILITY) && me.getAttack().hasSecondaryEffects()) 
+		{
+			return false;
+		}
 		
 		return true;
 	}
@@ -472,27 +486,41 @@ public abstract class Attack implements Serializable
 	
 	public void startTurn(Battle b, ActivePokemon me) {}
 
-	public static Attack getAttack(String m)
+	// ONLY CALL THIS FUNCTION IF YOU SRSLY LIKE NEED TO LIKE YOU'RE READING FROM A FILE OR SOMETHING OTHERWISE JUST FUCKING USE THE FUCKING NAMESIES I FUCKING MEAN IT
+	public static Attack getAttackFromName(String m)
 	{
-		if (map == null) loadMoves();
-		if (map.containsKey(m)) return map.get(m);
+		if (isAttack(m)) 
+		{
+			return map.get(m);
+		}
 
 		Global.error("No such Move " + m);
 		return null;
 	}
 	
+	public static Attack getAttack(Namesies name)
+	{
+		return getAttackFromName(name.getName());
+	}
+	
 	public static boolean isAttack(String m)
 	{
-		if (map == null) loadMoves();
-		if (map.containsKey(m)) return true;
-
-		return false;
+		if (map == null)
+		{
+			loadMoves();
+		}
+		
+		return map.containsKey(m);
 	}
 
 	// Create and load the Moves map if it doesn't already exist
 	public static void loadMoves() 
 	{
-		if (map != null) return;
+		if (map != null) 
+		{
+			return;
+		}
+		
 		map = new HashMap<>();
 		moveNames = new ArrayList<>();
 
@@ -1053,7 +1081,7 @@ public abstract class Attack implements Serializable
 
 		public Tackle()
 		{
-			super("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", 35, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.TACKLE_ATTACK, "A physical attack in which the user charges and slams into the target with its whole body.", 35, Type.NORMAL, Category.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1066,9 +1094,9 @@ public abstract class Attack implements Serializable
 
 		public LeechSeed()
 		{
-			super("Leech Seed", "A seed is planted on the target. It steals some HP from the target every turn.", 10, Type.GRASS, Category.STATUS);
+			super(Namesies.LEECH_SEED_ATTACK, "A seed is planted on the target. It steals some HP from the target every turn.", 10, Type.GRASS, Category.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("LeechSeed", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.LEECH_SEED_EFFECT, EffectType.POKEMON));
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1084,7 +1112,7 @@ public abstract class Attack implements Serializable
 
 		public ThunderWave()
 		{
-			super("Thunder Wave", "A weak electric charge is launched at the target. It causes paralysis if it hits.", 20, Type.ELECTRIC, Category.STATUS);
+			super(Namesies.THUNDER_WAVE_ATTACK, "A weak electric charge is launched at the target. It causes paralysis if it hits.", 20, Type.ELECTRIC, Category.STATUS);
 			super.accuracy = 100;
 			super.status = StatusCondition.PARALYZED;
 		}
@@ -1103,7 +1131,7 @@ public abstract class Attack implements Serializable
 
 		public PoisonPowder()
 		{
-			super("Poison Powder", "The user scatters a cloud of poisonous dust on the target. It may poison the target.", 35, Type.POISON, Category.STATUS);
+			super(Namesies.POISON_POWDER_ATTACK, "The user scatters a cloud of poisonous dust on the target. It may poison the target.", 35, Type.POISON, Category.STATUS);
 			super.accuracy = 75;
 			super.status = StatusCondition.POISONED;
 			super.moveTypes.add(MoveType.POWDER);
@@ -1116,7 +1144,7 @@ public abstract class Attack implements Serializable
 
 		public SleepPowder()
 		{
-			super("Sleep Powder", "The user scatters a big cloud of sleep-inducing dust around the target.", 15, Type.GRASS, Category.STATUS);
+			super(Namesies.SLEEP_POWDER_ATTACK, "The user scatters a big cloud of sleep-inducing dust around the target.", 15, Type.GRASS, Category.STATUS);
 			super.accuracy = 75;
 			super.status = StatusCondition.ASLEEP;
 			super.moveTypes.add(MoveType.POWDER);
@@ -1129,9 +1157,9 @@ public abstract class Attack implements Serializable
 
 		public Toxic()
 		{
-			super("Toxic", "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", 10, Type.POISON, Category.STATUS);
+			super(Namesies.TOXIC_ATTACK, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", 10, Type.POISON, Category.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("BadPoison", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.BAD_POISON_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -1141,7 +1169,7 @@ public abstract class Attack implements Serializable
 
 		public Ember()
 		{
-			super("Ember", "The target is attacked with small flames. It may also leave the target with a burn.", 25, Type.FIRE, Category.SPECIAL);
+			super(Namesies.EMBER_ATTACK, "The target is attacked with small flames. It may also leave the target with a burn.", 25, Type.FIRE, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -1155,7 +1183,7 @@ public abstract class Attack implements Serializable
 
 		public Growl()
 		{
-			super("Growl", "The user growls in an endearing way, making the opposing team less wary. The foes' Attack stats are lowered.", 40, Type.NORMAL, Category.STATUS);
+			super(Namesies.GROWL_ATTACK, "The user growls in an endearing way, making the opposing team less wary. The foes' Attack stats are lowered.", 40, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.statChanges[Stat.ATTACK.index()] = -1;
@@ -1168,7 +1196,7 @@ public abstract class Attack implements Serializable
 
 		public Scratch()
 		{
-			super("Scratch", "Hard, pointed, and sharp claws rake the target to inflict damage.", 35, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SCRATCH_ATTACK, "Hard, pointed, and sharp claws rake the target to inflict damage.", 35, Type.NORMAL, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1181,7 +1209,7 @@ public abstract class Attack implements Serializable
 
 		public VineWhip()
 		{
-			super("Vine Whip", "The target is struck with slender, whiplike vines to inflict damage.", 25, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.VINE_WHIP_ATTACK, "The target is struck with slender, whiplike vines to inflict damage.", 25, Type.GRASS, Category.PHYSICAL);
 			super.power = 45;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1194,7 +1222,7 @@ public abstract class Attack implements Serializable
 
 		public SonicBoom()
 		{
-			super("Sonic Boom", "The target is hit with a destructive shock wave that always inflicts 20 HP damage.", 20, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.SONIC_BOOM_ATTACK, "The target is hit with a destructive shock wave that always inflicts 20 HP damage.", 20, Type.NORMAL, Category.SPECIAL);
 			super.accuracy = 90;
 		}
 
@@ -1215,7 +1243,7 @@ public abstract class Attack implements Serializable
 
 		public Smokescreen()
 		{
-			super("Smokescreen", "The user releases an obscuring cloud of smoke or ink. It reduces the target's accuracy.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.SMOKESCREEN_ATTACK, "The user releases an obscuring cloud of smoke or ink. It reduces the target's accuracy.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ACCURACY.index()] = -1;
 		}
@@ -1227,7 +1255,7 @@ public abstract class Attack implements Serializable
 
 		public TakeDown()
 		{
-			super("Take Down", "A reckless, full-body charge attack for slamming into the target. It also damages the user a little.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.TAKE_DOWN_ATTACK, "A reckless, full-body charge attack for slamming into the target. It also damages the user a little.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1235,7 +1263,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/4.0));
 		}
@@ -1247,7 +1279,7 @@ public abstract class Attack implements Serializable
 
 		public Struggle()
 		{
-			super("Struggle", "An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.", 1, Type.NONE, Category.PHYSICAL);
+			super(Namesies.STRUGGLE_ATTACK, "An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.", 1, Type.NONE, Category.PHYSICAL);
 			super.power = 50;
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.MIMICLESS);
@@ -1269,7 +1301,7 @@ public abstract class Attack implements Serializable
 
 		public RazorLeaf()
 		{
-			super("Razor Leaf", "Sharp-edged leaves are launched to slash at the opposing team. Critical hits land more easily.", 25, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.RAZOR_LEAF_ATTACK, "Sharp-edged leaves are launched to slash at the opposing team. Critical hits land more easily.", 25, Type.GRASS, Category.PHYSICAL);
 			super.power = 55;
 			super.accuracy = 95;
 		}
@@ -1286,7 +1318,7 @@ public abstract class Attack implements Serializable
 
 		public SweetScent()
 		{
-			super("Sweet Scent", "A sweet scent that lowers the opposing team's evasiveness. It also lures wild Pok\u00e9mon if used in grass, etc.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.SWEET_SCENT_ATTACK, "A sweet scent that lowers the opposing team's evasiveness. It also lures wild Pok\u00e9mon if used in grass, etc.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.EVASION.index()] = -1;
 		}
@@ -1298,7 +1330,7 @@ public abstract class Attack implements Serializable
 
 		public Growth()
 		{
-			super("Growth", "The user's body grows all at once, raising the Attack and Sp. Atk stats.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.GROWTH_ATTACK, "The user's body grows all at once, raising the Attack and Sp. Atk stats.", 20, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.SP_ATTACK.index()] = 1;
@@ -1317,7 +1349,7 @@ public abstract class Attack implements Serializable
 
 		public DoubleEdge()
 		{
-			super("Double-edge", "A reckless, life-risking tackle. It also damages the user by a fairly large amount, however.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.DOUBLE_EDGE_ATTACK, "A reckless, life-risking tackle. It also damages the user by a fairly large amount, however.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1325,7 +1357,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/3.0));
 		}
@@ -1337,7 +1373,7 @@ public abstract class Attack implements Serializable
 
 		public SeedBomb()
 		{
-			super("Seed Bomb", "The user slams a barrage of hard-shelled seeds down on the target from above.", 15, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.SEED_BOMB_ATTACK, "The user slams a barrage of hard-shelled seeds down on the target from above.", 15, Type.GRASS, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 		}
@@ -1349,29 +1385,29 @@ public abstract class Attack implements Serializable
 
 		public Synthesis()
 		{
-			super("Synthesis", "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.GRASS, Category.STATUS);
+			super(Namesies.SYNTHESIS_ATTACK, "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.GRASS, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
-			switch (b.getWeather().getType())
+			switch (b.getWeather().namesies())
 			{
-				case CLEAR_SKIES:
+				case CLEAR_SKIES_EFFECT:
 				victim.healHealthFraction(1/2.0);
 				break;
-				case SUNNY:
+				case SUNNY_EFFECT:
 				victim.healHealthFraction(2/3.0);
 				break;
-				case HAILING:
-				case RAINING:
-				case SANDSTORM:
+				case HAILING_EFFECT:
+				case RAINING_EFFECT:
+				case SANDSTORM_EFFECT:
 				victim.healHealthFraction(1/4.0);
 				break;
 				default:
@@ -1389,13 +1425,13 @@ public abstract class Attack implements Serializable
 
 		public Recover()
 		{
-			super("Recover", "Restoring its own cells, the user restores its own HP by half of its max HP.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.RECOVER_ATTACK, "Restoring its own cells, the user restores its own HP by half of its max HP.", 10, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -1413,7 +1449,7 @@ public abstract class Attack implements Serializable
 
 		public DragonRage()
 		{
-			super("Dragon Rage", "This attack hits the target with a shock wave of pure rage. This attack always inflicts 40 HP damage.", 10, Type.DRAGON, Category.SPECIAL);
+			super(Namesies.DRAGON_RAGE_ATTACK, "This attack hits the target with a shock wave of pure rage. This attack always inflicts 40 HP damage.", 10, Type.DRAGON, Category.SPECIAL);
 			super.accuracy = 100;
 		}
 
@@ -1434,7 +1470,7 @@ public abstract class Attack implements Serializable
 
 		public ScaryFace()
 		{
-			super("Scary Face", "The user frightens the target with a scary face to harshly reduce its Speed stat.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.SCARY_FACE_ATTACK, "The user frightens the target with a scary face to harshly reduce its Speed stat.", 10, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.SPEED.index()] = -2;
 		}
@@ -1446,10 +1482,10 @@ public abstract class Attack implements Serializable
 
 		public FireFang()
 		{
-			super("Fire Fang", "The user bites with flame-cloaked fangs. It may also make the target flinch or leave it burned.", 15, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.FIRE_FANG_ATTACK, "The user bites with flame-cloaked fangs. It may also make the target flinch or leave it burned.", 15, Type.FIRE, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 			super.status = StatusCondition.BURNED;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1468,7 +1504,7 @@ public abstract class Attack implements Serializable
 
 		public FlameBurst()
 		{
-			super("Flame Burst", "The user attacks the target with a bursting flame.", 15, Type.FIRE, Category.SPECIAL);
+			super(Namesies.FLAME_BURST_ATTACK, "The user attacks the target with a bursting flame.", 15, Type.FIRE, Category.SPECIAL);
 			super.power = 70;
 			super.accuracy = 100;
 		}
@@ -1480,10 +1516,10 @@ public abstract class Attack implements Serializable
 
 		public Bite()
 		{
-			super("Bite", "The target is bitten with viciously sharp fangs. It may make the target flinch.", 25, Type.DARK, Category.PHYSICAL);
+			super(Namesies.BITE_ATTACK, "The target is bitten with viciously sharp fangs. It may make the target flinch.", 25, Type.DARK, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -1495,7 +1531,7 @@ public abstract class Attack implements Serializable
 
 		public Slash()
 		{
-			super("Slash", "The target is attacked with a slash of claws or blades. Critical hits land more easily.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SLASH_ATTACK, "The target is attacked with a slash of claws or blades. Critical hits land more easily.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1513,7 +1549,7 @@ public abstract class Attack implements Serializable
 
 		public TailWhip()
 		{
-			super("Tail Whip", "The user wags its tail cutely, making opposing Pok\u00e9mon less wary and lowering their Defense stat.", 30, Type.NORMAL, Category.STATUS);
+			super(Namesies.TAIL_WHIP_ATTACK, "The user wags its tail cutely, making opposing Pok\u00e9mon less wary and lowering their Defense stat.", 30, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.DEFENSE.index()] = -1;
 		}
@@ -1525,7 +1561,7 @@ public abstract class Attack implements Serializable
 
 		public SolarBeam()
 		{
-			super("Solar Beam", "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", 10, Type.GRASS, Category.SPECIAL);
+			super(Namesies.SOLAR_BEAM_ATTACK, "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", 10, Type.GRASS, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -1533,14 +1569,14 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			switch (b.getWeather().getType())
+			switch (b.getWeather().namesies())
 			{
-				case SUNNY:
-				case CLEAR_SKIES:
+				case SUNNY_EFFECT:
+				case CLEAR_SKIES_EFFECT:
 				return super.power;
-				case HAILING:
-				case RAINING:
-				case SANDSTORM:
+				case HAILING_EFFECT:
+				case RAINING_EFFECT:
+				case SANDSTORM_EFFECT:
 				return super.power/2;
 				default:
 				Global.error("Funky weather problems!");
@@ -1550,7 +1586,7 @@ public abstract class Attack implements Serializable
 
 		public boolean isMultiTurn(Battle b)
 		{
-			return b.getWeather().getType() != Weather.WeatherType.SUNNY;
+			return b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
 		}
 
 		public boolean chargesFirst()
@@ -1580,7 +1616,7 @@ public abstract class Attack implements Serializable
 
 		public Flamethrower()
 		{
-			super("Flamethrower", "The target is scorched with an intense blast of fire. It may also leave the target with a burn.", 15, Type.FIRE, Category.SPECIAL);
+			super(Namesies.FLAMETHROWER_ATTACK, "The target is scorched with an intense blast of fire. It may also leave the target with a burn.", 15, Type.FIRE, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -1594,7 +1630,7 @@ public abstract class Attack implements Serializable
 
 		public Fly()
 		{
-			super("Fly", "The user soars, then strikes its target on the second turn. It can also be used for flying to any familiar town.", 15, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.FLY_ATTACK, "The user soars, then strikes its target on the second turn. It can also be used for flying to any familiar town.", 15, Type.FLYING, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -1629,10 +1665,10 @@ public abstract class Attack implements Serializable
 
 		public FireSpin()
 		{
-			super("Fire Spin", "The target becomes trapped within a fierce vortex of fire that rages for four to five turns.", 15, Type.FIRE, Category.SPECIAL);
+			super(Namesies.FIRE_SPIN_ATTACK, "The target becomes trapped within a fierce vortex of fire that rages for four to five turns.", 15, Type.FIRE, Category.SPECIAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect("FireSpin", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FIRE_SPIN_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -1642,7 +1678,7 @@ public abstract class Attack implements Serializable
 
 		public Inferno()
 		{
-			super("Inferno", "The user attacks by engulfing the target in an intense fire. It leaves the target with a burn.", 5, Type.FIRE, Category.SPECIAL);
+			super(Namesies.INFERNO_ATTACK, "The user attacks by engulfing the target in an intense fire. It leaves the target with a burn.", 5, Type.FIRE, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 50;
 			super.status = StatusCondition.BURNED;
@@ -1655,7 +1691,7 @@ public abstract class Attack implements Serializable
 
 		public DragonClaw()
 		{
-			super("Dragon Claw", "The user slashes the target with huge, sharp claws.", 15, Type.DRAGON, Category.PHYSICAL);
+			super(Namesies.DRAGON_CLAW_ATTACK, "The user slashes the target with huge, sharp claws.", 15, Type.DRAGON, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1668,7 +1704,7 @@ public abstract class Attack implements Serializable
 
 		public ShadowClaw()
 		{
-			super("Shadow Claw", "The user slashes with a sharp claw made from shadows. Critical hits land more easily.", 15, Type.GHOST, Category.PHYSICAL);
+			super(Namesies.SHADOW_CLAW_ATTACK, "The user slashes with a sharp claw made from shadows. Critical hits land more easily.", 15, Type.GHOST, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1686,10 +1722,10 @@ public abstract class Attack implements Serializable
 
 		public AirSlash()
 		{
-			super("Air Slash", "The user attacks with a blade of air that slices even the sky. It may also make the target flinch.", 15, Type.FLYING, Category.SPECIAL);
+			super(Namesies.AIR_SLASH_ATTACK, "The user attacks with a blade of air that slices even the sky. It may also make the target flinch.", 15, Type.FLYING, Category.SPECIAL);
 			super.power = 75;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 		}
 	}
@@ -1700,7 +1736,7 @@ public abstract class Attack implements Serializable
 
 		public WingAttack()
 		{
-			super("Wing Attack", "The target is struck with large, imposing wings spread wide to inflict damage.", 35, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.WING_ATTACK_ATTACK, "The target is struck with large, imposing wings spread wide to inflict damage.", 35, Type.FLYING, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1713,7 +1749,7 @@ public abstract class Attack implements Serializable
 
 		public HeatWave()
 		{
-			super("Heat Wave", "The user attacks by exhaling hot breath on the opposing team. It may also leave targets with a burn.", 10, Type.FIRE, Category.SPECIAL);
+			super(Namesies.HEAT_WAVE_ATTACK, "The user attacks by exhaling hot breath on the opposing team. It may also leave targets with a burn.", 10, Type.FIRE, Category.SPECIAL);
 			super.power = 95;
 			super.accuracy = 90;
 			super.effectChance = 10;
@@ -1727,7 +1763,7 @@ public abstract class Attack implements Serializable
 
 		public FlareBlitz()
 		{
-			super("Flare Blitz", "The user cloaks itself in fire and charges at the target. The user sustains serious damage and may leave the target burned.", 15, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.FLARE_BLITZ_ATTACK, "The user cloaks itself in fire and charges at the target. The user sustains serious damage and may leave the target burned.", 15, Type.FIRE, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -1738,7 +1774,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/3.0));
 		}
@@ -1750,7 +1790,7 @@ public abstract class Attack implements Serializable
 
 		public FlashCannon()
 		{
-			super("Flash Cannon", "The user gathers all its light energy and releases it at once. It may also lower the target's Sp. Def stat.", 10, Type.STEEL, Category.SPECIAL);
+			super(Namesies.FLASH_CANNON_ATTACK, "The user gathers all its light energy and releases it at once. It may also lower the target's Sp. Def stat.", 10, Type.STEEL, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -1764,7 +1804,7 @@ public abstract class Attack implements Serializable
 
 		public Bubble()
 		{
-			super("Bubble", "A spray of countless bubbles is jetted at the opposing team. It may also lower the targets' Speed stats.", 30, Type.WATER, Category.SPECIAL);
+			super(Namesies.BUBBLE_ATTACK, "A spray of countless bubbles is jetted at the opposing team. It may also lower the targets' Speed stats.", 30, Type.WATER, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -1778,7 +1818,7 @@ public abstract class Attack implements Serializable
 
 		public Withdraw()
 		{
-			super("Withdraw", "The user withdraws its body into its hard shell, raising its Defense stat.", 40, Type.WATER, Category.STATUS);
+			super(Namesies.WITHDRAW_ATTACK, "The user withdraws its body into its hard shell, raising its Defense stat.", 40, Type.WATER, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 		}
@@ -1790,7 +1830,7 @@ public abstract class Attack implements Serializable
 
 		public WaterGun()
 		{
-			super("Water Gun", "The target is blasted with a forceful shot of water.", 25, Type.WATER, Category.SPECIAL);
+			super(Namesies.WATER_GUN_ATTACK, "The target is blasted with a forceful shot of water.", 25, Type.WATER, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 		}
@@ -1802,7 +1842,7 @@ public abstract class Attack implements Serializable
 
 		public RapidSpin()
 		{
-			super("Rapid Spin", "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.", 40, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.RAPID_SPIN_ATTACK, "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.", 40, Type.NORMAL, Category.PHYSICAL);
 			super.power = 20;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1837,8 +1877,8 @@ public abstract class Attack implements Serializable
 
 		public Reflect()
 		{
-			super("Reflect", "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", 20, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("Reflect", EffectType.TEAM));
+			super(Namesies.REFLECT_ATTACK, "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", 20, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.REFLECT_EFFECT, EffectType.TEAM));
 			super.selfTarget = true;
 		}
 	}
@@ -1849,8 +1889,8 @@ public abstract class Attack implements Serializable
 
 		public Protect()
 		{
-			super("Protect", "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", 10, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Protecting", EffectType.POKEMON));
+			super(Namesies.PROTECT_ATTACK, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", 10, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.PROTECTING_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1865,8 +1905,8 @@ public abstract class Attack implements Serializable
 
 		public Detect()
 		{
-			super("Detect", "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", 5, Type.FIGHTING, Category.STATUS);
-			super.effects.add(Effect.getEffect("Protecting", EffectType.POKEMON));
+			super(Namesies.DETECT_ATTACK, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", 5, Type.FIGHTING, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.PROTECTING_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1881,8 +1921,8 @@ public abstract class Attack implements Serializable
 
 		public QuickGuard()
 		{
-			super("Quick Guard", "The user protects itself and its allies from priority moves. If used in succession, its chance of failing rises.", 15, Type.FIGHTING, Category.STATUS);
-			super.effects.add(Effect.getEffect("QuickGuard", EffectType.POKEMON));
+			super(Namesies.QUICK_GUARD_ATTACK, "The user protects itself and its allies from priority moves. If used in succession, its chance of failing rises.", 15, Type.FIGHTING, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.QUICK_GUARD_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.selfTarget = true;
@@ -1896,8 +1936,8 @@ public abstract class Attack implements Serializable
 
 		public Endure()
 		{
-			super("Endure", "The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession.", 10, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Bracing", EffectType.POKEMON));
+			super(Namesies.ENDURE_ATTACK, "The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession.", 10, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.BRACING_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -1913,10 +1953,10 @@ public abstract class Attack implements Serializable
 
 		public WaterPulse()
 		{
-			super("Water Pulse", "The user attacks the target with a pulsing blast of water. It may also confuse the target.", 20, Type.WATER, Category.SPECIAL);
+			super(Namesies.WATER_PULSE_ATTACK, "The user attacks the target with a pulsing blast of water. It may also confuse the target.", 20, Type.WATER, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.effectChance = 20;
 		}
 	}
@@ -1927,7 +1967,7 @@ public abstract class Attack implements Serializable
 
 		public ConfusionDamage()
 		{
-			super("ConfusionDamage", "None", 1, Type.NONE, Category.PHYSICAL);
+			super(Namesies.CONFUSION_DAMAGE_ATTACK, "None", 1, Type.NONE, Category.PHYSICAL);
 			super.power = 40;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -1944,9 +1984,9 @@ public abstract class Attack implements Serializable
 
 		public ConfuseRay()
 		{
-			super("Confuse Ray", "The target is exposed to a sinister ray that triggers confusion.", 10, Type.GHOST, Category.STATUS);
+			super(Namesies.CONFUSE_RAY_ATTACK, "The target is exposed to a sinister ray that triggers confusion.", 10, Type.GHOST, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -1956,7 +1996,7 @@ public abstract class Attack implements Serializable
 
 		public AquaTail()
 		{
-			super("Aqua Tail", "The user attacks by swinging its tail as if it were a vicious wave in a raging storm.", 10, Type.WATER, Category.PHYSICAL);
+			super(Namesies.AQUA_TAIL_ATTACK, "The user attacks by swinging its tail as if it were a vicious wave in a raging storm.", 10, Type.WATER, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1969,7 +2009,7 @@ public abstract class Attack implements Serializable
 
 		public SkullBash()
 		{
-			super("Skull Bash", "The user tucks in its head to raise its Defense in the first turn, then rams the target on the next turn.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SKULL_BASH_ATTACK, "The user tucks in its head to raise its Defense in the first turn, then rams the target on the next turn.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 130;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -2004,7 +2044,7 @@ public abstract class Attack implements Serializable
 
 		public IronDefense()
 		{
-			super("Iron Defense", "The user hardens its body's surface like iron, sharply raising its Defense stat.", 15, Type.STEEL, Category.STATUS);
+			super(Namesies.IRON_DEFENSE_ATTACK, "The user hardens its body's surface like iron, sharply raising its Defense stat.", 15, Type.STEEL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 2;
 		}
@@ -2016,7 +2056,7 @@ public abstract class Attack implements Serializable
 
 		public HydroPump()
 		{
-			super("Hydro Pump", "The target is blasted by a huge volume of water launched under great pressure.", 5, Type.WATER, Category.SPECIAL);
+			super(Namesies.HYDRO_PUMP_ATTACK, "The target is blasted by a huge volume of water launched under great pressure.", 5, Type.WATER, Category.SPECIAL);
 			super.power = 110;
 			super.accuracy = 80;
 		}
@@ -2028,8 +2068,8 @@ public abstract class Attack implements Serializable
 
 		public RainDance()
 		{
-			super("Rain Dance", "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, Category.STATUS);
-			super.effects.add(Effect.getEffect("RAINING", EffectType.BATTLE));
+			super(Namesies.RAIN_DANCE_ATTACK, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.RAINING_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -2040,8 +2080,8 @@ public abstract class Attack implements Serializable
 
 		public SunnyDay()
 		{
-			super("Sunny Day", "The user intensifies the sun for five turns, powering up Fire-type moves.", 5, Type.FIRE, Category.STATUS);
-			super.effects.add(Effect.getEffect("SUNNY", EffectType.BATTLE));
+			super(Namesies.SUNNY_DAY_ATTACK, "The user intensifies the sun for five turns, powering up Fire-type moves.", 5, Type.FIRE, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.SUNNY_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -2052,8 +2092,8 @@ public abstract class Attack implements Serializable
 
 		public Sandstorm()
 		{
-			super("Sandstorm", "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", 10, Type.ROCK, Category.STATUS);
-			super.effects.add(Effect.getEffect("SANDSTORM", EffectType.BATTLE));
+			super(Namesies.SANDSTORM_ATTACK, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", 10, Type.ROCK, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.SANDSTORM_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -2064,8 +2104,8 @@ public abstract class Attack implements Serializable
 
 		public Hail()
 		{
-			super("Hail", "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.", 10, Type.ICE, Category.STATUS);
-			super.effects.add(Effect.getEffect("HAILING", EffectType.BATTLE));
+			super(Namesies.HAIL_ATTACK, "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.", 10, Type.ICE, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.HAILING_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -2076,10 +2116,10 @@ public abstract class Attack implements Serializable
 
 		public PetalDance()
 		{
-			super("Petal Dance", "The user attacks the target by scattering petals for two to three turns. The user then becomes confused.", 10, Type.GRASS, Category.SPECIAL);
+			super(Namesies.PETAL_DANCE_ATTACK, "The user attacks the target by scattering petals for two to three turns. The user then becomes confused.", 10, Type.GRASS, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("SelfConfusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.SELF_CONFUSION_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -2091,10 +2131,10 @@ public abstract class Attack implements Serializable
 
 		public Thrash()
 		{
-			super("Thrash", "The user rampages and attacks for two to three turns. It then becomes confused, however.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.THRASH_ATTACK, "The user rampages and attacks for two to three turns. It then becomes confused, however.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("SelfConfusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.SELF_CONFUSION_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -2106,7 +2146,7 @@ public abstract class Attack implements Serializable
 
 		public HyperBeam()
 		{
-			super("Hyper Beam", "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.", 5, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.HYPER_BEAM_ATTACK, "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.", 5, Type.NORMAL, Category.SPECIAL);
 			super.power = 150;
 			super.accuracy = 90;
 		}
@@ -2138,7 +2178,7 @@ public abstract class Attack implements Serializable
 
 		public StringShot()
 		{
-			super("String Shot", "The targets are bound with silk blown from the user's mouth. This silk reduces the targets' Speed stat.", 40, Type.BUG, Category.STATUS);
+			super(Namesies.STRING_SHOT_ATTACK, "The targets are bound with silk blown from the user's mouth. This silk reduces the targets' Speed stat.", 40, Type.BUG, Category.STATUS);
 			super.accuracy = 95;
 			super.statChanges[Stat.SPEED.index()] = -1;
 		}
@@ -2150,7 +2190,7 @@ public abstract class Attack implements Serializable
 
 		public BugBite()
 		{
-			super("Bug Bite", "The user bites the target. If the target is holding a Berry, the user eats it and gains its effect.", 20, Type.BUG, Category.PHYSICAL);
+			super(Namesies.BUG_BITE_ATTACK, "The user bites the target. If the target is holding a Berry, the user eats it and gains its effect.", 20, Type.BUG, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2182,7 +2222,7 @@ public abstract class Attack implements Serializable
 
 		public Harden()
 		{
-			super("Harden", "The user stiffens all the muscles in its body to raise its Defense stat.", 30, Type.NORMAL, Category.STATUS);
+			super(Namesies.HARDEN_ATTACK, "The user stiffens all the muscles in its body to raise its Defense stat.", 30, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 		}
@@ -2194,10 +2234,10 @@ public abstract class Attack implements Serializable
 
 		public Confusion()
 		{
-			super("Confusion", "The target is hit by a weak telekinetic force. It may also leave the target confused.", 25, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.CONFUSION_ATTACK, "The target is hit by a weak telekinetic force. It may also leave the target confused.", 25, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 		}
 	}
@@ -2208,7 +2248,7 @@ public abstract class Attack implements Serializable
 
 		public StunSpore()
 		{
-			super("Stun Spore", "The user scatters a cloud of paralyzing powder. It may leave the target with paralysis.", 30, Type.GRASS, Category.STATUS);
+			super(Namesies.STUN_SPORE_ATTACK, "The user scatters a cloud of paralyzing powder. It may leave the target with paralysis.", 30, Type.GRASS, Category.STATUS);
 			super.accuracy = 75;
 			super.status = StatusCondition.PARALYZED;
 			super.moveTypes.add(MoveType.POWDER);
@@ -2221,7 +2261,7 @@ public abstract class Attack implements Serializable
 
 		public Gust()
 		{
-			super("Gust", "A gust of wind is whipped up by wings and launched at the target to inflict damage.", 35, Type.FLYING, Category.SPECIAL);
+			super(Namesies.GUST_ATTACK, "A gust of wind is whipped up by wings and launched at the target to inflict damage.", 35, Type.FLYING, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.HIT_FLY);
@@ -2245,9 +2285,9 @@ public abstract class Attack implements Serializable
 
 		public Supersonic()
 		{
-			super("Supersonic", "The user generates odd sound waves from its body. It may confuse the target.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.SUPERSONIC_ATTACK, "The user generates odd sound waves from its body. It may confuse the target.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 55;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SOUND_BASED);
 		}
 	}
@@ -2258,10 +2298,10 @@ public abstract class Attack implements Serializable
 
 		public Psybeam()
 		{
-			super("Psybeam", "The target is attacked with a peculiar ray. It may also cause confusion.", 20, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.PSYBEAM_ATTACK, "The target is attacked with a peculiar ray. It may also cause confusion.", 20, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 		}
 	}
@@ -2272,7 +2312,7 @@ public abstract class Attack implements Serializable
 
 		public SilverWind()
 		{
-			super("Silver Wind", "The target is attacked with powdery scales blown by wind. It may also raise all the user's stats.", 5, Type.BUG, Category.SPECIAL);
+			super(Namesies.SILVER_WIND_ATTACK, "The target is attacked with powdery scales blown by wind. It may also raise all the user's stats.", 5, Type.BUG, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -2293,8 +2333,8 @@ public abstract class Attack implements Serializable
 
 		public Tailwind()
 		{
-			super("Tailwind", "The user whips up a turbulent whirlwind that ups the Speed of all party Pok\u00e9mon for four turns.", 30, Type.FLYING, Category.STATUS);
-			super.effects.add(Effect.getEffect("Tailwind", EffectType.TEAM));
+			super(Namesies.TAILWIND_ATTACK, "The user whips up a turbulent whirlwind that ups the Speed of all party Pok\u00e9mon for four turns.", 30, Type.FLYING, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.TAILWIND_EFFECT, EffectType.TEAM));
 			super.selfTarget = true;
 		}
 	}
@@ -2305,29 +2345,29 @@ public abstract class Attack implements Serializable
 
 		public MorningSun()
 		{
-			super("Morning Sun", "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.NORMAL, Category.STATUS);
+			super(Namesies.MORNING_SUN_ATTACK, "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
-			switch (b.getWeather().getType())
+			switch (b.getWeather().namesies())
 			{
-				case CLEAR_SKIES:
+				case CLEAR_SKIES_EFFECT:
 				victim.healHealthFraction(1/2.0);
 				break;
-				case SUNNY:
+				case SUNNY_EFFECT:
 				victim.healHealthFraction(2/3.0);
 				break;
-				case HAILING:
-				case RAINING:
-				case SANDSTORM:
+				case HAILING_EFFECT:
+				case RAINING_EFFECT:
+				case SANDSTORM_EFFECT:
 				victim.healHealthFraction(1/4.0);
 				break;
 				default:
@@ -2345,8 +2385,8 @@ public abstract class Attack implements Serializable
 
 		public Safeguard()
 		{
-			super("Safeguard", "The user creates a protective field that prevents status problems for five turns.", 25, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Safeguard", EffectType.POKEMON));
+			super(Namesies.SAFEGUARD_ATTACK, "The user creates a protective field that prevents status problems for five turns.", 25, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.SAFEGUARD_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 	}
@@ -2357,7 +2397,7 @@ public abstract class Attack implements Serializable
 
 		public Captivate()
 		{
-			super("Captivate", "If it is the opposite gender of the user, the target is charmed into harshly lowering its Sp. Atk stat.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.CAPTIVATE_ATTACK, "If it is the opposite gender of the user, the target is charmed into harshly lowering its Sp. Atk stat.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.SP_ATTACK.index()] = -2;
 		}
@@ -2381,7 +2421,7 @@ public abstract class Attack implements Serializable
 
 		public BugBuzz()
 		{
-			super("Bug Buzz", "The user vibrates its wings to generate a damaging sound wave. It may also lower the target's Sp. Def stat.", 10, Type.BUG, Category.SPECIAL);
+			super(Namesies.BUG_BUZZ_ATTACK, "The user vibrates its wings to generate a damaging sound wave. It may also lower the target's Sp. Def stat.", 10, Type.BUG, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -2396,7 +2436,7 @@ public abstract class Attack implements Serializable
 
 		public QuiverDance()
 		{
-			super("Quiver Dance", "The user lightly performs a beautiful, mystic dance. It boosts the user's Sp. Atk, Sp. Def, and Speed stats.", 20, Type.BUG, Category.STATUS);
+			super(Namesies.QUIVER_DANCE_ATTACK, "The user lightly performs a beautiful, mystic dance. It boosts the user's Sp. Atk, Sp. Def, and Speed stats.", 20, Type.BUG, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_ATTACK.index()] = 1;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
@@ -2410,9 +2450,9 @@ public abstract class Attack implements Serializable
 
 		public Encore()
 		{
-			super("Encore", "The user compels the target to keep using only the move it last used for three turns.", 5, Type.NORMAL, Category.STATUS);
+			super(Namesies.ENCORE_ATTACK, "The user compels the target to keep using only the move it last used for three turns.", 5, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Encore", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.ENCORE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
@@ -2424,7 +2464,7 @@ public abstract class Attack implements Serializable
 
 		public PoisonSting()
 		{
-			super("Poison Sting", "The user stabs the target with a poisonous stinger. This may also poison the target.", 35, Type.POISON, Category.PHYSICAL);
+			super(Namesies.POISON_STING_ATTACK, "The user stabs the target with a poisonous stinger. This may also poison the target.", 35, Type.POISON, Category.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -2438,7 +2478,7 @@ public abstract class Attack implements Serializable
 
 		public FuryAttack()
 		{
-			super("Fury Attack", "The target is jabbed repeatedly with a horn or beak two to five times in a row.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.FURY_ATTACK_ATTACK, "The target is jabbed repeatedly with a horn or beak two to five times in a row.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2457,7 +2497,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -2479,7 +2519,7 @@ public abstract class Attack implements Serializable
 
 		public FalseSwipe()
 		{
-			super("False Swipe", "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.", 40, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.FALSE_SWIPE_ATTACK, "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.", 40, Type.NORMAL, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2487,9 +2527,9 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			o.addEffect(PokemonEffect.getEffect("Bracing"));
+			o.addEffect(PokemonEffect.getEffect(Namesies.BRACING_EFFECT));
 			super.applyDamage(me, o, b);
-			o.getAttributes().removeEffect("Bracing");
+			o.getAttributes().removeEffect(Namesies.BRACING_EFFECT);
 		}
 	}
 
@@ -2499,9 +2539,9 @@ public abstract class Attack implements Serializable
 
 		public Disable()
 		{
-			super("Disable", "For four turns, this move prevents the target from using the move it last used.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.DISABLE_ATTACK, "For four turns, this move prevents the target from using the move it last used.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Disable", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.DISABLE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
@@ -2512,8 +2552,8 @@ public abstract class Attack implements Serializable
 
 		public FocusEnergy()
 		{
-			super("Focus Energy", "The user takes a deep breath and focuses so that critical hits land more easily.", 30, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("RaiseCrits", EffectType.POKEMON));
+			super(Namesies.FOCUS_ENERGY_ATTACK, "The user takes a deep breath and focuses so that critical hits land more easily.", 30, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.RAISE_CRITS_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 	}
@@ -2524,7 +2564,7 @@ public abstract class Attack implements Serializable
 
 		public Twineedle()
 		{
-			super("Twineedle", "The user damages the target twice in succession by jabbing it with two spikes. It may also poison the target.", 20, Type.BUG, Category.PHYSICAL);
+			super(Namesies.TWINEEDLE_ATTACK, "The user damages the target twice in succession by jabbing it with two spikes. It may also poison the target.", 20, Type.BUG, Category.PHYSICAL);
 			super.power = 25;
 			super.accuracy = 100;
 			super.effectChance = 20;
@@ -2544,7 +2584,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -2566,7 +2606,7 @@ public abstract class Attack implements Serializable
 
 		public Rage()
 		{
-			super("Rage", "As long as this move is in use, the power of rage raises the Attack stat each time the user is hit in battle.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.RAGE_ATTACK, "As long as this move is in use, the power of rage raises the Attack stat each time the user is hit in battle.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 20;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2584,7 +2624,7 @@ public abstract class Attack implements Serializable
 
 		public Pursuit()
 		{
-			super("Pursuit", "An attack move that inflicts double damage if used on a target that is switching out of battle.", 20, Type.DARK, Category.PHYSICAL);
+			super(Namesies.PURSUIT_ATTACK, "An attack move that inflicts double damage if used on a target that is switching out of battle.", 20, Type.DARK, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2615,8 +2655,8 @@ public abstract class Attack implements Serializable
 
 		public ToxicSpikes()
 		{
-			super("Toxic Spikes", "The user lays a trap of poison spikes at the opponent's feet. They poison opponents that switch into battle.", 20, Type.POISON, Category.STATUS);
-			super.effects.add(Effect.getEffect("ToxicSpikes", EffectType.TEAM));
+			super(Namesies.TOXIC_SPIKES_ATTACK, "The user lays a trap of poison spikes at the opponent's feet. They poison opponents that switch into battle.", 20, Type.POISON, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.TOXIC_SPIKES_EFFECT, EffectType.TEAM));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -2627,7 +2667,7 @@ public abstract class Attack implements Serializable
 
 		public PinMissile()
 		{
-			super("Pin Missile", "Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.", 20, Type.BUG, Category.PHYSICAL);
+			super(Namesies.PIN_MISSILE_ATTACK, "Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.", 20, Type.BUG, Category.PHYSICAL);
 			super.power = 25;
 			super.accuracy = 95;
 		}
@@ -2645,7 +2685,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -2667,7 +2707,7 @@ public abstract class Attack implements Serializable
 
 		public Agility()
 		{
-			super("Agility", "The user relaxes and lightens its body to move faster. It sharply boosts the Speed stat.", 30, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.AGILITY_ATTACK, "The user relaxes and lightens its body to move faster. It sharply boosts the Speed stat.", 30, Type.PSYCHIC, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.SPEED.index()] = 2;
 		}
@@ -2679,7 +2719,7 @@ public abstract class Attack implements Serializable
 
 		public Assurance()
 		{
-			super("Assurance", "If the target has already taken some damage in the same turn, this attack's power is doubled.", 10, Type.DARK, Category.PHYSICAL);
+			super(Namesies.ASSURANCE_ATTACK, "If the target has already taken some damage in the same turn, this attack's power is doubled.", 10, Type.DARK, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2702,7 +2742,7 @@ public abstract class Attack implements Serializable
 
 		public PoisonJab()
 		{
-			super("Poison Jab", "The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.", 20, Type.POISON, Category.PHYSICAL);
+			super(Namesies.POISON_JAB_ATTACK, "The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.", 20, Type.POISON, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -2718,7 +2758,7 @@ public abstract class Attack implements Serializable
 
 		public Endeavor()
 		{
-			super("Endeavor", "An attack move that cuts down the target's HP to equal the user's HP.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.ENDEAVOR_ATTACK, "An attack move that cuts down the target's HP to equal the user's HP.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -2746,7 +2786,7 @@ public abstract class Attack implements Serializable
 
 		public SandAttack()
 		{
-			super("Sand Attack", "Sand is hurled in the target's face, reducing its accuracy.", 15, Type.GROUND, Category.STATUS);
+			super(Namesies.SAND_ATTACK_ATTACK, "Sand is hurled in the target's face, reducing its accuracy.", 15, Type.GROUND, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ACCURACY.index()] = -1;
 		}
@@ -2758,7 +2798,7 @@ public abstract class Attack implements Serializable
 
 		public QuickAttack()
 		{
-			super("Quick Attack", "The user lunges at the target at a speed that makes it almost invisible. It is sure to strike first.", 30, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.QUICK_ATTACK_ATTACK, "The user lunges at the target at a speed that makes it almost invisible. It is sure to strike first.", 30, Type.NORMAL, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.priority = 1;
@@ -2772,10 +2812,10 @@ public abstract class Attack implements Serializable
 
 		public Twister()
 		{
-			super("Twister", "The user whips up a vicious tornado to tear at the opposing team. It may also make targets flinch.", 20, Type.DRAGON, Category.SPECIAL);
+			super(Namesies.TWISTER_ATTACK, "The user whips up a vicious tornado to tear at the opposing team. It may also make targets flinch.", 20, Type.DRAGON, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.HIT_FLY);
 		}
@@ -2798,7 +2838,7 @@ public abstract class Attack implements Serializable
 
 		public FeatherDance()
 		{
-			super("Feather Dance", "The user covers the target's body with a mass of down that harshly lowers its Attack stat.", 15, Type.FLYING, Category.STATUS);
+			super(Namesies.FEATHER_DANCE_ATTACK, "The user covers the target's body with a mass of down that harshly lowers its Attack stat.", 15, Type.FLYING, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ATTACK.index()] = -2;
 		}
@@ -2811,7 +2851,7 @@ public abstract class Attack implements Serializable
 
 		public Roost()
 		{
-			super("Roost", "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", 10, Type.FLYING, Category.STATUS);
+			super(Namesies.ROOST_ATTACK, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", 10, Type.FLYING, Category.STATUS);
 			super.selfTarget = true;
 			super.printCast = false;
 		}
@@ -2822,14 +2862,14 @@ public abstract class Attack implements Serializable
 			super.applyEffects(b, user, victim);
 			if (!healFail && getType(b, user, victim) != null)
 			{
-				PokemonEffect.getEffect("ChangeType").cast(b, user, victim, CastSource.ATTACK, super.printCast);
-				user.getEffect("ChangeType").setTurns(1);
+				PokemonEffect.getEffect(Namesies.CHANGE_TYPE_EFFECT).cast(b, user, victim, CastSource.ATTACK, super.printCast);
+				user.getEffect(Namesies.CHANGE_TYPE_EFFECT).setTurns(1);
 			}
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -2856,7 +2896,7 @@ public abstract class Attack implements Serializable
 
 		public ThunderShock()
 		{
-			super("Thunder Shock", "A jolt of electricity is hurled at the target to inflict damage. It may also leave the target with paralysis.", 30, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.THUNDER_SHOCK_ATTACK, "A jolt of electricity is hurled at the target to inflict damage. It may also leave the target with paralysis.", 30, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -2870,7 +2910,7 @@ public abstract class Attack implements Serializable
 
 		public MirrorMove()
 		{
-			super("Mirror Move", "The user counters the target by mimicking the target's last move.", 20, Type.FLYING, Category.STATUS);
+			super(Namesies.MIRROR_MOVE_ATTACK, "The user counters the target by mimicking the target's last move.", 20, Type.FLYING, Category.STATUS);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -2897,10 +2937,10 @@ public abstract class Attack implements Serializable
 
 		public Hurricane()
 		{
-			super("Hurricane", "The user attacks by wrapping its opponent in a fierce wind that flies up into the sky. It may also confuse the target.", 10, Type.FLYING, Category.SPECIAL);
+			super(Namesies.HURRICANE_ATTACK, "The user attacks by wrapping its opponent in a fierce wind that flies up into the sky. It may also confuse the target.", 10, Type.FLYING, Category.SPECIAL);
 			super.power = 110;
 			super.accuracy = 70;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.HIT_FLY);
 		}
@@ -2908,11 +2948,11 @@ public abstract class Attack implements Serializable
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 		{
 			// TODO: Should have double power when opponent is in the air
-			switch (b.getWeather().getType())
+			switch (b.getWeather().namesies())
 			{
-				case RAINING:
+				case RAINING_EFFECT:
 				return 100;
-				case SUNNY:
+				case SUNNY_EFFECT:
 				return 50;
 				default:
 				return super.accuracy;
@@ -2926,10 +2966,10 @@ public abstract class Attack implements Serializable
 
 		public HyperFang()
 		{
-			super("Hyper Fang", "The user bites hard on the target with its sharp front fangs. It may also make the target flinch.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.HYPER_FANG_ATTACK, "The user bites hard on the target with its sharp front fangs. It may also make the target flinch.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -2941,7 +2981,7 @@ public abstract class Attack implements Serializable
 
 		public SuckerPunch()
 		{
-			super("Sucker Punch", "This move enables the user to attack first. It fails if the foe is not readying an attack, however.", 5, Type.DARK, Category.PHYSICAL);
+			super(Namesies.SUCKER_PUNCH_ATTACK, "This move enables the user to attack first. It fails if the foe is not readying an attack, however.", 5, Type.DARK, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.priority = 1;
@@ -2966,7 +3006,7 @@ public abstract class Attack implements Serializable
 
 		public Crunch()
 		{
-			super("Crunch", "The user crunches up the foe with sharp fangs. It may also lower the target's Defense stat.", 15, Type.DARK, Category.PHYSICAL);
+			super(Namesies.CRUNCH_ATTACK, "The user crunches up the foe with sharp fangs. It may also lower the target's Defense stat.", 15, Type.DARK, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 20;
@@ -2981,7 +3021,7 @@ public abstract class Attack implements Serializable
 
 		public SuperFang()
 		{
-			super("Super Fang", "The user chomps hard on the foe with its sharp front fangs. It cuts the target's HP to half.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SUPER_FANG_ATTACK, "The user chomps hard on the foe with its sharp front fangs. It cuts the target's HP to half.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -3003,7 +3043,7 @@ public abstract class Attack implements Serializable
 
 		public SwordsDance()
 		{
-			super("Swords Dance", "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.", 30, Type.NORMAL, Category.STATUS);
+			super(Namesies.SWORDS_DANCE_ATTACK, "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.", 30, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 2;
 		}
@@ -3015,7 +3055,7 @@ public abstract class Attack implements Serializable
 
 		public Peck()
 		{
-			super("Peck", "The foe is jabbed with a sharply pointed beak or horn.", 35, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.PECK_ATTACK, "The foe is jabbed with a sharply pointed beak or horn.", 35, Type.FLYING, Category.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3028,7 +3068,7 @@ public abstract class Attack implements Serializable
 
 		public Leer()
 		{
-			super("Leer", "The foe is given an intimidating leer with sharp eyes. The target's Defense stat is reduced.", 30, Type.NORMAL, Category.STATUS);
+			super(Namesies.LEER_ATTACK, "The foe is given an intimidating leer with sharp eyes. The target's Defense stat is reduced.", 30, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.DEFENSE.index()] = -1;
 		}
@@ -3040,7 +3080,7 @@ public abstract class Attack implements Serializable
 
 		public AerialAce()
 		{
-			super("Aerial Ace", "The user confounds the foe with speed, then slashes. The attack lands without fail.", 20, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.AERIAL_ACE_ATTACK, "The user confounds the foe with speed, then slashes. The attack lands without fail.", 20, Type.FLYING, Category.PHYSICAL);
 			super.power = 60;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -3052,7 +3092,7 @@ public abstract class Attack implements Serializable
 
 		public DrillPeck()
 		{
-			super("Drill Peck", "A corkscrewing attack with the sharp beak acting as a drill.", 20, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.DRILL_PECK_ATTACK, "A corkscrewing attack with the sharp beak acting as a drill.", 20, Type.FLYING, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3065,7 +3105,7 @@ public abstract class Attack implements Serializable
 
 		public Pluck()
 		{
-			super("Pluck", "The user pecks the foe. If the foe is holding a Berry, the user plucks it and gains its effect.", 20, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.PLUCK_ATTACK, "The user pecks the foe. If the foe is holding a Berry, the user plucks it and gains its effect.", 20, Type.FLYING, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3097,7 +3137,7 @@ public abstract class Attack implements Serializable
 
 		public DrillRun()
 		{
-			super("Drill Run", "The user crashes into its target while rotating its body like a drill. Critical hits land more easily.", 10, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.DRILL_RUN_ATTACK, "The user crashes into its target while rotating its body like a drill. Critical hits land more easily.", 10, Type.GROUND, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3115,10 +3155,10 @@ public abstract class Attack implements Serializable
 
 		public Wrap()
 		{
-			super("Wrap", "A long body or vines are used to wrap and squeeze the target for four to five turns.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.WRAP_ATTACK, "A long body or vines are used to wrap and squeeze the target for four to five turns.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("Wrapped", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.WRAPPED_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -3129,7 +3169,7 @@ public abstract class Attack implements Serializable
 
 		public Glare()
 		{
-			super("Glare", "The user intimidates the target with the pattern on its belly to cause paralysis.", 30, Type.NORMAL, Category.STATUS);
+			super(Namesies.GLARE_ATTACK, "The user intimidates the target with the pattern on its belly to cause paralysis.", 30, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.status = StatusCondition.PARALYZED;
 		}
@@ -3141,7 +3181,7 @@ public abstract class Attack implements Serializable
 
 		public Screech()
 		{
-			super("Screech", "An earsplitting screech harshly reduces the target's Defense stat.", 40, Type.NORMAL, Category.STATUS);
+			super(Namesies.SCREECH_ATTACK, "An earsplitting screech harshly reduces the target's Defense stat.", 40, Type.NORMAL, Category.STATUS);
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.statChanges[Stat.DEFENSE.index()] = -2;
@@ -3154,7 +3194,7 @@ public abstract class Attack implements Serializable
 
 		public Acid()
 		{
-			super("Acid", "The opposing team is attacked with a spray of harsh acid. The acid may also lower the targets' Sp. Def stats.", 30, Type.POISON, Category.SPECIAL);
+			super(Namesies.ACID_ATTACK, "The opposing team is attacked with a spray of harsh acid. The acid may also lower the targets' Sp. Def stats.", 30, Type.POISON, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -3168,8 +3208,8 @@ public abstract class Attack implements Serializable
 
 		public Stockpile()
 		{
-			super("Stockpile", "The user charges up power and raises both its Defense and Sp. Def. The move can be used three times.", 20, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Stockpile", EffectType.POKEMON));
+			super(Namesies.STOCKPILE_ATTACK, "The user charges up power and raises both its Defense and Sp. Def. The move can be used three times.", 20, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.STOCKPILE_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 	}
@@ -3180,13 +3220,13 @@ public abstract class Attack implements Serializable
 
 		public SpitUp()
 		{
-			super("Spit Up", "The power stored using the move Stockpile is released at once in an attack. The more power is stored, the greater the damage.", 10, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.SPIT_UP_ATTACK, "The power stored using the move Stockpile is released at once in an attack. The more power is stored, the greater the damage.", 10, Type.NORMAL, Category.SPECIAL);
 			super.accuracy = 100;
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (!me.hasEffect("Stockpile"))
+			if (!me.hasEffect(Namesies.STOCKPILE_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -3197,7 +3237,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			int turns = me.getEffect("Stockpile").getTurns();
+			int turns = me.getEffect(Namesies.STOCKPILE_EFFECT).getTurns();
 			if (turns <= 0)
 			{
 				Global.error("Stockpile turns should never be nonpositive");
@@ -3214,19 +3254,19 @@ public abstract class Attack implements Serializable
 
 		public Swallow()
 		{
-			super("Swallow", "The power stored using the move Stockpile is absorbed by the user to heal its HP. Storing more power heals more HP.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.SWALLOW_ATTACK, "The power stored using the move Stockpile is absorbed by the user to heal its HP. Storing more power heals more HP.", 10, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
-			PokemonEffect e = user.getEffect("Stockpile");
+			PokemonEffect e = user.getEffect(Namesies.STOCKPILE_EFFECT);
 			if (e  == null)
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
@@ -3261,7 +3301,7 @@ public abstract class Attack implements Serializable
 
 		public AcidSpray()
 		{
-			super("Acid Spray", "The user spits fluid that works to melt the target. This harshly reduces the target's Sp. Def stat.", 20, Type.POISON, Category.SPECIAL);
+			super(Namesies.ACID_SPRAY_ATTACK, "The user spits fluid that works to melt the target. This harshly reduces the target's Sp. Def stat.", 20, Type.POISON, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.statChanges[Stat.SP_DEFENSE.index()] = -2;
@@ -3274,7 +3314,7 @@ public abstract class Attack implements Serializable
 
 		public MudBomb()
 		{
-			super("Mud Bomb", "The user launches a hard-packed mud ball to attack. It may also lower the target's accuracy.", 10, Type.GROUND, Category.SPECIAL);
+			super(Namesies.MUD_BOMB_ATTACK, "The user launches a hard-packed mud ball to attack. It may also lower the target's accuracy.", 10, Type.GROUND, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 85;
 			super.effectChance = 30;
@@ -3288,7 +3328,7 @@ public abstract class Attack implements Serializable
 
 		public Haze()
 		{
-			super("Haze", "The user creates a haze that eliminates every stat change among all the Pok\u00e9mon engaged in battle.", 30, Type.ICE, Category.STATUS);
+			super(Namesies.HAZE_ATTACK, "The user creates a haze that eliminates every stat change among all the Pok\u00e9mon engaged in battle.", 30, Type.ICE, Category.STATUS);
 			super.moveTypes.add(MoveType.FIELD);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
@@ -3307,7 +3347,7 @@ public abstract class Attack implements Serializable
 
 		public Coil()
 		{
-			super("Coil", "The user coils up and concentrates. This raises its Attack and Defense stats as well as its accuracy.", 20, Type.POISON, Category.STATUS);
+			super(Namesies.COIL_ATTACK, "The user coils up and concentrates. This raises its Attack and Defense stats as well as its accuracy.", 20, Type.POISON, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
@@ -3321,7 +3361,7 @@ public abstract class Attack implements Serializable
 
 		public GunkShot()
 		{
-			super("Gunk Shot", "The user shoots filthy garbage at the target to attack. It may also poison the target.", 5, Type.POISON, Category.PHYSICAL);
+			super(Namesies.GUNK_SHOT_ATTACK, "The user shoots filthy garbage at the target to attack. It may also poison the target.", 5, Type.POISON, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 80;
 			super.effectChance = 30;
@@ -3335,10 +3375,10 @@ public abstract class Attack implements Serializable
 
 		public IceFang()
 		{
-			super("Ice Fang", "The user bites with cold-infused fangs. It may also make the target flinch or leave it frozen.", 15, Type.ICE, Category.PHYSICAL);
+			super(Namesies.ICE_FANG_ATTACK, "The user bites with cold-infused fangs. It may also make the target flinch or leave it frozen.", 15, Type.ICE, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 			super.status = StatusCondition.FROZEN;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3357,10 +3397,10 @@ public abstract class Attack implements Serializable
 
 		public ThunderFang()
 		{
-			super("Thunder Fang", "The user bites with electrified fangs. It may also make the target flinch or leave it with paralysis.", 15, Type.ELECTRIC, Category.PHYSICAL);
+			super(Namesies.THUNDER_FANG_ATTACK, "The user bites with electrified fangs. It may also make the target flinch or leave it with paralysis.", 15, Type.ELECTRIC, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 			super.status = StatusCondition.PARALYZED;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3379,7 +3419,7 @@ public abstract class Attack implements Serializable
 
 		public ElectroBall()
 		{
-			super("Electro Ball", "The user hurls an electric orb at the target. The faster the user is than the target, the greater the damage.", 10, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.ELECTRO_BALL_ATTACK, "The user hurls an electric orb at the target. The faster the user is than the target, the greater the damage.", 10, Type.ELECTRIC, Category.SPECIAL);
 			super.accuracy = 100;
 		}
 
@@ -3399,7 +3439,7 @@ public abstract class Attack implements Serializable
 
 		public DoubleTeam()
 		{
-			super("Double Team", "By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.", 15, Type.NORMAL, Category.STATUS);
+			super(Namesies.DOUBLE_TEAM_ATTACK, "By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.", 15, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.EVASION.index()] = 1;
 		}
@@ -3411,7 +3451,7 @@ public abstract class Attack implements Serializable
 
 		public Slam()
 		{
-			super("Slam", "The target is slammed with a long tail, vines, etc., to inflict damage.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SLAM_ATTACK, "The target is slammed with a long tail, vines, etc., to inflict damage.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 75;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3424,7 +3464,7 @@ public abstract class Attack implements Serializable
 
 		public Thunderbolt()
 		{
-			super("Thunderbolt", "A strong electric blast is loosed at the target. It may also leave the target with paralysis.", 15, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.THUNDERBOLT_ATTACK, "A strong electric blast is loosed at the target. It may also leave the target with paralysis.", 15, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 95;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -3438,7 +3478,7 @@ public abstract class Attack implements Serializable
 
 		public Feint()
 		{
-			super("Feint", "An attack that hits a target using Protect or Detect. It also lifts the effects of those moves.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.FEINT_ATTACK, "An attack that hits a target using Protect or Detect. It also lifts the effects of those moves.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 30;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.ASSISTLESS);
@@ -3454,7 +3494,7 @@ public abstract class Attack implements Serializable
 
 		public Discharge()
 		{
-			super("Discharge", "A flare of electricity is loosed to strike the area around the user. It may also cause paralysis.", 15, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.DISCHARGE_ATTACK, "A flare of electricity is loosed to strike the area around the user. It may also cause paralysis.", 15, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -3468,8 +3508,8 @@ public abstract class Attack implements Serializable
 
 		public LightScreen()
 		{
-			super("Light Screen", "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", 30, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("LightScreen", EffectType.TEAM));
+			super(Namesies.LIGHT_SCREEN_ATTACK, "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", 30, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.LIGHT_SCREEN_EFFECT, EffectType.TEAM));
 			super.selfTarget = true;
 		}
 	}
@@ -3480,7 +3520,7 @@ public abstract class Attack implements Serializable
 
 		public Thunder()
 		{
-			super("Thunder", "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.", 10, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.THUNDER_ATTACK, "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.", 10, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 110;
 			super.accuracy = 70;
 			super.effectChance = 30;
@@ -3489,11 +3529,11 @@ public abstract class Attack implements Serializable
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			switch (b.getWeather().getType())
+			switch (b.getWeather().namesies())
 			{
-				case RAINING:
+				case RAINING_EFFECT:
 				return 100;
-				case SUNNY:
+				case SUNNY_EFFECT:
 				return 50;
 				default:
 				return super.accuracy;
@@ -3507,8 +3547,8 @@ public abstract class Attack implements Serializable
 
 		public DefenseCurl()
 		{
-			super("Defense Curl", "The user curls up to conceal weak spots and raise its Defense stat.", 40, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("UsedDefenseCurl", EffectType.POKEMON));
+			super(Namesies.DEFENSE_CURL_ATTACK, "The user curls up to conceal weak spots and raise its Defense stat.", 40, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.USED_DEFENSE_CURL_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 		}
@@ -3520,7 +3560,7 @@ public abstract class Attack implements Serializable
 
 		public Swift()
 		{
-			super("Swift", "Star-shaped rays are shot at the opposing team. This attack never misses.", 20, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.SWIFT_ATTACK, "Star-shaped rays are shot at the opposing team. This attack never misses.", 20, Type.NORMAL, Category.SPECIAL);
 			super.power = 60;
 		}
 	}
@@ -3531,7 +3571,7 @@ public abstract class Attack implements Serializable
 
 		public FurySwipes()
 		{
-			super("Fury Swipes", "The target is raked with sharp claws or scythes for two to five times in quick succession.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.FURY_SWIPES_ATTACK, "The target is raked with sharp claws or scythes for two to five times in quick succession.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 18;
 			super.accuracy = 80;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3550,7 +3590,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -3572,7 +3612,7 @@ public abstract class Attack implements Serializable
 
 		public Rollout()
 		{
-			super("Rollout", "The user continually rolls into the target over five turns. It becomes stronger each time it hits.", 20, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.ROLLOUT_ATTACK, "The user continually rolls into the target over five turns. It becomes stronger each time it hits.", 20, Type.ROCK, Category.PHYSICAL);
 			super.power = 30;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3580,7 +3620,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect("UsedDefenseCurl") ? 2 : 1);
+			return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(Namesies.USED_DEFENSE_CURL_EFFECT) ? 2 : 1);
 		}
 	}
 
@@ -3590,7 +3630,7 @@ public abstract class Attack implements Serializable
 
 		public FuryCutter()
 		{
-			super("Fury Cutter", "The target is slashed with scythes or claws. Its power increases if it hits in succession.", 20, Type.BUG, Category.PHYSICAL);
+			super(Namesies.FURY_CUTTER_ATTACK, "The target is slashed with scythes or claws. Its power increases if it hits in succession.", 20, Type.BUG, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3608,10 +3648,10 @@ public abstract class Attack implements Serializable
 
 		public SandTomb()
 		{
-			super("Sand Tomb", "The user traps the target inside a harshly raging sandstorm for four to five turns.", 15, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.SAND_TOMB_ATTACK, "The user traps the target inside a harshly raging sandstorm for four to five turns.", 15, Type.GROUND, Category.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect("SandTomb", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.SAND_TOMB_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -3621,7 +3661,7 @@ public abstract class Attack implements Serializable
 
 		public GyroBall()
 		{
-			super("Gyro Ball", "The user tackles the target with a high-speed spin. The slower the user, the greater the damage.", 5, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.GYRO_BALL_ATTACK, "The user tackles the target with a high-speed spin. The slower the user, the greater the damage.", 5, Type.STEEL, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -3638,7 +3678,7 @@ public abstract class Attack implements Serializable
 
 		public CrushClaw()
 		{
-			super("Crush Claw", "The user slashes the target with hard and sharp claws. It may also lower the target's Defense.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.CRUSH_CLAW_ATTACK, "The user slashes the target with hard and sharp claws. It may also lower the target's Defense.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 95;
 			super.effectChance = 50;
@@ -3653,7 +3693,7 @@ public abstract class Attack implements Serializable
 
 		public DoubleKick()
 		{
-			super("Double Kick", "The target is quickly kicked twice in succession using both feet.", 30, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.DOUBLE_KICK_ATTACK, "The target is quickly kicked twice in succession using both feet.", 30, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 30;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3672,7 +3712,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -3694,7 +3734,7 @@ public abstract class Attack implements Serializable
 
 		public PoisonTail()
 		{
-			super("Poison Tail", "The user hits the target with its tail. It may also poison the target. Critical hits land more easily.", 25, Type.POISON, Category.PHYSICAL);
+			super(Namesies.POISON_TAIL_ATTACK, "The user hits the target with its tail. It may also poison the target. Critical hits land more easily.", 25, Type.POISON, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -3714,9 +3754,9 @@ public abstract class Attack implements Serializable
 
 		public Flatter()
 		{
-			super("Flatter", "Flattery is used to confuse the target. However, it also raises the target's Sp. Atk stat.", 15, Type.DARK, Category.STATUS);
+			super(Namesies.FLATTER_ATTACK, "Flattery is used to confuse the target. However, it also raises the target's Sp. Atk stat.", 15, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.statChanges[Stat.SP_ATTACK.index()] = 2;
 		}
 	}
@@ -3727,10 +3767,10 @@ public abstract class Attack implements Serializable
 
 		public PoisonFang()
 		{
-			super("Poison Fang", "The user bites the target with toxic fangs. It may also leave the target badly poisoned.", 15, Type.POISON, Category.PHYSICAL);
+			super(Namesies.POISON_FANG_ATTACK, "The user bites the target with toxic fangs. It may also leave the target badly poisoned.", 15, Type.POISON, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("BadPoison", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.BAD_POISON_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -3742,7 +3782,7 @@ public abstract class Attack implements Serializable
 
 		public ChipAway()
 		{
-			super("Chip Away", "Looking for an opening, the user strikes continually. The target's stat changes don't affect this attack's damage.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.CHIP_AWAY_ATTACK, "Looking for an opening, the user strikes continually. The target's stat changes don't affect this attack's damage.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3760,7 +3800,7 @@ public abstract class Attack implements Serializable
 
 		public BodySlam()
 		{
-			super("Body Slam", "The user drops onto the target with its full body weight. It may also leave the target with paralysis.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.BODY_SLAM_ATTACK, "The user drops onto the target with its full body weight. It may also leave the target with paralysis.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 85;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -3775,7 +3815,7 @@ public abstract class Attack implements Serializable
 
 		public EarthPower()
 		{
-			super("Earth Power", "The user makes the ground under the target erupt with power. It may also lower the target's Sp. Def.", 10, Type.GROUND, Category.SPECIAL);
+			super(Namesies.EARTH_POWER_ATTACK, "The user makes the ground under the target erupt with power. It may also lower the target's Sp. Def.", 10, Type.GROUND, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -3789,7 +3829,7 @@ public abstract class Attack implements Serializable
 
 		public Superpower()
 		{
-			super("Superpower", "The user attacks the target with great power. However, it also lowers the user's Attack and Defense.", 5, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.SUPERPOWER_ATTACK, "The user attacks the target with great power. However, it also lowers the user's Attack and Defense.", 5, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.selfTarget = true;
@@ -3805,7 +3845,7 @@ public abstract class Attack implements Serializable
 
 		public HornAttack()
 		{
-			super("Horn Attack", "The target is jabbed with a sharply pointed horn to inflict damage.", 25, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.HORN_ATTACK_ATTACK, "The target is jabbed with a sharply pointed horn to inflict damage.", 25, Type.NORMAL, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3818,7 +3858,7 @@ public abstract class Attack implements Serializable
 
 		public HornDrill()
 		{
-			super("Horn Drill", "The user stabs the target with a horn that rotates like a drill. If it hits, the target faints instantly.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.HORN_DRILL_ATTACK, "The user stabs the target with a horn that rotates like a drill. If it hits, the target faints instantly.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.accuracy = 30;
 			super.moveTypes.add(MoveType.ONE_HIT_KO);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3832,7 +3872,7 @@ public abstract class Attack implements Serializable
 				return -1;
 			}
 			
-			if (o.hasAbility("Sturdy") && !me.breaksTheMold())
+			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
 				b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
 				return -1;
@@ -3859,7 +3899,7 @@ public abstract class Attack implements Serializable
 
 		public Megahorn()
 		{
-			super("Megahorn", "Using its tough and impressive horn, the user rams into the target with no letup.", 10, Type.BUG, Category.PHYSICAL);
+			super(Namesies.MEGAHORN_ATTACK, "Using its tough and impressive horn, the user rams into the target with no letup.", 10, Type.BUG, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3872,7 +3912,7 @@ public abstract class Attack implements Serializable
 
 		public Pound()
 		{
-			super("Pound", "The target is physically pounded with a long tail or a foreleg, etc.", 35, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.POUND_ATTACK, "The target is physically pounded with a long tail or a foreleg, etc.", 35, Type.NORMAL, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3885,7 +3925,7 @@ public abstract class Attack implements Serializable
 
 		public Sing()
 		{
-			super("Sing", "A soothing lullaby is sung in a calming voice that puts the target into a deep slumber.", 15, Type.NORMAL, Category.STATUS);
+			super(Namesies.SING_ATTACK, "A soothing lullaby is sung in a calming voice that puts the target into a deep slumber.", 15, Type.NORMAL, Category.STATUS);
 			super.accuracy = 55;
 			super.status = StatusCondition.ASLEEP;
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -3898,7 +3938,7 @@ public abstract class Attack implements Serializable
 
 		public DoubleSlap()
 		{
-			super("Double Slap", "The target is slapped repeatedly, back and forth, two to five times in a row.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.DOUBLE_SLAP_ATTACK, "The target is slapped repeatedly, back and forth, two to five times in a row.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3917,7 +3957,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -3939,8 +3979,8 @@ public abstract class Attack implements Serializable
 
 		public Wish()
 		{
-			super("Wish", "One turn after this move is used, the target's HP is restored by half the user's maximum HP.", 10, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Wish", EffectType.TEAM));
+			super(Namesies.WISH_ATTACK, "One turn after this move is used, the target's HP is restored by half the user's maximum HP.", 10, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.WISH_EFFECT, EffectType.TEAM));
 			super.selfTarget = true;
 		}
 	}
@@ -3951,8 +3991,8 @@ public abstract class Attack implements Serializable
 
 		public Minimize()
 		{
-			super("Minimize", "The user compresses its body to make itself look smaller, which sharply raises its evasiveness.", 20, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("UsedMinimize", EffectType.POKEMON));
+			super(Namesies.MINIMIZE_ATTACK, "The user compresses its body to make itself look smaller, which sharply raises its evasiveness.", 20, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.USED_MINIMIZE_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 			super.statChanges[Stat.EVASION.index()] = 2;
 		}
@@ -3964,7 +4004,7 @@ public abstract class Attack implements Serializable
 
 		public WakeUpSlap()
 		{
-			super("Wake-up Slap", "This attack inflicts big damage on a sleeping target. It also wakes the target up, however.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.WAKE_UP_SLAP_ATTACK, "This attack inflicts big damage on a sleeping target. It also wakes the target up, however.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3991,7 +4031,7 @@ public abstract class Attack implements Serializable
 
 		public CosmicPower()
 		{
-			super("Cosmic Power", "The user absorbs a mystical power from space to raise its Defense and Sp. Def stats.", 20, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.COSMIC_POWER_ATTACK, "The user absorbs a mystical power from space to raise its Defense and Sp. Def stats.", 20, Type.PSYCHIC, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
@@ -4004,8 +4044,8 @@ public abstract class Attack implements Serializable
 
 		public LuckyChant()
 		{
-			super("Lucky Chant", "The user chants an incantation toward the sky, preventing opposing Pok\u00e9mon from landing critical hits.", 30, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("LuckyChant", EffectType.TEAM));
+			super(Namesies.LUCKY_CHANT_ATTACK, "The user chants an incantation toward the sky, preventing opposing Pok\u00e9mon from landing critical hits.", 30, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.LUCKY_CHANT_EFFECT, EffectType.TEAM));
 			super.selfTarget = true;
 		}
 	}
@@ -4016,7 +4056,7 @@ public abstract class Attack implements Serializable
 
 		public Metronome()
 		{
-			super("Metronome", "The user waggles a finger and stimulates its brain into randomly using nearly any move.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.METRONOME_ATTACK, "The user waggles a finger and stimulates its brain into randomly using nearly any move.", 10, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.MIMICLESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
@@ -4038,8 +4078,8 @@ public abstract class Attack implements Serializable
 
 		public Gravity()
 		{
-			super("Gravity", "Gravity is intensified for five turns, making moves involving flying unusable and negating Levitate.", 5, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("Gravity", EffectType.BATTLE));
+			super(Namesies.GRAVITY_ATTACK, "Gravity is intensified for five turns, making moves involving flying unusable and negating Levitate.", 5, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.GRAVITY_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -4050,30 +4090,30 @@ public abstract class Attack implements Serializable
 
 		public Moonlight()
 		{
-			super("Moonlight", "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.NORMAL, Category.STATUS);
+			super(Namesies.MOONLIGHT_ATTACK, "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
 			// TODO: Need to change type of this move to fairy type along with charm and sweet kiss
-			switch (b.getWeather().getType())
+			switch (b.getWeather().namesies())
 			{
-				case CLEAR_SKIES:
+				case CLEAR_SKIES_EFFECT:
 				victim.healHealthFraction(1/2.0);
 				break;
-				case SUNNY:
+				case SUNNY_EFFECT:
 				victim.healHealthFraction(2/3.0);
 				break;
-				case HAILING:
-				case RAINING:
-				case SANDSTORM:
+				case HAILING_EFFECT:
+				case RAINING_EFFECT:
+				case SANDSTORM_EFFECT:
 				victim.healHealthFraction(1/4.0);
 				break;
 				default:
@@ -4091,7 +4131,7 @@ public abstract class Attack implements Serializable
 
 		public StoredPower()
 		{
-			super("Stored Power", "The user attacks the target with stored power. The more the user's stats are raised, the greater the damage.", 10, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.STORED_POWER_ATTACK, "The user attacks the target with stored power. The more the user's stats are raised, the greater the damage.", 10, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 20;
 			super.accuracy = 100;
 		}
@@ -4108,8 +4148,8 @@ public abstract class Attack implements Serializable
 
 		public Mimic()
 		{
-			super("Mimic", "The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.", 10, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Mimic", EffectType.POKEMON));
+			super(Namesies.MIMIC_ATTACK, "The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.", 10, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.MIMIC_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
@@ -4123,7 +4163,7 @@ public abstract class Attack implements Serializable
 
 		public MeteorMash()
 		{
-			super("Meteor Mash", "The target is hit with a hard punch fired like a meteor. It may also raise the user's Attack.", 10, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.METEOR_MASH_ATTACK, "The target is hit with a hard punch fired like a meteor. It may also raise the user's Attack.", 10, Type.STEEL, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 90;
 			super.effectChance = 20;
@@ -4140,8 +4180,8 @@ public abstract class Attack implements Serializable
 
 		public Imprison()
 		{
-			super("Imprison", "If the opponents know any move also known by the user, the opponents are prevented from using it.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("Imprison", EffectType.POKEMON));
+			super(Namesies.IMPRISON_ATTACK, "If the opponents know any move also known by the user, the opponents are prevented from using it.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.IMPRISON_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
@@ -4154,7 +4194,7 @@ public abstract class Attack implements Serializable
 
 		public WillOWisp()
 		{
-			super("Will-o-wisp", "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", 15, Type.FIRE, Category.STATUS);
+			super(Namesies.WILL_OWISP_ATTACK, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", 15, Type.FIRE, Category.STATUS);
 			super.accuracy = 85;
 			super.status = StatusCondition.BURNED;
 		}
@@ -4172,7 +4212,7 @@ public abstract class Attack implements Serializable
 
 		public Payback()
 		{
-			super("Payback", "If the user moves after the target, this attack's power will be doubled.", 10, Type.DARK, Category.PHYSICAL);
+			super(Namesies.PAYBACK_ATTACK, "If the user moves after the target, this attack's power will be doubled.", 10, Type.DARK, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -4190,10 +4230,10 @@ public abstract class Attack implements Serializable
 
 		public Extrasensory()
 		{
-			super("Extrasensory", "The user attacks with an odd, unseeable power. It may also make the target flinch.", 20, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.EXTRASENSORY_ATTACK, "The user attacks with an odd, unseeable power. It may also make the target flinch.", 20, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 		}
 	}
@@ -4204,7 +4244,7 @@ public abstract class Attack implements Serializable
 
 		public FireBlast()
 		{
-			super("Fire Blast", "The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.", 5, Type.FIRE, Category.SPECIAL);
+			super(Namesies.FIRE_BLAST_ATTACK, "The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.", 5, Type.FIRE, Category.SPECIAL);
 			super.power = 110;
 			super.accuracy = 85;
 			super.effectChance = 10;
@@ -4218,7 +4258,7 @@ public abstract class Attack implements Serializable
 
 		public NastyPlot()
 		{
-			super("Nasty Plot", "The user stimulates its brain by thinking bad thoughts. It sharply raises the user's Sp. Atk.", 20, Type.DARK, Category.STATUS);
+			super(Namesies.NASTY_PLOT_ATTACK, "The user stimulates its brain by thinking bad thoughts. It sharply raises the user's Sp. Atk.", 20, Type.DARK, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_ATTACK.index()] = 2;
 		}
@@ -4230,7 +4270,7 @@ public abstract class Attack implements Serializable
 
 		public Round()
 		{
-			super("Round", "The user attacks the target with a song.", 15, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.ROUND_ATTACK, "The user attacks the target with a song.", 15, Type.NORMAL, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -4243,14 +4283,14 @@ public abstract class Attack implements Serializable
 
 		public Rest()
 		{
-			super("Rest", "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem.", 10, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.REST_ATTACK, "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem.", 10, Type.PSYCHIC, Category.STATUS);
 			super.status = StatusCondition.ASLEEP;
 			super.selfTarget = true;
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (victim.fullHealth() || victim.hasAbility("Insomnia") || victim.hasAbility("Vital Spirit") || victim.hasStatus(StatusCondition.ASLEEP))
+			if (victim.fullHealth() || victim.hasAbility(Namesies.INSOMNIA_ABILITY) || victim.hasAbility(Namesies.VITAL_SPIRIT_ABILITY) || victim.hasStatus(StatusCondition.ASLEEP))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -4263,7 +4303,7 @@ public abstract class Attack implements Serializable
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -4281,7 +4321,7 @@ public abstract class Attack implements Serializable
 
 		public HyperVoice()
 		{
-			super("Hyper Voice", "The user lets loose a horribly echoing shout with the power to inflict damage.", 10, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.HYPER_VOICE_ATTACK, "The user lets loose a horribly echoing shout with the power to inflict damage.", 10, Type.NORMAL, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -4294,7 +4334,7 @@ public abstract class Attack implements Serializable
 
 		public LeechLife()
 		{
-			super("Leech Life", "The user drains the target's blood. The user's HP is restored by half the damage taken by the target.", 15, Type.BUG, Category.PHYSICAL);
+			super(Namesies.LEECH_LIFE_ATTACK, "The user drains the target's blood. The user's HP is restored by half the damage taken by the target.", 15, Type.BUG, Category.PHYSICAL);
 			super.power = 20;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SAP_HEALTH);
@@ -4308,10 +4348,10 @@ public abstract class Attack implements Serializable
 
 		public Astonish()
 		{
-			super("Astonish", "The user attacks the target while shouting in a startling fashion. It may also make the target flinch.", 15, Type.GHOST, Category.PHYSICAL);
+			super(Namesies.ASTONISH_ATTACK, "The user attacks the target while shouting in a startling fashion. It may also make the target flinch.", 15, Type.GHOST, Category.PHYSICAL);
 			super.power = 30;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4323,7 +4363,7 @@ public abstract class Attack implements Serializable
 
 		public AirCutter()
 		{
-			super("Air Cutter", "The user launches razor-like wind to slash the opposing team. Critical hits land more easily.", 25, Type.FLYING, Category.SPECIAL);
+			super(Namesies.AIR_CUTTER_ATTACK, "The user launches razor-like wind to slash the opposing team. Critical hits land more easily.", 25, Type.FLYING, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 95;
 		}
@@ -4340,8 +4380,8 @@ public abstract class Attack implements Serializable
 
 		public MeanLook()
 		{
-			super("Mean Look", "The user pins the target with a dark, arresting look. The target becomes unable to flee.", 5, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Trapped", EffectType.POKEMON));
+			super(Namesies.MEAN_LOOK_ATTACK, "The user pins the target with a dark, arresting look. The target becomes unable to flee.", 5, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.TRAPPED_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -4351,7 +4391,7 @@ public abstract class Attack implements Serializable
 
 		public Acrobatics()
 		{
-			super("Acrobatics", "The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage.", 15, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.ACROBATICS_ATTACK, "The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage.", 15, Type.FLYING, Category.PHYSICAL);
 			super.power = 55;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -4369,7 +4409,7 @@ public abstract class Attack implements Serializable
 
 		public Absorb()
 		{
-			super("Absorb", "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 25, Type.GRASS, Category.SPECIAL);
+			super(Namesies.ABSORB_ATTACK, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 25, Type.GRASS, Category.SPECIAL);
 			super.power = 20;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SAP_HEALTH);
@@ -4382,7 +4422,7 @@ public abstract class Attack implements Serializable
 
 		public MegaDrain()
 		{
-			super("Mega Drain", "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 15, Type.GRASS, Category.SPECIAL);
+			super(Namesies.MEGA_DRAIN_ATTACK, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 15, Type.GRASS, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SAP_HEALTH);
@@ -4395,7 +4435,7 @@ public abstract class Attack implements Serializable
 
 		public NaturalGift()
 		{
-			super("Natural Gift", "The user draws power to attack by using its held Berry. The Berry determines its type and power.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.NATURAL_GIFT_ATTACK, "The user draws power to attack by using its held Berry. The Berry determines its type and power.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.accuracy = 100;
 		}
 
@@ -4428,7 +4468,7 @@ public abstract class Attack implements Serializable
 
 		public Type getType(Battle b, ActivePokemon user)
 		{
-			if (user.hasAbility("Normalize"))
+			if (user.hasAbility(Namesies.NORMALIZE_ABILITY))
 			{
 				return Type.NORMAL;
 			}
@@ -4449,7 +4489,7 @@ public abstract class Attack implements Serializable
 
 		public GigaDrain()
 		{
-			super("Giga Drain", "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 10, Type.GRASS, Category.SPECIAL);
+			super(Namesies.GIGA_DRAIN_ATTACK, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 10, Type.GRASS, Category.SPECIAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SAP_HEALTH);
@@ -4462,7 +4502,7 @@ public abstract class Attack implements Serializable
 
 		public Aromatherapy()
 		{
-			super("Aromatherapy", "The user releases a soothing scent that heals all status problems affecting the user's party.", 5, Type.GRASS, Category.STATUS);
+			super(Namesies.AROMATHERAPY_ATTACK, "The user releases a soothing scent that heals all status problems affecting the user's party.", 5, Type.GRASS, Category.STATUS);
 			super.selfTarget = true;
 		}
 
@@ -4482,7 +4522,7 @@ public abstract class Attack implements Serializable
 
 		public Spore()
 		{
-			super("Spore", "The user scatters bursts of spores that induce sleep.", 15, Type.GRASS, Category.STATUS);
+			super(Namesies.SPORE_ATTACK, "The user scatters bursts of spores that induce sleep.", 15, Type.GRASS, Category.STATUS);
 			super.accuracy = 100;
 			super.status = StatusCondition.ASLEEP;
 		}
@@ -4494,7 +4534,7 @@ public abstract class Attack implements Serializable
 
 		public CrossPoison()
 		{
-			super("Cross Poison", "A slashing attack with a poisonous blade that may also leave the target poisoned. Critical hits land more easily.", 20, Type.POISON, Category.PHYSICAL);
+			super(Namesies.CROSS_POISON_ATTACK, "A slashing attack with a poisonous blade that may also leave the target poisoned. Critical hits land more easily.", 20, Type.POISON, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -4514,7 +4554,7 @@ public abstract class Attack implements Serializable
 
 		public XScissor()
 		{
-			super("X-scissor", "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", 15, Type.BUG, Category.PHYSICAL);
+			super(Namesies.XSCISSOR_ATTACK, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", 15, Type.BUG, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -4527,8 +4567,8 @@ public abstract class Attack implements Serializable
 
 		public Foresight()
 		{
-			super("Foresight", "Enables a Ghost-type target to be hit by Normal and Fighting type attacks. It also enables an evasive target to be hit.", 40, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Foresight", EffectType.POKEMON));
+			super(Namesies.FORESIGHT_ATTACK, "Enables a Ghost-type target to be hit by Normal and Fighting type attacks. It also enables an evasive target to be hit.", 40, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.FORESIGHT_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -4545,8 +4585,8 @@ public abstract class Attack implements Serializable
 
 		public OdorSleuth()
 		{
-			super("Odor Sleuth", "Enables a Ghost-type target to be hit with Normal- and Fighting-type attacks. It also enables an evasive target to be hit.", 40, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Foresight", EffectType.POKEMON));
+			super(Namesies.ODOR_SLEUTH_ATTACK, "Enables a Ghost-type target to be hit with Normal- and Fighting-type attacks. It also enables an evasive target to be hit.", 40, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.FORESIGHT_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -4563,8 +4603,8 @@ public abstract class Attack implements Serializable
 
 		public MiracleEye()
 		{
-			super("Miracle Eye", "Enables a Dark-type target to be hit by Psychic-type attacks. It also enables an evasive target to be hit.", 40, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("MiracleEye", EffectType.POKEMON));
+			super(Namesies.MIRACLE_EYE_ATTACK, "Enables a Dark-type target to be hit by Psychic-type attacks. It also enables an evasive target to be hit.", 40, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.MIRACLE_EYE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -4581,7 +4621,7 @@ public abstract class Attack implements Serializable
 
 		public Howl()
 		{
-			super("Howl", "The user howls loudly to raise its spirit, boosting its Attack stat.", 40, Type.NORMAL, Category.STATUS);
+			super(Namesies.HOWL_ATTACK, "The user howls loudly to raise its spirit, boosting its Attack stat.", 40, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 		}
@@ -4593,10 +4633,10 @@ public abstract class Attack implements Serializable
 
 		public SignalBeam()
 		{
-			super("Signal Beam", "The user attacks with a sinister beam of light. It may also confuse the target.", 15, Type.BUG, Category.SPECIAL);
+			super(Namesies.SIGNAL_BEAM_ATTACK, "The user attacks with a sinister beam of light. It may also confuse the target.", 15, Type.BUG, Category.SPECIAL);
 			super.power = 75;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 		}
 	}
@@ -4607,10 +4647,10 @@ public abstract class Attack implements Serializable
 
 		public ZenHeadbutt()
 		{
-			super("Zen Headbutt", "The user focuses its willpower to its head and attacks the target. It may also make the target flinch.", 15, Type.PSYCHIC, Category.PHYSICAL);
+			super(Namesies.ZEN_HEADBUTT_ATTACK, "The user focuses its willpower to its head and attacks the target. It may also make the target flinch.", 15, Type.PSYCHIC, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4622,7 +4662,7 @@ public abstract class Attack implements Serializable
 
 		public Psychic()
 		{
-			super("Psychic", "The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat.", 10, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.PSYCHIC_ATTACK, "The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat.", 10, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -4636,7 +4676,7 @@ public abstract class Attack implements Serializable
 
 		public MudSlap()
 		{
-			super("Mud-slap", "The user hurls mud in the target's face to inflict damage and lower its accuracy.", 10, Type.GROUND, Category.SPECIAL);
+			super(Namesies.MUD_SLAP_ATTACK, "The user hurls mud in the target's face to inflict damage and lower its accuracy.", 10, Type.GROUND, Category.SPECIAL);
 			super.power = 20;
 			super.accuracy = 100;
 			super.statChanges[Stat.ACCURACY.index()] = -1;
@@ -4652,7 +4692,7 @@ public abstract class Attack implements Serializable
 
 		public Magnitude()
 		{
-			super("Magnitude", "The user looses a ground-shaking quake affecting everyone around the user. Its power varies.", 30, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.MAGNITUDE_ATTACK, "The user looses a ground-shaking quake affecting everyone around the user. Its power varies.", 30, Type.GROUND, Category.PHYSICAL);
 			super.accuracy = 100;
 		}
 
@@ -4680,7 +4720,7 @@ public abstract class Attack implements Serializable
 
 		public Bulldoze()
 		{
-			super("Bulldoze", "The user stomps down on the ground and attacks everything in the area. Hit Pok\u00e9mon's Speed stat is reduced.", 20, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.BULLDOZE_ATTACK, "The user stomps down on the ground and attacks everything in the area. Hit Pok\u00e9mon's Speed stat is reduced.", 20, Type.GROUND, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -4693,7 +4733,7 @@ public abstract class Attack implements Serializable
 
 		public Dig()
 		{
-			super("Dig", "The user burrows, then attacks on the second turn. It can also be used to exit dungeons.", 10, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.DIG_ATTACK, "The user burrows, then attacks on the second turn. It can also be used to exit dungeons.", 10, Type.GROUND, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -4727,7 +4767,7 @@ public abstract class Attack implements Serializable
 
 		public Earthquake()
 		{
-			super("Earthquake", "The user sets off an earthquake that strikes those around it.", 10, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.EARTHQUAKE_ATTACK, "The user sets off an earthquake that strikes those around it.", 10, Type.GROUND, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.HIT_DIG);
@@ -4750,7 +4790,7 @@ public abstract class Attack implements Serializable
 
 		public Fissure()
 		{
-			super("Fissure", "The user opens up a fissure in the ground and drops the target in. The target instantly faints if it hits.", 5, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.FISSURE_ATTACK, "The user opens up a fissure in the ground and drops the target in. The target instantly faints if it hits.", 5, Type.GROUND, Category.PHYSICAL);
 			super.accuracy = 30;
 			super.moveTypes.add(MoveType.ONE_HIT_KO);
 		}
@@ -4763,7 +4803,7 @@ public abstract class Attack implements Serializable
 				return -1;
 			}
 			
-			if (o.hasAbility("Sturdy") && !me.breaksTheMold())
+			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
 				b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
 				return -1;
@@ -4790,7 +4830,7 @@ public abstract class Attack implements Serializable
 
 		public NightSlash()
 		{
-			super("Night Slash", "The user slashes the target the instant an opportunity arises. Critical hits land more easily.", 15, Type.DARK, Category.PHYSICAL);
+			super(Namesies.NIGHT_SLASH_ATTACK, "The user slashes the target the instant an opportunity arises. Critical hits land more easily.", 15, Type.DARK, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -4808,7 +4848,7 @@ public abstract class Attack implements Serializable
 
 		public TriAttack()
 		{
-			super("Tri Attack", "The user strikes with a simultaneous three-beam attack. May also burn, freeze, or leave the target with paralysis.", 10, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.TRI_ATTACK_ATTACK, "The user strikes with a simultaneous three-beam attack. May also burn, freeze, or leave the target with paralysis.", 10, Type.NORMAL, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 20;
@@ -4830,10 +4870,10 @@ public abstract class Attack implements Serializable
 
 		public FakeOut()
 		{
-			super("Fake Out", "An attack that hits first and makes the target flinch. It only works the first turn the user is in battle.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.FAKE_OUT_ATTACK, "An attack that hits first and makes the target flinch. It only works the first turn the user is in battle.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.priority = 3;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4858,7 +4898,7 @@ public abstract class Attack implements Serializable
 
 		public FeintAttack()
 		{
-			super("Feint Attack", "The user approaches the target disarmingly, then throws a sucker punch. It hits without fail.", 20, Type.DARK, Category.PHYSICAL);
+			super(Namesies.FEINT_ATTACK_ATTACK, "The user approaches the target disarmingly, then throws a sucker punch. It hits without fail.", 20, Type.DARK, Category.PHYSICAL);
 			super.power = 60;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4870,9 +4910,9 @@ public abstract class Attack implements Serializable
 
 		public Taunt()
 		{
-			super("Taunt", "The target is taunted into a rage that allows it to use only attack moves for three turns.", 20, Type.DARK, Category.STATUS);
+			super(Namesies.TAUNT_ATTACK, "The target is taunted into a rage that allows it to use only attack moves for three turns.", 20, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Taunt", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.TAUNT_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
@@ -4883,10 +4923,10 @@ public abstract class Attack implements Serializable
 
 		public PayDay()
 		{
-			super("Pay Day", "Numerous coins are hurled at the target to inflict damage. Money is earned after the battle.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.PAY_DAY_ATTACK, "Numerous coins are hurled at the target to inflict damage. Money is earned after the battle.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("PayDay", EffectType.TEAM));
+			super.effects.add(Effect.getEffect(Namesies.PAY_DAY_EFFECT, EffectType.TEAM));
 			super.selfTarget = true;
 		}
 	}
@@ -4897,7 +4937,7 @@ public abstract class Attack implements Serializable
 
 		public PowerGem()
 		{
-			super("Power Gem", "The user attacks with a ray of light that sparkles as if it were made of gemstones.", 20, Type.ROCK, Category.SPECIAL);
+			super(Namesies.POWER_GEM_ATTACK, "The user attacks with a ray of light that sparkles as if it were made of gemstones.", 20, Type.ROCK, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 		}
@@ -4909,8 +4949,8 @@ public abstract class Attack implements Serializable
 
 		public WaterSport()
 		{
-			super("Water Sport", "The user soaks itself with water. The move weakens Fire-type moves while the user is in the battle.", 15, Type.WATER, Category.STATUS);
-			super.effects.add(Effect.getEffect("WaterSport", EffectType.BATTLE));
+			super(Namesies.WATER_SPORT_ATTACK, "The user soaks itself with water. The move weakens Fire-type moves while the user is in the battle.", 15, Type.WATER, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.WATER_SPORT_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -4921,9 +4961,9 @@ public abstract class Attack implements Serializable
 
 		public Soak()
 		{
-			super("Soak", "The user shoots a torrent of water at the target and changes the target's type to Water.", 20, Type.WATER, Category.STATUS);
+			super(Namesies.SOAK_ATTACK, "The user shoots a torrent of water at the target and changes the target's type to Water.", 20, Type.WATER, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeType", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_TYPE_EFFECT, EffectType.POKEMON));
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -4944,7 +4984,7 @@ public abstract class Attack implements Serializable
 
 		public PsychUp()
 		{
-			super("Psych Up", "The user hypnotizes itself into copying any stat change made by the target.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.PSYCH_UP_ATTACK, "The user hypnotizes itself into copying any stat change made by the target.", 10, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
@@ -4963,7 +5003,7 @@ public abstract class Attack implements Serializable
 
 		public Amnesia()
 		{
-			super("Amnesia", "The user temporarily empties its mind to forget its concerns. It sharply raises the user's Sp. Def stat.", 20, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.AMNESIA_ATTACK, "The user temporarily empties its mind to forget its concerns. It sharply raises the user's Sp. Def stat.", 20, Type.PSYCHIC, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 2;
 		}
@@ -4975,8 +5015,8 @@ public abstract class Attack implements Serializable
 
 		public WonderRoom()
 		{
-			super("Wonder Room", "The user creates a bizarre area in which Pok\u00e9mon's Defense and Sp. Def stats are swapped for five turns.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("WonderRoom", EffectType.BATTLE));
+			super(Namesies.WONDER_ROOM_ATTACK, "The user creates a bizarre area in which Pok\u00e9mon's Defense and Sp. Def stats are swapped for five turns.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.WONDER_ROOM_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -4987,7 +5027,7 @@ public abstract class Attack implements Serializable
 
 		public AquaJet()
 		{
-			super("Aqua Jet", "The user lunges at the target at a speed that makes it almost invisible. It is sure to strike first.", 20, Type.WATER, Category.PHYSICAL);
+			super(Namesies.AQUA_JET_ATTACK, "The user lunges at the target at a speed that makes it almost invisible. It is sure to strike first.", 20, Type.WATER, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.priority = 1;
@@ -5002,10 +5042,10 @@ public abstract class Attack implements Serializable
 
 		public Covet()
 		{
-			super("Covet", "The user endearingly approaches the target, then steals the target's held item.", 25, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.COVET_ATTACK, "The user endearingly approaches the target, then steals the target's held item.", 25, Type.NORMAL, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeItem", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5013,7 +5053,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility("Sticky Hold"))
+			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -5056,7 +5096,7 @@ public abstract class Attack implements Serializable
 
 		public LowKick()
 		{
-			super("Low Kick", "A powerful low kick that makes the target fall over. It inflicts greater damage on heavier targets.", 20, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.LOW_KICK_ATTACK, "A powerful low kick that makes the target fall over. It inflicts greater damage on heavier targets.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5079,7 +5119,7 @@ public abstract class Attack implements Serializable
 
 		public KarateChop()
 		{
-			super("Karate Chop", "The target is attacked with a sharp chop. Critical hits land more easily.", 25, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.KARATE_CHOP_ATTACK, "The target is attacked with a sharp chop. Critical hits land more easily.", 25, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5097,7 +5137,7 @@ public abstract class Attack implements Serializable
 
 		public SeismicToss()
 		{
-			super("Seismic Toss", "The target is thrown using the power of gravity. It inflicts damage equal to the user's level.", 20, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.SEISMIC_TOSS_ATTACK, "The target is thrown using the power of gravity. It inflicts damage equal to the user's level.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5119,9 +5159,9 @@ public abstract class Attack implements Serializable
 
 		public Swagger()
 		{
-			super("Swagger", "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", 15, Type.NORMAL, Category.STATUS);
+			super(Namesies.SWAGGER_ATTACK, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", 15, Type.NORMAL, Category.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.statChanges[Stat.ATTACK.index()] = 2;
 		}
 	}
@@ -5132,7 +5172,7 @@ public abstract class Attack implements Serializable
 
 		public CrossChop()
 		{
-			super("Cross Chop", "The user delivers a double chop with its forearms crossed. Critical hits land more easily.", 5, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.CROSS_CHOP_ATTACK, "The user delivers a double chop with its forearms crossed. Critical hits land more easily.", 5, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 80;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5150,7 +5190,7 @@ public abstract class Attack implements Serializable
 
 		public Punishment()
 		{
-			super("Punishment", "This attack's power increases the more the target has powered up with stat changes.", 5, Type.DARK, Category.PHYSICAL);
+			super(Namesies.PUNISHMENT_ATTACK, "This attack's power increases the more the target has powered up with stat changes.", 5, Type.DARK, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5168,7 +5208,7 @@ public abstract class Attack implements Serializable
 
 		public CloseCombat()
 		{
-			super("Close Combat", "The user fights the target up close without guarding itself. It also cuts the user's Defense and Sp. Def.", 5, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.CLOSE_COMBAT_ATTACK, "The user fights the target up close without guarding itself. It also cuts the user's Defense and Sp. Def.", 5, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.selfTarget = true;
@@ -5184,7 +5224,7 @@ public abstract class Attack implements Serializable
 
 		public FlameWheel()
 		{
-			super("Flame Wheel", "The user cloaks itself in fire and charges at the target. It may also leave the target with a burn.", 25, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.FLAME_WHEEL_ATTACK, "The user cloaks itself in fire and charges at the target. It may also leave the target with a burn.", 25, Type.FIRE, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -5200,7 +5240,7 @@ public abstract class Attack implements Serializable
 
 		public Reversal()
 		{
-			super("Reversal", "An all-out attack that becomes more powerful the less HP the user has.", 15, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.REVERSAL_ATTACK, "An all-out attack that becomes more powerful the less HP the user has.", 15, Type.FIGHTING, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5223,7 +5263,7 @@ public abstract class Attack implements Serializable
 
 		public ExtremeSpeed()
 		{
-			super("Extreme Speed", "The user charges the target at blinding speed. This attack always goes before any other move.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.EXTREME_SPEED_ATTACK, "The user charges the target at blinding speed. This attack always goes before any other move.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.priority = 2;
@@ -5237,7 +5277,7 @@ public abstract class Attack implements Serializable
 
 		public Hypnosis()
 		{
-			super("Hypnosis", "The user employs hypnotic suggestion to make the target fall into a deep sleep.", 20, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.HYPNOSIS_ATTACK, "The user employs hypnotic suggestion to make the target fall into a deep sleep.", 20, Type.PSYCHIC, Category.STATUS);
 			super.accuracy = 60;
 			super.status = StatusCondition.ASLEEP;
 		}
@@ -5249,7 +5289,7 @@ public abstract class Attack implements Serializable
 
 		public BubbleBeam()
 		{
-			super("Bubble Beam", "A spray of bubbles is forcefully ejected at the opposing team. It may also lower their Speed stats.", 20, Type.WATER, Category.SPECIAL);
+			super(Namesies.BUBBLE_BEAM_ATTACK, "A spray of bubbles is forcefully ejected at the opposing team. It may also lower their Speed stats.", 20, Type.WATER, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -5263,7 +5303,7 @@ public abstract class Attack implements Serializable
 
 		public MudShot()
 		{
-			super("Mud Shot", "The user attacks by hurling a blob of mud at the target. It also reduces the target's Speed.", 15, Type.GROUND, Category.SPECIAL);
+			super(Namesies.MUD_SHOT_ATTACK, "The user attacks by hurling a blob of mud at the target. It also reduces the target's Speed.", 15, Type.GROUND, Category.SPECIAL);
 			super.power = 55;
 			super.accuracy = 95;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -5276,7 +5316,7 @@ public abstract class Attack implements Serializable
 
 		public BellyDrum()
 		{
-			super("Belly Drum", "The user maximizes its Attack stat in exchange for HP equal to half its max HP.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.BELLY_DRUM_ATTACK, "The user maximizes its Attack stat in exchange for HP equal to half its max HP.", 10, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
@@ -5302,7 +5342,7 @@ public abstract class Attack implements Serializable
 
 		public Submission()
 		{
-			super("Submission", "The user grabs the target and recklessly dives for the ground. It also hurts the user slightly.", 25, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.SUBMISSION_ATTACK, "The user grabs the target and recklessly dives for the ground. It also hurts the user slightly.", 25, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 80;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5310,7 +5350,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/4.0));
 		}
@@ -5322,10 +5366,10 @@ public abstract class Attack implements Serializable
 
 		public DynamicPunch()
 		{
-			super("Dynamic Punch", "The user punches the target with full, concentrated power. It confuses the target if it hits.", 5, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.DYNAMIC_PUNCH_ATTACK, "The user punches the target with full, concentrated power. It confuses the target if it hits.", 5, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 50;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PUNCHING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5337,8 +5381,8 @@ public abstract class Attack implements Serializable
 
 		public MindReader()
 		{
-			super("Mind Reader", "The user senses the target's movements with its mind to ensure its next attack does not miss the target.", 5, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("LockOn", EffectType.POKEMON));
+			super(Namesies.MIND_READER_ATTACK, "The user senses the target's movements with its mind to ensure its next attack does not miss the target.", 5, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.LOCK_ON_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -5350,8 +5394,8 @@ public abstract class Attack implements Serializable
 
 		public LockOn()
 		{
-			super("Lock-on", "The user takes sure aim at the target. It ensures the next attack does not fail to hit the target.", 5, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("LockOn", EffectType.POKEMON));
+			super(Namesies.LOCK_ON_ATTACK, "The user takes sure aim at the target. It ensures the next attack does not fail to hit the target.", 5, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.LOCK_ON_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -5363,7 +5407,7 @@ public abstract class Attack implements Serializable
 
 		public Kinesis()
 		{
-			super("Kinesis", "The user distracts the target by bending a spoon. It lowers the target's accuracy.", 15, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.KINESIS_ATTACK, "The user distracts the target by bending a spoon. It lowers the target's accuracy.", 15, Type.PSYCHIC, Category.STATUS);
 			super.accuracy = 80;
 			super.statChanges[Stat.ACCURACY.index()] = -1;
 		}
@@ -5375,7 +5419,7 @@ public abstract class Attack implements Serializable
 
 		public Barrier()
 		{
-			super("Barrier", "The user throws up a sturdy wall that sharply raises its Defense stat.", 20, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.BARRIER_ATTACK, "The user throws up a sturdy wall that sharply raises its Defense stat.", 20, Type.PSYCHIC, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 2;
 		}
@@ -5387,8 +5431,8 @@ public abstract class Attack implements Serializable
 
 		public Telekinesis()
 		{
-			super("Telekinesis", "The user makes the target float with its psychic power. The target is easier to hit for three turns.", 15, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("Telekinesis", EffectType.POKEMON));
+			super(Namesies.TELEKINESIS_ATTACK, "The user makes the target float with its psychic power. The target is easier to hit for three turns.", 15, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.TELEKINESIS_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.AIRBORNE);
 		}
 	}
@@ -5399,8 +5443,8 @@ public abstract class Attack implements Serializable
 
 		public Ingrain()
 		{
-			super("Ingrain", "The user lays roots that restore its HP on every turn. Because it is rooted, it can't switch out.", 20, Type.GRASS, Category.STATUS);
-			super.effects.add(Effect.getEffect("Ingrain", EffectType.POKEMON));
+			super(Namesies.INGRAIN_ATTACK, "The user lays roots that restore its HP on every turn. Because it is rooted, it can't switch out.", 20, Type.GRASS, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.INGRAIN_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 	}
@@ -5411,7 +5455,7 @@ public abstract class Attack implements Serializable
 
 		public PsychoCut()
 		{
-			super("Psycho Cut", "The user tears at the target with blades formed by psychic power. Critical hits land more easily.", 20, Type.PSYCHIC, Category.PHYSICAL);
+			super(Namesies.PSYCHO_CUT_ATTACK, "The user tears at the target with blades formed by psychic power. Critical hits land more easily.", 20, Type.PSYCHIC, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 		}
@@ -5428,10 +5472,10 @@ public abstract class Attack implements Serializable
 
 		public FutureSight()
 		{
-			super("Future Sight", "Two turns after this move is used, a hunk of psychic energy attacks the target.", 10, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.FUTURE_SIGHT_ATTACK, "Two turns after this move is used, a hunk of psychic energy attacks the target.", 10, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("FutureSight", EffectType.TEAM));
+			super.effects.add(Effect.getEffect(Namesies.FUTURE_SIGHT_EFFECT, EffectType.TEAM));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
@@ -5446,10 +5490,10 @@ public abstract class Attack implements Serializable
 
 		public DoomDesire()
 		{
-			super("Doom Desire", "Two turns after this move is used, the user blasts the target with a concentrated bundle of light.", 5, Type.STEEL, Category.SPECIAL);
+			super(Namesies.DOOM_DESIRE_ATTACK, "Two turns after this move is used, the user blasts the target with a concentrated bundle of light.", 5, Type.STEEL, Category.SPECIAL);
 			super.power = 140;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("DoomDesire", EffectType.TEAM));
+			super.effects.add(Effect.getEffect(Namesies.DOOM_DESIRE_EFFECT, EffectType.TEAM));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
@@ -5464,7 +5508,7 @@ public abstract class Attack implements Serializable
 
 		public CalmMind()
 		{
-			super("Calm Mind", "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.", 20, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.CALM_MIND_ATTACK, "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.", 20, Type.PSYCHIC, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
@@ -5477,7 +5521,7 @@ public abstract class Attack implements Serializable
 
 		public LowSweep()
 		{
-			super("Low Sweep", "The user attacks the target's legs swiftly, reducing the target's Speed stat.", 20, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.LOW_SWEEP_ATTACK, "The user attacks the target's legs swiftly, reducing the target's Speed stat.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -5491,7 +5535,7 @@ public abstract class Attack implements Serializable
 
 		public Revenge()
 		{
-			super("Revenge", "An attack move that inflicts double the damage if the user has been hurt by the opponent in the same turn.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.REVENGE_ATTACK, "An attack move that inflicts double the damage if the user has been hurt by the opponent in the same turn.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.priority = -4;
@@ -5515,7 +5559,7 @@ public abstract class Attack implements Serializable
 
 		public VitalThrow()
 		{
-			super("Vital Throw", "The user attacks last. In return, this throw move is guaranteed not to miss.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.VITAL_THROW_ATTACK, "The user attacks last. In return, this throw move is guaranteed not to miss.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 70;
 			super.priority = -1;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5528,7 +5572,7 @@ public abstract class Attack implements Serializable
 
 		public WringOut()
 		{
-			super("Wring Out", "The user powerfully wrings the target. The more HP the target has, the greater this attack's power.", 5, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.WRING_OUT_ATTACK, "The user powerfully wrings the target. The more HP the target has, the greater this attack's power.", 5, Type.NORMAL, Category.SPECIAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5545,7 +5589,7 @@ public abstract class Attack implements Serializable
 
 		public LeafTornado()
 		{
-			super("Leaf Tornado", "The user attacks its target by encircling it in sharp leaves. This attack may also lower the target's accuracy.", 10, Type.GRASS, Category.SPECIAL);
+			super(Namesies.LEAF_TORNADO_ATTACK, "The user attacks its target by encircling it in sharp leaves. This attack may also lower the target's accuracy.", 10, Type.GRASS, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 90;
 			super.effectChance = 30;
@@ -5559,7 +5603,7 @@ public abstract class Attack implements Serializable
 
 		public LeafStorm()
 		{
-			super("Leaf Storm", "The user whips up a storm of leaves around the target. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.GRASS, Category.SPECIAL);
+			super(Namesies.LEAF_STORM_ATTACK, "The user whips up a storm of leaves around the target. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.GRASS, Category.SPECIAL);
 			super.power = 130;
 			super.accuracy = 90;
 			super.selfTarget = true;
@@ -5573,7 +5617,7 @@ public abstract class Attack implements Serializable
 
 		public LeafBlade()
 		{
-			super("Leaf Blade", "The user handles a sharp leaf like a sword and attacks by cutting its target. Critical hits land more easily.", 15, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.LEAF_BLADE_ATTACK, "The user handles a sharp leaf like a sword and attacks by cutting its target. Critical hits land more easily.", 15, Type.GRASS, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5591,7 +5635,7 @@ public abstract class Attack implements Serializable
 
 		public Constrict()
 		{
-			super("Constrict", "The target is attacked with long, creeping tentacles or vines. It may also lower the target's Speed stat.", 35, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.CONSTRICT_ATTACK, "The target is attacked with long, creeping tentacles or vines. It may also lower the target's Speed stat.", 35, Type.NORMAL, Category.PHYSICAL);
 			super.power = 10;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -5606,7 +5650,7 @@ public abstract class Attack implements Serializable
 
 		public Hex()
 		{
-			super("Hex", "This relentless attack does massive damage to a target affected by status problems.", 10, Type.GHOST, Category.SPECIAL);
+			super(Namesies.HEX_ATTACK, "This relentless attack does massive damage to a target affected by status problems.", 10, Type.GHOST, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
 		}
@@ -5623,7 +5667,7 @@ public abstract class Attack implements Serializable
 
 		public SludgeWave()
 		{
-			super("Sludge Wave", "It swamps the area around the user with a giant sludge wave. It may also poison those hit.", 10, Type.POISON, Category.SPECIAL);
+			super(Namesies.SLUDGE_WAVE_ATTACK, "It swamps the area around the user with a giant sludge wave. It may also poison those hit.", 10, Type.POISON, Category.SPECIAL);
 			super.power = 95;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -5637,8 +5681,8 @@ public abstract class Attack implements Serializable
 
 		public MudSport()
 		{
-			super("Mud Sport", "The user covers itself with mud. It weakens Electric-type moves while the user is in the battle.", 15, Type.GROUND, Category.STATUS);
-			super.effects.add(Effect.getEffect("MudSport", EffectType.BATTLE));
+			super(Namesies.MUD_SPORT_ATTACK, "The user covers itself with mud. It weakens Electric-type moves while the user is in the battle.", 15, Type.GROUND, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.MUD_SPORT_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -5649,7 +5693,7 @@ public abstract class Attack implements Serializable
 
 		public RockPolish()
 		{
-			super("Rock Polish", "The user polishes its body to reduce drag. It can sharply raise the Speed stat.", 20, Type.ROCK, Category.STATUS);
+			super(Namesies.ROCK_POLISH_ATTACK, "The user polishes its body to reduce drag. It can sharply raise the Speed stat.", 20, Type.ROCK, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.SPEED.index()] = 2;
 		}
@@ -5661,7 +5705,7 @@ public abstract class Attack implements Serializable
 
 		public RockThrow()
 		{
-			super("Rock Throw", "The user picks up and throws a small rock at the target to attack.", 15, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.ROCK_THROW_ATTACK, "The user picks up and throws a small rock at the target to attack.", 15, Type.ROCK, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 90;
 		}
@@ -5673,7 +5717,7 @@ public abstract class Attack implements Serializable
 
 		public RockBlast()
 		{
-			super("Rock Blast", "The user hurls hard rocks at the target. Two to five rocks are launched in quick succession.", 10, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.ROCK_BLAST_ATTACK, "The user hurls hard rocks at the target. Two to five rocks are launched in quick succession.", 10, Type.ROCK, Category.PHYSICAL);
 			super.power = 25;
 			super.accuracy = 90;
 		}
@@ -5691,7 +5735,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -5713,10 +5757,10 @@ public abstract class Attack implements Serializable
 
 		public SmackDown()
 		{
-			super("Smack Down", "The user throws a stone or projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when hit.", 15, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.SMACK_DOWN_ATTACK, "The user throws a stone or projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when hit.", 15, Type.ROCK, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Grounded", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.GROUNDED_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.HIT_FLY);
 		}
 	}
@@ -5727,8 +5771,8 @@ public abstract class Attack implements Serializable
 
 		public StealthRock()
 		{
-			super("Stealth Rock", "The user lays a trap of levitating stones around the opponent's team. The trap hurts opponents that switch into battle.", 20, Type.ROCK, Category.STATUS);
-			super.effects.add(Effect.getEffect("StealthRock", EffectType.TEAM));
+			super(Namesies.STEALTH_ROCK_ATTACK, "The user lays a trap of levitating stones around the opponent's team. The trap hurts opponents that switch into battle.", 20, Type.ROCK, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.STEALTH_ROCK_EFFECT, EffectType.TEAM));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -5739,7 +5783,7 @@ public abstract class Attack implements Serializable
 
 		public StoneEdge()
 		{
-			super("Stone Edge", "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.", 5, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.STONE_EDGE_ATTACK, "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.", 5, Type.ROCK, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 80;
 		}
@@ -5756,17 +5800,17 @@ public abstract class Attack implements Serializable
 
 		public Steamroller()
 		{
-			super("Steamroller", "The user crushes its targets by rolling over them with its rolled-up body. This attack may make the target flinch.", 20, Type.BUG, Category.PHYSICAL);
+			super(Namesies.STEAMROLLER_ATTACK, "The user crushes its targets by rolling over them with its rolled-up body. This attack may make the target flinch.", 20, Type.BUG, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return super.power*(o.hasEffect("UsedMinimize") ? 2 : 1);
+			return super.power*(o.hasEffect(Namesies.USED_MINIMIZE_EFFECT) ? 2 : 1);
 		}
 	}
 
@@ -5776,7 +5820,7 @@ public abstract class Attack implements Serializable
 
 		public HeavySlam()
 		{
-			super("Heavy Slam", "The user slams into the target with its heavy body. The more the user outweighs the target, the greater its damage.", 10, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.HEAVY_SLAM_ATTACK, "The user slams into the target with its heavy body. The more the user outweighs the target, the greater its damage.", 10, Type.STEEL, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5798,10 +5842,10 @@ public abstract class Attack implements Serializable
 
 		public Stomp()
 		{
-			super("Stomp", "The target is stomped with a big foot. It may also make the target flinch.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.STOMP_ATTACK, "The target is stomped with a big foot. It may also make the target flinch.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5813,7 +5857,7 @@ public abstract class Attack implements Serializable
 
 		public FlameCharge()
 		{
-			super("Flame Charge", "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.", 20, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.FLAME_CHARGE_ATTACK, "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.", 20, Type.FIRE, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
 			super.selfTarget = true;
@@ -5828,7 +5872,7 @@ public abstract class Attack implements Serializable
 
 		public Bounce()
 		{
-			super("Bounce", "The user bounces up high, then drops on the target on the second turn. It may also leave the target with paralysis.", 5, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.BOUNCE_ATTACK, "The user bounces up high, then drops on the target on the second turn. It may also leave the target with paralysis.", 5, Type.FLYING, Category.PHYSICAL);
 			super.power = 85;
 			super.accuracy = 85;
 			super.effectChance = 30;
@@ -5865,8 +5909,8 @@ public abstract class Attack implements Serializable
 
 		public Curse()
 		{
-			super("Curse", "A move that works differently for the Ghost type than for all other types.", 10, Type.GHOST, Category.STATUS);
-			super.effects.add(Effect.getEffect("Curse", EffectType.POKEMON));
+			super(Namesies.CURSE_ATTACK, "A move that works differently for the Ghost type than for all other types.", 10, Type.GHOST, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CURSE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.statChanges[Stat.ATTACK.index()] = 1;
@@ -5901,8 +5945,8 @@ public abstract class Attack implements Serializable
 
 		public Yawn()
 		{
-			super("Yawn", "The user lets loose a huge yawn that lulls the target into falling asleep on the next turn.", 10, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Yawn", EffectType.POKEMON));
+			super(Namesies.YAWN_ATTACK, "The user lets loose a huge yawn that lulls the target into falling asleep on the next turn.", 10, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.YAWN_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -5912,10 +5956,10 @@ public abstract class Attack implements Serializable
 
 		public Headbutt()
 		{
-			super("Headbutt", "The user sticks out its head and attacks by charging straight into the target. It may also make the target flinch.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.HEADBUTT_ATTACK, "The user sticks out its head and attacks by charging straight into the target. It may also make the target flinch.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5927,13 +5971,13 @@ public abstract class Attack implements Serializable
 
 		public SlackOff()
 		{
-			super("Slack Off", "The user slacks off, restoring its own HP by up to half of its maximum HP.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.SLACK_OFF_ATTACK, "The user slacks off, restoring its own HP by up to half of its maximum HP.", 10, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -5951,12 +5995,12 @@ public abstract class Attack implements Serializable
 
 		public HealPulse()
 		{
-			super("Heal Pulse", "The user emits a healing pulse which restores the target's HP by up to half of its max HP.", 10, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.HEAL_PULSE_ATTACK, "The user emits a healing pulse which restores the target's HP by up to half of its max HP.", 10, Type.PSYCHIC, Category.STATUS);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -5973,7 +6017,7 @@ public abstract class Attack implements Serializable
 
 		public MetalSound()
 		{
-			super("Metal Sound", "A horrible sound like scraping metal harshly reduces the target's Sp. Def stat.", 40, Type.STEEL, Category.STATUS);
+			super(Namesies.METAL_SOUND_ATTACK, "A horrible sound like scraping metal harshly reduces the target's Sp. Def stat.", 40, Type.STEEL, Category.STATUS);
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.statChanges[Stat.SP_DEFENSE.index()] = -2;
@@ -5986,7 +6030,7 @@ public abstract class Attack implements Serializable
 
 		public Spark()
 		{
-			super("Spark", "The user throws an electrically charged tackle at the target. It may also leave the target with paralysis.", 20, Type.ELECTRIC, Category.PHYSICAL);
+			super(Namesies.SPARK_ATTACK, "The user throws an electrically charged tackle at the target. It may also leave the target with paralysis.", 20, Type.ELECTRIC, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -6001,7 +6045,7 @@ public abstract class Attack implements Serializable
 
 		public MagnetBomb()
 		{
-			super("Magnet Bomb", "The user launches steel bombs that stick to the target. This attack will not miss.", 20, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.MAGNET_BOMB_ATTACK, "The user launches steel bombs that stick to the target. This attack will not miss.", 20, Type.STEEL, Category.PHYSICAL);
 			super.power = 60;
 		}
 	}
@@ -6012,7 +6056,7 @@ public abstract class Attack implements Serializable
 
 		public MirrorShot()
 		{
-			super("Mirror Shot", "The user looses a flash of energy at the target from its polished body. It may also lower the target's accuracy.", 10, Type.STEEL, Category.SPECIAL);
+			super(Namesies.MIRROR_SHOT_ATTACK, "The user looses a flash of energy at the target from its polished body. It may also lower the target's accuracy.", 10, Type.STEEL, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 85;
 			super.statChanges[Stat.ACCURACY.index()] = -1;
@@ -6025,8 +6069,8 @@ public abstract class Attack implements Serializable
 
 		public MagnetRise()
 		{
-			super("Magnet Rise", "The user levitates using electrically generated magnetism for five turns.", 10, Type.ELECTRIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("MagnetRise", EffectType.POKEMON));
+			super(Namesies.MAGNET_RISE_ATTACK, "The user levitates using electrically generated magnetism for five turns.", 10, Type.ELECTRIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.MAGNET_RISE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.AIRBORNE);
 			super.selfTarget = true;
 		}
@@ -6038,7 +6082,7 @@ public abstract class Attack implements Serializable
 
 		public ZapCannon()
 		{
-			super("Zap Cannon", "The user fires an electric blast like a cannon to inflict damage and cause paralysis.", 5, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.ZAP_CANNON_ATTACK, "The user fires an electric blast like a cannon to inflict damage and cause paralysis.", 5, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 50;
 			super.status = StatusCondition.PARALYZED;
@@ -6051,7 +6095,7 @@ public abstract class Attack implements Serializable
 
 		public BraveBird()
 		{
-			super("Brave Bird", "The user tucks in its wings and charges from a low altitude. The user also takes serious damage.", 15, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.BRAVE_BIRD_ATTACK, "The user tucks in its wings and charges from a low altitude. The user also takes serious damage.", 15, Type.FLYING, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -6059,7 +6103,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/3.0));
 		}
@@ -6071,10 +6119,10 @@ public abstract class Attack implements Serializable
 
 		public Uproar()
 		{
-			super("Uproar", "The user attacks in an uproar for three turns. Over that time, no one can fall asleep.", 10, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.UPROAR_ATTACK, "The user attacks in an uproar for three turns. Over that time, no one can fall asleep.", 10, Type.NORMAL, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Uproar", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.UPROAR_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.selfTarget = true;
@@ -6087,7 +6135,7 @@ public abstract class Attack implements Serializable
 
 		public Acupressure()
 		{
-			super("Acupressure", "The user applies pressure to stress points, sharply boosting one of its stats.", 30, Type.NORMAL, Category.STATUS);
+			super(Namesies.ACUPRESSURE_ATTACK, "The user applies pressure to stress points, sharply boosting one of its stats.", 30, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
@@ -6105,7 +6153,7 @@ public abstract class Attack implements Serializable
 
 		public DoubleHit()
 		{
-			super("Double Hit", "The user slams the target with a long tail, vines, or tentacle. The target is hit twice in a row.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.DOUBLE_HIT_ATTACK, "The user slams the target with a long tail, vines, or tentacle. The target is hit twice in a row.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -6124,7 +6172,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -6146,7 +6194,7 @@ public abstract class Attack implements Serializable
 
 		public IcyWind()
 		{
-			super("Icy Wind", "The user attacks with a gust of chilled air. It also reduces the targets' Speed stat.", 15, Type.ICE, Category.SPECIAL);
+			super(Namesies.ICY_WIND_ATTACK, "The user attacks with a gust of chilled air. It also reduces the targets' Speed stat.", 15, Type.ICE, Category.SPECIAL);
 			super.power = 55;
 			super.accuracy = 95;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -6159,7 +6207,7 @@ public abstract class Attack implements Serializable
 
 		public IceShard()
 		{
-			super("Ice Shard", "The user flash freezes chunks of ice and hurls them at the target. This move always goes first.", 30, Type.ICE, Category.PHYSICAL);
+			super(Namesies.ICE_SHARD_ATTACK, "The user flash freezes chunks of ice and hurls them at the target. This move always goes first.", 30, Type.ICE, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.priority = 1;
@@ -6172,8 +6220,8 @@ public abstract class Attack implements Serializable
 
 		public AquaRing()
 		{
-			super("Aqua Ring", "The user envelops itself in a veil made of water. It regains some HP on every turn.", 20, Type.WATER, Category.STATUS);
-			super.effects.add(Effect.getEffect("AquaRing", EffectType.POKEMON));
+			super(Namesies.AQUA_RING_ATTACK, "The user envelops itself in a veil made of water. It regains some HP on every turn.", 20, Type.WATER, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.AQUA_RING_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 	}
@@ -6184,7 +6232,7 @@ public abstract class Attack implements Serializable
 
 		public AuroraBeam()
 		{
-			super("Aurora Beam", "The target is hit with a rainbow-colored beam. This may also lower the target's Attack stat.", 20, Type.ICE, Category.SPECIAL);
+			super(Namesies.AURORA_BEAM_ATTACK, "The target is hit with a rainbow-colored beam. This may also lower the target's Attack stat.", 20, Type.ICE, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -6198,7 +6246,7 @@ public abstract class Attack implements Serializable
 
 		public Brine()
 		{
-			super("Brine", "If the target's HP is down to about half, this attack will hit with double the power.", 10, Type.WATER, Category.SPECIAL);
+			super(Namesies.BRINE_ATTACK, "If the target's HP is down to about half, this attack will hit with double the power.", 10, Type.WATER, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
 		}
@@ -6215,7 +6263,7 @@ public abstract class Attack implements Serializable
 
 		public Dive()
 		{
-			super("Dive", "Diving on the first turn, the user floats up and attacks on the second turn. It can be used to dive deep in the ocean.", 10, Type.WATER, Category.PHYSICAL);
+			super(Namesies.DIVE_ATTACK, "Diving on the first turn, the user floats up and attacks on the second turn. It can be used to dive deep in the ocean.", 10, Type.WATER, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -6249,7 +6297,7 @@ public abstract class Attack implements Serializable
 
 		public IceBeam()
 		{
-			super("Ice Beam", "The target is struck with an icy-cold beam of energy. It may also freeze the target solid.", 10, Type.ICE, Category.SPECIAL);
+			super(Namesies.ICE_BEAM_ATTACK, "The target is struck with an icy-cold beam of energy. It may also freeze the target solid.", 10, Type.ICE, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -6263,7 +6311,7 @@ public abstract class Attack implements Serializable
 
 		public SheerCold()
 		{
-			super("Sheer Cold", "The target is attacked with a blast of absolute-zero cold. The target instantly faints if it hits.", 5, Type.ICE, Category.SPECIAL);
+			super(Namesies.SHEER_COLD_ATTACK, "The target is attacked with a blast of absolute-zero cold. The target instantly faints if it hits.", 5, Type.ICE, Category.SPECIAL);
 			super.accuracy = 30;
 			super.moveTypes.add(MoveType.ONE_HIT_KO);
 		}
@@ -6276,7 +6324,7 @@ public abstract class Attack implements Serializable
 				return -1;
 			}
 			
-			if (o.hasAbility("Sturdy") && !me.breaksTheMold())
+			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
 				b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
 				return -1;
@@ -6303,7 +6351,7 @@ public abstract class Attack implements Serializable
 
 		public PoisonGas()
 		{
-			super("Poison Gas", "A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon. It may poison those hit.", 40, Type.POISON, Category.STATUS);
+			super(Namesies.POISON_GAS_ATTACK, "A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon. It may poison those hit.", 40, Type.POISON, Category.STATUS);
 			super.accuracy = 90;
 			super.status = StatusCondition.POISONED;
 		}
@@ -6315,7 +6363,7 @@ public abstract class Attack implements Serializable
 
 		public Sludge()
 		{
-			super("Sludge", "Unsanitary sludge is hurled at the target. It may also poison the target.", 20, Type.POISON, Category.SPECIAL);
+			super(Namesies.SLUDGE_ATTACK, "Unsanitary sludge is hurled at the target. It may also poison the target.", 20, Type.POISON, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -6329,7 +6377,7 @@ public abstract class Attack implements Serializable
 
 		public SludgeBomb()
 		{
-			super("Sludge Bomb", "Unsanitary sludge is hurled at the target. It may also poison the target.", 10, Type.POISON, Category.SPECIAL);
+			super(Namesies.SLUDGE_BOMB_ATTACK, "Unsanitary sludge is hurled at the target. It may also poison the target.", 10, Type.POISON, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -6343,7 +6391,7 @@ public abstract class Attack implements Serializable
 
 		public AcidArmor()
 		{
-			super("Acid Armor", "The user alters its cellular structure to liquefy itself, sharply raising its Defense stat.", 20, Type.POISON, Category.STATUS);
+			super(Namesies.ACID_ARMOR_ATTACK, "The user alters its cellular structure to liquefy itself, sharply raising its Defense stat.", 20, Type.POISON, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 2;
 		}
@@ -6355,7 +6403,7 @@ public abstract class Attack implements Serializable
 
 		public IcicleSpear()
 		{
-			super("Icicle Spear", "The user launches sharp icicles at the target. It strikes two to five times in a row.", 30, Type.ICE, Category.PHYSICAL);
+			super(Namesies.ICICLE_SPEAR_ATTACK, "The user launches sharp icicles at the target. It strikes two to five times in a row.", 30, Type.ICE, Category.PHYSICAL);
 			super.power = 25;
 			super.accuracy = 100;
 		}
@@ -6373,7 +6421,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -6395,10 +6443,10 @@ public abstract class Attack implements Serializable
 
 		public Clamp()
 		{
-			super("Clamp", "The target is clamped and squeezed by the user's very thick and sturdy shell for four to five turns.", 15, Type.WATER, Category.PHYSICAL);
+			super(Namesies.CLAMP_ATTACK, "The target is clamped and squeezed by the user's very thick and sturdy shell for four to five turns.", 15, Type.WATER, Category.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect("Clamped", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CLAMPED_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -6409,7 +6457,7 @@ public abstract class Attack implements Serializable
 
 		public RazorShell()
 		{
-			super("Razor Shell", "The user cuts its target with sharp shells. This attack may also lower the target's Defense stat.", 10, Type.WATER, Category.PHYSICAL);
+			super(Namesies.RAZOR_SHELL_ATTACK, "The user cuts its target with sharp shells. This attack may also lower the target's Defense stat.", 10, Type.WATER, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 95;
 			super.effectChance = 50;
@@ -6424,10 +6472,10 @@ public abstract class Attack implements Serializable
 
 		public Whirlpool()
 		{
-			super("Whirlpool", "Traps foes in a violent swirling whirlpool for four to five turns.", 15, Type.WATER, Category.SPECIAL);
+			super(Namesies.WHIRLPOOL_ATTACK, "Traps foes in a violent swirling whirlpool for four to five turns.", 15, Type.WATER, Category.SPECIAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect("Whirlpool", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.WHIRLPOOL_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -6437,7 +6485,7 @@ public abstract class Attack implements Serializable
 
 		public ShellSmash()
 		{
-			super("Shell Smash", "The user breaks its shell, lowering its Defense and Sp. Def stats but sharply raising Attack, Sp. Atk, and Speed stats.", 15, Type.NORMAL, Category.STATUS);
+			super(Namesies.SHELL_SMASH_ATTACK, "The user breaks its shell, lowering its Defense and Sp. Def stats but sharply raising Attack, Sp. Atk, and Speed stats.", 15, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = -1;
 			super.statChanges[Stat.SP_DEFENSE.index()] = -1;
@@ -6453,7 +6501,7 @@ public abstract class Attack implements Serializable
 
 		public SpikeCannon()
 		{
-			super("Spike Cannon", "Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SPIKE_CANNON_ATTACK, "Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 20;
 			super.accuracy = 100;
 		}
@@ -6471,7 +6519,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -6493,8 +6541,8 @@ public abstract class Attack implements Serializable
 
 		public Spikes()
 		{
-			super("Spikes", "The user lays a trap of spikes at the opposing team's feet. The trap hurts Pok\u00e9mon that switch into battle.", 20, Type.GROUND, Category.STATUS);
-			super.effects.add(Effect.getEffect("Spikes", EffectType.TEAM));
+			super(Namesies.SPIKES_ATTACK, "The user lays a trap of spikes at the opposing team's feet. The trap hurts Pok\u00e9mon that switch into battle.", 20, Type.GROUND, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.SPIKES_EFFECT, EffectType.TEAM));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -6505,10 +6553,10 @@ public abstract class Attack implements Serializable
 
 		public IcicleCrash()
 		{
-			super("Icicle Crash", "The user attacks by harshly dropping an icicle onto the target. It may also make the target flinch.", 10, Type.ICE, Category.PHYSICAL);
+			super(Namesies.ICICLE_CRASH_ATTACK, "The user attacks by harshly dropping an icicle onto the target. It may also make the target flinch.", 10, Type.ICE, Category.PHYSICAL);
 			super.power = 85;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 		}
 	}
@@ -6519,7 +6567,7 @@ public abstract class Attack implements Serializable
 
 		public Lick()
 		{
-			super("Lick", "The target is licked with a long tongue, causing damage. It may also leave the target with paralysis.", 30, Type.GHOST, Category.PHYSICAL);
+			super(Namesies.LICK_ATTACK, "The target is licked with a long tongue, causing damage. It may also leave the target with paralysis.", 30, Type.GHOST, Category.PHYSICAL);
 			super.power = 30;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -6534,7 +6582,7 @@ public abstract class Attack implements Serializable
 
 		public Spite()
 		{
-			super("Spite", "The user unleashes its grudge on the move last used by the target by cutting 4 PP from it.", 10, Type.GHOST, Category.STATUS);
+			super(Namesies.SPITE_ATTACK, "The user unleashes its grudge on the move last used by the target by cutting 4 PP from it.", 10, Type.GHOST, Category.STATUS);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
@@ -6544,7 +6592,7 @@ public abstract class Attack implements Serializable
 			Move last = victim.getAttributes().getLastMoveUsed();
 			
 			// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
-			if (last == null || last.getPP() == 0 || !victim.hasMove(last.getAttack().getName()))
+			if (last == null || last.getPP() == 0 || !victim.hasMove(last.getAttack().namesies()))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -6560,7 +6608,7 @@ public abstract class Attack implements Serializable
 
 		public NightShade()
 		{
-			super("Night Shade", "The user makes the target see a frightening mirage. It inflicts damage matching the user's level.", 15, Type.GHOST, Category.SPECIAL);
+			super(Namesies.NIGHT_SHADE_ATTACK, "The user makes the target see a frightening mirage. It inflicts damage matching the user's level.", 15, Type.GHOST, Category.SPECIAL);
 			super.accuracy = 100;
 		}
 
@@ -6581,7 +6629,7 @@ public abstract class Attack implements Serializable
 
 		public ShadowBall()
 		{
-			super("Shadow Ball", "The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.", 15, Type.GHOST, Category.SPECIAL);
+			super(Namesies.SHADOW_BALL_ATTACK, "The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.", 15, Type.GHOST, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 20;
@@ -6595,7 +6643,7 @@ public abstract class Attack implements Serializable
 
 		public DreamEater()
 		{
-			super("Dream Eater", "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", 15, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.DREAM_EATER_ATTACK, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", 15, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 100;
 		}
@@ -6618,10 +6666,10 @@ public abstract class Attack implements Serializable
 			int damage = super.applyDamage(me, o, b);
 			
 			// Healers gon' heal
-			if (!me.hasEffect("HealBlock"))
+			if (!me.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				int healAmount = (int)(damage*.5);
-				if (me.isHoldingItem(b, "Big Root"))
+				if (me.isHoldingItem(b, Namesies.BIG_ROOT_ITEM))
 				{
 					healAmount *= 1.3;
 				}
@@ -6643,10 +6691,10 @@ public abstract class Attack implements Serializable
 
 		public DarkPulse()
 		{
-			super("Dark Pulse", "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", 15, Type.DARK, Category.SPECIAL);
+			super(Namesies.DARK_PULSE_ATTACK, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", 15, Type.DARK, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 20;
 		}
 	}
@@ -6657,9 +6705,9 @@ public abstract class Attack implements Serializable
 
 		public Nightmare()
 		{
-			super("Nightmare", "A sleeping target sees a nightmare that inflicts some damage every turn.", 15, Type.GHOST, Category.STATUS);
+			super(Namesies.NIGHTMARE_ATTACK, "A sleeping target sees a nightmare that inflicts some damage every turn.", 15, Type.GHOST, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Nightmare", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.NIGHTMARE_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -6669,7 +6717,7 @@ public abstract class Attack implements Serializable
 
 		public ShadowPunch()
 		{
-			super("Shadow Punch", "The user throws a punch from the shadows. The punch lands without fail.", 20, Type.GHOST, Category.PHYSICAL);
+			super(Namesies.SHADOW_PUNCH_ATTACK, "The user throws a punch from the shadows. The punch lands without fail.", 20, Type.GHOST, Category.PHYSICAL);
 			super.power = 60;
 			super.moveTypes.add(MoveType.PUNCHING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -6682,10 +6730,10 @@ public abstract class Attack implements Serializable
 
 		public Bind()
 		{
-			super("Bind", "Things such as long bodies or tentacles are used to bind and squeeze the target for four to five turns.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.BIND_ATTACK, "Things such as long bodies or tentacles are used to bind and squeeze the target for four to five turns.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect("Binded", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.BINDED_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -6696,7 +6744,7 @@ public abstract class Attack implements Serializable
 
 		public RockTomb()
 		{
-			super("Rock Tomb", "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.", 10, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.ROCK_TOMB_ATTACK, "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.", 10, Type.ROCK, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 95;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -6709,7 +6757,7 @@ public abstract class Attack implements Serializable
 
 		public DragonBreath()
 		{
-			super("Dragon Breath", "The user exhales a mighty gust that inflicts damage. It may also leave the target with paralysis.", 20, Type.DRAGON, Category.SPECIAL);
+			super(Namesies.DRAGON_BREATH_ATTACK, "The user exhales a mighty gust that inflicts damage. It may also leave the target with paralysis.", 20, Type.DRAGON, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -6723,7 +6771,7 @@ public abstract class Attack implements Serializable
 
 		public IronTail()
 		{
-			super("Iron Tail", "The target is slammed with a steel-hard tail. It may also lower the target's Defense stat.", 15, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.IRON_TAIL_ATTACK, "The target is slammed with a steel-hard tail. It may also lower the target's Defense stat.", 15, Type.STEEL, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 75;
 			super.effectChance = 30;
@@ -6738,7 +6786,7 @@ public abstract class Attack implements Serializable
 
 		public Meditate()
 		{
-			super("Meditate", "The user meditates to awaken the power deep within its body and raise its Attack stat.", 40, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.MEDITATE_ATTACK, "The user meditates to awaken the power deep within its body and raise its Attack stat.", 40, Type.PSYCHIC, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = -1;
 		}
@@ -6750,7 +6798,7 @@ public abstract class Attack implements Serializable
 
 		public Synchronoise()
 		{
-			super("Synchronoise", "Using an odd shock wave, the user inflicts damage on any Pok\u00e9mon of the same type in the area around it.", 15, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.SYNCHRONOISE_ATTACK, "Using an odd shock wave, the user inflicts damage on any Pok\u00e9mon of the same type in the area around it.", 15, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
 		}
@@ -6777,7 +6825,7 @@ public abstract class Attack implements Serializable
 
 		public Psyshock()
 		{
-			super("Psyshock", "The user materializes an odd psychic wave to attack the target. This attack does physical damage.", 10, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.PSYSHOCK_ATTACK, "The user materializes an odd psychic wave to attack the target. This attack does physical damage.", 10, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 		}
@@ -6794,7 +6842,7 @@ public abstract class Attack implements Serializable
 
 		public ViceGrip()
 		{
-			super("Vice Grip", "The target is gripped and squeezed from both sides to inflict damage.", 30, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.VICE_GRIP_ATTACK, "The target is gripped and squeezed from both sides to inflict damage.", 30, Type.NORMAL, Category.PHYSICAL);
 			super.power = 55;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -6807,7 +6855,7 @@ public abstract class Attack implements Serializable
 
 		public MetalClaw()
 		{
-			super("Metal Claw", "The target is raked with steel claws. It may also raise the user's Attack stat.", 35, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.METAL_CLAW_ATTACK, "The target is raked with steel claws. It may also raise the user's Attack stat.", 35, Type.STEEL, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 95;
 			super.selfTarget = true;
@@ -6822,7 +6870,7 @@ public abstract class Attack implements Serializable
 
 		public Guillotine()
 		{
-			super("Guillotine", "A vicious, tearing attack with big pincers. The target will faint instantly if this attack hits.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.GUILLOTINE_ATTACK, "A vicious, tearing attack with big pincers. The target will faint instantly if this attack hits.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.accuracy = 30;
 			super.moveTypes.add(MoveType.ONE_HIT_KO);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -6836,7 +6884,7 @@ public abstract class Attack implements Serializable
 				return -1;
 			}
 			
-			if (o.hasAbility("Sturdy") && !me.breaksTheMold())
+			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
 				b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
 				return -1;
@@ -6863,7 +6911,7 @@ public abstract class Attack implements Serializable
 
 		public Crabhammer()
 		{
-			super("Crabhammer", "The target is hammered with a large pincer. Critical hits land more easily.", 10, Type.WATER, Category.PHYSICAL);
+			super(Namesies.CRABHAMMER_ATTACK, "The target is hammered with a large pincer. Critical hits land more easily.", 10, Type.WATER, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -6881,7 +6929,7 @@ public abstract class Attack implements Serializable
 
 		public Flail()
 		{
-			super("Flail", "The user flails about aimlessly to attack. It becomes more powerful the less HP the user has.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.FLAIL_ATTACK, "The user flails about aimlessly to attack. It becomes more powerful the less HP the user has.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -6904,8 +6952,8 @@ public abstract class Attack implements Serializable
 
 		public Charge()
 		{
-			super("Charge", "The user boosts the power of the Electric move it uses on the next turn. It also raises the user's Sp. Def stat.", 20, Type.ELECTRIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("Charge", EffectType.POKEMON));
+			super(Namesies.CHARGE_ATTACK, "The user boosts the power of the Electric move it uses on the next turn. It also raises the user's Sp. Def stat.", 20, Type.ELECTRIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CHARGE_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
 		}
@@ -6917,7 +6965,7 @@ public abstract class Attack implements Serializable
 
 		public ChargeBeam()
 		{
-			super("Charge Beam", "The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.", 10, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.CHARGE_BEAM_ATTACK, "The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.", 10, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 50;
 			super.accuracy = 90;
 			super.effectChance = 70;
@@ -6932,7 +6980,7 @@ public abstract class Attack implements Serializable
 
 		public MirrorCoat()
 		{
-			super("Mirror Coat", "A retaliation move that counters any special attack, inflicting double the damage taken.", 20, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.MIRROR_COAT_ATTACK, "A retaliation move that counters any special attack, inflicting double the damage taken.", 20, Type.PSYCHIC, Category.SPECIAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -6961,7 +7009,7 @@ public abstract class Attack implements Serializable
 
 		public Counter()
 		{
-			super("Counter", "A retaliation move that counters any physical attack, inflicting double the damage taken.", 20, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.COUNTER_ATTACK, "A retaliation move that counters any physical attack, inflicting double the damage taken.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
@@ -6991,7 +7039,7 @@ public abstract class Attack implements Serializable
 
 		public Barrage()
 		{
-			super("Barrage", "Round objects are hurled at the target to strike two to five times in a row.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.BARRAGE_ATTACK, "Round objects are hurled at the target to strike two to five times in a row.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 85;
 		}
@@ -7009,7 +7057,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -7031,7 +7079,7 @@ public abstract class Attack implements Serializable
 
 		public BulletSeed()
 		{
-			super("Bullet Seed", "The user forcefully shoots seeds at the target. Two to five seeds are shot in rapid succession.", 30, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.BULLET_SEED_ATTACK, "The user forcefully shoots seeds at the target. Two to five seeds are shot in rapid succession.", 30, Type.GRASS, Category.PHYSICAL);
 			super.power = 25;
 			super.accuracy = 100;
 		}
@@ -7049,7 +7097,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -7071,7 +7119,7 @@ public abstract class Attack implements Serializable
 
 		public EggBomb()
 		{
-			super("Egg Bomb", "A large egg is hurled at the target with maximum force to inflict damage.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.EGG_BOMB_ATTACK, "A large egg is hurled at the target with maximum force to inflict damage.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 75;
 		}
@@ -7083,7 +7131,7 @@ public abstract class Attack implements Serializable
 
 		public WoodHammer()
 		{
-			super("Wood Hammer", "The user slams its rugged body into the target to attack. The user also sustains serious damage.", 15, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.WOOD_HAMMER_ATTACK, "The user slams its rugged body into the target to attack. The user also sustains serious damage.", 15, Type.GRASS, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -7091,7 +7139,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/3.0));
 		}
@@ -7103,10 +7155,10 @@ public abstract class Attack implements Serializable
 
 		public BoneClub()
 		{
-			super("Bone Club", "The user clubs the target with a bone. It may also make the target flinch.", 20, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.BONE_CLUB_ATTACK, "The user clubs the target with a bone. It may also make the target flinch.", 20, Type.GROUND, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 10;
 		}
 	}
@@ -7117,7 +7169,7 @@ public abstract class Attack implements Serializable
 
 		public Bonemerang()
 		{
-			super("Bonemerang", "The user throws the bone it holds. The bone loops to hit the target twice, coming and going.", 10, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.BONEMERANG_ATTACK, "The user throws the bone it holds. The bone loops to hit the target twice, coming and going.", 10, Type.GROUND, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 90;
 		}
@@ -7135,7 +7187,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -7157,7 +7209,7 @@ public abstract class Attack implements Serializable
 
 		public BoneRush()
 		{
-			super("Bone Rush", "The user strikes the target with a hard bone two to five times in a row.", 10, Type.GROUND, Category.PHYSICAL);
+			super(Namesies.BONE_RUSH_ATTACK, "The user strikes the target with a hard bone two to five times in a row.", 10, Type.GROUND, Category.PHYSICAL);
 			super.power = 25;
 			super.accuracy = 90;
 		}
@@ -7175,7 +7227,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -7197,10 +7249,10 @@ public abstract class Attack implements Serializable
 
 		public RollingKick()
 		{
-			super("Rolling Kick", "The user lashes out with a quick, spinning kick. It may also make the target flinch.", 15, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.ROLLING_KICK_ATTACK, "The user lashes out with a quick, spinning kick. It may also make the target flinch.", 15, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -7212,7 +7264,7 @@ public abstract class Attack implements Serializable
 
 		public JumpKick()
 		{
-			super("Jump Kick", "The user jumps up high, then strikes with a kick. If the kick misses, the user hurts itself.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.JUMP_KICK_ATTACK, "The user jumps up high, then strikes with a kick. If the kick misses, the user hurts itself.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.AIRBORNE);
@@ -7232,7 +7284,7 @@ public abstract class Attack implements Serializable
 
 		public BrickBreak()
 		{
-			super("Brick Break", "The user attacks with a swift chop. It can also break any barrier such as Light Screen and Reflect.", 15, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.BRICK_BREAK_ATTACK, "The user attacks with a swift chop. It can also break any barrier such as Light Screen and Reflect.", 15, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -7240,15 +7292,17 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), "Reflect"))
+			// TODO: Maybe do something with these effects to generalize this as well as Light Clay
+			if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), Namesies.REFLECT_EFFECT))
 			{
 				b.addMessage(user.getName() + " broke the reflect barrier!");
-				Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), "Reflect");
+				Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), Namesies.REFLECT_EFFECT);
 			}
-			if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), "LightScreen"))
+			
+			if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), Namesies.LIGHT_SCREEN_EFFECT))
 			{
 				b.addMessage(user.getName() + " broke the light screen barrier!");
-				Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), "LightScreen");
+				Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), Namesies.LIGHT_SCREEN_EFFECT);
 			}
 		}
 	}
@@ -7259,7 +7313,7 @@ public abstract class Attack implements Serializable
 
 		public HighJumpKick()
 		{
-			super("High Jump Kick", "The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.HIGH_JUMP_KICK_ATTACK, "The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 130;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.AIRBORNE);
@@ -7279,7 +7333,7 @@ public abstract class Attack implements Serializable
 
 		public BlazeKick()
 		{
-			super("Blaze Kick", "The user launches a kick that lands a critical hit more easily. It may also leave the target with a burn.", 10, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.BLAZE_KICK_ATTACK, "The user launches a kick that lands a critical hit more easily. It may also leave the target with a burn.", 10, Type.FIRE, Category.PHYSICAL);
 			super.power = 85;
 			super.accuracy = 90;
 			super.effectChance = 10;
@@ -7299,7 +7353,7 @@ public abstract class Attack implements Serializable
 
 		public MegaKick()
 		{
-			super("Mega Kick", "The target is attacked by a kick launched with muscle-packed power.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.MEGA_KICK_ATTACK, "The target is attacked by a kick launched with muscle-packed power.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 75;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -7312,7 +7366,7 @@ public abstract class Attack implements Serializable
 
 		public CometPunch()
 		{
-			super("Comet Punch", "The target is hit with a flurry of punches that strike two to five times in a row.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.COMET_PUNCH_ATTACK, "The target is hit with a flurry of punches that strike two to five times in a row.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 18;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -7331,7 +7385,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -7353,7 +7407,7 @@ public abstract class Attack implements Serializable
 
 		public MachPunch()
 		{
-			super("Mach Punch", "The user throws a punch at blinding speed. It is certain to strike first.", 30, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.MACH_PUNCH_ATTACK, "The user throws a punch at blinding speed. It is certain to strike first.", 30, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PUNCHING);
@@ -7368,7 +7422,7 @@ public abstract class Attack implements Serializable
 
 		public BulletPunch()
 		{
-			super("Bullet Punch", "The user strikes the target with tough punches as fast as bullets. This move always goes first.", 30, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.BULLET_PUNCH_ATTACK, "The user strikes the target with tough punches as fast as bullets. This move always goes first.", 30, Type.STEEL, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PUNCHING);
@@ -7383,7 +7437,7 @@ public abstract class Attack implements Serializable
 
 		public VacuumWave()
 		{
-			super("Vacuum Wave", "The user whirls its fists to send a wave of pure vacuum at the target. This move always goes first.", 30, Type.FIGHTING, Category.SPECIAL);
+			super(Namesies.VACUUM_WAVE_ATTACK, "The user whirls its fists to send a wave of pure vacuum at the target. This move always goes first.", 30, Type.FIGHTING, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.priority = 1;
@@ -7396,7 +7450,7 @@ public abstract class Attack implements Serializable
 
 		public ThunderPunch()
 		{
-			super("Thunder Punch", "The target is punched with an electrified fist. It may also leave the target with paralysis.", 15, Type.ELECTRIC, Category.PHYSICAL);
+			super(Namesies.THUNDER_PUNCH_ATTACK, "The target is punched with an electrified fist. It may also leave the target with paralysis.", 15, Type.ELECTRIC, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -7412,7 +7466,7 @@ public abstract class Attack implements Serializable
 
 		public IcePunch()
 		{
-			super("Ice Punch", "The target is punched with an icy fist. It may also leave the target frozen.", 15, Type.ICE, Category.PHYSICAL);
+			super(Namesies.ICE_PUNCH_ATTACK, "The target is punched with an icy fist. It may also leave the target frozen.", 15, Type.ICE, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -7428,7 +7482,7 @@ public abstract class Attack implements Serializable
 
 		public FirePunch()
 		{
-			super("Fire Punch", "The target is punched with a fiery fist. It may also leave the target with a burn.", 15, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.FIRE_PUNCH_ATTACK, "The target is punched with a fiery fist. It may also leave the target with a burn.", 15, Type.FIRE, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -7444,7 +7498,7 @@ public abstract class Attack implements Serializable
 
 		public SkyUppercut()
 		{
-			super("Sky Uppercut", "The user attacks the target with an uppercut thrown skyward with force.", 15, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.SKY_UPPERCUT_ATTACK, "The user attacks the target with an uppercut thrown skyward with force.", 15, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 85;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PUNCHING);
@@ -7459,7 +7513,7 @@ public abstract class Attack implements Serializable
 
 		public MegaPunch()
 		{
-			super("Mega Punch", "The target is slugged by a punch thrown with muscle-packed power.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.MEGA_PUNCH_ATTACK, "The target is slugged by a punch thrown with muscle-packed power.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PUNCHING);
@@ -7473,10 +7527,10 @@ public abstract class Attack implements Serializable
 
 		public FocusPunch()
 		{
-			super("Focus Punch", "The user focuses its mind before launching a punch. It will fail if the user is hit before it is used.", 20, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.FOCUS_PUNCH_ATTACK, "The user focuses its mind before launching a punch. It will fail if the user is hit before it is used.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 150;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Focusing", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FOCUSING_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -7488,7 +7542,10 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (me.hasEffect("Focusing")) super.applyDamage(me, o, b);
+			if (me.hasEffect(Namesies.FOCUSING_EFFECT))
+			{
+				super.applyDamage(me, o, b);
+			}
 		}
 
 		public void startTurn(Battle b, ActivePokemon me)
@@ -7503,7 +7560,7 @@ public abstract class Attack implements Serializable
 
 		public MeFirst()
 		{
-			super("Me First", "The user tries to cut ahead of the target to steal and use the target's intended move with greater power.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.ME_FIRST_ATTACK, "The user tries to cut ahead of the target to steal and use the target's intended move with greater power.", 20, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -7518,9 +7575,9 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			me.addEffect(PokemonEffect.getEffect("FiddyPercentStronger"));
+			me.addEffect(PokemonEffect.getEffect(Namesies.FIDDY_PERCENT_STRONGER_EFFECT));
 			me.callNewMove(b, o, new Move(o.getAttack()));
-			me.getAttributes().removeEffect("FiddyPercentStronger");
+			me.getAttributes().removeEffect(Namesies.FIDDY_PERCENT_STRONGER_EFFECT);
 		}
 	}
 
@@ -7530,7 +7587,7 @@ public abstract class Attack implements Serializable
 
 		public Refresh()
 		{
-			super("Refresh", "The user rests to cure itself of a poisoning, burn, or paralysis.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.REFRESH_ATTACK, "The user rests to cure itself of a poisoning, burn, or paralysis.", 20, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
@@ -7553,7 +7610,7 @@ public abstract class Attack implements Serializable
 
 		public PowerWhip()
 		{
-			super("Power Whip", "The user violently whirls its vines or tentacles to harshly lash the target.", 10, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.POWER_WHIP_ATTACK, "The user violently whirls its vines or tentacles to harshly lash the target.", 10, Type.GRASS, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -7566,7 +7623,7 @@ public abstract class Attack implements Serializable
 
 		public Smog()
 		{
-			super("Smog", "The target is attacked with a discharge of filthy gases. It may also poison the target.", 20, Type.POISON, Category.SPECIAL);
+			super(Namesies.SMOG_ATTACK, "The target is attacked with a discharge of filthy gases. It may also poison the target.", 20, Type.POISON, Category.SPECIAL);
 			super.power = 30;
 			super.accuracy = 70;
 			super.effectChance = 40;
@@ -7580,7 +7637,7 @@ public abstract class Attack implements Serializable
 
 		public ClearSmog()
 		{
-			super("Clear Smog", "The user attacks by throwing a clump of special mud. All status changes are returned to normal.", 15, Type.POISON, Category.SPECIAL);
+			super(Namesies.CLEAR_SMOG_ATTACK, "The user attacks by throwing a clump of special mud. All status changes are returned to normal.", 15, Type.POISON, Category.SPECIAL);
 			super.power = 50;
 		}
 
@@ -7598,7 +7655,7 @@ public abstract class Attack implements Serializable
 
 		public HammerArm()
 		{
-			super("Hammer Arm", "The user swings and hits with its strong and heavy fist. It lowers the user's Speed, however.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.HAMMER_ARM_ATTACK, "The user swings and hits with its strong and heavy fist. It lowers the user's Speed, however.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PUNCHING);
@@ -7614,13 +7671,13 @@ public abstract class Attack implements Serializable
 
 		public SoftBoiled()
 		{
-			super("Soft-Boiled", "The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.SOFT_BOILED_ATTACK, "The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.", 10, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -7638,7 +7695,7 @@ public abstract class Attack implements Serializable
 
 		public AncientPower()
 		{
-			super("Ancient Power", "The user attacks with a prehistoric power. It may also raise all the user's stats at once.", 5, Type.ROCK, Category.SPECIAL);
+			super(Namesies.ANCIENT_POWER_ATTACK, "The user attacks with a prehistoric power. It may also raise all the user's stats at once.", 5, Type.ROCK, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -7659,7 +7716,7 @@ public abstract class Attack implements Serializable
 
 		public Tickle()
 		{
-			super("Tickle", "The user tickles the target into laughing, reducing its Attack and Defense stats.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.TICKLE_ATTACK, "The user tickles the target into laughing, reducing its Attack and Defense stats.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ATTACK.index()] = -1;
 			super.statChanges[Stat.DEFENSE.index()] = -1;
@@ -7672,10 +7729,10 @@ public abstract class Attack implements Serializable
 
 		public DizzyPunch()
 		{
-			super("Dizzy Punch", "The target is hit with rhythmically launched punches that may also leave it confused.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.DIZZY_PUNCH_ATTACK, "The target is hit with rhythmically launched punches that may also leave it confused.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PUNCHING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -7688,10 +7745,10 @@ public abstract class Attack implements Serializable
 
 		public Outrage()
 		{
-			super("Outrage", "The user rampages and attacks for two to three turns. It then becomes confused, however.", 10, Type.DRAGON, Category.PHYSICAL);
+			super(Namesies.OUTRAGE_ATTACK, "The user rampages and attacks for two to three turns. It then becomes confused, however.", 10, Type.DRAGON, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("SelfConfusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.SELF_CONFUSION_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -7703,7 +7760,7 @@ public abstract class Attack implements Serializable
 
 		public DragonDance()
 		{
-			super("Dragon Dance", "The user vigorously performs a mystic, powerful dance that boosts its Attack and Speed stats.", 20, Type.DRAGON, Category.STATUS);
+			super(Namesies.DRAGON_DANCE_ATTACK, "The user vigorously performs a mystic, powerful dance that boosts its Attack and Speed stats.", 20, Type.DRAGON, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.SPEED.index()] = 1;
@@ -7716,7 +7773,7 @@ public abstract class Attack implements Serializable
 
 		public DragonPulse()
 		{
-			super("Dragon Pulse", "The target is attacked with a shock wave generated by the user's gaping mouth.", 10, Type.DRAGON, Category.SPECIAL);
+			super(Namesies.DRAGON_PULSE_ATTACK, "The target is attacked with a shock wave generated by the user's gaping mouth.", 10, Type.DRAGON, Category.SPECIAL);
 			super.power = 85;
 			super.accuracy = 100;
 		}
@@ -7728,7 +7785,7 @@ public abstract class Attack implements Serializable
 
 		public DracoMeteor()
 		{
-			super("Draco Meteor", "Comets are summoned down from the sky onto the target. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.DRAGON, Category.SPECIAL);
+			super(Namesies.DRACO_METEOR_ATTACK, "Comets are summoned down from the sky onto the target. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.DRAGON, Category.SPECIAL);
 			super.power = 130;
 			super.accuracy = 90;
 			super.selfTarget = true;
@@ -7742,10 +7799,10 @@ public abstract class Attack implements Serializable
 
 		public Waterfall()
 		{
-			super("Waterfall", "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", 15, Type.WATER, Category.PHYSICAL);
+			super(Namesies.WATERFALL_ATTACK, "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", 15, Type.WATER, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -7757,8 +7814,8 @@ public abstract class Attack implements Serializable
 
 		public ReflectType()
 		{
-			super("Reflect Type", "The user reflects the target's type, making it the same type as the target.", 15, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("ChangeType", EffectType.POKEMON));
+			super(Namesies.REFLECT_TYPE_ATTACK, "The user reflects the target's type, making it the same type as the target.", 15, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_TYPE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -7775,7 +7832,7 @@ public abstract class Attack implements Serializable
 
 		public MagicalLeaf()
 		{
-			super("Magical Leaf", "The user scatters curious leaves that chase the target. This attack will not miss.", 20, Type.GRASS, Category.SPECIAL);
+			super(Namesies.MAGICAL_LEAF_ATTACK, "The user scatters curious leaves that chase the target. This attack will not miss.", 20, Type.GRASS, Category.SPECIAL);
 			super.power = 60;
 		}
 	}
@@ -7786,7 +7843,7 @@ public abstract class Attack implements Serializable
 
 		public PowerSwap()
 		{
-			super("Power Swap", "The user employs its psychic power to switch changes to its Attack and Sp. Atk with the target.", 10, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.POWER_SWAP_ATTACK, "The user employs its psychic power to switch changes to its Attack and Sp. Atk with the target.", 10, Type.PSYCHIC, Category.STATUS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
@@ -7808,7 +7865,7 @@ public abstract class Attack implements Serializable
 
 		public GuardSwap()
 		{
-			super("Guard Swap", "The user employs its psychic power to switch changes to its Defense and Sp. Def with the target.", 10, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.GUARD_SWAP_ATTACK, "The user employs its psychic power to switch changes to its Defense and Sp. Def with the target.", 10, Type.PSYCHIC, Category.STATUS);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
@@ -7831,7 +7888,7 @@ public abstract class Attack implements Serializable
 
 		public Copycat()
 		{
-			super("Copycat", "The user mimics the move used immediately before it. The move fails if no other move has been used yet.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.COPYCAT_ATTACK, "The user mimics the move used immediately before it. The move fails if no other move has been used yet.", 20, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -7857,8 +7914,8 @@ public abstract class Attack implements Serializable
 
 		public Transform()
 		{
-			super("Transform", "The user transforms into a copy of the target right down to having the same move set.", 10, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Transformed", EffectType.POKEMON));
+			super(Namesies.TRANSFORM_ATTACK, "The user transforms into a copy of the target right down to having the same move set.", 10, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.TRANSFORMED_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.ENCORELESS);
@@ -7874,8 +7931,8 @@ public abstract class Attack implements Serializable
 
 		public Substitute()
 		{
-			super("Substitute", "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", 10, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Substitute", EffectType.POKEMON));
+			super(Namesies.SUBSTITUTE_ATTACK, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", 10, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.SUBSTITUTE_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 	}
@@ -7886,7 +7943,7 @@ public abstract class Attack implements Serializable
 
 		public RazorWind()
 		{
-			super("Razor Wind", "A two-turn attack. Blades of wind hit opposing Pok\u00e9mon on the second turn. Critical hits land more easily.", 10, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.RAZOR_WIND_ATTACK, "A two-turn attack. Blades of wind hit opposing Pok\u00e9mon on the second turn. Critical hits land more easily.", 10, Type.NORMAL, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -7924,7 +7981,7 @@ public abstract class Attack implements Serializable
 
 		public LovelyKiss()
 		{
-			super("Lovely Kiss", "With a scary face, the user tries to force a kiss on the target. If it succeeds, the target falls asleep.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.LOVELY_KISS_ATTACK, "With a scary face, the user tries to force a kiss on the target. If it succeeds, the target falls asleep.", 10, Type.NORMAL, Category.STATUS);
 			super.accuracy = 75;
 			super.status = StatusCondition.ASLEEP;
 		}
@@ -7936,7 +7993,7 @@ public abstract class Attack implements Serializable
 
 		public PowderSnow()
 		{
-			super("Powder Snow", "The user attacks with a chilling gust of powdery snow. It may also freeze the targets.", 25, Type.ICE, Category.SPECIAL);
+			super(Namesies.POWDER_SNOW_ATTACK, "The user attacks with a chilling gust of powdery snow. It may also freeze the targets.", 25, Type.ICE, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -7950,10 +8007,10 @@ public abstract class Attack implements Serializable
 
 		public HeartStamp()
 		{
-			super("Heart Stamp", "The user unleashes a vicious blow after its cute act makes the target less wary. It may also make the target flinch.", 25, Type.PSYCHIC, Category.PHYSICAL);
+			super(Namesies.HEART_STAMP_ATTACK, "The user unleashes a vicious blow after its cute act makes the target less wary. It may also make the target flinch.", 25, Type.PSYCHIC, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -7965,7 +8022,7 @@ public abstract class Attack implements Serializable
 
 		public FakeTears()
 		{
-			super("Fake Tears", "The user feigns crying to fluster the target, harshly lowering its Sp. Def stat.", 20, Type.DARK, Category.STATUS);
+			super(Namesies.FAKE_TEARS_ATTACK, "The user feigns crying to fluster the target, harshly lowering its Sp. Def stat.", 20, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.SP_DEFENSE.index()] = -2;
 		}
@@ -7977,7 +8034,7 @@ public abstract class Attack implements Serializable
 
 		public Avalanche()
 		{
-			super("Avalanche", "An attack move that inflicts double the damage if the user has been hurt by the target in the same turn.", 10, Type.ICE, Category.PHYSICAL);
+			super(Namesies.AVALANCHE_ATTACK, "An attack move that inflicts double the damage if the user has been hurt by the target in the same turn.", 10, Type.ICE, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.priority = -4;
@@ -8001,7 +8058,7 @@ public abstract class Attack implements Serializable
 
 		public Blizzard()
 		{
-			super("Blizzard", "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.", 5, Type.ICE, Category.SPECIAL);
+			super(Namesies.BLIZZARD_ATTACK, "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.", 5, Type.ICE, Category.SPECIAL);
 			super.power = 110;
 			super.accuracy = 70;
 			super.effectChance = 10;
@@ -8010,7 +8067,11 @@ public abstract class Attack implements Serializable
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			if (b.getWeather().getType() == Weather.WeatherType.HAILING) return 100;
+			if (b.getWeather().namesies() == Namesies.HAILING_EFFECT)
+			{
+				return 100;
+			}
+			
 			return super.accuracy;
 		}
 	}
@@ -8021,7 +8082,7 @@ public abstract class Attack implements Serializable
 
 		public ShockWave()
 		{
-			super("Shock Wave", "The user strikes the target with a quick jolt of electricity. This attack cannot be evaded.", 20, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.SHOCK_WAVE_ATTACK, "The user strikes the target with a quick jolt of electricity. This attack cannot be evaded.", 20, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 60;
 		}
 	}
@@ -8032,7 +8093,7 @@ public abstract class Attack implements Serializable
 
 		public LavaPlume()
 		{
-			super("Lava Plume", "An inferno of scarlet flames torches everything around the user. It may leave targets with a burn.", 15, Type.FIRE, Category.SPECIAL);
+			super(Namesies.LAVA_PLUME_ATTACK, "An inferno of scarlet flames torches everything around the user. It may leave targets with a burn.", 15, Type.FIRE, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -8046,7 +8107,7 @@ public abstract class Attack implements Serializable
 
 		public WorkUp()
 		{
-			super("Work Up", "The user is roused, and its Attack and Sp. Atk stats increase.", 30, Type.NORMAL, Category.STATUS);
+			super(Namesies.WORK_UP_ATTACK, "The user is roused, and its Attack and Sp. Atk stats increase.", 30, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.SP_ATTACK.index()] = 1;
@@ -8059,7 +8120,7 @@ public abstract class Attack implements Serializable
 
 		public GigaImpact()
 		{
-			super("Giga Impact", "The user charges at the target using every bit of its power. The user must rest on the next turn.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.GIGA_IMPACT_ATTACK, "The user charges at the target using every bit of its power. The user must rest on the next turn.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 150;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -8092,7 +8153,7 @@ public abstract class Attack implements Serializable
 
 		public Splash()
 		{
-			super("Splash", "The user just flops and splashes around to no effect at all...", 40, Type.NORMAL, Category.STATUS);
+			super(Namesies.SPLASH_ATTACK, "The user just flops and splashes around to no effect at all...", 40, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.AIRBORNE);
 			super.selfTarget = true;
 		}
@@ -8109,8 +8170,8 @@ public abstract class Attack implements Serializable
 
 		public Mist()
 		{
-			super("Mist", "The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns.", 30, Type.ICE, Category.STATUS);
-			super.effects.add(Effect.getEffect("Mist", EffectType.POKEMON));
+			super(Namesies.MIST_ATTACK, "The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns.", 30, Type.ICE, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.MIST_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 	}
@@ -8121,7 +8182,7 @@ public abstract class Attack implements Serializable
 
 		public LastResort()
 		{
-			super("Last Resort", "This move can be used only after the user has used all the other moves it knows in the battle.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.LAST_RESORT_ATTACK, "This move can be used only after the user has used all the other moves it knows in the battle.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 140;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -8152,7 +8213,7 @@ public abstract class Attack implements Serializable
 
 		public TrumpCard()
 		{
-			super("Trump Card", "The fewer PP this move has, the greater its attack power.", 5, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.TRUMP_CARD_ATTACK, "The fewer PP this move has, the greater its attack power.", 5, Type.NORMAL, Category.SPECIAL);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
@@ -8173,7 +8234,7 @@ public abstract class Attack implements Serializable
 
 		public MuddyWater()
 		{
-			super("Muddy Water", "The user attacks by shooting muddy water at the opposing team. It may also lower the targets' accuracy.", 10, Type.WATER, Category.SPECIAL);
+			super(Namesies.MUDDY_WATER_ATTACK, "The user attacks by shooting muddy water at the opposing team. It may also lower the targets' accuracy.", 10, Type.WATER, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 85;
 			super.effectChance = 30;
@@ -8187,8 +8248,8 @@ public abstract class Attack implements Serializable
 
 		public Conversion()
 		{
-			super("Conversion", "The user changes its type to become the same type as one of its moves.", 30, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("ChangeType", EffectType.POKEMON));
+			super(Namesies.CONVERSION_ATTACK, "The user changes its type to become the same type as one of its moves.", 30, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_TYPE_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 
@@ -8237,8 +8298,8 @@ public abstract class Attack implements Serializable
 
 		public Conversion2()
 		{
-			super("Conversion 2", "The user changes its type to make itself resistant to the type of the attack the opponent used last.", 30, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("ChangeType", EffectType.POKEMON));
+			super(Namesies.CONVERSION2_ATTACK, "The user changes its type to make itself resistant to the type of the attack the opponent used last.", 30, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_TYPE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -8269,7 +8330,7 @@ public abstract class Attack implements Serializable
 
 		public Sharpen()
 		{
-			super("Sharpen", "The user reduces its polygon count to make itself more jagged, raising the Attack stat.", 30, Type.NORMAL, Category.STATUS);
+			super(Namesies.SHARPEN_ATTACK, "The user reduces its polygon count to make itself more jagged, raising the Attack stat.", 30, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 		}
@@ -8281,8 +8342,8 @@ public abstract class Attack implements Serializable
 
 		public MagicCoat()
 		{
-			super("Magic Coat", "A barrier reflects back to the target moves like Leech Seed and moves that damage status.", 15, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("MagicCoat", EffectType.POKEMON));
+			super(Namesies.MAGIC_COAT_ATTACK, "A barrier reflects back to the target moves like Leech Seed and moves that damage status.", 15, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.MAGIC_COAT_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 			super.priority = 4;
@@ -8295,7 +8356,7 @@ public abstract class Attack implements Serializable
 
 		public SkyDrop()
 		{
-			super("Sky Drop", "The user takes the target into the sky, then slams it into the ground.", 10, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.SKY_DROP_ATTACK, "The user takes the target into the sky, then slams it into the ground.", 10, Type.FLYING, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.AIRBORNE);
@@ -8309,10 +8370,10 @@ public abstract class Attack implements Serializable
 
 		public IronHead()
 		{
-			super("Iron Head", "The user slams the target with its steel-hard head. It may also make the target flinch.", 15, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.IRON_HEAD_ATTACK, "The user slams the target with its steel-hard head. It may also make the target flinch.", 15, Type.STEEL, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -8324,10 +8385,10 @@ public abstract class Attack implements Serializable
 
 		public RockSlide()
 		{
-			super("Rock Slide", "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", 10, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.ROCK_SLIDE_ATTACK, "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", 10, Type.ROCK, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 		}
 	}
@@ -8338,10 +8399,10 @@ public abstract class Attack implements Serializable
 
 		public Snore()
 		{
-			super("Snore", "An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.", 15, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.SNORE_ATTACK, "An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.", 15, Type.NORMAL, Category.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -8366,7 +8427,7 @@ public abstract class Attack implements Serializable
 
 		public SleepTalk()
 		{
-			super("Sleep Talk", "While it is asleep, the user randomly uses one of the moves it knows.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.SLEEP_TALK_ATTACK, "While it is asleep, the user randomly uses one of the moves it knows.", 10, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.ASLEEP_USER);
@@ -8407,8 +8468,8 @@ public abstract class Attack implements Serializable
 
 		public Block()
 		{
-			super("Block", "The user blocks the target's way with arms spread wide to prevent escape.", 5, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("Trapped", EffectType.POKEMON));
+			super(Namesies.BLOCK_ATTACK, "The user blocks the target's way with arms spread wide to prevent escape.", 5, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.TRAPPED_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -8418,10 +8479,10 @@ public abstract class Attack implements Serializable
 
 		public SkyAttack()
 		{
-			super("Sky Attack", "A second-turn attack move where critical hits land more easily. It may also make the target flinch.", 5, Type.FLYING, Category.PHYSICAL);
+			super(Namesies.SKY_ATTACK_ATTACK, "A second-turn attack move where critical hits land more easily. It may also make the target flinch.", 5, Type.FLYING, Category.PHYSICAL);
 			super.power = 140;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
@@ -8458,10 +8519,10 @@ public abstract class Attack implements Serializable
 
 		public DragonRush()
 		{
-			super("Dragon Rush", "The user tackles the target while exhibiting overwhelming menace. It may also make the target flinch.", 10, Type.DRAGON, Category.PHYSICAL);
+			super(Namesies.DRAGON_RUSH_ATTACK, "The user tackles the target while exhibiting overwhelming menace. It may also make the target flinch.", 10, Type.DRAGON, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -8473,7 +8534,7 @@ public abstract class Attack implements Serializable
 
 		public AuraSphere()
 		{
-			super("Aura Sphere", "The user looses a blast of aura power from deep within its body at the target. This move is certain to hit.", 20, Type.FIGHTING, Category.SPECIAL);
+			super(Namesies.AURA_SPHERE_ATTACK, "The user looses a blast of aura power from deep within its body at the target. This move is certain to hit.", 20, Type.FIGHTING, Category.SPECIAL);
 			super.power = 80;
 		}
 	}
@@ -8484,7 +8545,7 @@ public abstract class Attack implements Serializable
 
 		public Psystrike()
 		{
-			super("Psystrike", "The user materializes an odd psychic wave to attack the target. This attack does physical damage.", 10, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.PSYSTRIKE_ATTACK, "The user materializes an odd psychic wave to attack the target. This attack does physical damage.", 10, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 100;
 		}
@@ -8501,7 +8562,7 @@ public abstract class Attack implements Serializable
 
 		public Eruption()
 		{
-			super("Eruption", "The user attacks the opposing team with explosive fury. The lower the user's HP, the less powerful this attack becomes.", 5, Type.FIRE, Category.SPECIAL);
+			super(Namesies.ERUPTION_ATTACK, "The user attacks the opposing team with explosive fury. The lower the user's HP, the less powerful this attack becomes.", 5, Type.FIRE, Category.SPECIAL);
 			super.accuracy = 100;
 		}
 
@@ -8517,7 +8578,7 @@ public abstract class Attack implements Serializable
 
 		public Charm()
 		{
-			super("Charm", "The user gazes at the target rather charmingly, making it less wary. The target's Attack is harshly lowered.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.CHARM_ATTACK, "The user gazes at the target rather charmingly, making it less wary. The target's Attack is harshly lowered.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ATTACK.index()] = -2;
 		}
@@ -8529,7 +8590,7 @@ public abstract class Attack implements Serializable
 
 		public EchoedVoice()
 		{
-			super("Echoed Voice", "The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.", 15, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.ECHOED_VOICE_ATTACK, "The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.", 15, Type.NORMAL, Category.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -8547,7 +8608,7 @@ public abstract class Attack implements Serializable
 
 		public PsychoShift()
 		{
-			super("Psycho Shift", "Using its psychic power of suggestion, the user transfers its status problems to the target.", 10, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.PSYCHO_SHIFT_ATTACK, "Using its psychic power of suggestion, the user transfers its status problems to the target.", 10, Type.PSYCHIC, Category.STATUS);
 			super.accuracy = 100;
 		}
 
@@ -8569,7 +8630,7 @@ public abstract class Attack implements Serializable
 
 		public ShadowSneak()
 		{
-			super("Shadow Sneak", "The user extends its shadow and attacks the target from behind. This move always goes first.", 30, Type.GHOST, Category.PHYSICAL);
+			super(Namesies.SHADOW_SNEAK_ATTACK, "The user extends its shadow and attacks the target from behind. This move always goes first.", 30, Type.GHOST, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.priority = 1;
@@ -8583,8 +8644,8 @@ public abstract class Attack implements Serializable
 
 		public SpiderWeb()
 		{
-			super("Spider Web", "The user ensnares the target with thin, gooey silk so it can't flee from battle.", 10, Type.BUG, Category.STATUS);
-			super.effects.add(Effect.getEffect("Trapped", EffectType.POKEMON));
+			super(Namesies.SPIDER_WEB_ATTACK, "The user ensnares the target with thin, gooey silk so it can't flee from battle.", 10, Type.BUG, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.TRAPPED_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -8594,9 +8655,9 @@ public abstract class Attack implements Serializable
 
 		public SweetKiss()
 		{
-			super("Sweet Kiss", "The user kisses the target with a sweet, angelic cuteness that causes confusion.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.SWEET_KISS_ATTACK, "The user kisses the target with a sweet, angelic cuteness that causes confusion.", 10, Type.NORMAL, Category.STATUS);
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -8606,7 +8667,7 @@ public abstract class Attack implements Serializable
 
 		public OminousWind()
 		{
-			super("Ominous Wind", "The user blasts the target with a gust of repulsive wind. It may also raise all the user's stats at once.", 5, Type.GHOST, Category.SPECIAL);
+			super(Namesies.OMINOUS_WIND_ATTACK, "The user blasts the target with a gust of repulsive wind. It may also raise all the user's stats at once.", 5, Type.GHOST, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -8627,7 +8688,7 @@ public abstract class Attack implements Serializable
 
 		public CottonSpore()
 		{
-			super("Cotton Spore", "The user releases cotton-like spores that cling to the target, harshly reducing its Speed stat.", 40, Type.GRASS, Category.STATUS);
+			super(Namesies.COTTON_SPORE_ATTACK, "The user releases cotton-like spores that cling to the target, harshly reducing its Speed stat.", 40, Type.GRASS, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.SPEED.index()] = -2;
 		}
@@ -8639,7 +8700,7 @@ public abstract class Attack implements Serializable
 
 		public CottonGuard()
 		{
-			super("Cotton Guard", "The user protects itself by wrapping its body in soft cotton, drastically raising the user's Defense stat.", 10, Type.GRASS, Category.STATUS);
+			super(Namesies.COTTON_GUARD_ATTACK, "The user protects itself by wrapping its body in soft cotton, drastically raising the user's Defense stat.", 10, Type.GRASS, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 3;
 		}
@@ -8651,7 +8712,7 @@ public abstract class Attack implements Serializable
 
 		public GrassWhistle()
 		{
-			super("Grass Whistle", "The user plays a pleasant melody that lulls the target into a deep sleep.", 15, Type.GRASS, Category.STATUS);
+			super(Namesies.GRASS_WHISTLE_ATTACK, "The user plays a pleasant melody that lulls the target into a deep sleep.", 15, Type.GRASS, Category.STATUS);
 			super.accuracy = 55;
 			super.status = StatusCondition.ASLEEP;
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -8664,9 +8725,9 @@ public abstract class Attack implements Serializable
 
 		public Torment()
 		{
-			super("Torment", "The user torments and enrages the target, making it incapable of using the same move twice in a row.", 15, Type.DARK, Category.STATUS);
+			super(Namesies.TORMENT_ATTACK, "The user torments and enrages the target, making it incapable of using the same move twice in a row.", 15, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Torment", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.TORMENT_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
@@ -8677,14 +8738,14 @@ public abstract class Attack implements Serializable
 
 		public HiddenPower()
 		{
-			super("Hidden Power", "A unique attack that varies in type and intensity depending on the Pok\u00e9mon using it.", 15, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.HIDDEN_POWER_ATTACK, "A unique attack that varies in type and intensity depending on the Pok\u00e9mon using it.", 15, Type.NORMAL, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 		}
 
 		public Type getType(Battle b, ActivePokemon user)
 		{
-			if (user.hasAbility("Normalize"))
+			if (user.hasAbility(Namesies.NORMALIZE_ABILITY))
 			{
 				return Type.NORMAL;
 			}
@@ -8699,7 +8760,7 @@ public abstract class Attack implements Serializable
 
 		public Psywave()
 		{
-			super("Psywave", "The target is attacked with an odd psychic wave. The attack varies in intensity.", 15, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.PSYWAVE_ATTACK, "The target is attacked with an odd psychic wave. The attack varies in intensity.", 15, Type.PSYCHIC, Category.SPECIAL);
 			super.accuracy = 100;
 		}
 
@@ -8720,7 +8781,7 @@ public abstract class Attack implements Serializable
 
 		public PainSplit()
 		{
-			super("Pain Split", "The user adds its HP to the target's HP, then equally shares the combined HP with the target.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.PAIN_SPLIT_ATTACK, "The user adds its HP to the target's HP, then equally shares the combined HP with the target.", 20, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
@@ -8740,8 +8801,8 @@ public abstract class Attack implements Serializable
 
 		public Bide()
 		{
-			super("Bide", "The user endures attacks for two turns, then strikes back to cause double the damage taken.", 10, Type.NORMAL, Category.PHYSICAL);
-			super.effects.add(Effect.getEffect("Bide", EffectType.POKEMON));
+			super(Namesies.BIDE_ATTACK, "The user endures attacks for two turns, then strikes back to cause double the damage taken.", 10, Type.NORMAL, Category.PHYSICAL);
+			super.effects.add(Effect.getEffect(Namesies.BIDE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.selfTarget = true;
 			super.priority = 1;
@@ -8760,8 +8821,8 @@ public abstract class Attack implements Serializable
 
 		public Autotomize()
 		{
-			super("Autotomize", "The user sheds part of its body to make itself lighter and sharply raise its Speed stat.", 15, Type.STEEL, Category.STATUS);
-			super.effects.add(Effect.getEffect("HalfWeight", EffectType.POKEMON));
+			super(Namesies.AUTOTOMIZE_ATTACK, "The user sheds part of its body to make itself lighter and sharply raise its Speed stat.", 15, Type.STEEL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.HALF_WEIGHT_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 			super.statChanges[Stat.SPEED.index()] = 2;
 		}
@@ -8773,7 +8834,7 @@ public abstract class Attack implements Serializable
 
 		public StruggleBug()
 		{
-			super("Struggle Bug", "While resisting, the user attacks the opposing Pok\u00e9mon. The targets' Sp. Atk stat is reduced.", 20, Type.BUG, Category.SPECIAL);
+			super(Namesies.STRUGGLE_BUG_ATTACK, "While resisting, the user attacks the opposing Pok\u00e9mon. The targets' Sp. Atk stat is reduced.", 20, Type.BUG, Category.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
 			super.statChanges[Stat.SP_ATTACK.index()] = -1;
@@ -8786,8 +8847,8 @@ public abstract class Attack implements Serializable
 
 		public PowerTrick()
 		{
-			super("Power Trick", "The user employs its psychic power to switch its Attack with its Defense stat.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("PowerTrick", EffectType.POKEMON));
+			super(Namesies.POWER_TRICK_ATTACK, "The user employs its psychic power to switch its Attack with its Defense stat.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.POWER_TRICK_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 	}
@@ -8798,8 +8859,8 @@ public abstract class Attack implements Serializable
 
 		public PowerSplit()
 		{
-			super("Power Split", "The user employs its psychic power to average its Attack and Sp. Atk stats with those of the target's.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("PowerSplit", EffectType.POKEMON));
+			super(Namesies.POWER_SPLIT_ATTACK, "The user employs its psychic power to average its Attack and Sp. Atk stats with those of the target's.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.POWER_SPLIT_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -8811,8 +8872,8 @@ public abstract class Attack implements Serializable
 
 		public GuardSplit()
 		{
-			super("Guard Split", "The user employs its psychic power to average its Defense and Sp. Def stats with those of its target's.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("GuardSplit", EffectType.POKEMON));
+			super(Namesies.GUARD_SPLIT_ATTACK, "The user employs its psychic power to average its Defense and Sp. Def stats with those of its target's.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.GUARD_SPLIT_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -8824,7 +8885,7 @@ public abstract class Attack implements Serializable
 
 		public HoneClaws()
 		{
-			super("Hone Claws", "The user sharpens its claws to boost its Attack stat and accuracy.", 15, Type.DARK, Category.STATUS);
+			super(Namesies.HONE_CLAWS_ATTACK, "The user sharpens its claws to boost its Attack stat and accuracy.", 15, Type.DARK, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.ACCURACY.index()] = 1;
@@ -8837,7 +8898,7 @@ public abstract class Attack implements Serializable
 
 		public BeatUp()
 		{
-			super("Beat Up", "The user gets all party Pok\u00e9mon to attack the target. The more party Pok\u00e9mon, the greater the number of attacks.", 10, Type.DARK, Category.PHYSICAL);
+			super(Namesies.BEAT_UP_ATTACK, "The user gets all party Pok\u00e9mon to attack the target. The more party Pok\u00e9mon, the greater the number of attacks.", 10, Type.DARK, Category.PHYSICAL);
 			super.power = 10;
 			super.accuracy = 100;
 		}
@@ -8848,7 +8909,7 @@ public abstract class Attack implements Serializable
 			{
 				if (p.hasStatus()) continue;
 				Move temp = p.getMove();
-				p.setMove(new Move(Attack.getAttack("Beat Up")));
+				p.setMove(new Move(Attack.getAttack(this.namesies)));
 				b.addMessage(p.getName() + "'s attack!");
 				super.applyDamage(p, o, b);
 				p.setMove(temp);
@@ -8862,7 +8923,7 @@ public abstract class Attack implements Serializable
 
 		public Octazooka()
 		{
-			super("Octazooka", "The user attacks by spraying ink in the target's face or eyes. It may also lower the target's accuracy.", 10, Type.WATER, Category.SPECIAL);
+			super(Namesies.OCTAZOOKA_ATTACK, "The user attacks by spraying ink in the target's face or eyes. It may also lower the target's accuracy.", 10, Type.WATER, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 85;
 			super.effectChance = 50;
@@ -8876,7 +8937,7 @@ public abstract class Attack implements Serializable
 
 		public Present()
 		{
-			super("Present", "The user attacks by giving the target a gift with a hidden trap. It restores HP sometimes, however.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.PRESENT_ATTACK, "The user attacks by giving the target a gift with a hidden trap. It restores HP sometimes, however.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.accuracy = 90;
 		}
 
@@ -8888,7 +8949,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			if (o.fullHealth() || o.hasEffect("HealBlock"))
+			if (o.fullHealth() || o.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -8913,7 +8974,7 @@ public abstract class Attack implements Serializable
 
 		public SteelWing()
 		{
-			super("Steel Wing", "The target is hit with wings of steel. It may also raise the user's Defense stat.", 25, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.STEEL_WING_ATTACK, "The target is hit with wings of steel. It may also raise the user's Defense stat.", 25, Type.STEEL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 90;
 			super.effectChance = 10;
@@ -8929,7 +8990,7 @@ public abstract class Attack implements Serializable
 
 		public Sketch()
 		{
-			super("Sketch", "It enables the user to permanently learn the move last used by the target. Once used, Sketch disappears.", 1, Type.NORMAL, Category.STATUS);
+			super(Namesies.SKETCH_ATTACK, "It enables the user to permanently learn the move last used by the target. Once used, Sketch disappears.", 1, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.MIMICLESS);
@@ -8940,7 +9001,7 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Move copy = o.getAttributes().getLastMoveUsed();
-			if (copy == null || copy.getAttack().getName().equals("Struggle") || me.hasEffect("Transformed"))
+			if (copy == null || copy.getAttack().getName().equals("Struggle") || me.hasEffect(Namesies.TRANSFORMED_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -8966,7 +9027,7 @@ public abstract class Attack implements Serializable
 
 		public TripleKick()
 		{
-			super("Triple Kick", "A consecutive three-kick attack that becomes more powerful with each successive hit.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.TRIPLE_KICK_ATTACK, "A consecutive three-kick attack that becomes more powerful with each successive hit.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 10;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -8996,13 +9057,13 @@ public abstract class Attack implements Serializable
 
 		public MilkDrink()
 		{
-			super("Milk Drink", "The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.MILK_DRINK_ATTACK, "The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.", 10, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -9020,7 +9081,7 @@ public abstract class Attack implements Serializable
 
 		public HealBell()
 		{
-			super("Heal Bell", "The user makes a soothing bell chime to heal the status problems of all the party Pok\u00e9mon.", 5, Type.NORMAL, Category.STATUS);
+			super(Namesies.HEAL_BELL_ATTACK, "The user makes a soothing bell chime to heal the status problems of all the party Pok\u00e9mon.", 5, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
@@ -9040,32 +9101,32 @@ public abstract class Attack implements Serializable
 
 		public WeatherBall()
 		{
-			super("Weather Ball", "An attack move that varies in power and type depending on the weather.", 10, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.WEATHER_BALL_ATTACK, "An attack move that varies in power and type depending on the weather.", 10, Type.NORMAL, Category.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
 		}
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return super.power*(b.getWeather().getType() == Weather.WeatherType.CLEAR_SKIES ? 1 : 2);
+			return super.power*(b.getWeather().namesies() == Namesies.CLEAR_SKIES_EFFECT ? 1 : 2);
 		}
 
 		public Type getType(Battle b, ActivePokemon user)
 		{
-			if (user.hasAbility("Normalize"))
+			if (user.hasAbility(Namesies.NORMALIZE_ABILITY))
 			{
 				return Type.NORMAL;
 			}
 			
-			switch (b.getWeather().getType())
+			switch (b.getWeather().namesies())
 			{
-				case SUNNY:
+				case SUNNY_EFFECT:
 				return Type.FIRE;
-				case RAINING:
+				case RAINING_EFFECT:
 				return Type.WATER;
-				case HAILING:
+				case HAILING_EFFECT:
 				return Type.ICE;
-				case SANDSTORM:
+				case SANDSTORM_EFFECT:
 				return Type.ROCK;
 				default:
 				return Type.NORMAL;
@@ -9079,7 +9140,7 @@ public abstract class Attack implements Serializable
 
 		public Aeroblast()
 		{
-			super("Aeroblast", "A vortex of air is shot at the target to inflict damage. Critical hits land more easily.", 5, Type.FLYING, Category.SPECIAL);
+			super(Namesies.AEROBLAST_ATTACK, "A vortex of air is shot at the target to inflict damage. Critical hits land more easily.", 5, Type.FLYING, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 95;
 		}
@@ -9096,7 +9157,7 @@ public abstract class Attack implements Serializable
 
 		public SacredFire()
 		{
-			super("Sacred Fire", "The target is razed with a mystical fire of great intensity. It may also leave the target with a burn.", 5, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.SACRED_FIRE_ATTACK, "The target is razed with a mystical fire of great intensity. It may also leave the target with a burn.", 5, Type.FIRE, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 95;
 			super.effectChance = 50;
@@ -9111,9 +9172,9 @@ public abstract class Attack implements Serializable
 
 		public HealBlock()
 		{
-			super("Heal Block", "For five turns, the user prevents the opposing team from using any moves, Abilities, or held items that recover HP.", 15, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.HEAL_BLOCK_ATTACK, "For five turns, the user prevents the opposing team from using any moves, Abilities, or held items that recover HP.", 15, Type.PSYCHIC, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("HealBlock", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.HEAL_BLOCK_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -9123,7 +9184,7 @@ public abstract class Attack implements Serializable
 
 		public EnergyBall()
 		{
-			super("Energy Ball", "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.", 10, Type.GRASS, Category.SPECIAL);
+			super(Namesies.ENERGY_BALL_ATTACK, "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.", 10, Type.GRASS, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -9137,7 +9198,7 @@ public abstract class Attack implements Serializable
 
 		public BulkUp()
 		{
-			super("Bulk Up", "The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats.", 20, Type.FIGHTING, Category.STATUS);
+			super(Namesies.BULK_UP_ATTACK, "The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats.", 20, Type.FIGHTING, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
@@ -9151,10 +9212,10 @@ public abstract class Attack implements Serializable
 
 		public Thief()
 		{
-			super("Thief", "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", 25, Type.DARK, Category.PHYSICAL);
+			super(Namesies.THIEF_ATTACK, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", 25, Type.DARK, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeItem", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9162,7 +9223,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility("Sticky Hold"))
+			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -9205,9 +9266,9 @@ public abstract class Attack implements Serializable
 
 		public Attract()
 		{
-			super("Attract", "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.", 15, Type.NORMAL, Category.STATUS);
+			super(Namesies.ATTRACT_ATTACK, "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.", 15, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Infatuated", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.INFATUATED_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
@@ -9218,7 +9279,7 @@ public abstract class Attack implements Serializable
 
 		public ForcePalm()
 		{
-			super("Force Palm", "The target is attacked with a shock wave. It may also leave the target with paralysis.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.FORCE_PALM_ATTACK, "The target is attacked with a shock wave. It may also leave the target with paralysis.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -9233,7 +9294,7 @@ public abstract class Attack implements Serializable
 
 		public ArmThrust()
 		{
-			super("Arm Thrust", "The user looses a flurry of open-palmed arm thrusts that hit two to five times in a row.", 20, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.ARM_THRUST_ATTACK, "The user looses a flurry of open-palmed arm thrusts that hit two to five times in a row.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9252,7 +9313,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -9274,7 +9335,7 @@ public abstract class Attack implements Serializable
 
 		public SmellingSalts()
 		{
-			super("Smelling Salts", "This attack inflicts double damage on a target with paralysis. It also cures the target's paralysis, however.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SMELLING_SALTS_ATTACK, "This attack inflicts double damage on a target with paralysis. It also cures the target's paralysis, however.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9301,7 +9362,7 @@ public abstract class Attack implements Serializable
 
 		public Assist()
 		{
-			super("Assist", "The user hurriedly and randomly uses a move among those known by other Pok\u00e9mon in the party.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.ASSIST_ATTACK, "The user hurriedly and randomly uses a move among those known by other Pok\u00e9mon in the party.", 20, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -9343,7 +9404,7 @@ public abstract class Attack implements Serializable
 
 		public MetalBurst()
 		{
-			super("Metal Burst", "The user retaliates with much greater power against the target that last inflicted damage on it.", 10, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.METAL_BURST_ATTACK, "The user retaliates with much greater power against the target that last inflicted damage on it.", 10, Type.STEEL, Category.PHYSICAL);
 			super.accuracy = 100;
 		}
 
@@ -9371,7 +9432,7 @@ public abstract class Attack implements Serializable
 
 		public WildCharge()
 		{
-			super("Wild Charge", "The user shrouds itself in electricity and smashes into its target. It also damages the user a little.", 15, Type.ELECTRIC, Category.PHYSICAL);
+			super(Namesies.WILD_CHARGE_ATTACK, "The user shrouds itself in electricity and smashes into its target. It also damages the user a little.", 15, Type.ELECTRIC, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9379,7 +9440,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/4.0));
 		}
@@ -9391,7 +9456,7 @@ public abstract class Attack implements Serializable
 
 		public Flash()
 		{
-			super("Flash", "The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.FLASH_ATTACK, "The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ACCURACY.index()] = -1;
 		}
@@ -9403,7 +9468,7 @@ public abstract class Attack implements Serializable
 
 		public TailGlow()
 		{
-			super("Tail Glow", "The user stares at flashing lights to focus its mind, drastically raising its Sp. Atk stat.", 20, Type.BUG, Category.STATUS);
+			super(Namesies.TAIL_GLOW_ATTACK, "The user stares at flashing lights to focus its mind, drastically raising its Sp. Atk stat.", 20, Type.BUG, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_ATTACK.index()] = 3;
 		}
@@ -9415,7 +9480,7 @@ public abstract class Attack implements Serializable
 
 		public WaterSpout()
 		{
-			super("Water Spout", "The user spouts water to damage the opposing team. The lower the user's HP, the less powerful it becomes.", 5, Type.WATER, Category.SPECIAL);
+			super(Namesies.WATER_SPOUT_ATTACK, "The user spouts water to damage the opposing team. The lower the user's HP, the less powerful it becomes.", 5, Type.WATER, Category.SPECIAL);
 			super.accuracy = 100;
 		}
 
@@ -9431,9 +9496,9 @@ public abstract class Attack implements Serializable
 
 		public TeeterDance()
 		{
-			super("Teeter Dance", "The user performs a wobbly dance that confuses the Pok\u00e9mon around it.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.TEETER_DANCE_ATTACK, "The user performs a wobbly dance that confuses the Pok\u00e9mon around it.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -9443,10 +9508,10 @@ public abstract class Attack implements Serializable
 
 		public NeedleArm()
 		{
-			super("Needle Arm", "The user attacks by wildly swinging its thorny arms. It may also make the target flinch.", 15, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.NEEDLE_ARM_ATTACK, "The user attacks by wildly swinging its thorny arms. It may also make the target flinch.", 15, Type.GRASS, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Flinch", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.FLINCH_EFFECT, EffectType.POKEMON));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -9458,7 +9523,7 @@ public abstract class Attack implements Serializable
 
 		public Venoshock()
 		{
-			super("Venoshock", "The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned.", 10, Type.POISON, Category.SPECIAL);
+			super(Namesies.VENOSHOCK_ATTACK, "The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned.", 10, Type.POISON, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
 		}
@@ -9475,8 +9540,8 @@ public abstract class Attack implements Serializable
 
 		public Snatch()
 		{
-			super("Snatch", "The user steals the effects of any healing or stat-changing move the opponent attempts to use.", 10, Type.DARK, Category.STATUS);
-			super.effects.add(Effect.getEffect("Snatch", EffectType.POKEMON));
+			super(Namesies.SNATCH_ATTACK, "The user steals the effects of any healing or stat-changing move the opponent attempts to use.", 10, Type.DARK, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.SNATCH_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.selfTarget = true;
@@ -9490,7 +9555,7 @@ public abstract class Attack implements Serializable
 
 		public IceBall()
 		{
-			super("Ice Ball", "The user continually rolls into the target over five turns. It becomes stronger each time it hits.", 20, Type.ICE, Category.PHYSICAL);
+			super(Namesies.ICE_BALL_ATTACK, "The user continually rolls into the target over five turns. It becomes stronger each time it hits.", 20, Type.ICE, Category.PHYSICAL);
 			super.power = 30;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9498,7 +9563,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect("UsedDefenseCurl") ? 2 : 1);
+			return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(Namesies.USED_DEFENSE_CURL_EFFECT) ? 2 : 1);
 		}
 	}
 
@@ -9508,7 +9573,7 @@ public abstract class Attack implements Serializable
 
 		public HeadSmash()
 		{
-			super("Head Smash", "The user attacks the target with a hazardous, full-power headbutt. The user also takes terrible damage.", 5, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.HEAD_SMASH_ATTACK, "The user attacks the target with a hazardous, full-power headbutt. The user also takes terrible damage.", 5, Type.ROCK, Category.PHYSICAL);
 			super.power = 150;
 			super.accuracy = 80;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9516,7 +9581,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/2.0));
 		}
@@ -9528,7 +9597,7 @@ public abstract class Attack implements Serializable
 
 		public MistBall()
 		{
-			super("Mist Ball", "A mistlike flurry of down envelops and damages the target. It may also lower the target's Sp. Atk.", 5, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.MIST_BALL_ATTACK, "A mistlike flurry of down envelops and damages the target. It may also lower the target's Sp. Atk.", 5, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.effectChance = 50;
@@ -9542,7 +9611,7 @@ public abstract class Attack implements Serializable
 
 		public LusterPurge()
 		{
-			super("Luster Purge", "The user lets loose a damaging burst of light. It may also reduce the target's Sp. Def stat.", 5, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.LUSTER_PURGE_ATTACK, "The user lets loose a damaging burst of light. It may also reduce the target's Sp. Def stat.", 5, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.effectChance = 50;
@@ -9556,7 +9625,7 @@ public abstract class Attack implements Serializable
 
 		public PsychoBoost()
 		{
-			super("Psycho Boost", "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.PSYCHIC, Category.SPECIAL);
+			super(Namesies.PSYCHO_BOOST_ATTACK, "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 140;
 			super.accuracy = 90;
 			super.selfTarget = true;
@@ -9570,7 +9639,7 @@ public abstract class Attack implements Serializable
 
 		public Facade()
 		{
-			super("Facade", "An attack move that doubles its power if the user is poisoned, burned, or has paralysis.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.FACADE_ATTACK, "An attack move that doubles its power if the user is poisoned, burned, or has paralysis.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9588,7 +9657,7 @@ public abstract class Attack implements Serializable
 
 		public DefendOrder()
 		{
-			super("Defend Order", "The user calls out its underlings to shield its body, raising its Defense and Sp. Def stats.", 10, Type.BUG, Category.STATUS);
+			super(Namesies.DEFEND_ORDER_ATTACK, "The user calls out its underlings to shield its body, raising its Defense and Sp. Def stats.", 10, Type.BUG, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
@@ -9601,13 +9670,13 @@ public abstract class Attack implements Serializable
 
 		public HealOrder()
 		{
-			super("Heal Order", "The user calls out its underlings to heal it. The user regains up to half of its max HP.", 10, Type.BUG, Category.STATUS);
+			super(Namesies.HEAL_ORDER_ATTACK, "The user calls out its underlings to heal it. The user regains up to half of its max HP.", 10, Type.BUG, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		{
-			if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -9625,7 +9694,7 @@ public abstract class Attack implements Serializable
 
 		public AttackOrder()
 		{
-			super("Attack Order", "The user calls out its underlings to pummel the target. Critical hits land more easily.", 15, Type.BUG, Category.PHYSICAL);
+			super(Namesies.ATTACK_ORDER_ATTACK, "The user calls out its underlings to pummel the target. Critical hits land more easily.", 15, Type.BUG, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 100;
 		}
@@ -9642,10 +9711,10 @@ public abstract class Attack implements Serializable
 
 		public Chatter()
 		{
-			super("Chatter", "The user attacks using a sound wave based on words it has learned. It may also confuse the target.", 20, Type.FLYING, Category.SPECIAL);
+			super(Namesies.CHATTER_ATTACK, "The user attacks using a sound wave based on words it has learned. It may also confuse the target.", 20, Type.FLYING, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.MIMICLESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
@@ -9660,7 +9729,7 @@ public abstract class Attack implements Serializable
 
 		public DualChop()
 		{
-			super("Dual Chop", "The user attacks its target by hitting it with brutal strikes. The target is hit twice in a row.", 15, Type.DRAGON, Category.PHYSICAL);
+			super(Namesies.DUAL_CHOP_ATTACK, "The user attacks its target by hitting it with brutal strikes. The target is hit twice in a row.", 15, Type.DRAGON, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9679,7 +9748,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -9701,7 +9770,7 @@ public abstract class Attack implements Serializable
 
 		public RockWrecker()
 		{
-			super("Rock Wrecker", "The user launches a huge boulder at the target to attack. It must rest on the next turn, however.", 5, Type.ROCK, Category.PHYSICAL);
+			super(Namesies.ROCK_WRECKER_ATTACK, "The user launches a huge boulder at the target to attack. It must rest on the next turn, however.", 5, Type.ROCK, Category.PHYSICAL);
 			super.power = 150;
 			super.accuracy = 90;
 		}
@@ -9733,8 +9802,8 @@ public abstract class Attack implements Serializable
 
 		public TrickRoom()
 		{
-			super("Trick Room", "The user creates a bizarre area in which slower Pok\u00e9mon get to move first for five turns.", 5, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("TrickRoom", EffectType.BATTLE));
+			super(Namesies.TRICK_ROOM_ATTACK, "The user creates a bizarre area in which slower Pok\u00e9mon get to move first for five turns.", 5, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.TRICK_ROOM_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 			super.priority = -7;
 		}
@@ -9746,7 +9815,7 @@ public abstract class Attack implements Serializable
 
 		public RoarOfTime()
 		{
-			super("Roar Of Time", "The user blasts the target with power that distorts even time. The user must rest on the next turn.", 5, Type.DRAGON, Category.SPECIAL);
+			super(Namesies.ROAR_OF_TIME_ATTACK, "The user blasts the target with power that distorts even time. The user must rest on the next turn.", 5, Type.DRAGON, Category.SPECIAL);
 			super.power = 150;
 			super.accuracy = 90;
 		}
@@ -9778,7 +9847,7 @@ public abstract class Attack implements Serializable
 
 		public SpacialRend()
 		{
-			super("Spacial Rend", "The user tears the target along with the space around it. Critical hits land more easily.", 5, Type.DRAGON, Category.SPECIAL);
+			super(Namesies.SPACIAL_REND_ATTACK, "The user tears the target along with the space around it. Critical hits land more easily.", 5, Type.DRAGON, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 95;
 		}
@@ -9795,10 +9864,10 @@ public abstract class Attack implements Serializable
 
 		public MagmaStorm()
 		{
-			super("Magma Storm", "The target becomes trapped within a maelstrom of fire that rages for four to five turns.", 5, Type.FIRE, Category.SPECIAL);
+			super(Namesies.MAGMA_STORM_ATTACK, "The target becomes trapped within a maelstrom of fire that rages for four to five turns.", 5, Type.FIRE, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect("MagmaStorm", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.MAGMA_STORM_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -9808,7 +9877,7 @@ public abstract class Attack implements Serializable
 
 		public CrushGrip()
 		{
-			super("Crush Grip", "The target is crushed with great force. The attack is more powerful the more HP the target has left.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.CRUSH_GRIP_ATTACK, "The target is crushed with great force. The attack is more powerful the more HP the target has left.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -9825,7 +9894,7 @@ public abstract class Attack implements Serializable
 
 		public ShadowForce()
 		{
-			super("Shadow Force", "The user disappears, then strikes the target on the second turn. It hits even if the target protects itself.", 5, Type.GHOST, Category.PHYSICAL);
+			super(Namesies.SHADOW_FORCE_ATTACK, "The user disappears, then strikes the target on the second turn. It hits even if the target protects itself.", 5, Type.GHOST, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
@@ -9860,7 +9929,7 @@ public abstract class Attack implements Serializable
 
 		public HeartSwap()
 		{
-			super("Heart Swap", "The user employs its psychic power to switch stat changes with the target.", 10, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.HEART_SWAP_ATTACK, "The user employs its psychic power to switch stat changes with the target.", 10, Type.PSYCHIC, Category.STATUS);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
@@ -9883,7 +9952,7 @@ public abstract class Attack implements Serializable
 
 		public DarkVoid()
 		{
-			super("Dark Void", "Opposing Pok\u00e9mon are dragged into a world of total darkness that makes them sleep.", 10, Type.DARK, Category.STATUS);
+			super(Namesies.DARK_VOID_ATTACK, "Opposing Pok\u00e9mon are dragged into a world of total darkness that makes them sleep.", 10, Type.DARK, Category.STATUS);
 			super.accuracy = 80;
 			super.status = StatusCondition.ASLEEP;
 		}
@@ -9895,7 +9964,7 @@ public abstract class Attack implements Serializable
 
 		public SeedFlare()
 		{
-			super("Seed Flare", "The user emits a shock wave from its body to attack its target. It may harshly lower the target's Sp. Def.", 5, Type.GRASS, Category.SPECIAL);
+			super(Namesies.SEED_FLARE_ATTACK, "The user emits a shock wave from its body to attack its target. It may harshly lower the target's Sp. Def.", 5, Type.GRASS, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 85;
 			super.effectChance = 40;
@@ -9909,14 +9978,14 @@ public abstract class Attack implements Serializable
 
 		public Judgment()
 		{
-			super("Judgment", "The user releases countless shots of light at the target. Its type varies with the kind of Plate the user is holding.", 10, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.JUDGMENT_ATTACK, "The user releases countless shots of light at the target. Its type varies with the kind of Plate the user is holding.", 10, Type.NORMAL, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 100;
 		}
 
 		public Type getType(Battle b, ActivePokemon user)
 		{
-			if (user.hasAbility("Normalize"))
+			if (user.hasAbility(Namesies.NORMALIZE_ABILITY))
 			{
 				return Type.NORMAL;
 			}
@@ -9937,7 +10006,7 @@ public abstract class Attack implements Serializable
 
 		public SearingShot()
 		{
-			super("Searing Shot", "An inferno of scarlet flames torches everything around the user. It may leave targets with a burn.", 5, Type.FIRE, Category.SPECIAL);
+			super(Namesies.SEARING_SHOT_ATTACK, "An inferno of scarlet flames torches everything around the user. It may leave targets with a burn.", 5, Type.FIRE, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -9951,7 +10020,7 @@ public abstract class Attack implements Serializable
 
 		public Incinerate()
 		{
-			super("Incinerate", "The user attacks the target with fire. If the target is holding a Berry, the Berry becomes burnt up and unusable.", 15, Type.FIRE, Category.SPECIAL);
+			super(Namesies.INCINERATE_ATTACK, "The user attacks the target with fire. If the target is holding a Berry, the Berry becomes burnt up and unusable.", 15, Type.FIRE, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
 		}
@@ -9975,7 +10044,7 @@ public abstract class Attack implements Serializable
 
 		public Overheat()
 		{
-			super("Overheat", "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.FIRE, Category.SPECIAL);
+			super(Namesies.OVERHEAT_ATTACK, "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", 5, Type.FIRE, Category.SPECIAL);
 			super.power = 130;
 			super.accuracy = 90;
 			super.selfTarget = true;
@@ -9989,7 +10058,7 @@ public abstract class Attack implements Serializable
 
 		public HeatCrash()
 		{
-			super("Heat Crash", "The user slams its target with its flame- covered body. The more the user outweighs the target, the greater the damage.", 10, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.HEAT_CRASH_ATTACK, "The user slams its target with its flame- covered body. The more the user outweighs the target, the greater the damage.", 10, Type.FIRE, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -10011,7 +10080,7 @@ public abstract class Attack implements Serializable
 
 		public GrassKnot()
 		{
-			super("Grass Knot", "The user snares the target with grass and trips it. The heavier the target, the greater the damage.", 20, Type.GRASS, Category.SPECIAL);
+			super(Namesies.GRASS_KNOT_ATTACK, "The user snares the target with grass and trips it. The heavier the target, the greater the damage.", 20, Type.GRASS, Category.SPECIAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -10034,7 +10103,7 @@ public abstract class Attack implements Serializable
 
 		public Scald()
 		{
-			super("Scald", "The user shoots boiling hot water at its target. It may also leave the target with a burn.", 15, Type.WATER, Category.SPECIAL);
+			super(Namesies.SCALD_ATTACK, "The user shoots boiling hot water at its target. It may also leave the target with a burn.", 15, Type.WATER, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -10049,7 +10118,7 @@ public abstract class Attack implements Serializable
 
 		public DrainPunch()
 		{
-			super("Drain Punch", "An energy-draining punch. The user's HP is restored by half the damage taken by the target.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.DRAIN_PUNCH_ATTACK, "An energy-draining punch. The user's HP is restored by half the damage taken by the target.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PUNCHING);
@@ -10064,7 +10133,7 @@ public abstract class Attack implements Serializable
 
 		public StormThrow()
 		{
-			super("Storm Throw", "The user strikes the target with a fierce blow. This attack always results in a critical hit.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.STORM_THROW_ATTACK, "The user strikes the target with a fierce blow. This attack always results in a critical hit.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.ALWAYS_CRIT);
@@ -10078,7 +10147,7 @@ public abstract class Attack implements Serializable
 
 		public FrostBreath()
 		{
-			super("Frost Breath", "The user blows a cold breath on the target. This attack always results in a critical hit.", 10, Type.ICE, Category.SPECIAL);
+			super(Namesies.FROST_BREATH_ATTACK, "The user blows a cold breath on the target. This attack always results in a critical hit.", 10, Type.ICE, Category.SPECIAL);
 			super.power = 60;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.ALWAYS_CRIT);
@@ -10091,7 +10160,7 @@ public abstract class Attack implements Serializable
 
 		public RockSmash()
 		{
-			super("Rock Smash", "The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat.", 15, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.ROCK_SMASH_ATTACK, "The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat.", 15, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
 			super.effectChance = 50;
@@ -10106,10 +10175,10 @@ public abstract class Attack implements Serializable
 
 		public RockClimb()
 		{
-			super("Rock Climb", "The user attacks the target by smashing into it with incredible force. It may also confuse the target.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.ROCK_CLIMB_ATTACK, "The user attacks the target by smashing into it with incredible force. It may also confuse the target.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect("Confusion", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -10121,7 +10190,7 @@ public abstract class Attack implements Serializable
 
 		public NightDaze()
 		{
-			super("Night Daze", "The user lets loose a pitch-black shock wave at its target. It may also lower the target's accuracy.", 10, Type.DARK, Category.SPECIAL);
+			super(Namesies.NIGHT_DAZE_ATTACK, "The user lets loose a pitch-black shock wave at its target. It may also lower the target's accuracy.", 10, Type.DARK, Category.SPECIAL);
 			super.power = 85;
 			super.accuracy = 95;
 			super.effectChance = 40;
@@ -10135,7 +10204,7 @@ public abstract class Attack implements Serializable
 
 		public TailSlap()
 		{
-			super("Tail Slap", "The user attacks by striking the target with its hard tail. It hits the target two to five times in a row.", 10, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.TAIL_SLAP_ATTACK, "The user attacks by striking the target with its hard tail. It hits the target two to five times in a row.", 10, Type.NORMAL, Category.PHYSICAL);
 			super.power = 25;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -10154,7 +10223,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -10176,7 +10245,7 @@ public abstract class Attack implements Serializable
 
 		public Defog()
 		{
-			super("Defog", "A strong wind blows away the target's obstacles such as Reflect or Light Screen. It also lowers the target's evasiveness.", 15, Type.FLYING, Category.STATUS);
+			super(Namesies.DEFOG_ATTACK, "A strong wind blows away the target's obstacles such as Reflect or Light Screen. It also lowers the target's evasiveness.", 15, Type.FLYING, Category.STATUS);
 			super.statChanges[Stat.EVASION.index()] = -1;
 		}
 
@@ -10210,7 +10279,7 @@ public abstract class Attack implements Serializable
 
 		public HornLeech()
 		{
-			super("Horn Leech", "The user drains the target's energy with its horns. The user's HP is restored by half the damage taken by the target.", 10, Type.GRASS, Category.PHYSICAL);
+			super(Namesies.HORN_LEECH_ATTACK, "The user drains the target's energy with its horns. The user's HP is restored by half the damage taken by the target.", 10, Type.GRASS, Category.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SAP_HEALTH);
@@ -10224,7 +10293,7 @@ public abstract class Attack implements Serializable
 
 		public Electroweb()
 		{
-			super("Electroweb", "The user captures and attacks opposing Pok\u00e9mon by using an electric net. It reduces the targets' Speed stat.", 15, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.ELECTROWEB_ATTACK, "The user captures and attacks opposing Pok\u00e9mon by using an electric net. It reduces the targets' Speed stat.", 15, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 55;
 			super.accuracy = 95;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -10237,7 +10306,7 @@ public abstract class Attack implements Serializable
 
 		public GearGrind()
 		{
-			super("Gear Grind", "The user attacks by throwing two steel gears at its target.", 15, Type.STEEL, Category.PHYSICAL);
+			super(Namesies.GEAR_GRIND_ATTACK, "The user attacks by throwing two steel gears at its target.", 15, Type.STEEL, Category.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 85;
 		}
@@ -10255,7 +10324,7 @@ public abstract class Attack implements Serializable
 			int damage = 0;
 			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 			
-			if (maxHits == 5 && me.hasAbility("Skill Link"))
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
@@ -10277,7 +10346,7 @@ public abstract class Attack implements Serializable
 
 		public ShiftGear()
 		{
-			super("Shift Gear", "The user rotates its gears, raising its Attack and sharply raising its Speed.", 10, Type.STEEL, Category.STATUS);
+			super(Namesies.SHIFT_GEAR_ATTACK, "The user rotates its gears, raising its Attack and sharply raising its Speed.", 10, Type.STEEL, Category.STATUS);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.SPEED.index()] = 2;
@@ -10290,7 +10359,7 @@ public abstract class Attack implements Serializable
 
 		public HeadCharge()
 		{
-			super("Head Charge", "The user charges its head into its target, using its powerful guard hair. It also damages the user a little.", 15, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.HEAD_CHARGE_ATTACK, "The user charges its head into its target, using its powerful guard hair. It also damages the user a little.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -10298,7 +10367,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/4.0));
 		}
@@ -10310,7 +10383,7 @@ public abstract class Attack implements Serializable
 
 		public FieryDance()
 		{
-			super("Fiery Dance", "Cloaked in flames, the user dances and flaps its wings. It may also raise the user's Sp. Atk stat.", 10, Type.FIRE, Category.SPECIAL);
+			super(Namesies.FIERY_DANCE_ATTACK, "Cloaked in flames, the user dances and flaps its wings. It may also raise the user's Sp. Atk stat.", 10, Type.FIRE, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.effectChance = 50;
@@ -10325,7 +10398,7 @@ public abstract class Attack implements Serializable
 
 		public SacredSword()
 		{
-			super("Sacred Sword", "The user attacks by slicing with its long horns. The target's stat changes don't affect this attack's damage.", 20, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.SACRED_SWORD_ATTACK, "The user attacks by slicing with its long horns. The target's stat changes don't affect this attack's damage.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -10343,7 +10416,7 @@ public abstract class Attack implements Serializable
 
 		public SecretSword()
 		{
-			super("Secret Sword", "The user cuts with its long horn. The odd power contained in the horn does physical damage to the target.", 10, Type.FIGHTING, Category.SPECIAL);
+			super(Namesies.SECRET_SWORD_ATTACK, "The user cuts with its long horn. The odd power contained in the horn does physical damage to the target.", 10, Type.FIGHTING, Category.SPECIAL);
 			super.power = 85;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -10361,7 +10434,7 @@ public abstract class Attack implements Serializable
 
 		public FusionFlare()
 		{
-			super("Fusion Flare", "The user brings down a giant flame. This attack does greater damage when influenced by an enormous thunderbolt.", 5, Type.FIRE, Category.SPECIAL);
+			super(Namesies.FUSION_FLARE_ATTACK, "The user brings down a giant flame. This attack does greater damage when influenced by an enormous thunderbolt.", 5, Type.FIRE, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.DEFROST);
@@ -10379,7 +10452,7 @@ public abstract class Attack implements Serializable
 
 		public FusionBolt()
 		{
-			super("Fusion Bolt", "The user throws down a giant thunderbolt. This attack does greater damage when influenced by an enormous flame.", 5, Type.ELECTRIC, Category.PHYSICAL);
+			super(Namesies.FUSION_BOLT_ATTACK, "The user throws down a giant thunderbolt. This attack does greater damage when influenced by an enormous flame.", 5, Type.ELECTRIC, Category.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 100;
 		}
@@ -10396,7 +10469,7 @@ public abstract class Attack implements Serializable
 
 		public BlueFlare()
 		{
-			super("Blue Flare", "The user attacks by engulfing the target in an intense, yet beautiful, blue flame. It may leave the target with a burn.", 5, Type.FIRE, Category.SPECIAL);
+			super(Namesies.BLUE_FLARE_ATTACK, "The user attacks by engulfing the target in an intense, yet beautiful, blue flame. It may leave the target with a burn.", 5, Type.FIRE, Category.SPECIAL);
 			super.power = 130;
 			super.accuracy = 85;
 			super.effectChance = 20;
@@ -10410,7 +10483,7 @@ public abstract class Attack implements Serializable
 
 		public BoltStrike()
 		{
-			super("Bolt Strike", "The user charges its target, surrounding itself with a great amount of electricity. It may leave the target with paralysis.", 5, Type.ELECTRIC, Category.PHYSICAL);
+			super(Namesies.BOLT_STRIKE_ATTACK, "The user charges its target, surrounding itself with a great amount of electricity. It may leave the target with paralysis.", 5, Type.ELECTRIC, Category.PHYSICAL);
 			super.power = 130;
 			super.accuracy = 85;
 			super.effectChance = 20;
@@ -10425,7 +10498,7 @@ public abstract class Attack implements Serializable
 
 		public Glaciate()
 		{
-			super("Glaciate", "The user attacks by blowing freezing cold air at opposing Pok\u00e9mon. This attack reduces the targets' Speed stat.", 10, Type.ICE, Category.SPECIAL);
+			super(Namesies.GLACIATE_ATTACK, "The user attacks by blowing freezing cold air at opposing Pok\u00e9mon. This attack reduces the targets' Speed stat.", 10, Type.ICE, Category.SPECIAL);
 			super.power = 65;
 			super.accuracy = 95;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -10438,7 +10511,7 @@ public abstract class Attack implements Serializable
 
 		public TechnoBlast()
 		{
-			super("Techno Blast", "The user fires a beam of light at its target. The type changes depending on the Drive the user holds.", 5, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.TECHNO_BLAST_ATTACK, "The user fires a beam of light at its target. The type changes depending on the Drive the user holds.", 5, Type.NORMAL, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -10446,7 +10519,7 @@ public abstract class Attack implements Serializable
 
 		public Type getType(Battle b, ActivePokemon user)
 		{
-			if (user.hasAbility("Normalize"))
+			if (user.hasAbility(Namesies.NORMALIZE_ABILITY))
 			{
 				return Type.NORMAL;
 			}
@@ -10467,7 +10540,7 @@ public abstract class Attack implements Serializable
 
 		public Explosion()
 		{
-			super("Explosion", "The user explodes to inflict damage on those around it. The user faints upon using this move.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.EXPLOSION_ATTACK, "The user explodes to inflict damage on those around it. The user faints upon using this move.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 250;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.USER_FAINTS);
@@ -10480,7 +10553,7 @@ public abstract class Attack implements Serializable
 
 		public SelfDestruct()
 		{
-			super("Self-Destruct", "The user attacks everything around it by causing an explosion. The user faints upon using this move.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SELF_DESTRUCT_ATTACK, "The user attacks everything around it by causing an explosion. The user faints upon using this move.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 200;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.USER_FAINTS);
@@ -10493,13 +10566,13 @@ public abstract class Attack implements Serializable
 
 		public Fling()
 		{
-			super("Fling", "The user flings its held item at the target to attack. Its power and effects depend on the item.", 10, Type.DARK, Category.PHYSICAL);
+			super(Namesies.FLING_ATTACK, "The user flings its held item at the target to attack. Its power and effects depend on the item.", 10, Type.DARK, Category.PHYSICAL);
 			super.accuracy = 100;
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (me.hasEffect("Embargo"))
+			if (me.hasEffect(Namesies.EMBARGO_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -10520,7 +10593,7 @@ public abstract class Attack implements Serializable
 
 		public FreezeShock()
 		{
-			super("Freeze Shock", "On the second turn, the user hits the target with electrically charged ice. It may leave the target with paralysis.", 5, Type.ICE, Category.PHYSICAL);
+			super(Namesies.FREEZE_SHOCK_ATTACK, "On the second turn, the user hits the target with electrically charged ice. It may leave the target with paralysis.", 5, Type.ICE, Category.PHYSICAL);
 			super.power = 140;
 			super.accuracy = 90;
 			super.effectChance = 30;
@@ -10535,7 +10608,7 @@ public abstract class Attack implements Serializable
 
 		public SecretPower()
 		{
-			super("Secret Power", "The user attacks the target with a secret power. Its added effects vary depending on the user's environment.", 20, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.SECRET_POWER_ATTACK, "The user attacks the target with a secret power. Its added effects vary depending on the user's environment.", 20, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.effectChance = 30;
@@ -10553,7 +10626,7 @@ public abstract class Attack implements Serializable
 
 		public FinalGambit()
 		{
-			super("Final Gambit", "The user risks everything to attack its target. The user faints but does damage equal to the user's HP.", 5, Type.FIGHTING, Category.SPECIAL);
+			super(Namesies.FINAL_GAMBIT_ATTACK, "The user risks everything to attack its target. The user faints but does damage equal to the user's HP.", 5, Type.FIGHTING, Category.SPECIAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.USER_FAINTS);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -10576,14 +10649,14 @@ public abstract class Attack implements Serializable
 
 		public GastroAcid()
 		{
-			super("Gastro Acid", "The user hurls up its stomach acids on the target. The fluid eliminates the effect of the target's Ability.", 10, Type.POISON, Category.STATUS);
+			super(Namesies.GASTRO_ACID_ATTACK, "The user hurls up its stomach acids on the target. The fluid eliminates the effect of the target's Ability.", 10, Type.POISON, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeAbility", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ABILITY_EFFECT, EffectType.POKEMON));
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return Ability.getAbility("None").newInstance();
+			return Ability.getAbility(Namesies.NONE_ABILITY).newInstance();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -10598,8 +10671,8 @@ public abstract class Attack implements Serializable
 
 		public HealingWish()
 		{
-			super("Healing Wish", "The user faints. In return, the Pok\u00e9mon taking its place will have its HP restored and status cured.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("HealSwitch", EffectType.TEAM));
+			super(Namesies.HEALING_WISH_ATTACK, "The user faints. In return, the Pok\u00e9mon taking its place will have its HP restored and status cured.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.HEAL_SWITCH_EFFECT, EffectType.TEAM));
 			super.moveTypes.add(MoveType.USER_FAINTS);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
@@ -10612,8 +10685,8 @@ public abstract class Attack implements Serializable
 
 		public LunarDance()
 		{
-			super("Lunar Dance", "The user faints. In return, the Pok\u00e9mon taking its place will have its status and HP fully restored.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("HealSwitch", EffectType.TEAM));
+			super(Namesies.LUNAR_DANCE_ATTACK, "The user faints. In return, the Pok\u00e9mon taking its place will have its status and HP fully restored.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.HEAL_SWITCH_EFFECT, EffectType.TEAM));
 			super.moveTypes.add(MoveType.USER_FAINTS);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
@@ -10626,7 +10699,7 @@ public abstract class Attack implements Serializable
 
 		public Roar()
 		{
-			super("Roar", "The target is scared off and replaced by another Pok\u00e9mon in its party. In the wild, the battle ends.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.ROAR_ATTACK, "The target is scared off and replaced by another Pok\u00e9mon in its party. In the wild, the battle ends.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -10636,7 +10709,7 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
+			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -10645,7 +10718,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			if (victim.hasAbility("Suction Cups") && !user.breaksTheMold())
+			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
 				b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
 				return;
@@ -10664,8 +10737,8 @@ public abstract class Attack implements Serializable
 
 		public Grudge()
 		{
-			super("Grudge", "If the user faints, the user's grudge fully depletes the PP of the opponent's move that knocked it out.", 5, Type.GHOST, Category.STATUS);
-			super.effects.add(Effect.getEffect("Grudge", EffectType.POKEMON));
+			super(Namesies.GRUDGE_ATTACK, "If the user faints, the user's grudge fully depletes the PP of the opponent's move that knocked it out.", 5, Type.GHOST, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.GRUDGE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.selfTarget = true;
 		}
@@ -10677,7 +10750,7 @@ public abstract class Attack implements Serializable
 
 		public Retaliate()
 		{
-			super("Retaliate", "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this attack's damage increases.", 5, Type.NORMAL, Category.PHYSICAL);
+			super(Namesies.RETALIATE_ATTACK, "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this attack's damage increases.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -10685,7 +10758,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return super.power*(Effect.hasEffect(b.getEffects(me.user()), "DeadAlly") ? 2 : 1);
+			return super.power*(Effect.hasEffect(b.getEffects(me.user()), Namesies.DEAD_ALLY_EFFECT) ? 2 : 1);
 		}
 	}
 
@@ -10695,7 +10768,7 @@ public abstract class Attack implements Serializable
 
 		public CircleThrow()
 		{
-			super("Circle Throw", "The user throws the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.", 10, Type.FIGHTING, Category.PHYSICAL);
+			super(Namesies.CIRCLE_THROW_ATTACK, "The user throws the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.", 10, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.ASSISTLESS);
@@ -10706,7 +10779,7 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
+			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -10715,7 +10788,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			if (victim.hasAbility("Suction Cups") && !user.breaksTheMold())
+			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
 				b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
 				return;
@@ -10734,7 +10807,7 @@ public abstract class Attack implements Serializable
 
 		public Teleport()
 		{
-			super("Teleport", "Use it to flee from any wild Pok\u00e9mon. It can also warp to the last Pok\u00e9mon Center visited.", 20, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.TELEPORT_ATTACK, "Use it to flee from any wild Pok\u00e9mon. It can also warp to the last Pok\u00e9mon Center visited.", 20, Type.PSYCHIC, Category.STATUS);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -10757,8 +10830,8 @@ public abstract class Attack implements Serializable
 
 		public RolePlay()
 		{
-			super("Role Play", "The user mimics the target completely, copying the target's natural Ability.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("ChangeAbility", EffectType.POKEMON));
+			super(Namesies.ROLE_PLAY_ATTACK, "The user mimics the target completely, copying the target's natural Ability.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ABILITY_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.selfTarget = true;
@@ -10766,10 +10839,10 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			switch (o.getAbility().getName())
+			switch (o.getAbility().namesies())
 			{
-				case "Wonder Guard":
-				case "Multitype":
+				case WONDER_GUARD_ABILITY:
+				case MULTITYPE_ABILITY:
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				break;
 				default:
@@ -10795,16 +10868,20 @@ public abstract class Attack implements Serializable
 
 		public KnockOff()
 		{
-			super("Knock Off", "The user slaps down the target's held item, preventing that item from being used in the battle.", 25, Type.DARK, Category.PHYSICAL);
+			super(Namesies.KNOCK_OFF_ATTACK, "The user slaps down the target's held item, preventing that item from being used in the battle.", 25, Type.DARK, Category.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeItem", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (!victim.isHoldingItem(b) || victim.hasAbility("Sticky Hold")) return;
+			if (!victim.isHoldingItem(b) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 			super.applyEffects(b, user, victim);
 		}
@@ -10826,7 +10903,7 @@ public abstract class Attack implements Serializable
 
 		public Whirlwind()
 		{
-			super("Whirlwind", "The target is blown away, to be replaced by another Pok\u00e9mon in its party. In the wild, the battle ends.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.WHIRLWIND_ATTACK, "The target is blown away, to be replaced by another Pok\u00e9mon in its party. In the wild, the battle ends.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.priority = -6;
@@ -10835,7 +10912,7 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
+			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -10844,7 +10921,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			if (victim.hasAbility("Suction Cups") && !user.breaksTheMold())
+			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
 				b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
 				return;
@@ -10864,8 +10941,8 @@ public abstract class Attack implements Serializable
 
 		public Bestow()
 		{
-			super("Bestow", "The user passes its held item to the target when the target isn't holding an item.", 15, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("ChangeItem", EffectType.POKEMON));
+			super(Namesies.BESTOW_ATTACK, "The user passes its held item to the target when the target isn't holding an item.", 15, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
@@ -10915,16 +10992,16 @@ public abstract class Attack implements Serializable
 
 		public Switcheroo()
 		{
-			super("Switcheroo", "The user passes its held item to the target when the target isn't holding an item.", 10, Type.DARK, Category.STATUS);
+			super(Namesies.SWITCHEROO_ATTACK, "The user passes its held item to the target when the target isn't holding an item.", 10, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeItem", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility("Sticky Hold") || victim.hasAbility("Sticky Hold"))
+			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -10968,16 +11045,16 @@ public abstract class Attack implements Serializable
 
 		public Trick()
 		{
-			super("Trick", "The user catches the target off guard and swaps its held item with its own.", 10, Type.PSYCHIC, Category.STATUS);
+			super(Namesies.TRICK_ATTACK, "The user catches the target off guard and swaps its held item with its own.", 10, Type.PSYCHIC, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeItem", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility("Sticky Hold") || victim.hasAbility("Sticky Hold"))
+			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -11020,7 +11097,7 @@ public abstract class Attack implements Serializable
 
 		public Memento()
 		{
-			super("Memento", "The user faints when using this move. In return, it harshly lowers the target's Attack and Sp. Atk.", 10, Type.DARK, Category.STATUS);
+			super(Namesies.MEMENTO_ATTACK, "The user faints when using this move. In return, it harshly lowers the target's Attack and Sp. Atk.", 10, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.USER_FAINTS);
 			super.statChanges[Stat.ATTACK.index()] = -2;
@@ -11034,8 +11111,8 @@ public abstract class Attack implements Serializable
 
 		public DestinyBond()
 		{
-			super("Destiny Bond", "When this move is used, if the user faints, the Pok\u00e9mon that landed the knockout hit also faints.", 5, Type.GHOST, Category.STATUS);
-			super.effects.add(Effect.getEffect("DestinyBond", EffectType.POKEMON));
+			super(Namesies.DESTINY_BOND_ATTACK, "When this move is used, if the user faints, the Pok\u00e9mon that landed the knockout hit also faints.", 5, Type.GHOST, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.DESTINY_BOND_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -11049,8 +11126,8 @@ public abstract class Attack implements Serializable
 
 		public Camouflage()
 		{
-			super("Camouflage", "The user's type is changed depending on its environment, such as at water's edge, in grass, or in a cave.", 20, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("ChangeType", EffectType.POKEMON));
+			super(Namesies.CAMOUFLAGE_ATTACK, "The user's type is changed depending on its environment, such as at water's edge, in grass, or in a cave.", 20, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_TYPE_EFFECT, EffectType.POKEMON));
 			super.selfTarget = true;
 		}
 
@@ -11066,13 +11143,13 @@ public abstract class Attack implements Serializable
 
 		public Recycle()
 		{
-			super("Recycle", "The user recycles a held item that has been used in battle so it can be used again.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.RECYCLE_ATTACK, "The user recycles a held item that has been used in battle so it can be used again.", 10, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			PokemonEffect consumed = victim.getEffect("ConsumedItem");
+			PokemonEffect consumed = victim.getEffect(Namesies.CONSUMED_ITEM_EFFECT);
 			if (consumed == null || victim.isHoldingItem(b))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
@@ -11091,7 +11168,7 @@ public abstract class Attack implements Serializable
 
 		public UTurn()
 		{
-			super("U-turn", "After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.", 20, Type.BUG, Category.PHYSICAL);
+			super(Namesies.UTURN_ATTACK, "After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.", 20, Type.BUG, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -11123,7 +11200,7 @@ public abstract class Attack implements Serializable
 
 		public BatonPass()
 		{
-			super("Baton Pass", "The user switches places with a party Pok\u00e9mon in waiting, passing along any stat changes.", 40, Type.NORMAL, Category.STATUS);
+			super(Namesies.BATON_PASS_ATTACK, "The user switches places with a party Pok\u00e9mon in waiting, passing along any stat changes.", 40, Type.NORMAL, Category.STATUS);
 			super.selfTarget = true;
 		}
 
@@ -11169,8 +11246,8 @@ public abstract class Attack implements Serializable
 
 		public PerishSong()
 		{
-			super("Perish Song", "Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.", 5, Type.NORMAL, Category.STATUS);
-			super.effects.add(Effect.getEffect("PerishSong", EffectType.POKEMON));
+			super(Namesies.PERISH_SONG_ATTACK, "Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.", 5, Type.NORMAL, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.PERISH_SONG_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
@@ -11188,7 +11265,7 @@ public abstract class Attack implements Serializable
 
 		public DragonTail()
 		{
-			super("Dragon Tail", "The user knocks away the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.", 10, Type.DRAGON, Category.PHYSICAL);
+			super(Namesies.DRAGON_TAIL_ATTACK, "The user knocks away the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.", 10, Type.DRAGON, Category.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.ASSISTLESS);
@@ -11199,7 +11276,7 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect("Ingrain"))
+			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -11208,7 +11285,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			if (victim.hasAbility("Suction Cups") && !user.breaksTheMold())
+			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
 				b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
 				return;
@@ -11227,7 +11304,7 @@ public abstract class Attack implements Serializable
 
 		public FoulPlay()
 		{
-			super("Foul Play", "The user turns the target's power against it. The higher the target's Attack stat, the greater the damage.", 15, Type.DARK, Category.PHYSICAL);
+			super(Namesies.FOUL_PLAY_ATTACK, "The user turns the target's power against it. The higher the target's Attack stat, the greater the damage.", 15, Type.DARK, Category.PHYSICAL);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -11249,9 +11326,9 @@ public abstract class Attack implements Serializable
 
 		public Embargo()
 		{
-			super("Embargo", "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", 15, Type.DARK, Category.STATUS);
+			super(Namesies.EMBARGO_ATTACK, "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", 15, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("Embargo", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.EMBARGO_EFFECT, EffectType.POKEMON));
 		}
 	}
 
@@ -11261,7 +11338,7 @@ public abstract class Attack implements Serializable
 
 		public NaturePower()
 		{
-			super("Nature Power", "An attack that makes use of nature's power. Its effects vary depending on the user's environment.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.NATURE_POWER_ATTACK, "An attack that makes use of nature's power. Its effects vary depending on the user's environment.", 20, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
@@ -11269,12 +11346,12 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			// TODO: Battle environments
-			me.callNewMove(b, o, new Move(Attack.getAttack("Tri Attack")));
+			me.callNewMove(b, o, new Move(Attack.getAttack(Namesies.TRI_ATTACK_ATTACK)));
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return Attack.getAttack("Tri Attack").getAccuracy(b, me, o);
+			return Attack.getAttack(Namesies.TRI_ATTACK_ATTACK).getAccuracy(b, me, o);
 		}
 	}
 
@@ -11284,17 +11361,17 @@ public abstract class Attack implements Serializable
 
 		public Entrainment()
 		{
-			super("Entrainment", "The user dances with an odd rhythm that compels the target to mimic it, making the target's Ability the same as the user's.", 15, Type.NORMAL, Category.STATUS);
+			super(Namesies.ENTRAINMENT_ATTACK, "The user dances with an odd rhythm that compels the target to mimic it, making the target's Ability the same as the user's.", 15, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeAbility", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ABILITY_EFFECT, EffectType.POKEMON));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			switch (o.getAbility().getName())
+			switch (o.getAbility().namesies())
 			{
-				case "Truant":
-				case "Multitype":
+				case TRUANT_ABILITY:
+				case MULTITYPE_ABILITY:
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				break;
 				default:
@@ -11319,8 +11396,8 @@ public abstract class Attack implements Serializable
 
 		public MagicRoom()
 		{
-			super("Magic Room", "The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("MagicRoom", EffectType.BATTLE));
+			super(Namesies.MAGIC_ROOM_ATTACK, "The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.MAGIC_ROOM_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -11331,17 +11408,17 @@ public abstract class Attack implements Serializable
 
 		public SimpleBeam()
 		{
-			super("Simple Beam", "The user's mysterious psychic wave changes the target's Ability to Simple.", 15, Type.NORMAL, Category.STATUS);
+			super(Namesies.SIMPLE_BEAM_ATTACK, "The user's mysterious psychic wave changes the target's Ability to Simple.", 15, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect("ChangeAbility", EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ABILITY_EFFECT, EffectType.POKEMON));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			switch (o.getAbility().getName())
+			switch (o.getAbility().namesies())
 			{
-				case "Truant":
-				case "Multitype":
+				case TRUANT_ABILITY:
+				case MULTITYPE_ABILITY:
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				break;
 				default:
@@ -11351,7 +11428,7 @@ public abstract class Attack implements Serializable
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return Ability.getAbility("Simple").newInstance();
+			return Ability.getAbility(Namesies.SIMPLE_ABILITY).newInstance();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -11367,15 +11444,15 @@ public abstract class Attack implements Serializable
 
 		public SkillSwap()
 		{
-			super("Skill Swap", "The user employs its psychic power to exchange Abilities with the target.", 10, Type.PSYCHIC, Category.STATUS);
-			super.effects.add(Effect.getEffect("ChangeAbility", EffectType.POKEMON));
+			super(Namesies.SKILL_SWAP_ATTACK, "The user employs its psychic power to exchange Abilities with the target.", 10, Type.PSYCHIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.CHANGE_ABILITY_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.FIELD);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (victim.hasAbility("Wonder Guard") || victim.hasAbility("Multitype"))
+			if (victim.hasAbility(Namesies.WONDER_GUARD_ABILITY) || victim.hasAbility(Namesies.MULTITYPE_ABILITY))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -11405,7 +11482,7 @@ public abstract class Attack implements Serializable
 
 		public VoltSwitch()
 		{
-			super("Volt Switch", "After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.", 20, Type.ELECTRIC, Category.SPECIAL);
+			super(Namesies.VOLT_SWITCH_ATTACK, "After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.", 20, Type.ELECTRIC, Category.SPECIAL);
 			super.power = 70;
 			super.accuracy = 100;
 		}
@@ -11436,7 +11513,7 @@ public abstract class Attack implements Serializable
 
 		public RelicSong()
 		{
-			super("Relic Song", "The user sings an ancient song and attacks by appealing to the hearts of those listening. It may also induce sleep.", 10, Type.NORMAL, Category.SPECIAL);
+			super(Namesies.RELIC_SONG_ATTACK, "The user sings an ancient song and attacks by appealing to the hearts of those listening. It may also induce sleep.", 10, Type.NORMAL, Category.SPECIAL);
 			super.power = 75;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -11452,7 +11529,7 @@ public abstract class Attack implements Serializable
 
 		public Snarl()
 		{
-			super("Snarl", "The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.", 15, Type.DARK, Category.SPECIAL);
+			super(Namesies.SNARL_ATTACK, "The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.", 15, Type.DARK, Category.SPECIAL);
 			super.power = 55;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -11467,7 +11544,7 @@ public abstract class Attack implements Serializable
 
 		public IceBurn()
 		{
-			super("Ice Burn", "On the second turn, an ultracold, freezing wind surrounds the target. This may leave the target with a burn.", 5, Type.ICE, Category.SPECIAL);
+			super(Namesies.ICE_BURN_ATTACK, "On the second turn, an ultracold, freezing wind surrounds the target. This may leave the target with a burn.", 5, Type.ICE, Category.SPECIAL);
 			super.power = 140;
 			super.accuracy = 90;
 			super.effectChance = 30;
@@ -11482,7 +11559,7 @@ public abstract class Attack implements Serializable
 
 		public VCreate()
 		{
-			super("V-create", "With a hot flame on its forehead, the user hurls itself at its target. It lowers the user's Defense, Sp. Def, and Speed stats.", 5, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.VCREATE_ATTACK, "With a hot flame on its forehead, the user hurls itself at its target. It lowers the user's Defense, Sp. Def, and Speed stats.", 5, Type.FIRE, Category.PHYSICAL);
 			super.power = 180;
 			super.accuracy = 95;
 			super.selfTarget = true;
@@ -11499,7 +11576,7 @@ public abstract class Attack implements Serializable
 
 		public Surf()
 		{
-			super("Surf", "It swamps the area around the user with a giant wave. It can also be used for crossing water.", 15, Type.WATER, Category.SPECIAL);
+			super(Namesies.SURF_ATTACK, "It swamps the area around the user with a giant wave. It can also be used for crossing water.", 15, Type.WATER, Category.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
 		}
@@ -11511,7 +11588,7 @@ public abstract class Attack implements Serializable
 
 		public VoltTackle()
 		{
-			super("Volt Tackle", "The user electrifies itself, then charges. It causes considerable damage to the user and may leave the target with paralysis.", 15, Type.ELECTRIC, Category.PHYSICAL);
+			super(Namesies.VOLT_TACKLE_ATTACK, "The user electrifies itself, then charges. It causes considerable damage to the user and may leave the target with paralysis.", 15, Type.ELECTRIC, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.effectChance = 10;
@@ -11521,7 +11598,11 @@ public abstract class Attack implements Serializable
 
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
-			if (user.hasAbility("Rock Head") || user.hasAbility("Magic Guard")) return;
+			if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+			{
+				return;
+			}
+			
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			b.applyDamage(user, (int)Math.ceil(damage/3.0));
 		}
@@ -11533,7 +11614,7 @@ public abstract class Attack implements Serializable
 
 		public FocusBlast()
 		{
-			super("Focus Blast", "The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.", 5, Type.FIGHTING, Category.SPECIAL);
+			super(Namesies.FOCUS_BLAST_ATTACK, "The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.", 5, Type.FIGHTING, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 70;
 			super.effectChance = 10;

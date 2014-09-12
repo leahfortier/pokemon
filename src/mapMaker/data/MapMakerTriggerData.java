@@ -1217,12 +1217,14 @@ public class MapMakerTriggerData {
 		
 		String itemType = itemDialog.getItemName();
 		
-		if (results == JOptionPane.CLOSED_OPTION || results == 1 || itemType.equals("") || !Item.exists(itemType))
+		if (results == JOptionPane.CLOSED_OPTION || results == 1 || itemType.equals("") || !Item.isItem(itemType))
+		{
 			return null;
+		}
 		
 		itemType = itemType.replace(' ', '_');
 		
-		//loop until valid name is created.
+		// Loop until valid name is created.
 		int number = 1;
 		String itemEntityName = "";
 		

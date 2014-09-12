@@ -3,7 +3,7 @@
 # Also, homegroups are really stupid, but if you would like to join ours, here you go: wA43yC8BU2
 
 Constructor:
-	Name String
+	Namesies Enum Namesies Attack
 	Desc String
 	PP Int
 	Type Enum Type
@@ -12,7 +12,7 @@ Constructor:
 Fields:
 	Pow Int power
 	Acc Int accuracy
-	Effect Function Effect.getEffect 2 1 String 0 Enum EffectType effects List
+	Effect Function Effect.getEffect 2 1 Enum Namesies Effect 0 Enum EffectType effects List
 	EffChance Int effectChance
 	Status Enum StatusCondition status
 	MoveType Multiple Enum MoveType moveTypes List
@@ -213,17 +213,17 @@ Synthesis:
 	Cat: Status
 	Int: SelfHealingMove
 	SelfHealing: 
-	switch (b.getWeather().getType())
+	switch (b.getWeather().namesies())
 	{
-		case CLEAR_SKIES:
+		case CLEAR_SKIES_EFFECT:
 			victim.healHealthFraction(1/2.0);
 			break;
-		case SUNNY:
+		case SUNNY_EFFECT:
 			victim.healHealthFraction(2/3.0);
 			break;
-		case HAILING:
-		case RAINING:
-		case SANDSTORM:
+		case HAILING_EFFECT:
+		case RAINING_EFFECT:
+		case SANDSTORM_EFFECT:
 			victim.healHealthFraction(1/4.0);
 			break;
 		default:
@@ -319,14 +319,14 @@ Solar Beam:
 	SemiInv: false
 	ChargeFirst: true 
 	GetPow: 
-	switch (b.getWeather().getType())
+	switch (b.getWeather().namesies())
 	{
-		case SUNNY:
-		case CLEAR_SKIES:
+		case SUNNY_EFFECT:
+		case CLEAR_SKIES_EFFECT:
 			return super.power;
-		case HAILING:
-		case RAINING:
-		case SANDSTORM:
+		case HAILING_EFFECT:
+		case RAINING_EFFECT:
+		case SANDSTORM_EFFECT:
 			return super.power/2;
 		default:
 			Global.error("Funky weather problems!");
@@ -334,7 +334,7 @@ Solar Beam:
 	}
 	###
 	IsMultiTurn: 
-	return b.getWeather().getType() != Weather.WeatherType.SUNNY;
+	return b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
 	###
 *
 Flamethrower:
@@ -619,7 +619,7 @@ Rain Dance:
 	Type: Water
 	Cat: Status
 	PP: 5
-	Effect: Battle RAINING
+	Effect: Battle Raining
 	MoveType: Field
 *
 Sunny Day:
@@ -628,7 +628,7 @@ Sunny Day:
 	Type: Fire
 	Cat: Status
 	MoveType: Field
-	Effect: Battle SUNNY
+	Effect: Battle Sunny
 *
 Sandstorm:
 	Desc: A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.
@@ -636,7 +636,7 @@ Sandstorm:
 	Type: Rock
 	Cat: Status
 	MoveType: Field
-	Effect: Battle SANDSTORM
+	Effect: Battle Sandstorm
 *
 Hail:
 	Desc: The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.
@@ -644,7 +644,7 @@ Hail:
 	Type: Ice
 	Cat: Status
 	MoveType: Field
-	Effect: Battle HAILING
+	Effect: Battle Hailing
 *
 Petal Dance:
 	Desc: The user attacks the target by scattering petals for two to three turns. The user then becomes confused.
@@ -800,17 +800,17 @@ Morning Sun:
 	PP: 5
 	Int: SelfHealingMove
 	SelfHealing: 
-	switch (b.getWeather().getType())
+	switch (b.getWeather().namesies())
 	{
-		case CLEAR_SKIES:
+		case CLEAR_SKIES_EFFECT:
 			victim.healHealthFraction(1/2.0);
 			break;
-		case SUNNY:
+		case SUNNY_EFFECT:
 			victim.healHealthFraction(2/3.0);
 			break;
-		case HAILING:
-		case RAINING:
-		case SANDSTORM:
+		case HAILING_EFFECT:
+		case RAINING_EFFECT:
+		case SANDSTORM_EFFECT:
 			victim.healHealthFraction(1/4.0);
 			break;
 		default:
@@ -903,9 +903,9 @@ False Swipe:
 	Acc: 100
 	Type: Normal
 	Apply: 
-	o.addEffect(PokemonEffect.getEffect("Bracing"));
+	o.addEffect(PokemonEffect.getEffect(Namesies.BRACING_EFFECT));
 	super.applyDamage(me, o, b);
-	o.getAttributes().removeEffect("Bracing");
+	o.getAttributes().removeEffect(Namesies.BRACING_EFFECT);
 	###
 *
 Disable:
@@ -1105,8 +1105,8 @@ Roost:
 	super.applyEffects(b, user, victim);
 	if (!healFail && getType(b, user, victim) != null)
 	{
-		PokemonEffect.getEffect("ChangeType").cast(b, user, victim, CastSource.ATTACK, super.printCast);
-		user.getEffect("ChangeType").setTurns(1);
+		PokemonEffect.getEffect(Namesies.CHANGE_TYPE_EFFECT).cast(b, user, victim, CastSource.ATTACK, super.printCast);
+		user.getEffect(Namesies.CHANGE_TYPE_EFFECT).setTurns(1);
 	}
 	###
 	ChangeType: 
@@ -1155,11 +1155,11 @@ Hurricane:
 	Cat: Special
 	GetAccuracy: 
 	// TODO: Should have double power when opponent is in the air
-	switch (b.getWeather().getType())
+	switch (b.getWeather().namesies())
 	{
-		case RAINING:
+		case RAINING_EFFECT:
 			return 100;
-		case SUNNY:
+		case SUNNY_EFFECT:
 			return 50;
 		default:
 			return super.accuracy;
@@ -1339,7 +1339,7 @@ Spit Up:
 	Cat: Special
 	Acc: 100
 	Apply: 
-	if (!me.hasEffect("Stockpile"))
+	if (!me.hasEffect(Namesies.STOCKPILE_EFFECT))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -1348,7 +1348,7 @@ Spit Up:
 	super.apply(me, o, b);
 	###
 	GetPow: 
-	int turns = me.getEffect("Stockpile").getTurns();
+	int turns = me.getEffect(Namesies.STOCKPILE_EFFECT).getTurns();
 	if (turns <= 0) 
 	{
 		Global.error("Stockpile turns should never be nonpositive");
@@ -1364,7 +1364,7 @@ Swallow:
 	Cat: Status
 	Int: SelfHealingMove
 	SelfHealing: 
-	PokemonEffect e = user.getEffect("Stockpile");
+	PokemonEffect e = user.getEffect(Namesies.STOCKPILE_EFFECT);
 	if (e  == null)
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
@@ -1548,11 +1548,11 @@ Thunder:
 	Pow: 110
 	Acc: 70
 	GetAccuracy: 
-	switch (b.getWeather().getType())
+	switch (b.getWeather().namesies())
 	{
-		case RAINING:
+		case RAINING_EFFECT:
 			return 100;
-		case SUNNY:
+		case SUNNY_EFFECT:
 			return 50;
 		default:
 			return super.accuracy;
@@ -1594,7 +1594,7 @@ Rollout:
 	Cat: Physical
 	Type: Rock
 	GetPow: 
-	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect("UsedDefenseCurl") ? 2 : 1);
+	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(Namesies.USED_DEFENSE_CURL_EFFECT) ? 2 : 1);
 	###
 *
 Fury Cutter:
@@ -1842,17 +1842,17 @@ Moonlight:
 	Int: SelfHealingMove
 	SelfHealing: 
 	// TODO: Need to change type of this move to fairy type along with charm and sweet kiss
-	switch (b.getWeather().getType())
+	switch (b.getWeather().namesies())
 	{
-		case CLEAR_SKIES:
+		case CLEAR_SKIES_EFFECT:
 			victim.healHealthFraction(1/2.0);
 			break;
-		case SUNNY:
+		case SUNNY_EFFECT:
 			victim.healHealthFraction(2/3.0);
 			break;
-		case HAILING:
-		case RAINING:
-		case SANDSTORM:
+		case HAILING_EFFECT:
+		case RAINING_EFFECT:
+		case SANDSTORM_EFFECT:
 			victim.healHealthFraction(1/4.0);
 			break;
 		default:
@@ -1974,7 +1974,7 @@ Rest:
 	SelfHealing: 1
 	Status: Asleep
 	ApplyEffects: 
-	if (victim.fullHealth() || victim.hasAbility("Insomnia") || victim.hasAbility("Vital Spirit") || victim.hasStatus(StatusCondition.ASLEEP))
+	if (victim.fullHealth() || victim.hasAbility(Namesies.INSOMNIA_ABILITY) || victim.hasAbility(Namesies.VITAL_SPIRIT_ABILITY) || victim.hasStatus(StatusCondition.ASLEEP))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -2454,7 +2454,7 @@ Covet:
 	Type: Normal
 	Cat: Physical
 	Desc: The user endearingly approaches the target, then steals the target's held item.
-	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility("Sticky Hold")
+	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
 	SwitchMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 Low Kick:
@@ -2904,7 +2904,7 @@ Steamroller:
 	Effect: Pokemon Flinch
 	EffChance: 30
 	GetPow: 
-	return super.power*(o.hasEffect("UsedMinimize") ? 2 : 1);
+	return super.power*(o.hasEffect(Namesies.USED_MINIMIZE_EFFECT) ? 2 : 1);
 	###
 *
 Heavy Slam:
@@ -3015,7 +3015,7 @@ Heal Pulse:
 	Type: Psychic
 	Cat: Status
 	ApplyEffects: 
-	if (victim.fullHealth() || victim.hasEffect("HealBlock"))
+	if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -3332,7 +3332,7 @@ Spite:
 	Move last = victim.getAttributes().getLastMoveUsed();
 	
 	// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
-	if (last == null || last.getPP() == 0 || !victim.hasMove(last.getAttack().getName()))
+	if (last == null || last.getPP() == 0 || !victim.hasMove(last.getAttack().namesies()))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -3381,10 +3381,10 @@ Dream Eater:
 	int damage = super.applyDamage(me, o, b);
 	
 	// Healers gon' heal
-	if (!me.hasEffect("HealBlock"))
+	if (!me.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 	{
 		int healAmount = (int)(damage*.5);
-		if (me.isHoldingItem(b, "Big Root"))
+		if (me.isHoldingItem(b, Namesies.BIG_ROOT_ITEM))
 		{
 			healAmount *= 1.3;
 		}
@@ -3719,15 +3719,17 @@ Brick Break:
 	Acc: 100
 	Cat: Physical
 	ApplyEffects: 
-	if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), "Reflect"))
+	// TODO: Maybe do something with these effects to generalize this as well as Light Clay
+	if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), Namesies.REFLECT_EFFECT))
 	{
 		b.addMessage(user.getName() + " broke the reflect barrier!");
-		Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), "Reflect");
+		Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), Namesies.REFLECT_EFFECT);
 	}
-	if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), "LightScreen"))
+	
+	if (Effect.hasEffect(b.getTrainer(!user.user()).getEffects(), Namesies.LIGHT_SCREEN_EFFECT))
 	{
 		b.addMessage(user.getName() + " broke the light screen barrier!");
-		Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), "LightScreen");
+		Effect.removeEffect(b.getTrainer(!user.user()).getEffects(), Namesies.LIGHT_SCREEN_EFFECT);
 	}
 	###
 *
@@ -3865,7 +3867,10 @@ Focus Punch:
 	super.applyEffects(b, me, me);
 	###
 	Apply: 
-	if (me.hasEffect("Focusing")) super.applyDamage(me, o, b);
+	if (me.hasEffect(Namesies.FOCUSING_EFFECT)) 
+	{
+		super.applyDamage(me, o, b);
+	}
 	###
 *
 Me First:
@@ -3882,9 +3887,9 @@ Me First:
 		return;
 	}
 	
-	me.addEffect(PokemonEffect.getEffect("FiddyPercentStronger"));
+	me.addEffect(PokemonEffect.getEffect(Namesies.FIDDY_PERCENT_STRONGER_EFFECT));
 	me.callNewMove(b, o, new Move(o.getAttack()));
-	me.getAttributes().removeEffect("FiddyPercentStronger");
+	me.getAttributes().removeEffect(Namesies.FIDDY_PERCENT_STRONGER_EFFECT);
 	###
 *
 Refresh:
@@ -4192,7 +4197,11 @@ Blizzard:
 	Status: Frozen
 	EffChance: 10
 	GetAccuracy: 
-	if (b.getWeather().getType() == Weather.WeatherType.HAILING) return 100;
+	if (b.getWeather().namesies() == Namesies.HAILING_EFFECT) 
+	{
+		return 100;
+	}
+	
 	return super.accuracy;
 	###
 *
@@ -4746,7 +4755,7 @@ Beat Up:
 	{
 		if (p.hasStatus()) continue;
 		Move temp = p.getMove();
-		p.setMove(new Move(Attack.getAttack("Beat Up")));
+		p.setMove(new Move(Attack.getAttack(this.namesies)));
 		b.addMessage(p.getName() + "'s attack!");
 		super.applyDamage(p, o, b);
 		p.setMove(temp);
@@ -4785,7 +4794,7 @@ Present:
 		return;
 	}
 	
-	if (o.fullHealth() || o.hasEffect("HealBlock"))
+	if (o.fullHealth() || o.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -4814,7 +4823,7 @@ Sketch:
 	Cat: Status
 	Apply: 
 	Move copy = o.getAttributes().getLastMoveUsed();
-	if (copy == null || copy.getAttack().getName().equals("Struggle") || me.hasEffect("Transformed"))
+	if (copy == null || copy.getAttack().getName().equals("Struggle") || me.hasEffect(Namesies.TRANSFORMED_EFFECT))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -4880,22 +4889,22 @@ Heal Bell:
 *
 Weather Ball:
 	GetType: 
-	switch (b.getWeather().getType())
+	switch (b.getWeather().namesies())
 	{
-		case SUNNY:
+		case SUNNY_EFFECT:
 			return Type.FIRE;
-		case RAINING:
+		case RAINING_EFFECT:
 			return Type.WATER;
-		case HAILING:
+		case HAILING_EFFECT:
 			return Type.ICE;
-		case SANDSTORM:
+		case SANDSTORM_EFFECT:
 			return Type.ROCK;
 		default:
 			return Type.NORMAL;
 	}
 	###
 	GetPow: 
-	return super.power*(b.getWeather().getType() == Weather.WeatherType.CLEAR_SKIES ? 1 : 2);
+	return super.power*(b.getWeather().namesies() == Namesies.CLEAR_SKIES_EFFECT ? 1 : 2);
 	###
 	Pow: 50
 	Acc: 100
@@ -4959,7 +4968,7 @@ Thief:
 	Pow: 60
 	Cat: Physical
 	Acc: 100
-	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility("Sticky Hold")
+	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
 	SwitchMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 Attract:
@@ -5147,7 +5156,7 @@ Ice Ball:
 	Type: Ice
 	Acc: 90
 	GetPow: 
-	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect("UsedDefenseCurl") ? 2 : 1);
+	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(Namesies.USED_DEFENSE_CURL_EFFECT) ? 2 : 1);
 	###
 *
 Head Smash:
@@ -5729,7 +5738,7 @@ Fling:
 	return 1; // TODO: FLING DAMAGE
 	###
 	Apply: 
-	if (me.hasEffect("Embargo"))
+	if (me.hasEffect(Namesies.EMBARGO_EFFECT))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -5778,7 +5787,7 @@ Gastro Acid:
 	Int: ChangeAbilityMove
 	Effect: Pokemon ChangeAbility
 	AbilityChange: 
-	return Ability.getAbility("None").newInstance();
+	return Ability.getAbility(Namesies.NONE_ABILITY).newInstance();
 	###
 	PP: 10
 	Type: Poison
@@ -5833,7 +5842,7 @@ Retaliate:
 	Cat: Physical
 	Pow: 70
 	GetPow: 
-	return super.power*(Effect.hasEffect(b.getEffects(me.user()), "DeadAlly") ? 2 : 1);
+	return super.power*(Effect.hasEffect(b.getEffects(me.user()), Namesies.DEAD_ALLY_EFFECT) ? 2 : 1);
 	###
 *
 Circle Throw:
@@ -5881,10 +5890,10 @@ Role Play:
 	return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 	###
 	Apply: 
-	switch (o.getAbility().getName())
+	switch (o.getAbility().namesies())
 	{
-		case "Wonder Guard":
-		case "Multitype":
+		case WONDER_GUARD_ABILITY:
+		case MULTITYPE_ABILITY:
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			break;
 		default:
@@ -5903,7 +5912,11 @@ Knock Off:
 	return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
 	###
 	ApplyEffects: 
-	if (!victim.isHoldingItem(b) || victim.hasAbility("Sticky Hold")) return;
+	if (!victim.isHoldingItem(b) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
+	{
+		return;
+	}
+	
 	b.addMessage(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 	super.applyEffects(b, user, victim);
 	###
@@ -5938,7 +5951,7 @@ Switcheroo:
 	Type: Dark
 	Cat: Status
 	Acc: 100
-	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility("Sticky Hold") || victim.hasAbility("Sticky Hold")
+	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
 	SwitchMessage: user.getName() + " switched items with " + victim.getName() + "!"
 	MoveType: Assistless, Metronomeless
 *	
@@ -5948,7 +5961,7 @@ Trick:
 	Type: Psychic
 	Acc: 100
 	Cat: Status
-	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility("Sticky Hold") || victim.hasAbility("Sticky Hold")
+	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
 	SwitchMessage: user.getName() + " switched items with " + victim.getName() + "!"
 	MoveType: Assistless, Metronomeless
 *
@@ -5989,7 +6002,7 @@ Recycle:
 	Cat: Status
 	SelfTarget: True
 	ApplyEffects: 
-	PokemonEffect consumed = victim.getEffect("ConsumedItem");
+	PokemonEffect consumed = victim.getEffect(Namesies.CONSUMED_ITEM_EFFECT);
 	if (consumed == null || victim.isHoldingItem(b))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
@@ -6105,10 +6118,10 @@ Nature Power:
 	MoveType: Assistless, Metronomeless
 	Apply: 
 	// TODO: Battle environments
-	me.callNewMove(b, o, new Move(Attack.getAttack("Tri Attack")));
+	me.callNewMove(b, o, new Move(Attack.getAttack(Namesies.TRI_ATTACK_ATTACK)));
 	###
 	GetAccuracy: 
-	return Attack.getAttack("Tri Attack").getAccuracy(b, me, o);
+	return Attack.getAttack(Namesies.TRI_ATTACK_ATTACK).getAccuracy(b, me, o);
 	###
 *
 Entrainment:
@@ -6126,10 +6139,10 @@ Entrainment:
 	return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
 	###
 	Apply: 
-	switch (o.getAbility().getName())
+	switch (o.getAbility().namesies())
 	{
-		case "Truant":
-		case "Multitype":
+		case TRUANT_ABILITY:
+		case MULTITYPE_ABILITY:
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			break;
 		default:
@@ -6154,16 +6167,16 @@ Simple Beam:
 	Int: ChangeAbilityMove
 	Effect: Pokemon ChangeAbility
 	AbilityChange: 
-	return Ability.getAbility("Simple").newInstance();
+	return Ability.getAbility(Namesies.SIMPLE_ABILITY).newInstance();
 	###
 	AbilityMessage: 
 	return victim.getName() + "'s ability was changed to Simple!";
 	###
 	Apply: 
-	switch (o.getAbility().getName())
+	switch (o.getAbility().namesies())
 	{
-		case "Truant":
-		case "Multitype":
+		case TRUANT_ABILITY:
+		case MULTITYPE_ABILITY:
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			break;
 		default:
@@ -6189,7 +6202,7 @@ Skill Swap:
 	return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
 	###
 	ApplyEffects: 
-	if (victim.hasAbility("Wonder Guard") || victim.hasAbility("Multitype"))
+	if (victim.hasAbility(Namesies.WONDER_GUARD_ABILITY) || victim.hasAbility(Namesies.MULTITYPE_ABILITY))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;

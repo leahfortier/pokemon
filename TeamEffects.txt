@@ -4,14 +4,14 @@
 # Fields can be specified in any order
 
 Constructor:
-	Name String
+	Namesies Enum Namesies Effect
 	MinTurns Default -1 Int
 	MaxTurns Default -1 Int
 	NextTurnSubside Default False Boolean
 *
 Failure:
 	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(victim.user()), "@ClassName")
+	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(victim.user()), this.namesies)
 *
 
 ***
@@ -20,28 +20,34 @@ Reflect:
 	Int: StatChangingEffect, DefogRelease
 	NumTurns: 5
 	ModifyStat: 
-	return stat*(s == Stat.DEFENSE && !opp.hasAbility("Infiltrator") ? 2 : 1);
+	return stat*(s == Stat.DEFENSE && !opp.hasAbility(Namesies.INFILTRATOR_ABILITY) ? 2 : 1);
 	###
 	CastMessage: user.getName() + " raised the defense of its team!"
 	SubsideMessage: "The effects of reflect faded."
 	Defog: "The effects of reflect faded."
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (caster.isHoldingItem(b, "Light Clay")) Effect.getEffect(b.getEffects(victim.user()), "Reflect").setTurns(8);
+	if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM))
+	{
+		Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
+	}
 	###
 *
 LightScreen:
 	Int: StatChangingEffect, DefogRelease
 	NumTurns: 5
 	ModifyStat: 
-	return stat*(s == Stat.SP_DEFENSE && !opp.hasAbility("Infiltrator") ? 2 : 1);
+	return stat*(s == Stat.SP_DEFENSE && !opp.hasAbility(Namesies.INFILTRATOR_ABILITY) ? 2 : 1);
 	###
 	CastMessage: user.getName() + " raised the special defense of its team!"
 	SubsideMessage: "The effects of light screen faded."
 	Defog: "The effects of light screen faded."
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (caster.isHoldingItem(b, "Light Clay")) Effect.getEffect(b.getEffects(victim.user()), "LightScreen").setTurns(8);
+	if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM)) 
+	{
+		Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
+	}
 	###
 *
 Tailwind:
@@ -56,7 +62,11 @@ Tailwind:
 StealthRock:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter: 
-	if (victim.hasAbility("Magic Guard")) return;
+	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
+	{
+		return;
+	}
+	
 	b.addMessage(victim.getName() + " was hurt by stealth rock!");
 	victim.reduceHealthFraction(b, Type.getAdvantage(Type.ROCK, victim, b)/8.0);
 	###
@@ -73,30 +83,42 @@ ToxicSpikes:
 	x.layers = 1;
 	###
 	Enter: 
-	if (victim.isLevitating(b)) return;
+	if (victim.isLevitating(b)) 
+	{
+		return;
+	}
+	
 	if (victim.isType(b, Type.POISON))
 	{
 		b.addMessage(victim.getName() + " absorbed the Toxic Spikes!");
 		super.active = false;
 		return;
 	}
-	ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user()); 
+	
+	ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user());
 	if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim))
 	{
-		if (layers >= 2) PokemonEffect.getEffect("BadPoison").cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
-		else Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
+		if (layers >= 2) 
+		{
+			PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
+		}
+		else 
+		{
+			Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
+		}
 	}
 	###
 	CastMessage: "Toxic spikes were scattered all around!"
 	CanHave: True
 	Cast: 
-	Effect e = Effect.getEffect(b.getEffects(victim.user()), "ToxicSpikes");
-	if (e == null) 
+	Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
+	if (spikesies == null)
 	{
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
-	((ToxicSpikes)e).layers++;
+	
+	((ToxicSpikes)spikesies).layers++;
 	b.addMessage(getCastMessage(b, caster, victim));
 	###
 	RapidSpin: "The toxic spikes dispersed!"
@@ -111,7 +133,11 @@ Spikes:
 	x.layers = 1;
 	###
 	Enter: 
-	if (victim.isLevitating(b) || victim.hasAbility("Magic Guard")) return;
+	if (victim.isLevitating(b) || victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+	{
+		return;
+	}
+	
 	b.addMessage(victim.getName() + " was hurt by spikes!");
 	if (layers == 1) victim.reduceHealthFraction(b, 1/8.0);
 	else if (layers == 2) victim.reduceHealthFraction(b, 1/6.0);
@@ -120,13 +146,14 @@ Spikes:
 	CastMessage: "Spikes were scattered all around!"
 	CanHave: True
 	Cast: 
-	Effect e = Effect.getEffect(b.getEffects(victim.user()), "Spikes");
-	if (e == null) 
+	Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
+	if (spikesies == null)
 	{
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
-	((Spikes)e).layers++;
+	
+	((Spikes)spikesies).layers++;
 	b.addMessage(getCastMessage(b, caster, victim));
 	###
 	RapidSpin: "The spikes dispersed!"
@@ -142,7 +169,11 @@ Wish:
 	x.casterName = casterName;
 	###
 	Subside: 
-	if (p.hasEffect("HealBlock")) return;
+	if (p.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+	{
+		return;
+	}
+	
 	p.healHealthFraction(1/2.0);
 	b.addMessage(casterName + "'s wish came true!", p.getHP(), p.user());
 	###
@@ -168,7 +199,7 @@ FutureSight:
 	###
 	Subside: 
 	b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
-	theSeeer.setMove(new Move(Attack.getAttack("Future Sight")));
+	theSeeer.setMove(new Move(Attack.getAttack(Namesies.FUTURE_SIGHT_ATTACK)));
 	theSeeer.getAttack().applyDamage(theSeeer, p, b);
 	###
 	Cast: 
@@ -188,7 +219,7 @@ DoomDesire:
 	###
 	Subside: 
 	b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
-	theSeeer.setMove(new Move(Attack.getAttack("Doom Desire")));
+	theSeeer.setMove(new Move(Attack.getAttack(Namesies.DOOM_DESIRE_ATTACK)));
 	theSeeer.getAttack().applyDamage(theSeeer, p, b);
 	###
 	Cast: 
@@ -226,7 +257,7 @@ PayDay:
 	private int coins;
 	###
 	Cast: 
-	PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), "PayDay");
+	PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
 	b.addMessage(getCastMessage(b, caster, victim));
 	coins = 5*caster.getLevel();
 	if (payday == null) b.getPlayer().addEffect(this);

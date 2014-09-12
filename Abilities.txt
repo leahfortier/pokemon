@@ -2,7 +2,7 @@
 # Blocks are separated by '*'
 
 Constructor:
-	Name String
+	Namesies Enum Namesies Ability
 	Desc String
 *
 
@@ -22,7 +22,7 @@ Chlorophyll:
 	Desc: Boosts the Pok\u00e9mon’s Speed in sunshine.
 	Int: StatChangingEffect
 	ModifyStat: 
-	return stat*(s == Stat.SPEED && b.getWeather().getType() == WeatherType.SUNNY ? 2 : 1);
+	return stat*(s == Stat.SPEED && b.getWeather().namesies() == Namesies.SUNNY_EFFECT ? 2 : 1);
 	###
 *
 Blaze:
@@ -36,12 +36,12 @@ Solar Power:
 	Desc: Boosts Sp. Atk, but lowers HP in sunshine.
 	Int: PowerChangeEffect, EndTurnEffect
 	GetMultiplier: 
-	return user.getAttack().getCategory() == Category.SPECIAL && b.getWeather().getType() == WeatherType.SUNNY ? 1.5 : 1;
+	return user.getAttack().getCategory() == Category.SPECIAL && b.getWeather().namesies() == Namesies.SUNNY_EFFECT ? 1.5 : 1;
 	###
 	ApplyEndTurn: 
-	if (b.getWeather().getType() == WeatherType.SUNNY)
+	if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT)
 	{
-		b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
+		b.addMessage(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
 		victim.reduceHealthFraction(b, 1/8.0);
 	}
 	###
@@ -57,10 +57,10 @@ Rain Dish:
 	Desc: The Pok\u00e9mon gradually recovers HP in rain.
 	Int: EndTurnEffect
 	ApplyEndTurn: 
-	if (b.getWeather().getType() == WeatherType.RAINING)
+	if (b.getWeather().namesies() == Namesies.RAINING_EFFECT)
 	{
 		victim.healHealthFraction(1/16.0);
-		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
 	}
 	###
 *
@@ -77,7 +77,7 @@ Shed Skin:
 	ApplyEndTurn: 
 	if (victim.hasStatus() && (int)(Math.random()*3) == 0)
 	{
-		b.addMessage(victim.getName() + "'s " + this.name + " cured it of its status condition!", StatusCondition.NONE, victim.user());
+		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 		victim.removeStatus();
 	}
 	###
@@ -118,7 +118,7 @@ Tangled Feet:
 	Desc: Raises evasion if the Pok\u00e9mon is confused.
 	Int: StageChangingEffect
 	StageChange: 
-	return s == Stat.EVASION && p.hasEffect("Confusion") ? stage + 1 : stage;
+	return s == Stat.EVASION && p.hasEffect(Namesies.CONFUSION_EFFECT) ? stage + 1 : stage;
 	###
 *
 Guts:
@@ -153,7 +153,7 @@ Lightningrod:
 	return attacking == Type.ELECTRIC;
 	###
 	AlternateEffect: 
-	b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Electric type moves!");
+	b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to Electric type moves!");
 	victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 	###
 *
@@ -161,14 +161,14 @@ Sand Veil:
 	Desc: Raises the Pok\u00e9mon’s evasion during a sandstorm by one level.
 	Int: StageChangingEffect
 	StageChange: 
-	return s == Stat.EVASION && b.getWeather().getType() == WeatherType.SANDSTORM ? stage + 1 : stage;
+	return s == Stat.EVASION && b.getWeather().namesies() == Namesies.SANDSTORM_EFFECT ? stage + 1 : stage;
 	###
 *
 Sand Rush:
 	Desc: Speed rises in a Sandstorm.
 	Int: StatChangingEffect
 	ModifyStat: 
-	return stat*(s == Stat.SPEED && b.getWeather().getType() == WeatherType.SANDSTORM ? 2 : 1);
+	return stat*(s == Stat.SPEED && b.getWeather().namesies() == Namesies.SANDSTORM_EFFECT ? 2 : 1);
 	###
 *
 Poison Point:
@@ -197,11 +197,11 @@ Cute Charm:
 	Contact: 
 	if (Math.random()*100 < 30)
 	{
-		PokemonEffect e = PokemonEffect.getEffect("Infatuated");
+		PokemonEffect e = PokemonEffect.getEffect(Namesies.INFATUATED_EFFECT);
 		if (e.applies(b, victim, user, CastSource.ABILITY))
 		{
 			user.addEffect(e.newInstance());
-			b.addMessage(victim.getName() + "'s " + this.name + " infatuated " + user.getName() + "!");
+			b.addMessage(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 		}
 	}
 	###
@@ -226,7 +226,7 @@ Flash Fire:
 	return attacking == Type.FIRE;
 	###
 	AlternateEffect: 
-	b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Fire type moves!");
+	b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!");
 	activated = true;
 	###
 	GetMultiplier: 
@@ -236,8 +236,8 @@ Flash Fire:
 Drought:
 	Int: EntryEffect
 	Enter: 
-	b.addEffect(Weather.getWeather(WeatherType.SUNNY).newInstance());
-	b.addMessage(victim.getName() + "'s " + this.name + " made the sunlight turn harsh!");
+	b.addEffect(Weather.getEffect(Namesies.SUNNY_EFFECT).newInstance());
+	b.addMessage(victim.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
 	###
 	Desc: The Pok\u00e9mon makes it sunny if it is in battle.
 *
@@ -246,7 +246,7 @@ Frisk:
 	Int: EntryEffect
 	Enter: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
-	if (other.isHoldingItem(b)) b.addMessage(victim.getName() + "'s " + this.name + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
+	if (other.isHoldingItem(b)) b.addMessage(victim.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
 	###
 *
 Inner Focus:
@@ -261,11 +261,11 @@ Stench:
 	OnApplyDamage: 
 	if (Math.random()*100 < 10)
 	{
-		PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
+		PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
 		if (flinch.applies(b, user, victim, CastSource.ABILITY))
 		{
 			flinch.cast(b, user, victim, CastSource.ABILITY, false);
-			b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
+			b.addMessage(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
 		}
 	}
 	###
@@ -287,14 +287,14 @@ Dry Skin:
 	Desc: Reduces HP if it is hot. Water restores HP.
 	Int: EndTurnEffect, DamageBlocker, OpponentPowerChangeEffect
 	ApplyEndTurn: 
-	if (b.getWeather().getType() == WeatherType.RAINING)
+	if (b.getWeather().namesies() == Namesies.RAINING_EFFECT)
 	{
 		victim.healHealthFraction(1/8.0);
-		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
 	}
-	else if (b.getWeather().getType() == WeatherType.SUNNY)
+	else if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT)
 	{
-		b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
+		b.addMessage(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
 		victim.reduceHealthFraction(b, 1/8.0);
 	}
 	###
@@ -303,7 +303,7 @@ Dry Skin:
 	###
 	AlternateEffect: 
 	victim.healHealthFraction(1/4.0);
-	b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
+	b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
 	###
 	GetOppMultiplier: 
 	return user.getAttack().getType(b, user) == Type.FIRE ? 1.25 : 1;
@@ -334,11 +334,11 @@ Limber:
 Damp:
 	Desc: Prevents combatants from self destructing.
 	Int: BeforeTurnEffect, OpposingBeforeTurnEffect
-	CanAttack: 
+	CanAttack:
 	if (p.getAttack().getName().equals("Selfdestruct") || p.getAttack().getName().equals("Explosion"))
 	{
 		b.printAttacking(p);
-		b.addMessage(p.getName() + "'s " + this.name + " prevents " + p.getAttack().getName() + " from being used!");
+		b.addMessage(p.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
 		return false;
 	}
 	return true;
@@ -347,7 +347,7 @@ Damp:
 	if (p.getAttack().getName().equals("Selfdestruct") || p.getAttack().getName().equals("Explosion"))
 	{
 		b.printAttacking(p);
-		b.addMessage(opp.getName() + "'s " + this.name + " prevents " + p.getAttack().getName() + " from being used!");
+		b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
 		return false;
 	}
 	return true;
@@ -357,8 +357,8 @@ Cloud Nine:
 	Desc: Eliminates the effects of weather.
 	Int: EntryEffect
 	Enter: 
-	b.addEffect(Weather.getWeather(WeatherType.CLEAR_SKIES));
-	b.addMessage(victim.getName() + "'s " + this.name + " eliminated the weather!");
+	b.addEffect(Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT));
+	b.addMessage(victim.getName() + "'s " + this.getName() + " eliminated the weather!");
 	###
 *
 Vital Spirit:
@@ -384,11 +384,11 @@ Water Absorb:
 	Desc: Restores HP if hit by a Water-type move.
 	Int: DamageBlocker
 	Block: 
-	return attacking == Type.WATER && !victim.hasEffect("HealBlock");
+	return attacking == Type.WATER && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
 	###
 	AlternateEffect: 
 	victim.healHealthFraction(1/4.0);
-	b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
+	b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
 	###
 *
 Synchronize:
@@ -460,10 +460,10 @@ Hydration:
 	Desc: Heals status problems if it is raining.
 	Int: EndTurnEffect
 	ApplyEndTurn: 
-	if (b.getWeather().getType() == WeatherType.RAINING && victim.hasStatus())
+	if (b.getWeather().namesies() == Namesies.RAINING_EFFECT && victim.hasStatus())
 	{
 		victim.removeStatus();
-		b.addMessage(victim.getName() + "'s " + this.name + " cured it of its status condition!", StatusCondition.NONE, victim.user());
+		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 	}
 	###
 *
@@ -501,7 +501,7 @@ Forewarn:
 		else if (pow == best) besties.add(m.getAttack().getName());
 	}
 	String warn = best == -1 ? other.getMoves().get((int)(Math.random()*other.getMoves().size())).getAttack().getName() : besties.get((int)(Math.random()*besties.size()));	
-	b.addMessage(victim.getName() + "'s " + this.name + " alerted it to " + other.getName() + "'s " + warn + "!");
+	b.addMessage(victim.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn + "!");
 	###
 *
 Hyper Cutter:
@@ -519,7 +519,7 @@ Soundproof:
 	if (p.getAttack().isMoveType(MoveType.SOUND_BASED))
 	{
 		b.printAttacking(p);
-		b.addMessage(opp.getName() + "'s " + this.name + " makes it immune to sound based moves!");
+		b.addMessage(opp.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
 		return false;
 	}
 	return true;
@@ -553,7 +553,7 @@ Leaf Guard:
 	Desc: Prevents status problems in sunny weather.
 	Int: StatusPreventionEffect
 	StatusPrevent: 
-	return b.getWeather().getType() == WeatherType.SUNNY;
+	return b.getWeather().namesies() == Namesies.SUNNY_EFFECT;
 	###
 	StatusPreventMessage: victim.getName() + "'s Leaf Guard prevents status conditions!"
 *
@@ -564,7 +564,7 @@ Swift Swim:
 	Desc: Boosts the Pok\u00e9mon’s Speed in rain.
 	Int: StatChangingEffect
 	ModifyStat: 
-	return stat*(s == Stat.SPEED && b.getWeather().getType() == WeatherType.RAINING ? 2 : 1);
+	return stat*(s == Stat.SPEED && b.getWeather().namesies() == Namesies.RAINING_EFFECT ? 2 : 1);
 	###
 *
 Water Veil:
@@ -614,7 +614,7 @@ Imposter:
 	Desc: It transforms itself into the Pok\u00e9mon it is facing.
 	Int: EntryEffect
 	Enter: 
-	PokemonEffect.getEffect("Transformed").cast(b, victim, victim, CastSource.ABILITY, false);
+	PokemonEffect.getEffect(Namesies.TRANSFORMED_EFFECT).cast(b, victim, victim, CastSource.ABILITY, false);
 	###
 *
 Adaptability:
@@ -624,11 +624,11 @@ Volt Absorb:
 	Desc: Restores HP if hit by an Electric-type move.
 	Int: DamageBlocker
 	Block: 
-	return attacking == Type.ELECTRIC && !victim.hasEffect("HealBlock");
+	return attacking == Type.ELECTRIC && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
 	###
 	AlternateEffect: 
 	victim.healHealthFraction(1/4.0);
-	b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
+	b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
 	###
 *
 Quick Feet:
@@ -643,8 +643,12 @@ Trace:
 	Int: EntryEffect, ChangeAbilityMove
 	Enter: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
-	if (other.hasAbility("Multitype") || other.hasAbility("Illusion") || other.hasAbility("Trace")) return;
-	PokemonEffect.getEffect("ChangeAbility").cast(b, victim, victim, CastSource.ABILITY, true);
+	if (other.hasAbility(Namesies.MULTITYPE_ABILITY) || other.hasAbility(Namesies.ILLUSION_ABILITY) || other.hasAbility(this.namesies))
+	{
+		return;
+	}
+	
+	PokemonEffect.getEffect(Namesies.CHANGE_ABILITY_EFFECT).cast(b, victim, victim, CastSource.ABILITY, true);
 	###
 	AbilityChange: 
 	return b.getOtherPokemon(victim.user()).getAbility().newInstance();
@@ -688,7 +692,7 @@ Snow Cloak:
 	Desc: Raises the Pok\u00e9mon’s evasion during a hailstorm by one level.
 	Int: StageChangingEffect
 	StageChange: 
-	return s == Stat.EVASION && b.getWeather().getType() == WeatherType.HAILING ? stage + 1 : stage;
+	return s == Stat.EVASION && b.getWeather().namesies() == Namesies.HAILING_EFFECT ? stage + 1 : stage;
 	###
 *
 Marvel Scale:
@@ -746,7 +750,7 @@ Shadow Tag:
 	Desc: Prevents the foe from escaping.
 	Int: OpponentTrappingEffect
 	Trapped: 
-	return !p.hasAbility("Shadow Tag");
+	return !p.hasAbility(this.namesies);
 	###
 *
 Overcoat:
@@ -774,8 +778,8 @@ Sand Stream:
 	Desc: The Pok\u00e9mon summons a sandstorm in battle.
 	Int: EntryEffect
 	Enter: 
-	b.addEffect(Weather.getWeather(WeatherType.SANDSTORM).newInstance());
-	b.addMessage(victim.getName() + "'s " + this.name + " whipped up a sand storm!");
+	b.addEffect(Weather.getEffect(Namesies.SANDSTORM_EFFECT).newInstance());
+	b.addMessage(victim.getName() + "'s " + this.getName() + " whipped up a sand storm!");
 	###
 *
 Regenerator:
@@ -819,7 +823,7 @@ Wonder Guard:
 	if (Type.getAdvantage(p.getAttack().getType(b, p), opp, b) > 1) return true;
 	if (p.getAttack().getType(b, p) == Type.NONE) return true;
 	b.printAttacking(p);
-	b.addMessage(opp.getName() + "'s " + this.name + " makes it immune to " + p.getAttack().getName() + "!");
+	b.addMessage(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!");
 	return false;
 	###
 *
@@ -841,7 +845,7 @@ Rough Skin:
 	Desc: Inflicts damage to the foe on contact.
 	Int: PhysicalContactEffect
 	Contact: 
-	b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+	b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 	user.reduceHealthFraction(b, 1/8.0);
 	###
 *
@@ -876,7 +880,7 @@ Anticipation:
 	{
 		if (Type.getAdvantage(m.getAttack().getType(b, other), victim, b) > 1 || m.getAttack().isMoveType(MoveType.ONE_HIT_KO))
 		{
-			b.addMessage(victim.getName() + "'s " + this.name + " made it shudder!");
+			b.addMessage(victim.getName() + "'s " + this.getName() + " made it shudder!");
 			break;
 		}
 	}
@@ -889,7 +893,7 @@ Storm Drain:
 	return attacking == Type.WATER;
 	###
 	AlternateEffect: 
-	b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Water type moves!");
+	b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to Water type moves!");
 	victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 	###
 *
@@ -900,7 +904,7 @@ Color Change:
 	if (!victim.isType(b, t))
 	{
 		type = t;
-		PokemonEffect.getEffect("ChangeType").cast(b, victim, victim, CastSource.ABILITY, true);
+		PokemonEffect.getEffect(Namesies.CHANGE_TYPE_EFFECT).cast(b, victim, victim, CastSource.ABILITY, true);
 	}
 	###
 	Activate: 
@@ -918,14 +922,14 @@ Ice Body:
 	Desc: The Pok\u00e9mon gradually regains HP in a hailstorm.
 	Int: EndTurnEffect, WeatherBlockerEffect
 	ApplyEndTurn: 
-	if (b.getWeather().getType() == WeatherType.HAILING)
+	if (b.getWeather().namesies() == Namesies.HAILING_EFFECT)
 	{
 		victim.healHealthFraction(1/16.0);
-		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.name + "!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
 	}
 	###
 	WeatherBlock: 
-	return weather == WeatherType.HAILING;
+	return weather == Namesies.HAILING_EFFECT;
 	###
 *
 Light Metal:
@@ -935,16 +939,16 @@ Drizzle:
 	Desc: The Pok\u00e9mon makes it rain if it appears in battle.
 	Int: EntryEffect
 	Enter: 
-	b.addEffect(Weather.getWeather(WeatherType.RAINING).newInstance());
-	b.addMessage(victim.getName() + "'s " + this.name + " started a downpour!");
+	b.addEffect(Weather.getEffect(Namesies.RAINING_EFFECT).newInstance());
+	b.addMessage(victim.getName() + "'s " + this.getName() + " started a downpour!");
 	###
 *
 Air Lock:
 	Desc: Eliminates the effects of weather.
 	Int: EntryEffect
 	Enter: 
-	b.addEffect(Weather.getWeather(WeatherType.CLEAR_SKIES));
-	b.addMessage(victim.getName() + "'s " + this.name + " eliminated the weather!");
+	b.addEffect(Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT));
+	b.addMessage(victim.getName() + "'s " + this.getName() + " eliminated the weather!");
 	###
 *
 Defiant:
@@ -954,7 +958,7 @@ Flower Gift:
 	Desc: Powers up party Pok\u00e9mon when it is sunny.
 	Int: StatChangingEffect
 	ModifyStat: 
-	return (int)(stat*((s == Stat.ATTACK || s == Stat.SP_DEFENSE) && b.getWeather().getType() == WeatherType.SUNNY ? 1.5 : 1));
+	return (int)(stat*((s == Stat.ATTACK || s == Stat.SP_DEFENSE) && b.getWeather().namesies() == Namesies.SUNNY_EFFECT ? 1.5 : 1));
 	###
 *
 Aftermath:
@@ -963,7 +967,7 @@ Aftermath:
 	Contact: 
 	if (victim.isFainted(b))
 	{
-		b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+		b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 		user.reduceHealthFraction(b, 1/4.0);
 	}
 	###
@@ -980,18 +984,18 @@ Sand Force:
 	Int: PowerChangeEffect, WeatherBlockerEffect
 	GetMultiplier: 
 	Type type = user.getAttack().getType(b, user);
-	return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().getType() == WeatherType.SANDSTORM ? 1.3 : 1;
+	return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == Namesies.SANDSTORM_EFFECT ? 1.3 : 1;
 	###
 	WeatherBlock: 
-	return weather == WeatherType.SANDSTORM;
+	return weather == Namesies.SANDSTORM_EFFECT;
 	###
 *
 Snow Warning:
 	Desc: The Pok\u00e9mon summons a hailstorm in battle.
 	Int: EntryEffect
 	Enter: 
-	b.addEffect(Weather.getWeather(WeatherType.HAILING).newInstance());
-	b.addMessage(victim.getName() + "'s " + this.name + " caused it to hail!");
+	b.addEffect(Weather.getEffect(Namesies.HAILING_EFFECT).newInstance());
+	b.addMessage(victim.getName() + "'s " + this.getName() + " caused it to hail!");
 	###
 *
 Motor Drive:
@@ -1000,7 +1004,7 @@ Motor Drive:
 	return attacking == Type.ELECTRIC;
 	###
 	AlternateEffect: 
-	b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Electric type moves!");
+	b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to Electric type moves!");
 	victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 	###
 	Desc: Raises Speed if hit by an Electric-type move.
@@ -1022,11 +1026,11 @@ Cursed Body:
 	if (Math.random()*100 < 30)
 	{
 		user.getAttributes().setLastMoveUsed();
-		PokemonEffect disable = PokemonEffect.getEffect("Disable");
+		PokemonEffect disable = PokemonEffect.getEffect(Namesies.DISABLE_EFFECT);
 		if (disable.applies(b, victim, user, CastSource.ABILITY))
 		{
 			disable.cast(b, victim, user, CastSource.ABILITY, false);
-			b.addMessage(victim.getName() + "'s " + this.name + " disabled " + user.getName() + "'s " + user.getAttack().getName());
+			b.addMessage(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
 		}
 	}
 	###
@@ -1057,7 +1061,7 @@ Bad Dreams:
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	if (other.hasStatus(StatusCondition.ASLEEP))
 	{
-		b.addMessage(other.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+		b.addMessage(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 		other.reduceHealthFraction(b, 1/8.0);
 	}
 	###
@@ -1108,8 +1112,13 @@ Mummy:
 	Desc: Contact with this Pok\u00e9mon spreads this Ability.
 	Int: PhysicalContactEffect, ChangeAbilityMove
 	Contact: 
-	if (user.hasAbility("Multitype") || user.hasAbility("Mummy")) return;
-	PokemonEffect.getEffect("ChangeAbility").cast(b, victim, user, CastSource.ABILITY, true);
+	if (user.hasAbility(Namesies.MULTITYPE_ABILITY) || user.hasAbility(this.namesies))
+	{
+		return;
+	}
+	
+	// Cast the change ability effect onto the user
+	PokemonEffect.getEffect(Namesies.CHANGE_ABILITY_EFFECT).cast(b, victim, user, CastSource.ABILITY, true);
 	###
 	AbilityChange: 
 	return (new Mummy()).newInstance();
@@ -1192,7 +1201,7 @@ Sap Sipper:
 	return attacking == Type.GRASS;
 	###
 	AlternateEffect: 
-	b.addMessage(victim.getName() + "'s " + this.name + " makes it immune to Grass type moves!");
+	b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to Grass type moves!");
 	victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 	###
 *
@@ -1200,7 +1209,7 @@ Iron Barbs:
 	Desc: Inflicts damage to the Pok\u00e9mon on contact.
 	Int: PhysicalContactEffect
 	Contact: 
-	b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+	b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 	user.reduceHealthFraction(b, 1/8.0);
 	###
 *
@@ -1239,7 +1248,7 @@ Unburden:
 	Desc: Raises Speed if a held item is used.
 	Int: StatChangingEffect
 	ModifyStat: 
-	return stat*(s == Stat.SPEED && p.hasEffect("ChangeItem") && !p.isHoldingItem(b) ? 2 : 1);
+	return stat*(s == Stat.SPEED && p.hasEffect(Namesies.CHANGE_ITEM_EFFECT) && !p.isHoldingItem(b) ? 2 : 1);
 	###
 *
 Pickpocket:
@@ -1251,7 +1260,10 @@ Pickpocket:
 	return item;
 	###
 	Contact: 
-	if (victim.isFainted(b) || !user.isHoldingItem(b) || victim.isHoldingItem(b) || b.getTrainer(victim.user()) instanceof WildPokemon || user.hasAbility("Sticky Hold")) return;
+	if (victim.isFainted(b) || !user.isHoldingItem(b) || victim.isHoldingItem(b) || b.getTrainer(victim.user()) instanceof WildPokemon || user.hasAbility(Namesies.STICKY_HOLD_ABILITY))
+	{
+		return;
+	}
 
 	Item stolen = user.getHeldItem(b);
 	b.addMessage(victim.getName() + " stole " + user.getName() + "'s " + stolen.getName() + "!");
@@ -1264,9 +1276,9 @@ Pickpocket:
 	}
 
 	item = stolen;
-	PokemonEffect.getEffect("ChangeItem").cast(b, victim, victim, CastSource.ABILITY, false);
+	PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, victim, CastSource.ABILITY, false);
 	item = Item.noneItem();
-	PokemonEffect.getEffect("ChangeItem").cast(b, victim, user, CastSource.ABILITY, false);
+	PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.ABILITY, false);
 	###
 	Desc: Steals an item when hit by another Pok\u00e9mon.
 *
@@ -1274,13 +1286,13 @@ Harvest:
 	Desc: May create another Berry after one is used.
 	Int: EndTurnEffect
 	ApplyEndTurn: 
-	PokemonEffect consumed = victim.getEffect("ConsumedItem");
+	PokemonEffect consumed = victim.getEffect(Namesies.CONSUMED_ITEM_EFFECT);
 	if (consumed == null || victim.isHoldingItem(b)) return;
 	Item restored = ((ItemCondition)consumed).getItem();
-	if (restored instanceof Berry && (b.getWeather().getType() == WeatherType.SUNNY || Math.random() < .5))
+	if (restored instanceof Berry && (b.getWeather().namesies() == Namesies.SUNNY_EFFECT || Math.random() < .5))
 	{
 		victim.giveItem((HoldItem)restored);
-		b.addMessage(victim.getName() + "'s " + this.name + " restored its " + restored.getName() + "!");
+		b.addMessage(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
 	}
 	###
 *
@@ -1291,7 +1303,7 @@ Pickup:
 	if (!p.isHoldingItem(b) && Math.random() < .1)
 	{
 		// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
-		p.giveItem((HoldItem)Item.getItem("Leftovers"));
+		p.giveItem((HoldItem)Item.getItem(Namesies.LEFTOVERS_ITEM));
 	}
 	###
 *
@@ -1299,7 +1311,7 @@ Unnerve:
 	Desc: Makes the foe nervous and unable to eat Berries.
 	Int: EntryEffect
 	Enter: 
-	b.addMessage(victim.getName() + "'s " + this.name + " made " + b.getOtherPokemon(victim.user()).getName() + " too nervous to eat berries!");
+	b.addMessage(victim.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(victim.user()).getName() + " too nervous to eat berries!");
 	###
 *
 Honey Gather:
@@ -1308,7 +1320,7 @@ Honey Gather:
 	if (!p.isHoldingItem(b) && Math.random()*100 < 5*Math.ceil(p.getLevel()/10.0))
 	{
 		// TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
-		p.giveItem((HoldItem)Item.getItem("Leftovers"));
+		p.giveItem((HoldItem)Item.getItem(Namesies.LEFTOVERS_ITEM));
 	}
 	###
 	Desc: The Pok\u00e9mon may gather Honey from somewhere.

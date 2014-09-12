@@ -15,13 +15,14 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.InputControl;
+import main.Namesies;
 import main.InputControl.Control;
 import main.Type;
 import trainer.CharacterData;
 
 public class MartView extends View
 {
-	private static final String[] FOR_SALE_NAMES = new String[] {"Potion", "Pok\u00e9 Ball", "Antidote", "Paralyze Heal", "Burn Heal"};
+	private static final Namesies[] FOR_SALE_NAMES = new Namesies[] {Namesies.POTION_ITEM, Namesies.POKE_BALL_ITEM, Namesies.ANTIDOTE_ITEM, Namesies.PARALYZE_HEAL_ITEM, Namesies.BURN_HEAL_ITEM};
 	private static ArrayList<Item> forSaleItems = null;
 	
 	private static final Color BACKGROUND_COLOR = new Color (68, 123, 184);
@@ -102,7 +103,7 @@ public class MartView extends View
 		if (forSaleItems == null)
 		{
 			forSaleItems = new ArrayList<>();
-			for (String itemName : FOR_SALE_NAMES)
+			for (Namesies itemName : FOR_SALE_NAMES)
 			{
 				forSaleItems.add(Item.getItem(itemName));
 			}

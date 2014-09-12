@@ -53,7 +53,7 @@ public enum Type implements Serializable
 		int t1 = pType[0].index, t2 = pType[1].index, index = moveType.index;
 		
 		// Pokemon holding Ring Target lose their immunities
-		if (p.isHoldingItem(b, "Ring Target"))
+		if (p.isHoldingItem(b, Namesies.RING_TARGET_ITEM))
 		{
 			for (int i = 0; i < typeAdvantage[index].length; i++)
 			{
@@ -75,7 +75,7 @@ public enum Type implements Serializable
 		}
 		
 		// Foresight and the Scrappy allows Ghost type Pokemon to be hit by Normal and Fighting type moves
-		if ((p.hasEffect("Foresight") || b.getOtherPokemon(p.user()).hasAbility("Scrappy")) 
+		if ((p.hasEffect(Namesies.FORESIGHT_EFFECT) || b.getOtherPokemon(p.user()).hasAbility(Namesies.SCRAPPY_ABILITY)) 
 				&& (moveType == NORMAL || moveType == FIGHTING))
 		{
 			if (pType[0] == GHOST) t1 = NONE.index;
@@ -83,7 +83,7 @@ public enum Type implements Serializable
 		}
 		
 		// Miracle Eye allows Dark type Pokemon to be hit by Psychic type moves
-		if (p.hasEffect("MiracleEye") && moveType == PSYCHIC)
+		if (p.hasEffect(Namesies.MIRACLE_EYE_EFFECT) && moveType == PSYCHIC)
 		{
 			if (pType[0] == DARK) t1 = NONE.index;
 			if (pType[1] == DARK) t2 = NONE.index;
@@ -102,7 +102,7 @@ public enum Type implements Serializable
 		Type[] pokemonType = p.getType(b);
 		Type attackType = p.getAttack().getType(b, p);
 		
-		return pokemonType[0] ==  attackType|| pokemonType[1] == attackType ? (p.hasAbility("Adaptability") ? 2 : 1.5) : 1; 
+		return pokemonType[0] ==  attackType|| pokemonType[1] == attackType ? (p.hasAbility(Namesies.ADAPTABILITY_ABILITY) ? 2 : 1.5) : 1; 
 	}
 
 	private int index;

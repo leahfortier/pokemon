@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.Global;
+import main.Namesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
 import battle.Move;
@@ -164,7 +165,7 @@ public abstract class Trainer implements Team, Serializable
 		return prev - cashMoney;
 	}
 
-	public boolean hasEffect(String effect)
+	public boolean hasEffect(Namesies effect)
 	{
 		return Effect.hasEffect(effects, effect);
 	}

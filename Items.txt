@@ -13,7 +13,7 @@
 # // Not implemented: Casteliacone, Heal Powder, Lava Cookie
 
 Constructor:
-	Name String
+	Namesies Enum Namesies Item
 	Desc String
 	Cat Enum BagCategory
 	Index Int
@@ -104,7 +104,7 @@ Amulet Coin
 	Price: 100
 	Fling: 30
 	Enter:
-		TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 *
 Big Root
@@ -134,7 +134,7 @@ Black Sludge
 			victim.healHealthFraction(1/16.0);
 			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
 		}
-		else if (!victim.hasAbility("Magic Guard"))
+		else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 		{
 			b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
@@ -275,7 +275,7 @@ Toxic Orb
 	ApplyEndTurn:
 		if (Status.applies(StatusCondition.POISONED, b, victim, victim))
 		{
-			victim.addEffect(PokemonEffect.getEffect("BadPoison").newInstance());
+			victim.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
 			Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 		}
 		###
@@ -362,7 +362,11 @@ Life Orb
 		return 5324.0/4096.0;
 		###
 	OnApplyDamage:
-		if (user.hasAbility("Magic Guard")) return;
+		if (user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+		{
+			return;
+		}
+		
 		b.addMessage(user.getName() + " was hurt by its " + this.name + "!");
 		user.reduceHealthFraction(b, .1);
 		###
@@ -423,21 +427,21 @@ Macho Brace
 	return vals;
 	###
 *
-Mental Herb
+Mental Herb:
 	Int: HoldItem, EndTurnEffect
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.
 	Price: 100
 	Fling: 10
 	Field:
-		String[] effects = {"Infatuated", "Disable", "Taunt", "Encore", "Torment", "Confusion"};
+		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT};
 		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused"};
 		###
 	ApplyEndTurn:
 		boolean used = false;
 		for (int i = 0; i < effects.length; i++)
 		{
-			String s = effects[i];
+			Namesies s = effects[i];
 			if (victim.hasEffect(s))
 			{
 				used = true;
@@ -553,6 +557,7 @@ Quick Powder
 	Price: 10
 	Fling: 10
 	ModifyStat:
+		// TODO: Need to do a namesies-like thing for Pokemon as well
 		if (s == Stat.SPEED && p.isPokemon("Ditto")) stat *= 1.5;
 		return stat;
 		###
@@ -692,12 +697,16 @@ Sticky Barb
 	Price: 200
 	Fling: 80
 	ApplyEndTurn:
-		if (victim.hasAbility("Magic Guard")) return;
+		if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+		{
+			return;
+		}
+		
 		b.addMessage(victim.getName() + " was hurt by its " + this.name + "!");
 		victim.reduceHealthFraction(b, 1/8.0);
 		###
 	Contact:
-		if (!user.hasAbility("Magic Guard"))
+		if (!user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 		{
 			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
@@ -714,9 +723,9 @@ Sticky Barb
 		}
 	            
 		item = this;
-		PokemonEffect.getEffect("ChangeItem").cast(b, victim, user, CastSource.HELD_ITEM, false);
+		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.HELD_ITEM, false);
 		item = Item.noneItem();
-		PokemonEffect.getEffect("ChangeItem").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 	GetItem: return item;
 	Field: 
@@ -818,7 +827,7 @@ Luck Incense
 	Price: 9600
 	Fling: 10
 	Enter:
-		TeamEffect.getEffect("DoubleMoney").cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 *
 Odd Incense
@@ -1132,7 +1141,11 @@ Leftovers
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.
 	ApplyEndTurn:
-		if (victim.fullHealth() || victim.hasEffect("Heal Block")) return;
+		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+		{
+			return;
+		}
+		
 		victim.healHealthFraction(1/16.0);
 		b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
 		###
@@ -1378,7 +1391,7 @@ King's Rock
 	OnApplyDamage:
 		if (Math.random()*100 < 10)
 		{
-			PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
+			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
 			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
 			{
 				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
@@ -1460,7 +1473,7 @@ Razor Fang
 	OnApplyDamage:
 		if (Math.random()*100 < 10)
 		{
-			PokemonEffect flinch = PokemonEffect.getEffect("Flinch");
+			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
 			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
 			{
 				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
@@ -1859,7 +1872,7 @@ Dire Hit
 	Price: 650
 	Fling: 30
 	BattleUse:
-		PokemonEffect crits = PokemonEffect.getEffect("RaiseCrits");
+		PokemonEffect crits = PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT);
 		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) 
 		{
 			return false;
@@ -1879,7 +1892,7 @@ Guard Spec.
 	Price: 700
 	Fling: 30
 	BattleUse:
-		PokemonEffect gSpesh = PokemonEffect.getEffect("GuardSpecial");
+		PokemonEffect gSpesh = PokemonEffect.getEffect(Namesies.GUARD_SPECIAL_EFFECT);
 		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) return false;
 
 		gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
@@ -2400,9 +2413,9 @@ Persim Berry
 	NGType: GROUND
 	NGPow: 60
 	BattleUse:
-		if (p.hasEffect("Confusion"))
+		if (p.hasEffect(Namesies.CONFUSION_EFFECT))
 		{
-			p.getAttributes().removeEffect("Confusion");
+			p.getAttributes().removeEffect(Namesies.CONFUSION_EFFECT);
 			return true;
 		}
 		
@@ -2662,7 +2675,7 @@ Lansat Berry
 	NGPow: 80
 	HealthTriggerRatio: 4
 	HealthTrigger:
-		PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
+		PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, CastSource.HELD_ITEM, false);
 		b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
 		return true;
 		###
@@ -2680,7 +2693,7 @@ Starf Berry
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS)
 		{
-			PokemonEffect.getEffect("RaiseCrits").cast(b, user, user, CastSource.HELD_ITEM, false);
+			PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, CastSource.HELD_ITEM, false);
 			b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
 			return true;
 		}

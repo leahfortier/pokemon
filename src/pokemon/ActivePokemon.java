@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import main.Global;
+import main.Namesies;
 import main.Type;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
@@ -156,16 +157,21 @@ public class ActivePokemon implements Serializable
 	private void setMoves()
 	{
 		moves = new ArrayList<Move>();
-		TreeMap<Integer, List<String>> map = pokemon.getLevelUpMoves();
+		TreeMap<Integer, List<Namesies>> map = pokemon.getLevelUpMoves();
 		for (Integer i : map.keySet())
 		{
-			if (i > level) continue;
-			for (String s : map.get(i))
+			if (i > level) 
+			{
+				continue;
+			}
+			
+			for (Namesies s : map.get(i))
 			{
 				if (hasMove(s)) continue;
 				moves.add(new Move(Attack.getAttack(s)));
 			}
 		}
+		
 		while (moves.size() > Move.MAX_MOVES) moves.remove(0);
 	}
 	
@@ -245,10 +251,12 @@ public class ActivePokemon implements Serializable
 		return EVs;
 	}
 	
+	// TODO: Check if can look for a StatsCondition effect instead of hardcoding transform
 	public int getStat(Stat s)
 	{
-		PokemonEffect e = getEffect("Transformed");
+		PokemonEffect e = getEffect(Namesies.TRANSFORMED_EFFECT);
 		if (e != null) return ((StatsCondition)e).getStat(s);
+		
 		return stats[s.index()];
 	}
 	
@@ -275,8 +283,9 @@ public class ActivePokemon implements Serializable
 	public Ability getAbility()
 	{
 		// Check if the Pokemon has had its ability changed during the battle
-		PokemonEffect e = getEffect("ChangeAbility");
+		PokemonEffect e = getEffect(Namesies.CHANGE_ABILITY_EFFECT);
 		if (e != null) return ((AbilityCondition)e).getAbility();
+		
 		return ability;
 	}
 	
@@ -290,10 +299,13 @@ public class ActivePokemon implements Serializable
 		return getMoves().get(index);
 	}
 	
+	// TODO: Check if can just look for MoveListCondition
 	public List<Move> getMoves()
 	{
-		PokemonEffect mimic = getEffect("Mimic"), transformed = getEffect("Transformed");
+		PokemonEffect transformed = getEffect(Namesies.TRANSFORMED_EFFECT);
 		if (transformed != null) return ((MoveListCondition)transformed).getMoveList(this, moves);
+		
+		PokemonEffect mimic = getEffect(Namesies.MIMIC_EFFECT);
 		if (mimic != null) return ((MoveListCondition)mimic).getMoveList(this, moves);
 		
 		return moves;
@@ -361,7 +373,10 @@ public class ActivePokemon implements Serializable
 		if (print && front) b.addMessage("", hp, gain, stats, playerPokemon);
 		
 		// Learn new moves
-		for (String s : pokemon.getMoves(level)) learnMove(b, s);
+		for (Namesies s : pokemon.getMoves(level)) 
+		{
+			learnMove(b, s);
+		}
 		
 		// Maybe you'll evolve?!
 		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionCheck.LEVEL, this, null);
@@ -372,7 +387,10 @@ public class ActivePokemon implements Serializable
 	
 	public String evolve(Battle b, BaseEvolution ev)
 	{
-		if (getActualHeldItem() == Item.getItem("Everstone")) return "";
+		if (getActualHeldItem() == Item.getItem(Namesies.EVERSTONE_ITEM)) 
+		{
+			return "";
+		}
 		
 		boolean print = b != null, front = print && b.getPlayer().front() == this;
 		boolean sameName = nickname.equals(pokemon.getName());
@@ -402,15 +420,22 @@ public class ActivePokemon implements Serializable
 		if (print && front) b.addMessage("", hp, gain, stats, playerPokemon);
 		
 		// Learn new moves
-		List<String> levelMoves = pokemon.getMoves(level);
-		for (String s : levelMoves) learnMove(b, s);
+		List<Namesies> levelMoves = pokemon.getMoves(level);
+		for (Namesies s : levelMoves) 
+		{
+			learnMove(b, s);
+		}
 		
 		return message;
 	}
 	
-	private void learnMove(Battle b, String attackName)
+	private void learnMove(Battle b, Namesies attackName)
 	{
-		if (hasMove(attackName)) return;
+		// Don't want to learn a move you already know!
+		if (hasMove(attackName)) 
+		{
+			return;
+		}
 		
 		Move m = new Move(Attack.getAttack(attackName));
 		if (moves.size() < Move.MAX_MOVES)
@@ -420,7 +445,12 @@ public class ActivePokemon implements Serializable
 			return;
 		}
 		
-		if (b == null) return;
+		// Only add messagy things whilst in battle TODO: But really we need to be able to do messagy things outside of battle too...
+		if (b == null) 
+		{
+			return;
+		}
+		
 		b.addMessage(" ", this, m);
 		b.addMessage(nickname + " did not learn " + m.getAttack().getName() + ".");
 		
@@ -428,6 +458,7 @@ public class ActivePokemon implements Serializable
 		{
 			b.addMessage(nickname + " forgot how to use " + moves.get(i).getAttack().getName() + "...");	
 		}
+		
 		b.addMessage("...and " + nickname + " learned " + m.getAttack().getName() + "!");
 	}
 	
@@ -478,9 +509,8 @@ public class ActivePokemon implements Serializable
 		return getAbility() instanceof StallingEffect || getHeldItem(b) instanceof StallingEffect;
 	}
 	
-	public boolean hasAbility(String a)
+	public boolean hasAbility(Namesies a)
 	{
-		Ability.getAbility(a);
 		return getAbility().getName().equals(a);
 	}
 	
@@ -516,10 +546,10 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Returns whether or not this Pokemon knows this move already
-	public boolean hasMove(String name)
+	public boolean hasMove(Namesies name)
 	{
 		for (Move m : getMoves())
-			if (m.getAttack().getName().equals(name)) 
+			if (m.getAttack().namesies() == name) 
 				return true;
 
 		return false;
@@ -582,7 +612,7 @@ public class ActivePokemon implements Serializable
 	
 	public Type[] getType(Battle b) 
 	{
-		if (hasAbility("Multitype"))
+		if (hasAbility(Namesies.MULTITYPE_ABILITY))
 		{
 			Item item = getHeldItem(b);
 			if (item instanceof PlateItem)
@@ -593,18 +623,17 @@ public class ActivePokemon implements Serializable
 			return new Type[] {Type.NORMAL, Type.NONE};
 		}
 		
-		if (hasAbility("Forecast"))
-		{
-			System.out.println(getName() + " has Forecast");			
-			return new Type[] { b.getWeather().getType().getElement(), Type.NONE};
+		if (hasAbility(Namesies.FORECAST_ABILITY))
+		{			
+			return new Type[] { b.getWeather().getElement(), Type.NONE};
 		}
 		
 		// Check if the Pokemon has had its type changed during the battle
-		PokemonEffect changeType = getEffect("ChangeType");
+		PokemonEffect changeType = getEffect(Namesies.CHANGE_TYPE_EFFECT);
 		if (changeType != null) 
 			return ((TypeCondition)changeType).getType();
 		
-		PokemonEffect transformed = getEffect("Transformed");
+		PokemonEffect transformed = getEffect(Namesies.TRANSFORMED_EFFECT);
 		if (transformed != null) 
 			return ((TypeCondition)transformed).getType();
 		
@@ -693,12 +722,20 @@ public class ActivePokemon implements Serializable
 			// Apply effects which occur when the user faints 
 			for (PokemonEffect e : attributes.getEffects())
 			{
-				if (!e.isActive() || !(e instanceof FaintEffect)) continue;
+				if (!e.isActive() || !(e instanceof FaintEffect)) 
+				{
+					continue;
+				}
+				
 				((FaintEffect)e).deathwish(b, this, murderer);
 			}
-			if (murderer.getAbility() instanceof FaintEffect) ((FaintEffect)murderer.getAbility()).deathwish(b, this, murderer);
 			
-			b.getEffects(playerPokemon).add(TeamEffect.getEffect("DeadAlly").newInstance());
+			if (murderer.getAbility() instanceof FaintEffect)
+			{
+				((FaintEffect)murderer.getAbility()).deathwish(b, this, murderer);
+			}
+			
+			b.getEffects(playerPokemon).add(TeamEffect.getEffect(Namesies.DEAD_ALLY_EFFECT).newInstance());
 			
 			return true;	
 		}
@@ -711,7 +748,10 @@ public class ActivePokemon implements Serializable
 	public String canEscape(Battle b)
 	{
 		// Shed Shell always allows escape
-		if (isHoldingItem(b, "Shed Shell")) return "";
+		if (isHoldingItem(b, Namesies.SHED_SHELL_ITEM)) 
+		{
+			return "";
+		}
 		
 		// Check if the user is under an effect that prevents escape
 		for (PokemonEffect e : getEffects())
@@ -731,13 +771,13 @@ public class ActivePokemon implements Serializable
 		return "";
 	}
 	
-	public boolean hasEffect(String effect)
+	public boolean hasEffect(Namesies effect)
 	{
 		return attributes.hasEffect(effect);
 	}
 	
 	// Returns null if the Pokemon is not under the effects of the input effect, otherwise returns the Condition
-	public PokemonEffect getEffect(String effect)
+	public PokemonEffect getEffect(Namesies effect)
 	{
 		return attributes.getEffect(effect);
 	}
@@ -776,14 +816,14 @@ public class ActivePokemon implements Serializable
 	public void removeStatus()
 	{
 		Status.removeStatus(this);
-		attributes.removeEffect("Nightmare");
-		attributes.removeEffect("BadPoison");
+		attributes.removeEffect(Namesies.NIGHTMARE_EFFECT);
+		attributes.removeEffect(Namesies.BAD_POISON_EFFECT);
 	}
 	
 	// Returns null if the Pokemon is not bracing, and the associated effect if it is
 	private BracingEffect bracing(Battle b, boolean fullHealth)
 	{
-		BracingEffect bracingEffect = (BracingEffect)getEffect("Bracing");
+		BracingEffect bracingEffect = (BracingEffect)getEffect(Namesies.BRACING_EFFECT);
 		if (bracingEffect != null) 
 		{
 			return bracingEffect;
@@ -801,15 +841,16 @@ public class ActivePokemon implements Serializable
 		if (amount == 0) return 0;
 		
 		// Substitute absorbs the damage instead of the Pokemon
-		IntegerCondition e = (IntegerCondition)getEffect("Substitute");
+		IntegerCondition e = (IntegerCondition)getEffect(Namesies.SUBSTITUTE_EFFECT);
 		if (e != null)
 		{
 			e.decrease(amount);
 			if (e.getAmount() <= 0)
 			{
 				b.addMessage("The substitute broke!");
-				attributes.removeEffect("Substitute");
+				attributes.removeEffect(Namesies.SUBSTITUTE_EFFECT);
 			}
+			
 			return 0;
 		}
 		
@@ -831,15 +872,18 @@ public class ActivePokemon implements Serializable
 			}
 		}
 		
-		if (isFainted(b)) return taken;
+		if (isFainted(b)) 
+		{
+			return taken;
+		}
 		b.addMessage("", hp, playerPokemon);
 		
 		// Check if the Pokemon fainted and also handle Focus Punch
-		if (hasEffect("Focusing"))
+		if (hasEffect(Namesies.FOCUSING_EFFECT))
 		{
 			b.addMessage(nickname + " lost its focus and couldn't move!");
-			attributes.removeEffect("Focusing");
-			addEffect(PokemonEffect.getEffect("Flinch"));		
+			attributes.removeEffect(Namesies.FOCUSING_EFFECT);
+			addEffect(PokemonEffect.getEffect(Namesies.FLINCH_EFFECT));
 		}
 		
 		// Health Triggered Berries
@@ -848,7 +892,7 @@ public class ActivePokemon implements Serializable
 		{
 			HealthTriggeredBerry h  = (HealthTriggeredBerry)i;
 			double healthRatio = getHPRatio();
-			if ((healthRatio <= h.healthTriggerRatio() || (healthRatio <= .5 && hasAbility("Gluttony"))))
+			if ((healthRatio <= h.healthTriggerRatio() || (healthRatio <= .5 && hasAbility(Namesies.GLUTTONY_ABILITY))))
 			{
 				if (h.useHealthTriggerBerry(b, this))
 				{
@@ -892,16 +936,16 @@ public class ActivePokemon implements Serializable
 	// Heals the Pokemon by damage amount. It is assume damage has already been dealt to the victim
 	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print)
 	{
-		if (victim.hasAbility("Liquid Ooze"))
+		if (victim.hasAbility(Namesies.LIQUID_OOZE_ABILITY))
 		{
 			b.addMessage(victim.getName() + "'s Liquid Ooze caused " + nickname + " to lose health instead!");
 			reduceHealth(b, amount);
 			return;
 		}
 		
-		if (isHoldingItem(b, "Big Root")) amount *= 1.3;
+		if (isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) amount *= 1.3;
 		if (print) b.addMessage(victim.getName() + "'s health was sapped!");
-		if (!hasEffect("HealBlock")) heal(amount);
+		if (!hasEffect(Namesies.HEAL_BLOCK_EFFECT)) heal(amount);
 		b.addMessage("", victim.hp, victim.user());
 		b.addMessage("", hp, user());
 	}
@@ -925,7 +969,10 @@ public class ActivePokemon implements Serializable
 		if (levitation) return true;
 		
 		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker.
-		if (hasAbility("Levitate") && !b.getOtherPokemon(playerPokemon).breaksTheMold()) return true;
+		if (hasAbility(Namesies.LEVITATE_ABILITY) && !b.getOtherPokemon(playerPokemon).breaksTheMold())
+		{
+			return true;
+		}
 		
 		// Flyahs gon' Fly
 		return isType(b, Type.FLYING);
@@ -944,10 +991,10 @@ public class ActivePokemon implements Serializable
 	public void consumeItem(Battle b)
 	{
 		Item consumed = getHeldItem(b);
-		PokemonEffect.getEffect("ConsumedItem").cast(b, this, this, CastSource.HELD_ITEM, false);
+		PokemonEffect.getEffect(Namesies.CONSUMED_ITEM_EFFECT).cast(b, this, this, CastSource.HELD_ITEM, false);
 		
 		ActivePokemon other = b.getOtherPokemon(playerPokemon); 
-		if (other.hasAbility("Pickup") && !other.isHoldingItem(b))
+		if (other.hasAbility(Namesies.PICKUP_ABILITY) && !other.isHoldingItem(b))
 		{
 			other.giveItem((HoldItem)consumed);
 			b.addMessage(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
@@ -966,16 +1013,16 @@ public class ActivePokemon implements Serializable
 			return getActualHeldItem();
 		}
 		
-		if (hasAbility("Klutz") || b.hasEffect("MagicRoom") || hasEffect("Embargo")) 
+		if (hasAbility(Namesies.KLUTZ_ABILITY) || b.hasEffect(Namesies.MAGIC_ROOM_EFFECT) || hasEffect(Namesies.EMBARGO_EFFECT)) 
 		{
 			return Item.noneItem();
 		}
 		
 		// Check if the Pokemon has had its item changed during the battle
-		PokemonEffect changeItem = getEffect("ChangeItem");
+		PokemonEffect changeItem = getEffect(Namesies.CHANGE_ITEM_EFFECT);
 		Item item = changeItem == null ? getActualHeldItem() : ((ItemCondition)changeItem).getItem();
 		
-		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility("Unnerve"))
+		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility(Namesies.UNNERVE_ABILITY))
 		{
 			return Item.noneItem();
 		}
@@ -983,7 +1030,7 @@ public class ActivePokemon implements Serializable
 		return item;
 	}
 	
-	public boolean isHoldingItem(Battle b, String itemName)
+	public boolean isHoldingItem(Battle b, Namesies itemName)
 	{
 		return getHeldItem(b) == Item.getItem(itemName);
 	}
@@ -1008,13 +1055,14 @@ public class ActivePokemon implements Serializable
 		return pokemon.getName().equals(name);
 	}
 	
+	// TODO: There should be a weight effect here instead of all this motherfucking hardcoding...
 	public double getWeight(Battle b)
 	{
-		int halfAmount = hasAbility("Light Metal") && !b.getOtherPokemon(playerPokemon).breaksTheMold() ? 1 : 0;
-		if (isHoldingItem(b, "Float Stone")) 
+		int halfAmount = hasAbility(Namesies.LIGHT_METAL_ABILITY) && !b.getOtherPokemon(playerPokemon).breaksTheMold() ? 1 : 0;
+		if (isHoldingItem(b, Namesies.FLOAT_STONE_ITEM)) 
 			halfAmount++;
 		
-		PokemonEffect halfWeight = getEffect("HalfWeight");
+		PokemonEffect halfWeight = getEffect(Namesies.HALF_WEIGHT_EFFECT);
 		if (halfWeight != null) 
 			halfAmount += ((IntegerCondition)halfWeight).getAmount();
 		

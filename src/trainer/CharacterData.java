@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import main.Global;
+import main.Namesies;
 import pokemon.ActivePokemon;
 import pokemon.PC;
 import pokemon.Stat;
@@ -256,7 +257,7 @@ public class CharacterData extends Trainer implements Serializable
 				double gain = wild*base*lev*Math.pow(2*lev + 10, 2.5);
 				gain /= 5*Math.pow(lev + p.getLevel() + 10, 2.5);
 				gain++;
-				gain *= p.isHoldingItem(b, "Lucky Egg") ? 1.5 : 1;
+				gain *= p.isHoldingItem(b, Namesies.LUCKY_EGG_ITEM) ? 1.5 : 1;
 				
 				p.gainEXP(b, (int)Math.max(1, gain/numUsed), dead);				
 			}
@@ -272,7 +273,7 @@ public class CharacterData extends Trainer implements Serializable
 			b.addMessage(getName() + " defeated " + opp.getName() + "!");
 			addGlobal(b.getWinGlobal());
 			
-			int datCash = opp.getDatCashMoney()*(hasEffect("DoubleMoney") ? 2 : 1);
+			int datCash = opp.getDatCashMoney()*(hasEffect(Namesies.DOUBLE_MONEY_EFFECT) ? 2 : 1);
 			b.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
 		}

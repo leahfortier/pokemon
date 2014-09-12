@@ -26,6 +26,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.InputControl;
+import main.Namesies;
 import main.InputControl.Control;
 import main.Type;
 import pokemon.ActivePokemon;
@@ -837,7 +838,7 @@ public class BattleView extends View
 		if (bagLastUsedBtn.checkConsumePress())
 		{
 			Item lastItemUsed = bag.getLastUsedItem();
-			if (lastItemUsed != Item.getItem("None") && bag.battleUseItem(lastItemUsed, player.front(), currentBattle))
+			if (lastItemUsed != Item.getItem(Namesies.NONE_ITEM) && bag.battleUseItem(lastItemUsed, player.front(), currentBattle))
 			{
 				player.performAction(currentBattle, Action.ITEM);
 				setVisualState(VisualState.MENU);
@@ -1120,7 +1121,7 @@ public class BattleView extends View
 				for (int i = 0; i < ITEMS_PER_PAGE; i++)
 					bagButtons[ITEMS + i].setActive(i < pageSize - bagPage*ITEMS_PER_PAGE);
 				
-				bagLastUsedBtn.setActive(currentBattle.getPlayer().getBag().getLastUsedItem() != Item.getItem("None"));
+				bagLastUsedBtn.setActive(currentBattle.getPlayer().getBag().getLastUsedItem() != Item.getItem(Namesies.NONE_ITEM));
 				
 				for (Button b: bagButtons)
 					b.setForceHover(false);
@@ -1307,7 +1308,7 @@ public class BattleView extends View
 		// Last Item Used
 		Bag bag = currentBattle.getPlayer().getBag();
 		Item lastUsedItem = bag.getLastUsedItem();
-		if (lastUsedItem != Item.getItem("None"))
+		if (lastUsedItem != Item.getItem(Namesies.NONE_ITEM))
 		{
 			g.translate(214, 517);
 			g.setFont(Global.getFont(12));

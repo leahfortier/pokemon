@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import main.Global;
+import main.Namesies;
 import main.StuffGen;
 import main.Type;
 import battle.Attack;
@@ -37,12 +38,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private int baseExp;
 	private GrowthRate growthRate;
 	private Type[] type;
-	private TreeMap<Integer, List<String>> levelUpMoves; 
+	private TreeMap<Integer, List<Namesies>> levelUpMoves; 
 	private int catchRate;
 	private int[] givenEVs;
 	private Evolution evolution;
 	private List<WildHoldItem> wildHoldItems;
-	private String[] abilities;
+	private Namesies[] abilities;
 	private int maleRatio;
 	private String classification;
 	private int height;
@@ -53,7 +54,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private String eggGroup2;
 	
 	public PokemonInfo (int number, String name, int[] baseStats, int baseExp, String growthRate, 
-			String type1, String type2, TreeMap<Integer, List<String>> levelUpMoves, int catchRate, 
+			String type1, String type2, TreeMap<Integer, List<Namesies>> levelUpMoves, int catchRate, 
 			int[] givenEVs, Evolution evolution, List<WildHoldItem> wildHoldItems, int genderRatio, 
 			String ability1, String ability2, String classification, int height, double weight, 
 			String flavorText, int eggSteps, String eggGroup1, String eggGroup2)
@@ -69,7 +70,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
 		this.wildHoldItems = wildHoldItems;
-		this.abilities = new String[] {ability1, ability2};
+		this.abilities = new Namesies[] {Namesies.getValueOf(ability1, "Ability"), Namesies.getValueOf(ability2, "Ability")};
 		this.maleRatio = genderRatio;
 		this.classification = classification;
 		this.height = height;
@@ -98,7 +99,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		return type;
 	}
 	
-	public TreeMap<Integer, List<String>> getLevelUpMoves()
+	public TreeMap<Integer, List<Namesies>> getLevelUpMoves()
 	{
 		return levelUpMoves;
 	}
@@ -118,14 +119,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		return eggSteps;
 	}
 	
-	public String[] getAbilities()
+	public Namesies[] getAbilities()
 	{
 		return abilities;
 	}
 	
-	public boolean hasAbility(String s)
+	public boolean hasAbility(Namesies s)
 	{
-		return abilities[0].equals(s) || abilities[1].equals(s);
+		return abilities[0] == s || abilities[1] == s;
 	}
 	
 	public int getCatchRate()
@@ -322,25 +323,35 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		return arr;
 	}
 	
-	private static TreeMap<Integer, List<String>> createLevelUpMoves(Scanner in)
+	private static TreeMap<Integer, List<Namesies>> createLevelUpMoves(Scanner in)
 	{
-		TreeMap<Integer, List<String>> lum = new TreeMap<>();
+		TreeMap<Integer, List<Namesies>> levelUpMoves = new TreeMap<>();
 		int numMoves = in.nextInt();
+		
 		for (int i = 0; i < numMoves; i++)
 		{
 			int level = in.nextInt();
-			if (!lum.containsKey(level)) lum.put(level, new ArrayList<String>());
-			lum.get(level).add(in.nextLine().trim());
+			if (!levelUpMoves.containsKey(level)) 
+			{
+				levelUpMoves.put(level, new ArrayList<Namesies>());
+			}
 			
-			String name = lum.get(level).get(lum.get(level).size() - 1);
-			if (GameFrame.GENERATE_STUFF) Attack.getAttack(name);
+			String attackName = in.nextLine().trim();
+			Namesies namesies = Attack.getAttackFromName(attackName).namesies();
+			
+			levelUpMoves.get(level).add(namesies);
 		}
-		return lum;
+		
+		return levelUpMoves;
 	}
 	
-	public List<String> getMoves(int level)
+	public List<Namesies> getMoves(int level)
 	{
-		if (levelUpMoves.containsKey(level)) return levelUpMoves.get(level);
+		if (levelUpMoves.containsKey(level))
+		{
+			return levelUpMoves.get(level);
+		}
+		
 		return new ArrayList<>();
 	}
 	
@@ -357,7 +368,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		
 		public WildHoldItem(int c, String i)
 		{
-			item = (HoldItem)Item.getItem(i);
+			item = (HoldItem)Item.getItemFromName(i);
 			chance = c;
 		}
 		
@@ -377,6 +388,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 				sum += i.chance;
 				if (random < sum) return i.item;
 			}
+			
 			return (HoldItem)Item.noneItem();
 		}
 	}

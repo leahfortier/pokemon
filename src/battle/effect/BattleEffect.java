@@ -2,21 +2,21 @@ package battle.effect;
 
 import java.util.HashMap;
 
-import main.Global;
+import main.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import battle.Battle;
 import battle.Attack.MoveType;
+import battle.Battle;
 
 public abstract class BattleEffect extends Effect 
 {
 	private static final long serialVersionUID = 1L;
 	private static HashMap<String, BattleEffect> map;
 	
-	public BattleEffect(String s, int min, int max, boolean sub)
+	public BattleEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside)
 	{
-		super(s, min, max, sub);
+		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
 	
 	public abstract BattleEffect newInstance();
@@ -27,13 +27,22 @@ public abstract class BattleEffect extends Effect
 		b.addEffect(this.newInstance());
 	}
 	
-	public static BattleEffect getEffect(String e)
+	public static BattleEffect getEffect(Namesies name)
 	{
-		if (map == null) loadEffects();
-		if (map.containsKey(e)) return map.get(e);
-
-		Global.error("No such Effect " + e);
-		return null;
+		String e = name.getName();
+		
+		if (map == null) 
+		{
+			loadEffects();
+		}
+		
+		if (map.containsKey(e))
+		{
+			return map.get(e);
+		}
+		
+		// Otherwise, check if it's a weather effect which will handle the error checking and such if it isn't there either
+		return Weather.getEffect(name);
 	}
 
 	// Create and load the effects map if it doesn't already exist
@@ -41,11 +50,6 @@ public abstract class BattleEffect extends Effect
 	{
 		if (map != null) return;
 		map = new HashMap<>();
-		
-		for (Weather.WeatherType weatherType : Weather.WeatherType.values())
-		{
-			map.put(weatherType.toString(), Weather.getWeather(weatherType));
-		}
 		
 		// EVERYTHING BELOW IS GENERATED ###
 
@@ -70,21 +74,23 @@ public abstract class BattleEffect extends Effect
 				p.getMove().switchReady(b);
 				b.addMessage(p.getName() + " fell due to the gravity!");
 			}
-			if (p.hasEffect("MagnetRise"))
+			
+			if (p.hasEffect(Namesies.MAGNET_RISE_EFFECT))
 			{
-				Effect.removeEffect(p.getEffects(), "MagnetRise");
+				Effect.removeEffect(p.getEffects(), Namesies.MAGNET_RISE_EFFECT);
 				b.addMessage("The effects of " + p.getName() + "'s magnet rise were cancelled due to the gravity!");
 			}
-			if (p.hasEffect("Telekinesis"))
+			
+			if (p.hasEffect(Namesies.TELEKINESIS_EFFECT))
 			{
-				Effect.removeEffect(p.getEffects(), "Telekinesis");
+				Effect.removeEffect(p.getEffects(), Namesies.TELEKINESIS_EFFECT);
 				b.addMessage("The effects of telekinesis were cancelled due to the gravity!");
 			}
 		}
 
 		public Gravity()
 		{
-			super("Gravity", 5, 5, false);
+			super(Namesies.GRAVITY_EFFECT, 5, 5, false);
 		}
 
 		public Gravity newInstance()
@@ -94,7 +100,7 @@ public abstract class BattleEffect extends Effect
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
-			return !(Effect.hasEffect(b.getEffects(), "Gravity"));
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -137,7 +143,7 @@ public abstract class BattleEffect extends Effect
 
 		public WaterSport()
 		{
-			super("WaterSport", -1, -1, false);
+			super(Namesies.WATER_SPORT_EFFECT, -1, -1, false);
 		}
 
 		public WaterSport newInstance()
@@ -147,7 +153,7 @@ public abstract class BattleEffect extends Effect
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
-			return !(Effect.hasEffect(b.getEffects(), "WaterSport"));
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -167,7 +173,7 @@ public abstract class BattleEffect extends Effect
 
 		public MudSport()
 		{
-			super("MudSport", -1, -1, false);
+			super(Namesies.MUD_SPORT_EFFECT, -1, -1, false);
 		}
 
 		public MudSport newInstance()
@@ -177,7 +183,7 @@ public abstract class BattleEffect extends Effect
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
-			return !(Effect.hasEffect(b.getEffects(), "MudSport"));
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -197,7 +203,7 @@ public abstract class BattleEffect extends Effect
 
 		public WonderRoom()
 		{
-			super("WonderRoom", 5, 5, false);
+			super(Namesies.WONDER_ROOM_EFFECT, 5, 5, false);
 		}
 
 		public WonderRoom newInstance()
@@ -207,14 +213,15 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			Effect e = Effect.getEffect(b.getEffects(), "WonderRoom");
-			if (e == null)
+			Effect wonder = Effect.getEffect(b.getEffects(), Namesies.WONDER_ROOM_EFFECT);
+			if (wonder == null)
 			{
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
-			b.addMessage(e.getSubsideMessage(caster));
-			Effect.removeEffect(b.getEffects(), "WonderRoom");
+			
+			b.addMessage(wonder.getSubsideMessage(caster));
+			Effect.removeEffect(b.getEffects(), Namesies.WONDER_ROOM_EFFECT);
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -241,7 +248,7 @@ public abstract class BattleEffect extends Effect
 
 		public TrickRoom()
 		{
-			super("TrickRoom", 5, 5, false);
+			super(Namesies.TRICK_ROOM_EFFECT, 5, 5, false);
 		}
 
 		public TrickRoom newInstance()
@@ -251,14 +258,15 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			Effect e = Effect.getEffect(b.getEffects(), "TrickRoom");
-			if (e == null)
+			Effect tricksies = Effect.getEffect(b.getEffects(), this.namesies);
+			if (tricksies == null)
 			{
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
-			b.addMessage(e.getSubsideMessage(caster));
-			Effect.removeEffect(b.getEffects(), "TrickRoom");
+			
+			b.addMessage(tricksies.getSubsideMessage(caster));
+			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -278,7 +286,7 @@ public abstract class BattleEffect extends Effect
 
 		public MagicRoom()
 		{
-			super("MagicRoom", 5, 5, false);
+			super(Namesies.MAGIC_ROOM_EFFECT, 5, 5, false);
 		}
 
 		public MagicRoom newInstance()
@@ -288,14 +296,15 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			Effect e = Effect.getEffect(b.getEffects(), "MagicRoom");
-			if (e == null)
+			Effect magics = Effect.getEffect(b.getEffects(), this.namesies);
+			if (magics == null)
 			{
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
-			b.addMessage(e.getSubsideMessage(caster));
-			Effect.removeEffect(b.getEffects(), "MagicRoom");
+			
+			b.addMessage(magics.getSubsideMessage(caster));
+			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)

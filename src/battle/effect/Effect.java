@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import main.Global;
+import main.Namesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
 
@@ -13,7 +14,7 @@ public abstract class Effect implements Serializable
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected String name;
+	protected Namesies namesies;
 	protected int minTurns;
 	protected int maxTurns;
 	protected boolean nextTurnSubside;
@@ -47,14 +48,17 @@ public abstract class Effect implements Serializable
 		}
 	}
 	
-	public Effect(String s, int min, int max, boolean sub)
+	public Effect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside)
 	{
-		if ((min == -1 && max != -1) || (min != -1 && max == -1)) Global.error("Incorrect min/max turns for effect " + s);
+		if ((minTurns == -1 && maxTurns != -1) || (minTurns != -1 && maxTurns == -1)) 
+		{
+			Global.error("Incorrect min/max turns for effect " + name);
+		}
 		
-		name = s;
-		minTurns = min;
-		maxTurns = max;
-		nextTurnSubside = sub;
+		this.namesies = name;
+		this.minTurns = minTurns;
+		this.maxTurns = maxTurns;
+		this.nextTurnSubside = nextTurnSubside;
 	}
 	
 	public abstract Effect newInstance();
@@ -71,7 +75,7 @@ public abstract class Effect implements Serializable
 		return nextTurnSubside;
 	}
 	
-	public static Effect getEffect(String effect, EffectType type)
+	public static Effect getEffect(Namesies effect, EffectType type)
 	{
 		switch (type)
 		{
@@ -85,21 +89,21 @@ public abstract class Effect implements Serializable
 		return null;
 	}
 	
-	public static Effect getEffect(List<? extends Effect> effects, String effect)
+	public static Effect getEffect(List<? extends Effect> effects, Namesies effect)
 	{
 		for (Effect e : effects)
-		{
-			if (e.getName().equals(effect) && e.isActive()) return e;
-		}
+			if (e.getName().equals(effect) && e.isActive()) 
+				return e;
+			
 		return null;
 	}
 	
-	public static boolean hasEffect(List<? extends Effect> effects, String effect)
+	public static boolean hasEffect(List<? extends Effect> effects, Namesies effect)
 	{
 		return getEffect(effects, effect) != null;
 	}
 	
-	public static boolean removeEffect(List<? extends Effect> effects, String effect)
+	public static boolean removeEffect(List<? extends Effect> effects, Namesies effect)
 	{
 		for (int i = 0; i < effects.size(); i++)
 		{
@@ -109,6 +113,7 @@ public abstract class Effect implements Serializable
 				return true;
 			}
 		}
+		
 		return false;
 	}
 	
@@ -126,7 +131,7 @@ public abstract class Effect implements Serializable
 	{
 		if (numTurns == 0) 
 		{
-			Global.error("Number of turns should never be zero before the decrement!! (Effect: " + name + ")");
+			Global.error("Number of turns should never be zero before the decrement!! (Effect: " + getName() + ")");
 		}
 		
 		// -1 indicates a permanent effect
@@ -176,9 +181,14 @@ public abstract class Effect implements Serializable
 		return "";
 	}
 	
+	public Namesies namesies()
+	{
+		return this.namesies;
+	}
+	
 	public String getName()
 	{
-		return name;
+		return namesies.getName();
 	}
 	
 	public boolean isActive()
@@ -199,6 +209,6 @@ public abstract class Effect implements Serializable
 	
 	public String toString()
 	{
-		return name + " " + getTurns();
+		return getName() + " " + getTurns();
 	}
 }

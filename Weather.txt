@@ -1,0 +1,116 @@
+# The name of each effect and its contents.
+# Blocks are separated by '*'
+# Any function must be terminated by ### on a line by itself
+# Fields can be specified in any order
+
+Constructor:
+	Namesies Enum Namesies Effect
+	WeatherType Enum Type
+*
+Failure:
+	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+	CanHave Not Default True Boolean b.getWeather().namesies() == this.namesies
+*
+
+***
+
+ClearSkies:
+	WeatherType: Normal
+	CanHave: True
+	Int: Hidden-EndTurnEffect
+	ApplyEndTurn:
+	###
+*
+Raining:
+	WeatherType: Water
+	Int: Hidden-EndTurnEffect, StatChangingEffect
+	ApplyEndTurn:
+	b.addMessage("The rain continues to pour.");
+	###
+	CastMessage: "It started to rain!"
+	SubsideMessage: "The rain stopped."
+	ModifyStat:
+	if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
+	{
+		Type t = p.getAttack().getType(b, p); 
+		if (t == Type.WATER) return (int)(stat*1.5);
+		if (t == Type.FIRE) return (int)(stat*.5);
+	}
+	
+	return stat;
+	###
+*
+Sunny:
+	WeatherType: Fire
+	Int: Hidden-EndTurnEffect, StatChangingEffect
+	ApplyEndTurn:
+	b.addMessage("The sunlight is strong.");
+	###
+	CastMessage: "The sunlight turned harsh!"
+	SubsideMessage: "The sunlight faded."
+	ModifyStat:
+	if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
+	{
+		Type t = p.getAttack().getType(b, p);
+		
+		// Fire is fiddy percent stronger in tha sun
+		if (t == Type.FIRE)
+		{
+			stat *= 1.5;
+		}
+		
+		// Water is fiddy percent weaker in tha sun
+		if (t == Type.WATER) 
+		{
+			stat *= .5;
+		}
+	}
+	
+	return stat;
+	###
+*
+Sandstorm:
+	WeatherType: Rock
+	Field:
+	private static Type[] immunees = new Type[] {Type.ROCK, Type.GROUND, Type.STEEL};
+	
+	private String getBuffetMessage(ActivePokemon p)
+	{
+		return p.getName() + " is buffeted by the sandstorm!";
+	}
+	###
+	Int: Hidden-EndTurnEffect, StatChangingEffect
+	ApplyEndTurn:
+	b.addMessage("The sandstorm rages.");
+			
+	ActivePokemon other = b.getOtherPokemon(victim.user());
+	buffet(b, victim, immunees, getBuffetMessage(victim));
+	buffet(b, other, immunees, getBuffetMessage(other));
+	###
+	CastMessage: "A sandstorm kicked up!"
+	SubsideMessage: "The sandstorm subsided."
+	ModifyStat:
+	return (int)(stat*(s == Stat.SP_DEFENSE && p.isType(b, Type.ROCK) ? 1.5 : 1));
+	###
+*
+Hailing:
+	WeatherType: Ice
+	Field: 
+	private static Type[] immunees = new Type[] {Type.ICE};
+	
+	private String getBuffetMessage(ActivePokemon p)
+	{
+		return p.getName() + " is buffeted by the hail!";
+	}
+	###
+	Int: Hidden-EndTurnEffect
+	CastMessage: "It started to hail!"
+	SubsideMessage: "The hail stopped."
+	ApplyEndTurn:
+	b.addMessage("The hail continues to fall.");
+			
+	ActivePokemon other = b.getOtherPokemon(victim.user());
+	buffet(b, victim, immunees, getBuffetMessage(victim)); 
+	buffet(b, other, immunees, getBuffetMessage(other));
+	###
+*

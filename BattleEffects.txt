@@ -4,14 +4,14 @@
 # Fields can be specified in any order
 
 Constructor:
-	Name String
+	Namesies Enum Namesies Effect
 	MinTurns Default -1 Int
 	MaxTurns Default -1 Int
 	NextTurnSubside Default False Boolean
 *
 Failure:
 	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(), "@ClassName")
+	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(), this.namesies)
 *
 
 ***
@@ -36,14 +36,16 @@ Gravity:
 			p.getMove().switchReady(b);
 			b.addMessage(p.getName() + " fell due to the gravity!");
 		}
-		if (p.hasEffect("MagnetRise"))
+		
+		if (p.hasEffect(Namesies.MAGNET_RISE_EFFECT))
 		{
-			Effect.removeEffect(p.getEffects(), "MagnetRise");
+			Effect.removeEffect(p.getEffects(), Namesies.MAGNET_RISE_EFFECT);
 			b.addMessage("The effects of " + p.getName() + "'s magnet rise were cancelled due to the gravity!");
 		}
-		if (p.hasEffect("Telekinesis"))
+		
+		if (p.hasEffect(Namesies.TELEKINESIS_EFFECT))
 		{
-			Effect.removeEffect(p.getEffects(), "Telekinesis");
+			Effect.removeEffect(p.getEffects(), Namesies.TELEKINESIS_EFFECT);
 			b.addMessage("The effects of telekinesis were cancelled due to the gravity!");
 		}
 	}
@@ -85,14 +87,15 @@ WonderRoom:
 	CastMessage: user.getName() + " twisted the dimensions to switch defense and special defense!"
 	CanHave: True
 	Cast: 
-	Effect e = Effect.getEffect(b.getEffects(), "WonderRoom");
-	if (e == null)
+	Effect wonder = Effect.getEffect(b.getEffects(), Namesies.WONDER_ROOM_EFFECT);
+	if (wonder == null)
 	{
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
-	b.addMessage(e.getSubsideMessage(caster));
-	Effect.removeEffect(b.getEffects(), "WonderRoom");
+	
+	b.addMessage(wonder.getSubsideMessage(caster));
+	Effect.removeEffect(b.getEffects(), Namesies.WONDER_ROOM_EFFECT);
 	###
 *
 TrickRoom:
@@ -101,14 +104,15 @@ TrickRoom:
 	CastMessage: user.getName() + " twisted the dimensions to switch speeds!"
 	CanHave: True
 	Cast: 
-	Effect e = Effect.getEffect(b.getEffects(), "TrickRoom");
-	if (e == null)
+	Effect tricksies = Effect.getEffect(b.getEffects(), this.namesies);
+	if (tricksies == null)
 	{
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
-	b.addMessage(e.getSubsideMessage(caster));
-	Effect.removeEffect(b.getEffects(), "TrickRoom");
+	
+	b.addMessage(tricksies.getSubsideMessage(caster));
+	Effect.removeEffect(b.getEffects(), this.namesies);
 	###
 *
 MagicRoom:
@@ -117,13 +121,14 @@ MagicRoom:
 	CastMessage: user.getName() + " twisted the dimensions to prevent using items!"
 	CanHave: True
 	Cast: 
-	Effect e = Effect.getEffect(b.getEffects(), "MagicRoom");
-	if (e == null)
+	Effect magics = Effect.getEffect(b.getEffects(), this.namesies);
+	if (magics == null)
 	{
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
-	b.addMessage(e.getSubsideMessage(caster));
-	Effect.removeEffect(b.getEffects(), "MagicRoom");
+	
+	b.addMessage(magics.getSubsideMessage(caster));
+	Effect.removeEffect(b.getEffects(), this.namesies);
 	###
 *

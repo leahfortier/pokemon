@@ -7,6 +7,7 @@ import item.use.PokemonUseItem;
 import java.io.Serializable;
 
 import main.Global;
+import main.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
@@ -158,10 +159,14 @@ public abstract class Status implements Serializable
 	private static void synchronizeCheck(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status)
 	{
 		Status s = getStatus(status, caster);
-		if (victim.hasAbility("Synchronize") && s.applies(b, victim, caster)
+		if (victim.hasAbility(Namesies.SYNCHRONIZE_ABILITY) && s.applies(b, victim, caster)
 				&& (status == StatusCondition.BURNED || status == StatusCondition.POISONED || status == StatusCondition.PARALYZED))
 		{
-			if (victim.hasEffect("BadPoison")) caster.addEffect(PokemonEffect.getEffect("BadPoison").newInstance());
+			if (victim.hasEffect(Namesies.BAD_POISON_EFFECT)) 
+			{
+				caster.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
+			}
+			
 			caster.setStatus(s);
 			berryCheck(b, caster, status);
 			b.addMessage(s.getAbilityCastMessage(victim, caster), status, caster.user());
@@ -256,7 +261,7 @@ public abstract class Status implements Serializable
 		
 		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			return (int)(stat*(s == Stat.SPEED && !p.hasAbility("Quick Feet") ? .25 : 1));
+			return (int)(stat*(s == Stat.SPEED && !p.hasAbility(Namesies.QUICK_FEET_ABILITY) ? .25 : 1));
 		}
 	}
 	
@@ -271,18 +276,26 @@ public abstract class Status implements Serializable
 		
 		public void apply(ActivePokemon victim, Battle b) 
 		{
-			if (victim.hasAbility("Magic Guard")) return;
-			if (victim.hasAbility("Poison Heal"))
+			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
 			{
-				if  (victim.fullHealth() || victim.hasEffect("Heal Block")) return;
+				return;
+			}
+			
+			if (victim.hasAbility(Namesies.POISON_HEAL_ABILITY))
+			{
+				if  (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) 
+				{
+					return;
+				}
+				
 				victim.healHealthFraction(1/8.0);
 				b.addMessage(victim.getName() + "'s Poison Heal restored its health!", victim.getHP(), victim.user());
 				return;
 			}
 			
-			PokemonEffect e = victim.getEffect("BadPoison");
+			PokemonEffect badPoison = victim.getEffect(Namesies.BAD_POISON_EFFECT);
 			b.addMessage(victim.getName() + " was hurt by its poison!");
-			victim.reduceHealthFraction(b, e == null ? 1/8.0 : e.getTurns()/16.0);
+			victim.reduceHealthFraction(b, badPoison == null ? 1/8.0 : badPoison.getTurns()/16.0);
 		}
 		
 		// Poison-type Pokemon cannot be poisoned
@@ -293,12 +306,12 @@ public abstract class Status implements Serializable
 		
 		public String getCastMessage(ActivePokemon p)
 		{
-			return p.getName() + " was " + (p.hasEffect("BadPoison") ? "badly " : "") + "poisoned!";
+			return p.getName() + " was " + (p.hasEffect(Namesies.BAD_POISON_EFFECT) ? "badly " : "") + "poisoned!";
 		}
 		
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
-			return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect("BadPoison") ? " badly " : " ") + "poisoned " + victim.getName() + "!";
+			return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect(Namesies.BAD_POISON_EFFECT) ? " badly " : " ") + "poisoned " + victim.getName() + "!";
 		}
 	}
 	
@@ -311,18 +324,26 @@ public abstract class Status implements Serializable
 		{
 			numTurns = (int)(Math.random()*3) + 1;
 			super.type = StatusCondition.ASLEEP;
-			if (victim.hasAbility("Early Bird")) numTurns /= 2;
+			
+			if (victim.hasAbility(Namesies.EARLY_BIRD_ABILITY)) 
+			{
+				numTurns /= 2;
+			}
 		}
 
 		// No one can be asleep while Uproar is in effect by either Pokemon
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return super.applies(b, caster, victim) && !caster.hasEffect("Uproar") && !victim.hasEffect("Uproar");
+			return super.applies(b, caster, victim) && !caster.hasEffect(Namesies.UPROAR_EFFECT) && !victim.hasEffect(Namesies.UPROAR_EFFECT);
 		}
 		
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.hasEffect("Uproar") || victim.hasEffect("Uproar")) return "The uproar prevents sleep!";
+			if (user.hasEffect(Namesies.UPROAR_EFFECT) || victim.hasEffect(Namesies.UPROAR_EFFECT))
+			{
+				return "The uproar prevents sleep!";
+			}
+			
 			return super.getFailMessage(b, user, victim);
 		}
 		
@@ -367,9 +388,13 @@ public abstract class Status implements Serializable
 		
 		public void apply(ActivePokemon victim, Battle b) 
 		{
-			if (victim.hasAbility("Magic Guard")) return;
+			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
+			{
+				return;
+			}
+			
 			b.addMessage(victim.getName() + " was hurt by its burn!");
-			victim.reduceHealthFraction(b, victim.hasAbility("Heatproof") ? 1/16.0 : 1/8.0);
+			victim.reduceHealthFraction(b, victim.hasAbility(Namesies.HEATPROOF_ABILITY) ? 1/16.0 : 1/8.0);
 		}
 		
 		// Fire-type Pokemon cannot be burned
@@ -390,7 +415,7 @@ public abstract class Status implements Serializable
 		
 		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			return (int)(stat*(s == Stat.ATTACK && !p.hasAbility("Guts") ? .5 : 1));
+			return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(Namesies.GUTS_ABILITY) ? .5 : 1));
 		}
 	}
 	

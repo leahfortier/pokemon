@@ -4,7 +4,7 @@
 # Fields can be specified in any order
 
 Constructor:
-	Name String
+	Namesies Enum Namesies Effect
 	MinTurns Default -1 Int
 	MaxTurns Default -1 Int
 	NextTurnSubside Default False Boolean
@@ -12,9 +12,9 @@ Constructor:
 Failure:
 	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 	FailType Enum Type victim.isType(b, {0})
-	FailAbility String (victim.hasAbility({0}) && !caster.breaksTheMold())
+	FailAbility Enum Namesies Ability (victim.hasAbility({0}) && !caster.breaksTheMold())
 	FailCondition Int {0}
-	CanHave Not Default True Boolean victim.hasEffect("@ClassName")
+	CanHave Not Default True Boolean victim.hasEffect(this.namesies)
 *
 
 ***
@@ -24,11 +24,15 @@ LeechSeed:
 	FailType: Grass
 	FailMessage: 
 	if (victim.isType(b, Type.GRASS)) return "It doesn't affect " + victim.getName() + "!";
-	if (victim.hasEffect("LeechSeed")) return victim.getName() + " is already seeded!";
+	if (victim.hasEffect(this.namesies)) return victim.getName() + " is already seeded!";
 	###
 	CastMessage: victim.getName() + " was seeded!"
 	ApplyEndTurn: 
-	if (victim.hasAbility("Magic Guard")) return;
+	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+	{
+		return;
+	}
+	
 	b.addMessage(victim.getName() + "'s health was sapped!");
 	b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false);
 	###
@@ -63,7 +67,7 @@ Flinch:
 	NumTurns: 1
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (victim.hasAbility("Steadfast"))
+	if (victim.hasAbility(Namesies.STEADFAST_ABILITY))
 	{
 		victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 	}
@@ -169,6 +173,7 @@ QuickGuard:
 	Int: OpposingBeforeTurnEffect
 	NumTurns: 1
 	OpposingCanAttack: 
+	// TODO: Look into why Feint needs to be hardcoded instead of just being ProtectPiercing...
 	if (p.getAttack().isSelfTarget() || p.getAttack().getName().equals("Feint") || p.getAttack().getPriority(b, p) <= 0) return true;
 	b.printAttacking(p);
 	b.addMessage(opp.getName() + " is protecting itself!");
@@ -207,8 +212,8 @@ Confusion:
 	Int: PassableEffect, BeforeTurnEffect
 	FailAbility: Own Tempo
 	FailMessage: 
-	if (victim.hasEffect("Confusion")) return victim.getName() + " is already confused!";
-	if (victim.hasAbility("Own Tempo")) return victim.getName() + "'s Own Tempo prevents confusion!";
+	if (victim.hasEffect(this.namesies)) return victim.getName() + " is already confused!";
+	if (victim.hasAbility(Namesies.OWN_TEMPO_ABILITY)) return victim.getName() + "'s Own Tempo prevents confusion!";
 	###
 	Field: 
 	private int turns;
@@ -226,7 +231,7 @@ Confusion:
 	{
 		b.addMessage("It hurt itself in confusion!");
 		Move temp = p.getMove();
-		p.setMove(new Move(Attack.getAttack("ConfusionDamage")));
+		p.setMove(new Move(Attack.getAttack(Namesies.CONFUSION_DAMAGE_ATTACK)));
 		b.applyDamage(p, b.damageCalc(p, p));
 		p.setMove(temp);
 		return false;
@@ -239,10 +244,10 @@ Confusion:
 	CastMessage: victim.getName() + " became confused!"
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (victim.isHoldingItem(b, "Persim Berry"))
+	if (victim.isHoldingItem(b, Namesies.PERSIM_BERRY_ITEM))
 	{
-		b.addMessage(victim.getName() + "'s Persim Berry snapped it out of confusion!");
-		victim.getAttributes().removeEffect("Confusion");
+		b.addMessage(victim.getName() + "'s " + Namesies.PERSIM_BERRY_ITEM.getName() + " snapped it out of confusion!");
+		victim.getAttributes().removeEffect(this.namesies);
 		victim.consumeItem(b);
 	}
 	###
@@ -280,7 +285,7 @@ Safeguard:
 	Defog: "The effects of " + victim.getName() + "'s Safeguard faded."
 	Int: StatusPreventionEffect, DefogRelease
 	StatusPrevent: 
-	return !caster.hasAbility("Infiltrator");
+	return !caster.hasAbility(Namesies.INFILTRATOR_ABILITY);
 	###
 	StatusPreventMessage: "Safeguard protects " + victim.getName() + " from status conditions!"
 *
@@ -289,7 +294,7 @@ GuardSpecial:
 	NumTurns: 5
 	Int: StatusPreventionEffect
 	StatusPrevent: 
-	return !caster.hasAbility("Infiltrator");
+	return !caster.hasAbility(Namesies.INFILTRATOR_ABILITY);
 	###
 	StatusPreventMessage: "Guard Special protects " + victim.getName() + " from status conditions!"
 *
@@ -367,7 +372,7 @@ Disable:
 	return disabled;
 	###
 	FailMessage: 
-	if (victim.hasEffect("Disable")) return victim.getName() + " is already disabled!";
+	if (victim.hasEffect(this.namesies)) return victim.getName() + " is already disabled!";
 	###
 *
 RaiseCrits:
@@ -407,14 +412,14 @@ RaiseCrits:
 	
 	return critStage + stage;
 	###
-	FailCondition: source == CastSource.USE_ITEM && victim.hasEffect("RaiseCrits") && ((RaiseCrits)victim.getEffect("RaiseCrits")).direHit
+	FailCondition: source == CastSource.USE_ITEM && victim.hasEffect(this.namesies) && ((RaiseCrits)victim.getEffect(this.namesies)).direHit
 	CastMessage: victim.getName() + " is getting pumped!"
 	CanHave: True
 	Cast: 
-	if (!victim.hasEffect("RaiseCrits")) super.cast(b, caster, victim, source, printCast);
+	if (!victim.hasEffect(this.namesies)) super.cast(b, caster, victim, source, printCast);
 	else if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 	
-	RaiseCrits critsies = (RaiseCrits)victim.getEffect("RaiseCrits");
+	RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
 	switch (source)
 	{
 		case ATTACK:
@@ -438,7 +443,7 @@ ChangeItem:
 	###
 	Cast: 
 	item = ((ItemCondition)source.getSource(b, caster)).getItem();
-	while (victim.getAttributes().removeEffect("ChangeItem"));
+	while (victim.getAttributes().removeEffect(this.namesies));
 	super.cast(b, caster, victim, source, printCast);
 	###
 	Field:
@@ -459,7 +464,7 @@ ChangeType:
 	###
 	Cast: 
 	type = ((ChangeTypeMove)source.getSource(b, caster)).getType(b, caster, victim);
-	while (victim.getAttributes().removeEffect("ChangeType"));
+	while (victim.getAttributes().removeEffect(this.namesies));
 	super.cast(b, caster, victim, source, printCast);
 	b.addMessage("", type, victim.user());
 	###
@@ -487,7 +492,7 @@ ChangeAbility:
 	ability = changey.getAbility(b, caster, victim);
 	message = changey.getMessage(b, caster, victim);
 	
-	while (victim.getAttributes().removeEffect("ChangeAbility"));
+	while (victim.getAttributes().removeEffect(this.namesies));
 	super.cast(b, caster, victim, source, printCast);
 	###
 	GetAbility: 
@@ -512,12 +517,12 @@ Stockpile:
 	###
 	CanHave: True
 	Cast: 
-	if (!victim.hasEffect("Stockpile")) 
+	if (!victim.hasEffect(this.namesies)) 
 	{
 		super.cast(b, caster, victim, source, printCast);
 	}
 	
-	Stockpile stockpile = (Stockpile)victim.getEffect("Stockpile");
+	Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
 	if (stockpile.turns < 3)
 	{
 		b.addMessage(victim.getName() + " Defense and Special Defense were raised!");
@@ -538,13 +543,19 @@ Stockpile:
 UsedDefenseCurl:
 	CanHave: True
 	Cast: 
-	if (!victim.hasEffect("UsedDefenseCurl")) super.cast(b, caster, victim, source, printCast);
+	if (!victim.hasEffect(this.namesies))
+	{
+		super.cast(b, caster, victim, source, printCast);
+	}
 	###
 *
 UsedMinimize:
 	CanHave: True
 	Cast: 
-	if (!victim.hasEffect("UsedMinimize")) super.cast(b, caster, victim, source, printCast);
+	if (!victim.hasEffect(this.namesies)) 
+	{
+		super.cast(b, caster, victim, source, printCast);
+	}
 	###
 *
 Mimic:
@@ -615,16 +626,28 @@ Foresight:
 	CastMessage: user.getName() + " identified " + victim.getName() + "!"
 	CanHave: True
 	Cast: 
-	if (!victim.hasEffect("Foresight")) super.cast(b, caster, victim, source, printCast);
-	else b.addMessage(getCastMessage(b, caster, victim));
+	if (!victim.hasEffect(this.namesies)) 
+	{
+		super.cast(b, caster, victim, source, printCast);
+	}
+	else 
+	{
+		b.addMessage(getCastMessage(b, caster, victim));
+	}
 	###
 *
 MiracleEye:
 	CastMessage: user.getName() + " identified " + victim.getName() + "!"
 	CanHave: True
 	Cast: 
-	if (!victim.hasEffect("MiracleEye")) super.cast(b, caster, victim, source, printCast);
-	else b.addMessage(getCastMessage(b, caster, victim));
+	if (!victim.hasEffect(this.namesies)) 
+	{
+		super.cast(b, caster, victim, source, printCast);
+	}
+	else 
+	{
+		b.addMessage(getCastMessage(b, caster, victim));
+	}
 	###
 *
 Torment:
@@ -671,29 +694,40 @@ LockOn:
 Telekinesis:
 	NumTurns: 3
 	CastMessage: victim.getName() + " was levitated due to " + user.getName() + "'s telekinesis!"
-	FailCondition: victim.hasEffect("Ingrain")
+	FailCondition: victim.hasEffect(Namesies.INGRAIN_EFFECT)
 	SubsideMessage: victim.getName() + " is no longer under the effects of telekinesis."
 	Int: LevitationEffect
 *
 Ingrain:
 	Int: TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect
 	ApplyEndTurn: 
-	if (victim.fullHealth() || victim.hasEffect("HealBlock")) return;
+	if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+	{
+		return;
+	}
+	
 	int healAmount = victim.healHealthFraction(1/16.0);
-	if (victim.isHoldingItem(b, "Big Root")) victim.heal((int)(healAmount*.3));
+	if (victim.isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) 
+	{
+		victim.heal((int)(healAmount*.3));
+	}
+	
 	b.addMessage(victim.getName() + " restored some HP due to ingrain!", victim.getHP(), victim.user());
 	###
 	CastMessage: victim.getName() + " planted its roots!"
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (victim.hasEffect("MagnetRise"))
+			
+	// TODO: Look into to see if this can be somehow combined with Gravity
+	if (victim.hasEffect(Namesies.MAGNET_RISE_EFFECT))
 	{
-		Effect.removeEffect(victim.getEffects(), "MagnetRise");
+		Effect.removeEffect(victim.getEffects(), Namesies.MAGNET_RISE_EFFECT);
 		b.addMessage("The effects of " + victim.getName() + "'s magnet rise were cancelled due to ingrain!");
 	}
-	if (victim.hasEffect("Telekinesis"))
+	
+	if (victim.hasEffect(Namesies.TELEKINESIS_EFFECT))
 	{
-		Effect.removeEffect(victim.getEffects(), "Telekinesis");
+		Effect.removeEffect(victim.getEffects(), Namesies.TELEKINESIS_EFFECT);
 		b.addMessage("The effects of telekinesis were cancelled due to ingrain!");
 	}
 	###
@@ -701,20 +735,24 @@ Ingrain:
 Grounded:
 	Int: GroundedEffect
 	Cast: 
+	// TODO: Find a way to combine this with gravity or something like that
 	super.cast(b, caster, victim, source, printCast);
+	
 	if (victim.isSemiInvulnerable() && (victim.getAttack().getName().equals("Fly") || victim.getAttack().getName().equals("Bounce")))
 	{
 		victim.getMove().switchReady(b);
 		b.addMessage(victim.getName() + " fell to the ground!");
 	}
-	if (victim.hasEffect("MagnetRise"))
+	
+	if (victim.hasEffect(Namesies.MAGNET_RISE_EFFECT))
 	{
-		Effect.removeEffect(victim.getEffects(), "MagnetRise");
+		Effect.removeEffect(victim.getEffects(), Namesies.MAGNET_RISE_EFFECT);
 		b.addMessage("The effects of " + victim.getName() + "'s magnet rise was cancelled!");
 	}
-	if (victim.hasEffect("Telekinesis"))
+	
+	if (victim.hasEffect(Namesies.TELEKINESIS_EFFECT))
 	{
-		Effect.removeEffect(victim.getEffects(), "Telekinesis");
+		Effect.removeEffect(victim.getEffects(), Namesies.TELEKINESIS_EFFECT);
 		b.addMessage("The effects of telekinesis were cancelled!");
 	}
 	###
@@ -722,7 +760,11 @@ Grounded:
 Curse:
 	Int: EndTurnEffect, PassableEffect
 	ApplyEndTurn: 
-	if (victim.hasAbility("Magic Guard")) return;
+	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+	{
+		return;
+	}
+	
 	b.addMessage(victim.getName() + " was hurt by the curse!");
 	victim.reduceHealthFraction(b, 1/4.0);
 	###
@@ -744,7 +786,7 @@ MagnetRise:
 	Int: LevitationEffect, PassableEffect
 	NumTurns: 5
 	CastMessage: user.getName() + " levitated with electromagnetism!"
-	FailCondition: victim.hasEffect("Ingrain")
+	FailCondition: victim.hasEffect(Namesies.INGRAIN_EFFECT)
 	SubsideMessage: victim.getName() + " is no longer under the effects of magnet rise."
 *
 Uproar:
@@ -787,9 +829,13 @@ Uproar:
 AquaRing:
 	Int: PassableEffect, EndTurnEffect
 	ApplyEndTurn: 
-	if (victim.fullHealth() || victim.hasEffect("HealBlock")) return;
+	if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) return;
 	int healAmount = victim.healHealthFraction(1/16.0);
-	if (victim.isHoldingItem(b, "Big Root")) victim.heal((int)(healAmount*.3));
+	if (victim.isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) 
+	{
+		victim.heal((int)(healAmount*.3));
+	}
+	
 	b.addMessage(victim.getName() + " restored some HP due to aqua ring!", victim.getHP(), victim.user());
 	###
 	CastMessage: user.getName() + " surrounded itself with a veil of water!"
@@ -798,7 +844,11 @@ Nightmare:
 	FailCondition: !victim.hasStatus(StatusCondition.ASLEEP)
 	Int: EndTurnEffect
 	ApplyEndTurn: 
-	if (victim.hasAbility("Magic Guard")) return;
+	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
+	{
+		return;
+	}
+	
 	b.addMessage(victim.getName() + " was hurt by its nightmare!");
 	victim.reduceHealthFraction(b, 1/4.0);
 	###
@@ -853,11 +903,16 @@ Transformed:
 	b.addMessage("", transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user());
 	b.addMessage("", victim.getType(b), victim.user());
 	###
-	FailCondition: b.getOtherPokemon(victim.user()).hasEffect("Transformed")
+	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies)
 	Int: MoveListCondition, StatsCondition, TypeCondition
 	GetMoveList: 
-	PokemonEffect mimic = p.getEffect("Mimic");
-	if (mimic != null) return ((MoveListCondition)mimic).getMoveList(p, moveList);
+	// TODO: Test this with mimic I'm not convinced this is working
+	PokemonEffect mimic = p.getEffect(Namesies.MIMIC_EFFECT);
+	if (mimic != null) 
+	{
+		return ((MoveListCondition)mimic).getMoveList(p, moveList);
+	}
+	
 	return moveList;
 	###
 	GetStat: 
@@ -906,7 +961,7 @@ Mist:
 	Defog: "The mist faded."
 	Int: StatProtectingEffect, DefogRelease
 	StatProtect: 
-	return !caster.hasAbility("Infiltrator");
+	return !caster.hasAbility(Namesies.INFILTRATOR_ABILITY);
 	###
 	StatProtectMessage: "The mist prevents stat reductions!"
 *
@@ -937,7 +992,7 @@ Bide:
 	x.damage = 0;
 	###
 	Cast: 
-	Bide e = (Bide)victim.getEffect("Bide");
+	Bide e = (Bide)victim.getEffect(this.namesies);
 	if (e == null)
 	{
 		move = caster.getMove();
@@ -962,7 +1017,7 @@ Bide:
 		b.applyDamage(b.getOtherPokemon(victim.user()), 2*e.damage);
 	}
 	
-	victim.getAttributes().removeEffect("Bide");
+	victim.getAttributes().removeEffect(this.namesies);
 	###
 	CanHave: True
 	ApplyEndTurn: 
@@ -975,7 +1030,7 @@ HalfWeight:
 	###
 	CanHave: True
 	Cast: 
-	HalfWeight e = (HalfWeight)victim.getEffect("HalfWeight");
+	HalfWeight e = (HalfWeight)victim.getEffect(this.namesies);
 	if (e == null) super.cast(b, caster, victim, source, printCast);
 	else e.layers++;
 	###
@@ -997,14 +1052,15 @@ PowerTrick:
 	Int: PassableEffect, StatSwitchingEffect
 	CastMessage: user.getName() + "'s attack and defense were swapped!"
 	Cast: 
-	PokemonEffect p = victim.getEffect("PowerTrick");
-	if (p == null)
+	PokemonEffect thaPowah = victim.getEffect(this.namesies);
+	if (thaPowah == null)
 	{
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
+	
 	b.addMessage(getCastMessage(b, caster, victim));
-	victim.getAttributes().removeEffect("PowerTrick");
+	victim.getAttributes().removeEffect(this.namesies);
 	###
 *
 PowerSplit:
@@ -1035,7 +1091,7 @@ Infatuated:
 	FailCondition: !Gender.oppositeGenders(caster, victim)
 	Int: BeforeTurnEffect
 	FailMessage: 
-	if (Gender.oppositeGenders(user, victim) && victim.hasAbility("Oblivious")) return victim.getName() + "'s Oblivious prevents infatuation!";
+	if (Gender.oppositeGenders(user, victim) && victim.hasAbility(Namesies.OBLIVIOUS_ABILITY)) return victim.getName() + "'s Oblivious prevents infatuation!";
 	###
 	CanAttack: 
 	b.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
@@ -1046,7 +1102,7 @@ Infatuated:
 	CastMessage: victim.getName() + " fell in love!"
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (victim.isHoldingItem(b, "Destiny Knot") && this.applies(b, victim, caster, CastSource.HELD_ITEM))
+	if (victim.isHoldingItem(b, Namesies.DESTINY_KNOT_ITEM) && this.applies(b, victim, caster, CastSource.HELD_ITEM))
 	{
 		super.cast(b, victim, caster, CastSource.HELD_ITEM, false);
 		b.addMessage(victim.getName() + "'s Destiny Knot caused " + caster.getName() + " to fall in love!");
@@ -1083,7 +1139,7 @@ PerishSong:
 	FailAbility: Soundproof
 	Int: PassableEffect, EndTurnEffect
 	FailMessage: 
-	if (victim.hasAbility("Soundproof")) return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
+	if (victim.hasAbility(Namesies.SOUNDPROOF_ABILITY)) return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
 	###
 	CastMessage: "All Pokemon hearing this song will faint in three turns!"
 	ApplyEndTurn: 
@@ -1107,7 +1163,7 @@ ConsumedItem:
 	Cast: 
 	consumed = victim.getHeldItem(b);
 	victim.removeItem();
-	while (victim.getAttributes().removeEffect("ConsumedItem"));
+	while (victim.getAttributes().removeEffect(this.namesies));
 	super.cast(b, caster, victim, source, printCast);
 	###
 	Int: ItemCondition

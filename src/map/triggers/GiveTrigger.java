@@ -30,8 +30,8 @@ public class GiveTrigger extends Trigger
 		while (m.find()){
 			String type = m.group(1);
 			if (type.equals("item"))
-				if (Item.exists(m.group(2)))
-					itemList.add(Item.getItem(m.group(2)));
+				if (Item.isItem(m.group(2)))
+					itemList.add(Item.getItemFromName(m.group(2)));
 				else
 					Global.error("Invalid item: " + m.group(2));
 		}
@@ -68,11 +68,11 @@ public class GiveTrigger extends Trigger
 					{
 						setMoves = true;
 						moves = new ArrayList<>();
-						for (int i=0; i<4; ++i)
+						for (int i = 0; i < 4; ++i)
 						{
 							if (!params.group(3 + i).equals("None"))
 							{
-								moves.add(new Move(Attack.getAttack(params.group(3 + i))));
+								moves.add(new Move(Attack.getAttackFromName(params.group(3 + i))));
 							}
 						}
 					}

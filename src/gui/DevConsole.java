@@ -168,8 +168,13 @@ public class DevConsole
 									System.err.println("Invalid move: " + s);
 									return;
 								}
-								if (!"none".equals(s.toLowerCase())) moves.add(new Move(Attack.getAttack(s)));
+								
+								if (!"none".equals(s.toLowerCase())) 
+								{
+									moves.add(new Move(Attack.getAttackFromName(s)));
+								}
 							}
+							
 							in.useDelimiter("\\s+");
 							break;
 						default:
@@ -197,7 +202,8 @@ public class DevConsole
 					System.out.println("Invalid item: " + itemName);
 					return;
 				}
-				game.charData.addItem(Item.getItem(itemName), amt);
+				
+				game.charData.addItem(Item.getItemFromName(itemName), amt);
 				break;
 			default:
 				;
