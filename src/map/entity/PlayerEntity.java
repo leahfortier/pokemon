@@ -9,11 +9,12 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import main.Game;
+import main.Game.ViewMode;
 import main.Global;
 import main.InputControl;
-import main.Game.ViewMode;
 import main.InputControl.Control;
 import map.MapData;
+import map.MapData.WalkType;
 import map.triggers.Trigger;
 import trainer.CharacterData;
 
@@ -86,8 +87,13 @@ public class PlayerEntity extends Entity
 						
 						int dx = charData.locationX + fdx[i];
 						int dy = charData.locationY + fdy[i];
-						if (isPassable(map.getPassValue(dx, dy), i) && entity[dx][dy] == null)
+						WalkType curPassValue = map.getPassValue(charData.locationX, charData.locationY);
+						WalkType passValue = map.getPassValue(dx, dy);
+						if (isPassable(passValue, i) && entity[dx][dy] == null)
 						{
+							//dx += getWalkTypeAdditionalMove(passValue, i);
+							dy += getWalkTypeAdditionalMove(curPassValue, passValue, i);
+							
 							entity[dx][dy] = this;
 							entity[charData.locationX][charData.locationY] = null;
 							
@@ -139,6 +145,21 @@ public class PlayerEntity extends Entity
 		
 		justMoved = transitionTime == 1 || justCreated;
 		justCreated = false;
+	}
+	
+	public int getWalkTypeAdditionalMove(WalkType prev, WalkType next, int dir)
+	{
+		if (dir == 1 || dir == 3)
+			return 0;
+		if (dir == 2 && next == WalkType.STAIRS_UP_LEFT)
+			return -1;
+		if (dir == 2 && next == WalkType.STAIRS_UP_RIGHT)
+			return 1;
+		if (dir == 0 && prev == WalkType.STAIRS_UP_LEFT)
+			return 1;
+		if (dir == 0 && prev == WalkType.STAIRS_UP_RIGHT)
+			return -1;
+		return 0;
 	}
 	
 	public void triggerCheck(Game game, MapData map)
@@ -222,4 +243,5 @@ public class PlayerEntity extends Entity
 	}
 	
 	public void addData(GameData gameData) {}
+	public void reset() {}
 }

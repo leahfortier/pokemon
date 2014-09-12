@@ -162,7 +162,14 @@ public class ItemEntityDialog extends JPanel
 			if (string.length() == 0)
 				break;
 			
-			int index = string.indexOf(' ');
+			char c = ' ';
+			int index = string.indexOf(c);
+			int indexOther = string.indexOf('-');
+			if(indexOther != -1 && (indexOther < index || index == -1))
+			{
+				c = '-';
+				index = indexOther;
+			}
 			
 			if (index == -1) 
 			{
@@ -171,7 +178,7 @@ public class ItemEntityDialog extends JPanel
 			}
 			else 
 			{
-				s.append(string.substring(0,index) +" ");
+				s.append(string.substring(0,index) + c);
 				string = string.substring(index + 1, string.length());
 			}
 		}

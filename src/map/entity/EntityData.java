@@ -6,7 +6,7 @@ import map.Condition;
 import trainer.CharacterData;
 
 public abstract class EntityData {
-	public static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*(-?\\w+)", Pattern.UNICODE_CHARACTER_CLASS);
+	public static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*(-?[\\w'.-]+)", Pattern.UNICODE_CHARACTER_CLASS);
 	
 	public String name;
 	public Condition condition;

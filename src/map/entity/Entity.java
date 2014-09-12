@@ -81,6 +81,8 @@ public abstract class Entity {
 			return false;
 		case NOT_WALKABLE:
 			return false;
+		case STAIRS_UP_RIGHT:
+		case STAIRS_UP_LEFT:
 		case WALKABLE:
 			return true;
 		case WATER:
@@ -105,10 +107,10 @@ public abstract class Entity {
 		return tdx[transitionDirection] == dx && tdy[transitionDirection] == dy;
 	}
 	
-	
 	protected abstract BufferedImage getFrame(GameData data);
 	public abstract String getTrigger();
 	public abstract int getTransitionTime();
 	public abstract void getAttention(int d);
 	public abstract void addData(GameData gameData);
+	public abstract void reset();
 }

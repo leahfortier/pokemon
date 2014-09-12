@@ -184,6 +184,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		moveListModel.addElement(new ImageIcon(textWithColor("Down Ledge", Color.green), Color.green.getRGB() +""));
 		moveListModel.addElement(new ImageIcon(textWithColor("Left Ledge", Color.yellow), Color.yellow.getRGB() +""));
 		moveListModel.addElement(new ImageIcon(textWithColor("Up Ledge", Color.red), Color.red.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(textWithColor("Stairs Up Right", Color.magenta), Color.magenta.getRGB() + ""));
+		moveListModel.addElement(new ImageIcon(textWithColor("Stairs Up Left	", Color.ORANGE), Color.orange.getRGB() + ""));
 		
 		tileListModel = new DefaultListModel<>();
 		areaListModel = new DefaultListModel<>();

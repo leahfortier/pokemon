@@ -139,6 +139,12 @@ StoneBrickPath2LD.png ff98b0ba
 StoneBrickPath2RU.png ff98b0bb
 StoneBrickPath2LU.png ff98b0bc
 
+Stairs01StairsUpLeftTop.png ffa5ad82
+Stairs01StairsUpLeftCenter.png ffa5ad81
+Stairs01StairsUpLeftBottom.png ffa5ad80
+Stairs01StairsUpRightTop.png ffa5ad85
+Stairs01StairsUpRightCenter.png ffa5ad84
+Stairs01StairsUpRightBottom.png ffa5ad83
 
 Flag.png ffefbd00
 
