@@ -758,10 +758,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
 			// TODO: Look into why Feint needs to be hardcoded instead of just being ProtectPiercing...
-			if (p.getAttack().isSelfTarget() || p.getAttack().getName().equals("Feint") || p.getAttack().getPriority(b, p) <= 0) return true;
+			if (p.getAttack().isSelfTarget() || p.getAttack().namesies() == Namesies.FEINT_ATTACK || p.getAttack().getPriority(b, p) <= 0)
+			{
+				return true;
+			}
+			
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
 			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			
 			return false;
 		}
 	}
@@ -1044,7 +1049,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean usable(ActivePokemon p, Move m)
 		{
-			return move.getAttack().getName().equals(m.getAttack().getName());
+			return move.getAttack().namesies() == m.getAttack().namesies();
 		}
 
 		public String getUnusableMessage(ActivePokemon p)
@@ -1059,7 +1064,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			if (!p.getAttack().getName().equals(move.getAttack().getName()))
+			if (p.getAttack().namesies() != move.getAttack().namesies())
 			{
 				b.printAttacking(p);
 				b.addMessage(this.getFailMessage(b, p, opp));
@@ -1127,7 +1132,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean usable(ActivePokemon p, Move m)
 		{
-			return !disabled.getAttack().getName().equals(m.getAttack().getName());
+			return disabled.getAttack().namesies() != m.getAttack().namesies();
 		}
 
 		public String getUnusableMessage(ActivePokemon p)
@@ -1143,7 +1148,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
 			turns--;
-			if (p.getAttack().getName().equals(disabled.getAttack().getName()))
+			if (p.getAttack().namesies() == disabled.getAttack().namesies())
 			{
 				b.printAttacking(p);
 				b.addMessage(p.getAttack().getName() + " is disabled!");
@@ -1393,7 +1398,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void apply(ActivePokemon victim, Battle b)
 		{
-			if (!victim.getAttributes().getLastMoveUsed().getAttack().getName().equals("Stockpile")) active = false;
+			// TODO: Why is this making the effect inactive?
+			if (victim.getAttributes().getLastMoveUsed().getAttack().namesies() != Namesies.STOCKPILE_ATTACK)
+			{
+				active = false;
+			}
 		}
 
 		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
@@ -1505,7 +1514,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Imprison extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
-		private List<String> unableMoves;
+		private List<Namesies> unableMoves;
 
 		public Imprison()
 		{
@@ -1526,8 +1535,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
+			// TODO: Test this effect again
 			unableMoves = new ArrayList<>();
-			for (Move m : caster.getMoves()) unableMoves.add(m.getAttack().getName());
+			for (Move m : caster.getMoves())
+			{
+				unableMoves.add(m.getAttack().namesies());
+			}
+			
 			super.cast(b, caster, victim, source, printCast);
 		}
 
@@ -1538,7 +1552,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean usable(ActivePokemon p, Move m)
 		{
-			return !unableMoves.contains(m.getAttack().getName());
+			return !unableMoves.contains(m.getAttack().namesies());
 		}
 
 		public String getUnusableMessage(ActivePokemon p)
@@ -1548,12 +1562,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			if (unableMoves.contains(p.getAttack().getName()))
+			if (unableMoves.contains(p.getAttack().namesies()))
 			{
 				b.printAttacking(p);
 				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
 			}
+			
 			return true;
 		}
 	}
@@ -1673,7 +1688,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean usable(ActivePokemon p, Move m)
 		{
-			return (p.getAttributes().getLastMoveUsed() == null || !p.getAttributes().getLastMoveUsed().getAttack().getName().equals(m.getAttack().getName()));
+			return (p.getAttributes().getLastMoveUsed() == null || p.getAttributes().getLastMoveUsed().getAttack().namesies() != m.getAttack().namesies());
 		}
 
 		public String getUnusableMessage(ActivePokemon p)
@@ -1882,7 +1897,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// TODO: Find a way to combine this with gravity or something like that
 			super.cast(b, caster, victim, source, printCast);
 			
-			if (victim.isSemiInvulnerable() && (victim.getAttack().getName().equals("Fly") || victim.getAttack().getName().equals("Bounce")))
+			if (victim.isSemiInvulnerableFlying())
 			{
 				victim.getMove().switchReady(b);
 				b.addMessage(victim.getName() + " fell to the ground!");
@@ -2060,7 +2075,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean usable(ActivePokemon p, Move m)
 		{
-			return m.getAttack().getName().equals("Uproar");
+			return m.getAttack().namesies() == Namesies.UPROAR_ATTACK;
 		}
 
 		public String getUnusableMessage(ActivePokemon p)

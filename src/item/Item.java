@@ -561,6 +561,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(Trainer t)
 		{
+			// TODO: DOESN'T DO SHIT
 			return false;
 		}
 	}
@@ -1357,6 +1358,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
+			// TODO: UNFINISHED - Should cause PAR on fling
 			if ((s == Stat.ATTACK || s == Stat.SP_ATTACK) && p.isPokemon("Pikachu")) stat *= 2;
 			return stat;
 		}
@@ -5003,6 +5005,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
+			// TODO: IF HIT BEFORE THE OPPONENT MOVES (FLING) THE OPPONENT FLINCHES!
 			if (Math.random()*100 < 10)
 			{
 				PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
@@ -6005,6 +6008,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(Move m)
 		{
+			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
 			restore = m.getAttack().getName();
 			return m.increasePP(10);
 		}
@@ -6034,6 +6038,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(Move m)
 		{
+			// TODO: Same as ether
 			restore = m.getAttack().getName();
 			return m.increasePP(m.getMaxPP());
 		}
@@ -7198,7 +7203,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class PPMax extends Item implements MoveUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-private String increase;
+		private String increase;
+
 		public PPMax()
 		{
 			super(Namesies.PPMAX_ITEM, "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 200);
@@ -8235,7 +8241,8 @@ private String increase;
 	private static class LeppaBerry extends Item implements EndTurnEffect, MoveUseItem, GainableEffectBerry
 	{
 		private static final long serialVersionUID = 1L;
-private String restore;
+		private String restore;
+
 		public LeppaBerry()
 		{
 			super(Namesies.LEPPA_BERRY_ITEM, "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 234);
@@ -10172,6 +10179,7 @@ private String restore;
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
+			// TODO: Yes I realize this is Eviolite and not Honey, but functionality needs to be implemented for Honey
 			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.getPokemonInfo().getEvolution().canEvolve()) return (int)(1.5*stat);
 			return stat;
 		}

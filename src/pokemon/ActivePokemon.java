@@ -440,7 +440,11 @@ public class ActivePokemon implements Serializable
 		Move m = new Move(Attack.getAttack(attackName));
 		if (moves.size() < Move.MAX_MOVES)
 		{
-			if (b != null) b.addMessage(nickname + " learned " + m.getAttack().getName() + "!");
+			if (b != null) 
+			{
+				b.addMessage(nickname + " learned " + m.getAttack().getName() + "!");
+			}
+			
 			addMove(b, m, moves.size() - 1);
 			return;
 		}
@@ -454,6 +458,7 @@ public class ActivePokemon implements Serializable
 		b.addMessage(" ", this, m);
 		b.addMessage(nickname + " did not learn " + m.getAttack().getName() + ".");
 		
+		// Wait I think this is in a motherfucking for loop because this is really poorly and hackily implemented...
 		for (int i = 0; i < moves.size(); i++)
 		{
 			b.addMessage(nickname + " forgot how to use " + moves.get(i).getAttack().getName() + "...");	
@@ -562,8 +567,27 @@ public class ActivePokemon implements Serializable
 	
 	public boolean isSemiInvulnerable()
 	{
-		if (getMove() == null) return false;
+		if (getMove() == null) 
+		{
+			return false;
+		}
+		
 		return !getMove().isReady() && ((MultiTurnMove)getAttack()).semiInvulnerability();
+	}
+	
+	public boolean isSemiInvulnerableFlying()
+	{
+		return isSemiInvulnerable() && (getAttack().namesies() == Namesies.FLY_ATTACK || getAttack().namesies() == Namesies.BOUNCE_ATTACK); 
+	}
+	
+	public boolean isSemiInvulnerableDigging()
+	{
+		return isSemiInvulnerable() && getAttack().namesies() == Namesies.DIG_ATTACK;
+	}
+	
+	public boolean isSemiInvulnerableDiving()
+	{
+		return isSemiInvulnerable() && getAttack().namesies() == Namesies.DIVE_ATTACK;
 	}
 	
 	private int totalEVs()
@@ -829,7 +853,7 @@ public class ActivePokemon implements Serializable
 			return bracingEffect;
 		}
 		
-		Object[] invokees = new Object[] {getAbility(), getHeldItem(b)};
+		Object[] invokees = b.getEffectsList(this);
 		bracingEffect = (BracingEffect)Global.checkInvoke(true, b.getOtherPokemon(user()), invokees, BracingEffect.class, "isBracing", b, this, fullHealth);
 		
 		return bracingEffect;

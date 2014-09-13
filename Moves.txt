@@ -748,8 +748,7 @@ Gust:
 	PP: 35
 	MoveType: Hit_Fly
 	GetPow: 
-	// TODO: This isn't correct, should hit bounce too but I want to rework how this works
-	if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Fly"))
+	if (o.isSemiInvulnerableFlying())
 	{
 		return super.power*2;
 	}
@@ -1072,8 +1071,7 @@ Twister:
 	EffChance: 20
 	MoveType: Hit_Fly
 	GetPow: 
-	// TODO: Same as gust
-	if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Fly")) 
+	if (o.isSemiInvulnerableFlying())
 	{
 		return super.power*2;
 	}
@@ -1137,7 +1135,7 @@ Mirror Move:
 	Cat: Status
 	Apply: 
 	Move mirror = o.getAttributes().getLastMoveUsed();
-	if (mirror == null || mirror.getAttack().getName().equals("Mirror Move") ||	mirror.getAttack().getName().equals("Copycat"))
+	if (mirror == null || mirror.getAttack().namesies() == Namesies.MIRROR_MOVE_ATTACK || mirror.getAttack().namesies() == Namesies.COPYCAT_ATTACK)
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -2288,7 +2286,7 @@ Earthquake:
 	PhysicalContact: False
 	MoveType: Hit_Dig
 	GetPow: 
-	if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Dig")) 
+	if (o.isSemiInvulnerableDigging())
 	{
 		return super.power*2;
 	}
@@ -4095,7 +4093,7 @@ Copycat:
 	MoveType: Metronomeless, No_Magic_Coat, Sleep_Talk_Fail, Assistless
 	Apply: 
 	Move mirror = o.getAttributes().getLastMoveUsed();
-	if (mirror == null || mirror.getAttack().getName().equals("Mirror Move") || mirror.getAttack().getName().equals("Copycat"))
+	if (mirror == null || mirror.getAttack().namesies() == Namesies.MIRROR_MOVE_ATTACK || mirror.getAttack().namesies() == Namesies.COPYCAT_ATTACK)
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -4271,7 +4269,7 @@ Last Resort:
 	Apply: 
 	for (Move m : me.getMoves())
 	{
-		if (m.getAttack().getName().equals("Last Resort")) 
+		if (m.getAttack().namesies() == this.namesies)
 		{
 			continue;
 		}
@@ -4823,7 +4821,7 @@ Sketch:
 	Cat: Status
 	Apply: 
 	Move copy = o.getAttributes().getLastMoveUsed();
-	if (copy == null || copy.getAttack().getName().equals("Struggle") || me.hasEffect(Namesies.TRANSFORMED_EFFECT))
+	if (copy == null || copy.getAttack().namesies() == Namesies.STRUGGLE_ATTACK || me.hasEffect(Namesies.TRANSFORMED_EFFECT))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -4832,7 +4830,7 @@ Sketch:
 	List<Move> moves = me.getMoves();
 	for (int i = 0; i < moves.size(); i++)
 	{
-		if (moves.get(i).getAttack().getName().equals("Sketch"))
+		if (moves.get(i).getAttack().namesies() == this.namesies)
 		{
 			moves.add(i, new Move(copy.getAttack()));
 			moves.remove(i + 1);
@@ -5643,7 +5641,7 @@ Fusion Flare:
 	Cat: Special
 	Type: Fire
 	GetPow: 
-	return super.power*(!b.isFirstAttack() && o.getAttack().getName().equals("Fusion Bolt") ? 2 : 1);
+	return super.power*(!b.isFirstAttack() && o.getAttack().namesies() == Namesies.FUSION_BOLT_ATTACK ? 2 : 1);
 	###
 	MoveType: Defrost
 *
@@ -5656,7 +5654,7 @@ Fusion Bolt:
 	Cat: Physical
 	Acc: 100
 	GetPow: 
-	return super.power*(!b.isFirstAttack() && o.getAttack().getName().equals("Fusion Flare") ? 2 : 1);
+	return super.power*(!b.isFirstAttack() && o.getAttack().namesies() == Namesies.FUSION_FLARE_ATTACK ? 2 : 1);
 	###
 *
 Blue Flare:

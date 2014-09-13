@@ -53,12 +53,12 @@ Bicycle:
 		###
 	SuccessMessage: ""
 *
-# TODO: DOESN'T DO SHIT
 Surfboard:
 	Int: TrainerUseItem
 	Cat: KEY_ITEM
 	Desc: A fancy shmancy surfboard that lets you be RADICAL DUDE!
 	TrainerUse:
+		// TODO: DOESN'T DO SHIT
 		return false;
 		###
 	SuccessMessage: ""
@@ -371,7 +371,6 @@ Life Orb
 		user.reduceHealthFraction(b, .1);
 		###
 *
-# TODO: UNFINISHED - Should cause PAR on fling
 Light Ball
 	Int: HoldItem, StatChangingEffect
 	Cat: MISC
@@ -379,6 +378,7 @@ Light Ball
 	Price: 100
 	Fling: 30
 	ModifyStat:
+		// TODO: UNFINISHED - Should cause PAR on fling
 		if ((s == Stat.ATTACK || s == Stat.SP_ATTACK) && p.isPokemon("Pikachu")) stat *= 2;
 		return stat;
 		###
@@ -543,14 +543,14 @@ Power Weight
 	return Stat.HP;
 	###
 *
-Quick Claw
+Quick Claw:
 	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. A light, sharp claw that lets the bearer move first occasionally.
 	Price: 100
 	Fling: 80
 *
-Quick Powder
+Quick Powder:
 	Int: HoldItem, StatChangingEffect
 	Cat: MISC
 	Desc: An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.
@@ -562,7 +562,7 @@ Quick Powder
 		return stat;
 		###
 *
-Red Card
+Red Card:
 	Int: HoldItem, TakeDamageEffect
 	Cat: MISC
 	Desc: A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.
@@ -1379,7 +1379,6 @@ Fire Stone
 	Price: 2100
 	Fling: 30
 *
-# TODO: IF HIT BEFORE THE OPPONENT MOVES (FLING) THE OPPONENT FLINCHES!
 King's Rock
 	Int: HoldItem, ApplyDamageEffect
 	EvolutionItem: True
@@ -1389,6 +1388,7 @@ King's Rock
 	Price: 100
 	Fling: 30
 	OnApplyDamage:
+		// TODO: IF HIT BEFORE THE OPPONENT MOVES (FLING) THE OPPONENT FLINCHES!
 		if (Math.random()*100 < 10)
 		{
 			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
@@ -1645,8 +1645,7 @@ Max Elixir
 		###
 	SuccessMessage: p.getName() + "'s PP was restored!"
 *
-# TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-Ether
+Ether:
 	Int: MoveUseItem, HoldItem
 	Cat: MEDICINE
 	BattleCat: HPPP
@@ -1654,6 +1653,7 @@ Ether
 	Price: 1200
 	Fling: 30
 	MoveUse:
+		// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
 		restore = m.getAttack().getName();
 		return m.increasePP(10);
 		###
@@ -1662,7 +1662,6 @@ Ether
 	###
 	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
 *
-# TODO: Same as ether
 Max Ether
 	Int: MoveUseItem, HoldItem
 	Cat: MEDICINE
@@ -1671,9 +1670,10 @@ Max Ether
 	Price: 2000
 	Fling: 30
 	MoveUse:
+		// TODO: Same as ether
 		restore = m.getAttack().getName();
 		return m.increasePP(m.getMaxPP());
-		###
+		###	
 	Field: 
 	private String restore;
 	###
@@ -2018,7 +2018,7 @@ Iron
 	Price: 9800
 	Fling: 30
 *
-Muscle Wing
+Muscle Wing:
 	Int: HoldItem
 	Cat: STAT
 	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Attack stat of a single Pok\u00e9mon.
@@ -2027,7 +2027,7 @@ Muscle Wing
 	Price: 3000
 	Fling: 20
 *
-PP Max
+PP Max:
 	Int: MoveUseItem, HoldItem
 	Cat: STAT
 	Desc: It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.
@@ -2037,10 +2037,12 @@ PP Max
 		###
 	Price: 9800
 	Fling: 30
-	Field: private String increase;
+	Field: 
+		private String increase;
+		###
 	SuccessMessage: p.getName() + "'s " + increase + "'s Max PP was increased!"
 *
-PP Up
+PP Up:
 	Int: MoveUseItem, HoldItem
 	Cat: STAT
 	Desc: It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.
@@ -2345,7 +2347,7 @@ Aspear Berry
 	NGType: GRASS
 	NGPow: 60
 *
-Leppa Berry
+Leppa Berry:
 	Int: EndTurnEffect, MoveUseItem, GainableEffectBerry
 	BattleCat: HPPP
 	Desc: If held by a Pok\u00e9mon, it restores a move's PP by 10.
@@ -2385,7 +2387,9 @@ Leppa Berry
 		restore = m.getAttack().getName();
 		return m.increasePP(10);
 		###
-	Field: private String restore;
+	Field: 
+		private String restore;
+		###
 	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
 *
 Oran Berry
@@ -2784,8 +2788,7 @@ Rare Bone
 	Desc: A bone that is extremely valuable for Pokémon archeology. It can be sold for a high price to shops.
 	Fling: 100
 	Price: 10000
-*	
-# TODO: We have no functionality for this
+*
 Honey
 	Int: HoldItem
 	Cat: MISC
@@ -2800,6 +2803,7 @@ Eviolite
 	Fling: 40
 	Price: 200
 	ModifyStat:
+		// TODO: Yes I realize this is Eviolite and not Honey, but functionality needs to be implemented for Honey
 		if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.getPokemonInfo().getEvolution().canEvolve()) return (int)(1.5*stat);
 		return stat;
 		###

@@ -244,7 +244,7 @@ HealSwitch:
 	super.active = false;
 	###
 	Cast: 
-	wish = caster.getAttack().getName().equals("Lunar Dance") ? "lunar dance" : "healing wish";
+	wish = caster.getAttack().namesies() == Namesies.LUNAR_DANCE_ATTACK ? "lunar dance" : "healing wish";
 	super.cast(b, caster, victim, source, printCast);
 	###
 *

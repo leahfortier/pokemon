@@ -111,17 +111,13 @@ public class BattleAttributes implements Serializable
 	// Increment count if the pokemon uses the same move twice in a row
 	public void count()
 	{
-		if (lastMoveUsed == null) 
+		if (lastMoveUsed == null || selected.getAttack().namesies() != lastMoveUsed.getAttack().namesies()) 
 		{
-			counter = 1;
-		}
-		else if (selected.getAttack().getName().equals(lastMoveUsed.getAttack().getName()))
-		{
-			counter++;
+			resetCount();
 		}
 		else
 		{
-			counter = 1;
+			counter++;
 		}
 	}
 	

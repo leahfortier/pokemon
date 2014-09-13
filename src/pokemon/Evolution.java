@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import main.Global;
+import main.Namesies;
 import battle.Move;
 
 public abstract class Evolution implements Serializable
@@ -244,12 +245,13 @@ public abstract class Evolution implements Serializable
 		private static final long serialVersionUID = 1L;
 		
 		private int evolutionNumber;
-		private String move;
+		private Namesies move;
 		
+		// TODO: Make sure this still works with the namesies
 		public MoveEvolution(int num, String m)
 		{
 			evolutionNumber = num;
-			move = m;
+			move = Namesies.getValueOf(m, "Attack");
 		}
 		
 		public PokemonInfo getEvolution()
@@ -263,7 +265,7 @@ public abstract class Evolution implements Serializable
 			
 			for (Move m : p.getActualMoves())
 			{
-				if (m.getAttack().getName().equals(move))
+				if (m.getAttack().namesies() == move)
 				{
 					return this;
 				}

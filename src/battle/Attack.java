@@ -2269,8 +2269,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			// TODO: This isn't correct, should hit bounce too but I want to rework how this works
-			if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Fly"))
+			if (o.isSemiInvulnerableFlying())
 			{
 				return super.power*2;
 			}
@@ -2822,8 +2821,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			// TODO: Same as gust
-			if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Fly"))
+			if (o.isSemiInvulnerableFlying())
 			{
 				return super.power*2;
 			}
@@ -2921,7 +2919,7 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Move mirror = o.getAttributes().getLastMoveUsed();
-			if (mirror == null || mirror.getAttack().getName().equals("Mirror Move") ||	mirror.getAttack().getName().equals("Copycat"))
+			if (mirror == null || mirror.getAttack().namesies() == Namesies.MIRROR_MOVE_ATTACK || mirror.getAttack().namesies() == Namesies.COPYCAT_ATTACK)
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -4775,7 +4773,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			if (o.isSemiInvulnerable() && o.getAttack().getName().equals("Dig"))
+			if (o.isSemiInvulnerableDigging())
 			{
 				return super.power*2;
 			}
@@ -7898,7 +7896,7 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Move mirror = o.getAttributes().getLastMoveUsed();
-			if (mirror == null || mirror.getAttack().getName().equals("Mirror Move") || mirror.getAttack().getName().equals("Copycat"))
+			if (mirror == null || mirror.getAttack().namesies() == Namesies.MIRROR_MOVE_ATTACK || mirror.getAttack().namesies() == Namesies.COPYCAT_ATTACK)
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -8192,7 +8190,7 @@ public abstract class Attack implements Serializable
 		{
 			for (Move m : me.getMoves())
 			{
-				if (m.getAttack().getName().equals("Last Resort"))
+				if (m.getAttack().namesies() == this.namesies)
 				{
 					continue;
 				}
@@ -9001,7 +8999,7 @@ public abstract class Attack implements Serializable
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Move copy = o.getAttributes().getLastMoveUsed();
-			if (copy == null || copy.getAttack().getName().equals("Struggle") || me.hasEffect(Namesies.TRANSFORMED_EFFECT))
+			if (copy == null || copy.getAttack().namesies() == Namesies.STRUGGLE_ATTACK || me.hasEffect(Namesies.TRANSFORMED_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -9010,7 +9008,7 @@ public abstract class Attack implements Serializable
 			List<Move> moves = me.getMoves();
 			for (int i = 0; i < moves.size(); i++)
 			{
-				if (moves.get(i).getAttack().getName().equals("Sketch"))
+				if (moves.get(i).getAttack().namesies() == this.namesies)
 				{
 					moves.add(i, new Move(copy.getAttack()));
 					moves.remove(i + 1);
@@ -10442,7 +10440,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return super.power*(!b.isFirstAttack() && o.getAttack().getName().equals("Fusion Bolt") ? 2 : 1);
+			return super.power*(!b.isFirstAttack() && o.getAttack().namesies() == Namesies.FUSION_BOLT_ATTACK ? 2 : 1);
 		}
 	}
 
@@ -10459,7 +10457,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return super.power*(!b.isFirstAttack() && o.getAttack().getName().equals("Fusion Flare") ? 2 : 1);
+			return super.power*(!b.isFirstAttack() && o.getAttack().namesies() == Namesies.FUSION_FLARE_ATTACK ? 2 : 1);
 		}
 	}
 

@@ -574,7 +574,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			wish = caster.getAttack().getName().equals("Lunar Dance") ? "lunar dance" : "healing wish";
+			wish = caster.getAttack().namesies() == Namesies.LUNAR_DANCE_ATTACK ? "lunar dance" : "healing wish";
 			super.cast(b, caster, victim, source, printCast);
 		}
 

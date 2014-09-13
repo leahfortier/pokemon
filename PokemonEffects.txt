@@ -174,10 +174,15 @@ QuickGuard:
 	NumTurns: 1
 	OpposingCanAttack: 
 	// TODO: Look into why Feint needs to be hardcoded instead of just being ProtectPiercing...
-	if (p.getAttack().isSelfTarget() || p.getAttack().getName().equals("Feint") || p.getAttack().getPriority(b, p) <= 0) return true;
+	if (p.getAttack().isSelfTarget() || p.getAttack().namesies() == Namesies.FEINT_ATTACK || p.getAttack().getPriority(b, p) <= 0) 
+	{
+		return true;
+	}
+	
 	b.printAttacking(p);
 	b.addMessage(opp.getName() + " is protecting itself!");
 	Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+	
 	return false;
 	###
 	Cast: 
@@ -309,7 +314,7 @@ Encore:
 	return move;
 	###
 	Usable: 
-	return move.getAttack().getName().equals(m.getAttack().getName());
+	return move.getAttack().namesies() == m.getAttack().namesies();
 	###
 	UnusableMessage: "Only " + move.getAttack().getName() + " can be used right now!"
 	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS)
@@ -322,7 +327,7 @@ Encore:
 	x.move = move;
 	###
 	CanAttack: 
-	if (!p.getAttack().getName().equals(move.getAttack().getName()))
+	if (p.getAttack().namesies() != move.getAttack().namesies())
 	{
 		b.printAttacking(p);
 		b.addMessage(this.getFailMessage(b, p, opp));
@@ -345,13 +350,13 @@ Disable:
 	x.turns = (int)(Math.random()*4) + 4; // Between 4 and 7 turns
 	###
 	Usable: 
-	return !disabled.getAttack().getName().equals(m.getAttack().getName());
+	return disabled.getAttack().namesies() != m.getAttack().namesies();
 	###
 	UnusableMessage: disabled.getAttack().getName() + " is disabled!"
 	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0
 	CanAttack: 
 	turns--;
-	if (p.getAttack().getName().equals(disabled.getAttack().getName()))
+	if (p.getAttack().namesies() == disabled.getAttack().namesies())
 	{
 		b.printAttacking(p);
 		b.addMessage(p.getAttack().getName() + " is disabled!");
@@ -513,7 +518,11 @@ Stockpile:
 	###
 	Int: EndTurnEffect, StageChangingEffect
 	ApplyEndTurn: 
-	if (!victim.getAttributes().getLastMoveUsed().getAttack().getName().equals("Stockpile")) active = false;
+	// TODO: Why is this making the effect inactive?
+	if (victim.getAttributes().getLastMoveUsed().getAttack().namesies() != Namesies.STOCKPILE_ATTACK) 
+	{
+		active = false;
+	}
 	###
 	CanHave: True
 	Cast: 
@@ -576,7 +585,7 @@ Mimic:
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	Attack m = other.getAttributes().getLastMoveUsed() == null ? null : other.getAttributes().getLastMoveUsed().getAttack();
 	
-	if (m == null || victim.hasMove(m.getName()) || m.isMoveType(MoveType.MIMICLESS))
+	if (m == null || victim.hasMove(m.namesies()) || m.isMoveType(MoveType.MIMICLESS))
 	{
 		b.addMessage(this.getFailMessage(b, caster, victim));
 		return;
@@ -593,28 +602,34 @@ Mimic:
 Imprison:
 	Int: AttackSelectionEffect, BeforeTurnEffect
 	Field: 
-	private List<String> unableMoves;
+	private List<Namesies> unableMoves;
 	###
 	Activate: 
 	x.unableMoves = unableMoves;
 	###
-	Cast: 
+	Cast:
+	// TODO: Test this effect again
 	unableMoves = new ArrayList<>();
-	for (Move m : caster.getMoves()) unableMoves.add(m.getAttack().getName());
+	for (Move m : caster.getMoves())
+	{
+		unableMoves.add(m.getAttack().namesies());
+	}
+	
 	super.cast(b, caster, victim, source, printCast);
 	###
 	CastMessage: user.getName() + " sealed " + victim.getName() + "'s moves!"
 	Usable: 
-	return !unableMoves.contains(m.getAttack().getName());
+	return !unableMoves.contains(m.getAttack().namesies());
 	###
 	UnusableMessage: "No!! You are imprisoned!!!"
 	CanAttack: 
-	if (unableMoves.contains(p.getAttack().getName()))
+	if (unableMoves.contains(p.getAttack().namesies()))
 	{
 		b.printAttacking(p);
 		b.addMessage(this.getFailMessage(b, p, opp));
 		return false;
 	}
+	
 	return true;
 	###
 *
@@ -653,7 +668,7 @@ MiracleEye:
 Torment:
 	Int: AttackSelectionEffect, BeforeTurnEffect
 	Usable: 
-	return (p.getAttributes().getLastMoveUsed() == null || !p.getAttributes().getLastMoveUsed().getAttack().getName().equals(m.getAttack().getName()));
+	return (p.getAttributes().getLastMoveUsed() == null || p.getAttributes().getLastMoveUsed().getAttack().namesies() != m.getAttack().namesies());
 	###
 	UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
 	CanAttack: 
@@ -738,7 +753,7 @@ Grounded:
 	// TODO: Find a way to combine this with gravity or something like that
 	super.cast(b, caster, victim, source, printCast);
 	
-	if (victim.isSemiInvulnerable() && (victim.getAttack().getName().equals("Fly") || victim.getAttack().getName().equals("Bounce")))
+	if (victim.isSemiInvulnerableFlying())
 	{
 		victim.getMove().switchReady(b);
 		b.addMessage(victim.getName() + " fell to the ground!");
@@ -819,7 +834,7 @@ Uproar:
 	###
 	CastMessage: user.getName() + " started an uproar!"
 	Usable: 
-	return m.getAttack().getName().equals("Uproar");
+	return m.getAttack().namesies() == Namesies.UPROAR_ATTACK;
 	###
 	UnusableMessage: "Only Uproar can be used right now!"
 	ApplyEndTurn: 

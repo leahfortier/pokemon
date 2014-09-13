@@ -707,9 +707,9 @@ public class Battle
 		
 		// Semi-invulnerable moves
 		if (o.isSemiInvulnerable() 
-				&& !(me.getAttack().isMoveType(MoveType.HIT_FLY) && o.getAttack().getName().equals("Fly") || o.getAttack().getName().equals("Bounce"))
-				&& !(me.getAttack().isMoveType(MoveType.HIT_DIG) && o.getAttack().getName().equals("Dig")) 
-				&& !(me.getAttack().isMoveType(MoveType.HIT_DIVE) && o.getAttack().getName().equals("Dive"))) 
+				&& !(me.getAttack().isMoveType(MoveType.HIT_FLY) && o.isSemiInvulnerableFlying())
+				&& !(me.getAttack().isMoveType(MoveType.HIT_DIG) && o.isSemiInvulnerableDigging()) 
+				&& !(me.getAttack().isMoveType(MoveType.HIT_DIVE) && o.isSemiInvulnerableDiving())) 
 		{
 			return false;
 		}

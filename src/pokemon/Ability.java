@@ -1189,7 +1189,7 @@ public abstract class Ability implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			if (p.getAttack().getName().equals("Selfdestruct") || p.getAttack().getName().equals("Explosion"))
+			if (p.getAttack().namesies() == Namesies.SELF_DESTRUCT_ATTACK || p.getAttack().namesies() == Namesies.EXPLOSION_ATTACK)
 			{
 				b.printAttacking(p);
 				b.addMessage(p.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
@@ -1200,7 +1200,7 @@ public abstract class Ability implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			if (p.getAttack().getName().equals("Selfdestruct") || p.getAttack().getName().equals("Explosion"))
+			if (p.getAttack().namesies() == Namesies.SELF_DESTRUCT_ATTACK || p.getAttack().namesies() == Namesies.EXPLOSION_ATTACK)
 			{
 				b.printAttacking(p);
 				b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
@@ -1673,22 +1673,41 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			int best = -1;
-			List<String> besties = new ArrayList<>();;
+			List<Namesies> besties = new ArrayList<>();
+			
+			int highestPower = -1;
+			
 			for (Move m : other.getMoves())
 			{
-				if (m.getAttack().getCategory() == Category.STATUS) continue;
-				int pow = m.getAttack().getPower(b, other, victim);
-				if (pow > best)
+				if (m.getAttack().getCategory() == Category.STATUS)
 				{
-					best = pow;
-					besties = new ArrayList<>();
-					besties.add(m.getAttack().getName());
+					continue;
 				}
-				else if (pow == best) besties.add(m.getAttack().getName());
+				
+				int power = m.getAttack().getPower(b, other, victim);
+				if (power > highestPower)
+				{
+					highestPower = power;
+					besties = new ArrayList<>();
+					besties.add(m.getAttack().namesies());
+				}
+				else if (power == highestPower)
+				{
+					besties.add(m.getAttack().namesies());
+				}
 			}
-			String warn = best == -1 ? other.getMoves().get((int)(Math.random()*other.getMoves().size())).getAttack().getName() : besties.get((int)(Math.random()*besties.size()));
-			b.addMessage(victim.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn + "!");
+			
+			Namesies warn;
+			if (highestPower == -1)
+			{
+				warn = other.getMoves().get((int)(Math.random()*other.getMoves().size())).getAttack().namesies();
+			}
+			else
+			{
+				warn = besties.get((int)(Math.random()*besties.size()));
+			}
+			
+			b.addMessage(victim.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
 		}
 	}
 

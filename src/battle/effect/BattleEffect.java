@@ -69,7 +69,7 @@ public abstract class BattleEffect extends Effect
 		private static final long serialVersionUID = 1L;
 		private void removeLevitation(Battle b, ActivePokemon p)
 		{
-			if (p.isSemiInvulnerable() && (p.getAttack().getName().equals("Fly") || p.getAttack().getName().equals("Bounce")))
+			if (p.isSemiInvulnerableFlying())
 			{
 				p.getMove().switchReady(b);
 				b.addMessage(p.getName() + " fell due to the gravity!");

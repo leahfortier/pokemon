@@ -89,10 +89,11 @@ public abstract class Effect implements Serializable
 		return null;
 	}
 	
+	// Returns the effect if it is in the list, otherwise returns null
 	public static Effect getEffect(List<? extends Effect> effects, Namesies effect)
 	{
 		for (Effect e : effects)
-			if (e.getName().equals(effect) && e.isActive()) 
+			if (e.namesies() == effect && e.isActive()) 
 				return e;
 			
 		return null;
@@ -107,7 +108,7 @@ public abstract class Effect implements Serializable
 	{
 		for (int i = 0; i < effects.size(); i++)
 		{
-			if (effects.get(i).getName().equals(effect)) 
+			if (effects.get(i).namesies() == effect) 
 			{
 				effects.remove(i--);
 				return true;
