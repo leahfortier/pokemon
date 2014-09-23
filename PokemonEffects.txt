@@ -561,6 +561,7 @@ UsedDefenseCurl:
 UsedMinimize:
 	CanHave: True
 	Cast: 
+	// Body Slam, Dragon Rush, Flying Press, Phantom Force, Shadow Force, Steamroller, and Stomp all deal double damage to a Pokémon that has used Minimize, and cannot miss against it.
 	if (!victim.hasEffect(this.namesies)) 
 	{
 		super.cast(b, caster, victim, source, printCast);
@@ -697,6 +698,7 @@ Taunt:
 	###
 	UnusableMessage: "No!! Not while you're under the effects of taunt!!"
 	CanAttack: 
+	// TODO: Cannot cast this effect on Oblivious Pokemon
 	if (!usable(p, p.getMove()))
 	{
 		b.printAttacking(p);
@@ -963,6 +965,7 @@ Substitute:
 	###
 	FailCondition: victim.getHPRatio() <= .25 || victim.getStat(Stat.HP) <= 3
 	ValidMove: 
+	// TODO: Soundbase moves bypass the substitute and also Infiltrator
 	if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING))
 	{
 		return true;
@@ -1107,6 +1110,11 @@ HealBlock:
 	NumTurns: 5
 	CastMessage: user.getName() + " blocked " + victim.getName() + " from healing!"
 	SubsideMessage: "The effects of heal block wore off."
+	Int: BeforeTurnEffect:
+	CanAttack:
+	// TODO: Draining moves don't work -- also I think this should be an OpposingBeforeTurnEffect, not a BeforeTurnEffect
+	return true;
+	###
 *
 Infatuated:
 	FailAbility: Oblivious

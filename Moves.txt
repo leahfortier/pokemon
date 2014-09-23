@@ -81,6 +81,10 @@ Toxic:
 	Effect: Pokemon BadPoison
 	Cat: Status
 	Acc: 90
+	GetAccuracy:
+	// TODO: Lock-on accuracy if used by a Poison-type Pokemon
+	return super.accuracy;
+	###
 *
 Ember:
 	Acc: 100
@@ -170,7 +174,7 @@ Sweet Scent:
 	Desc: A sweet scent that lowers the opposing team's evasiveness. It also lures wild Pok\u00e9mon if used in grass, etc.
 	PP: 20
 	Cat: Status
-	StatChange: 1 Evasion -1
+	StatChange: 1 Evasion -2
 	Type: Normal
 	Acc: 100
 *
@@ -684,7 +688,7 @@ String Shot:
 	PP: 40
 	Type: Bug
 	Cat: Status
-	StatChange: 1 Speed -1
+	StatChange: 1 Speed -2
 	Acc: 95
 *
 Bug Bite:
@@ -836,6 +840,7 @@ Captivate:
 	PP: 20
 	StatChange: 1 Sp_attack -2
 	ApplyEffects: 
+	// TODO: Doesn't work against Oblivious Pokemon
 	if (Gender.oppositeGenders(user, victim)) 
 	{
 		super.applyEffects(b, user, victim);
@@ -1682,7 +1687,7 @@ Poison Fang:
 	Cat: Physical
 	Type: Poison
 	Effect: Pokemon BadPoison
-	EffChance: 30
+	EffChance: 50
 *
 Chip Away:
 	Desc: Looking for an opening, the user strikes continually. The target's stat changes don't affect this attack's damage.
@@ -4413,6 +4418,10 @@ Sky Drop:
 	Cat: Physical
 	Acc: 100
 	MoveType: Airborne
+	Apply:
+	// TODO: Fails if opponent is above a certain weight
+	super.apply(me, o, b);
+	###
 *
 Iron Head:
 	Desc: The user slams the target with its steel-hard head. It may also make the target flinch.
@@ -5031,6 +5040,7 @@ Assist:
 	Cat: Status
 	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Metronomeless, Assistless
 	Apply: 
+	// TODO: Roar and whirlwind and multi-turn moves should be assistless
 	List<Attack> attacks = new ArrayList<>();
 	for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
 	{
@@ -5212,6 +5222,7 @@ Facade:
 	Type: Normal
 	Pow: 70
 	GetPow: 
+	// TODO: Should not take the attack reduction from burn
 	return super.power*(me.hasStatus() ? 2 : 1);
 	###
 	Acc: 100
@@ -5542,6 +5553,7 @@ Defog:
 	Cat: Status
 	StatChange: 1 Evasion -1
 	ApplyEffects: 
+	// TODO: Look this up
 	for (int i = 0; i < victim.getEffects().size(); i++)
 	{
 		PokemonEffect fogglyBoggly = victim.getEffects().get(i);

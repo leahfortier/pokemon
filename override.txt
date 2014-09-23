@@ -284,6 +284,7 @@ Override:
 	ExitBattle:
 		Header: void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		Body:
+		// TODO: These moves need infinite accuracy and bypass Protect
 		Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 		if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 		{
