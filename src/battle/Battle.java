@@ -361,13 +361,24 @@ public class Battle
 	
 	public void enterBattle(ActivePokemon enterer, String enterMessage, boolean reset)
 	{
-		if (enterer.isEgg()) Global.error("Eggs can't battle!!!");
+		if (enterer.isEgg()) 
+		{
+			Global.error("Eggs can't battle!!!");
+		}
 		
-		if (!enterer.user()) player.getPokedex().setStatus(enterer, PokedexStatus.SEEN, isWildBattle() ? player.getRouteName() : "");
+		// Document sighting in the Pokedex
+		if (!enterer.user()) 
+		{
+			player.getPokedex().setStatus(enterer, PokedexStatus.SEEN, isWildBattle() ? player.getRouteName() : "");
+		}
 		
 		addMessage(enterMessage, enterer);
 		
-		if (reset) enterer.resetAttributes();
+		if (reset) 
+		{
+			enterer.resetAttributes();
+		}
+		
 		enterer.getAttributes().setUsed(true);
 		Object[] list = getEffectsList(enterer);
 		for (Object o : list)

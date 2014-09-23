@@ -516,7 +516,7 @@ public class ActivePokemon implements Serializable
 	
 	public boolean hasAbility(Namesies a)
 	{
-		return getAbility().getName().equals(a);
+		return getAbility().namesies() == a;
 	}
 	
 	public void setStatus(Status s)
@@ -667,7 +667,7 @@ public class ActivePokemon implements Serializable
 	public boolean isType(Battle b, Type type)
 	{
 		Type[] types = getType(b);
-		return types[0].equals(type) || types[1].equals(type); 
+		return types[0] == type || types[1] == type; 
 	}
 	
 	public int getHP()
@@ -718,6 +718,11 @@ public class ActivePokemon implements Serializable
 	public void resetAttributes()
 	{
 		attributes = new BattleAttributes();
+		
+		for (Move m : moves)
+		{
+			m.resetReady();
+		}
 	}
 	
 	public void setCaught()
@@ -1074,6 +1079,7 @@ public class ActivePokemon implements Serializable
 		return pokemon;
 	}
 	
+	// TODO: GET DAT NAMESIES THANG GOING ON HEA'
 	public boolean isPokemon(String name)
 	{
 		return pokemon.getName().equals(name);

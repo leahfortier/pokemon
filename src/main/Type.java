@@ -142,14 +142,15 @@ public enum Type implements Serializable
 
 	public Color getTextColor()
 	{
-		if (this.equals(NORMAL))
+		if (this == NORMAL)
 		{
 			return new Color(180, 180, 200);
 		} 
-		else if (this.equals(STEEL))
+		else if (this == STEEL)
 		{
 			return new Color(160, 160, 170);
 		}
+		
 		return color;
 	}
 	

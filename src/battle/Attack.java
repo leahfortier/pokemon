@@ -173,11 +173,10 @@ public abstract class Attack implements Serializable
 		
 		for (Effect e : effects)
 		{
-			if (e.getName().equals("Confusion")) 
+			if (e.namesies() == Namesies.CONFUSION_EFFECT || e.namesies() == Namesies.FLINCH_EFFECT)
+			{
 				return true;
-			
-			if (e.getName().equals("Flinch")) 
-				return true;
+			}
 		}
 		
 		for (int val : statChanges)
@@ -486,7 +485,7 @@ public abstract class Attack implements Serializable
 	
 	public void startTurn(Battle b, ActivePokemon me) {}
 
-	// ONLY CALL THIS FUNCTION IF YOU SRSLY LIKE NEED TO LIKE YOU'RE READING FROM A FILE OR SOMETHING OTHERWISE JUST FUCKING USE THE FUCKING NAMESIES I FUCKING MEAN IT
+	// ONLY CALL THIS FUNCTION IF YOU SRSLY LIKE NEED TO LIKE YOU'RE READING FROM A FILE OR SOMETHING OTHERWISE JUST FUCKING USE THE FUCKING NAMESIES I FUCKING MEAN IT AND EVEN IN THE SITUATION I SAID IT COULD BE USED IT BETTER FUCKING BE PRECEDED BY THE ISATTACK FUNCTION SRSRLY SRSLY SRSLY
 	public static Attack getAttackFromName(String m)
 	{
 		if (isAttack(m)) 
@@ -2882,8 +2881,17 @@ public abstract class Attack implements Serializable
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			Type[] type = victim.getType(b);
-			if (type[0].equals(Type.FLYING)) return new Type[] {type[1], Type.NONE};
-			if (type[1].equals(Type.FLYING)) return new Type[] {type[0], Type.NONE};
+			
+			if (type[0] == Type.FLYING)
+			{
+				return new Type[] {type[1], Type.NONE};
+			}
+			
+			if (type[1] == Type.FLYING)
+			{
+				return new Type[] {type[0], Type.NONE};
+			}
+			
 			return null;
 		}
 	}

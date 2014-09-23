@@ -1109,8 +1109,17 @@ Roost:
 	###
 	ChangeType: 
 	Type[] type = victim.getType(b);
-	if (type[0].equals(Type.FLYING)) return new Type[] {type[1], Type.NONE};
-	if (type[1].equals(Type.FLYING)) return new Type[] {type[0], Type.NONE};
+			
+	if (type[0] == Type.FLYING) 
+	{
+		return new Type[] {type[1], Type.NONE};
+	}
+	
+	if (type[1] == Type.FLYING) 
+	{
+		return new Type[] {type[0], Type.NONE};
+	}
+	
 	return null;
 	###
 	Field: 

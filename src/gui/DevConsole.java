@@ -203,6 +203,7 @@ public class DevConsole
 									return;
 								}
 								
+								// TODO: 'None' isn't a valid attack so can this if statement be deleted?
 								if (!"none".equals(s.toLowerCase())) 
 								{
 									moves.add(new Move(Attack.getAttackFromName(s)));

@@ -32,7 +32,7 @@ public class Move implements Serializable
 		maxPP = attack.getPP();
 		pp = maxPP;
 		
-		ready = attack instanceof MultiTurnMove ? ((MultiTurnMove)attack).chargesFirst() : true;
+		resetReady();
 		used = false;
 	}
 	
@@ -47,6 +47,11 @@ public class Move implements Serializable
 		pp = maxPP;
 	}
 	
+	public void resetReady()
+	{
+		ready = attack instanceof MultiTurnMove ? ((MultiTurnMove)attack).chargesFirst() : true;
+	}
+	
 	public boolean isReady()
 	{
 		return ready;
@@ -54,7 +59,10 @@ public class Move implements Serializable
 	
 	public void switchReady(Battle b)
 	{
-		if (attack.isMultiTurn(b)) ready = !ready;
+		if (attack.isMultiTurn(b)) 
+		{
+			ready = !ready;
+		}
 	}
 	
 	public Attack getAttack()

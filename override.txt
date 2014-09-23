@@ -753,7 +753,7 @@ PowerItem:
 		Header: int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		Optional: True
 		Default:
-		if (s.equals(Stat.SPEED))
+		if (s == Stat.SPEED)
 		{
 			return stat / 2;
 		}
@@ -843,7 +843,7 @@ Override:
 		Header: BaseEvolution getBaseEvolution(ActivePokemon p)
 		Body: 
 		Evolution ev = p.getPokemonInfo().getEvolution();
-		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.getName());
+		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
 		return base;
 		###
 		AddInterface: PokemonUseItem

@@ -176,7 +176,7 @@ public class PartyView extends View
 			g.drawString("Lv" + selectedPkm.getLevel(), 525, 147);
 			
 			// Type Tiles
-			if (type[1].equals(Type.NONE))
+			if (type[1] == Type.NONE)
 			{
 				g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 687, 133, null);
 			}

@@ -1504,9 +1504,16 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			List<Move> list = new ArrayList<>();
 			for (Move m : moves)
 			{
-				if (m.getAttack().getName().equals("Mimic")) list.add(mimicMove);
-				else list.add(m);
+				if (m.getAttack().namesies() == Namesies.MIMIC_ATTACK)
+				{
+					list.add(mimicMove);
+				}
+				else
+				{
+					list.add(m);
+				}
 			}
+			
 			return list;
 		}
 	}

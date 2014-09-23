@@ -19,16 +19,17 @@ import battle.effect.StatProtectingEffect;
 public class BattleAttributes implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private int[] stages;
-	private boolean used;
+
 	private Move selected;
-	private List<PokemonEffect> effects;
-	private double successionDecayRate;
 	private Move lastMoveUsed;
+	private List<PokemonEffect> effects;
+	private int[] stages;
 	private int counter;
 	private int damageTaken;
+	private double successionDecayRate;
 	private boolean firstTurn;
 	private boolean attacking;
+	private boolean used;
 	
 	public BattleAttributes()
 	{
