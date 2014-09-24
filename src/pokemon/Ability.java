@@ -18,6 +18,7 @@ import battle.Attack.Category;
 import battle.Attack.MoveType;
 import battle.Battle;
 import battle.Move;
+import battle.effect.AdvantageChanger;
 import battle.effect.ApplyDamageEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.BracingEffect;
@@ -1943,7 +1944,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class Scrappy extends Ability 
+	private static class Scrappy extends Ability implements AdvantageChanger
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1955,6 +1956,19 @@ public abstract class Ability implements Serializable
 		public Scrappy newInstance()
 		{
 			return (Scrappy)(new Scrappy().activate());
+		}
+
+		public Type[] getAdvantageChange(Type attacking, Type[] defending)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				if ((attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST)
+				{
+					defending[i] = Type.NONE;
+				}
+			}
+			
+			return defending;
 		}
 	}
 
@@ -2310,9 +2324,12 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
+			PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getName());
 			
-			// TODO: I don't think this should take the current battle effects into account -- just the straight up base stats of the opponent
-			if (Stat.getStat(Stat.DEFENSE, other, victim, b) < Stat.getStat(Stat.SP_DEFENSE, other, victim, b))
+			int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
+			int baseSpecialDefense = otherInfo.getStat(Stat.SP_DEFENSE.index());
+			
+			if (baseDefense < baseSpecialDefense)
 			{
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 			}
@@ -2620,7 +2637,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class Overcoat extends Ability implements WeatherBlockerEffect
+	private static class Overcoat extends Ability implements EffectBlockerEffect, WeatherBlockerEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2634,9 +2651,28 @@ public abstract class Ability implements Serializable
 			return (Overcoat)(new Overcoat().activate());
 		}
 
+		public String getPreventMessage(ActivePokemon victim)
+		{
+			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
+		}
+
+		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (!user.getAttack().isMoveType(MoveType.POWDER))
+			{
+				return true;
+			}
+			
+			if (user.getAttack().getCategory() == Category.STATUS)
+			{
+				b.addMessage(getPreventMessage(victim));
+			}
+			
+			return false;
+		}
+
 		public boolean block(Namesies weather)
 		{
-			// TODO: Should also be immune to le powderz
 			return true;
 		}
 	}

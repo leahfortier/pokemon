@@ -1098,7 +1098,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		{
 			for (int y = 0; y <= canvas.getHeight()/16; y++)
 			{
-				g.setColor(((x^y)&1) == 0 ? Color.gray : Color.LIGHT_GRAY);
+				g.setColor(((x^y)&1) == 0 ? Color.GRAY : Color.LIGHT_GRAY);
 				g.fillRect(x*16, y*16, 16, 16);
 			}
 		}
@@ -1247,7 +1247,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 	public void keyPressed(KeyEvent e) 
 	{		
-		//TODO e for eraser, s for single, r for rect, t for trigger, ? for select?
+		// TODO: e for eraser, s for single, r for rect, t for trigger, ? for select?
 		if (e.getKeyCode() == KeyEvent.VK_SPACE && previousToolListIndex == -1 && !toolList.isSelectionEmpty()) 
 		{
 			previousToolListIndex = toolList.getSelectedIndex();

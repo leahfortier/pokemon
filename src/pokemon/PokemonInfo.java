@@ -221,6 +221,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		in.close();
 	}
 	
+	// TODO: Change this to namesies
 	public static PokemonInfo getPokemonInfo(String p)
 	{
 		if (map == null) loadPokemonInfo();

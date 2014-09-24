@@ -190,8 +190,7 @@ public class MainMenuView extends View
 						if (deletePressed && saveInfo[pressed] != null)
 						{
 							deletePressed = false;
-							game.deleteSave(pressed); // TODO ask to delete
-														// first
+							game.deleteSave(pressed); // TODO: ask to delete first
 							System.out.println("deleted");
 							updateSaveData();
 						}
@@ -231,8 +230,8 @@ public class MainMenuView extends View
 					case 1:
 					case 2:
 						/*
-						 * if (saveInfo[pressed] != null){ //TODO ask to delete
-						 * first
+						 * if (saveInfo[pressed] != null){ // TODO: ask to delete
+						 * first 
 						 * 
 						 * }else{
 						 * 

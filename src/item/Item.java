@@ -43,6 +43,7 @@ import battle.Attack.Category;
 import battle.Attack.MoveType;
 import battle.Battle;
 import battle.Move;
+import battle.effect.AdvantageChanger;
 import battle.effect.ApplyDamageEffect;
 import battle.effect.AttackSelectionEffect;
 import battle.effect.BracingEffect;
@@ -1858,7 +1859,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class RingTarget extends Item implements HoldItem
+	private static class RingTarget extends Item implements HoldItem, AdvantageChanger
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1871,6 +1872,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public Type[] getAdvantageChange(Type attacking, Type[] defending)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				if (Type.getAdvantage(attacking, defending[i]) == 0)
+				{
+					defending[i] = Type.NONE;
+				}
+			}
+			
+			return defending;
 		}
 	}
 
@@ -1896,7 +1910,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class SafetyGoggles extends Item implements HoldItem, EffectBlockerEffect, WeatherBlockerEffect
+	private static class SafetyGoggles extends Item implements EffectBlockerEffect, HoldItem, WeatherBlockerEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1906,9 +1920,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
+		public String getPreventMessage(ActivePokemon victim)
 		{
-			return 30;
+			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
 		}
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1920,10 +1934,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			if (user.getAttack().getCategory() == Category.STATUS)
 			{
-				b.addMessage(victim.getName() + "'s " + this.name + " protects it from powder moves!");
+				b.addMessage(getPreventMessage(victim));
 			}
 			
 			return false;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
 		}
 
 		public boolean block(Namesies weather)

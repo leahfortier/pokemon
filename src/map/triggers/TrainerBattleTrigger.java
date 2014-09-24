@@ -52,7 +52,9 @@ public class TrainerBattleTrigger extends Trigger
 
 				while (params.find())
 				{
-					if (params.group(1) != null) p.setShiny();
+					if (params.group(1) != null) 
+						p.setShiny();
+					
 					if (params.group(2) != null)
 					{
 						ArrayList<Move> moves = new ArrayList<>();
@@ -64,6 +66,7 @@ public class TrainerBattleTrigger extends Trigger
 								moves.add(new Move(Attack.getAttackFromName(params.group(3 + i))));
 							}
 						}
+						
 						p.setMoves(moves);
 					}
 				}

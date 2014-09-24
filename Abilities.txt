@@ -552,6 +552,8 @@ Leaf Guard:
 *
 Scrappy:
 	Desc: Enables moves to hit Ghost-type foes.
+	Int: AdvantageChanger
+	AdvantageChange: (attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST
 *
 Swift Swim:
 	Desc: Boosts the Pok\u00e9mon’s Speed in rain.
@@ -651,9 +653,12 @@ Download:
 	Int: EntryEffect
 	Enter: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
+	PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getName());
 	
-	// TODO: I don't think this should take the current battle effects into account -- just the straight up base stats of the opponent
-	if (Stat.getStat(Stat.DEFENSE, other, victim, b) < Stat.getStat(Stat.SP_DEFENSE, other, victim, b))
+	int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
+	int baseSpecialDefense = otherInfo.getStat(Stat.SP_DEFENSE.index());
+	
+	if (baseDefense < baseSpecialDefense)
 	{
 		victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 	}
@@ -752,9 +757,9 @@ Overcoat:
 	Desc: Protects the Pok\u00e9mon from damage from weather.
 	Int: WeatherBlockerEffect
 	WeatherBlock: 
-	// TODO: Should also be immune to le powderz
 	return true;
 	###
+	PowderResist: True
 *
 Magma Armor:
 	Desc: Prevents the Pok\u00e9mon from becoming frozen.

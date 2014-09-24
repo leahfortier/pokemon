@@ -431,14 +431,14 @@ public class MapView extends View{
 							npc.setDirection(dir);
 							npc.walkTowards(dist - 1, dir);
 							
-							if(npc.isTrainer())
+							if (npc.isTrainer())
 							{
-								//TODO get trainer spotted music
+								// TODO: get trainer spotted music
 								Global.soundPlayer.playMusic("21-trainer-challenge-theme-1");
 							}
 							else
 							{
-								
+								// TODO: WHAT THE FUCK IS THIS EMPTY ELSE HERE FOR WHAT THE FUCK
 							}
 						}
 					}

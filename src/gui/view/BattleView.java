@@ -307,9 +307,9 @@ public class BattleView extends View
 			}
 		}
 		
-		//TODO Move method to global
-		public BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
-	        
+		// TODO: Move method to global
+		public BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) 
+		{
 			ColorModel cm = image.getColorModel();
 			boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 			WritableRaster raster = image.copyData(null);
@@ -1857,7 +1857,7 @@ public class BattleView extends View
 		}
 		else
 		{
-			//TODO get trainer battle music
+			// TODO: get trainer battle music
 			Global.soundPlayer.playMusic("22-trainer-battle-theme-1");
 		}
 	}

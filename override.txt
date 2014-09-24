@@ -1197,3 +1197,41 @@ CritBlockerEffect:
 		###
 	*
 ***
+Override:
+	PowderResist:
+		Header: String getPreventMessage(ActivePokemon victim)
+		Body:
+		return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
+		###
+		AddInterface: EffectBlockerEffect
+		AddMapField: ValidMove:
+		if (!user.getAttack().isMoveType(MoveType.POWDER)) 
+		{
+			return true;
+		}
+		
+		if (user.getAttack().getCategory() == Category.STATUS) 
+		{
+			b.addMessage(getPreventMessage(victim));
+		}
+		
+		return false;
+		###
+	*
+***
+AdvantageChanger:
+	AdvantageChange:
+		Header: Type[] getAdvantageChange(Type attacking, Type[] defending)
+		Body:
+		for (int i = 0; i < 2; i++)
+		{
+			if ({0})
+			{
+				defending[i] = Type.NONE;	
+			}
+		}
+		
+		return defending;
+		###
+	*
+***

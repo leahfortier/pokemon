@@ -1614,7 +1614,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class Foresight extends PokemonEffect 
+	private static class Foresight extends PokemonEffect implements AdvantageChanger
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1644,9 +1644,22 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return user.getName() + " identified " + victim.getName() + "!";
 		}
+
+		public Type[] getAdvantageChange(Type attacking, Type[] defending)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				if ((attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST)
+				{
+					defending[i] = Type.NONE;
+				}
+			}
+			
+			return defending;
+		}
 	}
 
-	private static class MiracleEye extends PokemonEffect 
+	private static class MiracleEye extends PokemonEffect implements AdvantageChanger
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1675,6 +1688,19 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getName() + " identified " + victim.getName() + "!";
+		}
+
+		public Type[] getAdvantageChange(Type attacking, Type[] defending)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				if (attacking == Type.PSYCHIC && defending[i] == Type.DARK)
+				{
+					defending[i] = Type.NONE;
+				}
+			}
+			
+			return defending;
 		}
 	}
 

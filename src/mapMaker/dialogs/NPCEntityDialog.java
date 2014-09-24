@@ -48,7 +48,7 @@ public class NPCEntityDialog extends JPanel {
 	
 	private JTextField conditionTextField;
 	
-	//TODO simplify adding data to NPC
+	// TODO: simplify adding data to NPC
 		//item list
 		//first and second trigger parsing (remove "trigger: " when reading and add it when saving)
 	

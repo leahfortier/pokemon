@@ -310,7 +310,10 @@ public class Battle
 	private void deadOpponent()
 	{
 		ActivePokemon dead = opponent.front();
-		if (!dead.isFainted(this)) return; // YOU'RE FINE
+		
+		// YOU'RE FINE
+		if (!dead.isFainted(this)) 
+			return; 
 		
 		// Gain dat EXP
 		player.gainEXP(dead, this); 
@@ -318,14 +321,14 @@ public class Battle
 		// You have achieved total victory
 		if (opponent.blackout())
 		{
-			//TODO send message to notify battle view of victory and play music then.
+			// TODO: Send message to notify battle view of victory and play music then.
 			if(isWildBattle())
 			{
 				Global.soundPlayer.playMusic("10-wild-pokemon-defeated");
 			}
 			else
 			{
-				//TODO get trainer win music
+				// TODO: Get trainer win music
 				Global.soundPlayer.playMusic("23-trainer-defeated");
 			}
 			
@@ -378,6 +381,7 @@ public class Battle
 			enterer.resetAttributes();
 		}
 		
+		// TODO: Invoke dat shit
 		enterer.getAttributes().setUsed(true);
 		Object[] list = getEffectsList(enterer);
 		for (Object o : list)

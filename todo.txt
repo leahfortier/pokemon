@@ -47,13 +47,14 @@ MAP TILES
 
 Look into rewriting MoldBreaker because it sucks
 Semi-invulnerable moves shouldn't get a menu in between turns
-
 Look at differences in Roar and other exit battle moves
+There is a bug with the buttons in bag view particularly the give and take ones
 
-Bracing effect isn't working -- Roilu used and it still crit it's pants
-Multiturn turn moves need to be reset when pokemon is called back -- Dragonair needed to recharge on the first turn of the next battle after using hyper beam
+Protean and Competitive abilities will affect non-gen6 Pokemon -- add these in
 
 Ask Josh if High Jump Kick will still fit everywhere since it is now the longest move name
+Ask Josh how to give a trainer Pokemon a held item
+Ask Josh to make a motherfucking enum or something to the effect for music titles so there aren't any fucking typos come on srsly
 
 Things to test:
 	EffectBlockerEffect

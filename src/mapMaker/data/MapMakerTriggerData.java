@@ -1513,7 +1513,7 @@ public class MapMakerTriggerData {
 		return null;
 	}
 	
-	//TODO make editable for adding conditions for each transition
+	// TODO: make editable for adding conditions for each transition
 	public PlaceableTrigger editTransitionBuildingTransition() 
 	{	
 		TransitionBuildingTransitionDialog transitionBuildingTransitionDialog = new TransitionBuildingTransitionDialog(mapMaker, this, currentMapName);

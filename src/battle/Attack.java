@@ -163,15 +163,19 @@ public abstract class Attack implements Serializable
 	// Secondary effects include status conditions, confusing, flinching, and stat changes (unless the stat changes are negative for the user)
 	public boolean hasSecondaryEffects()
 	{
+		// Effects are primary for status moves
 		if (category == Category.STATUS) 
 			return false;
 		
+		// If the effect may not necessarily occur, then it is secondary
 		if (effectChance < 100) 
 			return true;
 		
+		// Giving the target a status condition is a secondary effect
 		if (status != StatusCondition.NONE) 
 			return true;
 		
+		// Confusion and flinching count as secondary effects -- but I don't think anything else does?
 		for (Effect e : effects)
 		{
 			if (e.namesies() == Namesies.CONFUSION_EFFECT || e.namesies() == Namesies.FLINCH_EFFECT)
@@ -180,6 +184,7 @@ public abstract class Attack implements Serializable
 			}
 		}
 		
+		// Stat changes are considered to be secondary effects unless they are negative for the user
 		for (int val : statChanges)
 		{
 			if (val < 0)
@@ -282,18 +287,29 @@ public abstract class Attack implements Serializable
 	
 	public String getPowerString()
 	{
-		if (power == 0) return "--";
-		
-		return power + "";
+		return power == 0 ? "--" : power + "";
 	}
 	
 	public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 	{
-		boolean applyEffects = canApplyEffects(b, me, o);
+		// TODO: Just switched the order of these and changed the last parameter in canApplyEffects to target instead of o -- pretty sure it is right but should def be tested thoroughly
 		ActivePokemon target = getTarget(b, me, o);
+		boolean applyEffects = canApplyEffects(b, me, target);
 		
-		if (category != Category.STATUS) applyEffects = applyDamage(me, o, b) != -1 && applyEffects;
-		if (applyEffects) applyEffects(b, me, target);
+		// Physical and special attacks -- apply dat damage
+		if (category != Category.STATUS) 
+		{
+			// Effects can only be applied from non-status moves if damage was actually applied
+			applyEffects = applyDamage(me, o, b) != -1 && applyEffects;
+		}
+		
+		// TODO: I really think the canApplyEffects method needs to be called after apply damage is called especially if something is going to be printed
+		
+		// If you got it, flaunt it
+		if (applyEffects) 
+		{
+			applyEffects(b, me, target);
+		}
 	}
 	
 	private ActivePokemon getTarget(Battle b, ActivePokemon me, ActivePokemon o)
@@ -307,6 +323,7 @@ public abstract class Attack implements Serializable
 				b.addMessage(o.getName() + " snatched " + me.getName() + "'s move!");
 				return o;
 			}
+			
 			return me;
 		}
 		
@@ -4318,6 +4335,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: Try to make insomnia and vital spirit not hardcoded -- something like Asleep.applies or whatever
 			if (victim.fullHealth() || victim.hasAbility(Namesies.INSOMNIA_ABILITY) || victim.hasAbility(Namesies.VITAL_SPIRIT_ABILITY) || victim.hasStatus(StatusCondition.ASLEEP))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
@@ -8310,8 +8328,12 @@ public abstract class Attack implements Serializable
 		{
 			List<Type> types = new ArrayList<>();
 			for (Type t : Type.values())
-			if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(b, t))
-			types.add(t);
+			{
+				if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(b, t))
+				{
+					types.add(t);
+				}
+			}
 			
 			return types;
 		}

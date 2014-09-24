@@ -2,9 +2,12 @@ package main;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import pokemon.ActivePokemon;
 import battle.Battle;
+import battle.effect.AdvantageChanger;
 
 public enum Type implements Serializable 
 {
@@ -49,47 +52,39 @@ public enum Type implements Serializable
 	
 	public static double getAdvantage(Type moveType, ActivePokemon p, Battle b)
 	{
-		Type[] pType = p.getType(b);
-		int t1 = pType[0].index, t2 = pType[1].index, index = moveType.index;
+		// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes 
+		List<Object> invokees = new ArrayList<>();
+		invokees.addAll(p.getEffects());
+		invokees.add(p.getHeldItem(b));
+		invokees.add(b.getOtherPokemon(p.user()).getAbility());
 		
-		// Pokemon holding Ring Target lose their immunities
-		if (p.isHoldingItem(b, Namesies.RING_TARGET_ITEM))
+		Type[] pType = p.getType(b);
+		Type[] defending = (Type[])Global.updateInvoke(1, invokees.toArray(), AdvantageChanger.class, "getAdvantageChange", moveType, new Type[] {pType[0], pType[1]});
+		
+		// If nothing was updated, do special case check stupid things for fucking levitation which fucks everything up
+		if (defending[0] == pType[0] && defending[1] == pType[1] && moveType == GROUND)
 		{
-			for (int i = 0; i < typeAdvantage[index].length; i++)
+			// Pokemon that are levitating cannot be hit by ground type moves
+			if (p.isLevitating(b)) 
 			{
-				double adv1 = typeAdvantage[index][t1], adv2 = typeAdvantage[index][t2]; 
-				if (adv1 == 0 && adv2 == 0) return 1;
-				if (adv1 == 0) return adv2;
-				if (adv2 == 0) return adv1;
+				return 0;
+			}
+			
+			// If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
+			for (int i = 0; i < 2; i++)
+			{
+				if (defending[i] == FLYING)
+				{
+					defending[i] = NONE;
+				}
 			}
 		}
 		
-		// Pokemon that are levitating cannot be hit by ground type moves
-		if (p.isLevitating(b) && moveType == GROUND) return 0;
+		int index = moveType.index;
+		int type1 = defending[0].index;
+		int type2 = defending[1].index;
 		
-		// If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
-		if (moveType == GROUND)
-		{
-			if (pType[0] == FLYING) t1 = NONE.index;
-			if (pType[1] == FLYING) t2 = NONE.index;
-		}
-		
-		// Foresight and the Scrappy allows Ghost type Pokemon to be hit by Normal and Fighting type moves
-		if ((p.hasEffect(Namesies.FORESIGHT_EFFECT) || b.getOtherPokemon(p.user()).hasAbility(Namesies.SCRAPPY_ABILITY)) 
-				&& (moveType == NORMAL || moveType == FIGHTING))
-		{
-			if (pType[0] == GHOST) t1 = NONE.index;
-			if (pType[1] == GHOST) t2 = NONE.index;
-		}
-		
-		// Miracle Eye allows Dark type Pokemon to be hit by Psychic type moves
-		if (p.hasEffect(Namesies.MIRACLE_EYE_EFFECT) && moveType == PSYCHIC)
-		{
-			if (pType[0] == DARK) t1 = NONE.index;
-			if (pType[1] == DARK) t2 = NONE.index;
-		}
-		
-		return typeAdvantage[index][t1]*typeAdvantage[index][t2];
+		return typeAdvantage[index][type1]*typeAdvantage[index][type2];
 	}
 	
 	public static double getAdvantage(Type attacking, Type defending)
@@ -167,9 +162,9 @@ public enum Type implements Serializable
 	public static Type getHiddenType(int hiddenIndex)
 	{
 		for (Type t : values())
-		{
-			if (t.hiddenIndex == hiddenIndex) return t;
-		}
+			if (t.hiddenIndex == hiddenIndex) 
+				return t;
+		
 		Global.error("Invalid hidden type index " + hiddenIndex);
 		return null;
 	}

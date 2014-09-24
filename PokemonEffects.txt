@@ -666,6 +666,8 @@ Foresight:
 		b.addMessage(getCastMessage(b, caster, victim));
 	}
 	###
+	Int: AdvantageChanger
+	AdvantageChange: (attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST
 *
 MiracleEye:
 	CastMessage: user.getName() + " identified " + victim.getName() + "!"
@@ -680,6 +682,8 @@ MiracleEye:
 		b.addMessage(getCastMessage(b, caster, victim));
 	}
 	###
+	Int: AdvantageChanger
+	AdvantageChange: attacking == Type.PSYCHIC && defending[i] == Type.DARK
 *
 Torment:
 	Int: AttackSelectionEffect, BeforeTurnEffect

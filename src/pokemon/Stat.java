@@ -140,8 +140,7 @@ public enum Stat
 		
 //		System.out.println(p.getName() + " " + s.getName() + " Stage: " + temp + " -> " + temp2 + " -> " + stage);
 		
-		// Evasion stages are inverted
-		return s == EVASION ? stage*-1 : stage;
+		return stage;
 	}
 	
 	// Returns the corresponding Stat based on the index passed in

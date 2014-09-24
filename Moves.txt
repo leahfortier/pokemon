@@ -1985,6 +1985,7 @@ Rest:
 	SelfHealing: 1
 	Status: Asleep
 	ApplyEffects: 
+	// TODO: Try to make insomnia and vital spirit not hardcoded -- something like Asleep.applies or whatever
 	if (victim.fullHealth() || victim.hasAbility(Namesies.INSOMNIA_ABILITY) || victim.hasAbility(Namesies.VITAL_SPIRIT_ABILITY) || victim.hasStatus(StatusCondition.ASLEEP))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
@@ -4383,8 +4384,12 @@ Conversion 2:
 	{
 		List<Type> types = new ArrayList<>();
 		for (Type t : Type.values())
+		{
 			if (Type.getAdvantage(attacking, t) < 1 && !victim.isType(b, t))
+			{
 				types.add(t);
+			}
+		}
 				
 		return types;
 	}
