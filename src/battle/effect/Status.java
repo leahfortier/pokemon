@@ -274,7 +274,7 @@ public abstract class Status implements Serializable
 			super.type = StatusCondition.POISONED;
 		}
 		
-		public void apply(ActivePokemon victim, Battle b) 
+		public void applyEndTurn(ActivePokemon victim, Battle b) 
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
 			{
@@ -386,7 +386,7 @@ public abstract class Status implements Serializable
 			super.type = StatusCondition.BURNED;
 		}
 		
-		public void apply(ActivePokemon victim, Battle b) 
+		public void applyEndTurn(ActivePokemon victim, Battle b) 
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
 			{

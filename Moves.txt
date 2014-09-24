@@ -159,7 +159,7 @@ Struggle:
 	Cat: Physical
 	Recoil: 
 	b.addMessage(user.getName() + " was hurt by recoil!");
-	b.applyDamage(user, user.getStat(Stat.HP)/4);
+	user.reduceHealth(b, user.getStat(Stat.HP)/4);
 	###
 	MoveType: Encoreless,  Mimicless, Assistless, Metronomeless
 	Int: RecoilMove
@@ -1038,18 +1038,13 @@ Endeavor:
 	PP: 5
 	Acc: 100
 	Apply: 
-	if (super.zeroAdvantage(b, me, o)) 
-	{
-		return;
-	}
-	
 	if (me.getHP() >= o.getHP())
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
-	b.applyDamage(o, o.getHP() - me.getHP());
+	super.tryDamage(me, o, b, o.getHP() - me.getHP());
 	###
 *
 Sand Attack:
@@ -3611,8 +3606,7 @@ Mirror Coat:
 		return;
 	}
 	
-	if (super.zeroAdvantage(b, me, o)) return;
-	b.applyDamage(o, damageTaken*2);
+	super.tryDamage(me, o, b, damageTaken*2);
 	###
 *
 Counter:
@@ -3633,8 +3627,7 @@ Counter:
 		return;
 	}
 	
-	if (super.zeroAdvantage(b, me, o)) return;
-	b.applyDamage(o, damageTaken*2);
+	super.tryDamage(me, o, b, damageTaken*2);
 	###
 *
 Barrage:
@@ -4710,6 +4703,7 @@ Bide:
 	SelfTarget: True
 	Priority: 1
 	Apply: 
+	// TODO: I'm pretty sure Bide is supposed to be a forced move while the effect is in play
 	super.applyEffects(b, me, me);
 	###
 	MoveType: Sleep_Talk_Fail
@@ -5088,12 +5082,7 @@ Metal Burst:
 		return;
 	}
 	
-	if (super.zeroAdvantage(b, me, o)) 
-	{
-		return;
-	}
-	
-	b.applyDamage(o, (int)(damageTaken*1.5));
+	super.tryDamage(me, o, b, (int)(damageTaken*1.5));
 	###
 *
 Wild Charge:

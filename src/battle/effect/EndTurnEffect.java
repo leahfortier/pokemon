@@ -5,5 +5,5 @@ import battle.Battle;
 
 public interface EndTurnEffect
 {
-	public void apply(ActivePokemon victim, Battle b);		
+	public void applyEndTurn(ActivePokemon victim, Battle b);		
 }

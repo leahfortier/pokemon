@@ -224,23 +224,31 @@ Confusion:
 	private int turns;
 	###
 	CanAttack: 
+	// Snap it out!
 	if (turns == 0)
 	{
 		b.addMessage(p.getName() + " snapped out of its confusion!");
 		super.active = false;
 		return true;
 	}
+	
 	turns--;
 	b.addMessage(p.getName() + " is confused!");
-	if (Math.random()*100 < 50)
+	
+	// 50% chance to hurt yourself in confusion while confused
+	if (Math.random() < .5)
 	{
 		b.addMessage("It hurt itself in confusion!");
+		
+		// Perform confusion damage
 		Move temp = p.getMove();
 		p.setMove(new Move(Attack.getAttack(Namesies.CONFUSION_DAMAGE_ATTACK)));
-		b.applyDamage(p, b.damageCalc(p, p));
+		p.reduceHealth(b, b.damageCalc(p, p));
 		p.setMove(temp);
+		
 		return false;
 	}
+	
 	return true;
 	###
 	Activate: 
@@ -1017,31 +1025,38 @@ Bide:
 	x.damage = 0;
 	###
 	Cast: 
-	Bide e = (Bide)victim.getEffect(this.namesies);
-	if (e == null)
+	Bide bidesies = (Bide)victim.getEffect(this.namesies);
+			
+	// If the victim is not already under the effects of Bide, cast it upon them
+	if (bidesies == null)
 	{
 		move = caster.getMove();
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
 	
-	if (e.turns > 0)
+	// Already has the effect, but not ready for it to end yet -- store dat energy 
+	if (bidesies.turns > 0)
 	{
-		e.turns--;
-		b.addMessage(getCastMessage(b, caster, victim));				
+		bidesies.turns--;
+		b.addMessage(getCastMessage(b, caster, victim));
 		return;
 	}
 	
+	// TIME'S UP -- RELEASE DAT STORED ENERGY
 	b.addMessage(victim.getName() + " released energy!");
-	if (e.damage == 0) 
+	if (bidesies.damage == 0)
 	{
+		// Sucks to suck
 		b.addMessage(this.getFailMessage(b, caster, victim));
 	}
-	else 
+	else
 	{
-		b.applyDamage(b.getOtherPokemon(victim.user()), 2*e.damage);
+		// RETALIATION STATION
+		b.getOtherPokemon(victim.user()).reduceHealth(b, 2*bidesies.damage);
 	}
 	
+	// Bye Bye Bidesies
 	victim.getAttributes().removeEffect(this.namesies);
 	###
 	CanHave: True

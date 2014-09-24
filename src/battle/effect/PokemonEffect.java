@@ -165,7 +165,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return super.getFailMessage(b, user, victim);
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -213,7 +213,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return turns;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			turns++;
 		}
@@ -298,7 +298,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped by fire spin.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -357,7 +357,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped by magma storm.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -416,7 +416,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped by clamp.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -475,7 +475,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped by whirlpool.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -534,7 +534,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " was freed from wrap.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -593,7 +593,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " was freed from bind.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -652,7 +652,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer trapped from sand tomb.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -864,23 +864,31 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
+			// Snap it out!
 			if (turns == 0)
 			{
 				b.addMessage(p.getName() + " snapped out of its confusion!");
 				super.active = false;
 				return true;
 			}
+			
 			turns--;
 			b.addMessage(p.getName() + " is confused!");
-			if (Math.random()*100 < 50)
+			
+			// 50% chance to hurt yourself in confusion while confused
+			if (Math.random() < .5)
 			{
 				b.addMessage("It hurt itself in confusion!");
+				
+				// Perform confusion damage
 				Move temp = p.getMove();
 				p.setMove(new Move(Attack.getAttack(Namesies.CONFUSION_DAMAGE_ATTACK)));
-				b.applyDamage(p, b.damageCalc(p, p));
+				p.reduceHealth(b, b.damageCalc(p, p));
 				p.setMove(temp);
+				
 				return false;
 			}
+			
 			return true;
 		}
 	}
@@ -1073,7 +1081,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return true;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (move.getPP() == 0) active = false; // If the move runs out of PP, Encore immediately ends
 		}
@@ -1396,7 +1404,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return turns;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			// TODO: Why is this making the effect inactive?
 			if (victim.getAttributes().getLastMoveUsed().getAttack().namesies() != Namesies.STOCKPILE_ATTACK)
@@ -1865,7 +1873,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " planted its roots!";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
@@ -1956,7 +1964,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return user.getName() + " cut its own HP and put a curse on " + victim.getName() + "!";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -2092,7 +2100,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return "Only Uproar can be used right now!";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (uproar.getPP() == 0) active = false; // If uproar runs out of PP, the effect immediately ends
 		}
@@ -2122,7 +2130,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return user.getName() + " surrounded itself with a veil of water!";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) return;
 			int healAmount = victim.healHealthFraction(1/16.0);
@@ -2164,7 +2172,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !victim.hasStatus(StatusCondition.ASLEEP);
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -2482,31 +2490,38 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			Bide e = (Bide)victim.getEffect(this.namesies);
-			if (e == null)
+			Bide bidesies = (Bide)victim.getEffect(this.namesies);
+			
+			// If the victim is not already under the effects of Bide, cast it upon them
+			if (bidesies == null)
 			{
 				move = caster.getMove();
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
 			
-			if (e.turns > 0)
+			// Already has the effect, but not ready for it to end yet -- store dat energy
+			if (bidesies.turns > 0)
 			{
-				e.turns--;
+				bidesies.turns--;
 				b.addMessage(getCastMessage(b, caster, victim));
 				return;
 			}
 			
+			// TIME'S UP -- RELEASE DAT STORED ENERGY
 			b.addMessage(victim.getName() + " released energy!");
-			if (e.damage == 0)
+			if (bidesies.damage == 0)
 			{
+				// Sucks to suck
 				b.addMessage(this.getFailMessage(b, caster, victim));
 			}
 			else
 			{
-				b.applyDamage(b.getOtherPokemon(victim.user()), 2*e.damage);
+				// RETALIATION STATION
+				b.getOtherPokemon(victim.user()).reduceHealth(b, 2*bidesies.damage);
 			}
 			
+			// Bye Bye Bidesies
 			victim.getAttributes().removeEffect(this.namesies);
 		}
 
@@ -2525,7 +2540,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return move;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			increase(victim.getAttributes().getDamageTaken());
 		}
@@ -2895,7 +2910,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return super.getFailMessage(b, user, victim);
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			b.addMessage(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
 			if (super.numTurns == 1) victim.reduceHealthFraction(b, 1);

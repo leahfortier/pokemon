@@ -120,7 +120,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return (ClearSkies)(new ClearSkies().activate());
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 		}
 	}
@@ -154,7 +154,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return "The rain stopped.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			b.addMessage("The rain continues to pour.");
 		}
@@ -202,7 +202,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return "The sunlight faded.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			b.addMessage("The sunlight is strong.");
 		}
@@ -266,7 +266,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return "The sandstorm subsided.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			b.addMessage("The sandstorm rages.");
 			
@@ -317,7 +317,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return "The hail stopped.";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			b.addMessage("The hail continues to fall.");
 			

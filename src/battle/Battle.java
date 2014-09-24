@@ -7,7 +7,6 @@ import java.util.List;
 import main.Global;
 import main.Namesies;
 import main.Type;
-import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
@@ -465,7 +464,7 @@ public class Battle
 			return;
 		}
 		
-		weather.apply(player.front(), this);
+		weather.applyEndTurn(player.front(), this);
 		weather.decrement(this, player.front());
 	}
 	
@@ -479,7 +478,7 @@ public class Battle
 		list.add(me.getHeldItem(this));
 		list.add(getEffects(me.user()));
 		
-		Global.invoke(this, me, null, list.toArray(), EndTurnEffect.class, "apply", me, this);
+		Global.invoke(this, me, null, list.toArray(), EndTurnEffect.class, "applyEndTurn", me, this);
 		
 		me.isFainted(this);
 		
@@ -645,16 +644,6 @@ public class Battle
 		
 //		System.out.println(me.getName() + " Modifier: " + modifier);
 		return modifier;
-	}
-	
-	public int applyDamage(ActivePokemon p, int damage)
-	{
-		if (Ability.blockDamage(this, getOtherPokemon(p.user()), p)) 
-		{
-			return 0;
-		}
-		
-		return p.reduceHealth(this, damage);
 	}
 	
 	private static int[] critsicles = { 16, 8, 4, 3, 2 };

@@ -243,7 +243,7 @@ public abstract class Attack implements Serializable
 	
 	public boolean isType(Battle b, ActivePokemon user, Type t)
 	{
-		return getType(b, user) == type;
+		return getType(b, user) == t;
 	}
 	
 	public boolean isMoveType(MoveType moveType)
@@ -371,11 +371,37 @@ public abstract class Attack implements Serializable
 		return true;
 	}
 	
+	private boolean effective(ActivePokemon me, ActivePokemon o, Battle b)
+	{
+		if (this.zeroAdvantage(b, me, o))
+		{
+			return false;
+		}
+		
+		if (Ability.blockDamage(b, me, o)) 
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public int tryDamage(ActivePokemon me, ActivePokemon o, Battle b, int damage)
+	{
+		if (!effective(me, o, b))
+		{
+			return -1;
+		}
+		
+		return o.reduceHealth(b, damage);
+	}
+	
 	// Physical and Special moves -- do dat damage!
 	// Returns -1 if the move was unsuccessful due to zero type advantage
 	public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 	{
-		if (zeroAdvantage(b, me, o)) 
+		// Return if the move is uneffective
+		if (!effective(me, o, b))
 		{
 			return -1;
 		}
@@ -386,7 +412,7 @@ public abstract class Attack implements Serializable
 		else if (adv > 1) b.addMessage("It's super effective!");
 		
 		// Deal damage
-		int damage = b.applyDamage(o, b.damageCalc(me, o));
+		int damage = o.reduceHealth(b, b.damageCalc(me, o));
 		
 		// Check if target is fainted
 		o.isFainted(b);
@@ -394,6 +420,7 @@ public abstract class Attack implements Serializable
 		Ability userAbility = me.getAbility(), oppAbility = o.getAbility();
 		Item userItem = me.getHeldItem(b), oppItem = o.getHeldItem(b);
 		
+		// TODO: I don't think this should just be the ability and the item, it should be all effects -- it's just a coincidence that these happens to be the ones that have cases so far
 		Object[] invokees = new Object[] {userAbility, userItem};
 		
 		// Apply a damage effect
@@ -1240,12 +1267,7 @@ public abstract class Attack implements Serializable
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return -1;
-			}
-			
-			return b.applyDamage(o, 20);
+			return super.tryDamage(me, o, b, 20);
 		}
 	}
 
@@ -1281,7 +1303,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/4.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/4.0));
 		}
 	}
 
@@ -1303,7 +1325,7 @@ public abstract class Attack implements Serializable
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, user.getStat(Stat.HP)/4);
+			user.reduceHealth(b, user.getStat(Stat.HP)/4);
 		}
 	}
 
@@ -1375,7 +1397,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
 		}
 	}
 
@@ -1467,12 +1489,7 @@ public abstract class Attack implements Serializable
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return -1;
-			}
-			
-			return b.applyDamage(o, 40);
+			return super.tryDamage(me, o, b, 40);
 		}
 	}
 
@@ -1792,7 +1809,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
 		}
 	}
 
@@ -2777,18 +2794,13 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return;
-			}
-			
 			if (me.getHP() >= o.getHP())
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
-			b.applyDamage(o, o.getHP() - me.getHP());
+			super.tryDamage(me, o, b, o.getHP() - me.getHP());
 		}
 	}
 
@@ -3048,12 +3060,7 @@ public abstract class Attack implements Serializable
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return -1;
-			}
-			
-			return b.applyDamage(o, (int)Math.ceil(o.getHP()/2.0));
+			return super.tryDamage(me, o, b, (int)Math.ceil(o.getHP()/2.0));
 		}
 	}
 
@@ -3894,17 +3901,18 @@ public abstract class Attack implements Serializable
 			
 			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
-				b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
+				b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
 				return -1;
 			}
 			
-			if (super.zeroAdvantage(b, me, o))
+			// TODO: This code is pretty ugly
+			int damage = super.tryDamage(me, o, b, o.getHP());
+			if (damage >= 0)
 			{
-				return -1;
+				b.addMessage("It's a One-Hit KO!");
 			}
 			
-			b.addMessage("It's a One-Hit KO!");
-			return b.applyDamage(o, o.getHP());
+			return damage;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -4826,17 +4834,18 @@ public abstract class Attack implements Serializable
 			
 			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
-				b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
+				b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
 				return -1;
 			}
 			
-			if (super.zeroAdvantage(b, me, o))
+			// TODO: This code is pretty ugly
+			int damage = super.tryDamage(me, o, b, o.getHP());
+			if (damage >= 0)
 			{
-				return -1;
+				b.addMessage("It's a One-Hit KO!");
 			}
 			
-			b.addMessage("It's a One-Hit KO!");
-			return b.applyDamage(o, o.getHP());
+			return damage;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -5165,12 +5174,7 @@ public abstract class Attack implements Serializable
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return -1;
-			}
-			
-			return b.applyDamage(o, me.getLevel());
+			return super.tryDamage(me, o, b, me.getLevel());
 		}
 	}
 
@@ -5377,7 +5381,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/4.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/4.0));
 		}
 	}
 
@@ -6130,7 +6134,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
 		}
 	}
 
@@ -6347,17 +6351,18 @@ public abstract class Attack implements Serializable
 			
 			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
-				b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
+				b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
 				return -1;
 			}
 			
-			if (super.zeroAdvantage(b, me, o))
+			// TODO: This code is pretty ugly
+			int damage = super.tryDamage(me, o, b, o.getHP());
+			if (damage >= 0)
 			{
-				return -1;
+				b.addMessage("It's a One-Hit KO!");
 			}
 			
-			b.addMessage("It's a One-Hit KO!");
-			return b.applyDamage(o, o.getHP());
+			return damage;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -6635,12 +6640,7 @@ public abstract class Attack implements Serializable
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return -1;
-			}
-			
-			return b.applyDamage(o, me.getLevel());
+			return super.tryDamage(me, o, b, me.getLevel());
 		}
 	}
 
@@ -6907,17 +6907,18 @@ public abstract class Attack implements Serializable
 			
 			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
-				b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
+				b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
 				return -1;
 			}
 			
-			if (super.zeroAdvantage(b, me, o))
+			// TODO: This code is pretty ugly
+			int damage = super.tryDamage(me, o, b, o.getHP());
+			if (damage >= 0)
 			{
-				return -1;
+				b.addMessage("It's a One-Hit KO!");
 			}
 			
-			b.addMessage("It's a One-Hit KO!");
-			return b.applyDamage(o, o.getHP());
+			return damage;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -7019,8 +7020,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			if (super.zeroAdvantage(b, me, o)) return;
-			b.applyDamage(o, damageTaken*2);
+			super.tryDamage(me, o, b, damageTaken*2);
 		}
 	}
 
@@ -7049,8 +7049,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			if (super.zeroAdvantage(b, me, o)) return;
-			b.applyDamage(o, damageTaken*2);
+			super.tryDamage(me, o, b, damageTaken*2);
 		}
 	}
 
@@ -7166,7 +7165,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
 		}
 	}
 
@@ -7295,7 +7294,7 @@ public abstract class Attack implements Serializable
 		public void crash(Battle b, ActivePokemon user)
 		{
 			b.addMessage(user.getName() + " kept going and crashed!");
-			b.applyDamage(user, user.getStat(Stat.HP)/3);
+			user.reduceHealth(b, user.getStat(Stat.HP)/3);
 		}
 	}
 
@@ -7344,7 +7343,7 @@ public abstract class Attack implements Serializable
 		public void crash(Battle b, ActivePokemon user)
 		{
 			b.addMessage(user.getName() + " kept going and crashed!");
-			b.applyDamage(user, user.getStat(Stat.HP)/2);
+			user.reduceHealth(b, user.getStat(Stat.HP)/2);
 		}
 	}
 
@@ -8794,12 +8793,7 @@ public abstract class Attack implements Serializable
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return -1;
-			}
-			
-			return b.applyDamage(o, (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0));
+			return super.tryDamage(me, o, b, (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0));
 		}
 	}
 
@@ -8839,6 +8833,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// TODO: I'm pretty sure Bide is supposed to be a forced move while the effect is in play
 			super.applyEffects(b, me, me);
 		}
 	}
@@ -9446,12 +9441,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return;
-			}
-			
-			b.applyDamage(o, (int)(damageTaken*1.5));
+			super.tryDamage(me, o, b, (int)(damageTaken*1.5));
 		}
 	}
 
@@ -9475,7 +9465,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/4.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/4.0));
 		}
 	}
 
@@ -9616,7 +9606,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/2.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/2.0));
 		}
 	}
 
@@ -10403,7 +10393,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/4.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/4.0));
 		}
 	}
 
@@ -10664,12 +10654,7 @@ public abstract class Attack implements Serializable
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o))
-			{
-				return -1;
-			}
-			
-			return b.applyDamage(o, me.getHP());
+			return super.tryDamage(me, o, b, me.getHP());
 		}
 	}
 
@@ -11638,7 +11623,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			b.applyDamage(user, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
 		}
 	}
 

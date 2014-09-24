@@ -718,7 +718,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.isType(b, Type.POISON))
 			{
@@ -1124,7 +1124,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
 		}
@@ -1145,7 +1145,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (Status.applies(StatusCondition.POISONED, b, victim, victim))
 			{
@@ -1482,7 +1482,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			boolean used = false;
 			for (int i = 0; i < effects.length; i++)
@@ -2108,7 +2108,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 80;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -3760,7 +3760,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 			{
@@ -8032,7 +8032,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + restore + "'s PP was restored!";
 		}
 
-		public void apply(ActivePokemon victim, Battle b)
+		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			for (Move m : victim.getMoves())
 			{

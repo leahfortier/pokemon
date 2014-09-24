@@ -56,8 +56,6 @@ Multiturn turn moves need to be reset when pokemon is called back -- Dragonair n
 Ask Josh if High Jump Kick will still fit everywhere since it is now the longest move name
 
 Things to test:
-	BracingEffect
-	CrashDamageEffect
 	EffectBlockerEffect
 	EndBattleEffect
 	EndTurnEffect
@@ -74,6 +72,8 @@ Things to test:
 		if (this instanceof Ability && user.breaksTheMold()) return 1;
 	StatProtectingEffect:
 		if (this instanceof Ability && caster.breaksTheMold()) return false;
+		
+	Test fixed damage moves or basically anything that takes advantage of the new tryDamage method
 	
 pokemoninfo.txt changes:
 	LEVEL 100 FLYING BULBASAUR

@@ -17,12 +17,7 @@ Override:
 	FixedDamage:
 		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		Body: 
-		if (super.zeroAdvantage(b, me, o)) 
-		{
-			return -1;
-		}
-		
-		return b.applyDamage(o, {0});
+		return super.tryDamage(me, o, b, {0});
 		###
 	*
 ***
@@ -63,7 +58,7 @@ RecoilMove:
 		}
 		
 		b.addMessage(user.getName() + " was hurt by recoil!");
-		b.applyDamage(user, (int)Math.ceil(damage/{0}.0));
+		user.reduceHealth(b, (int)Math.ceil(damage/{0}.0));
 		###
 	*
 ***
@@ -220,17 +215,18 @@ Override:
 
 		if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 		{
-			b.addMessage(o.getName() + "'s Sturdy prevents OHKO moves!");
-			return -1;
-		}
-
-		if (super.zeroAdvantage(b, me, o)) 
-		{
+			b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
 			return -1;
 		}
 		
-		b.addMessage("It's a One-Hit KO!");
-		return b.applyDamage(o, o.getHP());
+		// TODO: This code is pretty ugly
+		int damage = super.tryDamage(me, o, b, o.getHP());
+		if (damage >= 0)
+		{
+			b.addMessage("It's a One-Hit KO!");
+		}
+		
+		return damage;
 		###
 		AddMapField: MoveType: One_Hit_KO
 		AddMapField: OHKO2: True
@@ -254,7 +250,7 @@ CrashDamageMove:
 		Header: void crash(Battle b, ActivePokemon user)
 		Body:
 		b.addMessage(user.getName() + " kept going and crashed!");
-		b.applyDamage(user, user.getStat(Stat.HP)/{0});
+		user.reduceHealth(b, user.getStat(Stat.HP)/{0});
 		###
 	*
 ***
@@ -332,7 +328,7 @@ Override:
 ***
 EndTurnEffect:
 	ApplyEndTurn:
-		Header: void apply(ActivePokemon victim, Battle b)
+		Header: void applyEndTurn(ActivePokemon victim, Battle b)
 	*
 ***
 BeforeTurnEffect:
@@ -414,8 +410,51 @@ RapidSpinRelease:
 StatChangingEffect:
 	ModifyStat:
 		Header: int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		Optional: True
+		Default:
+		if (s == toModify() && modifyCondition(b, p, opp))
+		{
+			stat *= modifyMultiplier();
+		}
+		
+		return stat;
+		###
 		Begin: 
 		int stat = statValue;
+		###
+	*
+***
+Override:
+	ToModify:
+		Header: Stat toModify()
+		Body:
+		return Stat.{00};
+		###
+	*
+***
+Override:
+	WeatherModify:
+		Header: Namesies getWeatherCondition()
+		Body:
+		return Namesies.{00}_EFFECT;
+		###
+		AddMapField: ModifyCondition: b.getWeather().namesies() == getWeatherCondition()
+	*
+***
+Override:
+	ModifyCondition:
+		Header: boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		Body:
+		return {0};
+		###
+		AddInterface: StatChangingEffect
+	*
+***
+Override:
+	ModifyMultiplier:
+		Header: double modifyMultiplier()
+		Body:
+		return {0};
 		###
 	*
 ***
@@ -605,6 +644,39 @@ DamageBlocker:
 	*
 	AlternateEffect:
 		Header: void alternateEffect(Battle b, ActivePokemon victim)
+	*
+***
+Override:
+	BlockType:
+		Header: Type getType()
+		Body:
+		return Type.{00};
+		###
+		AddInterface: DamageBlocker
+		AddMapField: Block:
+		return attacking == getType();
+		###
+		AddMapField: AlternateEffect:
+		b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + getType().getName() + " type moves!");
+		victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+		###
+	*
+***
+Override:
+	AbsorbType:
+		Header: Type getType()
+		Body:
+		return Type.{00};
+		###
+		AddInterface: DamageBlocker
+		AddMapField: Block:
+		return attacking == getType() && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
+		###
+		AddMapField: AlternateEffect:
+		// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
+		victim.healHealthFraction(1/4.0);
+		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+		###
 	*
 ***
 WeatherBlockerEffect:
