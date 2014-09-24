@@ -375,7 +375,7 @@ None
 
 12
 Butterfree
-60 45 50 80 80 70 
+60 45 50 90 80 70 
 173
 Medium Fast
 Bug Flying
@@ -457,7 +457,7 @@ None
 
 15
 Beedrill
-65 80 40 45 80 75 
+65 90 40 45 80 75 
 173
 Medium Fast
 Bug Poison
@@ -560,7 +560,7 @@ None
 
 18
 Pidgeot
-83 80 75 70 70 91 
+83 80 75 70 70 101 
 211
 Medium Slow
 Normal Flying
@@ -817,7 +817,7 @@ Dragon
 
 25
 Pikachu
-35 55 30 50 40 90 
+35 55 40 50 50 90 
 105
 Medium Fast
 Electric None
@@ -853,7 +853,7 @@ Fairy
 
 26
 Raichu
-60 90 55 90 80 100 
+60 90 55 90 80 110 
 214
 Medium Fast
 Electric None
@@ -1016,7 +1016,7 @@ None
 
 31
 Nidoqueen
-90 82 87 75 85 76 
+90 92 87 75 85 76 
 223
 Medium Slow
 Poison Ground
@@ -1110,7 +1110,7 @@ Field
 
 34
 Nidoking
-81 92 77 85 75 85 
+81 102 77 85 75 85 
 223
 Medium Slow
 Poison Ground
@@ -1181,7 +1181,7 @@ None
 
 36
 Clefable
-95 70 73 85 90 60 
+95 70 73 95 90 60 
 213
 Fast
 Normal None
@@ -1307,7 +1307,7 @@ None
 
 40
 Wigglytuff
-140 70 45 75 50 45 
+140 70 45 85 50 45 
 191
 Fast
 Normal None
@@ -1467,7 +1467,7 @@ None
 
 45
 Vileplume
-75 80 85 100 90 50 
+75 80 85 110 90 50 
 216
 Medium Slow
 Grass Poison
@@ -2076,7 +2076,7 @@ None
 
 62
 Poliwrath
-90 85 95 70 90 70 
+90 95 95 70 90 70 
 225
 Medium Slow
 Water Fighting
@@ -2163,7 +2163,7 @@ None
 
 65
 Alakazam
-55 50 45 135 85 120 
+55 50 45 135 95 120 
 221
 Medium Slow
 Psychic None
@@ -2378,7 +2378,7 @@ None
 
 71
 Victreebel
-80 105 65 100 60 70 
+80 105 65 100 70 70 
 216
 Medium Slow
 Grass Poison
@@ -2562,7 +2562,7 @@ None
 
 76
 Golem
-80 110 130 55 65 45 
+80 120 130 55 65 45 
 218
 Medium Slow
 Rock Ground
@@ -6343,7 +6343,7 @@ Field
 
 181
 Ampharos
-90 75 75 115 90 55 
+90 75 85 115 90 55 
 225
 Medium Slow
 Electric None
@@ -6381,7 +6381,7 @@ Field
 
 182
 Bellossom
-75 80 85 90 100 50 
+75 80 95 90 100 50 
 216
 Medium Slow
 Grass None
@@ -6439,7 +6439,7 @@ Fairy
 
 184
 Azumarill
-100 50 80 50 80 50 
+100 50 80 60 80 50 
 185
 Fast
 Water None
@@ -6617,7 +6617,7 @@ Grass
 
 189
 Jumpluff
-75 55 70 55 85 110 
+75 55 70 55 95 110 
 203
 Medium Slow
 Grass Flying
@@ -9343,7 +9343,7 @@ None
 
 267
 Beautifly
-60 70 50 90 50 65 
+60 70 50 100 50 65 
 173
 Medium Fast
 Bug Flying
@@ -10258,7 +10258,7 @@ Field
 
 295
 Exploud
-104 91 63 91 63 68 
+104 91 63 91 73 68 
 216
 Medium Slow
 Normal None
@@ -13918,7 +13918,7 @@ None
 
 398
 Staraptor
-85 120 70 50 50 100 
+85 120 70 50 60 100 
 214
 Medium Slow
 Normal Flying
@@ -14208,7 +14208,7 @@ None
 
 407
 Roserade
-60 70 55 125 105 90 
+60 70 65 125 105 90 
 227
 Medium Slow
 Grass Poison
@@ -17741,7 +17741,7 @@ None
 
 508
 Stoutland
-85 100 90 45 90 80 
+85 110 90 45 90 80 
 221
 Medium Slow
 Normal None
@@ -18177,7 +18177,7 @@ None
 
 521
 Unfezant
-80 105 80 65 55 93 
+80 115 80 65 55 93 
 215
 Medium Slow
 Normal Flying
@@ -18360,7 +18360,7 @@ None
 
 526
 Gigalith
-85 135 130 60 70 25 
+85 135 130 60 80 25 
 227
 Medium Slow
 Rock None
@@ -18765,7 +18765,7 @@ None
 
 537
 Seismitoad
-105 85 75 85 75 74 
+105 95 75 85 75 74 
 225
 Medium Slow
 Water Ground
@@ -18935,7 +18935,7 @@ None
 
 542
 Leavanny
-75 103 80 70 70 92 
+75 103 80 70 80 92 
 221
 Medium Slow
 Bug Grass
@@ -19046,7 +19046,7 @@ None
 
 545
 Scolipede
-60 90 89 55 69 112 
+60 100 89 55 69 112 
 214
 Medium Slow
 Bug Poison
@@ -19326,7 +19326,7 @@ None
 
 553
 Krookodile
-95 117 70 65 70 92 
+95 117 80 65 70 92 
 229
 Medium Slow
 Ground Dark

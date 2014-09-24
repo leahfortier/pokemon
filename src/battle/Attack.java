@@ -1149,6 +1149,12 @@ public abstract class Attack implements Serializable
 			super.status = StatusCondition.ASLEEP;
 			super.moveTypes.add(MoveType.POWDER);
 		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			// TODO: Grass-type Pokemon are not affected by Powder moves
+			super.apply(me, o, b);
+		}
 	}
 
 	private static class Toxic extends Attack 
@@ -4539,6 +4545,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.SPORE_ATTACK, "The user scatters bursts of spores that induce sleep.", 15, Type.GRASS, Category.STATUS);
 			super.accuracy = 100;
 			super.status = StatusCondition.ASLEEP;
+			super.moveTypes.add(MoveType.POWDER);
 		}
 	}
 
@@ -8710,6 +8717,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.COTTON_SPORE_ATTACK, "The user releases cotton-like spores that cling to the target, harshly reducing its Speed stat.", 40, Type.GRASS, Category.STATUS);
 			super.accuracy = 100;
+			super.moveTypes.add(MoveType.POWDER);
 			super.statChanges[Stat.SPEED.index()] = -2;
 		}
 	}

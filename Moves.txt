@@ -73,6 +73,10 @@ Sleep Powder:
 	Status: Asleep
 	Cat: Status
 	MoveType: Powder
+	Apply:
+	// TODO: Grass-type Pokemon are not affected by Powder moves
+	super.apply(me, o, b);
+	###
 *
 Toxic:
 	PP: 10
@@ -2138,6 +2142,7 @@ Spore:
 	Status: Asleep
 	Type: Grass
 	Cat: Status
+	MoveType: Powder
 *
 Cross Poison:
 	Desc: A slashing attack with a poisonous blade that may also leave the target poisoned. Critical hits land more easily.
@@ -4635,6 +4640,7 @@ Cotton Spore:
 	Type: Grass
 	Cat: Status
 	StatChange: 1 Speed -2
+	MoveType: Powder
 *
 Cotton Guard:
 	Desc: The user protects itself by wrapping its body in soft cotton, drastically raising the user's Defense stat.
