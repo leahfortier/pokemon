@@ -4,6 +4,7 @@ import item.Item;
 import item.berry.Berry;
 import item.berry.GainableEffectBerry;
 import item.hold.DriveItem;
+import item.hold.GemItem;
 import item.hold.HoldItem;
 import item.hold.PlateItem;
 
@@ -1160,6 +1161,12 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 			super.effects.add(Effect.getEffect(Namesies.BAD_POISON_EFFECT, EffectType.POKEMON));
 		}
+
+		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
+		{
+			// TODO: Lock-on accuracy if used by a Poison-type Pokemon
+			return super.accuracy;
+		}
 	}
 
 	private static class Ember extends Attack 
@@ -1319,7 +1326,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.SWEET_SCENT_ATTACK, "A sweet scent that lowers the opposing team's evasiveness. It also lures wild Pok\u00e9mon if used in grass, etc.", 20, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
-			super.statChanges[Stat.EVASION.index()] = -1;
+			super.statChanges[Stat.EVASION.index()] = -2;
 		}
 	}
 
@@ -2179,7 +2186,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.STRING_SHOT_ATTACK, "The targets are bound with silk blown from the user's mouth. This silk reduces the targets' Speed stat.", 40, Type.BUG, Category.STATUS);
 			super.accuracy = 95;
-			super.statChanges[Stat.SPEED.index()] = -1;
+			super.statChanges[Stat.SPEED.index()] = -2;
 		}
 	}
 
@@ -2402,6 +2409,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: Doesn't work against Oblivious Pokemon
 			if (Gender.oppositeGenders(user, victim))
 			{
 				super.applyEffects(b, user, victim);
@@ -3777,7 +3785,7 @@ public abstract class Attack implements Serializable
 			super.power = 50;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect(Namesies.BAD_POISON_EFFECT, EffectType.POKEMON));
-			super.effectChance = 30;
+			super.effectChance = 50;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -8368,6 +8376,12 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.AIRBORNE);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			// TODO: Fails if opponent is above a certain weight
+			super.apply(me, o, b);
+		}
 	}
 
 	private static class IronHead extends Attack 
@@ -9377,6 +9391,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// TODO: Roar and whirlwind and multi-turn moves should be assistless
 			List<Attack> attacks = new ArrayList<>();
 			for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
 			{
@@ -9653,6 +9668,7 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
+			// TODO: Should not take the attack reduction from burn
 			return super.power*(me.hasStatus() ? 2 : 1);
 		}
 	}
@@ -10035,8 +10051,7 @@ public abstract class Attack implements Serializable
 		{
 			Item heldItem = victim.getHeldItem(b);
 			
-			// TODO: Should also burn the victim's gems
-			if (heldItem instanceof Berry)
+			if (heldItem instanceof Berry || heldItem instanceof GemItem)
 			{
 				b.addMessage(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 				victim.consumeItem(b);
@@ -10257,6 +10272,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: Look this up
 			for (int i = 0; i < victim.getEffects().size(); i++)
 			{
 				PokemonEffect fogglyBoggly = victim.getEffects().get(i);
@@ -10714,6 +10730,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: These moves need infinite accuracy and bypass Protect
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
@@ -10784,6 +10801,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: These moves need infinite accuracy and bypass Protect
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
@@ -10917,6 +10935,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: These moves need infinite accuracy and bypass Protect
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
@@ -11281,6 +11300,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: These moves need infinite accuracy and bypass Protect
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{

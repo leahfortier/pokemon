@@ -645,6 +645,7 @@ public abstract class Ability implements Serializable
 
 		public boolean prevent(ActivePokemon caster, Stat stat)
 		{
+			// TODO: Also needs to ignore opponent's evasion boosts
 			return stat == Stat.ACCURACY;
 		}
 
@@ -2423,6 +2424,7 @@ public abstract class Ability implements Serializable
 
 		public boolean block(Namesies weather)
 		{
+			// TODO: Should also be immune to le powderz
 			return true;
 		}
 	}

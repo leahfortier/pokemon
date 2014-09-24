@@ -772,6 +772,30 @@ PowerItem:
 		AddInterface: Hidden-HoldItem
 	*
 ***
+GemItem:
+	GemType:
+		Header: Type getType()
+		Body:
+		return Type.{00};
+		###
+		AddInterface: Hidden-PowerChangeEffect
+		AddMapField: GetMultiplier:
+		if (user.getAttack().isType(b, user, getType()))
+		{
+			// Consume the item
+			b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+			user.consumeItem(b);
+
+			// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+			return 1.5;
+		}
+
+		return 1;
+		###
+		AddInterface: Hidden-HoldItem
+		AddMapField: Fling: 30
+	*
+***
 Override:
 	EnhanceType:
 		Header: Type getType()
@@ -790,12 +814,6 @@ Override:
 		AddMapField: GetMultiplier:
 		if (user.getAttack().isType(b, user, getType()))
 		{
-			if (this instanceof ConsumedItem)
-			{
-				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-				user.consumeItem(b);
-			}
-
 			return getMultiplier();
 		}
 

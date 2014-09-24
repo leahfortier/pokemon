@@ -118,7 +118,10 @@ public class Bag implements Serializable
 	
 	public String giveItem(CharacterData player, ActivePokemon p, Item hold)
 	{
-		if (p.isEgg()) return "You can't give an item to an egg!";
+		if (p.isEgg()) 
+		{
+			return "You can't give an item to an egg!";
+		}
 		
 		String s = "";
 		

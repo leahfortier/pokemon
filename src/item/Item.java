@@ -8,6 +8,7 @@ import item.berry.HealthTriggeredBerry;
 import item.berry.StatusBerry;
 import item.hold.ConsumedItem;
 import item.hold.DriveItem;
+import item.hold.GemItem;
 import item.hold.HoldItem;
 import item.hold.PlateItem;
 import item.hold.PowerItem;
@@ -1467,8 +1468,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class MentalHerb extends Item implements HoldItem, EndTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
-		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT};
-		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused"};
+		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT, Namesies.HEAL_BLOCK_EFFECT};
+		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
 
 		public MentalHerb()
 		{
@@ -2375,12 +2376,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -2438,12 +2433,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -2480,12 +2469,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -2522,12 +2505,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -2564,12 +2541,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -3162,7 +3133,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class FireGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class FireGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3177,22 +3148,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.FIRE;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3204,7 +3169,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class WaterGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class WaterGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3219,22 +3184,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.WATER;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3246,7 +3205,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class ElectricGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class ElectricGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3261,22 +3220,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.ELECTRIC;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3288,7 +3241,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class GrassGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class GrassGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3303,22 +3256,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.GRASS;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3330,7 +3277,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class IceGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class IceGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3345,22 +3292,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.ICE;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3372,7 +3313,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class FightingGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class FightingGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3387,22 +3328,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.FIGHTING;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3414,7 +3349,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PoisonGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class PoisonGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3429,22 +3364,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.POISON;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3456,7 +3385,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class GroundGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class GroundGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3471,22 +3400,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.GROUND;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3498,7 +3421,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class FlyingGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class FlyingGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3513,22 +3436,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.FLYING;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3540,7 +3457,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PsychicGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class PsychicGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3555,22 +3472,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.PSYCHIC;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3582,7 +3493,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class BugGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class BugGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3597,22 +3508,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.BUG;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3624,7 +3529,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class RockGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class RockGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3639,22 +3544,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.ROCK;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3666,7 +3565,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class GhostGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class GhostGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3681,22 +3580,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.GHOST;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3708,7 +3601,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class DragonGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class DragonGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3723,22 +3616,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.DRAGON;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3750,7 +3637,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class DarkGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class DarkGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3765,22 +3652,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.DARK;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3792,7 +3673,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class SteelGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class SteelGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3807,22 +3688,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.STEEL;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3834,7 +3709,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class NormalGem extends Item implements PowerChangeEffect, HoldItem, ConsumedItem
+	private static class NormalGem extends Item implements GemItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3849,22 +3724,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.NORMAL;
 		}
 
-		public double getMultiplier()
-		{
-			return 1.5;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
+				// Consume the item
+				b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+				user.consumeItem(b);
 				
-				return getMultiplier();
+				// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
+				return 1.5;
 			}
 			
 			return 1;
@@ -3927,12 +3796,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -3969,12 +3832,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4011,12 +3868,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4053,12 +3904,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4095,12 +3940,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4137,12 +3976,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4225,12 +4058,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4267,12 +4094,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4309,12 +4130,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4351,12 +4166,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4393,12 +4202,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4435,12 +4238,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4477,12 +4274,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4519,12 +4310,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4561,12 +4346,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			
@@ -4603,12 +4382,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (user.getAttack().isType(b, user, getType()))
 			{
-				if (this instanceof ConsumedItem)
-				{
-					b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-					user.consumeItem(b);
-				}
-				
 				return getMultiplier();
 			}
 			

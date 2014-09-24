@@ -561,7 +561,7 @@ UsedDefenseCurl:
 UsedMinimize:
 	CanHave: True
 	Cast: 
-	// Body Slam, Dragon Rush, Flying Press, Phantom Force, Shadow Force, Steamroller, and Stomp all deal double damage to a Pokémon that has used Minimize, and cannot miss against it.
+	// TODO: Body Slam, Dragon Rush, Flying Press, Phantom Force, Shadow Force, Steamroller, and Stomp all deal double damage to a Pokémon that has used Minimize, and cannot miss against it.
 	if (!victim.hasEffect(this.namesies)) 
 	{
 		super.cast(b, caster, victim, source, printCast);
@@ -1110,7 +1110,7 @@ HealBlock:
 	NumTurns: 5
 	CastMessage: user.getName() + " blocked " + victim.getName() + " from healing!"
 	SubsideMessage: "The effects of heal block wore off."
-	Int: BeforeTurnEffect:
+	Int: BeforeTurnEffect
 	CanAttack:
 	// TODO: Draining moves don't work -- also I think this should be an OpposingBeforeTurnEffect, not a BeforeTurnEffect
 	return true;

@@ -5419,8 +5419,7 @@ Incinerate:
 	ApplyEffects: 
 	Item heldItem = victim.getHeldItem(b);
 	
-	// TODO: Should also burn the victim's gems
-	if (heldItem instanceof Berry)
+	if (heldItem instanceof Berry || heldItem instanceof GemItem)
 	{
 		b.addMessage(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 		victim.consumeItem(b);

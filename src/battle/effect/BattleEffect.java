@@ -193,6 +193,7 @@ public abstract class BattleEffect extends Effect
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: This and water sport should only last five turns
 			return user.getAttack().getType(b, user) == Type.ELECTRIC ? .33 : 1;
 		}
 	}

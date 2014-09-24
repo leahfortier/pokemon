@@ -1450,6 +1450,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
+			// TODO: Body Slam, Dragon Rush, Flying Press, Phantom Force, Shadow Force, Steamroller, and Stomp all deal double damage to a Pokémon that has used Minimize, and cannot miss against it.
 			if (!victim.hasEffect(this.namesies))
 			{
 				super.cast(b, caster, victim, source, printCast);
@@ -1756,6 +1757,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
+			// TODO: Cannot cast this effect on Oblivious Pokemon
 			if (!usable(p, p.getMove()))
 			{
 				b.printAttacking(p);
@@ -2372,6 +2374,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: Soundbase moves bypass the substitute and also Infiltrator
 			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING))
 			{
 				return true;
@@ -2689,7 +2692,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class HealBlock extends PokemonEffect 
+	private static class HealBlock extends PokemonEffect implements BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2716,6 +2719,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public String getSubsideMessage(ActivePokemon victim)
 		{
 			return "The effects of heal block wore off.";
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			// TODO: Draining moves don't work -- also I think this should be an OpposingBeforeTurnEffect, not a BeforeTurnEffect
+			return true;
 		}
 	}
 

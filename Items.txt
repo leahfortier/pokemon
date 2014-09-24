@@ -412,7 +412,7 @@ Lucky Punch
 		return stage;
 		###
 *
-Macho Brace
+Macho Brace:
 	Int: PowerItem
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.
@@ -434,8 +434,8 @@ Mental Herb:
 	Price: 100
 	Fling: 10
 	Field:
-		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT};
-		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused"};
+		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT, Namesies.HEAL_BLOCK_EFFECT};
+		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
 		###
 	ApplyEndTurn:
 		boolean used = false;
@@ -983,158 +983,124 @@ Shock Drive
 	Desc: A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.
 	DriveType: ELECTRIC
 *
-Fire Gem
-	Int: HoldItem, ConsumedItem
+Fire Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: FIRE
-	TypeEnhanceMultiplier: 1.5
+	GemType: FIRE
 *
-Water Gem
-	Int: HoldItem, ConsumedItem
+Water Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: WATER
-	TypeEnhanceMultiplier: 1.5
+	GemType: WATER
 *
-Electric Gem
-	Int: HoldItem, ConsumedItem
+Electric Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: ELECTRIC
-	TypeEnhanceMultiplier: 1.5
+	GemType: ELECTRIC
 *
-Grass Gem
-	Int: HoldItem, ConsumedItem
+Grass Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: GRASS
-	TypeEnhanceMultiplier: 1.5
+	GemType: GRASS
 *
-Ice Gem
-	Int: HoldItem, ConsumedItem
+Ice Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: ICE
-	TypeEnhanceMultiplier: 1.5
+	GemType: ICE
 *
-Fighting Gem
-	Int: HoldItem, ConsumedItem
+Fighting Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: FIGHTING
-	TypeEnhanceMultiplier: 1.5
+	GemType: FIGHTING
 *
-Poison Gem
-	Int: HoldItem, ConsumedItem
+Poison Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: POISON
-	TypeEnhanceMultiplier: 1.5
+	GemType: POISON
 *
-Ground Gem
-	Int: HoldItem, ConsumedItem
+Ground Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: GROUND
-	TypeEnhanceMultiplier: 1.5
+	GemType: GROUND
 *
-Flying Gem
-	Int: HoldItem, ConsumedItem
+Flying Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: FLYING
-	TypeEnhanceMultiplier: 1.5
+	GemType: FLYING
 *
-Psychic Gem
-	Int: HoldItem, ConsumedItem
+Psychic Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: PSYCHIC
-	TypeEnhanceMultiplier: 1.5
+	GemType: PSYCHIC
 *
-Bug Gem
-	Int: HoldItem, ConsumedItem
+Bug Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: BUG
-	TypeEnhanceMultiplier: 1.5
+	GemType: BUG
 *
-Rock Gem
-	Int: HoldItem, ConsumedItem
+Rock Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: ROCK
-	TypeEnhanceMultiplier: 1.5
+	GemType: ROCK
 *
-Ghost Gem
-	Int: HoldItem, ConsumedItem
+Ghost Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: GHOST
-	TypeEnhanceMultiplier: 1.5
+	GemType: GHOST
 *
-Dragon Gem
-	Int: HoldItem, ConsumedItem
+Dragon Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: DRAGON
-	TypeEnhanceMultiplier: 1.5
+	GemType: DRAGON
 *
-Dark Gem
-	Int: HoldItem, ConsumedItem
+Dark Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: DARK
-	TypeEnhanceMultiplier: 1.5
+	GemType: DARK
 *
-Steel Gem
-	Int: HoldItem, ConsumedItem
+Steel Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: STEEL
-	TypeEnhanceMultiplier: 1.5
+	GemType: STEEL
 *
-Normal Gem
-	Int: HoldItem, ConsumedItem
+Normal Gem:
+	Int: GemItem
 	Cat: MISC
 	Desc: A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.
 	Price: 100
-	Fling: 30
-	EnhanceType: NORMAL
-	TypeEnhanceMultiplier: 1.5
+	GemType: NORMAL
 *
 Leftovers
 	Int: HoldItem, EndTurnEffect
