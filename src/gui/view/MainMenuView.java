@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+import sound.SoundTitle;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
@@ -133,20 +134,22 @@ public class MainMenuView extends View
 		switch (state)
 		{
 			case CREDITS:
-				Global.soundPlayer.playMusic("doubletrouble");
+				Global.soundPlayer.playMusic(SoundTitle.CREDITS_TUNE);
 				break;
 			default:
-				Global.soundPlayer.playMusic("dancemix");
+				Global.soundPlayer.playMusic(SoundTitle.MAIN_MENU_TUNE);
 				break;
 		}
 	}
 
 	public void update(int dt, InputControl input, Game game)
 	{
-		if (!musicStarted){
+		if (!musicStarted)
+		{
 			musicStarted = true;
-			Global.soundPlayer.playMusic("dancemix");
+			Global.soundPlayer.playMusic(SoundTitle.MAIN_MENU_TUNE);
 		}
+		
 		int pressed = -1;
 		switch (state)
 		{

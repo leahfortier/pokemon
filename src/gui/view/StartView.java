@@ -12,6 +12,7 @@ import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
 import pokemon.PokemonInfo;
+import sound.SoundTitle;
 import trainer.CharacterData;
 import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
@@ -179,6 +180,6 @@ public class StartView extends View
 		name = "";	
 		ditto = false;
 		
-		Global.soundPlayer.playMusic("04-welcome-to-the-world-of-pokemon");
+		Global.soundPlayer.playMusic(SoundTitle.NEW_GAME);
 	}
 }

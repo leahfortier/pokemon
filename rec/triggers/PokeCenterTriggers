@@ -4,7 +4,7 @@ EventTrigger Heal_Trigger {
 }
 
 SoundTrigger PokeCenterSound {
-	effectName: dundundundundun
+	effectName: POKE_CENTER_HEAL
 }
 
 HealPartyTrigger HealParty {}

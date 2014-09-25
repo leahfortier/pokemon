@@ -98,7 +98,7 @@ public class GameData
 					String musicName = areaSoundMatcher.group(2);
 					String soundTriggerName = "SoundTrigger_AreaSound_for_"+areaNameDisplay+"_MusicName_"+musicName;
 					
-					//System.out.println(condition +"\n" +musicName);
+//					System.out.println(condition + " : " + musicName);
 					
 					addTrigger("Sound", soundTriggerName, (condition != null? "condition: "+condition: "") + "\nmusicName: "+musicName);
 					groupTriggers.append("trigger: "+soundTriggerName +"\n");

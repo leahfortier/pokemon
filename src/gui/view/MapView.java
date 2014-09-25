@@ -22,6 +22,7 @@ import map.entity.Entity;
 import map.entity.NPCEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
+import sound.SoundTitle;
 import trainer.CharacterData;
 
 public class MapView extends View{
@@ -433,12 +434,8 @@ public class MapView extends View{
 							
 							if (npc.isTrainer())
 							{
-								// TODO: get trainer spotted music
-								Global.soundPlayer.playMusic("21-trainer-challenge-theme-1");
-							}
-							else
-							{
-								// TODO: WHAT THE FUCK IS THIS EMPTY ELSE HERE FOR WHAT THE FUCK
+								// TODO: Get trainer spotted music
+								Global.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
 							}
 						}
 					}
@@ -470,13 +467,14 @@ public class MapView extends View{
 	
 	public void playAreaMusic(Game game)
 	{
-		if(currentMusicTrigger != null)
+		if (currentMusicTrigger != null)
 		{
 			currentMusicTrigger.execute(game);
 		}
 		else
 		{
-			Global.soundPlayer.playMusic("lalala");
+			System.err.println("No music specified for current area " + currentAreaName + ".");
+			Global.soundPlayer.playMusic(SoundTitle.DEFAULT_TUNE);
 		}
 	}
 

@@ -84,21 +84,24 @@ public class Global
 		try
 		{
 			while ((line = in.readLine()) != null)
+			{
 				if (line.length() > 0 && (line.charAt(0) != '#' || ignoreComments))
 				{
 					build.append(line);
 					build.append("\n");
 				}
+			}
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
 		return build.toString().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642");
 	}
 	
-	public static String readEntireFileWithoutReplacements (File file, boolean ignoreComments)
+	public static String readEntireFileWithoutReplacements(File file, boolean ignoreComments)
 	{
 		BufferedReader in = openFileBuffered(file);
 		StringBuilder build = new StringBuilder();
@@ -117,6 +120,7 @@ public class Global
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
 		return build.toString();
 	}
 	
@@ -138,6 +142,7 @@ public class Global
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
 		return null;
 	}
 
