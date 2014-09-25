@@ -1079,10 +1079,9 @@ public class ActivePokemon implements Serializable
 		return pokemon;
 	}
 	
-	// TODO: GET DAT NAMESIES THANG GOING ON HEA'
-	public boolean isPokemon(String name)
+	public boolean isPokemon(Namesies name)
 	{
-		return pokemon.getName().equals(name);
+		return pokemon.namesies() == name;
 	}
 	
 	// TODO: There should be a weight effect here instead of all this motherfucking hardcoding...

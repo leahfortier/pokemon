@@ -5753,7 +5753,9 @@ Fling:
 	Acc: 100
 	Cat: Physical
 	GetPow: 
-	return 1; // TODO: FLING DAMAGE
+	// TODO: FLING DAMAGE
+	// TODO: Effects from fling damage for certain items like Light Ball and such
+	return 1;
 	###
 	Apply: 
 	if (me.hasEffect(Namesies.EMBARGO_EFFECT))

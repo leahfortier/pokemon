@@ -410,9 +410,9 @@ public abstract class Ability implements Serializable
 			return (Chlorophyll)(new Chlorophyll().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.SPEED;
+			return s == Stat.SPEED;
 		}
 
 		public Namesies getWeatherCondition()
@@ -433,7 +433,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -593,9 +593,9 @@ public abstract class Ability implements Serializable
 			return (Compoundeyes)(new Compoundeyes().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.ACCURACY;
+			return s == Stat.ACCURACY;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -611,7 +611,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -735,9 +735,9 @@ public abstract class Ability implements Serializable
 			return (Guts)(new Guts().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.ATTACK;
+			return s == Stat.ATTACK;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -753,7 +753,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -876,9 +876,9 @@ public abstract class Ability implements Serializable
 			return (SandRush)(new SandRush().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.SPEED;
+			return s == Stat.SPEED;
 		}
 
 		public Namesies getWeatherCondition()
@@ -899,7 +899,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -1986,9 +1986,9 @@ public abstract class Ability implements Serializable
 			return (SwiftSwim)(new SwiftSwim().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.SPEED;
+			return s == Stat.SPEED;
 		}
 
 		public Namesies getWeatherCondition()
@@ -2009,7 +2009,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -2243,9 +2243,9 @@ public abstract class Ability implements Serializable
 			return (QuickFeet)(new QuickFeet().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.SPEED;
+			return s == Stat.SPEED;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -2261,7 +2261,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -2324,7 +2324,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getName());
+			PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 			
 			int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
 			int baseSpecialDefense = otherInfo.getStat(Stat.SP_DEFENSE.index());
@@ -2419,9 +2419,9 @@ public abstract class Ability implements Serializable
 			return (MarvelScale)(new MarvelScale().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.DEFENSE;
+			return s == Stat.DEFENSE;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -2437,7 +2437,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -2530,9 +2530,9 @@ public abstract class Ability implements Serializable
 			return (HugePower)(new HugePower().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.ATTACK;
+			return s == Stat.ATTACK;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -2548,7 +2548,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -2892,9 +2892,9 @@ public abstract class Ability implements Serializable
 			return (PurePower)(new PurePower().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.ATTACK;
+			return s == Stat.ATTACK;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -2910,7 +2910,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -2999,9 +2999,9 @@ public abstract class Ability implements Serializable
 			return (ToxicBoost)(new ToxicBoost().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.ATTACK;
+			return s == Stat.ATTACK;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -3017,7 +3017,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -3238,12 +3238,35 @@ public abstract class Ability implements Serializable
 			return (FlowerGift)(new FlowerGift().activate());
 		}
 
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.ATTACK || s == Stat.SP_DEFENSE;
+		}
+
+		public Namesies getWeatherCondition()
+		{
+			return Namesies.SUNNY_EFFECT;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return b.getWeather().namesies() == getWeatherCondition();
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.5;
+		}
+
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
 			
-			// TODO: Try to find something to do to make this generated
-			return (int)(stat*((s == Stat.ATTACK || s == Stat.SP_DEFENSE) && b.getWeather().namesies() == Namesies.SUNNY_EFFECT ? 1.5 : 1));
+			return stat;
 		}
 	}
 
@@ -3426,7 +3449,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class SlowStart extends Ability implements EndTurnEffect, EntryEffect, StatChangingEffect
+	private static class SlowStart extends Ability implements StatChangingEffect, EndTurnEffect, EntryEffect
 	{
 		private static final long serialVersionUID = 1L;
 		int count;
@@ -3443,6 +3466,32 @@ public abstract class Ability implements Serializable
 			return x;
 		}
 
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.ATTACK || s == Stat.SPEED;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return count < 5;
+		}
+
+		public double modifyMultiplier()
+		{
+			return .5;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
+			return stat;
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			count++;
@@ -3451,14 +3500,6 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			count = 0;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			
-			// TODO: If it works for Flower Gift, do it here too
-			return (int)(stat*(count < 5 && (s == Stat.ATTACK || s == Stat.SPEED) ? .5 : 1));
 		}
 	}
 
@@ -3501,9 +3542,9 @@ public abstract class Ability implements Serializable
 			return (VictoryStar)(new VictoryStar().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.ACCURACY;
+			return s == Stat.ACCURACY;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -3519,7 +3560,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}
@@ -3625,9 +3666,9 @@ public abstract class Ability implements Serializable
 			return (WonderSkin)(new WonderSkin().activate());
 		}
 
-		public Stat toModify()
+		public boolean isModifyStat(Stat s)
 		{
-			return Stat.EVASION;
+			return s == Stat.EVASION;
 		}
 
 		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
@@ -3643,7 +3684,7 @@ public abstract class Ability implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == toModify() && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
 			{
 				stat *= modifyMultiplier();
 			}

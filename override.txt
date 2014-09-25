@@ -412,7 +412,7 @@ StatChangingEffect:
 		Header: int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		Optional: True
 		Default:
-		if (s == toModify() && modifyCondition(b, p, opp))
+		if (isModifyStat(s) && modifyCondition(b, p, opp))
 		{
 			stat *= modifyMultiplier();
 		}
@@ -425,10 +425,18 @@ StatChangingEffect:
 	*
 ***
 Override:
-	ToModify:
-		Header: Stat toModify()
+	TwoModify:
+		Header: boolean isModifyStat(Stat s)
 		Body:
-		return Stat.{00};
+		return s == Stat.{11} || s == Stat.{22};
+		###
+	*
+***
+Override:
+	ToModify:
+		Header: boolean isModifyStat(Stat s)
+		Body:
+		return s == Stat.{00};
 		###
 	*
 ***

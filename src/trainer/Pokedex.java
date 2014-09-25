@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import main.Namesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 
@@ -16,38 +17,38 @@ public class Pokedex implements Serializable
 	{
 		NOT_SEEN(0), SEEN(1), CAUGHT(2);
 		
-		int weight;
+		private int weight;
 		
 		private PokedexStatus(int weight)
 		{
 			this.weight = weight;
 		}
 		
-		int getWeight()
+		private int getWeight()
 		{
 			return weight;
 		}
 	}
 	
-	private HashMap<String, PokedexInfo> pokedex;
+	private HashMap<Namesies, PokedexInfo> pokedex;
 	private int numSeen;
 	private int numCaught;
 
 	public Pokedex()
 	{
 		pokedex = new HashMap<>();
-		for (String s : PokemonInfo.getPokemonList())
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
 		{
-			pokedex.put(s, new PokedexInfo());
+			pokedex.put(PokemonInfo.getPokemonInfo(i).namesies(), new PokedexInfo());
 		}
 		
 		numSeen = 0;
 		numCaught = 0;
 	}
 	
-	public PokedexStatus getStatus(String s)
+	public PokedexStatus getStatus(Namesies name)
 	{
-		return pokedex.get(s).status;
+		return pokedex.get(name).status;
 	}
 	
 	public boolean setStatus(ActivePokemon p, PokedexStatus status)
@@ -57,12 +58,14 @@ public class Pokedex implements Serializable
 	
 	public boolean setStatus(ActivePokemon p, PokedexStatus status, String wildLocation)
 	{
-		String pokemon = p.getPokemonInfo().getName();
-		System.out.println(pokemon);
+		Namesies pokemon = p.getPokemonInfo().namesies();
 		PokedexInfo info = pokedex.get(pokemon); 
 		info.addLocation(wildLocation);
 		
-		if (info.status.getWeight() >= status.getWeight()) return false;
+		if (info.status.getWeight() >= status.getWeight()) 
+		{
+			return false;
+		}
 		
 		if (status == PokedexStatus.SEEN)
 		{
@@ -71,23 +74,25 @@ public class Pokedex implements Serializable
 		else // Caught
 		{
 			numCaught++;
+			
 			if (info.status == PokedexStatus.NOT_SEEN)
 			{
 				numSeen++;
 			}
 		}
+		
 		info.status = status;
 	
 		pokedex.put(pokemon, info);
 		return true;
 	}
 	
-	public boolean seen(String name)
+	public boolean seen(Namesies name)
 	{
 		return pokedex.containsKey(name) && pokedex.get(name).status == PokedexStatus.SEEN;
 	}
 	
-	public boolean caught(String name)
+	public boolean caught(Namesies name)
 	{
 		return pokedex.containsKey(name) && pokedex.get(name).status == PokedexStatus.CAUGHT;
 	}
@@ -102,7 +107,7 @@ public class Pokedex implements Serializable
 		return numCaught;
 	}
 	
-	public List<String> getLocations(String pokemon)
+	public List<String> getLocations(Namesies pokemon)
 	{
 		return pokedex.get(pokemon).getLocations();
 	}
@@ -122,16 +127,24 @@ public class Pokedex implements Serializable
 		
 		public void addLocation(String location)
 		{
-			if (location == null || location.equals("") || locations.contains(location)) return;
+			if (location == null || location.equals("") || locations.contains(location)) 
+			{
+				return;
+			}
+			
 			locations.add(location);
 		}
 		
 		public List<String> getLocations()
 		{
-			if (locations.size() > 0) return locations;
+			if (locations.size() > 0) 
+			{
+				return locations;
+			}
 			
 			List<String> list = new ArrayList<>();
 			list.add("Area Unknown");
+			
 			return list;
 		}
 	}

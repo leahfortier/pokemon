@@ -653,7 +653,7 @@ Download:
 	Int: EntryEffect
 	Enter: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
-	PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getName());
+	PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 	
 	int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
 	int baseSpecialDefense = otherInfo.getStat(Stat.SP_DEFENSE.index());
@@ -949,12 +949,9 @@ Defiant:
 *
 Flower Gift:
 	Desc: Powers up party Pok\u00e9mon when it is sunny.
-	Int: StatChangingEffect
-	ModifyStat: 
-	
-	// TODO: Try to find something to do to make this generated
-	return (int)(stat*((s == Stat.ATTACK || s == Stat.SP_DEFENSE) && b.getWeather().namesies() == Namesies.SUNNY_EFFECT ? 1.5 : 1));
-	###
+	TwoModify: Attack Sp_Defense
+	WeatherModify: Sunny
+	ModifyMultiplier: 1.5
 *
 Aftermath:
 	Desc: Damages the attacker landing the finishing hit.
@@ -1032,18 +1029,16 @@ Slow Start:
 	Activate: 
 	x.count = 0;
 	###
-	Int: EndTurnEffect, EntryEffect, StatChangingEffect
+	Int: EndTurnEffect, EntryEffect
 	ApplyEndTurn: 
 	count++;
 	###
 	Enter: 
 	count = 0;
 	###
-	ModifyStat: 
-	
-	// TODO: If it works for Flower Gift, do it here too
-	return (int)(stat*(count < 5 && (s == Stat.ATTACK || s == Stat.SPEED) ? .5 : 1));
-	###
+	TwoModify: Attack Speed
+	ModifyMultiplier: .5
+	ModifyCondition: count < 5
 *
 Bad Dreams:
 	Desc: Reduces a sleeping foe's HP.

@@ -10625,7 +10625,9 @@ public abstract class Attack implements Serializable
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return 1; // TODO: FLING DAMAGE
+			// TODO: FLING DAMAGE
+			// TODO: Effects from fling damage for certain items like Light Ball and such
+			return 1;
 		}
 	}
 

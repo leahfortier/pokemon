@@ -296,7 +296,7 @@ public class CharacterData extends Trainer implements Serializable
 	public void addPokemon(Battle b, ActivePokemon p)
 	{
 		p.setCaught();
-		if (!pokedex.caught(p.getPokemonInfo().getName()))
+		if (!pokedex.caught(p.getPokemonInfo().namesies()))
 		{
 			if (b != null) b.addMessage(p.getPokemonInfo().getName() + " was registered in the Pok\u00e9dex!");
 			if (!p.isEgg()) pokedex.setStatus(p, PokedexStatus.CAUGHT);			

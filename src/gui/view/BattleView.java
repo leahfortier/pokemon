@@ -174,7 +174,7 @@ public class BattleView extends View
 			state.type = type;
 			state.shiny = shiny;
 			state.imageNumber = pokemon.getImageNumber(state.shiny);
-			state.caught = currentBattle.isWildBattle() && currentBattle.getPlayer().getPokedex().caught(pokemon.getName());
+			state.caught = currentBattle.isWildBattle() && currentBattle.getPlayer().getPokedex().caught(pokemon.namesies());
 			state.name = name;
 			state.maxHp = oldState.maxHp = maxHP;
 			state.level = level;

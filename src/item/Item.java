@@ -735,7 +735,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class BrightPowder extends Item implements HoldItem, StatChangingEffect
+	private static class BrightPowder extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -745,16 +745,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 30;
+			return s == Stat.EVASION;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return true;
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.1;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.EVASION) stat *= 1.1;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
 		}
 	}
 
@@ -1262,16 +1281,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isPokemon("Giratina"))
+			if (user.isPokemon(Namesies.GIRATINA_POKEMON))
 			{
 				Type t = user.getAttack().getType(b, user);
-				if (t == Type.DRAGON || t == Type.GHOST) return 1.2;
+				if (t == Type.DRAGON || t == Type.GHOST)
+				{
+					return 1.2;
+				}
 			}
+			
 			return 1;
 		}
 	}
 
-	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect
+	private static class IronBall extends Item implements StatChangingEffect, HoldItem, GroundedEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1281,16 +1304,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 130;
+			return s == Stat.SPEED;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return true;
+		}
+
+		public double modifyMultiplier()
+		{
+			return .5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.SPEED) stat *= .5;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 130;
 		}
 	}
 
@@ -1342,7 +1384,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LightBall extends Item implements HoldItem, StatChangingEffect
+	private static class LightBall extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1352,17 +1394,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 30;
+			return s == Stat.ATTACK || s == Stat.SP_ATTACK;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.isPokemon(Namesies.PIKACHU_POKEMON);
+		}
+
+		public double modifyMultiplier()
+		{
+			return 2;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			// TODO: UNFINISHED - Should cause PAR on fling
-			if ((s == Stat.ATTACK || s == Stat.SP_ATTACK) && p.isPokemon("Pikachu")) stat *= 2;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
 		}
 	}
 
@@ -1415,7 +1475,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
-			if (p.isPokemon("Chansey"))
+			if (p.isPokemon(Namesies.CHANSEY_POKEMON))
 			{
 				return stage + 2;
 			}
@@ -1500,7 +1560,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class MetalPowder extends Item implements HoldItem, StatChangingEffect
+	private static class MetalPowder extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1510,16 +1570,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 10;
+			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.isPokemon(Namesies.DITTO_POKEMON);
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.isPokemon("Ditto")) stat *= 1.5;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
@@ -1803,7 +1882,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class QuickPowder extends Item implements HoldItem, StatChangingEffect
+	private static class QuickPowder extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1813,17 +1892,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 10;
+			return s == Stat.SPEED;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.isPokemon(Namesies.DITTO_POKEMON);
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			// TODO: Need to do a namesies-like thing for Pokemon as well
-			if (s == Stat.SPEED && p.isPokemon("Ditto")) stat *= 1.5;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
@@ -2062,7 +2159,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class SoulDew extends Item implements HoldItem, StatChangingEffect
+	private static class SoulDew extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2072,16 +2169,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 10;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 10;
+			return s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON);
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if ((s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE) && (p.isPokemon("Latios") || p.isPokemon("Latias"))) stat *= 1.5;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
@@ -2102,7 +2218,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
-			if (p.isPokemon("Farfetch'd"))
+			if (p.isPokemon(Namesies.FARFETCHD_POKEMON))
 			{
 				return stage + 2;
 			}
@@ -2168,7 +2284,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class ThickClub extends Item implements HoldItem, StatChangingEffect
+	private static class ThickClub extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2178,16 +2294,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 500;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 90;
+			return s == Stat.ATTACK;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON);
+		}
+
+		public double modifyMultiplier()
+		{
+			return 2;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.ATTACK && (p.isPokemon("Cubone") || p.isPokemon("Marowak"))) stat *= 2;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 90;
 		}
 	}
 
@@ -2242,7 +2377,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class WideLens extends Item implements HoldItem, StatChangingEffect
+	private static class WideLens extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2252,20 +2387,39 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 10;
+			return s == Stat.ACCURACY;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return true;
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.1;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.ACCURACY) stat *= 1.1;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class WiseGlasses extends Item implements HoldItem, StatChangingEffect
+	private static class WiseGlasses extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2275,20 +2429,39 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 10;
+			return s == Stat.SP_ATTACK;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return true;
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.1;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.SP_ATTACK) stat *= 1.1;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
-	private static class ZoomLens extends Item implements HoldItem, StatChangingEffect
+	private static class ZoomLens extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2298,16 +2471,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 10;
+			return s == Stat.ACCURACY;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return !b.isFirstAttack();
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.2;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.ACCURACY && !b.isFirstAttack()) stat *= 1.2;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
@@ -2327,7 +2519,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LaxIncense extends Item implements HoldItem, StatChangingEffect
+	private static class LaxIncense extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2337,16 +2529,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 10;
+			return s == Stat.EVASION;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return true;
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.1;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.EVASION) stat *= 1.1;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
 		}
 	}
 
@@ -4454,7 +4665,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class DeepSeaScale extends Item implements PokemonUseItem, HoldItem, StatChangingEffect
+	private static class DeepSeaScale extends Item implements StatChangingEffect, PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 		private String message;
@@ -4463,6 +4674,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			super(Namesies.DEEP_SEA_SCALE_ITEM, "An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.", BagCategory.MISC, 134);
 			super.price = 200;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SP_DEFENSE;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON);
+		}
+
+		public double modifyMultiplier()
+		{
+			return 2;
 		}
 
 		public BaseEvolution getBaseEvolution(ActivePokemon p)
@@ -4475,6 +4701,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return message;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
+			return stat;
 		}
 
 		public boolean use(ActivePokemon p)
@@ -4493,16 +4730,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (s == Stat.SP_DEFENSE && (p.isPokemon("Clamperl") || p.isPokemon("Chinchou") || p.isPokemon("Lanturn"))) stat *= 2;
-			return stat;
-		}
 	}
 
-	private static class DeepSeaTooth extends Item implements PokemonUseItem, HoldItem, StatChangingEffect
+	private static class DeepSeaTooth extends Item implements StatChangingEffect, PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 		private String message;
@@ -4511,6 +4741,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			super(Namesies.DEEP_SEA_TOOTH_ITEM, "An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.", BagCategory.MISC, 135);
 			super.price = 200;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SP_ATTACK;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.isPokemon(Namesies.CLAMPERL_POKEMON);
+		}
+
+		public double modifyMultiplier()
+		{
+			return 2;
 		}
 
 		public BaseEvolution getBaseEvolution(ActivePokemon p)
@@ -4523,6 +4768,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return message;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
+			return stat;
 		}
 
 		public boolean use(ActivePokemon p)
@@ -4540,13 +4796,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (s == Stat.SP_ATTACK && p.isPokemon("Clamperl")) stat *= 2;
-			return stat;
 		}
 	}
 
@@ -7633,7 +7882,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (b.getTurn() == 1) return new double[] {3, 0};
+			if (b.getTurn() == 1)
+			{
+				return new double[] {3, 0};
+			}
+			
 			else return new double[] {1, 0};
 		}
 
@@ -7655,7 +7908,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (b.getPlayer().getPokedex().caught(o.getName())) return new double[] {3, 0};
+			if (b.getPlayer().getPokedex().caught(o.getPokemonInfo().namesies()))
+			{
+				return new double[] {3, 0};
+			}
+			
 			return new double[] {1, 0};
 		}
 
@@ -9677,6 +9934,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user)
 		{
+			// TODO: Yes I realize this is Lansat Berry and not Honey, but functionality needs to be implemented for Honey
 			PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, CastSource.HELD_ITEM, false);
 			b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
 			return true;
@@ -9957,7 +10215,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class Eviolite extends Item implements HoldItem, StatChangingEffect
+	private static class Eviolite extends Item implements StatChangingEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -9967,17 +10225,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public int flingDamage()
+		public boolean isModifyStat(Stat s)
 		{
-			return 40;
+			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.getPokemonInfo().getEvolution().canEvolve();
+		}
+
+		public double modifyMultiplier()
+		{
+			return 1.5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			// TODO: Yes I realize this is Eviolite and not Honey, but functionality needs to be implemented for Honey
-			if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.getPokemonInfo().getEvolution().canEvolve()) return (int)(1.5*stat);
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
 			return stat;
+		}
+
+		public int flingDamage()
+		{
+			return 40;
 		}
 	}
 

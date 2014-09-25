@@ -12,6 +12,9 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import main.Namesies.NamesiesType;
+import pokemon.PokemonInfo;
+
 public class StuffGen 
 {
 	private static String POKEMON_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "PokemonEffect.java";
@@ -27,24 +30,22 @@ public class StuffGen
 	
 	private enum Generator
 	{
-		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", "Attack", false, true),
-		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", "Effect", true, true),
-		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", "Effect", true, true),
-		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", "Effect", true, true),
-		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", "Effect", true, true),
-		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", "Ability", true, true),
-		ITEM_GEN("Items.txt", ITEM_PATH, "Item", "Item", false, true);
+		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", NamesiesType.ATTACK, false, true),
+		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", NamesiesType.EFFECT, true, true),
+		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", NamesiesType.EFFECT, true, true),
+		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", NamesiesType.EFFECT, true, true),
+		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", NamesiesType.EFFECT, true, true),
+		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", NamesiesType.ABILITY, true, true),
+		ITEM_GEN("Items.txt", ITEM_PATH, "Item", NamesiesType.ITEM, false, true);
 		
 		private String inputPath;
 		private String outputPath;
 		private String superClass;
-		private String appendsies;
+		private NamesiesType appendsies;
 		private boolean activate;
 		private boolean mappity;
 		
-		private String temp;
-		
-		private Generator(String inputPath, String outputPath, String superClass, String appendsies, boolean activate, boolean mappity)
+		private Generator(String inputPath, String outputPath, String superClass, NamesiesType appendsies, boolean activate, boolean mappity)
 		{
 			this.inputPath = inputPath;
 			this.outputPath = outputPath;
@@ -52,9 +53,6 @@ public class StuffGen
 			this.appendsies = appendsies;
 			this.activate = activate;
 			this.mappity = mappity;
-			
-			this.temp = this.inputPath.substring(0, this.inputPath.length() - 3) + "temp";
-			System.out.println(temp);
 		}
 		
 		private void generate()
@@ -79,6 +77,13 @@ public class StuffGen
 		}
 		
 		writeNamesies();
+	}
+	
+	private static void createNamesies(String name, String className, NamesiesType superClass)
+	{
+		String enumName = Namesies.getNamesies(className, superClass);
+		namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
+		firstNamesies = false;
 	}
 	
 	private static void writeNamesies()
@@ -115,7 +120,16 @@ public class StuffGen
 					Global.error("Everything generated line should not be repeated.");
 				}
 				
-				out.append(namesies + ";\n\n");
+				// Add the Pokemon to namesies
+				for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
+				{
+					PokemonInfo info = PokemonInfo.getPokemonInfo(i);
+					createNamesies(info.getName(), info.getName(), NamesiesType.POKEMON);
+				}
+				
+				out.append(namesies);
+				out.append(";\n\n");
+				
 				outputNamesies = true;
 				canPrint = false;
 			}
@@ -195,11 +209,9 @@ public class StuffGen
 			
 			String className = fields.get("ClassName");
 			
-			String enumName = Namesies.getNamesies(className, gen.appendsies);
 			fields.put("Namesies", className);
 			
-			namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
-			firstNamesies = false;
+			createNamesies(name, className, gen.appendsies);
 			
 			fields.put("Index", index + "");
 			
@@ -613,8 +625,8 @@ public class StuffGen
 		String[] mcSplit = fieldValue.split(" ");
 		for (int i = 0; i < mcSplit.length; i++)
 		{
-			String regex = "{" + (i + 1) + "}";
-			body = body.replace(regex, mcSplit[i]);		
+			body = body.replace(String.format("{%d}", i + 1), mcSplit[i]);
+			body = body.replace(String.format("{%d%d}", i + 1, i + 1), mcSplit[i].toUpperCase());	
 		}
 		
 		return body;
@@ -818,7 +830,7 @@ public class StuffGen
 				if (enumType.equals("Namesies"))
 				{
 					String appendsies = splitInfo[index++];
-					value = Namesies.getNamesies(fieldValue, appendsies);
+					value = Namesies.getNamesies(fieldValue, NamesiesType.valueOf(appendsies.toUpperCase()));
 				}
 				else
 				{

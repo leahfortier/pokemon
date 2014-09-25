@@ -1,6 +1,5 @@
 package pokemon;
 
-import gui.GameFrame;
 import item.Item;
 import item.hold.HoldItem;
 
@@ -17,6 +16,7 @@ import java.util.TreeMap;
 
 import main.Global;
 import main.Namesies;
+import main.Namesies.NamesiesType;
 import main.StuffGen;
 import main.Type;
 import battle.Attack;
@@ -27,13 +27,13 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 
 	public static int NUM_POKEMON = 649;
 	
-	private static String[] pokemonList;
 	private static HashMap<String, PokemonInfo> map;
 	private static PokemonInfo[] info;
 	private static List<PokemonInfo> baseEvolution;
 	
 	private int number;
 	private String name;
+	private Namesies namesies;
 	private int[] baseStats;
 	private int baseExp;
 	private GrowthRate growthRate;
@@ -61,6 +61,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	{	
 		this.number = number;
 		this.name = name;
+		this.namesies = Namesies.getValueOf(this.name, NamesiesType.POKEMON);
 		this.baseStats = baseStats;
 		this.baseExp = baseExp;
 		this.growthRate = GrowthRate.getRate(growthRate);
@@ -70,7 +71,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
 		this.wildHoldItems = wildHoldItems;
-		this.abilities = new Namesies[] {Namesies.getValueOf(ability1, "Ability"), Namesies.getValueOf(ability2, "Ability")};
+		this.abilities = new Namesies[] {Namesies.getValueOf(ability1, NamesiesType.ABILITY), Namesies.getValueOf(ability2, NamesiesType.ABILITY)};
 		this.maleRatio = genderRatio;
 		this.classification = classification;
 		this.height = height;
@@ -79,19 +80,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.eggSteps = eggSteps;
 		this.eggGroup1 = eggGroup1;
 		this.eggGroup2 = eggGroup2;
-		
-		verifyAbilities();
-	}
-	
-	private void verifyAbilities()
-	{
-		if (GameFrame.GENERATE_STUFF)
-		{
-			for (int i = 0; i < 2; i++)
-			{
-				Ability.getAbility(abilities[i]);				
-			}
-		}
 	}
 	
 	public Type[] getType()
@@ -169,6 +157,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		return flavorText;
 	}
 	
+	public Namesies namesies()
+	{
+		return namesies;
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -200,50 +193,46 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		return 4*number;
 	}
 	
-	public static String[] getPokemonList()
-	{
-		if (pokemonList == null) loadPokemonList();
-		return pokemonList;
-	}
-	
-	public static void loadPokemonList()
-	{
-		if (pokemonList != null) return;
-		Scanner in = new Scanner(Global.readEntireFile(new File("pokedex.txt"), false));
-		
-		pokemonList = new String[in.nextInt()];
-		in.nextLine();
-		for (int i = 0; i < pokemonList.length; i++)
+	public static PokemonInfo getPokemonInfo(Namesies p)
+	{	
+		if (isPokemon(p)) 
 		{
-			pokemonList[i] = in.nextLine().trim();
+			return map.get(p.getName());
 		}
-		
-		in.close();
-	}
-	
-	// TODO: Change this to namesies
-	public static PokemonInfo getPokemonInfo(String p)
-	{
-		if (map == null) loadPokemonInfo();
-		if (map.containsKey(p)) return map.get(p);
 
-		Global.error("No such Pokemon " + p);
+		Global.error("No such Pokemon " + p.getName());
 		return null;
 	}
 	
 	public static PokemonInfo getPokemonInfo(int index)
 	{
-		if (info == null) loadPokemonInfo();
-		if (index <= 0 || index > NUM_POKEMON) Global.error("No such Pokemon Number " + index); 
+		if (info == null) 
+		{
+			loadPokemonInfo();
+		}
+		
+		if (index <= 0 || index > NUM_POKEMON) 
+		{
+			Global.error("No such Pokemon Number " + index); 
+		}
 
 		return info[index];
 	}
 	
-	public static boolean isPokemon(String p)
+	// Pretend this comment has as much hate and passion as the similar methods in Attack.java and Item.java
+	public static boolean isPokemonName(String name)
 	{
-		if (map == null) loadPokemonInfo();
-		if (map.containsKey(p)) return true;
-		return false;
+		if (map == null) 
+		{
+			loadPokemonInfo();
+		}
+		
+		return map.containsKey(name);
+	}
+	
+	public static boolean isPokemon(Namesies p)
+	{
+		return isPokemonName(p.getName());
 	}
 	
 	public static void baseEvolutionGenerator()
@@ -263,7 +252,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		
 		PokemonInfo[] p = new PokemonInfo[set.size()];
 		int i = 0;
-		for (String s : set) p[i++] = getPokemonInfo(s);
+		for (String s : set) 
+		{
+			Namesies namesies = Namesies.getValueOf(s, NamesiesType.POKEMON);
+			p[i++] = getPokemonInfo(namesies);
+		}
 		
 		Arrays.sort(p);
 		
@@ -272,6 +265,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		StuffGen.printToFile("BaseEvolutions.txt", out);
 	}
 	
+	// TODO: Look into this again
 	public static PokemonInfo getRandomBaseEvolution()
 	{
 		if (baseEvolution == null)
@@ -280,8 +274,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			Scanner in = new Scanner(Global.readEntireFile(new File("BaseEvolutions.txt"), false));
 			while (in.hasNext())
 			{
-				baseEvolution.add(PokemonInfo.getPokemonInfo(in.nextLine().trim()));
+				Namesies namesies = Namesies.getValueOf(in.nextLine().trim(), NamesiesType.POKEMON);
+				baseEvolution.add(PokemonInfo.getPokemonInfo(namesies));
 			}
+			
 			in.close();
 		}
 		
@@ -296,7 +292,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	// Create and load the Pokemon info map if it doesn't already exist
 	public static void loadPokemonInfo()
 	{
-		if (map != null) return;
+		if (map != null)
+		{
+			return;
+		}
+		
 		map = new HashMap<String, PokemonInfo>();
 		info = new PokemonInfo[NUM_POKEMON + 1];
 

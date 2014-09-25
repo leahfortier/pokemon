@@ -8,9 +8,10 @@ import java.util.regex.Pattern;
 
 import battle.Attack;
 import battle.Move;
-
 import main.Game;
 import main.Global;
+import main.Namesies;
+import main.Namesies.NamesiesType;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 
@@ -48,7 +49,9 @@ public class GiveTrigger extends Trigger
 					continue;
 				}
 				
-				PokemonInfo pinfo = PokemonInfo.getPokemonInfo(m.group(2));
+				Namesies namesies = Namesies.getValueOf(m.group(2), NamesiesType.POKEMON);
+				PokemonInfo pinfo = PokemonInfo.getPokemonInfo(namesies);
+				
 				int level = Integer.parseInt(m.group(3));
 				
 				Matcher params = TrainerBattleTrigger.parameterPattern.matcher(m.group(4));

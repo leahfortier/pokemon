@@ -949,7 +949,7 @@ Field
 None
 
 29
-Nidoran\u2640
+Nidoran F
 55 47 52 40 40 41 
 55
 Medium Slow
@@ -1043,7 +1043,7 @@ None
 None
 
 32
-Nidoran\u2642
+Nidoran
 46 57 40 40 40 50 
 55
 Medium Slow
@@ -1064,9 +1064,11 @@ Poison None
 45 Horn Drill
 235
 0 1 0 0 0 0 
-Level 33 16
+Multi 2
+Gender Male Level 33 16
+Gender Female Level 30 16
 0
-100
+50
 Poison Point
 Rivalry
 Poison Pin 

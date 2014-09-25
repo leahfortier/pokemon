@@ -51,17 +51,20 @@ public class WildPokemonDataPanel extends JPanel {
 			public void changedUpdate(DocumentEvent e) {}
 			public void valueChanged() {
 				String pokemonName = pokemonTextField.getText().trim();
-				if (pokemonName.length() < 2) {
+				if (pokemonName.length() < 2) 
+				{
 					pokemonTextField.setBackground(new Color(0xFF9494));
 					return;
 				}
 				
 				pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
 				
-				if (!PokemonInfo.isPokemon(pokemonName)) {
+				if (!PokemonInfo.isPokemonName(pokemonName)) 
+				{
 					pokemonTextField.setBackground(new Color(0xFF9494));
 				}
-				else {
+				else 
+				{
 					pokemonTextField.setBackground(new Color(0x90EE90));
 				}
 			}
