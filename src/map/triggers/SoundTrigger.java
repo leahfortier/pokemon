@@ -2,15 +2,17 @@ package map.triggers;
 
 import java.util.regex.Matcher;
 
+import sound.SoundTitle;
 import main.Game;
 import main.Global;
 
-public class SoundTrigger extends Trigger {
-
-	public String musicName;
-	public String effectName;
+public class SoundTrigger extends Trigger 
+{
+	public SoundTitle music;
+	public SoundTitle effect;
 	
-	public SoundTrigger(String name, String contents) {
+	public SoundTrigger(String name, String contents) 
+	{
 		super(name, contents);
 
 		Matcher m = variablePattern.matcher(contents);
@@ -20,55 +22,55 @@ public class SoundTrigger extends Trigger {
 			switch (m.group(1))
 			{
 				case "effectName":
-					effectName = m.group(2);
+					effect = SoundTitle.valueOf(m.group(2));
 					break;
 				case "musicName":
-					musicName = m.group(2);
+					music = SoundTitle.valueOf(m.group(2));
 					break;
 			}
 		}
 	}
 	
-	public SoundTrigger(String name, String conditionString, String musicName, String effectName) 
+	public SoundTrigger(String name, String conditionString, SoundTitle music, SoundTitle effect) 
 	{
 		super(name, conditionString);
 		
-		this.musicName = musicName;
-		this.effectName = effectName;
+		this.music = music;
+		this.effect = effect;
 	}
 	
 	public void execute(Game game) 
 	{
 		super.execute(game);
 			
-		if(musicName != null)
+		if (music != null)
 		{
-			Global.soundPlayer.playMusic(musicName);
+			Global.soundPlayer.playMusic(music);
 		}
 		
-		if(effectName != null)
+		if(effect != null)
 		{
-			Global.soundPlayer.playSoundEffect(effectName);
+			Global.soundPlayer.playSoundEffect(effect);
 		}
 	}
 
 	public String toString() 
 	{
-		return "SoundTrigger: " + name + " music: " + musicName + " effect: " + effectName;
+		return "SoundTrigger: " + name + " music: " + music + " effect: " + effect;
 	}
 	
 	public String triggerDataAsString() 
 	{
 		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
 		
-		if(musicName != null)
+		if(music != null)
 		{
-			ret.append("\tmusicName: " + musicName + "\n");
+			ret.append("\tmusicName: " + music + "\n");
 		}
 		
-		if(effectName != null)
+		if(effect != null)
 		{
-			ret.append("\teffectName: " + effectName + "\n");
+			ret.append("\teffectName: " + effect + "\n");
 		}
 		
 		return ret.toString();

@@ -1,15 +1,15 @@
 package sound;
 
-public class SoundPlayer {
-	
+public class SoundPlayer 
+{
 	private boolean muted;	
-	private String musicName;
+	private SoundTitle music;
 	private	MP3Player musicPlayer;
 	private MP3Player soundEffectPlayer;
 	
 	public SoundPlayer() 
 	{
-		musicName = null;
+		music = null;
 		musicPlayer = null;
 		soundEffectPlayer = null;
 	}
@@ -24,11 +24,11 @@ public class SoundPlayer {
 		this.muted = muted;
 	}
 	
-	public void playMusic(String music) 
+	public void playMusic(SoundTitle newMusic) 
 	{
 		// If we're trying to play the same song that's already playing
 		// don't do anything.
-		if (music.equals(musicName))
+		if (music == newMusic)
 		{
 			return;
 		}
@@ -38,13 +38,11 @@ public class SoundPlayer {
 			musicPlayer.close();
 		}
 		
-		musicName = music;
+		music = newMusic;
 		
 		if (!muted)
 		{
-			musicPlayer = new MP3Player(music);
-			musicPlayer.setLoop(true);
-			musicPlayer.start();
+			createPlayer(music);
 		}
 	}
 	
@@ -57,6 +55,22 @@ public class SoundPlayer {
 		}
 	}
 	
+	private void createPlayer(SoundTitle music)
+	{
+		MP3Player player = new MP3Player(music.getSoundTitle());
+		player.setLoop(music.isMusic());
+		player.start();
+		
+		if (music.isMusic())
+		{
+			musicPlayer = player;
+		}
+		else
+		{
+			soundEffectPlayer = player;
+		}
+	}
+	
 	public void resumeMusic()
 	{
 		if (musicPlayer != null)
@@ -64,20 +78,20 @@ public class SoundPlayer {
 			musicPlayer.close();
 		}
 		
-		if (musicName != null)
+		if (music != null)
 		{
-			musicPlayer = new MP3Player(musicName);
-			musicPlayer.setLoop(true);
-			musicPlayer.start();
+			createPlayer(music);
 		}
 	}
 	
+	// Toggly Boggly
 	public void toggleMusic()
 	{
 		if (muted)
 			resumeMusic();
 		else
 			pauseMusic();
+		
 		muted = !muted;
 	}
 	
@@ -87,20 +101,18 @@ public class SoundPlayer {
 		{
 			musicPlayer.close();
 			musicPlayer = null;
-			musicName = null;
+			music = null;
 		}
 	}
 	
-	public void playSoundEffect(String soundEffect) 
+	public void playSoundEffect(SoundTitle soundEffect) 
 	{
 		if (soundEffectPlayer != null)
 		{
 			soundEffectPlayer.close();
 		}
-		
-		soundEffectPlayer = new MP3Player(soundEffect);
-		soundEffectPlayer.setLoop(false);
-		soundEffectPlayer.start();
+
+		createPlayer(soundEffect);
 	}
 	
 	public boolean soundEffectIsPlaying() 

@@ -33,6 +33,7 @@ import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
+import sound.SoundTitle;
 import trainer.CharacterData;
 import trainer.Trainer;
 import trainer.Trainer.Action;
@@ -1218,7 +1219,7 @@ public class BattleView extends View
 				}
 				if (newMessage.levelUpdate())
 				{
-					Global.soundPlayer.playSoundEffect("Pokemon-Level-Up-Notification");
+					Global.soundPlayer.playSoundEffect(SoundTitle.LEVEL_UP);
 					state.setLevel(newMessage.getLevel());
 				}
 				if (newMessage.nameUpdate())
@@ -1853,12 +1854,12 @@ public class BattleView extends View
 		
 		if(currentBattle.isWildBattle())
 		{
-			Global.soundPlayer.playMusic("09-wild-pokemon-battle-theme");
+			Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
 		}
 		else
 		{
 			// TODO: get trainer battle music
-			Global.soundPlayer.playMusic("22-trainer-battle-theme-1");
+			Global.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
 		}
 	}
 }
