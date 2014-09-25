@@ -89,8 +89,8 @@ public class DevConsole
 			case "global":
 				global(game, in);
 				break;
-			case "Tele":
-			case "Teleport":
+			case "tele":
+			case "teleport":
 				transition(game, in);
 				break;
 			default:

@@ -12,10 +12,6 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import battle.Attack;
-import battle.effect.BattleEffect;
-import battle.effect.PokemonEffect;
-import battle.effect.TeamEffect;
 import main.Game;
 import main.Global;
 import main.InputControl;
@@ -23,6 +19,11 @@ import main.InputControl.Control;
 import main.StuffGen;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
+import battle.Attack;
+import battle.effect.BattleEffect;
+import battle.effect.PokemonEffect;
+import battle.effect.TeamEffect;
+import trainer.CharacterData;
 
 public class GameFrame
 {
@@ -46,6 +47,10 @@ public class GameFrame
 			BattleEffect.loadEffects();
 			Ability.loadAbilities();
 			Item.loadItems();
+			
+			//Load all maps and test if all triggers and NPC data is correct.
+			Game g = new Game();
+			g.data.testMaps(new CharacterData());
 			
 			System.out.println("GEN GEN GEN");
 			

@@ -1,5 +1,6 @@
 package map;
 import gui.GameData;
+import gui.GameFrame;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -257,7 +258,7 @@ public class MapData
 		Entity[][] res = new Entity[width][height];
 		for (EntityData data: entities)
 		{
-			if (data.isEntityPresent(character))
+			if (data.isEntityPresent(character) || GameFrame.GENERATE_STUFF)
 			{
 				Entity e = data.getEntity();
 				e.reset();
