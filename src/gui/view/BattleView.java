@@ -308,38 +308,6 @@ public class BattleView extends View
 			}
 		}
 		
-		// TODO: Move method to global
-		public BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) 
-		{
-			ColorModel cm = image.getColorModel();
-			boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-			WritableRaster raster = image.copyData(null);
-			image = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-			
-			int width = image.getWidth();
-	        int height = image.getHeight();
-	        
-	        for (int x = 0; x < width; ++x) 
-	        {
-	            for (int y = 0; y < height; ++y) 
-	            {
-	                int[] pixels = raster.getPixel(x, y, (int[]) null);
-	                
-	                for (int currComponent = 0; currComponent < pixels.length; ++currComponent)
-	                {
-	                	pixels[currComponent] = (int)Math.round(pixels[currComponent] * scale[currComponent] + offset[currComponent]);
-	                	pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
-	                }
-	                if (pixels[3] == 0)
-	                {
-	                	pixels[0] = pixels[1] = pixels[2] = 0;
-	                }
-	                raster.setPixel(x, y, pixels);
-	            }
-	        }
-	        return image;
-	    }
-		
 		
 		private void catchAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
 		{
@@ -405,8 +373,8 @@ public class BattleView extends View
 
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
 
-			g2d.drawImage(colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
-			g2d.drawImage(colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
+			g2d.drawImage(Global.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
+			g2d.drawImage(Global.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
 		}
 		
 		// hi :)
@@ -444,8 +412,8 @@ public class BattleView extends View
 			
 			BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber + (isEnemy^1));
 
-			g2d.drawImage(colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
-			g2d.drawImage(colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
+			g2d.drawImage(Global.colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
+			g2d.drawImage(Global.colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
 		}
 		
 		private void drawHealthBar(Graphics g)

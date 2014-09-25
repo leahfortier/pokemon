@@ -64,10 +64,15 @@ public class TrainerBattleTrigger extends Trigger
 						ArrayList<Move> moves = new ArrayList<>();
 						for (int i = 0; i < 4; ++i)
 						{
-							if (!params.group(3 + i).equals("None"))
-							{
-								// TODO: Ask Josh how all this trigger stuff works -- will this get called upon the game loading, or not until the trigger is triggered -- like will this throw an error immediately if there is a typo or will it not I need to know I really need to know
-								moves.add(new Move(Attack.getAttackFromName(params.group(3 + i))));
+							String attackName = params.group(3 + i);
+							if (!attackName.equals("None"))
+							{	
+								if(!Attack.isAttack(attackName))
+								{
+									Global.error(attackName +" is not an attack for pokemon "+pinfo.getName()+ " for trainer "+ trainerName+".");
+								}
+								
+								moves.add(new Move(Attack.getAttackFromName(attackName)));
 							}
 						}
 						

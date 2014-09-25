@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import trainer.CharacterData;
+
 import main.Global;
 import map.DialogueSequence;
 import map.MapData;
@@ -53,6 +55,14 @@ public class GameData
 		{
 			if (d.getName().charAt(0) == '.' || d.getName().equals("areaIndex.txt")) continue;
 			maps.put(d.getName(), new MapData(d, this));
+		}
+	}
+	
+	public void testMaps(CharacterData charData)
+	{
+		for(String map: maps.keySet())
+		{
+			maps.get(map).populateEntities(charData, this);
 		}
 	}
 	

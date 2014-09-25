@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.font.TextLayout;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,6 +62,12 @@ public class Global
 	
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
 	
+	public static final String[][] SPECIAL_CHARACTERS = {
+			{"\\\\u00e9", "\u00e9"},	//Poke e
+			{"\\\\u2640", "\u2640"},	//female
+			{"\\\\u2642", "\u2642"}		//male
+		};
+	
 	// Load all game data that doesn't need to be initialized in the OpenGL
 	// context
 	public static void init()
@@ -98,7 +107,25 @@ public class Global
 			System.exit(1);
 		}
 		
-		return build.toString().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642");
+		return removeSpecialCharacters(build.toString());
+	}
+	
+	public static String removeSpecialCharacters(String string)
+	{
+		for(int currCharacterSet = 0; currCharacterSet < SPECIAL_CHARACTERS.length; ++currCharacterSet)
+		{
+			string = string.replaceAll(SPECIAL_CHARACTERS[currCharacterSet][0], SPECIAL_CHARACTERS[currCharacterSet][1]);
+		}
+		return string;
+	}
+	
+	public static String revertSpecialCharacters(String string)
+	{
+		for(int currCharacterSet = 0; currCharacterSet < SPECIAL_CHARACTERS.length; ++currCharacterSet)
+		{
+			string = string.replaceAll(SPECIAL_CHARACTERS[currCharacterSet][1], SPECIAL_CHARACTERS[currCharacterSet][0]);
+		}
+		return string;
 	}
 	
 	public static String readEntireFileWithoutReplacements(File file, boolean ignoreComments)
@@ -262,6 +289,38 @@ public class Global
 		else if (ratio < 0.5) return Color.YELLOW;
 		return Color.GREEN;
 	} 
+	
+	public static BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) 
+	{
+		ColorModel cm = image.getColorModel();
+		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		WritableRaster raster = image.copyData(null);
+		image = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+		
+		int width = image.getWidth();
+        int height = image.getHeight();
+        
+        for (int x = 0; x < width; ++x) 
+        {
+            for (int y = 0; y < height; ++y) 
+            {
+                int[] pixels = raster.getPixel(x, y, (int[]) null);
+                
+                for (int currComponent = 0; currComponent < pixels.length; ++currComponent)
+                {
+                	pixels[currComponent] = (int)Math.round(pixels[currComponent] * scale[currComponent] + offset[currComponent]);
+                	pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
+                }
+                if (pixels[3] == 0)
+                {
+                	pixels[0] = pixels[1] = pixels[2] = 0;
+                }
+                raster.setPixel(x, y, pixels);
+            }
+        }
+        return image;
+    }
+	
 	
 	private static <T> Object invoke(int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
 	{
