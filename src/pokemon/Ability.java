@@ -18,6 +18,7 @@ import battle.Attack.Category;
 import battle.Attack.MoveType;
 import battle.Battle;
 import battle.Move;
+import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageChanger;
 import battle.effect.ApplyDamageEffect;
 import battle.effect.BeforeTurnEffect;
@@ -38,6 +39,7 @@ import battle.effect.FaintEffect;
 import battle.effect.IgnoreStageEffect;
 import battle.effect.ItemCondition;
 import battle.effect.ModifyStageValueEffect;
+import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentPowerChangeEffect;
 import battle.effect.OpponentTrappingEffect;
 import battle.effect.OpposingBeforeTurnEffect;
@@ -61,7 +63,6 @@ public abstract class Ability implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private static HashMap<String, Ability> map; // Mappity map
-	private static List<String> abilityNames;
 	
 	protected Namesies namesies;
 	private String description;
@@ -195,7 +196,6 @@ public abstract class Ability implements Serializable
 			return;
 		
 		map = new HashMap<>();
-		abilityNames = new ArrayList<>();
 
 		// EVERYTHING BELOW IS GENERATED ###
 
@@ -355,8 +355,6 @@ public abstract class Ability implements Serializable
 		map.put("Gluttony", new Gluttony());
 		map.put("Multitype", new Multitype());
 		map.put("Forecast", new Forecast());
-
-		for (String s : map.keySet()) abilityNames.add(s);
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -675,7 +673,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class KeenEye extends Ability implements StatProtectingEffect
+	private static class KeenEye extends Ability implements StatProtectingEffect, IgnoreStageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -691,13 +689,17 @@ public abstract class Ability implements Serializable
 
 		public boolean prevent(ActivePokemon caster, Stat stat)
 		{
-			// TODO: Also needs to ignore opponent's evasion boosts
 			return stat == Stat.ACCURACY;
 		}
 
 		public String preventionMessage(ActivePokemon p)
 		{
 			return p.getName() + "'s " + this.getName() + " prevents its accuracy from being lowered!";
+		}
+
+		public boolean ignoreStage(Stat s)
+		{
+			return s == Stat.EVASION;
 		}
 	}
 
@@ -1419,7 +1421,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class NoGuard extends Ability 
+	private static class NoGuard extends Ability implements AccuracyBypassEffect, OpponentAccuracyBypassEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1431,6 +1433,18 @@ public abstract class Ability implements Serializable
 		public NoGuard newInstance()
 		{
 			return (NoGuard)(new NoGuard().activate());
+		}
+
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		{
+			// Moves always hit unless they are OHKO moves
+			return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+		}
+
+		public boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		{
+			// Moves always hit unless they are OHKO moves
+			return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
 		}
 	}
 

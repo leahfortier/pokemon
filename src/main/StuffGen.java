@@ -225,6 +225,12 @@ public class StuffGen
 				fields.remove("NumTurns");
 			}
 			
+			// There will be problems if a Field move does not get the necessary methods
+			if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
+			{
+				Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + name);
+			}
+			
 			if (gen.mappity)
 			{
 				out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");	
@@ -255,6 +261,7 @@ public class StuffGen
 				fields.remove("Field");
 			}
 			
+			// Write activation method if applicable
 			if (gen.activate)
 			{
 				String activation = "(" + className + ")(new " + className + "().activate())";
@@ -306,10 +313,7 @@ public class StuffGen
 		switch (gen)
 		{
 			case ATTACK_GEN:
-				out.append("\n\t\tfor (String s : map.keySet()) moveNames.add(s);\n");
-				break;
-			case ABILITY_GEN:
-				out.append("\n\t\tfor (String s : map.keySet()) abilityNames.add(s);\n");
+				out.append("\n\t\tfor (String s : map.keySet())\n\t\t{\n\t\t\tmoveNames.add(s);\n\t\t}\n");
 				break;
 			case ITEM_GEN:
 				printToFile(ITEM_TILES_PATH + "index.txt", indexOut);
@@ -429,9 +433,9 @@ public class StuffGen
 				}
 			}
 			
-			if (this.header == null)
+			if (this.header == null && (this.body.length() > 0 || this.begin.length() > 0 || this.end.length() > 0))
 			{
-				Global.error("Methods must have a header specified");
+				Global.error("Cannot have a body without a header.");
 			}
 			
 			if (this.defaultBody && this.required)
@@ -442,6 +446,11 @@ public class StuffGen
 		
 		private static String writeFunction(MethodInfo method, String fieldValue, String className)
 		{
+			if (method.header == null)
+			{
+				return "";
+			}
+			
 			String body;
 			
 			if (method.body.length() == 0)
@@ -937,7 +946,6 @@ public class StuffGen
 		for (int i = 0; i < interfaces.size(); i++)
 		{
 			String interfaceName = interfaces.get(i).replace("Hidden-", "");
-			System.out.println(interfaceName);
 			
 			List<Entry<String, MethodInfo>> list = interfaceMethods.get(interfaceName);
 			if (list == null)
@@ -994,15 +1002,17 @@ public class StuffGen
 				String mapField = fields.get(fieldKey);
 				if (mapField == null)
 				{
-					mapField = "";
+					mapField = addField.getValue();
 				}
-				
-				if (mapField.length() > 0 && fieldKey.equals("MoveType"))
+				else if (fieldKey.equals("MoveType"))
 				{
-					mapField += ", ";
+					mapField += ", " + addField.getValue();
 				}
-				
-				mapField += addField.getValue();
+				else
+				{
+					// Leave the map field as is -- including in the original fields overrides the override file
+//					System.out.println("Map Field: " + mapField);
+				}
 				
 				fields.put(fieldKey, mapField);
 			}

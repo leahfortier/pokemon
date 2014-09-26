@@ -127,7 +127,7 @@ public enum Stat
 		
 		ActivePokemon attacking = s.user ? p : opp;
 		
-		// Effects that completely ignore stage changes TODO: Test this more thoroughly moldbreaker-wise though I think it is just p
+		// Effects that completely ignore stage changes
 		list = new Object[] { opp.getAbility(), attacking.getAttack() };
 		Object ignoreStage = Global.checkInvoke(true, p, list, IgnoreStageEffect.class, "ignoreStage", s);
 		if (ignoreStage != null)

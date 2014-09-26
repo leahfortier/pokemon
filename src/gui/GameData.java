@@ -60,7 +60,7 @@ public class GameData
 	
 	public void testMaps(CharacterData charData)
 	{
-		for(String map: maps.keySet())
+		for (String map: maps.keySet())
 		{
 			maps.get(map).populateEntities(charData, this);
 		}

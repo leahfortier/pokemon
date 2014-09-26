@@ -22,11 +22,6 @@ Override:
 	*
 ***
 Override:
-	GetPow:
-		Header: int getPower(Battle b, ActivePokemon me, ActivePokemon o)
-	*
-***
-Override:
 	GetPriority:
 		Header: int getPriority(Battle b, ActivePokemon me)
 	*
@@ -262,10 +257,62 @@ StageChangingEffect:
 IgnoreStageEffect
 	IgnoreStage: 
 		Header: boolean ignoreStage(Stat s)
-		Optional: True
-		Default:
-		return !s.user();
+	*
+***
+Override:
+	FieldMove:
+		AddInterface: AccuracyBypassEffect
+		AddMapField: BypassAccuracy:
+		return true;
 		###
+		AddMapField: MoveType: Field
+	*
+***
+Override:
+	HitFly:
+		AddInterface: AccuracyBypassEffect
+		AddMapField: BypassAccuracy:
+		// Always hit when the opponent is flying
+		return defending.isSemiInvulnerableFlying();
+		###
+		AddMapField: GetPow:
+		// Twice as strong when the opponent is flying
+		return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
+		###
+	*
+***
+Override:
+	HitDig:
+		AddInterface: AccuracyBypassEffect
+		AddMapField: BypassAccuracy:
+		// Always hit when the opponent is underground
+		return defending.isSemiInvulnerableDigging();
+		###
+		AddMapField: GetPow:
+		// Twice as strong when the opponent is underground
+		return super.power*(o.isSemiInvulnerableDigging() ? 2 : 1);
+		###
+	*
+***
+Override:
+	HitMinimize:
+		AddInterface: AccuracyBypassEffect
+		AddMapField: BypassAccuracy:
+		return !defending.isSemiInvulnerable() && defending.hasEffect(Namesies.USED_MINIMIZE_EFFECT);
+		###
+		AddMapField: GetPow:
+		return super.power*(o.hasEffect(Namesies.USED_MINIMIZE_EFFECT) ? 2 : 1);
+		###
+	*
+***
+AccuracyBypassEffect:
+	BypassAccuracy:
+		Header: boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+	*
+***
+OpponentAccuracyBypassEffect:
+	OpponentBypassAccuracy:
+		Header: boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
 	*
 ***
 ChangeAbilityMove:
@@ -1241,5 +1288,10 @@ AdvantageChanger:
 		
 		return defending;
 		###
+	*
+***
+Override:
+	GetPow:
+		Header: int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 	*
 ***

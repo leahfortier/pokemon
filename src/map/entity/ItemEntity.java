@@ -74,8 +74,8 @@ public class ItemEntity extends Entity
 		if (dataCreated)
 			return;
 		
-		// TODO: add support for multiple items.
-		// TODO: add support for multiple placements of the same item on the same map
+		// TODO: Add support for multiple items.
+		// TODO: Add support for multiple placements of the same item on the same map
 		//		Add numbers to the end of entity name and condition?
 		
 		Trigger eventTrigger = data.getTrigger(name);

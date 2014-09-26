@@ -164,15 +164,19 @@ public class MapMakerTriggerData {
 						triggerNames.add(name);
 						
 						TriggerData triggerData = new TriggerData(name, m.group(4));
-						for (Integer loc: triggerData.getPoints((int)currentMapSize.getWidth())) {
+						for (Integer loc: triggerData.getPoints((int)currentMapSize.getWidth())) 
+						{
 							triggerDataOnMap.put(loc, triggerData);
 						}
 						
-						//TODO: Add each type of trigger data to specific data structure
-						if (triggerData.triggerType.equals("WildBattle")) {
+						// TODO: Add each type of trigger data to specific data structure
+						if (triggerData.triggerType.equals("WildBattle")) 
+						{
 							wildBattleTriggers.put(triggerData.name, triggerData);
 						}
-						if (triggerData.triggerType.equals("MapTransition")) {
+						
+						if (triggerData.triggerType.equals("MapTransition")) 
+						{
 							mapTransitionTriggers.put(triggerData.name, triggerData);
 						}
 						

@@ -22,6 +22,7 @@ import trainer.WildPokemon;
 import battle.Attack.Category;
 import battle.Attack.MoveType;
 import battle.MessageUpdate.Update;
+import battle.effect.AccuracyBypassEffect;
 import battle.effect.BattleEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.CrashDamageMove;
@@ -32,6 +33,7 @@ import battle.effect.Effect;
 import battle.effect.EndTurnEffect;
 import battle.effect.EntryEffect;
 import battle.effect.MultiTurnMove;
+import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentPowerChangeEffect;
 import battle.effect.OpposingBeforeTurnEffect;
 import battle.effect.PokemonEffect;
@@ -687,41 +689,32 @@ public class Battle
 	
 	public boolean accuracyCheck(ActivePokemon me, ActivePokemon o)
 	{
-		// TODO: Find a way to generalize all these stupid ifs
-		// Self-Target moves and Field moves don't miss
+		// Self-Target moves don't miss
 		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == Category.STATUS) 
 		{
 			return true;
 		}
 		
-		if (me.getAttack().isMoveType(MoveType.FIELD)) 
+		// Effects that allow the user to bypass the accuracy check
+		Object[] invokees = this.getEffectsList(me, me.getAttack());
+		Object bypass = Global.checkInvoke(true, invokees, AccuracyBypassEffect.class, "bypassAccuracy", this, me, o);
+		if (bypass != null)
 		{
 			return true;
 		}
 		
-		if (me.hasEffect(Namesies.LOCK_ON_EFFECT)) 
+		// Opponent effects that always allow the user to hit them
+		invokees = this.getEffectsList(o);
+		bypass = Global.checkInvoke(true, invokees, OpponentAccuracyBypassEffect.class, "opponentBypassAccuracy", this, me, o);
+		if (bypass != null)
 		{
 			return true;
 		}
 		
-		if ((me.hasAbility(Namesies.NO_GUARD_ABILITY) || o.hasAbility(Namesies.NO_GUARD_ABILITY)) 
-				&& !me.getAttack().isMoveType(MoveType.ONE_HIT_KO)) 
-		{
-			return true;
-		}
-		
-		// Semi-invulnerable moves
-		if (o.isSemiInvulnerable() 
-				&& !(me.getAttack().isMoveType(MoveType.HIT_FLY) && o.isSemiInvulnerableFlying())
-				&& !(me.getAttack().isMoveType(MoveType.HIT_DIG) && o.isSemiInvulnerableDigging()) 
-				&& !(me.getAttack().isMoveType(MoveType.HIT_DIVE) && o.isSemiInvulnerableDiving())) 
+		// Semi-invulnerable target -- automatic miss (unless a previous condition was triggered)
+		if (o.isSemiInvulnerable()) 
 		{
 			return false;
-		}
-		
-		if (o.hasEffect(Namesies.TELEKINESIS_EFFECT)) 
-		{
-			return true;
 		}
 		
 		int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
