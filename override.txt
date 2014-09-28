@@ -9,26 +9,19 @@ Override:
 	*
 ***
 Override:
-	ApplyDamage:
-		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-	*
-***
-Override:
 	FixedDamage:
-		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		Header: int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		Body: 
-		return super.tryDamage(me, o, b, {0});
+		return {0};
+		###
+		AddMapField: ApplyDamage:
+		return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
 		###
 	*
 ***
 Override:
 	GetPriority:
 		Header: int getPriority(Battle b, ActivePokemon me)
-	*
-***
-Override:
-	GetAccuracy:
-		Header: int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 	*
 ***
 Override:
@@ -112,17 +105,11 @@ Override:
 ***
 Override:
 	MultiStrike:
-		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		Header: int getHits(ActivePokemon me)
 		Body:
-		if (super.zeroAdvantage(b, me, o)) 
-		{
-			return -1;
-		}
-		
 		int minHits = {1};
 		int maxHits = {2};
 		
-		int damage = 0;
 		int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
 		
 		if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY)) 
@@ -130,13 +117,32 @@ Override:
 			hits = 5;
 		}
 		
-		for (int i = 1; i <= hits; i++)
+		return hits;
+		###
+		AddMapField: ApplyDamage:
+		// Don't apply damage if the move is ineffective
+		if (!effective(me, o, b))
 		{
-			b.addMessage("Hit " + i + "!");
-			damage += super.applyDamage(me, o, b);
+			return -1;
 		}
 		
-		b.addMessage("Hit " + hits + " times!");
+		int damage = 0, hit = 1;
+		int hits = getHits(me);
+		
+		for (; hit <= hits; hit++)
+		{
+			b.addMessage("Hit " + hit + "!");
+			damage += super.applyDamage(me, o, b);
+			
+			// Stop attacking the dead
+			if (o.isFainted(b))
+			{
+				break;
+			}
+		}
+		
+		// Print hits and gtfo
+		b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		return damage;
 		###
 	*
@@ -200,37 +206,35 @@ Override:
 ***
 Override:
 	OHKO:
-		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		Body:
+		AddMapField: ApplyDamage:
+		// Fails when the opponent is at a higher level than the user
 		if (me.getLevel() < o.getLevel())
 		{
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return -1;
 		}
-
+		
+		// Sturdy prevents OHKO moves if the user is not a mold breaker
 		if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 		{
 			b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
 			return -1;
 		}
 		
-		// TODO: This code is pretty ugly
 		int damage = super.tryDamage(me, o, b, o.getHP());
-		if (damage >= 0)
+		
+		// Did not actually strike as was ineffective for some reason
+		if (damage == -1)
 		{
-			b.addMessage("It's a One-Hit KO!");
+			return -1;
 		}
 		
+		// Certain death
+		b.addMessage("It's a One-Hit KO!");
 		return damage;
 		###
 		AddMapField: MoveType: One_Hit_KO
-		AddMapField: OHKO2: True
-	*
-***
-Override:
-	OHKO2:
-		Header: int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
-		Body:
+		AddMapField: GetAccuracy:
 		return super.accuracy + (me.getLevel() - o.getLevel());
 		###
 	*
@@ -577,7 +581,7 @@ PowerChangeEffect:
 ***
 OpponentPowerChangeEffect:
 	GetOppMultiplier:
-		Header: double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
 IntegerCondition:
@@ -741,7 +745,7 @@ WeatherBlockerEffect:
 ***
 ApplyDamageEffect:
 	OnApplyDamage:
-		Header: void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 	*
 ***
 ModifyStageValueEffect:
@@ -986,19 +990,14 @@ DriveItem:
 ***
 Override:
 	EvolutionItem:
-		Header: BaseEvolution getBaseEvolution(ActivePokemon p)
-		Body: 
-		Evolution ev = p.getPokemonInfo().getEvolution();
-		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-		return base;
-		###
 		AddInterface: PokemonUseItem
 		AddMapField: Field:
 		private String message;
 		###
 		AddMapField: SuccessMessage: message
 		AddMapField: PokemonUse:
-		BaseEvolution base = getBaseEvolution(p);
+		Evolution ev = p.getPokemonInfo().getEvolution();
+		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
 		if (base == null)
 		{
 			return false;
@@ -1293,5 +1292,15 @@ AdvantageChanger:
 Override:
 	GetPow:
 		Header: int getPower(Battle b, ActivePokemon me, ActivePokemon o)
+	*
+***
+Override:
+	ApplyDamage:
+		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+	*
+***
+Override:
+	GetAccuracy:
+		Header: int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 	*
 ***

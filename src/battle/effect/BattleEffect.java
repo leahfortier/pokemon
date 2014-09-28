@@ -143,7 +143,7 @@ public abstract class BattleEffect extends Effect
 
 		public WaterSport()
 		{
-			super(Namesies.WATER_SPORT_EFFECT, -1, -1, false);
+			super(Namesies.WATER_SPORT_EFFECT, 6, 6, false);
 		}
 
 		public WaterSport newInstance()
@@ -161,6 +161,11 @@ public abstract class BattleEffect extends Effect
 			return "Fire's power was weakened!";
 		}
 
+		public String getSubsideMessage(ActivePokemon victim)
+		{
+			return "The effects of Water Sport wore off.";
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getAttack().getType(b, user) == Type.FIRE ? .33 : 1;
@@ -173,7 +178,7 @@ public abstract class BattleEffect extends Effect
 
 		public MudSport()
 		{
-			super(Namesies.MUD_SPORT_EFFECT, -1, -1, false);
+			super(Namesies.MUD_SPORT_EFFECT, 6, 6, false);
 		}
 
 		public MudSport newInstance()
@@ -191,9 +196,13 @@ public abstract class BattleEffect extends Effect
 			return "Electricity's power was weakened!";
 		}
 
+		public String getSubsideMessage(ActivePokemon victim)
+		{
+			return "The effects of Mud Sport wore off.";
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: This and water sport should only last five turns
 			return user.getAttack().getType(b, user) == Type.ELECTRIC ? .33 : 1;
 		}
 	}

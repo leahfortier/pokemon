@@ -5,5 +5,5 @@ import battle.Battle;
 
 public interface OpponentPowerChangeEffect 
 {
-	public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim);
+	public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim);
 }

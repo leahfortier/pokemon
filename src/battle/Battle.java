@@ -610,11 +610,30 @@ public class Battle
 	
 	public int damageCalc(ActivePokemon me, ActivePokemon o)
 	{
-		int level = me.getLevel(), power = me.getAttack().getPower(this, me, o), random = (int)(Math.random()*16) + 85;
-		int attackStat = Stat.getStat(me.getAttack().getCategory() == Attack.Category.PHYSICAL ? Stat.ATTACK : Stat.SP_ATTACK, me, o, this);
-		int defenseStat = Stat.getStat(me.getAttack().getCategory() == Attack.Category.PHYSICAL ? Stat.DEFENSE : Stat.SP_DEFENSE, o, me, this);
-		double stab = Type.getSTAB(this, me), adv = Type.getAdvantage(me.getAttack().getType(this, me), o, this);
+		int level = me.getLevel();
+		int power = me.getAttack().getPower(this, me, o);
+		int random = (int)(Math.random()*16) + 85;
+		
+		Stat attacking, defending;
+		if (me.getAttack().getCategory() == Attack.Category.PHYSICAL)
+		{
+			attacking = Stat.ATTACK;
+			defending = Stat.DEFENSE;
+		}
+		else
+		{
+			attacking = Stat.SP_ATTACK;
+			defending = Stat.SP_DEFENSE;
+		}
+		
+		int attackStat = Stat.getStat(attacking, me, o, this);
+		int defenseStat = Stat.getStat(defending, o, me, this);
+		
+		double stab = Type.getSTAB(this, me);
+		double adv = Type.getAdvantage(me.getAttack().getType(this, me), o, this);
+		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
+		
 		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n", me.getName(), me.getAttack().getName(), level, power, random, attackStat, defenseStat, stab, adv, damage);
 		
 		damage *= getDamageModifier(me, o); 
@@ -625,29 +644,13 @@ public class Battle
 	
 	private double getDamageModifier(ActivePokemon me, ActivePokemon o)
 	{
-		double modifier = 1;
-		
 		// User effects that effect user power
 		Object[] list = getEffectsList(me);
-		for (Object obj : list)
-		{
-			if (Effect.isInactiveEffect(obj)) 
-				continue;
-			
-			if (obj instanceof PowerChangeEffect) modifier *= ((PowerChangeEffect)obj).getMultiplier(this, me, o);
-		}
+		double modifier = Global.multiplyInvoke(1, list, PowerChangeEffect.class, "getMultiplier", this, me, o);
 		
 		// Opponent effects that effects user power
-		List<Object> oppList = new ArrayList<>();
-		oppList.add(o.getAbility());
-		oppList.add(o.getHeldItem(this));
-		for (Object obj : oppList)
-		{
-			if (obj instanceof OpponentPowerChangeEffect)
-			{
-				modifier *= ((OpponentPowerChangeEffect)obj).getOppMultiplier(this, me, o);
-			}			
-		}
+		list = getEffectsList(o);
+		modifier = Global.multiplyInvoke(modifier, me, list, OpponentPowerChangeEffect.class, "getOpponentMultiplier", this, me, o);
 		
 //		System.out.println(me.getName() + " Modifier: " + modifier);
 		return modifier;
@@ -677,7 +680,7 @@ public class Battle
 			addMessage("It's a critical hit!!");
 			if (o.hasAbility(Namesies.ANGER_POINT_ABILITY))
 			{
-				addMessage(o.getName() + "'s Anger Point raised its attack to the max!");
+				addMessage(o.getName() + "'s " + Namesies.ANGER_POINT_ABILITY.getName() + " raised its attack to the max!");
 				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 			}
 			

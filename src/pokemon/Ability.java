@@ -1124,7 +1124,7 @@ public abstract class Ability implements Serializable
 			return (Stench)(new Stench().activate());
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
 			if (Math.random()*100 < 10)
 			{
@@ -1207,7 +1207,7 @@ public abstract class Ability implements Serializable
 			}
 		}
 
-		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getAttack().getType(b, user) == Type.FIRE ? 1.25 : 1;
 		}
@@ -1652,7 +1652,7 @@ public abstract class Ability implements Serializable
 			return (ThickFat)(new ThickFat().activate());
 		}
 
-		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getAttack().getType(b, user) == Type.FIRE || user.getAttack().getType(b, user) == Type.ICE ? .5 : 1;
 		}
@@ -2071,7 +2071,7 @@ public abstract class Ability implements Serializable
 			return (Filter)(new Filter().activate());
 		}
 
-		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1 ? .75 : 1;
 		}
@@ -2474,7 +2474,7 @@ public abstract class Ability implements Serializable
 			return (Multiscale)(new Multiscale().activate());
 		}
 
-		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return victim.fullHealth() ? .5 : 1;
 		}
@@ -2968,7 +2968,7 @@ public abstract class Ability implements Serializable
 			return (SolidRock)(new SolidRock().activate());
 		}
 
-		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) < 1 ? .75 : 1;
 		}
@@ -3322,7 +3322,7 @@ public abstract class Ability implements Serializable
 			return (Heatproof)(new Heatproof().activate());
 		}
 
-		public double getOppMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getAttack().getType(b, user) == Type.FIRE ? .5 : 1;
 		}
@@ -3642,7 +3642,7 @@ public abstract class Ability implements Serializable
 			return (PoisonTouch)(new PoisonTouch().activate());
 		}
 
-		public void applyEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
 			if (Math.random()*100 < 30)
 			{

@@ -167,12 +167,16 @@ public class ActivePokemon implements Serializable
 			
 			for (Namesies s : map.get(i))
 			{
-				if (hasMove(s)) continue;
+				if (hasMove(s)) 
+					continue;
+				
 				moves.add(new Move(Attack.getAttack(s)));
+				
+				// This can be an 'if' statement, but just to be safe...
+				while (moves.size() > Move.MAX_MOVES) 
+					moves.remove(0);
 			}
 		}
-		
-		while (moves.size() > Move.MAX_MOVES) moves.remove(0);
 	}
 	
 	public void setMoves(List<Move> list)
@@ -493,14 +497,15 @@ public class ActivePokemon implements Serializable
 	// Pangoro breaks the mold!
 	public boolean breaksTheMold()
 	{
-		switch (getAbility().getName())
+		switch (getAbility().namesies())
 		{
-			case "Mold Breaker":
-			case "Turboblaze":
-			case "Teravolt":
+			case MOLD_BREAKER_ABILITY:
+			case TURBOBLAZE_ABILITY:
+			case TERAVOLT_ABILITY:
 				return true;
+			default:
+				return false;
 		}
-		return false;
 	}
 	
 	public boolean canFight()

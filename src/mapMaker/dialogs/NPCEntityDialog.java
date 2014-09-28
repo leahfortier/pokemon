@@ -48,17 +48,18 @@ public class NPCEntityDialog extends JPanel {
 	
 	private JTextField conditionTextField;
 	
-	// TODO: simplify adding data to NPC
-		//item list
-		//first and second trigger parsing (remove "trigger: " when reading and add it when saving)
+	// TODO: Simplify adding data to NPC
+		// Item list
+		// First and second trigger parsing (remove "trigger: " when reading and add it when saving)
 	
-		//remove give items and instead improve first and second triggers
-			//Make JList and allow to edit selected or add new triggers. New triggers can be a name or from a new dialog.
+		// Remove give items and instead improve first and second triggers
+			// Make JList and allow to edit selected or add new triggers. New triggers can be a name or from a new dialog.
 	
 	private MapMaker mapMaker;
 	private String[] facingDirections = new String[] {"Right", "Up", "Left", "Down"};
 	
-	public NPCEntityDialog(MapMaker givenMapMaker) {
+	public NPCEntityDialog(MapMaker givenMapMaker) 
+	{
 		this.mapMaker = givenMapMaker;
 		
 		label = new JLabel();

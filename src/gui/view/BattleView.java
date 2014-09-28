@@ -1818,13 +1818,13 @@ public class BattleView extends View
 		System.out.println("moved to front cycle started");
 		cycleMessage(false);
 		
-		if(currentBattle.isWildBattle())
+		if (currentBattle.isWildBattle())
 		{
 			Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
 		}
 		else
 		{
-			// TODO: get trainer battle music
+			// TODO: Get trainer battle music
 			Global.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
 		}
 	}
