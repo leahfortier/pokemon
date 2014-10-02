@@ -135,7 +135,7 @@ public class PokedexView extends View
 				
 				g.translate(boxButtons[j][i].x, boxButtons[j][i].y);
 
-				if (pokedex.getStatus(p.getName()) == PokedexStatus.NOT_SEEN)
+				if (pokedex.getStatus(p.namesies()) == PokedexStatus.NOT_SEEN)
 				{
 					g.setColor(new Color(0, 0, 0, 64));
 					s = String.format("%03d", number);
@@ -151,7 +151,7 @@ public class PokedexView extends View
 					BufferedImage pkmImg = partyTiles.getTile(number);
 					g.drawImage(pkmImg, 20 - pkmImg.getWidth()/2, 20 - pkmImg.getHeight()/2, null);
 					
-					if (pokedex.getStatus(p.getName()) == PokedexStatus.CAUGHT)
+					if (pokedex.getStatus(p.namesies()) == PokedexStatus.CAUGHT)
 					{
 						g.drawImage(typeTiles.getTile(0x4), 28, 28, null);
 					}
@@ -179,11 +179,16 @@ public class PokedexView extends View
 		g.drawString("Caught: " + pokedex.numCaught(), 70 + 54*3, 524);
 		
 		// Description
-		PokedexStatus status = pokedex.getStatus(selected.getName());
+		PokedexStatus status = pokedex.getStatus(selected.namesies());
 
 		Type[] type = selected.getType();
 		Color[] typeColors = Type.getColors(type);
-		if (status == PokedexStatus.NOT_SEEN) typeColors = new Color[] {Color.BLACK, Color.BLACK};
+		
+		if (status == PokedexStatus.NOT_SEEN)
+		{
+			typeColors = new Color[] {Color.BLACK, Color.BLACK};	
+		}
+		
 		g.setColor(typeColors[0]);
 		g.fillPolygon(new int[] {410, 759, 759, 410}, new int[] {40, 40, 96, 445}, 4);
 		g.setColor(typeColors[1]);
@@ -224,7 +229,7 @@ public class PokedexView extends View
 			if (status == PokedexStatus.CAUGHT) Global.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350, 10, 21);
 			
 			g.drawString("Locations:", 427, 340);
-			List<String> locations = pokedex.getLocations(selected.getName());
+			List<String> locations = pokedex.getLocations(selected.namesies());
 			for (int i = 0; i < locations.size(); i++)
 			{
 				g.setFont(Global.getFont(16));

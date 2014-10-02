@@ -54,7 +54,6 @@ Protean and Competitive abilities will affect non-gen6 Pokemon -- add these in
 
 Ask Josh if High Jump Kick will still fit everywhere since it is now the longest move name
 Ask Josh how to give a trainer Pokemon a held item
-Ask Josh to make a motherfucking enum or something to the effect for music titles so there aren't any fucking typos come on srsly
 
 Things to test:
 	EffectBlockerEffect
@@ -63,14 +62,8 @@ Things to test:
 	StatusPreventionEffect
 	WeatherBlockerEffect
 	
-	StageChangingEffect: 
-		if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stage;
 	OpposingBeforeTurnAttack: 
 		if (this instanceof Ability && p.breaksTheMold()) return true;
-	StatChangingEffect: 
-		if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stat;
-	OpponentPowerChangeEffect:
-		if (this instanceof Ability && user.breaksTheMold()) return 1;
 	StatProtectingEffect:
 		if (this instanceof Ability && caster.breaksTheMold()) return false;
 		

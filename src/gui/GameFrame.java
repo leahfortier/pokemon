@@ -48,7 +48,7 @@ public class GameFrame
 			Ability.loadAbilities();
 			Item.loadItems();
 			
-			//Load all maps and test if all triggers and NPC data is correct.
+			// Load all maps and test if all triggers and NPC data is correct.
 			Game g = new Game();
 			g.data.testMaps(new CharacterData());
 			

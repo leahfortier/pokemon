@@ -142,15 +142,14 @@ Black Sludge
 		###
 *
 Bright Powder
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opponent's accuracy.
 	Price: 100
 	Fling: 30
-	ModifyStat:
-		if (s == Stat.EVASION) stat *= 1.1;
-		return stat;
-		###
+	ToModify: Evasion
+	ModifyCondition: true
+	ModifyMultiplier: 1.1
 *
 Cell Battery
 	Cat: MISC
@@ -326,24 +325,27 @@ Griseous Orb
 	Price: 200
 	Fling: 60
 	GetMultiplier:
-		if (user.isPokemon("Giratina"))
+		if (user.isPokemon(Namesies.GIRATINA_POKEMON))
 		{
 			Type t = user.getAttack().getType(b, user);
-			if (t == Type.DRAGON || t == Type.GHOST) return 1.2;	
+			if (t == Type.DRAGON || t == Type.GHOST) 
+			{
+				return 1.2;
+			}
 		}
+		
 		return 1;
 		###
 *
 Iron Ball
-	Int: HoldItem, GroundedEffect, StatChangingEffect
+	Int: HoldItem, GroundedEffect
 	Cat: MISC
 	Desc: A Pok\u00e9mon held item that cuts Speed. It makes Flying-type and levitating holders susceptible to Ground moves.
 	Price: 200
 	Fling: 130
-	ModifyStat:
-		if (s == Stat.SPEED) stat *= .5;
-		return stat;
-		###
+	ToModify: Speed
+	ModifyCondition: true
+	ModifyMultiplier: .5
 *
 Lagging Tail
 	Int: HoldItem, StallingEffect
@@ -372,16 +374,14 @@ Life Orb
 		###
 *
 Light Ball
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.
 	Price: 100
 	Fling: 30
-	ModifyStat:
-		// TODO: UNFINISHED - Should cause PAR on fling
-		if ((s == Stat.ATTACK || s == Stat.SP_ATTACK) && p.isPokemon("Pikachu")) stat *= 2;
-		return stat;
-		###
+	TwoModify: Attack Sp_Attack
+	ModifyCondition: p.isPokemon(Namesies.PIKACHU_POKEMON)
+	ModifyMultiplier: 2
 *
 Light Clay
 	Int: HoldItem
@@ -404,7 +404,7 @@ Lucky Punch
 	Price: 10
 	Fling: 40
 	IncreaseCritStage:
-		if (p.isPokemon("Chansey")) 
+		if (p.isPokemon(Namesies.CHANSEY_POKEMON)) 
 		{
 			return stage + 2;
 		}
@@ -453,15 +453,14 @@ Mental Herb:
 		###
 *
 Metal Powder
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: When this item is held by a Ditto, the holder's initial Defence & Special Defence stats are increased by 50%
 	Price: 10
 	Fling: 10
-	ModifyStat:
-		if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.isPokemon("Ditto")) stat *= 1.5;
-		return stat;
-		###
+	TwoModify: Defense Sp_Defense
+	ModifyCondition: p.isPokemon(Namesies.DITTO_POKEMON)
+	ModifyMultiplier: 1.5
 *
 Metronome
 	Int: HoldItem, PowerChangeEffect
@@ -551,16 +550,14 @@ Quick Claw:
 	Fling: 80
 *
 Quick Powder:
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.
 	Price: 10
 	Fling: 10
-	ModifyStat:
-		// TODO: Need to do a namesies-like thing for Pokemon as well
-		if (s == Stat.SPEED && p.isPokemon("Ditto")) stat *= 1.5;
-		return stat;
-		###
+	ToModify: Speed
+	ModifyCondition: p.isPokemon(Namesies.DITTO_POKEMON)
+	ModifyMultiplier: 1.5
 *
 Red Card:
 	Int: HoldItem, TakeDamageEffect
@@ -656,15 +653,14 @@ Snowball
 	IncreaseStat: ATTACK
 *
 Soul Dew
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.
 	Price: 10
 	Fling: 10
-	ModifyStat:
-		if ((s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE) && (p.isPokemon("Latios") || p.isPokemon("Latias"))) stat *= 1.5;
-		return stat;
-		###
+	TwoModify: Sp_Attack Sp_Defense
+	ModifyCondition: p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON)
+	ModifyMultiplier: 1.5
 *
 Stick
 	Int: HoldItem, CritStageEffect
@@ -673,7 +669,7 @@ Stick
 	Price: 200
 	Fling: 60
 	IncreaseCritStage:
-		if (p.isPokemon("Farfetch'd")) 
+		if (p.isPokemon(Namesies.FARFETCHD_POKEMON))
 		{
 			return stage + 2;
 		}
@@ -724,15 +720,14 @@ Sticky Barb
 	###
 *
 Thick Club
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by Cubone or Marowak. It is a hard bone of some sort that boosts the Attack stat.
 	Price: 500
 	Fling: 90
-	ModifyStat:
-		if (s == Stat.ATTACK && (p.isPokemon("Cubone") || p.isPokemon("Marowak"))) stat *= 2;
-		return stat;
-		###
+	ToModify: Attack
+	ModifyCondition: p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON)
+	ModifyMultiplier: 2
 *
 Weakness Policy
 	Int: HoldItem, TakeDamageEffect
@@ -761,37 +756,34 @@ White Herb
 	StatProtectMessage: p.getName() + "'s " + this.name + " prevented its stats from being lowered!"
 *
 Wide Lens
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. It is a magnifying lens that slightly boosts the accuracy of moves.
 	Price: 200
 	Fling: 10
-	ModifyStat:
-		if (s == Stat.ACCURACY) stat *= 1.1;
-		return stat;
-		###
+	ToModify: Accuracy
+	ModifyMultiplier: 1.1
+	ModifyCondition: true
 *
 Wise Glasses
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. It is a thick pair of glasses that slightly boosts the power of special moves.
 	Price: 200
 	Fling: 10
-	ModifyStat:
-		if (s == Stat.SP_ATTACK) stat *= 1.1;
-		return stat;
-		###
+	ToModify: Sp_Attack
+	ModifyMultiplier: 1.1
+	ModifyCondition: true
 *
 Zoom Lens
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. If the holder moves after its target, its accuracy will be boosted.
 	Price: 200
 	Fling: 10
-	ModifyStat:
-		if (s == Stat.ACCURACY && !b.isFirstAttack()) stat *= 1.2;
-		return stat;
-		###
+	ToModify: Accuracy
+	ModifyMultiplier: 1.2
+	ModifyCondition: !b.isFirstAttack()
 *
 Full Incense
 	Int: HoldItem, StallingEffect
@@ -801,15 +793,14 @@ Full Incense
 	Fling: 10
 *
 Lax Incense
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.
 	Price: 9600
 	Fling: 10
-	ModifyStat:
-		if (s == Stat.EVASION) stat *= 1.1;
-		return stat;
-		###
+	ToModify: Evasion
+	ModifyMultiplier: 1.1
+	ModifyCondition: true
 *
 Luck Incense
 	Int: HoldItem, EntryEffect
@@ -1273,28 +1264,26 @@ Dawn Stone
 	Fling: 80
 *
 DeepSeaScale
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	EvolutionItem: True
 	Cat: MISC
 	Desc: An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.
 	Price: 200
 	Fling: 30
-	ModifyStat:
-		if (s == Stat.SP_DEFENSE && (p.isPokemon("Clamperl") || p.isPokemon("Chinchou") || p.isPokemon("Lanturn"))) stat *= 2;
-		return stat;
-		###
+	ToModify: Sp_Defense
+	ModifyCondition: p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON)
+	ModifyMultiplier: 2
 *
 DeepSeaTooth
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	EvolutionItem: True
 	Cat: MISC
 	Desc: An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.
 	Price: 200
 	Fling: 90
-	ModifyStat:
-		if (s == Stat.SP_ATTACK && p.isPokemon("Clamperl")) stat *= 2;
-		return stat;
-		###
+	ToModify: Sp_Attack
+	ModifyCondition: p.isPokemon(Namesies.CLAMPERL_POKEMON)
+	ModifyMultiplier: 2
 *
 Dragon Scale
 	Int: HoldItem
@@ -2217,28 +2206,36 @@ Pok\u00e9 Ball
 	Price: 200
 	CatchRate: 1
 *
-Premier Ball
+Premier Ball:
 	Int: BallItem
 	Desc: A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.
 	Price: 200
 	CatchRate: 1
 *
-Quick Ball
+Quick Ball:
 	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.
 	Price: 1000
 	CatchRate:
-		if (b.getTurn() == 1) return new double[] {3, 0};
+		if (b.getTurn() == 1) 
+		{
+			return new double[] {3, 0};
+		}
+		
 		else return new double[] {1, 0};
 		###
 *
-Repeat Ball
+Repeat Ball:
 	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.
 	Price: 1000
 	CatchRate:
-		if (b.getPlayer().getPokedex().caught(o.getName())) return new double[] {3, 0};
-		return new double[] {1, 0};				
+		if (b.getPlayer().getPokedex().caught(o.getPokemonInfo().namesies())) 
+		{
+			return new double[] {3, 0};
+		}
+		
+		return new double[] {1, 0};
 		###
 *
 Safari Ball
@@ -2640,6 +2637,7 @@ Lansat Berry
 	NGPow: 80
 	HealthTriggerRatio: 4
 	HealthTrigger:
+		// TODO: Yes I realize this is Lansat Berry and not Honey, but functionality needs to be implemented for Honey
 		PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, CastSource.HELD_ITEM, false);
 		b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
 		return true;
@@ -2758,16 +2756,14 @@ Honey
 	Price: 100
 *
 Eviolite
-	Int: HoldItem, StatChangingEffect
+	Int: HoldItem
 	Cat: MISC
 	Desc: A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pokémon that can still evolve.
 	Fling: 40
 	Price: 200
-	ModifyStat:
-		// TODO: Yes I realize this is Eviolite and not Honey, but functionality needs to be implemented for Honey
-		if ((s == Stat.DEFENSE || s == Stat.SP_DEFENSE) && p.getPokemonInfo().getEvolution().canEvolve()) return (int)(1.5*stat);
-		return stat;
-		###
+	TwoModify: Defense Sp_Defense
+	ModifyCondition: p.getPokemonInfo().getEvolution().canEvolve()
+	ModifyMultiplier: 1.5
 *
 Heart Scale
 	Int: HoldItem

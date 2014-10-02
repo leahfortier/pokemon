@@ -7,7 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.Game;
+import main.Namesies;
 import main.Game.ViewMode;
+import main.Namesies.NamesiesType;
 import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
@@ -107,7 +109,9 @@ public class WildBattleTrigger extends Trigger
 			{
 				int index = Global.getPercentageIndex(probability);
 				int level = (int)(Math.random()*(highLevel[index] - lowLevel[index] + 1) + lowLevel[index]);
-				o = new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(pokemon[index]), level, true, false));				
+				
+				Namesies namesies = Namesies.getValueOf(pokemon[index], NamesiesType.POKEMON);
+				o = new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(namesies), level, true, false));				
 			}
 			
 			// Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
@@ -130,9 +134,9 @@ public class WildBattleTrigger extends Trigger
 	// Returns a legendary encounter if applicable and null otherwise
 	private WildPokemon legendaryEncounter(CharacterData player)
 	{
-		if ((int)(Math.random()*1024) == 0 && !player.getPokedex().caught("Mew"))
+		if ((int)(Math.random()*1024) == 0 && !player.getPokedex().caught(Namesies.MEW_POKEMON))
 		{
-			return new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo("Mew"), 5, true, false));
+			return new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.MEW_POKEMON), 5, true, false));
 		}
 		
 		return null;

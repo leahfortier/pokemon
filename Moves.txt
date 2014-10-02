@@ -628,14 +628,14 @@ Rain Dance:
 	Cat: Status
 	PP: 5
 	Effect: Battle Raining
-	MoveType: Field
+	FieldMove: True
 *
 Sunny Day:
 	Desc: The user intensifies the sun for five turns, powering up Fire-type moves.
 	PP: 5
 	Type: Fire
 	Cat: Status
-	MoveType: Field
+	FieldMove: True
 	Effect: Battle Sunny
 *
 Sandstorm:
@@ -643,7 +643,7 @@ Sandstorm:
 	PP: 10
 	Type: Rock
 	Cat: Status
-	MoveType: Field
+	FieldMove: True
 	Effect: Battle Sandstorm
 *
 Hail:
@@ -651,7 +651,7 @@ Hail:
 	PP: 10
 	Type: Ice
 	Cat: Status
-	MoveType: Field
+	FieldMove: True
 	Effect: Battle Hailing
 *
 Petal Dance:
@@ -754,15 +754,7 @@ Gust:
 	Pow: 40
 	Acc: 100
 	PP: 35
-	MoveType: Hit_Fly
-	GetPow: 
-	if (o.isSemiInvulnerableFlying())
-	{
-		return super.power*2;
-	}
-	
-	return super.power;
-	###
+	HitFly: True
 *
 Supersonic:
 	Desc: The user generates odd sound waves from its body. It may confuse the target.
@@ -983,7 +975,7 @@ Toxic Spikes:
 	PP: 20
 	Type: Poison
 	Cat: Status
-	MoveType: Field
+	FieldMove: True
 	Effect: Team ToxicSpikes
 *
 Pin Missile:
@@ -1073,15 +1065,7 @@ Twister:
 	Acc: 100
 	Effect: Pokemon Flinch
 	EffChance: 20
-	MoveType: Hit_Fly
-	GetPow: 
-	if (o.isSemiInvulnerableFlying())
-	{
-		return super.power*2;
-	}
-	
-	return super.power;
-	###
+	HitFly: True
 *
 Feather Dance:
 	Desc: The user covers the target's body with a mass of down that harshly lowers its Attack stat.
@@ -1164,19 +1148,20 @@ Hurricane:
 	PP: 10
 	Type: Flying
 	Cat: Special
-	GetAccuracy: 
-	// TODO: Should have double power when opponent is in the air
-	switch (b.getWeather().namesies())
+	GetAccuracy:
+	// Accuracy is only 50% when sunny
+	if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT)
 	{
-		case RAINING_EFFECT:
-			return 100;
-		case SUNNY_EFFECT:
-			return 50;
-		default:
-			return super.accuracy;
+		return 50;
 	}
+	
+	return super.accuracy;
 	###
-	MoveType: Hit_Fly
+	BypassAccuracy:
+	// Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
+	return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == Namesies.RAINING_EFFECT && defending.isSemiInvulnerable());
+	###
+	HitFly: True
 	Effect: Pokemon Confusion
 	EffChance: 30
 *
@@ -1431,7 +1416,8 @@ Haze:
 	victim.getAttributes().resetStages();
 	b.addMessage("All stat changes were eliminated!");
 	###
-	MoveType: Field, Substitute_Piercing
+	MoveType: Substitute_Piercing
+	FieldMove: True
 *
 Coil:
 	Desc: The user coils up and concentrates. This raises its Attack and Defense stats as well as its accuracy.
@@ -1695,6 +1681,9 @@ Chip Away:
 	Cat: Physical
 	Type: Normal
 	Int: IgnoreStageEffect
+	IgnoreStage:
+	return !s.user();
+	###
 	Acc: 100
 *
 Body Slam:
@@ -1706,6 +1695,7 @@ Body Slam:
 	Type: Normal
 	Status: Paralyzed
 	EffChance: 30
+	HitMinimize: True
 *
 Earth Power:
 	Desc: The user makes the ground under the target erupt with power. It may also lower the target's Sp. Def.
@@ -1847,7 +1837,7 @@ Gravity:
 	Type: Psychic
 	Cat: Status
 	Effect: Battle Gravity
-	MoveType: Field
+	FieldMove: True
 *
 Moonlight:
 	Int: SelfHealingMove
@@ -2299,15 +2289,7 @@ Earthquake:
 	Cat: Physical
 	Type: Ground
 	PhysicalContact: False
-	MoveType: Hit_Dig
-	GetPow: 
-	if (o.isSemiInvulnerableDigging())
-	{
-		return super.power*2;
-	}
-	
-	return super.power;
-	###
+	HitDig: True
 *
 Fissure:
 	Desc: The user opens up a fissure in the ground and drops the target in. The target instantly faints if it hits.
@@ -2401,7 +2383,7 @@ Power Gem:
 *
 Water Sport:
 	Desc: The user soaks itself with water. The move weakens Fire-type moves while the user is in the battle.
-	MoveType: Field
+	FieldMove: True
 	Effect: Battle WaterSport
 	PP: 15
 	Type: Water
@@ -2447,7 +2429,7 @@ Wonder Room:
 	PP: 10
 	Cat: Status
 	Effect: Battle WonderRoom
-	MoveType: Field
+	FieldMove: True
 	Type: Psychic
 *
 Aqua Jet:
@@ -2849,7 +2831,7 @@ Mud Sport:
 	Type: Ground
 	Cat: Status
 	Effect: Battle MudSport
-	MoveType: Field
+	FieldMove: True
 *
 Rock Polish:
 	Desc: The user polishes its body to reduce drag. It can sharply raise the Speed stat.
@@ -2880,7 +2862,7 @@ Rock Blast:
 *
 Smack Down:
 	Effect: Pokemon Grounded
-	MoveType: Hit_Fly
+	HitFly: True
 	Pow: 50
 	Desc: The user throws a stone or projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when hit.
 	PP: 15
@@ -2894,7 +2876,7 @@ Stealth Rock:
 	Cat: Status
 	PP: 20
 	Effect: Team StealthRock
-	MoveType: Field
+	FieldMove: True
 	Desc: The user lays a trap of levitating stones around the opponent's team. The trap hurts opponents that switch into battle.
 *
 Stone Edge:
@@ -2916,9 +2898,7 @@ Steamroller:
 	Pow: 65
 	Effect: Pokemon Flinch
 	EffChance: 30
-	GetPow: 
-	return super.power*(o.hasEffect(Namesies.USED_MINIMIZE_EFFECT) ? 2 : 1);
-	###
+	HitMinimize: True
 *
 Heavy Slam:
 	Desc: The user slams into the target with its heavy body. The more the user outweighs the target, the greater its damage.
@@ -2944,6 +2924,7 @@ Stomp:
 	Type: Normal
 	Effect: Pokemon Flinch
 	EffChance: 30
+	HitMinimize: True
 *
 Flame Charge:
 	Desc: The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.
@@ -3310,7 +3291,7 @@ Spikes:
 	PP: 20
 	Cat: Status
 	Type: Ground
-	MoveType: Field
+	FieldMove: True
 	Effect: Team Spikes
 *
 Icicle Crash:
@@ -3850,9 +3831,14 @@ Sky Uppercut:
 	PP: 15
 	Pow: 85
 	Cat: Physical
-	MoveType: Punching, Hit_Fly
+	MoveType: Punching
 	Acc: 90
 	Type: Fighting
+	HitFly: True
+	GetPow:
+	// Does not deal double damage when opponent is flying
+	return super.power;
+	###
 *
 Mega Punch:
 	Desc: The target is slugged by a punch thrown with muscle-packed power.
@@ -4530,6 +4516,7 @@ Dragon Rush:
 	Cat: Physical
 	Effect: Pokemon Flinch
 	EffChance: 20
+	HitMinimize: True
 *
 Aura Sphere:
 	Desc: The user looses a blast of aura power from deep within its body at the target. This move is certain to hit.
@@ -5293,7 +5280,7 @@ Trick Room:
 	Priority: -7
 	Cat: Status
 	Effect: Battle TrickRoom
-	MoveType: Field
+	FieldMove: True
 *
 Roar Of Time:
 	Desc: The user blasts the target with power that distorts even time. The user must rest on the next turn.
@@ -5639,6 +5626,9 @@ Sacred Sword:
 	Cat: Physical
 	Type: Fighting
 	Int: IgnoreStageEffect
+	IgnoreStage:
+	return !s.user();
+	###
 *
 Secret Sword:
 	MoveType: Metronomeless
@@ -5753,7 +5743,9 @@ Fling:
 	Acc: 100
 	Cat: Physical
 	GetPow: 
-	return 1; // TODO: FLING DAMAGE
+	// TODO: FLING DAMAGE
+	// TODO: Effects from fling damage for certain items like Light Ball and such
+	return 1;
 	###
 	Apply: 
 	if (me.hasEffect(Namesies.EMBARGO_EFFECT))
@@ -5879,7 +5871,7 @@ Teleport:
 	Desc: Use it to flee from any wild Pok\u00e9mon. It can also warp to the last Pok\u00e9mon Center visited.
 	PP: 20
 	Cat: Status
-	MoveType: Field
+	FieldMove: True
 	ApplyEffects: 
 	if (!b.isWildBattle())
 	{
@@ -6174,7 +6166,7 @@ Magic Room:
 	Type: Psychic
 	Cat: Status
 	Effect: Battle MagicRoom
-	MoveType: Field
+	FieldMove: True
 *
 Simple Beam:
 	Desc: The user's mysterious psychic wave changes the target's Ability to Simple.
@@ -6210,7 +6202,8 @@ Skill Swap:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	MoveType: Field, Substitute_Piercing
+	FieldMove: True
+	MoveType: Substitute_Piercing
 	Int: ChangeAbilityMove
 	Effect: Pokemon ChangeAbility
 	AbilityChange: 

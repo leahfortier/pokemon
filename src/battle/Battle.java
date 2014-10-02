@@ -22,6 +22,7 @@ import trainer.WildPokemon;
 import battle.Attack.Category;
 import battle.Attack.MoveType;
 import battle.MessageUpdate.Update;
+import battle.effect.AccuracyBypassEffect;
 import battle.effect.BattleEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.CrashDamageMove;
@@ -32,6 +33,7 @@ import battle.effect.Effect;
 import battle.effect.EndTurnEffect;
 import battle.effect.EntryEffect;
 import battle.effect.MultiTurnMove;
+import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentPowerChangeEffect;
 import battle.effect.OpposingBeforeTurnEffect;
 import battle.effect.PokemonEffect;
@@ -608,11 +610,30 @@ public class Battle
 	
 	public int damageCalc(ActivePokemon me, ActivePokemon o)
 	{
-		int level = me.getLevel(), power = me.getAttack().getPower(this, me, o), random = (int)(Math.random()*16) + 85;
-		int attackStat = Stat.getStat(me.getAttack().getCategory() == Attack.Category.PHYSICAL ? Stat.ATTACK : Stat.SP_ATTACK, me, o, this);
-		int defenseStat = Stat.getStat(me.getAttack().getCategory() == Attack.Category.PHYSICAL ? Stat.DEFENSE : Stat.SP_DEFENSE, o, me, this);
-		double stab = Type.getSTAB(this, me), adv = Type.getAdvantage(me.getAttack().getType(this, me), o, this);
+		int level = me.getLevel();
+		int power = me.getAttack().getPower(this, me, o);
+		int random = (int)(Math.random()*16) + 85;
+		
+		Stat attacking, defending;
+		if (me.getAttack().getCategory() == Attack.Category.PHYSICAL)
+		{
+			attacking = Stat.ATTACK;
+			defending = Stat.DEFENSE;
+		}
+		else
+		{
+			attacking = Stat.SP_ATTACK;
+			defending = Stat.SP_DEFENSE;
+		}
+		
+		int attackStat = Stat.getStat(attacking, me, o, this);
+		int defenseStat = Stat.getStat(defending, o, me, this);
+		
+		double stab = Type.getSTAB(this, me);
+		double adv = Type.getAdvantage(me.getAttack().getType(this, me), o, this);
+		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
+		
 		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n", me.getName(), me.getAttack().getName(), level, power, random, attackStat, defenseStat, stab, adv, damage);
 		
 		damage *= getDamageModifier(me, o); 
@@ -623,29 +644,13 @@ public class Battle
 	
 	private double getDamageModifier(ActivePokemon me, ActivePokemon o)
 	{
-		double modifier = 1;
-		
 		// User effects that effect user power
 		Object[] list = getEffectsList(me);
-		for (Object obj : list)
-		{
-			if (Effect.isInactiveEffect(obj)) 
-				continue;
-			
-			if (obj instanceof PowerChangeEffect) modifier *= ((PowerChangeEffect)obj).getMultiplier(this, me, o);
-		}
+		double modifier = Global.multiplyInvoke(1, list, PowerChangeEffect.class, "getMultiplier", this, me, o);
 		
 		// Opponent effects that effects user power
-		List<Object> oppList = new ArrayList<>();
-		oppList.add(o.getAbility());
-		oppList.add(o.getHeldItem(this));
-		for (Object obj : oppList)
-		{
-			if (obj instanceof OpponentPowerChangeEffect)
-			{
-				modifier *= ((OpponentPowerChangeEffect)obj).getOppMultiplier(this, me, o);
-			}			
-		}
+		list = getEffectsList(o);
+		modifier = Global.multiplyInvoke(modifier, me, list, OpponentPowerChangeEffect.class, "getOpponentMultiplier", this, me, o);
 		
 //		System.out.println(me.getName() + " Modifier: " + modifier);
 		return modifier;
@@ -675,7 +680,7 @@ public class Battle
 			addMessage("It's a critical hit!!");
 			if (o.hasAbility(Namesies.ANGER_POINT_ABILITY))
 			{
-				addMessage(o.getName() + "'s Anger Point raised its attack to the max!");
+				addMessage(o.getName() + "'s " + Namesies.ANGER_POINT_ABILITY.getName() + " raised its attack to the max!");
 				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 			}
 			
@@ -687,41 +692,32 @@ public class Battle
 	
 	public boolean accuracyCheck(ActivePokemon me, ActivePokemon o)
 	{
-		// TODO: Find a way to generalize all these stupid ifs
-		// Self-Target moves and Field moves don't miss
+		// Self-Target moves don't miss
 		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == Category.STATUS) 
 		{
 			return true;
 		}
 		
-		if (me.getAttack().isMoveType(MoveType.FIELD)) 
+		// Effects that allow the user to bypass the accuracy check
+		Object[] invokees = this.getEffectsList(me, me.getAttack());
+		Object bypass = Global.checkInvoke(true, invokees, AccuracyBypassEffect.class, "bypassAccuracy", this, me, o);
+		if (bypass != null)
 		{
 			return true;
 		}
 		
-		if (me.hasEffect(Namesies.LOCK_ON_EFFECT)) 
+		// Opponent effects that always allow the user to hit them
+		invokees = this.getEffectsList(o);
+		bypass = Global.checkInvoke(true, invokees, OpponentAccuracyBypassEffect.class, "opponentBypassAccuracy", this, me, o);
+		if (bypass != null)
 		{
 			return true;
 		}
 		
-		if ((me.hasAbility(Namesies.NO_GUARD_ABILITY) || o.hasAbility(Namesies.NO_GUARD_ABILITY)) 
-				&& !me.getAttack().isMoveType(MoveType.ONE_HIT_KO)) 
-		{
-			return true;
-		}
-		
-		// Semi-invulnerable moves
-		if (o.isSemiInvulnerable() 
-				&& !(me.getAttack().isMoveType(MoveType.HIT_FLY) && o.isSemiInvulnerableFlying())
-				&& !(me.getAttack().isMoveType(MoveType.HIT_DIG) && o.isSemiInvulnerableDigging()) 
-				&& !(me.getAttack().isMoveType(MoveType.HIT_DIVE) && o.isSemiInvulnerableDiving())) 
+		// Semi-invulnerable target -- automatic miss (unless a previous condition was triggered)
+		if (o.isSemiInvulnerable()) 
 		{
 			return false;
-		}
-		
-		if (o.hasEffect(Namesies.TELEKINESIS_EFFECT)) 
-		{
-			return true;
 		}
 		
 		int moveAccuracy = me.getAttack().getAccuracy(this, me, o);

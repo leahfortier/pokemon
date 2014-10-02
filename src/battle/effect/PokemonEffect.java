@@ -1458,7 +1458,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			// TODO: Body Slam, Dragon Rush, Flying Press, Phantom Force, Shadow Force, Steamroller, and Stomp all deal double damage to a Pokémon that has used Minimize, and cannot miss against it.
 			if (!victim.hasEffect(this.namesies))
 			{
 				super.cast(b, caster, victim, source, printCast);
@@ -1802,7 +1801,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class LockOn extends PokemonEffect implements PassableEffect
+	private static class LockOn extends PokemonEffect implements PassableEffect, AccuracyBypassEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1825,15 +1824,20 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			return user.getName() + " took aim!";
 		}
+
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		{
+			return true;
+		}
 	}
 
-	private static class Telekinesis extends PokemonEffect implements LevitationEffect
+	private static class Telekinesis extends PokemonEffect implements LevitationEffect, OpponentAccuracyBypassEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Telekinesis()
 		{
-			super(Namesies.TELEKINESIS_EFFECT, 3, 3, false);
+			super(Namesies.TELEKINESIS_EFFECT, 4, 4, false);
 		}
 
 		public Telekinesis newInstance()
@@ -1854,6 +1858,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public String getSubsideMessage(ActivePokemon victim)
 		{
 			return victim.getName() + " is no longer under the effects of telekinesis.";
+		}
+
+		public boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		{
+			// Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
+			return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO) && !defending.isSemiInvulnerable();
 		}
 	}
 

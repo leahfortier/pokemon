@@ -293,9 +293,9 @@ public class BattleAttributes implements Serializable
 	{
 		int sum = 0;
 		for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
-		{
-			if (stages[i] > 0) sum += stages[i];
-		}
+			if (stages[i] > 0) 
+				sum += stages[i];
+		
 		return sum;
 	}
 }

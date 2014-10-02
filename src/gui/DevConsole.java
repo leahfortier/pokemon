@@ -11,6 +11,8 @@ import main.Game;
 import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
+import main.Namesies.NamesiesType;
+import main.Namesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import battle.Attack;
@@ -172,11 +174,7 @@ public class DevConsole
 				boolean shiny = false;
 				
 				pokemonName = in.next();
-				if (!PokemonInfo.isPokemon(pokemonName))
-				{
-					System.err.println("Invalid Pokemon: " + pokemonName);
-					return;
-				}
+				Namesies namesies = Namesies.getValueOf(pokemonName, NamesiesType.POKEMON);
 
 				boolean valid = true;
 				while (in.hasNext() && valid)
@@ -221,12 +219,11 @@ public class DevConsole
 
 				System.out.println("adding " + pokemonName + " " + (shiny ? " shiny " : "") + (moves == null ? " " : moves.toString()));
 
-				ActivePokemon pokemon = new ActivePokemon(PokemonInfo.getPokemonInfo(pokemonName), level, false, true);
+				ActivePokemon pokemon = new ActivePokemon(PokemonInfo.getPokemonInfo(namesies), level, false, true);
 				if (moves != null) pokemon.setMoves(moves);
 				if (shiny) pokemon.setShiny();
 
 				game.charData.addPokemon(null, pokemon);
-
 				break;
 			case "item":
 				String itemName = in.next().replaceAll("_", " ");

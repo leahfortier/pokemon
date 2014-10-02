@@ -569,7 +569,6 @@ UsedDefenseCurl:
 UsedMinimize:
 	CanHave: True
 	Cast: 
-	// TODO: Body Slam, Dragon Rush, Flying Press, Phantom Force, Shadow Force, Steamroller, and Stomp all deal double damage to a Pokémon that has used Minimize, and cannot miss against it.
 	if (!victim.hasEffect(this.namesies)) 
 	{
 		super.cast(b, caster, victim, source, printCast);
@@ -725,14 +724,21 @@ Taunt:
 LockOn:
 	NumTurns: 2
 	CastMessage: user.getName() + " took aim!"
-	Int: PassableEffect
+	Int: PassableEffect, AccuracyBypassEffect
+	BypassAccuracy:
+	return true;
+	###
 *
 Telekinesis:
-	NumTurns: 3
+	NumTurns: 4
 	CastMessage: victim.getName() + " was levitated due to " + user.getName() + "'s telekinesis!"
 	FailCondition: victim.hasEffect(Namesies.INGRAIN_EFFECT)
 	SubsideMessage: victim.getName() + " is no longer under the effects of telekinesis."
-	Int: LevitationEffect
+	Int: LevitationEffect, OpponentAccuracyBypassEffect
+	OpponentBypassAccuracy:
+	// Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
+	return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO) && !defending.isSemiInvulnerable();
+	###
 *
 Ingrain:
 	Int: TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect

@@ -12,6 +12,9 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import main.Namesies.NamesiesType;
+import pokemon.PokemonInfo;
+
 public class StuffGen 
 {
 	private static String POKEMON_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "PokemonEffect.java";
@@ -27,24 +30,22 @@ public class StuffGen
 	
 	private enum Generator
 	{
-		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", "Attack", false, true),
-		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", "Effect", true, true),
-		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", "Effect", true, true),
-		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", "Effect", true, true),
-		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", "Effect", true, true),
-		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", "Ability", true, true),
-		ITEM_GEN("Items.txt", ITEM_PATH, "Item", "Item", false, true);
+		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", NamesiesType.ATTACK, false, true),
+		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", NamesiesType.EFFECT, true, true),
+		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", NamesiesType.EFFECT, true, true),
+		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", NamesiesType.EFFECT, true, true),
+		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", NamesiesType.EFFECT, true, true),
+		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", NamesiesType.ABILITY, true, true),
+		ITEM_GEN("Items.txt", ITEM_PATH, "Item", NamesiesType.ITEM, false, true);
 		
 		private String inputPath;
 		private String outputPath;
 		private String superClass;
-		private String appendsies;
+		private NamesiesType appendsies;
 		private boolean activate;
 		private boolean mappity;
 		
-		private String temp;
-		
-		private Generator(String inputPath, String outputPath, String superClass, String appendsies, boolean activate, boolean mappity)
+		private Generator(String inputPath, String outputPath, String superClass, NamesiesType appendsies, boolean activate, boolean mappity)
 		{
 			this.inputPath = inputPath;
 			this.outputPath = outputPath;
@@ -52,9 +53,6 @@ public class StuffGen
 			this.appendsies = appendsies;
 			this.activate = activate;
 			this.mappity = mappity;
-			
-			this.temp = this.inputPath.substring(0, this.inputPath.length() - 3) + "temp";
-			System.out.println(temp);
 		}
 		
 		private void generate()
@@ -79,6 +77,13 @@ public class StuffGen
 		}
 		
 		writeNamesies();
+	}
+	
+	private static void createNamesies(String name, String className, NamesiesType superClass)
+	{
+		String enumName = Namesies.getNamesies(className, superClass);
+		namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
+		firstNamesies = false;
 	}
 	
 	private static void writeNamesies()
@@ -115,7 +120,16 @@ public class StuffGen
 					Global.error("Everything generated line should not be repeated.");
 				}
 				
-				out.append(namesies + ";\n\n");
+				// Add the Pokemon to namesies
+				for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
+				{
+					PokemonInfo info = PokemonInfo.getPokemonInfo(i);
+					createNamesies(info.getName(), info.getName(), NamesiesType.POKEMON);
+				}
+				
+				out.append(namesies);
+				out.append(";\n\n");
+				
 				outputNamesies = true;
 				canPrint = false;
 			}
@@ -195,11 +209,9 @@ public class StuffGen
 			
 			String className = fields.get("ClassName");
 			
-			String enumName = Namesies.getNamesies(className, gen.appendsies);
 			fields.put("Namesies", className);
 			
-			namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
-			firstNamesies = false;
+			createNamesies(name, className, gen.appendsies);
 			
 			fields.put("Index", index + "");
 			
@@ -211,6 +223,12 @@ public class StuffGen
 				fields.put("MaxTurns", numTurns);
 				
 				fields.remove("NumTurns");
+			}
+			
+			// There will be problems if a Field move does not get the necessary methods
+			if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
+			{
+				Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + name);
 			}
 			
 			if (gen.mappity)
@@ -243,6 +261,7 @@ public class StuffGen
 				fields.remove("Field");
 			}
 			
+			// Write activation method if applicable
 			if (gen.activate)
 			{
 				String activation = "(" + className + ")(new " + className + "().activate())";
@@ -294,10 +313,7 @@ public class StuffGen
 		switch (gen)
 		{
 			case ATTACK_GEN:
-				out.append("\n\t\tfor (String s : map.keySet()) moveNames.add(s);\n");
-				break;
-			case ABILITY_GEN:
-				out.append("\n\t\tfor (String s : map.keySet()) abilityNames.add(s);\n");
+				out.append("\n\t\tfor (String s : map.keySet())\n\t\t{\n\t\t\tmoveNames.add(s);\n\t\t}\n");
 				break;
 			case ITEM_GEN:
 				printToFile(ITEM_TILES_PATH + "index.txt", indexOut);
@@ -417,9 +433,9 @@ public class StuffGen
 				}
 			}
 			
-			if (this.header == null)
+			if (this.header == null && (this.body.length() > 0 || this.begin.length() > 0 || this.end.length() > 0))
 			{
-				Global.error("Methods must have a header specified");
+				Global.error("Cannot have a body without a header.");
 			}
 			
 			if (this.defaultBody && this.required)
@@ -430,6 +446,11 @@ public class StuffGen
 		
 		private static String writeFunction(MethodInfo method, String fieldValue, String className)
 		{
+			if (method.header == null)
+			{
+				return "";
+			}
+			
 			String body;
 			
 			if (method.body.length() == 0)
@@ -613,8 +634,8 @@ public class StuffGen
 		String[] mcSplit = fieldValue.split(" ");
 		for (int i = 0; i < mcSplit.length; i++)
 		{
-			String regex = "{" + (i + 1) + "}";
-			body = body.replace(regex, mcSplit[i]);		
+			body = body.replace(String.format("{%d}", i + 1), mcSplit[i]);
+			body = body.replace(String.format("{%d%d}", i + 1, i + 1), mcSplit[i].toUpperCase());	
 		}
 		
 		return body;
@@ -818,7 +839,7 @@ public class StuffGen
 				if (enumType.equals("Namesies"))
 				{
 					String appendsies = splitInfo[index++];
-					value = Namesies.getNamesies(fieldValue, appendsies);
+					value = Namesies.getNamesies(fieldValue, NamesiesType.valueOf(appendsies.toUpperCase()));
 				}
 				else
 				{
@@ -925,7 +946,6 @@ public class StuffGen
 		for (int i = 0; i < interfaces.size(); i++)
 		{
 			String interfaceName = interfaces.get(i).replace("Hidden-", "");
-			System.out.println(interfaceName);
 			
 			List<Entry<String, MethodInfo>> list = interfaceMethods.get(interfaceName);
 			if (list == null)
@@ -982,15 +1002,17 @@ public class StuffGen
 				String mapField = fields.get(fieldKey);
 				if (mapField == null)
 				{
-					mapField = "";
+					mapField = addField.getValue();
 				}
-				
-				if (mapField.length() > 0 && fieldKey.equals("MoveType"))
+				else if (fieldKey.equals("MoveType"))
 				{
-					mapField += ", ";
+					mapField += ", " + addField.getValue();
 				}
-				
-				mapField += addField.getValue();
+				else
+				{
+					// Leave the map field as is -- including in the original fields overrides the override file
+//					System.out.println("Map Field: " + mapField);
+				}
 				
 				fields.put(fieldKey, mapField);
 			}

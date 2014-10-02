@@ -102,7 +102,7 @@ public class PlayerEntity extends Entity
 							
 							transitionTime = 1;
 							break;
-							//TODO: Add support for multiple pressed keys. Weird things happen when you hold one key and press another. 
+							// TODO: Add support for multiple pressed keys. Weird things happen when you hold one key and press another. 
 						}
 					}
 				}

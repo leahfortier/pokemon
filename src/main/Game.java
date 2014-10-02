@@ -52,7 +52,7 @@ public class Game
 	
 	public void addCharStuff()
 	{
-		charData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo("Eevee"), 1, false, true));
+		charData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.EEVEE_POKEMON), 1, false, true));
 		charData.front().giveItem((HoldItem)Item.getItem(Namesies.ORAN_BERRY_ITEM));
 	}
 

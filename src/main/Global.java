@@ -322,7 +322,7 @@ public class Global
     }
 	
 	
-	private static <T> Object invoke(int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
+	private static <T> Object invoke(double multiplyBase, int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
 	{
 		// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
 		if (p != null && p.isFainted(b))
@@ -341,6 +341,10 @@ public class Global
 		if (updateIndex != -1)
 		{
 			returnValue = parameterValues[updateIndex];
+		}
+		else if (multiplyBase != -1)
+		{
+			returnValue = multiplyBase;
 		}
 		
 		for (Object invokee : invokees)
@@ -401,10 +405,18 @@ public class Global
 						return methodReturn;
 					}
 					
+					// If this is an update invoke, continuously update the result
 					if (updateIndex != -1)
 					{
 						parameterValues[updateIndex] = methodReturn;
 						returnValue = methodReturn;
+					}
+					
+					// If this is a multiply invoke, continuously multiply the result by the base
+					if (multiplyBase != -1)
+					{
+						multiplyBase *= (double)methodReturn;
+						returnValue = multiplyBase;
 					}
 				}
 				// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
@@ -422,60 +434,72 @@ public class Global
 	// Used for calling methods that return booleans
 	public static <T> Object checkInvoke(boolean check, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(-1, true, check, null, null, null, null, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, -1, true, check, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans and also exit early if p or opp are fainted
 	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(-1, true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, -1, true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans where mold breaker may be a factor to check
 	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(-1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, -1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
 	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(-1, false, true, null, null, null, null, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, -1, false, true, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
 	public static <T> Object getInvoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(-1, false, true, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, -1, false, true, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want to continuously update the return value of -- it will return this value that you want so badly
 	public static <T> Object updateInvoke(int updateIndex, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(updateIndex, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, updateIndex, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want to continuously update the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
 	public static <T> Object updateInvoke(int updateIndex, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		return Global.invoke(updateIndex, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+		return Global.invoke(-1, updateIndex, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that continuously multiply the results by the base value, returns this value
+	public static <T> double multiplyInvoke(double baseValue, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return (double)Global.invoke(baseValue, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that continuously multiply the results by the base value where mold breaker may be a factor to check, returns this value
+	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return (double)Global.invoke(baseValue, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void
 	public static <T> void invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		Global.invoke(-1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+		Global.invoke(-1, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where mold breaker may be a factor to check
 	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		Global.invoke(-1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+		Global.invoke(-1, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where you need to split early if an activePokemon is deadsies
 	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
-		Global.invoke(-1, false, false, b, p, opp, null, invokees, className, methodName, parameterValues);
+		Global.invoke(-1, -1, false, false, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 }

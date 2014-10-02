@@ -47,27 +47,34 @@ public class PokemonDataPanel extends JPanel {
 		}
 		
 		nameTextField = new JTextField();
-		nameTextField.getDocument().addDocumentListener(new DocumentListener() {
+		nameTextField.getDocument().addDocumentListener(new DocumentListener() 
+		{
 			public void removeUpdate(DocumentEvent e) {valueChanged();}
 			public void insertUpdate(DocumentEvent e) {valueChanged();}
 			public void changedUpdate(DocumentEvent e) {}
-			public void valueChanged() {
+			
+			public void valueChanged() 
+			{
 				String pokemonName = nameTextField.getText().trim();
-				if (pokemonName.length() < 2) {
+				if (pokemonName.length() < 2) 
+				{
 					nameTextField.setBackground(new Color(0xFF9494));
 					return;
 				}
 				
 				pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
 				
-				if (!PokemonInfo.isPokemon(pokemonName)) {
+				if (!PokemonInfo.isPokemonName(pokemonName)) 
+				{
 					nameTextField.setBackground(new Color(0xFF9494));
 				}
-				else {
+				else 
+				{
 					nameTextField.setBackground(new Color(0x90EE90));
 				}
 			}
 		});
+		
 		nameTextField.setColumns(10);
 		
 		shinyCheckBox = new JCheckBox("");
@@ -167,37 +174,46 @@ public class PokemonDataPanel extends JPanel {
 					.addGap(6)
 					.addComponent(moveTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 		);
+		
 		setLayout(groupLayout);
 	}
 	
-	public void setPokemon() {
-		
+	public void setPokemon() 
+	{
+		// TODO: What is this?
 	}
 	
-	public String getPokemonData () {
+	public String getPokemonData () 
+	{
 		String pokemonName = nameTextField.getText().trim();
 		
 		if (pokemonName.length() < 2)
 			return null;
 		
+		// TODO: I don't think this will work always -- try with something like Mr. Mime
 		pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
 		
-		if (!PokemonInfo.isPokemon(pokemonName)) {
+		if (!PokemonInfo.isPokemonName(pokemonName)) 
+		{
 			return null;
 		}
 		
-		String data = "pokemon: " + pokemonName +" " +(String)levelFormattedTextField.getText() +" " + (shinyCheckBox.isSelected()?"Shiny":"");
+		String data = "pokemon: " + pokemonName + " " + (String)levelFormattedTextField.getText() + " " + (shinyCheckBox.isSelected() ? "Shiny" : "");
 		
-		if (moveCheckBox.isSelected()) {
+		if (moveCheckBox.isSelected()) 
+		{
 			boolean allValidMoves = true;
 			String moves = "";
-			for (int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) {
+			
+			for (int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) 
+			{
 				String move = customMoves[currMove].length() == 0? "None": customMoves[currMove];
 				allValidMoves |= Attack.isAttack(move);
 				moves+= move +(currMove + 1 == customMoves.length?"*":", ");
 			}
 			
-			if (allValidMoves) {
+			if (allValidMoves) 
+			{
 				data += " Moves: " + moves;
 			}
 		}

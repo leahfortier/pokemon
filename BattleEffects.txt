@@ -67,11 +67,14 @@ WaterSport:
 	return user.getAttack().getType(b, user) == Type.FIRE ? .33 : 1;
 	###
 	CastMessage: "Fire's power was weakened!"
+	NumTurns: 6
+	SubsideMessage: "The effects of Water Sport wore off."
 *
 MudSport:
+	NumTurns: 6
+	SubsideMessage: "The effects of Mud Sport wore off."
 	Int: PowerChangeEffect
-	GetMultiplier: 
-	// TODO: This and water sport should only last five turns
+	GetMultiplier:
 	return user.getAttack().getType(b, user) == Type.ELECTRIC ? .33 : 1;
 	###
 	CastMessage: "Electricity's power was weakened!"
