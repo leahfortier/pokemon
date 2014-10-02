@@ -126,7 +126,7 @@ public class NPCEntityDialog extends JPanel {
 		
 		JLabel trainerDataLabel = new JLabel("Trainer Data");
 		
-		JLabel giveItemsLabel = new JLabel("Give Items");
+		JLabel giveItemsLabel = new JLabel("Give Items and Pokemon");
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		

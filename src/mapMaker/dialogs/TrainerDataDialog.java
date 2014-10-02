@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
 import map.triggers.TrainerBattleTrigger;
+import pokemon.ActivePokemon;
 
 public class TrainerDataDialog extends JPanel 
 {	
@@ -307,7 +308,7 @@ public class TrainerDataDialog extends JPanel
 	public void setTrainerData(String contents) 
 	{
 		
-		Matcher m = TrainerBattleTrigger.eventTriggerPattern.matcher(contents);
+		Matcher m = TrainerBattleTrigger.trainerBattleTriggerPattern.matcher(contents);
 		while (m.find())
 		{
 			if (m.group(1) != null)
@@ -317,7 +318,7 @@ public class TrainerDataDialog extends JPanel
 				int level = Integer.parseInt(m.group(3));
 				panel.levelFormattedTextField.setValue(level);
 				
-				Matcher params = TrainerBattleTrigger.parameterPattern.matcher(m.group(4));
+				Matcher params = ActivePokemon.pokemonParameterPattern.matcher(m.group(4));
 
 				while (params.find())
 				{

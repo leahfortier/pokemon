@@ -33,7 +33,7 @@ NPC DFS_Town_NPC_Potion_Giver_01{
 	walkToPlayer: false
 	firstDialogue[0]: "Here, take this potion. You are going to need it!"
 	secondDialogue[0]: "You can use potions to heal your Pok\u00e9mon!"
-	giveItem: "item: Potion"
+	give: "item: Potion"
 }
 
 NPC DFS_Town_NPC_Edge1_Trainer_02{
@@ -59,7 +59,7 @@ NPC DFS_Town_NPC_Ball_Giver_01{
 	walkToPlayer: true
 	firstDialogue[0]: "Here, take these Pok\u00e9balls. You'll need them to capture Pok\u00e9!"
 	secondDialogue[0]: "You can use Pok\u00e9balls to catch new Pok\u00e9mon!"
-	giveItem: "item: Pok\u00e9 Ball
+	give: "item: Pok\u00e9 Ball
 		item: Pok\u00e9 Ball
 		item: Pok\u00e9 Ball
 		item: Pok\u00e9 Ball
