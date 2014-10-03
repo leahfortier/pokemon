@@ -12,9 +12,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import main.Global;
 import main.Namesies;
+import main.Namesies.NamesiesType;
 import main.Type;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
@@ -49,6 +52,9 @@ import battle.effect.TypeCondition;
 public class ActivePokemon implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+
+	public static final Pattern pokemonPattern = Pattern.compile("(?:(\\w+)\\s*(\\d+)([A-Za-z \\t0-9,:.\\-'*]*)|(RandomEgg))");
+	public static final Pattern pokemonParameterPattern = Pattern.compile("(?:(Shiny)|(Moves:)\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+)\\s*[*]|(Egg)|(Item:)\\s*([\\w \\-'.]+)[*])", Pattern.UNICODE_CHARACTER_CLASS);
 	
 	public static final int MAX_LEVEL = 100;
 	
@@ -99,7 +105,7 @@ public class ActivePokemon implements Serializable
 		totalEXP = GrowthRate.getEXP(pokemon.getGrowthRate(), level);
 		totalEXP += (int)(Math.random()*expToNextLevel());
 		gender = Gender.getGender(pokemon.getMaleRatio());
-		shiny = wild ? (int)(Math.random()*8192) == 13 : false;
+		shiny = user || wild ? (int)(Math.random()*8192) == 13 : false;
 		setMoves();
 		ability = Ability.assign(pokemon);
 		hiddenPowerType = computeHiddenPowerType();
@@ -115,6 +121,126 @@ public class ActivePokemon implements Serializable
 		isEgg = true;
 		eggSteps = p.getEggSteps();
 		nickname = "Egg";
+	}
+	
+	/*
+	 * Format: Name Level Parameters
+	 * Possible parameters:
+	 * 		Moves: Move1, Move2, Move3, Move4*
+	 * 		Shiny
+	 * 		Egg
+	 * 		Item: item name*
+	 */
+	// Constructor for triggers
+	public static ActivePokemon createActivePokemon(String pokemonDescription, boolean user)
+	{
+		Matcher m = pokemonPattern.matcher(pokemonDescription);
+		m.find();
+		
+		//Random Egg
+		if (m.group(4) != null) 
+		{
+			if(!user)
+			{
+				Global.error("Trainers cannot have eggs.");
+			}
+			return new ActivePokemon(PokemonInfo.getRandomBaseEvolution());
+		}
+		
+		Namesies namesies = Namesies.getValueOf(m.group(1), NamesiesType.POKEMON);
+		PokemonInfo pinfo = PokemonInfo.getPokemonInfo(namesies);
+		
+		int level = Integer.parseInt(m.group(2));
+		
+		Matcher params = pokemonParameterPattern.matcher(m.group(3));
+
+		boolean shiny = false;
+		boolean setMoves = false;
+		ArrayList<Move> moves = null;
+		HoldItem holdItem = null;
+		
+		boolean isEgg = false;
+		
+		while (params.find())
+		{
+			if (params.group(1) != null) 
+				shiny = true;
+			
+			if (params.group(2) != null)
+			{
+				setMoves = true;
+				moves = new ArrayList<>();
+				for (int i = 0; i < 4; ++i)
+				{
+					String attackName = params.group(3 + i);
+					if (!attackName.equals("None"))
+					{	
+						if(!Attack.isAttack(attackName))
+						{
+							Global.error(attackName +" is not an attack. Pokemon: "+pinfo.getName());
+						}
+						
+						moves.add(new Move(Attack.getAttackFromName(attackName)));
+					}
+				}
+			}
+			
+			if (params.group(7) != null) 
+				isEgg = true;
+			
+			if(params.group(8) != null)
+			{
+				String itemName = params.group(9);
+				if(Item.isItem(itemName))
+				{
+					Item i = Item.getItemFromName(itemName);
+					if(i.isHoldable())
+					{
+						holdItem = (HoldItem)i;
+					}
+					else
+					{
+						Global.error(itemName +" is not a hold item. Pokemon: "+pinfo.getName());
+					}
+				}
+				else
+				{
+					Global.error(itemName +" is not an item. Pokemon: "+pinfo.getName());
+				}
+			}
+		}
+		
+		ActivePokemon p;
+		if (isEgg) 
+		{	
+			if(!user)
+			{
+				Global.error("Trainers cannot have eggs.");
+			}
+			
+			p = new ActivePokemon(pinfo);
+		}
+		else 
+		{
+			p = new ActivePokemon(pinfo, level, false, user);
+		}
+		
+		if (shiny) 
+		{
+			p.setShiny();
+		}
+		
+		if (setMoves) 
+		{
+			p.setMoves(moves);
+		}
+		
+		if (holdItem != null)
+		{
+			p.giveItem(holdItem);
+		}
+
+		return p;
 	}
 	
 	public boolean isEgg()

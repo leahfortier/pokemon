@@ -20,8 +20,9 @@ NPC MaplesLab_NPC_Prof_Maple_01{
 	firstDialogue[2]: "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
 	firstDialogue[3]: "Oh, and also take this egg. No idea what Pok\u00e9mon is in it, but I'm sure you'll take good care of it."
 	secondDialogue[0]: "How's it goin'? Need to rest up your Pok\u00e9mon a bit?"
-	giveItem: "item: Syrup
-		pokemon: RandomEgg"
+	give: "item: Syrup
+		pokemon: RandomEgg
+#		pokemon: Charmander 100 Shiny Moves: Thunderbolt, Ice Beam, Flamethrower, None* Item: X Sp. Def*"
 	firstTriggers: "trigger: HealParty"
 	secondTriggers: "trigger: HealParty"
 }

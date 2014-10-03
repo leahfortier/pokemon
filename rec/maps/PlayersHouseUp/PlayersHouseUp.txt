@@ -36,7 +36,7 @@ TriggerData PlayersHouseUp_to_PlayersHouseDown {
 #		cash: 500
 #		pokemon: Glaceon 1" 
 ##		pokemon: Bidoof 100 Shiny Moves: Thunderbolt, Ice Beam, Flamethrower, None"
-#	giveItem: "item: Pok\u00e9 Ball
+#	give: "item: Pok\u00e9 Ball
 #		item: Pok\u00e9 Ball
 #		item: Pok\u00e9 Ball
 #		item: Pok\u00e9 Ball

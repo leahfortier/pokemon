@@ -209,7 +209,7 @@ public class PokemonDataPanel extends JPanel {
 			{
 				String move = customMoves[currMove].length() == 0? "None": customMoves[currMove];
 				allValidMoves |= Attack.isAttack(move);
-				moves+= move +(currMove + 1 == customMoves.length?"":", ");
+				moves+= move +(currMove + 1 == customMoves.length?"*":", ");
 			}
 			
 			if (allValidMoves) 

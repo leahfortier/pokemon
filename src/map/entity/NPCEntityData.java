@@ -75,7 +75,7 @@ public class NPCEntityData extends EntityData{
 			case "trainer":
 				trainerInfo = m.group(4);
 				break;
-			case "giveItem":
+			case "give":
 				itemInfo = m.group(4);
 				break;
 			case "firstTriggers":
@@ -164,7 +164,7 @@ public class NPCEntityData extends EntityData{
 		}
 		
 		if (itemInfo != null)
-			ret.append("\tgiveItem: \""+ itemInfo.trim() + "\"\n");
+			ret.append("\tgive: \""+ itemInfo.trim() + "\"\n");
 		
 		if (trainerInfo != null)
 			ret.append("\ttrainer: \""+ trainerInfo.trim() + "\"\n");
