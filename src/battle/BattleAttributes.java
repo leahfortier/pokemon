@@ -204,7 +204,10 @@ public class BattleAttributes implements Serializable
 	public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source)
 	{
 		// Don't modify the stages of a dead Pokemon
-		if (victim.isFainted(b)) return false;
+		if (victim.isFainted(b)) 
+		{
+			return false;
+		}
 		
 		int index = stat.index();
 		String statName = stat.getName();
@@ -221,16 +224,15 @@ public class BattleAttributes implements Serializable
 		if (val < 0 && caster != victim)
 		{
 			Object[] list = b.getEffectsList(victim);
-			for (Object o : list)
+			Object prevent = Global.checkInvoke(true, caster, list, StatProtectingEffect.class, "prevent", b, caster, victim, stat);
+			if (prevent != null)
 			{
-				if (Effect.isInactiveEffect(o)) 
-					continue;
-				
-				if (o instanceof StatProtectingEffect && ((StatProtectingEffect)o).prevent(caster, stat))
+				if (print)
 				{
-					if (print) b.addMessage(((StatProtectingEffect)o).preventionMessage(victim)); 
-					return false;					
+					b.addMessage(((StatProtectingEffect)prevent).preventionMessage(victim));
 				}
+				
+				return false;
 			}
 		}
 		
@@ -267,6 +269,7 @@ public class BattleAttributes implements Serializable
 			case HELD_ITEM:
 				b.addMessage(caster.getName() + "'s " + caster.getHeldItem(b).getName() + " " + change + " " + victimName + " " + statName + "!");
 				break;
+			case EFFECT:
 			case USE_ITEM:
 				break; // Don't print anything for these, they will be handled manually
 			default:

@@ -25,7 +25,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 {
 	private static final long serialVersionUID = 1L;
 
-	public static int NUM_POKEMON = 649;
+	public static int NUM_POKEMON = 719;
 	
 	private static HashMap<String, PokemonInfo> map;
 	private static PokemonInfo[] info;
@@ -71,7 +71,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
 		this.wildHoldItems = wildHoldItems;
-		this.abilities = new Namesies[] {Namesies.getValueOf(ability1, NamesiesType.ABILITY), Namesies.getValueOf(ability2, NamesiesType.ABILITY)};
+		this.abilities = setAbilities(ability1, ability2);
 		this.maleRatio = genderRatio;
 		this.classification = classification;
 		this.height = height;
@@ -80,6 +80,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.eggSteps = eggSteps;
 		this.eggGroup1 = eggGroup1;
 		this.eggGroup2 = eggGroup2;
+	}
+	
+	public Namesies[] setAbilities(String ability1, String ability2)
+	{
+		Namesies first = Namesies.tryValueOf(ability1, NamesiesType.ABILITY);
+		Namesies second = Namesies.tryValueOf(ability2, NamesiesType.ABILITY);
+
+		return new Namesies[] {first, second};
 	}
 	
 	public Type[] getType()

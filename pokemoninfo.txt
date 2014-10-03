@@ -15,7 +15,7 @@ Grass Poison
 19 Razor Leaf
 21 Sweet Scent
 25 Growth
-27 Double-edge
+27 Double-Edge
 31 Seed Bomb
 33 Synthesis
 37 Solar Beam
@@ -52,7 +52,7 @@ Grass Poison
 20 Razor Leaf
 23 Sweet Scent
 28 Growth
-31 Double-edge
+31 Double-Edge
 36 Seed Bomb
 39 Synthesis
 44 Solar Beam
@@ -90,7 +90,7 @@ Grass Poison
 20 Razor Leaf
 23 Sweet Scent
 28 Growth
-31 Double-edge
+31 Double-Edge
 32 Petal Dance
 39 Seed Bomb
 45 Synthesis
@@ -613,7 +613,7 @@ Normal None
 22 Crunch
 25 Assurance
 28 Super Fang
-31 Double-edge
+31 Double-Edge
 34 Endeavor
 255
 0 0 0 0 0 1 
@@ -651,7 +651,7 @@ Normal None
 24 Crunch
 29 Assurance
 34 Super Fang
-39 Double-edge
+39 Double-Edge
 44 Endeavor
 127
 0 0 0 0 0 2 
@@ -1224,7 +1224,7 @@ Fire None
 21 Imprison
 24 Flame Burst
 27 Safeguard
-31 Will-o-wisp
+31 Will-O-Wisp
 34 Payback
 37 Flamethrower
 41 Captivate
@@ -1292,7 +1292,7 @@ Normal None
 41 Wake-up Slap
 45 Mimic
 49 Hyper Voice
-53 Double-edge
+53 Double-Edge
 170
 2 0 0 0 0 0 
 Item 40  Moon Stone
@@ -1653,7 +1653,7 @@ Ground None
 0 Sand Attack
 4 Growl
 7 Astonish
-12 Mud-slap
+12 Mud-Slap
 15 Magnitude
 18 Bulldoze
 23 Sucker Punch
@@ -1691,7 +1691,7 @@ Ground None
 0 Growl
 4 Growl
 7 Astonish
-12 Mud-slap
+12 Mud-Slap
 15 Magnitude
 18 Bulldoze
 23 Sucker Punch
@@ -2505,7 +2505,7 @@ Rock Ground
 36 Stealth Rock
 39 Earthquake
 43 Explosion
-46 Double-edge
+46 Double-Edge
 50 Stone Edge
 255
 0 0 1 0 0 0 
@@ -2545,7 +2545,7 @@ Rock Ground
 42 Stealth Rock
 47 Earthquake
 53 Explosion
-58 Double-edge
+58 Double-Edge
 64 Stone Edge
 120
 0 0 2 0 0 0 
@@ -2585,7 +2585,7 @@ Rock Ground
 42 Stealth Rock
 47 Earthquake
 53 Explosion
-58 Double-edge
+58 Double-Edge
 64 Stone Edge
 69 Heavy Slam
 45
@@ -3038,7 +3038,7 @@ Poison None
 0 Poison Gas
 0 Pound
 4 Harden
-7 Mud-slap
+7 Mud-Slap
 12 Disable
 17 Minimize
 20 Sludge
@@ -3075,9 +3075,9 @@ Poison None
 0 Poison Gas
 0 Pound
 0 Harden
-0 Mud-slap
+0 Mud-Slap
 4 Harden
-7 Mud-slap
+7 Mud-Slap
 12 Disable
 17 Minimize
 20 Sludge
@@ -3309,7 +3309,7 @@ Rock Ground
 46 Curse
 49 Iron Tail
 54 Sand Tomb
-57 Double-edge
+57 Double-Edge
 62 Stone Edge
 45
 0 0 1 0 0 0 
@@ -3632,7 +3632,7 @@ Ground None
 33 Fling
 37 Bone Rush
 41 Endeavor
-43 Double-edge
+43 Double-Edge
 47 Retaliate
 190
 0 0 1 0 0 0 
@@ -3671,7 +3671,7 @@ Ground None
 37 Fling
 43 Bone Rush
 49 Endeavor
-53 Double-edge
+53 Double-Edge
 59 Retaliate
 75
 0 0 2 0 0 0 
@@ -3966,7 +3966,7 @@ Normal None
 42 Egg Bomb
 46 Light Screen
 50 Healing Wish
-54 Double-edge
+54 Double-Edge
 30
 2 0 0 0 0 0 
 Item 242  Shiny Stone
@@ -5434,7 +5434,7 @@ Fire None
 40 Flamethrower
 46 Inferno
 49 Rollout
-55 Double-edge
+55 Double-Edge
 58 Eruption
 45
 0 0 0 0 0 1 
@@ -5471,7 +5471,7 @@ Fire None
 46 Flamethrower
 53 Inferno
 57 Rollout
-64 Double-edge
+64 Double-Edge
 68 Eruption
 45
 0 0 0 1 0 1 
@@ -5510,7 +5510,7 @@ Fire None
 48 Flamethrower
 56 Inferno
 61 Rollout
-69 Double-edge
+69 Double-Edge
 74 Eruption
 45
 0 0 0 3 0 0 
@@ -5808,7 +5808,7 @@ Bug Flying
 25 Silver Wind
 30 Agility
 33 Swift
-38 Double-edge
+38 Double-Edge
 41 Bug Buzz
 255
 0 0 0 0 1 0 
@@ -5843,7 +5843,7 @@ Bug Flying
 29 Silver Wind
 36 Agility
 41 Swift
-48 Double-edge
+48 Double-Edge
 53 Bug Buzz
 90
 0 0 0 0 2 0 
@@ -6148,7 +6148,7 @@ Normal None
 33 Ancient Power
 37 Safeguard
 41 Baton Pass
-45 Double-edge
+45 Double-Edge
 49 Last Resort
 53 Soft-Boiled
 190
@@ -6186,7 +6186,7 @@ Normal Flying
 33 Ancient Power
 37 Safeguard
 41 Baton Pass
-45 Double-edge
+45 Double-Edge
 49 Last Resort
 53 Soft-Boiled
 75
@@ -6401,7 +6401,7 @@ None
 0
 50
 Chlorophyll
-Leaf Guard
+Healer
 Flower 
 16 12.8 When the heavy rainfall season ends, it is drawn out by warm sunlight to dance in the open.
 5120
@@ -6422,7 +6422,7 @@ Water None
 15 Rollout
 18 Bubble Beam
 23 Aqua Ring
-27 Double-edge
+27 Double-Edge
 32 Rain Dance
 37 Aqua Tail
 42 Hydro Pump
@@ -6456,7 +6456,7 @@ Water None
 15 Rollout
 20 Bubble Beam
 27 Aqua Ring
-33 Double-edge
+33 Double-Edge
 40 Rain Dance
 47 Aqua Tail
 54 Hydro Pump
@@ -6495,7 +6495,7 @@ Rock None
 33 Rock Slide
 38 Slam
 41 Sucker Punch
-46 Double-edge
+46 Double-Edge
 49 Hammer Arm
 65
 0 0 2 0 0 0 
@@ -7140,7 +7140,7 @@ Bug None
 34 Explosion
 39 Iron Defense
 42 Gyro Ball
-45 Double-edge
+45 Double-Edge
 190
 0 0 1 0 0 0 
 Level 205 31
@@ -7179,7 +7179,7 @@ Bug Steel
 42 Explosion
 46 Iron Defense
 50 Gyro Ball
-56 Double-edge
+56 Double-Edge
 60 Magnet Rise
 64 Zap Cannon
 70 Heavy Slam
@@ -7293,7 +7293,7 @@ Steel Ground
 46 Curse
 49 Iron Tail
 54 Crunch
-57 Double-edge
+57 Double-Edge
 62 Stone Edge
 25
 0 0 2 0 0 0 
@@ -7716,7 +7716,7 @@ Ice Ground
 0 Odor Sleuth
 4 Mud Sport
 8 Powder Snow
-13 Mud-slap
+13 Mud-Slap
 16 Endure
 20 Mud Bomb
 25 Icy Wind
@@ -7754,7 +7754,7 @@ Ice Ground
 0 Powder Snow
 4 Mud Sport
 8 Powder Snow
-13 Mud-slap
+13 Mud-Slap
 16 Endure
 20 Mud Bomb
 25 Icy Wind
@@ -8111,7 +8111,7 @@ Ground None
 28 Endure
 33 Charm
 37 Last Resort
-42 Double-edge
+42 Double-Edge
 120
 1 0 0 0 0 0 
 Level 232 25
@@ -8490,7 +8490,7 @@ Normal None
 42 Egg Bomb
 46 Light Screen
 50 Healing Wish
-54 Double-edge
+54 Double-Edge
 30
 3 0 0 0 0 0 
 None
@@ -9051,7 +9051,7 @@ Water None
 12
 0 Tackle
 0 Growl
-6 Mud-slap
+6 Mud-Slap
 10 Water Gun
 15 Bide
 19 Foresight
@@ -9084,9 +9084,9 @@ Water Ground
 15
 0 Tackle
 0 Growl
-0 Mud-slap
+0 Mud-Slap
 0 Water Gun
-6 Mud-slap
+6 Mud-Slap
 10 Water Gun
 15 Bide
 16 Mud Shot
@@ -9120,9 +9120,9 @@ Water Ground
 16
 0 Tackle
 0 Growl
-0 Mud-slap
+0 Mud-Slap
 0 Water Gun
-6 Mud-slap
+6 Mud-Slap
 10 Water Gun
 15 Bide
 16 Mud Shot
@@ -10103,7 +10103,7 @@ Bug Ground
 14 Fury Swipes
 19 Mind Reader
 25 False Swipe
-31 Mud-slap
+31 Mud-Slap
 38 Metal Claw
 45 Dig
 255
@@ -10461,7 +10461,7 @@ Normal None
 32 Wake-up Slap
 36 Covet
 39 Heal Bell
-42 Double-edge
+42 Double-Edge
 46 Captivate
 255
 0 0 0 0 0 1 
@@ -10587,7 +10587,7 @@ Steel Rock
 16
 0 Tackle
 4 Harden
-8 Mud-slap
+8 Mud-Slap
 11 Headbutt
 15 Metal Claw
 18 Iron Defense
@@ -10599,7 +10599,7 @@ Steel Rock
 39 Iron Tail
 43 Autotomize
 46 Heavy Slam
-50 Double-edge
+50 Double-Edge
 53 Metal Burst
 180
 0 0 1 0 0 0 
@@ -10624,10 +10624,10 @@ Steel Rock
 19
 0 Tackle
 0 Harden
-0 Mud-slap
+0 Mud-Slap
 0 Headbutt
 4 Harden
-8 Mud-slap
+8 Mud-Slap
 11 Headbutt
 15 Metal Claw
 18 Iron Defense
@@ -10639,7 +10639,7 @@ Steel Rock
 45 Iron Tail
 51 Autotomize
 56 Heavy Slam
-62 Double-edge
+62 Double-Edge
 67 Metal Burst
 90
 0 0 2 0 0 0 
@@ -10664,10 +10664,10 @@ Steel Rock
 19
 0 Tackle
 0 Harden
-0 Mud-slap
+0 Mud-Slap
 0 Headbutt
 4 Harden
-8 Mud-slap
+8 Mud-Slap
 11 Headbutt
 15 Metal Claw
 18 Iron Defense
@@ -10679,7 +10679,7 @@ Steel Rock
 48 Iron Tail
 57 Autotomize
 65 Heavy Slam
-74 Double-edge
+74 Double-Edge
 82 Metal Burst
 45
 0 0 3 0 0 0 
@@ -10938,7 +10938,7 @@ Bug None
 33 Dizzy Punch
 37 Zen Headbutt
 41 Bug Buzz
-45 Double-edge
+45 Double-Edge
 150
 0 0 0 0 0 1 
 None
@@ -11266,7 +11266,7 @@ Fire Ground
 41 Earth Power
 45 Earthquake
 51 Flamethrower
-55 Double-edge
+55 Double-Edge
 255
 0 0 0 1 0 0 
 Level 323 33
@@ -11449,7 +11449,7 @@ Normal None
 32 Sucker Punch
 37 Teeter Dance
 41 Psych Up
-46 Double-edge
+46 Double-Edge
 50 Flail
 55 Thrash
 255
@@ -11866,7 +11866,7 @@ Barboach
 Medium Fast
 Water Ground
 14
-0 Mud-slap
+0 Mud-Slap
 6 Mud Sport
 6 Water Sport
 10 Water Gun
@@ -11902,7 +11902,7 @@ Water Ground
 18
 0 Zen Headbutt
 0 Tickle
-0 Mud-slap
+0 Mud-Slap
 0 Mud Sport
 0 Water Sport
 6 Mud Sport
@@ -12011,7 +12011,7 @@ Ground Psychic
 0 Confusion
 4 Harden
 7 Rapid Spin
-11 Mud-slap
+11 Mud-Slap
 15 Psybeam
 18 Rock Tomb
 21 Self-Destruct
@@ -12051,7 +12051,7 @@ Ground Psychic
 0 Rapid Spin
 4 Harden
 7 Rapid Spin
-11 Mud-slap
+11 Mud-Slap
 15 Psybeam
 18 Rock Tomb
 21 Self-Destruct
@@ -12357,7 +12357,7 @@ Ghost None
 13 Curse
 16 Spite
 20 Shadow Sneak
-23 Will-o-wisp
+23 Will-O-Wisp
 28 Feint Attack
 31 Hex
 35 Shadow Ball
@@ -12396,7 +12396,7 @@ Ghost None
 13 Curse
 16 Spite
 20 Shadow Sneak
-23 Will-o-wisp
+23 Will-O-Wisp
 28 Feint Attack
 31 Hex
 35 Shadow Ball
@@ -12435,7 +12435,7 @@ Ghost None
 22 Shadow Sneak
 25 Pursuit
 30 Curse
-33 Will-o-wisp
+33 Will-O-Wisp
 38 Hex
 41 Mean Look
 46 Payback
@@ -12478,7 +12478,7 @@ Ghost None
 22 Shadow Sneak
 25 Pursuit
 30 Curse
-33 Will-o-wisp
+33 Will-O-Wisp
 37 Shadow Punch
 42 Hex
 49 Mean Look
@@ -12551,7 +12551,7 @@ Psychic None
 22 Take Down
 25 Yawn
 30 Psywave
-33 Double-edge
+33 Double-Edge
 38 Heal Bell
 41 Safeguard
 46 Extrasensory
@@ -12921,7 +12921,7 @@ Water Rock
 29 Take Down
 36 Mud Sport
 43 Ancient Power
-50 Double-edge
+50 Double-Edge
 57 Dive
 64 Rest
 71 Hydro Pump
@@ -12993,7 +12993,7 @@ Dragon None
 40 Scary Face
 46 Crunch
 50 Dragon Claw
-55 Double-edge
+55 Double-Edge
 45
 0 1 0 0 0 0 
 Level 372 30
@@ -13031,7 +13031,7 @@ Dragon None
 43 Scary Face
 50 Crunch
 55 Dragon Claw
-61 Double-edge
+61 Double-Edge
 45
 0 0 2 0 0 0 
 Level 373 50
@@ -13072,7 +13072,7 @@ Dragon Flying
 50 Fly
 53 Crunch
 61 Dragon Claw
-70 Double-edge
+70 Double-Edge
 80 Dragon Tail
 45
 0 3 0 0 0 0 
@@ -13379,7 +13379,7 @@ Water None
 60 Calm Mind
 65 Aqua Tail
 75 Sheer Cold
-80 Double-edge
+80 Double-Edge
 90 Hydro Pump
 5
 0 0 0 3 0 0 
@@ -13476,7 +13476,7 @@ Steel Psychic
 25 Refresh
 30 Rest
 35 Zen Headbutt
-40 Double-edge
+40 Double-Edge
 45 Gravity
 50 Healing Wish
 55 Future Sight
@@ -14699,7 +14699,7 @@ Shellos
 Medium Fast
 Water None
 10
-0 Mud-slap
+0 Mud-Slap
 2 Mud Sport
 4 Harden
 7 Water Pulse
@@ -14729,7 +14729,7 @@ Gastrodon
 Medium Fast
 Water Ground
 13
-0 Mud-slap
+0 Mud-Slap
 0 Mud Sport
 0 Harden
 0 Water Pulse
@@ -15259,7 +15259,7 @@ Rock None
 33 Rock Slide
 38 Slam
 41 Sucker Punch
-46 Double-edge
+46 Double-Edge
 255
 0 0 1 0 0 0 
 Move 185  Mimic
@@ -15634,7 +15634,7 @@ Ground None
 25 Sand Tomb
 31 Crunch
 37 Earthquake
-44 Double-edge
+44 Double-Edge
 50 Fissure
 140
 0 0 1 0 0 0 
@@ -15670,7 +15670,7 @@ Ground None
 25 Sand Tomb
 31 Crunch
 40 Earthquake
-50 Double-edge
+50 Double-Edge
 60 Fissure
 60
 0 0 2 0 0 0 
@@ -15767,7 +15767,7 @@ Medium Fast
 Poison Fighting
 15
 0 Astonish
-3 Mud-slap
+3 Mud-Slap
 8 Poison Sting
 10 Taunt
 15 Pursuit
@@ -15803,9 +15803,9 @@ Medium Fast
 Poison Fighting
 17
 0 Astonish
-0 Mud-slap
+0 Mud-Slap
 0 Poison Sting
-3 Mud-slap
+3 Mud-Slap
 8 Poison Sting
 10 Taunt
 15 Pursuit
@@ -16503,7 +16503,7 @@ Ice Ground
 0 Powder Snow
 4 Mud Sport
 8 Powder Snow
-13 Mud-slap
+13 Mud-Slap
 16 Endure
 20 Mud Bomb
 25 Hail
@@ -16666,7 +16666,7 @@ Ghost None
 22 Shadow Sneak
 25 Pursuit
 30 Curse
-33 Will-o-wisp
+33 Will-O-Wisp
 37 Shadow Punch
 42 Hex
 49 Mean Look
@@ -17234,7 +17234,7 @@ Psychic Fire
 41 Flame Burst
 49 Zen Headbutt
 57 Inferno
-65 Double-edge
+65 Double-Edge
 73 Flare Blitz
 81 Final Gambit
 89 Stored Power
@@ -18298,7 +18298,7 @@ Rock None
 7 Sand Attack
 10 Headbutt
 14 Rock Blast
-17 Mud-slap
+17 Mud-Slap
 20 Iron Defense
 23 Smack Down
 27 Rock Slide
@@ -18336,7 +18336,7 @@ Rock None
 7 Sand Attack
 10 Headbutt
 14 Rock Blast
-17 Mud-slap
+17 Mud-Slap
 20 Iron Defense
 23 Smack Down
 25 Power Gem
@@ -18375,7 +18375,7 @@ Rock None
 7 Sand Attack
 10 Headbutt
 14 Rock Blast
-17 Mud-slap
+17 Mud-Slap
 20 Iron Defense
 23 Smack Down
 25 Power Gem
@@ -18480,7 +18480,7 @@ Ground None
 0 Scratch
 0 Mud Sport
 5 Rapid Spin
-8 Mud-slap
+8 Mud-Slap
 12 Fury Swipes
 15 Metal Claw
 19 Dig
@@ -18515,9 +18515,9 @@ Ground Steel
 0 Scratch
 0 Mud Sport
 0 Rapid Spin
-0 Mud-slap
+0 Mud-Slap
 5 Rapid Spin
-8 Mud-slap
+8 Mud-Slap
 12 Fury Swipes
 15 Metal Claw
 19 Dig
@@ -18562,7 +18562,7 @@ Normal None
 35 Heal Pulse
 40 Heal Bell
 45 Simple Beam
-50 Double-edge
+50 Double-Edge
 55 Last Resort
 255
 2 0 0 0 0 0 
@@ -18571,7 +18571,7 @@ None
 5 Sitrus Berry
 50 Oran Berry
 50
-Klutz
+Healer
 Regenerator
 Hearing 
 43 68.3 It touches others with the feelers on its ears, using the sound of their heartbeats to tell how they are feeling.
@@ -18991,7 +18991,7 @@ Bug Poison
 33 Steamroller
 36 Toxic
 40 Rock Climb
-43 Double-edge
+43 Double-Edge
 255
 0 0 1 0 0 0 
 Level 544 22
@@ -19030,7 +19030,7 @@ Bug Poison
 37 Steamroller
 41 Toxic
 46 Rock Climb
-50 Double-edge
+50 Double-Edge
 120
 0 0 2 0 0 0 
 Level 545 30
@@ -19070,7 +19070,7 @@ Bug Poison
 39 Steamroller
 44 Toxic
 50 Rock Climb
-55 Double-edge
+55 Double-Edge
 45
 0 0 0 0 0 3 
 None
@@ -19230,7 +19230,7 @@ Water None
 24 Crunch
 28 Aqua Tail
 32 Soak
-36 Double-edge
+36 Double-Edge
 41 Scary Face
 46 Flail
 51 Final Gambit
@@ -19264,7 +19264,7 @@ Ground Dark
 10 Torment
 13 Sand Tomb
 16 Assurance
-19 Mud-slap
+19 Mud-Slap
 22 Embargo
 25 Swagger
 28 Crunch
@@ -19303,7 +19303,7 @@ Ground Dark
 10 Torment
 13 Sand Tomb
 16 Assurance
-19 Mud-slap
+19 Mud-Slap
 22 Embargo
 25 Swagger
 28 Crunch
@@ -19342,7 +19342,7 @@ Ground Dark
 10 Torment
 13 Sand Tomb
 16 Assurance
-19 Mud-slap
+19 Mud-Slap
 22 Embargo
 25 Swagger
 28 Crunch
@@ -19685,7 +19685,7 @@ Ghost None
 9 Haze
 13 Night Shade
 17 Hex
-21 Will-o-wisp
+21 Will-O-Wisp
 25 Ominous Wind
 29 Curse
 33 Power Split 
@@ -19723,7 +19723,7 @@ Ghost None
 9 Haze
 13 Night Shade
 17 Hex
-21 Will-o-wisp
+21 Will-O-Wisp
 25 Ominous Wind
 29 Curse
 33 Power Split 
@@ -20561,7 +20561,7 @@ Normal Grass
 32 Energy Ball
 36 Charm
 41 Nature Power
-46 Double-edge
+46 Double-Edge
 51 Solar Beam
 190
 0 0 0 0 0 1 
@@ -20600,7 +20600,7 @@ Normal Grass
 36 Charm
 37 Horn Leech
 44 Nature Power
-52 Double-edge
+52 Double-Edge
 60 Solar Beam
 75
 0 2 0 0 0 0 
@@ -20672,7 +20672,7 @@ Bug None
 44 X-scissor
 49 Flail
 52 Swords Dance
-56 Double-edge
+56 Double-Edge
 200
 0 1 0 0 0 0 
 Item 589  Metal Coat
@@ -20902,7 +20902,7 @@ Water None
 None
 0
 50
-Regenerator
+Healer
 Hydration
 Caring 
 47 69.7 The special membrane enveloping Alomomola has the ability to heal wounds.
@@ -21347,7 +21347,7 @@ Ghost Fire
 7 Fire Spin
 10 Confuse Ray
 13 Night Shade
-16 Will-o-wisp
+16 Will-O-Wisp
 20 Flame Burst
 24 Imprison
 28 Hex
@@ -21386,7 +21386,7 @@ Ghost Fire
 7 Fire Spin
 10 Confuse Ray
 13 Night Shade
-16 Will-o-wisp
+16 Will-O-Wisp
 20 Flame Burst
 24 Imprison
 28 Hex
@@ -21743,7 +21743,7 @@ Stunfisk
 Medium Fast
 Ground Electric
 15
-0 Mud-slap
+0 Mud-Slap
 0 Mud Sport
 5 Bide
 9 Thunder Shock
@@ -21894,7 +21894,7 @@ Ground Ghost
 0 Pound
 0 Astonish
 0 Defense Curl
-5 Mud-slap
+5 Mud-Slap
 9 Rollout
 13 Shadow Punch
 17 Iron Defense
@@ -21930,8 +21930,8 @@ Ground Ghost
 0 Pound
 0 Astonish
 0 Defense Curl
-0 Mud-slap
-5 Mud-slap
+0 Mud-Slap
+5 Mud-Slap
 9 Rollout
 13 Shadow Punch
 17 Iron Defense
@@ -22415,7 +22415,7 @@ Bug Fire
 20 Take Down
 30 Flame Charge
 40 Bug Bite
-50 Double-edge
+50 Double-Edge
 60 Flame Wheel
 70 Bug Buzz
 80 Amnesia
@@ -22898,4 +22898,2520 @@ Paleozoic
 30720
 None
 None
+
+650
+Chespin
+56 61 65 48 45 38 
+63
+Medium Slow
+Grass None
+14
+0 Tackle
+0 Growl
+5 Vine Whip
+8 Rollout
+11 Bite
+15 Leech Seed
+18 Pin Missile
+27 Take Down
+32 Seed Bomb
+35 Mud Shot
+39 Bulk Up
+42 Body Slam
+45 Pain Split
+48 Wood Hammer
+45
+0 0 1 0 0 0 
+None
+0
+87
+Overgrow
+Bulletproof
+Spiky Nut
+16 19.8 Such a thick shell of wood covers its head and back that even a direct hit from a truck wouldn't faze it.
+5120
+Field
+None
+
+651
+Quilladin
+61 78 95 56 58 57 
+142
+Medium Slow
+Grass None
+15
+0 Tackle
+0 Growl
+5 Vine Whip
+8 Rollout
+11 Bite
+15 Leech Seed
+20 Pin Missile
+26 Needle Arm
+30 Take Down
+35 Seed Bomb
+39 Mud Shot
+44 Bulk Up
+48 Body Slam
+52 Pain Split
+55 Wood Hammer
+45
+0 0 2 0 0 0 
+None
+0
+87
+Overgrow
+Bulletproof
+Spiny Armor
+28 63.9 They strengthen their lower bodies by running into one another. They are very kind and won't start fights.
+5120
+Field
+None
+
+652
+Chesnaught
+88 107 122 74 75 64 
+239
+Medium Slow
+Grass Fighting
+22
+0 Feint
+0 Hammer Arm
+0 Belly Drum
+0 Tackle
+0 Growl
+5 Vine Whip
+8 Rollout
+11 Bite
+15 Leech Seed
+20 Pin Missile
+26 Needle Arm
+30 Take Down
+35 Seed Bomb
+36 Spiky Shield
+41 Mud Shot
+44 Bulk Up
+48 Body Slam
+52 Pain Split
+55 Wood Hammer
+60 Hammer Arm
+70 Giga Impact
+75 Spiky Shield
+45
+0 0 3 0 0 0 
+None
+0
+87
+Overgrow
+Bulletproof
+Spiny Armor
+63 198.4 When it takes a defensive posture with its fists guarding its face, it could withstand a bomb blast.
+5120
+Field
+None
+
+653
+Fennekin
+40 45 40 62 60 60 
+61
+Medium Slow
+Fire None
+16
+0 Scratch
+0 Tail Whip
+5 Ember
+11 Howl
+14 Flame Charge
+17 Psybeam
+20 Fire Spin
+25 Lucky Chant
+27 Light Screen
+31 Psyshock
+35 Flamethrower
+38 Will-O-Wisp
+41 Psychic
+43 Sunny Day
+46 Magic Room
+48 Fire Blast
+45
+0 0 0 1 0 0 
+None
+0
+87
+Blaze
+Magician
+Fox
+16 20.7 As it walks, it munches on a twig in place of a snack. It intimidates opponents by puffing hot air out of its ears. 
+5120
+Field
+None
+
+654
+Braixen
+59 59 58 90 70 73 
+143
+Medium Slow
+Fire None
+16
+0 Scratch
+0 Tail Whip
+5 Ember
+11 Howl
+14 Flame Charge
+18 Psybeam
+22 Fire Spin
+27 Lucky Chant
+30 Light Screen
+34 Psyshock
+41 Flamethrower
+45 Will-O-Wisp
+48 Psychic
+51 Sunny Day
+53 Magic Room
+55 Fire Blast
+45
+0 0 0 2 0 0 
+None
+0
+87
+Blaze
+Magician
+Fox
+39 32.0 When the twig is plucked from its tail, friction sets the twig alight. The flame is used to send signals to its allies.
+5120
+Field
+None
+
+655
+Delphox
+75 69 72 114 100 104 
+240
+Medium Slow
+Fire Psychic
+23
+0 Future Sight
+0 Role Play
+0 Switcheroo
+0 Shadow Ball
+0 Scratch
+0 Tail Whip
+5 Ember
+11 Howl
+14 Flame Charge
+18 Psybeam
+22 Fire Spin
+27 Lucky Chant
+30 Light Screen
+34 Psyshock
+36 Mystical Fire
+42 Flamethrower
+47 Will-O-Wisp
+51 Psychic
+55 Sunny Day
+56 Magic Room
+61 Fire Blast
+69 Future Sight
+75 Mystical Fire
+45
+0 0 0 3 0 0 
+None
+0
+87
+Blaze
+Magician
+Fox
+59 86.0 Using psychic power, it generates a fiery vortex of 5,400 degrees Fahrenheit, incinerating foes swept into this whirl of flame.
+5120
+Field
+None
+
+656
+Froakie
+41 56 40 62 44 71 
+63
+Medium Slow
+Water None
+14
+0 Pound
+0 Growl
+5 Bubble
+8 Quick Attack
+10 Lick
+14 Water Pulse
+18 Smokescreen
+21 Round
+25 Fling
+29 Smack Down
+35 Substitute
+39 Bounce
+43 Double Team
+48 Hydro Pump
+45
+0 0 0 0 0 1 
+None
+0
+87
+Torrent
+Protean
+Bubble Frog
+12 15.4 It protects its skin by covering its body in delicate bubbles. Beneath its happy-go-lucky air, it keeps a watchful eye on its surroundings.
+5120
+Water 1
+None
+
+657
+Frogadier
+54 63 52 83 56 97 
+142
+Medium Slow
+Water None
+14
+0 Pound
+0 Growl
+5 Bubble
+8 Quick Attack
+10 Lick
+14 Water Pulse
+20 Smokescreen
+23 Round
+28 Fling
+33 Smack Down
+38 Substitute
+44 Bounce
+48 Double Team
+55 Hydro Pump
+45
+0 0 0 0 0 2 
+None
+0
+87
+Torrent
+Protean
+Bubble Frog
+24 24.0 Its swiftness is unparalleled. It can scale a tower of more than 2,000 feet in a minute's time.
+5120
+Water 1
+None
+
+658
+Greninja
+72 95 67 103 71 122 
+239
+Medium Slow
+Water Dark
+21
+0 Night Slash
+0 Role Play
+0 Mat Block
+0 Pound
+0 Growl
+5 Bubble
+8 Quick Attack
+10 Lick
+14 Water Pulse
+20 Smokescreen
+23 Shadow Sneak
+28 Spikes
+33 Feint Attack
+36 Water Shuriken
+43 Substitute
+49 Extrasensory
+52 Double Team
+56 Haze
+60 Hydro Pump
+70 Night Slash
+75 Water Shuriken
+45
+0 0 0 0 0 3 
+None
+0
+87
+Torrent
+Protean
+Ninja
+59 88.2 It appears and vanishes with a ninja's grace. It toys with its enemies using swift movements, while slicing them with throwing stars of sharpest water.
+5120
+Water 1
+None
+
+659
+Bunnelby
+38 36 38 32 36 57 
+47
+Medium Fast
+Normal None
+16
+0 Tackle
+0 Agility
+0 Leer
+7 Quick Attack
+10 Double Slap
+13 Mud-Slap
+15 Take Down
+18 Mud Shot
+20 Double Kick
+25 Odor Sleuth
+29 Flail
+33 Dig
+38 Bounce
+42 Super Fang
+47 Facade
+49 Earthquake
+255
+0 0 0 0 0 1 
+None
+0
+50
+Pickup
+Cheek Pouch
+Digging
+16 11.0 It has ears like shovels. Digging holes strengthens its ears so much that they can sever thick roots effortlessly.
+3840
+Field
+None
+
+660
+Diggersby
+85 56 77 50 77 78 
+148
+Medium Fast
+Normal Ground
+20
+0 Hammer Arm
+0 Rototiller
+0 Bulldoze
+0 Swords Dance
+0 Tackle
+0 Agility
+0 Leer
+7 Quick Attack
+13 Mud-Slap
+15 Take Down
+18 Mud Shot
+20 Double Kick
+26 Odor Sleuth
+31 Flail
+37 Dig
+42 Bounce
+48 Super Fang
+53 Facade
+57 Earthquake
+60 Hammer Arm
+255
+2 0 0 0 0 0 
+None
+0
+50
+Pickup
+Cheek Pouch
+Digging
+39 93.5 As powerful as an excavator, its ears can reduce dense bedrock to rubble. When it's finished digging, it lounges lazily.
+3840
+Field
+None
+
+661
+Fletchling
+45 50 43 40 38 62 
+56
+Medium Slow
+Normal Flying
+14
+0 Tackle
+0 Growl
+6 Quick Attack
+10 Peck
+13 Agility
+16 Flail
+21 Roost
+25 Razor Wind
+29 Natural Gift
+34 Flame Charge
+39 Acrobatics
+41 Me First
+45 Tailwind
+48 Steel Wing
+255
+0 0 0 0 0 1 
+None
+0
+50
+Big Pecks
+Gale Wings
+Tiny Robin
+12 3.7 Despite the beauty of its lilting voice, it's merciless to intruders that enter its territory.
+3840
+Flying
+None
+
+662
+Fletchinder
+62 73 55 56 52 84 
+134
+Medium Slow
+Fire Flying
+15
+0 Tackle
+0 Growl
+6 Quick Attack
+10 Peck
+13 Agility
+16 Flail
+17 Ember
+25 Roost
+27 Razor Wind
+31 Natural Gift
+38 Flame Charge
+42 Acrobatics
+46 Me First
+51 Tailwind
+55 Steel Wing
+255
+0 0 0 0 0 2 
+None
+0
+50
+Flame Body
+Gale Wings
+Ember
+28 35.3 The hotter the flame sac on its belly, the faster it can fly, but it takes some time to get the fire going.
+3840
+Flying
+None
+
+663
+Talonflame
+78 81 71 74 69 126 
+175
+Medium Slow
+Fire Flying
+18
+0 Brave Bird
+0 Flare Blitz
+0 Tackle
+0 Growl
+6 Quick Attack
+10 Peck
+13 Agility
+16 Flail
+17 Ember
+25 Roost
+27 Razor Wind
+31 Natural Gift
+39 Flame Charge
+44 Acrobatics
+49 Me First
+55 Tailwind
+60 Steel Wing
+64 Brave Bird
+255
+0 0 0 0 0 3 
+None
+0
+50
+Flame Body
+Gale Wings
+Scorching
+47 54.0 When attacking prey, it can reach speeds of up to 310 mph. It finishes its prey off with a colossal kick.
+3840
+Flying
+None
+
+664
+Scatterbug
+38 35 40 27 25 35 
+40
+Medium Fast
+Bug None
+4
+0 Tackle
+0 String Shot
+6 Stun Spore
+15 Bug Bite
+255
+0 0 1 0 0 0 
+None
+0
+50
+Shield Dust
+Compoundeyes
+Scatterdust
+12 5.5 The powder that covers its body regulates its temperature, so it can live in any region or climate.
+3840
+Bug
+None
+
+665
+Spewpa
+45 22 60 27 30 29 
+75
+Medium Fast
+Bug None
+2
+0 Harden
+9 Protect
+255
+0 0 2 0 0 0 
+None
+0
+50
+Shed Skin
+None
+Scatterdust
+12 18.5 The beaks of bird Pok\u00e9mon can't begin to scratch its stalwart body. To defend itself, it spews powder.
+3840
+Bug
+None
+
+666
+Vivillon
+80 52 50 90 50 89 
+185
+Medium Fast
+Bug Flying
+16
+0 Powder
+0 Sleep Powder
+0 Poison Powder
+0 Stun Spore
+0 Gust
+0 Light Screen
+12 Struggle Bug
+17 Psybeam
+21 Supersonic
+25 Draining Kiss
+31 Aromatherapy
+35 Bug Buzz
+41 Safeguard
+45 Quiver Dance
+50 Hurricane
+55 Powder
+255
+1 0 0 1 0 1 
+None
+0
+50
+Shield Dust
+Compoundeyes
+Scale
+47 37.5 The patterns on this Pok\u00e9mon's wings depend on the climate and topography of its habitat. It scatters colorful scales.
+3840
+Bug
+None
+
+667
+Litleo
+62 50 58 73 54 72 
+74
+Medium Slow
+Fire Normal
+15
+0 Tackle
+0 Leer
+5 Ember
+8 Work Up
+11 Headbutt
+15 Noble Roar
+20 Take Down
+23 Fire Fang
+28 Endeavor
+33 Echoed Voice
+36 Flamethrower
+39 Crunch
+43 Hyper Voice
+46 Incinerate
+50 Overheat
+200
+0 0 0 1 0 0 
+None
+0
+25
+Rivalry
+Unnerve
+Lion Cub
+24 29.8 They set off on their own from their pride and live by themselves to become stronger. These hot-blooded Pok\u00e9mon are quick to fight.
+5120
+Field
+None
+
+668
+Pyroar
+86 68 72 109 66 106 
+177
+Medium Slow
+Fire Normal
+16
+0 Hyper Beam
+0 Tackle
+0 Leer
+5 Ember
+8 Work Up
+11 Headbutt
+15 Noble Roar
+20 Take Down
+23 Fire Fang
+28 Endeavor
+33 Echoed Voice
+38 Flamethrower
+42 Crunch
+48 Hyper Voice
+51 Incinerate
+57 Overheat
+200
+0 0 0 2 0 0 
+None
+0
+25
+Rivalry
+Unnerve
+Royal
+59 179.7 With fiery breath of more than 10,000 degrees Fahrenheit, they viciously threaten any challenger. The females protect the pride's cubs.
+5120
+Field
+None
+
+669
+Flabebe
+44 38 39 61 79 42 
+61
+Medium Fast
+Fairy Grass
+14
+0 Tackle
+0 Vine Whip
+6 Fairy Wind
+10 Lucky Chant
+15 Razor Leaf
+20 Wish
+22 Magical Leaf
+24 Grassy Terrain
+28 Petal Blizzard
+33 Aromatherapy
+37 Misty Terrain
+41 Moonblast
+45 Petal Dance
+48 Solar Beam
+255
+0 0 0 0 1 0 
+None
+0
+0
+Flower Veil
+Flower Gift
+Single Bloom
+4 0.2 When it finds a flower it likes, it dwells on that flower its whole life long. It floats in the wind's embrace with an untroubled heart.
+5120
+Fairy
+None
+
+670
+Floette
+54 45 47 75 98 52 
+130
+Medium Fast
+Fairy Grass
+14
+0 Tackle
+0 Vine Whip
+6 Fairy Wind
+10 Lucky Chant
+15 Razor Leaf
+20 Wish
+25 Magical Leaf
+27 Grassy Terrain
+33 Petal Blizzard
+38 Aromatherapy
+43 Misty Terrain
+46 Moonblast
+51 Petal Dance
+58 Solar Beam
+255
+0 0 0 0 2 0 
+None
+0
+0
+Flower Veil
+Flower Gift
+Fairy
+8 2.0 When the flowers of a well-tended flower bed bloom, it appears and celebrates with an elegant dance.
+5120
+Fairy
+None
+
+671
+Florges
+78 65 68 112 154 75 
+248
+Medium Fast
+Fairy Grass
+12
+0 Disarming Voice
+0 Lucky Chant
+0 Wish
+0 Magical Leaf
+0 Flower Shield
+0 Grass Knot
+0 Grassy Terrain
+0 Petal Blizzard
+0 Misty Terrain
+0 Moonblast
+0 Petal Dance
+0 Aromatherapy
+255
+0 0 0 0 3 0 
+None
+0
+0
+Flower Veil
+Flower Gift
+Garden
+43 22.0 In times long past, governors of castles would invite Florges to create flower gardens to embellish the castle domains.
+5120
+Fairy
+None
+
+672
+Skiddo
+66 65 48 62 57 52 
+70
+Medium Fast
+Grass None
+16
+0 Tackle
+0 Growth
+7 Vine Whip
+9 Tail Whip
+12 Leech Seed
+13 Razor Leaf
+16 Worry Seed
+20 Synthesis
+22 Take Down
+26 Bulldoze
+30 Seed Bomb
+34 Bulk Up
+38 Double-Edge
+42 Horn Leech
+45 Leaf Blade
+50 Milk Drink
+160
+1 0 0 0 0 0 
+None
+0
+50
+Sap Sipper
+Grass Pelt
+Mount
+35 68.3 If it has sunshine and water, it doesnt need to eat, because it can generate energy from the leaves on its back.
+5120
+Field
+None
+
+673
+Gogoat
+123 100 62 97 81 68 
+186
+Medium Fast
+Grass None
+19
+0 Aerial Ace
+0 Tackle
+0 Growth
+7 Vine Whip
+9 Tail Whip
+12 Leech Seed
+13 Razor Leaf
+16 Worry Seed
+20 Synthesis
+22 Take Down
+26 Bulldoze
+30 Seed Bomb
+34 Bulk Up
+40 Double-Edge
+47 Horn Leech
+55 Leaf Blade
+58 Milk Drink
+60 Earthquake
+65 Aerial Ace
+160
+2 0 0 0 0 0 
+None
+0
+50
+Sap Sipper
+Grass Pelt
+Mount
+67 200.6 They inhabit mountainous regions. The leader of the herd is decided by a battle of clashing horns.
+5120
+Field
+None
+
+674
+Pancham
+67 82 62 46 48 43 
+70
+Medium Fast
+Fighting None
+14
+0 Tackle
+0 Leer
+7 Arm Thrust
+10 Work Up
+12 Karate Chop
+15 Comet Punch
+20 Slash
+25 Circle Throw
+27 Vital Throw
+33 Body Slam
+39 Crunch
+42 Entrainment
+45 Parting Shot
+48 Sky Uppercut
+128
+0 1 0 0 0 0 
+None
+0
+50
+Iron Fist
+Mold Breaker
+Playful
+24 17.6 It does its level best to glare and pull a scary face, but it can't help grinning if anyone pats its head.
+6400
+Field
+Human-like
+
+675
+Pangoro
+95 124 78 69 71 58 
+173
+Medium Fast
+Fighting Dark
+19
+0 Entrainment
+0 Hammer Arm
+0 Tackle
+0 Leer
+7 Arm Thrust
+10 Work Up
+12 Karate Chop
+15 Comet Punch
+20 Slash
+25 Circle Throw
+27 Vital Throw
+35 Body Slam
+42 Crunch
+45 Entrainment
+48 Parting Shot
+52 Sky Uppercut
+57 Hammer Arm
+65 Taunt
+70 Low Sweep
+128
+0 2 0 0 0 0 
+None
+0
+50
+Iron Fist
+Mold Breaker
+Daunting
+83 299.8 It charges ahead and bashes its opponents like a berserker, uncaring about any hits it might take. Its arms are mighty enough to snap a telephone pole.
+6400
+Field
+Human-like
+
+676
+Furfrou
+75 80 60 65 90 102 
+165
+Medium Fast
+Normal None
+13
+0 Tackle
+0 Growl
+5 Sand Attack
+9 Baby-Doll Eyes
+12 Headbutt
+15 Tail Whip
+22 Bite
+27 Odor Sleuth
+33 Retaliate
+35 Take Down
+38 Charm
+42 Sucker Punch
+48 Cotton Guard
+120
+0 0 0 0 0 1 
+None
+0
+50
+Fur Coat
+None
+Poodle
+47 61.7 Historically, in the Kalos region, these Pok\u00e9mon were the designated guardians of the king.
+5120
+Field
+None
+
+677
+Espurr
+62 48 54 63 60 68 
+71
+Medium Fast
+Psychic None
+9
+0 Scratch
+0 Leer
+5 Covet
+9 Confusion
+13 Light Screen
+17 Psybeam
+19 Fake Out
+22 Disarming Voice
+25 Psyshock
+228
+0 0 0 0 0 1 
+None
+0
+50
+Keen Eye
+Infiltrator
+Restraint
+12 7.7 It has enough psychic energy to blast everything within 300 feet of itself, but it has no control over its power.
+5120
+Field
+None
+
+678
+Meowstic
+74 48 76 83 81 104 
+163
+Medium Fast
+Psychic None
+20
+0 Quick Guard
+0 Mean Look
+0 Scratch
+0 Leer
+5 Covet
+9 Confusion
+13 Light Screen
+17 Psybeam
+19 Fake Out
+22 Disarming Voice
+25 Psyshock
+28 Charm
+31 Miracle Eye
+35 Reflect
+40 Psychic
+43 Role Play
+45 Imprison
+48 Sucker Punch
+50 Misty Terrain
+53 Quick Guard
+228
+0 0 0 0 0 2 
+None
+0
+50
+Keen Eye
+Infiltrator
+Constraint
+24 18.7 The eyeball patterns on the interior of its ears emit psychic energy. It keeps the patterns tightly covered because that power is too immense.
+5120
+Field
+None
+
+679
+Honedge
+45 80 100 35 37 28 
+65
+Medium Fast
+Steel Ghost
+15
+0 Tackle
+0 Swords Dance
+5 Fury Cutter
+8 Metal Sound
+13 Pursuit
+18 Autotomize
+20 Shadow Sneak
+22 Aerial Ace
+26 Retaliate
+29 Slash
+32 Iron Defense
+35 Night Slash
+39 Power Trick
+42 Iron Head
+47 Sacred Sword
+222
+0 0 1 0 0 0 
+None
+0
+50
+No Guard
+None
+Sword
+31 4.4 If anyone dares to grab its hilt, it wraps a blue cloth around that person's arm and drains that person's life energy completely.
+5120
+Mineral
+None
+
+680
+Doublade
+59 110 150 45 49 35 
+157
+Medium Fast
+Steel Ghost
+15
+0 Tackle
+0 Swords Dance
+5 Fury Cutter
+8 Metal Sound
+13 Pursuit
+18 Autotomize
+20 Shadow Sneak
+22 Aerial Ace
+26 Retaliate
+29 Slash
+32 Iron Defense
+36 Night Slash
+41 Power Trick
+45 Iron Head
+51 Sacred Sword
+222
+0 0 2 0 0 0 
+None
+0
+50
+No Guard
+None
+Sword
+31 9.9 The complex attack patterns of its two swords are unstoppable, even for an opponent greatly accomplished at swordplay.
+5120
+Mineral
+None
+
+681
+Aegislash
+60 50 150 50 150 60 
+234
+Medium Fast
+Steel Ghost
+14
+0 Fury Cutter
+0 Pursuit
+0 Autotomize
+0 Shadow Sneak
+0 Slash
+0 Iron Defense
+0 Night Slash
+0 Power Trick
+0 Iron Head
+0 Head Smash
+0 Swords Dance
+0 Aerial Ace
+0 King's Shield
+0 Sacred Sword
+222
+0 0 2 0 1 0 
+None
+0
+50
+Stance Change
+None
+Royal Sword
+67 116.8 Apparently, it can detect innate qualities of leadership. According to legend, whoever it recognizes is destined to become king.
+5120
+Mineral
+None
+
+682
+Spritzee
+78 52 60 63 65 23 
+68
+Medium Fast
+Fairy None
+16
+0 Sweet Scent
+0 Fairy Wind
+6 Sweet Kiss
+8 Odor Sleuth
+13 Echoed Voice
+17 Calm Mind
+21 Draining Kiss
+25 Aromatherapy
+29 Attract
+31 Moonblast
+35 Charm
+38 Flail
+42 Misty Terrain
+44 Skill Swap
+48 Psychic
+50 Disarming Voice
+200
+1 0 0 0 0 0 
+None
+0
+50
+Healer
+Aroma Veil
+Perfume
+8 1.1 In the past, rather than using perfume, royal ladies carried a Spritzee that would waft a fragrance they liked.
+5120
+Fairy
+None
+
+683
+Aromatisse
+101 72 72 99 89 29 
+162
+Medium Fast
+Fairy None
+20
+0 Aromatic Mist
+0 Heal Pulse
+0 Sweet Scent
+0 Fairy Wind
+6 Sweet Kiss
+8 Odor Sleuth
+13 Echoed Voice
+17 Calm Mind
+21 Draining Kiss
+25 Aromatherapy
+29 Attract
+31 Moonblast
+35 Charm
+38 Flail
+42 Misty Terrain
+44 Skill Swap
+48 Psychic
+53 Disarming Voice
+57 Reflect
+64 Psych Up
+200
+2 0 0 0 0 0 
+None
+0
+50
+Healer
+Aroma Veil
+Fragrance
+31 34.2 Its scent is so overpowering that, unless a Trainer happens to really enjoy the smell, he or she will have a hard time walking alongside it.
+5120
+Fairy
+None
+
+684
+Swirlix
+62 48 66 59 57 49 
+68
+Medium Fast
+Fairy None
+16
+0 Sweet Scent
+0 Tackle
+5 Fairy Wind
+8 Play Nice
+10 Fake Tears
+13 Round
+17 Cotton Spore
+21 Endeavor
+26 Aromatherapy
+31 Draining Kiss
+36 Energy Ball
+41 Cotton Guard
+45 Wish
+49 Play Rough
+58 Light Screen
+67 Safeguard
+200
+0 0 1 0 0 0 
+None
+0
+50
+Sweet Veil
+Unburden
+Cotton Candy
+16 7.7 Because it eats nothing but sweets, its fur is as sticky sweet as cotton candy.
+5120
+Fairy
+None
+
+685
+Slurpuff
+82 80 86 85 75 72 
+168
+Medium Fast
+Fairy None
+16
+0 Sweet Scent
+0 Tackle
+5 Fairy Wind
+8 Play Nice
+10 Fake Tears
+13 Round
+17 Cotton Spore
+21 Endeavor
+26 Aromatherapy
+31 Draining Kiss
+36 Energy Ball
+41 Cotton Guard
+45 Wish
+49 Play Rough
+58 Light Screen
+67 Safeguard
+200
+0 0 2 0 0 0 
+None
+0
+50
+Sweet Veil
+Unburden
+Meringue
+31 11.0 Its sense of smell is 100 million times better than a human's, so even the faintest scent tells it about everything in the area. It's like it can see with its nose!
+5120
+Fairy
+None
+
+686
+Inkay
+53 54 53 37 46 45 
+58
+Medium Fast
+Dark Psychic
+18
+0 Tackle
+0 Peck
+0 Constrict
+4 Reflect
+8 Foul Play
+12 Swagger
+13 Psywave
+15 Topsy-Turvy
+18 Hypnosis
+21 Psybeam
+23 Switcheroo
+27 Payback
+31 Light Screen
+35 Pluck
+39 Psycho Cut
+43 Slash
+46 Night Slash
+48 Superpower
+120
+0 1 0 0 0 0 
+None
+0
+50
+Contrary
+Suction Cups
+Revolving
+16 7.7 It flashes the light-emitting spots on its body, which drains its opponent's will to fight. It takes the opportunity to scuttle away and hide.
+5120
+Water 1
+Water 2
+
+687
+Malamar
+86 92 88 68 75 73 
+169
+Medium Fast
+Dark Psychic
+20
+0 Superpower
+0 Reversal
+0 Tackle
+0 Peck
+0 Constrict
+4 Reflect
+8 Foul Play
+12 Swagger
+13 Psywave
+15 Topsy-Turvy
+18 Hypnosis
+21 Psybeam
+23 Switcheroo
+27 Payback
+31 Light Screen
+35 Pluck
+39 Psycho Cut
+43 Slash
+46 Night Slash
+48 Superpower
+120
+0 2 0 0 0 0 
+None
+0
+50
+Contrary
+Suction Cups
+Overturning
+59 103.6 It lures its prey close with hypnotic motions, then wraps its tentacles around it before finishing it off with digestive fluids.
+5120
+Water 1
+Water 2
+
+688
+Binacle
+42 52 67 39 56 50 
+61
+Medium Fast
+Rock Water
+16
+0 Shell Smash
+0 Scratch
+0 Sand Attack
+4 Water Gun
+7 Withdraw
+10 Fury Swipes
+13 Slash
+18 Mud-Slap
+20 Clamp
+24 Rock Polish
+28 Ancient Power
+32 Hone Claws
+37 Fury Cutter
+41 Night Slash
+45 Razor Shell
+49 Cross Chop
+255
+0 1 0 0 0 0 
+None
+0
+50
+Tough Claws
+Sniper
+Two-Handed
+20 68.3 They stretch and then contract, yanking their rocks along with them in bold hops. They eat  seaweed that washes up on the shoreline.
+5120
+Water 3
+None
+
+689
+Barbaracle
+72 105 115 54 86 68 
+175
+Medium Fast
+Rock Water
+20
+0 Stone Edge
+0 Skull Bash
+0 Shell Smash
+0 Scratch
+0 Sand Attack
+4 Water Gun
+7 Withdraw
+10 Fury Swipes
+13 Slash
+18 Mud-Slap
+20 Clamp
+24 Rock Polish
+28 Ancient Power
+32 Hone Claws
+37 Fury Cutter
+44 Night Slash
+48 Razor Shell
+55 Cross Chop
+60 Stone Edge
+65 Skull Bash
+255
+0 2 0 0 0 0 
+None
+0
+50
+Tough Claws
+Sniper
+Collective
+51 211.6 Barbaracle's legs and hands have minds of their own, and they will move independently. But they usually follow the head's orders.
+5120
+Water 3
+None
+
+690
+Skrelp
+50 60 60 60 60 30 
+64
+Medium Fast
+Poison Water
+16
+0 Tackle
+0 Smokescreen
+0 Water Gun
+5 Feint Attack
+9 Tail Whip
+12 Bubble
+15 Acid
+19 Camouflage
+23 Poison Tail
+25 Water Pulse
+28 Double Team
+32 Toxic
+35 Aqua Tail
+38 Sludge Bomb
+42 Hydro Pump
+49 Dragon Pulse
+225
+0 0 0 0 1 0 
+None
+0
+50
+Poison Point
+Poison Touch
+Mock Kelp
+20 16.1 It looks just like rotten kelp. It hides from foes while storing up power for its evolution.
+5120
+Water 1
+Dragon
+
+691
+Dragalge
+65 75 90 97 123 44 
+173
+Medium Fast
+Poison Dragon
+20
+0 Dragon Tail
+0 Twister
+0 Tackle
+0 Smokescreen
+0 Water Gun
+5 Feint Attack
+9 Tail Whip
+12 Bubble
+15 Acid
+19 Camouflage
+23 Poison Tail
+25 Water Pulse
+28 Double Team
+32 Toxic
+35 Aqua Tail
+38 Sludge Bomb
+42 Hydro Pump
+53 Dragon Pulse
+59 Dragon Tail
+67 Twister
+225
+0 0 0 0 2 0 
+None
+0
+50
+Poison Point
+Poison Touch
+Mock Kelp
+71 179.7 Tales are told of ships that wander into seas where Dragalge live, never to return.
+5120
+Water 1
+Dragon
+
+692
+Clauncher
+50 53 62 58 63 44 
+66
+Slow
+Water None
+13
+0 Splash
+0 Water Gun
+7 Water Sport
+9 Vice Grip
+12 Bubble
+16 Flail
+20 Bubble Beam
+25 Swords Dance
+30 Crabhammer
+34 Water Pulse
+39 Smack Down
+43 Aqua Jet
+48 Muddy Water
+155
+0 0 0 1 0 0 
+None
+0
+50
+Mega Launcher
+None
+Water Gun
+20 18.3 Through controlled explosions of internal gas, it can expel water like a pistol shot. At close distances, it can shatter rock.
+3840
+Water 1
+Water 3
+
+693
+Clawitzer
+71 73 88 120 89 59 
+100
+Slow
+Water None
+20
+0 Heal Pulse
+0 Dark Pulse
+0 Dragon Pulse
+0 Aura Sphere
+0 Splash
+0 Water Gun
+7 Water Sport
+9 Vice Grip
+12 Bubble
+16 Flail
+20 Bubble Beam
+25 Swords Dance
+30 Crabhammer
+34 Water Pulse
+42 Smack Down
+47 Aqua Jet
+53 Muddy Water
+57 Dark Pulse
+63 Dragon Pulse
+67 Aura Sphere
+155
+0 0 0 2 0 0 
+None
+0
+50
+Mega Launcher
+None
+Howitzer
+51 77.8 By expelling water from the nozzle in the back of its claw, it can move at a speed of 60 knots.
+3840
+Water 1
+Water 3
+
+694
+Helioptile
+44 38 33 61 43 70 
+58
+Medium Fast
+Electric Normal
+13
+0 Pound
+0 Tail Whip
+6 Thunder Shock
+11 Charge
+13 Mud-Slap
+17 Quick Attack
+22 Razor Wind
+25 Parabolic Charge
+31 Thunder Wave
+35 Bulldoze
+40 Volt Switch
+45 Electrify
+49 Thunderbolt
+90
+0 0 0 0 0 1 
+None
+0
+50
+Dry Skin
+Sand Veil
+Generator
+20 13.2 The frills on either side of its head have cells that generate electricity when exposed to sunlight.
+5120
+Monster
+Dragon
+
+695
+Heliolisk
+62 55 52 109 94 109 
+168
+Medium Fast
+Electric Normal
+7
+0 Eerie Impulse
+0 Electrify
+0 Razor Wind
+0 Quick Attack
+0 Thunder
+0 Charge
+0 Parabolic Charge
+90
+0 0 0 1 0 1 
+None
+0
+50
+Dry Skin
+Sand Veil
+Generator
+39 46.3 It stimulates its muscles with electricity, boosting the strength in its legs and enabling it to run 100 yards in five seconds.
+5120
+Monster
+Dragon
+
+696
+Tyrunt
+58 89 77 45 45 48 
+72
+Medium Fast
+Rock Dragon
+15
+0 Tail Whip
+0 Tackle
+6 Roar
+10 Stomp
+12 Bide
+15 Stealth Rock
+17 Bite
+20 Charm
+26 Ancient Power
+30 Dragon Tail
+34 Crunch
+37 Dragon Claw
+40 Thrash
+44 Earthquake
+49 Horn Drill
+45
+0 1 0 0 0 0 
+None
+0
+87
+Strong Jaw
+Sturdy
+Royal Heir
+31 57.3 Its immense jaws have enough destructive force that it can chew up an automobile. It lived 100 million years ago.
+7680
+Monster
+Dragon
+
+697
+Tyrantrum
+82 121 119 69 59 71 
+182
+Medium Fast
+Rock Dragon
+19
+0 Head Smash
+0 Tail Whip
+0 Tackle
+6 Roar
+10 Stomp
+12 Bide
+15 Stealth Rock
+17 Bite
+20 Charm
+26 Ancient Power
+30 Dragon Tail
+34 Crunch
+37 Dragon Claw
+42 Thrash
+47 Earthquake
+53 Horn Drill
+58 Head Smash
+68 Rock Slide
+75 Giga Impact
+45
+0 2 0 0 0 0 
+None
+0
+87
+Strong Jaw
+Rock Head
+Despot
+98 595.2 Nothing could stop this Pok\u00e9mon 100 million years ago, so it behaved like a king.
+7680
+Monster
+Dragon
+
+698
+Amaura
+77 59 50 67 63 46 
+72
+Medium Fast
+Rock Ice
+18
+0 Growl
+0 Powder Snow
+5 Thunder Wave
+10 Rock Throw
+13 Icy Wind
+15 Take Down
+18 Mist
+20 Aurora Beam
+26 Ancient Power
+30 Round
+34 Avalanche
+38 Hail
+41 Nature Power
+44 Encore
+47 Light Screen
+50 Ice Beam
+57 Hyper Beam
+65 Blizzard
+45
+1 0 0 0 0 0 
+None
+0
+87
+Refrigerate
+Snow Warning
+Tundra
+51 55.6 This calm Pok\u00e9mon lived in a cold land where there were no violent predators like Tyrantrum.
+7680
+Monster
+None
+
+699
+Aurorus
+123 77 72 99 92 58 
+104
+Medium Fast
+Rock Ice
+20
+0 Freeze-Dry
+0 Growl
+0 Powder Snow
+5 Thunder Wave
+10 Rock Throw
+13 Icy Wind
+15 Take Down
+18 Mist
+20 Aurora Beam
+26 Ancient Power
+30 Round
+34 Avalanche
+38 Hail
+43 Nature Power
+46 Encore
+50 Light Screen
+56 Ice Beam
+63 Hyper Beam
+74 Blizzard
+77 Freeze-Dry
+45
+2 0 0 0 0 0 
+None
+0
+87
+Refrigerate
+Snow Warning
+Tundra
+106 496.0 Using its diamond-shaped crystals, it can instantly create a wall of ice to block an opponent's attack.
+7680
+Monster
+None
+
+700
+Sylveon
+95 65 65 110 130 60 
+184
+Medium Fast
+Fairy None
+14
+0 Disarming Voice
+0 Tail Whip
+0 Tackle
+5 Sand Attack
+9 Fairy Wind
+13 Quick Attack
+17 Swift
+20 Draining Kiss
+25 Skill Swap
+29 Misty Terrain
+33 Light Screen
+37 Moonblast
+41 Last Resort
+45 Psych Up
+45
+0 0 0 0 2 0 
+None
+0
+87
+Cute Charm
+Pixilate
+Intertwining
+39 51.8 It wraps its ribbonlike feelers around the arm of its beloved Trainer and walks with him or her.
+8960
+Field
+None
+
+701
+Hawlucha
+78 92 75 74 63 118 
+175
+Medium Fast
+Fighting Flying
+17
+0 Detect
+0 Tackle
+0 Hone Claws
+4 Karate Chop
+8 Wing Attack
+12 Roost
+16 Aerial Ace
+20 Encore
+24 Fling
+28 Flying Press
+32 Bounce
+36 Endeavor
+40 Feather Dance
+44 High Jump Kick
+48 Sky Attack
+55 Sky Drop
+60 Swords Dance
+128
+0 2 0 0 0 0 
+None
+0
+50
+Limber
+Unburden
+Wrestling
+31 47.4 With its wings, it controls its position in the air. It likes to attack from above, a maneuver that is difficult to defend against.
+5120
+Human-like
+None
+
+702
+Dedenne
+67 58 57 81 67 101 
+151
+Medium Fast
+Electric Fairy
+16
+0 Tackle
+0 Tail Whip
+7 Thunder Shock
+11 Charge
+14 Charm
+17 Parabolic Charge
+20 Nuzzle
+23 Thunder Wave
+26 Volt Switch
+30 Rest
+31 Snore
+34 Charge Beam
+39 Entrainment
+42 Play Rough
+45 Thunder
+50 Discharge
+200
+0 0 0 0 0 2 
+None
+0
+50
+Cheek Pouch
+Pickup
+Antenna
+8 4.9 It uses its tail to absorb electricity from power plants or from outlets in houses, and then it fires the electricity from its whiskers.
+5120
+Field
+Fairy
+
+703
+Carbink
+50 50 150 50 150 50 
+100
+Slow
+Rock Fairy
+16
+0 Tackle
+0 Harden
+5 Rock Throw
+8 Sharpen
+12 Smack Down
+18 Reflect
+21 Stealth Rock
+27 Guard Split
+31 Ancient Power
+35 Flail
+40 Skill Swap
+46 Power Gem
+49 Stone Edge
+50 Moonblast
+60 Light Screen
+70 Safeguard
+30
+0 0 1 0 1 0 
+None
+0
+-1
+Clear Body
+Sturdy
+Jewel
+12 12.6 It has slept underground for hundreds of millions of years since its birth. It's occasionally found during the excavation of caves.
+6400
+Fairy
+Mineral
+
+704
+Goomy
+45 50 35 55 75 40 
+60
+Slow
+Dragon None
+11
+0 Tackle
+0 Bubble
+5 Absorb
+9 Protect
+13 Bide
+18 Dragon Breath
+25 Rain Dance
+28 Flail
+32 Body Slam
+38 Muddy Water
+42 Dragon Pulse
+20
+0 0 0 0 1 0 
+None
+0
+50
+Sap Sipper
+Hydration
+Soft Tissue
+12 6.2 It's covered in a slimy membrane that makes any punches or kicks slide off it harmlessly.
+10240
+Dragon
+None
+
+705
+Sliggoo
+68 75 53 83 113 60 
+158
+Slow
+Dragon None
+11
+0 Tackle
+0 Bubble
+5 Absorb
+9 Protect
+13 Bide
+18 Dragon Breath
+25 Rain Dance
+28 Flail
+32 Body Slam
+38 Muddy Water
+47 Dragon Pulse
+20
+0 0 0 0 2 0 
+None
+0
+50
+Sap Sipper
+Hydration
+Soft Tissue
+31 38.6 Its four horns are a high-performance radar system. It uses them to sense sounds and smells, rather than using ears or a nose.
+10240
+Dragon
+None
+
+706
+Goodra
+90 100 70 110 150 80 
+270
+Slow
+Dragon None
+16
+0 Outrage
+0 Feint
+0 Tackle
+0 Bubble
+5 Absorb
+9 Protect
+13 Bide
+18 Dragon Breath
+25 Rain Dance
+28 Flail
+32 Body Slam
+38 Muddy Water
+47 Dragon Pulse
+50 Aqua Tail
+55 Power Whip
+63 Outrage
+20
+0 0 0 0 3 0 
+None
+0
+50
+Sap Sipper
+Hydration
+Dragon
+79 331.8 It attacks with retractable horns. It throws a punch that's the equivalent of the force of a hundred pro boxers.
+10240
+Dragon
+None
+
+707
+Klefki
+57 80 91 80 87 75 
+165
+Fast
+Steel Fairy
+16
+0 Fairy Lock
+0 Tackle
+5 Fairy Wind
+8 Astonish
+12 Metal Sound
+15 Spikes
+18 Draining Kiss
+23 Crafty Shield
+27 Foul Play
+32 Torment
+34 Mirror Shot
+36 Imprison
+40 Recycle
+43 Play Rough
+44 Magic Room
+50 Heal Block
+60
+0 0 1 0 0 0 
+None
+0
+50
+Prankster
+Magician
+Key Ring
+8 6.6 It never lets go of a key that it likes, so people give it the keys to vaults and safes as a way to prevent crime.
+5120
+Mineral
+None
+
+708
+Phantump
+43 70 48 50 60 38 
+62
+Medium Fast
+Ghost Grass
+14
+0 Tackle
+0 Confuse Ray
+5 Astonish
+8 Growth
+13 Ingrain
+19 Feint Attack
+23 Leech Seed
+28 Curse
+31 Will-O-Wisp
+35 Forest's Curse
+39 Destiny Bond
+45 Phantom Force
+49 Wood Hammer
+54 Horn Leech
+150
+0 1 0 0 0 0 
+None
+0
+50
+Natural Cure
+Frisk
+Stump
+16 15.4 According to old tales, these Pok\u00e9mon are stumps possessed by the spirits of children who died while lost in the forest.
+5120
+Grass
+Amorphous
+
+709
+Trevenant
+85 110 76 65 82 56 
+166
+Medium Fast
+Ghost Grass
+16
+0 Horn Leech
+0 Tackle
+0 Confuse Ray
+5 Astonish
+8 Growth
+13 Ingrain
+19 Feint Attack
+23 Leech Seed
+28 Curse
+31 Will-O-Wisp
+35 Forest's Curse
+39 Destiny Bond
+45 Phantom Force
+49 Wood Hammer
+55 Shadow Claw
+62 Horn Leech
+150
+0 2 0 0 0 0 
+None
+0
+50
+Natural Cure
+Frisk
+Elder Tree
+59 156.5 Using its roots as a nervous system, it controls the trees in the forest. It's kind to the Pok\u00e9mon that reside in its body.
+5120
+Grass
+Amorphous
+
+710
+Pumpkaboo
+49 66 70 44 55 51 
+67
+Medium Fast
+Ghost Grass
+15
+0 Trick
+0 Astonish
+0 Confuse Ray
+4 Scary Face
+6 Trick-or-Treat
+11 Worry Seed
+16 Razor Leaf
+20 Leech Seed
+23 Trick-or-Treat
+26 Bullet Seed
+30 Shadow Sneak
+36 Shadow Ball
+40 Trick-or-Treat
+42 Pain Split
+48 Seed Bomb
+190
+0 0 1 0 0 0 
+None
+0
+50
+Pickup
+Frisk
+Pumpkin
+31 33.1 It is said to carry wandering spirits to the place where they belong so they can move on.
+5120
+Amorphous
+None
+
+711
+Gourgeist
+65 90 122 58 75 84 
+173
+Medium Fast
+Ghost Grass
+21
+0 Explosion
+0 Phantom Force
+0 Trick
+0 Astonish
+0 Confuse Ray
+4 Scary Face
+6 Trick-or-Treat
+11 Worry Seed
+16 Razor Leaf
+20 Leech Seed
+23 Trick-or-Treat
+26 Bullet Seed
+30 Shadow Sneak
+36 Shadow Ball
+40 Trick-or-Treat
+42 Pain Split
+48 Seed Bomb
+57 Phantom Force
+63 Trick-or-Treat
+70 Shadow Ball
+75 Explosion
+190
+0 0 2 0 0 0 
+None
+0
+50
+Pickup
+Frisk
+Pumpkin
+67 86.0 It enwraps its prey in its hairlike arms. It sings joyfully as it observes the suffering of its prey.
+5120
+Amorphous
+None
+
+712
+Bergmite
+55 69 85 32 35 28 
+61
+Medium Fast
+Ice None
+15
+0 Tackle
+0 Bite
+0 Harden
+5 Powder Snow
+10 Icy Wind
+15 Take Down
+20 Sharpen
+22 Curse
+26 Ice Fang
+30 Ice Ball
+35 Rapid Spin
+39 Avalanche
+43 Blizzard
+47 Recover
+49 Double-Edge
+255
+0 0 1 0 0 0 
+None
+0
+50
+Own Tempo
+Ice Body
+Ice Chunk
+39 219.4 Using air of -150 degrees Fahrenheit, they freeze opponents solid. They live in herds above the snow line on mountains.
+5120
+Monster
+None
+
+713
+Avalugg
+95 117 184 44 46 28 
+180
+Medium Fast
+Ice None
+20
+0 Iron Defense
+0 Crunch
+0 Skull Bash
+0 Tackle
+0 Bite
+0 Harden
+5 Powder Snow
+10 Icy Wind
+15 Take Down
+20 Sharpen
+22 Curse
+26 Ice Fang
+30 Ice Ball
+35 Rapid Spin
+42 Avalanche
+46 Blizzard
+51 Recover
+56 Double-Edge
+60 Skull Bash
+65 Crunch
+255
+0 0 2 0 0 0 
+None
+0
+50
+Own Tempo
+Ice Body
+Iceberg
+79 1113.3 The way several Bergmite huddle on its back makes it look like an aircraft carrier made of ice.
+5120
+Monster
+None
+
+714
+Noibat
+40 30 35 45 40 55 
+49
+Medium Fast
+Flying Dragon
+16
+0 Screech
+0 Supersonic
+0 Tackle
+5 Leech Life
+11 Gust
+13 Bite
+16 Wing Attack
+18 Agility
+23 Air Cutter
+27 Roost
+31 Razor Wind
+35 Tailwind
+40 Whirlwind
+43 Super Fang
+48 Air Slash
+58 Hurricane
+200
+0 0 0 0 0 1 
+None
+0
+50
+Frisk
+Infiltrator
+Sound Wave
+20 17.6 Even a robust wrestler will become dizzy and unable to stand when exposed to its 200,000-hertz ultrasonic waves.
+5120
+Flying
+None
+
+715
+Noivern
+85 70 80 97 80 123 
+187
+Medium Fast
+Flying Dragon
+22
+0 Moonlight
+0 Boomburst
+0 Dragon Pulse
+0 Hurricane
+0 Screech
+0 Supersonic
+0 Tackle
+5 Leech Life
+11 Gust
+13 Bite
+16 Wing Attack
+18 Agility
+23 Air Cutter
+27 Roost
+31 Razor Wind
+35 Tailwind
+40 Whirlwind
+43 Super Fang
+53 Air Slash
+62 Hurricane
+70 Dragon Pulse
+75 Boomburst
+200
+0 0 0 0 0 2 
+None
+0
+50
+Frisk
+Infiltrator
+Sound Wave
+59 187.4 The ultrasonic waves it emits from its ears can reduce a large boulder to pebbles. It swoops out of the dark to attack.
+5120
+Flying
+None
+
+716
+Xerneas
+126 131 95 131 98 99 
+306
+Slow
+Fairy None
+18
+0 Heal Pulse
+0 Aromatherapy
+0 Ingrain
+0 Take Down
+5 Light Screen
+10 Aurora Beam
+18 Gravity
+26 Geomancy
+35 Moonblast
+44 Megahorn
+51 Night Slash
+55 Horn Leech
+59 Psych Up
+63 Misty Terrain
+72 Nature Power
+80 Close Combat
+88 Giga Impact
+93 Outrage
+70
+3 0 0 0 0 0 
+None
+0
+-1
+Fairy Aura
+None
+Life
+118 474.0 When the horns on its head shine in seven colors, it is said to be sharing everlasting life.
+30720
+None
+None
+
+717
+Yveltal
+126 131 95 131 98 99 
+306
+Slow
+Dark Flying
+18
+0 Hurricane
+0 Razor Wind
+0 Taunt
+0 Roost
+5 Double Team
+10 Air Slash
+18 Snarl
+26 Oblivion Wing
+35 Disable
+44 Dark Pulse
+51 Foul Play
+55 Phantom Force
+59 Psychic
+63 Dragon Rush
+72 Focus Blast
+80 Sucker Punch
+88 Hyper Beam
+93 Sky Attack
+70
+3 0 0 0 0 0 
+None
+0
+-1
+Dark Aura
+None
+Destruction
+228 447.5 When its life comes to an end, it absorbs the life energy of every living thing and turns into a cocoon once more.
+30720
+None
+None
+
+718
+Zygarde
+108 100 121 81 95 95 
+270
+Slow
+Dragon Ground
+18
+0 Glare
+0 Bulldoze
+0 Dragon Breath
+0 Bite
+5 Safeguard
+10 Dig
+18 Bind
+26 Land's Wrath
+35 Sandstorm
+44 Haze
+51 Crunch
+55 Earthquake
+59 Camouflage
+63 Dragon Pulse
+72 Dragon Dance
+80 Coil
+88 Extreme Speed
+93 Outrage
+3
+3 0 0 0 0 0 
+None
+0
+-1
+Aura Break
+None
+Order
+197 627.4 It's hypothesized that it's monitoring those who destroy the ecosystem from deep in the cave where it lives.
+30720
+None
+None
+
+719
+Diancie
+50 100 150 100 150 50 
+270
+Slow
+Rock Fairy
+17
+0 Tackle
+0 Harden
+5 Rock Throw
+8 Sharpen
+12 Smack Down
+18 Reflect
+21 Stealth Rock
+27 Guard Split
+31 Ancient Power
+35 Flail
+40 Skill Swap
+46 Trick Room
+49 Stone Edge
+50 Moonblast
+50 Diamond Storm
+60 Light Screen
+70 Safeguard
+3
+0 0 1 0 2 0 
+None
+0
+-1
+Clear Body
+None
+Jewel
+28 19.4 It can instantly create many diamonds by compressing the carbon in the air between its hands.
+30720
+None
+None
+
 

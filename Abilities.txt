@@ -15,7 +15,7 @@ Overgrow:
 	Desc: Powers up Grass-type moves in a pinch.
 	Int: PowerChangeEffect
 	GetMultiplier: 
-	return user.getHPRatio() < 1/3.0 && user.getAttack().getType(b, user) == Type.GRASS ? 1.5 : 1;
+	return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.GRASS ? 1.5 : 1;
 	###
 *
 Chlorophyll:
@@ -28,7 +28,7 @@ Blaze:
 	Desc: Powers up Fire-type moves in a pinch.
 	Int: PowerChangeEffect
 	GetMultiplier: 
-	return user.getHPRatio() < 1/3.0 && user.getAttack().getType(b, user) == Type.FIRE ? 1.5 : 1;
+	return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.FIRE ? 1.5 : 1;
 	###
 *
 Solar Power:
@@ -48,7 +48,7 @@ Solar Power:
 Torrent:
 	Desc: Powers up Water-type moves in a pinch.
 	GetMultiplier: 
-	return user.getHPRatio() < 1/3.0 && user.getAttack().getType(b, user) == Type.WATER ? 1.5 : 1;
+	return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.WATER ? 1.5 : 1;
 	###
 	Int: PowerChangeEffect
 *
@@ -91,14 +91,14 @@ Tinted Lens:
 	Desc: Powers up “not very effective” moves.
 	Int: PowerChangeEffect
 	GetMultiplier: 
-	return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) < 1 ? 2 : 1;
+	return Type.getAdvantage(user, victim, b) < 1 ? 2 : 1;
 	###
 *
 Swarm:
 	Desc: Powers up Bug-type moves in a pinch.
 	Int: PowerChangeEffect
 	GetMultiplier: 
-	return user.getHPRatio() < 1/3.0 && user.getAttack().getType(b, user) == Type.BUG ? 1.5 : 1;
+	return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.BUG ? 1.5 : 1;
 	###
 *
 Sniper:
@@ -223,7 +223,7 @@ Flash Fire:
 	activated = true;
 	###
 	GetMultiplier: 
-	return activated && user.getAttack().getType(b, user) == Type.FIRE ? 1.5 : 1;
+	return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
 	###
 *
 Drought:
@@ -293,20 +293,20 @@ Dry Skin:
 	###
 	AbsorbType: Water
 	GetOppMultiplier: 
-	return user.getAttack().getType(b, user) == Type.FIRE ? 1.25 : 1;
+	return user.getAttackType() == Type.FIRE ? 1.25 : 1;
 	###
 *
 Arena Trap:
 	Desc: Prevents the foe from fleeing.
 	Int: OpponentTrappingEffect
-	Trapped: 
-	return !p.isLevitating(b);	
+	OppTrapped: 
+	return !p.isLevitating(b) && !p.isType(b, Type.GHOST);	
 	###
 *
 Technician:
 	Desc: Powers up the Pok\u00e9mon’s weaker moves.
 	GetMultiplier: 
-	return user.getAttack().getPower(b, user, victim) <= 60 ? 1.5 : 1;
+	return user.getAttackPower() <= 60 ? 1.5 : 1;
 	###
 	Int: PowerChangeEffect
 *
@@ -320,7 +320,7 @@ Limber:
 *
 Damp:
 	Desc: Prevents combatants from self destructing.
-	Int: BeforeTurnEffect, OpposingBeforeTurnEffect
+	Int: BeforeTurnEffect, OpponentBeforeTurnEffect
 	CanAttack:
 	if (p.getAttack().namesies() == Namesies.SELF_DESTRUCT_ATTACK || p.getAttack().namesies() == Namesies.EXPLOSION_ATTACK)
 	{
@@ -330,7 +330,7 @@ Damp:
 	}
 	return true;
 	###
-	OpposingCanAttack: 
+	OpponentCanAttack: 
 	if (p.getAttack().namesies() == Namesies.SELF_DESTRUCT_ATTACK || p.getAttack().namesies() == Namesies.EXPLOSION_ATTACK)
 	{
 		b.printAttacking(p);
@@ -354,7 +354,7 @@ Vital Spirit:
 	StatusPrevent: 
 	return status == StatusCondition.ASLEEP;
 	###
-	StatusPreventMessage: victim.getName() + "'s Vital Spirit prevents sleep!"
+	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents sleep!"
 *
 Insomnia:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
@@ -362,7 +362,7 @@ Insomnia:
 	StatusPrevent: 
 	return status == StatusCondition.ASLEEP;
 	###
-	StatusPreventMessage: victim.getName() + "'s Insomnia prevents sleep!"
+	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents sleep!"
 *
 Anger Point:
 	Desc: Raises Attack upon taking a critical hit.
@@ -391,7 +391,7 @@ Clear Body:
 	StatProtect: 
 	return true;
 	###
-	StatProtectMessage: p.getName() + "'s Clear Body prevents its stats from being lowered!"
+	StatProtectMessage: p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!"
 *
 Liquid Ooze:
 	Desc: Inflicts damage on foes using any draining move.
@@ -412,8 +412,8 @@ Oblivious:
 *
 Magnet Pull:
 	Int: OpponentTrappingEffect
-	Trapped: 
-	return p.isType(b, Type.STEEL);
+	OppTrapped: 
+	return p.isType(b, Type.STEEL) && !p.isType(b, Type.GHOST);
 	###
 	Desc: Prevents Steel-type Pok\u00e9mon from escaping.
 *
@@ -438,7 +438,7 @@ Thick Fat:
 	Desc: Raises resistance to Fire-and Ice-type moves.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return user.getAttack().getType(b, user) == Type.FIRE || user.getAttack().getType(b, user) == Type.ICE ? .5 : 1;
+	return user.getAttackType() == Type.FIRE || user.getAttackType() == Type.ICE ? .5 : 1;
 	###
 *
 Hydration:
@@ -482,7 +482,7 @@ Forewarn:
 			continue;
 		}
 		
-		int power = m.getAttack().getPower(b, other, victim);
+		int power = m.getAttack().getPower();
 		if (power > highestPower)
 		{
 			highestPower = power;
@@ -518,8 +518,8 @@ Hyper Cutter:
 *
 Soundproof:
 	Desc: Gives full immunity to all sound-based moves.
-	Int: OpposingBeforeTurnEffect
-	OpposingCanAttack: 
+	Int: OpponentBeforeTurnEffect
+	OpponentCanAttack: 
 	if (p.getAttack().isMoveType(MoveType.SOUND_BASED))
 	{
 		b.printAttacking(p);
@@ -584,7 +584,7 @@ Filter:
 	Desc: Powers down super-effective moves.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1 ? .75 : 1;
+	return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
 	###
 *
 Flame Body:
@@ -601,7 +601,7 @@ Rattled:
 	Desc: Some move types scare it and boost its Speed.
 	Int: TakeDamageEffect
 	OnTakeDamage:
-	Type type = user.getAttack().getType(b, user);
+	Type type = user.getAttackType();
 	if (type == Type.BUG || type == Type.DARK || type == Type.GHOST)
 	{
 		victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
@@ -644,7 +644,7 @@ Trace:
 	Int: EntryEffect, ChangeAbilityMove
 	Enter: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
-	if (other.hasAbility(Namesies.MULTITYPE_ABILITY) || other.hasAbility(Namesies.ILLUSION_ABILITY) || other.hasAbility(this.namesies))
+	if (other.hasAbility(Namesies.MULTITYPE_ABILITY) || other.hasAbility(Namesies.ILLUSION_ABILITY) || other.hasAbility(Namesies.STANCE_CHANGE_ABILITY) || other.hasAbility(Namesies.IMPOSTER_ABILITY) || other.hasAbility(this.namesies))
 	{
 		return;
 	}
@@ -692,7 +692,7 @@ Immunity:
 	StatusPrevent: 
 	return status == StatusCondition.POISONED;
 	###
-	StatusPreventMessage: victim.getName() + "'s Immunity prevents it from being poisoned!"
+	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents it from being poisoned!"
 *
 Snow Cloak:
 	Desc: Raises the Pok\u00e9mon’s evasion during a hailstorm by one level.
@@ -760,8 +760,8 @@ Super Luck:
 Shadow Tag:
 	Desc: Prevents the foe from escaping.
 	Int: OpponentTrappingEffect
-	Trapped: 
-	return !p.hasAbility(this.namesies);
+	OppTrapped:  
+	return !p.hasAbility(this.namesies) && !p.isType(b, Type.GHOST);
 	###
 *
 Overcoat:
@@ -829,11 +829,27 @@ Truant:
 *
 Wonder Guard:
 	Desc: Only supereffective moves will hit.
-	Int: OpposingBeforeTurnEffect
-	OpposingCanAttack: 
-	if (p.getAttack().getCategory() == Category.STATUS) return true;
-	if (Type.getAdvantage(p.getAttack().getType(b, p), opp, b) > 1) return true;
-	if (p.getAttack().getType(b, p) == Type.NONE) return true;
+	Int: OpponentBeforeTurnEffect
+	OpponentCanAttack: 
+	// Status moves always hit
+	if (p.getAttack().getCategory() == Category.STATUS) 
+	{
+		return true;
+	}
+	
+	// Super effective moves hit
+	if (Type.getAdvantage(p, opp, b) > 1) 
+	{
+		return true;
+	}
+	
+	// None-type moves always hit
+	if (p.isAttackType(Type.NONE)) 
+	{
+		return true;
+	}
+	
+	// Immunity Solunity
 	b.printAttacking(p);
 	b.addMessage(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!");
 	return false;
@@ -841,6 +857,10 @@ Wonder Guard:
 *
 Normalize:
 	Desc: All the Pok\u00e9mon's moves become the Normal type.
+	Int: ChangeAttackTypeEffect
+	ChangeAttackType:
+	return Type.NORMAL;
+	###
 *
 Stall:
 	Desc: The Pok\u00e9mon moves after even slower foes.
@@ -864,7 +884,7 @@ Solid Rock:
 	Desc: Reduces damage from supereffective attacks.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) < 1 ? .75 : 1;
+	return Type.getAdvantage(user, victim, b) < 1 ? .75 : 1;
 	###
 *
 White Smoke:
@@ -888,7 +908,8 @@ Anticipation:
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	for (Move m : other.getMoves())
 	{
-		if (Type.getAdvantage(m.getAttack().getType(b, other), victim, b) > 1 || m.getAttack().isMoveType(MoveType.ONE_HIT_KO))
+		Attack attack = m.getAttack();
+		if (Type.getBasicAdvantage(attack.getActualType(), victim, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO))
 		{
 			b.addMessage(victim.getName() + "'s " + this.getName() + " made it shudder!");
 			break;
@@ -904,7 +925,7 @@ Storm Drain:
 Color Change:
 	Int: TakeDamageEffect, ChangeTypeMove
 	OnTakeDamage: 
-	Type t = user.getAttack().getType(b, user);
+	Type t = user.getAttackType();
 	if (!victim.isType(b, t))
 	{
 		type = t;
@@ -979,14 +1000,14 @@ Heatproof:
 	Desc: Weakens the power of Fire-type moves.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return user.getAttack().getType(b, user) == Type.FIRE ? .5 : 1;
+	return user.getAttackType() == Type.FIRE ? .5 : 1;
 	###
 *
 Sand Force:
 	Desc: Boosts certain moves' power in a sandstorm.
 	Int: PowerChangeEffect, WeatherBlockerEffect
 	GetMultiplier: 
-	Type type = user.getAttack().getType(b, user);
+	Type type = user.getAttackType();
 	return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == Namesies.SANDSTORM_EFFECT ? 1.3 : 1;
 	###
 	WeatherBlock: 
@@ -1009,7 +1030,7 @@ Motor Drive:
 Justified:
 	Int: TakeDamageEffect
 	OnTakeDamage: 
-	if (user.getAttack().getType(b, user) == Type.DARK)
+	if (user.getAttackType() == Type.DARK)
 	{
 		victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 	}
@@ -1096,6 +1117,8 @@ Poison Touch:
 *
 Prankster:
 	Desc: Gives priority to a status move.
+	Int: PriorityChangeEffect
+	ChangePriority: user.getAttack().getCategory() == Category.STATUS
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
@@ -1107,7 +1130,7 @@ Mummy:
 	Desc: Contact with this Pok\u00e9mon spreads this Ability.
 	Int: PhysicalContactEffect, ChangeAbilityMove
 	Contact: 
-	if (user.hasAbility(Namesies.MULTITYPE_ABILITY) || user.hasAbility(this.namesies))
+	if (user.hasAbility(this.namesies) || user.hasAbility(Namesies.MULTITYPE_ABILITY) || user.hasAbility(Namesies.STANCE_CHANGE_ABILITY))
 	{
 		return;
 	}
@@ -1119,7 +1142,7 @@ Mummy:
 	return (new Mummy()).newInstance();
 	###
 	AbilityMessage: 
-	return victim.getName() + "'s ability was changed to Mummy!";
+	return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
 	###
 *
 Defeatist:
@@ -1242,33 +1265,11 @@ Unburden:
 	###
 *
 Pickpocket:
-	Int: PhysicalContactEffect, ItemCondition
-	Field:
-	private Item item;
-	###
-	GetItem:
-	return item;
-	###
+	Int: PhysicalContactEffect
+	StealItem: True
 	Contact: 
-	if (victim.isFainted(b) || !user.isHoldingItem(b) || victim.isHoldingItem(b) || b.getTrainer(victim.user()) instanceof WildPokemon || user.hasAbility(Namesies.STICKY_HOLD_ABILITY))
-	{
-		return;
-	}
-
-	Item stolen = user.getHeldItem(b);
-	b.addMessage(victim.getName() + " stole " + user.getName() + "'s " + stolen.getName() + "!");
-
-	if (b.isWildBattle())
-	{
-		user.removeItem();
-		victim.giveItem((HoldItem)stolen);
-		return;
-	}
-
-	item = stolen;
-	PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, victim, CastSource.ABILITY, false);
-	item = Item.noneItem();
-	PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.ABILITY, false);
+	// Steal from the Pokemon who made physical contact with you
+	steal(b, victim, user);
 	###
 	Desc: Steals an item when hit by another Pok\u00e9mon.
 *
@@ -1323,4 +1324,180 @@ Multitype:
 *
 Forecast:
 	Desc: Changes with the weather.
+*
+Bulletproof:
+	Desc: Protects the Pok\u00e9mon from some ball and bomb moves.
+	Int: OpponentBeforeTurnEffect
+	OpponentCanAttack:
+	if (p.getAttack().isMoveType(MoveType.BOMB_BALL))
+	{
+		b.printAttacking(p);
+		b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
+		return false;
+	}
+	
+	return true;
+	###
+*
+Aura Break:
+	Desc: The effects of Aura Abilities are reversed.
+*
+Fairy Aura:
+	Desc: Powers up each Pok\u00e9mon's Fairy-type moves.
+	Aura: Fairy
+*
+Dark Aura:
+	Desc: Powers up each Pok\u00e9mon's Dark-type moves.
+	Aura: Dark
+*
+Magician:
+	Desc: The Pok\u00e9mon steals the held item of a Pok\u00e9mon it hits with a move.
+	Int: ApplyDamageEffect
+	OnApplyDamage:
+	// Steal the victim's item when damage is dealt
+	steal(b, user, victim);
+	###
+	StealItem: True
+*
+Cheek Pouch:
+	Desc: Restores HP as well when the Pok\u00e9mon eats a Berry.
+*
+Strong Jaw:
+	Desc: The Pok\u00e9mon's strong jaw gives it tremendous biting power.
+	Int: PowerChangeEffect
+	GetMultiplier: 
+	return user.getAttack().isMoveType(MoveType.BITING) ? 1.5 : 1;
+	###
+*
+Mega Launcher:
+	Desc: Powers up aura and pulse moves.
+	Int: PowerChangeEffect
+	GetMultiplier: 
+	return user.getAttack().isMoveType(MoveType.AURA_PULSE) ? 1.5 : 1;
+	###
+*
+Tough Claws:
+	Desc: Powers up moves that make direct contact.
+	Int: PowerChangeEffect
+	GetMultiplier: 
+	return user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) ? 1.33 : 1;
+	###
+*
+Sweet Veil:
+	Desc: Prevents itself and ally Pok\u00e9mon from falling asleep.
+	Int: StatusPreventionEffect
+	StatusPrevent: 
+	return status == StatusCondition.ASLEEP;
+	###
+	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents sleep!"
+*
+Aroma Veil:
+	Desc: Protects allies from attacks that effect their mental state.
+*
+Healer:
+	Desc: The Pok\u00e9mon may heal its own status problems.
+	Int: EndTurnEffect
+	ApplyEndTurn: 
+	if (victim.hasStatus() && (int)(Math.random()*3) == 0)
+	{
+		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
+		victim.removeStatus();
+	}
+	###
+*
+Pixilate:
+	Desc: Normal-type moves become Fairy-type moves.
+	NormalTypeChanger: Fairy
+*
+Refrigerate:
+	Desc: Normal-type moves become Ice-type moves.
+	NormalTypeChanger: Ice
+*
+Stance Change:
+	Desc: The Pok\u00e9mon changes form depending on how it battles.
+	Field:
+	private static final int[] BLADE_STATS = new int[] {60, 150, 50, 150, 50, 60};
+	private static final int[] SHIELD_STATS = new int[] {60, 50, 150, 50, 150, 60};
+	
+	private boolean shieldForm;
+	###
+	Activate:
+	x.shieldForm = true;
+	###
+	Int: BeforeTurnEffect, EntryEffect, StatsCondition
+	CanAttack:
+	if (shieldForm && p.getAttack().getCategory() != Category.STATUS)
+	{
+		shieldForm = false;
+		b.addMessage(p.getName() + " changed into Blade Forme!");
+	}
+	else if (!shieldForm && p.getAttack().namesies() == Namesies.KINGS_SHIELD_ATTACK)
+	{
+		shieldForm = true;
+		b.addMessage(p.getName() + " changed into Shield Forme!");
+	}
+	
+	return true;
+	###
+	Enter:
+	b.addMessage(victim.getName() + " is in Shield Forme!");
+	shieldForm = true;
+	###
+	GetStat:
+	// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+	int index = stat.index();
+	return Stat.getStat(index, user.getLevel(), (shieldForm ? SHIELD_STATS : BLADE_STATS)[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
+	###
+*
+Fur Coat:
+	Desc: Halves damage from physical moves.
+	ToModify: Defense
+	ModifyCondition: true
+	ModifyMultiplier: 2
+*
+Grass Pelt:
+	Desc: Boosts the Defense stat in Grassy Terrain.
+	ToModify: Defense
+	ModifyCondition: b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT)
+	ModifyMultiplier: 1.5
+*
+Flower Veil:
+	Desc: Prevents lowering of Grass-type Pok\u00e9mon's stats.
+	Int: StatusPreventionEffect, StatProtectingEffect
+	StatusPrevent: 
+	return victim.isType(b, Type.GRASS);
+	###
+	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
+	StatProtect: 
+	return victim.isType(b, Type.GRASS);
+	###
+	StatProtectMessage: p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!"
+*
+Gale Wings:
+	Desc: Gives priority to Flying-type moves.
+	Int: PriorityChangeEffect
+	ChangePriority: user.getAttack().getActualType() == Type.FLYING
+*
+Protean:
+	Desc: Changes the Pok\u00e9mon's type to the type of the move it's using.
+	Int: BeforeTurnEffect, ChangeTypeMove
+	CanAttack:
+	// Protean activates for all moves except for Struggle
+	if (p.getAttack().namesies() != Namesies.STRUGGLE_ATTACK)
+	{
+		type = p.getAttackType();
+		PokemonEffect.getEffect(Namesies.CHANGE_TYPE_EFFECT).cast(b, p, p, CastSource.ABILITY, true);
+	}
+	
+	return true;
+	###
+	Activate: 
+	x.type = type;
+	###
+	Field: 
+	private Type type;
+	###
+	ChangeType: 
+	return new Type[] {type, Type.NONE};
+	###
 *

@@ -11,8 +11,8 @@ Constructor:
 *
 Failure:
 	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	FailType Enum Type victim.isType(b, {0})
-	FailAbility Enum Namesies Ability (victim.hasAbility({0}) && !caster.breaksTheMold())
+	FailType List Enum Type victim.isType(b, {0})
+	FailAbility List Enum Namesies Ability (victim.hasAbility({0}) && !caster.breaksTheMold())
 	FailCondition Int {0}
 	CanHave Not Default True Boolean victim.hasEffect(this.namesies)
 *
@@ -74,138 +74,96 @@ Flinch:
 	###
 *
 FireSpin:
-	Int: EndTurnEffect, TrappingEffect, RapidSpinRelease
-	MinTurns: 4
-	MaxTurns: 5
 	CastMessage: victim.getName() + " was trapped in the fiery vortex!"
 	SubsideMessage: victim.getName() + " is no longer trapped by fire spin."
 	PartialTrap: victim.getName() + " is hurt by fire spin!"
 	RapidSpin: user.getName() + " was released from fire spin!"
-	NextTurnSubside: True
+*
+Infestation:
+	CastMessage: victim.getName() + " has been afflicted with an infestation!"
+	SubsideMessage: victim.getName() + " is no longer afflicted by infestation."
+	PartialTrap: victim.getName() + " is hurt by infestation!"
+	RapidSpin: user.getName() + " was released from infestation!"
 *
 MagmaStorm:
-	Int: EndTurnEffect, TrappingEffect, RapidSpinRelease
-	MinTurns: 4
-	MaxTurns: 5
 	CastMessage: victim.getName() + " was trapped by swirling magma!"
 	SubsideMessage: victim.getName() + " is no longer trapped by magma storm."
 	PartialTrap: victim.getName() + " is hurt by magma storm!"
 	RapidSpin: user.getName() + " was released from magma storm!"
-	NextTurnSubside: True
 *
 Clamped:
-	Int: EndTurnEffect, TrappingEffect, RapidSpinRelease
-	MinTurns: 4
-	MaxTurns: 5
 	CastMessage: user.getName() + " clamped " + victim.getName() + "!"
 	SubsideMessage: victim.getName() + " is no longer trapped by clamp."
 	PartialTrap: victim.getName() + " is hurt by clamp!"
 	RapidSpin: user.getName() + " was released from clamp!"
-	NextTurnSubside: True
 *
 Whirlpool:
-	Int: EndTurnEffect, TrappingEffect, RapidSpinRelease
-	MinTurns: 4
-	MaxTurns: 5
 	CastMessage: victim.getName() + " was trapped in the vortex!"
 	SubsideMessage: victim.getName() + " is no longer trapped by whirlpool."
 	PartialTrap: victim.getName() + " is hurt by whirlpool!"
 	RapidSpin: user.getName() + " was released from whirlpool!"
-	NextTurnSubside: True
 *
 Wrapped:
-	Int: EndTurnEffect, TrappingEffect, RapidSpinRelease
-	MinTurns: 4
-	MaxTurns: 5
 	CastMessage: victim.getName() + " was wrapped by " + user.getName() + "!"
 	SubsideMessage: victim.getName() + " was freed from wrap."
 	PartialTrap: victim.getName() + " is hurt by wrap!"
 	RapidSpin: user.getName() + " was released from wrap!"
-	NextTurnSubside: True
 *
 Binded:
-	Int: EndTurnEffect, TrappingEffect, RapidSpinRelease
-	MinTurns: 4
-	MaxTurns: 5
 	CastMessage: victim.getName() + " was binded by " + user.getName() + "!"
 	SubsideMessage: victim.getName() + " was freed from bind."
 	PartialTrap: victim.getName() + " is hurt by bind!"
 	RapidSpin: user.getName() + " was released from bind!"
-	NextTurnSubside: True
 *
 SandTomb:
-	Int: EndTurnEffect, TrappingEffect, RapidSpinRelease
-	MinTurns: 4
-	MaxTurns: 5
 	CastMessage: victim.getName() + " was trapped by sand tomb!"
 	SubsideMessage: victim.getName() + " is no longer trapped from sand tomb."
 	PartialTrap: victim.getName() + " is hurt by sand tomb!"
 	RapidSpin: user.getName() + " was released from sand tomb!"
-	NextTurnSubside: True
+*
+KingsShield:
+	ProtectingEffect: True
+	OnProtectingSuccess:
+	// Pokemon that make contact with the king's shield have their attack reduced
+	if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT))
+	{
+		b.addMessage("The King's Shield sharply reduced " + p.getName() + "'s attack!");
+	}
+	###
+*
+SpikyShield:
+	ProtectingEffect: True
+	OnProtectingSuccess:
+	// Pokemon that make contact with the spiky shield have their health reduced
+	if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT))
+	{
+		b.addMessage(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
+		p.reduceHealthFraction(b, 1/8.0);
+	}
+	###
 *
 Protecting:
-	Int: OpposingBeforeTurnEffect
-	NumTurns: 1
-	OpposingCanAttack: 
-	if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING)) 
-	{
-		return true;
-	}
-	
-	b.printAttacking(p);
-	b.addMessage(opp.getName() + " is protecting itself!");
-	Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
-	
-	return false;
-	###
-	Cast: 
-	if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
-	{
-		b.addMessage(this.getFailMessage(b, caster, victim));
-		return;
-	}
-	
-	super.cast(b, caster, victim, source, printCast);
-	###
-	CastMessage: victim.getName() + " protected itself!"
+	ProtectingEffect: True
 *
 QuickGuard:
-	Int: OpposingBeforeTurnEffect
-	NumTurns: 1
-	OpposingCanAttack: 
-	// TODO: Look into why Feint needs to be hardcoded instead of just being ProtectPiercing...
-	if (p.getAttack().isSelfTarget() || p.getAttack().namesies() == Namesies.FEINT_ATTACK || p.getAttack().getPriority(b, p) <= 0) 
-	{
-		return true;
-	}
-	
-	b.printAttacking(p);
-	b.addMessage(opp.getName() + " is protecting itself!");
-	Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
-	
-	return false;
-	###
-	Cast: 
-	if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
-	{
-		b.addMessage(this.getFailMessage(b, caster, victim));
-		return;
-	}
+	ProtectingEffect: True
+	ProtectingCondition: attacking.getAttack().getPriority(b, attacking) > 0
+*
+CraftyShield:
+	ProtectingEffect: True
+	ProtectingCondition: attacking.getAttack().getCategory() == Category.STATUS
+*
+MatBlock:
+	ProtectingEffect: True
+	ProtectingCondition: attacking.getAttack().getCategory() != Category.STATUS
+	Cast:
+	// No successive decay for this move
 	super.cast(b, caster, victim, source, printCast);
 	###
-	CastMessage: victim.getName() + " protected itself!"
 *
 Bracing:
 	NumTurns: 1
-	Cast: 
-	if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
-	{
-		b.addMessage(this.getFailMessage(b, caster, victim));
-		return;
-	}
-	
-	super.cast(b, caster, victim, source, printCast);
-	###
+	SuccessiveDecay: True
 	CastMessage: user.getName() + " braced itself!"
 	Int: BracingEffect
 	Bracing: 
@@ -217,8 +175,14 @@ Confusion:
 	Int: PassableEffect, BeforeTurnEffect
 	FailAbility: Own Tempo
 	FailMessage: 
-	if (victim.hasEffect(this.namesies)) return victim.getName() + " is already confused!";
-	if (victim.hasAbility(Namesies.OWN_TEMPO_ABILITY)) return victim.getName() + "'s Own Tempo prevents confusion!";
+	if (victim.hasEffect(this.namesies)) 
+	{
+		return victim.getName() + " is already confused!";
+	}
+	if (victim.hasAbility(Namesies.OWN_TEMPO_ABILITY)) 
+	{
+		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
+	}
 	###
 	Field: 
 	private int turns;
@@ -312,6 +276,13 @@ GuardSpecial:
 	StatusPreventMessage: "Guard Special protects " + victim.getName() + " from status conditions!"
 *
 Encore:
+	FailAbility: Aroma Veil
+	FailMessage: 
+	if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
+	{
+		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
+	}
+	###
 	Int: AttackSelectionEffect, ForceMoveEffect, BeforeTurnEffect, EndTurnEffect
 	Field: 
 	private Move move;
@@ -348,6 +319,7 @@ Encore:
 	###
 *
 Disable:
+	FailAbility: Aroma Veil
 	Int: AttackSelectionEffect, MoveCondition, BeforeTurnEffect
 	Field: 
 	private Move disabled;
@@ -385,7 +357,14 @@ Disable:
 	return disabled;
 	###
 	FailMessage: 
-	if (victim.hasEffect(this.namesies)) return victim.getName() + " is already disabled!";
+	if (victim.hasEffect(this.namesies)) 
+	{
+		return victim.getName() + " is already disabled!";
+	}
+	if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
+	{
+		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
+	}
 	###
 *
 RaiseCrits:
@@ -471,20 +450,48 @@ ChangeType:
 	Int: TypeCondition
 	Field: 
 	private Type[] type;
+	private ChangeTypeMove typeSource;
+	private CastSource castSource;
+	
+	private String castMessage(ActivePokemon victim)
+	{
+		String changeType = type[0].getName() + (type[1] == Type.NONE ? "" : "/" + type[1].getName());
+		
+		switch (castSource)
+		{
+			case ATTACK:
+				return victim.getName() + " was changed to " + changeType + " type!!";
+			case ABILITY:
+				return victim.getName() + "'s " + ((Ability)typeSource).getName() + " changed it to the " + changeType + " type!!";
+			case HELD_ITEM:
+				return victim.getName() + "'s " + ((Item)typeSource).getName() + " changed it to the " + changeType + " type!!";
+				
+			default:
+				Global.error("Invalid cast source for ChangeType " + castSource);
+				return null;
+		}
+	}
 	###
 	Activate: 
 	x.type = type;
+	x.castSource = castSource;
+	x.typeSource = typeSource;
 	###
 	Cast: 
-	type = ((ChangeTypeMove)source.getSource(b, caster)).getType(b, caster, victim);
+	castSource = source;
+	typeSource = (ChangeTypeMove)source.getSource(b, caster);
+	type = typeSource.getType(b, caster, victim);
+	
+	// Remove any other ChangeType effects that the victim may have
 	while (victim.getAttributes().removeEffect(this.namesies));
+	
 	super.cast(b, caster, victim, source, printCast);
 	b.addMessage("", type, victim.user());
 	###
 	GetTypeCondition:
 	return type;
 	###
-	CastMessage: victim.getName() + " was changed to " + type[0].getName() + (type[1] == Type.NONE ? "" : "/" + type[1].getName()) + " type!!"
+	CastMessage: castMessage(victim)
 	CanHave: True
 	Subside: 
 	b.addMessage("", p.getType(b), p.user());
@@ -685,6 +692,13 @@ MiracleEye:
 	AdvantageChange: attacking == Type.PSYCHIC && defending[i] == Type.DARK
 *
 Torment:
+	FailAbility: Aroma Veil
+	FailMessage: 
+	if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
+	{
+		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
+	}
+	###
 	Int: AttackSelectionEffect, BeforeTurnEffect
 	Usable: 
 	return (p.getAttributes().getLastMoveUsed() == null || p.getAttributes().getLastMoveUsed().getAttack().namesies() != m.getAttack().namesies());
@@ -703,13 +717,19 @@ Torment:
 *	
 Taunt:
 	NumTurns: 3
+	FailAbility: Aroma Veil, Oblivious
 	Int: AttackSelectionEffect, BeforeTurnEffect
+	FailMessage: 
+	if (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY) || victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
+	{
+		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
+	}
+	###
 	Usable: 
 	return m.getAttack().getCategory() != Attack.Category.STATUS;
 	###
 	UnusableMessage: "No!! Not while you're under the effects of taunt!!"
-	CanAttack: 
-	// TODO: Cannot cast this effect on Oblivious Pokemon
+	CanAttack:
 	if (!usable(p, p.getMove()))
 	{
 		b.printAttacking(p);
@@ -742,6 +762,9 @@ Telekinesis:
 *
 Ingrain:
 	Int: TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect
+	Trapped:
+	return true;
+	###
 	ApplyEndTurn: 
 	if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
 	{
@@ -837,23 +860,24 @@ Uproar:
 	Cast: 
 	uproar = victim.getMove();
 	super.cast(b, caster, victim, source, printCast);
-	ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user());
-	if (victim.hasStatus(StatusCondition.ASLEEP))
-	{
-		b.addMessage("The uproar woke up " + victim.getName() + "!", StatusCondition.NONE, victim.user());
-		victim.removeStatus();
-	}
-	if (theOtherPokemon.hasStatus(StatusCondition.ASLEEP))
-	{
-		b.addMessage("The uproar woke up " + theOtherPokemon.getName() + "!", StatusCondition.NONE, theOtherPokemon.user());
-		theOtherPokemon.removeStatus();
-	}
+	
+	wakeUp(b, victim);
+	wakeUp(b, b.getOtherPokemon(victim.user()));
 	###
 	Activate: 
 	x.uproar = uproar;
 	###
 	Field: 
 	private Move uproar;
+	
+	private static void wakeUp(Battle b, ActivePokemon wakey)
+	{
+		if (wakey.hasStatus(StatusCondition.ASLEEP))
+		{
+			b.addMessage("The uproar woke up " + wakey.getName() + "!", StatusCondition.NONE, wakey.user());
+			wakey.removeStatus();
+		}	
+	}
 	###
 	Int: ForceMoveEffect, AttackSelectionEffect, EndTurnEffect
 	GetMove: 
@@ -865,7 +889,11 @@ Uproar:
 	###
 	UnusableMessage: "Only Uproar can be used right now!"
 	ApplyEndTurn: 
-	if (uproar.getPP() == 0) active = false; // If uproar runs out of PP, the effect immediately ends
+	// If uproar runs out of PP, the effect immediately ends
+	if (uproar.getPP() == 0) 
+	{
+		active = false;
+	}
 	###
 *
 AquaRing:
@@ -903,7 +931,7 @@ Charge:
 	NumTurns: 2
 	Int: PowerChangeEffect
 	GetMultiplier: 
-	return user.getAttack().getType(b, user) == Type.ELECTRIC ? 2 : 1;
+	return user.getAttackType() == Type.ELECTRIC ? 2 : 1;
 	###
 *
 Focusing:
@@ -930,17 +958,34 @@ Transformed:
 	###
 	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!"
 	Cast: 
+	// Pokemon to transform into
 	ActivePokemon transformee = b.getOtherPokemon(victim.user());
+	
+	// Set the new stats
 	stats = new int[Stat.NUM_STATS];
 	for (int i = 0; i < stats.length; i++)
 	{
 		stats[i] = Stat.getStat(i, victim.getLevel(), transformee.getPokemonInfo().getStat(i), victim.getIV(i), victim.getEV(i), victim.getNature().getNatureVal(i));
 	}
 	stats[Stat.HP.index()] = victim.getStat(Stat.HP);
+	
+	// Copy the move list
 	moveList = new ArrayList<>();
-	for (Move m : transformee.getMoves()) moveList.add(new Move(m.getAttack(), 5));
-	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) victim.getAttributes().setStage(i, transformee.getStage(i));
+	for (Move m : transformee.getMoves()) 
+	{
+		moveList.add(new Move(m.getAttack(), 5));
+	}
+	
+	// Copy all stages
+	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) 
+	{
+		victim.getAttributes().setStage(i, transformee.getStage(i));
+	}
+	
+	// Copy the type
 	type = transformee.getPokemonInfo().getType();
+	
+	// Castaway
 	super.cast(b, caster, victim, source, printCast);
 	b.addMessage("", transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user());
 	b.addMessage("", victim.getType(b), victim.user());
@@ -1132,25 +1177,39 @@ GuardSplit:
 	CastMessage: user.getName() + " split the defense!"
 *
 HealBlock:
+	FailAbility: Aroma Veil
+	FailMessage: 
+	if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
+	{
+		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents heal block!";
+	}
+	###
 	NumTurns: 5
 	CastMessage: user.getName() + " blocked " + victim.getName() + " from healing!"
 	SubsideMessage: "The effects of heal block wore off."
 	Int: BeforeTurnEffect
 	CanAttack:
-	// TODO: Draining moves don't work -- also I think this should be an OpposingBeforeTurnEffect, not a BeforeTurnEffect
+	// TODO: Draining moves don't work -- also I think this should be an OpponentBeforeTurnEffect, not a BeforeTurnEffect
 	return true;
 	###
 *
 Infatuated:
-	FailAbility: Oblivious
+	FailAbility: Oblivious, Aroma Veil
 	FailCondition: !Gender.oppositeGenders(caster, victim)
 	Int: BeforeTurnEffect
 	FailMessage: 
-	if (Gender.oppositeGenders(user, victim) && victim.hasAbility(Namesies.OBLIVIOUS_ABILITY)) return victim.getName() + "'s Oblivious prevents infatuation!";
+	if (Gender.oppositeGenders(user, victim) && (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY) || victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)))
+	{
+		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents infatuation!";
+	}
 	###
 	CanAttack: 
 	b.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
-	if (Math.random() < .5) return true;
+	if (Math.random() < .5) 
+	{
+		return true;
+	}
+	
 	b.addMessage(p.getName() + "'s infatuation kept it from attacking!");
 	return false;
 	###
@@ -1194,7 +1253,10 @@ PerishSong:
 	FailAbility: Soundproof
 	Int: PassableEffect, EndTurnEffect
 	FailMessage: 
-	if (victim.hasAbility(Namesies.SOUNDPROOF_ABILITY)) return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
+	if (victim.hasAbility(Namesies.SOUNDPROOF_ABILITY)) 
+	{
+		return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
+	}
 	###
 	CastMessage: "All Pokemon hearing this song will faint in three turns!"
 	ApplyEndTurn: 
@@ -1226,4 +1288,34 @@ ConsumedItem:
 	return consumed;
 	###
 	CanHave: True
+*
+FairyLock:
+	Int: OpponentTrappingEffect
+	OppTrapped:
+	return true;
+	###
+*
+Powder:
+	NumTurns: 1
+	CastMessage: user.getName() + " sprinkled powder on " + victim.getName() + "!"
+	Int: BeforeTurnEffect
+	CanAttack:
+	// Fire-type moves makes the user explode
+	if (p.getAttackType() == Type.FIRE)
+	{
+		b.addMessage("The powder exploded!");
+		p.reduceHealthFraction(b, 1/4.0);
+		return false;
+	}
+	
+	return true;
+	###
+*
+Electrified:
+	NumTurns: 1
+	CastMessage: user.getName() + " electrified " + victim.getName() + "!"
+	Int: ChangeAttackTypeEffect
+	ChangeAttackType:
+	return Type.ELECTRIC;
+	###
 *

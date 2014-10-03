@@ -1,5 +1,6 @@
 package main;
 
+
 public enum Namesies
 {
 	// EVERYTHING BELOW IS GENERATED ###
@@ -20,7 +21,7 @@ public enum Namesies
 	RAZOR_LEAF_ATTACK("Razor Leaf"),
 	SWEET_SCENT_ATTACK("Sweet Scent"),
 	GROWTH_ATTACK("Growth"),
-	DOUBLE_EDGE_ATTACK("Double-edge"),
+	DOUBLE_EDGE_ATTACK("Double-Edge"),
 	SEED_BOMB_ATTACK("Seed Bomb"),
 	SYNTHESIS_ATTACK("Synthesis"),
 	RECOVER_ATTACK("Recover"),
@@ -48,6 +49,8 @@ public enum Namesies
 	WATER_GUN_ATTACK("Water Gun"),
 	RAPID_SPIN_ATTACK("Rapid Spin"),
 	REFLECT_ATTACK("Reflect"),
+	SPIKY_SHIELD_ATTACK("Spiky Shield"),
+	KINGS_SHIELD_ATTACK("King's Shield"),
 	PROTECT_ATTACK("Protect"),
 	DETECT_ATTACK("Detect"),
 	QUICK_GUARD_ATTACK("Quick Guard"),
@@ -171,7 +174,7 @@ public enum Namesies
 	MIMIC_ATTACK("Mimic"),
 	METEOR_MASH_ATTACK("Meteor Mash"),
 	IMPRISON_ATTACK("Imprison"),
-	WILL_OWISP_ATTACK("Will-o-wisp"),
+	WILL_OWISP_ATTACK("Will-O-Wisp"),
 	PAYBACK_ATTACK("Payback"),
 	EXTRASENSORY_ATTACK("Extrasensory"),
 	FIRE_BLAST_ATTACK("Fire Blast"),
@@ -199,7 +202,7 @@ public enum Namesies
 	SIGNAL_BEAM_ATTACK("Signal Beam"),
 	ZEN_HEADBUTT_ATTACK("Zen Headbutt"),
 	PSYCHIC_ATTACK("Psychic"),
-	MUD_SLAP_ATTACK("Mud-slap"),
+	MUD_SLAP_ATTACK("Mud-Slap"),
 	MAGNITUDE_ATTACK("Magnitude"),
 	BULLDOZE_ATTACK("Bulldoze"),
 	DIG_ATTACK("Dig"),
@@ -214,6 +217,8 @@ public enum Namesies
 	POWER_GEM_ATTACK("Power Gem"),
 	WATER_SPORT_ATTACK("Water Sport"),
 	SOAK_ATTACK("Soak"),
+	TRICK_OR_TREAT_ATTACK("Trick-or-Treat"),
+	FORESTS_CURSE_ATTACK("Forest's Curse"),
 	PSYCH_UP_ATTACK("Psych Up"),
 	AMNESIA_ATTACK("Amnesia"),
 	WONDER_ROOM_ATTACK("Wonder Room"),
@@ -526,6 +531,7 @@ public enum Namesies
 	DESTINY_BOND_ATTACK("Destiny Bond"),
 	CAMOUFLAGE_ATTACK("Camouflage"),
 	RECYCLE_ATTACK("Recycle"),
+	PARTING_SHOT_ATTACK("Parting Shot"),
 	UTURN_ATTACK("U-turn"),
 	BATON_PASS_ATTACK("Baton Pass"),
 	PERISH_SONG_ATTACK("Perish Song"),
@@ -535,6 +541,7 @@ public enum Namesies
 	NATURE_POWER_ATTACK("Nature Power"),
 	ENTRAINMENT_ATTACK("Entrainment"),
 	MAGIC_ROOM_ATTACK("Magic Room"),
+	WORRY_SEED_ATTACK("Worry Seed"),
 	SIMPLE_BEAM_ATTACK("Simple Beam"),
 	SKILL_SWAP_ATTACK("Skill Swap"),
 	VOLT_SWITCH_ATTACK("Volt Switch"),
@@ -545,18 +552,57 @@ public enum Namesies
 	SURF_ATTACK("Surf"),
 	VOLT_TACKLE_ATTACK("Volt Tackle"),
 	FOCUS_BLAST_ATTACK("Focus Blast"),
+	DIAMOND_STORM_ATTACK("Diamond Storm"),
+	MOONBLAST_ATTACK("Moonblast"),
+	LANDS_WRATH_ATTACK("Land's Wrath"),
+	PHANTOM_FORCE_ATTACK("Phantom Force"),
+	OBLIVION_WING_ATTACK("Oblivion Wing"),
+	GEOMANCY_ATTACK("Geomancy"),
+	BOOMBURST_ATTACK("Boomburst"),
+	PLAY_ROUGH_ATTACK("Play Rough"),
+	CRAFTY_SHIELD_ATTACK("Crafty Shield"),
+	NUZZLE_ATTACK("Nuzzle"),
+	DRAINING_KISS_ATTACK("Draining Kiss"),
+	FAIRY_WIND_ATTACK("Fairy Wind"),
+	PARABOLIC_CHARGE_ATTACK("Parabolic Charge"),
+	DISARMING_VOICE_ATTACK("Disarming Voice"),
+	FREEZE_DRY_ATTACK("Freeze-Dry"),
+	FLYING_PRESS_ATTACK("Flying Press"),
+	TOPSY_TURVY_ATTACK("Topsy-Turvy"),
+	PLAY_NICE_ATTACK("Play Nice"),
+	EERIE_IMPULSE_ATTACK("Eerie Impulse"),
+	MISTY_TERRAIN_ATTACK("Misty Terrain"),
+	FAIRY_LOCK_ATTACK("Fairy Lock"),
+	AROMATIC_MIST_ATTACK("Aromatic Mist"),
+	BABY_DOLL_EYES_ATTACK("Baby-Doll Eyes"),
+	PETAL_BLIZZARD_ATTACK("Petal Blizzard"),
+	GRASSY_TERRAIN_ATTACK("Grassy Terrain"),
+	FLOWER_SHIELD_ATTACK("Flower Shield"),
+	NOBLE_ROAR_ATTACK("Noble Roar"),
+	POWDER_ATTACK("Powder"),
+	ROTOTILLER_ATTACK("Rototiller"),
+	WATER_SHURIKEN_ATTACK("Water Shuriken"),
+	MAT_BLOCK_ATTACK("Mat Block"),
+	MYSTICAL_FIRE_ATTACK("Mystical Fire"),
+	INFESTATION_ATTACK("Infestation"),
+	ELECTRIFY_ATTACK("Electrify"),
 	LEECH_SEED_EFFECT("LeechSeed"),
 	BAD_POISON_EFFECT("BadPoison"),
 	FLINCH_EFFECT("Flinch"),
 	FIRE_SPIN_EFFECT("FireSpin"),
+	INFESTATION_EFFECT("Infestation"),
 	MAGMA_STORM_EFFECT("MagmaStorm"),
 	CLAMPED_EFFECT("Clamped"),
 	WHIRLPOOL_EFFECT("Whirlpool"),
 	WRAPPED_EFFECT("Wrapped"),
 	BINDED_EFFECT("Binded"),
 	SAND_TOMB_EFFECT("SandTomb"),
+	KINGS_SHIELD_EFFECT("KingsShield"),
+	SPIKY_SHIELD_EFFECT("SpikyShield"),
 	PROTECTING_EFFECT("Protecting"),
 	QUICK_GUARD_EFFECT("QuickGuard"),
+	CRAFTY_SHIELD_EFFECT("CraftyShield"),
+	MAT_BLOCK_EFFECT("MatBlock"),
 	BRACING_EFFECT("Bracing"),
 	CONFUSION_EFFECT("Confusion"),
 	SELF_CONFUSION_EFFECT("SelfConfusion"),
@@ -608,6 +654,9 @@ public enum Namesies
 	PERISH_SONG_EFFECT("PerishSong"),
 	EMBARGO_EFFECT("Embargo"),
 	CONSUMED_ITEM_EFFECT("ConsumedItem"),
+	FAIRY_LOCK_EFFECT("FairyLock"),
+	POWDER_EFFECT("Powder"),
+	ELECTRIFIED_EFFECT("Electrified"),
 	REFLECT_EFFECT("Reflect"),
 	LIGHT_SCREEN_EFFECT("LightScreen"),
 	TAILWIND_EFFECT("Tailwind"),
@@ -628,6 +677,8 @@ public enum Namesies
 	WONDER_ROOM_EFFECT("WonderRoom"),
 	TRICK_ROOM_EFFECT("TrickRoom"),
 	MAGIC_ROOM_EFFECT("MagicRoom"),
+	MISTY_TERRAIN_EFFECT("MistyTerrain"),
+	GRASSY_TERRAIN_EFFECT("GrassyTerrain"),
 	CLEAR_SKIES_EFFECT("ClearSkies"),
 	RAINING_EFFECT("Raining"),
 	SUNNY_EFFECT("Sunny"),
@@ -788,6 +839,26 @@ public enum Namesies
 	GLUTTONY_ABILITY("Gluttony"),
 	MULTITYPE_ABILITY("Multitype"),
 	FORECAST_ABILITY("Forecast"),
+	BULLETPROOF_ABILITY("Bulletproof"),
+	AURA_BREAK_ABILITY("Aura Break"),
+	FAIRY_AURA_ABILITY("Fairy Aura"),
+	DARK_AURA_ABILITY("Dark Aura"),
+	MAGICIAN_ABILITY("Magician"),
+	CHEEK_POUCH_ABILITY("Cheek Pouch"),
+	STRONG_JAW_ABILITY("Strong Jaw"),
+	MEGA_LAUNCHER_ABILITY("Mega Launcher"),
+	TOUGH_CLAWS_ABILITY("Tough Claws"),
+	SWEET_VEIL_ABILITY("Sweet Veil"),
+	AROMA_VEIL_ABILITY("Aroma Veil"),
+	HEALER_ABILITY("Healer"),
+	PIXILATE_ABILITY("Pixilate"),
+	REFRIGERATE_ABILITY("Refrigerate"),
+	STANCE_CHANGE_ABILITY("Stance Change"),
+	FUR_COAT_ABILITY("Fur Coat"),
+	GRASS_PELT_ABILITY("Grass Pelt"),
+	FLOWER_VEIL_ABILITY("Flower Veil"),
+	GALE_WINGS_ABILITY("Gale Wings"),
+	PROTEAN_ABILITY("Protean"),
 	NONE_ITEM("None"),
 	SYRUP_ITEM("Syrup"),
 	BICYCLE_ITEM("Bicycle"),
@@ -1723,7 +1794,77 @@ public enum Namesies
 	KYUREM_POKEMON("Kyurem"),
 	KELDEO_POKEMON("Keldeo"),
 	MELOETTA_POKEMON("Meloetta"),
-	GENESECT_POKEMON("Genesect");
+	GENESECT_POKEMON("Genesect"),
+	CHESPIN_POKEMON("Chespin"),
+	QUILLADIN_POKEMON("Quilladin"),
+	CHESNAUGHT_POKEMON("Chesnaught"),
+	FENNEKIN_POKEMON("Fennekin"),
+	BRAIXEN_POKEMON("Braixen"),
+	DELPHOX_POKEMON("Delphox"),
+	FROAKIE_POKEMON("Froakie"),
+	FROGADIER_POKEMON("Frogadier"),
+	GRENINJA_POKEMON("Greninja"),
+	BUNNELBY_POKEMON("Bunnelby"),
+	DIGGERSBY_POKEMON("Diggersby"),
+	FLETCHLING_POKEMON("Fletchling"),
+	FLETCHINDER_POKEMON("Fletchinder"),
+	TALONFLAME_POKEMON("Talonflame"),
+	SCATTERBUG_POKEMON("Scatterbug"),
+	SPEWPA_POKEMON("Spewpa"),
+	VIVILLON_POKEMON("Vivillon"),
+	LITLEO_POKEMON("Litleo"),
+	PYROAR_POKEMON("Pyroar"),
+	FLABEBE_POKEMON("Flabebe"),
+	FLOETTE_POKEMON("Floette"),
+	FLORGES_POKEMON("Florges"),
+	SKIDDO_POKEMON("Skiddo"),
+	GOGOAT_POKEMON("Gogoat"),
+	PANCHAM_POKEMON("Pancham"),
+	PANGORO_POKEMON("Pangoro"),
+	FURFROU_POKEMON("Furfrou"),
+	ESPURR_POKEMON("Espurr"),
+	MEOWSTIC_POKEMON("Meowstic"),
+	HONEDGE_POKEMON("Honedge"),
+	DOUBLADE_POKEMON("Doublade"),
+	AEGISLASH_POKEMON("Aegislash"),
+	SPRITZEE_POKEMON("Spritzee"),
+	AROMATISSE_POKEMON("Aromatisse"),
+	SWIRLIX_POKEMON("Swirlix"),
+	SLURPUFF_POKEMON("Slurpuff"),
+	INKAY_POKEMON("Inkay"),
+	MALAMAR_POKEMON("Malamar"),
+	BINACLE_POKEMON("Binacle"),
+	BARBARACLE_POKEMON("Barbaracle"),
+	SKRELP_POKEMON("Skrelp"),
+	DRAGALGE_POKEMON("Dragalge"),
+	CLAUNCHER_POKEMON("Clauncher"),
+	CLAWITZER_POKEMON("Clawitzer"),
+	HELIOPTILE_POKEMON("Helioptile"),
+	HELIOLISK_POKEMON("Heliolisk"),
+	TYRUNT_POKEMON("Tyrunt"),
+	TYRANTRUM_POKEMON("Tyrantrum"),
+	AMAURA_POKEMON("Amaura"),
+	AURORUS_POKEMON("Aurorus"),
+	SYLVEON_POKEMON("Sylveon"),
+	HAWLUCHA_POKEMON("Hawlucha"),
+	DEDENNE_POKEMON("Dedenne"),
+	CARBINK_POKEMON("Carbink"),
+	GOOMY_POKEMON("Goomy"),
+	SLIGGOO_POKEMON("Sliggoo"),
+	GOODRA_POKEMON("Goodra"),
+	KLEFKI_POKEMON("Klefki"),
+	PHANTUMP_POKEMON("Phantump"),
+	TREVENANT_POKEMON("Trevenant"),
+	PUMPKABOO_POKEMON("Pumpkaboo"),
+	GOURGEIST_POKEMON("Gourgeist"),
+	BERGMITE_POKEMON("Bergmite"),
+	AVALUGG_POKEMON("Avalugg"),
+	NOIBAT_POKEMON("Noibat"),
+	NOIVERN_POKEMON("Noivern"),
+	XERNEAS_POKEMON("Xerneas"),
+	YVELTAL_POKEMON("Yveltal"),
+	ZYGARDE_POKEMON("Zygarde"),
+	DIANCIE_POKEMON("Diancie");
 
 	// EVERYTHING ABOVE IS GENERATED ###
 	
@@ -1737,6 +1878,35 @@ public enum Namesies
 	public String getName()
 	{
 		return this.name;
+	}
+	
+	// TODO: Delete this function
+	public static Namesies tryValueOf(String className, NamesiesType superClass)
+	{
+		try
+		{
+			return getValueOf(className, superClass);
+		}
+		catch (IllegalArgumentException e)
+		{
+			System.err.println("No such " + superClass.toString().toLowerCase() + " " + className);
+			switch (superClass)
+			{
+				case ABILITY:
+					return Namesies.OVERGROW_ABILITY;
+				case ATTACK:
+					return Namesies.TACKLE_ATTACK;
+				case EFFECT:
+					return Namesies.LEECH_SEED_EFFECT;
+				case ITEM:
+					return Namesies.POTION_ITEM;
+				case POKEMON:
+					return Namesies.BULBASAUR_POKEMON;
+			}
+		}
+		
+		Global.error("Seriously how the fuck could you ever get to this line of code?");
+		return null;
 	}
 	
 	public static Namesies getValueOf(String className, NamesiesType superClass)

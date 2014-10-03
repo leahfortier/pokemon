@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import main.Namesies.NamesiesType;
 import pokemon.PokemonInfo;
+import battle.Attack.Category;
 
 public class StuffGen 
 {
@@ -176,10 +177,12 @@ public class StuffGen
 				continue;
 			}
 			
+			// Get the name
 			String name = line.replace(":", "");
 			
 			HashMap<String, String> fields = new HashMap<>();
 			
+			// Read in all of the fields
 			while (in.hasNextLine())
 			{
 				line = in.nextLine().trim();
@@ -215,6 +218,44 @@ public class StuffGen
 			
 			fields.put("Index", index + "");
 			
+			// There will be problems if a Field move does not get the necessary methods
+			if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
+			{
+				Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + name);
+			}
+			
+			// Just some light error-checking
+			if (gen == Generator.ATTACK_GEN)
+			{
+				Category category = Category.valueOf(fields.get("Cat").toUpperCase());
+				if (category == Category.STATUS)
+				{
+					if (fields.containsKey("Pow"))
+					{
+						Global.error("Status moves shouldn't have power (" + className + ").");
+					}
+				}
+				else
+				{
+					if (!fields.containsKey("Pow") && !fields.containsKey("GetPow") 
+							&& !fields.containsKey("FixedDamage") && !fields.containsKey("OHKO")
+							&& !fields.containsKey("Apply"))
+					{
+						Global.error("Non-status moves must include a power (" + className + ").");
+					}
+				}
+			}
+			
+			// Mappity map
+			if (gen.mappity)
+			{
+				out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");	
+			}
+
+			List<String> interfaces = new ArrayList<>();
+			
+			String additionalMethods = getAdditionalMethods(fields, interfaces);
+			
 			// NumTurns matches to both MinTurns and MaxTurns
 			if (fields.containsKey("NumTurns"))
 			{
@@ -225,20 +266,6 @@ public class StuffGen
 				fields.remove("NumTurns");
 			}
 			
-			// There will be problems if a Field move does not get the necessary methods
-			if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
-			{
-				Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + name);
-			}
-			
-			if (gen.mappity)
-			{
-				out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");	
-			}
-
-			List<String> interfaces = new ArrayList<>();
-			
-			String additionalMethods = getAdditionalMethods(fields, interfaces);
 			String constructor = getConstructor(fields, gen);
 			
 			boolean implemented = false;
@@ -563,9 +590,15 @@ public class StuffGen
 				int index = 0;
 				String[] split = fieldInfo.split(" ");
 			
-				boolean not = false;
+				boolean not = false, list = false;
 				
 				String fieldType = split[index++];
+				if (fieldType.equals("List"))
+				{
+					list = true;
+					fieldType = split[index++]; 
+				}
+				
 				if (fieldType.equals("Not"))
 				{
 					not = true;
@@ -595,22 +628,36 @@ public class StuffGen
 					continue;
 				}
 				
-				Entry<Integer, String> pair = getValue(split, fieldValue, index);
-				index = pair.getKey();
-				String value = pair.getValue();
-				
-				String body = "";
-				boolean space = false;
-				for (; index < split.length; index++)
+				String[] fieldValues = new String[] {fieldValue};
+				if (list)
 				{
-					body += (space ? " " : "") + split[index];
-					space = true;
+					fieldValues = fieldValue.split(",");
 				}
+
+				int previousIndex = index;
 				
-				body = replaceBody(body, className, value);
-				
-				failure += (first ? "" : " || ")  + body;
-				first = false;
+				for (String value : fieldValues)
+				{
+					index = previousIndex;
+					
+					Entry<Integer, String> pair = getValue(split, value, index);
+					index = pair.getKey();
+					String pairValue = pair.getValue();
+
+					String body = "";
+					boolean space = false;
+					
+					for (; index < split.length; index++)
+					{
+						body += (space ? " " : "") + split[index];
+						space = true;
+					}
+					
+					body = replaceBody(body, className, pairValue);
+					
+					failure += (first ? "" : " || ")  + body;
+					first = false;	
+				}
 				
 				fields.remove(fieldName);
 			}
@@ -956,6 +1003,8 @@ public class StuffGen
 			addMethodInfo(methods, list, fields, interfaces, interfaceName);
 		}
 		
+		addMethodInfo(methods, overrideMethods, fields, null, "");
+		
 		return methods.toString();
 	}
 	
@@ -992,6 +1041,11 @@ public class StuffGen
 			
 			for (String addInterface : methodInfo.addInterfaces)
 			{
+				if (interfaces == null)
+				{
+					Global.error("Cannot add interfaces during second pass through overrides.");
+				}
+				
 				interfaces.add(addInterface);
 			}
 			

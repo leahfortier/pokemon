@@ -259,7 +259,12 @@ public class ActivePokemon implements Serializable
 	public int getStat(Stat s)
 	{
 		PokemonEffect e = getEffect(Namesies.TRANSFORMED_EFFECT);
-		if (e != null) return ((StatsCondition)e).getStat(s);
+		if (e != null) return ((StatsCondition)e).getStat(this, s);
+		
+		if (hasAbility(Namesies.STANCE_CHANGE_ABILITY))
+		{
+			return ((StatsCondition)getAbility()).getStat(this, s);
+		}
 		
 		return stats[s.index()];
 	}
@@ -555,6 +560,21 @@ public class ActivePokemon implements Serializable
 		return m.getAttack();
 	}
 	
+	public boolean isAttackType(Type t)
+	{
+		return getAttackType() == t;
+	}
+	
+	public Type getAttackType()
+	{
+		return getMove().getType();
+	}
+	
+	public int getAttackPower()
+	{
+		return getMove().getPower();
+	}
+	
 	// Returns whether or not this Pokemon knows this move already
 	public boolean hasMove(Namesies name)
 	{
@@ -788,18 +808,21 @@ public class ActivePokemon implements Serializable
 		}
 		
 		// Check if the user is under an effect that prevents escape
-		for (PokemonEffect e : getEffects())
+		Object[] invokees = b.getEffectsList(this);
+		Object trapped = Global.checkInvoke(true, invokees, TrappingEffect.class, "isTrapped", b, this);
+		if (trapped != null)
 		{
-			if (!e.isActive()) continue;
-			if (e instanceof TrappingEffect) return nickname + " cannot be recalled at this time!";
+			// TODO: Add a more specific message here like the OpponentTrappingEffect
+			return nickname + " cannot be recalled at this time!";
 		}
 		
-		// The opponent has an ability that prevents escape
-		Ability oppAbility = b.getOtherPokemon(playerPokemon).getAbility(); 
-		if (oppAbility instanceof OpponentTrappingEffect)
+		// The opponent has an effect that prevents escape
+		ActivePokemon other = b.getOtherPokemon(user());
+		invokees = b.getEffectsList(other);
+		trapped = Global.checkInvoke(true, invokees, OpponentTrappingEffect.class, "trapOpponent", b, this);
+		if (trapped != null)
 		{
-			OpponentTrappingEffect trapping = (OpponentTrappingEffect)oppAbility;
-			if (trapping.isTrapped(b, this)) return trapping.trappingMessage(this, b.getOtherPokemon(user()));
+			return ((OpponentTrappingEffect)trapped).trappingMessage(this, other);
 		}
 		
 		return "";
@@ -921,14 +944,14 @@ public class ActivePokemon implements Serializable
 		}
 		
 		// Health Triggered Berries
-		Item i = getHeldItem(b);
-		if (i instanceof HealthTriggeredBerry)
+		Item item = getHeldItem(b);
+		if (item instanceof HealthTriggeredBerry)
 		{
-			HealthTriggeredBerry h  = (HealthTriggeredBerry)i;
+			HealthTriggeredBerry berry  = (HealthTriggeredBerry)item;
 			double healthRatio = getHPRatio();
-			if ((healthRatio <= h.healthTriggerRatio() || (healthRatio <= .5 && hasAbility(Namesies.GLUTTONY_ABILITY))))
+			if ((healthRatio <= berry.healthTriggerRatio() || (healthRatio <= .5 && hasAbility(Namesies.GLUTTONY_ABILITY))))
 			{
-				if (h.useHealthTriggerBerry(b, this))
+				if (berry.gainBerryEffect(b, this, CastSource.HELD_ITEM))
 				{
 					consumeItem(b);
 				}
@@ -972,7 +995,7 @@ public class ActivePokemon implements Serializable
 	{
 		if (victim.hasAbility(Namesies.LIQUID_OOZE_ABILITY))
 		{
-			b.addMessage(victim.getName() + "'s Liquid Ooze caused " + nickname + " to lose health instead!");
+			b.addMessage(victim.getName() + "'s " + Namesies.LIQUID_OOZE_ABILITY.getName() + " caused " + nickname + " to lose health instead!");
 			reduceHealth(b, amount);
 			return;
 		}
@@ -1101,5 +1124,30 @@ public class ActivePokemon implements Serializable
 			halfAmount += ((IntegerCondition)halfWeight).getAmount();
 		
 		return pokemon.getWeight()/Math.pow(2, halfAmount);
+	}
+	
+	public void startAttack(Battle b, ActivePokemon opp)
+	{
+		this.getAttributes().setAttacking(true);
+		this.getMove().switchReady(b);
+		this.getMove().setAttributes(b, this, opp);
+	}
+	
+	public void endAttack(Battle b, ActivePokemon opp, boolean success, boolean reduce)
+	{
+		if (!success)
+		{
+			this.getAttributes().removeEffect(Namesies.SELF_CONFUSION_EFFECT);
+			this.getAttributes().resetCount();
+		}
+		
+		this.getAttributes().setLastMoveUsed();
+		
+		if (reduce) 
+		{
+			this.getMove().reducePP(opp.hasAbility(Namesies.PRESSURE_ABILITY) ? 2 : 1);
+		}
+		
+		this.getAttributes().setAttacking(false);
 	}
 }

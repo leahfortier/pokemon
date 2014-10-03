@@ -164,9 +164,14 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			int stat = statValue;
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
 			{
-				Type t = p.getAttack().getType(b, p);
-				if (t == Type.WATER) return (int)(stat*1.5);
-				if (t == Type.FIRE) return (int)(stat*.5);
+				if (p.isAttackType(Type.WATER))
+				{
+					stat *= 1.5;
+				}
+				else if (p.isAttackType(Type.FIRE))
+				{
+					stat *= .5;
+				}
 			}
 			
 			return stat;
@@ -212,17 +217,14 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			int stat = statValue;
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
 			{
-				Type t = p.getAttack().getType(b, p);
-				
-				// Fire is fiddy percent stronger in tha sun
-				if (t == Type.FIRE)
+				if (p.isAttackType(Type.FIRE))
 				{
+					// Fire is fiddy percent stronger in tha sun
 					stat *= 1.5;
 				}
-				
-				// Water is fiddy percent weaker in tha sun
-				if (t == Type.WATER)
+				else if (p.isAttackType(Type.WATER))
 				{
+					// Water is fiddy percent weaker in tha sun
 					stat *= .5;
 				}
 			}

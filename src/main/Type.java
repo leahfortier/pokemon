@@ -8,6 +8,7 @@ import java.util.List;
 import pokemon.ActivePokemon;
 import battle.Battle;
 import battle.effect.AdvantageChanger;
+import battle.effect.AdvantageMultiplier;
 
 public enum Type implements Serializable 
 {
@@ -27,45 +28,49 @@ public enum Type implements Serializable
 	GHOST(13, "Ghost", new Color(92, 61, 139), 6, 0x47), 
 	DRAGON(14, "Dragon", new Color(106, 90, 205), 14, 0x42), 
 	DARK(15, "Dark", new Color(49, 79, 79), 15, 0x41), 
-	STEEL(16, "Steel", new Color(200, 200, 210), 7, 0x4f), 
-	NONE(17, "None", Color.WHITE, -1, 0);
+	STEEL(16, "Steel", new Color(200, 200, 210), 7, 0x4f),
+	FAIRY(17, "Fairy", new Color(221, 160, 221), -1, 0), // TODO: Need image
+	NONE(18, "None", Color.WHITE, -1, 0);
 	
 	private static final double typeAdvantage[][] = {
-		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5, 1}, // Normal
-		{1, .5, .5,  1,  2,  2,  1,  1,  1,  1,  1,  2, .5,  1, .5,  1,  2, 1}, // Fire
-		{1,  2, .5,  1, .5,  1,  1,  1,  2,  1,  1,  1,  2,  1, .5,  1,  1, 1}, // Water
-		{1,  1,  2, .5, .5,  1,  1,  1,  0,  2,  1,  1,  1,  1, .5,  1,  1, 1}, // Electric
-		{1, .5,  2,  1, .5,  1,  1, .5,  2, .5,  1, .5,  2,  1, .5,  1, .5, 1}, // Grass
-		{1, .5, .5,  1,  2, .5,  1,  1,  2,  2,  1,  1,  1,  1,  2,  1, .5, 1}, // Ice
-		{2,  1,  1,  1,  1,  2,  1, .5,  1, .5, .5, .5,  2,  0,  1,  2,  2, 1}, // Fighting
-		{1,  1,  1,  1,  2,  1,  1, .5, .5,  1,  1,  1, .5, .5,  1,  1,  0, 1}, // Poison
-		{1,  2,  1,  2, .5,  1,  1,  2,  1,  0,  1, .5,  2,  1,  1,  1,  2, 1}, // Ground
-		{1,  1,  1, .5,  2,  1,  2,  1,  1,  1,  1,  2, .5,  1,  1,  1, .5, 1}, // Flying
-		{1,  1,  1,  1,  1,  1,  2,  2,  1,  1, .5,  1,  1,  1,  1,  0, .5, 1}, // Psychic
-		{1, .5,  1,  1,  2,  1, .5, .5,  1, .5,  2,  1,  1, .5,  1,  2, .5, 1}, // Bug
-		{1,  2,  1,  1,  1,  2, .5,  1, .5,  2,  1,  2,  1,  1,  1,  1, .5, 1}, // Rock
-		{0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  2,  1, .5, .5, 1}, // Ghost
-		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1, .5, 1}, // Dragon
-		{1,  1,  1,  1,  1,  1, .5,  1,  1,  1,  2,  1,  1,  2,  1, .5, .5, 1}, // Dark
-		{1, .5, .5, .5,  1,  2,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1, .5, 1}, // Steel
-		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1}}; // No Type
+		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5,  1, 1}, // Normal
+		{1, .5, .5,  1,  2,  2,  1,  1,  1,  1,  1,  2, .5,  1, .5,  1,  2,  1, 1}, // Fire
+		{1,  2, .5,  1, .5,  1,  1,  1,  2,  1,  1,  1,  2,  1, .5,  1,  1,  1, 1}, // Water
+		{1,  1,  2, .5, .5,  1,  1,  1,  0,  2,  1,  1,  1,  1, .5,  1,  1,  1, 1}, // Electric
+		{1, .5,  2,  1, .5,  1,  1, .5,  2, .5,  1, .5,  2,  1, .5,  1, .5,  1, 1}, // Grass
+		{1, .5, .5,  1,  2, .5,  1,  1,  2,  2,  1,  1,  1,  1,  2,  1, .5,  1, 1}, // Ice
+		{2,  1,  1,  1,  1,  2,  1, .5,  1, .5, .5, .5,  2,  0,  1,  2,  2, .5, 1}, // Fighting
+		{1,  1,  1,  1,  2,  1,  1, .5, .5,  1,  1,  1, .5, .5,  1,  1,  0,  2, 1}, // Poison
+		{1,  2,  1,  2, .5,  1,  1,  2,  1,  0,  1, .5,  2,  1,  1,  1,  2,  1, 1}, // Ground
+		{1,  1,  1, .5,  2,  1,  2,  1,  1,  1,  1,  2, .5,  1,  1,  1, .5,  1, 1}, // Flying
+		{1,  1,  1,  1,  1,  1,  2,  2,  1,  1, .5,  1,  1,  1,  1,  0, .5,  1, 1}, // Psychic
+		{1, .5,  1,  1,  2,  1, .5, .5,  1, .5,  2,  1,  1, .5,  1,  2, .5, .5, 1}, // Bug
+		{1,  2,  1,  1,  1,  2, .5,  1, .5,  2,  1,  2,  1,  1,  1,  1, .5,  1, 1}, // Rock
+		{0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  2,  1, .5,  1,  1, 1}, // Ghost
+		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1, .5,  0, 1}, // Dragon
+		{1,  1,  1,  1,  1,  1, .5,  1,  1,  1,  2,  1,  1,  2,  1, .5,  1, .5, 1}, // Dark
+		{1, .5, .5, .5,  1,  2,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1, .5,  2, 1}, // Steel
+		{1, .5,  1,  1,  1,  1,  2, .5,  1,  1,  1,  1,  1,  1,  2,  2, .5,  1, 1}, // Fairy
+		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1}}; // No Type
 	
-	public static double getAdvantage(Type moveType, ActivePokemon p, Battle b)
+	public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b)
 	{
+		Type moveType = attacking.getAttackType(); 
+		
 		// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes 
 		List<Object> invokees = new ArrayList<>();
-		invokees.addAll(p.getEffects());
-		invokees.add(p.getHeldItem(b));
-		invokees.add(b.getOtherPokemon(p.user()).getAbility());
+		invokees.addAll(defending.getEffects());
+		invokees.add(defending.getHeldItem(b));
+		invokees.add(attacking.getAbility());
 		
-		Type[] pType = p.getType(b);
-		Type[] defending = (Type[])Global.updateInvoke(1, invokees.toArray(), AdvantageChanger.class, "getAdvantageChange", moveType, new Type[] {pType[0], pType[1]});
+		Type[] originalType = defending.getType(b);
+		Type[] defendingType = (Type[])Global.updateInvoke(1, invokees.toArray(), AdvantageChanger.class, "getAdvantageChange", moveType, originalType.clone());
 		
 		// If nothing was updated, do special case check stupid things for fucking levitation which fucks everything up
-		if (defending[0] == pType[0] && defending[1] == pType[1] && moveType == GROUND)
+		if (defendingType[0] == originalType[0] && defendingType[1] == originalType[1] && moveType == GROUND)
 		{
 			// Pokemon that are levitating cannot be hit by ground type moves
-			if (p.isLevitating(b)) 
+			if (defending.isLevitating(b)) 
 			{
 				return 0;
 			}
@@ -73,21 +78,27 @@ public enum Type implements Serializable
 			// If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
 			for (int i = 0; i < 2; i++)
 			{
-				if (defending[i] == FLYING)
+				if (defendingType[i] == FLYING)
 				{
-					defending[i] = NONE;
+					defendingType[i] = NONE;
 				}
 			}
 		}
 		
-		int index = moveType.index;
-		int type1 = defending[0].index;
-		int type2 = defending[1].index;
+		// Get the advantage and apply any multiplier that may come from the attack
+		double adv = getBasicAdvantage(moveType, defendingType[0])*getBasicAdvantage(moveType, defendingType[1]);
+		adv = Global.multiplyInvoke(adv, new Object[] {attacking.getAttack()}, AdvantageMultiplier.class, "multiplyAdvantage", moveType, defendingType);	
 		
-		return typeAdvantage[index][type1]*typeAdvantage[index][type2];
+		return adv;
 	}
 	
-	public static double getAdvantage(Type attacking, Type defending)
+	public static double getBasicAdvantage(Type attacking, ActivePokemon defending, Battle b)
+	{
+		Type[] defendingType = defending.getType(b);
+		return getBasicAdvantage(attacking, defendingType[0])*getBasicAdvantage(attacking, defendingType[1]);
+	}
+	
+	public static double getBasicAdvantage(Type attacking, Type defending)
 	{
 		return typeAdvantage[attacking.index][defending.index];
 	}
@@ -95,9 +106,16 @@ public enum Type implements Serializable
 	public static double getSTAB(Battle b, ActivePokemon p)
 	{
 		Type[] pokemonType = p.getType(b);
-		Type attackType = p.getAttack().getType(b, p);
+		Type attackType = p.getAttackType();
 		
-		return pokemonType[0] ==  attackType|| pokemonType[1] == attackType ? (p.hasAbility(Namesies.ADAPTABILITY_ABILITY) ? 2 : 1.5) : 1; 
+		// Same type -- STAB
+		if (pokemonType[0] == attackType || pokemonType[1] == attackType)
+		{
+			// The adaptability ability increases stab
+			return p.hasAbility(Namesies.ADAPTABILITY_ABILITY) ? 2 : 1.5;
+		}
+		
+		return 1; 
 	}
 
 	private int index;

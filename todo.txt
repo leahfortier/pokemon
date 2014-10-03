@@ -49,11 +49,14 @@ Look into rewriting MoldBreaker because it sucks
 Semi-invulnerable moves shouldn't get a menu in between turns
 Look at differences in Roar and other exit battle moves
 There is a bug with the buttons in bag view particularly the give and take ones
+Look at Forecast and Multitype again and the fix -- I don't think they actually work -- try paired with Illusion, should make some sort of changeType thing or use a similar effect that already exists, Protean should go in this category as well
 
 Protean and Competitive abilities will affect non-gen6 Pokemon -- add these in
 
 Ask Josh if High Jump Kick will still fit everywhere since it is now the longest move name
 Ask Josh how to give a trainer Pokemon a held item
+
+Diancie needs a base exp yield and a capture rate whenever that gets updated
 
 Things to test:
 	EffectBlockerEffect
@@ -61,9 +64,10 @@ Things to test:
 	EndTurnEffect
 	StatusPreventionEffect
 	WeatherBlockerEffect
+	TrappingEffect
+	OpponentTrappingEffect
+	EntryEffect
 	
-	OpposingBeforeTurnAttack: 
-		if (this instanceof Ability && p.breaksTheMold()) return true;
 	StatProtectingEffect:
 		if (this instanceof Ability && caster.breaksTheMold()) return false;
 		

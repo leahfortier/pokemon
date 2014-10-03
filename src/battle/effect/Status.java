@@ -1,8 +1,8 @@
 package battle.effect;
 
 import item.Item;
+import item.berry.GainableEffectBerry;
 import item.berry.StatusBerry;
-import item.use.PokemonUseItem;
 
 import java.io.Serializable;
 
@@ -13,6 +13,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.Attack.MoveType;
 import battle.Battle;
+import battle.effect.Effect.CastSource;
 
 public abstract class Status implements Serializable
 {
@@ -55,10 +56,10 @@ public abstract class Status implements Serializable
 	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 	{
 		Object[] list = b.getEffectsList(victim);
-		Object statusPrevent = Global.getInvoke(user, list, StatusPreventionEffect.class, "preventStatus", b, user, victim, type);
+		Object statusPrevent = Global.checkInvoke(true, user, list, StatusPreventionEffect.class, "preventStatus", b, user, victim, type);
 		if (statusPrevent != null)
 		{
-			return ((StatusPreventionEffect)statusPrevent).preventionMessage(victim); 
+			return ((StatusPreventionEffect)statusPrevent).statusPreventionMessage(victim); 
 		}
 		
 		return Effect.DEFAULT_FAIL_MESSAGE;
@@ -148,9 +149,10 @@ public abstract class Status implements Serializable
 		Item item = victim.getHeldItem(b);
 		if (item instanceof StatusBerry)
 		{
-			if (((PokemonUseItem)item).use(victim))
+			GainableEffectBerry berry = ((GainableEffectBerry)item);
+			
+			if (berry.gainBerryEffect(b, victim, CastSource.HELD_ITEM))
 			{
-				b.addMessage(victim.getName() + "'s " + item.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 				victim.consumeItem(b);				
 			}
 		}

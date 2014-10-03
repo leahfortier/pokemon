@@ -10,6 +10,7 @@ import main.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import battle.effect.AttackSelectionEffect;
+import battle.effect.ChangeAttackTypeEffect;
 import battle.effect.ForceMoveEffect;
 import battle.effect.MultiTurnMove;
 
@@ -22,8 +23,12 @@ public class Move implements Serializable
 	private Attack attack;
 	private int maxPP;
 	private int pp;
+	
 	private boolean ready;
 	private boolean used;
+	
+	private Type type;
+	private int power;
 	
 	public Move(Attack attack)
 	{
@@ -34,6 +39,9 @@ public class Move implements Serializable
 		
 		resetReady();
 		used = false;
+		
+		type = attack.getActualType();
+		power = attack.getPower();
 	}
 	
 	public Move(Attack m, int startPP)
@@ -63,6 +71,29 @@ public class Move implements Serializable
 		{
 			ready = !ready;
 		}
+	}
+	
+	public Type getType()
+	{
+		return type;
+	}
+	
+	public int getPower()
+	{
+		return power;
+	}
+	
+	public void setAttributes(Battle b, ActivePokemon user, ActivePokemon victim)
+	{
+		type = this.attack.setType(b, user);
+		
+		// Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
+		Object[] invokees = b.getEffectsList(user);
+		type =  (Type)Global.updateInvoke(0, invokees, ChangeAttackTypeEffect.class, "changeAttackType", type);
+		
+//		System.out.println(user.getName() + " " + attack.getName() + " Type: " + type.getName());
+		
+		power = this.attack.setPower(b, user, victim);
 	}
 	
 	public Attack getAttack()
@@ -230,7 +261,8 @@ public class Move implements Serializable
 		//multiplies by effectiveness
 		for (int i = 0; i < usable.size(); i++)
 		{
-			move[i] *= Type.getAdvantage(usable.get(i).getAttack().getType(b, p), opp, b)*3;
+			// TODO: Honestly this shouldn't be using the basic advantage it should be using actual advantage
+			move[i] *= Type.getBasicAdvantage(usable.get(i).getAttack().getActualType(), opp, b)*3;
 		}
 		
 		double[] range = new double[move.length];

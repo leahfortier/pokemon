@@ -252,7 +252,7 @@ Expert Belt
 	Price: 200
 	Fling: 10
 	GetMultiplier:
-		return Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1 ? 1.2 : 1;
+		return Type.getAdvantage(user, victim, b) > 1 ? 1.2 : 1;
 		###
 *
 Flame Orb
@@ -327,8 +327,7 @@ Griseous Orb
 	GetMultiplier:
 		if (user.isPokemon(Namesies.GIRATINA_POKEMON))
 		{
-			Type t = user.getAttack().getType(b, user);
-			if (t == Type.DRAGON || t == Type.GHOST) 
+			if (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST))
 			{
 				return 1.2;
 			}
@@ -586,7 +585,7 @@ Ring Target:
 	Desc: Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.
 	Price: 200
 	Fling: 10
-	AdvantageChange: Type.getAdvantage(attacking, defending[i]) == 0
+	AdvantageChange: Type.getBasicAdvantage(attacking, defending[i]) == 0
 *
 Rocky Helmet
 	Int: HoldItem, PhysicalContactEffect
@@ -736,7 +735,7 @@ Weakness Policy
 	Price: 200
 	Fling: 30
 	OnTakeDamage:
-		if (Type.getAdvantage(user.getAttack().getType(b, user), victim, b) > 1)
+		if (Type.getAdvantage(user, victim, b) > 1)
 		{
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
@@ -1162,7 +1161,7 @@ Metal Coat
 	Price: 9800
 	Fling: 30
 	GetMultiplier:
-		return user.getAttack().isType(b, user, Type.STEEL) ? 1.2 : 1;
+		return user.isAttackType(Type.STEEL) ? 1.2 : 1;
 		###
 *
 Miracle Seed
@@ -1305,7 +1304,7 @@ Dusk Stone
 	Int: HoldItem
 	EvolutionItem: True
 	Cat: MISC
-	Desc: A peculiar stone that makes certain species of Pokémon evolve. It is as dark as dark can be.
+	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as dark as dark can be.
 	Price: 2100
 	Fling: 80
 *
@@ -2260,7 +2259,7 @@ Ultra Ball
 	Price: 1200
 	CatchRate: 2
 *
-Cheri Berry
+Cheri Berry:
 	Int: StatusBerry
 	BattleCat: STATUS
 	Desc: If held by a Pok\u00e9mon, it recovers from paralysis.
@@ -2317,8 +2316,8 @@ Leppa Berry:
 		{
 			if (m.getPP() == 0)
 			{
-				b.addMessage(victim.getName() + "'s " + this.name + " restored " + m.getAttack().getName() + "'s PP!");
-				m.increasePP(10);
+				use(m);
+				b.addMessage(getHoldSuccessMessage(victim));
 				victim.consumeItem(b);
 				break;
 			}
@@ -2335,11 +2334,12 @@ Leppa Berry:
 		}
 		
 		int size = list.size();
-		if (size == 0) return;
+		if (size == 0) 
+		{
+			return false;
+		}
 		
-		Move m = list.get((int)(Math.random()*size));
-		m.increasePP(10);
-		b.addMessage(user.getName() + "'s " + this.name + " restored " + m.getAttack().getName() + "'s PP!");
+		use(list.get((int)(Math.random()*size)));
 		###
 	MoveUse:
 		restore = m.getAttack().getName();
@@ -2349,8 +2349,9 @@ Leppa Berry:
 		private String restore;
 		###
 	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
+	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
-Oran Berry
+Oran Berry:
 	Int: HealthTriggeredBerry
 	BattleCat: HPPP
 	Desc: If held by a Pok\u00e9mon, it heals the user by just 10 HP.
@@ -2358,16 +2359,10 @@ Oran Berry
 	NGType: POISON
 	NGPow: 60
 	HealthTriggerRatio: 3
-	HealthTrigger:
-		if (user.fullHealth()) return false;
-		
-		user.heal(10);
-		b.addMessage(user.getName() + " was healed by its " + this.name + "!", user.getHP(), user.user());
-		return true;
-		###
+	HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
 	HealAmt: 10
 *
-Persim Berry
+Persim Berry:
 	Int: BattleUseItem, GainableEffectBerry
 	BattleCat: HPPP
 	Desc: If held by a Pok\u00e9mon, it recovers from confusion.
@@ -2384,14 +2379,15 @@ Persim Berry
 		return false;
 		###
 	GainEffect:
-		if (use(user, b))
+		if (!use(user, b))
 		{
-			b.addMessage(getSuccessMessage(user));
+			return false;
 		}
 		###
 	SuccessMessage: p.getName() + " snapped out of its confusion!"
+	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
 *
-Lum Berry
+Lum Berry:
 	Int: PokemonUseItem, BattleUseItem, StatusBerry 
 	BattleCat: STATUS
 	Desc: If held by a Pok\u00e9mon, it recovers from any status problem.
@@ -2399,7 +2395,10 @@ Lum Berry
 	NGType: FLYING
 	NGPow: 60
 	PokemonUse:
-		if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
+		if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) 
+		{
+			return false;
+		}
 		
 		p.removeStatus();
 		return true;
@@ -2407,24 +2406,18 @@ Lum Berry
 	SuccessMessage: p.getName() + " was cured of its status condition!"
 *
 Sitrus Berry
-	Int: PokemonUseItem, BattleUseItem, HealthTriggeredBerry
 	BattleCat: HPPP
+	Int: PokemonUseItem, BattleUseItem, HealthTriggeredBerry
 	Desc: If held by a Pok\u00e9mon, it heals the user by a little.
 	Price: 20
 	NGType: PSYCHIC
 	NGPow: 60
 	HealthTriggerRatio: 2
-	HealthTrigger:
-		if (user.fullHealth()) return false;
-	
-		user.healHealthFraction(1/4.0);
-		b.addMessage(user.getName() + " was healed by its " + this.name + "!", user.getHP(), user.user());
-		return true;
-		###
 	PokemonUse:
 		return p.healHealthFraction(1/4.0) != 0;
 		###
 	SuccessMessage: p.getName() + "'s health was restored!"
+	HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
 *
 Razz Berry
 	Int: Berry
@@ -2573,14 +2566,14 @@ Haban Berry
 	NGPow: 60
 	SuperEffectivePowerReduceBerryType: DRAGON
 *
-Colbur Berry
+Colbur Berry:
 	Desc: Weakens a supereffective Dark-type attack against the holding Pok\u00e9mon.
 	Price: 20
 	NGType: DARK
 	NGPow: 60
 	SuperEffectivePowerReduceBerryType: DARK
 *
-Babiri Berry
+Babiri Berry:
 	Desc: Weakens a supereffective Steel-type attack against the holding Pok\u00e9mon.
 	Price: 20
 	NGType: STEEL
@@ -2638,12 +2631,13 @@ Lansat Berry
 	HealthTriggerRatio: 4
 	HealthTrigger:
 		// TODO: Yes I realize this is Lansat Berry and not Honey, but functionality needs to be implemented for Honey
-		PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, CastSource.HELD_ITEM, false);
-		b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
+		PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, source, false);
 		return true;
 		###
+	HoldSuccessMessage: p.getName() + " is getting pumped due to its " + this.name + "!"
+	SuccessMessage: p.getName() + " is getting pumped!"
 *
-Starf Berry
+Starf Berry:
 	Int: HealthTriggeredBerry
 	Desc: If held by a Pok\u00e9mon, it raises a random stat in a pinch.
 	Price: 20
@@ -2651,24 +2645,37 @@ Starf Berry
 	NGPow: 80
 	HealthTriggerRatio: 4
 	HealthTrigger:
+		holdMessage = "";
+		useMessage = "";
+	
 		int rand = (int)(Math.random()*(Stat.NUM_BATTLE_STATS + 1));
 		
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS)
 		{
-			PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, CastSource.HELD_ITEM, false);
-			b.addMessage(user.getName() + " is getting pumped due to its " + this.name + "!");
+			PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, source, false);
+			holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
+			useMessage = user.getName() + " is getting pumped!";
 			return true;
 		}
 		
 		// Raise random battle stat
-		if (user.getAttributes().modifyStage(user, user, 1, Stat.getStat(rand, true), b, CastSource.HELD_ITEM))
+		Stat stat = Stat.getStat(rand, true);
+		if (user.getAttributes().modifyStage(user, user, 1, stat, b, source))
 		{
+			// TODO: Test this and such
+			useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 			return true;
 		}
 
 		return false;
 		###
+	Field:
+	private String holdMessage;
+	private String useMessage;
+	###
+	SuccessMessage: useMessage
+	HoldSuccessMessage: holdMessage
 *
 # Other Items
 Comet Shard
@@ -2744,21 +2751,21 @@ Star Piece
 Rare Bone
 	Int: HoldItem
 	Cat: MISC
-	Desc: A bone that is extremely valuable for Pokémon archeology. It can be sold for a high price to shops.
+	Desc: A bone that is extremely valuable for Pok\u00e9mon archeology. It can be sold for a high price to shops.
 	Fling: 100
 	Price: 10000
 *
 Honey
 	Int: HoldItem
 	Cat: MISC
-	Desc: A sweet honey with a lush aroma that attracts wild Pokémon when it is used in grass, caves, or on special trees.
+	Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in grass, caves, or on special trees.
 	Fling: 30
 	Price: 100
 *
 Eviolite
 	Int: HoldItem
 	Cat: MISC
-	Desc: A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pokémon that can still evolve.
+	Desc: A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pok\u00e9mon that can still evolve.
 	Fling: 40
 	Price: 200
 	TwoModify: Defense Sp_Defense
@@ -2778,12 +2785,12 @@ Repel
 	Price: 350
 *
 Super Repel
-	Desc: An item that prevents weak wild Pokémon from appearing for 200 steps after its use.
+	Desc: An item that prevents weak wild Pok\u00e9mon from appearing for 200 steps after its use.
 	RepelSteps: 200
 	Price: 500
 *
 Max Repel
-	Desc: An item that prevents weak wild Pokémon from appearing for 250 steps after its use.
+	Desc: An item that prevents weak wild Pok\u00e9mon from appearing for 250 steps after its use.
 	RepelSteps: 250
 	Price: 700
 *

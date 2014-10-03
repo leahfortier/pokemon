@@ -449,6 +449,12 @@ public class Global
 		return Global.invoke(-1, -1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
+	// Used for calling methods that return booleans and also exit early if p or opp are fainted
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Global.invoke(-1, -1, true, check, b, p, opp, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
 	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
 	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{

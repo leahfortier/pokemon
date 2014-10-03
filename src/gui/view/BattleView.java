@@ -1319,7 +1319,7 @@ public class BattleView extends View
 				g.translate(dx, dy);
 				
 				Move move = moves.get(i);
-				g.setColor(move.getAttack().getType(currentBattle, plyr).getColor());
+				g.setColor(move.getAttack().getActualType().getColor());
 				g.fillRect(0, 0, 183, 55);
 				g.drawImage(tiles.getTile(0x22), 0, 0, null);
 				
@@ -1641,7 +1641,7 @@ public class BattleView extends View
 				g.translate(dx, dy);
 				
 				Move move = moves.get(i);
-				g.setColor(move.getAttack().getType(currentBattle, learnedPokemon).getColor());
+				g.setColor(move.getAttack().getActualType().getColor());
 				g.fillRect(0, 0, 183, 55);
 				g.drawImage(tiles.getTile(0x22), 0, 0, null);
 				
@@ -1662,7 +1662,7 @@ public class BattleView extends View
 		
 		g.translate(newMoveButton.x, newMoveButton.y);
 		Move move = learnedMove;
-		Color boxColor = move.getAttack().getType(currentBattle, learnedPokemon).getColor();
+		Color boxColor = move.getAttack().getActualType().getColor();
 		g.setColor(boxColor);
 		g.fillRect(0, 0, 183, 55);
 		g.drawImage(tiles.getTile(0x22), 0, 0, null);

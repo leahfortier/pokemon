@@ -64,18 +64,18 @@ Gravity:
 WaterSport:
 	Int: PowerChangeEffect
 	GetMultiplier: 
-	return user.getAttack().getType(b, user) == Type.FIRE ? .33 : 1;
+	return user.getAttackType() == Type.FIRE ? .33 : 1;
 	###
 	CastMessage: "Fire's power was weakened!"
-	NumTurns: 6
+	NumTurns: 5
 	SubsideMessage: "The effects of Water Sport wore off."
 *
 MudSport:
-	NumTurns: 6
+	NumTurns: 5
 	SubsideMessage: "The effects of Mud Sport wore off."
 	Int: PowerChangeEffect
 	GetMultiplier:
-	return user.getAttack().getType(b, user) == Type.ELECTRIC ? .33 : 1;
+	return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
 	###
 	CastMessage: "Electricity's power was weakened!"
 *
@@ -134,5 +134,37 @@ MagicRoom:
 	
 	b.addMessage(magics.getSubsideMessage(caster));
 	Effect.removeEffect(b.getEffects(), this.namesies);
+	###
+*
+MistyTerrain:
+	CastMessage: "Mist swirled around the battlefield!"
+	SubsideMessage: "The mist disappeared from the battlefield."
+	NumTurns: 5
+	Int: StatusPreventionEffect, PowerChangeEffect
+	StatusPrevent: 
+	// Levitating Pokemon are immune to the mist
+	return !victim.isLevitating(b);
+	###
+	StatusPreventMessage: "The protective mist prevents status conditions!"
+	GetMultiplier:
+	// Dragon type moves have halved power during the misty terrain
+	return user.getAttackType() == Type.DRAGON && !user.isLevitating(b) ? .5 : 1;
+	###
+*
+GrassyTerrain:
+	CastMessage: "Grass grew around the battlefield!"
+	SubsideMessage: "The grass disappeared from the battlefield."
+	NumTurns: 5
+	Int: EndTurnEffect, PowerChangeEffect
+	ApplyEndTurn:
+	if (!victim.fullHealth() && !victim.isLevitating(b))
+	{
+		victim.healHealthFraction(1/16.0);
+		b.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", victim.getHP(), victim.user());
+	}
+	###
+	GetMultiplier:
+	// Grass-type moves are 50% stronger with the grassy terrain
+	return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
 	###
 *

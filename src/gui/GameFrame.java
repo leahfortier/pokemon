@@ -19,22 +19,22 @@ import main.InputControl.Control;
 import main.StuffGen;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
+import trainer.CharacterData;
 import battle.Attack;
 import battle.effect.BattleEffect;
 import battle.effect.PokemonEffect;
 import battle.effect.TeamEffect;
-import trainer.CharacterData;
 
 public class GameFrame
 {
-//	 public static boolean GENERATE_STUFF = true;
+//	public static boolean GENERATE_STUFF = true;
 	public static boolean GENERATE_STUFF = false;
 	public static boolean DEV_MODE = true;
 
 	private static JFrame frame;
 
 	public static void main(String[] args)
-	{
+	{		
 		if (GENERATE_STUFF)
 		{
 			new StuffGen();

@@ -34,10 +34,11 @@ import battle.effect.EndTurnEffect;
 import battle.effect.EntryEffect;
 import battle.effect.MultiTurnMove;
 import battle.effect.OpponentAccuracyBypassEffect;
+import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentPowerChangeEffect;
-import battle.effect.OpposingBeforeTurnEffect;
 import battle.effect.PokemonEffect;
 import battle.effect.PowerChangeEffect;
+import battle.effect.PriorityChangeEffect;
 import battle.effect.Status.StatusCondition;
 import battle.effect.TeamEffect;
 import battle.effect.Weather;
@@ -377,6 +378,7 @@ public class Battle
 			player.getPokedex().setStatus(enterer, PokedexStatus.SEEN, isWildBattle() ? player.getRouteName() : "");
 		}
 		
+		// TODO: I don't think this is sending the message properly, switched to Squirtle and had Bulbasaur's type colors at first
 		addMessage(enterMessage, enterer);
 		
 		if (reset) 
@@ -384,16 +386,10 @@ public class Battle
 			enterer.resetAttributes();
 		}
 		
-		// TODO: Invoke dat shit
+		// TODO: Test the invoke
 		enterer.getAttributes().setUsed(true);
 		Object[] list = getEffectsList(enterer);
-		for (Object o : list)
-		{
-			if (Effect.isInactiveEffect(o)) 
-				continue;
-			
-			if (o instanceof EntryEffect) ((EntryEffect)o).enter(this, enterer);
-		}
+		Global.invoke(list, EntryEffect.class, "enter", this, enterer);
 		
 		getTrainer(!enterer.user()).resetUsed();
 	}
@@ -480,10 +476,11 @@ public class Battle
 		// Effects that need to be checked
 		List<Object> list = new ArrayList<>();
 		list.addAll(me.getEffects());
+		list.addAll(getEffects(me.user()));
+		list.addAll(getEffects());
 		list.add(me.getStatus());
 		list.add(me.getAbility());
 		list.add(me.getHeldItem(this));
-		list.add(getEffects(me.user()));
 		
 		Global.invoke(this, me, null, list.toArray(), EndTurnEffect.class, "applyEndTurn", me, this);
 		
@@ -496,13 +493,15 @@ public class Battle
 	private void executionSolution(ActivePokemon me, ActivePokemon o)
 	{
 		// Don't do anything if they're not actually attacking
-		if (!isFighting(me.user())) return;
-		
+		if (!isFighting(me.user()))
+		{
+			return;
+		}
+
+		boolean success = false;
 		reduce = false;
 		
-		boolean success = false;
-		me.getMove().switchReady(this);
-		me.getAttributes().setAttacking(true);
+		me.startAttack(this, o);
 		
 		// HOLD IT RIGHT THERE! YOU MAY NOT BE ABLE TO ATTACK!
 		if (ableToAttack(me, o))
@@ -523,22 +522,9 @@ public class Battle
 			}			
 		}
 		
-		if (!success)
-		{
-			me.getAttributes().removeEffect(Namesies.SELF_CONFUSION_EFFECT);
-			me.getAttributes().resetCount();
-		}
+		me.endAttack(this, o, success, reduce);
 		
-		me.getAttributes().setLastMoveUsed();
-		
-		if (reduce) 
-		{
-			me.getMove().reducePP(o.hasAbility(Namesies.PRESSURE_ABILITY) ? 2 : 1);
-		}
-		
-		me.getAttributes().setAttacking(false);
-		
-		// Hopefully this doesn't mess anything up but update type at the end of each attack
+		// Hopefully this doesn't mess anything up but update type at the end of each attack TODO: I'm pretty sure it will -- try with Illusion or something
 		addMessage("", me.getType(this), me.user());
 		addMessage("", o.getType(this), o.user());
 	}
@@ -611,7 +597,7 @@ public class Battle
 	public int damageCalc(ActivePokemon me, ActivePokemon o)
 	{
 		int level = me.getLevel();
-		int power = me.getAttack().getPower(this, me, o);
+		int power = me.getAttackPower();
 		int random = (int)(Math.random()*16) + 85;
 		
 		Stat attacking, defending;
@@ -630,7 +616,7 @@ public class Battle
 		int defenseStat = Stat.getStat(defending, o, me, this);
 		
 		double stab = Type.getSTAB(this, me);
-		double adv = Type.getAdvantage(me.getAttack().getType(this, me), o, this);
+		double adv = Type.getAdvantage(me, o, this);
 		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 		
@@ -749,7 +735,7 @@ public class Battle
 		
 		// Opponents effects that prevent you from attacking
 		invokees = getEffectsList(opp);
-		cannotAttack = Global.checkInvoke(false, this, p, opp, invokees, OpposingBeforeTurnEffect.class, "opposingCanAttack", p, opp, this);
+		cannotAttack = Global.checkInvoke(false, this, p, opp, p, invokees, OpponentBeforeTurnEffect.class, "opposingCanAttack", p, opp, this);
 		if (cannotAttack != null)
 		{
 			return false;
@@ -773,10 +759,11 @@ public class Battle
 		if (isFighting(p.user()))
 		{
 			int priority = p.getAttack().getPriority(this, p);
-			if (p.getAttack().getCategory() == Category.STATUS && p.hasAbility(Namesies.PRANKSTER_ABILITY))	
-			{
-				priority++;
-			}
+			
+			Object[] invokees = this.getEffectsList(p);
+			priority = (int)Global.updateInvoke(1, invokees, PriorityChangeEffect.class, "changePriority", p, priority);
+			
+//			System.out.println(p.getAttack().getName() + " Priority: " + priority);
 			
 			return priority;
 		}

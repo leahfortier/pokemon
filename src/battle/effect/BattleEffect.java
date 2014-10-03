@@ -8,6 +8,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.Attack.MoveType;
 import battle.Battle;
+import battle.effect.Status.StatusCondition;
 
 public abstract class BattleEffect extends Effect 
 {
@@ -60,6 +61,8 @@ public abstract class BattleEffect extends Effect
 		map.put("WonderRoom", new WonderRoom());
 		map.put("TrickRoom", new TrickRoom());
 		map.put("MagicRoom", new MagicRoom());
+		map.put("MistyTerrain", new MistyTerrain());
+		map.put("GrassyTerrain", new GrassyTerrain());
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -143,7 +146,7 @@ public abstract class BattleEffect extends Effect
 
 		public WaterSport()
 		{
-			super(Namesies.WATER_SPORT_EFFECT, 6, 6, false);
+			super(Namesies.WATER_SPORT_EFFECT, 5, 5, false);
 		}
 
 		public WaterSport newInstance()
@@ -168,7 +171,7 @@ public abstract class BattleEffect extends Effect
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getAttack().getType(b, user) == Type.FIRE ? .33 : 1;
+			return user.getAttackType() == Type.FIRE ? .33 : 1;
 		}
 	}
 
@@ -178,7 +181,7 @@ public abstract class BattleEffect extends Effect
 
 		public MudSport()
 		{
-			super(Namesies.MUD_SPORT_EFFECT, 6, 6, false);
+			super(Namesies.MUD_SPORT_EFFECT, 5, 5, false);
 		}
 
 		public MudSport newInstance()
@@ -203,7 +206,7 @@ public abstract class BattleEffect extends Effect
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return user.getAttack().getType(b, user) == Type.ELECTRIC ? .33 : 1;
+			return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
 		}
 	}
 
@@ -325,6 +328,98 @@ public abstract class BattleEffect extends Effect
 		public String getSubsideMessage(ActivePokemon victim)
 		{
 			return "The dimensions of the magic room returned to normal.";
+		}
+	}
+
+	private static class MistyTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public MistyTerrain()
+		{
+			super(Namesies.MISTY_TERRAIN_EFFECT, 5, 5, false);
+		}
+
+		public MistyTerrain newInstance()
+		{
+			return (MistyTerrain)(new MistyTerrain().activate());
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+		{
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return "Mist swirled around the battlefield!";
+		}
+
+		public String getSubsideMessage(ActivePokemon victim)
+		{
+			return "The mist disappeared from the battlefield.";
+		}
+
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status)
+		{
+			// Levitating Pokemon are immune to the mist
+			return !victim.isLevitating(b);
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim)
+		{
+			return "The protective mist prevents status conditions!";
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			// Dragon type moves have halved power during the misty terrain
+			return user.getAttackType() == Type.DRAGON && !user.isLevitating(b) ? .5 : 1;
+		}
+	}
+
+	private static class GrassyTerrain extends BattleEffect implements EndTurnEffect, PowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public GrassyTerrain()
+		{
+			super(Namesies.GRASSY_TERRAIN_EFFECT, 5, 5, false);
+		}
+
+		public GrassyTerrain newInstance()
+		{
+			return (GrassyTerrain)(new GrassyTerrain().activate());
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+		{
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return "Grass grew around the battlefield!";
+		}
+
+		public String getSubsideMessage(ActivePokemon victim)
+		{
+			return "The grass disappeared from the battlefield.";
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b)
+		{
+			if (!victim.fullHealth() && !victim.isLevitating(b))
+			{
+				victim.healHealthFraction(1/16.0);
+				b.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", victim.getHP(), victim.user());
+			}
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			// Grass-type moves are 50% stronger with the grassy terrain
+			return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
 		}
 	}
 }
