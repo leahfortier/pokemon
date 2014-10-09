@@ -847,7 +847,7 @@ TrainerUseItem:
 ***
 PokemonUseItem:
 	PokemonUse:
-		Header: boolean use(ActivePokemon p)
+		Header: boolean use(CharacterData player, ActivePokemon p)
 	*
 ***
 BattleUseItem:
@@ -855,7 +855,7 @@ BattleUseItem:
 		Header: boolean use(ActivePokemon p, Battle b)
 		Optional: True
 		Default:
-		return use(p);
+		return use(b.getPlayer(), p);
 		###
 	*
 ***
@@ -1053,10 +1053,7 @@ DriveItem:
 Override:
 	EvolutionItem:
 		AddInterface: PokemonUseItem
-		AddMapField: Field:
-		private String message;
-		###
-		AddMapField: SuccessMessage: message
+		AddMapField: SuccessMessage: ""
 		AddMapField: PokemonUse:
 		Evolution ev = p.getPokemonInfo().getEvolution();
 		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -1065,7 +1062,7 @@ Override:
 			return false;
 		}
 
-		message = p.evolve(null, base);
+		player.setEvolution(p, base);
 		return true;
 		###
 	*

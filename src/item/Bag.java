@@ -203,13 +203,16 @@ public class Bag implements Serializable
 		return res;
 	}
 	
-	public boolean useItem(Item i, ActivePokemon p)
+	public boolean useItem(CharacterData player, Item i, ActivePokemon p)
 	{
-		if (items.get(i) <= 0) Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		if (items.get(i) <= 0)
+		{
+			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		}
 		
 		boolean res = false;
 		if (i instanceof PokemonUseItem) 
-			res |= ((PokemonUseItem)i).use(p);
+			res |= ((PokemonUseItem)i).use(player, p);
 		
 		if (res) removeItem(i);
 		return res;
@@ -229,7 +232,10 @@ public class Bag implements Serializable
 	
 	public boolean battleUseItem(Item i, ActivePokemon p, Battle b)
 	{
-		if (items.get(i) <= 0) Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		if (items.get(i) <= 0) 
+		{
+			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		}
 		
 		boolean res = false;
 		
@@ -238,7 +244,7 @@ public class Bag implements Serializable
 		else if (i instanceof PokemonUseItem)
 		{
 			System.err.println("PokemonUseItem called from Bag.battleUseItem() instead of BattleUseItem.");
-			res |= ((PokemonUseItem)i).use(p);
+			res |= ((PokemonUseItem)i).use(b.getPlayer(), p);
 		}
 		else if (i instanceof BallItem)
 			res |= b.getPlayer().catchPokemon(b, (BallItem)i);

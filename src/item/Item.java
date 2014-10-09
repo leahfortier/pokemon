@@ -4283,7 +4283,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class MetalCoat extends Item implements PokemonUseItem, HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public MetalCoat()
 		{
@@ -4293,10 +4292,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -4305,7 +4304,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -4683,7 +4682,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class DawnStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public DawnStone()
 		{
@@ -4693,10 +4691,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -4705,7 +4703,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -4718,7 +4716,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class DeepSeaScale extends Item implements StatChangingEffect, PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public DeepSeaScale()
 		{
@@ -4743,7 +4740,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
@@ -4757,7 +4754,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return stat;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -4766,7 +4763,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -4779,7 +4776,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class DeepSeaTooth extends Item implements StatChangingEffect, PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public DeepSeaTooth()
 		{
@@ -4804,7 +4800,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
@@ -4818,7 +4814,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return stat;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -4827,7 +4823,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -4840,7 +4836,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class DragonScale extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public DragonScale()
 		{
@@ -4850,10 +4845,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -4862,7 +4857,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -4875,7 +4870,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class DubiousDisc extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public DubiousDisc()
 		{
@@ -4885,10 +4879,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -4897,7 +4891,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -4910,7 +4904,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class DuskStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public DuskStone()
 		{
@@ -4920,10 +4913,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -4932,7 +4925,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -4945,7 +4938,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class Electirizer extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public Electirizer()
 		{
@@ -4955,10 +4947,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -4967,7 +4959,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -4980,7 +4972,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class FireStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public FireStone()
 		{
@@ -4990,10 +4981,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5002,7 +4993,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5015,7 +5006,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class KingsRock extends Item implements PokemonUseItem, HoldItem, ApplyDamageEffect
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public KingsRock()
 		{
@@ -5025,10 +5015,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5037,7 +5027,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5064,7 +5054,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class LeafStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public LeafStone()
 		{
@@ -5074,10 +5063,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5086,7 +5075,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5099,7 +5088,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class Magmarizer extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public Magmarizer()
 		{
@@ -5109,10 +5097,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5121,7 +5109,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5134,7 +5122,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class MoonStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public MoonStone()
 		{
@@ -5144,10 +5131,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5156,7 +5143,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5169,7 +5156,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class OvalStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public OvalStone()
 		{
@@ -5179,10 +5165,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5191,7 +5177,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5220,7 +5206,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class PrismScale extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public PrismScale()
 		{
@@ -5230,10 +5215,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5242,7 +5227,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5255,7 +5240,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class Protector extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public Protector()
 		{
@@ -5265,10 +5249,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5277,7 +5261,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5290,7 +5274,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class RazorClaw extends Item implements PokemonUseItem, HoldItem, CritStageEffect
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public RazorClaw()
 		{
@@ -5300,10 +5283,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5312,7 +5295,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5330,7 +5313,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class RazorFang extends Item implements PokemonUseItem, HoldItem, ApplyDamageEffect
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public RazorFang()
 		{
@@ -5340,10 +5322,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5352,7 +5334,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5378,7 +5360,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class ReaperCloth extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public ReaperCloth()
 		{
@@ -5388,10 +5369,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5400,7 +5381,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5413,7 +5394,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class Sachet extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public Sachet()
 		{
@@ -5423,10 +5403,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5435,7 +5415,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5448,7 +5428,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class ShinyStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public ShinyStone()
 		{
@@ -5458,10 +5437,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5470,7 +5449,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5483,7 +5462,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class SunStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public SunStone()
 		{
@@ -5493,10 +5471,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5505,7 +5483,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5518,7 +5496,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class ThunderStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public ThunderStone()
 		{
@@ -5528,10 +5505,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5540,7 +5517,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5553,7 +5530,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class UpGrade extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public UpGrade()
 		{
@@ -5563,10 +5539,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5575,7 +5551,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5588,7 +5564,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class WaterStone extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public WaterStone()
 		{
@@ -5598,10 +5573,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5610,7 +5585,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5623,7 +5598,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class WhippedDream extends Item implements PokemonUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		public WhippedDream()
 		{
@@ -5633,10 +5607,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return message;
+			return "";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
@@ -5645,7 +5619,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			message = p.evolve(null, base);
+			player.setEvolution(p, base);
 			return true;
 		}
 
@@ -5676,7 +5650,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -5689,7 +5663,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -5719,7 +5693,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -5732,7 +5706,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -5762,7 +5736,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -5775,7 +5749,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -5805,7 +5779,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -5818,7 +5792,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -5848,7 +5822,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -5861,7 +5835,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -5886,7 +5860,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
 			
@@ -5896,7 +5870,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -5922,7 +5896,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was fully healed!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (p.hasStatus(StatusCondition.FAINTED)) return false;
 			if (!p.hasStatus() && p.fullHealth()) return false;
@@ -5939,7 +5913,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 	}
 
@@ -5959,7 +5933,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s PP was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			boolean changed = false;
 			for (Move m : p.getMoves())
@@ -5971,7 +5945,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -5996,7 +5970,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s PP was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			boolean changed = false;
 			for (Move m : p.getMoves())
@@ -6009,7 +5983,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6099,14 +6073,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6136,14 +6110,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6173,14 +6147,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6210,14 +6184,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6247,14 +6221,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6284,14 +6258,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6321,14 +6295,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6358,14 +6332,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6395,14 +6369,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6432,14 +6406,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6469,14 +6443,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6501,14 +6475,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.healHealthFraction(1) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6533,7 +6507,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was revived!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
 			
@@ -6545,7 +6519,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -6570,7 +6544,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was fully revived!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
 			
@@ -6602,7 +6576,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was fully revived!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(StatusCondition.FAINTED))
 			{
@@ -6945,7 +6919,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -6984,7 +6958,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7023,7 +6997,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7062,7 +7036,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7101,7 +7075,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7140,7 +7114,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7179,7 +7153,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7218,7 +7192,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7313,7 +7287,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7347,7 +7321,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			// TODO: Need Level Up to be implemented -- also handle the message accordingly
 			return false;
@@ -7379,7 +7353,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7418,7 +7392,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7457,7 +7431,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
 			toAdd[toIncrease().index()] += increaseAmount();
@@ -7998,7 +7972,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -8011,7 +7985,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -8089,7 +8063,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -8102,7 +8076,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -8180,7 +8154,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -8193,7 +8167,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -8271,7 +8245,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -8284,7 +8258,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -8362,7 +8336,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
 			{
@@ -8375,7 +8349,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -8561,14 +8535,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.heal(healAmount()) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
@@ -8727,7 +8701,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED))
 			{
@@ -8740,7 +8714,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -8818,14 +8792,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			return p.healHealthFraction(1/4.0) != 0;
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(p);
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
@@ -8943,7 +8917,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.ICE;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] vals = new int[Stat.NUM_STATS];
 			if (p.getEV(toDecrease().index()) > 110)
@@ -8990,7 +8964,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.FIGHTING;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] vals = new int[Stat.NUM_STATS];
 			if (p.getEV(toDecrease().index()) > 110)
@@ -9037,7 +9011,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.POISON;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] vals = new int[Stat.NUM_STATS];
 			if (p.getEV(toDecrease().index()) > 110)
@@ -9084,7 +9058,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.GROUND;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] vals = new int[Stat.NUM_STATS];
 			if (p.getEV(toDecrease().index()) > 110)
@@ -9131,7 +9105,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.FLYING;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] vals = new int[Stat.NUM_STATS];
 			if (p.getEV(toDecrease().index()) > 110)
@@ -9178,7 +9152,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return Type.PSYCHIC;
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] vals = new int[Stat.NUM_STATS];
 			if (p.getEV(toDecrease().index()) > 110)
@@ -11320,7 +11294,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!";
 		}
 
-		public boolean use(ActivePokemon p)
+		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Ability other = Ability.getOtherAbility(p);
 			if (other.namesies() == Namesies.NONE_ABILITY)

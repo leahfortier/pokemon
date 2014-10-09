@@ -233,7 +233,7 @@ public class BagView extends View
 					}
 					else if (selectedItem instanceof PokemonUseItem) 
 					{
-						addUseMessages(bag.useItem(selectedItem, p), p);
+						addUseMessages(bag.useItem(player, selectedItem, p), p);
 					}
 					else if (selectedItem instanceof MoveUseItem)
 					{
