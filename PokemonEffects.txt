@@ -726,7 +726,7 @@ Taunt:
 	}
 	###
 	Usable: 
-	return m.getAttack().getCategory() != Attack.Category.STATUS;
+	return m.getAttack().getCategory() != Category.STATUS;
 	###
 	UnusableMessage: "No!! Not while you're under the effects of taunt!!"
 	CanAttack:

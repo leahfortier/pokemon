@@ -874,22 +874,22 @@ Override:
 ***
 Override:
 	TypeTakeDamageStatIncrease:
-		Header: Type damageType()
+		Header: boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
 		Body:
-		return Type.{00};
+		return user.getAttackType() == Type.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM);
 		###
 		AddMapField: OnTakeDamage:
-		if (user.getAttackType() == damageType() && victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.HELD_ITEM))
+		if (checkModify(b, user, victim))
 		{
 			victim.consumeItem(b);
 		}
 		###
 		AddInterface: HoldItem
-		AddInterface: ConsumedItem
+		AddInterface: ConsumableItem
 		AddInterface: TakeDamageEffect
 	*
 ***
-ConsumedItem:
+ConsumableItem:
 ***
 Override:
 	ChoiceItem:
@@ -1147,8 +1147,8 @@ BallItem:
 		Try:
 		return new double[] {{0}, 0};
 		###
-		AddMapField: Cat: BALL
-		AddMapField: BattleCat: BALL
+		AddMapField: Cat: Ball
+		AddMapField: BattleCat: Ball
 	*
 	AfterCaught:
 		Header: void afterCaught(ActivePokemon p)
@@ -1175,6 +1175,7 @@ Override:
 		return p.addEVs(vals);
 		###
 		AddMapField: SuccessMessage: p.getName() + "'s " + toDecrease().getName() + " was lowered!"
+		AddMapField: NGPow: 90
 	*
 ***
 Override:
@@ -1184,6 +1185,7 @@ Override:
 		return Type.{00};
 		###
 		AddInterface: Berry
+		AddMapField: NGPow: 80
 		AddInterface: OpponentPowerChangeEffect
 		AddMapField: GetOppMultiplier:
 		if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
@@ -1215,6 +1217,43 @@ Override:
 		AddMapField: HealthTriggerRatio: 4
 		AddMapField: SuccessMessage: p.getName() + "'s " + toRaise().getName() + " increased!"
 		AddMapField: HoldSuccessMessage: ""
+		AddMapField: NGPow: 100
+	*
+***
+Override:
+	CategoryIncreaseBerry:
+		Header: boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
+		Body:
+		return user.getAttack().getCategory() == Category.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM);
+		###
+		AddMapField: NGPow: 100
+		AddInterface: Berry
+		AddInterface: TakeDamageEffect
+		AddMapField: OnTakeDamage:
+		if (checkModify(b, user, victim))
+		{
+			victim.consumeItem(b);
+		}
+		###
+	*
+***
+Override:
+	CategoryDamagerBerry:
+		Header: Category getCategory()
+		Body:
+		return Category.{00};
+		###
+		AddMapField: NGPow: 100
+		AddInterface: Berry
+		AddInterface: TakeDamageEffect
+		AddMapField: OnTakeDamage:
+		if (user.getAttack().getCategory() == getCategory())
+		{
+			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+			user.reduceHealthFraction(b, 1/8.0);
+			victim.consumeItem(b);
+		}
+		###
 	*
 ***
 StatusBerry:
@@ -1228,6 +1267,7 @@ StatusBerry:
 		###
 		AddInterface: Hidden-GainableEffectBerry
 		AddMapField: HoldSuccessMessage: p.getName() + "'s " + this.getName() + " cured it of its status condition!"
+		AddMapField: NGPow: 80
 	*
 ***
 GainableEffectBerry:
@@ -1291,9 +1331,10 @@ Berry:
 		Body:
 		return {0};
 		###
-		AddMapField: Cat: BERRY
+		AddMapField: Cat: Berry
 		AddInterface: Hidden-HoldItem
 		AddMapField: Fling: 10
+		AddMapField: Price: 20
 	*
 	NGType:
 		Header: Type naturalGiftType()
@@ -1534,10 +1575,15 @@ Override:
 ***
 PriorityChangeEffect:
 	ChangePriority:
-		Header: int changePriority(ActivePokemon user, Integer priority)
+		Header: int changePriority(Battle b, ActivePokemon user, Integer priority)
 		Body:
 		if ({0})
 		{
+			if (this instanceof ConsumableItem)
+			{
+				user.consumeItem(b);
+			}
+			
 			priority++;
 		}
 		

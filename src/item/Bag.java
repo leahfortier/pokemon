@@ -74,7 +74,7 @@ public class Bag implements Serializable
 	
 	public enum BattleBagCategory implements Serializable
 	{
-		HPPP("HP/PP", 0x16), STATUS("Status", 0x17), BALL("Balls", 0x18), BATTLE("Battle", 0x19);
+		HP_PP("HP/PP", 0x16), STATUS("Status", 0x17), BALL("Balls", 0x18), BATTLE("Battle", 0x19);
 		
 		// Name to display in BagView
 		String name;

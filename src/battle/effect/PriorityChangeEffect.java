@@ -1,8 +1,9 @@
 package battle.effect;
 
 import pokemon.ActivePokemon;
+import battle.Battle;
 
 public interface PriorityChangeEffect
 {
-	public int changePriority(ActivePokemon user, Integer priority);
+	public int changePriority(Battle b, ActivePokemon user, Integer priority);
 }

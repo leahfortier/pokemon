@@ -2275,7 +2275,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean usable(ActivePokemon p, Move m)
 		{
-			return m.getAttack().getCategory() != Attack.Category.STATUS;
+			return m.getAttack().getCategory() != Category.STATUS;
 		}
 
 		public String getUnusableMessage(ActivePokemon p)

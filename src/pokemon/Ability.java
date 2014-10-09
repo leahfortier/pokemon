@@ -2,6 +2,7 @@ package pokemon;
 
 import item.Item;
 import item.berry.Berry;
+import item.hold.ConsumableItem;
 import item.hold.HoldItem;
 
 import java.io.Serializable;
@@ -160,6 +161,11 @@ public abstract class Ability implements Serializable
 		}
 		
 		return getAbility(abilities[(int)(Math.random()*2)]);
+	}
+	
+	public static Ability getOtherAbility(ActivePokemon p)
+	{
+		return getOtherAbility(p.getPokemonInfo(), p.getAbility().namesies());
 	}
 	
 	private static Ability getOtherAbility(PokemonInfo p, Namesies ability)
@@ -3711,10 +3717,15 @@ public abstract class Ability implements Serializable
 			return (Prankster)(new Prankster().activate());
 		}
 
-		public int changePriority(ActivePokemon user, Integer priority)
+		public int changePriority(Battle b, ActivePokemon user, Integer priority)
 		{
 			if (user.getAttack().getCategory() == Category.STATUS)
 			{
+				if (this instanceof ConsumableItem)
+				{
+					user.consumeItem(b);
+				}
+				
 				priority++;
 			}
 			
@@ -4863,10 +4874,15 @@ public abstract class Ability implements Serializable
 			return (GaleWings)(new GaleWings().activate());
 		}
 
-		public int changePriority(ActivePokemon user, Integer priority)
+		public int changePriority(Battle b, ActivePokemon user, Integer priority)
 		{
 			if (user.getAttack().getActualType() == Type.FLYING)
 			{
+				if (this instanceof ConsumableItem)
+				{
+					user.consumeItem(b);
+				}
+				
 				priority++;
 			}
 			

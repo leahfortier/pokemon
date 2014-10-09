@@ -601,7 +601,7 @@ public class Battle
 		int random = (int)(Math.random()*16) + 85;
 		
 		Stat attacking, defending;
-		if (me.getAttack().getCategory() == Attack.Category.PHYSICAL)
+		if (me.getAttack().getCategory() == Category.PHYSICAL)
 		{
 			attacking = Stat.ATTACK;
 			defending = Stat.DEFENSE;
@@ -761,7 +761,7 @@ public class Battle
 			int priority = p.getAttack().getPriority(this, p);
 			
 			Object[] invokees = this.getEffectsList(p);
-			priority = (int)Global.updateInvoke(1, invokees, PriorityChangeEffect.class, "changePriority", p, priority);
+			priority = (int)Global.updateInvoke(2, invokees, PriorityChangeEffect.class, "changePriority", this, p, priority);
 			
 //			System.out.println(p.getAttack().getName() + " Priority: " + priority);
 			

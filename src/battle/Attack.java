@@ -5077,8 +5077,21 @@ public abstract class Attack implements Serializable
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
+			int power = super.power;
+			
 			// Power is halved during Grassy Terrain
-			return (int)(super.power*(b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT) ? .5 : 1));
+			if (b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT))
+			{
+				power *= .5;
+			}
+			
+			// Power is double when the opponent is underground
+			if (o.isSemiInvulnerableDigging())
+			{
+				power *= 2;
+			}
+			
+			return power;
 		}
 
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)

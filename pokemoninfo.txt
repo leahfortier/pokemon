@@ -4647,7 +4647,7 @@ Normal None
 57 Trump Card
 45
 0 0 0 0 1 0 
-Multi 7
+Multi 8
 Item 134  Water Stone
 Item 135  Thunder Stone
 Item 136  Fire Stone
@@ -4655,6 +4655,7 @@ Item 196  Sun Stone
 Item 197  Moon Stone
 Item 470  Leaf Stone
 Item 471  Dawn Stone
+Item 700  Shiny Stone
 1
 5 Eviolite
 87
@@ -11777,7 +11778,8 @@ Poison None
 90
 0 1 0 1 0 0 
 None
-0
+1
+100 Persim Berry
 50
 Shed Skin
 Infiltrator
@@ -22922,7 +22924,7 @@ Grass None
 48 Wood Hammer
 45
 0 0 1 0 0 0 
-None
+Level 651 16
 0
 87
 Overgrow
@@ -22957,7 +22959,7 @@ Grass None
 55 Wood Hammer
 45
 0 0 2 0 0 0 
-None
+Level 652 36
 0
 87
 Overgrow
@@ -23035,7 +23037,7 @@ Fire None
 48 Fire Blast
 45
 0 0 0 1 0 0 
-None
+Level 654 16
 0
 87
 Blaze
@@ -23071,7 +23073,7 @@ Fire None
 55 Fire Blast
 45
 0 0 0 2 0 0 
-None
+Level 655 36
 0
 87
 Blaze
@@ -23148,7 +23150,7 @@ Water None
 48 Hydro Pump
 45
 0 0 0 0 0 1 
-None
+Level 657 16
 0
 87
 Torrent
@@ -23182,7 +23184,7 @@ Water None
 55 Hydro Pump
 45
 0 0 0 0 0 2 
-None
+Level 658 36
 0
 87
 Torrent
@@ -23259,7 +23261,7 @@ Normal None
 49 Earthquake
 255
 0 0 0 0 0 1 
-None
+Level 660 20
 0
 50
 Pickup
@@ -23333,7 +23335,7 @@ Normal Flying
 48 Steel Wing
 255
 0 0 0 0 0 1 
-None
+Level 662 17
 0
 50
 Big Pecks
@@ -23368,7 +23370,7 @@ Fire Flying
 55 Steel Wing
 255
 0 0 0 0 0 2 
-None
+Level 663 35
 0
 50
 Flame Body
@@ -23430,7 +23432,7 @@ Bug None
 15 Bug Bite
 255
 0 0 1 0 0 0 
-None
+Level 665 9
 0
 50
 Shield Dust
@@ -23452,7 +23454,7 @@ Bug None
 9 Protect
 255
 0 0 2 0 0 0 
-None
+Level 666 12
 0
 50
 Shed Skin
@@ -23523,7 +23525,7 @@ Fire Normal
 50 Overheat
 200
 0 0 0 1 0 0 
-None
+Level 668 35
 0
 25
 Rivalry
@@ -23593,7 +23595,7 @@ Fairy Grass
 48 Solar Beam
 255
 0 0 0 0 1 0 
-None
+Level 670 19
 0
 0
 Flower Veil
@@ -23627,7 +23629,7 @@ Fairy Grass
 58 Solar Beam
 255
 0 0 0 0 2 0 
-None
+Item 671 Shiny Stone
 0
 0
 Flower Veil
@@ -23695,7 +23697,7 @@ Grass None
 50 Milk Drink
 160
 1 0 0 0 0 0 
-None
+Level 673 32
 0
 50
 Sap Sipper
@@ -23768,8 +23770,9 @@ Fighting None
 48 Sky Uppercut
 128
 0 1 0 0 0 0 
-None
-0
+Level 675 32
+1
+5 Mental Herb
 50
 Iron Fist
 Mold Breaker
@@ -23869,7 +23872,7 @@ Psychic None
 25 Psyshock
 228
 0 0 0 0 0 1 
-None
+Level 678 25
 0
 50
 Keen Eye
@@ -23944,7 +23947,7 @@ Steel Ghost
 47 Sacred Sword
 222
 0 0 1 0 0 0 
-None
+Level 680 35
 0
 50
 No Guard
@@ -23979,7 +23982,7 @@ Steel Ghost
 51 Sacred Sword
 222
 0 0 2 0 0 0 
-None
+Item 681 Dusk Stone
 0
 50
 No Guard
@@ -24049,8 +24052,9 @@ Fairy None
 50 Disarming Voice
 200
 1 0 0 0 0 0 
-None
-0
+Item 683 Sachet
+1
+5 Sachet
 50
 Healer
 Aroma Veil
@@ -24090,7 +24094,8 @@ Fairy None
 200
 2 0 0 0 0 0 
 None
-0
+1
+5 Sachet
 50
 Healer
 Aroma Veil
@@ -24125,8 +24130,9 @@ Fairy None
 67 Safeguard
 200
 0 0 1 0 0 0 
-None
-0
+Item 685 Whipped Dream
+1
+5 Whipped Dream
 50
 Sweet Veil
 Unburden
@@ -24162,7 +24168,8 @@ Fairy None
 200
 0 0 2 0 0 0 
 None
-0
+1
+5 Whipped Dream
 50
 Sweet Veil
 Unburden
@@ -24199,7 +24206,7 @@ Dark Psychic
 48 Superpower
 120
 0 1 0 0 0 0 
-None
+Level 687 30
 0
 50
 Contrary
@@ -24275,7 +24282,7 @@ Rock Water
 49 Cross Chop
 255
 0 1 0 0 0 0 
-None
+Level 689 39
 0
 50
 Tough Claws
@@ -24351,7 +24358,7 @@ Poison Water
 49 Dragon Pulse
 225
 0 0 0 0 1 0 
-None
+Level 691 48
 0
 50
 Poison Point
@@ -24424,7 +24431,7 @@ Water None
 48 Muddy Water
 155
 0 0 0 1 0 0 
-None
+Level 693 37
 0
 50
 Mega Launcher
@@ -24497,7 +24504,7 @@ Electric Normal
 49 Thunderbolt
 90
 0 0 0 0 0 1 
-None
+Item 695 Sun Stone
 0
 50
 Dry Skin
@@ -24559,7 +24566,7 @@ Rock Dragon
 49 Horn Drill
 45
 0 1 0 0 0 0 
-None
+Level 697 39
 0
 87
 Strong Jaw
@@ -24636,7 +24643,7 @@ Rock Ice
 65 Blizzard
 45
 1 0 0 0 0 0 
-None
+Level 699 39
 0
 87
 Refrigerate
@@ -24748,7 +24755,8 @@ Fighting Flying
 128
 0 2 0 0 0 0 
 None
-0
+1
+5 King's Rock
 50
 Limber
 Unburden
@@ -24850,7 +24858,7 @@ Dragon None
 42 Dragon Pulse
 20
 0 0 0 0 1 0 
-None
+Level 705 40
 0
 50
 Sap Sipper
@@ -24881,7 +24889,7 @@ Dragon None
 47 Dragon Pulse
 20
 0 0 0 0 2 0 
-None
+Level 706 50
 0
 50
 Sap Sipper
@@ -24987,8 +24995,9 @@ Ghost Grass
 54 Horn Leech
 150
 0 1 0 0 0 0 
-None
-0
+Item 709 Big Root
+1
+5 Big Root
 50
 Natural Cure
 Frisk
@@ -25024,7 +25033,8 @@ Ghost Grass
 150
 0 2 0 0 0 0 
 None
-0
+1
+5 Big Root
 50
 Natural Cure
 Frisk
@@ -25058,8 +25068,9 @@ Ghost Grass
 48 Seed Bomb
 190
 0 0 1 0 0 0 
-None
-0
+Item 711 Miracle Seed
+1
+5 Miracle Seed
 50
 Pickup
 Frisk
@@ -25100,7 +25111,8 @@ Ghost Grass
 190
 0 0 2 0 0 0 
 None
-0
+1
+5 Miracle Seed
 50
 Pickup
 Frisk
@@ -25134,8 +25146,10 @@ Ice None
 49 Double-Edge
 255
 0 0 1 0 0 0 
-None
-0
+Level 713 37
+2
+5 NeverMeltIce
+1 Icy Rock
 50
 Own Tempo
 Ice Body
@@ -25175,7 +25189,9 @@ Ice None
 255
 0 0 2 0 0 0 
 None
-0
+2
+5 NeverMeltIce
+1 Icy Rock
 50
 Own Tempo
 Ice Body
@@ -25210,7 +25226,7 @@ Flying Dragon
 58 Hurricane
 200
 0 0 0 0 0 1 
-None
+Level 715 48
 0
 50
 Frisk
@@ -25413,5 +25429,4 @@ Jewel
 30720
 None
 None
-
 

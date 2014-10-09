@@ -59,6 +59,7 @@ public class StuffGen
 		private void generate()
 		{
 			superGen(this);
+			System.out.println(this.inputPath + " generated.");
 		}
 	}
 	
@@ -137,6 +138,7 @@ public class StuffGen
 		}
 		
 		printToFile(NAMESIES_PATH, out);
+		System.out.println("Namesies generated.");
 	}
 	
 	private static void superGen(Generator gen)
@@ -202,7 +204,7 @@ public class StuffGen
 				}
 				
 				fields.put(key, value);
-				System.out.println(name + " " + key + " " + value);
+//				System.out.println(name + " " + key + " " + value);
 			}
 			
 			if (!fields.containsKey("ClassName"))
@@ -327,7 +329,10 @@ public class StuffGen
 			if (gen == Generator.ITEM_GEN)
 			{
 				File imageFile = new File(ITEM_TILES_PATH + className.toLowerCase() + ".png");
-				if (!imageFile.exists()) System.err.println("Image for " + name + " does not exist." + imageFile.getAbsolutePath());
+				if (!imageFile.exists()) 
+				{
+					System.err.println("Image for " + name + " does not exist." + imageFile.getAbsolutePath());
+				}
 				
 				String indexBase16 = Integer.toString(index, 16);
 				while (indexBase16.length() < 8) indexBase16 = "0" + indexBase16;
@@ -1065,7 +1070,7 @@ public class StuffGen
 				else
 				{
 					// Leave the map field as is -- including in the original fields overrides the override file
-//					System.out.println("Map Field: " + mapField);
+//					System.out.println("Map Field (ClassName = " + className + "): " + mapField);
 				}
 				
 				fields.put(fieldKey, mapField);

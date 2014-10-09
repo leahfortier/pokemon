@@ -410,6 +410,11 @@ public class ActivePokemon implements Serializable
 		return nature;
 	}
 	
+	public void assignAbility(Ability newAbility)
+	{
+		ability = newAbility;
+	}
+	
 	public Ability getActualAbility()
 	{
 		return ability;
