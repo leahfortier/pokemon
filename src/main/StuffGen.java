@@ -25,7 +25,9 @@ public class StuffGen
 	private static String MOVE_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "Attack.java";
 	private static String ABILITY_PATH = "src" + Global.FILE_SLASH + "pokemon" + Global.FILE_SLASH + "Ability.java";
 	private static String NAMESIES_PATH = "src" + Global.FILE_SLASH + "main" + Global.FILE_SLASH + "Namesies.java";
+	
 	private static String POKEMON_TILES_INDEX_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "pokemonTiles" + Global.FILE_SLASH + "index.txt";
+	private static String POKEMON_SMALL_TILES_INDEX_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "partyTiles" + Global.FILE_SLASH + "index.txt";
 	
 	private static String ITEM_PATH = "src" + Global.FILE_SLASH + "item" + Global.FILE_SLASH + "Item.java", 
 			ITEM_TILES_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "itemTiles" + Global.FILE_SLASH;
@@ -1436,21 +1438,37 @@ public class StuffGen
 		StringBuilder out = new StringBuilder();
 		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
 		{
-			out.append(String.format("%03d.png %07x%n", i, i*4));
-			out.append(String.format("%03d-back.png %07x%n", i, i*4 + 1));
+			out.append(String.format("%03d.png %08x%n", i, i*4));
+			out.append(String.format("%03d-back.png %08x%n", i, i*4 + 1));
 			
 			if (i >= 650)
 			{
-				out.append(String.format("%03d.png %07x%n", i, i*4 + 2));
-				out.append(String.format("%03d-back.png %07x%n", i, i*4 + 3));
+				out.append(String.format("%03d.png %08x%n", i, i*4 + 2));
+				out.append(String.format("%03d-back.png %08x%n", i, i*4 + 3));
 			}
 			else
 			{
-				out.append(String.format("%03d-shiny.png %07x%n", i, i*4 + 2));
-				out.append(String.format("%03d-shiny-back.png %07x%n", i, i*4 + 3));				
+				out.append(String.format("%03d-shiny.png %08x%n", i, i*4 + 2));
+				out.append(String.format("%03d-shiny-back.png %08x%n", i, i*4 + 3));				
 			}
 		}
 		
+		out.append("pokeball.png 00011111\n");
+		out.append("egg.png 00010000\n");
+		
 		printToFile(POKEMON_TILES_INDEX_PATH, out);
+	}
+	
+	private static void generatePokemonPartyTileIndices()
+	{
+		StringBuilder out = new StringBuilder();
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
+		{
+			out.append(String.format("%03d-small.png %08x%n", i, i));
+		}
+		
+		out.append("egg-small.png 00010000\n");
+		
+		printToFile(POKEMON_SMALL_TILES_INDEX_PATH, out);
 	}
 }

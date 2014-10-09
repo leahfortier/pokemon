@@ -22,7 +22,7 @@ public abstract class Evolution implements Serializable
 	}
 	
 	public abstract Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use);
-	public abstract String[] getEvolutions();
+	public abstract Namesies[] getEvolutions();
 	
 	public boolean canEvolve()
 	{
@@ -74,9 +74,9 @@ public abstract class Evolution implements Serializable
 			return false;
 		}
 
-		public String[] getEvolutions()
+		public Namesies[] getEvolutions()
 		{
-			return new String[0];
+			return new Namesies[0];
 		}
 	}
 	
@@ -113,9 +113,9 @@ public abstract class Evolution implements Serializable
 			return null;
 		}
 
-		public String[] getEvolutions()
+		public Namesies[] getEvolutions()
 		{
-			String[] s = new String[evolutions.length];
+			Namesies[] s = new Namesies[evolutions.length];
 			for (int i = 0; i < evolutions.length; i++) 
 			{
 				s[i] = evolutions[i].getEvolutions()[0];		
@@ -148,7 +148,7 @@ public abstract class Evolution implements Serializable
 			return null;
 		}
 
-		public String[] getEvolutions()
+		public Namesies[] getEvolutions()
 		{
 			return evolution.getEvolutions();
 		}
@@ -165,17 +165,24 @@ public abstract class Evolution implements Serializable
 		
 		public StatEvolution(String eq, String h, String l, Evolution e)
 		{
-			if (!(e instanceof LevelUpEvolution)) Global.error("Stat evolutions must be level up");
+			if (!(e instanceof LevelUpEvolution)) 
+			{
+				Global.error("Stat evolutions must be level up");
+			}
 			
 			evolution = (LevelUpEvolution)e;
 			equals = eq.equals("Equal");
+			
 			higher = Stat.valueOf(h.toUpperCase());
 			lower = Stat.valueOf(l.toUpperCase());
 		}
 
 		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use)
 		{
-			if (type != EvolutionCheck.LEVEL) return null;
+			if (type != EvolutionCheck.LEVEL) 
+			{
+				return null;
+			}
 			
 			int[] stats = p.getStats();
 			int high = stats[higher.index()], low = stats[lower.index()];
@@ -186,7 +193,7 @@ public abstract class Evolution implements Serializable
 			return null;
 		}
 
-		public String[] getEvolutions()
+		public Namesies[] getEvolutions()
 		{
 			return evolution.getEvolutions();
 		}
@@ -225,9 +232,9 @@ public abstract class Evolution implements Serializable
 			return null;
 		}
 
-		public String[] getEvolutions()
+		public Namesies[] getEvolutions()
 		{
-			return new String[] { PokemonInfo.getPokemonInfo(evolutionNumber).getName() };
+			return new Namesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
 		}
 	}
 
@@ -270,9 +277,9 @@ public abstract class Evolution implements Serializable
 			return null;
 		}
 
-		public String[] getEvolutions()
+		public Namesies[] getEvolutions()
 		{
-			return new String[] { PokemonInfo.getPokemonInfo(evolutionNumber).getName() };
+			return new Namesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
 		}
 	}
 
@@ -283,7 +290,6 @@ public abstract class Evolution implements Serializable
 		private int evolutionNumber;
 		private Namesies move;
 		
-		// TODO: Make sure this still works with the namesies
 		public MoveEvolution(int num, String m)
 		{
 			evolutionNumber = num;
@@ -319,9 +325,9 @@ public abstract class Evolution implements Serializable
 			return null;
 		}
 
-		public String[] getEvolutions()
+		public Namesies[] getEvolutions()
 		{
-			return new String[] { PokemonInfo.getPokemonInfo(evolutionNumber).getName() };
+			return new Namesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
 		}
 	}
 }

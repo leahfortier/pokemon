@@ -4386,7 +4386,7 @@ public abstract class Attack implements Serializable
 
 		public Moonlight()
 		{
-			super(Namesies.MOONLIGHT_ATTACK, "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.NORMAL, Category.STATUS);
+			super(Namesies.MOONLIGHT_ATTACK, "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.FAIRY, Category.STATUS);
 			super.selfTarget = true;
 		}
 
@@ -4398,7 +4398,6 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			// TODO: Need to change type of this move to fairy type along with charm and sweet kiss
 			switch (b.getWeather().namesies())
 			{
 				case CLEAR_SKIES_EFFECT:
@@ -9190,7 +9189,7 @@ public abstract class Attack implements Serializable
 
 		public Charm()
 		{
-			super(Namesies.CHARM_ATTACK, "The user gazes at the target rather charmingly, making it less wary. The target's Attack is harshly lowered.", 20, Type.NORMAL, Category.STATUS);
+			super(Namesies.CHARM_ATTACK, "The user gazes at the target rather charmingly, making it less wary. The target's Attack is harshly lowered.", 20, Type.FAIRY, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ATTACK.index()] = -2;
 		}
@@ -9267,7 +9266,7 @@ public abstract class Attack implements Serializable
 
 		public SweetKiss()
 		{
-			super(Namesies.SWEET_KISS_ATTACK, "The user kisses the target with a sweet, angelic cuteness that causes confusion.", 10, Type.NORMAL, Category.STATUS);
+			super(Namesies.SWEET_KISS_ATTACK, "The user kisses the target with a sweet, angelic cuteness that causes confusion.", 10, Type.FAIRY, Category.STATUS);
 			super.accuracy = 75;
 			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 		}

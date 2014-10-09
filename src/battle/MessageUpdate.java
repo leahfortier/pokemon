@@ -40,7 +40,8 @@ public class MessageUpdate
 		STAT_GAIN, 
 		ENTER_NAME, 
 		APPEND_TO_NAME, 
-		SHOW_POKEMON;
+		SHOW_POKEMON,
+		WIN_BATTLE;
 	}
 	
 	public MessageUpdate(String m)
@@ -359,12 +360,12 @@ public class MessageUpdate
 		return updateType == Update.EXIT_BATTLE;
 	}
 	
-	public boolean promptswitch ()
+	public boolean promptSwitch()
 	{
 		return updateType == Update.PROMPT_SWITCH;
 	}
 	
-	public boolean forceswitch ()
+	public boolean forceSwitch()
 	{
 		return updateType == Update.FORCE_SWITCH;
 	}

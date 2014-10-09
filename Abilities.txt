@@ -541,7 +541,13 @@ Iron Fist:
 	GetMultiplier: 
 	return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
 	###
-	Int: PowerChangeEffect
+	Int: PowerChangeEffect, EntryEffect
+	Enter:
+	if (victim.getPokemonInfo().namesies() == Namesies.PANGORO_POKEMON)
+	{
+		b.addMessage(victim.getName() + " does not break the mold!!!!!!!");
+	}
+	###
 *
 Natural Cure:
 	Desc: All status problems are healed upon switching out.

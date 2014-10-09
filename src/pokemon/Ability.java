@@ -1908,7 +1908,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class IronFist extends Ability implements PowerChangeEffect
+	private static class IronFist extends Ability implements PowerChangeEffect, EntryEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1925,6 +1925,14 @@ public abstract class Ability implements Serializable
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
+		}
+
+		public void enter(Battle b, ActivePokemon victim)
+		{
+			if (victim.getPokemonInfo().namesies() == Namesies.PANGORO_POKEMON)
+			{
+				b.addMessage(victim.getName() + " does not break the mold!!!!!!!");
+			}
 		}
 	}
 

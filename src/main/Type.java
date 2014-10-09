@@ -29,8 +29,8 @@ public enum Type implements Serializable
 	DRAGON(14, "Dragon", new Color(106, 90, 205), 14, 0x42), 
 	DARK(15, "Dark", new Color(49, 79, 79), 15, 0x41), 
 	STEEL(16, "Steel", new Color(200, 200, 210), 7, 0x4f),
-	FAIRY(17, "Fairy", new Color(221, 160, 221), -1, 0), // TODO: Need image
-	NONE(18, "None", Color.WHITE, -1, 0);
+	FAIRY(17, "Fairy", new Color(221, 160, 221), -1, 0x52),
+	NONE(18, "None", Color.WHITE, -1, 0x51);
 	
 	private static final double typeAdvantage[][] = {
 		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5,  1, 1}, // Normal

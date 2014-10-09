@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 import main.Global;
 import main.Namesies;
+import map.DialogueSequence;
 import pokemon.ActivePokemon;
 import pokemon.PC;
 import pokemon.Stat;
@@ -61,6 +62,8 @@ public class CharacterData extends Trainer implements Serializable
 	private PC pc;
 	private boolean[] badges;
 	private int repelSteps;
+	
+	public DialogueSequence messages;
 	
 	private ArrayList<String> logMessages;
 
@@ -165,6 +168,10 @@ public class CharacterData extends Trainer implements Serializable
 				// check to see if there is a message. If there is a message and no current dialogue, 
 				// set the message as the current dialogue.
 				// Do you think that would work?
+				
+				// TODO: Give choice if you want to use another. 
+				// Game variable needed
+				messages = new DialogueSequence("The effects of repel have worn off.", null, null, null);
 			}
 			
 			System.out.println("Repel Steps: " + repelSteps);
@@ -175,7 +182,17 @@ public class CharacterData extends Trainer implements Serializable
 		}
 		
 		// Hatch eggs
-		ActivePokemon.hatch(this, team);
+		for (ActivePokemon p : team)
+		{
+			if (p.isEgg() && p.hatch())
+			{
+				// TODO: Show hatch animation
+				this.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
+				
+				// Only one hatch per step
+				break;
+			}
+		}
 	}
 	
 	public boolean isUsingRepel()
@@ -266,16 +283,21 @@ public class CharacterData extends Trainer implements Serializable
 	
 	public void winBattle(Battle b, Opponent opponent)
 	{
+		
 		// Trainers pay up!
 		if (opponent instanceof Trainer)
 		{
 			Trainer opp = (Trainer)opponent;
-			b.addMessage(getName() + " defeated " + opp.getName() + "!");
+			b.addMessage(getName() + " defeated " + opp.getName() + "!", Update.WIN_BATTLE);
 			addGlobal(b.getWinGlobal());
 			
 			int datCash = opp.getDatCashMoney()*(hasEffect(Namesies.DOUBLE_MONEY_EFFECT) ? 2 : 1);
 			b.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
+		}
+		else 
+		{
+			b.addMessage("", Update.WIN_BATTLE);
 		}
 		
 		Global.invoke(getEffects().toArray(), EndBattleEffect.class, "afterBattle", this, b, front());

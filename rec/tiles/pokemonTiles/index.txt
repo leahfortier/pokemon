@@ -2875,3 +2875,6 @@
 719.png 0000b3e
 719-back.png 0000b3f
 
+pokeball.png 00011111
+egg.png 00010000
+
