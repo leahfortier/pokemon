@@ -360,12 +360,12 @@ public class MessageUpdate
 		return updateType == Update.EXIT_BATTLE;
 	}
 	
-	public boolean promptswitch ()
+	public boolean promptSwitch()
 	{
 		return updateType == Update.PROMPT_SWITCH;
 	}
 	
-	public boolean forceswitch ()
+	public boolean forceSwitch()
 	{
 		return updateType == Update.FORCE_SWITCH;
 	}

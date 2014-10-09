@@ -248,12 +248,26 @@ public class ActivePokemon implements Serializable
 		return isEgg;
 	}
 	
-	private boolean hatch()
+	public boolean hatch()
 	{	
-		eggSteps--;
+		if (!isEgg())
+		{
+			Global.error("Only eggs can hatch!");
+		}
 		
+		eggSteps--;
+
 //		System.out.println(pokemon.getName() + " Egg Steps: " + eggSteps);
-		return eggSteps <= 0;
+		
+		if (eggSteps > 0)
+		{
+			return false;
+		}
+		
+		this.isEgg = false;
+		this.nickname = pokemon.getName();
+		
+		return true;
 	}
 	
 	public String getEggMessage()
@@ -263,21 +277,6 @@ public class ActivePokemon implements Serializable
 		if (eggSteps > 10*255) return "Wonder what's inside? It needs more time though.";
 		else if (eggSteps > 5*255) return "It moves around inside sometimes. It must be close to hatching.";
 		return "It's making sounds inside! It's going to hatch soon!";
-	}
-	
-	public static void hatch(CharacterData player, List<ActivePokemon> team)
-	{
-		for (ActivePokemon p : team)
-		{
-			if (p.isEgg && p.hatch())
-			{
-				// TODO: Show hatch animation
-				p.isEgg = false;
-				p.nickname = p.pokemon.getName();
-				player.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
-				break; // Only one hatch per step
-			}
-		}
 	}
 	
 	private void setMoves()

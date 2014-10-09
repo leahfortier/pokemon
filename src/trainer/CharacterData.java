@@ -175,7 +175,17 @@ public class CharacterData extends Trainer implements Serializable
 		}
 		
 		// Hatch eggs
-		ActivePokemon.hatch(this, team);
+		for (ActivePokemon p : team)
+		{
+			if (p.isEgg() && p.hatch())
+			{
+				// TODO: Show hatch animation
+				this.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
+				
+				// Only one hatch per step
+				break;
+			}
+		}
 	}
 	
 	public boolean isUsingRepel()
