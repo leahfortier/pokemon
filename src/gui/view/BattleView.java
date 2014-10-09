@@ -751,7 +751,7 @@ public class BattleView extends View
 	// Handles updates for the bag view
 	private void updateBag(InputControl input)
 	{
-		// Update all bag butons and the back button
+		// Update all bag buttons and the back button
 		selectedButton = Button.update(bagButtons, selectedButton, input);
 		backButton.update(input, false, Control.BACK);
 		
@@ -1068,6 +1068,19 @@ public class BattleView extends View
 				game.setViewMode(ViewMode.MAP_VIEW);
 				update = Update.NONE;
 				break;	
+			case WIN_BATTLE:
+				
+				if(currentBattle.isWildBattle())
+				{
+					Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
+				}
+				else
+				{
+					// TODO: Get trainer win music
+					Global.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
+				}
+				
+				break;
 			default:
 				break;				
 		}
@@ -1205,7 +1218,7 @@ public class BattleView extends View
 				{
 					newStats = newMessage.getNewStats();
 					statGains = newMessage.getGain();
-				}				
+				}	
 			}
 			
 			if (newMessage.getMessage().length() == 0)
