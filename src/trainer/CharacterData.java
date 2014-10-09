@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 import main.Global;
 import main.Namesies;
+import map.DialogueSequence;
 import pokemon.ActivePokemon;
 import pokemon.PC;
 import pokemon.Stat;
@@ -61,6 +62,8 @@ public class CharacterData extends Trainer implements Serializable
 	private PC pc;
 	private boolean[] badges;
 	private int repelSteps;
+	
+	public DialogueSequence messages;
 	
 	private ArrayList<String> logMessages;
 
@@ -165,6 +168,10 @@ public class CharacterData extends Trainer implements Serializable
 				// check to see if there is a message. If there is a message and no current dialogue, 
 				// set the message as the current dialogue.
 				// Do you think that would work?
+				
+				// TODO: Give choice if you want to use another. 
+				// Game variable needed
+				messages = new DialogueSequence("The effects of repel have worn off.", null, null, null);
 			}
 			
 			System.out.println("Repel Steps: " + repelSteps);

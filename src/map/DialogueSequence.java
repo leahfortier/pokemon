@@ -62,6 +62,22 @@ public class DialogueSequence
 		triggers = Arrays.copyOf(triggers, max + 1);
 	}
 	
+	public DialogueSequence(String message, String[] next, String[] choices, String[] triggers)
+	{
+		name = "Temp";
+		text = message;
+		
+		if(next == null || choices == null || triggers == null)
+		{
+			triggers = choices = next = new String[0];
+		}
+		
+		this.next = next;
+		this.choices = choices;
+		this.triggers = triggers;
+		
+	}
+	
 	public void choose(int choiceIndex, MapView mapView, Game game)
 	{
 		if (choiceIndex < 0 || choiceIndex >= next.length)
@@ -79,5 +95,10 @@ public class DialogueSequence
 			if (trigger.isTriggered(game.charData))
 				trigger.execute(game);
 		}
+	}
+	
+	public String toString()
+	{
+		return "Name: "+name +" Text: " +text +" Next: "+Arrays.toString(next) +" Choices: "+Arrays.toString(choices) +" Triggers: "+Arrays.toString(triggers);
 	}
 }

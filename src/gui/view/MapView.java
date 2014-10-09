@@ -312,10 +312,11 @@ public class MapView extends View{
 					input.consumeKey(Control.ESC);
 					state = VisualState.MENU;
 				}
-	//			if (input.bKey.isDown){
-	//				input.bKey.consume();
-	//				game.setViewMode(Game.ViewMode.BATTLE_VIEW);
-	//			}
+//				if (input.isDown(Control.SPACE)){
+//					input.consumeKey(Control.SPACE);
+//					//game.setViewMode(Game.ViewMode.BATTLE_VIEW);
+//					game.setViewMode(Game.ViewMode.EVOLUTION_VIEW);
+//				}
 				break;
 			case MESSAGE:
 				if (input.isDown(Control.DOWN)){
@@ -454,6 +455,18 @@ public class MapView extends View{
 			Entity e = removeQueue.removeFirst();
 			entityList.remove(e);
 			entities[e.charX][e.charY] = null;
+		}
+		
+		//System.out.println(character.messages);
+		
+		if(character.messages != null && queuedDialogueName == null && currentDialogue == null)
+		{
+			currentDialogue = character.messages;
+			character.messages = null;
+			queuedDialogueName = null;
+			dialogueSelection = 0;
+
+			state = VisualState.MESSAGE;
 		}
 
 		if (queuedDialogueName != null && (currentDialogue == null || !queuedDialogueName.equals(currentDialogue.name)))
