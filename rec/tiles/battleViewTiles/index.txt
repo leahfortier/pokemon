@@ -37,6 +37,7 @@ MenuPokemonTabSelected.png		00000036
 
 TypeBug.png				00000040TypeDark.png				00000041TypeDragon.png				00000042TypeElectric.png			00000043TypeFighting.png			00000044TypeFire.png				00000045TypeFlying.png				00000046TypeGhost.png				00000047TypeGrass.png				00000048TypeGround.png				00000049TypeIce.png				0000004aTypeNormal.png				0000004bTypePoison.png				0000004cTypePsychic.png				0000004dTypeRock.png				0000004eTypeSteel.png				0000004fTypeWater.png				00000050
 TypeUnknown.png				00000051
+TypeFairy.png				00000052
 
 
 Background01.png	00000100
