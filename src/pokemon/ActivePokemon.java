@@ -10,6 +10,7 @@ import item.hold.PowerItem;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -121,6 +122,25 @@ public class ActivePokemon implements Serializable
 		isEgg = true;
 		eggSteps = p.getEggSteps();
 		nickname = "Egg";
+	}
+	
+	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy)
+	{
+		this(mommy.getPokemonInfo().getBaseEvolution(), 1, false, true);
+		
+		setIVs(daddy, mommy);
+		setStats();
+		setCharacteristic();
+		hiddenPowerType = computeHiddenPowerType();
+		
+		ArrayList<Nature> naturesToChooseFrom = new ArrayList<>();
+		if (daddy.getActualHeldItem().namesies() == Namesies.EVERSTONE_ITEM)
+			naturesToChooseFrom.add(daddy.getNature());
+		if (mommy.getActualHeldItem().namesies() == Namesies.EVERSTONE_ITEM)
+			naturesToChooseFrom.add(mommy.getNature());
+		
+		if (naturesToChooseFrom.size() > 0)
+			nature = naturesToChooseFrom.get((int)(Math.random() * naturesToChooseFrom.size()));
 	}
 	
 	/*
@@ -319,7 +339,57 @@ public class ActivePokemon implements Serializable
 	private void setIVs()
 	{
 		IVs = new int[Stat.NUM_STATS];
-		for (int i = 0; i < IVs.length; i++) IVs[i] = (int)(Math.random()*32);
+		for (int i = 0; i < IVs.length; i++) 
+			IVs[i] = (int)(Math.random()*32);
+	}
+	
+	private void setIVs(ActivePokemon daddy, ActivePokemon mommy)
+	{
+		Item daddysItem = daddy.getActualHeldItem();
+		Item mommysItem = mommy.getActualHeldItem();
+		
+		ArrayList<PowerItem> powerItems = new ArrayList<>();
+		if (daddysItem instanceof PowerItem && daddysItem.namesies() != Namesies.MACHO_BRACE_ITEM)
+			powerItems.add((PowerItem)daddysItem);
+		if (mommysItem instanceof PowerItem && mommysItem.namesies() != Namesies.MACHO_BRACE_ITEM)
+			powerItems.add((PowerItem)mommysItem);
+		
+		ArrayList<Stat> remainingStats = new ArrayList<>();
+		remainingStats.add(Stat.HP);
+		remainingStats.add(Stat.ATTACK);
+		remainingStats.add(Stat.DEFENSE);
+		remainingStats.add(Stat.SP_ATTACK);
+		remainingStats.add(Stat.SP_DEFENSE);
+		remainingStats.add(Stat.SPEED);
+		
+		int remainingIVsToInherit = daddysItem.namesies() == Namesies.DESTINY_KNOT_ITEM || mommysItem.namesies() == Namesies.DESTINY_KNOT_ITEM ? 5 : 3;
+		IVs = new int[Stat.NUM_STATS];
+		Arrays.fill(IVs, -1);
+		
+		if (powerItems.size() > 0)
+		{
+			PowerItem randomItem = powerItems.get((int)(Math.random() * powerItems.size()));
+			Stat stat = randomItem.toIncrease();
+			remainingStats.remove(stat);
+			
+			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
+			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
+			
+			remainingIVsToInherit--;
+		}
+		
+		while (remainingIVsToInherit --> 0)
+		{
+			Stat stat = remainingStats.get((int)(Math.random() * remainingStats.size()));
+			remainingStats.remove(stat);
+			
+			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
+			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
+		}
+		
+		for (int i = 0; i < IVs.length; i++)
+			if (IVs[i] == -1)
+				IVs[i] = (int)(Math.random()*32);
 	}
 	
 	private void setCharacteristic()
@@ -1280,5 +1350,10 @@ public class ActivePokemon implements Serializable
 		}
 		
 		this.getAttributes().setAttacking(false);
+	}
+	
+	public boolean canBreed()
+	{
+		return !isEgg && pokemon.canBreed();
 	}
 }

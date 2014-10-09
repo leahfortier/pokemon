@@ -50,8 +50,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private double weight;
 	private String flavorText;
 	private int eggSteps;
-	private String eggGroup1;
-	private String eggGroup2;
+	private String[] eggGroups;
 	
 	public PokemonInfo (int number, String name, int[] baseStats, int baseExp, String growthRate, 
 			String type1, String type2, TreeMap<Integer, List<Namesies>> levelUpMoves, int catchRate, 
@@ -78,8 +77,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.weight = weight;
 		this.flavorText = flavorText;
 		this.eggSteps = eggSteps;
-		this.eggGroup1 = eggGroup1;
-		this.eggGroup2 = eggGroup2;
+		this.eggGroups = new String[] {eggGroup1, eggGroup2};
 	}
 	
 	public Namesies[] setAbilities(String ability1, String ability2)
@@ -366,7 +364,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	
 	public boolean canBreed()
 	{
-		return !eggGroup1.equals("None") || !eggGroup2.equals("None");
+		return !eggGroups[0].equals("None") || !eggGroups[1].equals("None");
 	}
 	
 	public static class WildHoldItem implements Serializable
@@ -400,5 +398,44 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			
 			return (HoldItem)Item.noneItem();
 		}
+	}
+	
+	public PokemonInfo getBaseEvolution()
+	{
+		return getBaseEvolution(this);
+	}
+	
+	public static PokemonInfo getBaseEvolution(PokemonInfo targetPokes)
+	{
+		Set<String> allPokes = map.keySet();
+		while (true)
+		{
+			boolean changed = false;
+			for (String pokesName : allPokes)
+			{
+				PokemonInfo pokes = map.get(pokesName);
+				Namesies[] evolutionNamesies = pokes.getEvolution().getEvolutions();
+				for (Namesies namesies : evolutionNamesies)
+				{
+					if (namesies.equals(targetPokes.namesies()))
+					{
+						targetPokes = pokes;
+						changed = true;
+						break;
+					}
+				}
+				
+				if (changed)
+					break;
+			}
+			
+			if (!changed)
+				return targetPokes;
+		}
+	}
+	
+	public String[] getEggGroups()
+	{
+		return eggGroups;
 	}
 }
