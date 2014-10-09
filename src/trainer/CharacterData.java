@@ -15,10 +15,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import main.Game;
+import main.Game.ViewMode;
 import main.Global;
 import main.Namesies;
 import map.DialogueSequence;
 import pokemon.ActivePokemon;
+import pokemon.BaseEvolution;
 import pokemon.PC;
 import pokemon.Stat;
 import trainer.Pokedex.PokedexStatus;
@@ -65,11 +68,18 @@ public class CharacterData extends Trainer implements Serializable
 	
 	public DialogueSequence messages;
 	
+	public Game game;
+	
+	public ActivePokemon evolvingPokemon;
+	public BaseEvolution evolution;
+	
 	private ArrayList<String> logMessages;
 
-	public CharacterData()
+	public CharacterData(Game game)
 	{
 		super(DEFAULT_NAME, START_MONEY);
+		this.game = game;
+		
 		definedGlobals = new HashSet<>();
 		logMessages = new ArrayList<>();
 		
@@ -187,6 +197,8 @@ public class CharacterData extends Trainer implements Serializable
 			if (p.isEgg() && p.hatch())
 			{
 				// TODO: Show hatch animation
+				evolvingPokemon = p;
+				messages = new DialogueSequence("Huh?", null, null, new String[]{"Evolution_View_Trigger"});
 				this.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
 				
 				// Only one hatch per step
@@ -395,6 +407,13 @@ public class CharacterData extends Trainer implements Serializable
 		
 		b.addMessage(" ", Update.EXIT_BATTLE);
 		return true;
+	}
+	
+	public void setEvolution(ActivePokemon pokemon, BaseEvolution evolution)
+	{
+		this.evolvingPokemon = pokemon;
+		this.evolution = evolution;
+		game.setViewMode(ViewMode.EVOLUTION_VIEW);
 	}
 	
 	public void addLogMessage(MessageUpdate messageUpdate)

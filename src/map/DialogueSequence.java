@@ -67,9 +67,22 @@ public class DialogueSequence
 		name = "Temp";
 		text = message;
 		
-		if(next == null || choices == null || triggers == null)
+		int max = 0;
+		max = Math.max(max, next == null?0:next.length);
+		max = Math.max(max, choices == null?0:choices.length);
+		max = Math.max(max, triggers == null?0:triggers.length);
+		
+		if(next == null)
 		{
-			triggers = choices = next = new String[0];
+			next = new String[max];
+		}
+		if(choices == null)
+		{
+			choices = new String[max];
+		}
+		if(triggers == null)
+		{
+			triggers = new String[max];
 		}
 		
 		this.next = next;
