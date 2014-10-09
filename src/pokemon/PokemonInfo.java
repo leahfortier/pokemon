@@ -245,31 +245,47 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	
 	public static void baseEvolutionGenerator()
 	{
-		if (info == null) loadPokemonInfo();
+		if (info == null) 
+		{
+			loadPokemonInfo();
+		}
 		
-		Set<String> set = new HashSet<>();
-		for (int i = 1; i < info.length; i++) set.add(info[i].getName());
+		Set<Namesies> set = new HashSet<>();
+		for (int i = 1; i < info.length; i++) 
+		{
+			set.add(info[i].namesies());
+		}
 		
 		for (int i = 1; i < info.length; i++)
 		{
 			PokemonInfo p = info[i];
 			
-			if (!p.canBreed() && !p.getEvolution().canEvolve()) set.remove(p.getName());
-			for (String s : p.getEvolution().getEvolutions()) set.remove(s);
+			if (!p.canBreed() && !p.getEvolution().canEvolve()) 
+			{
+				set.remove(p.getName());
+			}
+			
+			for (Namesies s : p.getEvolution().getEvolutions()) 
+			{
+				set.remove(s);
+			}
 		}
 		
 		PokemonInfo[] p = new PokemonInfo[set.size()];
 		int i = 0;
-		for (String s : set) 
+		for (Namesies s : set) 
 		{
-			Namesies namesies = Namesies.getValueOf(s, NamesiesType.POKEMON);
-			p[i++] = getPokemonInfo(namesies);
+			p[i++] = getPokemonInfo(s);
 		}
 		
 		Arrays.sort(p);
 		
 		StringBuilder out = new StringBuilder();
-		for (PokemonInfo info : p) out.append(info.getName() + "\n");
+		for (PokemonInfo info : p) 
+		{
+			out.append(info.getName() + "\n");
+		}
+		
 		StuffGen.printToFile("BaseEvolutions.txt", out);
 	}
 	

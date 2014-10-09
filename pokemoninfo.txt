@@ -1143,7 +1143,7 @@ Clefairy
 70 45 48 60 65 35 
 113
 Fast
-Normal None
+Fairy None
 20
 0 Pound
 0 Growl
@@ -1186,7 +1186,7 @@ Clefable
 95 70 73 95 90 60 
 213
 Fast
-Normal None
+Fairy None
 4
 0 Sing
 0 Double Slap
@@ -1277,7 +1277,7 @@ Jigglypuff
 115 45 20 45 25 20 
 95
 Fast
-Normal None
+Normal Fairy
 14
 0 Sing
 5 Defense Curl
@@ -1312,7 +1312,7 @@ Wigglytuff
 140 70 45 85 50 45 
 191
 Fast
-Normal None
+Normal Fairy
 4
 0 Sing
 0 Disable
@@ -4262,7 +4262,7 @@ Mr. Mime
 40 45 65 100 120 90 
 161
 Medium Fast
-Psychic None
+Psychic Fairy
 21
 0 Magical Leaf
 0 Quick Guard
@@ -4544,7 +4544,7 @@ Gyarados
 95 125 79 60 100 81 
 189
 Slow
-Water Flying
+Water Dragon
 11
 0 Thrash
 20 Bite
@@ -6078,7 +6078,7 @@ Cleffa
 50 25 28 45 55 15 
 44
 Fast
-Normal None
+Fairy None
 7
 0 Pound
 0 Charm
@@ -6108,7 +6108,7 @@ Igglybuff
 90 30 15 40 20 15 
 42
 Fast
-Normal None
+Normal Fairy
 6
 0 Sing
 0 Charm
@@ -6135,7 +6135,7 @@ Togepi
 35 20 65 40 65 20 
 49
 Fast
-Normal None
+Fairy None
 15
 0 Growl
 0 Charm
@@ -6170,7 +6170,7 @@ Togetic
 55 40 85 80 105 40 
 142
 Fast
-Normal Flying
+Fairy Flying
 18
 0 Magical Leaf
 0 Growl
@@ -6414,7 +6414,7 @@ Marill
 70 20 50 20 50 40 
 88
 Fast
-Water None
+Water Fairy
 11
 0 Tackle
 2 Defense Curl
@@ -6445,7 +6445,7 @@ Azumarill
 100 50 80 60 80 50 
 185
 Fast
-Water None
+Water Fairy
 14
 0 Tackle
 0 Defense Curl
@@ -7315,7 +7315,7 @@ Snubbull
 60 80 50 40 40 30 
 60
 Fast
-Normal None
+Fairy None
 15
 0 Ice Fang
 0 Fire Fang
@@ -7350,7 +7350,7 @@ Granbull
 90 120 75 60 60 45 
 158
 Fast
-Normal None
+Fairy None
 16
 0 Ice Fang
 0 Fire Fang
@@ -9746,7 +9746,7 @@ Ralts
 28 25 25 45 35 40 
 40
 Slow
-Psychic None
+Psychic Fairy
 15
 0 Growl
 6 Confusion
@@ -9781,7 +9781,7 @@ Kirlia
 38 35 35 65 55 50 
 97
 Slow
-Psychic None
+Psychic Fairy
 18
 0 Growl
 0 Confusion
@@ -9821,7 +9821,7 @@ Gardevoir
 68 65 65 125 115 80 
 233
 Slow
-Psychic None
+Psychic Fairy
 19
 0 Healing Wish
 0 Growl
@@ -10384,7 +10384,7 @@ Azurill
 50 20 40 20 40 20 
 38
 Fast
-Normal None
+Normal Fairy
 6
 0 Splash
 2 Charm
@@ -10549,7 +10549,7 @@ Mawile
 50 85 85 55 55 50 
 133
 Fast
-Steel None
+Steel Fairy
 14
 0 Astonish
 6 Fake Tears
@@ -15280,7 +15280,7 @@ Mime Jr.
 20 25 45 70 90 60 
 62
 Medium Fast
-Psychic None
+Psychic Fairy
 18
 0 Tickle
 0 Barrier
@@ -16323,7 +16323,7 @@ Togekiss
 85 50 95 120 115 80 
 245
 Fast
-Normal Flying
+Fairy Flying
 4
 0 Sky Attack
 0 Extreme Speed
@@ -19093,7 +19093,7 @@ Cottonee
 40 27 60 37 50 66 
 56
 Medium Fast
-Grass None
+Grass Fairy
 16
 0 Absorb
 4 Growth
@@ -19129,7 +19129,7 @@ Whimsicott
 60 67 85 77 75 116 
 168
 Medium Fast
-Grass None
+Grass Fairy
 7
 0 Growth
 0 Leech Seed
@@ -24843,7 +24843,7 @@ Goomy
 45 50 35 55 75 40 
 60
 Slow
-Dragon None
+Dragon Water
 11
 0 Tackle
 0 Bubble
@@ -24874,7 +24874,7 @@ Sliggoo
 68 75 53 83 113 60 
 158
 Slow
-Dragon None
+Dragon Water
 11
 0 Tackle
 0 Bubble
@@ -24905,7 +24905,7 @@ Goodra
 90 100 70 110 150 80 
 270
 Slow
-Dragon None
+Dragon Water
 16
 0 Outrage
 0 Feint

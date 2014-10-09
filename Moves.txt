@@ -1852,7 +1852,6 @@ Gravity:
 Moonlight:
 	Int: SelfHealingMove
 	SelfHealing: 
-	// TODO: Need to change type of this move to fairy type along with charm and sweet kiss
 	switch (b.getWeather().namesies())
 	{
 		case CLEAR_SKIES_EFFECT:
@@ -1872,7 +1871,7 @@ Moonlight:
 	}
 	###
 	PP: 5
-	Type: Normal
+	Type: Fairy
 	Desc: The user restores its own HP. The amount of HP regained varies with the weather.
 	Cat: Status
 *
@@ -4633,7 +4632,7 @@ Eruption:
 Charm: 
 	Desc: The user gazes at the target rather charmingly, making it less wary. The target's Attack is harshly lowered.
 	PP: 20
-	Type: Normal
+	Type: Fairy
 	Acc: 100
 	Cat: Status
 	StatChange: 1 Attack -2
@@ -4685,7 +4684,7 @@ Spider Web:
 Sweet Kiss:
 	Desc: The user kisses the target with a sweet, angelic cuteness that causes confusion.
 	PP: 10
-	Type: Normal
+	Type: Fairy
 	Acc: 75
 	Cat: Status
 	Effect: Pokemon Confusion
