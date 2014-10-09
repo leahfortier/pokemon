@@ -25,6 +25,7 @@ public class StuffGen
 	private static String MOVE_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "Attack.java";
 	private static String ABILITY_PATH = "src" + Global.FILE_SLASH + "pokemon" + Global.FILE_SLASH + "Ability.java";
 	private static String NAMESIES_PATH = "src" + Global.FILE_SLASH + "main" + Global.FILE_SLASH + "Namesies.java";
+	private static String POKEMON_TILES_INDEX_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "pokemonTiles" + Global.FILE_SLASH + "index.txt";
 	
 	private static String ITEM_PATH = "src" + Global.FILE_SLASH + "item" + Global.FILE_SLASH + "Item.java", 
 			ITEM_TILES_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "itemTiles" + Global.FILE_SLASH;
@@ -1428,5 +1429,28 @@ public class StuffGen
 		out.println(num);
 		in.nextLine();
 		for (int i = 0; i < num; i++) out.println(in.nextLine());
+	}
+	
+	private static void generatePokemonTileIndices()
+	{
+		StringBuilder out = new StringBuilder();
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
+		{
+			out.append(String.format("%03d.png %07x%n", i, i*4));
+			out.append(String.format("%03d-back.png %07x%n", i, i*4 + 1));
+			
+			if (i >= 650)
+			{
+				out.append(String.format("%03d.png %07x%n", i, i*4 + 2));
+				out.append(String.format("%03d-back.png %07x%n", i, i*4 + 3));
+			}
+			else
+			{
+				out.append(String.format("%03d-shiny.png %07x%n", i, i*4 + 2));
+				out.append(String.format("%03d-shiny-back.png %07x%n", i, i*4 + 3));				
+			}
+		}
+		
+		printToFile(POKEMON_TILES_INDEX_PATH, out);
 	}
 }
