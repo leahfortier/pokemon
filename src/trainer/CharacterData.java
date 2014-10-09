@@ -266,16 +266,21 @@ public class CharacterData extends Trainer implements Serializable
 	
 	public void winBattle(Battle b, Opponent opponent)
 	{
+		
 		// Trainers pay up!
 		if (opponent instanceof Trainer)
 		{
 			Trainer opp = (Trainer)opponent;
-			b.addMessage(getName() + " defeated " + opp.getName() + "!");
+			b.addMessage(getName() + " defeated " + opp.getName() + "!", Update.WIN_BATTLE);
 			addGlobal(b.getWinGlobal());
 			
 			int datCash = opp.getDatCashMoney()*(hasEffect(Namesies.DOUBLE_MONEY_EFFECT) ? 2 : 1);
 			b.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
+		}
+		else 
+		{
+			b.addMessage("", Update.WIN_BATTLE);
 		}
 		
 		Global.invoke(getEffects().toArray(), EndBattleEffect.class, "afterBattle", this, b, front());

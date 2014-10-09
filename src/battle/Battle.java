@@ -11,7 +11,6 @@ import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
-import sound.SoundTitle;
 import trainer.CharacterData;
 import trainer.Opponent;
 import trainer.Pokedex.PokedexStatus;
@@ -325,17 +324,6 @@ public class Battle
 		// You have achieved total victory
 		if (opponent.blackout())
 		{
-			// TODO: Send message to notify battle view of victory and play music then.
-			if(isWildBattle())
-			{
-				Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
-			}
-			else
-			{
-				// TODO: Get trainer win music
-				Global.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
-			}
-			
 			player.winBattle(this, opponent);
 			
 			// WE'RE DONE HERE

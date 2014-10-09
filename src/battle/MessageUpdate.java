@@ -40,7 +40,8 @@ public class MessageUpdate
 		STAT_GAIN, 
 		ENTER_NAME, 
 		APPEND_TO_NAME, 
-		SHOW_POKEMON;
+		SHOW_POKEMON,
+		WIN_BATTLE;
 	}
 	
 	public MessageUpdate(String m)
