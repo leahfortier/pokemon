@@ -1794,7 +1794,7 @@ Minimize:
 	Type: Normal
 	Effect: Pokemon UsedMinimize
 *
-Wake-up Slap:
+Wake-Up Slap:
 	ClassName: WakeUpSlap
 	Desc: This attack inflicts big damage on a sleeping target. It also wakes the target up, however.
 	PP: 10
@@ -2153,7 +2153,7 @@ Cross Poison:
 	Acc: 100
 	PP: 20
 *
-X-scissor:
+X-Scissor:
 	ClassName: XScissor 
 	Desc: The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.
 	PP: 15
@@ -2704,7 +2704,7 @@ Mind Reader:
 	SelfTarget: True
 	Effect: Pokemon LockOn
 *
-Lock-on:
+Lock-On:
 	ClassName: LockOn
 	Desc: The user takes sure aim at the target. It ensures the next attack does not fail to hit the target.
 	PP: 5
@@ -5370,7 +5370,7 @@ Trick Room:
 	Effect: Battle TrickRoom
 	FieldMove: True
 *
-Roar Of Time:
+Roar of Time:
 	Desc: The user blasts the target with power that distorts even time. The user must rest on the next turn.
 	PP: 5
 	Type: Dragon
