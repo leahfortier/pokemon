@@ -83,3 +83,75 @@ pokemoninfo.txt changes:
 	ALL MOVES ARE DONE BESIDES THE ONES I SKIPPED
 	force switch, leafeon, b
 	Stat Gains when leveling up/evolving
+	
+	ONLY UPDATE ATTACKS
+	
+	Attack changes:
+	MAKE SURE BULBY CAN LEARN SOLAR BEAM AND IVY/VENY CAN LEARN SEED BOMB
+	BUTTERFREE RAGE POWEDER -> MORNING SUN
+	Nidoran lines: Helping Hand -> Poison Tail
+	Paras: Rage Powder -> Cross Poison
+	Growlithe: Helping Hand -> Howl
+	Kadabra: Ally Switch -> Barrier
+	Machamp: Wide Guard -> Superpower
+	Rapidash: Blaze Kick Level 0
+	Electrode: Keep Sonicboom
+	Hitmonlee: Wide Guard -> Low Kick
+	Sentret: Helping Hand -> Charm, Follow Me -> Covet
+	Togepi: Follow Me -> Captivate, After You -> Soft-Boiled
+	Hoppip: Rage Powder -> Silver Wind
+	Murkrow: Quash -> Roost
+	Tyrogue: Helping Hand -> Covet
+	Plusle: HH -> Sweet Kiss
+	Volbeat/Illumise: HH -> Dizzy Punch
+	Latias/Latios: HH -> Tailwind
+	Jirachi: HH -> Calm Mind
+	BUDEW NEEDS LEECH SEED
+	Cherubi: HH -> Tickle/Giga Drain
+	Buneary: Frustration -> Fake Tears, After You -> Covet
+	LEECH SEED LEAFEON
+	Gallade: HH -> Dual Chop
+	Regigas: Wide Guard -> Mega Punch
+	Patrat: After You -> Covet
+	Lillipup: HH -> Howl
+	Audino: HH -> Wish, After You -> Heal Bell
+	Throah: Wide Guard -> Brick Break
+	Leavanny: HH -> Seed Bomb (might change though)
+	Cottonee: HH -> Tailwind
+	Petilil: HH -> Heal Bell, After You -> Covet
+	Maractus: After You -> Wood Hammer
+	Tirtouga: Wide Guard -> Iron Defense
+	Minccino: HH -> Covet, After You -> Iron Tail
+	Foongus: Rage Powder -> Sludge Bomb
+	Alomomola: HH -> Mist, Wide Guard -> Refresh
+	Mienshao: Wide Guard -> Quick Guard
+	Volcarona: Rage Powder -> Morning Sun
+	Cobalion: HH -> Iron Defense
+	Terrakion: HH -> Stealth Rock
+	Virizion: HH -> Synthesis
+	Keldeo: HH -> Icy Wind
+	
+	Should probably just let Nidoran be 100% male again
+	
+	Clefairy's previous move list:
+		20
+		0 Pound
+		0 Growl
+		4 Encore
+		7 Sing
+		10 Double Slap
+		13 Defense Curl
+		16 Wish
+		19 Minimize
+		22 Wake-up Slap
+		25 Bestow
+		28 Cosmic Power
+		31 Lucky Chant
+		34 Metronome
+		37 Gravity
+		40 Moonlight
+		43 Stored Power
+		46 Light Screen
+		49 Healing Wish
+		52 Mimic
+		55 Meteor Mash

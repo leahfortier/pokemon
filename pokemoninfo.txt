@@ -1153,7 +1153,7 @@ Fairy None
 13 Defense Curl
 16 Wish
 19 Minimize
-22 Wake-up Slap
+22 Wake-Up Slap
 25 Bestow
 28 Cosmic Power
 31 Lucky Chant
@@ -1289,7 +1289,7 @@ Normal Fairy
 29 Rest
 33 Body Slam
 37 Gyro Ball
-41 Wake-up Slap
+41 Wake-Up Slap
 45 Mimic
 49 Hyper Voice
 53 Double-Edge
@@ -1300,7 +1300,7 @@ Item 40  Moon Stone
 50 Oran Berry
 25
 Cute Charm
-Frisk
+Competitive
 Balloon 
 20 12.1 When it wavers its big, round eyes, it begins singing a lullaby that makes everyone drowsy.
 2560
@@ -1325,7 +1325,7 @@ None
 50 Oran Berry
 25
 Cute Charm
-Frisk
+Competitive
 Balloon 
 39 26.5 Its fine fur feels sublime to the touch. It can expand its body by inhaling air.
 2560
@@ -1511,7 +1511,7 @@ Bug Grass
 38 Giga Drain
 43 Aromatherapy
 49 Cross Poison
-54 X-scissor
+54 X-Scissor
 190
 0 1 0 0 0 0 
 Level 47 24
@@ -1550,7 +1550,7 @@ Bug Grass
 44 Giga Drain
 51 Aromatherapy
 59 Cross Poison
-66 X-scissor
+66 X-Scissor
 75
 0 2 1 0 0 0 
 None
@@ -2022,7 +2022,7 @@ Water None
 25 Bubble Beam
 28 Mud Shot
 31 Belly Drum
-35 Wake-up Slap
+35 Wake-Up Slap
 38 Hydro Pump
 41 Mud Bomb
 255
@@ -2057,7 +2057,7 @@ Water None
 27 Bubble Beam
 32 Mud Shot
 37 Belly Drum
-43 Wake-up Slap
+43 Wake-Up Slap
 48 Hydro Pump
 53 Mud Bomb
 120
@@ -2217,7 +2217,7 @@ Fighting None
 25 Revenge
 31 Vital Throw
 34 Submission
-37 Wake-up Slap
+37 Wake-Up Slap
 43 Cross Chop
 46 Scary Face
 49 Dynamic Punch
@@ -2254,7 +2254,7 @@ Fighting None
 25 Revenge
 32 Vital Throw
 36 Submission
-40 Wake-up Slap
+40 Wake-Up Slap
 44 Cross Chop
 51 Scary Face
 55 Dynamic Punch
@@ -2292,7 +2292,7 @@ Fighting None
 25 Revenge
 32 Vital Throw
 36 Submission
-40 Wake-up Slap
+40 Wake-Up Slap
 44 Cross Chop
 51 Scary Face
 55 Dynamic Punch
@@ -2773,7 +2773,7 @@ Electric Steel
 17 Thunder Wave
 22 Spark
 27 Electro Ball
-30 Lock-on
+30 Lock-On
 33 Magnet Bomb
 38 Screech
 43 Discharge
@@ -2814,7 +2814,7 @@ Electric Steel
 17 Thunder Wave
 22 Spark
 27 Electro Ball
-30 Lock-on
+30 Lock-On
 34 Magnet Bomb
 40 Screech
 46 Discharge
@@ -4318,7 +4318,7 @@ Bug Flying
 29 Slash
 33 Razor Wind
 37 Double Team
-41 X-scissor
+41 X-Scissor
 45 Night Slash
 49 Double Hit
 53 Air Slash
@@ -4356,7 +4356,7 @@ Ice Psychic
 21 Heart Stamp
 25 Mean Look
 28 Fake Tears
-33 Wake-up Slap
+33 Wake-Up Slap
 39 Avalanche
 44 Body Slam
 49 Wring Out
@@ -4463,7 +4463,7 @@ Bug None
 18 Revenge
 21 Brick Break
 25 Vital Throw
-30 X-scissor
+30 X-Scissor
 35 Thrash
 38 Swords Dance
 42 Submission
@@ -4784,7 +4784,7 @@ Normal None
 29 Signal Beam
 34 Recycle
 40 Discharge
-45 Lock-on
+45 Lock-On
 51 Tri Attack
 56 Magic Coat
 62 Zap Cannon
@@ -5076,7 +5076,7 @@ None
 0
 -1
 Pressure
-Lightningrod
+Static
 Electric 
 63 116.0 A legendary Pok\u00e9mon that is said to live in thunderclouds. It freely controls lightning bolts.
 20480
@@ -5299,7 +5299,7 @@ None
 -1
 Synchronize
 None
-New Specie 
+New Species
 16 8.8 Because it can use all kinds of moves, many scientists believe Mew to be the ancestor of Pok\u00e9mon.
 30720
 None
@@ -6123,7 +6123,7 @@ Item 39  Sun Stone
 50 Oran Berry
 25
 Cute Charm
-Frisk
+Competitive
 Balloon 
 12 2.2 It has a soft and bouncy body. Once it starts bouncing, it becomes impossible to stop.
 2560
@@ -7251,7 +7251,7 @@ Ground Flying
 34 Slash
 38 Swords Dance
 42 U-turn
-45 X-scissor
+45 X-Scissor
 49 Guillotine
 60
 0 0 1 0 0 0 
@@ -7439,7 +7439,7 @@ Bug Steel
 29 Slash
 33 Razor Wind
 37 Iron Defense
-41 X-scissor
+41 X-Scissor
 45 Night Slash
 49 Double Hit
 53 Iron Head
@@ -7477,7 +7477,7 @@ Bug Rock
 37 Rollout
 43 Power Trick
 49 Bug Bite
-55 Power Split 
+55 Power Split
 55 Guard Split
 190
 0 0 1 0 1 0 
@@ -7824,7 +7824,7 @@ Medium Fast
 Water None
 12
 0 Water Gun
-6 Lock-on
+6 Lock-On
 10 Psybeam
 14 Aurora Beam
 19 Bubble Beam
@@ -8182,7 +8182,7 @@ Normal None
 29 Signal Beam
 34 Recycle
 40 Discharge
-45 Lock-on
+45 Lock-On
 51 Tri Attack
 56 Magic Coat
 62 Zap Cannon
@@ -8453,7 +8453,7 @@ Normal None
 35 Captivate
 41 Gyro Ball
 48 Heal Bell
-55 Wake-up Slap
+55 Wake-Up Slap
 45
 0 0 2 0 0 0 
 None
@@ -8913,7 +8913,7 @@ Grass None
 0 Quick Attack
 6 Absorb
 11 Quick Attack
-16 X-scissor
+16 X-Scissor
 17 Pursuit
 23 Screech
 29 Leaf Blade
@@ -9251,7 +9251,7 @@ Level 264 20
 50
 Pickup
 Gluttony
-Tinyracoon 
+Tiny Raccoon 
 16 38.6 It walks in zigzag fashion. It is good at finding items in the grass and even in the ground.
 3840
 Field
@@ -10143,7 +10143,7 @@ Bug Flying
 31 Slash
 38 Agility
 45 Baton Pass
-52 X-scissor
+52 X-Scissor
 120
 0 0 0 0 0 2 
 None
@@ -10320,7 +10320,7 @@ Fighting None
 25 Belly Drum
 28 Force Palm
 31 Seismic Toss
-34 Wake-up Slap
+34 Wake-Up Slap
 37 Endure
 40 Close Combat
 43 Reversal
@@ -10360,7 +10360,7 @@ Fighting None
 27 Belly Drum
 32 Force Palm
 37 Seismic Toss
-42 Wake-up Slap
+42 Wake-Up Slap
 47 Endure
 52 Close Combat
 57 Reversal
@@ -10424,7 +10424,7 @@ Rock None
 55 Discharge
 61 Stone Edge
 67 Zap Cannon
-73 Lock-on
+73 Lock-On
 79 Earth Power
 255
 0 0 1 0 0 0 
@@ -10459,7 +10459,7 @@ Normal None
 22 Assist
 25 Charm
 29 Feint Attack
-32 Wake-up Slap
+32 Wake-Up Slap
 36 Covet
 39 Heal Bell
 42 Double-Edge
@@ -10875,7 +10875,7 @@ None
 0
 50
 Static
-None
+Lightningrod
 Cheering 
 16 9.3 It cheers on friends with pom-poms made of sparks. It drains power from telephone poles.
 5120
@@ -10913,7 +10913,7 @@ None
 0
 50
 Static
-None
+Volt Absorb
 Cheering 
 16 9.3 It cheers on friends. If its friends are losing, its body lets off more and more sparks.
 5120
@@ -11737,7 +11737,7 @@ Normal None
 35 Taunt
 40 Detect
 44 False Swipe
-48 X-scissor
+48 X-Scissor
 53 Close Combat
 90
 0 2 0 0 0 0 
@@ -12023,7 +12023,7 @@ Ground Psychic
 37 Cosmic Power
 43 Extrasensory
 48 Guard Split
-48 Power Split 
+48 Power Split
 51 Earth Power
 54 Heal Block
 60 Explosion
@@ -12064,7 +12064,7 @@ Ground Psychic
 39 Extrasensory
 47 Cosmic Power
 54 Guard Split
-54 Power Split 
+54 Power Split
 59 Earth Power
 64 Heal Block
 72 Explosion
@@ -12169,7 +12169,7 @@ Rock Bug
 43 Slash
 49 Rock Blast
 55 Crush Claw
-61 X-scissor
+61 X-Scissor
 45
 0 1 0 0 0 0 
 Level 348 40
@@ -12203,7 +12203,7 @@ Rock Bug
 46 Slash
 55 Rock Blast
 67 Crush Claw
-73 X-scissor
+73 X-Scissor
 45
 0 2 0 0 0 0 
 None
@@ -12233,7 +12233,7 @@ Item 350  Prism Scale
 0
 50
 Swift Swim
-Adaptability
+Oblivious
 Fish 
 24 16.3 It is a shabby and ugly Pok\u00e9mon. However, it is very hardy and can survive on little water.
 5120
@@ -12267,7 +12267,7 @@ None
 0
 50
 Marvel Scale
-Cute Charm
+Competitive
 Tender 
 244 357.1 Its lovely scales are described as rainbow colored. They change color depending on the viewing angle.
 5120
@@ -12339,7 +12339,7 @@ None
 5 Persim Berry
 50
 Color Change
-None
+Protean
 Color Swap 
 39 48.5 It can freely change its body's color. The zigzag pattern on its belly doesn't change, however.
 5120
@@ -12451,7 +12451,7 @@ Level 356 37
 5 Reaper Cloth
 50
 Levitate
-None
+Frisk
 Requiem 
 31 33.1 It loves the crying of children. It startles bad kids by passing through walls and making them cry.
 6400
@@ -12495,7 +12495,7 @@ Item 477  Reaper Cloth
 5 Reaper Cloth
 50
 Pressure
-None
+Frisk
 Beckon 
 63 67.5 It seeks drifting will-o'-the-wisps and sucks them into its empty body. What happens inside is a mystery.
 6400
@@ -13201,7 +13201,7 @@ Rock None
 33 Ancient Power
 41 Iron Defense
 49 Charge Beam
-57 Lock-on
+57 Lock-On
 65 Zap Cannon
 73 Stone Edge
 81 Hammer Arm
@@ -13234,7 +13234,7 @@ Ice None
 33 Ancient Power
 41 Amnesia
 49 Charge Beam
-57 Lock-on
+57 Lock-On
 65 Zap Cannon
 73 Ice Beam
 81 Hammer Arm
@@ -13268,7 +13268,7 @@ Steel None
 41 Iron Defense
 41 Amnesia
 49 Charge Beam
-57 Lock-on
+57 Lock-On
 65 Zap Cannon
 73 Iron Head
 73 Flash Cannon
@@ -13347,7 +13347,7 @@ Dragon Psychic
 60 Psychic
 65 Heal Pulse
 70 Telekinesis
-75 Power Split 
+75 Power Split
 80 Dragon Pulse
 85 Memento
 3
@@ -13501,7 +13501,7 @@ None
 
 386
 Deoxys
-50 95 90 95 90 180 
+50 150 50 150 50 150
 270
 Slow
 Psychic None
@@ -13879,7 +13879,7 @@ Level 397 14
 5 Yache Berry
 50
 Keen Eye
-None
+Reckless
 Starling 
 12 4.4 Because they are weak individually, they form groups. However, they bicker if the group grows too big.
 3840
@@ -14063,7 +14063,7 @@ Bug None
 18 Sing
 22 Focus Energy
 26 Slash
-30 X-scissor
+30 X-Scissor
 34 Screech
 38 Taunt
 42 Night Slash
@@ -14397,7 +14397,7 @@ None
 
 413
 Wormadam
-60 69 95 69 95 36 
+60 59 85 79 105 36
 148
 Medium Fast
 Bug Grass
@@ -14416,7 +14416,7 @@ Bug Grass
 44 Psychic
 47 Leaf Storm
 45
-0 0 1 0 1 0
+0 0 0 0 2 0
 None
 1
 5 Silver Powder
@@ -16103,7 +16103,7 @@ Electric Steel
 17 Thunder Wave
 22 Spark
 27 Electro Ball
-30 Lock-on
+30 Lock-On
 34 Magnet Bomb
 40 Screech
 46 Discharge
@@ -16475,7 +16475,7 @@ Ground Flying
 34 Night Slash
 38 Swords Dance
 42 U-turn
-45 X-scissor
+45 X-Scissor
 49 Guillotine
 30
 0 0 2 0 0 0 
@@ -16548,7 +16548,7 @@ Normal None
 29 Signal Beam
 34 Embargo
 40 Discharge
-45 Lock-on
+45 Lock-On
 51 Tri Attack
 56 Magic Coat
 62 Zap Cannon
@@ -16630,7 +16630,7 @@ Rock Steel
 55 Discharge
 61 Stone Edge
 67 Zap Cannon
-73 Lock-on
+73 Lock-On
 79 Earth Power
 60
 0 0 1 0 2 0 
@@ -16683,7 +16683,7 @@ None
 5 Kasib Berry
 50
 Pressure
-None
+Frisk
 Gripper 
 87 235.0 It is said to take lost spirits into its pliant body and guide them home.
 6400
@@ -16706,7 +16706,7 @@ Ice Ghost
 13 Icy Wind
 19 Confuse Ray
 22 Ominous Wind
-28 Wake-up Slap
+28 Wake-Up Slap
 31 Captivate
 37 Ice Shard
 40 Hail
@@ -17152,10 +17152,10 @@ None
 
 492
 Shaymin
-100 103 75 120 75 127 
+100 100 100 100 100 100
 270
 Medium Slow
-Grass Grass
+Grass None
 12
 0 Growth
 10 Magical Leaf
@@ -18594,7 +18594,7 @@ Fighting None
 8 Bide
 12 Low Kick
 16 Rock Throw
-20 Wake-up Slap
+20 Wake-Up Slap
 24 Chip Away
 28 Bulk Up
 31 Rock Slide
@@ -18632,7 +18632,7 @@ Fighting None
 8 Bide
 12 Low Kick
 16 Rock Throw
-20 Wake-up Slap
+20 Wake-Up Slap
 24 Chip Away
 29 Bulk Up
 33 Rock Slide
@@ -18670,7 +18670,7 @@ Fighting None
 8 Bide
 12 Low Kick
 16 Rock Throw
-20 Wake-up Slap
+20 Wake-Up Slap
 24 Chip Away
 29 Bulk Up
 33 Rock Slide
@@ -18955,7 +18955,7 @@ Bug Grass
 29 Slash
 32 Seed Bomb
 36 Leaf Blade
-39 X-scissor
+39 X-Scissor
 43 Entrainment
 46 Swords Dance
 50 Leaf Storm
@@ -19406,10 +19406,10 @@ None
 
 555
 Darmanitan
-105 30 105 140 105 55 
+105 140 55 30 55 95
 168
 Medium Slow
-Fire Fire
+Fire None
 20
 0 Tackle
 0 Rollout
@@ -19502,7 +19502,7 @@ Bug Rock
 24 Stealth Rock
 29 Rock Slide
 31 Slash
-35 X-scissor
+35 X-Scissor
 37 Shell Smash
 41 Flail
 43 Rock Wrecker
@@ -19542,7 +19542,7 @@ Bug Rock
 24 Stealth Rock
 29 Rock Slide
 31 Slash
-38 X-scissor
+38 X-Scissor
 43 Shell Smash
 50 Flail
 55 Rock Wrecker
@@ -19690,7 +19690,7 @@ Ghost None
 21 Will-O-Wisp
 25 Ominous Wind
 29 Curse
-33 Power Split 
+33 Power Split
 33 Guard Split
 37 Shadow Ball
 41 Grudge
@@ -19728,7 +19728,7 @@ Ghost None
 21 Will-O-Wisp
 25 Ominous Wind
 29 Curse
-33 Power Split 
+33 Power Split
 33 Guard Split
 34 Scary Face
 39 Shadow Ball
@@ -20075,7 +20075,7 @@ Normal None
 21 Sing
 25 Tail Slap
 27 Charm
-31 Wake-up Slap
+31 Wake-Up Slap
 33 Echoed Voice
 37 Slam
 39 Captivate
@@ -20153,7 +20153,7 @@ Level 575 32
 50 Persim Berry
 25
 Frisk
-Shadow Tag
+Competitive
 Fixation 
 16 12.8 Their ribbonlike feelers increase their psychic power. They are always staring at something.
 5120
@@ -20193,7 +20193,7 @@ Level 576 41
 50 Persim Berry
 25
 Frisk
-Shadow Tag
+Competitive
 Manipulate 
 28 39.7 They use hypnosis to control people and Pok\u00e9mon. Tales of Gothorita leading people astray are told in every corner.
 5120
@@ -20233,7 +20233,7 @@ None
 50 Persim Berry
 25
 Frisk
-Shadow Tag
+Competitive
 Astral Body 
 59 97.0 Starry skies thousands of light-years away are visible in the space distorted by their intense psychic power.
 5120
@@ -20671,7 +20671,7 @@ Bug None
 32 Slash
 37 Take Down
 40 Scary Face
-44 X-scissor
+44 X-Scissor
 49 Flail
 52 Swords Dance
 56 Double-Edge
@@ -20709,7 +20709,7 @@ Bug Steel
 32 Slash
 37 Iron Head
 40 Iron Defense
-44 X-scissor
+44 X-Scissor
 49 Reversal
 52 Swords Dance
 56 Giga Impact
@@ -20890,7 +20890,7 @@ Water None
 17 Heal Pulse
 21 Protect
 25 Water Pulse
-29 Wake-up Slap
+29 Wake-Up Slap
 33 Soak
 37 Wish
 41 Brine
@@ -21080,7 +21080,7 @@ Steel None
 42 Discharge
 45 Metal Sound
 48 Shift Gear
-51 Lock-on
+51 Lock-On
 54 Zap Cannon
 57 Hyper Beam
 130
@@ -21118,7 +21118,7 @@ Steel None
 44 Discharge
 48 Metal Sound
 52 Shift Gear
-56 Lock-on
+56 Lock-On
 60 Zap Cannon
 64 Hyper Beam
 60
@@ -21156,7 +21156,7 @@ Steel None
 44 Discharge
 48 Metal Sound
 54 Shift Gear
-60 Lock-on
+60 Lock-On
 66 Zap Cannon
 72 Hyper Beam
 30
@@ -21278,7 +21278,7 @@ Psychic None
 43 Calm Mind
 46 Recover
 50 Guard Split
-50 Power Split 
+50 Power Split
 53 Synchronoise
 56 Wonder Room
 255
@@ -21319,7 +21319,7 @@ Psychic None
 45 Calm Mind
 50 Recover
 56 Guard Split
-58 Power Split 
+58 Power Split
 63 Synchronoise
 68 Wonder Room
 90
@@ -21852,7 +21852,7 @@ Human-like
 621
 Druddigon
 77 120 90 60 90 48 
-170
+173
 Medium Fast
 Dragon None
 16
@@ -22275,7 +22275,7 @@ Bug Steel
 36 Iron Head
 41 Dig
 46 Entrainment
-51 X-scissor
+51 X-Scissor
 56 Iron Defense
 61 Guillotine
 66 Metal Sound
@@ -22576,7 +22576,7 @@ None
 
 641
 Tornadus
-79 100 80 110 90 121 
+79 115 70 125 80 111 
 261
 Slow
 Flying None
@@ -22613,7 +22613,7 @@ None
 
 642
 Thundurus
-79 105 70 145 80 101 
+79 115 70 125 80 111 
 261
 Slow
 Electric Flying
@@ -22722,7 +22722,7 @@ None
 
 645
 Landorus
-89 145 90 105 80 91 
+89 125 90 115 80 101 
 270
 Slow
 Ground Flying
@@ -22745,7 +22745,7 @@ Ground Flying
 79 Hammer Arm
 85 Outrage
 3
-0 0 0 3 0 0
+0 3 0 0 0 0
 None
 0
 100
@@ -22759,7 +22759,7 @@ None
 
 646
 Kyurem
-125 120 90 170 100 95 
+125 130 90 130 90 95
 297
 Slow
 Dragon Ice
@@ -22828,7 +22828,7 @@ None
 
 648
 Meloetta
-100 128 90 77 77 128 
+100 77 77 128 128 90
 270
 Slow
 Normal Psychic
@@ -22842,7 +22842,7 @@ Normal Psychic
 31 Psybeam
 36 Echoed Voice
 43 U-turn
-50 Wake-up Slap
+50 Wake-Up Slap
 57 Psychic
 64 Hyper Voice
 71 Role Play
@@ -22875,14 +22875,14 @@ Bug Steel
 0 Metal Claw
 0 Screech
 7 Fury Cutter
-11 Lock-on
+11 Lock-On
 18 Flame Charge
 22 Magnet Bomb
 29 Slash
 33 Metal Sound
 40 Signal Beam
 44 Tri Attack
-51 X-scissor
+51 X-Scissor
 55 Bug Buzz
 62 Simple Beam
 66 Zap Cannon

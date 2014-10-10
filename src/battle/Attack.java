@@ -729,7 +729,7 @@ public abstract class Attack implements Serializable
 		map.put("Double Slap", new DoubleSlap());
 		map.put("Wish", new Wish());
 		map.put("Minimize", new Minimize());
-		map.put("Wake-up Slap", new WakeUpSlap());
+		map.put("Wake-Up Slap", new WakeUpSlap());
 		map.put("Cosmic Power", new CosmicPower());
 		map.put("Lucky Chant", new LuckyChant());
 		map.put("Metronome", new Metronome());
@@ -759,7 +759,7 @@ public abstract class Attack implements Serializable
 		map.put("Aromatherapy", new Aromatherapy());
 		map.put("Spore", new Spore());
 		map.put("Cross Poison", new CrossPoison());
-		map.put("X-scissor", new XScissor());
+		map.put("X-Scissor", new XScissor());
 		map.put("Foresight", new Foresight());
 		map.put("Odor Sleuth", new OdorSleuth());
 		map.put("Miracle Eye", new MiracleEye());
@@ -806,7 +806,7 @@ public abstract class Attack implements Serializable
 		map.put("Submission", new Submission());
 		map.put("Dynamic Punch", new DynamicPunch());
 		map.put("Mind Reader", new MindReader());
-		map.put("Lock-on", new LockOn());
+		map.put("Lock-On", new LockOn());
 		map.put("Kinesis", new Kinesis());
 		map.put("Barrier", new Barrier());
 		map.put("Telekinesis", new Telekinesis());
