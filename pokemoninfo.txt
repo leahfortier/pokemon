@@ -4,7 +4,7 @@ Bulbasaur
 64
 Medium Slow
 Grass Poison
-14
+15
 0 Tackle
 3 Growl
 7 Leech Seed
@@ -19,6 +19,7 @@ Grass Poison
 31 Worry Seed
 33 Synthesis
 37 Seed Bomb
+39 Solar Beam
 45
 0 0 0 1 0 0 
 Level 2 16
@@ -2188,7 +2189,7 @@ Psychic None
 16 Confusion
 18 Disable
 22 Miracle Eye
-24 Signal Beam
+24 Barrier
 28 Psybeam
 30 Reflect
 34 Telekinesis
@@ -2225,7 +2226,7 @@ Psychic None
 16 Confusion
 18 Disable
 22 Miracle Eye
-24 Signal Beam
+24 Barrier
 28 Psybeam
 30 Reflect
 34 Telekinesis
@@ -2692,7 +2693,8 @@ Rapidash
 175
 Medium Fast
 Fire None
-19
+20
+0 Blaze Kick
 0 Poison Jab
 0 Megahorn
 0 Growl
@@ -14560,13 +14562,14 @@ Budew
 56
 Medium Slow
 Grass Poison
-6
+7
 0 Absorb
 4 Growth
 7 Water Sport
 10 Stun Spore
 13 Mega Drain
-16 Worry Seed
+16 Leech Seed
+19 Worry Seed
 255
 0 0 0 1 0 0 
 Item 315  Leaf Stone
@@ -15274,7 +15277,7 @@ Normal None
 26 Baton Pass
 33 Agility
 36 Dizzy Punch
-43 Cosmic Power
+43 Fake Tears
 46 Charm
 50 Entrainment
 56 Bounce
@@ -19668,11 +19671,11 @@ Grass None
 22 Stun Spore
 26 Giga Drain
 28 Aromatherapy
-31 Heal Bell
+31 Fairy Wind
 35 Energy Ball
 37 Entrainment
 40 Sunny Day
-44 Fairy Wind
+44 Heal Bell
 46 Leaf Storm
 190
 0 0 0 1 0 0 
