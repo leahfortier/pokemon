@@ -37,6 +37,7 @@ import battle.effect.Effect;
 import battle.effect.Effect.CastSource;
 import battle.effect.Effect.EffectType;
 import battle.effect.EffectBlockerEffect;
+import battle.effect.FaintEffect;
 import battle.effect.IgnoreStageEffect;
 import battle.effect.ItemCondition;
 import battle.effect.MultiTurnMove;
@@ -1151,6 +1152,14 @@ public abstract class Attack implements Serializable
 		map.put("Mystical Fire", new MysticalFire());
 		map.put("Infestation", new Infestation());
 		map.put("Electrify", new Electrify());
+		map.put("Fell Stinger", new FellStinger());
+		map.put("Magnetic Flux", new MagneticFlux());
+		map.put("Sticky Web", new StickyWeb());
+		map.put("Belch", new Belch());
+		map.put("Venom Drench", new VenomDrench());
+		map.put("Electric Terrain", new ElectricTerrain());
+		map.put("Power-Up Punch", new PowerUpPunch());
+		map.put("Confide", new Confide());
 
 		for (String s : map.keySet())
 		{
@@ -13051,6 +13060,148 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.ELECTRIFY_ATTACK, "If the target is electrified before it uses a move during that turn, the target's move becomes Electric type.", 20, Type.ELECTRIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.ELECTRIFIED_EFFECT, EffectType.POKEMON));
+			super.priority = 1;
+		}
+	}
+
+	private static class FellStinger extends Attack implements FaintEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public FellStinger()
+		{
+			super(Namesies.FELL_STINGER_ATTACK, "When the user knocks out a target with this move, the user's Attack stat rises sharply.", 25, Type.BUG, Category.PHYSICAL);
+			super.power = 30;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public void deathwish(Battle b, ActivePokemon dead, ActivePokemon murderer)
+		{
+			murderer.getAttributes().modifyStage(murderer, murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
+		}
+	}
+
+	private static class MagneticFlux extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public MagneticFlux()
+		{
+			super(Namesies.MAGNETIC_FLUX_ATTACK, "The user manipulates magnetic fields which raises its Defense and Sp. Def stats.", 20, Type.ELECTRIC, Category.STATUS);
+			super.selfTarget = true;
+			super.statChanges[Stat.DEFENSE.index()] = 1;
+			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+		}
+	}
+
+	private static class StickyWeb extends Attack implements AccuracyBypassEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public StickyWeb()
+		{
+			super(Namesies.STICKY_WEB_ATTACK, "The user weaves a sticky net around the opposing team, which lowers their Speed stat upon switching into battle.", 20, Type.BUG, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.STICKY_WEB_EFFECT, EffectType.TEAM));
+			super.moveTypes.add(MoveType.FIELD);
+		}
+
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		{
+			return true;
+		}
+	}
+
+	private static class Belch extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Belch()
+		{
+			super(Namesies.BELCH_ATTACK, "The user lets out a damaging belch on the target. The user must eat a Berry to use this move.", 10, Type.POISON, Category.SPECIAL);
+			super.power = 120;
+			super.accuracy = 90;
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			if (!me.hasEffect(Namesies.EATEN_BERRY_EFFECT))
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return;
+			}
+			
+			super.apply(me, o, b);
+		}
+	}
+
+	private static class VenomDrench extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public VenomDrench()
+		{
+			super(Namesies.VENOM_DRENCH_ATTACK, "Opposing Pokémon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.", 20, Type.POISON, Category.STATUS);
+			super.accuracy = 100;
+			super.statChanges[Stat.ATTACK.index()] = -1;
+			super.statChanges[Stat.SP_ATTACK.index()] = -1;
+			super.statChanges[Stat.SPEED.index()] = -1;
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (!victim.hasStatus(StatusCondition.POISONED))
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return;
+			}
+			
+			super.applyEffects(b, user, victim);
+		}
+	}
+
+	private static class ElectricTerrain extends Attack implements AccuracyBypassEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ElectricTerrain()
+		{
+			super(Namesies.ELECTRIC_TERRAIN_ATTACK, "The user electrifies the ground under everyone's feet for five turns. Pokémon on the ground no longer fall asleep.", 10, Type.ELECTRIC, Category.STATUS);
+			super.effects.add(Effect.getEffect(Namesies.ELECTRIC_TERRAIN_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.FIELD);
+		}
+
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		{
+			return true;
+		}
+	}
+
+	private static class PowerUpPunch extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public PowerUpPunch()
+		{
+			super(Namesies.POWER_UP_PUNCH_ATTACK, "Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.", 20, Type.FIGHTING, Category.PHYSICAL);
+			super.power = 40;
+			super.accuracy = 100;
+			super.selfTarget = true;
+			super.statChanges[Stat.ATTACK.index()] = 1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	private static class Confide extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Confide()
+		{
+			super(Namesies.CONFIDE_ATTACK, "The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target's Sp. Atk stat.", 20, Type.NORMAL, Category.STATUS);
+			super.moveTypes.add(MoveType.SOUND_BASED);
+			super.moveTypes.add(MoveType.PROTECT_PIERCING);
+			super.statChanges[Stat.SP_ATTACK.index()] = -1;
 		}
 	}
 }

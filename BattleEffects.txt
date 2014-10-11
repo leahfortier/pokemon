@@ -152,8 +152,8 @@ MistyTerrain:
 	###
 *
 GrassyTerrain:
-	CastMessage: "Grass grew around the battlefield!"
-	SubsideMessage: "The grass disappeared from the battlefield."
+	CastMessage: "Grass sprouted around the battlefield!"
+	SubsideMessage: "The grass withered and died."
 	NumTurns: 5
 	Int: EndTurnEffect, PowerChangeEffect
 	ApplyEndTurn:
@@ -166,5 +166,19 @@ GrassyTerrain:
 	GetMultiplier:
 	// Grass-type moves are 50% stronger with the grassy terrain
 	return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
+	###
+*
+ElectricTerrain:
+	CastMessage: "Electricity crackled around the battlefield!"
+	SubsideMessage: "The electricity dissipated."
+	NumTurns: 5
+	Int: StatusPreventionEffect, PowerChangeEffect
+	StatusPrevent:
+	return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
+	###
+	StatusPreventMessage: "The electric terrain prevents sleep!"
+	GetMultiplier:
+	// Electric-type moves are 50% stronger with the electric terrain
+	return user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b) ? 1.5 : 1;
 	###
 *

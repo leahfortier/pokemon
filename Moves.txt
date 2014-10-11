@@ -5370,7 +5370,7 @@ Trick Room:
 	Effect: Battle TrickRoom
 	FieldMove: True
 *
-Roar of Time:
+Roar Of Time:
 	Desc: The user blasts the target with power that distorts even time. The user must rest on the next turn.
 	PP: 5
 	Type: Dragon
@@ -6817,4 +6817,94 @@ Electrify:
 	Type: Electric
 	Cat: Status
 	Effect: Pokemon Electrified
+	Priority: 1
+*
+Fell Stinger:
+	Desc: When the user knocks out a target with this move, the user's Attack stat rises sharply.
+	PP: 25
+	Type: Bug
+	Cat: Physical
+	Acc: 100
+	Pow: 30
+	Int: FaintEffect
+	Deathwish:
+	murderer.getAttributes().modifyStage(murderer, murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
+	###
+*
+Magnetic Flux:
+	Desc: The user manipulates magnetic fields which raises its Defense and Sp. Def stats.
+	PP: 20
+	Type: Electric
+	Cat: Status
+	StatChange: 2 Defense 1 Sp_Defense 1
+	SelfTarget: True
+*
+Sticky Web:
+	Type: Bug
+	Cat: Status
+	PP: 20
+	Effect: Team StickyWeb
+	FieldMove: True
+	Desc: The user weaves a sticky net around the opposing team, which lowers their Speed stat upon switching into battle.
+*
+Belch:
+	Desc: The user lets out a damaging belch on the target. The user must eat a Berry to use this move.
+	Type: Poison
+	PP: 10
+	Pow: 120
+	Cat: Special
+	Acc: 90
+	Apply:
+	if (!me.hasEffect(Namesies.EATEN_BERRY_EFFECT))
+	{
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		return;
+	}
+	
+	super.apply(me, o, b);
+	###
+*
+Venom Drench:
+	Desc: Opposing Pokémon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.
+	Type: Poison
+	Cat: Status
+	Acc: 100
+	StatChange: 3 Attack -1 Sp_Attack -1 Speed -1
+	ApplyEffects:
+	if (!victim.hasStatus(StatusCondition.POISONED))
+	{
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		return;
+	}
+	
+	super.applyEffects(b, user, victim);
+	###
+	PP: 20
+*
+Electric Terrain:
+	Desc: The user electrifies the ground under everyone's feet for five turns. Pokémon on the ground no longer fall asleep.
+	Type: Electric
+	PP: 10
+	Cat: Status
+	FieldMove: True
+	Effect: Battle ElectricTerrain
+*
+Power-Up Punch:
+	ClassName: PowerUpPunch
+	Desc: Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.
+	PP: 20
+	Type: Fighting
+	Pow: 40
+	Acc: 100
+	Cat: Physical
+	SelfTarget: True
+	StatChange: 1 Attack 1
+*
+Confide:
+	Desc: The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target's Sp. Atk stat.
+	PP: 20
+	Type: Normal
+	Cat: Status
+	MoveType: Sound_Based, Protect_Piercing
+	StatChange: 1 Sp_Attack -1
 *

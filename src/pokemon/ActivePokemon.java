@@ -970,22 +970,16 @@ public class ActivePokemon implements Serializable
 			b.addMessage("", hp, playerPokemon);
 			b.addMessage(nickname + " fainted!", StatusCondition.FAINTED, playerPokemon);
 			
-			ActivePokemon murderer = b.getOtherPokemon(playerPokemon);
+			ActivePokemon murderer = b.getOtherPokemon(user());
+
+			// Apply effects which occur when the user faints
+			Global.invoke(getEffects().toArray(), FaintEffect.class, "deathwish", b, this, murderer);
 			
-			// Apply effects which occur when the user faints 
-			for (PokemonEffect e : attributes.getEffects())
+			// If the pokemon fainted by direct result of an attack -- apply ability and attack deathwishes 
+			if (murderer.getAttributes().isAttacking())
 			{
-				if (!e.isActive() || !(e instanceof FaintEffect)) 
-				{
-					continue;
-				}
-				
-				((FaintEffect)e).deathwish(b, this, murderer);
-			}
-			
-			if (murderer.getAbility() instanceof FaintEffect)
-			{
-				((FaintEffect)murderer.getAbility()).deathwish(b, this, murderer);
+				Object[] invokees = new Object[] {murderer.getAttack(), murderer.getAbility()};
+				Global.invoke(invokees, FaintEffect.class, "deathwish", b, this, murderer);
 			}
 			
 			b.getEffects(playerPokemon).add(TeamEffect.getEffect(Namesies.DEAD_ALLY_EFFECT).newInstance());

@@ -1319,3 +1319,12 @@ Electrified:
 	return Type.ELECTRIC;
 	###
 *
+EatenBerry:
+	CanHave: True
+	Cast: 
+	if (!victim.hasEffect(this.namesies)) 
+	{
+		super.cast(b, caster, victim, source, printCast);
+	}
+	###
+*

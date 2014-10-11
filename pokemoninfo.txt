@@ -394,7 +394,7 @@ Bug Flying
 24 Psybeam
 28 Silver Wind
 30 Tailwind
-34 Rage Powder
+34 Morning Sun
 36 Safeguard
 40 Captivate
 42 Bug Buzz
@@ -980,7 +980,7 @@ Poison None
 13 Poison Sting
 19 Fury Swipes
 21 Bite
-25 Helping Hand
+25 Poison Tail
 31 Toxic Spikes
 33 Flatter
 37 Crunch
@@ -1013,7 +1013,7 @@ Poison None
 13 Poison Sting
 20 Fury Swipes
 23 Bite
-28 Helping Hand
+28 Poison Tail
 35 Toxic Spikes
 38 Flatter
 43 Crunch
@@ -1075,7 +1075,7 @@ Poison None
 13 Poison Sting
 19 Fury Attack
 21 Horn Attack
-25 Helping Hand
+25 Poison Tail
 31 Toxic Spikes
 33 Flatter
 37 Poison Jab
@@ -1110,7 +1110,7 @@ Poison None
 13 Poison Sting
 20 Fury Attack
 23 Horn Attack
-28 Helping Hand
+28 Poison Tail
 35 Toxic Spikes
 38 Flatter
 43 Poison Jab
@@ -1165,7 +1165,7 @@ Clefairy
 Fast
 Fairy None
 24
-0 After You
+0 Mimic
 0 Healing Wish
 0 Disarming Voice
 0 Pound
@@ -1174,7 +1174,7 @@ Fairy None
 7 Sing
 10 Double Slap
 13 Defense Curl
-16 Follow Me
+16 Light Screen
 19 Bestow
 22 Wake-Up Slap
 25 Minimize
@@ -1188,7 +1188,7 @@ Fairy None
 49 Gravity
 50 Meteor Mash
 55 Healing Wish
-58 After You
+58 Wish
 150
 2 0 0 0 0 0 
 Item 36  Moon Stone
@@ -1549,7 +1549,7 @@ Bug Grass
 33 Growth
 38 Giga Drain
 43 Aromatherapy
-49 Rage Powder
+49 Cross Poison
 54 X-Scissor
 190
 0 1 0 0 0 0 
@@ -1588,7 +1588,7 @@ Bug Grass
 37 Growth
 44 Giga Drain
 51 Aromatherapy
-59 Rage Powder
+59 Cross Poison
 66 X-Scissor
 75
 0 2 1 0 0 0 
@@ -1999,7 +1999,7 @@ Fire None
 6 Ember
 8 Leer
 10 Odor Sleuth
-12 Helping Hand
+12 Howl
 17 Flame Wheel
 19 Reversal
 21 Fire Fang
@@ -2188,7 +2188,7 @@ Psychic None
 16 Confusion
 18 Disable
 22 Miracle Eye
-24 Ally Switch
+24 Signal Beam
 28 Psybeam
 30 Reflect
 34 Telekinesis
@@ -2225,7 +2225,7 @@ Psychic None
 16 Confusion
 18 Disable
 22 Miracle Eye
-24 Ally Switch
+24 Signal Beam
 28 Psybeam
 30 Reflect
 34 Telekinesis
@@ -2328,7 +2328,7 @@ Machamp
 Medium Slow
 Fighting None
 17
-0 Wide Guard
+0 Superpower
 0 Low Kick
 0 Leer
 0 Focus Energy
@@ -3506,7 +3506,7 @@ Kingler
 Medium Fast
 Water None
 18
-0 Wide Guard
+0 Fury Cutter
 0 Mud Sport
 0 Bubble
 0 Vice Grip
@@ -3772,7 +3772,7 @@ Fighting None
 29 High Jump Kick
 33 Mind Reader
 37 Foresight
-41 Wide Guard
+41 Low Kick
 45 Blaze Kick
 49 Endure
 53 Mega Kick
@@ -4347,7 +4347,7 @@ Psychic Fairy
 0 Misty Terrain
 0 Magical Leaf
 0 Quick Guard
-0 Wide Guard
+0 Teeter Dance
 0 Power Swap
 0 Guard Swap
 0 Barrier
@@ -4722,8 +4722,7 @@ Eevee
 65
 Medium Fast
 Normal None
-17
-0 Helping Hand
+16
 0 Growl
 0 Tackle
 0 Tail Whip
@@ -4768,8 +4767,7 @@ Vaporeon
 184
 Medium Fast
 Water None
-14
-0 Helping Hand
+13
 0 Tackle
 0 Tail Whip
 5 Sand Attack
@@ -4802,8 +4800,7 @@ Jolteon
 184
 Medium Fast
 Electric None
-14
-0 Helping Hand
+13
 0 Tackle
 0 Tail Whip
 5 Sand Attack
@@ -4836,8 +4833,7 @@ Flareon
 184
 Medium Fast
 Fire None
-14
-0 Helping Hand
+13
 0 Tackle
 0 Tail Whip
 5 Sand Attack
@@ -5775,8 +5771,8 @@ Normal None
 4 Defense Curl
 7 Quick Attack
 13 Fury Swipes
-16 Helping Hand
-19 Follow Me
+16 Charm
+19 Covet
 25 Slam
 28 Rest
 31 Sucker Punch
@@ -5812,8 +5808,8 @@ Normal None
 4 Defense Curl
 7 Quick Attack
 13 Fury Swipes
-17 Helping Hand
-21 Follow Me
+17 Charm
+21 Covet
 28 Slam
 32 Rest
 36 Sucker Punch
@@ -6116,7 +6112,7 @@ Water Electric
 39 Discharge
 42 Aqua Ring
 45 Hydro Pump
-47 Ion Deluge
+47 Electrify
 50 Charge
 190
 1 0 0 0 0 0 
@@ -6159,7 +6155,7 @@ Water Electric
 47 Discharge
 52 Aqua Ring
 57 Hydro Pump
-60 Ion Deluge
+60 Electrify
 64 Charge
 75
 2 0 0 0 0 0 
@@ -6273,7 +6269,7 @@ Fairy None
 9 Sweet Kiss
 13 Yawn
 17 Encore
-21 Follow Me
+21 Draining Kiss
 25 Bestow
 29 Wish
 33 Ancient Power
@@ -6281,7 +6277,7 @@ Fairy None
 41 Baton Pass
 45 Double-Edge
 49 Last Resort
-53 After You
+53 Soft-Boiled
 190
 0 0 0 0 1 0 
 Item 176  Sun Stone
@@ -6312,7 +6308,7 @@ Fairy Flying
 13 Yawn
 14 Fairy Wind
 17 Encore
-21 Follow Me
+21 Draining Kiss
 25 Bestow
 29 Wish
 33 Ancient Power
@@ -6320,7 +6316,7 @@ Fairy Flying
 41 Baton Pass
 45 Double-Edge
 49 Last Resort
-53 After You
+53 Moonblast
 75
 0 0 0 0 2 0 
 Item 468  Shiny Stone
@@ -6488,7 +6484,7 @@ Electric None
 22
 0 Zap Cannon
 0 Magnetic Flux
-0 Ion Deluge
+0 Electrify
 0 Dragon Pulse
 0 Fire Punch
 0 Tackle
@@ -6565,7 +6561,7 @@ Water Fairy
 10 Defense Curl
 10 Rollout
 13 Bubble Beam
-16 Helping Hand
+16 Disarming Voice
 20 Aqua Tail
 23 Double-Edge
 28 Aqua Ring
@@ -6603,7 +6599,7 @@ Water Fairy
 10 Defense Curl
 10 Rollout
 13 Bubble Beam
-16 Helping Hand
+16 Disarming Voice
 21 Aqua Tail
 25 Double-Edge
 31 Aqua Ring
@@ -6710,7 +6706,7 @@ Grass Flying
 22 Leech Seed
 25 Mega Drain
 28 Acrobatics
-31 Rage Powder
+31 Silver Wind
 34 Cotton Spore
 37 U-turn
 40 Worry Seed
@@ -6752,7 +6748,7 @@ Grass Flying
 24 Leech Seed
 28 Mega Drain
 32 Acrobatics
-36 Rage Powder
+36 Silver Wind
 40 Cotton Spore
 44 U-turn
 48 Worry Seed
@@ -6794,7 +6790,7 @@ Grass Flying
 24 Leech Seed
 29 Mega Drain
 34 Acrobatics
-39 Rage Powder
+39 Silver Wind
 44 Cotton Spore
 49 U-turn
 54 Worry Seed
@@ -7034,8 +7030,7 @@ Espeon
 184
 Medium Fast
 Psychic None
-14
-0 Helping Hand
+13
 0 Tackle
 0 Tail Whip
 5 Sand Attack
@@ -7068,8 +7063,7 @@ Umbreon
 184
 Medium Fast
 Dark None
-14
-0 Helping Hand
+13
 0 Tackle
 0 Tail Whip
 5 Sand Attack
@@ -7117,7 +7111,7 @@ Dark Flying
 50 Tailwind
 55 Sucker Punch
 61 Torment
-65 Quash
+65 Roost
 30
 0 0 0 0 0 1 
 Item 430  Dusk Stone
@@ -8132,7 +8126,7 @@ Water Flying
 14 Wing Attack
 16 Headbutt
 19 Water Pulse
-23 Wide Guard
+23 Dive
 27 Take Down
 32 Agility
 36 Air Slash
@@ -8487,7 +8481,7 @@ Medium Fast
 Fighting None
 4
 0 Tackle
-0 Helping Hand
+0 Covet
 0 Fake Out
 0 Foresight
 75
@@ -8526,7 +8520,7 @@ Fighting None
 33 Feint
 37 Agility
 42 Gyro Ball
-46 Wide Guard
+46 Drill Run
 46 Quick Guard
 50 Detect
 55 Close Combat
@@ -10637,7 +10631,7 @@ Normal Fairy
 7 Bubble
 10 Charm
 13 Bubble Beam
-16 Helping Hand
+16 Disarming Voice
 20 Slam
 23 Bounce
 150
@@ -11118,7 +11112,7 @@ Electric None
 0 Growl
 3 Thunder Wave
 7 Quick Attack
-10 Helping Hand
+10 Sweet Kiss
 15 Spark
 17 Encore
 21 Play Nice
@@ -11160,7 +11154,7 @@ Electric None
 0 Growl
 3 Thunder Wave
 7 Quick Attack
-10 Helping Hand
+10 Sweet Kiss
 15 Spark
 17 Encore
 21 Charm
@@ -11204,7 +11198,7 @@ Bug None
 21 Tail Glow
 25 Signal Beam
 29 Protect
-33 Helping Hand
+33 Dizzy Punch
 37 Zen Headbutt
 41 Bug Buzz
 45 Double-Edge
@@ -11237,7 +11231,7 @@ Bug None
 21 Wish
 25 Encore
 29 Flatter
-33 Helping Hand
+33 Dizzy Punch
 37 Zen Headbutt
 41 Bug Buzz
 45 Covet
@@ -13661,7 +13655,7 @@ Dragon Psychic
 0 Charm
 0 Psywave
 5 Wish
-10 Helping Hand
+10 Tailwind
 15 Safeguard
 20 Dragon Breath
 25 Water Sport
@@ -13705,7 +13699,7 @@ Dragon Psychic
 0 Dragon Dance
 0 Psywave
 5 Heal Block
-10 Helping Hand
+10 Tailwind
 15 Safeguard
 20 Dragon Breath
 25 Protect
@@ -13844,7 +13838,7 @@ Steel Psychic
 0 Confusion
 5 Rest
 10 Swift
-15 Helping Hand
+15 Calm Mind
 20 Psychic
 25 Refresh
 30 Rest
@@ -15030,7 +15024,7 @@ Grass None
 0 Tackle
 7 Growth
 10 Leech Seed
-13 Helping Hand
+13 Tickle
 19 Magical Leaf
 22 Sunny Day
 28 Worry Seed
@@ -15064,7 +15058,7 @@ Grass None
 0 Growth
 7 Growth
 10 Leech Seed
-13 Helping Hand
+13 Tickle
 19 Magical Leaf
 22 Sunny Day
 25 Petal Dance
@@ -15274,13 +15268,13 @@ Normal None
 0 Foresight
 6 Endure
 10 Baby-Doll Eyes
-13 Frustration
+13 Sweet Kiss
 16 Quick Attack
 23 Jump Kick
 26 Baton Pass
 33 Agility
 36 Dizzy Punch
-43 After You
+43 Cosmic Power
 46 Charm
 50 Entrainment
 56 Bounce
@@ -15317,13 +15311,13 @@ Normal None
 0 Pound
 0 Foresight
 6 Endure
-13 Return
+13 Draining Kiss
 16 Quick Attack
 23 Jump Kick
 26 Baton Pass
 33 Agility
 36 Dizzy Punch
-43 After You
+43 Captivate
 46 Charm
 53 Entrainment
 56 Bounce
@@ -15388,7 +15382,7 @@ Dark Flying
 35 Nasty Plot
 45 Foul Play
 55 Night Slash
-65 Quash
+65 Roost
 75 Dark Pulse
 30
 0 2 0 0 0 0 
@@ -16388,7 +16382,7 @@ Water Flying
 14 Wing Attack
 16 Headbutt
 19 Water Pulse
-23 Wide Guard
+23 Dive
 27 Take Down
 32 Agility
 36 Air Slash
@@ -16695,7 +16689,7 @@ Medium Fast
 Electric None
 21
 0 Electric Terrain
-0 Ion Deluge
+0 Electrify
 0 Fire Punch
 0 Quick Attack
 0 Leer
@@ -16777,7 +16771,7 @@ Togekiss
 Fast
 Fairy Flying
 5
-0 After You
+0 Moonblast
 0 Sky Attack
 0 Extreme Speed
 0 Aura Sphere
@@ -16844,10 +16838,9 @@ Leafeon
 196
 Medium Fast
 Grass None
-14
+13
 0 Tail Whip
 0 Tackle
-0 Helping Hand
 5 Sand Attack
 9 Razor Leaf
 13 Quick Attack
@@ -16878,8 +16871,7 @@ Glaceon
 196
 Medium Fast
 Ice None
-14
-0 Helping Hand
+13
 0 Tackle
 0 Tail Whip
 5 Sand Attack
@@ -17051,7 +17043,7 @@ Psychic Fighting
 25 Heal Pulse
 31 Swords Dance
 36 Psycho Cut
-39 Helping Hand
+39 Dual Chop
 45 Feint
 50 False Swipe
 53 Protect
@@ -17351,7 +17343,7 @@ Steel Dragon
 33 Earth Power
 37 Aura Sphere
 42 Iron Tail
-46 Roar of Time
+46 Roar Of Time
 50 Flash Cannon
 30
 0 0 0 3 0 0 
@@ -17454,7 +17446,7 @@ Normal None
 0 Confuse Ray
 0 Foresight
 25 Revenge
-40 Wide Guard
+40 Mega Punch
 50 Zen Headbutt
 65 Payback
 75 Crush Grip
@@ -18106,7 +18098,7 @@ Normal None
 16 Crunch
 18 Hypnosis
 21 Super Fang
-23 After You
+23 Covet
 26 Work Up
 28 Hyper Fang
 31 Mean Look
@@ -18146,7 +18138,7 @@ Normal None
 18 Hypnosis
 20 Confuse Ray
 22 Super Fang
-25 After You
+25 Covet
 29 Psych Up
 32 Hyper Fang
 36 Mean Look
@@ -18177,7 +18169,7 @@ Normal None
 5 Odor Sleuth
 8 Bite
 10 Baby-Doll Eyes
-12 Helping Hand
+12 Howl
 15 Take Down
 19 Work Up
 22 Crunch
@@ -18211,7 +18203,7 @@ Normal None
 0 Tackle
 5 Odor Sleuth
 8 Bite
-12 Helping Hand
+12 Howl
 15 Take Down
 20 Work Up
 24 Crunch
@@ -18248,7 +18240,7 @@ Normal None
 0 Tackle
 5 Odor Sleuth
 8 Bite
-12 Helping Hand
+12 Howl
 15 Take Down
 20 Work Up
 24 Crunch
@@ -18753,7 +18745,7 @@ Zebstrika
 Medium Fast
 Electric None
 18
-0 Ion Deluge
+0 Electrify
 0 Quick Attack
 0 Tail Whip
 0 Charge
@@ -18770,7 +18762,7 @@ Electric None
 42 Agility
 47 Wild Charge
 53 Thrash
-58 Ion Deluge
+58 Electrify
 75
 0 0 0 0 0 2 
 None
@@ -19054,7 +19046,7 @@ Normal None
 0 Play Nice
 0 Pound
 0 Growl
-0 Helping Hand
+0 Wish
 5 Refresh
 10 Double Slap
 15 Attract
@@ -19062,7 +19054,7 @@ Normal None
 25 Entrainment
 30 Take Down
 35 Heal Pulse
-40 After You
+40 Heal Bell
 45 Simple Beam
 50 Double-Edge
 55 Last Resort
@@ -19326,7 +19318,7 @@ Fighting None
 33 Bulk Up
 37 Circle Throw
 41 Endure
-45 Wide Guard
+45 Brick Break
 48 Superpower
 50 Reversal
 45
@@ -19454,7 +19446,7 @@ Bug Grass
 15 Razor Leaf
 22 Struggle Bug
 29 Slash
-32 Helping Hand
+32 Me First
 34 Fell Stinger
 36 Leaf Blade
 39 X-Scissor
@@ -19612,7 +19604,7 @@ Grass Fairy
 22 Poison Powder
 26 Giga Drain
 28 Charm
-31 Helping Hand
+31 Tailwind
 35 Energy Ball
 37 Cotton Guard
 40 Sunny Day
@@ -19676,11 +19668,11 @@ Grass None
 22 Stun Spore
 26 Giga Drain
 28 Aromatherapy
-31 Helping Hand
+31 Heal Bell
 35 Energy Ball
 37 Entrainment
 40 Sunny Day
-44 After You
+44 Fairy Wind
 46 Leaf Storm
 190
 0 0 0 1 0 0 
@@ -19966,7 +19958,7 @@ Medium Fast
 Grass None
 21
 0 Cotton Guard
-0 After You
+0 Wood Hammer
 0 Peck
 0 Absorb
 3 Sweet Scent
@@ -19985,7 +19977,7 @@ Grass None
 48 Petal Blizzard
 50 Solar Beam
 55 Cotton Guard
-57 After You
+57 Wood Hammer
 255
 0 0 0 2 0 0 
 None
@@ -20281,7 +20273,7 @@ Water Rock
 15 Aqua Jet
 18 Ancient Power
 21 Crunch
-25 Wide Guard
+25 Iron Defense
 28 Brine
 31 Smack Down
 35 Curse
@@ -20320,7 +20312,7 @@ Water Rock
 15 Aqua Jet
 18 Ancient Power
 21 Crunch
-25 Wide Guard
+25 Iron Defense
 28 Brine
 31 Smack Down
 35 Curse
@@ -20587,7 +20579,7 @@ Normal None
 17
 0 Pound
 3 Baby-Doll Eyes
-7 Helping Hand
+7 Covet
 9 Tickle
 13 Double Slap
 15 Encore
@@ -20601,7 +20593,7 @@ Normal None
 39 Captivate
 43 Hyper Voice
 45 Last Resort
-49 After You
+49 Iron Tail
 255
 0 0 0 0 0 1 
 Item 573  Shiny Stone
@@ -20625,7 +20617,7 @@ Normal None
 6
 0 Bullet Seed
 0 Rock Blast
-0 Helping Hand
+0 Covet
 0 Tickle
 0 Sing
 0 Tail Slap
@@ -21273,7 +21265,7 @@ Grass Poison
 35 Synthesis
 39 Clear Smog
 43 Solar Beam
-45 Rage Powder
+45 Gastro Acid
 50 Spore
 190
 1 0 0 0 0 0 
@@ -21314,7 +21306,7 @@ Grass Poison
 35 Synthesis
 43 Clear Smog
 49 Solar Beam
-54 Rage Powder
+54 Gastro Acid
 62 Spore
 75
 2 0 0 0 0 0 
@@ -21412,7 +21404,7 @@ Fast
 Water None
 20
 0 Hydro Pump
-0 Wide Guard
+0 Refresh
 0 Healing Wish
 0 Pound
 0 Water Sport
@@ -21427,8 +21419,8 @@ Water None
 37 Wish
 41 Brine
 45 Safeguard
-49 Helping Hand
-53 Wide Guard
+49 Mist
+53 Refresh
 57 Healing Wish
 61 Hydro Pump
 75
@@ -21773,7 +21765,7 @@ Electric None
 0 Zap Cannon
 0 Gastro Acid
 0 Coil
-0 Ion Deluge
+0 Electrify
 0 Crush Claw
 0 Headbutt
 0 Acid
@@ -22388,7 +22380,7 @@ Fighting None
 33 Drain Punch
 37 Jump Kick
 41 U-turn
-45 Wide Guard
+45 Dual Chop
 49 Bounce
 56 High Jump Kick
 63 Reversal
@@ -23023,7 +23015,7 @@ Bug Fire
 25
 0 Fiery Dance
 0 Hurricane
-0 Rage Powder
+0 Morning Sun
 0 Heat Wave
 0 Quiver Dance
 0 Flare Blitz
@@ -23043,7 +23035,7 @@ Bug Fire
 59 Quiver Dance
 60 Heat Wave
 70 Bug Buzz
-80 Rage Powder
+80 Morning Sun
 90 Hurricane
 100 Fiery Dance
 15
@@ -23076,7 +23068,7 @@ Steel Fighting
 7 Double Kick
 13 Metal Claw
 19 Take Down
-25 Helping Hand
+25 Iron Defense
 31 Retaliate
 37 Iron Head
 42 Sacred Sword
@@ -23113,7 +23105,7 @@ Rock Fighting
 7 Double Kick
 13 Smack Down
 19 Take Down
-25 Helping Hand
+25 Stealth Rock
 31 Retaliate
 37 Rock Slide
 42 Sacred Sword
@@ -23151,7 +23143,7 @@ Grass Fighting
 7 Double Kick
 13 Magical Leaf
 19 Take Down
-25 Helping Hand
+25 Synthesis
 31 Retaliate
 37 Giga Drain
 42 Sacred Sword
@@ -23414,7 +23406,7 @@ Water Fighting
 7 Double Kick
 13 Bubble Beam
 19 Take Down
-25 Helping Hand
+25 Icy Wind
 31 Retaliate
 37 Aqua Tail
 43 Sacred Sword
@@ -24503,7 +24495,7 @@ Psychic None
 21
 0 Quick Guard
 0 Mean Look
-0 Helping Hand
+0 Assist
 0 Scratch
 0 Leer
 5 Covet
@@ -25312,11 +25304,10 @@ Sylveon
 184
 Medium Fast
 Fairy None
-15
+14
 0 Disarming Voice
 0 Tail Whip
 0 Tackle
-0 Helping Hand
 5 Sand Attack
 9 Fairy Wind
 13 Quick Attack

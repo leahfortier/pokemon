@@ -259,7 +259,7 @@ public class StuffGen
 
 			List<String> interfaces = new ArrayList<>();
 			
-			String additionalMethods = getAdditionalMethods(fields, interfaces);
+			String additionalMethods = getAdditionalMethods(gen, fields, interfaces);
 			
 			// NumTurns matches to both MinTurns and MaxTurns
 			if (fields.containsKey("NumTurns"))
@@ -314,7 +314,7 @@ public class StuffGen
 					activateInfo = new MethodInfo(activateHeader, "", "return " + activation + ";", "");
 				}
 				
-				additionalMethods = MethodInfo.writeFunction(activateInfo, "", className) + additionalMethods;
+				additionalMethods = MethodInfo.writeFunction(gen, activateInfo, "", className) + additionalMethods;
 			}
 			
 			String classString = createClass(className, gen.superClass, implementsString, extraFields, constructor, additionalMethods);
@@ -479,7 +479,7 @@ public class StuffGen
 			}
 		}
 		
-		private static String writeFunction(MethodInfo method, String fieldValue, String className)
+		private static String writeFunction(Generator gen, MethodInfo method, String fieldValue, String className)
 		{
 			if (method.header == null)
 			{
@@ -515,7 +515,7 @@ public class StuffGen
 			}
 			
 			body = method.begin + body + method.end;
-			body = replaceBody(body, className, fieldValue);
+			body = replaceBody(gen, body, className, fieldValue);
 			
 			return MethodInfo.writeFunction(method.header, body);
 		}
@@ -583,7 +583,7 @@ public class StuffGen
 			}
 		}
 		
-		private String writeFailure(HashMap<String, String> fields)
+		private String writeFailure(Generator gen, HashMap<String, String> fields)
 		{
 			String failure = "";
 			
@@ -661,7 +661,7 @@ public class StuffGen
 						space = true;
 					}
 					
-					body = replaceBody(body, className, pairValue);
+					body = replaceBody(gen, body, className, pairValue);
 					
 					failure += (first ? "" : " || ")  + body;
 					first = false;	
@@ -680,9 +680,10 @@ public class StuffGen
 		}
 	}
 	
-	private static String replaceBody(String body, String className, String fieldValue)
+	private static String replaceBody(Generator gen, String body, String className, String fieldValue)
 	{
 		body = body.replace("@ClassName", className);
+		body = body.replace("@SuperClass", gen.superClass.toUpperCase());
 		body = body.replace("{0}", fieldValue);
 		body = body.replace("{00}", fieldValue.toUpperCase());
 
@@ -977,16 +978,16 @@ public class StuffGen
 		return value;
 	}
 	
-	private static String getAdditionalMethods(HashMap<String, String> fields, List<String> interfaces)
+	private static String getAdditionalMethods(Generator gen, HashMap<String, String> fields, List<String> interfaces)
 	{
 		StringBuilder methods = new StringBuilder();
 	
 		if (failureInfo != null)
 		{
-			methods.append(failureInfo.writeFailure(fields));
+			methods.append(failureInfo.writeFailure(gen, fields));
 		}
 		
-		addMethodInfo(methods, overrideMethods, fields, interfaces, "");
+		addMethodInfo(gen, methods, overrideMethods, fields, interfaces, "");
 		
 		if (fields.containsKey("Int"))
 		{
@@ -1008,16 +1009,16 @@ public class StuffGen
 				Global.error("Invalid interface name " + interfaceName + " for " + fields.get("ClassName"));
 			}
 			
-			addMethodInfo(methods, list, fields, interfaces, interfaceName);
+			addMethodInfo(gen, methods, list, fields, interfaces, interfaceName);
 		}
 		
-		addMethodInfo(methods, overrideMethods, fields, null, "");
+		addMethodInfo(gen, methods, overrideMethods, fields, null, "");
 		
 		return methods.toString();
 	}
 	
 	// Interface name should be empty if it is an override
-	private static void addMethodInfo(StringBuilder methods, List<Entry<String, MethodInfo>> methodList, HashMap<String, String> fields, List<String> interfaces, String interfaceName)
+	private static void addMethodInfo(Generator gen, StringBuilder methods, List<Entry<String, MethodInfo>> methodList, HashMap<String, String> fields, List<String> interfaces, String interfaceName)
 	{
 		String className = fields.get("ClassName");
 		
@@ -1044,7 +1045,7 @@ public class StuffGen
 				fieldValue = "";
 			}
 			
-			String implementation = MethodInfo.writeFunction(methodInfo, fieldValue, className);
+			String implementation = MethodInfo.writeFunction(gen, methodInfo, fieldValue, className);
 			methods.append(implementation);
 			
 			for (String addInterface : methodInfo.addInterfaces)

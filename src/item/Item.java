@@ -8018,6 +8018,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -8108,6 +8111,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.healHealthFraction(1/3.0);
 				b.addMessage("", user.getHP(), user.user());
 			}
+			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
 		}
@@ -8200,6 +8206,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -8291,6 +8300,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -8381,6 +8393,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.healHealthFraction(1/3.0);
 				b.addMessage("", user.getHP(), user.user());
 			}
+			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
 		}
@@ -8490,6 +8505,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -8585,6 +8603,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -8666,6 +8687,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -8746,6 +8770,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.healHealthFraction(1/3.0);
 				b.addMessage("", user.getHP(), user.user());
 			}
+			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
 		}
@@ -8841,6 +8868,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.healHealthFraction(1/3.0);
 				b.addMessage("", user.getHP(), user.user());
 			}
+			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
 		}
@@ -10013,6 +10043,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -10101,6 +10134,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.healHealthFraction(1/3.0);
 				b.addMessage("", user.getHP(), user.user());
 			}
+			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
 		}
@@ -10191,6 +10227,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -10279,6 +10318,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.healHealthFraction(1/3.0);
 				b.addMessage("", user.getHP(), user.user());
 			}
+			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
 		}
@@ -10369,6 +10411,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -10457,6 +10502,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.healHealthFraction(1/3.0);
 				b.addMessage("", user.getHP(), user.user());
 			}
+			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
 		}
@@ -10777,6 +10825,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage("", user.getHP(), user.user());
 			}
 			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+			
 			return true;
 		}
 
@@ -10880,6 +10931,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.healHealthFraction(1/3.0);
 				b.addMessage("", user.getHP(), user.user());
 			}
+			
+			// Eat dat berry!!
+			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
 		}
