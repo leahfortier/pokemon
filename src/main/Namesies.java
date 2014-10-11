@@ -594,6 +594,9 @@ public enum Namesies
 	ELECTRIC_TERRAIN_ATTACK("Electric Terrain"),
 	POWER_UP_PUNCH_ATTACK("Power-Up Punch"),
 	CONFIDE_ATTACK("Confide"),
+	CUT_ATTACK("Cut"),
+	DAZZLING_GLEAM_ATTACK("Dazzling Gleam"),
+	STRENGTH_ATTACK("Strength"),
 	LEECH_SEED_EFFECT("LeechSeed"),
 	BAD_POISON_EFFECT("BadPoison"),
 	FLINCH_EFFECT("Flinch"),
@@ -1965,22 +1968,22 @@ public enum Namesies
 		return enumName.toUpperCase();
 	}
 	
-	private static boolean isSpecial(char c)
+	public static boolean isSpecial(char c)
 	{
 		return !isLower(c) && !isUpper(c) && !isNumber(c) && c != '_';
 	}
 	
-	private static boolean isUpper(char c)
+	public static boolean isUpper(char c)
 	{
 		return c >= 'A' && c <= 'Z';
 	}
 	
-	private static boolean isLower(char c)
+	public static boolean isLower(char c)
 	{
 		return c >= 'a' && c <= 'z';
 	}
 	
-	private static boolean isNumber(char c)
+	public static boolean isNumber(char c)
 	{
 		return c >= '0' && c <= '9';
 	}

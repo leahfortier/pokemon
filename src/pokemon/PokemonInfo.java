@@ -14,12 +14,12 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
+import battle.Attack;
 import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;
 import main.StuffGen;
 import main.Type;
-import battle.Attack;
 
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 {
@@ -38,7 +38,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private int baseExp;
 	private GrowthRate growthRate;
 	private Type[] type;
-	private TreeMap<Integer, List<Namesies>> levelUpMoves; 
+	private TreeMap<Integer, List<Namesies>> levelUpMoves;
+	private HashSet<Namesies> tmMoves;
 	private int catchRate;
 	private int[] givenEVs;
 	private Evolution evolution;
@@ -52,9 +53,9 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private int eggSteps;
 	private String[] eggGroups;
 	
-	public PokemonInfo (int number, String name, int[] baseStats, int baseExp, String growthRate, 
-			String type1, String type2, TreeMap<Integer, List<Namesies>> levelUpMoves, int catchRate, 
-			int[] givenEVs, Evolution evolution, List<WildHoldItem> wildHoldItems, int genderRatio, 
+	public PokemonInfo(int number, String name, int[] baseStats, int baseExp, String growthRate, 
+			String type1, String type2, TreeMap<Integer, List<Namesies>> levelUpMoves, HashSet<Namesies> tmMoves, 
+			int catchRate, int[] givenEVs, Evolution evolution, List<WildHoldItem> wildHoldItems, int genderRatio, 
 			String ability1, String ability2, String classification, int height, double weight, 
 			String flavorText, int eggSteps, String eggGroup1, String eggGroup2)
 	{	
@@ -66,6 +67,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.growthRate = GrowthRate.getRate(growthRate);
 		this.type = new Type[] {Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase())};
 		this.levelUpMoves = levelUpMoves;
+		this.tmMoves = tmMoves;
 		this.catchRate = catchRate;
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
@@ -327,9 +329,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		{
 			int num = in.nextInt();
 			in.nextLine();
+			
 			info[num] = new PokemonInfo(num, in.nextLine().trim(), sixIntArray(in),
 					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.next(), in.next(), 
-					createLevelUpMoves(in), in.nextInt(), sixIntArray(in), Evolution.readEvolution(in),
+					createLevelUpMoves(in), createTmMoves(in), in.nextInt(), sixIntArray(in), Evolution.readEvolution(in),
 					WildHoldItem.createList(in), in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), 
 					in.nextLine().trim(), in.nextLine().trim(), in.nextInt(), in.nextDouble(), 
 					in.nextLine().trim(), in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim());
@@ -342,7 +345,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private static int[] sixIntArray(Scanner in)
 	{
 		int[] arr = new int[6];
-		for (int i = 0; i < 6; i++) arr[i] = in.nextInt();
+		for (int i = 0; i < 6; i++) 
+		{
+			arr[i] = in.nextInt();
+		}
+		
 		return arr;
 	}
 	
@@ -360,12 +367,31 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			}
 			
 			String attackName = in.nextLine().trim();
+//			Namesies namesies = Namesies.getValueOf(attackName, NamesiesType.ATTACK);
 			Namesies namesies = Attack.getAttackFromName(attackName).namesies();
 			
 			levelUpMoves.get(level).add(namesies);
 		}
 		
 		return levelUpMoves;
+	}
+	
+	private static HashSet<Namesies> createTmMoves(Scanner in)
+	{
+		HashSet<Namesies> tmMoves = new HashSet<>();
+		int numMoves = in.nextInt();
+		in.nextLine();
+		
+		for (int i = 0; i < numMoves; i++)
+		{
+			String attackName = in.nextLine().trim();
+//			Namesies namesies = Namesies.getValueOf(attackName, NamesiesType.ATTACK);
+			Namesies namesies = Attack.getAttackFromName(attackName).namesies();
+			
+			tmMoves.add(namesies);
+		}
+		
+		return tmMoves;
 	}
 	
 	public List<Namesies> getMoves(int level)
@@ -391,6 +417,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		
 		public WildHoldItem(int c, String i)
 		{
+			if (!Item.isItem(i))
+			{
+				Global.error("Invalid wild hold item name " + i);
+			}
+			
 			item = (HoldItem)Item.getItemFromName(i);
 			chance = c;
 		}

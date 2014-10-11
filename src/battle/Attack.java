@@ -1160,6 +1160,9 @@ public abstract class Attack implements Serializable
 		map.put("Electric Terrain", new ElectricTerrain());
 		map.put("Power-Up Punch", new PowerUpPunch());
 		map.put("Confide", new Confide());
+		map.put("Cut", new Cut());
+		map.put("Dazzling Gleam", new DazzlingGleam());
+		map.put("Strength", new Strength());
 
 		for (String s : map.keySet())
 		{
@@ -13202,6 +13205,44 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.statChanges[Stat.SP_ATTACK.index()] = -1;
+		}
+	}
+
+	private static class Cut extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Cut()
+		{
+			super(Namesies.CUT_ATTACK, "The target is cut with a scythe or a claw. It can also be used to cut down thin trees.", 30, Type.NORMAL, Category.PHYSICAL);
+			super.power = 50;
+			super.accuracy = 95;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	private static class DazzlingGleam extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public DazzlingGleam()
+		{
+			super(Namesies.DAZZLING_GLEAM_ATTACK, "The user damages opposing Pokémon by emitting a powerful flash.", 10, Type.FAIRY, Category.SPECIAL);
+			super.power = 80;
+			super.accuracy = 100;
+		}
+	}
+
+	private static class Strength extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Strength()
+		{
+			super(Namesies.STRENGTH_ATTACK, "The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.", 15, Type.NORMAL, Category.PHYSICAL);
+			super.power = 80;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 }

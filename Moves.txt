@@ -202,7 +202,6 @@ Growth:
 	PP: 20
 *
 Double-Edge:
-	ClassName: DoubleEdge
 	Desc: A reckless, life-risking tackle. It also damages the user by a fairly large amount, however.
 	PP: 15
 	Pow: 120
@@ -537,7 +536,6 @@ Spiky Shield:
 	Priority: 4
 *
 King's Shield:
-	ClassName: KingsShield
 	Desc: The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.
 	Type: Steel
 	PP: 10
@@ -1795,7 +1793,6 @@ Minimize:
 	Effect: Pokemon UsedMinimize
 *
 Wake-Up Slap:
-	ClassName: WakeUpSlap
 	Desc: This attack inflicts big damage on a sleeping target. It also wakes the target up, however.
 	PP: 10
 	Pow: 70
@@ -1916,7 +1913,6 @@ Imprison:
 *
 Will-O-Wisp:
 	Desc: The user shoots a sinister, bluish-white flame at the target to inflict a burn.
-	ClassName: WillOWisp
 	Status: Burned
 	PP: 15
 	Acc: 85
@@ -2154,7 +2150,6 @@ Cross Poison:
 	PP: 20
 *
 X-Scissor:
-	ClassName: XScissor 
 	Desc: The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.
 	PP: 15
 	Type: Bug
@@ -2237,7 +2232,6 @@ Psychic:
 	EffChance: 10
 *
 Mud-Slap:
-	ClassName: MudSlap
 	Desc: The user hurls mud in the target's face to inflict damage and lower its accuracy.
 	PP: 10
 	Type: Ground
@@ -2454,7 +2448,6 @@ Trick-or-Treat:
 	Type: Ghost
 	Cat: Status
 	Acc: 100
-	ClassName: TrickOrTreat
 *
 Forest's Curse:
 	Int: ChangeTypeMove
@@ -2467,7 +2460,6 @@ Forest's Curse:
 	Type: Grass
 	Cat: Status
 	Acc: 100
-	ClassName: ForestsCurse
 *
 Psych Up:
 	Desc: The user hypnotizes itself into copying any stat change made by the target.
@@ -2705,7 +2697,6 @@ Mind Reader:
 	Effect: Pokemon LockOn
 *
 Lock-On:
-	ClassName: LockOn
 	Desc: The user takes sure aim at the target. It ensures the next attack does not fail to hit the target.
 	PP: 5
 	Type: Normal
@@ -4028,7 +4019,6 @@ Hammer Arm:
 	SelfTarget: True
 *
 Soft-Boiled:
-	ClassName: SoftBoiled
 	Desc: The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.
 	PP: 10
 	Type: Normal
@@ -5814,7 +5804,6 @@ Explosion:
 	MoveType: User_Faints
 *
 Self-Destruct:
-	ClassName: SelfDestruct
 	Desc: The user attacks everything around it by causing an explosion. The user faints upon using this move.
 	PP: 5
 	Type: Normal
@@ -6137,7 +6126,6 @@ Parting Shot:
 	SelfSwitching: True
 *
 U-turn:
-	ClassName: UTurn
 	Desc: After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.
 	PP: 20
 	Type: Bug
@@ -6425,7 +6413,6 @@ Ice Burn:
 	Status: Burned
 *
 V-create:
-	ClassName: VCreate
 	Desc: With a hot flame on its forehead, the user hurls itself at its target. It lowers the user's Defense, Sp. Def, and Speed stats.
 	Type: Fire
 	PP: 5
@@ -6493,7 +6480,6 @@ Land's Wrath:
 	Pow: 90
 	Acc: 100
 	PP: 10
-	ClassName: LandsWrath
 	Cat: Physical
 *
 Phantom Force:
@@ -6605,7 +6591,6 @@ Disarming Voice:
 	Cat: Special
 *
 Freeze-Dry:
-	ClassName: FreezeDry
 	Desc: The user rapidly cools the target. This may also leave the target frozen. This move is super effective on Water types.
 	PP: 20
 	Type: Ice
@@ -6641,7 +6626,6 @@ Flying Press:
 	###
 *
 Topsy-Turvy:
-	ClassName: TopsyTurvy
 	Acc: 100
 	Type: Dark
 	Cat: Status
@@ -6705,7 +6689,6 @@ Aromatic Mist:
 	StatChange: 1 Sp_Defense 1
 *
 Baby-Doll Eyes
-	ClassName: BabyDollEyes
 	Desc: The user stares at the target with its baby-doll eyes, which lowers its Attack stat. This move always goes first.
 	PP: 30
 	Priority: 1
@@ -6890,7 +6873,6 @@ Electric Terrain:
 	Effect: Battle ElectricTerrain
 *
 Power-Up Punch:
-	ClassName: PowerUpPunch
 	Desc: Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.
 	PP: 20
 	Type: Fighting
@@ -6907,4 +6889,28 @@ Confide:
 	Cat: Status
 	MoveType: Sound_Based, Protect_Piercing
 	StatChange: 1 Sp_Attack -1
+*
+Cut:
+	Desc: The target is cut with a scythe or a claw. It can also be used to cut down thin trees.
+	PP: 30
+	Pow: 50
+	Acc: 95
+	Cat: Physical
+	Type: Normal
+*
+Dazzling Gleam:
+	Desc: The user damages opposing Pokémon by emitting a powerful flash.
+	PP: 10
+	Type: Fairy
+	Cat: Special
+	Acc: 100
+	Pow: 80
+*
+Strength:
+	Desc: The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.
+	PP: 15
+	Pow: 80
+	Type: Normal
+	Cat: Physical
+	Acc: 100
 *

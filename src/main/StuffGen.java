@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -144,6 +145,36 @@ public class StuffGen
 		System.out.println("Namesies generated.");
 	}
 	
+	private static String writeClassName(String name)
+	{
+		String className = "";
+		for (int i = 0; i < name.length(); i++)
+		{
+			if (name.charAt(i) == '-')
+			{
+				if (Namesies.isLower(name.charAt(i + 1)))
+				{
+					char c = (char)(name.charAt(i + 1) - 'a' + 'A');
+					className += c;
+					i++;
+					continue;
+				}
+				
+				continue;
+			}
+			
+			if (Namesies.isSpecial(name.charAt(i)))
+			{
+				continue;
+			}
+			
+			className += name.charAt(i);
+		}
+		
+		className = className.replace("u00e9", "e");
+		return className;
+	}
+	
 	private static void superGen(Generator gen)
 	{
 		Scanner original = openFile(gen.outputPath);
@@ -210,14 +241,10 @@ public class StuffGen
 //				System.out.println(name + " " + key + " " + value);
 			}
 			
-			if (!fields.containsKey("ClassName"))
-			{
-				fields.put("ClassName", name.replace(" ", ""));
-			}
-			
-			String className = fields.get("ClassName");
+			String className = writeClassName(name);
 			
 			fields.put("Namesies", className);
+			fields.put("ClassName", className);
 			
 			createNamesies(name, className, gen.appendsies);
 			

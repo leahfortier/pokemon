@@ -22,8 +22,6 @@ import main.Namesies.NamesiesType;
 import main.Type;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
-import trainer.CharacterData;
-import trainer.Pokedex;
 import trainer.Pokedex.PokedexStatus;
 import battle.Attack;
 import battle.Battle;
@@ -208,13 +206,13 @@ public class ActivePokemon implements Serializable
 			if (params.group(7) != null) 
 				isEgg = true;
 			
-			if(params.group(8) != null)
+			if (params.group(8) != null)
 			{
 				String itemName = params.group(9);
-				if(Item.isItem(itemName))
+				if (Item.isItem(itemName))
 				{
 					Item i = Item.getItemFromName(itemName);
-					if(i.isHoldable())
+					if (i.isHoldable())
 					{
 						holdItem = (HoldItem)i;
 					}
