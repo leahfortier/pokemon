@@ -48,6 +48,22 @@ Nature Power
 Confide
 Cut
 Strength
+15
+Amnesia
+Charm
+Curse
+Endure
+Giga Drain
+Grass Whistle
+Grassy Terrain
+Ingrain
+Leaf Storm
+Magical Leaf
+Nature Power
+Petal Dance
+Power Whip
+Skull Bash
+Sludge
 45
 0 0 0 1 0 0 
 Level 2 16
@@ -113,6 +129,22 @@ Nature Power
 Confide
 Cut
 Strength
+15
+Amnesia
+Charm
+Curse
+Endure
+Giga Drain
+Grass Whistle
+Grassy Terrain
+Ingrain
+Leaf Storm
+Magical Leaf
+Nature Power
+Petal Dance
+Power Whip
+Skull Bash
+Sludge
 45
 0 0 0 1 1 0 
 Level 3 32
@@ -186,6 +218,22 @@ Nature Power
 Confide
 Cut
 Strength
+15
+Amnesia
+Charm
+Curse
+Endure
+Giga Drain
+Grass Whistle
+Grassy Terrain
+Ingrain
+Leaf Storm
+Magical Leaf
+Nature Power
+Petal Dance
+Power Whip
+Skull Bash
+Sludge
 45
 0 0 0 2 1 0 
 None
@@ -254,6 +302,21 @@ Power-Up Punch
 Confide
 Cut
 Strength
+14
+Air Cutter
+Ancient Power
+Beat Up
+Belly Drum
+Bite
+Counter
+Crunch
+Dragon Dance
+Dragon Pulse
+Dragon Rush
+Flare Blitz
+Focus Punch
+Metal Claw
+Outrage
 45
 0 0 0 0 0 1 
 Level 5 16
@@ -323,6 +386,21 @@ Power-Up Punch
 Confide
 Cut
 Strength
+14
+Air Cutter
+Ancient Power
+Beat Up
+Belly Drum
+Bite
+Counter
+Crunch
+Dragon Dance
+Dragon Pulse
+Dragon Rush
+Flare Blitz
+Focus Punch
+Metal Claw
+Outrage
 45
 0 0 0 1 0 1 
 Level 6 36
@@ -413,6 +491,21 @@ Confide
 Cut
 Fly
 Strength
+14
+Air Cutter
+Ancient Power
+Beat Up
+Belly Drum
+Bite
+Counter
+Crunch
+Dragon Dance
+Dragon Pulse
+Dragon Rush
+Flare Blitz
+Focus Punch
+Metal Claw
+Outrage
 45
 0 0 0 3 0 0 
 None
@@ -476,6 +569,23 @@ Confide
 Surf
 Strength
 Waterfall
+16
+Aqua Jet
+Aqua Ring
+Aura Sphere
+Brine
+Dragon Pulse
+Fake Out
+Flail
+Foresight
+Haze
+Mirror Coat
+Mist
+Mud Sport
+Muddy Water
+Refresh
+Water Spout
+Yawn
 45
 0 0 1 0 0 0 
 Level 8 16
@@ -541,6 +651,23 @@ Confide
 Surf
 Strength
 Waterfall
+16
+Aqua Jet
+Aqua Ring
+Aura Sphere
+Brine
+Dragon Pulse
+Fake Out
+Flail
+Foresight
+Haze
+Mirror Coat
+Mist
+Mud Sport
+Muddy Water
+Refresh
+Water Spout
+Yawn
 45
 0 0 1 0 1 0 
 Level 9 36
@@ -619,6 +746,23 @@ Confide
 Surf
 Strength
 Waterfall
+16
+Aqua Jet
+Aqua Ring
+Aura Sphere
+Brine
+Dragon Pulse
+Fake Out
+Flail
+Foresight
+Haze
+Mirror Coat
+Mist
+Mud Sport
+Muddy Water
+Refresh
+Water Spout
+Yawn
 45
 0 0 0 0 3 0 
 None
@@ -644,6 +788,7 @@ Bug None
 0 String Shot
 15 Bug Bite
 0
+0
 255
 1 0 0 0 0 0 
 Level 11 7
@@ -666,6 +811,7 @@ Bug None
 2
 0 Harden
 7 Harden
+0
 0
 120
 0 0 2 0 0 0 
@@ -736,6 +882,7 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+0
 45
 0 0 0 2 1 0 
 None
@@ -761,6 +908,7 @@ Bug Poison
 0 String Shot
 15 Bug Bite
 0
+0
 255
 0 0 0 0 0 1 
 Level 14 7
@@ -783,6 +931,7 @@ Bug Poison
 2
 0 Harden
 7 Harden
+0
 0
 120
 0 0 2 0 0 0 
@@ -852,6 +1001,7 @@ Substitute
 Rock Smash
 Confide
 Cut
+0
 45
 0 2 0 0 1 0 
 None
@@ -908,6 +1058,16 @@ U-turn
 Substitute
 Confide
 Fly
+9
+Air Cutter
+Air Slash
+Brave Bird
+Defog
+Feint Attack
+Foresight
+Pursuit
+Steel Wing
+Uproar
 255
 0 0 0 0 0 1 
 Level 17 18
@@ -965,6 +1125,16 @@ U-turn
 Substitute
 Confide
 Fly
+9
+Air Cutter
+Air Slash
+Brave Bird
+Defog
+Feint Attack
+Foresight
+Pursuit
+Steel Wing
+Uproar
 120
 0 0 0 0 0 2 
 Level 18 36
@@ -1026,6 +1196,16 @@ U-turn
 Substitute
 Confide
 Fly
+9
+Air Cutter
+Air Slash
+Brave Bird
+Defog
+Feint Attack
+Foresight
+Pursuit
+Steel Wing
+Uproar
 45
 0 0 0 0 0 3 
 None
@@ -1090,6 +1270,18 @@ Wild Charge
 Rock Smash
 Confide
 Cut
+11
+Bite
+Counter
+Final Gambit
+Flame Wheel
+Fury Swipes
+Last Resort
+Me First
+Revenge
+Reversal
+Screech
+Uproar
 255
 0 0 0 0 0 1 
 Level 20 20
@@ -1164,6 +1356,18 @@ Rock Smash
 Confide
 Cut
 Strength
+11
+Bite
+Counter
+Final Gambit
+Flame Wheel
+Fury Swipes
+Last Resort
+Me First
+Revenge
+Reversal
+Screech
+Uproar
 127
 0 0 0 0 0 2 
 None
@@ -1221,6 +1425,18 @@ U-turn
 Substitute
 Confide
 Fly
+11
+Astonish
+Feather Dance
+Feint Attack
+Quick Attack
+Razor Wind
+Scary Face
+Sky Attack
+Steel Wing
+Tri Attack
+Uproar
+Whirlwind
 255
 0 0 0 0 0 1 
 Level 22 20
@@ -1282,6 +1498,18 @@ U-turn
 Substitute
 Confide
 Fly
+11
+Astonish
+Feather Dance
+Feint Attack
+Quick Attack
+Razor Wind
+Scary Face
+Sky Attack
+Steel Wing
+Tri Attack
+Uproar
+Whirlwind
 90
 0 0 0 0 0 2 
 None
@@ -1350,6 +1578,19 @@ Substitute
 Dark Pulse
 Confide
 Strength
+12
+Beat Up
+Disable
+Iron Tail
+Poison Fang
+Poison Tail
+Pursuit
+Scary Face
+Slam
+Snatch
+Spite
+Sucker Punch
+Switcheroo
 255
 0 1 0 0 0 0 
 Level 24 22
@@ -1426,6 +1667,19 @@ Substitute
 Dark Pulse
 Confide
 Strength
+12
+Beat Up
+Disable
+Iron Tail
+Poison Fang
+Poison Tail
+Pursuit
+Scary Face
+Slam
+Snatch
+Spite
+Sucker Punch
+Switcheroo
 90
 0 2 0 0 0 0 
 None
@@ -1492,6 +1746,23 @@ Wild Charge
 Rock Smash
 Confide
 Strength
+16
+Bestow
+Bide
+Charge
+Disarming Voice
+Double Slap
+Encore
+Endure
+Fake Out
+Flail
+Lucky Chant
+Present
+Reversal
+Thunder Punch
+Tickle
+Wish
+Volt Tackle
 190
 0 0 0 0 0 2 
 Item 26  Thunder Stone
@@ -1551,6 +1822,23 @@ Wild Charge
 Rock Smash
 Confide
 Strength
+16
+Bestow
+Bide
+Charge
+Disarming Voice
+Double Slap
+Encore
+Endure
+Fake Out
+Flail
+Lucky Chant
+Present
+Reversal
+Thunder Punch
+Tickle
+Wish
+Volt Tackle
 75
 0 0 0 0 0 3 
 None
@@ -1623,6 +1911,18 @@ Rock Smash
 Confide
 Cut
 Strength
+11
+Chip Away
+Counter
+Crush Claw
+Endure
+Flail
+Metal Claw
+Mud Shot
+Night Slash
+Rapid Spin
+Rock Climb
+Rototiller
 255
 0 0 1 0 0 0 
 Level 28 22
@@ -1702,6 +2002,18 @@ Rock Smash
 Confide
 Cut
 Strength
+11
+Chip Away
+Counter
+Crush Claw
+Endure
+Flail
+Metal Claw
+Mud Shot
+Night Slash
+Rapid Spin
+Rock Climb
+Rototiller
 90
 0 0 2 0 0 0 
 None
@@ -1768,6 +2080,21 @@ Rock Smash
 Confide
 Cut
 Strength
+14
+Beat Up
+Charm
+Chip Away
+Counter
+Disable
+Endure
+Focus Energy
+Iron Tail
+Poison Tail
+Pursuit
+Skull Bash
+Supersonic
+Take Down
+Venom Drench
 235
 1 0 0 0 0 0 
 Level 30 16
@@ -1832,6 +2159,21 @@ Rock Smash
 Confide
 Cut
 Strength
+14
+Beat Up
+Charm
+Chip Away
+Counter
+Disable
+Endure
+Focus Energy
+Iron Tail
+Poison Tail
+Pursuit
+Skull Bash
+Supersonic
+Take Down
+Venom Drench
 120
 2 0 0 0 0 0 
 Item 31  Moon Stone
@@ -1915,6 +2257,21 @@ Confide
 Cut
 Surf
 Strength
+14
+Beat Up
+Charm
+Chip Away
+Counter
+Disable
+Endure
+Focus Energy
+Iron Tail
+Poison Tail
+Pursuit
+Skull Bash
+Supersonic
+Take Down
+Venom Drench
 45
 3 0 0 0 0 0 
 None
@@ -1978,6 +2335,21 @@ Rock Smash
 Confide
 Cut
 Strength
+14
+Amnesia
+Beat Up
+Chip Away
+Confusion
+Counter
+Disable
+Endure
+Head Smash
+Iron Tail
+Poison Tail
+Sucker Punch
+Supersonic
+Take Down
+Venom Drench
 235
 0 1 0 0 0 0 
 Multi 2
@@ -2043,6 +2415,21 @@ Rock Smash
 Confide
 Cut
 Strength
+14
+Amnesia
+Beat Up
+Chip Away
+Confusion
+Counter
+Disable
+Endure
+Head Smash
+Iron Tail
+Poison Tail
+Sucker Punch
+Supersonic
+Take Down
+Venom Drench
 120
 0 2 0 0 0 0 
 Item 34  Moon Stone
@@ -2125,6 +2512,21 @@ Confide
 Cut
 Surf
 Strength
+14
+Amnesia
+Beat Up
+Chip Away
+Confusion
+Counter
+Disable
+Endure
+Head Smash
+Iron Tail
+Poison Tail
+Sucker Punch
+Supersonic
+Take Down
+Venom Drench
 45
 0 3 0 0 0 0 
 None
@@ -2214,6 +2616,21 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+14
+Amnesia
+Aromatherapy
+Belly Drum
+Covet
+Fake Tears
+Heal Pulse
+Metronome
+Mimic
+Misty Terrain
+Present
+Splash
+Stored Power
+Tickle
+Wish
 150
 2 0 0 0 0 0 
 Item 36  Moon Stone
@@ -2290,6 +2707,21 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+14
+Amnesia
+Aromatherapy
+Belly Drum
+Covet
+Fake Tears
+Heal Pulse
+Metronome
+Mimic
+Misty Terrain
+Present
+Splash
+Stored Power
+Tickle
+Wish
 25
 3 0 0 0 0 0 
 None
@@ -2360,6 +2792,21 @@ Sleep Talk
 Substitute
 Dark Pulse
 Confide
+14
+Captivate
+Disable
+Extrasensory
+Feint Attack
+Flail
+Flare Blitz
+Heat Wave
+Hex
+Howl
+Hypnosis
+Power Swap
+Secret Power
+Spite
+Tail Slap
 190
 0 0 0 0 0 1 
 Item 38  Fire Stone
@@ -2420,6 +2867,21 @@ Sleep Talk
 Substitute
 Dark Pulse
 Confide
+14
+Captivate
+Disable
+Extrasensory
+Feint Attack
+Flail
+Flare Blitz
+Heat Wave
+Hex
+Howl
+Hypnosis
+Power Swap
+Secret Power
+Spite
+Tail Slap
 75
 0 0 0 0 1 1 
 None
@@ -2501,6 +2963,20 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+13
+Captivate
+Covet
+Fake Tears
+Feint Attack
+Gravity
+Heal Pulse
+Last Resort
+Misty Terrain
+Perish Song
+Present
+Punishment
+Sleep Talk
+Wish
 170
 2 0 0 0 0 0 
 Item 40  Moon Stone
@@ -2575,6 +3051,20 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+13
+Captivate
+Covet
+Fake Tears
+Feint Attack
+Gravity
+Heal Pulse
+Last Resort
+Misty Terrain
+Perish Song
+Present
+Punishment
+Sleep Talk
+Wish
 50
 3 0 0 0 0 0 
 None
@@ -2637,6 +3127,21 @@ U-turn
 Substitute
 Confide
 Fly
+14
+Brave Bird
+Curse
+Defog
+Feint Attack
+Giga Drain
+Gust
+Hypnosis
+Nasty Plot
+Pursuit
+Quick Attack
+Steel Wing
+Venom Drench
+Whirlwind
+Zen Headbutt
 255
 0 0 0 0 0 1 
 Level 42 22
@@ -2703,6 +3208,21 @@ U-turn
 Substitute
 Confide
 Fly
+14
+Brave Bird
+Curse
+Defog
+Feint Attack
+Giga Drain
+Gust
+Hypnosis
+Nasty Plot
+Pursuit
+Quick Attack
+Steel Wing
+Venom Drench
+Whirlwind
+Zen Headbutt
 90
 0 0 0 0 0 2 
 Item 169  Dusk Stone
@@ -2761,6 +3281,16 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+9
+Charm
+Flail
+Ingrain
+Nature Power
+Razor Leaf
+Secret Power
+Synthesis
+Teeter Dance
+Tickle
 255
 0 0 0 1 0 0 
 Level 44 21
@@ -2823,6 +3353,16 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+9
+Charm
+Flail
+Ingrain
+Nature Power
+Razor Leaf
+Secret Power
+Synthesis
+Teeter Dance
+Tickle
 120
 0 0 0 2 0 0 
 Multi 2
@@ -2881,6 +3421,16 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+9
+Charm
+Flail
+Ingrain
+Nature Power
+Razor Leaf
+Secret Power
+Synthesis
+Teeter Dance
+Tickle
 45
 0 0 0 3 0 0 
 None
@@ -2946,6 +3496,22 @@ Rock Smash
 Nature Power
 Confide
 Cut
+15
+Agility
+Bug Bite
+Counter
+Cross Poison
+Endure
+Fell Stinger
+Flail
+Leech Seed
+Metal Claw
+Natural Gift
+Psybeam
+Pursuit
+Rototiller
+Screech
+Sweet Scent
 190
 0 1 0 0 0 0 
 Level 47 24
@@ -3020,6 +3586,22 @@ Rock Smash
 Nature Power
 Confide
 Cut
+15
+Agility
+Bug Bite
+Counter
+Cross Poison
+Endure
+Fell Stinger
+Flail
+Leech Seed
+Metal Claw
+Natural Gift
+Psybeam
+Pursuit
+Rototiller
+Screech
+Sweet Scent
 75
 0 2 1 0 0 0 
 None
@@ -3079,6 +3661,17 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+10
+Agility
+Baton Pass
+Bug Bite
+Giga Drain
+Morning Sun
+Screech
+Secret Power
+Signal Beam
+Skill Swap
+Toxic Spikes
 190
 0 0 0 0 1 0 
 Level 49 31
@@ -3149,6 +3742,17 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+10
+Agility
+Baton Pass
+Bug Bite
+Giga Drain
+Morning Sun
+Screech
+Secret Power
+Signal Beam
+Skill Swap
+Toxic Spikes
 75
 0 0 0 1 0 1 
 None
@@ -3213,6 +3817,20 @@ Substitute
 Rock Smash
 Confide
 Cut
+13
+Ancient Power
+Astonish
+Beat Up
+Endure
+Feint Attack
+Final Gambit
+Headbutt
+Memento
+Mud Bomb
+Pursuit
+Reversal
+Screech
+Uproar
 255
 0 0 0 0 0 1 
 Level 51 26
@@ -3285,6 +3903,20 @@ Substitute
 Rock Smash
 Confide
 Cut
+13
+Ancient Power
+Astonish
+Beat Up
+Endure
+Feint Attack
+Final Gambit
+Headbutt
+Memento
+Mud Bomb
+Pursuit
+Reversal
+Screech
+Uproar
 50
 0 0 0 0 0 2 
 None
@@ -3355,6 +3987,20 @@ Substitute
 Dark Pulse
 Confide
 Cut
+13
+Amnesia
+Assist
+Charm
+Flail
+Foul Play
+Hypnosis
+Iron Tail
+Last Resort
+Odor Sleuth
+Punishment
+Snatch
+Spite
+Tail Whip
 255
 0 0 0 0 0 1 
 Level 53 28
@@ -3435,6 +4081,20 @@ Substitute
 Dark Pulse
 Confide
 Cut
+13
+Amnesia
+Assist
+Charm
+Flail
+Foul Play
+Hypnosis
+Iron Tail
+Last Resort
+Odor Sleuth
+Punishment
+Snatch
+Spite
+Tail Whip
 90
 0 0 0 0 0 2 
 None
@@ -3507,6 +4167,22 @@ Confide
 Surf
 Strength
 Waterfall
+15
+Clear Smog
+Confuse Ray
+Cross Chop
+Encore
+Foresight
+Future Sight
+Hypnosis
+Mud Bomb
+Psybeam
+Refresh
+Secret Power
+Simple Beam
+Sleep Talk
+Synchronoise
+Yawn
 190
 0 0 0 1 0 0 
 Level 55 33
@@ -3585,6 +4261,22 @@ Confide
 Surf
 Strength
 Waterfall
+15
+Clear Smog
+Confuse Ray
+Cross Chop
+Encore
+Foresight
+Future Sight
+Hypnosis
+Mud Bomb
+Psybeam
+Refresh
+Secret Power
+Simple Beam
+Sleep Talk
+Synchronoise
+Yawn
 75
 0 0 0 2 0 0 
 None
@@ -3662,6 +4354,19 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+12
+Beat Up
+Close Combat
+Counter
+Encore
+Focus Punch
+Foresight
+Meditate
+Night Slash
+Revenge
+Reversal
+Sleep Talk
+Smelling Salts
 190
 0 1 0 0 0 0 
 Level 57 28
@@ -3745,6 +4450,19 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+12
+Beat Up
+Close Combat
+Counter
+Encore
+Focus Punch
+Foresight
+Meditate
+Night Slash
+Revenge
+Reversal
+Sleep Talk
+Smelling Salts
 75
 0 2 0 0 0 0 
 None
@@ -3814,6 +4532,20 @@ Rock Smash
 Snarl
 Confide
 Strength
+13
+Body Slam
+Close Combat
+Covet
+Crunch
+Double Kick
+Double-Edge
+Fire Spin
+Flare Blitz
+Heat Wave
+Howl
+Iron Tail
+Morning Sun
+Thrash
 190
 0 1 0 0 0 0 
 Item 59  Fire Stone
@@ -3875,6 +4607,20 @@ Rock Smash
 Snarl
 Confide
 Strength
+13
+Body Slam
+Close Combat
+Covet
+Crunch
+Double Kick
+Double-Edge
+Fire Spin
+Flare Blitz
+Heat Wave
+Howl
+Iron Tail
+Morning Sun
+Thrash
 75
 0 2 0 0 0 0 
 None
@@ -3932,6 +4678,20 @@ Substitute
 Confide
 Surf
 Waterfall
+13
+Bubble Beam
+Encore
+Endeavor
+Endure
+Haze
+Ice Ball
+Mind Reader
+Mist
+Mud Shot
+Refresh
+Splash
+Water Pulse
+Water Sport
 255
 0 0 0 0 0 1 
 Level 61 25
@@ -3997,6 +4757,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Bubble Beam
+Encore
+Endeavor
+Endure
+Haze
+Ice Ball
+Mind Reader
+Mist
+Mud Shot
+Refresh
+Splash
+Water Pulse
+Water Sport
 120
 0 0 0 0 0 2 
 Multi 2
@@ -4067,6 +4841,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Bubble Beam
+Encore
+Endeavor
+Endure
+Haze
+Ice Ball
+Mind Reader
+Mist
+Mud Shot
+Refresh
+Splash
+Water Pulse
+Water Sport
 45
 0 0 3 0 0 0 
 None
@@ -4125,6 +4913,18 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+11
+Barrier
+Encore
+Fire Punch
+Guard Split
+Guard Swap
+Ice Punch
+Knock Off
+Power Trick
+Psycho Shift
+Skill Swap
+Thunder Punch
 200
 0 0 0 1 0 0 
 Level 64 16
@@ -4198,6 +4998,18 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+11
+Barrier
+Encore
+Fire Punch
+Guard Split
+Guard Swap
+Ice Punch
+Knock Off
+Power Trick
+Psycho Shift
+Skill Swap
+Thunder Punch
 100
 0 0 0 2 0 0 
 Item 65  Twisted Spoon
@@ -4274,6 +5086,18 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+11
+Barrier
+Encore
+Fire Punch
+Guard Split
+Guard Swap
+Ice Punch
+Knock Off
+Power Trick
+Psycho Shift
+Skill Swap
+Thunder Punch
 50
 0 0 0 3 0 0 
 None
@@ -4346,6 +5170,22 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+15
+Bullet Punch
+Close Combat
+Counter
+Encore
+Fire Punch
+Heavy Slam
+Ice Punch
+Knock Off
+Meditate
+Power Trick
+Quick Guard
+Rolling Kick
+Smelling Salts
+Thunder Punch
+Tickle
 180
 0 1 0 0 0 0 
 Level 67 28
@@ -4420,6 +5260,22 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+15
+Bullet Punch
+Close Combat
+Counter
+Encore
+Fire Punch
+Heavy Slam
+Ice Punch
+Knock Off
+Meditate
+Power Trick
+Quick Guard
+Rolling Kick
+Smelling Salts
+Thunder Punch
+Tickle
 90
 0 2 0 0 0 0 
 Item 68  Focus Band
@@ -4498,6 +5354,22 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+15
+Bullet Punch
+Close Combat
+Counter
+Encore
+Fire Punch
+Heavy Slam
+Ice Punch
+Knock Off
+Meditate
+Power Trick
+Quick Guard
+Rolling Kick
+Smelling Salts
+Thunder Punch
+Tickle
 45
 0 3 0 0 0 0 
 None
@@ -4558,6 +5430,22 @@ Substitute
 Nature Power
 Confide
 Cut
+15
+Acid Spray
+Belch
+Bullet Seed
+Clear Smog
+Encore
+Giga Drain
+Ingrain
+Leech Life
+Magical Leaf
+Natural Gift
+Power Whip
+Synthesis
+Tickle
+Weather Ball
+Worry Seed
 255
 0 1 0 0 0 0 
 Level 70 21
@@ -4619,6 +5507,22 @@ Substitute
 Nature Power
 Confide
 Cut
+15
+Acid Spray
+Belch
+Bullet Seed
+Clear Smog
+Encore
+Giga Drain
+Ingrain
+Leech Life
+Magical Leaf
+Natural Gift
+Power Whip
+Synthesis
+Tickle
+Weather Ball
+Worry Seed
 120
 0 2 0 0 0 0 
 Item 71  Leaf Stone
@@ -4677,6 +5581,22 @@ Substitute
 Nature Power
 Confide
 Cut
+15
+Acid Spray
+Belch
+Bullet Seed
+Clear Smog
+Encore
+Giga Drain
+Ingrain
+Leech Life
+Magical Leaf
+Natural Gift
+Power Whip
+Synthesis
+Tickle
+Weather Ball
+Worry Seed
 45
 0 3 0 0 0 0 
 None
@@ -4744,6 +5664,18 @@ Confide
 Cut
 Surf
 Waterfall
+11
+Acupressure
+Aqua Ring
+Aurora Beam
+Bubble
+Confuse Ray
+Haze
+Knock Off
+Mirror Coat
+Muddy Water
+Rapid Spin
+Tickle
 190
 0 0 0 0 1 0 
 Level 73 30
@@ -4818,6 +5750,18 @@ Confide
 Cut
 Surf
 Waterfall
+11
+Acupressure
+Aqua Ring
+Aurora Beam
+Bubble
+Confuse Ray
+Haze
+Knock Off
+Mirror Coat
+Muddy Water
+Rapid Spin
+Tickle
 60
 0 0 0 0 2 0 
 None
@@ -4889,6 +5833,16 @@ Nature Power
 Power-Up Punch
 Confide
 Strength
+9
+Autotomize
+Block
+Curse
+Endure
+Flail
+Focus Punch
+Hammer Arm
+Mega Punch
+Rock Climb
 255
 0 0 1 0 0 0 
 Level 75 25
@@ -4961,6 +5915,16 @@ Nature Power
 Power-Up Punch
 Confide
 Strength
+9
+Autotomize
+Block
+Curse
+Endure
+Flail
+Focus Punch
+Hammer Arm
+Mega Punch
+Rock Climb
 120
 0 0 2 0 0 0 
 Item 76  Hard Stone
@@ -5039,6 +6003,16 @@ Nature Power
 Power-Up Punch
 Confide
 Strength
+9
+Autotomize
+Block
+Curse
+Endure
+Flail
+Focus Punch
+Hammer Arm
+Mega Punch
+Rock Climb
 45
 0 0 3 0 0 0 
 None
@@ -5099,6 +6073,17 @@ Substitute
 Wild Charge
 Confide
 Strength
+10
+Captivate
+Charm
+Double Kick
+Double-Edge
+Flame Wheel
+Horn Drill
+Hypnosis
+Low Kick
+Morning Sun
+Thrash
 190
 0 0 0 0 0 1 
 Level 78 40
@@ -5167,6 +6152,17 @@ Substitute
 Wild Charge
 Confide
 Strength
+10
+Captivate
+Charm
+Double Kick
+Double-Edge
+Flame Wheel
+Horn Drill
+Hypnosis
+Low Kick
+Morning Sun
+Thrash
 60
 0 0 0 0 0 2 
 None
@@ -5244,6 +6240,18 @@ Trick Room
 Confide
 Surf
 Strength
+11
+Belch
+Belly Drum
+Block
+Future Sight
+Me First
+Mud Sport
+Sleep Talk
+Snore
+Stomp
+Wonder Room
+Zen Headbutt
 190
 1 0 0 0 0 0 
 Multi 2
@@ -5334,6 +6342,18 @@ Rock Smash
 Confide
 Surf
 Strength
+11
+Belch
+Belly Drum
+Block
+Future Sight
+Me First
+Mud Sport
+Sleep Talk
+Snore
+Stomp
+Wonder Room
+Zen Headbutt
 75
 0 0 2 0 0 0 
 None
@@ -5399,6 +6419,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Confide
+0
 190
 0 0 0 1 0 0 
 Level 82 30
@@ -5472,6 +6493,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Confide
+0
 60
 0 0 0 2 0 0 
 Item 462  Thunder Stone
@@ -5540,6 +6562,23 @@ Substitute
 Confide
 Cut
 Fly
+16
+Covet
+Curse
+Feather Dance
+Flail
+Foresight
+Gust
+Leaf Blade
+Mirror Move
+Mud-Slap
+Night Slash
+Quick Attack
+Revenge
+Roost
+Simple Beam
+Steel Wing
+Trump Card
 45
 0 1 0 0 0 0 
 None
@@ -5594,6 +6633,17 @@ Sleep Talk
 Substitute
 Confide
 Fly
+10
+Assurance
+Brave Bird
+Endeavor
+Feint Attack
+Flail
+Haze
+Mirror Move
+Natural Gift
+Quick Attack
+Supersonic
 190
 0 1 0 0 0 0 
 Level 85 31
@@ -5656,6 +6706,17 @@ Sleep Talk
 Substitute
 Confide
 Fly
+10
+Assurance
+Brave Bird
+Endeavor
+Feint Attack
+Flail
+Haze
+Mirror Move
+Natural Gift
+Quick Attack
+Supersonic
 45
 0 2 0 0 0 0 
 None
@@ -5717,6 +6778,24 @@ Substitute
 Confide
 Surf
 Waterfall
+17
+Belch
+Disable
+Encore
+Entrainment
+Fake Out
+Horn Drill
+Icicle Spear
+Iron Tail
+Lick
+Perish Song
+Signal Beam
+Slam
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
+Water Pulse
 190
 0 0 0 0 1 0 
 Level 87 34
@@ -5785,6 +6864,24 @@ Substitute
 Confide
 Surf
 Waterfall
+17
+Belch
+Disable
+Encore
+Entrainment
+Fake Out
+Horn Drill
+Icicle Spear
+Iron Tail
+Lick
+Perish Song
+Signal Beam
+Slam
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
+Water Pulse
 75
 0 0 0 0 2 0 
 None
@@ -5860,6 +6957,19 @@ Substitute
 Power-Up Punch
 Confide
 Strength
+12
+Acid Spray
+Curse
+Haze
+Imprison
+Lick
+Mean Look
+Scary Face
+Shadow Punch
+Shadow Sneak
+Spit Up
+Stockpile
+Swallow
 190
 1 0 0 0 0 0 
 Level 89 38
@@ -5943,6 +7053,19 @@ Dark Pulse
 Power-Up Punch
 Confide
 Strength
+12
+Acid Spray
+Curse
+Haze
+Imprison
+Lick
+Mean Look
+Scary Face
+Shadow Punch
+Shadow Sneak
+Spit Up
+Stockpile
+Swallow
 75
 1 1 0 0 0 0 
 None
@@ -6002,6 +7125,19 @@ Sleep Talk
 Substitute
 Confide
 Surf
+12
+Aqua Ring
+Avalanche
+Barrier
+Bubble Beam
+Icicle Spear
+Mud Shot
+Rapid Spin
+Rock Blast
+Screech
+Take Down
+Twineedle
+Water Pulse
 190
 0 0 1 0 0 0 
 Item 91  Water Stone
@@ -6059,6 +7195,19 @@ Sleep Talk
 Substitute
 Confide
 Surf
+12
+Aqua Ring
+Avalanche
+Barrier
+Bubble Beam
+Icicle Spear
+Mud Shot
+Rapid Spin
+Rock Blast
+Screech
+Take Down
+Twineedle
+Water Pulse
 60
 0 0 2 0 0 0 
 None
@@ -6130,6 +7279,20 @@ Trick Room
 Dark Pulse
 Dazzling Gleam
 Confide
+13
+Astonish
+Clear Smog
+Disable
+Fire Punch
+Grudge
+Haze
+Ice Punch
+Perish Song
+Psywave
+Reflect Type
+Scary Face
+Smog
+Thunder Punch
 190
 0 0 0 1 0 0 
 Level 93 25
@@ -6205,6 +7368,20 @@ Trick Room
 Dark Pulse
 Dazzling Gleam
 Confide
+13
+Astonish
+Clear Smog
+Disable
+Fire Punch
+Grudge
+Haze
+Ice Punch
+Perish Song
+Psywave
+Reflect Type
+Scary Face
+Smog
+Thunder Punch
 90
 0 0 0 2 0 0 
 Item 94  Spell Tag
@@ -6288,6 +7465,20 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+13
+Astonish
+Clear Smog
+Disable
+Fire Punch
+Grudge
+Haze
+Ice Punch
+Perish Song
+Psywave
+Reflect Type
+Scary Face
+Smog
+Thunder Punch
 45
 0 0 0 3 0 0 
 None
@@ -6365,6 +7556,16 @@ Rock Smash
 Nature Power
 Confide
 Strength
+9
+Block
+Defense Curl
+Flail
+Heavy Slam
+Rock Blast
+Rock Climb
+Rollout
+Rototiller
+Stealth Rock
 45
 0 0 1 0 0 0 
 Item 208  Metal Coat
@@ -6439,6 +7640,19 @@ Trick Room
 Power-Up Punch
 Dazzling Gleam
 Confide
+12
+Assist
+Barrier
+Fire Punch
+Flatter
+Guard Swap
+Ice Punch
+Nasty Plot
+Psycho Cut
+Role Play
+Secret Power
+Skill Swap
+Thunder Punch
 190
 0 0 0 0 1 0 
 Level 97 26
@@ -6521,6 +7735,19 @@ Trick Room
 Power-Up Punch
 Dazzling Gleam
 Confide
+12
+Assist
+Barrier
+Fire Punch
+Flatter
+Guard Swap
+Ice Punch
+Nasty Plot
+Psycho Cut
+Role Play
+Secret Power
+Skill Swap
+Thunder Punch
 75
 0 0 0 0 2 0 
 None
@@ -6588,6 +7815,18 @@ Confide
 Cut
 Surf
 Strength
+11
+Agility
+Amnesia
+Ancient Power
+Bide
+Chip Away
+Endure
+Flail
+Haze
+Knock Off
+Slam
+Tickle
 225
 0 1 0 0 0 0 
 Level 99 28
@@ -6660,6 +7899,18 @@ Confide
 Cut
 Surf
 Strength
+11
+Agility
+Amnesia
+Ancient Power
+Bide
+Chip Away
+Endure
+Flail
+Haze
+Knock Off
+Slam
+Tickle
 60
 0 2 0 0 0 0 
 None
@@ -6722,6 +7973,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+0
 190
 0 0 0 0 0 1 
 Level 101 30
@@ -6789,6 +8041,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+0
 60
 0 0 0 0 0 2 
 None
@@ -6855,6 +8108,21 @@ Trick Room
 Nature Power
 Confide
 Strength
+14
+Ancient Power
+Block
+Curse
+Giga Drain
+Grassy Terrain
+Ingrain
+Leaf Storm
+Lucky Chant
+Moonlight
+Natural Gift
+Nature Power
+Power Swap
+Skill Swap
+Synthesis
 90
 0 0 1 0 0 0 
 Item 103  Leaf Stone
@@ -6918,6 +8186,21 @@ Trick Room
 Nature Power
 Confide
 Strength
+14
+Ancient Power
+Block
+Curse
+Giga Drain
+Grassy Terrain
+Ingrain
+Leaf Storm
+Lucky Chant
+Moonlight
+Natural Gift
+Nature Power
+Power Swap
+Skill Swap
+Synthesis
 45
 0 0 0 2 0 0 
 None
@@ -6990,6 +8273,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Ancient Power
+Belly Drum
+Chip Away
+Detect
+Double Kick
+Endure
+Iron Head
+Perish Song
+Screech
+Skull Bash
 190
 0 0 1 0 0 0 
 Level 105 28
@@ -7070,6 +8364,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Ancient Power
+Belly Drum
+Chip Away
+Detect
+Double Kick
+Endure
+Iron Head
+Perish Song
+Screech
+Skull Bash
 75
 0 0 2 0 0 0 
 None
@@ -7142,6 +8447,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Bullet Punch
+Counter
+Endure
+Feint
+High Jump Kick
+Mach Punch
+Mind Reader
+Pursuit
+Rapid Spin
+Vacuum Wave
 45
 0 2 0 0 0 0 
 None
@@ -7213,6 +8529,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Bullet Punch
+Counter
+Endure
+Feint
+High Jump Kick
+Mach Punch
+Mind Reader
+Pursuit
+Rapid Spin
+Vacuum Wave
 45
 0 0 0 0 2 0 
 None
@@ -7293,6 +8620,19 @@ Confide
 Cut
 Surf
 Strength
+12
+Amnesia
+Belch
+Belly Drum
+Body Slam
+Curse
+Hammer Arm
+Magnitude
+Muddy Water
+Sleep Talk
+Smelling Salts
+Snore
+Zen Headbutt
 45
 2 0 0 0 0 0 
 None
@@ -7362,6 +8702,19 @@ Sleep Talk
 Substitute
 Dark Pulse
 Confide
+12
+Curse
+Destiny Bond
+Grudge
+Pain Split
+Psybeam
+Psywave
+Screech
+Spit Up
+Spite
+Stockpile
+Swallow
+Toxic Spikes
 190
 0 0 1 0 0 0 
 Level 110 35
@@ -7435,6 +8788,19 @@ Sleep Talk
 Substitute
 Dark Pulse
 Confide
+12
+Curse
+Destiny Bond
+Grudge
+Pain Split
+Psybeam
+Psywave
+Screech
+Spit Up
+Spite
+Stockpile
+Swallow
+Toxic Spikes
 60
 0 0 2 0 0 0 
 None
@@ -7507,6 +8873,23 @@ Substitute
 Rock Smash
 Confide
 Strength
+16
+Counter
+Crunch
+Crush Claw
+Curse
+Dragon Rush
+Fire Fang
+Guard Split
+Ice Fang
+Iron Tail
+Magnitude
+Metal Burst
+Reversal
+Rock Climb
+Rototiller
+Skull Bash
+Thunder Fang
 120
 0 0 1 0 0 0 
 Level 112 42
@@ -7595,6 +8978,23 @@ Confide
 Cut
 Surf
 Strength
+16
+Counter
+Crunch
+Crush Claw
+Curse
+Dragon Rush
+Fire Fang
+Guard Split
+Ice Fang
+Iron Tail
+Magnitude
+Metal Burst
+Reversal
+Rock Climb
+Rototiller
+Skull Bash
+Thunder Fang
 60
 0 2 0 0 0 0 
 Item 464  Protector
@@ -7685,6 +9085,17 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+10
+Aromatherapy
+Counter
+Endure
+Gravity
+Heal Bell
+Metronome
+Mud Bomb
+Natural Gift
+Present
+Seismic Toss
 30
 2 0 0 0 0 0 
 Item 242  Shiny Stone
@@ -7754,6 +9165,18 @@ Substitute
 Rock Smash
 Confide
 Cut
+11
+Amnesia
+Confusion
+Endeavor
+Flail
+Giga Drain
+Leaf Storm
+Leech Seed
+Mega Drain
+Natural Gift
+Nature Power
+Power Swap
 45
 0 0 1 0 0 0 
 Move 465  Ancient Power
@@ -7836,6 +9259,20 @@ Confide
 Cut
 Surf
 Strength
+13
+Circle Throw
+Counter
+Crush Claw
+Disable
+Double-Edge
+Endeavor
+Focus Energy
+Focus Punch
+Foresight
+Hammer Arm
+Stomp
+Trump Card
+Uproar
 45
 2 0 0 0 0 0 
 None
@@ -7889,6 +9326,20 @@ Flash Cannon
 Confide
 Surf
 Waterfall
+13
+Aurora Beam
+Clear Smog
+Disable
+Dragon Breath
+Dragon Rage
+Flail
+Muddy Water
+Octazooka
+Outrage
+Razor Wind
+Signal Beam
+Splash
+Water Pulse
 225
 0 0 0 1 0 0 
 Level 117 32
@@ -7948,6 +9399,20 @@ Flash Cannon
 Confide
 Surf
 Waterfall
+13
+Aurora Beam
+Clear Smog
+Disable
+Dragon Breath
+Dragon Rage
+Flail
+Muddy Water
+Octazooka
+Outrage
+Razor Wind
+Signal Beam
+Splash
+Water Pulse
 75
 0 0 1 1 0 0 
 Item 230  Dragon Scale
@@ -8004,6 +9469,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Aqua Tail
+Body Slam
+Haze
+Hydro Pump
+Mud Shot
+Mud Sport
+Mud-Slap
+Psybeam
+Signal Beam
+Skull Bash
+Sleep Talk
 225
 0 1 0 0 0 0 
 Level 119 33
@@ -8064,6 +9541,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Aqua Tail
+Body Slam
+Haze
+Hydro Pump
+Mud Shot
+Mud Sport
+Mud-Slap
+Psybeam
+Signal Beam
+Skull Bash
+Sleep Talk
 60
 0 2 0 0 0 0 
 None
@@ -8130,6 +9619,7 @@ Dazzling Gleam
 Confide
 Surf
 Waterfall
+0
 225
 0 0 0 0 0 1 
 Item 121  Water Stone
@@ -8194,6 +9684,7 @@ Dazzling Gleam
 Confide
 Surf
 Waterfall
+0
 60
 0 0 0 0 0 2 
 None
@@ -8286,6 +9777,19 @@ Trick Room
 Power-Up Punch
 Dazzling Gleam
 Confide
+12
+Confuse Ray
+Fake Out
+Future Sight
+Hypnosis
+Icy Wind
+Magic Room
+Mimic
+Nasty Plot
+Power Split
+Teeter Dance
+Trick
+Wake-Up Slap
 45
 0 0 0 0 2 0 
 None
@@ -8356,6 +9860,18 @@ Substitute
 Rock Smash
 Confide
 Cut
+11
+Baton Pass
+Bug Buzz
+Counter
+Defog
+Endure
+Night Slash
+Quick Guard
+Razor Wind
+Reversal
+Silver Wind
+Steel Wing
 45
 0 1 0 0 0 0 
 Item 212  Metal Coat
@@ -8437,6 +9953,15 @@ Substitute
 Trick Room
 Power-Up Punch
 Confide
+8
+Captivate
+Fake Out
+Ice Punch
+Meditate
+Miracle Eye
+Nasty Plot
+Wake-Up Slap
+Wish
 45
 0 0 0 2 0 0 
 None
@@ -8506,6 +10031,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+11
+Barrier
+Cross Chop
+Dynamic Punch
+Feint
+Fire Punch
+Focus Punch
+Hammer Arm
+Ice Punch
+Karate Chop
+Meditate
+Rolling Kick
 45
 0 0 0 0 0 2 
 Item 466  Electirizer
@@ -8574,6 +10111,21 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+14
+Barrier
+Belch
+Belly Drum
+Cross Chop
+Dynamic Punch
+Flare Blitz
+Focus Energy
+Iron Tail
+Karate Chop
+Mach Punch
+Mega Punch
+Power Swap
+Screech
+Thunder Punch
 45
 0 0 0 2 0 0 
 Item 467  Magmarizer
@@ -8647,6 +10199,16 @@ Rock Smash
 Confide
 Cut
 Strength
+9
+Bug Bite
+Close Combat
+Feint
+Feint Attack
+Flail
+Fury Attack
+Me First
+Quick Attack
+Superpower
 45
 0 2 0 0 0 0 
 None
@@ -8718,6 +10280,7 @@ Rock Smash
 Confide
 Surf
 Strength
+0
 45
 0 1 0 0 0 1 
 None
@@ -8741,6 +10304,7 @@ Water None
 0 Splash
 15 Tackle
 30 Flail
+0
 0
 255
 0 0 0 0 0 1 
@@ -8813,6 +10377,7 @@ Confide
 Surf
 Strength
 Waterfall
+0
 45
 0 2 0 0 0 0 
 None
@@ -8880,6 +10445,21 @@ Confide
 Surf
 Strength
 Waterfall
+14
+Ancient Power
+Avalanche
+Curse
+Dragon Dance
+Dragon Pulse
+Fissure
+Foresight
+Freeze-Dry
+Future Sight
+Horn Drill
+Refresh
+Sleep Talk
+Tickle
+Whirlpool
 45
 2 0 0 0 0 0 
 None
@@ -8901,6 +10481,7 @@ Medium Fast
 Normal None
 1
 0 Transform
+0
 0
 35
 1 0 0 0 0 0 
@@ -8959,6 +10540,21 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 0 0 0 0 1 0 
 Multi 8
@@ -9031,6 +10627,21 @@ Confide
 Surf
 Strength
 Waterfall
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 2 0 0 0 0 0 
 None
@@ -9096,6 +10707,21 @@ Wild Charge
 Rock Smash
 Confide
 Strength
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 0 0 0 0 0 2 
 None
@@ -9159,6 +10785,21 @@ Substitute
 Rock Smash
 Confide
 Strength
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 0 2 0 0 0 0 
 None
@@ -9226,6 +10867,7 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+0
 45
 0 0 0 1 0 0 
 Item 233  Up-Grade
@@ -9289,6 +10931,21 @@ Rock Smash
 Confide
 Surf
 Waterfall
+14
+Aurora Beam
+Bide
+Bubble Beam
+Haze
+Knock Off
+Muddy Water
+Reflect Type
+Slam
+Spikes
+Supersonic
+Toxic Spikes
+Water Pulse
+Whirlpool
+Wring Out
 45
 0 0 1 0 0 0 
 Level 139 40
@@ -9357,6 +11014,21 @@ Rock Smash
 Confide
 Surf
 Waterfall
+14
+Aurora Beam
+Bide
+Bubble Beam
+Haze
+Knock Off
+Muddy Water
+Reflect Type
+Slam
+Spikes
+Supersonic
+Toxic Spikes
+Water Pulse
+Whirlpool
+Wring Out
 45
 0 0 2 0 0 0 
 None
@@ -9418,6 +11090,19 @@ Rock Smash
 Confide
 Surf
 Waterfall
+12
+Aurora Beam
+Bubble Beam
+Confuse Ray
+Flail
+Foresight
+Giga Drain
+Icy Wind
+Knock Off
+Mud Shot
+Rapid Spin
+Screech
+Take Down
 45
 0 0 1 0 0 0 
 Level 141 40
@@ -9494,6 +11179,19 @@ Confide
 Cut
 Surf
 Waterfall
+12
+Aurora Beam
+Bubble Beam
+Confuse Ray
+Flail
+Foresight
+Giga Drain
+Icy Wind
+Knock Off
+Mud Shot
+Rapid Spin
+Screech
+Take Down
 45
 0 2 0 0 0 0 
 None
@@ -9574,6 +11272,16 @@ Rock Smash
 Confide
 Fly
 Strength
+9
+Assurance
+Curse
+Dragon Breath
+Foresight
+Pursuit
+Roost
+Steel Wing
+Tailwind
+Whirlwind
 45
 0 0 0 0 0 2 
 None
@@ -9652,6 +11360,17 @@ Power-Up Punch
 Confide
 Surf
 Strength
+10
+Belch
+Charm
+Counter
+Curse
+Double-Edge
+Fissure
+Lick
+Natural Gift
+Pursuit
+Whirlwind
 25
 2 0 0 0 0 0 
 None
@@ -9723,6 +11442,7 @@ Substitute
 Rock Smash
 Confide
 Fly
+0
 3
 0 0 0 0 3 0 
 None
@@ -9794,6 +11514,7 @@ Wild Charge
 Rock Smash
 Confide
 Fly
+0
 3
 0 0 0 3 0 0 
 None
@@ -9866,6 +11587,7 @@ Substitute
 Rock Smash
 Confide
 Fly
+0
 3
 0 0 0 3 0 0 
 None
@@ -9930,6 +11652,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Aqua Jet
+Dragon Breath
+Dragon Dance
+Dragon Pulse
+Dragon Rush
+Extreme Speed
+Haze
+Iron Tail
+Mist
+Supersonic
+Water Pulse
 45
 0 1 0 0 0 0 
 Level 148 30
@@ -9997,6 +11731,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Aqua Jet
+Dragon Breath
+Dragon Dance
+Dragon Pulse
+Dragon Rush
+Extreme Speed
+Haze
+Iron Tail
+Mist
+Supersonic
+Water Pulse
 45
 0 2 0 0 0 0 
 Level 149 55
@@ -10093,6 +11839,18 @@ Fly
 Surf
 Strength
 Waterfall
+11
+Aqua Jet
+Dragon Breath
+Dragon Dance
+Dragon Pulse
+Dragon Rush
+Extreme Speed
+Haze
+Iron Tail
+Mist
+Supersonic
+Water Pulse
 45
 0 3 0 0 0 0 
 None
@@ -10193,6 +11951,7 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+0
 3
 0 0 0 3 0 0 
 None
@@ -10329,6 +12088,7 @@ Fly
 Surf
 Strength
 Waterfall
+0
 45
 3 0 0 0 0 0 
 None
@@ -10389,6 +12149,22 @@ Substitute
 Nature Power
 Confide
 Cut
+15
+Ancient Power
+Aromatherapy
+Body Slam
+Counter
+Flail
+Grass Whistle
+Grassy Terrain
+Heal Pulse
+Ingrain
+Leaf Storm
+Leech Seed
+Nature Power
+Refresh
+Vine Whip
+Wring Out
 45
 0 0 0 0 1 0 
 Level 153 16
@@ -10453,6 +12229,22 @@ Nature Power
 Confide
 Cut
 Strength
+15
+Ancient Power
+Aromatherapy
+Body Slam
+Counter
+Flail
+Grass Whistle
+Grassy Terrain
+Heal Pulse
+Ingrain
+Leaf Storm
+Leech Seed
+Nature Power
+Refresh
+Vine Whip
+Wring Out
 45
 0 0 1 0 1 0 
 Level 154 32
@@ -10525,6 +12317,22 @@ Nature Power
 Confide
 Cut
 Strength
+15
+Ancient Power
+Aromatherapy
+Body Slam
+Counter
+Flail
+Grass Whistle
+Grassy Terrain
+Heal Pulse
+Ingrain
+Leaf Storm
+Leech Seed
+Nature Power
+Refresh
+Vine Whip
+Wring Out
 45
 0 0 1 0 2 0 
 None
@@ -10586,6 +12394,21 @@ Wild Charge
 Nature Power
 Confide
 Cut
+14
+Covet
+Crush Claw
+Double Kick
+Double-Edge
+Extrasensory
+Flame Burst
+Flare Blitz
+Foresight
+Fury Swipes
+Howl
+Nature Power
+Quick Attack
+Reversal
+Thrash
 45
 0 0 0 0 0 1 
 Level 156 16
@@ -10652,6 +12475,21 @@ Nature Power
 Confide
 Cut
 Strength
+14
+Covet
+Crush Claw
+Double Kick
+Double-Edge
+Extrasensory
+Flame Burst
+Flare Blitz
+Foresight
+Fury Swipes
+Howl
+Nature Power
+Quick Attack
+Reversal
+Thrash
 45
 0 0 0 1 0 1 
 Level 157 32
@@ -10734,6 +12572,21 @@ Power-Up Punch
 Confide
 Cut
 Strength
+14
+Covet
+Crush Claw
+Double Kick
+Double-Edge
+Extrasensory
+Flame Burst
+Flare Blitz
+Foresight
+Fury Swipes
+Howl
+Nature Power
+Quick Attack
+Reversal
+Thrash
 45
 0 0 0 3 0 0 
 None
@@ -10803,6 +12656,21 @@ Confide
 Cut
 Surf
 Waterfall
+14
+Ancient Power
+Aqua Jet
+Block
+Crunch
+Dragon Dance
+Fake Tears
+Flatter
+Hydro Pump
+Ice Punch
+Metal Claw
+Mud Sport
+Thrash
+Water Pulse
+Water Sport
 45
 0 1 0 0 0 0 
 Level 159 18
@@ -10876,6 +12744,21 @@ Cut
 Surf
 Strength
 Waterfall
+14
+Ancient Power
+Aqua Jet
+Block
+Crunch
+Dragon Dance
+Fake Tears
+Flatter
+Hydro Pump
+Ice Punch
+Metal Claw
+Mud Sport
+Thrash
+Water Pulse
+Water Sport
 45
 0 1 1 0 0 0 
 Level 160 30
@@ -10957,6 +12840,21 @@ Cut
 Surf
 Strength
 Waterfall
+14
+Ancient Power
+Aqua Jet
+Block
+Crunch
+Dragon Dance
+Fake Tears
+Flatter
+Hydro Pump
+Ice Punch
+Metal Claw
+Mud Sport
+Thrash
+Water Pulse
+Water Sport
 45
 0 2 1 0 0 0 
 None
@@ -11026,6 +12924,20 @@ Power-Up Punch
 Confide
 Cut
 Surf
+13
+Assist
+Captivate
+Charm
+Covet
+Double-Edge
+Focus Energy
+Iron Tail
+Last Resort
+Natural Gift
+Pursuit
+Reversal
+Slash
+Trick
 255
 0 1 0 0 0 0 
 Level 162 15
@@ -11104,6 +13016,20 @@ Confide
 Cut
 Surf
 Strength
+13
+Assist
+Captivate
+Charm
+Covet
+Double-Edge
+Focus Energy
+Iron Tail
+Last Resort
+Natural Gift
+Pursuit
+Reversal
+Slash
+Trick
 90
 0 0 0 0 0 2 
 None
@@ -11169,6 +13095,17 @@ Sleep Talk
 Substitute
 Confide
 Fly
+10
+Agility
+Defog
+Feather Dance
+Feint Attack
+Mirror Move
+Night Shade
+Sky Attack
+Supersonic
+Whirlwind
+Wing Attack
 255
 1 0 0 0 0 0 
 Level 164 20
@@ -11237,6 +13174,17 @@ Sleep Talk
 Substitute
 Confide
 Fly
+10
+Agility
+Defog
+Feather Dance
+Feint Attack
+Mirror Move
+Night Shade
+Sky Attack
+Supersonic
+Whirlwind
+Wing Attack
 90
 2 0 0 0 0 0 
 None
@@ -11301,6 +13249,19 @@ U-turn
 Substitute
 Power-Up Punch
 Confide
+12
+Bide
+Bug Bite
+Bug Buzz
+Dizzy Punch
+Drain Punch
+Encore
+Focus Punch
+Knock Off
+Psybeam
+Screech
+Silver Wind
+Tailwind
 255
 0 0 0 0 1 0 
 Level 166 18
@@ -11372,6 +13333,19 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+12
+Bide
+Bug Bite
+Bug Buzz
+Dizzy Punch
+Drain Punch
+Encore
+Focus Punch
+Knock Off
+Psybeam
+Screech
+Silver Wind
+Tailwind
 90
 0 0 0 0 2 0 
 None
@@ -11434,6 +13408,18 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+11
+Baton Pass
+Disable
+Electroweb
+Megahorn
+Night Slash
+Psybeam
+Pursuit
+Signal Beam
+Sonic Boom
+Toxic Spikes
+Twineedle
 255
 0 1 0 0 0 0 
 Level 168 22
@@ -11503,6 +13489,18 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+11
+Baton Pass
+Disable
+Electroweb
+Megahorn
+Night Slash
+Psybeam
+Pursuit
+Signal Beam
+Sonic Boom
+Toxic Spikes
+Twineedle
 90
 0 2 0 0 0 0 
 None
@@ -11572,6 +13570,21 @@ Substitute
 Dark Pulse
 Confide
 Fly
+14
+Brave Bird
+Curse
+Defog
+Feint Attack
+Giga Drain
+Gust
+Hypnosis
+Nasty Plot
+Pursuit
+Quick Attack
+Steel Wing
+Venom Drench
+Whirlwind
+Zen Headbutt
 90
 0 0 0 0 0 3 
 None
@@ -11636,6 +13649,18 @@ Dazzling Gleam
 Confide
 Surf
 Waterfall
+11
+Agility
+Amnesia
+Brine
+Flail
+Mist
+Psybeam
+Screech
+Shock Wave
+Soak
+Water Pulse
+Whirlpool
 190
 1 0 0 0 0 0 
 Level 171 27
@@ -11709,6 +13734,18 @@ Dazzling Gleam
 Confide
 Surf
 Waterfall
+11
+Agility
+Amnesia
+Brine
+Flail
+Mist
+Psybeam
+Screech
+Shock Wave
+Soak
+Water Pulse
+Whirlpool
 75
 2 0 0 0 0 0 
 None
@@ -11762,6 +13799,23 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+16
+Bestow
+Bide
+Charge
+Disarming Voice
+Double Slap
+Encore
+Endure
+Fake Out
+Flail
+Lucky Chant
+Present
+Reversal
+Thunder Punch
+Tickle
+Wish
+Volt Tackle
 190
 0 0 0 0 0 1 
 Item 25  Sun Stone
@@ -11823,6 +13877,21 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+14
+Amnesia
+Aromatherapy
+Belly Drum
+Covet
+Fake Tears
+Heal Pulse
+Metronome
+Mimic
+Misty Terrain
+Present
+Splash
+Stored Power
+Tickle
+Wish
 150
 0 0 0 0 1 0 
 Item 35  Sun Stone
@@ -11885,6 +13954,20 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+13
+Captivate
+Covet
+Fake Tears
+Feint Attack
+Gravity
+Heal Pulse
+Last Resort
+Misty Terrain
+Perish Song
+Present
+Punishment
+Sleep Talk
+Wish
 170
 1 0 0 0 0 0 
 Item 39  Sun Stone
@@ -11955,6 +14038,19 @@ Substitute
 Rock Smash
 Dazzling Gleam
 Confide
+12
+Extrasensory
+Foresight
+Future Sight
+Lucky Chant
+Mirror Move
+Morning Sun
+Nasty Plot
+Peck
+Present
+Psycho Shift
+Secret Power
+Stored Power
 190
 0 0 0 0 1 0 
 Item 176  Sun Stone
@@ -12036,6 +14132,19 @@ Rock Smash
 Dazzling Gleam
 Confide
 Fly
+12
+Extrasensory
+Foresight
+Future Sight
+Lucky Chant
+Mirror Move
+Morning Sun
+Nasty Plot
+Peck
+Present
+Psycho Shift
+Secret Power
+Stored Power
 75
 0 0 0 0 2 0 
 Item 468  Shiny Stone
@@ -12106,6 +14215,20 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+13
+Drill Peck
+Feather Dance
+Feint Attack
+Haze
+Quick Attack
+Refresh
+Roost
+Simple Beam
+Skill Swap
+Steel Wing
+Sucker Punch
+Synchronoise
+Zen Headbutt
 190
 0 0 0 1 0 0 
 Level 178 25
@@ -12180,6 +14303,20 @@ Trick Room
 Dazzling Gleam
 Confide
 Fly
+13
+Drill Peck
+Feather Dance
+Feint Attack
+Haze
+Quick Attack
+Refresh
+Roost
+Simple Beam
+Skill Swap
+Steel Wing
+Sucker Punch
+Synchronoise
+Zen Headbutt
 75
 0 0 0 1 0 1 
 None
@@ -12238,6 +14375,18 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+11
+Agility
+Body Slam
+Charge
+Eerie Impulse
+Electric Terrain
+Flatter
+Iron Tail
+Odor Sleuth
+Sand Attack
+Screech
+Take Down
 235
 0 0 0 1 0 0 
 Level 180 15
@@ -12304,6 +14453,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+11
+Agility
+Body Slam
+Charge
+Eerie Impulse
+Electric Terrain
+Flatter
+Iron Tail
+Odor Sleuth
+Sand Attack
+Screech
+Take Down
 120
 0 0 0 2 0 0 
 Level 181 30
@@ -12379,6 +14540,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+11
+Agility
+Body Slam
+Charge
+Eerie Impulse
+Electric Terrain
+Flatter
+Iron Tail
+Odor Sleuth
+Sand Attack
+Screech
+Take Down
 45
 0 0 0 3 0 0 
 None
@@ -12437,6 +14610,16 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+9
+Charm
+Flail
+Ingrain
+Nature Power
+Razor Leaf
+Secret Power
+Synthesis
+Teeter Dance
+Tickle
 45
 0 0 0 0 3 0 
 None
@@ -12501,6 +14684,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Amnesia
+Aqua Jet
+Belly Drum
+Body Slam
+Camouflage
+Future Sight
+Muddy Water
+Perish Song
+Present
+Refresh
+Superpower
+Supersonic
+Water Sport
 190
 2 0 0 0 0 0 
 Level 184 18
@@ -12571,6 +14768,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Amnesia
+Aqua Jet
+Belly Drum
+Body Slam
+Camouflage
+Future Sight
+Muddy Water
+Perish Song
+Present
+Refresh
+Superpower
+Supersonic
+Water Sport
 75
 3 0 0 0 0 0 
 None
@@ -12645,6 +14856,16 @@ Nature Power
 Power-Up Punch
 Confide
 Strength
+9
+Curse
+Defense Curl
+Endure
+Harden
+Headbutt
+Rollout
+Sand Tomb
+Self-Destruct
+Stealth Rock
 65
 0 0 2 0 0 0 
 None
@@ -12707,6 +14928,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Bubble Beam
+Encore
+Endeavor
+Endure
+Haze
+Ice Ball
+Mind Reader
+Mist
+Mud Shot
+Refresh
+Splash
+Water Pulse
+Water Sport
 45
 0 0 0 0 3 0 
 None
@@ -12773,6 +15008,17 @@ U-turn
 Substitute
 Dazzling Gleam
 Confide
+10
+Amnesia
+Aromatherapy
+Confusion
+Cotton Guard
+Double-Edge
+Encore
+Endure
+Grassy Terrain
+Seed Bomb
+Worry Seed
 255
 0 0 0 0 1 0 
 Level 188 18
@@ -12841,6 +15087,17 @@ U-turn
 Substitute
 Dazzling Gleam
 Confide
+10
+Amnesia
+Aromatherapy
+Confusion
+Cotton Guard
+Double-Edge
+Encore
+Endure
+Grassy Terrain
+Seed Bomb
+Worry Seed
 120
 0 0 0 0 0 2 
 Level 189 27
@@ -12911,6 +15168,17 @@ U-turn
 Substitute
 Dazzling Gleam
 Confide
+10
+Amnesia
+Aromatherapy
+Confusion
+Cotton Guard
+Double-Edge
+Encore
+Endure
+Grassy Terrain
+Seed Bomb
+Worry Seed
 45
 0 0 0 0 0 3 
 None
@@ -12984,6 +15252,21 @@ Power-Up Punch
 Confide
 Cut
 Strength
+14
+Agility
+Beat Up
+Bounce
+Counter
+Covet
+Double Slap
+Fake Out
+Pursuit
+Quick Guard
+Revenge
+Screech
+Slam
+Spite
+Switcheroo
 45
 0 0 0 0 0 1 
 Move 424  Double Hit
@@ -13044,6 +15327,19 @@ Substitute
 Nature Power
 Confide
 Cut
+12
+Bide
+Curse
+Encore
+Endure
+Grass Whistle
+Grassy Terrain
+Ingrain
+Leech Seed
+Morning Sun
+Natural Gift
+Nature Power
+Sweet Scent
 235
 0 0 0 1 0 0 
 Item 192  Sun Stone
@@ -13110,6 +15406,19 @@ Substitute
 Nature Power
 Confide
 Cut
+12
+Bide
+Curse
+Encore
+Endure
+Grass Whistle
+Grassy Terrain
+Ingrain
+Leech Seed
+Morning Sun
+Natural Gift
+Nature Power
+Sweet Scent
 120
 0 0 0 2 0 0 
 None
@@ -13170,6 +15479,17 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+10
+Double-Edge
+Feint
+Feint Attack
+Leech Life
+Pursuit
+Reversal
+Secret Power
+Signal Beam
+Silver Wind
+Whirlwind
 75
 0 0 0 0 0 1 
 Move 469  Ancient Power
@@ -13234,6 +15554,22 @@ Rock Smash
 Confide
 Surf
 Waterfall
+15
+Acid Spray
+Ancient Power
+Body Slam
+Counter
+Curse
+Double Kick
+Eerie Impulse
+Encore
+Guard Swap
+Mud Sport
+Recover
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
 255
 1 0 0 0 0 0 
 Level 195 20
@@ -13309,6 +15645,22 @@ Confide
 Surf
 Strength
 Waterfall
+15
+Acid Spray
+Ancient Power
+Body Slam
+Counter
+Curse
+Double Kick
+Eerie Impulse
+Encore
+Guard Swap
+Mud Sport
+Recover
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
 90
 2 0 0 0 0 0 
 None
@@ -13375,6 +15727,21 @@ Trick Room
 Dazzling Gleam
 Confide
 Cut
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 0 0 0 2 0 0 
 None
@@ -13439,6 +15806,21 @@ Snarl
 Dark Pulse
 Confide
 Cut
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 0 0 0 0 2 0 
 None
@@ -13507,6 +15889,22 @@ Snarl
 Dark Pulse
 Confide
 Fly
+15
+Assurance
+Brave Bird
+Confuse Ray
+Drill Peck
+Feather Dance
+Feint Attack
+Flatter
+Mirror Move
+Perish Song
+Psycho Shift
+Roost
+Screech
+Sky Attack
+Whirlwind
+Wing Attack
 30
 0 0 0 0 0 1 
 Item 430  Dusk Stone
@@ -13594,6 +15992,18 @@ Power-Up Punch
 Confide
 Surf
 Strength
+11
+Belch
+Belly Drum
+Block
+Future Sight
+Me First
+Mud Sport
+Sleep Talk
+Snore
+Stomp
+Wonder Room
+Zen Headbutt
 70
 0 0 0 0 3 0 
 None
@@ -13665,6 +16075,20 @@ Trick Room
 Dark Pulse
 Dazzling Gleam
 Confide
+13
+Curse
+Destiny Bond
+Imprison
+Me First
+Memento
+Nasty Plot
+Ominous Wind
+Screech
+Shadow Sneak
+Skill Swap
+Spite
+Sucker Punch
+Wonder Room
 45
 0 0 0 0 1 0 
 Item 429  Dusk Stone
@@ -13686,6 +16110,7 @@ Medium Fast
 Psychic None
 1
 0 Hidden Power
+0
 0
 225
 0 1 0 1 0 0 
@@ -13713,6 +16138,7 @@ Psychic None
 0 Destiny Bond
 1
 Safeguard
+0
 45
 2 0 0 0 0 0 
 None
@@ -13788,6 +16214,20 @@ Rock Smash
 Dazzling Gleam
 Confide
 Strength
+13
+Amnesia
+Beat Up
+Double Kick
+Foresight
+Future Sight
+Magic Coat
+Mean Look
+Mirror Coat
+Razor Wind
+Secret Power
+Skill Swap
+Take Down
+Wish
 60
 0 0 0 2 0 0 
 None
@@ -13853,6 +16293,18 @@ Substitute
 Rock Smash
 Confide
 Strength
+11
+Counter
+Double-Edge
+Endure
+Flail
+Pin Missile
+Power Trick
+Revenge
+Sand Tomb
+Stealth Rock
+Swift
+Toxic Spikes
 190
 0 0 1 0 0 0 
 Level 205 31
@@ -13931,6 +16383,18 @@ Flash Cannon
 Rock Smash
 Confide
 Strength
+11
+Counter
+Double-Edge
+Endure
+Flail
+Pin Missile
+Power Trick
+Revenge
+Sand Tomb
+Stealth Rock
+Swift
+Toxic Spikes
 75
 0 0 2 0 0 0 
 None
@@ -14011,6 +16475,20 @@ Wild Charge
 Rock Smash
 Confide
 Strength
+13
+Agility
+Ancient Power
+Astonish
+Bide
+Bite
+Curse
+Headbutt
+Hex
+Magic Coat
+Secret Power
+Sleep Talk
+Snore
+Trump Card
 190
 1 0 0 0 0 0 
 None
@@ -14092,6 +16570,21 @@ Dark Pulse
 Confide
 Cut
 Strength
+14
+Agility
+Baton Pass
+Counter
+Cross Poison
+Double-Edge
+Feint
+Metal Claw
+Night Slash
+Poison Tail
+Power Trick
+Razor Wind
+Rock Climb
+Sand Tomb
+Wing Attack
 60
 0 0 1 0 0 0 
 Item 472  Razor Fang
@@ -14177,6 +16670,16 @@ Dark Pulse
 Confide
 Cut
 Strength
+9
+Block
+Defense Curl
+Flail
+Heavy Slam
+Rock Blast
+Rock Climb
+Rollout
+Rototiller
+Stealth Rock
 25
 0 0 2 0 0 0 
 None
@@ -14257,6 +16760,22 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+15
+Close Combat
+Crunch
+Double-Edge
+Fake Tears
+Feint Attack
+Fire Fang
+Focus Punch
+Heal Bell
+Ice Fang
+Metronome
+Mimic
+Present
+Smelling Salts
+Snore
+Thunder Fang
 190
 0 1 0 0 0 0 
 Level 210 23
@@ -14344,6 +16863,22 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+15
+Close Combat
+Crunch
+Double-Edge
+Fake Tears
+Feint Attack
+Fire Fang
+Focus Punch
+Heal Bell
+Ice Fang
+Metronome
+Mimic
+Present
+Smelling Salts
+Snore
+Thunder Fang
 75
 0 2 0 0 0 0 
 None
@@ -14417,6 +16952,17 @@ Substitute
 Confide
 Surf
 Waterfall
+10
+Acid Spray
+Aqua Jet
+Astonish
+Brine
+Bubble Beam
+Flail
+Haze
+Signal Beam
+Supersonic
+Water Pulse
 45
 0 1 0 0 0 0 
 None
@@ -14494,6 +17040,18 @@ Rock Smash
 Confide
 Cut
 Strength
+11
+Baton Pass
+Bug Buzz
+Counter
+Defog
+Endure
+Night Slash
+Quick Guard
+Razor Wind
+Reversal
+Silver Wind
+Steel Wing
 25
 0 2 0 0 0 0 
 None
@@ -14567,6 +17125,15 @@ Substitute
 Rock Smash
 Confide
 Strength
+8
+Acid
+Acupressure
+Final Gambit
+Knock Off
+Mud-Slap
+Rock Blast
+Sand Tomb
+Sweet Scent
 190
 0 0 1 0 1 0 
 None
@@ -14645,6 +17212,17 @@ Rock Smash
 Confide
 Cut
 Strength
+10
+Bide
+Double-Edge
+Flail
+Focus Punch
+Harden
+Megahorn
+Pursuit
+Revenge
+Rock Blast
+Seismic Toss
 45
 0 2 0 0 0 0 
 None
@@ -14728,6 +17306,22 @@ Confide
 Cut
 Surf
 Strength
+15
+Assist
+Avalanche
+Bite
+Counter
+Crush Claw
+Double Hit
+Fake Out
+Feint
+Foresight
+Ice Punch
+Ice Shard
+Icicle Crash
+Punishment
+Pursuit
+Spite
 60
 0 0 0 0 0 1 
 Item 461  Razor Claw
@@ -14804,6 +17398,22 @@ Power-Up Punch
 Confide
 Cut
 Strength
+15
+Belly Drum
+Chip Away
+Close Combat
+Counter
+Cross Chop
+Crunch
+Double-Edge
+Fake Tears
+Metal Claw
+Night Slash
+Play Rough
+Seismic Toss
+Sleep Talk
+Take Down
+Yawn
 120
 0 1 0 0 0 0 
 Level 217 30
@@ -14885,6 +17495,22 @@ Power-Up Punch
 Confide
 Cut
 Strength
+15
+Belly Drum
+Chip Away
+Close Combat
+Counter
+Cross Chop
+Crunch
+Double-Edge
+Fake Tears
+Metal Claw
+Night Slash
+Play Rough
+Seismic Toss
+Sleep Talk
+Take Down
+Yawn
 60
 0 2 0 0 0 0 
 None
@@ -14946,6 +17572,19 @@ Substitute
 Rock Smash
 Nature Power
 Confide
+12
+Acid Armor
+Curse
+Earth Power
+Guard Swap
+Heat Wave
+Inferno
+Memento
+Rollout
+Smokescreen
+Spit Up
+Stockpile
+Swallow
 190
 0 0 0 1 0 0 
 Level 219 38
@@ -15023,6 +17662,19 @@ Rock Smash
 Nature Power
 Confide
 Strength
+12
+Acid Armor
+Curse
+Earth Power
+Guard Swap
+Heat Wave
+Inferno
+Memento
+Rollout
+Smokescreen
+Spit Up
+Stockpile
+Swallow
 75
 0 0 2 0 0 0 
 None
@@ -15086,6 +17738,20 @@ Substitute
 Rock Smash
 Confide
 Strength
+13
+Ancient Power
+Avalanche
+Bite
+Body Slam
+Curse
+Double-Edge
+Fissure
+Freeze-Dry
+Icicle Crash
+Icicle Spear
+Mud Shot
+Stealth Rock
+Take Down
 225
 0 1 0 0 0 0 
 Level 221 33
@@ -15157,6 +17823,20 @@ Substitute
 Rock Smash
 Confide
 Strength
+13
+Ancient Power
+Avalanche
+Bite
+Body Slam
+Curse
+Double-Edge
+Fissure
+Freeze-Dry
+Icicle Crash
+Icicle Spear
+Mud Shot
+Stealth Rock
+Take Down
 75
 1 1 0 0 0 0 
 Move 473  Ancient Power
@@ -15234,6 +17914,21 @@ Nature Power
 Confide
 Surf
 Strength
+14
+Amnesia
+Aqua Ring
+Barrier
+Bide
+Camouflage
+Confuse Ray
+Curse
+Head Smash
+Icicle Spear
+Ingrain
+Mist
+Nature Power
+Screech
+Water Pulse
 60
 0 0 1 0 1 0 
 None
@@ -15297,6 +17992,21 @@ Substitute
 Confide
 Surf
 Waterfall
+14
+Acid Spray
+Aurora Beam
+Entrainment
+Flail
+Haze
+Mud Shot
+Octazooka
+Rock Blast
+Screech
+Snore
+Supersonic
+Swift
+Water Pulse
+Water Spout
 190
 0 0 0 1 0 0 
 Level 224 25
@@ -15371,6 +18081,21 @@ Flash Cannon
 Confide
 Surf
 Waterfall
+14
+Acid Spray
+Aurora Beam
+Entrainment
+Flail
+Haze
+Mud Shot
+Octazooka
+Rock Blast
+Screech
+Snore
+Supersonic
+Swift
+Water Pulse
+Water Spout
 75
 0 1 0 1 0 0 
 None
@@ -15416,6 +18141,21 @@ Substitute
 Power-Up Punch
 Confide
 Fly
+14
+Aurora Beam
+Bestow
+Destiny Bond
+Fake Out
+Freeze-Dry
+Future Sight
+Ice Ball
+Ice Punch
+Ice Shard
+Icy Wind
+Quick Attack
+Rapid Spin
+Spikes
+Splash
 45
 0 0 0 0 0 1 
 None
@@ -15484,6 +18224,16 @@ Substitute
 Confide
 Surf
 Waterfall
+9
+Amnesia
+Haze
+Hydro Pump
+Mirror Coat
+Mud Sport
+Slam
+Splash
+Twister
+Water Sport
 25
 0 0 0 0 2 0 
 None
@@ -15553,6 +18303,17 @@ Dark Pulse
 Confide
 Cut
 Fly
+10
+Assurance
+Brave Bird
+Curse
+Drill Peck
+Endure
+Guard Swap
+Pursuit
+Sky Attack
+Stealth Rock
+Whirlwind
 25
 0 0 2 0 0 0 
 None
@@ -15624,6 +18385,21 @@ Rock Smash
 Snarl
 Dark Pulse
 Confide
+14
+Beat Up
+Counter
+Destiny Bond
+Feint
+Fire Fang
+Fire Spin
+Nasty Plot
+Punishment
+Pursuit
+Rage
+Reversal
+Spite
+Sucker Punch
+Thunder Fang
 120
 0 0 0 1 0 0 
 Level 229 24
@@ -15702,6 +18478,21 @@ Snarl
 Dark Pulse
 Confide
 Strength
+14
+Beat Up
+Counter
+Destiny Bond
+Feint
+Fire Fang
+Fire Spin
+Nasty Plot
+Punishment
+Pursuit
+Rage
+Reversal
+Spite
+Sucker Punch
+Thunder Fang
 45
 0 0 0 2 0 0 
 None
@@ -15762,6 +18553,20 @@ Flash Cannon
 Confide
 Surf
 Waterfall
+13
+Aurora Beam
+Clear Smog
+Disable
+Dragon Breath
+Dragon Rage
+Flail
+Muddy Water
+Octazooka
+Outrage
+Razor Wind
+Signal Beam
+Splash
+Water Pulse
 45
 0 1 0 1 1 0 
 None
@@ -15819,6 +18624,19 @@ Substitute
 Rock Smash
 Confide
 Strength
+12
+Ancient Power
+Body Slam
+Counter
+Endeavor
+Fissure
+Focus Energy
+Head Smash
+Heavy Slam
+Ice Shard
+Mud-Slap
+Play Rough
+Snore
 120
 1 0 0 0 0 0 
 Level 232 25
@@ -15885,6 +18703,19 @@ Substitute
 Rock Smash
 Confide
 Strength
+12
+Ancient Power
+Body Slam
+Counter
+Endeavor
+Fissure
+Focus Energy
+Head Smash
+Heavy Slam
+Ice Shard
+Mud-Slap
+Play Rough
+Snore
 60
 0 1 1 0 0 0 
 None
@@ -15956,6 +18787,7 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+0
 45
 0 0 0 2 0 0 
 Item 474  Dubious Disc
@@ -16031,6 +18863,18 @@ Substitute
 Trick Room
 Wild Charge
 Confide
+11
+Bite
+Disable
+Double Kick
+Extrasensory
+Me First
+Megahorn
+Mud Sport
+Rage
+Spite
+Thrash
+Zen Headbutt
 45
 0 1 0 0 0 0 
 None
@@ -16061,6 +18905,7 @@ Normal None
 71 Sketch
 81 Sketch
 91 Sketch
+0
 0
 45
 0 0 0 0 0 1 
@@ -16111,6 +18956,17 @@ Substitute
 Rock Smash
 Confide
 Strength
+10
+Bullet Punch
+Counter
+Endure
+Feint
+High Jump Kick
+Mach Punch
+Mind Reader
+Pursuit
+Rapid Spin
+Vacuum Wave
 75
 0 1 0 0 0 0 
 Multi 3
@@ -16182,6 +19038,17 @@ Substitute
 Rock Smash
 Confide
 Strength
+10
+Bullet Punch
+Counter
+Endure
+Feint
+High Jump Kick
+Mach Punch
+Mind Reader
+Pursuit
+Rapid Spin
+Vacuum Wave
 45
 0 0 0 0 2 0 
 None
@@ -16250,6 +19117,15 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+8
+Captivate
+Fake Out
+Ice Punch
+Meditate
+Miracle Eye
+Nasty Plot
+Wake-Up Slap
+Wish
 45
 0 0 0 1 0 0 
 Level 124 30
@@ -16313,6 +19189,18 @@ Wild Charge
 Rock Smash
 Power-Up Punch
 Confide
+11
+Barrier
+Cross Chop
+Dynamic Punch
+Feint
+Fire Punch
+Focus Punch
+Hammer Arm
+Ice Punch
+Karate Chop
+Meditate
+Rolling Kick
 45
 0 0 0 0 0 1 
 Level 125 30
@@ -16375,6 +19263,21 @@ Substitute
 Rock Smash
 Power-Up Punch
 Confide
+14
+Barrier
+Belch
+Belly Drum
+Cross Chop
+Dynamic Punch
+Flare Blitz
+Focus Energy
+Iron Tail
+Karate Chop
+Mach Punch
+Mega Punch
+Power Swap
+Screech
+Thunder Punch
 45
 0 0 0 0 0 1 
 Level 126 30
@@ -16450,6 +19353,20 @@ Power-Up Punch
 Confide
 Surf
 Strength
+13
+Belch
+Curse
+Dizzy Punch
+Double-Edge
+Endure
+Hammer Arm
+Heart Stamp
+Natural Gift
+Present
+Punishment
+Reversal
+Seismic Toss
+Sleep Talk
 45
 0 0 2 0 0 0 
 None
@@ -16541,6 +19458,17 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+10
+Aromatherapy
+Counter
+Endure
+Gravity
+Heal Bell
+Metronome
+Mud Bomb
+Natural Gift
+Present
+Seismic Toss
 30
 3 0 0 0 0 0 
 None
@@ -16615,6 +19543,7 @@ Snarl
 Confide
 Cut
 Strength
+0
 3
 0 0 0 1 0 2 
 None
@@ -16690,6 +19619,7 @@ Snarl
 Confide
 Cut
 Strength
+0
 3
 1 2 0 0 0 0 
 None
@@ -16760,6 +19690,7 @@ Confide
 Cut
 Surf
 Waterfall
+0
 3
 0 0 1 0 2 0 
 None
@@ -16828,6 +19759,19 @@ Snarl
 Dark Pulse
 Power-Up Punch
 Confide
+12
+Ancient Power
+Assurance
+Curse
+Dragon Dance
+Focus Energy
+Iron Defense
+Iron Head
+Iron Tail
+Outrage
+Pursuit
+Stealth Rock
+Stomp
 45
 0 1 0 0 0 0 
 Level 247 30
@@ -16899,6 +19843,19 @@ Snarl
 Dark Pulse
 Power-Up Punch
 Confide
+12
+Ancient Power
+Assurance
+Curse
+Dragon Dance
+Focus Energy
+Iron Defense
+Iron Head
+Iron Tail
+Outrage
+Pursuit
+Stealth Rock
+Stomp
 45
 0 2 0 0 0 0 
 Level 248 55
@@ -16994,6 +19951,19 @@ Confide
 Cut
 Surf
 Strength
+12
+Ancient Power
+Assurance
+Curse
+Dragon Dance
+Focus Energy
+Iron Defense
+Iron Head
+Iron Tail
+Outrage
+Pursuit
+Stealth Rock
+Stomp
 45
 0 3 0 0 0 0 
 None
@@ -17079,6 +20049,7 @@ Fly
 Surf
 Strength
 Waterfall
+0
 3
 0 0 0 0 3 0 
 None
@@ -17163,6 +20134,7 @@ Rock Smash
 Confide
 Fly
 Strength
+0
 3
 0 0 0 0 3 0 
 None
@@ -17238,6 +20210,7 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+0
 45
 3 0 0 0 0 0 
 None
@@ -17303,6 +20276,23 @@ Power-Up Punch
 Confide
 Cut
 Strength
+16
+Bullet Seed
+Crunch
+Crush Claw
+Double Kick
+Dragon Breath
+Endeavor
+Grass Whistle
+Grassy Terrain
+Leaf Storm
+Leech Seed
+Magical Leaf
+Mud Sport
+Natural Gift
+Razor Wind
+Synthesis
+Worry Seed
 45
 0 0 0 0 0 1 
 Level 253 16
@@ -17372,6 +20362,23 @@ Power-Up Punch
 Confide
 Cut
 Strength
+16
+Bullet Seed
+Crunch
+Crush Claw
+Double Kick
+Dragon Breath
+Endeavor
+Grass Whistle
+Grassy Terrain
+Leaf Storm
+Leech Seed
+Magical Leaf
+Mud Sport
+Natural Gift
+Razor Wind
+Synthesis
+Worry Seed
 45
 0 0 0 0 0 2 
 Level 254 36
@@ -17451,6 +20458,23 @@ Power-Up Punch
 Confide
 Cut
 Strength
+16
+Bullet Seed
+Crunch
+Crush Claw
+Double Kick
+Dragon Breath
+Endeavor
+Grass Whistle
+Grassy Terrain
+Leaf Storm
+Leech Seed
+Magical Leaf
+Mud Sport
+Natural Gift
+Razor Wind
+Synthesis
+Worry Seed
 45
 0 0 0 0 0 3 
 None
@@ -17514,6 +20538,21 @@ Rock Smash
 Confide
 Cut
 Strength
+14
+Agility
+Baton Pass
+Counter
+Crush Claw
+Curse
+Endure
+Feather Dance
+Feint
+Flame Burst
+Last Resort
+Low Kick
+Night Slash
+Reversal
+Smelling Salts
 45
 0 0 0 1 0 0 
 Level 256 16
@@ -17586,6 +20625,21 @@ Power-Up Punch
 Confide
 Cut
 Strength
+14
+Agility
+Baton Pass
+Counter
+Crush Claw
+Curse
+Endure
+Feather Dance
+Feint
+Flame Burst
+Last Resort
+Low Kick
+Night Slash
+Reversal
+Smelling Salts
 45
 0 1 0 1 0 0 
 Level 257 36
@@ -17670,6 +20724,21 @@ Power-Up Punch
 Confide
 Cut
 Strength
+14
+Agility
+Baton Pass
+Counter
+Crush Claw
+Curse
+Endure
+Feather Dance
+Feint
+Flame Burst
+Last Resort
+Low Kick
+Night Slash
+Reversal
+Smelling Salts
 45
 0 3 0 0 0 0 
 None
@@ -17730,6 +20799,23 @@ Confide
 Surf
 Strength
 Waterfall
+16
+Ancient Power
+Avalanche
+Barrier
+Bite
+Counter
+Curse
+Double-Edge
+Ice Ball
+Mirror Coat
+Mud Bomb
+Refresh
+Sludge
+Stomp
+Uproar
+Whirlpool
+Yawn
 45
 0 1 0 0 0 0 
 Level 259 16
@@ -17796,6 +20882,23 @@ Confide
 Surf
 Strength
 Waterfall
+16
+Ancient Power
+Avalanche
+Barrier
+Bite
+Counter
+Curse
+Double-Edge
+Ice Ball
+Mirror Coat
+Mud Bomb
+Refresh
+Sludge
+Stomp
+Uproar
+Whirlpool
+Yawn
 45
 0 2 0 0 0 0 
 Level 260 36
@@ -17869,6 +20972,23 @@ Confide
 Surf
 Strength
 Waterfall
+16
+Ancient Power
+Avalanche
+Barrier
+Bite
+Counter
+Curse
+Double-Edge
+Ice Ball
+Mirror Coat
+Mud Bomb
+Refresh
+Sludge
+Stomp
+Uproar
+Whirlpool
+Yawn
 45
 0 3 0 0 0 0 
 None
@@ -17932,6 +21052,20 @@ Rock Smash
 Snarl
 Dark Pulse
 Confide
+13
+Astonish
+Covet
+Fire Fang
+Ice Fang
+Leer
+Me First
+Play Rough
+Poison Fang
+Sleep Talk
+Snatch
+Sucker Punch
+Thunder Fang
+Yawn
 255
 0 1 0 0 0 0 
 Level 262 18
@@ -18003,6 +21137,20 @@ Snarl
 Dark Pulse
 Confide
 Strength
+13
+Astonish
+Covet
+Fire Fang
+Ice Fang
+Leer
+Me First
+Play Rough
+Poison Fang
+Sleep Talk
+Snatch
+Sucker Punch
+Thunder Fang
+Yawn
 127
 0 2 0 0 0 0 
 None
@@ -18071,6 +21219,15 @@ Rock Smash
 Confide
 Cut
 Surf
+8
+Charm
+Mud-Slap
+Pursuit
+Rock Climb
+Simple Beam
+Sleep Talk
+Tickle
+Trick
 255
 0 0 0 0 0 1 
 Level 264 20
@@ -18148,6 +21305,15 @@ Confide
 Cut
 Surf
 Strength
+8
+Charm
+Mud-Slap
+Pursuit
+Rock Climb
+Simple Beam
+Sleep Talk
+Tickle
+Trick
 90
 0 0 0 0 0 2 
 None
@@ -18175,6 +21341,7 @@ Bug None
 5 Poison Sting
 15 Bug Bite
 0
+0
 255
 1 0 0 0 0 0 
 Multi 2
@@ -18199,6 +21366,7 @@ Bug None
 2
 0 Harden
 7 Harden
+0
 0
 120
 0 0 2 0 0 0 
@@ -18262,6 +21430,7 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+0
 45
 0 0 0 3 0 0 
 None
@@ -18286,6 +21455,7 @@ Bug None
 2
 0 Harden
 7 Harden
+0
 0
 120
 0 0 2 0 0 0 
@@ -18350,6 +21520,7 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+0
 45
 0 0 0 0 3 0 
 None
@@ -18411,6 +21582,17 @@ Substitute
 Nature Power
 Confide
 Surf
+10
+Counter
+Flail
+Giga Drain
+Leech Seed
+Razor Leaf
+Sweet Scent
+Synthesis
+Teeter Dance
+Tickle
+Water Gun
 255
 0 0 0 0 1 0 
 Level 271 14
@@ -18477,6 +21659,17 @@ Confide
 Surf
 Strength
 Waterfall
+10
+Counter
+Flail
+Giga Drain
+Leech Seed
+Razor Leaf
+Sweet Scent
+Synthesis
+Teeter Dance
+Tickle
+Water Gun
 120
 0 0 0 0 2 0 
 Item 272  Water Stone
@@ -18539,6 +21732,17 @@ Confide
 Surf
 Strength
 Waterfall
+10
+Counter
+Flail
+Giga Drain
+Leech Seed
+Razor Leaf
+Sweet Scent
+Synthesis
+Teeter Dance
+Tickle
+Water Gun
 45
 0 0 0 0 3 0 
 None
@@ -18592,6 +21796,20 @@ Substitute
 Rock Smash
 Nature Power
 Confide
+13
+Amnesia
+Beat Up
+Bullet Seed
+Defog
+Foul Play
+Grassy Terrain
+Leech Seed
+Nasty Plot
+Power Swap
+Quick Attack
+Razor Wind
+Take Down
+Worry Seed
 255
 0 0 1 0 0 0 
 Level 274 14
@@ -18665,6 +21883,20 @@ Power-Up Punch
 Confide
 Cut
 Strength
+13
+Amnesia
+Beat Up
+Bullet Seed
+Defog
+Foul Play
+Grassy Terrain
+Leech Seed
+Nasty Plot
+Power Swap
+Quick Attack
+Razor Wind
+Take Down
+Worry Seed
 120
 0 2 0 0 0 0 
 Item 275  Leaf Stone
@@ -18737,6 +21969,20 @@ Power-Up Punch
 Confide
 Cut
 Strength
+13
+Amnesia
+Beat Up
+Bullet Seed
+Defog
+Foul Play
+Grassy Terrain
+Leech Seed
+Nasty Plot
+Power Swap
+Quick Attack
+Razor Wind
+Take Down
+Worry Seed
 45
 0 3 0 0 0 0 
 None
@@ -18789,6 +22035,19 @@ U-turn
 Substitute
 Confide
 Fly
+12
+Boomburst
+Brave Bird
+Defog
+Mirror Move
+Pursuit
+Rage
+Refresh
+Roost
+Sky Attack
+Steel Wing
+Supersonic
+Whirlwind
 200
 0 0 0 0 0 1 
 Level 277 22
@@ -18848,6 +22107,19 @@ U-turn
 Substitute
 Confide
 Fly
+12
+Boomburst
+Brave Bird
+Defog
+Mirror Move
+Pursuit
+Rage
+Refresh
+Roost
+Sky Attack
+Steel Wing
+Supersonic
+Whirlwind
 45
 0 0 0 0 0 2 
 None
@@ -18908,6 +22180,17 @@ U-turn
 Substitute
 Confide
 Fly
+10
+Agility
+Aqua Ring
+Brine
+Gust
+Knock Off
+Mist
+Roost
+Soak
+Twister
+Water Sport
 190
 0 0 0 0 0 1 
 Level 279 25
@@ -18981,6 +22264,17 @@ Substitute
 Confide
 Fly
 Surf
+10
+Agility
+Aqua Ring
+Brine
+Gust
+Knock Off
+Mist
+Roost
+Soak
+Twister
+Water Sport
 45
 0 0 2 0 0 0 
 None
@@ -19053,6 +22347,18 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+11
+Confuse Ray
+Destiny Bond
+Disable
+Encore
+Grudge
+Mean Look
+Memento
+Misty Terrain
+Shadow Sneak
+Skill Swap
+Synchronoise
 235
 0 0 0 1 0 0 
 Level 281 20
@@ -19128,6 +22434,18 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+11
+Confuse Ray
+Destiny Bond
+Disable
+Encore
+Grudge
+Mean Look
+Memento
+Misty Terrain
+Shadow Sneak
+Skill Swap
+Synchronoise
 120
 0 0 0 2 0 0 
 Multi 2
@@ -19214,6 +22532,18 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+11
+Confuse Ray
+Destiny Bond
+Disable
+Encore
+Grudge
+Mean Look
+Memento
+Misty Terrain
+Shadow Sneak
+Skill Swap
+Synchronoise
 45
 0 0 0 3 0 0 
 None
@@ -19269,6 +22599,18 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+11
+Aqua Jet
+Bug Bite
+Endure
+Fell Stinger
+Foresight
+Hydro Pump
+Mind Reader
+Mud Shot
+Power Split
+Psybeam
+Signal Beam
 200
 0 0 0 0 0 1 
 Level 284 22
@@ -19339,6 +22681,18 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+11
+Aqua Jet
+Bug Bite
+Endure
+Fell Stinger
+Foresight
+Hydro Pump
+Mind Reader
+Mud Shot
+Power Split
+Psybeam
+Signal Beam
 75
 0 0 0 1 1 0 
 None
@@ -19395,6 +22749,16 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+9
+Bullet Seed
+Charm
+Drain Punch
+Fake Tears
+Focus Punch
+Natural Gift
+Seed Bomb
+Wake-Up Slap
+Worry Seed
 255
 1 0 0 0 0 0 
 Level 286 23
@@ -19470,6 +22834,16 @@ Power-Up Punch
 Confide
 Cut
 Strength
+9
+Bullet Seed
+Charm
+Drain Punch
+Fake Tears
+Focus Punch
+Natural Gift
+Seed Bomb
+Wake-Up Slap
+Worry Seed
 90
 0 2 0 0 0 0 
 None
@@ -19538,6 +22912,17 @@ Power-Up Punch
 Confide
 Cut
 Strength
+10
+Body Slam
+Crush Claw
+Curse
+Hammer Arm
+Night Slash
+Pursuit
+Slash
+Sleep Talk
+Snore
+Tickle
 255
 1 0 0 0 0 0 
 Level 288 18
@@ -19615,6 +23000,17 @@ Power-Up Punch
 Confide
 Cut
 Strength
+10
+Body Slam
+Crush Claw
+Curse
+Hammer Arm
+Night Slash
+Pursuit
+Slash
+Sleep Talk
+Snore
+Tickle
 120
 0 0 0 0 0 2 
 Level 289 36
@@ -19700,6 +23096,17 @@ Power-Up Punch
 Confide
 Cut
 Strength
+10
+Body Slam
+Crush Claw
+Curse
+Hammer Arm
+Night Slash
+Pursuit
+Slash
+Sleep Talk
+Snore
+Tickle
 45
 3 0 0 0 0 0 
 None
@@ -19754,6 +23161,15 @@ Sleep Talk
 Substitute
 Confide
 Cut
+8
+Bug Bite
+Bug Buzz
+Endure
+Feint Attack
+Final Gambit
+Gust
+Night Slash
+Silver Wind
 255
 0 0 1 0 0 0 
 Level 291 20
@@ -19822,6 +23238,15 @@ U-turn
 Substitute
 Confide
 Cut
+8
+Bug Bite
+Bug Buzz
+Endure
+Feint Attack
+Final Gambit
+Gust
+Night Slash
+Silver Wind
 120
 0 0 0 0 0 2 
 None
@@ -19885,6 +23310,15 @@ Sleep Talk
 Substitute
 Confide
 Cut
+8
+Bug Bite
+Bug Buzz
+Endure
+Feint Attack
+Final Gambit
+Gust
+Night Slash
+Silver Wind
 45
 2 0 0 0 0 0 
 None
@@ -19943,6 +23377,17 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+10
+Circle Throw
+Disarming Voice
+Endeavor
+Extrasensory
+Fake Tears
+Hammer Arm
+Smelling Salts
+Smokescreen
+Snore
+Take Down
 190
 1 0 0 0 0 0 
 Level 294 20
@@ -20018,6 +23463,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Circle Throw
+Disarming Voice
+Endeavor
+Extrasensory
+Fake Tears
+Hammer Arm
+Smelling Salts
+Smokescreen
+Snore
+Take Down
 120
 2 0 0 0 0 0 
 Level 295 40
@@ -20104,6 +23560,17 @@ Power-Up Punch
 Confide
 Surf
 Strength
+10
+Circle Throw
+Disarming Voice
+Endeavor
+Extrasensory
+Fake Tears
+Hammer Arm
+Smelling Salts
+Smokescreen
+Snore
+Take Down
 45
 3 0 0 0 0 0 
 None
@@ -20174,6 +23641,19 @@ Power-Up Punch
 Confide
 Surf
 Strength
+12
+Bullet Punch
+Chip Away
+Counter
+Cross Chop
+Detect
+Dynamic Punch
+Feint
+Feint Attack
+Focus Punch
+Foresight
+Revenge
+Wake-Up Slap
 180
 1 0 0 0 0 0 
 Level 297 24
@@ -20250,6 +23730,19 @@ Power-Up Punch
 Confide
 Surf
 Strength
+12
+Bullet Punch
+Chip Away
+Counter
+Cross Chop
+Detect
+Dynamic Punch
+Feint
+Feint Attack
+Focus Punch
+Foresight
+Revenge
+Wake-Up Slap
 200
 2 0 0 0 0 0 
 None
@@ -20302,6 +23795,19 @@ Substitute
 Confide
 Surf
 Waterfall
+12
+Body Slam
+Camouflage
+Copycat
+Encore
+Fake Tears
+Muddy Water
+Refresh
+Sing
+Slam
+Soak
+Tickle
+Water Sport
 150
 1 0 0 0 0 0 
 Item 183  Water Stone
@@ -20370,6 +23876,13 @@ Rock Smash
 Dazzling Gleam
 Confide
 Strength
+6
+Block
+Double-Edge
+Endure
+Magnitude
+Rollout
+Stealth Rock
 255
 0 0 1 0 0 0 
 Item 476  Thunder Stone
@@ -20443,6 +23956,20 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+13
+Baton Pass
+Captivate
+Cosmic Power
+Fake Out
+Fake Tears
+Last Resort
+Mud Bomb
+Simple Beam
+Sucker Punch
+Tickle
+Uproar
+Wish
+Zen Headbutt
 255
 0 0 0 0 0 1 
 Item 301  Moon Stone
@@ -20507,6 +24034,20 @@ Wild Charge
 Rock Smash
 Confide
 Strength
+13
+Baton Pass
+Captivate
+Cosmic Power
+Fake Out
+Fake Tears
+Last Resort
+Mud Bomb
+Simple Beam
+Sucker Punch
+Tickle
+Uproar
+Wish
+Zen Headbutt
 60
 1 0 0 0 0 1 
 None
@@ -20594,6 +24135,18 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Cut
+11
+Captivate
+Feint
+Flatter
+Imprison
+Mean Look
+Metal Burst
+Moonlight
+Nasty Plot
+Recover
+Sucker Punch
+Trick
 45
 0 1 1 0 0 0 
 None
@@ -20679,6 +24232,21 @@ Dark Pulse
 Power-Up Punch
 Confide
 Strength
+14
+Ancient Power
+Captivate
+Fire Fang
+Guard Swap
+Ice Fang
+Metal Burst
+Misty Terrain
+Poison Fang
+Punishment
+Seismic Toss
+Slam
+Sucker Punch
+Thunder Fang
+Tickle
 45
 0 1 1 0 0 0 
 None
@@ -20745,6 +24313,19 @@ Rock Smash
 Confide
 Cut
 Strength
+12
+Body Slam
+Curse
+Dragon Rush
+Endeavor
+Head Smash
+Iron Head
+Reversal
+Screech
+Smelling Salts
+Stealth Rock
+Stomp
+Superpower
 180
 0 0 1 0 0 0 
 Level 305 32
@@ -20814,6 +24395,19 @@ Rock Smash
 Confide
 Cut
 Strength
+12
+Body Slam
+Curse
+Dragon Rush
+Endeavor
+Head Smash
+Iron Head
+Reversal
+Screech
+Smelling Salts
+Stealth Rock
+Stomp
+Superpower
 90
 0 0 2 0 0 0 
 Level 306 42
@@ -20906,6 +24500,19 @@ Confide
 Cut
 Surf
 Strength
+12
+Body Slam
+Curse
+Dragon Rush
+Endeavor
+Head Smash
+Iron Head
+Reversal
+Screech
+Smelling Salts
+Stealth Rock
+Stomp
+Superpower
 45
 0 0 3 0 0 0 
 None
@@ -20979,6 +24586,21 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+14
+Baton Pass
+Bullet Punch
+Drain Punch
+Dynamic Punch
+Fake Out
+Fire Punch
+Foresight
+Guard Swap
+Ice Punch
+Power Swap
+Psycho Cut
+Quick Guard
+Secret Power
+Thunder Punch
 180
 0 0 0 0 0 1 
 Level 308 37
@@ -21061,6 +24683,21 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+14
+Baton Pass
+Bullet Punch
+Drain Punch
+Dynamic Punch
+Fake Out
+Fire Punch
+Foresight
+Guard Swap
+Ice Punch
+Power Swap
+Psycho Cut
+Quick Guard
+Secret Power
+Thunder Punch
 90
 0 0 0 0 0 2 
 None
@@ -21122,6 +24759,21 @@ Wild Charge
 Snarl
 Confide
 Strength
+14
+Crunch
+Curse
+Discharge
+Eerie Impulse
+Electro Ball
+Fire Fang
+Flame Burst
+Headbutt
+Ice Fang
+Shock Wave
+Swift
+Switcheroo
+Thunder Fang
+Uproar
 120
 0 0 0 0 0 1 
 Level 310 26
@@ -21192,6 +24844,21 @@ Wild Charge
 Snarl
 Confide
 Strength
+14
+Crunch
+Curse
+Discharge
+Eerie Impulse
+Electro Ball
+Fire Fang
+Flame Burst
+Headbutt
+Ice Fang
+Shock Wave
+Swift
+Switcheroo
+Thunder Fang
+Uproar
 45
 0 0 0 0 0 2 
 None
@@ -21259,6 +24926,12 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+5
+Discharge
+Lucky Chant
+Sing
+Sweet Kiss
+Wish
 200
 0 0 0 0 0 1 
 None
@@ -21326,6 +24999,12 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+5
+Discharge
+Lucky Chant
+Sing
+Sweet Kiss
+Wish
 200
 0 0 0 0 0 1 
 None
@@ -21393,6 +25072,14 @@ Substitute
 Power-Up Punch
 Dazzling Gleam
 Confide
+7
+Baton Pass
+Bug Buzz
+Dizzy Punch
+Encore
+Seismic Toss
+Silver Wind
+Trick
 150
 0 0 0 0 0 1 
 None
@@ -21460,6 +25147,15 @@ Substitute
 Power-Up Punch
 Dazzling Gleam
 Confide
+8
+Baton Pass
+Bug Buzz
+Captivate
+Confuse Ray
+Encore
+Fake Tears
+Growth
+Silver Wind
 150
 0 0 0 0 0 1 
 None
@@ -21525,6 +25221,20 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+13
+Bullet Seed
+Cotton Spore
+Giga Drain
+Grass Whistle
+Leaf Storm
+Mind Reader
+Natural Gift
+Pin Missile
+Razor Leaf
+Seed Bomb
+Sleep Powder
+Spikes
+Synthesis
 150
 0 0 0 2 0 0 
 Item 407  Shiny Stone
@@ -21590,6 +25300,15 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+8
+Acid Armor
+Curse
+Destiny Bond
+Gunk Shot
+Mud-Slap
+Pain Split
+Smog
+Venom Drench
 225
 1 0 0 0 0 0 
 Level 317 26
@@ -21664,6 +25383,15 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+8
+Acid Armor
+Curse
+Destiny Bond
+Gunk Shot
+Mud-Slap
+Pain Split
+Smog
+Venom Drench
 75
 2 0 0 0 0 0 
 None
@@ -21725,6 +25453,14 @@ Dark Pulse
 Confide
 Surf
 Waterfall
+7
+Ancient Power
+Brine
+Destiny Bond
+Double-Edge
+Hydro Pump
+Swift
+Thrash
 225
 0 1 0 0 0 0 
 Level 319 30
@@ -21802,6 +25538,14 @@ Confide
 Surf
 Strength
 Waterfall
+7
+Ancient Power
+Brine
+Destiny Bond
+Double-Edge
+Hydro Pump
+Swift
+Thrash
 60
 0 2 0 0 0 0 
 None
@@ -21866,6 +25610,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Aqua Ring
+Body Slam
+Clear Smog
+Curse
+Defense Curl
+Double-Edge
+Fissure
+Sleep Talk
+Snore
+Soak
+Thrash
+Tickle
+Zen Headbutt
 125
 1 0 0 0 0 0 
 Level 321 40
@@ -21934,6 +25692,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Aqua Ring
+Body Slam
+Clear Smog
+Curse
+Defense Curl
+Double-Edge
+Fissure
+Sleep Talk
+Snore
+Soak
+Thrash
+Tickle
+Zen Headbutt
 60
 2 0 0 0 0 0 
 None
@@ -21999,6 +25771,23 @@ Rock Smash
 Nature Power
 Confide
 Strength
+16
+Ancient Power
+Body Slam
+Defense Curl
+Endure
+Growth
+Heat Wave
+Howl
+Iron Head
+Mud Bomb
+Rollout
+Scary Face
+Spit Up
+Stockpile
+Stomp
+Swallow
+Yawn
 255
 0 0 0 1 0 0 
 Level 323 33
@@ -22078,6 +25867,23 @@ Rock Smash
 Nature Power
 Confide
 Strength
+16
+Ancient Power
+Body Slam
+Defense Curl
+Endure
+Growth
+Heat Wave
+Howl
+Iron Head
+Mud Bomb
+Rollout
+Scary Face
+Spit Up
+Stockpile
+Stomp
+Swallow
+Yawn
 150
 0 1 0 1 0 0 
 None
@@ -22156,6 +25962,16 @@ Rock Smash
 Nature Power
 Confide
 Strength
+9
+Clear Smog
+Endure
+Eruption
+Fissure
+Flame Burst
+Skull Bash
+Sleep Talk
+Superpower
+Yawn
 90
 0 0 2 0 0 0 
 None
@@ -22223,6 +26039,18 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+11
+Amnesia
+Endure
+Extrasensory
+Future Sight
+Lucky Chant
+Mirror Coat
+Simple Beam
+Skill Swap
+Trick
+Whirlwind
+Zen Headbutt
 255
 0 0 0 0 1 0 
 Level 326 32
@@ -22303,6 +26131,18 @@ Substitute
 Trick Room
 Power-Up Punch
 Confide
+11
+Amnesia
+Endure
+Extrasensory
+Future Sight
+Lucky Chant
+Mirror Coat
+Simple Beam
+Skill Swap
+Trick
+Whirlwind
+Zen Headbutt
 60
 0 0 0 0 2 0 
 None
@@ -22371,6 +26211,23 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+16
+Assist
+Baton Pass
+Disable
+Encore
+Fake Out
+Fake Tears
+Guard Split
+Icy Wind
+Psycho Cut
+Psycho Shift
+Rapid Spin
+Role Play
+Smelling Salts
+Trick
+Water Pulse
+Wish
 255
 0 0 0 1 0 0 
 None
@@ -22437,6 +26294,17 @@ Substitute
 Rock Smash
 Confide
 Strength
+10
+Bug Bite
+Earth Power
+Endure
+Flail
+Focus Energy
+Fury Cutter
+Gust
+Mud Shot
+Quick Attack
+Signal Beam
 255
 0 1 0 0 0 0 
 Level 329 35
@@ -22504,6 +26372,17 @@ Rock Smash
 Confide
 Fly
 Strength
+10
+Bug Bite
+Earth Power
+Endure
+Flail
+Focus Energy
+Fury Cutter
+Gust
+Mud Shot
+Quick Attack
+Signal Beam
 120
 0 1 0 0 0 1 
 Level 330 45
@@ -22582,6 +26461,17 @@ Power-Up Punch
 Confide
 Fly
 Strength
+10
+Bug Bite
+Earth Power
+Endure
+Flail
+Focus Energy
+Fury Cutter
+Gust
+Mud Shot
+Quick Attack
+Signal Beam
 45
 0 1 0 0 0 2 
 None
@@ -22647,6 +26537,24 @@ Dark Pulse
 Power-Up Punch
 Confide
 Cut
+17
+Acid
+Belch
+Block
+Counter
+Disable
+Dynamic Punch
+Fell Stinger
+Grass Whistle
+Low Kick
+Magical Leaf
+Nasty Plot
+Rototiller
+Seed Bomb
+Smelling Salts
+Switcheroo
+Teeter Dance
+Worry Seed
 190
 0 0 0 1 0 0 
 Level 332 32
@@ -22724,6 +26632,24 @@ Power-Up Punch
 Confide
 Cut
 Strength
+17
+Acid
+Belch
+Block
+Counter
+Disable
+Dynamic Punch
+Fell Stinger
+Grass Whistle
+Low Kick
+Magical Leaf
+Nasty Plot
+Rototiller
+Seed Bomb
+Smelling Salts
+Switcheroo
+Teeter Dance
+Worry Seed
 60
 0 1 0 1 0 0 
 None
@@ -22789,6 +26715,17 @@ Substitute
 Dazzling Gleam
 Confide
 Fly
+10
+Agility
+Dragon Rush
+Feather Dance
+Haze
+Hyper Voice
+Power Swap
+Pursuit
+Rage
+Roost
+Steel Wing
 255
 0 0 0 0 1 0 
 Level 334 35
@@ -22869,6 +26806,17 @@ Rock Smash
 Dazzling Gleam
 Confide
 Fly
+10
+Agility
+Dragon Rush
+Feather Dance
+Haze
+Hyper Voice
+Power Swap
+Pursuit
+Rage
+Roost
+Steel Wing
 45
 0 0 0 0 2 0 
 None
@@ -22950,6 +26898,21 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+14
+Counter
+Curse
+Disable
+Double Hit
+Double Kick
+Feint
+Final Gambit
+Flail
+Fury Swipes
+Iron Tail
+Metal Claw
+Night Slash
+Quick Guard
+Razor Wind
 90
 0 2 0 0 0 0 
 None
@@ -23022,6 +26985,19 @@ Rock Smash
 Dark Pulse
 Confide
 Strength
+12
+Assurance
+Body Slam
+Final Gambit
+Iron Tail
+Night Slash
+Punishment
+Scary Face
+Spit Up
+Stockpile
+Swallow
+Switcheroo
+Wring Out
 90
 0 1 0 1 0 0 
 None
@@ -23104,6 +27080,7 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+0
 45
 0 0 0 2 0 0 
 None
@@ -23190,6 +27167,7 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+0
 45
 0 2 0 0 0 0 
 None
@@ -23250,6 +27228,17 @@ Substitute
 Confide
 Surf
 Waterfall
+10
+Dragon Dance
+Earth Power
+Flail
+Hydro Pump
+Mud Shot
+Muddy Water
+Spark
+Take Down
+Thrash
+Whirlpool
 190
 1 0 0 0 0 0 
 Level 340 30
@@ -23318,6 +27307,17 @@ Confide
 Surf
 Strength
 Waterfall
+10
+Dragon Dance
+Earth Power
+Flail
+Hydro Pump
+Mud Shot
+Muddy Water
+Spark
+Take Down
+Thrash
+Whirlpool
 75
 2 0 0 0 0 0 
 None
@@ -23387,6 +27387,20 @@ Cut
 Surf
 Strength
 Waterfall
+13
+Ancient Power
+Aqua Jet
+Body Slam
+Chip Away
+Double-Edge
+Dragon Dance
+Endeavor
+Knock Off
+Metal Claw
+Mud Sport
+Superpower
+Switcheroo
+Trump Card
 205
 0 1 0 0 0 0 
 Level 342 30
@@ -23468,6 +27482,20 @@ Cut
 Surf
 Strength
 Waterfall
+13
+Ancient Power
+Aqua Jet
+Body Slam
+Chip Away
+Double-Edge
+Dragon Dance
+Endeavor
+Knock Off
+Metal Claw
+Mud Sport
+Superpower
+Switcheroo
+Trump Card
 155
 0 2 0 0 0 0 
 None
@@ -23545,6 +27573,7 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+0
 255
 0 0 0 0 1 0 
 Level 344 36
@@ -23630,6 +27659,7 @@ Rock Smash
 Dazzling Gleam
 Confide
 Strength
+0
 90
 0 0 0 0 2 0 
 None
@@ -23689,6 +27719,16 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+9
+Barrier
+Curse
+Endure
+Mega Drain
+Mirror Coat
+Recover
+Stealth Rock
+Tickle
+Wring Out
 45
 0 0 0 0 1 0 
 Level 346 40
@@ -23763,6 +27803,16 @@ Substitute
 Rock Smash
 Confide
 Strength
+9
+Barrier
+Curse
+Endure
+Mega Drain
+Mirror Coat
+Recover
+Stealth Rock
+Tickle
+Wring Out
 45
 0 0 0 0 2 0 
 None
@@ -23825,6 +27875,16 @@ Substitute
 Rock Smash
 Confide
 Cut
+9
+Aqua Jet
+Cross Poison
+Curse
+Iron Defense
+Knock Off
+Rapid Spin
+Sand Attack
+Screech
+Water Pulse
 45
 0 1 0 0 0 0 
 Level 348 40
@@ -23896,6 +27956,16 @@ Rock Smash
 Confide
 Cut
 Strength
+9
+Aqua Jet
+Cross Poison
+Curse
+Iron Defense
+Knock Off
+Rapid Spin
+Sand Attack
+Screech
+Water Pulse
 45
 0 2 0 0 0 0 
 None
@@ -23940,6 +28010,19 @@ Substitute
 Confide
 Surf
 Waterfall
+12
+Brine
+Captivate
+Confuse Ray
+Dragon Breath
+Dragon Pulse
+Haze
+Hypnosis
+Iron Tail
+Mirror Coat
+Mist
+Mud Sport
+Tickle
 255
 0 0 0 0 0 1 
 Item 350  Prism Scale
@@ -24001,6 +28084,19 @@ Substitute
 Confide
 Surf
 Waterfall
+12
+Brine
+Captivate
+Confuse Ray
+Dragon Breath
+Dragon Pulse
+Haze
+Hypnosis
+Iron Tail
+Mirror Coat
+Mist
+Mud Sport
+Tickle
 60
 0 0 0 0 2 0 
 None
@@ -24066,6 +28162,17 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+10
+Amnesia
+Clear Smog
+Cosmic Power
+Disable
+Future Sight
+Guard Swap
+Hex
+Lucky Chant
+Ominous Wind
+Reflect Type
 45
 1 0 0 0 0 0 
 None
@@ -24151,6 +28258,18 @@ Power-Up Punch
 Confide
 Cut
 Strength
+11
+Camouflage
+Disable
+Dizzy Punch
+Fake Out
+Foul Play
+Magic Coat
+Nasty Plot
+Recover
+Skill Swap
+Snatch
+Trick
 200
 0 0 0 0 1 0 
 None
@@ -24221,6 +28340,18 @@ Trick Room
 Dark Pulse
 Dazzling Gleam
 Confide
+11
+Astonish
+Confuse Ray
+Destiny Bond
+Disable
+Foresight
+Gunk Shot
+Imprison
+Ominous Wind
+Phantom Force
+Pursuit
+Shadow Sneak
 225
 0 1 0 0 0 0 
 Level 354 37
@@ -24299,6 +28430,18 @@ Trick Room
 Dark Pulse
 Dazzling Gleam
 Confide
+11
+Astonish
+Confuse Ray
+Destiny Bond
+Disable
+Foresight
+Gunk Shot
+Imprison
+Ominous Wind
+Phantom Force
+Pursuit
+Shadow Sneak
 45
 0 2 0 0 0 0 
 None
@@ -24368,6 +28511,17 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+10
+Dark Pulse
+Destiny Bond
+Feint Attack
+Grudge
+Haze
+Imprison
+Memento
+Ominous Wind
+Pain Split
+Skill Swap
 190
 0 0 0 0 1 0 
 Level 356 37
@@ -24456,6 +28610,17 @@ Dark Pulse
 Power-Up Punch
 Confide
 Strength
+10
+Dark Pulse
+Destiny Bond
+Feint Attack
+Grudge
+Haze
+Imprison
+Memento
+Ominous Wind
+Pain Split
+Skill Swap
 90
 0 0 1 0 1 0 
 Item 477  Reaper Cloth
@@ -24531,6 +28696,19 @@ Confide
 Cut
 Fly
 Strength
+12
+Bullet Seed
+Curse
+Dragon Dance
+Headbutt
+Leaf Blade
+Leaf Storm
+Leech Seed
+Natural Gift
+Nature Power
+Razor Wind
+Slam
+Synthesis
 200
 2 0 0 0 0 0 
 None
@@ -24602,6 +28780,16 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+9
+Cosmic Power
+Curse
+Disable
+Future Sight
+Hypnosis
+Recover
+Skill Swap
+Stored Power
+Wish
 45
 0 0 0 1 1 0 
 None
@@ -24700,6 +28888,22 @@ Dark Pulse
 Confide
 Cut
 Strength
+15
+Assurance
+Baton Pass
+Curse
+Double-Edge
+Feint Attack
+Hex
+Magic Coat
+Me First
+Mean Look
+Megahorn
+Perish Song
+Play Rough
+Punishment
+Sucker Punch
+Zen Headbutt
 30
 0 2 0 0 0 0 
 None
@@ -24729,6 +28933,7 @@ Psychic None
 15 Destiny Bond
 1
 Safeguard
+0
 125
 1 0 0 0 0 0 
 Level 202 15
@@ -24783,6 +28988,17 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+10
+Avalanche
+Bide
+Block
+Disable
+Fake Tears
+Hex
+Rollout
+Spikes
+Switcheroo
+Weather Ball
 190
 1 0 0 0 0 0 
 Multi 2
@@ -24854,6 +29070,17 @@ Sleep Talk
 Substitute
 Dark Pulse
 Confide
+10
+Avalanche
+Bide
+Block
+Disable
+Fake Tears
+Hex
+Rollout
+Spikes
+Switcheroo
+Weather Ball
 75
 2 0 0 0 0 0 
 None
@@ -24916,6 +29143,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Aqua Ring
+Belly Drum
+Curse
+Fissure
+Rollout
+Signal Beam
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
+Water Pulse
+Water Sport
+Yawn
 255
 1 0 0 0 0 0 
 Level 364 32
@@ -24978,6 +29219,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Aqua Ring
+Belly Drum
+Curse
+Fissure
+Rollout
+Signal Beam
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
+Water Pulse
+Water Sport
+Yawn
 120
 2 0 0 0 0 0 
 Level 365 44
@@ -25044,6 +29299,20 @@ Confide
 Surf
 Strength
 Waterfall
+13
+Aqua Ring
+Belly Drum
+Curse
+Fissure
+Rollout
+Signal Beam
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
+Water Pulse
+Water Sport
+Yawn
 45
 3 0 0 0 0 0 
 None
@@ -25089,6 +29358,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Aqua Ring
+Barrier
+Body Slam
+Brine
+Confuse Ray
+Endure
+Mud Sport
+Muddy Water
+Refresh
+Supersonic
+Water Pulse
 255
 0 0 1 0 0 0 
 Multi 2
@@ -25148,6 +29429,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Aqua Ring
+Barrier
+Body Slam
+Brine
+Confuse Ray
+Endure
+Mud Sport
+Muddy Water
+Refresh
+Supersonic
+Water Pulse
 60
 0 1 1 0 0 0 
 None
@@ -25208,6 +29501,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Aqua Ring
+Barrier
+Body Slam
+Brine
+Confuse Ray
+Endure
+Mud Sport
+Muddy Water
+Refresh
+Supersonic
+Water Pulse
 60
 0 0 0 2 0 0 
 None
@@ -25280,6 +29585,19 @@ Rock Smash
 Confide
 Surf
 Waterfall
+12
+Amnesia
+Aqua Tail
+Brine
+Magnitude
+Mud Shot
+Mud-Slap
+Muddy Water
+Skull Bash
+Sleep Talk
+Snore
+Water Sport
+Zen Headbutt
 25
 1 0 1 0 0 0 
 None
@@ -25337,6 +29655,17 @@ Substitute
 Confide
 Surf
 Waterfall
+10
+Aqua Jet
+Aqua Ring
+Brine
+Captivate
+Entrainment
+Heal Pulse
+Mud Sport
+Splash
+Supersonic
+Water Sport
 225
 0 0 0 0 0 1 
 None
@@ -25399,6 +29728,17 @@ Rock Smash
 Confide
 Cut
 Strength
+10
+Defense Curl
+Dragon Dance
+Dragon Pulse
+Dragon Rage
+Dragon Rush
+Endure
+Fire Fang
+Hydro Pump
+Thrash
+Twister
 45
 0 1 0 0 0 0 
 Level 372 30
@@ -25466,6 +29806,17 @@ Rock Smash
 Confide
 Cut
 Strength
+10
+Defense Curl
+Dragon Dance
+Dragon Pulse
+Dragon Rage
+Dragon Rush
+Endure
+Fire Fang
+Hydro Pump
+Thrash
+Twister
 45
 0 0 2 0 0 0 
 Level 373 50
@@ -25547,6 +29898,17 @@ Confide
 Cut
 Fly
 Strength
+10
+Defense Curl
+Dragon Dance
+Dragon Pulse
+Dragon Rage
+Dragon Rush
+Endure
+Fire Fang
+Hydro Pump
+Thrash
+Twister
 45
 0 3 0 0 0 0 
 None
@@ -25570,6 +29932,7 @@ Slow
 Steel Psychic
 1
 0 Take Down
+0
 0
 3
 0 0 1 0 0 0 
@@ -25648,6 +30011,7 @@ Power-Up Punch
 Confide
 Cut
 Strength
+0
 3
 0 0 2 0 0 0 
 Level 376 45
@@ -25727,6 +30091,7 @@ Power-Up Punch
 Confide
 Cut
 Strength
+0
 3
 0 0 3 0 0 0 
 None
@@ -25801,6 +30166,7 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+0
 3
 0 0 3 0 0 0 
 None
@@ -25875,6 +30241,7 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+0
 3
 0 0 0 0 3 0 
 None
@@ -25953,6 +30320,7 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+0
 3
 0 0 2 0 1 0 
 None
@@ -26047,6 +30415,7 @@ Cut
 Fly
 Surf
 Waterfall
+0
 3
 0 0 0 0 3 0 
 None
@@ -26141,6 +30510,7 @@ Cut
 Fly
 Surf
 Waterfall
+0
 3
 0 0 0 3 0 0 
 None
@@ -26209,6 +30579,7 @@ Confide
 Surf
 Strength
 Waterfall
+0
 5
 0 0 0 3 0 0 
 None
@@ -26291,6 +30662,7 @@ Power-Up Punch
 Confide
 Cut
 Strength
+0
 5
 0 3 0 0 0 0 
 None
@@ -26377,6 +30749,7 @@ Fly
 Surf
 Strength
 Waterfall
+0
 3
 0 2 0 1 0 0 
 None
@@ -26453,6 +30826,7 @@ Trick Room
 Power-Up Punch
 Dazzling Gleam
 Confide
+0
 3
 3 0 0 0 0 0 
 None
@@ -26539,6 +30913,7 @@ Power-Up Punch
 Confide
 Cut
 Strength
+0
 3
 0 1 0 1 0 1
 None
@@ -26597,6 +30972,22 @@ Nature Power
 Confide
 Cut
 Strength
+15
+Amnesia
+Body Slam
+Double-Edge
+Earth Power
+Grassy Terrain
+Growth
+Sand Tomb
+Seed Bomb
+Spit Up
+Stockpile
+Superpower
+Swallow
+Thrash
+Tickle
+Worry Seed
 45
 0 1 0 0 0 0 
 Level 388 18
@@ -26657,6 +31048,22 @@ Nature Power
 Confide
 Cut
 Strength
+15
+Amnesia
+Body Slam
+Double-Edge
+Earth Power
+Grassy Terrain
+Growth
+Sand Tomb
+Seed Bomb
+Spit Up
+Stockpile
+Superpower
+Swallow
+Thrash
+Tickle
+Worry Seed
 45
 0 1 1 0 0 0 
 Level 389 32
@@ -26731,6 +31138,22 @@ Nature Power
 Confide
 Cut
 Strength
+15
+Amnesia
+Body Slam
+Double-Edge
+Earth Power
+Grassy Terrain
+Growth
+Sand Tomb
+Seed Bomb
+Spit Up
+Stockpile
+Superpower
+Swallow
+Thrash
+Tickle
+Worry Seed
 45
 0 2 1 0 0 0 
 None
@@ -26803,6 +31226,20 @@ Power-Up Punch
 Confide
 Cut
 Strength
+13
+Assist
+Blaze Kick
+Counter
+Double Kick
+Encore
+Fake Out
+Fire Punch
+Focus Energy
+Focus Punch
+Heat Wave
+Quick Guard
+Submission
+Thunder Punch
 45
 0 0 0 0 0 1 
 Level 391 14
@@ -26882,6 +31319,20 @@ Power-Up Punch
 Confide
 Cut
 Strength
+13
+Assist
+Blaze Kick
+Counter
+Double Kick
+Encore
+Fake Out
+Fire Punch
+Focus Energy
+Focus Punch
+Heat Wave
+Quick Guard
+Submission
+Thunder Punch
 45
 0 0 0 1 0 1 
 Level 392 36
@@ -26971,6 +31422,20 @@ Power-Up Punch
 Confide
 Cut
 Strength
+13
+Assist
+Blaze Kick
+Counter
+Double Kick
+Encore
+Fake Out
+Fire Punch
+Focus Energy
+Focus Punch
+Heat Wave
+Quick Guard
+Submission
+Thunder Punch
 45
 0 1 0 1 0 1 
 None
@@ -27033,6 +31498,20 @@ Confide
 Cut
 Surf
 Waterfall
+13
+Agility
+Aqua Ring
+Bide
+Double Hit
+Feather Dance
+Flail
+Hydro Pump
+Icy Wind
+Mud Sport
+Mud-Slap
+Snore
+Supersonic
+Yawn
 45
 0 0 0 1 0 0 
 Level 394 16
@@ -27101,6 +31580,20 @@ Cut
 Surf
 Strength
 Waterfall
+13
+Agility
+Aqua Ring
+Bide
+Double Hit
+Feather Dance
+Flail
+Hydro Pump
+Icy Wind
+Mud Sport
+Mud-Slap
+Snore
+Supersonic
+Yawn
 45
 0 0 0 2 0 0 
 Level 395 36
@@ -27180,6 +31673,20 @@ Cut
 Surf
 Strength
 Waterfall
+13
+Agility
+Aqua Ring
+Bide
+Double Hit
+Feather Dance
+Flail
+Hydro Pump
+Icy Wind
+Mud Sport
+Mud-Slap
+Snore
+Supersonic
+Yawn
 45
 0 0 0 3 0 0 
 None
@@ -27235,6 +31742,20 @@ U-turn
 Substitute
 Confide
 Fly
+13
+Astonish
+Detect
+Double-Edge
+Feather Dance
+Foresight
+Fury Attack
+Mirror Move
+Pursuit
+Revenge
+Roost
+Sand Attack
+Steel Wing
+Uproar
 255
 0 0 0 0 0 1 
 Level 397 14
@@ -27292,6 +31813,20 @@ U-turn
 Substitute
 Confide
 Fly
+13
+Astonish
+Detect
+Double-Edge
+Feather Dance
+Foresight
+Fury Attack
+Mirror Move
+Pursuit
+Revenge
+Roost
+Sand Attack
+Steel Wing
+Uproar
 120
 0 0 0 0 0 2 
 Level 398 34
@@ -27353,6 +31888,20 @@ U-turn
 Substitute
 Confide
 Fly
+13
+Astonish
+Detect
+Double-Edge
+Feather Dance
+Foresight
+Fury Attack
+Mirror Move
+Pursuit
+Revenge
+Roost
+Sand Attack
+Steel Wing
+Uproar
 45
 0 3 0 0 0 0 
 None
@@ -27416,6 +31965,19 @@ Substitute
 Rock Smash
 Confide
 Cut
+12
+Aqua Tail
+Defense Curl
+Double-Edge
+Endure
+Fury Swipes
+Odor Sleuth
+Quick Attack
+Rock Climb
+Rollout
+Skull Bash
+Sleep Talk
+Water Sport
 255
 1 0 0 0 0 0 
 Level 400 15
@@ -27489,6 +32051,19 @@ Cut
 Surf
 Strength
 Waterfall
+12
+Aqua Tail
+Defense Curl
+Double-Edge
+Endure
+Fury Swipes
+Odor Sleuth
+Quick Attack
+Rock Climb
+Rollout
+Skull Bash
+Sleep Talk
+Water Sport
 127
 0 2 0 0 0 0 
 None
@@ -27517,6 +32092,7 @@ Bug None
 16 Bug Bite
 1
 Struggle Bug
+0
 255
 0 0 1 0 0 0 
 Level 402 10
@@ -27585,6 +32161,7 @@ Power-Up Punch
 Confide
 Cut
 Strength
+0
 45
 0 2 0 0 0 0 
 None
@@ -27645,6 +32222,20 @@ Wild Charge
 Snarl
 Confide
 Strength
+13
+Double Kick
+Eerie Impulse
+Fake Tears
+Fire Fang
+Howl
+Ice Fang
+Night Slash
+Quick Attack
+Shock Wave
+Signal Beam
+Swift
+Take Down
+Thunder Fang
 235
 0 1 0 0 0 0 
 Level 404 15
@@ -27704,6 +32295,20 @@ Wild Charge
 Snarl
 Confide
 Strength
+13
+Double Kick
+Eerie Impulse
+Fake Tears
+Fire Fang
+Howl
+Ice Fang
+Night Slash
+Quick Attack
+Shock Wave
+Signal Beam
+Swift
+Take Down
+Thunder Fang
 120
 0 2 0 0 0 0 
 Level 405 30
@@ -27768,6 +32373,20 @@ Wild Charge
 Snarl
 Confide
 Strength
+13
+Double Kick
+Eerie Impulse
+Fake Tears
+Fire Fang
+Howl
+Ice Fang
+Night Slash
+Quick Attack
+Shock Wave
+Signal Beam
+Swift
+Take Down
+Thunder Fang
 45
 0 3 0 0 0 0 
 None
@@ -27822,6 +32441,20 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+13
+Cotton Spore
+Extrasensory
+Giga Drain
+Grass Whistle
+Leaf Storm
+Mind Reader
+Natural Gift
+Pin Missile
+Razor Leaf
+Seed Bomb
+Sleep Powder
+Spikes
+Synthesis
 255
 0 0 0 1 0 0 
 Item 315  Leaf Stone
@@ -27880,6 +32513,20 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+13
+Bullet Seed
+Cotton Spore
+Giga Drain
+Grass Whistle
+Leaf Storm
+Mind Reader
+Natural Gift
+Pin Missile
+Razor Leaf
+Seed Bomb
+Sleep Powder
+Spikes
+Synthesis
 75
 0 0 0 3 0 0 
 None
@@ -27953,6 +32600,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+11
+Crunch
+Curse
+Double-Edge
+Hammer Arm
+Iron Head
+Iron Tail
+Leer
+Slam
+Stomp
+Thrash
+Whirlwind
 45
 0 1 0 0 0 0 
 Level 409 30
@@ -28032,6 +32691,18 @@ Confide
 Cut
 Surf
 Strength
+11
+Crunch
+Curse
+Double-Edge
+Hammer Arm
+Iron Head
+Iron Tail
+Leer
+Slam
+Stomp
+Thrash
+Whirlwind
 45
 0 2 0 0 0 0 
 None
@@ -28101,6 +32772,19 @@ Flash Cannon
 Rock Smash
 Confide
 Strength
+12
+Body Slam
+Counter
+Curse
+Double-Edge
+Fissure
+Focus Energy
+Guard Split
+Headbutt
+Rock Blast
+Scary Face
+Screech
+Stealth Rock
 45
 0 0 1 0 0 0 
 Level 411 30
@@ -28175,6 +32859,19 @@ Flash Cannon
 Rock Smash
 Confide
 Strength
+12
+Body Slam
+Counter
+Curse
+Double-Edge
+Fissure
+Focus Energy
+Guard Split
+Headbutt
+Rock Blast
+Scary Face
+Screech
+Stealth Rock
 45
 0 0 2 0 0 0 
 None
@@ -28202,6 +32899,7 @@ Bug None
 2
 Hidden Power
 Protect
+0
 120
 0 0 0 0 1 0 
 Multi 2
@@ -28274,6 +32972,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Confide
+0
 45
 0 0 0 0 2 0
 None
@@ -28342,6 +33041,7 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+0
 45
 0 1 0 1 0 0 
 None
@@ -28367,6 +33067,7 @@ Bug Flying
 0 Gust
 13 Bug Bite
 29 Bug Buzz
+0
 0
 120
 0 0 0 0 0 1 
@@ -28440,6 +33141,7 @@ U-turn
 Substitute
 Confide
 Cut
+0
 45
 0 0 1 0 1 0 
 None
@@ -28503,6 +33205,19 @@ U-turn
 Substitute
 Confide
 Cut
+12
+Bestow
+Bite
+Charge
+Covet
+Defense Curl
+Fake Tears
+Flail
+Flatter
+Electrify
+Iron Tail
+Rollout
+Tail Whip
 200
 0 0 0 0 0 1 
 None
@@ -28565,6 +33280,21 @@ Confide
 Surf
 Strength
 Waterfall
+14
+Aqua Ring
+Aqua Tail
+Baton Pass
+Double Slap
+Fury Cutter
+Fury Swipes
+Headbutt
+Me First
+Mud-Slap
+Odor Sleuth
+Slash
+Soak
+Switcheroo
+Tail Slap
 190
 0 0 0 0 0 1 
 Level 419 26
@@ -28640,6 +33370,21 @@ Confide
 Surf
 Strength
 Waterfall
+14
+Aqua Ring
+Aqua Tail
+Baton Pass
+Double Slap
+Fury Cutter
+Fury Swipes
+Headbutt
+Me First
+Mud-Slap
+Odor Sleuth
+Slash
+Soak
+Switcheroo
+Tail Slap
 75
 0 0 0 0 0 2 
 None
@@ -28695,6 +33440,21 @@ Substitute
 Nature Power
 Dazzling Gleam
 Confide
+14
+Aromatherapy
+Defense Curl
+Flower Shield
+Grass Whistle
+Heal Pulse
+Healing Wish
+Natural Gift
+Nature Power
+Razor Leaf
+Rollout
+Seed Bomb
+Sweet Scent
+Tickle
+Weather Ball
 190
 0 0 0 1 0 0 
 Level 421 25
@@ -28754,6 +33514,21 @@ Substitute
 Nature Power
 Dazzling Gleam
 Confide
+14
+Aromatherapy
+Defense Curl
+Flower Shield
+Grass Whistle
+Heal Pulse
+Healing Wish
+Natural Gift
+Nature Power
+Razor Leaf
+Rollout
+Seed Bomb
+Sweet Scent
+Tickle
+Weather Ball
 75
 0 0 0 2 0 0 
 None
@@ -28805,6 +33580,23 @@ Sleep Talk
 Substitute
 Confide
 Surf
+16
+Acid Armor
+Amnesia
+Brine
+Clear Smog
+Counter
+Curse
+Fissure
+Memento
+Mirror Coat
+Mist
+Sludge
+Spit Up
+Stockpile
+Swallow
+Trump Card
+Yawn
 190
 1 0 0 0 0 0 
 Level 423 30
@@ -28873,6 +33665,23 @@ Confide
 Surf
 Strength
 Waterfall
+16
+Acid Armor
+Amnesia
+Brine
+Clear Smog
+Counter
+Curse
+Fissure
+Memento
+Mirror Coat
+Mist
+Sludge
+Spit Up
+Stockpile
+Swallow
+Trump Card
+Yawn
 75
 2 0 0 0 0 0 
 None
@@ -28950,6 +33759,21 @@ Power-Up Punch
 Confide
 Cut
 Strength
+14
+Agility
+Beat Up
+Bounce
+Counter
+Covet
+Double Slap
+Fake Out
+Pursuit
+Quick Guard
+Revenge
+Screech
+Slam
+Spite
+Switcheroo
 45
 0 0 0 0 0 2 
 None
@@ -29018,6 +33842,17 @@ Sleep Talk
 Substitute
 Confide
 Cut
+10
+Body Slam
+Clear Smog
+Defog
+Destiny Bond
+Disable
+Haze
+Hypnosis
+Memento
+Tailwind
+Weather Ball
 125
 1 0 0 0 0 0 
 Level 426 28
@@ -29093,6 +33928,17 @@ Substitute
 Confide
 Cut
 Fly
+10
+Body Slam
+Clear Smog
+Defog
+Destiny Bond
+Disable
+Haze
+Hypnosis
+Memento
+Tailwind
+Weather Ball
 60
 2 0 0 0 0 0 
 None
@@ -29159,6 +34005,25 @@ Rock Smash
 Power-Up Punch
 Confide
 Cut
+18
+Circle Throw
+Copycat
+Cosmic Power
+Double Hit
+Encore
+Fake Out
+Fake Tears
+Fire Punch
+Flail
+Focus Punch
+Ice Punch
+Low Kick
+Mud Sport
+Sky Uppercut
+Sweet Kiss
+Switcheroo
+Teeter Dance
+Thunder Punch
 190
 0 0 0 0 0 1 
 Item 428  Shiny Stone
@@ -29237,6 +34102,25 @@ Power-Up Punch
 Confide
 Cut
 Strength
+18
+Circle Throw
+Copycat
+Cosmic Power
+Double Hit
+Encore
+Fake Out
+Fake Tears
+Fire Punch
+Flail
+Focus Punch
+Ice Punch
+Low Kick
+Mud Sport
+Sky Uppercut
+Sweet Kiss
+Switcheroo
+Teeter Dance
+Thunder Punch
 60
 0 0 0 0 0 2 
 None
@@ -29306,6 +34190,20 @@ Trick Room
 Dark Pulse
 Dazzling Gleam
 Confide
+13
+Curse
+Destiny Bond
+Imprison
+Me First
+Memento
+Nasty Plot
+Ominous Wind
+Screech
+Shadow Sneak
+Skill Swap
+Spite
+Sucker Punch
+Wonder Room
 45
 0 0 0 1 1 0 
 None
@@ -29374,6 +34272,22 @@ Snarl
 Dark Pulse
 Confide
 Fly
+15
+Assurance
+Brave Bird
+Confuse Ray
+Drill Peck
+Feather Dance
+Feint Attack
+Flatter
+Mirror Move
+Perish Song
+Psycho Shift
+Roost
+Screech
+Sky Attack
+Whirlwind
+Wing Attack
 30
 0 2 0 0 0 0 
 None
@@ -29441,6 +34355,17 @@ U-turn
 Substitute
 Confide
 Cut
+10
+Assurance
+Bite
+Fake Tears
+Flail
+Last Resort
+Quick Attack
+Sand Attack
+Snatch
+Tail Whip
+Wake-Up Slap
 190
 0 0 0 0 0 1 
 Level 432 38
@@ -29515,6 +34440,17 @@ U-turn
 Substitute
 Confide
 Cut
+10
+Assurance
+Bite
+Fake Tears
+Flail
+Last Resort
+Quick Attack
+Sand Attack
+Snatch
+Tail Whip
+Wake-Up Slap
 75
 0 0 0 0 0 2 
 None
@@ -29576,6 +34512,16 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+9
+Cosmic Power
+Curse
+Disable
+Future Sight
+Hypnosis
+Recover
+Skill Swap
+Stored Power
+Wish
 120
 0 0 0 1 0 0 
 Item 358  Moon Stone
@@ -29645,6 +34591,20 @@ Snarl
 Dark Pulse
 Confide
 Cut
+13
+Astonish
+Crunch
+Double-Edge
+Flame Burst
+Foul Play
+Haze
+Iron Tail
+Leer
+Play Rough
+Punishment
+Pursuit
+Scary Face
+Smog
 225
 0 0 0 0 0 1 
 Level 435 34
@@ -29720,6 +34680,20 @@ Dark Pulse
 Confide
 Cut
 Strength
+13
+Astonish
+Crunch
+Double-Edge
+Flame Burst
+Foul Play
+Haze
+Iron Tail
+Leer
+Play Rough
+Punishment
+Pursuit
+Scary Face
+Smog
 60
 2 0 0 0 0 0 
 None
@@ -29794,6 +34768,7 @@ Substitute
 Flash Cannon
 Trick Room
 Confide
+0
 255
 0 0 1 0 0 0 
 Level 437 33
@@ -29878,6 +34853,7 @@ Trick Room
 Rock Smash
 Confide
 Strength
+0
 90
 0 0 1 0 1 0 
 None
@@ -29938,6 +34914,16 @@ Sleep Talk
 Substitute
 Nature Power
 Confide
+9
+Curse
+Defense Curl
+Endure
+Harden
+Headbutt
+Rollout
+Sand Tomb
+Self-Destruct
+Stealth Rock
 255
 0 0 1 0 0 0 
 Move 185  Mimic
@@ -30014,6 +35000,21 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+14
+Charm
+Confuse Ray
+Fake Out
+Future Sight
+Healing Wish
+Hypnosis
+Icy Wind
+Magic Room
+Mimic
+Nasty Plot
+Power Split
+Teeter Dance
+Trick
+Wake-Up Slap
 145
 0 0 0 0 1 0 
 Move 122  Mimic
@@ -30071,6 +35072,17 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+10
+Aromatherapy
+Counter
+Endure
+Gravity
+Heal Bell
+Last Resort
+Metronome
+Mud Bomb
+Natural Gift
+Present
 130
 1 0 0 0 0 0 
 Item 113  Oval Stone
@@ -30137,6 +35149,17 @@ U-turn
 Substitute
 Confide
 Fly
+10
+Agility
+Air Cutter
+Boomburst
+Defog
+Encore
+Nasty Plot
+Night Shade
+Sleep Talk
+Steel Wing
+Supersonic
 30
 0 1 0 0 0 0 
 None
@@ -30204,6 +35227,16 @@ Substitute
 Snarl
 Dark Pulse
 Confide
+9
+Captivate
+Destiny Bond
+Foul Play
+Grudge
+Imprison
+Nightmare
+Pain Split
+Shadow Sneak
+Smokescreen
 100
 0 0 1 0 1 0 
 None
@@ -30267,6 +35300,20 @@ Rock Smash
 Confide
 Cut
 Strength
+13
+Body Slam
+Double-Edge
+Dragon Breath
+Iron Head
+Iron Tail
+Metal Claw
+Mud Shot
+Outrage
+Rock Climb
+Sand Tomb
+Scary Face
+Thrash
+Twister
 45
 0 1 0 0 0 0 
 Level 444 24
@@ -30333,6 +35380,20 @@ Rock Smash
 Confide
 Cut
 Strength
+13
+Body Slam
+Double-Edge
+Dragon Breath
+Iron Head
+Iron Tail
+Metal Claw
+Mud Shot
+Outrage
+Rock Climb
+Sand Tomb
+Scary Face
+Thrash
+Twister
 45
 0 2 0 0 0 0 
 Level 445 48
@@ -30412,6 +35473,20 @@ Confide
 Cut
 Surf
 Strength
+13
+Body Slam
+Double-Edge
+Dragon Breath
+Iron Head
+Iron Tail
+Metal Claw
+Mud Shot
+Outrage
+Rock Climb
+Sand Tomb
+Scary Face
+Thrash
+Twister
 45
 0 3 0 0 0 0 
 None
@@ -30490,6 +35565,18 @@ Power-Up Punch
 Confide
 Surf
 Strength
+11
+Belch
+Charm
+Counter
+Curse
+Double-Edge
+Lick
+Natural Gift
+Pursuit
+Self-Destruct
+Whirlwind
+Zen Headbutt
 50
 1 0 0 0 0 0 
 Item 143  Lax Incense
@@ -30556,6 +35643,21 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+14
+Agility
+Bite
+Blaze Kick
+Bullet Punch
+Circle Throw
+Cross Chop
+Crunch
+Detect
+High Jump Kick
+Iron Defense
+Low Kick
+Mind Reader
+Sky Uppercut
+Vacuum Wave
 75
 0 1 0 0 0 0 
 Item 448  Dawn Stone
@@ -30641,6 +35743,21 @@ Dark Pulse
 Power-Up Punch
 Confide
 Strength
+14
+Agility
+Bite
+Blaze Kick
+Bullet Punch
+Circle Throw
+Cross Chop
+Crunch
+Detect
+High Jump Kick
+Iron Defense
+Low Kick
+Mind Reader
+Sky Uppercut
+Vacuum Wave
 45
 0 1 0 1 0 0 
 None
@@ -30695,6 +35812,17 @@ Substitute
 Rock Smash
 Confide
 Strength
+10
+Body Slam
+Curse
+Revenge
+Sand Tomb
+Slack Off
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
+Whirlwind
 140
 0 0 1 0 0 0 
 Level 450 34
@@ -30757,6 +35885,17 @@ Substitute
 Rock Smash
 Confide
 Strength
+10
+Body Slam
+Curse
+Revenge
+Sand Tomb
+Slack Off
+Sleep Talk
+Spit Up
+Stockpile
+Swallow
+Whirlwind
 60
 0 0 2 0 0 0 
 None
@@ -30833,6 +35972,19 @@ Dark Pulse
 Confide
 Cut
 Strength
+12
+Agility
+Confuse Ray
+Feint Attack
+Iron Tail
+Night Slash
+Poison Tail
+Pursuit
+Sand Attack
+Screech
+Slash
+Twineedle
+Whirlwind
 120
 0 0 1 0 0 0 
 Level 452 40
@@ -30922,6 +36074,19 @@ Dark Pulse
 Confide
 Cut
 Strength
+12
+Agility
+Confuse Ray
+Feint Attack
+Iron Tail
+Night Slash
+Poison Tail
+Pursuit
+Sand Attack
+Screech
+Slash
+Twineedle
+Whirlwind
 45
 0 0 2 0 0 0 
 None
@@ -31000,6 +36165,22 @@ Dark Pulse
 Power-Up Punch
 Confide
 Strength
+15
+Acupressure
+Bullet Punch
+Counter
+Cross Chop
+Drain Punch
+Dynamic Punch
+Fake Out
+Feint
+Headbutt
+Me First
+Meditate
+Quick Guard
+Smelling Salts
+Vacuum Wave
+Wake-Up Slap
 140
 0 1 0 0 0 0 
 Level 454 37
@@ -31085,6 +36266,22 @@ Power-Up Punch
 Confide
 Cut
 Strength
+15
+Acupressure
+Bullet Punch
+Counter
+Cross Chop
+Drain Punch
+Dynamic Punch
+Fake Out
+Feint
+Headbutt
+Me First
+Meditate
+Quick Guard
+Smelling Salts
+Vacuum Wave
+Wake-Up Slap
 75
 0 2 0 0 0 0 
 None
@@ -31148,6 +36345,17 @@ Substitute
 Nature Power
 Confide
 Cut
+10
+Giga Drain
+Grass Whistle
+Leech Seed
+Magical Leaf
+Razor Leaf
+Slam
+Sleep Powder
+Stun Spore
+Synthesis
+Worry Seed
 200
 0 2 0 0 0 0 
 None
@@ -31208,6 +36416,18 @@ Nature Power
 Confide
 Surf
 Waterfall
+11
+Agility
+Aqua Tail
+Aurora Beam
+Brine
+Charm
+Flail
+Psybeam
+Signal Beam
+Splash
+Sweet Kiss
+Tickle
 190
 0 0 0 0 0 1 
 Level 457 31
@@ -31274,6 +36494,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Agility
+Aqua Tail
+Aurora Beam
+Brine
+Charm
+Flail
+Psybeam
+Signal Beam
+Splash
+Sweet Kiss
+Tickle
 75
 0 0 0 0 0 2 
 None
@@ -31335,6 +36567,18 @@ Substitute
 Confide
 Surf
 Waterfall
+11
+Amnesia
+Haze
+Hydro Pump
+Mirror Coat
+Mud Sport
+Signal Beam
+Slam
+Splash
+Tailwind
+Twister
+Water Sport
 25
 0 0 0 0 1 0 
 Item 226  Water Stone
@@ -31393,6 +36637,18 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+11
+Avalanche
+Bullet Seed
+Double-Edge
+Growth
+Leech Seed
+Magical Leaf
+Mist
+Natural Gift
+Seed Bomb
+Skull Bash
+Stomp
 120
 0 1 0 0 0 0 
 Level 460 40
@@ -31466,6 +36722,18 @@ Substitute
 Rock Smash
 Confide
 Strength
+11
+Avalanche
+Bullet Seed
+Double-Edge
+Growth
+Leech Seed
+Magical Leaf
+Mist
+Natural Gift
+Seed Bomb
+Skull Bash
+Stomp
 60
 0 1 0 1 0 0 
 None
@@ -31557,6 +36825,22 @@ Confide
 Cut
 Surf
 Strength
+15
+Assist
+Avalanche
+Bite
+Counter
+Crush Claw
+Double Hit
+Fake Out
+Feint
+Foresight
+Ice Punch
+Ice Shard
+Icicle Crash
+Punishment
+Pursuit
+Spite
 45
 0 1 0 0 0 1 
 None
@@ -31632,6 +36916,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Confide
+0
 30
 0 0 0 3 0 0 
 None
@@ -31720,6 +37005,19 @@ Confide
 Cut
 Surf
 Strength
+12
+Amnesia
+Belch
+Belly Drum
+Body Slam
+Curse
+Hammer Arm
+Magnitude
+Muddy Water
+Sleep Talk
+Smelling Salts
+Snore
+Zen Headbutt
 30
 3 0 0 0 0 0 
 None
@@ -31811,6 +37109,23 @@ Confide
 Cut
 Surf
 Strength
+16
+Counter
+Crunch
+Crush Claw
+Curse
+Dragon Rush
+Fire Fang
+Guard Split
+Ice Fang
+Iron Tail
+Magnitude
+Metal Burst
+Reversal
+Rock Climb
+Rototiller
+Skull Bash
+Thunder Fang
 30
 0 3 0 0 0 0 
 None
@@ -31893,6 +37208,18 @@ Nature Power
 Confide
 Cut
 Strength
+11
+Amnesia
+Confusion
+Endeavor
+Flail
+Giga Drain
+Leaf Storm
+Leech Seed
+Mega Drain
+Natural Gift
+Nature Power
+Power Swap
 30
 0 0 2 0 0 0 
 None
@@ -31975,6 +37302,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+11
+Barrier
+Cross Chop
+Dynamic Punch
+Feint
+Fire Punch
+Focus Punch
+Hammer Arm
+Ice Punch
+Karate Chop
+Meditate
+Rolling Kick
 30
 0 3 0 0 0 0 
 None
@@ -32054,6 +37393,21 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+14
+Barrier
+Belch
+Belly Drum
+Cross Chop
+Dynamic Punch
+Flare Blitz
+Focus Energy
+Iron Tail
+Karate Chop
+Mach Punch
+Mega Punch
+Power Swap
+Screech
+Thunder Punch
 30
 0 0 0 3 0 0 
 None
@@ -32123,6 +37477,19 @@ Rock Smash
 Dazzling Gleam
 Confide
 Fly
+12
+Extrasensory
+Foresight
+Future Sight
+Lucky Chant
+Mirror Move
+Morning Sun
+Nasty Plot
+Peck
+Present
+Psycho Shift
+Secret Power
+Stored Power
 30
 0 0 0 2 1 0 
 None
@@ -32193,6 +37560,17 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+10
+Double-Edge
+Feint
+Feint Attack
+Leech Life
+Pursuit
+Reversal
+Secret Power
+Signal Beam
+Silver Wind
+Whirlwind
 30
 0 2 0 0 0 0 
 None
@@ -32259,6 +37637,21 @@ Rock Smash
 Nature Power
 Confide
 Strength
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 0 0 2 0 0 0 
 None
@@ -32320,6 +37713,21 @@ Substitute
 Rock Smash
 Confide
 Strength
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 0 0 0 2 0 0 
 None
@@ -32410,6 +37818,21 @@ Dark Pulse
 Confide
 Cut
 Strength
+14
+Agility
+Baton Pass
+Counter
+Cross Poison
+Double-Edge
+Feint
+Metal Claw
+Night Slash
+Poison Tail
+Power Trick
+Razor Wind
+Rock Climb
+Sand Tomb
+Wing Attack
 30
 0 0 2 0 0 0 
 None
@@ -32482,6 +37905,20 @@ Substitute
 Rock Smash
 Confide
 Strength
+13
+Ancient Power
+Avalanche
+Bite
+Body Slam
+Curse
+Double-Edge
+Fissure
+Freeze-Dry
+Icicle Crash
+Icicle Spear
+Mud Shot
+Stealth Rock
+Take Down
 50
 0 3 0 0 0 0 
 None
@@ -32555,6 +37992,7 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+0
 30
 0 0 0 3 0 0 
 None
@@ -32655,6 +38093,18 @@ Dazzling Gleam
 Confide
 Cut
 Strength
+11
+Confuse Ray
+Destiny Bond
+Disable
+Encore
+Grudge
+Mean Look
+Memento
+Misty Terrain
+Shadow Sneak
+Skill Swap
+Synchronoise
 45
 0 3 0 0 0 0 
 None
@@ -32731,6 +38181,13 @@ Rock Smash
 Dazzling Gleam
 Confide
 Strength
+6
+Block
+Double-Edge
+Endure
+Magnitude
+Rollout
+Stealth Rock
 60
 0 0 1 0 2 0 
 None
@@ -32818,6 +38275,17 @@ Dark Pulse
 Power-Up Punch
 Confide
 Strength
+10
+Dark Pulse
+Destiny Bond
+Feint Attack
+Grudge
+Haze
+Imprison
+Memento
+Ominous Wind
+Pain Split
+Skill Swap
 45
 0 0 1 0 2 0 
 None
@@ -32892,6 +38360,17 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+10
+Avalanche
+Bide
+Block
+Disable
+Fake Tears
+Hex
+Rollout
+Spikes
+Switcheroo
+Weather Ball
 75
 0 0 0 0 0 2 
 None
@@ -32957,6 +38436,7 @@ Sleep Talk
 Substitute
 Dark Pulse
 Confide
+0
 45
 0 0 0 1 0 1 
 None
@@ -33032,6 +38512,7 @@ Trick Room
 Power-Up Punch
 Dazzling Gleam
 Confide
+0
 3
 0 0 2 0 1 0 
 None
@@ -33108,6 +38589,7 @@ Trick Room
 Power-Up Punch
 Dazzling Gleam
 Confide
+0
 3
 0 1 0 1 1 0 
 None
@@ -33188,6 +38670,7 @@ Trick Room
 Power-Up Punch
 Dazzling Gleam
 Confide
+0
 3
 0 2 0 1 0 0 
 None
@@ -33269,6 +38752,7 @@ Rock Smash
 Confide
 Cut
 Strength
+0
 30
 0 0 0 3 0 0 
 None
@@ -33351,6 +38835,7 @@ Confide
 Cut
 Surf
 Strength
+0
 30
 0 0 0 3 0 0 
 None
@@ -33428,6 +38913,7 @@ Nature Power
 Dark Pulse
 Confide
 Strength
+0
 3
 0 0 0 3 0 0 
 None
@@ -33500,6 +38986,7 @@ Nature Power
 Power-Up Punch
 Confide
 Strength
+0
 3
 0 3 0 0 0 0 
 None
@@ -33578,6 +39065,7 @@ Confide
 Cut
 Fly
 Strength
+0
 3
 3 0 0 0 0 0 
 None
@@ -33649,6 +39137,7 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+0
 3
 0 0 0 0 3 0 
 None
@@ -33705,6 +39194,7 @@ Dazzling Gleam
 Confide
 Surf
 Waterfall
+0
 30
 1 0 0 0 0 0 
 None
@@ -33772,6 +39262,7 @@ Dazzling Gleam
 Confide
 Surf
 Waterfall
+0
 3
 3 0 0 0 0 0 
 None
@@ -33857,6 +39348,7 @@ Power-Up Punch
 Confide
 Cut
 Strength
+0
 3
 0 0 0 2 0 1 
 None
@@ -33914,6 +39406,7 @@ Substitute
 Nature Power
 Dazzling Gleam
 Confide
+0
 45
 3 0 0 0 0 0
 None
@@ -34020,6 +39513,7 @@ Fly
 Surf
 Strength
 Waterfall
+0
 3
 3 0 0 0 0 0 
 None
@@ -34103,6 +39597,7 @@ Rock Smash
 Power-Up Punch
 Dazzling Gleam
 Confide
+0
 3
 3 0 0 0 0 0 
 None
@@ -34166,6 +39661,18 @@ Substitute
 Nature Power
 Confide
 Cut
+11
+Captivate
+Glare
+Grassy Terrain
+Iron Tail
+Magical Leaf
+Mean Look
+Mirror Coat
+Natural Gift
+Pursuit
+Sweet Scent
+Twister
 45
 0 0 0 0 0 1 
 Level 496 17
@@ -34233,6 +39740,18 @@ Substitute
 Nature Power
 Confide
 Cut
+11
+Captivate
+Glare
+Grassy Terrain
+Iron Tail
+Magical Leaf
+Mean Look
+Mirror Coat
+Natural Gift
+Pursuit
+Sweet Scent
+Twister
 45
 0 0 0 0 0 2 
 Level 497 36
@@ -34305,6 +39824,18 @@ Nature Power
 Confide
 Cut
 Strength
+11
+Captivate
+Glare
+Grassy Terrain
+Iron Tail
+Magical Leaf
+Mean Look
+Mirror Coat
+Natural Gift
+Pursuit
+Sweet Scent
+Twister
 45
 0 0 0 0 0 3 
 None
@@ -34371,6 +39902,18 @@ Wild Charge
 Rock Smash
 Confide
 Strength
+11
+Body Slam
+Covet
+Curse
+Endeavor
+Heavy Slam
+Magnitude
+Sleep Talk
+Sucker Punch
+Superpower
+Thrash
+Yawn
 45
 1 0 0 0 0 0 
 Level 499 17
@@ -34450,6 +39993,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+11
+Body Slam
+Covet
+Curse
+Endeavor
+Heavy Slam
+Magnitude
+Sleep Talk
+Sucker Punch
+Superpower
+Thrash
+Yawn
 45
 0 2 0 0 0 0 
 Level 500 36
@@ -34536,6 +40091,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+11
+Body Slam
+Covet
+Curse
+Endeavor
+Heavy Slam
+Magnitude
+Sleep Talk
+Sucker Punch
+Superpower
+Thrash
+Yawn
 45
 0 3 0 0 0 0 
 None
@@ -34603,6 +40170,15 @@ Confide
 Cut
 Surf
 Waterfall
+8
+Air Slash
+Assurance
+Brine
+Copycat
+Detect
+Night Slash
+Screech
+Trump Card
 45
 0 0 0 1 0 0 
 Level 502 17
@@ -34673,6 +40249,15 @@ Confide
 Cut
 Surf
 Waterfall
+8
+Air Slash
+Assurance
+Brine
+Copycat
+Detect
+Night Slash
+Screech
+Trump Card
 45
 0 0 0 2 0 0 
 Level 503 36
@@ -34749,6 +40334,15 @@ Cut
 Surf
 Strength
 Waterfall
+8
+Air Slash
+Assurance
+Brine
+Copycat
+Detect
+Night Slash
+Screech
+Trump Card
 45
 0 0 0 3 0 0 
 None
@@ -34808,6 +40402,14 @@ Sleep Talk
 Substitute
 Confide
 Cut
+7
+Assurance
+Flail
+Foresight
+Iron Tail
+Pursuit
+Revenge
+Screech
 255
 0 1 0 0 0 0 
 Level 505 20
@@ -34884,6 +40486,14 @@ Power-Up Punch
 Confide
 Cut
 Strength
+7
+Assurance
+Flail
+Foresight
+Iron Tail
+Pursuit
+Revenge
+Screech
 255
 0 2 0 0 0 0 
 None
@@ -34946,6 +40556,18 @@ Wild Charge
 Rock Smash
 Snarl
 Confide
+11
+Charm
+Endure
+Fire Fang
+Howl
+Ice Fang
+Lick
+Mud-Slap
+Pursuit
+Sand Attack
+Thunder Fang
+Yawn
 255
 0 1 0 0 0 0 
 Level 507 16
@@ -35010,6 +40632,18 @@ Snarl
 Confide
 Surf
 Strength
+11
+Charm
+Endure
+Fire Fang
+Howl
+Ice Fang
+Lick
+Mud-Slap
+Pursuit
+Sand Attack
+Thunder Fang
+Yawn
 120
 0 2 0 0 0 0 
 Level 508 32
@@ -35079,6 +40713,18 @@ Snarl
 Confide
 Surf
 Strength
+11
+Charm
+Endure
+Fire Fang
+Howl
+Ice Fang
+Lick
+Mud-Slap
+Pursuit
+Sand Attack
+Thunder Fang
+Yawn
 45
 0 3 0 0 0 0 
 None
@@ -35149,6 +40795,16 @@ Snarl
 Dark Pulse
 Confide
 Cut
+9
+Charm
+Copycat
+Covet
+Encore
+Fake Tears
+Feint Attack
+Foul Play
+Pay Day
+Yawn
 255
 0 0 0 0 0 1 
 Level 510 20
@@ -35225,6 +40881,16 @@ Snarl
 Dark Pulse
 Confide
 Cut
+9
+Charm
+Copycat
+Covet
+Encore
+Fake Tears
+Feint Attack
+Foul Play
+Pay Day
+Yawn
 90
 0 0 0 0 0 2 
 None
@@ -35293,6 +40959,18 @@ Rock Smash
 Nature Power
 Confide
 Cut
+11
+Astonish
+Bullet Seed
+Covet
+Disarming Voice
+Grass Whistle
+Leaf Storm
+Low Kick
+Magical Leaf
+Nasty Plot
+Role Play
+Tickle
 190
 0 0 0 0 0 1 
 Item 512  Leaf Stone
@@ -35357,6 +41035,18 @@ Nature Power
 Power-Up Punch
 Confide
 Cut
+11
+Astonish
+Bullet Seed
+Covet
+Disarming Voice
+Grass Whistle
+Leaf Storm
+Low Kick
+Magical Leaf
+Nasty Plot
+Role Play
+Tickle
 75
 0 0 0 0 0 2 
 None
@@ -35430,6 +41120,18 @@ Substitute
 Rock Smash
 Confide
 Cut
+11
+Astonish
+Covet
+Disarming Voice
+Fire Punch
+Fire Spin
+Heat Wave
+Low Kick
+Nasty Plot
+Role Play
+Sleep Talk
+Tickle
 190
 0 0 0 0 0 1 
 Item 514  Fire Stone
@@ -35497,6 +41199,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Cut
+11
+Astonish
+Covet
+Disarming Voice
+Fire Punch
+Fire Spin
+Heat Wave
+Low Kick
+Nasty Plot
+Role Play
+Sleep Talk
+Tickle
 75
 0 0 0 0 0 2 
 None
@@ -35569,6 +41283,18 @@ Confide
 Cut
 Surf
 Waterfall
+11
+Aqua Ring
+Aqua Tail
+Astonish
+Covet
+Disarming Voice
+Hydro Pump
+Low Kick
+Mud Sport
+Nasty Plot
+Role Play
+Tickle
 190
 0 0 0 0 0 1 
 Item 516  Water Stone
@@ -35635,6 +41361,18 @@ Confide
 Cut
 Surf
 Waterfall
+11
+Aqua Ring
+Aqua Tail
+Astonish
+Covet
+Disarming Voice
+Hydro Pump
+Low Kick
+Mud Sport
+Nasty Plot
+Role Play
+Tickle
 75
 0 0 0 0 0 2 
 None
@@ -35707,6 +41445,16 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+9
+Barrier
+Baton Pass
+Curse
+Healing Wish
+Magic Coat
+Secret Power
+Sleep Talk
+Sonic Boom
+Swift
 190
 1 0 0 0 0 0 
 Item 518  Moon Stone
@@ -35766,6 +41514,16 @@ Substitute
 Trick Room
 Dazzling Gleam
 Confide
+9
+Barrier
+Baton Pass
+Curse
+Healing Wish
+Magic Coat
+Secret Power
+Sleep Talk
+Sonic Boom
+Swift
 75
 2 0 0 0 0 0 
 None
@@ -35823,6 +41581,15 @@ U-turn
 Substitute
 Confide
 Fly
+8
+Bestow
+Hypnosis
+Lucky Chant
+Morning Sun
+Night Slash
+Steel Wing
+Uproar
+Wish
 255
 0 1 0 0 0 0 
 Level 520 21
@@ -35883,6 +41650,15 @@ U-turn
 Substitute
 Confide
 Fly
+8
+Bestow
+Hypnosis
+Lucky Chant
+Morning Sun
+Night Slash
+Steel Wing
+Uproar
+Wish
 120
 0 2 0 0 0 0 
 Level 521 32
@@ -35946,6 +41722,15 @@ U-turn
 Substitute
 Confide
 Fly
+8
+Bestow
+Hypnosis
+Lucky Chant
+Morning Sun
+Night Slash
+Steel Wing
+Uproar
+Wish
 45
 0 3 0 0 0 0 
 None
@@ -36002,6 +41787,17 @@ Sleep Talk
 Substitute
 Wild Charge
 Confide
+10
+Double Kick
+Double-Edge
+Endure
+Me First
+Rage
+Sand Attack
+Screech
+Shock Wave
+Snatch
+Take Down
 190
 0 0 0 0 0 1 
 Level 523 27
@@ -36068,6 +41864,17 @@ Substitute
 Wild Charge
 Rock Smash
 Confide
+10
+Double Kick
+Double-Edge
+Endure
+Me First
+Rage
+Sand Attack
+Screech
+Shock Wave
+Snatch
+Take Down
 75
 0 0 0 0 0 2 
 None
@@ -36128,6 +41935,15 @@ Rock Smash
 Nature Power
 Confide
 Strength
+8
+Autotomize
+Curse
+Gravity
+Heavy Slam
+Lock-On
+Magnitude
+Rock Tomb
+Take Down
 255
 0 0 1 0 0 0 
 Level 525 25
@@ -36193,6 +42009,15 @@ Rock Smash
 Nature Power
 Confide
 Strength
+8
+Autotomize
+Curse
+Gravity
+Heavy Slam
+Lock-On
+Magnitude
+Rock Tomb
+Take Down
 120
 0 1 1 0 0 0 
 Item 526  Hard Stone
@@ -36261,6 +42086,15 @@ Rock Smash
 Nature Power
 Confide
 Strength
+8
+Autotomize
+Curse
+Gravity
+Heavy Slam
+Lock-On
+Magnitude
+Rock Tomb
+Take Down
 45
 0 3 0 0 0 0 
 None
@@ -36336,6 +42170,18 @@ Substitute
 Trick Room
 Confide
 Fly
+11
+Captivate
+Charm
+Fake Tears
+Flatter
+Knock Off
+Psycho Shift
+Roost
+Stored Power
+Supersonic
+Synchronoise
+Venom Drench
 190
 0 0 0 0 0 1 
 Item 528  Moon Stone
@@ -36414,6 +42260,18 @@ Substitute
 Trick Room
 Confide
 Fly
+11
+Captivate
+Charm
+Fake Tears
+Flatter
+Knock Off
+Psycho Shift
+Roost
+Stored Power
+Supersonic
+Synchronoise
+Venom Drench
 45
 0 0 0 0 0 2 
 None
@@ -36480,6 +42338,15 @@ Rock Smash
 Confide
 Cut
 Strength
+8
+Crush Claw
+Earth Power
+Iron Defense
+Metal Sound
+Rapid Spin
+Rock Climb
+Skull Bash
+Submission
 120
 0 1 0 0 0 0 
 Level 530 31
@@ -36553,6 +42420,15 @@ Rock Smash
 Confide
 Cut
 Strength
+8
+Crush Claw
+Earth Power
+Iron Defense
+Metal Sound
+Rapid Spin
+Rock Climb
+Skull Bash
+Submission
 60
 0 2 0 0 0 0 
 None
@@ -36635,6 +42511,18 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Surf
+11
+Amnesia
+Bestow
+Draining Kiss
+Encore
+Heal Bell
+Healing Wish
+Lucky Chant
+Sleep Talk
+Sweet Kiss
+Wish
+Yawn
 255
 2 0 0 0 0 0 
 None
@@ -36706,6 +42594,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Comet Punch
+Counter
+Detect
+Drain Punch
+Endure
+Force Palm
+Foresight
+Mach Punch
+Reversal
+Smelling Salts
 180
 0 1 0 0 0 0 
 Level 533 25
@@ -36777,6 +42676,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Comet Punch
+Counter
+Detect
+Drain Punch
+Endure
+Force Palm
+Foresight
+Mach Punch
+Reversal
+Smelling Salts
 90
 0 2 0 0 0 0 
 Item 534  Black Belt
@@ -36852,6 +42762,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Comet Punch
+Counter
+Detect
+Drain Punch
+Endure
+Force Palm
+Foresight
+Mach Punch
+Reversal
+Smelling Salts
 45
 0 3 0 0 0 0 
 None
@@ -36907,6 +42828,15 @@ Sleep Talk
 Substitute
 Confide
 Surf
+8
+Earth Power
+Mist
+Mud Bomb
+Mud Sport
+Refresh
+Sleep Talk
+Snore
+Water Pulse
 255
 0 0 0 0 0 1 
 Level 536 25
@@ -36968,6 +42898,15 @@ Substitute
 Rock Smash
 Confide
 Surf
+8
+Earth Power
+Mist
+Mud Bomb
+Mud Sport
+Refresh
+Sleep Talk
+Snore
+Water Pulse
 120
 2 0 0 0 0 0 
 Level 537 36
@@ -37046,6 +42985,15 @@ Power-Up Punch
 Confide
 Surf
 Strength
+8
+Earth Power
+Mist
+Mud Bomb
+Mud Sport
+Refresh
+Sleep Talk
+Snore
+Water Pulse
 45
 3 0 0 0 0 0 
 None
@@ -37118,6 +43066,7 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+0
 45
 2 0 0 0 0 0 
 None
@@ -37190,6 +43139,7 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+0
 45
 0 2 0 0 0 0 
 None
@@ -37247,6 +43197,16 @@ Substitute
 Nature Power
 Confide
 Cut
+9
+Agility
+Air Slash
+Baton Pass
+Camouflage
+Me First
+Mind Reader
+Razor Wind
+Screech
+Silver Wind
 255
 0 0 1 0 0 0 
 Level 541 20
@@ -37300,6 +43260,16 @@ Substitute
 Nature Power
 Confide
 Cut
+9
+Agility
+Air Slash
+Baton Pass
+Camouflage
+Me First
+Mind Reader
+Razor Wind
+Screech
+Silver Wind
 120
 0 0 2 0 0 0 
 Item 542  Leaf Stone
@@ -37375,6 +43345,16 @@ Substitute
 Nature Power
 Confide
 Cut
+9
+Agility
+Air Slash
+Baton Pass
+Camouflage
+Me First
+Mind Reader
+Razor Wind
+Screech
+Silver Wind
 45
 0 3 0 0 0 0 
 None
@@ -37434,6 +43414,13 @@ Sleep Talk
 Substitute
 Rock Smash
 Confide
+6
+Pin Missile
+Rock Climb
+Spikes
+Take Down
+Toxic Spikes
+Twineedle
 255
 0 0 1 0 0 0 
 Level 544 22
@@ -37497,6 +43484,13 @@ Sleep Talk
 Substitute
 Rock Smash
 Confide
+6
+Pin Missile
+Rock Climb
+Spikes
+Take Down
+Toxic Spikes
+Twineedle
 120
 0 0 2 0 0 0 
 Level 545 30
@@ -37573,6 +43567,13 @@ Rock Smash
 Confide
 Cut
 Strength
+6
+Pin Missile
+Rock Climb
+Spikes
+Take Down
+Toxic Spikes
+Twineedle
 45
 0 0 0 0 0 3 
 None
@@ -37635,6 +43636,17 @@ Substitute
 Nature Power
 Dazzling Gleam
 Confide
+10
+Beat Up
+Captivate
+Encore
+Fake Tears
+Grass Whistle
+Memento
+Natural Gift
+Switcheroo
+Tickle
+Worry Seed
 190
 0 0 0 0 0 1 
 Item 547  Sun Stone
@@ -37695,6 +43707,17 @@ Trick Room
 Nature Power
 Dazzling Gleam
 Confide
+10
+Beat Up
+Captivate
+Encore
+Fake Tears
+Grass Whistle
+Memento
+Natural Gift
+Switcheroo
+Tickle
+Worry Seed
 75
 0 0 0 0 0 2 
 None
@@ -37753,6 +43776,16 @@ Substitute
 Nature Power
 Confide
 Cut
+9
+Bide
+Charm
+Endure
+Grass Whistle
+Healing Wish
+Ingrain
+Natural Gift
+Sweet Scent
+Worry Seed
 190
 0 0 0 1 0 0 
 Item 549  Sun Stone
@@ -37807,6 +43840,16 @@ Substitute
 Nature Power
 Confide
 Cut
+9
+Bide
+Charm
+Endure
+Grass Whistle
+Healing Wish
+Ingrain
+Natural Gift
+Sweet Scent
+Worry Seed
 75
 0 0 0 2 0 0 
 None
@@ -37867,6 +43910,16 @@ Confide
 Cut
 Surf
 Waterfall
+9
+Agility
+Brine
+Bubble Beam
+Mud Shot
+Muddy Water
+Rage
+Revenge
+Swift
+Whirlpool
 25
 0 0 0 0 0 2 
 None
@@ -37939,6 +43992,18 @@ Snarl
 Dark Pulse
 Confide
 Cut
+11
+Beat Up
+Counter
+Double-Edge
+Fire Fang
+Focus Energy
+Me First
+Mean Look
+Pursuit
+Rock Climb
+Thunder Fang
+Uproar
 180
 0 1 0 0 0 0 
 Level 552 29
@@ -38019,6 +44084,18 @@ Power-Up Punch
 Confide
 Cut
 Strength
+11
+Beat Up
+Counter
+Double-Edge
+Fire Fang
+Focus Energy
+Me First
+Mean Look
+Pursuit
+Rock Climb
+Thunder Fang
+Uproar
 90
 0 2 0 0 0 0 
 Level 553 40
@@ -38108,6 +44185,18 @@ Power-Up Punch
 Confide
 Cut
 Strength
+11
+Beat Up
+Counter
+Double-Edge
+Fire Fang
+Focus Energy
+Me First
+Mean Look
+Pursuit
+Rock Climb
+Thunder Fang
+Uproar
 45
 0 3 0 0 0 0 
 None
@@ -38179,6 +44268,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Encore
+Endure
+Flame Wheel
+Focus Energy
+Focus Punch
+Hammer Arm
+Sleep Talk
+Snatch
+Take Down
+Yawn
 120
 0 1 0 0 0 0 
 Level 555 35
@@ -38266,6 +44366,17 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+10
+Encore
+Endure
+Flame Wheel
+Focus Energy
+Focus Punch
+Hammer Arm
+Sleep Talk
+Snatch
+Take Down
+Yawn
 60
 0 2 0 0 0 0
 None
@@ -38329,6 +44440,16 @@ Sleep Talk
 Substitute
 Nature Power
 Confide
+9
+Bounce
+Bullet Seed
+Grass Whistle
+Grassy Terrain
+Leech Seed
+Seed Bomb
+Spikes
+Wood Hammer
+Worry Seed
 255
 0 0 0 2 0 0 
 None
@@ -38399,6 +44520,16 @@ Nature Power
 Confide
 Cut
 Strength
+9
+Block
+Counter
+Curse
+Endure
+Iron Defense
+Night Slash
+Rototiller
+Sand Tomb
+Spikes
 190
 0 0 1 0 0 0 
 Level 558 34
@@ -38475,6 +44606,16 @@ Nature Power
 Confide
 Cut
 Strength
+9
+Block
+Counter
+Curse
+Endure
+Iron Defense
+Night Slash
+Rototiller
+Sand Tomb
+Spikes
 75
 0 0 2 0 0 0 
 None
@@ -38554,6 +44695,19 @@ Dark Pulse
 Power-Up Punch
 Confide
 Strength
+12
+Amnesia
+Counter
+Detect
+Dragon Dance
+Drain Punch
+Fake Out
+Feint Attack
+Fire Punch
+Ice Punch
+Quick Guard
+Thunder Punch
+Zen Headbutt
 180
 0 1 0 0 0 0 
 Level 560 39
@@ -38637,6 +44791,19 @@ Dark Pulse
 Power-Up Punch
 Confide
 Strength
+12
+Amnesia
+Counter
+Detect
+Dragon Dance
+Drain Punch
+Fake Out
+Feint Attack
+Fire Punch
+Ice Punch
+Quick Guard
+Thunder Punch
+Zen Headbutt
 90
 0 0 1 0 1 0 
 None
@@ -38715,6 +44882,14 @@ Dark Pulse
 Dazzling Gleam
 Confide
 Fly
+7
+Ancient Power
+Future Sight
+Psycho Shift
+Roost
+Skill Swap
+Steel Wing
+Stored Power
 45
 0 0 0 2 0 0 
 None
@@ -38779,6 +44954,16 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+9
+Disable
+Endure
+Fake Tears
+Heal Block
+Imprison
+Memento
+Nasty Plot
+Nightmare
+Toxic Spikes
 190
 0 0 1 0 0 0 
 Level 563 34
@@ -38850,6 +45035,16 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+9
+Disable
+Endure
+Fake Tears
+Heal Block
+Imprison
+Memento
+Nasty Plot
+Nightmare
+Toxic Spikes
 90
 0 0 2 0 0 0 
 None
@@ -38919,6 +45114,17 @@ Confide
 Surf
 Strength
 Waterfall
+10
+Bide
+Body Slam
+Flail
+Guard Swap
+Iron Defense
+Knock Off
+Rock Throw
+Slam
+Water Pulse
+Whirlpool
 45
 0 0 1 0 0 0 
 Level 565 37
@@ -38991,6 +45197,17 @@ Confide
 Surf
 Strength
 Waterfall
+10
+Bide
+Body Slam
+Flail
+Guard Swap
+Iron Defense
+Knock Off
+Rock Throw
+Slam
+Water Pulse
+Whirlpool
 45
 0 0 2 0 0 0 
 None
@@ -39064,6 +45281,15 @@ Substitute
 Rock Smash
 Confide
 Cut
+8
+Bite
+Defog
+Dragon Pulse
+Earth Power
+Head Smash
+Knock Off
+Steel Wing
+Switcheroo
 45
 0 1 0 0 0 0 
 Level 567 37
@@ -39143,6 +45369,15 @@ Rock Smash
 Confide
 Cut
 Fly
+8
+Bite
+Defog
+Dragon Pulse
+Earth Power
+Head Smash
+Knock Off
+Steel Wing
+Switcheroo
 45
 0 2 0 0 0 0 
 None
@@ -39203,6 +45438,15 @@ Sleep Talk
 Substitute
 Dark Pulse
 Confide
+8
+Curse
+Haze
+Mud Sport
+Rock Blast
+Rollout
+Sand Attack
+Self-Destruct
+Spikes
 190
 0 0 0 0 0 1 
 Level 569 36
@@ -39276,6 +45520,15 @@ Sleep Talk
 Substitute
 Dark Pulse
 Confide
+8
+Curse
+Haze
+Mud Sport
+Rock Blast
+Rollout
+Sand Attack
+Self-Destruct
+Spikes
 60
 0 2 0 0 0 0 
 None
@@ -39351,6 +45604,16 @@ Snarl
 Dark Pulse
 Confide
 Cut
+9
+Captivate
+Copycat
+Counter
+Dark Pulse
+Detect
+Extrasensory
+Memento
+Snatch
+Sucker Punch
 75
 0 0 0 1 0 0 
 Level 571 30
@@ -39436,6 +45699,16 @@ Snarl
 Dark Pulse
 Confide
 Cut
+9
+Captivate
+Copycat
+Counter
+Dark Pulse
+Detect
+Extrasensory
+Memento
+Snatch
+Sucker Punch
 45
 0 0 0 2 0 0 
 None
@@ -39500,6 +45773,16 @@ U-turn
 Substitute
 Dazzling Gleam
 Confide
+9
+Aqua Tail
+Endure
+Fake Tears
+Flail
+Iron Tail
+Knock Off
+Mud-Slap
+Sleep Talk
+Tail Whip
 255
 0 0 0 0 0 1 
 Item 573  Shiny Stone
@@ -39559,6 +45842,16 @@ U-turn
 Substitute
 Dazzling Gleam
 Confide
+9
+Aqua Tail
+Endure
+Fake Tears
+Flail
+Iron Tail
+Knock Off
+Mud-Slap
+Sleep Talk
+Tail Whip
 60
 0 0 0 0 0 2 
 None
@@ -39635,6 +45928,14 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+7
+Captivate
+Dark Pulse
+Heal Pulse
+Mean Look
+Miracle Eye
+Mirror Coat
+Uproar
 200
 0 0 0 0 1 0 
 Level 575 32
@@ -39713,6 +46014,14 @@ Sleep Talk
 Substitute
 Trick Room
 Confide
+7
+Captivate
+Dark Pulse
+Heal Pulse
+Mean Look
+Miracle Eye
+Mirror Coat
+Uproar
 100
 0 0 0 0 2 0 
 Level 576 41
@@ -39796,6 +46105,14 @@ Substitute
 Trick Room
 Power-Up Punch
 Confide
+7
+Captivate
+Dark Pulse
+Heal Pulse
+Mean Look
+Miracle Eye
+Mirror Coat
+Uproar
 50
 0 0 0 0 3 0 
 None
@@ -39868,6 +46185,14 @@ Substitute
 Flash Cannon
 Trick Room
 Confide
+7
+Acid Armor
+Astonish
+Confuse Ray
+Imprison
+Night Shade
+Secret Power
+Trick
 200
 0 0 0 1 0 0 
 Level 578 32
@@ -39943,6 +46268,14 @@ Substitute
 Flash Cannon
 Trick Room
 Confide
+7
+Acid Armor
+Astonish
+Confuse Ray
+Imprison
+Night Shade
+Secret Power
+Trick
 100
 0 0 0 2 0 0 
 Level 579 41
@@ -40027,6 +46360,14 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+7
+Acid Armor
+Astonish
+Confuse Ray
+Imprison
+Night Shade
+Secret Power
+Trick
 50
 0 0 0 3 0 0 
 None
@@ -40085,6 +46426,15 @@ Substitute
 Confide
 Fly
 Surf
+8
+Air Cutter
+Brine
+Gust
+Lucky Chant
+Me First
+Mirror Move
+Mud Sport
+Steel Wing
 190
 1 0 0 0 0 0 
 Level 581 35
@@ -40147,6 +46497,15 @@ Substitute
 Confide
 Fly
 Surf
+8
+Air Cutter
+Brine
+Gust
+Lucky Chant
+Me First
+Mirror Move
+Mud Sport
+Steel Wing
 45
 0 0 0 0 0 2 
 None
@@ -40204,6 +46563,15 @@ Sleep Talk
 Substitute
 Flash Cannon
 Confide
+8
+Autotomize
+Ice Shard
+Imprison
+Iron Defense
+Magnet Rise
+Natural Gift
+Powder Snow
+Water Pulse
 255
 0 0 0 1 0 0 
 Level 583 35
@@ -40264,6 +46632,15 @@ Sleep Talk
 Substitute
 Flash Cannon
 Confide
+8
+Autotomize
+Ice Shard
+Imprison
+Iron Defense
+Magnet Rise
+Natural Gift
+Powder Snow
+Water Pulse
 120
 0 0 0 2 0 0 
 Level 584 47
@@ -40329,6 +46706,15 @@ Sleep Talk
 Substitute
 Flash Cannon
 Confide
+8
+Autotomize
+Ice Shard
+Imprison
+Iron Defense
+Magnet Rise
+Natural Gift
+Powder Snow
+Water Pulse
 45
 0 0 0 3 0 0 
 None
@@ -40391,6 +46777,16 @@ Substitute
 Wild Charge
 Nature Power
 Confide
+9
+Agility
+Baton Pass
+Fake Tears
+Grass Whistle
+Natural Gift
+Odor Sleuth
+Sleep Talk
+Synthesis
+Worry Seed
 190
 0 0 0 0 0 1 
 Level 586 34
@@ -40462,6 +46858,16 @@ Rock Smash
 Nature Power
 Confide
 Cut
+9
+Agility
+Baton Pass
+Fake Tears
+Grass Whistle
+Natural Gift
+Odor Sleuth
+Sleep Talk
+Synthesis
+Worry Seed
 75
 0 2 0 0 0 0 
 None
@@ -40527,6 +46933,17 @@ Substitute
 Wild Charge
 Confide
 Cut
+10
+Air Slash
+Astonish
+Baton Pass
+Charm
+Covet
+Electrify
+Iron Tail
+Roost
+Shock Wave
+Tickle
 200
 0 0 0 0 0 2 
 None
@@ -40586,6 +47003,16 @@ Sleep Talk
 Substitute
 Confide
 Cut
+9
+Bug Bite
+Counter
+Drill Run
+Feint Attack
+Horn Attack
+Knock Off
+Megahorn
+Pursuit
+Screech
 200
 0 1 0 0 0 0 
 Item 589  Metal Coat
@@ -40654,6 +47081,16 @@ Substitute
 Rock Smash
 Confide
 Cut
+9
+Bug Bite
+Counter
+Drill Run
+Feint Attack
+Horn Attack
+Knock Off
+Megahorn
+Pursuit
+Screech
 75
 0 2 0 0 0 0 
 None
@@ -40712,6 +47149,15 @@ Sleep Talk
 Substitute
 Nature Power
 Confide
+8
+Body Slam
+Defense Curl
+Endure
+Gastro Acid
+Growth
+Poison Powder
+Rollout
+Stun Spore
 190
 1 0 0 0 0 0 
 Level 591 39
@@ -40778,6 +47224,15 @@ Sleep Talk
 Substitute
 Nature Power
 Confide
+8
+Body Slam
+Defense Curl
+Endure
+Gastro Acid
+Growth
+Poison Powder
+Rollout
+Stun Spore
 75
 2 0 0 0 0 0 
 None
@@ -40849,6 +47304,13 @@ Dazzling Gleam
 Confide
 Surf
 Waterfall
+6
+Acid Armor
+Confuse Ray
+Constrict
+Mist
+Pain Split
+Recover
 190
 0 0 0 0 1 0 
 Level 593 40
@@ -40923,6 +47385,13 @@ Dazzling Gleam
 Confide
 Surf
 Waterfall
+6
+Acid Armor
+Confuse Ray
+Constrict
+Mist
+Pain Split
+Recover
 60
 0 0 0 0 2 0 
 None
@@ -40989,6 +47458,13 @@ Substitute
 Confide
 Surf
 Waterfall
+6
+Endure
+Mirror Coat
+Mist
+Pain Split
+Refresh
+Tickle
 75
 2 0 0 0 0 0 
 None
@@ -41053,6 +47529,15 @@ Substitute
 Wild Charge
 Confide
 Cut
+8
+Camouflage
+Cross Poison
+Disable
+Feint Attack
+Pin Missile
+Poison Sting
+Pursuit
+Rock Climb
 190
 0 0 0 0 0 1 
 Level 596 36
@@ -41123,6 +47608,15 @@ Substitute
 Wild Charge
 Confide
 Cut
+8
+Camouflage
+Cross Poison
+Disable
+Feint Attack
+Pin Missile
+Poison Sting
+Pursuit
+Rock Climb
 75
 0 0 0 0 0 2 
 None
@@ -41185,6 +47679,16 @@ Flash Cannon
 Rock Smash
 Nature Power
 Confide
+9
+Acid Spray
+Bullet Seed
+Gravity
+Leech Seed
+Rock Climb
+Seed Bomb
+Spikes
+Stealth Rock
+Worry Seed
 255
 0 0 1 0 0 0 
 Level 598 40
@@ -41263,6 +47767,16 @@ Nature Power
 Confide
 Cut
 Strength
+9
+Acid Spray
+Bullet Seed
+Gravity
+Leech Seed
+Rock Climb
+Seed Bomb
+Spikes
+Stealth Rock
+Worry Seed
 90
 0 0 2 0 0 0 
 None
@@ -41321,6 +47835,7 @@ Flash Cannon
 Wild Charge
 Rock Smash
 Confide
+0
 130
 0 0 1 0 0 0 
 Level 600 38
@@ -41378,6 +47893,7 @@ Flash Cannon
 Wild Charge
 Rock Smash
 Confide
+0
 60
 0 0 2 0 0 0 
 Level 601 49
@@ -41441,6 +47957,7 @@ Trick Room
 Wild Charge
 Rock Smash
 Confide
+0
 30
 0 0 3 0 0 0 
 None
@@ -41468,6 +47985,7 @@ Electric None
 2
 Charge Beam
 Thunder Wave
+0
 190
 0 0 0 0 0 1 
 Level 603 39
@@ -41528,6 +48046,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Confide
+0
 60
 0 2 0 0 0 0 
 Item 604  Thunder Stone
@@ -41598,6 +48117,7 @@ Power-Up Punch
 Confide
 Cut
 Strength
+0
 30
 0 3 0 0 0 0 
 None
@@ -41672,6 +48192,16 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+9
+Astonish
+Barrier
+Cosmic Power
+Disable
+Guard Swap
+Nasty Plot
+Power Swap
+Skill Swap
+Teleport
 255
 0 0 0 1 0 0 
 Level 606 42
@@ -41753,6 +48283,16 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+9
+Astonish
+Barrier
+Cosmic Power
+Disable
+Guard Swap
+Nasty Plot
+Power Swap
+Skill Swap
+Teleport
 90
 0 0 0 2 0 0 
 None
@@ -41825,6 +48365,15 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+8
+Acid
+Acid Armor
+Captivate
+Clear Smog
+Endure
+Haze
+Heat Wave
+Power Split
 190
 0 0 0 1 0 0 
 Level 608 41
@@ -41899,6 +48448,15 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+8
+Acid
+Acid Armor
+Captivate
+Clear Smog
+Endure
+Haze
+Heat Wave
+Power Split
 90
 0 0 0 2 0 0 
 Item 609  Dusk Stone
@@ -41961,6 +48519,15 @@ Substitute
 Trick Room
 Dark Pulse
 Confide
+8
+Acid
+Acid Armor
+Captivate
+Clear Smog
+Endure
+Haze
+Heat Wave
+Power Split
 45
 0 0 0 3 0 0 
 None
@@ -42030,6 +48597,17 @@ Rock Smash
 Confide
 Cut
 Strength
+10
+Counter
+Dragon Pulse
+Endeavor
+Endure
+Focus Energy
+Harden
+Iron Tail
+Night Slash
+Razor Wind
+Reversal
 75
 0 1 0 0 0 0 
 Level 611 38
@@ -42104,6 +48682,17 @@ Rock Smash
 Confide
 Cut
 Strength
+10
+Counter
+Dragon Pulse
+Endeavor
+Endure
+Focus Energy
+Harden
+Iron Tail
+Night Slash
+Razor Wind
+Reversal
 60
 0 2 0 0 0 0 
 Level 612 48
@@ -42187,6 +48776,17 @@ Confide
 Cut
 Surf
 Strength
+10
+Counter
+Dragon Pulse
+Endeavor
+Endure
+Focus Energy
+Harden
+Iron Tail
+Night Slash
+Razor Wind
+Reversal
 45
 0 3 0 0 0 0 
 None
@@ -42254,6 +48854,16 @@ Confide
 Cut
 Surf
 Strength
+9
+Assurance
+Avalanche
+Encore
+Focus Punch
+Ice Punch
+Night Slash
+Play Rough
+Sleep Talk
+Yawn
 120
 0 1 0 0 0 0 
 Level 614 37
@@ -42339,6 +48949,16 @@ Confide
 Cut
 Surf
 Strength
+9
+Assurance
+Avalanche
+Encore
+Focus Punch
+Ice Punch
+Night Slash
+Play Rough
+Sleep Talk
+Yawn
 60
 0 2 0 0 0 0 
 None
@@ -42410,6 +49030,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Confide
+0
 25
 0 0 0 0 2 0 
 None
@@ -42465,6 +49086,17 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+10
+Baton Pass
+Double-Edge
+Encore
+Endure
+Feint
+Guard Split
+Mind Reader
+Mud-Slap
+Pursuit
+Spikes
 200
 0 0 1 0 0 0 
 Item 617  Shed Shell
@@ -42529,6 +49161,17 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+10
+Baton Pass
+Double-Edge
+Encore
+Endure
+Feint
+Guard Split
+Mind Reader
+Mud-Slap
+Pursuit
+Spikes
 75
 0 0 0 0 0 2 
 None
@@ -42599,6 +49242,19 @@ Sleep Talk
 Substitute
 Confide
 Surf
+12
+Astonish
+Curse
+Earth Power
+Eerie Impulse
+Me First
+Pain Split
+Reflect Type
+Shock Wave
+Sleep Talk
+Spark
+Spite
+Yawn
 75
 2 0 0 0 0 0 
 None
@@ -42675,6 +49331,15 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+8
+Baton Pass
+Endure
+Feint
+Knock Off
+Low Kick
+Me First
+Smelling Salts
+Vital Throw
 180
 0 1 0 0 0 0 
 Level 620 50
@@ -42757,6 +49422,15 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+8
+Baton Pass
+Endure
+Feint
+Knock Off
+Low Kick
+Me First
+Smelling Salts
+Vital Throw
 45
 0 2 0 0 0 0 
 None
@@ -42840,6 +49514,18 @@ Confide
 Cut
 Surf
 Strength
+11
+Crush Claw
+Feint Attack
+Fire Fang
+Glare
+Iron Tail
+Metal Claw
+Poison Tail
+Pursuit
+Snatch
+Sucker Punch
+Thunder Fang
 45
 0 2 0 0 0 0 
 None
@@ -42909,6 +49595,7 @@ Rock Smash
 Power-Up Punch
 Confide
 Strength
+0
 190
 0 1 0 0 0 0 
 Level 623 43
@@ -42991,6 +49678,7 @@ Power-Up Punch
 Confide
 Fly
 Strength
+0
 90
 0 2 0 0 0 0 
 None
@@ -43069,6 +49757,15 @@ Dark Pulse
 Power-Up Punch
 Confide
 Cut
+8
+Headbutt
+Mean Look
+Psycho Cut
+Pursuit
+Quick Guard
+Revenge
+Stealth Rock
+Sucker Punch
 120
 0 1 0 0 0 0 
 Level 625 52
@@ -43156,6 +49853,15 @@ Dark Pulse
 Power-Up Punch
 Confide
 Cut
+8
+Headbutt
+Mean Look
+Psycho Cut
+Pursuit
+Quick Guard
+Revenge
+Stealth Rock
+Sucker Punch
 45
 0 2 0 0 0 0 
 None
@@ -43222,6 +49928,16 @@ Confide
 Cut
 Surf
 Strength
+9
+Amnesia
+Belch
+Headbutt
+Iron Head
+Mud Shot
+Mud-Slap
+Rock Climb
+Skull Bash
+Stomp
 45
 0 2 0 0 0 0 
 None
@@ -43288,6 +50004,7 @@ Confide
 Cut
 Fly
 Strength
+0
 190
 0 1 0 0 0 0 
 Level 628 54
@@ -43363,6 +50080,7 @@ Confide
 Cut
 Fly
 Strength
+0
 60
 0 2 0 0 0 0 
 None
@@ -43433,6 +50151,14 @@ Dark Pulse
 Confide
 Cut
 Fly
+7
+Fake Tears
+Foul Play
+Knock Off
+Mean Look
+Roost
+Scary Face
+Steel Wing
 190
 0 0 1 0 0 0 
 Level 630 54
@@ -43512,6 +50238,14 @@ Dark Pulse
 Confide
 Cut
 Fly
+7
+Fake Tears
+Foul Play
+Knock Off
+Mean Look
+Roost
+Scary Face
+Steel Wing
 60
 0 0 0 2 0 0 
 None
@@ -43584,6 +50318,18 @@ Rock Smash
 Power-Up Punch
 Confide
 Cut
+11
+Belch
+Body Slam
+Curse
+Feint Attack
+Heat Wave
+Night Slash
+Pursuit
+Sleep Talk
+Sucker Punch
+Tickle
+Wrap
 90
 0 0 0 2 0 0 
 None
@@ -43655,6 +50401,13 @@ Rock Smash
 Confide
 Cut
 Strength
+6
+Baton Pass
+Endure
+Feint Attack
+Rock Climb
+Screech
+Thunder Fang
 90
 0 0 2 0 0 0 
 None
@@ -43717,6 +50470,17 @@ Rock Smash
 Dark Pulse
 Confide
 Strength
+10
+Assurance
+Astonish
+Dark Pulse
+Double Hit
+Earth Power
+Fire Fang
+Head Smash
+Ice Fang
+Screech
+Thunder Fang
 45
 0 1 0 0 0 0 
 Level 634 50
@@ -43781,6 +50545,17 @@ Rock Smash
 Dark Pulse
 Confide
 Strength
+10
+Assurance
+Astonish
+Dark Pulse
+Double Hit
+Earth Power
+Fire Fang
+Head Smash
+Ice Fang
+Screech
+Thunder Fang
 45
 0 2 0 0 0 0 
 Level 635 64
@@ -43868,6 +50643,17 @@ Confide
 Fly
 Surf
 Strength
+10
+Assurance
+Astonish
+Dark Pulse
+Double Hit
+Earth Power
+Fire Fang
+Head Smash
+Ice Fang
+Screech
+Thunder Fang
 45
 0 0 0 3 0 0 
 None
@@ -43928,6 +50714,14 @@ U-turn
 Substitute
 Wild Charge
 Confide
+7
+Endure
+Foresight
+Harden
+Magnet Rise
+Morning Sun
+String Shot
+Zen Headbutt
 45
 0 1 0 0 0 0 
 Level 637 59
@@ -44007,6 +50801,14 @@ Substitute
 Wild Charge
 Confide
 Fly
+7
+Endure
+Foresight
+Harden
+Magnet Rise
+Morning Sun
+String Shot
+Zen Headbutt
 15
 0 0 0 3 0 0 
 None
@@ -44083,6 +50885,7 @@ Rock Smash
 Confide
 Cut
 Strength
+0
 3
 0 0 3 0 0 0 
 None
@@ -44158,6 +50961,7 @@ Rock Smash
 Confide
 Cut
 Strength
+0
 3
 0 3 0 0 0 0 
 None
@@ -44233,6 +51037,7 @@ Nature Power
 Confide
 Cut
 Strength
+0
 3
 0 0 0 0 3 0 
 None
@@ -44313,6 +51118,7 @@ Dark Pulse
 Confide
 Fly
 Strength
+0
 3
 0 3 0 0 0 0
 None
@@ -44398,6 +51204,7 @@ Dark Pulse
 Confide
 Fly
 Strength
+0
 3
 0 3 0 0 0 0 
 None
@@ -44478,6 +51285,7 @@ Confide
 Cut
 Fly
 Strength
+0
 45
 0 0 0 3 0 0 
 None
@@ -44559,6 +51367,7 @@ Confide
 Cut
 Fly
 Strength
+0
 45
 0 3 0 0 0 0 
 None
@@ -44639,6 +51448,7 @@ Rock Smash
 Confide
 Fly
 Strength
+0
 3
 0 3 0 0 0 0
 None
@@ -44716,6 +51526,7 @@ Confide
 Cut
 Fly
 Strength
+0
 3
 1 1 0 1 0 0
 None
@@ -44785,6 +51596,7 @@ Confide
 Cut
 Surf
 Strength
+0
 3
 0 0 0 3 0 0 
 None
@@ -44869,6 +51681,7 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 Strength
+0
 3
 0 0 0 1 1 1
 None
@@ -44950,6 +51763,7 @@ Flash Cannon
 Dark Pulse
 Confide
 Fly
+0
 3
 0 1 0 1 0 1 
 None
@@ -45028,6 +51842,14 @@ Power-Up Punch
 Confide
 Cut
 Strength
+7
+Belly Drum
+Curse
+Defense Curl
+Quick Guard
+Rollout
+Spikes
+Synthesis
 45
 0 0 1 0 0 0 
 Level 651 16
@@ -45108,6 +51930,14 @@ Power-Up Punch
 Confide
 Cut
 Strength
+7
+Belly Drum
+Curse
+Defense Curl
+Quick Guard
+Rollout
+Spikes
+Synthesis
 45
 0 0 2 0 0 0 
 Level 652 36
@@ -45200,6 +52030,14 @@ Power-Up Punch
 Confide
 Cut
 Strength
+7
+Belly Drum
+Curse
+Defense Curl
+Quick Guard
+Rollout
+Spikes
+Synthesis
 45
 0 0 3 0 0 0 
 None
@@ -45270,6 +52108,11 @@ Substitute
 Power-Up Punch
 Confide
 Cut
+4
+Heat Wave
+Hypnosis
+Magic Coat
+Wish
 45
 0 0 0 1 0 0 
 Level 654 16
@@ -45340,6 +52183,11 @@ Substitute
 Power-Up Punch
 Confide
 Cut
+4
+Heat Wave
+Hypnosis
+Magic Coat
+Wish
 45
 0 0 0 2 0 0 
 Level 655 36
@@ -45422,6 +52270,11 @@ Trick Room
 Power-Up Punch
 Confide
 Cut
+4
+Heat Wave
+Hypnosis
+Magic Coat
+Wish
 45
 0 0 0 3 0 0 
 None
@@ -45491,6 +52344,13 @@ Cut
 Surf
 Strength
 Waterfall
+6
+Bestow
+Camouflage
+Mind Reader
+Mud Sport
+Toxic Spikes
+Water Sport
 45
 0 0 0 0 0 1 
 Level 657 16
@@ -45561,6 +52421,13 @@ Cut
 Surf
 Strength
 Waterfall
+6
+Bestow
+Camouflage
+Mind Reader
+Mud Sport
+Toxic Spikes
+Water Sport
 45
 0 0 0 0 0 2 
 Level 658 36
@@ -45640,6 +52507,13 @@ Cut
 Surf
 Strength
 Waterfall
+6
+Bestow
+Camouflage
+Mind Reader
+Mud Sport
+Toxic Spikes
+Water Sport
 45
 0 0 0 0 0 3 
 None
@@ -45713,6 +52587,10 @@ Confide
 Cut
 Surf
 Strength
+3
+Defense Curl
+Rollout
+Spikes
 255
 0 0 0 0 0 1 
 Level 660 20
@@ -45793,6 +52671,10 @@ Confide
 Cut
 Surf
 Strength
+3
+Defense Curl
+Rollout
+Spikes
 255
 2 0 0 0 0 0 
 None
@@ -45852,6 +52734,10 @@ U-turn
 Substitute
 Confide
 Fly
+3
+Quick Guard
+Snatch
+Tailwind
 255
 0 0 0 0 0 1 
 Level 662 17
@@ -45916,6 +52802,10 @@ U-turn
 Substitute
 Confide
 Fly
+3
+Quick Guard
+Snatch
+Tailwind
 255
 0 0 0 0 0 2 
 Level 663 35
@@ -45988,6 +52878,10 @@ U-turn
 Substitute
 Confide
 Fly
+3
+Quick Guard
+Snatch
+Tailwind
 255
 0 0 0 0 0 3 
 None
@@ -46013,6 +52907,9 @@ Bug None
 6 Stun Spore
 15 Bug Bite
 0
+2
+Poison Powder
+Stun Spore
 255
 0 0 1 0 0 0 
 Level 665 9
@@ -46037,6 +52934,9 @@ Bug None
 9 Protect
 1
 Protect
+2
+Poison Powder
+Stun Spore
 255
 0 0 2 0 0 0 
 Level 666 12
@@ -46106,6 +53006,9 @@ Sleep Talk
 U-turn
 Substitute
 Confide
+2
+Poison Powder
+Stun Spore
 255
 1 0 0 1 0 1 
 None
@@ -46176,6 +53079,11 @@ Snarl
 Dark Pulse
 Confide
 Strength
+4
+Entrainment
+Fire Spin
+Snatch
+Yawn
 200
 0 0 0 1 0 0 
 Level 668 35
@@ -46249,6 +53157,11 @@ Snarl
 Dark Pulse
 Confide
 Strength
+4
+Entrainment
+Fire Spin
+Snatch
+Yawn
 200
 0 0 0 2 0 0 
 None
@@ -46308,6 +53221,10 @@ Substitute
 Nature Power
 Dazzling Gleam
 Confide
+3
+Camouflage
+Captivate
+Copycat
 255
 0 0 0 0 1 0 
 Level 670 19
@@ -46367,6 +53284,10 @@ Substitute
 Nature Power
 Dazzling Gleam
 Confide
+3
+Camouflage
+Captivate
+Copycat
 255
 0 0 0 0 2 0 
 Item 671 Shiny Stone
@@ -46427,6 +53348,10 @@ Substitute
 Nature Power
 Dazzling Gleam
 Confide
+3
+Camouflage
+Captivate
+Copycat
 255
 0 0 0 0 3 0 
 None
@@ -46494,6 +53419,10 @@ Nature Power
 Confide
 Surf
 Strength
+3
+Defense Curl
+Milk Drink
+Rollout
 160
 1 0 0 0 0 0 
 Level 673 32
@@ -46568,6 +53497,10 @@ Nature Power
 Confide
 Surf
 Strength
+3
+Defense Curl
+Milk Drink
+Rollout
 160
 2 0 0 0 0 0 
 None
@@ -46642,6 +53575,11 @@ Confide
 Cut
 Surf
 Strength
+4
+Foul Play
+Me First
+Quick Guard
+Storm Throw
 128
 0 1 0 0 0 0 
 Level 675 32
@@ -46736,6 +53674,11 @@ Confide
 Cut
 Surf
 Strength
+4
+Foul Play
+Me First
+Quick Guard
+Storm Throw
 128
 0 2 0 0 0 0 
 None
@@ -46799,6 +53742,12 @@ Snarl
 Dark Pulse
 Confide
 Surf
+5
+Captivate
+Mimic
+Refresh
+Role Play
+Work Up
 120
 0 0 0 0 0 1 
 None
@@ -46862,6 +53811,11 @@ Trick Room
 Dark Pulse
 Confide
 Cut
+4
+Assist
+Barrier
+Trick
+Yawn
 228
 0 0 0 0 0 1 
 Level 678 25
@@ -46942,6 +53896,11 @@ Dark Pulse
 Power-Up Punch
 Confide
 Cut
+4
+Assist
+Barrier
+Trick
+Yawn
 228
 0 0 0 0 0 2 
 None
@@ -47002,6 +53961,10 @@ Flash Cannon
 Rock Smash
 Confide
 Cut
+3
+Destiny Bond
+Metal Sound
+Shadow Sneak
 222
 0 0 1 0 0 0 
 Level 680 35
@@ -47062,6 +54025,10 @@ Flash Cannon
 Rock Smash
 Confide
 Cut
+3
+Destiny Bond
+Metal Sound
+Shadow Sneak
 222
 0 0 2 0 0 0 
 Item 681 Dusk Stone
@@ -47126,6 +54093,10 @@ Flash Cannon
 Rock Smash
 Confide
 Cut
+3
+Destiny Bond
+Metal Sound
+Shadow Sneak
 222
 0 0 2 0 1 0 
 None
@@ -47193,6 +54164,11 @@ Flash Cannon
 Trick Room
 Dazzling Gleam
 Confide
+4
+Captivate
+Disable
+Refresh
+Wish
 200
 1 0 0 0 0 0 
 Item 683 Sachet
@@ -47269,6 +54245,11 @@ Flash Cannon
 Trick Room
 Dazzling Gleam
 Confide
+4
+Captivate
+Disable
+Refresh
+Wish
 200
 2 0 0 0 0 0 
 None
@@ -47334,6 +54315,10 @@ Substitute
 Dazzling Gleam
 Confide
 Surf
+3
+Belly Drum
+Copycat
+Yawn
 200
 0 0 1 0 0 0 
 Item 685 Whipped Dream
@@ -47401,6 +54386,10 @@ Substitute
 Dazzling Gleam
 Confide
 Surf
+3
+Belly Drum
+Copycat
+Yawn
 200
 0 0 2 0 0 0 
 None
@@ -47475,6 +54464,12 @@ Trick Room
 Dark Pulse
 Confide
 Cut
+5
+Camouflage
+Destiny Bond
+Flatter
+Power Split
+Simple Beam
 120
 0 1 0 0 0 0 
 Level 687 30
@@ -47553,6 +54548,12 @@ Trick Room
 Dark Pulse
 Confide
 Cut
+5
+Camouflage
+Destiny Bond
+Flatter
+Power Split
+Simple Beam
 120
 0 2 0 0 0 0 
 None
@@ -47640,6 +54641,10 @@ Confide
 Cut
 Surf
 Strength
+3
+Switcheroo
+Tickle
+Water Sport
 255
 0 1 0 0 0 0 
 Level 689 39
@@ -47736,6 +54741,10 @@ Confide
 Cut
 Surf
 Strength
+3
+Switcheroo
+Tickle
+Water Sport
 255
 0 2 0 0 0 0 
 None
@@ -47795,6 +54804,12 @@ Substitute
 Confide
 Surf
 Waterfall
+5
+Acid Armor
+Haze
+Play Rough
+Toxic Spikes
+Venom Drench
 225
 0 0 0 0 1 0 
 Level 691 48
@@ -47863,6 +54878,12 @@ Substitute
 Confide
 Surf
 Waterfall
+5
+Acid Armor
+Haze
+Play Rough
+Toxic Spikes
+Venom Drench
 225
 0 0 0 0 2 0 
 None
@@ -47923,6 +54944,11 @@ Confide
 Cut
 Surf
 Waterfall
+4
+Aqua Jet
+Crabhammer
+Endure
+Entrainment
 155
 0 0 0 1 0 0 
 Level 693 37
@@ -47995,6 +55021,11 @@ Confide
 Cut
 Surf
 Waterfall
+4
+Aqua Jet
+Crabhammer
+Endure
+Entrainment
 155
 0 0 0 2 0 0 
 None
@@ -48063,6 +55094,11 @@ Dark Pulse
 Confide
 Cut
 Surf
+4
+Agility
+Camouflage
+Electric Terrain
+Glare
 90
 0 0 0 0 0 1 
 Item 695 Sun Stone
@@ -48128,6 +55164,11 @@ Dark Pulse
 Confide
 Cut
 Surf
+4
+Agility
+Camouflage
+Electric Terrain
+Glare
 90
 0 0 0 1 0 1 
 None
@@ -48194,6 +55235,14 @@ Rock Smash
 Dark Pulse
 Confide
 Strength
+7
+Curse
+Dragon Dance
+Fire Fang
+Ice Fang
+Poison Fang
+Rock Polish
+Thunder Fang
 45
 0 1 0 0 0 0 
 Level 697 39
@@ -48266,6 +55315,14 @@ Rock Smash
 Dark Pulse
 Confide
 Strength
+7
+Curse
+Dragon Dance
+Fire Fang
+Ice Fang
+Poison Fang
+Rock Polish
+Thunder Fang
 45
 0 2 0 0 0 0 
 None
@@ -48346,6 +55403,12 @@ Rock Smash
 Nature Power
 Dark Pulse
 Confide
+5
+Barrier
+Discharge
+Haze
+Magnet Rise
+Mirror Coat
 45
 1 0 0 0 0 0 
 Level 699 39
@@ -48432,6 +55495,12 @@ Rock Smash
 Nature Power
 Dark Pulse
 Confide
+5
+Barrier
+Discharge
+Haze
+Magnet Rise
+Mirror Coat
 45
 2 0 0 0 0 0 
 None
@@ -48496,6 +55565,21 @@ Substitute
 Dazzling Gleam
 Confide
 Cut
+14
+Captivate
+Charm
+Covet
+Curse
+Detect
+Endure
+Fake Tears
+Flail
+Natural Gift
+Stored Power
+Synchronoise
+Tickle
+Wish
+Yawn
 45
 0 0 0 0 2 0 
 None
@@ -48579,6 +55663,13 @@ Confide
 Cut
 Fly
 Strength
+6
+Agility
+Baton Pass
+Entrainment
+Me First
+Mud Sport
+Quick Guard
 128
 0 2 0 0 0 0 
 None
@@ -48647,6 +55738,10 @@ Substitute
 Wild Charge
 Confide
 Cut
+3
+Covet
+Eerie Impulse
+Natural Gift
 200
 0 0 0 0 0 2 
 None
@@ -48715,6 +55810,7 @@ Trick Room
 Nature Power
 Dazzling Gleam
 Confide
+0
 30
 0 0 1 0 1 0 
 None
@@ -48766,6 +55862,13 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+6
+Acid Armor
+Counter
+Curse
+Endure
+Iron Tail
+Poison Tail
 20
 0 0 0 0 1 0 
 Level 705 40
@@ -48819,6 +55922,13 @@ Swagger
 Sleep Talk
 Substitute
 Confide
+6
+Acid Armor
+Counter
+Curse
+Endure
+Iron Tail
+Poison Tail
 20
 0 0 0 0 2 0 
 Level 706 50
@@ -48890,6 +56000,13 @@ Substitute
 Rock Smash
 Confide
 Strength
+6
+Acid Armor
+Counter
+Curse
+Endure
+Iron Tail
+Poison Tail
 20
 0 0 0 0 3 0 
 None
@@ -48955,6 +56072,11 @@ Substitute
 Flash Cannon
 Dazzling Gleam
 Confide
+4
+Iron Defense
+Lock-On
+Switcheroo
+Thief
 60
 0 0 1 0 0 0 
 None
@@ -49024,6 +56146,11 @@ Dark Pulse
 Confide
 Cut
 Strength
+4
+Bestow
+Grudge
+Imprison
+Venom Drench
 150
 0 1 0 0 0 0 
 Item 709 Big Root
@@ -49104,6 +56231,11 @@ Power-Up Punch
 Confide
 Cut
 Strength
+4
+Bestow
+Grudge
+Imprison
+Venom Drench
 150
 0 2 0 0 0 0 
 None
@@ -49178,6 +56310,10 @@ Rock Smash
 Nature Power
 Dark Pulse
 Confide
+3
+Bestow
+Destiny Bond
+Disable
 190
 0 0 1 0 0 0 
 Item 711 Miracle Seed
@@ -49261,6 +56397,10 @@ Rock Smash
 Nature Power
 Dark Pulse
 Confide
+3
+Bestow
+Destiny Bond
+Disable
 190
 0 0 2 0 0 0 
 None
@@ -49326,6 +56466,11 @@ Rock Smash
 Confide
 Surf
 Strength
+4
+Barrier
+Mirror Coat
+Mist
+Recover
 255
 0 0 1 0 0 0 
 Level 713 37
@@ -49402,6 +56547,11 @@ Rock Smash
 Confide
 Surf
 Strength
+4
+Barrier
+Mirror Coat
+Mist
+Recover
 255
 0 0 2 0 0 0 
 None
@@ -49474,6 +56624,11 @@ Dark Pulse
 Confide
 Cut
 Fly
+4
+Outrage
+Snatch
+Switcheroo
+Tailwind
 200
 0 0 0 0 0 1 
 Level 715 48
@@ -49556,6 +56711,11 @@ Dark Pulse
 Confide
 Cut
 Fly
+4
+Outrage
+Snatch
+Switcheroo
+Tailwind
 200
 0 0 0 0 0 2 
 None
@@ -49630,6 +56790,7 @@ Nature Power
 Dazzling Gleam
 Confide
 Cut
+0
 70
 3 0 0 0 0 0 
 None
@@ -49706,6 +56867,7 @@ Dark Pulse
 Confide
 Cut
 Fly
+0
 70
 3 0 0 0 0 0 
 None
@@ -49773,6 +56935,7 @@ Substitute
 Rock Smash
 Confide
 Strength
+0
 3
 3 0 0 0 0 0 
 None
@@ -49845,6 +57008,7 @@ Trick Room
 Nature Power
 Dazzling Gleam
 Confide
+0
 3
 0 0 1 0 2 0 
 None

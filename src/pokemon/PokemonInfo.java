@@ -40,6 +40,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private Type[] type;
 	private TreeMap<Integer, List<Namesies>> levelUpMoves;
 	private HashSet<Namesies> tmMoves;
+	private HashSet<Namesies> eggMoves;
 	private int catchRate;
 	private int[] givenEVs;
 	private Evolution evolution;
@@ -55,8 +56,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	
 	public PokemonInfo(int number, String name, int[] baseStats, int baseExp, String growthRate, 
 			String type1, String type2, TreeMap<Integer, List<Namesies>> levelUpMoves, HashSet<Namesies> tmMoves, 
-			int catchRate, int[] givenEVs, Evolution evolution, List<WildHoldItem> wildHoldItems, int genderRatio, 
-			String ability1, String ability2, String classification, int height, double weight, 
+			HashSet<Namesies> eggMoves, int catchRate, int[] givenEVs, Evolution evolution, List<WildHoldItem> wildHoldItems,  
+			int genderRatio, String ability1, String ability2, String classification, int height, double weight, 
 			String flavorText, int eggSteps, String eggGroup1, String eggGroup2)
 	{	
 		this.number = number;
@@ -68,6 +69,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.type = new Type[] {Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase())};
 		this.levelUpMoves = levelUpMoves;
 		this.tmMoves = tmMoves;
+		this.eggMoves = eggMoves;
 		this.catchRate = catchRate;
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
@@ -332,10 +334,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			
 			info[num] = new PokemonInfo(num, in.nextLine().trim(), sixIntArray(in),
 					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.next(), in.next(), 
-					createLevelUpMoves(in), createTmMoves(in), in.nextInt(), sixIntArray(in), Evolution.readEvolution(in),
-					WildHoldItem.createList(in), in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), 
-					in.nextLine().trim(), in.nextLine().trim(), in.nextInt(), in.nextDouble(), 
-					in.nextLine().trim(), in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim());
+					createLevelUpMoves(in), createMovesHashSet(in), createMovesHashSet(in), in.nextInt(), 
+					sixIntArray(in), Evolution.readEvolution(in), WildHoldItem.createList(in), in.nextInt(), 
+					in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim(), in.nextLine().trim(), 
+					in.nextInt(), in.nextDouble(), in.nextLine().trim(), in.nextInt(), 
+					in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim());
+			
 			map.put(info[num].getName(), info[num]);
 		}
 		
@@ -376,7 +380,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		return levelUpMoves;
 	}
 	
-	private static HashSet<Namesies> createTmMoves(Scanner in)
+	private static HashSet<Namesies> createMovesHashSet(Scanner in)
 	{
 		HashSet<Namesies> tmMoves = new HashSet<>();
 		int numMoves = in.nextInt();

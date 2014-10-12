@@ -6006,7 +6006,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + restore + "'s PP was restored!";
+			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
 		public boolean use(Move m)
@@ -6036,7 +6036,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + restore + "'s PP was restored!";
+			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
 		public boolean use(Move m)
@@ -8435,7 +8435,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + restore + "'s PP was restored!";
+			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
 		public String getHoldSuccessMessage(ActivePokemon p)

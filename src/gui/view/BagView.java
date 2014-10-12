@@ -163,7 +163,11 @@ public class BagView extends View
 		
 		useClicked = false;
 		state = BagState.ITEM_SELECT;
-		if (player.getBag().getQuantity(selectedItem) == 0) changeCategory(selectedTab);
+		
+		if (player.getBag().getQuantity(selectedItem) == 0) 
+		{
+			changeCategory(selectedTab);
+		}
 	}
 
 	public void update(int dt, InputControl input, Game game)
@@ -202,10 +206,6 @@ public class BagView extends View
 				Move m = selectedPokemon.getMove(i);
 				 
 				addUseMessages(player.getBag().useMoveItem(selectedItem, m), selectedPokemon);
-				
-				useClicked = false;
-				state = BagState.ITEM_SELECT;
-				if (player.getBag().getQuantity(selectedItem) == 0) changeCategory(selectedTab);
 			}
 		}
 		
@@ -219,10 +219,16 @@ public class BagView extends View
 				if (giveClicked)
 				{
 					addMessage(bag.giveItem(player, p, selectedItem));
+					
 					giveClicked = false;
 					selectedButton = GIVE;
 					state = BagState.ITEM_SELECT;
-					if (bag.getQuantity(selectedItem) == 0) changeCategory(selectedTab);
+					
+					if (bag.getQuantity(selectedItem) == 0) 
+					{
+						changeCategory(selectedTab);
+					}
+					
 					updateActiveButtons();
 				}
 				else if (useClicked)
@@ -557,7 +563,9 @@ public class BagView extends View
 
 	private void changeCategory(int index)
 	{
-		if (selectedTab != index) pageNum = 0;
+		if (selectedTab != index) 
+			pageNum = 0;
+		
 		selectedTab = index;
 		state = BagState.ITEM_SELECT;
 

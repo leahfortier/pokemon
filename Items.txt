@@ -1628,7 +1628,7 @@ Ether:
 	Field: 
 	private String restore;
 	###
-	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
+	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 *
 Max Ether
 	Int: MoveUseItem, HoldItem
@@ -1645,7 +1645,7 @@ Max Ether
 	Field: 
 	private String restore;
 	###
-	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
+	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 *
 Berry Juice
 	Int: HoldItem
@@ -2360,7 +2360,7 @@ Leppa Berry:
 	Field: 
 		private String restore;
 		###
-	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
+	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
 Oran Berry:
