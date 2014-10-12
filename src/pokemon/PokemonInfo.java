@@ -86,8 +86,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	
 	public Namesies[] setAbilities(String ability1, String ability2)
 	{
-		Namesies first = Namesies.tryValueOf(ability1, NamesiesType.ABILITY);
-		Namesies second = Namesies.tryValueOf(ability2, NamesiesType.ABILITY);
+		Namesies first = Namesies.getValueOf(ability1, NamesiesType.ABILITY);
+		Namesies second = Namesies.getValueOf(ability2, NamesiesType.ABILITY);
 
 		return new Namesies[] {first, second};
 	}
@@ -95,6 +95,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	public Type[] getType()
 	{
 		return type;
+	}
+	
+	public boolean isTmMove(Namesies move)
+	{
+		return tmMoves.contains(move);
 	}
 	
 	public TreeMap<Integer, List<Namesies>> getLevelUpMoves()

@@ -244,7 +244,7 @@ StageChangingEffect:
 		Header: int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
 	*
 ***
-IgnoreStageEffect
+IgnoreStageEffect:
 	IgnoreStage: 
 		Header: boolean ignoreStage(Stat s)
 	*
@@ -389,7 +389,8 @@ OpponentBeforeTurnEffect:
 Override:
 	ProtectingEffect:
 		AddInterface: OpponentBeforeTurnEffect
-		AddMapField: NumTurns: 1
+		AddMapField: MinTurns: 1
+		AddMapField: MaxTurns: 1
 		AddMapField: CastMessage: victim.getName() + " protected itself!"
 		AddMapField: SuccessiveDecay: True
 		AddMapField: OnProtectingSuccess:
@@ -861,7 +862,7 @@ BattleUseItem:
 ***
 MoveUseItem:
 	MoveUse:
-		Header: boolean use(Move m)
+		Header: boolean use(ActivePokemon p, Move m)
 	*
 ***
 Override:
@@ -1578,6 +1579,56 @@ StatLoweredEffect:
 		Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
 		Body:
 		victim.getAttributes().modifyStage(victim, victim, 2, Stat.{00}, b, CastSource.@SuperClass);
+		###
+	*
+***
+Override:
+	TM:
+		Header: Attack getAttack()
+		Body:
+		return Attack.getAttack(Namesies.getValueOf("{0}", NamesiesType.ATTACK));
+		###
+		AddMapField: Cat: TM
+		AddInterface: MoveUseItem
+		AddMapField: SuccessMessage: p.getName() + " learned " + getAttack().getName() + "!"
+		AddMapField: MoveUse:
+		Attack attack = getAttack();
+		
+		// Cannot learn if you already know the move
+		if (p.hasMove(attack.namesies()))
+		{
+			return false;
+		}
+
+		// Cannot learn if the TM is not compatible with the Pokemon
+		if (!p.getPokemonInfo().isTmMove(attack.namesies()))
+		{
+			return false;
+		}
+
+		Move tmMove = new Move(attack);
+		int numMoves = p.getMoves().size();
+
+		// If they don't have a full move list, append to the end
+		if (numMoves < Move.MAX_MOVES)
+		{
+			p.addMove(null, tmMove, numMoves);
+			return true;
+		}
+
+		// Otherwise, go through their moves and find the one that matches and replace with the TM move
+		for (int i = 0; i < numMoves; i++)
+		{
+			if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+			{
+				p.addMove(null, tmMove, i);
+				return true;
+			}
+		}
+
+		// Did not find move to replace -- throw error
+		Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
+		return false;
 		###
 	*
 ***

@@ -6,7 +6,6 @@ import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -15,23 +14,26 @@ import java.util.regex.Pattern;
 
 import main.Namesies.NamesiesType;
 import pokemon.PokemonInfo;
+import battle.Attack;
 import battle.Attack.Category;
 
 public class StuffGen 
 {
+	private static int TM_BASE_INDEX = 2000;
+	
 	private static String POKEMON_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "PokemonEffect.java";
 	private static String TEAM_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "TeamEffect.java";
 	private static String BATTLE_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "BattleEffect.java";
 	private static String WEATHER_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "Weather.java";
 	private static String MOVE_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "Attack.java";
 	private static String ABILITY_PATH = "src" + Global.FILE_SLASH + "pokemon" + Global.FILE_SLASH + "Ability.java";
+	private static String ITEM_PATH = "src" + Global.FILE_SLASH + "item" + Global.FILE_SLASH + "Item.java";
 	private static String NAMESIES_PATH = "src" + Global.FILE_SLASH + "main" + Global.FILE_SLASH + "Namesies.java";
+	
+	private static String ITEM_TILES_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "itemTiles" + Global.FILE_SLASH;
 	
 	private static String POKEMON_TILES_INDEX_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "pokemonTiles" + Global.FILE_SLASH + "index.txt";
 	private static String POKEMON_SMALL_TILES_INDEX_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "partyTiles" + Global.FILE_SLASH + "index.txt";
-	
-	private static String ITEM_PATH = "src" + Global.FILE_SLASH + "item" + Global.FILE_SLASH + "Item.java", 
-			ITEM_TILES_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "itemTiles" + Global.FILE_SLASH;
 	
 	private enum Generator
 	{
@@ -145,6 +147,7 @@ public class StuffGen
 		System.out.println("Namesies generated.");
 	}
 	
+	// Creates the className from the name and adds to the appropriate fields
 	private static String writeClassName(String name)
 	{
 		String className = "";
@@ -172,10 +175,84 @@ public class StuffGen
 		}
 		
 		className = className.replace("u00e9", "e");
+		
 		return className;
 	}
 	
-	private static void superGen(Generator gen)
+	private static HashMap<String, String> readFields(Scanner in, Generator gen, String className, int index)
+	{
+		HashMap<String, String> fields = new HashMap<>();
+		
+		while (in.hasNextLine())
+		{
+			String line = in.nextLine().trim();
+			if (line.equals("*"))
+			{
+				break;
+			}
+			
+			Entry<String, String> pair = getFieldPair(in, line);
+			
+			String key = pair.getKey();
+			String value = pair.getValue();
+			
+			if (fields.containsKey(key))
+			{
+				Global.error("Repeated field " + key + " for " + gen.superClass  + " " + className);
+			}
+			
+			fields.put(key, value);
+//			System.out.println(name + " " + key + " " + value);
+		}
+		
+		fields.put("Namesies", className);
+		fields.put("ClassName", className);
+		
+		fields.put("Index", index + "");
+		
+		// There will be problems if a Field move does not get the necessary methods
+		if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
+		{
+			Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + className);
+		}
+		
+		// Just some light error-checking
+		if (gen == Generator.ATTACK_GEN)
+		{
+			Category category = Category.valueOf(fields.get("Cat").toUpperCase());
+			if (category == Category.STATUS)
+			{
+				if (fields.containsKey("Pow"))
+				{
+					Global.error("Status moves shouldn't have power (" + className + ").");
+				}
+			}
+			else
+			{
+				if (!fields.containsKey("Pow") && !fields.containsKey("GetPow") 
+						&& !fields.containsKey("FixedDamage") && !fields.containsKey("OHKO")
+						&& !fields.containsKey("Apply"))
+				{
+					Global.error("Non-status moves must include a power (" + className + ").");
+				}
+			}
+		}
+		
+		// NumTurns matches to both MinTurns and MaxTurns
+		if (fields.containsKey("NumTurns"))
+		{
+			String numTurns = fields.get("NumTurns");
+			fields.put("MinTurns", numTurns);
+			fields.put("MaxTurns", numTurns);
+			
+			fields.remove("NumTurns");
+		}
+		
+		return fields;
+	}
+	
+	// Opens the original file and appends the beginning until the key to generate
+	private static StringBuilder startGen(Generator gen)
 	{
 		Scanner original = openFile(gen.outputPath);
 		StringBuilder out = new StringBuilder();
@@ -195,13 +272,61 @@ public class StuffGen
 		
 		out.append("\n\t\t// List all of the classes we are loading\n");
 		
+		return out;
+	}
+	
+	private static void addClass(Generator gen, StringBuilder out, StringBuilder classes, String name, String className, HashMap<String, String> fields)
+	{
+		createNamesies(name, className, gen.appendsies);
+		
+		// Mappity map
+		if (gen.mappity)
+		{
+			out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");	
+		}
+
+		List<String> interfaces = new ArrayList<>();
+		String additionalMethods = getAdditionalMethods(gen, fields, interfaces);
+		String constructor = getConstructor(fields, gen);
+
+		String implementsString = getImplementsString(interfaces);
+		
+		String extraFields = "";
+		if (fields.containsKey("Field"))
+		{
+			extraFields = fields.get("Field");
+			fields.remove("Field");
+		}
+		
+		// Write activation method if applicable
+		additionalMethods = getActivationMethod(gen, className, fields) + additionalMethods;
+		
+		String classString = createClass(className, gen.superClass, implementsString, extraFields, constructor, additionalMethods);
+		
+		fields.remove("ClassName");
+		fields.remove("Index");
+		
+		for (String s : fields.keySet())
+		{
+			Global.error("Unused field " + s + " for class " + className);
+		}
+		
+		classes.append(classString);
+	}
+	
+	private static void superGen(Generator gen)
+	{
+		StringBuilder out = startGen(gen);
+		
 		Scanner in = openFile(gen.inputPath);
 		readFileFormat(in);
 		
+		// StringBuilder for the classes (does not append to out directly because of the map)
 		StringBuilder classes = new StringBuilder();
 		
-		int index = 0;
+		// The image index file for the item generator
 		StringBuilder indexOut = new StringBuilder();
+		int index = 0;
 		
 		while (in.hasNext())
 		{
@@ -215,158 +340,16 @@ public class StuffGen
 			
 			// Get the name
 			String name = line.replace(":", "");
-			
-			HashMap<String, String> fields = new HashMap<>();
-			
-			// Read in all of the fields
-			while (in.hasNextLine())
-			{
-				line = in.nextLine().trim();
-				if (line.equals("*"))
-				{
-					break;
-				}
-				
-				Entry<String, String> pair = getFieldPair(in, line);
-				
-				String key = pair.getKey();
-				String value = pair.getValue();
-				
-				if (fields.containsKey(key))
-				{
-					Global.error("Repeated field " + key + " for " + gen.superClass  + " " + name);
-				}
-				
-				fields.put(key, value);
-//				System.out.println(name + " " + key + " " + value);
-			}
-			
 			String className = writeClassName(name);
 			
-			fields.put("Namesies", className);
-			fields.put("ClassName", className);
+			// Read in all of the fields
+			HashMap<String, String> fields = readFields(in, gen, className, index);
 			
-			createNamesies(name, className, gen.appendsies);
-			
-			fields.put("Index", index + "");
-			
-			// There will be problems if a Field move does not get the necessary methods
-			if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
-			{
-				Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + name);
-			}
-			
-			// Just some light error-checking
-			if (gen == Generator.ATTACK_GEN)
-			{
-				Category category = Category.valueOf(fields.get("Cat").toUpperCase());
-				if (category == Category.STATUS)
-				{
-					if (fields.containsKey("Pow"))
-					{
-						Global.error("Status moves shouldn't have power (" + className + ").");
-					}
-				}
-				else
-				{
-					if (!fields.containsKey("Pow") && !fields.containsKey("GetPow") 
-							&& !fields.containsKey("FixedDamage") && !fields.containsKey("OHKO")
-							&& !fields.containsKey("Apply"))
-					{
-						Global.error("Non-status moves must include a power (" + className + ").");
-					}
-				}
-			}
-			
-			// Mappity map
-			if (gen.mappity)
-			{
-				out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");	
-			}
-
-			List<String> interfaces = new ArrayList<>();
-			
-			String additionalMethods = getAdditionalMethods(gen, fields, interfaces);
-			
-			// NumTurns matches to both MinTurns and MaxTurns
-			if (fields.containsKey("NumTurns"))
-			{
-				String numTurns = fields.get("NumTurns");
-				fields.put("MinTurns", numTurns);
-				fields.put("MaxTurns", numTurns);
-				
-				fields.remove("NumTurns");
-			}
-			
-			String constructor = getConstructor(fields, gen);
-			
-			boolean implemented = false;
-			String implementsString = "";
-			for (String interfaceName : interfaces)
-			{
-				if (interfaceName.contains("Hidden-"))
-				{
-					continue;
-				}
-				
-				implementsString += (implemented ? ", " : "implements ") + interfaceName;
-				implemented = true;
-			}
-			
-			String extraFields = "";
-			if (fields.containsKey("Field"))
-			{
-				extraFields = fields.get("Field");
-				fields.remove("Field");
-			}
-			
-			// Write activation method if applicable
-			if (gen.activate)
-			{
-				String activation = "(" + className + ")(new " + className + "().activate())";
-				String activateHeader = className + " newInstance()";
-				
-				MethodInfo activateInfo;
-				if (fields.containsKey("Activate"))
-				{
-					String activateBegin = className + " x = " + activation + ";\n";
-					String activateEnd = "return x;";
-					
-					activateInfo = new MethodInfo(activateHeader, activateBegin, fields.get("Activate"), activateEnd);
-					
-					fields.remove("Activate");
-				}
-				else
-				{
-					activateInfo = new MethodInfo(activateHeader, "", "return " + activation + ";", "");
-				}
-				
-				additionalMethods = MethodInfo.writeFunction(gen, activateInfo, "", className) + additionalMethods;
-			}
-			
-			String classString = createClass(className, gen.superClass, implementsString, extraFields, constructor, additionalMethods);
-			
-			fields.remove("ClassName");
-			fields.remove("Index");
-			
-			for (String s : fields.keySet())
-			{
-				Global.error("Unused field " + s + " for class " + className);
-			}
-			
-			classes.append(classString);
+			addClass(gen, out, classes, name, className, fields);
 			
 			if (gen == Generator.ITEM_GEN)
 			{
-				File imageFile = new File(ITEM_TILES_PATH + className.toLowerCase() + ".png");
-				if (!imageFile.exists()) 
-				{
-					System.err.println("Image for " + name + " does not exist." + imageFile.getAbsolutePath());
-				}
-				
-				String indexBase16 = Integer.toString(index, 16);
-				while (indexBase16.length() < 8) indexBase16 = "0" + indexBase16;
-				indexOut.append(className.toLowerCase() + ".png " + indexBase16 + "\n");
+				addImageIndex(indexOut, index, name, className.toLowerCase());
 			}
 			
 			index++;
@@ -378,6 +361,7 @@ public class StuffGen
 				out.append("\n\t\tfor (String s : map.keySet())\n\t\t{\n\t\t\tmoveNames.add(s);\n\t\t}\n");
 				break;
 			case ITEM_GEN:
+				addTMs(out, classes, indexOut);
 				printToFile(ITEM_TILES_PATH + "index.txt", indexOut);
 			default:
 				break;
@@ -392,6 +376,100 @@ public class StuffGen
 		out.append(classes + "}");
 		
 		printToFile(gen.outputPath, out);
+	}
+	
+	private static String getActivationMethod(Generator gen, String className, HashMap<String, String> fields)
+	{
+		if (!gen.activate)
+		{
+			return "";
+		}
+		
+		String activation = "(" + className + ")(new " + className + "().activate())";
+		String activateHeader = className + " newInstance()";
+		
+		MethodInfo activateInfo;
+		if (fields.containsKey("Activate"))
+		{
+			String activateBegin = className + " x = " + activation + ";\n";
+			String activateEnd = "return x;";
+			
+			activateInfo = new MethodInfo(activateHeader, activateBegin, fields.get("Activate"), activateEnd);
+			
+			fields.remove("Activate");
+		}
+		else
+		{
+			activateInfo = new MethodInfo(activateHeader, "", "return " + activation + ";", "");
+		}
+		
+		return MethodInfo.writeFunction(gen, activateInfo, "", className);
+	}
+	
+	private static String getImplementsString(List<String> interfaces)
+	{
+		boolean implemented = false;
+		String implementsString = "";
+		
+		for (String interfaceName : interfaces)
+		{
+			if (interfaceName.contains("Hidden-"))
+			{
+				continue;
+			}
+			
+			implementsString += (implemented ? ", " : "implements ") + interfaceName;
+			implemented = true;
+		}
+		
+		return implementsString;
+	}
+	
+	private static void addTMs(StringBuilder out, StringBuilder classes, StringBuilder indexOut)
+	{
+		// Add the image index for each type (except for None)
+		for (Type t : Type.values())
+		{
+			if (t == Type.NONE)
+			{
+				continue;
+			}
+			
+			String name = t.getName() + "TM";
+			addImageIndex(indexOut, TM_BASE_INDEX + t.getIndex(), name, name.toLowerCase());
+		}
+		
+		Scanner in = openFile("tmList.txt");
+		while (in.hasNext())
+		{
+			String attackName = in.nextLine().trim();
+			String className = writeClassName(attackName);
+			
+			Attack attack = Attack.getAttack(Namesies.getValueOf(className, NamesiesType.ATTACK));
+			
+			String itemName = attackName + " TM";
+			className += "TM";
+			
+			HashMap<String, String> fields = new HashMap<>();
+			fields.put("ClassName", className);
+			fields.put("Namesies", className);
+			fields.put("Index", TM_BASE_INDEX + attack.getActualType().getIndex() + "");
+			fields.put("Desc", attack.getDescription());
+			fields.put("TM", attackName);
+			
+			addClass(Generator.ITEM_GEN, out, classes, itemName, className, fields);
+		}
+	}
+	
+	private static void addImageIndex(StringBuilder indexOut, int index, String name, String imageName)
+	{
+		File imageFile = new File(ITEM_TILES_PATH + imageName + ".png");
+		if (!imageFile.exists()) 
+		{
+			System.err.println("Image for " + name + " does not exist." + imageFile.getAbsolutePath());
+		}
+	
+		indexOut.append(String.format("%s.png %08x%n", imageName, index));
 	}
 	
 	private static class MethodInfo

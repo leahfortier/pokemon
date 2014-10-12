@@ -525,6 +525,7 @@ public abstract class Attack implements Serializable
 		return printCast;
 	}
 	
+	// To be overridden if necessary
 	public void startTurn(Battle b, ActivePokemon me) {}
 
 	// ONLY CALL THIS FUNCTION IF YOU SRSLY LIKE NEED TO LIKE YOU'RE READING FROM A FILE OR SOMETHING OTHERWISE JUST FUCKING USE THE FUCKING NAMESIES I FUCKING MEAN IT AND EVEN IN THE SITUATION I SAID IT COULD BE USED IT BETTER FUCKING BE PRECEDED BY THE ISATTACK FUNCTION SRSRLY SRSLY SRSLY
@@ -535,10 +536,8 @@ public abstract class Attack implements Serializable
 			return map.get(m);
 		}
 
-		// TODO: Change this back to Global.error and tackle back to null
-		System.err.println("No such Move " + m);
-		
-		return map.get("Tackle");
+		Global.error("No such Move " + m);
+		return null;
 	}
 	
 	public static Attack getAttack(Namesies name)

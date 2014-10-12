@@ -193,12 +193,24 @@ public class Bag implements Serializable
 	
 	private void removeItem(Item i)
 	{
-		// Remove nonexistent items
+		// Trying to remove nonexistent items -- bad news
 		if (!items.containsKey(i) || items.get(i) <= 0)
 		{
 			Global.error("You can't remove an item you don't have! (" + i.getName() + ")");
 		}
 		
+		// Don't decrement for TMs or KeyItems
+		if (!i.hasQuantity())
+		{
+			if (items.get(i) != 1)
+			{
+				Global.error("Must only have exactly quantity per TM/KeyItem");
+			}
+			
+			return;
+		}
+		
+		// All other items -- decrement by one and remove from sets
 		items.put(i, items.get(i) - 1);
 
 		if (items.get(i) == 0)
@@ -243,14 +255,14 @@ public class Bag implements Serializable
 		return false;
 	}
 	
-	public boolean useMoveItem(Item i, Move m)
+	public boolean useMoveItem(Item i, ActivePokemon p, Move m)
 	{
 		if (items.get(i) <= 0) 
 		{
 			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
 		}
 		
-		if (i instanceof MoveUseItem && ((MoveUseItem)i).use(m)) 
+		if (i instanceof MoveUseItem && ((MoveUseItem)i).use(p, m)) 
 		{
 			removeItem(i);
 			return true;
@@ -313,13 +325,6 @@ public class Bag implements Serializable
 	public Item getLastUsedItem()
 	{
 		return lastUsedItem;
-	}
-	
-	public int getQuantityy(Item i)
-	{
-		System.out.println("HERE " + (items == null) + " " + (i == null));
-		
-		return getQuantity(i);
 	}
 	
 	public int getQuantity(Item i)

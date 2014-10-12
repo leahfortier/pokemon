@@ -2328,7 +2328,7 @@ Leppa Berry:
 		{
 			if (m.getPP() == 0)
 			{
-				use(m);
+				use(victim, m);
 				b.addMessage(getHoldSuccessMessage(victim));
 				victim.consumeItem(b);
 				break;
@@ -2351,7 +2351,7 @@ Leppa Berry:
 			return false;
 		}
 		
-		use(list.get((int)(Math.random()*size)));
+		use(user, list.get((int)(Math.random()*size)));
 		###
 	MoveUse:
 		restore = m.getAttack().getName();
