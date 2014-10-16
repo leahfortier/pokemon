@@ -225,16 +225,12 @@ public class EvolutionView extends View
 	{
 		state = State.START;
 		
-		
-		//setPokemon(new ActivePokemon(PokemonInfo.getRandomBaseEvolution()), null);
-		//ActivePokemon pokemon = new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.PONYTA_POKEMON), 40, false, true);
-		//setPokemon(pokemon, ((BaseEvolution)pokemon.getPokemonInfo().getEvolution().getEvolution(EvolutionCheck.LEVEL, pokemon, null)));
-		
 		setPokemon(player.evolvingPokemon, player.evolution);
 		setInitialMessage();
 		
 		animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
 		
-		Global.soundPlayer.playMusic(SoundTitle.NEW_GAME);
+		// TODO: Save current sound for when transitioning to the bag view.
+		//Global.soundPlayer.playMusic(SoundTitle.EVOLUTION_VIEW);
 	}
 }
