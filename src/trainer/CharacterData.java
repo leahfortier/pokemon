@@ -68,7 +68,7 @@ public class CharacterData extends Trainer implements Serializable
 	
 	public DialogueSequence messages;
 	
-	public Game game;
+	public transient Game game;
 	
 	public ActivePokemon evolvingPokemon;
 	public BaseEvolution evolution;
@@ -439,7 +439,6 @@ public class CharacterData extends Trainer implements Serializable
 		
 		//printGlobals();
 		
-		//*
 		try
 		{
 			updateTimePlayed();
@@ -462,10 +461,9 @@ public class CharacterData extends Trainer implements Serializable
 		{
 			Global.error("Oh no! That didn't save quite right!");
 		}
-		//*/
 	}
 	
-	public CharacterData load(){
+	public static CharacterData load(int fileNum, Game game){
 		CharacterData loadChar = null;
 		
 		//updateSerVariables();
@@ -474,6 +472,7 @@ public class CharacterData extends Trainer implements Serializable
 			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
 			ObjectInputStream in = new ObjectInputStream(fin);
 			loadChar = (CharacterData) in.readObject();
+			loadChar.game = game;
 			loadChar.logMessages = new ArrayList<>();
 			in.close();
 			fin.close();
@@ -487,12 +486,12 @@ public class CharacterData extends Trainer implements Serializable
 		
 		loadChar.timeSinceUpdate = System.currentTimeMillis();
 		
-		loadChar.updateGlobals(false);
+		//loadChar.updateGlobals(false);
 		
 		return loadChar;
 	}
 	
-	private void updateSerVariables() 
+	private static void updateSerVariables(int fileNum) 
 	{
 		try {
 			//Replace bytes of renamed variable name
@@ -541,7 +540,7 @@ public class CharacterData extends Trainer implements Serializable
 		}
 	}
 	
-	private byte[] updateSerVariables(byte[] bytes, byte[] find, byte[] replace)
+	private static byte[] updateSerVariables(byte[] bytes, byte[] find, byte[] replace)
 	{
 		boolean edited = false;
 		

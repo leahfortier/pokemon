@@ -55,9 +55,6 @@ public class Game
 	{
 		charData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.EEVEE_POKEMON), 1, false, true));
 		charData.front().giveItem((HoldItem)Item.getItem(Namesies.ORAN_BERRY_ITEM));
-		
-		//charData.getBag().addItem(Item.getItem(Namesies.REPEL_ITEM));
-		//charData.addPokemon(null, new ActivePokemon(PokemonInfo.getRandomBaseEvolution()));
 	}
 
 	public void update(int dt, InputControl input) 
@@ -88,9 +85,7 @@ public class Game
 
 	public void loadSave(int index) 
 	{
-		charData = new CharacterData(this);
-		charData.setFileNum(index);
-		charData = charData.load();
+		charData = CharacterData.load(index, this);
 		setViews();
 	}
 	
