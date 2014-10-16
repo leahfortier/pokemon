@@ -1591,3 +1591,11 @@ PriorityChangeEffect:
 		###
 	*
 ***
+IncenseItem:
+	Baby:
+		Header: Namesies getBaby()
+		Body:
+		return Namesies.{00}_POKEMON;
+		###
+	*
+***

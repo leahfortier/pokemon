@@ -789,14 +789,15 @@ Zoom Lens
 	ModifyCondition: !b.isFirstAttack()
 *
 Full Incense
-	Int: HoldItem, StallingEffect
+	Int: HoldItem, StallingEffect, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.
 	Price: 9600
 	Fling: 10
+	Baby: Munchlax
 *
 Lax Incense
-	Int: HoldItem
+	Int: HoldItem, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.
 	Price: 9600
@@ -804,6 +805,7 @@ Lax Incense
 	ToModify: Evasion
 	ModifyMultiplier: 1.1
 	ModifyCondition: true
+	Baby: Wynaut
 *
 Luck Incense
 	Int: HoldItem, EntryEffect

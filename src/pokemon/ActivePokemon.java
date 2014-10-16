@@ -22,8 +22,6 @@ import main.Namesies.NamesiesType;
 import main.Type;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
-import trainer.CharacterData;
-import trainer.Pokedex;
 import trainer.Pokedex.PokedexStatus;
 import battle.Attack;
 import battle.Battle;
@@ -49,6 +47,7 @@ import battle.effect.Status.StatusCondition;
 import battle.effect.TeamEffect;
 import battle.effect.TrappingEffect;
 import battle.effect.TypeCondition;
+import breeding.Breeding;
 
 public class ActivePokemon implements Serializable
 {
@@ -58,6 +57,7 @@ public class ActivePokemon implements Serializable
 	public static final Pattern pokemonParameterPattern = Pattern.compile("(?:(Shiny)|(Moves:)\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+)\\s*[*]|(Egg)|(Item:)\\s*([\\w \\-'.]+)[*])", Pattern.UNICODE_CHARACTER_CLASS);
 	
 	public static final int MAX_LEVEL = 100;
+	public static final int MAX_IV = 31;
 	
 	private static final String[][] characteristics = 
 		{{"Loves to eat", "Proud of its power", "Sturdy body", "Highly curious", "Strong willed", "Likes to run"},
@@ -124,23 +124,15 @@ public class ActivePokemon implements Serializable
 		nickname = "Egg";
 	}
 	
-	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy)
+	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo)
 	{
-		this(mommy.getPokemonInfo().getBaseEvolution(), 1, false, true);
+		this(babyInfo, 1, false, true);
 		
-		setIVs(daddy, mommy);
+		IVs = Breeding.getBabyIVs(daddy, mommy);
 		setStats();
 		setCharacteristic();
 		hiddenPowerType = computeHiddenPowerType();
-		
-		ArrayList<Nature> naturesToChooseFrom = new ArrayList<>();
-		if (daddy.getActualHeldItem().namesies() == Namesies.EVERSTONE_ITEM)
-			naturesToChooseFrom.add(daddy.getNature());
-		if (mommy.getActualHeldItem().namesies() == Namesies.EVERSTONE_ITEM)
-			naturesToChooseFrom.add(mommy.getNature());
-		
-		if (naturesToChooseFrom.size() > 0)
-			nature = naturesToChooseFrom.get((int)(Math.random() * naturesToChooseFrom.size()));
+		nature = Breeding.getBabyNature(daddy, mommy);
 	}
 	
 	/*
@@ -339,56 +331,7 @@ public class ActivePokemon implements Serializable
 	{
 		IVs = new int[Stat.NUM_STATS];
 		for (int i = 0; i < IVs.length; i++) 
-			IVs[i] = (int)(Math.random()*32);
-	}
-	
-	private void setIVs(ActivePokemon daddy, ActivePokemon mommy)
-	{
-		Item daddysItem = daddy.getActualHeldItem();
-		Item mommysItem = mommy.getActualHeldItem();
-		
-		ArrayList<PowerItem> powerItems = new ArrayList<>();
-		if (daddysItem instanceof PowerItem && daddysItem.namesies() != Namesies.MACHO_BRACE_ITEM)
-			powerItems.add((PowerItem)daddysItem);
-		if (mommysItem instanceof PowerItem && mommysItem.namesies() != Namesies.MACHO_BRACE_ITEM)
-			powerItems.add((PowerItem)mommysItem);
-		
-		ArrayList<Stat> remainingStats = new ArrayList<>();
-		remainingStats.add(Stat.HP);
-		remainingStats.add(Stat.ATTACK);
-		remainingStats.add(Stat.DEFENSE);
-		remainingStats.add(Stat.SP_ATTACK);
-		remainingStats.add(Stat.SP_DEFENSE);
-		remainingStats.add(Stat.SPEED);
-		
-		int remainingIVsToInherit = daddysItem.namesies() == Namesies.DESTINY_KNOT_ITEM || mommysItem.namesies() == Namesies.DESTINY_KNOT_ITEM ? 5 : 3;
-		IVs = new int[Stat.NUM_STATS];
-		Arrays.fill(IVs, -1);
-		
-		if (powerItems.size() > 0)
-		{
-			PowerItem randomItem = powerItems.get((int)(Math.random() * powerItems.size()));
-			Stat stat = randomItem.toIncrease();
-			remainingStats.remove(stat);
-			
-			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
-			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
-			
-			remainingIVsToInherit--;
-		}
-		
-		while (remainingIVsToInherit --> 0)
-		{
-			Stat stat = remainingStats.get((int)(Math.random() * remainingStats.size()));
-			remainingStats.remove(stat);
-			
-			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
-			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
-		}
-		
-		for (int i = 0; i < IVs.length; i++)
-			if (IVs[i] == -1)
-				IVs[i] = (int)(Math.random()*32);
+			IVs[i] = (int)(Math.random() * (MAX_IV + 1));
 	}
 	
 	private void setCharacteristic()
