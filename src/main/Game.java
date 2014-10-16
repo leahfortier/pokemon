@@ -56,8 +56,8 @@ public class Game
 		charData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.EEVEE_POKEMON), 1, false, true));
 		charData.front().giveItem((HoldItem)Item.getItem(Namesies.ORAN_BERRY_ITEM));
 	}
-
-	public void update(int dt, InputControl input) 
+	
+	private void checkViewSwitch(InputControl input)
 	{
 		if (!currentView.getViewModel().equals(currentViewMode))
 		{
@@ -65,7 +65,13 @@ public class Game
 			currentView = viewMap.get(currentViewMode);
 			currentView.movedToFront(this);
 		}
+	}
+
+	public void update(int dt, InputControl input) 
+	{
+		checkViewSwitch(input);
 		currentView.update(dt, input, this);
+		checkViewSwitch(input);
 	}
 
 	public void draw(Graphics g) 

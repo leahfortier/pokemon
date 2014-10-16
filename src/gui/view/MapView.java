@@ -11,6 +11,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import pokemon.ActivePokemon;
+
+import battle.Battle;
+
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
@@ -45,10 +49,18 @@ public class MapView extends View{
 	private float drawX, drawY;
 	
 	private int areaDisplayTime;
-	private static final int totalAreaDisplayTime = 2000;
+	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
+	
+	private Battle battle;
+	private boolean seenWild;
+	private int battleAnimationTime;
+	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
+	private BufferedImage battleImageSlideRight;
+	private BufferedImage battleImageSlideLeft;
+	
 	
 	private enum VisualState{
-		MESSAGE, MENU, MAP
+		MESSAGE, MENU, MAP, BATTLE_ANIMATION
 	};
 	VisualState state;
 	
@@ -135,43 +147,7 @@ public class MapView extends View{
 		//Area Transition
 		if (areaDisplayTime > 0)
 		{
-			int fontSize = 30;
-			
-			int width = (currentAreaName.length() + 3) * fontSize/2;
-			int height = fontSize + fontSize/2;
-			
-			int borderSize = 2;
-			int graySize = 10;
-			
-			int yValue = 0;
-			
-			//Calculate exit location
-			if (areaDisplayTime/(double)totalAreaDisplayTime < .2)
-			{
-				yValue = -1*(int)(((totalAreaDisplayTime - areaDisplayTime)/(double)totalAreaDisplayTime - 4/5.0) * 5 * (height + (2*graySize)));
-			}
-			
-			//Calculate entrance location
-			else if (areaDisplayTime/(double)totalAreaDisplayTime > .8)
-			{
-				yValue = -1*(int)(((areaDisplayTime)/(double)totalAreaDisplayTime - 4/5.0) * 5 * (height + (2*graySize)));
-			}
-			
-			//Black border
-			g.setColor(Color.BLACK);
-			g.fillRect(0, yValue, width + (2*graySize), height + (2*graySize));
-			
-			//Gray border
-			g.setColor(new Color(0x333333));
-			g.fillRect(borderSize, yValue + borderSize, width + (2*graySize) - (2*borderSize), height + (2*graySize) - (2*borderSize));
-			
-			//Lighter gray inside
-			g.setColor(new Color(0x666666));
-			g.fillRect(graySize, yValue + graySize, width, height);
-			
-			g.setFont(Global.getFont(fontSize));
-			g.setColor(Color.white);
-			Global.drawStringCenterX(currentAreaName, (width + (2*graySize))/2, yValue + fontSize/3 + graySize + height/2, g);
+			drawAreaTransitionAnimation(g);
 		}
 		
 		/*/sun
@@ -243,12 +219,118 @@ public class MapView extends View{
 				for (Button b: menuButtons)
 					b.draw(g);
 				break;
+			case BATTLE_ANIMATION:
+				if(battleImageSlideRight != null && battleImageSlideLeft != null)
+					drawBattleIntroAnimation(g);
+				break;
 			case MAP:
 				break;
 			default:
 				break;
 		}
 	}
+	
+	private void drawAreaTransitionAnimation(Graphics g)
+	{
+		int fontSize = 30;
+		
+		int width = (currentAreaName.length() + 3) * fontSize/2;
+		int height = fontSize + fontSize/2;
+		
+		int borderSize = 2;
+		int graySize = 10;
+		
+		int yValue = 0;
+		
+		//Calculate exit location
+		if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN < .2)
+		{
+			yValue = -1*(int)(((AREA_NAME_ANIMATION_LIFESPAN - areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (height + (2*graySize)));
+		}
+		
+		//Calculate entrance location
+		else if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN > .8)
+		{
+			yValue = -1*(int)(((areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (height + (2*graySize)));
+		}
+		
+		//Black border
+		g.setColor(Color.BLACK);
+		g.fillRect(0, yValue, width + (2*graySize), height + (2*graySize));
+		
+		//Gray border
+		g.setColor(new Color(0x333333));
+		g.fillRect(borderSize, yValue + borderSize, width + (2*graySize) - (2*borderSize), height + (2*graySize) - (2*borderSize));
+		
+		//Lighter gray inside
+		g.setColor(new Color(0x666666));
+		g.fillRect(graySize, yValue + graySize, width, height);
+		
+		g.setFont(Global.getFont(fontSize));
+		g.setColor(Color.white);
+		Global.drawStringCenterX(currentAreaName, (width + (2*graySize))/2, yValue + fontSize/3 + graySize + height/2, g);
+	}
+	
+	// Display battle intro animation.
+	private void drawBattleIntroAnimation(Graphics g)
+	{
+		int drawWidth = Global.GAME_SIZE.width/2;
+		int drawHeightLeft;
+		int drawHeighRight;
+		float moveInAnimationPercentage;
+		float fadeOutPercentage = 0.2f;
+		
+		if(battle.isWildBattle())
+		{
+			drawHeighRight = drawHeightLeft = Global.GAME_SIZE.height * 5 / 8;
+			drawHeightLeft -= battleImageSlideLeft.getHeight()/2;
+			drawHeighRight -= battleImageSlideRight.getHeight();
+			
+			moveInAnimationPercentage = 0.5f;
+		}
+		else
+		{
+			drawHeighRight = drawHeightLeft = Global.GAME_SIZE.height/2;
+			drawHeightLeft -= battleImageSlideLeft.getHeight();
+			//drawHeighRight -= battleImageSlideRight.getHeight();
+			
+			moveInAnimationPercentage = 0.4f;
+		}
+		
+		
+		// Images slide in from sides
+		if(battleAnimationTime > BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage))
+		{
+			float normalizedTime = (battleAnimationTime - BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage))/ (BATTLE_INTRO_ANIMATION_LIFESPAN*moveInAnimationPercentage);
+
+			int dist = -battleImageSlideRight.getWidth()/2 -drawWidth;
+			dist = (int)(dist * normalizedTime);
+			
+			g.drawImage(battleImageSlideLeft, drawWidth-battleImageSlideLeft.getWidth()/2 + dist, drawHeightLeft, null);
+			
+			dist = Global.GAME_SIZE.width;
+			dist = (int)(dist * normalizedTime);
+			
+			g.drawImage(battleImageSlideRight, drawWidth-battleImageSlideRight.getWidth()/2 + dist, drawHeighRight, null);
+		}
+		
+		// Hold images
+		else 
+		{
+			g.drawImage(battleImageSlideLeft, drawWidth-battleImageSlideLeft.getWidth()/2, drawHeightLeft, null);
+			g.drawImage(battleImageSlideRight, drawWidth-battleImageSlideRight.getWidth()/2, drawHeighRight, null);
+			
+			//Fade to black before battle appears.
+			if (battleAnimationTime < BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage)
+			{
+				int f = Math.min(255, (int)((BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage - battleAnimationTime)/ (BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage) *255));
+				
+				g.setColor(new Color(0, 0, 0, f));
+				g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+			}
+		}
+	}
+	
 
 	public void update(int dt, InputControl input, Game game) 
 	{
@@ -294,8 +376,7 @@ public class MapView extends View{
 		if (!game.data.getArea(currentMap.getAreaName(character.locationX, character.locationY)).equals(currentAreaName))
 		{
 			currentAreaName = character.areaName = game.data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
-			areaDisplayTime = totalAreaDisplayTime;
-			//System.out.println(character.areaName);
+			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
 			
 			//Queue to play new area's music.
 			currentMusicTrigger = game.data.getTrigger("GroupTrigger_AreaSound_for_"+currentAreaName.replace(' ', '_').replaceAll("\\W", ""));
@@ -304,9 +385,21 @@ public class MapView extends View{
 			playAreaMusic(game);
 		}
 		
-		
 		switch (state)
 		{
+			case BATTLE_ANIMATION:
+				if(battleImageSlideLeft == null || battleImageSlideRight == null)
+					loadBattleImages(game);
+				
+				if(battleAnimationTime < 0)
+				{
+					battle = null;
+					game.setViewMode(ViewMode.BATTLE_VIEW);
+					state = VisualState.MAP;
+				}
+				
+				battleAnimationTime -= dt;
+				break;		
 			case MAP:
 				if (input.isDown(Control.ESC)){
 					input.consumeKey(Control.ESC);
@@ -342,7 +435,8 @@ public class MapView extends View{
 					}
 					else {
 						currentDialogue = null;
-						state = VisualState.MAP;
+						if(battle == null)
+							state = VisualState.MAP;
 					}
 				}
 				break;
@@ -457,8 +551,7 @@ public class MapView extends View{
 			entities[e.charX][e.charY] = null;
 		}
 		
-		//System.out.println(character.messages);
-		
+		//CharacterData has a message to display and no current message is being displayed.
 		if(character.messages != null && queuedDialogueName == null && currentDialogue == null)
 		{
 			currentDialogue = character.messages;
@@ -499,6 +592,46 @@ public class MapView extends View{
 	public void setDialogue(String dialogueName) 
 	{
 		queuedDialogueName = dialogueName;
+	}
+	
+	public void setBattle(Battle battle, boolean seenWild)
+	{
+		this.battle = battle;
+		battleAnimationTime = BATTLE_INTRO_ANIMATION_LIFESPAN;
+		state = VisualState.BATTLE_ANIMATION;
+		battleImageSlideLeft = null;
+		battleImageSlideRight = null;
+		this.seenWild = seenWild;
+		
+		if (battle.isWildBattle())
+		{
+			Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
+		}
+		else
+		{
+			// TODO: Get trainer battle music
+			Global.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
+		}
+	}
+	
+	private void loadBattleImages(Game game)
+	{
+		if(battle.isWildBattle())
+		{
+			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x00010000);
+			
+			ActivePokemon p = battle.getOpponent().front();
+			battleImageSlideRight = game.data.getPokemonTilesLarge().getTile(p.getPokemonInfo().getImageNumber(p.isShiny()));
+			if(seenWild)
+			{
+				battleImageSlideRight = Global.colorImage(battleImageSlideRight, new float[] {0,0,0,1}, new float[] {0,0,0,0});
+			}
+		}
+		else
+		{
+			battleImageSlideRight = game.data.getBattleTiles().getTile(0x00100001);
+			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x00100000);
+		}
 	}
 	
 	public void addEntity(Entity e)

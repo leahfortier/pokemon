@@ -1,6 +1,7 @@
 package map.triggers;
 
 import gui.view.BattleView;
+import gui.view.MapView;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -88,6 +89,6 @@ public class TrainerBattleTrigger extends Trigger
 		Battle b = new Battle(game.charData, (Opponent) t, winGlobal);
 
 		((BattleView) game.viewMap.get(ViewMode.BATTLE_VIEW)).setBattle(b);
-		game.setViewMode(ViewMode.BATTLE_VIEW);
+		((MapView)game.viewMap.get(ViewMode.MAP_VIEW)).setBattle(b, true);
 	}
 }

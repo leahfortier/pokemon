@@ -1,20 +1,22 @@
 package map.triggers;
 
 import gui.view.BattleView;
+import gui.view.MapView;
 import item.Item;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.Game;
-import main.Namesies;
 import main.Game.ViewMode;
-import main.Namesies.NamesiesType;
 import main.Global;
+import main.Namesies;
+import main.Namesies.NamesiesType;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.WildPokemon;
+import trainer.Pokedex.PokedexStatus;
 import battle.Battle;
 import battle.effect.RepellingEffect;
 
@@ -123,11 +125,13 @@ public class WildBattleTrigger extends Trigger
 				if (item instanceof RepellingEffect && Math.random() < ((RepellingEffect)item).chance()) return;
 			}
 		
+			boolean seenWildPokemon = game.charData.getPokedex().getStatus(o.front().getPokemonInfo().namesies()) == PokedexStatus.NOT_SEEN;
+			
 			// Let the battle begin!!
 			Battle b = new Battle(game.charData, o);
 			
 			((BattleView)game.viewMap.get(ViewMode.BATTLE_VIEW)).setBattle(b);
-			game.setViewMode(ViewMode.BATTLE_VIEW);
+			((MapView)game.viewMap.get(ViewMode.MAP_VIEW)).setBattle(b, seenWildPokemon);
 		}
 	}
 	
