@@ -1962,7 +1962,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			Attack m = other.getAttributes().getLastMoveUsed() == null ? null : other.getAttributes().getLastMoveUsed().getAttack();
 			
-			if (m == null || victim.hasMove(m.namesies()) || m.isMoveType(MoveType.MIMICLESS))
+			if (m == null || victim.hasMove(b, m.namesies()) || m.isMoveType(MoveType.MIMICLESS))
 			{
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
@@ -1977,18 +1977,18 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " learned " + mimicMove.getAttack().getName() + "!";
 		}
 
-		public List<Move> getMoveList(ActivePokemon p, List<Move> moves)
+		public Move[] getMoveList(ActivePokemon p, Move[] moves)
 		{
-			List<Move> list = new ArrayList<>();
-			for (Move m : moves)
+			Move[] list = new Move[moves.length];
+			for (int i = 0; i < list.length; i++)
 			{
-				if (m.getAttack().namesies() == Namesies.MIMIC_ATTACK)
+				if (moves[i].getAttack().namesies() == Namesies.MIMIC_ATTACK)
 				{
-					list.add(mimicMove);
+					list[i] = mimicMove;
 				}
 				else
 				{
-					list.add(m);
+					list[i] = moves[i];
 				}
 			}
 			
@@ -2022,7 +2022,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			// TODO: Test this effect again
 			unableMoves = new ArrayList<>();
-			for (Move m : caster.getMoves())
+			for (Move m : caster.getMoves(b))
 			{
 				unableMoves.add(m.getAttack().namesies());
 			}
@@ -2803,7 +2803,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	private static class Transformed extends PokemonEffect implements MoveListCondition, StatsCondition, TypeCondition
 	{
 		private static final long serialVersionUID = 1L;
-		private List<Move> moveList;
+		private Move[] moveList;
 		private int[] stats;
 		private Type[] type;
 
@@ -2840,10 +2840,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			stats[Stat.HP.index()] = victim.getStat(Stat.HP);
 			
 			// Copy the move list
-			moveList = new ArrayList<>();
-			for (Move m : transformee.getMoves())
+			List<Move> transformeeMoves = transformee.getMoves(b);
+			moveList = new Move[transformeeMoves.size()];
+			for (int i = 0; i < transformeeMoves.size(); i++)
 			{
-				moveList.add(new Move(m.getAttack(), 5));
+				moveList[i] = new Move(transformeeMoves.get(i).getAttack(), 5);
 			}
 			
 			// Copy all stages
@@ -2866,15 +2867,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!";
 		}
 
-		public List<Move> getMoveList(ActivePokemon p, List<Move> moves)
+		public Move[] getMoveList(ActivePokemon p, Move[] moves)
 		{
-			// TODO: Test this with mimic I'm not convinced this is working
-			PokemonEffect mimic = p.getEffect(Namesies.MIMIC_EFFECT);
-			if (mimic != null)
-			{
-				return ((MoveListCondition)mimic).getMoveList(p, moveList);
-			}
-			
 			return moveList;
 		}
 
@@ -3306,7 +3300,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Draining moves don't work -- also I think this should be an OpponentBeforeTurnEffect, not a BeforeTurnEffect
+			if (p.getAttack().isMoveType(MoveType.SAP_HEALTH))
+			{
+				b.printAttacking(p);
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return false;
+			}
+			
 			return true;
 		}
 	}

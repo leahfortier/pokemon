@@ -376,7 +376,7 @@ public class PartyView extends View
 		}
 		
 		ActivePokemon pkm = team.get(selectedTab);
-		List<Move> moves = pkm.getMoves();
+		List<Move> moves = pkm.getActualMoves();
 		for (int i = 0; i < Move.MAX_MOVES; i++)
 		{
 			moveButtons[i].setActive(!pkm.isEgg() && i < moves.size());

@@ -426,8 +426,7 @@ public abstract class Status implements Serializable
 		}
 	}
 	
-	// TODO: Does not handle being defrosted when hit by a fire-type move -- should be a TakeDamageEffect or something to that nature
-	private static class Frozen extends Status implements BeforeTurnEffect
+	private static class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -436,10 +435,10 @@ public abstract class Status implements Serializable
 			super.type = StatusCondition.FROZEN;
 		}
 		
-		// Ice-type Pokemon cannot be frozen TODO: Cannot be frozen during intense sunlight
+		// Ice-type Pokemon cannot be frozen
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE);
+			return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE) && b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
 		}
 		
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) 
@@ -464,6 +463,16 @@ public abstract class Status implements Serializable
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
 			return abilify.getName() + "'s " + abilify.getAbility().getName() + " froze " + victim.getName() + "!";
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			// Fire-type moves defrost the user
+			if (user.isAttackType(Type.FIRE))
+			{
+				b.addMessage(victim.getName() + " thawed out!", StatusCondition.NONE, victim.user());
+				victim.removeStatus();
+			}
 		}
 	}
 }

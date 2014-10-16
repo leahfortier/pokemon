@@ -145,7 +145,7 @@ Bright Powder
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opponent's accuracy.
 	Price: 100
-	Fling: 30
+	Fling: 10
 	ToModify: Evasion
 	ModifyCondition: true
 	ModifyMultiplier: 1.1
@@ -253,27 +253,39 @@ Expert Belt
 		return Type.getAdvantage(user, victim, b) > 1 ? 1.2 : 1;
 		###
 *
-Flame Orb
+Flame Orb:
 	Int: HoldItem, EndTurnEffect
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.
 	Price: 200
-	Fling: 10
+	Fling: 30
 	ApplyEndTurn:
 		Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
 		###
+	FlingEffect:
+		Status.giveStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.name + "!");
+		###
 *
-Toxic Orb
+Toxic Orb:
 	Int: HoldItem, EndTurnEffect
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.
 	Price: 200
-	Fling: 10
+	Fling: 30
 	ApplyEndTurn:
+		// Badly poisons the holder at the end of the turn
 		if (Status.applies(StatusCondition.POISONED, b, victim, victim))
 		{
 			victim.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
 			Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
+		}
+		###
+	FlingEffect:
+		// Badly poisons the pelted
+		if (Status.applies(StatusCondition.POISONED, b, pelted, pelted))
+		{
+			pelted.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
+			Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was badly poisoned by the " + this.name + "!");
 		}
 		###
 *
@@ -309,32 +321,26 @@ Focus Sash
 		###
 	BraceMessage: bracer.getName() + " held on with its " + this.name + "!"
 *
-Grip Claw
+Grip Claw:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of multiturn attacks like Bind and Wrap.
 	Price: 200
 	Fling: 90
 *
-Griseous Orb
-	Int: HoldItem, PowerChangeEffect
-	Cat: Misc
-	Desc: A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.
-	Price: 200
-	Fling: 60
-	GetMultiplier:
-		if (user.isPokemon(Namesies.GIRATINA_POKEMON))
-		{
-			if (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST))
-			{
-				return 1.2;
-			}
-		}
-		
-		return 1;
-		###
+Adamant Orb:
+	Desc: A brightly gleaming orb to be held by Dialga. It boosts the power of Dragon- and Steel-type moves.
+	TimeSpaceOrb: Dialga Steel
 *
-Iron Ball
+Lustrous Orb:
+	Desc: A beautifully glowing orb to be held by Palkia. It boosts the power of Dragon- and Water-type moves.
+	TimeSpaceOrb: Palkia Water
+*
+Griseous Orb:
+	Desc: A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.
+	TimeSpaceOrb: Giratina Ghost
+*
+Iron Ball:
 	Int: HoldItem, GroundedEffect
 	Cat: Misc
 	Desc: A Pok\u00e9mon held item that cuts Speed. It makes Flying-type and levitating holders susceptible to Ground moves.
@@ -344,7 +350,7 @@ Iron Ball
 	ModifyCondition: true
 	ModifyMultiplier: .5
 *
-Lagging Tail
+Lagging Tail:
 	Int: HoldItem, StallingEffect
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is tremendously heavy and makes the holder move slower than usual.
@@ -370,7 +376,7 @@ Life Orb
 		user.reduceHealthFraction(b, .1);
 		###
 *
-Light Ball
+Light Ball:
 	Int: HoldItem
 	Cat: Misc
 	Desc: An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.
@@ -379,6 +385,9 @@ Light Ball
 	TwoModify: Attack Sp_Attack
 	ModifyCondition: p.isPokemon(Namesies.PIKACHU_POKEMON)
 	ModifyMultiplier: 2
+	FlingEffect:
+		Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
+		###
 *
 Light Clay
 	Int: HoldItem
@@ -442,6 +451,7 @@ Mental Herb:
 		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
 		###
 	ApplyEndTurn:
+		// TODO: Has nothing to do with Mental Herb, but the item Power Herb is not implemented yet
 		boolean used = false;
 		for (int i = 0; i < effects.length; i++)
 		{
@@ -453,7 +463,18 @@ Mental Herb:
 				b.addMessage(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
 			}
 		}
-		if (used) victim.consumeItem(b);
+		
+		if (used)
+		{
+			victim.consumeItem(b);
+		}
+		###
+	FlingEffect:
+		if (pelted.hasEffect(Namesies.INFATUATED_EFFECT))
+		{
+			pelted.getAttributes().removeEffect(Namesies.INFATUATED_EFFECT);
+			b.addMessage(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
+		}
 		###
 *
 Metal Powder
@@ -493,6 +514,7 @@ Power Anklet
 	Price: 3000
 	Fling: 70
 	PowerStat: 
+	// TODO: Generalize Power Items without Macho Brace -- include fling, price, and cat
 	return Stat.SPEED;
 	###
 *
@@ -570,6 +592,7 @@ Red Card:
 	Price: 200
 	Fling: 10
 	OnTakeDamage:
+		// TODO: Generalize this code with that of moves like U-Turn
 		Team t = b.getTrainer(user.user());
 		if (t instanceof WildPokemon) return;
 
@@ -660,12 +683,12 @@ Soul Dew
 	Cat: Misc
 	Desc: If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.
 	Price: 10
-	Fling: 10
+	Fling: 30
 	TwoModify: Sp_Attack Sp_Defense
 	ModifyCondition: p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON)
 	ModifyMultiplier: 1.5
 *
-Stick
+Stick:
 	Int: HoldItem, CritStageEffect
 	Cat: Misc
 	Desc: An item to be held by Farfetch'd. It is a very long and stiff stalk of leek that boosts the critical-hit ratio.
@@ -746,7 +769,7 @@ Weakness Policy:
 		}
 		###
 *
-White Herb
+White Herb:
 	Int: HoldItem, StatProtectingEffect
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It restores any lowered stat in battle. It can be used only once.
@@ -757,6 +780,18 @@ White Herb
 		return true;
 		###
 	StatProtectMessage: p.getName() + "'s " + this.name + " prevented its stats from being lowered!"
+	FlingEffect:
+	// Restores negative stat changes to the pelted
+	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
+	{
+		if (pelted.getStage(i) < 0)
+		{
+			pelted.getAttributes().setStage(i, 0);
+		}
+	}
+	
+	b.addMessage("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
+	###
 *
 Wide Lens
 	Int: HoldItem
@@ -1141,7 +1176,7 @@ Dragon Fang
 	Desc: An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.
 	EnhanceType: Dragon
 	Price: 9800
-	Fling: 30
+	Fling: 70
 	TypeEnhanceMultiplier: 1.2
 *
 Hard Stone
@@ -1150,7 +1185,7 @@ Hard Stone
 	Desc: An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.
 	EnhanceType: Rock
 	Price: 9800
-	Fling: 30
+	Fling: 100
 	TypeEnhanceMultiplier: 1.2
 *
 Magnet
@@ -1206,8 +1241,12 @@ Poison Barb
 	Desc: An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.
 	EnhanceType: Poison
 	Price: 9800
-	Fling: 30
+	Fling: 70
 	TypeEnhanceMultiplier: 1.2
+	FlingEffect:
+		// Poisons the pelted
+		Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
+		###
 *
 Sharp Beak
 	Int: HoldItem
@@ -1215,7 +1254,7 @@ Sharp Beak
 	Desc: An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.
 	EnhanceType: Flying
 	Price: 9800
-	Fling: 30
+	Fling: 50
 	TypeEnhanceMultiplier: 1.2
 *
 Silk Scarf
@@ -1224,7 +1263,7 @@ Silk Scarf
 	Desc: An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.
 	EnhanceType: Normal
 	Price: 9800
-	Fling: 30
+	Fling: 10
 	TypeEnhanceMultiplier: 1.2
 *
 Silver Powder
@@ -1233,7 +1272,7 @@ Silver Powder
 	Desc: An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.
 	EnhanceType: Bug
 	Price: 9800
-	Fling: 30
+	Fling: 10
 	TypeEnhanceMultiplier: 1.2
 *
 Soft Sand
@@ -1242,7 +1281,7 @@ Soft Sand
 	Desc: An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.
 	EnhanceType: Ground
 	Price: 9800
-	Fling: 30
+	Fling: 10
 	TypeEnhanceMultiplier: 1.2
 *
 Spell Tag
@@ -1271,7 +1310,7 @@ Dawn Stone
 	Price: 2100
 	Fling: 80
 *
-DeepSeaScale
+Deep Sea Scale:
 	Int: HoldItem
 	EvolutionItem: True
 	Cat: Misc
@@ -1282,7 +1321,7 @@ DeepSeaScale
 	ModifyCondition: p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON)
 	ModifyMultiplier: 2
 *
-DeepSeaTooth
+Deep Sea Tooth:
 	Int: HoldItem
 	EvolutionItem: True
 	Cat: Misc
@@ -1333,25 +1372,13 @@ Fire Stone
 	Price: 2100
 	Fling: 30
 *
-King's Rock
-	Int: HoldItem, ApplyDamageEffect
+King's Rock:
 	EvolutionItem: True
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.
 	Price: 100
 	Fling: 30
-	OnApplyDamage:
-		// TODO: IF HIT BEFORE THE OPPONENT MOVES (FLING) THE OPPONENT FLINCHES!
-		if (Math.random()*100 < 10)
-		{
-			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
-			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
-			{
-				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
-				b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
-			}
-		}
-		###
+	FlinchItem: True
 *
 Leaf Stone
 	Int: HoldItem
@@ -1417,25 +1444,14 @@ Razor Claw
 	Fling: 80
 *
 Razor Fang
-	Int: HoldItem, ApplyDamageEffect
 	EvolutionItem: True
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`
 	Price: 2100
 	Fling: 30
-	OnApplyDamage:
-		if (Math.random()*100 < 10)
-		{
-			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
-			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
-			{
-				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
-				b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
-			}
-		}
-		###
+	FlinchItem: True
 *
-Reaper Cloth
+Reaper Cloth:
 	Int: HoldItem
 	EvolutionItem: True
 	Cat: Misc
@@ -1447,7 +1463,7 @@ Sachet:
 	Int: HoldItem
 	EvolutionItem: True
 	Cat: Misc
-	Desc: A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pokémon.
+	Desc: A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pok\u00e9mon.
 	Price: 2100
 	Fling: 30
 *
@@ -1495,7 +1511,7 @@ Whipped Dream:
 	Int: HoldItem
 	EvolutionItem: True
 	Cat: Misc
-	Desc: A soft and sweet treat made of fluffy, puffy, whipped and whirled cream. It is loved by a certain Pokémon.
+	Desc: A soft and sweet treat made of fluffy, puffy, whipped and whirled cream. It is loved by a certain Pok\u00e9mon.
 	Price: 2100
 	Fling: 30
 *
@@ -1579,39 +1595,14 @@ Full Restore:
 	SuccessMessage: p.getName() + " was fully healed!"
 *
 Elixir:
-	Int: PokemonUseItem, BattleUseItem, HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
 	Desc: It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.
 	Price: 3000
-	Fling: 30
-	PokemonUse:
-		boolean changed = false;
-		for (Move m : p.getMoves())
-		{
-			changed |= m.increasePP(10);
-		}
-		return changed;
-		###
-	SuccessMessage: p.getName() + "'s PP was restored!"
+	Elixir: 10
 *
 Max Elixir
-	Int: PokemonUseItem, BattleUseItem, HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
 	Desc: It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.
 	Price: 4500
-	Fling: 30
-	PokemonUse:
-		boolean changed = false;
-		for (Move m : p.getMoves())
-		{
-			changed |= m.increasePP(m.getMaxPP());
-		}
-
-		return changed;
-		###
-	SuccessMessage: p.getName() + "'s PP was restored!"
+	Elixir: m.getMaxPP()
 *
 Ether:
 	Int: MoveUseItem, HoldItem
@@ -1647,103 +1638,59 @@ Max Ether
 	###
 	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 *
-Berry Juice
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Berry Juice:
 	Desc: A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.
 	Price: 100
-	Fling: 30
 	HealAmt: 20
 *
-Sweet Heart
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Sweet Heart:
 	Desc: Very sweet chocolate. It restores the HP of one Pok\u00e9mon by only 20 points.
 	Price: 100
-	Fling: 30
 	HealAmt: 20
 *
-Potion
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Potion:
 	Desc: A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.
 	Price: 100
-	Fling: 30
 	HealAmt: 20
 *
-Energy Powder
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Energy Powder:
 	Desc: A very bitter medicine powder. It restores the HP of one Pok\u00e9mon by 50 points.
 	Price: 500
-	Fling: 30
 	HealAmt: 50
 *
-Fresh Water
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Fresh Water:
 	Desc: Water with a high mineral content. It restores the HP of one Pok\u00e9mon by 50 points.
 	Price: 200
-	Fling: 30
 	HealAmt: 50
 *
 Super Potion
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
 	Desc: A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 50 points.
 	Price: 700
-	Fling: 30
 	HealAmt: 50
 *
-Soda Pop
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Soda Pop:
 	Desc: A fizzy soda drink. It restores the HP of one Pok\u00e9mon by 60 points.
 	Price: 300
-	Fling: 30
 	HealAmt: 60
 *
-Lemonade
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Lemonade:
 	Desc: A very sweet drink. It restores the HP of one Pok\u00e9mon by 80 points.
 	Price: 350
-	Fling: 30
 	HealAmt: 80
 *
-Moomoo Milk
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Moomoo Milk:
 	Desc: Milk with a very high nutrition content. It restores the HP of one Pok\u00e9mon by 100 points.
 	Price: 500
-	Fling: 30
 	HealAmt: 100
 *
-Energy Root
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Energy Root:
 	Desc: A very bitter root. It restores the HP of one Pok\u00e9mon by 200 points.
 	Price: 800
-	Fling: 30
 	HealAmt: 200
 *
-Hyper Potion
-	Int: HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
+Hyper Potion:
 	Desc: A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 200 points.
 	Price: 1200
-	Fling: 30
 	HealAmt: 200
 *
 Max Potion
@@ -1792,7 +1739,7 @@ Max Revive
 		###
 	SuccessMessage: p.getName() + " was fully revived!"
 *
-Revival Herb
+Revival Herb:
 	Int: PokemonUseItem, HoldItem
 	Cat: Medicine
 	BattleCat: Status
@@ -1812,7 +1759,7 @@ Revival Herb
 		###
 	SuccessMessage: p.getName() + " was fully revived!"
 *
-Sacred Ash
+Sacred Ash:
 	Int: TrainerUseItem, HoldItem, BattleUseItem
 	Cat: Medicine
 	BattleCat: Status
@@ -1835,7 +1782,7 @@ Sacred Ash
 	BattleUse: return use((Trainer)b.getTrainer(p.user()));
 	SuccessMessage: "All fainted Pok\u00e9mon were fully revived!"
 *
-Dire Hit
+Dire Hit:
 	Int: BattleUseItem, HoldItem
 	Cat: Stat
 	BattleCat: Battle
@@ -1870,131 +1817,83 @@ Guard Spec.
 		###
 	SuccessMessage: p.getName() + " is covered by a veil!"
 *
-X Accuracy
-	Int: HoldItem
-	Cat: Stat
-	BattleCat: Battle
+X Accuracy:
 	Desc: An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
-	StageIncrease: Accuracy
+	XStageIncrease: Accuracy
 	Price: 950
-	Fling: 30
 *
-X Attack
-	Int: HoldItem
-	Cat: Stat
-	BattleCat: Battle
+X Attack:
 	Desc: An item that raises the Attack stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
-	StageIncrease: Attack
+	XStageIncrease: Attack
 	Price: 500
-	Fling: 30
 *
-X Defend
-	Int: HoldItem
-	Cat: Stat
-	BattleCat: Battle
+X Defend:
 	Desc: An item that raises the Defense stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
-	StageIncrease: Sp_Defense
+	XStageIncrease: Defense
 	Price: 550
-	Fling: 30
 *
-X Sp. Def
-	Int: HoldItem
-	Cat: Stat
-	BattleCat: Battle
-	Desc: An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
-	StageIncrease: Sp_Defense
-	Price: 350
-	Fling: 30
-*
-X Special
-	Int: HoldItem
-	Cat: Stat
-	BattleCat: Battle
+X Special:
 	Desc: An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
-	StageIncrease: Sp_Attack
+	XStageIncrease: Sp_Attack
 	Price: 350
-	Fling: 30
 *
-X Speed
-	Int: HoldItem
-	Cat: Stat
-	BattleCat: Battle
+X Sp. Def:
+	Desc: An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
+	XStageIncrease: Sp_Defense
+	Price: 350
+*
+X Speed:
 	Desc: An item that raises the Speed stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
-	StageIncrease: Speed
+	XStageIncrease: Speed
 	Price: 350
-	Fling: 30
 *
-Calcium
-	Int: HoldItem
-	Cat: Stat
-	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Sp. Atk (Special Attack) stat of a single Pok\u00e9mon.
-	EVIncrease: Sp_Attack
-	EVIncreaseAmt: 10
-	Price: 9800
-	Fling: 30
-*
-Carbos
-	Int: HoldItem
-	Cat: Stat
-	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Speed stat of a single Pok\u00e9mon.
-	EVIncrease: Speed
-	EVIncreaseAmt: 10
-	Price: 9800
-	Fling: 30
-*
-Clever Wing
-	Int: HoldItem
-	Cat: Stat
-	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Def stat of a single Pok\u00e9mon.
-	EVIncrease: Sp_Attack
-	EVIncreaseAmt: 1
-	Price: 3000
-	Fling: 20
-*
-Health Wing
-	Int: HoldItem
-	Cat: Stat
-	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base HP of a single Pok\u00e9mon.
-	EVIncrease: HP
-	EVIncreaseAmt: 1
-	Price: 3000
-	Fling: 20
-*
-HP Up
-	Int: HoldItem
-	Cat: Stat
+HP Up:
 	Desc: A nutritious drink for Pok\u00e9mon. It raises the base HP of a single Pok\u00e9mon.
-	EVIncrease: HP
-	EVIncreaseAmt: 10
-	Price: 9800
-	Fling: 30
+	Vitamin: HP
 *
-Genius Wing
-	Int: HoldItem
-	Cat: Stat
-	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Atk stat of a single Pok\u00e9mon.
-	EVIncrease: Sp_Attack
-	EVIncreaseAmt: 1
-	Price: 3000
-	Fling: 20
+Protein:
+	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Attack stat of a single Pok\u00e9mon.
+	Vitamin: Attack
 *
 Iron
-	Int: HoldItem
-	Cat: Stat
 	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Defense stat of a single Pok\u00e9mon.
-	EVIncrease: Defense
-	EVIncreaseAmt: 10
-	Price: 9800
-	Fling: 30
+	Vitamin: Defense
+*
+Calcium:
+	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Sp. Atk (Special Attack) stat of a single Pok\u00e9mon.
+	Vitamin: Sp_Attack
+*
+Zinc:
+	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Sp. Def (Special Defense) stat of a single Pok\u00e9mon.
+	Vitamin: Sp_Defense
+*
+Carbos:
+	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Speed stat of a single Pok\u00e9mon.
+	Vitamin: Speed
+*
+Health Wing:
+	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base HP of a single Pok\u00e9mon.
+	Wing: HP
 *
 Muscle Wing:
-	Int: HoldItem
-	Cat: Stat
 	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Attack stat of a single Pok\u00e9mon.
-	EVIncrease: Attack
-	EVIncreaseAmt: 1
-	Price: 3000
-	Fling: 20
+	Wing: Attack
+*
+Resist Wing:
+	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Defense stat of a single Pok\u00e9mon.
+	Wing: Defense
+*
+Genius Wing:
+	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Atk stat of a single Pok\u00e9mon.
+	Wing: Sp_Attack
+*
+Clever Wing:
+	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Def stat of a single Pok\u00e9mon.
+	Wing: Sp_Defense
+*
+Swift Wing:
+	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Speed stat of a single Pok\u00e9mon.
+	Wing: Speed
 *
 PP Max:
 	Int: MoveUseItem, HoldItem
@@ -2026,15 +1925,6 @@ PP Up:
 	###
 	SuccessMessage: p.getName() + "'s " + increase + "'s Max PP was increased!"
 *
-Protein
-	Int: HoldItem
-	Cat: Stat
-	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Attack stat of a single Pok\u00e9mon.
-	EVIncrease: Attack
-	EVIncreaseAmt: 10
-	Price: 9800
-	Fling: 30
-*
 Rare Candy
 	Int: HoldItem, PokemonUseItem
 	Cat: Stat
@@ -2045,33 +1935,6 @@ Rare Candy
 		###
 	SuccessMessage: p.getName() + " gained a level!"
 	Price: 4800
-	Fling: 30
-*
-Resist Wing
-	Int: HoldItem
-	Cat: Stat
-	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Defense stat of a single Pok\u00e9mon.
-	EVIncrease: Defense
-	EVIncreaseAmt: 1
-	Price: 3000
-	Fling: 20
-*
-Swift Wing
-	Int: HoldItem
-	Cat: Stat
-	Desc: An item for use on a Pok\u00e9mon. It slightly increases the base Speed stat of a single Pok\u00e9mon.
-	EVIncrease: Speed
-	EVIncreaseAmt: 1
-	Price: 3000
-	Fling: 20
-*
-Zinc
-	Int: HoldItem
-	Cat: Stat
-	Desc: A nutritious drink for Pok\u00e9mon. It raises the base Sp. Def (Special Defense) stat of a single Pok\u00e9mon.
-	EVIncrease: Sp_Defense
-	EVIncreaseAmt: 10
-	Price: 9800
 	Fling: 30
 *
 
@@ -2123,8 +1986,7 @@ Heal Ball
 	Price: 300
 	CatchRate: 1
 	AfterCaught:
-		p.healHealthFraction(1);
-		for (Move m : p.getMoves()) m.increasePP(m.getAttack().getPP());
+		p.fullyHeal();
 		###
 *
 Heavy Ball
@@ -2324,7 +2186,7 @@ Leppa Berry:
 	NGType: Fighting
 	NGPow: 80
 	ApplyEndTurn:
-		for (Move m : victim.getMoves())
+		for (Move m : victim.getMoves(b))
 		{
 			if (m.getPP() == 0)
 			{
@@ -2337,7 +2199,7 @@ Leppa Berry:
 		###
 	GainEffect:
 		List<Move> list = new ArrayList<>();
-		for (Move m : user.getMoves())
+		for (Move m : user.getMoves(b))
 		{
 			if (m.getPP() < m.getMaxPP())
 			{
@@ -2351,6 +2213,7 @@ Leppa Berry:
 			return false;
 		}
 		
+		// TODO: This should probably heal the move with the smallest PP ratio, not at random
 		use(user, list.get((int)(Math.random()*size)));
 		###
 	MoveUse:
@@ -2364,14 +2227,17 @@ Leppa Berry:
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
 Oran Berry:
-	Int: HealthTriggeredBerry
+	Int: HealthTriggeredBerry, PokemonUseItem, BattleUseItem
 	BattleCat: HP_PP
 	Desc: If held by a Pok\u00e9mon, it heals the user by just 10 HP.
 	NGType: Poison
 	NGPow: 80
 	HealthTriggerRatio: 3
 	HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
-	HealAmt: 10
+	SuccessMessage: p.getName() + "'s health was restored!"
+	PokemonUse:
+		return p.heal(10) != 0;
+		###
 *
 Persim Berry:
 	Int: BattleUseItem, GainableEffectBerry
@@ -2584,34 +2450,34 @@ Micle Berry:
 	HealthTriggeredStageIncreaseBerryStat: Accuracy
 *
 Kee Berry:
-	Desc: If held by a Pokémon, this Berry will increase the Pokémon's Defense stat when hit by a physical attack.
+	Desc: If held by a Pok\u00e9mon, this Berry will increase the Pok\u00e9mon's Defense stat when hit by a physical attack.
 	NGType: Fairy
 	CategoryIncreaseBerry: Physical Defense
 *
 Maranga Berry:
-	Desc: If held by a Pokémon, this Berry will increase the Pokémon's Sp. Defense stat when hit by a special attack.
+	Desc: If held by a Pok\u00e9mon, this Berry will increase the Pok\u00e9mon's Sp. Defense stat when hit by a special attack.
 	NGType: Dark
 	CategoryIncreaseBerry: Special Sp_Defense
 *
 Jaboca Berry:
-	Desc: If held by a Pokémon and a physical attack lands, the attacker also takes damage.
+	Desc: If held by a Pok\u00e9mon and a physical attack lands, the attacker also takes damage.
 	NGType: Dragon
 	CategoryDamagerBerry: Physical
 *
 Rowap Berry:
-	Desc: If held by a Pokémon and a special attack lands, the attacker also takes damage.
+	Desc: If held by a Pok\u00e9mon and a special attack lands, the attacker also takes damage.
 	NGType: Dark
 	CategoryDamagerBerry: Special
 *
 Custap Berry:
-	Desc: If held by a Pokémon, it gets to move first just once in a pinch.	
+	Desc: If held by a Pok\u00e9mon, it gets to move first just once in a pinch.	
 	NGType: Ghost
 	NGPow: 100
 	Int: Berry, PriorityChangeEffect
 	ChangePriority: user.getHPRatio() < 1/3.0
 *
 Enigma Berry:
-	Desc: If held by a Pokémon, it restores its HP if it is hit by any supereffective attack.
+	Desc: If held by a Pok\u00e9mon, it restores its HP if it is hit by any supereffective attack.
 	NGType: Bug
 	NGPow: 100
 	Int: Berry, TakeDamageEffect
@@ -2796,7 +2662,7 @@ Max Repel
 	Price: 700
 *
 Ability Capsule:
-	Desc: A capsule that allows a Pokémon with two Abilities to switch between these Abilities when it is used.
+	Desc: A capsule that allows a Pok\u00e9mon with two Abilities to switch between these Abilities when it is used.
 	Price: 1000
 	Cat: Misc
 	Int: PokemonUseItem
@@ -2813,7 +2679,7 @@ Ability Capsule:
 	SuccessMessage: p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!"
 *
 Assault Vest:
-	Desc: An item to be held by a Pokémon. This offensive vest raises Sp. Def but prevents the use of status moves.
+	Desc: An item to be held by a Pok\u00e9mon. This offensive vest raises Sp. Def but prevents the use of status moves.
 	Price: 1000
 	Cat: Misc
 	Int: HoldItem, AttackSelectionEffect

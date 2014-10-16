@@ -849,13 +849,17 @@ Captivate:
 	Acc: 100
 	PP: 20
 	StatChange: 1 Sp_attack -2
-	ApplyEffects: 
-	// TODO: Doesn't work against Oblivious Pokemon
-	if (Gender.oppositeGenders(user, victim)) 
+	ApplyEffects:
+	boolean oblivious = victim.hasAbility(Namesies.OBLIVIOUS_ABILITY);
+	if (Gender.oppositeGenders(user, victim) && !oblivious)
 	{
 		super.applyEffects(b, user, victim);
 	}
-	else 
+	else if (oblivious)
+	{
+		b.addMessage(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!");
+	}
+	else
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 	}
@@ -1890,6 +1894,7 @@ Mimic:
 	Cat: Status
 	Effect: Pokemon Mimic
 	MoveType: No_Magic_Coat, Encoreless, Assistless, Metronomeless
+	SelfTarget: True
 *
 Meteor Mash:
 	Desc: The target is hit with a hard punch fired like a meteor. It may also raise the user's Attack.
@@ -2777,7 +2782,7 @@ Calm Mind:
 	Type: Psychic
 	Cat: Status
 	SelfTarget: True
-	StatChange: 2 Defense 1 Sp_Defense 1
+	StatChange: 2 Sp_Attack 1 Sp_Defense 1
 *
 Low Sweep:
 	Desc: The user attacks the target's legs swiftly, reducing the target's Speed stat.
@@ -3392,7 +3397,7 @@ Spite:
 	Move last = victim.getAttributes().getLastMoveUsed();
 	
 	// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
-	if (last == null || last.getPP() == 0 || !victim.hasMove(last.getAttack().namesies()))
+	if (last == null || last.getPP() == 0 || !victim.hasMove(b, last.getAttack().namesies()))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -4337,7 +4342,8 @@ Last Resort:
 	Pow: 140
 	Type: Normal
 	Apply: 
-	for (Move m : me.getMoves())
+	// TODO: Make sure this works with transform/mimic
+	for (Move m : me.getMoves(b))
 	{
 		if (m.getAttack().namesies() == this.namesies)
 		{
@@ -4385,7 +4391,7 @@ Conversion:
 	Cat: Status
 	SelfTarget: True
 	Apply: 
-	for (Move m : me.getMoves())
+	for (Move m : me.getMoves(b))
 	{
 		if (!me.isType(b, m.getAttack().getActualType()))
 		{
@@ -4399,7 +4405,7 @@ Conversion:
 	Int: ChangeTypeMove
 	ChangeType: 
 	List<Type> types = new ArrayList<>();
-	for (Move m : victim.getMoves())
+	for (Move m : victim.getMoves(b))
 	{
 		Type t = m.getAttack().getActualType();
 		if (!victim.isType(b, t)) 
@@ -4538,7 +4544,7 @@ Sleep Talk:
 	}
 	
 	List<Move> moves = new ArrayList<>();
-	for (Move m : me.getMoves())
+	for (Move m : me.getMoves(b))
 	{
 		if (!m.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)) 
 		{
@@ -4910,7 +4916,8 @@ Sketch:
 		return;
 	}
 	
-	List<Move> moves = me.getMoves();
+	// TODO: Make sure this does not permanently copy a move while transformed
+	List<Move> moves = me.getMoves(b);
 	for (int i = 0; i < moves.size(); i++)
 	{
 		if (moves.get(i).getAttack().namesies() == this.namesies)
@@ -5116,7 +5123,7 @@ Assist:
 			continue;
 		}
 		
-		for (Move m : p.getMoves())
+		for (Move m : p.getMoves(b))
 		{
 			if (!m.getAttack().isMoveType(MoveType.ASSISTLESS)) 
 			{
@@ -5820,19 +5827,32 @@ Fling:
 	Type: Dark
 	Acc: 100
 	Cat: Physical
-	GetPow: 
-	// TODO: FLING DAMAGE
-	// TODO: Effects from fling damage for certain items like Light Ball and such
-	return 1;
+	GetPow:
+	if (me.isHoldingItem(b))
+	{
+		return ((HoldItem)me.getHeldItem(b)).flingDamage();
+	}
+	
+	return super.power;
 	###
 	Apply: 
-	if (me.hasEffect(Namesies.EMBARGO_EFFECT))
+	if (!me.isHoldingItem(b))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
+	b.addMessage(me.getName() + " flung its " + me.getHeldItem(b).getName() + "!");
 	super.apply(me, o, b);
+	me.consumeItem(b);
+	###
+	ApplyEffects:
+	if (!user.isHoldingItem(b))
+	{
+		Global.error("Cannot apply Fling effect when user is not holding an item");
+	}
+	
+	((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
 	###
 *
 Freeze Shock:
@@ -6124,6 +6144,11 @@ Parting Shot:
 	Type: Dark
 	StatChange: 2 Attack -1 Sp_Attack -1
 	SelfSwitching: True
+	MoveType: Sound_Based
+	ApplyEffects:
+	b.addMessage(user.getName() + " called " + victim.getName() + " a chump!!");
+	super.applyEffects(b, user, victim);
+	###
 *
 U-turn:
 	Desc: After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.
@@ -6589,6 +6614,7 @@ Disarming Voice:
 	Pow: 40
 	Type: Fairy
 	Cat: Special
+	MoveType: Sound_Based
 *
 Freeze-Dry:
 	Desc: The user rapidly cools the target. This may also leave the target frozen. This move is super effective on Water types.
@@ -6728,6 +6754,7 @@ Noble Roar:
 	Acc: 100
 	Cat: Status
 	StatChange: 2 Attack -1 Sp_Attack -1
+	MoveType: Sound_Based
 *
 Powder:
 	Desc: The user covers the target in a powder that explodes and damages the target if it uses a Fire-type move.
@@ -6848,7 +6875,7 @@ Belch:
 	###
 *
 Venom Drench:
-	Desc: Opposing Pokémon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.
+	Desc: Opposing Pok\u00e9mon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.
 	Type: Poison
 	Cat: Status
 	Acc: 100
@@ -6865,7 +6892,7 @@ Venom Drench:
 	PP: 20
 *
 Electric Terrain:
-	Desc: The user electrifies the ground under everyone's feet for five turns. Pokémon on the ground no longer fall asleep.
+	Desc: The user electrifies the ground under everyone's feet for five turns. Pok\u00e9mon on the ground no longer fall asleep.
 	Type: Electric
 	PP: 10
 	Cat: Status
@@ -6899,7 +6926,7 @@ Cut:
 	Type: Normal
 *
 Dazzling Gleam:
-	Desc: The user damages opposing Pokémon by emitting a powerful flash.
+	Desc: The user damages opposing Pok\u00e9mon by emitting a powerful flash.
 	PP: 10
 	Type: Fairy
 	Cat: Special

@@ -310,7 +310,7 @@ public class ActivePokemon implements Serializable
 			
 			for (Namesies s : map.get(i))
 			{
-				if (hasMove(s)) 
+				if (hasActualMove(s)) 
 					continue;
 				
 				moves.add(new Move(Attack.getAttack(s)));
@@ -501,21 +501,18 @@ public class ActivePokemon implements Serializable
 		return attributes.getStage(index);
 	}
 	
-	public Move getMove(int index)
+	public Move getMove(Battle b, int index)
 	{
-		return getMoves().get(index);
+		return getMoves(b).get(index);
 	}
 	
-	// TODO: Check if can just look for MoveListCondition
-	public List<Move> getMoves()
+	public List<Move> getMoves(Battle b)
 	{
-		PokemonEffect transformed = getEffect(Namesies.TRANSFORMED_EFFECT);
-		if (transformed != null) return ((MoveListCondition)transformed).getMoveList(this, moves);
+		Move[] moveArray = this.moves.toArray(new Move[0]);		
+		moveArray = (Move[])Global.updateInvoke(1, b.getEffectsList(this), MoveListCondition.class, "getMoveList", this, moveArray);
+		List<Move> moveList = Arrays.asList(moveArray); 
 		
-		PokemonEffect mimic = getEffect(Namesies.MIMIC_EFFECT);
-		if (mimic != null) return ((MoveListCondition)mimic).getMoveList(this, moves);
-		
-		return moves;
+		return moveList;
 	}
 	
 	public List<Move> getActualMoves()
@@ -638,7 +635,7 @@ public class ActivePokemon implements Serializable
 	private void learnMove(Battle b, Namesies attackName)
 	{
 		// Don't want to learn a move you already know!
-		if (hasMove(attackName)) 
+		if (hasActualMove(attackName)) 
 		{
 			return;
 		}
@@ -773,9 +770,19 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Returns whether or not this Pokemon knows this move already
-	public boolean hasMove(Namesies name)
+	public boolean hasActualMove(Namesies name)
 	{
-		for (Move m : getMoves())
+		return hasMove(getActualMoves(), name);
+	}
+	
+	public boolean hasMove(Battle b, Namesies name)
+	{
+		return hasMove(getMoves(b), name);
+	}
+	
+	private boolean hasMove(List<Move> moveList, Namesies name)
+	{
+		for (Move m : moveList)
 			if (m.getAttack().namesies() == name) 
 				return true;
 
@@ -1175,10 +1182,17 @@ public class ActivePokemon implements Serializable
 		return heal((int)Math.max(getStat(Stat.HP)*fraction, 1));
 	}
 	
-	public int fullyHeal()
+	// Removes status, restores PP for all moves, restores to full health
+	public void fullyHeal()
 	{
 		removeStatus();
-		return healHealthFraction(1);
+		
+		for (Move m : this.getActualMoves())
+		{
+			m.resetPP();
+		}
+		
+		healHealthFraction(1);
 	}
 	
 	// Heals the Pokemon by damage amount. It is assume damage has already been dealt to the victim

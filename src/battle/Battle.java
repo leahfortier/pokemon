@@ -366,13 +366,13 @@ public class Battle
 			player.getPokedex().setStatus(enterer, PokedexStatus.SEEN, isWildBattle() ? player.getRouteName() : "");
 		}
 		
-		// TODO: I don't think this is sending the message properly, switched to Squirtle and had Bulbasaur's type colors at first
-		addMessage(enterMessage, enterer);
-		
 		if (reset) 
 		{
 			enterer.resetAttributes();
 		}
+		
+        // TODO: I don't think this is sending the message properly, switched to Squirtle and had Bulbasaur's type colors at first	
+		addMessage(enterMessage, enterer);
 		
 		// TODO: Test the invoke
 		enterer.getAttributes().setUsed(true);

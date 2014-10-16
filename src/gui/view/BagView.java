@@ -203,7 +203,7 @@ public class BagView extends View
 		{
 			if (moveButtons[i].checkConsumePress())
 			{
-				Move m = selectedPokemon.getMove(i);
+				Move m = selectedPokemon.getActualMoves().get(i);
 				
 				addUseMessages(player.getBag().useMoveItem(selectedItem, selectedPokemon, m), selectedPokemon);
 			}
@@ -439,10 +439,12 @@ public class BagView extends View
 		
 		// Draw moves
 		if (state == BagState.MOVE_SELECT)
-		{
-			for (int i = 0; i < selectedPokemon.getMoves().size(); i++)
+		{ 
+			List<Move> moveList = selectedPokemon.getActualMoves();
+			
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				Move m = selectedPokemon.getMove(i);
+				Move m = moveList.get(i);
 				g.translate(moveButtons[i].x, moveButtons[i].y);
 				
 				g.setColor(m.getAttack().getActualType().getColor());
@@ -621,7 +623,7 @@ public class BagView extends View
 		
 		for (int i = 0; i < Move.MAX_MOVES; i++)
 		{
-			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getMoves().size());
+			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
 		}
 		
 		giveButton.setActive(selectedItem instanceof HoldItem);

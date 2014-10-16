@@ -204,7 +204,7 @@ public class Move implements Serializable
 	private static List<Move> getUsableMoves(Battle b, ActivePokemon p)
 	{
 		List<Move> usable = new ArrayList<Move>();
-		for (Move m : p.getMoves())
+		for (Move m : p.getMoves(b))
 		{
 			if (validMove(b, p, m, false))
 			{

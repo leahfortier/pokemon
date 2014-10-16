@@ -122,6 +122,8 @@ public class BattleView extends View
 	private int logPage;
 	private ArrayList<String> logMessages;
 	
+	private List<Move> selectedMoveList;
+	
 	// The last move that a Pokemon used
 	private int lastMoveUsed;
 	
@@ -693,16 +695,15 @@ public class BattleView extends View
 		
 		// Get the Pokemon that is attacking and their corresponsing move list
 		ActivePokemon front = currentBattle.getPlayer().front();
-		List<Move> moves = front.getMoves();
 		
-		for (int i = 0; i < moves.size(); i++)
+		for (int i = 0; i < selectedMoveList.size(); i++)
 		{
 			if (moveButtons[i].checkConsumePress())
 			{
 				lastMoveUsed = i;
 				
 				// Execute the move if valid
-				if (Move.validMove(currentBattle, front, moves.get(i), true))
+				if (Move.validMove(currentBattle, front, selectedMoveList.get(i), true))
 				{
 					currentBattle.getPlayer().performAction(currentBattle, Action.FIGHT);
 					setVisualState(VisualState.MESSAGE);
@@ -1110,9 +1111,9 @@ public class BattleView extends View
 			case FIGHT:
 			case INVALID_FIGHT:
 				selectedButton = lastMoveUsed;
-				List<Move> moves = currentBattle.getPlayer().front().getMoves();
+				selectedMoveList = currentBattle.getPlayer().front().getMoves(currentBattle);
 				for (int i = 0; i < Move.MAX_MOVES; i++) 
-					moveButtons[i].setActive(i < moves.size());
+					moveButtons[i].setActive(i < selectedMoveList.size());
 				
 				for (Button b: moveButtons)
 					b.setForceHover(false);
@@ -1323,7 +1324,7 @@ public class BattleView extends View
 		g.drawImage(tiles.getTile(0x20), 415, 440, null);
 		g.drawImage(tiles.getTile(0x21), 0, 440, null);
 		
-		List<Move> moves = plyr.getMoves();
+		List<Move> moves = plyr.getMoves(currentBattle);
 		for (int y = 0, i = 0; y < 2; y++)
 		{
 			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
@@ -1645,7 +1646,7 @@ public class BattleView extends View
 	{
 		g.drawImage(tiles.getTile(0x3), 0, 439, null);
 		
-		List<Move> moves = learnedPokemon.getMoves();
+		List<Move> moves = learnedPokemon.getActualMoves();
 		for (int y = 0, i = 0; y < 2; y++)
 		{
 			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)

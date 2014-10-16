@@ -16,12 +16,12 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	private static final long serialVersionUID = 1L;
 	private static HashMap<String, Weather> map;
 	
-	protected Type weatherElement;
+	private Type weatherElement;
 	
-	public Weather(Namesies namesies, Type weather)
+	public Weather(Namesies namesies, Type weatherElement)
 	{
 		super(namesies, -1, -1, true);
-		weatherElement = weather;
+		this.weatherElement = weatherElement;
 	}
 	
 	public Type getElement()

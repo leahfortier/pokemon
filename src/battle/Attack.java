@@ -2571,10 +2571,14 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: Doesn't work against Oblivious Pokemon
-			if (Gender.oppositeGenders(user, victim))
+			boolean oblivious = victim.hasAbility(Namesies.OBLIVIOUS_ABILITY);
+			if (Gender.oppositeGenders(user, victim) && !oblivious)
 			{
 				super.applyEffects(b, user, victim);
+			}
+			else if (oblivious)
+			{
+				b.addMessage(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!");
 			}
 			else
 			{
@@ -4460,6 +4464,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.selfTarget = true;
 		}
 	}
 
@@ -5900,7 +5905,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.CALM_MIND_ATTACK, "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.", 20, Type.PSYCHIC, Category.STATUS);
 			super.selfTarget = true;
-			super.statChanges[Stat.DEFENSE.index()] = 1;
+			super.statChanges[Stat.SP_ATTACK.index()] = 1;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
 		}
 	}
@@ -7096,7 +7101,7 @@ public abstract class Attack implements Serializable
 			Move last = victim.getAttributes().getLastMoveUsed();
 			
 			// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
-			if (last == null || last.getPP() == 0 || !victim.hasMove(last.getAttack().namesies()))
+			if (last == null || last.getPP() == 0 || !victim.hasMove(b, last.getAttack().namesies()))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -8790,7 +8795,8 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			for (Move m : me.getMoves())
+			// TODO: Make sure this works with transform/mimic
+			for (Move m : me.getMoves(b))
 			{
 				if (m.getAttack().namesies() == this.namesies)
 				{
@@ -8855,7 +8861,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			for (Move m : me.getMoves())
+			for (Move m : me.getMoves(b))
 			{
 				if (!me.isType(b, m.getAttack().getActualType()))
 				{
@@ -8870,7 +8876,7 @@ public abstract class Attack implements Serializable
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			List<Type> types = new ArrayList<>();
-			for (Move m : victim.getMoves())
+			for (Move m : victim.getMoves(b))
 			{
 				Type t = m.getAttack().getActualType();
 				if (!victim.isType(b, t))
@@ -9054,7 +9060,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			List<Move> moves = new ArrayList<>();
-			for (Move m : me.getMoves())
+			for (Move m : me.getMoves(b))
 			{
 				if (!m.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL))
 				{
@@ -9627,7 +9633,8 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			List<Move> moves = me.getMoves();
+			// TODO: Make sure this does not permanently copy a move while transformed
+			List<Move> moves = me.getMoves(b);
 			for (int i = 0; i < moves.size(); i++)
 			{
 				if (moves.get(i).getAttack().namesies() == this.namesies)
@@ -10017,7 +10024,7 @@ public abstract class Attack implements Serializable
 					continue;
 				}
 				
-				for (Move m : p.getMoves())
+				for (Move m : p.getMoves(b))
 				{
 					if (!m.getAttack().isMoveType(MoveType.ASSISTLESS))
 					{
@@ -11250,20 +11257,35 @@ public abstract class Attack implements Serializable
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			// TODO: FLING DAMAGE
-			// TODO: Effects from fling damage for certain items like Light Ball and such
-			return 1;
+			if (me.isHoldingItem(b))
+			{
+				return ((HoldItem)me.getHeldItem(b)).flingDamage();
+			}
+			
+			return super.power;
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (me.hasEffect(Namesies.EMBARGO_EFFECT))
+			if (!me.isHoldingItem(b))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
+			b.addMessage(me.getName() + " flung its " + me.getHeldItem(b).getName() + "!");
 			super.apply(me, o, b);
+			me.consumeItem(b);
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (!user.isHoldingItem(b))
+			{
+				Global.error("Cannot apply Fling effect when user is not holding an item");
+			}
+			
+			((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
 		}
 	}
 
@@ -11889,6 +11911,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.PARTING_SHOT_ATTACK, "With a parting threat, the user lowers the target's Attack and Sp. Atk stats. Then it switches with a party Pok\u00e9mon.", 20, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
+			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.statChanges[Stat.ATTACK.index()] = -1;
 			super.statChanges[Stat.SP_ATTACK.index()] = -1;
 		}
@@ -11919,6 +11942,12 @@ public abstract class Attack implements Serializable
 			trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
 			me = trainer.front();
 			b.enterBattle(me, trainer.getName() + " sent out " + me.getName() + "!");
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			b.addMessage(user.getName() + " called " + victim.getName() + " a chump!!");
+			super.applyEffects(b, user, victim);
 		}
 	}
 
@@ -12705,6 +12734,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.DISARMING_VOICE_ATTACK, "Letting out a charming cry, the user does emotional damage to opposing Pok\u00e9mon. This attack never misses.", 15, Type.FAIRY, Category.SPECIAL);
 			super.power = 40;
+			super.moveTypes.add(MoveType.SOUND_BASED);
 		}
 	}
 
@@ -12914,6 +12944,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.NOBLE_ROAR_ATTACK, "Letting out a noble roar, the user intimidates the target and lowers its Attack and Sp. Atk stats.", 30, Type.NORMAL, Category.STATUS);
 			super.accuracy = 100;
+			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.statChanges[Stat.ATTACK.index()] = -1;
 			super.statChanges[Stat.SP_ATTACK.index()] = -1;
 		}
@@ -13143,7 +13174,7 @@ public abstract class Attack implements Serializable
 
 		public VenomDrench()
 		{
-			super(Namesies.VENOM_DRENCH_ATTACK, "Opposing Pokémon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.", 20, Type.POISON, Category.STATUS);
+			super(Namesies.VENOM_DRENCH_ATTACK, "Opposing Pok\u00e9mon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.", 20, Type.POISON, Category.STATUS);
 			super.accuracy = 100;
 			super.statChanges[Stat.ATTACK.index()] = -1;
 			super.statChanges[Stat.SP_ATTACK.index()] = -1;
@@ -13168,7 +13199,7 @@ public abstract class Attack implements Serializable
 
 		public ElectricTerrain()
 		{
-			super(Namesies.ELECTRIC_TERRAIN_ATTACK, "The user electrifies the ground under everyone's feet for five turns. Pokémon on the ground no longer fall asleep.", 10, Type.ELECTRIC, Category.STATUS);
+			super(Namesies.ELECTRIC_TERRAIN_ATTACK, "The user electrifies the ground under everyone's feet for five turns. Pok\u00e9mon on the ground no longer fall asleep.", 10, Type.ELECTRIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.ELECTRIC_TERRAIN_EFFECT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -13226,7 +13257,7 @@ public abstract class Attack implements Serializable
 
 		public DazzlingGleam()
 		{
-			super(Namesies.DAZZLING_GLEAM_ATTACK, "The user damages opposing Pokémon by emitting a powerful flash.", 10, Type.FAIRY, Category.SPECIAL);
+			super(Namesies.DAZZLING_GLEAM_ATTACK, "The user damages opposing Pok\u00e9mon by emitting a powerful flash.", 10, Type.FAIRY, Category.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
 		}
