@@ -732,7 +732,7 @@ BracingEffect:
 ***
 MoveListCondition:
 	GetMoveList:
-		Header: List<Move> getMoveList(ActivePokemon p, List<Move> moves)
+		Header: Move[] getMoveList(ActivePokemon p, Move[] moves)
 	*
 ***
 StatsCondition:
@@ -840,6 +840,12 @@ HoldItem:
 		return {0};
 		###
 	*
+	FlingEffect:
+		Header: void flingEffect(Battle b, ActivePokemon pelted)
+		Optional: True
+		Default:
+		###
+	*
 ***
 TrainerUseItem:
 	TrainerUse:
@@ -920,6 +926,32 @@ Override:
 		AddMapField: UnusableMessage: p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!"
 		AddInterface: HoldItem
 		AddMapField: Fling: 10
+	*
+***
+Override:
+	Wing:
+		Header: Stat toIncrease()
+		Body:
+		return Stat.{00};
+		###
+		AddMapField: EVIncreaseAmt: 1
+		AddMapField: Price: 3000
+		AddMapField: Fling: 20
+		AddInterface: HoldItem
+		AddMapField: Cat: Stat
+	*
+***
+Override:	
+	Vitamin:
+		Header: Stat toIncrease()
+		Body:
+		return Stat.{00};
+		###
+		AddMapField: EVIncreaseAmt: 10
+		AddMapField: Price: 9800
+		AddMapField: Fling: 30
+		AddInterface: HoldItem
+		AddMapField: Cat: Stat
 	*
 ***
 RepellingEffect:
@@ -1018,6 +1050,65 @@ Override:
 		###
 	*
 ***
+Override:
+	Elixir:
+		Header: int increaseAmount(Move m)
+		Body:
+		return {0};
+		###
+		AddMapField: Field:
+		private boolean use(List<Move> moves)
+		{
+			boolean changed = false;
+			for (Move m : moves)
+			{
+				changed |= m.increasePP(increaseAmount(m));
+			}
+			
+			return changed;
+		}
+		###
+		AddMapField: BattleUse:
+		return use(p.getMoves(b));
+		###
+		AddMapField: PokemonUse:
+		return use(p.getActualMoves());
+		###
+		AddMapField: SuccessMessage: p.getName() + "'s PP was restored!"
+		AddMapField: Fling: 30
+		AddInterface: PokemonUseItem
+		AddInterface: BattleUseItem
+		AddInterface: HoldItem
+		AddMapField: Cat: Medicine
+		AddMapField: BattleCat: HP_PP
+	*
+***
+Override:
+	TimeSpaceOrb:
+		Header: boolean canUseOrb(ActivePokemon user)
+		Body:
+		if (!user.isPokemon(Namesies.{11}_POKEMON))
+		{
+			return false;
+		}
+		
+		return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22});
+		###
+		AddMapField: Fling: 60
+		AddMapField: Price: 10000
+		AddInterface: HoldItem
+		AddInterface: PowerChangeEffect
+		AddMapField: Cat: Misc
+		AddMapField: GetMultiplier:
+		if (canUseOrb(user))
+		{
+			return 1.2;
+		}
+		
+		return 1;
+		###
+	*
+***
 PlateItem:
 	PlateType:
 		Header: Type getType()
@@ -1048,7 +1139,7 @@ DriveItem:
 		AddInterface: Hidden-HoldItem
 		AddMapField: Fling: 70
 		AddMapField: Price: 1000
-		AddMapField: Cat: MISC
+		AddMapField: Cat: Misc
 	*
 ***
 Override:
@@ -1100,14 +1191,22 @@ Override:
 		return p.heal(healAmount()) != 0;
 		###
 		AddMapField: SuccessMessage: p.getName() + "'s health was restored!"
+		AddMapField: Cat: Medicine
+		AddMapField: BattleCat: HP_PP
+		AddMapField: Fling: 30
+		AddInterface: HoldItem
 	*
 ***
 Override:
-	StageIncrease:
+	XStageIncrease:
 		Header: Stat toIncrease()
 		Body:
 		return Stat.{00};
 		###
+		AddMapField: Fling: 30
+		AddMapField: Cat: Stat
+		AddMapField: BattleCat: Battle
+		AddInterface: HoldItem
 		AddInterface: BattleUseItem
 		AddMapField: BattleUse:
 		return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
@@ -1121,14 +1220,6 @@ Override:
 		Body:
 		return Stat.{00};
 		###
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-		int[] toAdd = new int[Stat.NUM_STATS];
-		toAdd[toIncrease().index()] += increaseAmount();
-
-		return p.addEVs(toAdd);
-		###
-		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
 	*
 ***
 Override:
@@ -1137,6 +1228,14 @@ Override:
 		Body:
 		return {0};
 		###
+		AddInterface: PokemonUseItem
+		AddMapField: PokemonUse:
+		int[] toAdd = new int[Stat.NUM_STATS];
+		toAdd[toIncrease().index()] += increaseAmount();
+
+		return p.addEVs(toAdd);
+		###
+		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
 	*
 ***
 BallItem:
@@ -1302,6 +1401,9 @@ GainableEffectBerry:
 		return true;
 		###
 		AddInterface: Hidden-Berry
+		AddMapField: FlingEffect:
+		gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		###
 	*
 ***
 HealthTriggeredBerry:
@@ -1583,6 +1685,31 @@ StatLoweredEffect:
 	*
 ***
 Override:
+	FlinchItem:
+		AddMapField: FlingEffect:
+		PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
+		if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM))
+		{
+			flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
+			b.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
+		}
+		###
+		AddMapField: OnApplyDamage:
+		if (Math.random()*100 < 10)
+		{
+			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
+			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
+			{
+				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
+				b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
+			}
+		}
+		###
+		AddInterface: ApplyDamageEffect
+		AddInterface: HoldItem
+	*
+***
+Override:
 	TM:
 		Header: Attack getAttack()
 		Body:
@@ -1595,7 +1722,7 @@ Override:
 		Attack attack = getAttack();
 		
 		// Cannot learn if you already know the move
-		if (p.hasMove(attack.namesies()))
+		if (p.hasActualMove(attack.namesies()))
 		{
 			return false;
 		}
@@ -1607,19 +1734,19 @@ Override:
 		}
 
 		Move tmMove = new Move(attack);
-		int numMoves = p.getMoves().size();
+		List<Move> moveList = p.getActualMoves();
 
 		// If they don't have a full move list, append to the end
-		if (numMoves < Move.MAX_MOVES)
+		if (moveList.size() < Move.MAX_MOVES)
 		{
-			p.addMove(null, tmMove, numMoves);
+			p.addMove(null, tmMove, moveList.size());
 			return true;
 		}
 
 		// Otherwise, go through their moves and find the one that matches and replace with the TM move
-		for (int i = 0; i < numMoves; i++)
+		for (int i = 0; i < moveList.size(); i++)
 		{
-			if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+			if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 			{
 				p.addMove(null, tmMove, i);
 				return true;

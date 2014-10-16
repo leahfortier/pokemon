@@ -48,7 +48,7 @@ public class CharacterData extends Trainer implements Serializable
 	public String areaName;
 	HashSet<String> definedGlobals;
 	
-	//Used for map globals.
+	// Used for map globals.
 	public String previousMapName;
 	public String mapEntranceName;
 	

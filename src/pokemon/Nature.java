@@ -61,6 +61,7 @@ public class Nature implements Serializable
 		{
 			return new Color(200, 0, 0);
 		}
+		
 		return Color.BLACK;
 	}
 }

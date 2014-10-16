@@ -1805,7 +1805,7 @@ public abstract class Ability implements Serializable
 			
 			int highestPower = -1;
 			
-			for (Move m : other.getMoves())
+			for (Move m : other.getMoves(b))
 			{
 				if (m.getAttack().getCategory() == Category.STATUS)
 				{
@@ -1828,7 +1828,7 @@ public abstract class Ability implements Serializable
 			Namesies warn;
 			if (highestPower == -1)
 			{
-				warn = other.getMoves().get((int)(Math.random()*other.getMoves().size())).getAttack().namesies();
+				warn = other.getMoves(b).get((int)(Math.random()*other.getMoves(b).size())).getAttack().namesies();
 			}
 			else
 			{
@@ -3118,7 +3118,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			for (Move m : other.getMoves())
+			for (Move m : other.getMoves(b))
 			{
 				Attack attack = m.getAttack();
 				if (Type.getBasicAdvantage(attack.getActualType(), victim, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO))

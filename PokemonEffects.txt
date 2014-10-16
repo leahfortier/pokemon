@@ -588,16 +588,16 @@ Mimic:
 	###
 	Int: MoveListCondition
 	GetMoveList: 
-	List<Move> list = new ArrayList<>();
-	for (Move m : moves)
+	Move[] list = new Move[moves.length];
+	for (int i = 0; i < list.length; i++)
 	{
-		if (m.getAttack().namesies() == Namesies.MIMIC_ATTACK) 
+		if (moves[i].getAttack().namesies() == Namesies.MIMIC_ATTACK)
 		{
-			list.add(mimicMove);
+			list[i] = mimicMove;
 		}
-		else 
+		else
 		{
-			list.add(m);
+			list[i] = moves[i];
 		}
 	}
 	
@@ -607,7 +607,7 @@ Mimic:
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	Attack m = other.getAttributes().getLastMoveUsed() == null ? null : other.getAttributes().getLastMoveUsed().getAttack();
 	
-	if (m == null || victim.hasMove(m.namesies()) || m.isMoveType(MoveType.MIMICLESS))
+	if (m == null || victim.hasMove(b, m.namesies()) || m.isMoveType(MoveType.MIMICLESS))
 	{
 		b.addMessage(this.getFailMessage(b, caster, victim));
 		return;
@@ -632,7 +632,7 @@ Imprison:
 	Cast:
 	// TODO: Test this effect again
 	unableMoves = new ArrayList<>();
-	for (Move m : caster.getMoves())
+	for (Move m : caster.getMoves(b))
 	{
 		unableMoves.add(m.getAttack().namesies());
 	}
@@ -947,7 +947,7 @@ FiddyPercentStronger:
 *
 Transformed:
 	Field: 
-	private List<Move> moveList;
+	private Move[] moveList;
 	private int[] stats;
 	private Type[] type;
 	###
@@ -970,10 +970,11 @@ Transformed:
 	stats[Stat.HP.index()] = victim.getStat(Stat.HP);
 	
 	// Copy the move list
-	moveList = new ArrayList<>();
-	for (Move m : transformee.getMoves()) 
+	List<Move> transformeeMoves = transformee.getMoves(b);
+	moveList = new Move[transformeeMoves.size()];
+	for (int i = 0; i < transformeeMoves.size(); i++)
 	{
-		moveList.add(new Move(m.getAttack(), 5));
+		moveList[i] = new Move(transformeeMoves.get(i).getAttack(), 5);
 	}
 	
 	// Copy all stages
@@ -992,14 +993,7 @@ Transformed:
 	###
 	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies)
 	Int: MoveListCondition, StatsCondition, TypeCondition
-	GetMoveList: 
-	// TODO: Test this with mimic I'm not convinced this is working
-	PokemonEffect mimic = p.getEffect(Namesies.MIMIC_EFFECT);
-	if (mimic != null) 
-	{
-		return ((MoveListCondition)mimic).getMoveList(p, moveList);
-	}
-	
+	GetMoveList:
 	return moveList;
 	###
 	GetStat: 
@@ -1189,7 +1183,13 @@ HealBlock:
 	SubsideMessage: "The effects of heal block wore off."
 	Int: BeforeTurnEffect
 	CanAttack:
-	// TODO: Draining moves don't work -- also I think this should be an OpponentBeforeTurnEffect, not a BeforeTurnEffect
+	if (p.getAttack().isMoveType(MoveType.SAP_HEALTH))
+	{
+		b.printAttacking(p);
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		return false;
+	}
+	
 	return true;
 	###
 *

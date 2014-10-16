@@ -11,7 +11,6 @@ import main.Global;
 import main.Namesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
-import battle.Move;
 import battle.effect.Effect;
 import battle.effect.Status.StatusCondition;
 import battle.effect.SwitchOutEffect;
@@ -192,7 +191,6 @@ public abstract class Trainer implements Team, Serializable
 		for (ActivePokemon p : team)
 		{
 			p.fullyHeal();
-			for (Move m : p.getMoves()) m.resetPP();
 		}
 	}
 	

@@ -238,7 +238,10 @@ public class PC implements Serializable
 	// should be handled by the publicly accessible versions.
 	private void insertIntoBox(int boxNum, int i, int j, ActivePokemon p)
 	{
-		if (!inBounds(i, j)) Global.error("Attempting to insert into box at invalid indices.");
+		if (!inBounds(i, j)) 
+		{
+			Global.error("Attempting to insert into box at invalid indices.");
+		}
 		
 		currBox = boxNum;
 		p.fullyHeal();
