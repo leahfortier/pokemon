@@ -15,10 +15,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import main.Game;
+import main.Game.ViewMode;
 import main.Global;
 import main.Namesies;
 import map.DialogueSequence;
 import pokemon.ActivePokemon;
+import pokemon.BaseEvolution;
 import pokemon.PC;
 import pokemon.Stat;
 import trainer.Pokedex.PokedexStatus;
@@ -65,11 +68,18 @@ public class CharacterData extends Trainer implements Serializable
 	
 	public DialogueSequence messages;
 	
+	public transient Game game;
+	
+	public ActivePokemon evolvingPokemon;
+	public BaseEvolution evolution;
+	
 	private ArrayList<String> logMessages;
 
-	public CharacterData()
+	public CharacterData(Game game)
 	{
 		super(DEFAULT_NAME, START_MONEY);
+		this.game = game;
+		
 		definedGlobals = new HashSet<>();
 		logMessages = new ArrayList<>();
 		
@@ -187,6 +197,8 @@ public class CharacterData extends Trainer implements Serializable
 			if (p.isEgg() && p.hatch())
 			{
 				// TODO: Show hatch animation
+				evolvingPokemon = p;
+				messages = new DialogueSequence("Huh?", null, null, new String[]{"Evolution_View_Trigger"});
 				this.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
 				
 				// Only one hatch per step
@@ -397,6 +409,13 @@ public class CharacterData extends Trainer implements Serializable
 		return true;
 	}
 	
+	public void setEvolution(ActivePokemon pokemon, BaseEvolution evolution)
+	{
+		this.evolvingPokemon = pokemon;
+		this.evolution = evolution;
+		game.setViewMode(ViewMode.EVOLUTION_VIEW);
+	}
+	
 	public void addLogMessage(MessageUpdate messageUpdate)
 	{
 		String messageString = messageUpdate.getMessage().trim();
@@ -420,7 +439,6 @@ public class CharacterData extends Trainer implements Serializable
 		
 		//printGlobals();
 		
-		//*
 		try
 		{
 			updateTimePlayed();
@@ -443,10 +461,9 @@ public class CharacterData extends Trainer implements Serializable
 		{
 			Global.error("Oh no! That didn't save quite right!");
 		}
-		//*/
 	}
 	
-	public CharacterData load(){
+	public static CharacterData load(int fileNum, Game game){
 		CharacterData loadChar = null;
 		
 		//updateSerVariables();
@@ -455,6 +472,7 @@ public class CharacterData extends Trainer implements Serializable
 			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
 			ObjectInputStream in = new ObjectInputStream(fin);
 			loadChar = (CharacterData) in.readObject();
+			loadChar.game = game;
 			loadChar.logMessages = new ArrayList<>();
 			in.close();
 			fin.close();
@@ -468,12 +486,12 @@ public class CharacterData extends Trainer implements Serializable
 		
 		loadChar.timeSinceUpdate = System.currentTimeMillis();
 		
-		loadChar.updateGlobals(false);
+		//loadChar.updateGlobals(false);
 		
 		return loadChar;
 	}
 	
-	private void updateSerVariables() 
+	private static void updateSerVariables(int fileNum) 
 	{
 		try {
 			//Replace bytes of renamed variable name
@@ -522,7 +540,7 @@ public class CharacterData extends Trainer implements Serializable
 		}
 	}
 	
-	private byte[] updateSerVariables(byte[] bytes, byte[] find, byte[] replace)
+	private static byte[] updateSerVariables(byte[] bytes, byte[] find, byte[] replace)
 	{
 		boolean edited = false;
 		

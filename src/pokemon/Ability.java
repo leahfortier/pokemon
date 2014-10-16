@@ -54,6 +54,7 @@ import battle.effect.RecoilMove;
 import battle.effect.StageChangingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.StatChangingEffect;
+import battle.effect.StatLoweredEffect;
 import battle.effect.StatProtectingEffect;
 import battle.effect.StatsCondition;
 import battle.effect.Status;
@@ -327,6 +328,7 @@ public abstract class Ability implements Serializable
 		map.put("Drizzle", new Drizzle());
 		map.put("Air Lock", new AirLock());
 		map.put("Defiant", new Defiant());
+		map.put("Competitive", new Competitive());
 		map.put("Flower Gift", new FlowerGift());
 		map.put("Aftermath", new Aftermath());
 		map.put("Heatproof", new Heatproof());
@@ -3283,18 +3285,43 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class Defiant extends Ability 
+	private static class Defiant extends Ability implements StatLoweredEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Defiant()
 		{
-			super(Namesies.DEFIANT_ABILITY, "When its stats are lowered its Attack increases.");
+			super(Namesies.DEFIANT_ABILITY, "Boosts the Attack stat when a stat is lowered.");
 		}
 
 		public Defiant newInstance()
 		{
 			return (Defiant)(new Defiant().activate());
+		}
+
+		public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
+		{
+			victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.ABILITY);
+		}
+	}
+
+	private static class Competitive extends Ability implements StatLoweredEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Competitive()
+		{
+			super(Namesies.COMPETITIVE_ABILITY, "Boosts the Sp. Atk stat when a stat is lowered.");
+		}
+
+		public Competitive newInstance()
+		{
+			return (Competitive)(new Competitive().activate());
+		}
+
+		public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
+		{
+			victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.ABILITY);
 		}
 	}
 

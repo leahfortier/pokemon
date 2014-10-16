@@ -59,6 +59,20 @@ Tailwind:
 	SubsideMessage: "The effects of tailwind faded."
 	CastMessage: user.getName() + " raised the speed of its team!"
 *
+StickyWeb:
+	Int: EntryEffect, RapidSpinRelease, DefogRelease
+	Enter:
+	if (victim.isLevitating(b)) 
+	{
+		return;
+	}
+	
+	victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + victim.getName() + "'s {statName}!");
+	###
+	CastMessage: "Sticky web covers everything!"
+	RapidSpin: "The sticky web spun away!"
+	Defog: "The sticky web dispersed!"
+*
 StealthRock:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter: 

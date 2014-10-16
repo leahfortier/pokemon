@@ -162,26 +162,58 @@ public class Bag implements Serializable
 	
 	public void addItem(Item i, int amt)
 	{
-		if (items.containsKey(i)) items.put(i, items.get(i) + amt);
-		else items.put(i, amt);
+		// Increment the items by the amount
+		if (items.containsKey(i)) 
+		{
+			items.put(i, items.get(i) + amt);
+		}
+		else 
+		{
+			items.put(i, amt);
+		}
 		
-		for (Set<Item> set : getAllCategorySets(i)) set.add(i);
+		// Update lists
+		for (Set<Item> set : getAllCategorySets(i)) 
+		{
+			set.add(i);
+		}
 	}
 	
 	private List<Set<Item>> getAllCategorySets(Item i)
 	{
 		List<Set<Item>> res = new ArrayList<Set<Item>>();
 		res.add(bag.get(i.cat));
-		for (BattleBagCategory c : i.bcat) res.add(battleBag.get(c));
+		for (BattleBagCategory c : i.bcat) 
+		{
+			res.add(battleBag.get(c));
+		}
+		
 		return res;
 	}
 	
 	private void removeItem(Item i)
 	{
-		if (items.containsKey(i)) items.put(i, items.get(i) - 1);
-		else Global.error("Can't remove an item you don't have! (" + i.getName() + ")");
+		// Trying to remove nonexistent items -- bad news
+		if (!items.containsKey(i) || items.get(i) <= 0)
+		{
+			Global.error("You can't remove an item you don't have! (" + i.getName() + ")");
+		}
+		
+		// Don't decrement for TMs or KeyItems
+		if (!i.hasQuantity())
+		{
+			if (items.get(i) != 1)
+			{
+				Global.error("Must only have exactly quantity per TM/KeyItem");
+			}
+			
+			return;
+		}
+		
+		// All other items -- decrement by one and remove from sets
+		items.put(i, items.get(i) - 1);
 
-		if (items.get(i) <= 0)
+		if (items.get(i) == 0)
 		{
 			for (Set<Item> set : getAllCategorySets(i))
 			{			
@@ -193,43 +225,58 @@ public class Bag implements Serializable
 	
 	public boolean useItem(Item i, Trainer t)
 	{
-		if (items.get(i) <= 0) Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		if (items.get(i) <= 0) 
+		{
+			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		}
 		
-		boolean res = false;
-		if (i instanceof TrainerUseItem) 
-			res |= ((TrainerUseItem)i).use(t);
+		if (i instanceof TrainerUseItem && ((TrainerUseItem)i).use(t))
+		{
+			removeItem(i);
+			return true;
+		}
 		
-		if (res) removeItem(i);
-		return res;
+		return false;
 	}
 	
-	public boolean useItem(Item i, ActivePokemon p)
+	public boolean useItem(CharacterData player, Item i, ActivePokemon p)
 	{
-		if (items.get(i) <= 0) Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		if (items.get(i) <= 0)
+		{
+			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		}
 		
-		boolean res = false;
-		if (i instanceof PokemonUseItem) 
-			res |= ((PokemonUseItem)i).use(p);
+		if (i instanceof PokemonUseItem && ((PokemonUseItem)i).use(player, p))
+		{
+			removeItem(i);
+			return true;
+		}
 		
-		if (res) removeItem(i);
-		return res;
+		return false;
 	}
 	
-	public boolean useMoveItem(Item i, Move m)
+	public boolean useMoveItem(Item i, ActivePokemon p, Move m)
 	{
-		if (items.get(i) <= 0) Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		if (items.get(i) <= 0) 
+		{
+			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		}
 		
-		boolean res = false;
-		if (i instanceof MoveUseItem) 
-			res |= ((MoveUseItem)i).use(m);
+		if (i instanceof MoveUseItem && ((MoveUseItem)i).use(p, m)) 
+		{
+			removeItem(i);
+			return true;
+		}
 		
-		if (res) removeItem(i);
-		return res;
+		return false;
 	}
 	
 	public boolean battleUseItem(Item i, ActivePokemon p, Battle b)
 	{
-		if (items.get(i) <= 0) Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		if (items.get(i) <= 0) 
+		{
+			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+		}
 		
 		boolean res = false;
 		
@@ -238,7 +285,7 @@ public class Bag implements Serializable
 		else if (i instanceof PokemonUseItem)
 		{
 			System.err.println("PokemonUseItem called from Bag.battleUseItem() instead of BattleUseItem.");
-			res |= ((PokemonUseItem)i).use(p);
+			res |= ((PokemonUseItem)i).use(b.getPlayer(), p);
 		}
 		else if (i instanceof BallItem)
 			res |= b.getPlayer().catchPokemon(b, (BallItem)i);
@@ -282,7 +329,10 @@ public class Bag implements Serializable
 	
 	public int getQuantity(Item i)
 	{
-		if (items.containsKey(i)) return items.get(i);
+		if (items.containsKey(i)) 
+		{
+			return items.get(i);
+		}
 		
 		return 0;
 	}
@@ -290,9 +340,11 @@ public class Bag implements Serializable
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		for (BagCategory bc : BagCategory.values()) {
+		for (BagCategory bc : BagCategory.values()) 
+		{
 			sb.append(bc.name);
 			sb.append("\n");
+			
 			for (Item i : items.keySet())
 			{
 				sb.append('\t');

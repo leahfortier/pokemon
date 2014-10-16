@@ -14,6 +14,7 @@ import battle.effect.Effect;
 import battle.effect.Effect.CastSource;
 import battle.effect.ModifyStageValueEffect;
 import battle.effect.PokemonEffect;
+import battle.effect.StatLoweredEffect;
 import battle.effect.StatProtectingEffect;
 
 public class BattleAttributes implements Serializable
@@ -200,8 +201,36 @@ public class BattleAttributes implements Serializable
 		stages[stat.index()] = 0;
 	}
 	
-	// Modifies a stat for a Pokemon and prints appropriate messages and stuff
 	public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source)
+	{
+		String message = "";
+		
+		switch (source)
+		{
+			case ATTACK:
+				message = victim.getName() + "'s {statName} was {change}!";
+				break;
+			case ABILITY:
+				message = caster.getName() + "'s " + caster.getAbility().getName() + " {change} {victimName} {statName}!";
+				break;
+			case HELD_ITEM:
+				message = caster.getName() + "'s " + caster.getHeldItem(b).getName() + " {change} {victimName} {statName}!";
+				break;
+			case USE_ITEM:
+				break; // Don't print anything for these, they will be handled manually
+			case EFFECT:
+				Global.error("Effect message should be handled manually using the other modifyStage method.");
+				break;
+			default:
+				Global.error("Unknown source for stage modifier.");
+				break;
+		}
+		
+		return modifyStage(caster, victim, val, stat, b, source, message);
+	}
+	
+	// Modifies a stat for a Pokemon and prints appropriate messages and stuff
+	public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source, String message)
 	{
 		// Don't modify the stages of a dead Pokemon
 		if (victim.isFainted(b)) 
@@ -258,24 +287,8 @@ public class BattleAttributes implements Serializable
 		else if (val == -1) change = "lowered";
 		else if (val <= -2) change = "sharply lowered";
 		
-		switch (source)
-		{
-			case ATTACK:
-				b.addMessage(victim.getName() + "'s " + statName + " was " + change + "!");
-				break;
-			case ABILITY:
-				b.addMessage(caster.getName() + "'s " + caster.getAbility().getName() + " " + change + " " + victimName + " " + statName + "!");
-				break;
-			case HELD_ITEM:
-				b.addMessage(caster.getName() + "'s " + caster.getHeldItem(b).getName() + " " + change + " " + victimName + " " + statName + "!");
-				break;
-			case EFFECT:
-			case USE_ITEM:
-				break; // Don't print anything for these, they will be handled manually
-			default:
-				Global.error("Unknown source for stage modifier.");
-				break;
-		}
+		message = message.replace("{statName}", statName).replace("{change}", change).replace("{victimName}", victimName);
+		b.addMessage(message);
 		
 		stages[index] += val;
 		
@@ -284,9 +297,10 @@ public class BattleAttributes implements Serializable
 		stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
 		
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
-		if (val < 0 && caster != victim && victim.hasAbility(Namesies.DEFIANT_ABILITY) && modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.ABILITY))
+		if (val < 0 && caster != victim)
 		{
-			b.addMessage(victim.getName() + "'s " + Namesies.DEFIANT_ABILITY.getName() + " sharply raised its attack!");
+			Object[] invokees = b.getEffectsList(victim);
+			Global.invoke(invokees, StatLoweredEffect.class, "takeItToTheNextLevel", b, caster, victim);
 		}
 		
 		return true;

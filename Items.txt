@@ -1338,7 +1338,6 @@ Fire Stone
 King's Rock
 	Int: HoldItem, ApplyDamageEffect
 	EvolutionItem: True
-	ClassName: KingsRock
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.
 	Price: 100
@@ -1481,7 +1480,6 @@ Thunder Stone
 Up-Grade
 	Int: HoldItem
 	EvolutionItem: True
-	ClassName: UpGrade
 	Cat: Misc
 	Desc: A transparent device filled with all sorts of data. It was produced by Silph Co.
 	Price: 2100
@@ -1632,7 +1630,7 @@ Ether:
 	Field: 
 	private String restore;
 	###
-	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
+	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 *
 Max Ether
 	Int: MoveUseItem, HoldItem
@@ -1649,7 +1647,7 @@ Max Ether
 	Field: 
 	private String restore;
 	###
-	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
+	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 *
 Berry Juice
 	Int: HoldItem
@@ -1860,7 +1858,6 @@ Dire Hit
 *
 Guard Spec.
 	Int: BattleUseItem, HoldItem
-	ClassName: GuardSpec
 	Cat: Stat
 	BattleCat: Battle
 	Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.
@@ -1904,7 +1901,6 @@ X Defend
 *
 X Sp. Def
 	Int: HoldItem
-	ClassName: XSpDef 
 	Cat: Stat
 	BattleCat: Battle
 	Desc: An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
@@ -2230,7 +2226,6 @@ Net Ball
 *
 Pok\u00e9 Ball
 	Int: BallItem
-	ClassName: PokeBall
 	Desc: A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.
 	Price: 200
 	CatchRate: 1
@@ -2335,7 +2330,7 @@ Leppa Berry:
 		{
 			if (m.getPP() == 0)
 			{
-				use(m);
+				use(victim, m);
 				b.addMessage(getHoldSuccessMessage(victim));
 				victim.consumeItem(b);
 				break;
@@ -2358,7 +2353,7 @@ Leppa Berry:
 			return false;
 		}
 		
-		use(list.get((int)(Math.random()*size)));
+		use(user, list.get((int)(Math.random()*size)));
 		###
 	MoveUse:
 		restore = m.getAttack().getName();
@@ -2367,7 +2362,7 @@ Leppa Berry:
 	Field: 
 		private String restore;
 		###
-	SuccessMessage: p.getName() + "'s " + restore + "'s PP was restored!"
+	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
 Oran Berry:

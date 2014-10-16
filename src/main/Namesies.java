@@ -164,7 +164,7 @@ public enum Namesies
 	DOUBLE_SLAP_ATTACK("Double Slap"),
 	WISH_ATTACK("Wish"),
 	MINIMIZE_ATTACK("Minimize"),
-	WAKE_UP_SLAP_ATTACK("Wake-up Slap"),
+	WAKE_UP_SLAP_ATTACK("Wake-Up Slap"),
 	COSMIC_POWER_ATTACK("Cosmic Power"),
 	LUCKY_CHANT_ATTACK("Lucky Chant"),
 	METRONOME_ATTACK("Metronome"),
@@ -194,7 +194,7 @@ public enum Namesies
 	AROMATHERAPY_ATTACK("Aromatherapy"),
 	SPORE_ATTACK("Spore"),
 	CROSS_POISON_ATTACK("Cross Poison"),
-	XSCISSOR_ATTACK("X-scissor"),
+	XSCISSOR_ATTACK("X-Scissor"),
 	FORESIGHT_ATTACK("Foresight"),
 	ODOR_SLEUTH_ATTACK("Odor Sleuth"),
 	MIRACLE_EYE_ATTACK("Miracle Eye"),
@@ -241,7 +241,7 @@ public enum Namesies
 	SUBMISSION_ATTACK("Submission"),
 	DYNAMIC_PUNCH_ATTACK("Dynamic Punch"),
 	MIND_READER_ATTACK("Mind Reader"),
-	LOCK_ON_ATTACK("Lock-on"),
+	LOCK_ON_ATTACK("Lock-On"),
 	KINESIS_ATTACK("Kinesis"),
 	BARRIER_ATTACK("Barrier"),
 	TELEKINESIS_ATTACK("Telekinesis"),
@@ -586,6 +586,17 @@ public enum Namesies
 	MYSTICAL_FIRE_ATTACK("Mystical Fire"),
 	INFESTATION_ATTACK("Infestation"),
 	ELECTRIFY_ATTACK("Electrify"),
+	FELL_STINGER_ATTACK("Fell Stinger"),
+	MAGNETIC_FLUX_ATTACK("Magnetic Flux"),
+	STICKY_WEB_ATTACK("Sticky Web"),
+	BELCH_ATTACK("Belch"),
+	VENOM_DRENCH_ATTACK("Venom Drench"),
+	ELECTRIC_TERRAIN_ATTACK("Electric Terrain"),
+	POWER_UP_PUNCH_ATTACK("Power-Up Punch"),
+	CONFIDE_ATTACK("Confide"),
+	CUT_ATTACK("Cut"),
+	DAZZLING_GLEAM_ATTACK("Dazzling Gleam"),
+	STRENGTH_ATTACK("Strength"),
 	LEECH_SEED_EFFECT("LeechSeed"),
 	BAD_POISON_EFFECT("BadPoison"),
 	FLINCH_EFFECT("Flinch"),
@@ -657,9 +668,11 @@ public enum Namesies
 	FAIRY_LOCK_EFFECT("FairyLock"),
 	POWDER_EFFECT("Powder"),
 	ELECTRIFIED_EFFECT("Electrified"),
+	EATEN_BERRY_EFFECT("EatenBerry"),
 	REFLECT_EFFECT("Reflect"),
 	LIGHT_SCREEN_EFFECT("LightScreen"),
 	TAILWIND_EFFECT("Tailwind"),
+	STICKY_WEB_EFFECT("StickyWeb"),
 	STEALTH_ROCK_EFFECT("StealthRock"),
 	TOXIC_SPIKES_EFFECT("ToxicSpikes"),
 	SPIKES_EFFECT("Spikes"),
@@ -679,6 +692,7 @@ public enum Namesies
 	MAGIC_ROOM_EFFECT("MagicRoom"),
 	MISTY_TERRAIN_EFFECT("MistyTerrain"),
 	GRASSY_TERRAIN_EFFECT("GrassyTerrain"),
+	ELECTRIC_TERRAIN_EFFECT("ElectricTerrain"),
 	CLEAR_SKIES_EFFECT("ClearSkies"),
 	RAINING_EFFECT("Raining"),
 	SUNNY_EFFECT("Sunny"),
@@ -801,6 +815,7 @@ public enum Namesies
 	DRIZZLE_ABILITY("Drizzle"),
 	AIR_LOCK_ABILITY("Air Lock"),
 	DEFIANT_ABILITY("Defiant"),
+	COMPETITIVE_ABILITY("Competitive"),
 	FLOWER_GIFT_ABILITY("Flower Gift"),
 	AFTERMATH_ABILITY("Aftermath"),
 	HEATPROOF_ABILITY("Heatproof"),
@@ -1160,6 +1175,108 @@ public enum Namesies
 	MAX_REPEL_ITEM("Max Repel"),
 	ABILITY_CAPSULE_ITEM("Ability Capsule"),
 	ASSAULT_VEST_ITEM("Assault Vest"),
+	HONE_CLAWS_TM_ITEM("Hone Claws TM"),
+	DRAGON_CLAW_TM_ITEM("Dragon Claw TM"),
+	PSYSHOCK_TM_ITEM("Psyshock TM"),
+	CALM_MIND_TM_ITEM("Calm Mind TM"),
+	ROAR_TM_ITEM("Roar TM"),
+	TOXIC_TM_ITEM("Toxic TM"),
+	HAIL_TM_ITEM("Hail TM"),
+	BULK_UP_TM_ITEM("Bulk Up TM"),
+	VENOSHOCK_TM_ITEM("Venoshock TM"),
+	HIDDEN_POWER_TM_ITEM("Hidden Power TM"),
+	SUNNY_DAY_TM_ITEM("Sunny Day TM"),
+	TAUNT_TM_ITEM("Taunt TM"),
+	ICE_BEAM_TM_ITEM("Ice Beam TM"),
+	BLIZZARD_TM_ITEM("Blizzard TM"),
+	HYPER_BEAM_TM_ITEM("Hyper Beam TM"),
+	LIGHT_SCREEN_TM_ITEM("Light Screen TM"),
+	PROTECT_TM_ITEM("Protect TM"),
+	RAIN_DANCE_TM_ITEM("Rain Dance TM"),
+	ROOST_TM_ITEM("Roost TM"),
+	SAFEGUARD_TM_ITEM("Safeguard TM"),
+	SOLAR_BEAM_TM_ITEM("Solar Beam TM"),
+	SMACK_DOWN_TM_ITEM("Smack Down TM"),
+	THUNDERBOLT_TM_ITEM("Thunderbolt TM"),
+	THUNDER_TM_ITEM("Thunder TM"),
+	EARTHQUAKE_TM_ITEM("Earthquake TM"),
+	DIG_TM_ITEM("Dig TM"),
+	PSYCHIC_TM_ITEM("Psychic TM"),
+	SHADOW_BALL_TM_ITEM("Shadow Ball TM"),
+	BRICK_BREAK_TM_ITEM("Brick Break TM"),
+	DOUBLE_TEAM_TM_ITEM("Double Team TM"),
+	REFLECT_TM_ITEM("Reflect TM"),
+	SLUDGE_WAVE_TM_ITEM("Sludge Wave TM"),
+	FLAMETHROWER_TM_ITEM("Flamethrower TM"),
+	SLUDGE_BOMB_TM_ITEM("Sludge Bomb TM"),
+	SANDSTORM_TM_ITEM("Sandstorm TM"),
+	FIRE_BLAST_TM_ITEM("Fire Blast TM"),
+	ROCK_TOMB_TM_ITEM("Rock Tomb TM"),
+	AERIAL_ACE_TM_ITEM("Aerial Ace TM"),
+	TORMENT_TM_ITEM("Torment TM"),
+	FACADE_TM_ITEM("Facade TM"),
+	FLAME_CHARGE_TM_ITEM("Flame Charge TM"),
+	REST_TM_ITEM("Rest TM"),
+	ATTRACT_TM_ITEM("Attract TM"),
+	THIEF_TM_ITEM("Thief TM"),
+	LOW_SWEEP_TM_ITEM("Low Sweep TM"),
+	ROUND_TM_ITEM("Round TM"),
+	ECHOED_VOICE_TM_ITEM("Echoed Voice TM"),
+	OVERHEAT_TM_ITEM("Overheat TM"),
+	STEEL_WING_TM_ITEM("Steel Wing TM"),
+	FOCUS_BLAST_TM_ITEM("Focus Blast TM"),
+	ENERGY_BALL_TM_ITEM("Energy Ball TM"),
+	FALSE_SWIPE_TM_ITEM("False Swipe TM"),
+	SCALD_TM_ITEM("Scald TM"),
+	FLING_TM_ITEM("Fling TM"),
+	CHARGE_BEAM_TM_ITEM("Charge Beam TM"),
+	SKY_DROP_TM_ITEM("Sky Drop TM"),
+	INCINERATE_TM_ITEM("Incinerate TM"),
+	WILL_OWISP_TM_ITEM("Will-O-Wisp TM"),
+	ACROBATICS_TM_ITEM("Acrobatics TM"),
+	EMBARGO_TM_ITEM("Embargo TM"),
+	EXPLOSION_TM_ITEM("Explosion TM"),
+	SHADOW_CLAW_TM_ITEM("Shadow Claw TM"),
+	PAYBACK_TM_ITEM("Payback TM"),
+	RETALIATE_TM_ITEM("Retaliate TM"),
+	GIGA_IMPACT_TM_ITEM("Giga Impact TM"),
+	ROCK_POLISH_TM_ITEM("Rock Polish TM"),
+	FLASH_TM_ITEM("Flash TM"),
+	STONE_EDGE_TM_ITEM("Stone Edge TM"),
+	VOLT_SWITCH_TM_ITEM("Volt Switch TM"),
+	THUNDER_WAVE_TM_ITEM("Thunder Wave TM"),
+	GYRO_BALL_TM_ITEM("Gyro Ball TM"),
+	SWORDS_DANCE_TM_ITEM("Swords Dance TM"),
+	STRUGGLE_BUG_TM_ITEM("Struggle Bug TM"),
+	PSYCH_UP_TM_ITEM("Psych Up TM"),
+	BULLDOZE_TM_ITEM("Bulldoze TM"),
+	FROST_BREATH_TM_ITEM("Frost Breath TM"),
+	ROCK_SLIDE_TM_ITEM("Rock Slide TM"),
+	XSCISSOR_TM_ITEM("X-Scissor TM"),
+	DRAGON_TAIL_TM_ITEM("Dragon Tail TM"),
+	INFESTATION_TM_ITEM("Infestation TM"),
+	POISON_JAB_TM_ITEM("Poison Jab TM"),
+	DREAM_EATER_TM_ITEM("Dream Eater TM"),
+	GRASS_KNOT_TM_ITEM("Grass Knot TM"),
+	SWAGGER_TM_ITEM("Swagger TM"),
+	SLEEP_TALK_TM_ITEM("Sleep Talk TM"),
+	UTURN_TM_ITEM("U-turn TM"),
+	SUBSTITUTE_TM_ITEM("Substitute TM"),
+	FLASH_CANNON_TM_ITEM("Flash Cannon TM"),
+	TRICK_ROOM_TM_ITEM("Trick Room TM"),
+	WILD_CHARGE_TM_ITEM("Wild Charge TM"),
+	ROCK_SMASH_TM_ITEM("Rock Smash TM"),
+	SNARL_TM_ITEM("Snarl TM"),
+	NATURE_POWER_TM_ITEM("Nature Power TM"),
+	DARK_PULSE_TM_ITEM("Dark Pulse TM"),
+	POWER_UP_PUNCH_TM_ITEM("Power-Up Punch TM"),
+	DAZZLING_GLEAM_TM_ITEM("Dazzling Gleam TM"),
+	CONFIDE_TM_ITEM("Confide TM"),
+	CUT_TM_ITEM("Cut TM"),
+	FLY_TM_ITEM("Fly TM"),
+	SURF_TM_ITEM("Surf TM"),
+	STRENGTH_TM_ITEM("Strength TM"),
+	WATERFALL_TM_ITEM("Waterfall TM"),
 	BULBASAUR_POKEMON("Bulbasaur"),
 	IVYSAUR_POKEMON("Ivysaur"),
 	VENUSAUR_POKEMON("Venusaur"),
@@ -1894,35 +2011,6 @@ public enum Namesies
 		return this.name;
 	}
 	
-	// TODO: Delete this function
-	public static Namesies tryValueOf(String className, NamesiesType superClass)
-	{
-		try
-		{
-			return getValueOf(className, superClass);
-		}
-		catch (IllegalArgumentException e)
-		{
-			System.err.println("No such " + superClass.toString().toLowerCase() + " " + className);
-			switch (superClass)
-			{
-				case ABILITY:
-					return Namesies.OVERGROW_ABILITY;
-				case ATTACK:
-					return Namesies.TACKLE_ATTACK;
-				case EFFECT:
-					return Namesies.LEECH_SEED_EFFECT;
-				case ITEM:
-					return Namesies.POTION_ITEM;
-				case POKEMON:
-					return Namesies.BULBASAUR_POKEMON;
-			}
-		}
-		
-		Global.error("Seriously how the fuck could you ever get to this line of code?");
-		return null;
-	}
-	
 	public static Namesies getValueOf(String className, NamesiesType superClass)
 	{
 		return Namesies.valueOf(Namesies.getNamesies(className, superClass));
@@ -1953,22 +2041,22 @@ public enum Namesies
 		return enumName.toUpperCase();
 	}
 	
-	private static boolean isSpecial(char c)
+	public static boolean isSpecial(char c)
 	{
 		return !isLower(c) && !isUpper(c) && !isNumber(c) && c != '_';
 	}
 	
-	private static boolean isUpper(char c)
+	public static boolean isUpper(char c)
 	{
 		return c >= 'A' && c <= 'Z';
 	}
 	
-	private static boolean isLower(char c)
+	public static boolean isLower(char c)
 	{
 		return c >= 'a' && c <= 'z';
 	}
 	
-	private static boolean isNumber(char c)
+	public static boolean isNumber(char c)
 	{
 		return c >= '0' && c <= '9';
 	}

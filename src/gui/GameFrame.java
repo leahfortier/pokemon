@@ -50,7 +50,7 @@ public class GameFrame
 			
 			// Load all maps and test if all triggers and NPC data is correct.
 			Game g = new Game();
-			g.data.testMaps(new CharacterData());
+			g.data.testMaps(new CharacterData(g));
 			
 			System.out.println("GEN GEN GEN");
 			

@@ -6,3 +6,7 @@ ChangeViewTrigger Default_PC {
 ChangeViewTrigger Default_Mart {
 	view: MART_VIEW
 }
+
+ChangeViewTrigger Evolution_View_Trigger {
+	view: EVOLUTION_VIEW
+}

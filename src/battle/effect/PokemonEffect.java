@@ -138,6 +138,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		map.put("FairyLock", new FairyLock());
 		map.put("Powder", new Powder());
 		map.put("Electrified", new Electrified());
+		map.put("EatenBerry", new EatenBerry());
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -3652,6 +3653,29 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public Type changeAttackType(Type original)
 		{
 			return Type.ELECTRIC;
+		}
+	}
+
+	private static class EatenBerry extends PokemonEffect 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public EatenBerry()
+		{
+			super(Namesies.EATEN_BERRY_EFFECT, -1, -1, false);
+		}
+
+		public EatenBerry newInstance()
+		{
+			return (EatenBerry)(new EatenBerry().activate());
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+		{
+			if (!victim.hasEffect(this.namesies))
+			{
+				super.cast(b, caster, victim, source, printCast);
+			}
 		}
 	}
 }

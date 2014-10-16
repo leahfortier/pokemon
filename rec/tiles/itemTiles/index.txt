@@ -299,4 +299,22 @@ superrepel.png 00000129
 maxrepel.png 0000012a
 abilitycapsule.png 0000012b
 assaultvest.png 0000012c
+normaltm.png 000007d0
+firetm.png 000007d1
+watertm.png 000007d2
+electrictm.png 000007d3
+grasstm.png 000007d4
+icetm.png 000007d5
+fightingtm.png 000007d6
+poisontm.png 000007d7
+groundtm.png 000007d8
+flyingtm.png 000007d9
+psychictm.png 000007da
+bugtm.png 000007db
+rocktm.png 000007dc
+ghosttm.png 000007dd
+dragontm.png 000007de
+darktm.png 000007df
+steeltm.png 000007e0
+fairytm.png 000007e1
 

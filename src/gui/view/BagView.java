@@ -163,7 +163,11 @@ public class BagView extends View
 		
 		useClicked = false;
 		state = BagState.ITEM_SELECT;
-		if (player.getBag().getQuantity(selectedItem) == 0) changeCategory(selectedTab);
+		
+		if (player.getBag().getQuantity(selectedItem) == 0) 
+		{
+			changeCategory(selectedTab);
+		}
 	}
 
 	public void update(int dt, InputControl input, Game game)
@@ -200,12 +204,8 @@ public class BagView extends View
 			if (moveButtons[i].checkConsumePress())
 			{
 				Move m = selectedPokemon.getMove(i);
-				 
-				addUseMessages(player.getBag().useMoveItem(selectedItem, m), selectedPokemon);
 				
-				useClicked = false;
-				state = BagState.ITEM_SELECT;
-				if (player.getBag().getQuantity(selectedItem) == 0) changeCategory(selectedTab);
+				addUseMessages(player.getBag().useMoveItem(selectedItem, selectedPokemon, m), selectedPokemon);
 			}
 		}
 		
@@ -219,10 +219,16 @@ public class BagView extends View
 				if (giveClicked)
 				{
 					addMessage(bag.giveItem(player, p, selectedItem));
+					
 					giveClicked = false;
 					selectedButton = GIVE;
 					state = BagState.ITEM_SELECT;
-					if (bag.getQuantity(selectedItem) == 0) changeCategory(selectedTab);
+					
+					if (bag.getQuantity(selectedItem) == 0) 
+					{
+						changeCategory(selectedTab);
+					}
+					
 					updateActiveButtons();
 				}
 				else if (useClicked)
@@ -233,7 +239,7 @@ public class BagView extends View
 					}
 					else if (selectedItem instanceof PokemonUseItem) 
 					{
-						addUseMessages(bag.useItem(selectedItem, p), p);
+						addUseMessages(bag.useItem(player, selectedItem, p), p);
 					}
 					else if (selectedItem instanceof MoveUseItem)
 					{
@@ -374,8 +380,12 @@ public class BagView extends View
 			g.setColor(Color.BLACK);
 			g.setFont(Global.getFont(20));
 			g.drawString(selectedItem.getName(), 448, 138);
-			s = "x" + bag.getQuantity(selectedItem);
-			g.drawString(s, 726 - s.length()*10, 138);
+			
+			if (selectedItem.hasQuantity())
+			{
+				s = "x" + bag.getQuantity(selectedItem);
+				g.drawString(s, 726 - s.length()*10, 138);
+			}
 			
 			g.setFont(Global.getFont(14));
 			Global.drawWrappedText(g, selectedItem.getDesc(), 418, 156, 200, 5, 15);
@@ -409,8 +419,11 @@ public class BagView extends View
 				
 				g.drawString(item.getName(), 29, 18);
 				
-				s = "x" + bag.getQuantity(item);
-				g.drawString(s, 142 - s.length()*7, 18);
+				if (item.hasQuantity())
+				{
+					s = "x" + bag.getQuantity(item);
+					g.drawString(s, 142 - s.length()*7, 18);	
+				}
 				
 				g.translate(-itemButtons[k].x, -itemButtons[k].y);
 			}
@@ -557,7 +570,9 @@ public class BagView extends View
 
 	private void changeCategory(int index)
 	{
-		if (selectedTab != index) pageNum = 0;
+		if (selectedTab != index) 
+			pageNum = 0;
+		
 		selectedTab = index;
 		state = BagState.ITEM_SELECT;
 

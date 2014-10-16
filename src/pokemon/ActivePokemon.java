@@ -200,13 +200,13 @@ public class ActivePokemon implements Serializable
 			if (params.group(7) != null) 
 				isEgg = true;
 			
-			if(params.group(8) != null)
+			if (params.group(8) != null)
 			{
 				String itemName = params.group(9);
-				if(Item.isItem(itemName))
+				if (Item.isItem(itemName))
 				{
 					Item i = Item.getItemFromName(itemName);
-					if(i.isHoldable())
+					if (i.isHoldable())
 					{
 						holdItem = (HoldItem)i;
 					}
@@ -537,11 +537,11 @@ public class ActivePokemon implements Serializable
 		return true;
 	}
 	
-	public String evolve(Battle b, BaseEvolution ev)
+	public void evolve(Battle b, BaseEvolution ev)
 	{
 		if (getActualHeldItem() == Item.getItem(Namesies.EVERSTONE_ITEM)) 
 		{
-			return "";
+			return;
 		}
 		
 		boolean print = b != null, front = print && b.getPlayer().front() == this;
@@ -568,6 +568,7 @@ public class ActivePokemon implements Serializable
 		if (print && front) b.addMessage("", pokemon, shiny, true, playerPokemon);
 		
 		String message = name + " evolved into " + pokemon.getName() + "!";
+		
 		if (print) b.addMessage(message);
 		if (print && front) b.addMessage("", hp, gain, stats, playerPokemon);
 		
@@ -577,8 +578,6 @@ public class ActivePokemon implements Serializable
 		{
 			learnMove(b, s);
 		}
-		
-		return message;
 	}
 	
 	private void learnMove(Battle b, Namesies attackName)
@@ -914,22 +913,16 @@ public class ActivePokemon implements Serializable
 			b.addMessage("", hp, playerPokemon);
 			b.addMessage(nickname + " fainted!", StatusCondition.FAINTED, playerPokemon);
 			
-			ActivePokemon murderer = b.getOtherPokemon(playerPokemon);
+			ActivePokemon murderer = b.getOtherPokemon(user());
+
+			// Apply effects which occur when the user faints
+			Global.invoke(getEffects().toArray(), FaintEffect.class, "deathwish", b, this, murderer);
 			
-			// Apply effects which occur when the user faints 
-			for (PokemonEffect e : attributes.getEffects())
+			// If the pokemon fainted by direct result of an attack -- apply ability and attack deathwishes 
+			if (murderer.getAttributes().isAttacking())
 			{
-				if (!e.isActive() || !(e instanceof FaintEffect)) 
-				{
-					continue;
-				}
-				
-				((FaintEffect)e).deathwish(b, this, murderer);
-			}
-			
-			if (murderer.getAbility() instanceof FaintEffect)
-			{
-				((FaintEffect)murderer.getAbility()).deathwish(b, this, murderer);
+				Object[] invokees = new Object[] {murderer.getAttack(), murderer.getAbility()};
+				Global.invoke(invokees, FaintEffect.class, "deathwish", b, this, murderer);
 			}
 			
 			b.getEffects(playerPokemon).add(TeamEffect.getEffect(Namesies.DEAD_ALLY_EFFECT).newInstance());

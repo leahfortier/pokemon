@@ -63,6 +63,7 @@ public abstract class BattleEffect extends Effect
 		map.put("MagicRoom", new MagicRoom());
 		map.put("MistyTerrain", new MistyTerrain());
 		map.put("GrassyTerrain", new GrassyTerrain());
+		map.put("ElectricTerrain", new ElectricTerrain());
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -399,12 +400,12 @@ public abstract class BattleEffect extends Effect
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return "Grass grew around the battlefield!";
+			return "Grass sprouted around the battlefield!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim)
 		{
-			return "The grass disappeared from the battlefield.";
+			return "The grass withered and died.";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b)
@@ -420,6 +421,52 @@ public abstract class BattleEffect extends Effect
 		{
 			// Grass-type moves are 50% stronger with the grassy terrain
 			return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
+		}
+	}
+
+	private static class ElectricTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ElectricTerrain()
+		{
+			super(Namesies.ELECTRIC_TERRAIN_EFFECT, 5, 5, false);
+		}
+
+		public ElectricTerrain newInstance()
+		{
+			return (ElectricTerrain)(new ElectricTerrain().activate());
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+		{
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return "Electricity crackled around the battlefield!";
+		}
+
+		public String getSubsideMessage(ActivePokemon victim)
+		{
+			return "The electricity dissipated.";
+		}
+
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status)
+		{
+			return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim)
+		{
+			return "The electric terrain prevents sleep!";
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			// Electric-type moves are 50% stronger with the electric terrain
+			return user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b) ? 1.5 : 1;
 		}
 	}
 }

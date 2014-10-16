@@ -2,6 +2,7 @@ package main;
 import gui.GameData;
 import gui.view.BagView;
 import gui.view.BattleView;
+import gui.view.EvolutionView;
 import gui.view.MainMenuView;
 import gui.view.MapView;
 import gui.view.MartView;
@@ -30,7 +31,7 @@ public class Game
 	{
 		MAP_VIEW, POKEDEX_VIEW, BATTLE_VIEW, BAG_VIEW, 
 		PARTY_VIEW, PC_VIEW, MAIN_MENU_VIEW, TRAINER_CARD_VIEW, 
-		MART_VIEW, OPTIONS_VIEW, START_VIEW
+		MART_VIEW, OPTIONS_VIEW, START_VIEW, EVOLUTION_VIEW
 	}
 	
 	public GameData data;
@@ -84,15 +85,13 @@ public class Game
 
 	public void loadSave(int index) 
 	{
-		charData = new CharacterData();
-		charData.setFileNum(index);
-		charData = charData.load();
+		charData = CharacterData.load(index, this);
 		setViews();
 	}
 	
 	public void newSave(int index)
 	{
-		charData = new CharacterData();
+		charData = new CharacterData(this);
 		
 		String startingMap = "PlayersHouseUp";
 		String startingMapEntrance = "GameStartLocation";
@@ -134,5 +133,6 @@ public class Game
 		viewMap.put(ViewMode.BATTLE_VIEW, new BattleView());
 		viewMap.put(ViewMode.OPTIONS_VIEW, new OptionsView());
 		viewMap.put(ViewMode.START_VIEW, new StartView(charData));
+		viewMap.put(ViewMode.EVOLUTION_VIEW, new EvolutionView(charData));
 	}
 }

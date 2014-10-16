@@ -22,8 +22,13 @@ public abstract class Status implements Serializable
 	
 	public static enum StatusCondition implements Serializable
 	{
-		NONE("", 1), FAINTED("FNT", 1), PARALYZED("PRZ", 1.5), POISONED("PSN", 1.5), 
-		BURNED("BRN", 1.5), ASLEEP("SLP", 2.5), FROZEN("FRZ", 2.5);
+		NONE("", 1), 
+		FAINTED("FNT", 1),
+		PARALYZED("PRZ", 1.5), 
+		POISONED("PSN", 1.5), 
+		BURNED("BRN", 1.5),
+		ASLEEP("SLP", 2.5), 
+		FROZEN("FRZ", 2.5);
 		
 		private String name;
 		private double catchModifier;

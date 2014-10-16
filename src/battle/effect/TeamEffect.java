@@ -63,6 +63,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		map.put("Reflect", new Reflect());
 		map.put("LightScreen", new LightScreen());
 		map.put("Tailwind", new Tailwind());
+		map.put("StickyWeb", new StickyWeb());
 		map.put("StealthRock", new StealthRock());
 		map.put("ToxicSpikes", new ToxicSpikes());
 		map.put("Spikes", new Spikes());
@@ -211,6 +212,51 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			int stat = statValue;
 			return stat*(s == Stat.SPEED ? 2 : 1);
+		}
+	}
+
+	private static class StickyWeb extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease
+	{
+		private static final long serialVersionUID = 1L;
+
+		public StickyWeb()
+		{
+			super(Namesies.STICKY_WEB_EFFECT, -1, -1, false);
+		}
+
+		public StickyWeb newInstance()
+		{
+			return (StickyWeb)(new StickyWeb().activate());
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+		{
+			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return "Sticky web covers everything!";
+		}
+
+		public void enter(Battle b, ActivePokemon victim)
+		{
+			if (victim.isLevitating(b))
+			{
+				return;
+			}
+			
+			victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + victim.getName() + "'s {statName}!");
+		}
+
+		public String getReleaseMessage(ActivePokemon user)
+		{
+			return "The sticky web spun away!";
+		}
+
+		public String getDefogReleaseMessage(ActivePokemon victim)
+		{
+			return "The sticky web dispersed!";
 		}
 	}
 
