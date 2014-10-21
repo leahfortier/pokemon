@@ -159,7 +159,7 @@ public class BattleView extends View
 		private void resetVals(ActivePokemon p)
 		{
 			resetVals(p.getHP(), p.getStatus().getType(), p.getType(currentBattle), p.isShiny(), p.getPokemonInfo(), 
-					p.getName(), p.getStat(Stat.HP), p.getLevel(), p.getGender(), p.expRatio());
+					p.getName(), p.getMaxHP(), p.getLevel(), p.getGender(), p.expRatio());
 		}
 		
 		// Resets all the values in a state

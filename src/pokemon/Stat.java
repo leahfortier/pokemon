@@ -94,7 +94,7 @@ public enum Stat
 		
 		// Apply stage changes
 		int stage = getStage(list, s, p, opp, b);
-		int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(s);
+		int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(b, s);
 		
 //		int temp = stat;
 		

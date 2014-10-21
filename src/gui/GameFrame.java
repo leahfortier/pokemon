@@ -112,6 +112,7 @@ public class GameFrame
 			strategy.show();
 
 			game = new Game();
+			PokemonInfo.loadPokemonInfo();
 
 			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener()
 			{

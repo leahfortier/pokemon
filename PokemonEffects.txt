@@ -125,9 +125,9 @@ KingsShield:
 	ProtectingEffect: True
 	OnProtectingSuccess:
 	// Pokemon that make contact with the king's shield have their attack reduced
-	if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT))
+	if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT))
 	{
-		b.addMessage("The King's Shield sharply reduced " + p.getName() + "'s attack!");
+		p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
 	}
 	###
 *
@@ -967,7 +967,7 @@ Transformed:
 	{
 		stats[i] = Stat.getStat(i, victim.getLevel(), transformee.getPokemonInfo().getStat(i), victim.getIV(i), victim.getEV(i), victim.getNature().getNatureVal(i));
 	}
-	stats[Stat.HP.index()] = victim.getStat(Stat.HP);
+	stats[Stat.HP.index()] = victim.getMaxHP();
 	
 	// Copy the move list
 	List<Move> transformeeMoves = transformee.getMoves(b);
@@ -1020,7 +1020,7 @@ Substitute:
 	super.cast(b, caster, victim, source, printCast);
 	b.addMessage("", victim.getHP(), victim.user());
 	###
-	FailCondition: victim.getHPRatio() <= .25 || victim.getStat(Stat.HP) <= 3
+	FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
 	ValidMove: 
 	// TODO: Soundbase moves bypass the substitute and also Infiltrator
 	if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING))
@@ -1153,21 +1153,11 @@ PowerTrick:
 	###
 *
 PowerSplit:
-	Int: StatChangingEffect
-	ModifyStat: 
-	if (s == Stat.ATTACK) return (p.getStat(Stat.ATTACK) + opp.getStat(Stat.ATTACK))/2;
-	if (s == Stat.SP_ATTACK) return (p.getStat(Stat.SP_ATTACK) + opp.getStat(Stat.SP_ATTACK))/2;
-	return stat;
-	###
+	StatSplit: Attack Sp_Attack
 	CastMessage: user.getName() + " split the power!"
 *
 GuardSplit:
-	Int: StatChangingEffect
-	ModifyStat: 
-	if (s == Stat.DEFENSE) return (p.getStat(Stat.DEFENSE) + opp.getStat(Stat.DEFENSE))/2;
-	if (s == Stat.SP_DEFENSE) return (p.getStat(Stat.SP_DEFENSE) + opp.getStat(Stat.SP_DEFENSE))/2;
-	return stat;
-	###
+	StatSplit: Defense Sp_Defense
 	CastMessage: user.getName() + " split the defense!"
 *
 HealBlock:

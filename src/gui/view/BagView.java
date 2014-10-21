@@ -26,7 +26,6 @@ import main.InputControl;
 import main.InputControl.Control;
 import main.Type;
 import pokemon.ActivePokemon;
-import pokemon.Stat;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
 import trainer.Trainer;
@@ -511,7 +510,7 @@ public class BagView extends View
 					g.setColor(Color.BLACK);
 					g.setFont(Global.getFont(12));
 					g.drawString(p.getActualHeldItem().getName(), 50, 47);
-					s = p.getHP() + "/" + p.getStat(Stat.HP);
+					s = p.getHP() + "/" + p.getMaxHP();
 					g.drawString(s, Global.rightX(s, 293, 12), 47);
 					
 					if (p.hasStatus(StatusCondition.FAINTED))

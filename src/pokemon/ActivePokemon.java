@@ -448,20 +448,6 @@ public class ActivePokemon implements Serializable
 		return EVs;
 	}
 	
-	// TODO: Check if can look for a StatsCondition effect instead of hardcoding transform
-	public int getStat(Stat s)
-	{
-		PokemonEffect e = getEffect(Namesies.TRANSFORMED_EFFECT);
-		if (e != null) return ((StatsCondition)e).getStat(this, s);
-		
-		if (hasAbility(Namesies.STANCE_CHANGE_ABILITY))
-		{
-			return ((StatsCondition)getAbility()).getStat(this, s);
-		}
-		
-		return stats[s.index()];
-	}
-	
 	public int getIV(int index)
 	{
 		return IVs[index];
@@ -504,6 +490,23 @@ public class ActivePokemon implements Serializable
 	public Move getMove(Battle b, int index)
 	{
 		return getMoves(b).get(index);
+	}
+	
+	public int getMaxHP()
+	{
+		return stats[Stat.HP.index()];
+	}
+	
+	public int getStat(Battle b, Stat s)
+	{
+		Object stat = Global.getInvoke(b.getEffectsList(this), StatsCondition.class, "getStat", this, s);
+		if (stat != null)
+		{
+			System.out.println("GET STAT: " + this.getName() + " " + s.getName() + " " + (int)stat);
+			return (int)stat;
+		}
+		
+		return stats[s.index()];
 	}
 	
 	public List<Move> getMoves(Battle b)
@@ -906,17 +909,17 @@ public class ActivePokemon implements Serializable
 	
 	public void setHP(int amount)
 	{
-		hp = Math.min(getStat(Stat.HP), Math.max(0, amount));
+		hp = Math.min(getMaxHP(), Math.max(0, amount));
 	}
 	
 	public boolean fullHealth()
 	{
-		return hp == getStat(Stat.HP);
+		return hp == getMaxHP();
 	}
 	
 	public double getHPRatio()
 	{
-		return (double)hp/getStat(Stat.HP);
+		return (double)hp/getMaxHP();
 	}
 	
 	public Color getHPColor()
@@ -1172,14 +1175,14 @@ public class ActivePokemon implements Serializable
 		if (hasStatus(StatusCondition.FAINTED)) return 0;
 		
 		int prev = hp;
-		hp = Math.min(getStat(Stat.HP), hp + amount);
+		hp = Math.min(getMaxHP(), hp + amount);
 		return hp - prev;
 	}
 	
 	// Restores the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
 	public int healHealthFraction(double fraction)
 	{
-		return heal((int)Math.max(getStat(Stat.HP)*fraction, 1));
+		return heal((int)Math.max(getMaxHP()*fraction, 1));
 	}
 	
 	// Removes status, restores PP for all moves, restores to full health

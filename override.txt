@@ -235,7 +235,26 @@ CrashDamageMove:
 		Header: void crash(Battle b, ActivePokemon user)
 		Body:
 		b.addMessage(user.getName() + " kept going and crashed!");
-		user.reduceHealth(b, user.getStat(Stat.HP)/{0});
+		user.reduceHealth(b, user.getMaxHP()/{0});
+		###
+	*
+***
+Override:
+	StatSplit:
+		Header: boolean statSplit(Stat s)
+		Body:
+		return s == Stat.{11} || s == Stat.{22};
+		###
+		AddInterface: StatChangingEffect
+		AddMapField: ModifyStat:
+		
+		// If the stat is a splitting stat, return the average between the user and the opponent
+		if (statSplit(s))
+		{
+			return (p.getStat(b, s) + opp.getStat(b, s))/2;
+		}
+		
+		return stat;
 		###
 	*
 ***

@@ -166,7 +166,7 @@ Struggle:
 	Cat: Physical
 	Recoil: 
 	b.addMessage(user.getName() + " was hurt by recoil!");
-	user.reduceHealth(b, user.getStat(Stat.HP)/4);
+	user.reduceHealth(b, user.getMaxHP()/4);
 	###
 	MoveType: Encoreless,  Mimicless, Assistless, Metronomeless
 	Int: RecoilMove
@@ -196,7 +196,23 @@ Growth:
 	StatChange: 2 Attack 1 Sp_Attack 1
 	Type: Normal
 	ApplyEffects:
-	// TODO: In intense sunlight should raise by two each
+	// Doubles stat changes in the sunlight
+	if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT)
+	{
+		int[] statChanges = super.statChanges.clone();
+		for (int i = 0; i < super.statChanges.length; i++)
+		{
+			if (super.statChanges[i] != 0)
+			{
+				super.statChanges[i] *= 2;
+			}
+		}
+		
+		super.applyEffects(b, user, victim);
+		super.statChanges = statChanges;
+		return;
+	}
+	
 	super.applyEffects(b, user, victim);
 	###
 	PP: 20
@@ -2660,7 +2676,7 @@ Belly Drum:
 	SelfTarget: True
 	ApplyEffects: 
 	// Fails if attack is already maxed or if you have less than half your health to give up
-	if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHP() < user.getStat(Stat.HP)/2.0)
+	if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHPRatio() < .5)
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -4485,7 +4501,13 @@ Sky Drop:
 	Acc: 100
 	MoveType: Airborne
 	Apply:
-	// TODO: Fails if opponent is above a certain weight
+	// Fails if the target is more than 440 lbs
+	if (o.getWeight(b) > 440)
+	{
+		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		return;
+	}
+	
 	super.apply(me, o, b);
 	###
 *
@@ -4759,6 +4781,7 @@ Pain Split:
 	int share = (user.getHP() + victim.getHP())/2;
 	user.setHP(share);
 	victim.setHP(share);
+	
 	b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user.getHP(), user.user());
 	b.addMessage("", victim.getHP(), victim.user());
 	###

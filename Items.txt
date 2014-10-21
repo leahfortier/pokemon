@@ -1970,8 +1970,13 @@ Fast Ball
 	Desc: A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.
 	Price: 200
 	CatchRate:
-		if (o.getStat(Stat.SPEED) >= 100) return new double[] {4, 0};
-		else return new double[] {1, 0};
+		// If the opponent has a base speed of 100 or higher, multiplier is 4
+		if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100)
+		{
+			return new double[] {4, 0};
+		}
+		
+		return new double[] {1, 0};
 		###
 *
 Great Ball

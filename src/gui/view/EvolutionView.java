@@ -16,7 +16,6 @@ import main.InputControl.Control;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PokemonInfo;
-import sound.SoundTitle;
 import trainer.CharacterData;
 
 public class EvolutionView extends View

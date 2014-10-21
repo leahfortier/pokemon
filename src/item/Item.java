@@ -8614,8 +8614,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (o.getStat(Stat.SPEED) >= 100) return new double[] {4, 0};
-			else return new double[] {1, 0};
+			// If the opponent has a base speed of 100 or higher, multiplier is 4
+			if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100)
+			{
+				return new double[] {4, 0};
+			}
+			
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -18584,7 +18589,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DazzlingGleamTM()
 		{
-			super(Namesies.DAZZLING_GLEAM_TM_ITEM, "The user damages opposing PokÃ©mon by emitting a powerful flash.", BagCategory.TM, 2017);
+			super(Namesies.DAZZLING_GLEAM_TM_ITEM, "The user damages opposing Pokémon by emitting a powerful flash.", BagCategory.TM, 2017);
 		}
 
 		public Attack getAttack()

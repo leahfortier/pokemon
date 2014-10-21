@@ -1406,7 +1406,7 @@ public abstract class Attack implements Serializable
 		public void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		{
 			b.addMessage(user.getName() + " was hurt by recoil!");
-			user.reduceHealth(b, user.getStat(Stat.HP)/4);
+			user.reduceHealth(b, user.getMaxHP()/4);
 		}
 	}
 
@@ -1453,7 +1453,23 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: In intense sunlight should raise by two each
+			// Doubles stat changes in the sunlight
+			if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT)
+			{
+				int[] statChanges = super.statChanges.clone();
+				for (int i = 0; i < super.statChanges.length; i++)
+				{
+					if (super.statChanges[i] != 0)
+					{
+						super.statChanges[i] *= 2;
+					}
+				}
+				
+				super.applyEffects(b, user, victim);
+				super.statChanges = statChanges;
+				return;
+			}
+			
 			super.applyEffects(b, user, victim);
 		}
 	}
@@ -5718,7 +5734,7 @@ public abstract class Attack implements Serializable
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			// Fails if attack is already maxed or if you have less than half your health to give up
-			if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHP() < user.getStat(Stat.HP)/2.0)
+			if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHPRatio() < .5)
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -7852,7 +7868,7 @@ public abstract class Attack implements Serializable
 		public void crash(Battle b, ActivePokemon user)
 		{
 			b.addMessage(user.getName() + " kept going and crashed!");
-			user.reduceHealth(b, user.getStat(Stat.HP)/3);
+			user.reduceHealth(b, user.getMaxHP()/3);
 		}
 	}
 
@@ -7901,7 +7917,7 @@ public abstract class Attack implements Serializable
 		public void crash(Battle b, ActivePokemon user)
 		{
 			b.addMessage(user.getName() + " kept going and crashed!");
-			user.reduceHealth(b, user.getStat(Stat.HP)/2);
+			user.reduceHealth(b, user.getMaxHP()/2);
 		}
 	}
 
@@ -8975,7 +8991,13 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// TODO: Fails if opponent is above a certain weight
+			// Fails if the target is more than 440 lbs
+			if (o.getWeight(b) > 440)
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return;
+			}
+			
 			super.apply(me, o, b);
 		}
 	}
@@ -9414,6 +9436,7 @@ public abstract class Attack implements Serializable
 			int share = (user.getHP() + victim.getHP())/2;
 			user.setHP(share);
 			victim.setHP(share);
+			
 			b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user.getHP(), user.user());
 			b.addMessage("", victim.getHP(), victim.user());
 		}

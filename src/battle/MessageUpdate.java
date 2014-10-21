@@ -132,7 +132,7 @@ public class MessageUpdate
 		shiny = p.isShiny();
 		pokemon = p.getPokemonInfo();
 		name = p.getName();
-		maxHP = p.getStat(Stat.HP);
+		maxHP = p.getMaxHP();
 		level = p.getLevel();
 		gender = p.getGender();
 		expRatio = p.expRatio();

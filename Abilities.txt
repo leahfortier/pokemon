@@ -1271,11 +1271,9 @@ Klutz:
 *
 Unburden:
 	Desc: Raises Speed if a held item is used.
-	Int: StatChangingEffect
-	ModifyStat: 
-	// TODO: Is change-item effect the same thing as having a consumed item? Was this written before that existed? That should be what is being used instead if not Also I'm mostly not putting this in the other format because I want this todo to stay so when this gets fixed update the txt file as well so it's in the nice and pretty new format that is nice and pretty
-	return stat*(s == Stat.SPEED && p.hasEffect(Namesies.CHANGE_ITEM_EFFECT) && !p.isHoldingItem(b) ? 2 : 1);
-	###
+	ToModify: Speed
+	ModifyCondition: p.hasEffect(Namesies.CONSUMED_ITEM_EFFECT)
+	ModifyMultiplier: 2
 *
 Pickpocket:
 	Int: PhysicalContactEffect

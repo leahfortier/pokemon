@@ -23,7 +23,6 @@ import map.DialogueSequence;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
-import pokemon.Stat;
 import trainer.Pokedex.PokedexStatus;
 import battle.Battle;
 import battle.MessageUpdate;
@@ -383,7 +382,7 @@ public class CharacterData extends Trainer implements Serializable
 		b.addMessage(name + " threw the " + ((Item)ball).getName() + "!");
 		
 		ActivePokemon c = b.getOtherPokemon(true);
-		int maxHP = c.getStat(Stat.HP), hp = c.getHP(), catchRate = c.getPokemonInfo().getCatchRate();
+		int maxHP = c.getMaxHP(), hp = c.getHP(), catchRate = c.getPokemonInfo().getCatchRate();
 		double[] ballInfo = ball.catchRate(front(), c, b);
 		double ballMod = ballInfo[0], ballAdd = ballInfo[1], statusMod = c.getStatus().getType().getCatchModifier();
 		

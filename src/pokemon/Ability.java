@@ -4141,11 +4141,30 @@ public abstract class Ability implements Serializable
 			return (Unburden)(new Unburden().activate());
 		}
 
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
+		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		{
+			return p.hasEffect(Namesies.CONSUMED_ITEM_EFFECT);
+		}
+
+		public double modifyMultiplier()
+		{
+			return 2;
+		}
+
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			// TODO: Is change-item effect the same thing as having a consumed item? Was this written before that existed? That should be what is being used instead if not Also I'm mostly not putting this in the other format because I want this todo to stay so when this gets fixed update the txt file as well so it's in the nice and pretty new format that is nice and pretty
-			return stat*(s == Stat.SPEED && p.hasEffect(Namesies.CHANGE_ITEM_EFFECT) && !p.isHoldingItem(b) ? 2 : 1);
+			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			{
+				stat *= modifyMultiplier();
+			}
+			
+			return stat;
 		}
 	}
 

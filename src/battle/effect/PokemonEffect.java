@@ -815,9 +815,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
 			// Pokemon that make contact with the king's shield have their attack reduced
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT))
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT))
 			{
-				b.addMessage("The King's Shield sharply reduced " + p.getName() + "'s attack!");
+				p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
 			}
 		}
 
@@ -2837,7 +2837,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			{
 				stats[i] = Stat.getStat(i, victim.getLevel(), transformee.getPokemonInfo().getStat(i), victim.getIV(i), victim.getEV(i), victim.getNature().getNatureVal(i));
 			}
-			stats[Stat.HP.index()] = victim.getStat(Stat.HP);
+			stats[Stat.HP.index()] = victim.getMaxHP();
 			
 			// Copy the move list
 			List<Move> transformeeMoves = transformee.getMoves(b);
@@ -2902,7 +2902,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
-			return !(victim.getHPRatio() <= .25 || victim.getStat(Stat.HP) <= 3 || victim.hasEffect(this.namesies));
+			return !(victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3 || victim.hasEffect(this.namesies));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -3212,6 +3212,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public boolean statSplit(Stat s)
+		{
+			return s == Stat.ATTACK || s == Stat.SP_ATTACK;
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getName() + " split the power!";
@@ -3220,8 +3225,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.ATTACK) return (p.getStat(Stat.ATTACK) + opp.getStat(Stat.ATTACK))/2;
-			if (s == Stat.SP_ATTACK) return (p.getStat(Stat.SP_ATTACK) + opp.getStat(Stat.SP_ATTACK))/2;
+			
+			// If the stat is a splitting stat, return the average between the user and the opponent
+			if (statSplit(s))
+			{
+				return (p.getStat(b, s) + opp.getStat(b, s))/2;
+			}
+			
 			return stat;
 		}
 	}
@@ -3245,6 +3255,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public boolean statSplit(Stat s)
+		{
+			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getName() + " split the defense!";
@@ -3253,8 +3268,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (s == Stat.DEFENSE) return (p.getStat(Stat.DEFENSE) + opp.getStat(Stat.DEFENSE))/2;
-			if (s == Stat.SP_DEFENSE) return (p.getStat(Stat.SP_DEFENSE) + opp.getStat(Stat.SP_DEFENSE))/2;
+			
+			// If the stat is a splitting stat, return the average between the user and the opponent
+			if (statSplit(s))
+			{
+				return (p.getStat(b, s) + opp.getStat(b, s))/2;
+			}
+			
 			return stat;
 		}
 	}
