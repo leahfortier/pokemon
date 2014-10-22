@@ -8,6 +8,7 @@ import item.berry.HealthTriggeredBerry;
 import item.berry.StatusBerry;
 import item.hold.ConsumableItem;
 import item.hold.DriveItem;
+import item.hold.EVItem;
 import item.hold.GemItem;
 import item.hold.HoldItem;
 import item.hold.PlateItem;
@@ -732,11 +733,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
@@ -748,7 +744,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (checkModify(b, user, victim))
+			if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM))
 			{
 				victim.consumeItem(b);
 			}
@@ -886,7 +882,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class BrightPowder extends Item implements StatChangingEffect, HoldItem
+	private static class BrightPowder extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -901,27 +897,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.EVASION;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return true;
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.1;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 10;
@@ -929,6 +904,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.1;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -942,11 +928,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.ELECTRIC && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
@@ -958,14 +939,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (checkModify(b, user, victim))
+			if (user.getAttackType() == Type.ELECTRIC && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM))
 			{
 				victim.consumeItem(b);
 			}
 		}
 	}
 
-	private static class ChoiceBand extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	private static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -975,22 +956,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Stat toIncrease()
-		{
-			return Stat.ATTACK;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (s == toIncrease())
-			{
-				stat *= 1.5;
-			}
-			
-			return stat;
-		}
-
 		public boolean usable(ActivePokemon p, Move m)
 		{
 			Move last = p.getAttributes().getLastMoveUsed();
@@ -1015,9 +980,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.ATTACK;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
+		}
 	}
 
-	private static class ChoiceScarf extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	private static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1027,22 +1008,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Stat toIncrease()
-		{
-			return Stat.SPEED;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (s == toIncrease())
-			{
-				stat *= 1.5;
-			}
-			
-			return stat;
-		}
-
 		public boolean usable(ActivePokemon p, Move m)
 		{
 			Move last = p.getAttributes().getLastMoveUsed();
@@ -1067,9 +1032,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
+		}
 	}
 
-	private static class ChoiceSpecs extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	private static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1079,22 +1060,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Stat toIncrease()
-		{
-			return Stat.SP_ATTACK;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (s == toIncrease())
-			{
-				stat *= 1.5;
-			}
-			
-			return stat;
-		}
-
 		public boolean usable(ActivePokemon p, Move m)
 		{
 			Move last = p.getAttributes().getLastMoveUsed();
@@ -1118,6 +1083,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SP_ATTACK;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -1614,7 +1595,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class IronBall extends Item implements StatChangingEffect, HoldItem, GroundedEffect
+	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1629,27 +1610,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SPEED;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return true;
-		}
-
-		public double modifyMultiplier()
-		{
-			return .5;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 130;
@@ -1657,6 +1617,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= .5;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -1716,7 +1687,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LightBall extends Item implements StatChangingEffect, HoldItem
+	private static class LightBall extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1731,27 +1702,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.ATTACK || s == Stat.SP_ATTACK;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.PIKACHU_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 2;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 30;
@@ -1760,6 +1710,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 			Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && p.isPokemon(Namesies.PIKACHU_POKEMON))
+			{
+				stat *= 2;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -1843,11 +1804,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
@@ -1859,14 +1815,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (checkModify(b, user, victim))
+			if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM))
 			{
 				victim.consumeItem(b);
 			}
 		}
 	}
 
-	private static class MachoBrace extends Item implements PowerItem
+	private static class MachoBrace extends Item implements EVItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1874,6 +1830,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			super(Namesies.MACHO_BRACE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.", BagCategory.MISC, 41);
 			super.price = 3000;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
 		}
 
 		public int[] getEVs(int[] vals)
@@ -1886,20 +1847,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			Global.error("toIncrease() method in " + super.name +" is unimplemented.");
-			return null;
 		}
 
 		public int flingDamage()
@@ -1960,7 +1916,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class MetalPowder extends Item implements StatChangingEffect, HoldItem
+	private static class MetalPowder extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1975,27 +1931,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.DITTO_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.5;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 10;
@@ -2003,6 +1938,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && p.isPokemon(Namesies.DITTO_POKEMON))
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -2056,7 +2002,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PowerAnklet extends Item implements PowerItem
+	private static class PowerAnklet extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2066,26 +2012,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
+		public Stat powerStat()
+		{
+			return Stat.SPEED;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			// TODO: Generalize Power Items without Macho Brace -- include fling, price, and cat
-			return Stat.SPEED;
 		}
 
 		public int flingDamage()
@@ -2098,7 +2049,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PowerBand extends Item implements PowerItem
+	private static class PowerBand extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2108,25 +2059,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
+		public Stat powerStat()
+		{
+			return Stat.SP_DEFENSE;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.SP_DEFENSE;
 		}
 
 		public int flingDamage()
@@ -2139,7 +2096,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PowerBelt extends Item implements PowerItem
+	private static class PowerBelt extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2149,25 +2106,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
+		public Stat powerStat()
+		{
+			return Stat.DEFENSE;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.DEFENSE;
 		}
 
 		public int flingDamage()
@@ -2180,7 +2143,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PowerBracer extends Item implements PowerItem
+	private static class PowerBracer extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2190,25 +2153,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
+		public Stat powerStat()
+		{
+			return Stat.ATTACK;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.ATTACK;
 		}
 
 		public int flingDamage()
@@ -2221,7 +2190,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PowerLens extends Item implements PowerItem
+	private static class PowerLens extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2231,25 +2200,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
+		public Stat powerStat()
+		{
+			return Stat.SP_ATTACK;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.SP_ATTACK;
 		}
 
 		public int flingDamage()
@@ -2262,7 +2237,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PowerWeight extends Item implements PowerItem
+	private static class PowerWeight extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2272,25 +2247,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 3000;
 		}
 
+		public Stat powerStat()
+		{
+			return Stat.HP;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.HP;
 		}
 
 		public int flingDamage()
@@ -2323,7 +2304,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class QuickPowder extends Item implements StatChangingEffect, HoldItem
+	private static class QuickPowder extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2338,27 +2319,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SPEED;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.DITTO_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.5;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 10;
@@ -2366,6 +2326,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && p.isPokemon(Namesies.DITTO_POKEMON))
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -2465,7 +2436,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class SafetyGoggles extends Item implements EffectBlockerEffect, HoldItem, WeatherBlockerEffect
+	private static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, EffectBlockerEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2478,6 +2449,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public String getPreventMessage(ActivePokemon victim)
 		{
 			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean block(Namesies weather)
+		{
+			return true;
 		}
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2493,20 +2478,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			return false;
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
-
-		public boolean block(Namesies weather)
-		{
-			return true;
 		}
 	}
 
@@ -2613,11 +2584,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.ICE && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
@@ -2629,14 +2595,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (checkModify(b, user, victim))
+			if (user.getAttackType() == Type.ICE && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM))
 			{
 				victim.consumeItem(b);
 			}
 		}
 	}
 
-	private static class SoulDew extends Item implements StatChangingEffect, HoldItem
+	private static class SoulDew extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2651,27 +2617,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.5;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 30;
@@ -2679,6 +2624,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON))
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -2773,7 +2729,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class ThickClub extends Item implements StatChangingEffect, HoldItem
+	private static class ThickClub extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2788,27 +2744,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.ATTACK;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 2;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 90;
@@ -2816,6 +2751,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON))
+			{
+				stat *= 2;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -2889,7 +2835,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class WideLens extends Item implements StatChangingEffect, HoldItem
+	private static class WideLens extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2904,27 +2850,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.ACCURACY;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return true;
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.1;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 10;
@@ -2933,9 +2858,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.1;
+			}
+			
+			return stat;
+		}
 	}
 
-	private static class WiseGlasses extends Item implements StatChangingEffect, HoldItem
+	private static class WiseGlasses extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2950,27 +2886,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_ATTACK;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return true;
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.1;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 10;
@@ -2979,9 +2894,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.1;
+			}
+			
+			return stat;
+		}
 	}
 
-	private static class ZoomLens extends Item implements StatChangingEffect, HoldItem
+	private static class ZoomLens extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2996,27 +2922,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.ACCURACY;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return !b.isFirstAttack();
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.2;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 10;
@@ -3024,6 +2929,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && !b.isFirstAttack())
+			{
+				stat *= 1.2;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -3047,7 +2963,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LaxIncense extends Item implements StatChangingEffect, HoldItem
+	private static class LaxIncense extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3062,27 +2978,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.EVASION;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return true;
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.1;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 10;
@@ -3090,6 +2985,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.1;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -3118,7 +3024,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class OddIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class OddIncense extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3138,6 +3044,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -3146,15 +3061,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			return 1;
-		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
 		}
 	}
 
@@ -3183,7 +3089,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class RockIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class RockIncense extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3203,6 +3109,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -3212,18 +3127,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class RoseIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class RoseIncense extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3243,6 +3149,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -3252,18 +3167,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class SeaIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class SeaIncense extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3283,6 +3189,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -3292,18 +3207,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class WaveIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class WaveIncense extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3323,6 +3229,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -3331,15 +3246,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			return 1;
-		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
 		}
 	}
 
@@ -4749,7 +4655,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class BlackBelt extends Item implements PowerChangeEffect, HoldItem
+	private static class BlackBelt extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4769,6 +4675,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -4778,18 +4693,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class BlackGlasses extends Item implements PowerChangeEffect, HoldItem
+	private static class BlackGlasses extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4809,6 +4715,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -4818,18 +4733,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class Charcoal extends Item implements PowerChangeEffect, HoldItem
+	private static class Charcoal extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4849,6 +4755,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -4858,18 +4773,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class DragonFang extends Item implements PowerChangeEffect, HoldItem
+	private static class DragonFang extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4889,6 +4795,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 70;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -4898,18 +4813,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 70;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class HardStone extends Item implements PowerChangeEffect, HoldItem
+	private static class HardStone extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4929,6 +4835,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 100;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -4938,18 +4853,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 100;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class Magnet extends Item implements PowerChangeEffect, HoldItem
+	private static class Magnet extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4969,6 +4875,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -4978,18 +4893,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class MetalCoat extends Item implements PokemonUseItem, HoldItem, PowerChangeEffect
+	private static class MetalCoat extends Item implements HoldItem, PowerChangeEffect, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5002,19 +4908,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-			if (base == null)
-			{
-				return false;
-			}
-			
-			player.setEvolution(p, base);
-			return true;
 		}
 
 		public int flingDamage()
@@ -5030,9 +4923,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return user.isAttackType(Type.STEEL) ? 1.2 : 1;
 		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			if (base == null)
+			{
+				return false;
+			}
+			
+			player.setEvolution(p, base);
+			return true;
+		}
 	}
 
-	private static class MiracleSeed extends Item implements PowerChangeEffect, HoldItem
+	private static class MiracleSeed extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5052,6 +4958,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5061,18 +4976,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class MysticWater extends Item implements PowerChangeEffect, HoldItem
+	private static class MysticWater extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5092,6 +4998,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5101,18 +5016,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class NeverMeltIce extends Item implements PowerChangeEffect, HoldItem
+	private static class NeverMeltIce extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5132,6 +5038,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5141,18 +5056,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class PoisonBarb extends Item implements PowerChangeEffect, HoldItem
+	private static class PoisonBarb extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5172,16 +5078,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
-
 		public int flingDamage()
 		{
 			return 70;
@@ -5192,9 +5088,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			// Poisons the pelted
 			Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
 		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.isAttackType(getType()))
+			{
+				return getMultiplier();
+			}
+			
+			return 1;
+		}
 	}
 
-	private static class SharpBeak extends Item implements PowerChangeEffect, HoldItem
+	private static class SharpBeak extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5214,6 +5120,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 50;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5223,18 +5138,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 50;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class SilkScarf extends Item implements PowerChangeEffect, HoldItem
+	private static class SilkScarf extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5254,6 +5160,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5263,18 +5178,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class SilverPowder extends Item implements PowerChangeEffect, HoldItem
+	private static class SilverPowder extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5294,6 +5200,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5303,18 +5218,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class SoftSand extends Item implements PowerChangeEffect, HoldItem
+	private static class SoftSand extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5334,6 +5240,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5343,18 +5258,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class SpellTag extends Item implements PowerChangeEffect, HoldItem
+	private static class SpellTag extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5374,6 +5280,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5383,18 +5298,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class TwistedSpoon extends Item implements PowerChangeEffect, HoldItem
+	private static class TwistedSpoon extends Item implements HoldItem, PowerChangeEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5414,6 +5320,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 1.2;
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			if (user.isAttackType(getType()))
@@ -5423,18 +5338,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return 1;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class DawnStone extends Item implements PokemonUseItem, HoldItem
+	private static class DawnStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5449,6 +5355,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5461,18 +5376,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class DeepSeaScale extends Item implements StatChangingEffect, PokemonUseItem, HoldItem
+	private static class DeepSeaScale extends Item implements HoldItem, StatChangingEffect, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5487,27 +5393,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 2;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 2;
 			}
 			
 			return stat;
@@ -5525,18 +5430,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class DeepSeaTooth extends Item implements StatChangingEffect, PokemonUseItem, HoldItem
+	private static class DeepSeaTooth extends Item implements HoldItem, StatChangingEffect, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5551,27 +5447,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_ATTACK;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.CLAMPERL_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 2;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.CLAMPERL_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 2;
 			}
 			
 			return stat;
@@ -5589,18 +5484,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 90;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class DragonScale extends Item implements PokemonUseItem, HoldItem
+	private static class DragonScale extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5615,6 +5501,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5627,18 +5522,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class DubiousDisc extends Item implements PokemonUseItem, HoldItem
+	private static class DubiousDisc extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5653,6 +5539,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 50;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5665,18 +5560,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 50;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class DuskStone extends Item implements PokemonUseItem, HoldItem
+	private static class DuskStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5691,6 +5577,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5703,18 +5598,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class Electirizer extends Item implements PokemonUseItem, HoldItem
+	private static class Electirizer extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5729,6 +5615,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5741,18 +5636,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class FireStone extends Item implements PokemonUseItem, HoldItem
+	private static class FireStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5767,6 +5653,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5778,15 +5673,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
 		}
 	}
 
@@ -5847,7 +5733,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LeafStone extends Item implements PokemonUseItem, HoldItem
+	private static class LeafStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5862,6 +5748,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5874,18 +5769,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class Magmarizer extends Item implements PokemonUseItem, HoldItem
+	private static class Magmarizer extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5900,6 +5786,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5912,18 +5807,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class MoonStone extends Item implements PokemonUseItem, HoldItem
+	private static class MoonStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5938,6 +5824,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5950,18 +5845,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class OvalStone extends Item implements PokemonUseItem, HoldItem
+	private static class OvalStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5976,6 +5862,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5987,15 +5882,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
-		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
 		}
 	}
 
@@ -6019,7 +5905,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PrismScale extends Item implements PokemonUseItem, HoldItem
+	private static class PrismScale extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6034,6 +5920,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6046,18 +5941,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class Protector extends Item implements PokemonUseItem, HoldItem
+	private static class Protector extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6072,6 +5958,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6084,18 +5979,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class RazorClaw extends Item implements PokemonUseItem, HoldItem, CritStageEffect
+	private static class RazorClaw extends Item implements HoldItem, CritStageEffect, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6110,19 +5996,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-			if (base == null)
-			{
-				return false;
-			}
-			
-			player.setEvolution(p, base);
-			return true;
-		}
-
 		public int flingDamage()
 		{
 			return 80;
@@ -6135,6 +6008,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
 			return stage + 1;
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			if (base == null)
+			{
+				return false;
+			}
+			
+			player.setEvolution(p, base);
+			return true;
 		}
 	}
 
@@ -6195,7 +6081,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class ReaperCloth extends Item implements PokemonUseItem, HoldItem
+	private static class ReaperCloth extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6210,6 +6096,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6222,18 +6117,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class Sachet extends Item implements PokemonUseItem, HoldItem
+	private static class Sachet extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6248,6 +6134,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6260,18 +6155,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class ShinyStone extends Item implements PokemonUseItem, HoldItem
+	private static class ShinyStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6286,6 +6172,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6298,18 +6193,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class SunStone extends Item implements PokemonUseItem, HoldItem
+	private static class SunStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6324,6 +6210,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6336,18 +6231,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class ThunderStone extends Item implements PokemonUseItem, HoldItem
+	private static class ThunderStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6362,6 +6248,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6374,18 +6269,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class UpGrade extends Item implements PokemonUseItem, HoldItem
+	private static class UpGrade extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6400,6 +6286,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6412,18 +6307,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class WaterStone extends Item implements PokemonUseItem, HoldItem
+	private static class WaterStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6438,6 +6324,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6450,18 +6345,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class WhippedDream extends Item implements PokemonUseItem, HoldItem
+	private static class WhippedDream extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6476,6 +6362,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -6488,18 +6383,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class Antidote extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class Antidote extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6520,6 +6406,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
@@ -6535,18 +6430,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class Awakening extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class Awakening extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6567,6 +6453,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
@@ -6582,18 +6477,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class BurnHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class BurnHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6614,6 +6500,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
@@ -6629,18 +6524,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class IceHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class IceHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6661,6 +6547,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
@@ -6676,18 +6571,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
-		}
 	}
 
-	private static class ParalyzeHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6708,6 +6594,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
@@ -6722,15 +6617,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return use(b.getPlayer(), p);
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
 		}
 	}
 
@@ -9044,7 +8930,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class CheriBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class CheriBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -9079,6 +8965,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return use(b.getPlayer(), p);
+		}
+
+		public String getHoldSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -9136,14 +9027,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
-
-		public String getHoldSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
-		}
 	}
 
-	private static class ChestoBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -9178,6 +9064,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return use(b.getPlayer(), p);
+		}
+
+		public String getHoldSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -9235,14 +9126,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
-
-		public String getHoldSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
-		}
 	}
 
-	private static class PechaBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class PechaBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -9277,6 +9163,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return use(b.getPlayer(), p);
+		}
+
+		public String getHoldSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -9334,14 +9225,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
-
-		public String getHoldSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
-		}
 	}
 
-	private static class RawstBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class RawstBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -9378,6 +9264,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
 			if (!use(user, b))
@@ -9433,14 +9324,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
-
-		public String getHoldSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
-		}
 	}
 
-	private static class AspearBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class AspearBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -9477,6 +9363,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
 			if (!use(user, b))
@@ -9531,11 +9422,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
 		}
 	}
 
@@ -9870,6 +9756,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
 			if (!use(user, b))
@@ -9924,11 +9815,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
 		}
 	}
 
@@ -12497,7 +12383,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class Eviolite extends Item implements StatChangingEffect, HoldItem
+	private static class Eviolite extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -12512,27 +12398,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.getPokemonInfo().getEvolution().canEvolve();
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.5;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 40;
@@ -12540,6 +12405,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && p.getPokemonInfo().getEvolution().canEvolve())
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -12732,7 +12608,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class AssaultVest extends Item implements StatChangingEffect, HoldItem, AttackSelectionEffect
+	private static class AssaultVest extends Item implements HoldItem, AttackSelectionEffect, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -12745,27 +12621,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean isModifyStat(Stat s)
 		{
 			return s == Stat.SP_DEFENSE;
-		}
-
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return true;
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.5;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
 		}
 
 		public int flingDamage()
@@ -12785,6 +12640,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public String getUnusableMessage(ActivePokemon p)
 		{
 			return p.getName() + "'s " + this.name + " prevents the use of status moves!";
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
 		}
 	}
 

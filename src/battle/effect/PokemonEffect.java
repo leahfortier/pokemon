@@ -183,7 +183,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			}
 			
 			b.addMessage(victim.getName() + "'s health was sapped!");
-			b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false);
+			b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
 		}
 
 		public String getReleaseMessage(ActivePokemon user)
@@ -287,11 +287,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getPartialTrapMessage(ActivePokemon victim)
-		{
-			return victim.getName() + " is hurt by fire spin!";
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -315,7 +310,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				return;
 			}
 			
-			b.addMessage(getPartialTrapMessage(victim));
+			b.addMessage(victim.getName() + " is hurt by fire spin!");
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -352,11 +347,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getPartialTrapMessage(ActivePokemon victim)
-		{
-			return victim.getName() + " is hurt by infestation!";
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -380,7 +370,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				return;
 			}
 			
-			b.addMessage(getPartialTrapMessage(victim));
+			b.addMessage(victim.getName() + " is hurt by infestation!");
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -417,11 +407,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getPartialTrapMessage(ActivePokemon victim)
-		{
-			return victim.getName() + " is hurt by magma storm!";
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -445,7 +430,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				return;
 			}
 			
-			b.addMessage(getPartialTrapMessage(victim));
+			b.addMessage(victim.getName() + " is hurt by magma storm!");
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -482,11 +467,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getPartialTrapMessage(ActivePokemon victim)
-		{
-			return victim.getName() + " is hurt by clamp!";
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -510,7 +490,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				return;
 			}
 			
-			b.addMessage(getPartialTrapMessage(victim));
+			b.addMessage(victim.getName() + " is hurt by clamp!");
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -547,11 +527,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getPartialTrapMessage(ActivePokemon victim)
-		{
-			return victim.getName() + " is hurt by whirlpool!";
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -575,7 +550,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				return;
 			}
 			
-			b.addMessage(getPartialTrapMessage(victim));
+			b.addMessage(victim.getName() + " is hurt by whirlpool!");
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -612,11 +587,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getPartialTrapMessage(ActivePokemon victim)
-		{
-			return victim.getName() + " is hurt by wrap!";
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -640,7 +610,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				return;
 			}
 			
-			b.addMessage(getPartialTrapMessage(victim));
+			b.addMessage(victim.getName() + " is hurt by wrap!");
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -677,11 +647,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getPartialTrapMessage(ActivePokemon victim)
-		{
-			return victim.getName() + " is hurt by bind!";
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -705,7 +670,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				return;
 			}
 			
-			b.addMessage(getPartialTrapMessage(victim));
+			b.addMessage(victim.getName() + " is hurt by bind!");
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -742,11 +707,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getPartialTrapMessage(ActivePokemon victim)
-		{
-			return victim.getName() + " is hurt by sand tomb!";
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
@@ -770,7 +730,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				return;
 			}
 			
-			b.addMessage(getPartialTrapMessage(victim));
+			b.addMessage(victim.getName() + " is hurt by sand tomb!");
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -3212,11 +3172,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean statSplit(Stat s)
-		{
-			return s == Stat.ATTACK || s == Stat.SP_ATTACK;
-		}
-
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getName() + " split the power!";
@@ -3227,7 +3182,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			int stat = statValue;
 			
 			// If the stat is a splitting stat, return the average between the user and the opponent
-			if (statSplit(s))
+			if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
 			{
 				return (p.getStat(b, s) + opp.getStat(b, s))/2;
 			}
@@ -3255,11 +3210,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean statSplit(Stat s)
-		{
-			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
-		}
-
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getName() + " split the defense!";
@@ -3270,7 +3220,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			int stat = statValue;
 			
 			// If the stat is a splitting stat, return the average between the user and the opponent
-			if (statSplit(s))
+			if (s == Stat.DEFENSE || s == Stat.SP_DEFENSE)
 			{
 				return (p.getStat(b, s) + opp.getStat(b, s))/2;
 			}
@@ -3442,7 +3392,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class DestinyBond extends PokemonEffect implements FaintEffect
+	private static class DestinyBond extends PokemonEffect implements FaintEffect, BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3473,6 +3423,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				b.addMessage(dead.getName() + " took " + murderer.getName() + " down with it!");
 				murderer.reduceHealthFraction(b, 1);
 			}
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			super.active = false;
+			return true;
 		}
 	}
 

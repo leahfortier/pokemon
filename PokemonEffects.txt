@@ -34,7 +34,7 @@ LeechSeed:
 	}
 	
 	b.addMessage(victim.getName() + "'s health was sapped!");
-	b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false);
+	b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
 	###
 	RapidSpin: user.getName() + " was released from leech seed!"
 *
@@ -244,7 +244,7 @@ SelfConfusion:
 		p.addEffect(c);
 	}
 	###
-	GetMove: 
+	GetForceMove: 
 	return move;
 	###
 	Cast: 
@@ -289,7 +289,7 @@ Encore:
 	###
 	NumTurns: 3
 	SubsideMessage: "The effects of " + victim.getName() + "'s encore faded."
-	GetMove: 
+	GetForceMove: 
 	return move;
 	###
 	Usable: 
@@ -880,7 +880,7 @@ Uproar:
 	}
 	###
 	Int: ForceMoveEffect, AttackSelectionEffect, EndTurnEffect
-	GetMove: 
+	GetForceMove: 
 	return uproar;
 	###
 	CastMessage: user.getName() + " started an uproar!"
@@ -1011,9 +1011,7 @@ Substitute:
 	Activate: 
 	x.hp = hp;
 	###
-	GetAmount: hp
-	IncreaseAmount: hp
-	DecreaseAmount: hp
+	IntegerName: hp
 	CastMessage: victim.getName() + " put in a substitute!"
 	Cast: 
 	hp = victim.reduceHealthFraction(b, .25) + 1;
@@ -1058,12 +1056,10 @@ Bide:
 	private int damage;
 	###
 	Int: ForceMoveEffect, EndTurnEffect, IntegerCondition
-	GetMove: 
+	GetForceMove: 
 	return move;
 	###
-	GetAmount: damage
-	IncreaseAmount: damage
-	DecreaseAmount: damage
+	IntegerName: damage
 	GetTurns: 
 	return turns;
 	###
@@ -1127,9 +1123,7 @@ HalfWeight:
 	x.layers = 1;
 	###
 	Int: IntegerCondition
-	GetAmount: layers
-	IncreaseAmount: layers
-	DecreaseAmount: layers
+	IntegerName: layers
 *
 PowerTrick:
 	CanHave: True
@@ -1229,7 +1223,11 @@ Grudge:
 *
 DestinyBond:
 	CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim.user()).getName() + " down with it!"
-	Int: FaintEffect
+	Int: FaintEffect, BeforeTurnEffect
+	CanAttack:
+	super.active = false;
+	return true;
+	###
 	Deathwish: 
 	if (murderer.getAttributes().isAttacking())
 	{

@@ -3,6 +3,7 @@ package pokemon;
 import item.Item;
 import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
+import item.hold.EVItem;
 import item.hold.HoldItem;
 import item.hold.PlateItem;
 import item.hold.PowerItem;
@@ -346,18 +347,16 @@ public class ActivePokemon implements Serializable
 		Item mommysItem = mommy.getActualHeldItem();
 		
 		ArrayList<PowerItem> powerItems = new ArrayList<>();
-		if (daddysItem instanceof PowerItem && daddysItem.namesies() != Namesies.MACHO_BRACE_ITEM)
+		if (daddysItem instanceof PowerItem)
 			powerItems.add((PowerItem)daddysItem);
-		if (mommysItem instanceof PowerItem && mommysItem.namesies() != Namesies.MACHO_BRACE_ITEM)
+		if (mommysItem instanceof PowerItem)
 			powerItems.add((PowerItem)mommysItem);
 		
 		ArrayList<Stat> remainingStats = new ArrayList<>();
-		remainingStats.add(Stat.HP);
-		remainingStats.add(Stat.ATTACK);
-		remainingStats.add(Stat.DEFENSE);
-		remainingStats.add(Stat.SP_ATTACK);
-		remainingStats.add(Stat.SP_DEFENSE);
-		remainingStats.add(Stat.SPEED);
+		for (Stat s : Stat.STATS)
+		{
+			remainingStats.add(s);
+		}
 		
 		int remainingIVsToInherit = daddysItem.namesies() == Namesies.DESTINY_KNOT_ITEM || mommysItem.namesies() == Namesies.DESTINY_KNOT_ITEM ? 5 : 3;
 		IVs = new int[Stat.NUM_STATS];
@@ -366,7 +365,7 @@ public class ActivePokemon implements Serializable
 		if (powerItems.size() > 0)
 		{
 			PowerItem randomItem = powerItems.get((int)(Math.random() * powerItems.size()));
-			Stat stat = randomItem.toIncrease();
+			Stat stat = randomItem.powerStat();
 			remainingStats.remove(stat);
 			
 			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
@@ -384,6 +383,7 @@ public class ActivePokemon implements Serializable
 			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
 		}
 		
+		// TODO: I think you already did this but haven't committed yet so to avoid merge conflicts I'll just a note here instead of fixing it BUT WE REALLY SHOULD BE USING A CONSTANT INSTEAD OF 32
 		for (int i = 0; i < IVs.length; i++)
 			if (IVs[i] == -1)
 				IVs[i] = (int)(Math.random()*32);
@@ -552,7 +552,11 @@ public class ActivePokemon implements Serializable
 		// Add EVs
 		Item i = getHeldItem(b);
 		int[] vals = dead.getPokemonInfo().getGivenEVs();
-		if (i instanceof PowerItem) vals = ((PowerItem)i).getEVs(vals);
+		if (i instanceof EVItem) 
+		{
+			vals = ((EVItem)i).getEVs(vals);
+		}
+		
 		addEVs(vals);
 		
 		// Level up if applicable
@@ -564,7 +568,10 @@ public class ActivePokemon implements Serializable
 
 	private boolean levelUp(Battle b)
 	{
-		if (level == MAX_LEVEL) return false;
+		if (level == MAX_LEVEL) 
+		{
+			return false;
+		}
 		
 		boolean print = b != null, front = print && b.getPlayer().front() == this;
 		
@@ -1199,7 +1206,7 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Heals the Pokemon by damage amount. It is assume damage has already been dealt to the victim
-	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print)
+	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print, boolean dreamEater)
 	{
 		if (victim.hasAbility(Namesies.LIQUID_OOZE_ABILITY))
 		{
@@ -1208,9 +1215,25 @@ public class ActivePokemon implements Serializable
 			return;
 		}
 		
-		if (isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) amount *= 1.3;
-		if (print) b.addMessage(victim.getName() + "'s health was sapped!");
-		if (!hasEffect(Namesies.HEAL_BLOCK_EFFECT)) heal(amount);
+		// Big Root heals an additional 30%
+		if (isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) 
+		{
+			amount *= 1.3;
+		}
+		
+		// Sap message (different for Dream Eater)
+		if (print) 
+		{
+			String message = dreamEater ? victim.getName() + "'s dream was eaten!" : victim.getName() + "'s health was sapped!"; 
+			b.addMessage(message);
+		}
+		
+		// Healers gon' heal
+		if (!hasEffect(Namesies.HEAL_BLOCK_EFFECT)) 
+		{
+			heal(amount);
+		}
+		
 		b.addMessage("", victim.hp, victim.user());
 		b.addMessage("", hp, user());
 	}

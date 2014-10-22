@@ -147,8 +147,7 @@ Bright Powder
 	Price: 100
 	Fling: 10
 	ToModify: Evasion
-	ModifyCondition: true
-	ModifyMultiplier: 1.1
+	ModifyMultiplier: 1.1 true
 *
 Cell Battery
 	Cat: Misc
@@ -347,8 +346,7 @@ Iron Ball:
 	Price: 200
 	Fling: 130
 	ToModify: Speed
-	ModifyCondition: true
-	ModifyMultiplier: .5
+	ModifyMultiplier: .5 true
 *
 Lagging Tail:
 	Int: HoldItem, StallingEffect
@@ -383,8 +381,7 @@ Light Ball:
 	Price: 100
 	Fling: 30
 	TwoModify: Attack Sp_Attack
-	ModifyCondition: p.isPokemon(Namesies.PIKACHU_POKEMON)
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 p.isPokemon(Namesies.PIKACHU_POKEMON)
 	FlingEffect:
 		Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
 		###
@@ -426,7 +423,7 @@ Luminous Moss:
 	TypeTakeDamageStatIncrease: Water Sp_Defense
 *
 Macho Brace:
-	Int: PowerItem
+	Int: EVItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.
 	Price: 3000
@@ -439,6 +436,8 @@ Macho Brace:
 	
 	return vals;
 	###
+	ToModify: Speed
+	ModifyMultiplier: .5 true
 *
 Mental Herb:
 	Int: HoldItem, EndTurnEffect
@@ -484,8 +483,7 @@ Metal Powder
 	Price: 10
 	Fling: 10
 	TwoModify: Defense Sp_Defense
-	ModifyCondition: p.isPokemon(Namesies.DITTO_POKEMON)
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 p.isPokemon(Namesies.DITTO_POKEMON)
 *
 Metronome
 	Int: HoldItem, PowerChangeEffect
@@ -507,66 +505,35 @@ Muscle Band
 		return user.getAttack().getCategory() == Category.PHYSICAL ? 1.1 : 1;
 		###
 *
-Power Anklet
-	Int: PowerItem
-	Cat: Misc
+Power Anklet:
 	Desc: A Pok\u00e9mon held item that promotes Speed gain on leveling, but reduces the Speed stat.
-	Price: 3000
-	Fling: 70
-	PowerStat: 
-	// TODO: Generalize Power Items without Macho Brace -- include fling, price, and cat
-	return Stat.SPEED;
-	###
-*
-Power Band
 	Int: PowerItem
-	Cat: Misc
+	PowerStat: Speed
+*
+Power Band:
 	Desc: A Pok\u00e9mon held item that promotes Sp. Def gain on leveling, but reduces the Speed stat.
-	Price: 3000
-	Fling: 70
-	PowerStat: 
-	return Stat.SP_DEFENSE;
-	###
-*
-Power Belt
 	Int: PowerItem
-	Cat: Misc
+	PowerStat: Sp_Defense
+*
+Power Belt:
 	Desc: A Pok\u00e9mon held item that promotes Def gain on leveling, but reduces the Speed stat.
-	Price: 3000
-	Fling: 70
-	PowerStat: 
-	return Stat.DEFENSE;
-	###
-*
-Power Bracer
 	Int: PowerItem
-	Cat: Misc
+	PowerStat: Defense
+*
+Power Bracer:
 	Desc: A Pok\u00e9mon held item that promotes Att gain on leveling, but reduces the Speed stat.
-	Price: 3000
-	Fling: 70
-	PowerStat: 
-	return Stat.ATTACK;
-	###
-*
-Power Lens
 	Int: PowerItem
-	Cat: Misc
+	PowerStat: Attack
+*
+Power Lens:
 	Desc: A Pok\u00e9mon held item that promotes Sp. Att gain on leveling, but reduces the Speed stat.
-	Price: 3000
-	Fling: 70
-	PowerStat: 
-	return Stat.SP_ATTACK;
-	###
-*
-Power Weight
 	Int: PowerItem
-	Cat: Misc
+	PowerStat: Sp_Attack
+*
+Power Weight:
 	Desc: A Pok\u00e9mon held item that promotes HP gain on leveling, but reduces the Speed stat.
-	Price: 3000
-	Fling: 70
-	PowerStat: 
-	return Stat.HP;
-	###
+	Int: PowerItem
+	PowerStat: HP
 *
 Quick Claw:
 	Int: HoldItem
@@ -582,8 +549,7 @@ Quick Powder:
 	Price: 10
 	Fling: 10
 	ToModify: Speed
-	ModifyCondition: p.isPokemon(Namesies.DITTO_POKEMON)
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 p.isPokemon(Namesies.DITTO_POKEMON)
 *
 Red Card:
 	Int: HoldItem, TakeDamageEffect
@@ -685,8 +651,7 @@ Soul Dew
 	Price: 10
 	Fling: 30
 	TwoModify: Sp_Attack Sp_Defense
-	ModifyCondition: p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON)
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON)
 *
 Stick:
 	Int: HoldItem, CritStageEffect
@@ -752,8 +717,7 @@ Thick Club
 	Price: 500
 	Fling: 90
 	ToModify: Attack
-	ModifyCondition: p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON)
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON)
 *
 Weakness Policy:
 	Int: HoldItem, TakeDamageEffect
@@ -800,8 +764,7 @@ Wide Lens
 	Price: 200
 	Fling: 10
 	ToModify: Accuracy
-	ModifyMultiplier: 1.1
-	ModifyCondition: true
+	ModifyMultiplier: 1.1 true
 *
 Wise Glasses
 	Int: HoldItem
@@ -810,8 +773,7 @@ Wise Glasses
 	Price: 200
 	Fling: 10
 	ToModify: Sp_Attack
-	ModifyMultiplier: 1.1
-	ModifyCondition: true
+	ModifyMultiplier: 1.1 true
 *
 Zoom Lens
 	Int: HoldItem
@@ -820,8 +782,7 @@ Zoom Lens
 	Price: 200
 	Fling: 10
 	ToModify: Accuracy
-	ModifyMultiplier: 1.2
-	ModifyCondition: !b.isFirstAttack()
+	ModifyMultiplier: 1.2 !b.isFirstAttack()
 *
 Full Incense
 	Int: HoldItem, StallingEffect
@@ -837,8 +798,7 @@ Lax Incense
 	Price: 9600
 	Fling: 10
 	ToModify: Evasion
-	ModifyMultiplier: 1.1
-	ModifyCondition: true
+	ModifyMultiplier: 1.1 true
 *
 Luck Incense
 	Int: HoldItem, EntryEffect
@@ -1318,8 +1278,7 @@ Deep Sea Scale:
 	Price: 200
 	Fling: 30
 	ToModify: Sp_Defense
-	ModifyCondition: p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON)
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON)
 *
 Deep Sea Tooth:
 	Int: HoldItem
@@ -1329,8 +1288,7 @@ Deep Sea Tooth:
 	Price: 200
 	Fling: 90
 	ToModify: Sp_Attack
-	ModifyCondition: p.isPokemon(Namesies.CLAMPERL_POKEMON)
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 p.isPokemon(Namesies.CLAMPERL_POKEMON)
 *
 Dragon Scale
 	Int: HoldItem
@@ -2641,8 +2599,7 @@ Eviolite
 	Fling: 40
 	Price: 200
 	TwoModify: Defense Sp_Defense
-	ModifyCondition: p.getPokemonInfo().getEvolution().canEvolve()
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 p.getPokemonInfo().getEvolution().canEvolve()
 *
 Heart Scale
 	Int: HoldItem
@@ -2689,8 +2646,7 @@ Assault Vest:
 	Cat: Misc
 	Int: HoldItem, AttackSelectionEffect
 	ToModify: Sp_Defense
-	ModifyCondition: true
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 true
 	Usable:
 	return m.getAttack().getCategory() != Attack.Category.STATUS;
 	###

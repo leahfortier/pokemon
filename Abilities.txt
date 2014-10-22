@@ -21,8 +21,7 @@ Overgrow:
 Chlorophyll:
 	Desc: Boosts the Pok\u00e9mon’s Speed in sunshine.
 	ToModify: Speed
-	WeatherModify: Sunny
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 b.getWeather().namesies() == Namesies.SUNNY_EFFECT
 *
 Blaze:
 	Desc: Powers up Fire-type moves in a pinch.
@@ -83,9 +82,8 @@ Shed Skin:
 *
 Compoundeyes:
 	Desc: The Pok\u00e9mon’s accuracy is boosted.
-	ModifyMultiplier: 1.3
+	ModifyMultiplier: 1.3 true
 	ToModify: Accuracy
-	ModifyCondition: true
 *
 Tinted Lens:
 	Desc: Powers up “not very effective” moves.
@@ -125,8 +123,7 @@ Tangled Feet:
 Guts:
 	Desc: Boosts Attack if there is a status problem.
 	ToModify: Attack
-	ModifyMultiplier: 1.5
-	ModifyCondition: p.hasStatus()
+	ModifyMultiplier: 1.5 p.hasStatus()
 *
 Intimidate:
 	Desc: Lowers the foe’s Attack stat.
@@ -161,8 +158,7 @@ Sand Veil:
 Sand Rush:
 	Desc: Speed rises in a Sandstorm.
 	ToModify: Speed
-	WeatherModify: Sandstorm
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 b.getWeather().namesies() == Namesies.SANDSTORM_EFFECT
 *
 Poison Point:
 	Desc: Contact with the Pok\u00e9mon may poison the foe.
@@ -575,8 +571,7 @@ Scrappy:
 Swift Swim:
 	Desc: Boosts the Pok\u00e9mon’s Speed in rain.
 	ToModify: Speed
-	WeatherModify: Raining
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 b.getWeather().namesies() == Namesies.RAINING_EFFECT
 *
 Water Veil:
 	Desc: Prevents the Pok\u00e9mon from getting a burn.
@@ -642,8 +637,7 @@ Volt Absorb:
 Quick Feet:
 	Desc: Boosts Speed if there is a status problem.
 	ToModify: Speed
-	ModifyCondition: p.hasStatus()
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 p.hasStatus()
 *
 Trace:
 	Desc: The Pok\u00e9mon copies the foe’s ability.
@@ -710,8 +704,7 @@ Snow Cloak:
 Marvel Scale:
 	Desc: Boosts Defense if there is a status problem.
 	ToModify: Defense
-	ModifyCondition: p.hasStatus()
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 p.hasStatus()
 *
 Multiscale:
 	Desc: When this Pok\u00e9mon is at full HP, damage is lessened.
@@ -746,8 +739,7 @@ Hustle:
 Huge Power:
 	Desc: Raises the Pok\u00e9mon’s Attack stat.
 	ToModify: Attack
-	ModifyCondition: true
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 true
 *
 Speed Boost:
 	Desc: The Pok\u00e9mon’s Speed stat is gradually boosted.
@@ -875,8 +867,7 @@ Stall:
 Pure Power:
 	Desc: Raises the Pok\u00e9mon's Attack stat.
 	ToModify: Attack
-	ModifyCondition: true
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 true
 *
 Rough Skin:
 	Desc: Inflicts damage to the foe on contact.
@@ -904,8 +895,7 @@ White Smoke:
 Toxic Boost:
 	Desc: Powers up physical attacks when poisoned.
 	ToModify: Attack
-	ModifyCondition: p.hasStatus(StatusCondition.POISONED)
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 p.hasStatus(StatusCondition.POISONED)
 *
 Anticipation:
 	Desc: Senses a foe's dangerous moves.
@@ -995,8 +985,7 @@ Competitive:
 Flower Gift:
 	Desc: Powers up party Pok\u00e9mon when it is sunny.
 	TwoModify: Attack Sp_Defense
-	WeatherModify: Sunny
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 b.getWeather().namesies() == Namesies.SUNNY_EFFECT
 *
 Aftermath:
 	Desc: Damages the attacker landing the finishing hit.
@@ -1082,8 +1071,7 @@ Slow Start:
 	count = 0;
 	###
 	TwoModify: Attack Speed
-	ModifyMultiplier: .5
-	ModifyCondition: count < 5
+	ModifyMultiplier: .5 count < 5
 *
 Bad Dreams:
 	Desc: Reduces a sleeping foe's HP.
@@ -1100,8 +1088,7 @@ Bad Dreams:
 Victory Star:
 	Desc: Boosts the accuracy of its allies and itself.
 	ToModify: Accuracy
-	ModifyCondition: true
-	ModifyMultiplier: 1.1
+	ModifyMultiplier: 1.1 true
 *
 Contrary:
 	Desc: Makes stat changes have an opposite effect.
@@ -1136,8 +1123,7 @@ Prankster:
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
 	ToModify: Evasion
-	ModifyCondition: opp.getAttack().getCategory() == Category.STATUS
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 opp.getAttack().getCategory() == Category.STATUS
 *
 Mummy:
 	Desc: Contact with this Pok\u00e9mon spreads this Ability.
@@ -1272,8 +1258,7 @@ Klutz:
 Unburden:
 	Desc: Raises Speed if a held item is used.
 	ToModify: Speed
-	ModifyCondition: p.hasEffect(Namesies.CONSUMED_ITEM_EFFECT)
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 p.hasEffect(Namesies.CONSUMED_ITEM_EFFECT)
 *
 Pickpocket:
 	Int: PhysicalContactEffect
@@ -1463,14 +1448,12 @@ Stance Change:
 Fur Coat:
 	Desc: Halves damage from physical moves.
 	ToModify: Defense
-	ModifyCondition: true
-	ModifyMultiplier: 2
+	ModifyMultiplier: 2 true
 *
 Grass Pelt:
 	Desc: Boosts the Defense stat in Grassy Terrain.
 	ToModify: Defense
-	ModifyCondition: b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT)
-	ModifyMultiplier: 1.5
+	ModifyMultiplier: 1.5 b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT)
 *
 Flower Veil:
 	Desc: Prevents lowering of Grass-type Pok\u00e9mon's stats.

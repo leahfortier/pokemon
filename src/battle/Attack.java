@@ -10,11 +10,14 @@ import item.hold.PlateItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 import main.Global;
 import main.Namesies;
+import main.StuffGen;
 import main.Type;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
@@ -117,6 +120,7 @@ public abstract class Attack implements Serializable
 		FIELD,
 		METRONOMELESS,
 		MIMICLESS,
+		MIRRORLESS,
 		NO_MAGIC_COAT,
 		NON_SNATCHABLE,
 		ONE_HIT_KO,
@@ -327,7 +331,7 @@ public abstract class Attack implements Serializable
 		}
 		
 		// Magic Coat and Magic Bounce reflects effects back to the user
-		if (category == Category.STATUS && !isMoveType(MoveType.FIELD) && !isMoveType(MoveType.NO_MAGIC_COAT))
+		if (category == Category.STATUS && !isMoveType(MoveType.NO_MAGIC_COAT))
 		{
 			String bouncy = "";
 			if (o.hasEffect(Namesies.MAGIC_COAT_EFFECT))
@@ -433,10 +437,20 @@ public abstract class Attack implements Serializable
 		// Check if target is fainted
 		o.isFainted(b);
 		
+		if (me.isFainted(b))
+		{
+			return damage;
+		}
+		
 		Object[] invokees = b.getEffectsList(me);
 		
 		// Apply a damage effect
 		Global.invoke(invokees, ApplyDamageEffect.class, "applyDamageEffect", b, me, o, damage);
+		
+		if (me.isFainted(b))
+		{
+			return damage;
+		}
 		
 		// Take Recoil Damage
 		Global.invoke(new Object[] {this}, RecoilMove.class, "applyRecoil", b, me, damage);
@@ -451,7 +465,7 @@ public abstract class Attack implements Serializable
 		{
 			// TODO: Find a not hardcoded workaround for this
 			int sapAmount = (int)Math.ceil(damage*(this.isMoveType(MoveType.SAP_75) ? .75 : .5));
-			me.sapHealth(o, sapAmount, b, true);
+			me.sapHealth(o, sapAmount, b, true, this.namesies() == Namesies.DREAM_EATER_ATTACK);
 		}
 		
 		invokees = b.getEffectsList(o);
@@ -1341,14 +1355,9 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 		}
 
-		public int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			return 20;
-		}
-
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
+			return super.tryDamage(me, o, b, 20);
 		}
 	}
 
@@ -1585,14 +1594,9 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			return 40;
-		}
-
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
+			return super.tryDamage(me, o, b, 40);
 		}
 	}
 
@@ -1767,8 +1771,8 @@ public abstract class Attack implements Serializable
 			super(Namesies.FLY_ATTACK, "The user soars, then strikes its target on the second turn. It can also be used for flying to any familiar town.", 15, Type.FLYING, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 95;
-			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.AIRBORNE);
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
@@ -2028,6 +2032,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 			super.priority = 4;
 		}
@@ -2044,6 +2049,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 			super.priority = 4;
 		}
@@ -2060,6 +2066,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 			super.priority = 4;
 		}
@@ -2076,6 +2083,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 			super.priority = 4;
 		}
@@ -2090,9 +2098,11 @@ public abstract class Attack implements Serializable
 			super(Namesies.QUICK_GUARD_ATTACK, "The user protects itself and its allies from priority moves. If used in succession, its chance of failing rises.", 15, Type.FIGHTING, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.QUICK_GUARD_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
+			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
-			super.priority = 3;
+			super.priority = 4;
 		}
 	}
 
@@ -2136,7 +2146,6 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.CONFUSION_DAMAGE_ATTACK, "None", 1, Type.NONE, Category.PHYSICAL);
 			super.power = 40;
-			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
 		public boolean blockCrits()
@@ -2237,6 +2246,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.RAIN_DANCE_ATTACK, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.RAINING_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -2254,6 +2264,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.SUNNY_DAY_ATTACK, "The user intensifies the sun for five turns, powering up Fire-type moves.", 5, Type.FIRE, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.SUNNY_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -2271,6 +2282,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.SANDSTORM_ATTACK, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", 10, Type.ROCK, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.SANDSTORM_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -2288,6 +2300,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.HAIL_ATTACK, "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.", 10, Type.ICE, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.HAILING_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -2336,6 +2349,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.HYPER_BEAM_ATTACK, "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.", 5, Type.NORMAL, Category.SPECIAL);
 			super.power = 150;
 			super.accuracy = 90;
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
 		public boolean chargesFirst()
@@ -2672,8 +2686,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -2684,20 +2704,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -2774,8 +2781,14 @@ public abstract class Attack implements Serializable
 			super.status = StatusCondition.POISONED;
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 2;
 			
@@ -2786,20 +2799,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -2895,8 +2895,14 @@ public abstract class Attack implements Serializable
 			super.accuracy = 95;
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -2907,20 +2913,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -3158,12 +3151,13 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+			super.moveTypes.add(MoveType.MIRRORLESS);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Move mirror = o.getAttributes().getLastMoveUsed();
-			if (mirror == null || mirror.getAttack().namesies() == Namesies.MIRROR_MOVE_ATTACK || mirror.getAttack().namesies() == Namesies.COPYCAT_ATTACK)
+			if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -3279,14 +3273,9 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			return (int)Math.ceil(o.getHP()/2.0);
-		}
-
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
+			return super.tryDamage(me, o, b, (int)Math.ceil(o.getHP()/2.0));
 		}
 	}
 
@@ -3581,6 +3570,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.HAZE_ATTACK, "The user creates a haze that eliminates every stat change among all the Pok\u00e9mon engaged in battle.", 30, Type.ICE, Category.STATUS);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -3836,8 +3826,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -3848,20 +3844,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -3974,8 +3957,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 2;
 			
@@ -3986,20 +3975,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -4251,8 +4227,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -4263,20 +4245,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -4402,6 +4371,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.GRAVITY_ATTACK, "Gravity is intensified for five turns, making moves involving flying unusable and negating Levitate.", 5, Type.PSYCHIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.GRAVITY_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -4476,10 +4446,10 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.MIMIC_ATTACK, "The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.", 10, Type.NORMAL, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.MIMIC_EFFECT, EffectType.POKEMON));
-			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
@@ -5305,6 +5275,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.WATER_SPORT_ATTACK, "The user soaks itself with water. The move weakens Fire-type moves while the user is in the battle.", 15, Type.WATER, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.WATER_SPORT_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -5418,6 +5389,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.WONDER_ROOM_ATTACK, "The user creates a bizarre area in which Pok\u00e9mon's Defense and Sp. Def stats are swapped for five turns.", 10, Type.PSYCHIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.WONDER_ROOM_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -5452,14 +5424,10 @@ public abstract class Attack implements Serializable
 			super.power = 60;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
-			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
+			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public boolean switchCondition(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY);
 		}
 
 		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
@@ -5469,7 +5437,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (switchCondition(b, user, victim))
+			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -5553,14 +5521,9 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			return me.getLevel();
-		}
-
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
+			return super.tryDamage(me, o, b, me.getLevel());
 		}
 	}
 
@@ -6094,6 +6057,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.MUD_SPORT_ATTACK, "The user covers itself with mud. It weakens Electric-type moves while the user is in the battle.", 15, Type.GROUND, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.MUD_SPORT_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -6138,8 +6102,14 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -6150,20 +6120,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -6339,8 +6296,8 @@ public abstract class Attack implements Serializable
 			super.accuracy = 85;
 			super.effectChance = 30;
 			super.status = StatusCondition.PARALYZED;
-			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.AIRBORNE);
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
@@ -6375,6 +6332,7 @@ public abstract class Attack implements Serializable
 			super.effects.add(Effect.getEffect(Namesies.CURSE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -6627,8 +6585,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 2;
 			
@@ -6639,20 +6603,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -6898,8 +6849,14 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -6910,20 +6867,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -7011,8 +6955,14 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -7023,20 +6973,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -7137,14 +7074,9 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			return me.getLevel();
-		}
-
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
+			return super.tryDamage(me, o, b, me.getLevel());
 		}
 	}
 
@@ -7172,30 +7104,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.DREAM_EATER_ATTACK, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", 15, Type.PSYCHIC, Category.SPECIAL);
 			super.power = 100;
 			super.accuracy = 100;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Deal damage to the target
-			int damage = super.applyDamage(me, o, b);
-			
-			// Healers gon' heal
-			if (!me.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
-			{
-				int healAmount = (int)(damage*.5);
-				if (me.isHoldingItem(b, Namesies.BIG_ROOT_ITEM))
-				{
-					healAmount *= 1.3;
-				}
-				
-				me.heal(healAmount);
-			}
-			
-			b.addMessage(o.getName() + "'s dream was eaten!");
-			b.addMessage("", o.getHP(), o.user());
-			b.addMessage("", me.getHP(), me.user());
-			
-			return damage;
+			super.moveTypes.add(MoveType.SAP_HEALTH);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
@@ -7235,6 +7144,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.NIGHTMARE_ATTACK, "A sleeping target sees a nightmare that inflicts some damage every turn.", 15, Type.GHOST, Category.STATUS);
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect(Namesies.NIGHTMARE_EFFECT, EffectType.POKEMON));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 	}
 
@@ -7522,9 +7432,10 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// TODO: Need to take type advantage into consideration
 			int damageTaken = me.getAttributes().getDamageTaken();
 			
-			// Fails if no damage to reflect or if the opponent isn't using a special attack
+			// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
 			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.SPECIAL)
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
@@ -7543,17 +7454,18 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.COUNTER_ATTACK, "A retaliation move that counters any physical attack, inflicting double the damage taken.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
+			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.priority = -5;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// TODO: Need to take type advantage into consideration
 			int damageTaken = me.getAttributes().getDamageTaken();
 			
-			// Fails is no damage to reflect or if the opponent isn't using a physical attack
+			// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
 			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.PHYSICAL)
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
@@ -7576,8 +7488,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.BOMB_BALL);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -7588,20 +7506,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -7632,8 +7537,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.BOMB_BALL);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -7644,20 +7555,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -7738,8 +7636,14 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 2;
 			
@@ -7750,20 +7654,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -7793,8 +7684,14 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -7805,20 +7702,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -7963,22 +7847,8 @@ public abstract class Attack implements Serializable
 			super(Namesies.COMET_PUNCH_ATTACK, "The target is hit with a flurry of punches that strike two to five times in a row.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 18;
 			super.accuracy = 85;
+			super.moveTypes.add(MoveType.PUNCHING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public int getHits(ActivePokemon me)
-		{
-			int minHits = 2;
-			int maxHits = 5;
-			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
-			
-			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
-			{
-				hits = 5;
-			}
-			
-			return hits;
 		}
 
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
@@ -7989,9 +7859,17 @@ public abstract class Attack implements Serializable
 				return -1;
 			}
 			
-			int damage = 0, hit = 1;
-			int hits = getHits(me);
+			int minHits = 2;
+			int maxHits = 5;
 			
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
+			{
+				hits = 5;
+			}
+			
+			int damage = 0, hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -8184,6 +8062,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
@@ -8510,16 +8389,18 @@ public abstract class Attack implements Serializable
 		public Copycat()
 		{
 			super(Namesies.COPYCAT_ATTACK, "The user mimics the move used immediately before it. The move fails if no other move has been used yet.", 20, Type.NORMAL, Category.STATUS);
-			super.moveTypes.add(MoveType.METRONOMELESS);
-			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+			super.moveTypes.add(MoveType.ENCORELESS);
+			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+			super.moveTypes.add(MoveType.MIRRORLESS);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			Move mirror = o.getAttributes().getLastMoveUsed();
-			if (mirror == null || mirror.getAttack().namesies() == Namesies.MIRROR_MOVE_ATTACK || mirror.getAttack().namesies() == Namesies.COPYCAT_ATTACK)
+			if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
@@ -8744,6 +8625,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.GIGA_IMPACT_ATTACK, "The user charges at the target using every bit of its power. The user must rest on the next turn.", 5, Type.NORMAL, Category.PHYSICAL);
 			super.power = 150;
 			super.accuracy = 90;
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
@@ -9260,6 +9142,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.PSYCHO_SHIFT_ATTACK, "Using its psychic power of suggestion, the user transfers its status problems to the target.", 10, Type.PSYCHIC, Category.STATUS);
 			super.accuracy = 100;
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -9410,14 +9293,9 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			return (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0);
-		}
-
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
+			return super.tryDamage(me, o, b, (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0));
 		}
 	}
 
@@ -9645,6 +9523,8 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.MIMICLESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.PROTECT_PIERCING);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
@@ -9656,7 +9536,6 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			// TODO: Make sure this does not permanently copy a move while transformed
 			List<Move> moves = me.getMoves(b);
 			for (int i = 0; i < moves.size(); i++)
 			{
@@ -9732,6 +9611,7 @@ public abstract class Attack implements Serializable
 		public HealBell()
 		{
 			super(Namesies.HEAL_BELL_ATTACK, "The user makes a soothing bell chime to heal the status problems of all the party Pok\u00e9mon.", 5, Type.NORMAL, Category.STATUS);
+			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.selfTarget = true;
 		}
 
@@ -9863,14 +9743,10 @@ public abstract class Attack implements Serializable
 			super.power = 60;
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
-			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
+			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public boolean switchCondition(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY);
 		}
 
 		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
@@ -9880,7 +9756,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (switchCondition(b, user, victim))
+			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -9952,8 +9828,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -9964,20 +9846,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -10207,6 +10076,7 @@ public abstract class Attack implements Serializable
 			super.effects.add(Effect.getEffect(Namesies.SNATCH_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 			super.priority = 4;
 		}
@@ -10382,10 +10252,6 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect(Namesies.CONFUSION_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SOUND_BASED);
-			super.moveTypes.add(MoveType.MIMICLESS);
-			super.moveTypes.add(MoveType.ASSISTLESS);
-			super.moveTypes.add(MoveType.METRONOMELESS);
-			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 	}
 
@@ -10401,8 +10267,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 2;
 			
@@ -10413,20 +10285,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -10455,6 +10314,7 @@ public abstract class Attack implements Serializable
 			super.power = 150;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.BOMB_BALL);
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
 		public boolean chargesFirst()
@@ -10486,6 +10346,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.TRICK_ROOM_ATTACK, "The user creates a bizarre area in which slower Pok\u00e9mon get to move first for five turns.", 5, Type.PSYCHIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.TRICK_ROOM_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 			super.priority = -7;
 		}
@@ -10505,6 +10366,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.ROAR_OF_TIME_ATTACK, "The user blasts the target with power that distorts even time. The user must rest on the next turn.", 5, Type.DRAGON, Category.SPECIAL);
 			super.power = 150;
 			super.accuracy = 90;
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
 		public boolean chargesFirst()
@@ -10892,8 +10754,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -10904,20 +10772,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -11009,8 +10864,14 @@ public abstract class Attack implements Serializable
 			super.accuracy = 85;
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 2;
 			
@@ -11021,20 +10882,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -11312,7 +11160,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class FreezeShock extends Attack 
+	private static class FreezeShock extends Attack implements MultiTurnMove
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -11324,6 +11172,27 @@ public abstract class Attack implements Serializable
 			super.effectChance = 30;
 			super.status = StatusCondition.PARALYZED;
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+		}
+
+		public boolean chargesFirst()
+		{
+			return true;
+		}
+
+		public boolean semiInvulnerability()
+		{
+			return false;
+		}
+
+		public void charge(ActivePokemon user, Battle b)
+		{
+			b.addMessage(getChargeMessage(user));
+		}
+
+		public String getChargeMessage(ActivePokemon user)
+		{
+			return user.getName() + " is charging!";
 		}
 	}
 
@@ -11357,14 +11226,9 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			return me.getHP();
-		}
-
 		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
+			return super.tryDamage(me, o, b, me.getHP());
 		}
 	}
 
@@ -11438,15 +11302,15 @@ public abstract class Attack implements Serializable
 		public Roar()
 		{
 			super(Namesies.ROAR_ATTACK, "The target is scared off and replaced by another Pok\u00e9mon in its party. In the wild, the battle ends.", 20, Type.NORMAL, Category.STATUS);
-			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.SOUND_BASED);
+			super.moveTypes.add(MoveType.PROTECT_PIERCING);
+			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.priority = -6;
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: These moves need infinite accuracy and bypass Protect
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
@@ -11459,7 +11323,7 @@ public abstract class Attack implements Serializable
 			
 			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
-				b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
+				b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 				return;
 			}
 			
@@ -11479,6 +11343,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.GRUDGE_ATTACK, "If the user faints, the user's grudge fully depletes the PP of the opponent's move that knocked it out.", 5, Type.GHOST, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.GRUDGE_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
@@ -11517,7 +11382,6 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: These moves need infinite accuracy and bypass Protect
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
@@ -11530,7 +11394,7 @@ public abstract class Attack implements Serializable
 			
 			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
-				b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
+				b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 				return;
 			}
 			
@@ -11541,14 +11405,15 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Teleport extends Attack implements AccuracyBypassEffect
+	private static class Teleport extends Attack 
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Teleport()
 		{
 			super(Namesies.TELEPORT_ATTACK, "Use it to flee from any wild Pok\u00e9mon. It can also warp to the last Pok\u00e9mon Center visited.", 20, Type.PSYCHIC, Category.STATUS);
-			super.moveTypes.add(MoveType.FIELD);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
+			super.selfTarget = true;
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -11562,11 +11427,6 @@ public abstract class Attack implements Serializable
 			b.addMessage(user.getName() + " teleported out of battle!");
 			b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
-		{
-			return true;
-		}
 	}
 
 	private static class RolePlay extends Attack implements ChangeAbilityMove
@@ -11579,6 +11439,7 @@ public abstract class Attack implements Serializable
 			super.effects.add(Effect.getEffect(Namesies.CHANGE_ABILITY_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 
@@ -11652,14 +11513,14 @@ public abstract class Attack implements Serializable
 		public Whirlwind()
 		{
 			super(Namesies.WHIRLWIND_ATTACK, "The target is blown away, to be replaced by another Pok\u00e9mon in its party. In the wild, the battle ends.", 20, Type.NORMAL, Category.STATUS);
-			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+			super.moveTypes.add(MoveType.PROTECT_PIERCING);
+			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.priority = -6;
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: These moves need infinite accuracy and bypass Protect
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
@@ -11672,7 +11533,7 @@ public abstract class Attack implements Serializable
 			
 			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
-				b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
+				b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 				return;
 			}
 			
@@ -11693,11 +11554,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.BESTOW_ATTACK, "The user passes its held item to the target when the target isn't holding an item.", 15, Type.NORMAL, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.METRONOMELESS);
-		}
-
-		public boolean switchCondition(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return !user.isHoldingItem(b) || victim.isHoldingItem(b);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
 		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
@@ -11707,7 +11564,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (switchCondition(b, user, victim))
+			if (!user.isHoldingItem(b) || victim.isHoldingItem(b))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -11751,11 +11608,7 @@ public abstract class Attack implements Serializable
 			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
-		}
-
-		public boolean switchCondition(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
 		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
@@ -11765,7 +11618,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (switchCondition(b, user, victim))
+			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -11809,11 +11662,7 @@ public abstract class Attack implements Serializable
 			super.effects.add(Effect.getEffect(Namesies.CHANGE_ITEM_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
-		}
-
-		public boolean switchCondition(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
 		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
@@ -11823,7 +11672,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (switchCondition(b, user, victim))
+			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
 			{
 				if (super.category == Category.STATUS)
 				{
@@ -11864,6 +11713,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.MEMENTO_ATTACK, "The user faints when using this move. In return, it harshly lowers the target's Attack and Sp. Atk.", 10, Type.DARK, Category.STATUS);
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.USER_FAINTS);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.statChanges[Stat.ATTACK.index()] = -2;
 			super.statChanges[Stat.SP_ATTACK.index()] = -2;
 		}
@@ -11880,6 +11730,7 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
@@ -12022,6 +11873,7 @@ public abstract class Attack implements Serializable
 		public BatonPass()
 		{
 			super(Namesies.BATON_PASS_ATTACK, "The user switches places with a party Pok\u00e9mon in waiting, passing along any stat changes.", 40, Type.NORMAL, Category.STATUS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 
@@ -12071,6 +11923,8 @@ public abstract class Attack implements Serializable
 			super.effects.add(Effect.getEffect(Namesies.PERISH_SONG_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+			super.moveTypes.add(MoveType.SOUND_BASED);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -12096,7 +11950,6 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: These moves need infinite accuracy and bypass Protect
 			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 			{
@@ -12109,7 +11962,7 @@ public abstract class Attack implements Serializable
 			
 			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
-				b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
+				b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 				return;
 			}
 			
@@ -12163,6 +12016,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.NATURE_POWER_ATTACK, "An attack that makes use of nature's power. Its effects vary depending on the user's environment.", 20, Type.NORMAL, Category.STATUS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -12224,6 +12078,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.MAGIC_ROOM_ATTACK, "The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.", 10, Type.PSYCHIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.MAGIC_ROOM_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -12329,6 +12184,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.SKILL_SWAP_ATTACK, "The user employs its psychic power to exchange Abilities with the target.", 10, Type.PSYCHIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.CHANGE_ABILITY_EFFECT, EffectType.POKEMON));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -12428,7 +12284,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class IceBurn extends Attack 
+	private static class IceBurn extends Attack implements MultiTurnMove
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -12440,6 +12296,27 @@ public abstract class Attack implements Serializable
 			super.effectChance = 30;
 			super.status = StatusCondition.BURNED;
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+		}
+
+		public boolean chargesFirst()
+		{
+			return true;
+		}
+
+		public boolean semiInvulnerability()
+		{
+			return false;
+		}
+
+		public void charge(ActivePokemon user, Battle b)
+		{
+			b.addMessage(getChargeMessage(user));
+		}
+
+		public String getChargeMessage(ActivePokemon user)
+		{
+			return user.getName() + " is charging!";
 		}
 	}
 
@@ -12452,6 +12329,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.VCREATE_ATTACK, "With a hot flame on its forehead, the user hurls itself at its target. It lowers the user's Defense, Sp. Def, and Speed stats.", 5, Type.FIRE, Category.PHYSICAL);
 			super.power = 180;
 			super.accuracy = 95;
+			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = -1;
 			super.statChanges[Stat.SP_DEFENSE.index()] = -1;
@@ -12557,7 +12435,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class PhantomForce extends Attack implements AccuracyBypassEffect, MultiTurnMove
+	private static class PhantomForce extends Attack implements MultiTurnMove, AccuracyBypassEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -12566,19 +12444,15 @@ public abstract class Attack implements Serializable
 			super(Namesies.PHANTOM_FORCE_ATTACK, "The user vanishes somewhere, then strikes the target on the next turn. This move hits even if the target protects itself.", 10, Type.GHOST, Category.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
+			super.moveTypes.add(MoveType.ASSISTLESS);
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o)
 		{
 			return super.power*(o.hasEffect(Namesies.USED_MINIMIZE_EFFECT) ? 2 : 1);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
-		{
-			return !defending.isSemiInvulnerable() && defending.hasEffect(Namesies.USED_MINIMIZE_EFFECT);
 		}
 
 		public boolean chargesFirst()
@@ -12599,6 +12473,11 @@ public abstract class Attack implements Serializable
 		public String getChargeMessage(ActivePokemon user)
 		{
 			return user.getName() + " vanished suddenly!";
+		}
+
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		{
+			return !defending.isSemiInvulnerable() && defending.hasEffect(Namesies.USED_MINIMIZE_EFFECT);
 		}
 	}
 
@@ -12690,8 +12569,9 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
-			super.priority = 3;
+			super.priority = 4;
 		}
 	}
 
@@ -12871,6 +12751,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.MISTY_TERRAIN_ATTACK, "The user covers the ground under everyone's feet with mist for five turns. This protects Pok\u00e9mon on the ground from status conditions.", 10, Type.FAIRY, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.MISTY_TERRAIN_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -12888,6 +12769,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.FAIRY_LOCK_ATTACK, "By locking down the battlefield, the user keeps all Pok\u00e9mon from fleeing during the next turn.", 10, Type.FAIRY, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.FAIRY_LOCK_EFFECT, EffectType.POKEMON));
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
@@ -12938,6 +12820,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.GRASSY_TERRAIN_ATTACK, "The user turns the ground under everyone's feet to grass for five turns. This restores the HP of Pok\u00e9mon on the ground a little every turn.", 10, Type.GRASS, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.GRASSY_TERRAIN_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -13012,8 +12895,14 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int getHits(ActivePokemon me)
+		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// Don't apply damage if the move is ineffective
+			if (!effective(b, me, o))
+			{
+				return -1;
+			}
+			
 			int minHits = 2;
 			int maxHits = 5;
 			
@@ -13024,20 +12913,7 @@ public abstract class Attack implements Serializable
 				hits = 5;
 			}
 			
-			return hits;
-		}
-
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int damage = 0, hit = 1;
-			int hits = getHits(me);
-			
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
@@ -13064,6 +12940,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.MAT_BLOCK_ATTACK, "Using a pulled-up mat as a shield, the user protects itself and its allies from damaging moves. This does not stop status moves.", 15, Type.FIGHTING, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.MAT_BLOCK_EFFECT, EffectType.POKEMON));
+			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.selfTarget = true;
 		}
 
@@ -13116,6 +12993,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.ELECTRIFY_ATTACK, "If the target is electrified before it uses a move during that turn, the target's move becomes Electric type.", 20, Type.ELECTRIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.ELECTRIFIED_EFFECT, EffectType.POKEMON));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.priority = 1;
 		}
 	}
@@ -13177,6 +13055,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.BELCH_ATTACK, "The user lets out a damaging belch on the target. The user must eat a Berry to use this move.", 10, Type.POISON, Category.SPECIAL);
 			super.power = 120;
 			super.accuracy = 90;
+			super.moveTypes.add(MoveType.ASSISTLESS);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
@@ -13224,6 +13103,7 @@ public abstract class Attack implements Serializable
 		{
 			super(Namesies.ELECTRIC_TERRAIN_ATTACK, "The user electrifies the ground under everyone's feet for five turns. Pok\u00e9mon on the ground no longer fall asleep.", 10, Type.ELECTRIC, Category.STATUS);
 			super.effects.add(Effect.getEffect(Namesies.ELECTRIC_TERRAIN_EFFECT, EffectType.BATTLE));
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
@@ -13242,6 +13122,7 @@ public abstract class Attack implements Serializable
 			super(Namesies.POWER_UP_PUNCH_ATTACK, "Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.", 20, Type.FIGHTING, Category.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PUNCHING);
 			super.selfTarget = true;
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);

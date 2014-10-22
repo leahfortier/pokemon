@@ -69,6 +69,23 @@ public enum Stat
 	public static final int MAX_EVS = 510;
 	public static final int MAX_STAT_EVS = 255;
 	
+	public static final Stat[] STATS;
+	static
+	{
+		STATS = new Stat[NUM_STATS];
+		int i = 0;
+		
+		for (Stat s : Stat.values()) 
+		{
+			if (s.onlyBattle == InBattle.ONLY)
+			{
+				continue;
+			}
+			
+			STATS[i++] = s;
+		}
+	}
+	
 	// Generates a new stat
 	public static int getStat(int statIndex, int level, int baseStat, int IV, int EV, double natureVal)
 	{

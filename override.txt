@@ -1,11 +1,7 @@
 Override:
 	FixedDamage:
-		Header: int getFixedDamage(ActivePokemon me, ActivePokemon o, Battle b)
-		Body: 
-		return {0};
-		###
 		AddMapField: ApplyDamage:
-		return super.tryDamage(me, o, b, getFixedDamage(me, o, b));
+		return super.tryDamage(me, o, b, {0});
 		###
 	*
 ***
@@ -79,6 +75,7 @@ MultiTurnMove:
 		Body:
 		return {0};
 		###
+		AddMapField: MoveType: Sleep_Talk_Fail
 	*
 ***
 Override:
@@ -88,8 +85,13 @@ Override:
 ***
 Override:
 	MultiStrike:
-		Header: int getHits(ActivePokemon me)
-		Body:
+		AddMapField: ApplyDamage:
+		// Don't apply damage if the move is ineffective
+		if (!effective(b, me, o))
+		{
+			return -1;
+		}
+		
 		int minHits = {1};
 		int maxHits = {2};
 		
@@ -100,18 +102,7 @@ Override:
 			hits = 5;
 		}
 		
-		return hits;
-		###
-		AddMapField: ApplyDamage:
-		// Don't apply damage if the move is ineffective
-		if (!effective(b, me, o))
-		{
-			return -1;
-		}
-		
 		int damage = 0, hit = 1;
-		int hits = getHits(me);
-		
 		for (; hit <= hits; hit++)
 		{
 			b.addMessage("Hit " + hit + "!");
@@ -142,12 +133,8 @@ Override:
 ***
 Override:
 	SwitchItems:
-		Header: boolean switchCondition(Battle b, ActivePokemon user, ActivePokemon victim)
-		Body:
-		return {0};
-		###
 		AddMapField: ApplyEffects:
-		if (switchCondition(b, user, victim))
+		if ({0})
 		{
 			if (super.category == Category.STATUS) 
 			{
@@ -180,14 +167,30 @@ Override:
 		AddMapField: GetItem:
 		return item;
 		###
+		AddMapField: MoveType: Metronomeless, No_Magic_Coat
 	*
 ***
 Override:
-	SwitchMessage:
+	SwitchItemMessage:
 		Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
 		Body:
 		return {0};
 		###
+	*
+***
+Override:
+	BattleEffect:
+		AddMapField: Effect: Battle {0}
+		AddMapField: FieldMove: True
+		AddMapField: MoveType: No_Magic_Coat
+	*
+***
+Override:
+	ProtectingAttack:
+		AddMapField: Effect: Pokemon {0}
+		AddMapField: Priority: 4
+		AddMapField: SelfTarget: True
+		AddMapField: MoveType: Successive_Decay, Assistless, Metronomeless, Non_Snatchable
 	*
 ***
 Override:
@@ -241,15 +244,11 @@ CrashDamageMove:
 ***
 Override:
 	StatSplit:
-		Header: boolean statSplit(Stat s)
-		Body:
-		return s == Stat.{11} || s == Stat.{22};
-		###
 		AddInterface: StatChangingEffect
 		AddMapField: ModifyStat:
 		
 		// If the stat is a splitting stat, return the average between the user and the opponent
-		if (statSplit(s))
+		if (s == Stat.{11} || s == Stat.{22})
 		{
 			return (p.getStat(b, s) + opp.getStat(b, s))/2;
 		}
@@ -333,10 +332,46 @@ ChangeAbilityMove:
 	*
 ***
 Override:
+	MirrorMove:
+		AddMapField: MoveType: Sleep_Talk_Fail, Encoreless, Metronomeless, Assistless, No_Magic_Coat, Mirrorless
+		AddMapField: Apply: 
+		Move mirror = o.getAttributes().getLastMoveUsed();
+		if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS))
+		{
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			return;
+		}
+		
+		me.callNewMove(b, o, new Move(mirror.getAttack()));
+		###
+	*
+***
+Override:
+	Countering:
+		AddMapField: Priority: -5
+		AddMapField: MoveType: Assistless, Metronomeless
+		AddMapField: PP: 20
+		AddMapField: Acc: 100
+		AddMapField: Apply: 
+		// TODO: Need to take type advantage into consideration
+		int damageTaken = me.getAttributes().getDamageTaken();
+		
+		// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
+		if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.{00})
+		{
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			return;
+		}
+		
+		super.tryDamage(me, o, b, damageTaken*2);
+		###
+	*
+***
+Override:
 	ExitBattle:
-		Header: void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
-		Body:
-		// TODO: These moves need infinite accuracy and bypass Protect
+		AddMapField: MoveType: Assistless
+		AddMapField: Priority: -6
+		AddMapField: ApplyEffects:
 		Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
 		if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
 		{
@@ -349,7 +384,7 @@ Override:
 
 		if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 		{
-			b.addMessage(victim.getName() + "'s Suction Cups prevents it from switching!");
+			b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 			return;
 		}
 
@@ -486,10 +521,6 @@ OpponentTrappingEffect:
 ***
 Override:
 	PartialTrap:
-		Header: String getPartialTrapMessage(ActivePokemon victim)
-		Body: 
-		return {0};
-		###
 		AddMapField: Cast:
 		super.cast(b, caster, victim, source, printCast);
 		if (caster.isHoldingItem(b, Namesies.GRIP_CLAW_ITEM)) setTurns(5);
@@ -506,7 +537,7 @@ Override:
 			return;
 		}
 		
-		b.addMessage(getPartialTrapMessage(victim));
+		b.addMessage({0});
 		
 		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
@@ -545,17 +576,21 @@ RapidSpinRelease:
 StatChangingEffect:
 	ModifyStat:
 		Header: int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		Optional: True
-		Default:
-		if (isModifyStat(s) && modifyCondition(b, p, opp))
+		Begin: 
+		int stat = statValue;
+		###
+	*
+***
+Override:
+	ModifyMultiplier:
+		AddInterface: StatChangingEffect
+		AddMapField: ModifyStat:
+		if (isModifyStat(s) && {2-})
 		{
-			stat *= modifyMultiplier();
+			stat *= {1};
 		}
 		
 		return stat;
-		###
-		Begin: 
-		int stat = statValue;
 		###
 	*
 ***
@@ -575,39 +610,13 @@ Override:
 		###
 	*
 ***
-Override:
-	WeatherModify:
-		Header: Namesies getWeatherCondition()
-		Body:
-		return Namesies.{00}_EFFECT;
-		###
-		AddMapField: ModifyCondition: b.getWeather().namesies() == getWeatherCondition()
-	*
-***
-Override:
-	ModifyCondition:
-		Header: boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		Body:
-		return {0};
-		###
-		AddInterface: StatChangingEffect
-	*
-***
-Override:
-	ModifyMultiplier:
-		Header: double modifyMultiplier()
-		Body:
-		return {0};
-		###
-	*
-***
 MoveCondition:
 	GetMove:
 		Header: Move getMove()
 	*
 ***
 ForceMoveEffect:
-	GetMove:
+	GetForceMove:
 		Header: Move getMove()
 	*
 ***
@@ -669,6 +678,11 @@ OpponentPowerChangeEffect:
 	*
 ***
 IntegerCondition:
+	IntegerName:
+		AddMapField: GetAmount: {0}
+		AddMapField: DecreaseAmount: {0}
+		AddMapField: IncreaseAmount: {0}
+	*
 	GetAmount:
 		Header: int getAmount()
 		Body:
@@ -792,29 +806,21 @@ DamageBlocker:
 ***
 Override:
 	BlockType:
-		Header: Type getType()
-		Body:
-		return Type.{00};
-		###
 		AddInterface: DamageBlocker
 		AddMapField: Block:
-		return attacking == getType();
+		return attacking == Type.{00};
 		###
 		AddMapField: AlternateEffect:
-		b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + getType().getName() + " type moves!");
+		b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " type moves!");
 		victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		###
 	*
 ***
 Override:
 	AbsorbType:
-		Header: Type getType()
-		Body:
-		return Type.{00};
-		###
 		AddInterface: DamageBlocker
 		AddMapField: Block:
-		return attacking == getType() && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
+		return attacking == Type.{00} && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
 		###
 		AddMapField: AlternateEffect:
 		// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
@@ -900,12 +906,8 @@ Override:
 ***
 Override:
 	TypeTakeDamageStatIncrease:
-		Header: boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		Body:
-		return user.getAttackType() == Type.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM);
-		###
 		AddMapField: OnTakeDamage:
-		if (checkModify(b, user, victim))
+		if (user.getAttackType() == Type.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM))
 		{
 			victim.consumeItem(b);
 		}
@@ -919,19 +921,8 @@ ConsumableItem:
 ***
 Override:
 	ChoiceItem:
-		Header: Stat toIncrease()
-		Body:
-		return Stat.{00};
-		###
-		AddInterface: StatChangingEffect
-		AddMapField: ModifyStat:
-		if (s == toIncrease())
-		{
-			stat *= 1.5;
-		}
-		
-		return stat;
-		###
+		AddMapField: ToModify: {0}
+		AddMapField: ModifyMultiplier: 1.5 true
 		AddInterface: AttackSelectionEffect
 		AddMapField: Usable:
 		Move last = p.getAttributes().getLastMoveUsed();
@@ -989,35 +980,28 @@ WeatherExtendingEffect:
 		###
 	*
 ***
-PowerItem:
+EVItem:
 	GetEVs:
 		Header: int[] getEVs(int[] vals)
-		Optional: True
-		Default:
-		vals[toIncrease().index()] += 4;
+		AddInterface: Hidden-HoldItem
+	*
+***
+PowerItem:
+	PowerStat:
+		Header: Stat powerStat()
+		Body:
+		return Stat.{00};
+		###
+		AddMapField: ToModify: Speed
+		AddMapField: ModifyMultiplier: .5 true
+		AddInterface: Hidden-EVItem
+		AddMapField: GetEVs:
+		vals[powerStat().index()] += 4;
 		return vals;
 		###
-	*
-	ModifyStat:
-		Header: int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		Optional: True
-		Default:
-		if (s == Stat.SPEED)
-		{
-			return stat / 2;
-		}
-		
-		return stat;
-		###
-	*
-	PowerStat:
-		Header: Stat toIncrease()
-		Optional: True
-		Default:
-		Global.error("toIncrease() method in " + super.name +" is unimplemented.");
-		return null;
-		###
-		AddInterface: Hidden-HoldItem
+		AddMapField: Fling: 70
+		AddMapField: Price: 3000
+		AddMapField: Cat: Misc
 	*
 ***
 GemItem:
@@ -1137,7 +1121,7 @@ PlateItem:
 		AddInterface: Hidden-HoldItem
 		AddMapField: Price: 1000
 		AddMapField: Fling: 90
-		AddMapField: Cat: MISC
+		AddMapField: Cat: Misc
 		AddInterface: Hidden-PowerChangeEffect
 		AddMapField: GetMultiplier:
 		if (user.isAttackType(getType()))
@@ -1490,7 +1474,7 @@ Override:
 		return true;
 		###
 		AddMapField: SuccessMessage: "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!"
-		AddMapField: Cat: MISC
+		AddMapField: Cat: Misc
 	*
 ***
 CritBlockerEffect:
