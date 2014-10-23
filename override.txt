@@ -1,7 +1,7 @@
 Override:
 	FixedDamage:
 		AddMapField: ApplyDamage:
-		return super.tryDamage(me, o, b, {0});
+		o.reduceHealth(b, {0});
 		###
 	*
 ***
@@ -86,27 +86,21 @@ Override:
 Override:
 	MultiStrike:
 		AddMapField: ApplyDamage:
-		// Don't apply damage if the move is ineffective
-		if (!effective(b, me, o))
-		{
-			return -1;
-		}
-		
 		int minHits = {1};
 		int maxHits = {2};
 		
-		int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+		int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 		
 		if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY)) 
 		{
 			hits = 5;
 		}
 		
-		int damage = 0, hit = 1;
+		int hit = 1;
 		for (; hit <= hits; hit++)
 		{
 			b.addMessage("Hit " + hit + "!");
-			damage += super.applyDamage(me, o, b);
+			super.applyDamage(me, o, b);
 			
 			// Stop attacking the dead
 			if (o.isFainted(b))
@@ -117,7 +111,6 @@ Override:
 		
 		// Print hits and gtfo
 		b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-		return damage;
 		###
 	*
 ***
@@ -200,27 +193,19 @@ Override:
 		if (me.getLevel() < o.getLevel())
 		{
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-			return -1;
+			return;
 		}
 		
 		// Sturdy prevents OHKO moves if the user is not a mold breaker
 		if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 		{
 			b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
-			return -1;
-		}
-		
-		int damage = super.tryDamage(me, o, b, o.getHP());
-		
-		// Did not actually strike as was ineffective for some reason
-		if (damage == -1)
-		{
-			return -1;
+			return;
 		}
 		
 		// Certain death
+		o.reduceHealth(b, o.getHP());
 		b.addMessage("It's a One-Hit KO!");
-		return damage;
 		###
 		AddMapField: MoveType: One_Hit_KO
 		AddMapField: GetAccuracy:
@@ -352,18 +337,17 @@ Override:
 		AddMapField: MoveType: Assistless, Metronomeless
 		AddMapField: PP: 20
 		AddMapField: Acc: 100
-		AddMapField: Apply: 
-		// TODO: Need to take type advantage into consideration
+		AddMapField: ApplyDamage:
 		int damageTaken = me.getAttributes().getDamageTaken();
 		
 		// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-		if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.{00})
+		if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.{00} || b.isFirstAttack())
 		{
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 		
-		super.tryDamage(me, o, b, damageTaken*2);
+		o.reduceHealth(b, damageTaken*2);
 		###
 	*
 ***
@@ -372,22 +356,53 @@ Override:
 		AddMapField: MoveType: Assistless
 		AddMapField: Priority: -6
 		AddMapField: ApplyEffects:
-		Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-		if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
-		{
-			if (super.category == Category.STATUS) 
-			{
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-			}
-			return;
-		}
-
+		// Fails against the Suction Cups ability
 		if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 		{
 			b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 			return;
 		}
-
+		
+		// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
+		if (b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
+		{
+			if (super.category == Category.STATUS)
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			}
+			
+			return;
+		}
+		
+		Team opponent = b.getTrainer(victim.user());
+		if (opponent instanceof WildPokemon)
+		{
+			// Fails against wild Pokemon of higher levels
+			if (victim.getLevel() > user.getLevel())
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return;
+			}
+			
+			// End the battle against a wild Pokemon
+			b.addMessage({0});
+			b.addMessage(" ", Update.EXIT_BATTLE);
+			return;
+		}
+		
+		Trainer trainer = (Trainer)opponent;
+		if (!trainer.hasRemainingPokemon())
+		{
+			// Fails against trainers on their last Pokemon
+			if (super.category == Category.STATUS)
+			{
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			}
+			
+			return;
+		}
+		
+		// Swap to a random Pokemon!
 		b.addMessage({0});
 		trainer.switchToRandom();
 		victim = trainer.front();
@@ -986,6 +1001,26 @@ EVItem:
 		AddInterface: Hidden-HoldItem
 	*
 ***
+TargetSwapperEffect:
+	TargetSwap:
+		Header: boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
+	*
+***
+Override:
+	MagicReflection:
+		AddInterface: TargetSwapperEffect
+		AddMapField: TargetSwap:
+		Attack attack = user.getAttack();
+		if (!attack.isSelfTarget() && attack.getCategory() == Category.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT))
+		{
+			b.addMessage(opponent.getName() + "'s " + {0} + " reflected " + user.getName() + "'s move!");
+			return true;
+		}
+		
+		return false;
+		###
+	*
+***
 PowerItem:
 	PowerStat:
 		Header: Stat powerStat()
@@ -1536,7 +1571,7 @@ Override:
 ***
 Override:
 	ApplyDamage:
-		Header: int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		Header: void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 	*
 ***
 Override:

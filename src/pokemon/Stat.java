@@ -127,6 +127,9 @@ public enum Stat
 		
 //		System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 		
+		// Just to be safe
+		stat = Math.max(1, stat);
+		
 		return stat;
 	}
 	

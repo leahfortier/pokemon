@@ -2954,7 +2954,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class MagicCoat extends PokemonEffect 
+	private static class MagicCoat extends PokemonEffect implements TargetSwapperEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2976,6 +2976,18 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getName() + " shrouded itself with a magic coat!";
+		}
+
+		public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
+		{
+			Attack attack = user.getAttack();
+			if (!attack.isSelfTarget() && attack.getCategory() == Category.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT))
+			{
+				b.addMessage(opponent.getName() + "'s " + "Magic Coat" + " reflected " + user.getName() + "'s move!");
+				return true;
+			}
+			
+			return false;
 		}
 	}
 
@@ -3338,7 +3350,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class Snatch extends PokemonEffect 
+	private static class Snatch extends PokemonEffect implements TargetSwapperEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3355,6 +3367,18 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
 			return !(victim.hasEffect(this.namesies));
+		}
+
+		public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
+		{
+			Attack attack = user.getAttack();
+			if (attack.isSelfTarget() && attack.getCategory() == Category.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE))
+			{
+				b.addMessage(opponent.getName() + " snatched " + user.getName() + "'s move!");
+				return true;
+			}
+			
+			return false;
 		}
 	}
 

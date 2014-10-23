@@ -312,7 +312,7 @@ Limber:
 	StatusPrevent: 
 	return status == StatusCondition.PARALYZED;
 	###
-	StatusPreventMessage: victim.getName() + "'s Limber prevents paralysis!"
+	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents paralysis!"
 *
 Damp:
 	Desc: Prevents combatants from self destructing.
@@ -750,6 +750,7 @@ Speed Boost:
 *
 Magic Bounce:
 	Desc: Reflects status-changing moves.
+	MagicReflection: this.getName()
 *
 Super Luck:
 	Desc: Heightens the critical-hit ratios of moves.

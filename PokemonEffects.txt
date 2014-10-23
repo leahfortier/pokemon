@@ -1048,6 +1048,7 @@ Mist:
 MagicCoat:
 	CastMessage: user.getName() + " shrouded itself with a magic coat!"
 	NumTurns: 1
+	MagicReflection: "Magic Coat"
 *
 Bide:
 	Field: 
@@ -1209,6 +1210,17 @@ Infatuated:
 *
 Snatch:
 	NumTurns: 1
+	Int: TargetSwapperEffect
+	TargetSwap:
+	Attack attack = user.getAttack();
+	if (attack.isSelfTarget() && attack.getCategory() == Category.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE))
+	{
+		b.addMessage(opponent.getName() + " snatched " + user.getName() + "'s move!");
+		return true;
+	}
+	
+	return false;
+	###
 *
 Grudge:
 	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim.user()).getName() + " to bear a grudge!"

@@ -38,14 +38,6 @@ Leech Seed:
 	Desc: A seed is planted on the target. It steals some HP from the target every turn.
 	PP: 10
 	Effect: Pokemon LeechSeed
-	ApplyEffects: 
-	if (Ability.blockDamage(b, user, victim)) 
-	{
-		return;
-	}
-	
-	super.applyEffects(b, user, victim);
-	###
 *	
 Thunder Wave:
 	Acc: 100
@@ -54,14 +46,6 @@ Thunder Wave:
 	Desc: A weak electric charge is launched at the target. It causes paralysis if it hits.
 	PP: 20
 	Status: Paralyzed
-	ApplyEffects: 
-	if (!super.effective(b, user, victim)) 
-	{
-		return;
-	}
-	
-	super.applyEffects(b, user, victim);
-	###
 *	
 Poison Powder:
 	Acc: 75
@@ -1043,15 +1027,16 @@ Endeavor:
 	Cat: Physical
 	PP: 5
 	Acc: 100
-	Apply: 
+	Apply:
 	if (me.getHP() >= o.getHP())
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
-	super.tryDamage(me, o, b, o.getHP() - me.getHP());
+	super.apply(me, o, b);
 	###
+	FixedDamage: o.getHP() - me.getHP()
 *
 Sand Attack:
 	Desc: Sand is hurled in the target's face, reducing its accuracy.
@@ -1908,14 +1893,6 @@ Will-O-Wisp:
 	Acc: 85
 	Type: Fire
 	Cat: Status
-	ApplyEffects: 
-	if (Ability.blockDamage(b, user, victim)) 
-	{
-		return;
-	}
-	
-	super.applyEffects(b, user, victim);
-	###
 *
 Payback:
 	Desc: If the user moves after the target, this attack's power will be doubled.
@@ -2414,14 +2391,6 @@ Soak:
 	Effect: Pokemon ChangeType
 	ChangeType: 
 	return new Type[] {Type.WATER, Type.NONE};
-	###
-	ApplyEffects: 
-	if (Ability.blockDamage(b, user, victim)) 
-	{
-		return;
-	}
-	
-	super.applyEffects(b, user, victim);
 	###
 	Int: ChangeTypeMove
 *
@@ -3870,7 +3839,8 @@ Focus Punch:
 	StartTurn: 
 	super.applyEffects(b, me, me);
 	###
-	Apply: 
+	ApplyDamage:
+	// TODO: Test this I don't think it's working right -- particularly with printing and such -- like where's the error
 	if (me.hasEffect(Namesies.FOCUSING_EFFECT)) 
 	{
 		super.applyDamage(me, o, b);
@@ -4241,7 +4211,7 @@ Splash:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	Apply: 
+	ApplyEffects:
 	b.addMessage("But nothing happened...");
 	###
 	MoveType: Airborne
@@ -4276,6 +4246,7 @@ Last Resort:
 			return;
 		}
 	}
+	
 	super.apply(me, o, b);
 	###
 *
@@ -4699,7 +4670,7 @@ Bide:
 	Effect: Pokemon Bide
 	SelfTarget: True
 	Priority: 1
-	Apply: 
+	Apply:
 	// TODO: I'm pretty sure Bide is supposed to be a forced move while the effect is in play
 	super.applyEffects(b, me, me);
 	###
@@ -4763,10 +4734,16 @@ Beat Up:
 	Acc: 100
 	Cat: Physical
 	Type: Dark
-	Apply: 
+	ApplyDamage: 
+	// TODO: Make sure this still works with applyDamage instead of apply -- maybe it should be apply and be using callNewMove
 	for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
 	{
-		if (p.hasStatus()) continue;
+		// Only healthy Pokemon get to attack
+		if (p.hasStatus()) 
+		{
+			continue;
+		}
+		
 		Move temp = p.getMove();
 		p.setMove(new Move(Attack.getAttack(this.namesies)));
 		b.addMessage(p.getName() + "'s attack!");
@@ -4802,6 +4779,7 @@ Present:
 	return 120;
 	###
 	Apply: 
+	// TODO: Check effectiveness -- can this hit Ghost-types?
 	if (Math.random()*100 < 80)
 	{
 		super.applyDamage(me, o, b);
@@ -4835,22 +4813,22 @@ Sketch:
 	Type: Normal
 	MoveType: Sleep_Talk_Fail, Encoreless, Mimicless, Assistless, Metronomeless, Protect_Piercing, No_Magic_Coat
 	Cat: Status
-	Apply: 
-	Move copy = o.getAttributes().getLastMoveUsed();
-	if (copy == null || copy.getAttack().namesies() == Namesies.STRUGGLE_ATTACK || me.hasEffect(Namesies.TRANSFORMED_EFFECT))
+	ApplyEffects: 
+	Move copy = victim.getAttributes().getLastMoveUsed();
+	if (copy == null || copy.getAttack().namesies() == Namesies.STRUGGLE_ATTACK || user.hasEffect(Namesies.TRANSFORMED_EFFECT))
 	{
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
-	List<Move> moves = me.getMoves(b);
+	List<Move> moves = user.getMoves(b);
 	for (int i = 0; i < moves.size(); i++)
 	{
 		if (moves.get(i).getAttack().namesies() == this.namesies)
 		{
 			moves.add(i, new Move(copy.getAttack()));
 			moves.remove(i + 1);
-			b.addMessage(me.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
+			b.addMessage(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 			break;
 		}
 	}
@@ -4860,24 +4838,10 @@ Triple Kick:
 	Desc: A consecutive three-kick attack that becomes more powerful with each successive hit.
 	PP: 10
 	Type: Fighting
-	Pow: 10
+	Pow: 20
 	Acc: 90
 	Cat: Physical
-	ApplyDamage: 
-	if (super.zeroAdvantage(b, me, o)) return -1;
-	int pow = super.power, hits, damage = 0;
-	for (hits = 1; hits <= 3; hits++)
-	{
-		super.power = pow*hits;
-		b.addMessage("Hit " + hits + "!");
-		damage += super.applyDamage(me, o, b);
-		if (hits < 3 && !b.accuracyCheck(me, o)) break;
-	}
-	if (hits > 3) hits = 3;
-	b.addMessage("Hit " + hits + " times!");
-	super.power = pow;
-	return damage;
-	###
+	MultiStrike: 3 3
 *
 Milk Drink:
 	Type: Normal
@@ -4890,11 +4854,15 @@ Milk Drink:
 Heal Bell:
 	PP: 5
 	Desc: The user makes a soothing bell chime to heal the status problems of all the party Pok\u00e9mon.
-	Apply: 
-	for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
+	ApplyEffects:
+	for (ActivePokemon p : b.getTrainer(user.user()).getTeam())
 	{
-		if (!p.hasStatus(StatusCondition.FAINTED)) p.removeStatus();
+		if (!p.hasStatus(StatusCondition.FAINTED)) 
+		{
+			p.removeStatus();
+		}
 	}
+	
 	b.addMessage("All status problems were cured!");
 	###
 	Type: Normal
@@ -5075,7 +5043,7 @@ Metal Burst:
 	Cat: Physical
 	Acc: 100
 	PhysicalContact: False
-	Apply: 
+	ApplyDamage:
 	int damageTaken = me.getAttributes().getDamageTaken();
 	if (damageTaken == 0 || b.isFirstAttack())
 	{
@@ -5083,7 +5051,7 @@ Metal Burst:
 		return;
 	}
 	
-	super.tryDamage(me, o, b, (int)(damageTaken*1.5));
+	o.reduceHealth(b, (int)(damageTaken*1.5));
 	###
 *
 Wild Charge:
@@ -6604,14 +6572,6 @@ Eerie Impulse:
 	Cat: Status
 	Acc: 100
 	StatChange: 1 Sp_Attack -2
-	ApplyEffects: 
-	if (Ability.blockDamage(b, user, victim)) 
-	{
-		return;
-	}
-	
-	super.applyEffects(b, user, victim);
-	###
 *
 Misty Terrain:
 	Desc: The user covers the ground under everyone's feet with mist for five turns. This protects Pok\u00e9mon on the ground from status conditions.

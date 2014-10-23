@@ -62,6 +62,7 @@ import battle.effect.Status.StatusCondition;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.SwitchOutEffect;
 import battle.effect.TakeDamageEffect;
+import battle.effect.TargetSwapperEffect;
 import battle.effect.Weather;
 import battle.effect.WeatherBlockerEffect;
 
@@ -101,7 +102,7 @@ public abstract class Ability implements Serializable
 	}
 	
 	// Abilities that block damage
-	public static boolean blockDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+	public static boolean blockAttack(Battle b, ActivePokemon user, ActivePokemon victim)
 	{
 		if (user.breaksTheMold())
 		{
@@ -1251,7 +1252,7 @@ public abstract class Ability implements Serializable
 
 		public String statusPreventionMessage(ActivePokemon victim)
 		{
-			return victim.getName() + "'s Limber prevents paralysis!";
+			return victim.getName() + "'s " + this.getName() + " prevents paralysis!";
 		}
 	}
 
@@ -2516,7 +2517,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class MagicBounce extends Ability 
+	private static class MagicBounce extends Ability implements TargetSwapperEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2528,6 +2529,18 @@ public abstract class Ability implements Serializable
 		public MagicBounce newInstance()
 		{
 			return (MagicBounce)(new MagicBounce().activate());
+		}
+
+		public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
+		{
+			Attack attack = user.getAttack();
+			if (!attack.isSelfTarget() && attack.getCategory() == Category.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT))
+			{
+				b.addMessage(opponent.getName() + "'s " + this.getName() + " reflected " + user.getName() + "'s move!");
+				return true;
+			}
+			
+			return false;
 		}
 	}
 

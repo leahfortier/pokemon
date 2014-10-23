@@ -404,7 +404,7 @@ public class Battle
 		int pSpeed = Stat.getStat(Stat.SPEED, plyr, opp, this);
 		int oSpeed = Stat.getStat(Stat.SPEED, opp, plyr, this);
 		
-		int val = (pSpeed*32)/(oSpeed/4) + 30*escapeAttempts;
+		int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
 		if (Math.random()*256 < val 
 				|| plyr.getAbility() instanceof DefiniteEscape 
 				|| plyr.getHeldItem(this) instanceof DefiniteEscape)

@@ -232,7 +232,8 @@ public class StuffGen
 			{
 				if (!fields.containsKey("Pow") && !fields.containsKey("GetPow") 
 						&& !fields.containsKey("FixedDamage") && !fields.containsKey("OHKO")
-						&& !fields.containsKey("Apply") && !fields.containsKey("Countering"))
+						&& !fields.containsKey("ApplyDamage") && !fields.containsKey("Countering")
+						&& !fields.containsKey("Apply"))
 				{
 					Global.error("Non-status moves must include a power (" + className + ").");
 				}

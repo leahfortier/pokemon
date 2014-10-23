@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pokemon.ActivePokemon;
+import battle.Attack.MoveType;
 import battle.Battle;
 import battle.effect.AdvantageChanger;
 import battle.effect.AdvantageMultiplier;
@@ -52,6 +53,17 @@ public enum Type implements Serializable
 		{1, .5, .5, .5,  1,  2,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1, .5,  2, 1}, // Steel
 		{1, .5,  1,  1,  1,  1,  2, .5,  1,  1,  1,  1,  1,  1,  2,  2, .5,  1, 1}, // Fairy
 		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1}}; // No Type
+
+	public static boolean blockAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
+	{
+		if (defending.isAttackType(Type.GRASS) && attacking.getAttack().isMoveType(MoveType.POWDER))
+		{
+			b.addMessage(defending.getName() + " is immune to Powder moves!");
+			return true;
+		}
+		
+		return false;
+	}
 	
 	public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b)
 	{

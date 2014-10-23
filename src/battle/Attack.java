@@ -10,14 +10,11 @@ import item.hold.PlateItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 import main.Global;
 import main.Namesies;
-import main.StuffGen;
 import main.Type;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
@@ -27,6 +24,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import battle.MessageUpdate.Update;
 import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageMultiplier;
 import battle.effect.ApplyDamageEffect;
@@ -54,6 +52,7 @@ import battle.effect.StatSwitchingEffect;
 import battle.effect.Status;
 import battle.effect.Status.StatusCondition;
 import battle.effect.TakeDamageEffect;
+import battle.effect.TargetSwapperEffect;
 import battle.effect.TeamEffect;
 
 public abstract class Attack implements Serializable 
@@ -299,11 +298,16 @@ public abstract class Attack implements Serializable
 		ActivePokemon target = getTarget(b, me, o);
 		boolean applyEffects = canApplyEffects(b, me, target);
 		
+		// Don't do anything for moves that are uneffective
+		if (!effective(b, me, target))
+		{
+			return;
+		}
+		
 		// Physical and special attacks -- apply dat damage
 		if (category != Category.STATUS) 
 		{
-			// Effects can only be applied from non-status moves if damage was actually applied
-			applyEffects = applyDamage(me, o, b) != -1 && applyEffects;
+			applyDamage(me, o, b);
 		}
 		
 		// TODO: I really think the canApplyEffects method needs to be called after apply damage is called especially if something is going to be printed
@@ -315,42 +319,16 @@ public abstract class Attack implements Serializable
 		}
 	}
 	
-	private ActivePokemon getTarget(Battle b, ActivePokemon me, ActivePokemon o)
+	private ActivePokemon getTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
 	{
-		// TODO: This stuff shouldn't be hardcoded in here
-		if (selfTarget)
+		Object[] invokees = b.getEffectsList(opponent);
+		Object swapTarget = Global.checkInvoke(true, user, invokees, TargetSwapperEffect.class, "swapTarget", b, user, opponent);
+		if (swapTarget != null)
 		{
-			// Snatch steals self-target moves
-			if (category == Category.STATUS && !isMoveType(MoveType.NON_SNATCHABLE) && o.hasEffect(Namesies.SNATCH_EFFECT))
-			{
-				b.addMessage(o.getName() + " snatched " + me.getName() + "'s move!");
-				return o;
-			}
-			
-			return me;
+			return selfTarget ? opponent : user;
 		}
 		
-		// Magic Coat and Magic Bounce reflects effects back to the user
-		if (category == Category.STATUS && !isMoveType(MoveType.NO_MAGIC_COAT))
-		{
-			String bouncy = "";
-			if (o.hasEffect(Namesies.MAGIC_COAT_EFFECT))
-			{
-				bouncy = "Coat";
-			}
-			else if (o.hasAbility(Namesies.MAGIC_BOUNCE_ABILITY) && !me.breaksTheMold()) 
-			{
-				bouncy = "Bounce";
-			}
-			
-			if (bouncy.length() > 0)
-			{
-				b.addMessage(o.getName() + "'s Magic " + bouncy + " reflected " + me.getName() + "'s move!");
-				return me;
-			}
-		}
-		
-		return o;
+		return selfTarget ? user : opponent;
 	}
 	
 	private boolean canApplyEffects(Battle b, ActivePokemon me, ActivePokemon o)
@@ -391,41 +369,35 @@ public abstract class Attack implements Serializable
 		return true;
 	}
 	
-	protected boolean effective(Battle b, ActivePokemon me, ActivePokemon o)
+	// Takes type advantage, victim ability, and victim type into account to determine if the attack is effective
+	private boolean effective(Battle b, ActivePokemon me, ActivePokemon o)
 	{
-		if (this.zeroAdvantage(b, me, o))
+		// Self-target moves and field moves don't need to take type advantage always work
+		// TODO: Try with Snatch and see if it works -- might need to do me == o instead of this.isSelfTarget()
+		if (this.isSelfTarget() || this.isMoveType(MoveType.FIELD))
+		{
+			return true;
+		}
+		
+		// Non-status moves (AND FUCKING THUNDER WAVE) -- need to check the type chart
+		if ((this.category != Category.STATUS || this.namesies == Namesies.THUNDER_WAVE_ATTACK) && this.zeroAdvantage(b, me, o))
 		{
 			return false;
 		}
 		
-		if (Ability.blockDamage(b, me, o)) 
+		// Check if type or ability will block the attack
+		if (Ability.blockAttack(b, me, o) || Type.blockAttack(b, me, o)) 
 		{
 			return false;
 		}
 		
+		// You passed!!
 		return true;
 	}
 	
-	public int tryDamage(ActivePokemon me, ActivePokemon o, Battle b, int damage)
-	{
-		if (!effective(b, me, o))
-		{
-			return -1;
-		}
-		
-		return o.reduceHealth(b, damage);
-	}
-	
 	// Physical and Special moves -- do dat damage!
-	// Returns -1 if the move was unsuccessful due to zero type advantage
-	public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-	{
-		// Return if the move is uneffective
-		if (!effective(b, me, o))
-		{
-			return -1;
-		}
-		
+	public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+	{	
 		// Print Advantage
 		double adv = Type.getAdvantage(me, o, b);
 		if (adv < 1) b.addMessage("It's not very effective...");
@@ -439,7 +411,7 @@ public abstract class Attack implements Serializable
 		
 		if (me.isFainted(b))
 		{
-			return damage;
+			return;
 		}
 		
 		Object[] invokees = b.getEffectsList(me);
@@ -449,7 +421,7 @@ public abstract class Attack implements Serializable
 		
 		if (me.isFainted(b))
 		{
-			return damage;
+			return;
 		}
 		
 		// Take Recoil Damage
@@ -457,7 +429,7 @@ public abstract class Attack implements Serializable
 	
 		if (me.isFainted(b))
 		{
-			return damage;
+			return;
 		}
 		
 		// Sap the Health
@@ -479,7 +451,7 @@ public abstract class Attack implements Serializable
 		// Effects that apply to the opponent when they take damage
 		Global.invoke(invokees, TakeDamageEffect.class, "takeDamage", b, me, o);
 		
-		return damage;
+		return;
 	}
 	
 	public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1208,16 +1180,6 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 			super.effects.add(Effect.getEffect(Namesies.LEECH_SEED_EFFECT, EffectType.POKEMON));
 		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (Ability.blockDamage(b, user, victim))
-			{
-				return;
-			}
-			
-			super.applyEffects(b, user, victim);
-		}
 	}
 
 	private static class ThunderWave extends Attack 
@@ -1229,16 +1191,6 @@ public abstract class Attack implements Serializable
 			super(Namesies.THUNDER_WAVE_ATTACK, "A weak electric charge is launched at the target. It causes paralysis if it hits.", 20, Type.ELECTRIC, Category.STATUS);
 			super.accuracy = 100;
 			super.status = StatusCondition.PARALYZED;
-		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (!super.effective(b, user, victim))
-			{
-				return;
-			}
-			
-			super.applyEffects(b, user, victim);
 		}
 	}
 
@@ -1355,9 +1307,9 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, 20);
+			o.reduceHealth(b, 20);
 		}
 	}
 
@@ -1594,9 +1546,9 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, 40);
+			o.reduceHealth(b, 40);
 		}
 	}
 
@@ -2686,29 +2638,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -2719,7 +2665,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -2781,29 +2726,23 @@ public abstract class Attack implements Serializable
 			super.status = StatusCondition.POISONED;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 2;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -2814,7 +2753,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -2895,29 +2833,23 @@ public abstract class Attack implements Serializable
 			super.accuracy = 95;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -2928,7 +2860,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -2994,6 +2925,11 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		{
+			o.reduceHealth(b, o.getHP() - me.getHP());
+		}
+
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			if (me.getHP() >= o.getHP())
@@ -3002,7 +2938,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			super.tryDamage(me, o, b, o.getHP() - me.getHP());
+			super.apply(me, o, b);
 		}
 	}
 
@@ -3273,9 +3209,9 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, (int)Math.ceil(o.getHP()/2.0));
+			o.reduceHealth(b, (int)Math.ceil(o.getHP()/2.0));
 		}
 	}
 
@@ -3826,29 +3762,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -3859,7 +3789,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -3957,29 +3886,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 2;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -3990,7 +3913,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -4141,33 +4063,25 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			// Fails when the opponent is at a higher level than the user
 			if (me.getLevel() < o.getLevel())
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return -1;
+				return;
 			}
 			
 			// Sturdy prevents OHKO moves if the user is not a mold breaker
 			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
 				b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
-				return -1;
-			}
-			
-			int damage = super.tryDamage(me, o, b, o.getHP());
-			
-			// Did not actually strike as was ineffective for some reason
-			if (damage == -1)
-			{
-				return -1;
+				return;
 			}
 			
 			// Certain death
+			o.reduceHealth(b, o.getHP());
 			b.addMessage("It's a One-Hit KO!");
-			return damage;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -4227,29 +4141,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -4260,7 +4168,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -4494,16 +4401,6 @@ public abstract class Attack implements Serializable
 			super(Namesies.WILL_OWISP_ATTACK, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", 15, Type.FIRE, Category.STATUS);
 			super.accuracy = 85;
 			super.status = StatusCondition.BURNED;
-		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (Ability.blockDamage(b, user, victim))
-			{
-				return;
-			}
-			
-			super.applyEffects(b, user, victim);
 		}
 	}
 
@@ -5113,33 +5010,25 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.ONE_HIT_KO);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			// Fails when the opponent is at a higher level than the user
 			if (me.getLevel() < o.getLevel())
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return -1;
+				return;
 			}
 			
 			// Sturdy prevents OHKO moves if the user is not a mold breaker
 			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
 				b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
-				return -1;
-			}
-			
-			int damage = super.tryDamage(me, o, b, o.getHP());
-			
-			// Did not actually strike as was ineffective for some reason
-			if (damage == -1)
-			{
-				return -1;
+				return;
 			}
 			
 			// Certain death
+			o.reduceHealth(b, o.getHP());
 			b.addMessage("It's a One-Hit KO!");
-			return damage;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -5294,16 +5183,6 @@ public abstract class Attack implements Serializable
 			super(Namesies.SOAK_ATTACK, "The user shoots a torrent of water at the target and changes the target's type to Water.", 20, Type.WATER, Category.STATUS);
 			super.accuracy = 100;
 			super.effects.add(Effect.getEffect(Namesies.CHANGE_TYPE_EFFECT, EffectType.POKEMON));
-		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (Ability.blockDamage(b, user, victim))
-			{
-				return;
-			}
-			
-			super.applyEffects(b, user, victim);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -5521,9 +5400,9 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, me.getLevel());
+			o.reduceHealth(b, me.getLevel());
 		}
 	}
 
@@ -6102,29 +5981,23 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -6135,7 +6008,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -6585,29 +6457,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 2;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -6618,7 +6484,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -6750,33 +6615,25 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.ONE_HIT_KO);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			// Fails when the opponent is at a higher level than the user
 			if (me.getLevel() < o.getLevel())
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return -1;
+				return;
 			}
 			
 			// Sturdy prevents OHKO moves if the user is not a mold breaker
 			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
 				b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
-				return -1;
-			}
-			
-			int damage = super.tryDamage(me, o, b, o.getHP());
-			
-			// Did not actually strike as was ineffective for some reason
-			if (damage == -1)
-			{
-				return -1;
+				return;
 			}
 			
 			// Certain death
+			o.reduceHealth(b, o.getHP());
 			b.addMessage("It's a One-Hit KO!");
-			return damage;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -6849,29 +6706,23 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -6882,7 +6733,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -6955,29 +6805,23 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -6988,7 +6832,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -7074,9 +6917,9 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, me.getLevel());
+			o.reduceHealth(b, me.getLevel());
 		}
 	}
 
@@ -7313,33 +7156,25 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			// Fails when the opponent is at a higher level than the user
 			if (me.getLevel() < o.getLevel())
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return -1;
+				return;
 			}
 			
 			// Sturdy prevents OHKO moves if the user is not a mold breaker
 			if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
 			{
 				b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
-				return -1;
-			}
-			
-			int damage = super.tryDamage(me, o, b, o.getHP());
-			
-			// Did not actually strike as was ineffective for some reason
-			if (damage == -1)
-			{
-				return -1;
+				return;
 			}
 			
 			// Certain death
+			o.reduceHealth(b, o.getHP());
 			b.addMessage("It's a One-Hit KO!");
-			return damage;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
@@ -7430,19 +7265,18 @@ public abstract class Attack implements Serializable
 			super.priority = -5;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// TODO: Need to take type advantage into consideration
 			int damageTaken = me.getAttributes().getDamageTaken();
 			
 			// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.SPECIAL)
+			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.SPECIAL || b.isFirstAttack())
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
-			super.tryDamage(me, o, b, damageTaken*2);
+			o.reduceHealth(b, damageTaken*2);
 		}
 	}
 
@@ -7460,19 +7294,18 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// TODO: Need to take type advantage into consideration
 			int damageTaken = me.getAttributes().getDamageTaken();
 			
 			// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.PHYSICAL)
+			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.PHYSICAL || b.isFirstAttack())
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
-			super.tryDamage(me, o, b, damageTaken*2);
+			o.reduceHealth(b, damageTaken*2);
 		}
 	}
 
@@ -7488,29 +7321,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.BOMB_BALL);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -7521,7 +7348,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -7537,29 +7363,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.BOMB_BALL);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -7570,7 +7390,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -7636,29 +7455,23 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 2;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -7669,7 +7482,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -7684,29 +7496,23 @@ public abstract class Attack implements Serializable
 			super.accuracy = 90;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -7717,7 +7523,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -7851,29 +7656,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -7884,7 +7683,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -8043,8 +7841,9 @@ public abstract class Attack implements Serializable
 			super.applyEffects(b, me, me);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// TODO: Test this I don't think it's working right -- particularly with printing and such -- like where's the error
 			if (me.hasEffect(Namesies.FOCUSING_EFFECT))
 			{
 				super.applyDamage(me, o, b);
@@ -8661,7 +8460,7 @@ public abstract class Attack implements Serializable
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			b.addMessage("But nothing happened...");
 		}
@@ -8707,6 +8506,7 @@ public abstract class Attack implements Serializable
 					return;
 				}
 			}
+			
 			super.apply(me, o, b);
 		}
 	}
@@ -9293,9 +9093,9 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0));
+			o.reduceHealth(b, (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0));
 		}
 	}
 
@@ -9429,11 +9229,17 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// TODO: Make sure this still works with applyDamage instead of apply -- maybe it should be apply and be using callNewMove
 			for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
 			{
-				if (p.hasStatus()) continue;
+				// Only healthy Pokemon get to attack
+				if (p.hasStatus())
+				{
+					continue;
+				}
+				
 				Move temp = p.getMove();
 				p.setMove(new Move(Attack.getAttack(this.namesies)));
 				b.addMessage(p.getName() + "'s attack!");
@@ -9478,6 +9284,7 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
+			// TODO: Check effectiveness -- can this hit Ghost-types?
 			if (Math.random()*100 < 80)
 			{
 				super.applyDamage(me, o, b);
@@ -9527,23 +9334,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			Move copy = o.getAttributes().getLastMoveUsed();
-			if (copy == null || copy.getAttack().namesies() == Namesies.STRUGGLE_ATTACK || me.hasEffect(Namesies.TRANSFORMED_EFFECT))
+			Move copy = victim.getAttributes().getLastMoveUsed();
+			if (copy == null || copy.getAttack().namesies() == Namesies.STRUGGLE_ATTACK || user.hasEffect(Namesies.TRANSFORMED_EFFECT))
 			{
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
-			List<Move> moves = me.getMoves(b);
+			List<Move> moves = user.getMoves(b);
 			for (int i = 0; i < moves.size(); i++)
 			{
 				if (moves.get(i).getAttack().namesies() == this.namesies)
 				{
 					moves.add(i, new Move(copy.getAttack()));
 					moves.remove(i + 1);
-					b.addMessage(me.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
+					b.addMessage(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 					break;
 				}
 			}
@@ -9557,26 +9364,38 @@ public abstract class Attack implements Serializable
 		public TripleKick()
 		{
 			super(Namesies.TRIPLE_KICK_ATTACK, "A consecutive three-kick attack that becomes more powerful with each successive hit.", 10, Type.FIGHTING, Category.PHYSICAL);
-			super.power = 10;
+			super.power = 20;
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (super.zeroAdvantage(b, me, o)) return -1;
-			int pow = super.power, hits, damage = 0;
-			for (hits = 1; hits <= 3; hits++)
+			int minHits = 3;
+			int maxHits = 3;
+			
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
+			
+			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
-				super.power = pow*hits;
-				b.addMessage("Hit " + hits + "!");
-				damage += super.applyDamage(me, o, b);
-				if (hits < 3 && !b.accuracyCheck(me, o)) break;
+				hits = 5;
 			}
-			if (hits > 3) hits = 3;
-			b.addMessage("Hit " + hits + " times!");
-			super.power = pow;
-			return damage;
+			
+			int hit = 1;
+			for (; hit <= hits; hit++)
+			{
+				b.addMessage("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
+				
+				// Stop attacking the dead
+				if (o.isFainted(b))
+				{
+					break;
+				}
+			}
+			
+			// Print hits and gtfo
+			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -9615,12 +9434,16 @@ public abstract class Attack implements Serializable
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
+			for (ActivePokemon p : b.getTrainer(user.user()).getTeam())
 			{
-				if (!p.hasStatus(StatusCondition.FAINTED)) p.removeStatus();
+				if (!p.hasStatus(StatusCondition.FAINTED))
+				{
+					p.removeStatus();
+				}
 			}
+			
 			b.addMessage("All status problems were cured!");
 		}
 	}
@@ -9828,29 +9651,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -9861,7 +9678,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -9945,7 +9761,7 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
 			int damageTaken = me.getAttributes().getDamageTaken();
 			if (damageTaken == 0 || b.isFirstAttack())
@@ -9954,7 +9770,7 @@ public abstract class Attack implements Serializable
 				return;
 			}
 			
-			super.tryDamage(me, o, b, (int)(damageTaken*1.5));
+			o.reduceHealth(b, (int)(damageTaken*1.5));
 		}
 	}
 
@@ -10267,29 +10083,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 2;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -10300,7 +10110,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -10754,29 +10563,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -10787,7 +10590,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -10864,29 +10666,23 @@ public abstract class Attack implements Serializable
 			super.accuracy = 85;
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 2;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -10897,7 +10693,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
@@ -11226,9 +11021,9 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			return super.tryDamage(me, o, b, me.getHP());
+			o.reduceHealth(b, me.getHP());
 		}
 	}
 
@@ -11311,22 +11106,53 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
-			{
-				if (super.category == Category.STATUS)
-				{
-					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				}
-				return;
-			}
-			
+			// Fails against the Suction Cups ability
 			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
 				b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 				return;
 			}
 			
+			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
+			if (b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
+			{
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
+				
+				return;
+			}
+			
+			Team opponent = b.getTrainer(victim.user());
+			if (opponent instanceof WildPokemon)
+			{
+				// Fails against wild Pokemon of higher levels
+				if (victim.getLevel() > user.getLevel())
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
+				}
+				
+				// End the battle against a wild Pokemon
+				b.addMessage(victim.getName() + " fled in fear!");
+				b.addMessage(" ", Update.EXIT_BATTLE);
+				return;
+			}
+			
+			Trainer trainer = (Trainer)opponent;
+			if (!trainer.hasRemainingPokemon())
+			{
+				// Fails against trainers on their last Pokemon
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
+				
+				return;
+			}
+			
+			// Swap to a random Pokemon!
 			b.addMessage(victim.getName() + " fled in fear!");
 			trainer.switchToRandom();
 			victim = trainer.front();
@@ -11382,22 +11208,53 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
-			{
-				if (super.category == Category.STATUS)
-				{
-					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				}
-				return;
-			}
-			
+			// Fails against the Suction Cups ability
 			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
 				b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 				return;
 			}
 			
+			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
+			if (b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
+			{
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
+				
+				return;
+			}
+			
+			Team opponent = b.getTrainer(victim.user());
+			if (opponent instanceof WildPokemon)
+			{
+				// Fails against wild Pokemon of higher levels
+				if (victim.getLevel() > user.getLevel())
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
+				}
+				
+				// End the battle against a wild Pokemon
+				b.addMessage(victim.getName() + " was thrown away!");
+				b.addMessage(" ", Update.EXIT_BATTLE);
+				return;
+			}
+			
+			Trainer trainer = (Trainer)opponent;
+			if (!trainer.hasRemainingPokemon())
+			{
+				// Fails against trainers on their last Pokemon
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
+				
+				return;
+			}
+			
+			// Swap to a random Pokemon!
 			b.addMessage(victim.getName() + " was thrown away!");
 			trainer.switchToRandom();
 			victim = trainer.front();
@@ -11521,22 +11378,53 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
-			{
-				if (super.category == Category.STATUS)
-				{
-					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				}
-				return;
-			}
-			
+			// Fails against the Suction Cups ability
 			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
 				b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 				return;
 			}
 			
+			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
+			if (b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
+			{
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
+				
+				return;
+			}
+			
+			Team opponent = b.getTrainer(victim.user());
+			if (opponent instanceof WildPokemon)
+			{
+				// Fails against wild Pokemon of higher levels
+				if (victim.getLevel() > user.getLevel())
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
+				}
+				
+				// End the battle against a wild Pokemon
+				b.addMessage(victim.getName() + " blew away!");
+				b.addMessage(" ", Update.EXIT_BATTLE);
+				return;
+			}
+			
+			Trainer trainer = (Trainer)opponent;
+			if (!trainer.hasRemainingPokemon())
+			{
+				// Fails against trainers on their last Pokemon
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
+				
+				return;
+			}
+			
+			// Swap to a random Pokemon!
 			b.addMessage(victim.getName() + " blew away!");
 			trainer.switchToRandom();
 			victim = trainer.front();
@@ -11950,22 +11838,53 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			Trainer trainer = b.isWildBattle() ? null : (Trainer)b.getTrainer(victim.user());
-			if (trainer == null || !trainer.hasRemainingPokemon() || b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
-			{
-				if (super.category == Category.STATUS)
-				{
-					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				}
-				return;
-			}
-			
+			// Fails against the Suction Cups ability
 			if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
 			{
 				b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 				return;
 			}
 			
+			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
+			if (b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
+			{
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
+				
+				return;
+			}
+			
+			Team opponent = b.getTrainer(victim.user());
+			if (opponent instanceof WildPokemon)
+			{
+				// Fails against wild Pokemon of higher levels
+				if (victim.getLevel() > user.getLevel())
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
+				}
+				
+				// End the battle against a wild Pokemon
+				b.addMessage(victim.getName() + " was slapped away!");
+				b.addMessage(" ", Update.EXIT_BATTLE);
+				return;
+			}
+			
+			Trainer trainer = (Trainer)opponent;
+			if (!trainer.hasRemainingPokemon())
+			{
+				// Fails against trainers on their last Pokemon
+				if (super.category == Category.STATUS)
+				{
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				}
+				
+				return;
+			}
+			
+			// Swap to a random Pokemon!
 			b.addMessage(victim.getName() + " was slapped away!");
 			trainer.switchToRandom();
 			victim = trainer.front();
@@ -12731,16 +12650,6 @@ public abstract class Attack implements Serializable
 			super.accuracy = 100;
 			super.statChanges[Stat.SP_ATTACK.index()] = -2;
 		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (Ability.blockDamage(b, user, victim))
-			{
-				return;
-			}
-			
-			super.applyEffects(b, user, victim);
-		}
 	}
 
 	private static class MistyTerrain extends Attack implements AccuracyBypassEffect
@@ -12895,29 +12804,23 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// Don't apply damage if the move is ineffective
-			if (!effective(b, me, o))
-			{
-				return -1;
-			}
-			
 			int minHits = 2;
 			int maxHits = 5;
 			
-			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + 2;
+			int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
 			
 			if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY))
 			{
 				hits = 5;
 			}
 			
-			int damage = 0, hit = 1;
+			int hit = 1;
 			for (; hit <= hits; hit++)
 			{
 				b.addMessage("Hit " + hit + "!");
-				damage += super.applyDamage(me, o, b);
+				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
 				if (o.isFainted(b))
@@ -12928,7 +12831,6 @@ public abstract class Attack implements Serializable
 			
 			// Print hits and gtfo
 			b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-			return damage;
 		}
 	}
 
