@@ -26,6 +26,9 @@ public abstract class BattleEffect extends Effect
 	{
 		if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 		b.addEffect(this.newInstance());
+		
+		b.addMessage("", caster);
+		b.addMessage("", victim);
 	}
 	
 	public static BattleEffect getEffect(Namesies name)
@@ -413,7 +416,7 @@ public abstract class BattleEffect extends Effect
 			if (!victim.fullHealth() && !victim.isLevitating(b))
 			{
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", victim);
 			}
 		}
 

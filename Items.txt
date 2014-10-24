@@ -129,9 +129,14 @@ Black Sludge
 	ApplyEndTurn:
 		if (victim.isType(b, Type.POISON))
 		{
-			if (victim.fullHealth()) return;
+			// Don't heal if at full health
+			if (victim.fullHealth()) 
+			{
+				return;
+			}
+			
 			victim.healHealthFraction(1/16.0);
-			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 		}
 		else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 		{
@@ -624,10 +629,14 @@ Shell Bell
 	Price: 200
 	Fling: 30
 	OnApplyDamage:
-		if (user.fullHealth()) return;
+		if (user.fullHealth()) 
+		{
+			return;
+		}
+		
 		user.heal((int)Math.ceil(damage/8.0));
 		// TODO: This looks really bad when paired with Explosion
-		b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user.getHP(), user.user());
+		b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user);
 		###
 *
 Smoke Ball
@@ -690,7 +699,11 @@ Sticky Barb
 			user.reduceHealthFraction(b, 1/8.0);
 		}
 	            
-		if (user.isHoldingItem(b) || user.isFainted(b)) return;
+		if (user.isHoldingItem(b) || user.isFainted(b)) 
+		{
+			return;
+		}
+		
 		b.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
 
 		if (b.isWildBattle())
@@ -702,6 +715,7 @@ Sticky Barb
 	            
 		item = this;
 		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.HELD_ITEM, false);
+
 		item = Item.noneItem();
 		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
@@ -1098,7 +1112,7 @@ Leftovers
 		}
 		
 		victim.healHealthFraction(1/16.0);
-		b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 		###
 	Price: 200
 	Fling: 10
@@ -2449,7 +2463,7 @@ Enigma Berry:
 		{
 			b.addMessage(victim.getName() + "'s " + this.name + " restored its health!");
 			victim.healHealthFraction(.25);
-			b.addMessage("", victim.getHP(), victim.user());
+			b.addMessage("", victim);
 			victim.consumeItem(b);
 		}
 		###

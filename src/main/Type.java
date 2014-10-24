@@ -56,7 +56,7 @@ public enum Type implements Serializable
 
 	public static boolean blockAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
 	{
-		if (defending.isAttackType(Type.GRASS) && attacking.getAttack().isMoveType(MoveType.POWDER))
+		if (defending.isType(b, Type.GRASS) && attacking.getAttack().isMoveType(MoveType.POWDER))
 		{
 			b.addMessage(defending.getName() + " is immune to Powder moves!");
 			return true;

@@ -489,13 +489,13 @@ public class BagView extends View
 				{
 					g.setColor(Color.BLACK);
 					g.setFont(Global.getFont(14));
-					g.drawString(p.getName(), 50, 22);	
+					g.drawString(p.getActualName(), 50, 22);	
 				}
 				else
 				{
 					g.setColor(Color.BLACK);
 					g.setFont(Global.getFont(14));
-					g.drawString(p.getName() + " " + p.getGender().getCharacter(), 50, 22);
+					g.drawString(p.getActualName() + " " + p.getGender().getCharacter(), 50, 22);
 					g.drawString("Lv" + p.getLevel(), 153, 22);
 					s = p.getStatus().getType().getName();
 					g.drawString(s, Global.rightX(s, 293, 14), 22);

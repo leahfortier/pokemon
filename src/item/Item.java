@@ -870,9 +870,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			if (victim.isType(b, Type.POISON))
 			{
-				if (victim.fullHealth()) return;
+				// Don't heal if at full health
+				if (victim.fullHealth())
+				{
+					return;
+				}
+				
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 			}
 			else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -2547,10 +2552,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
-			if (user.fullHealth()) return;
+			if (user.fullHealth())
+			{
+				return;
+			}
+			
 			user.heal((int)Math.ceil(damage/8.0));
 			// TODO: This looks really bad when paired with Explosion
-			b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user.getHP(), user.user());
+			b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user);
 		}
 	}
 
@@ -2707,7 +2716,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.reduceHealthFraction(b, 1/8.0);
 			}
 			
-			if (user.isHoldingItem(b) || user.isFainted(b)) return;
+			if (user.isHoldingItem(b) || user.isFainted(b))
+			{
+				return;
+			}
+			
 			b.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
 			
 			if (b.isWildBattle())
@@ -2719,6 +2732,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			item = this;
 			PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.HELD_ITEM, false);
+			
 			item = Item.noneItem();
 			PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
@@ -4651,7 +4665,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			victim.healHealthFraction(1/16.0);
-			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 		}
 	}
 
@@ -8992,14 +9006,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9091,14 +9104,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9190,14 +9202,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9289,14 +9300,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9388,14 +9398,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9500,14 +9509,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9598,14 +9606,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9687,14 +9694,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9781,14 +9787,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9879,14 +9884,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11158,14 +11162,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11255,14 +11258,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11352,14 +11354,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11449,14 +11450,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11546,14 +11546,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11643,14 +11642,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11927,7 +11925,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " restored its health!");
 				victim.healHealthFraction(.25);
-				b.addMessage("", victim.getHP(), victim.user());
+				b.addMessage("", victim);
 				victim.consumeItem(b);
 			}
 		}
@@ -11994,14 +11992,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -12106,14 +12103,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!

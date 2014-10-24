@@ -130,29 +130,32 @@ public class Bag implements Serializable
 		{
 			player.getBag().addItem(item);
 			p.removeItem();
-			s += "Took the " + item.getName() + " from " + p.getName() + ". ";
+			s += "Took the " + item.getName() + " from " + p.getActualName() + ". ";
 		}
 		
 		p.giveItem((HoldItem)hold);
 		removeItem(hold);
-		s += p.getName() + " is now holding " + hold.getName() + ".";
+		s += p.getActualName() + " is now holding " + hold.getName() + ".";
 		
 		return s;
 	}
 	
 	public String takeItem(CharacterData player, ActivePokemon p)
 	{
-		if (p.isEgg()) return "Eggs can't hold anything. They're eggs.";
+		if (p.isEgg()) 
+		{
+			return "Eggs can't hold anything. They're eggs.";
+		}
 		
 		Item item = p.getActualHeldItem();
 		if (item != Item.noneItem()) 
 		{
 			player.getBag().addItem(item);
 			p.removeItem();
-			return "Took the " + item.getName() + " from " + p.getName() + ".";
+			return "Took the " + item.getName() + " from " + p.getActualName() + ".";
 		}
 		
-		return p.getName() + " is not holding anything.";
+		return p.getActualName() + " is not holding anything.";
 	}
 	
 	public void addItem(Item i)
@@ -298,8 +301,8 @@ public class Bag implements Serializable
 				
 				b.addMessage(((Trainer)b.getTrainer(p.user())).getName() + " used " + i.name + "!");
 				b.addMessage(((UseItem)i).getSuccessMessage(p));
-				if (front) b.addMessage("", p.getHP(), p.user());
-				if (front) b.addMessage("", p.getStatus().getType(), p.user());
+				
+				if (front) b.addMessage("", p);
 			}
 			
 			if (items.get(i) > 1) lastUsedItem = i;

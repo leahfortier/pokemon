@@ -151,7 +151,7 @@ public class PartyView extends View
 			g.setColor(Color.BLACK);
 			
 			// Name
-			g.drawString(selectedPkm.getName(), 213, 147);
+			g.drawString(selectedPkm.getActualName(), 213, 147);
 			
 			g.setFont(Global.getFont(16));
 			
@@ -164,7 +164,7 @@ public class PartyView extends View
 			g.setColor(Color.BLACK);
 			
 			// Name and Gender
-			g.drawString(selectedPkm.getName() + " " + selectedPkm.getGender().getCharacter(), 213, 147);
+			g.drawString(selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter(), 213, 147);
 			
 			// Number
 			g.drawString("#" + String.format("%03d", selectedPkm.getPokemonInfo().getNumber()), 378, 147);
@@ -349,7 +349,7 @@ public class PartyView extends View
 			else g.drawImage(tiles.getTile(0x15), 0, 0, null);
 			
 			g.setColor(Color.BLACK);
-			g.drawString(pkm.getName(), 40, 34);
+			g.drawString(pkm.getActualName(), 40, 34);
 			
 			pkmImg = partyTiles.getTile(pkm.getPokemonInfo().getNumber());
 			if (pkm.isEgg()) pkmImg = partyTiles.getTile(0x10000);

@@ -4,6 +4,7 @@ import item.Item;
 import item.berry.Berry;
 import item.hold.ConsumableItem;
 import item.hold.HoldItem;
+import item.hold.PlateItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import battle.effect.FaintEffect;
 import battle.effect.IgnoreStageEffect;
 import battle.effect.ItemCondition;
 import battle.effect.ModifyStageValueEffect;
+import battle.effect.NameChanger;
 import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentPowerChangeEffect;
@@ -63,6 +65,7 @@ import battle.effect.StatusPreventionEffect;
 import battle.effect.SwitchOutEffect;
 import battle.effect.TakeDamageEffect;
 import battle.effect.TargetSwapperEffect;
+import battle.effect.TypeCondition;
 import battle.effect.Weather;
 import battle.effect.WeatherBlockerEffect;
 
@@ -99,6 +102,11 @@ public abstract class Ability implements Serializable
 	public String getDescription()
 	{
 		return description;
+	}
+	
+	public boolean isActive()
+	{
+		return true;
 	}
 	
 	// Abilities that block damage
@@ -546,7 +554,7 @@ public abstract class Ability implements Serializable
 			if (b.getWeather().namesies() == Namesies.RAINING_EFFECT)
 			{
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 			}
 		}
 	}
@@ -589,8 +597,8 @@ public abstract class Ability implements Serializable
 		{
 			if (victim.hasStatus() && (int)(Math.random()*3) == 0)
 			{
-				b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 				victim.removeStatus();
+				b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
 			}
 		}
 	}
@@ -999,6 +1007,11 @@ public abstract class Ability implements Serializable
 			return x;
 		}
 
+		public boolean isActive()
+		{
+			return activated;
+		}
+
 		public boolean block(Type attacking, ActivePokemon victim)
 		{
 			return attacking == Type.FIRE;
@@ -1164,7 +1177,7 @@ public abstract class Ability implements Serializable
 			else if (b.getWeather().namesies() == Namesies.RAINING_EFFECT && !victim.fullHealth())
 			{
 				victim.healHealthFraction(1/8.0);
-				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 			}
 		}
 
@@ -1182,7 +1195,7 @@ public abstract class Ability implements Serializable
 		{
 			// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 		}
 	}
 
@@ -1650,7 +1663,7 @@ public abstract class Ability implements Serializable
 			if (b.getWeather().namesies() == Namesies.RAINING_EFFECT && victim.hasStatus())
 			{
 				victim.removeStatus();
-				b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
+				b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
 			}
 		}
 	}
@@ -2168,7 +2181,7 @@ public abstract class Ability implements Serializable
 		{
 			// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 		}
 	}
 
@@ -2195,7 +2208,7 @@ public abstract class Ability implements Serializable
 		{
 			// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 		}
 	}
 
@@ -3091,7 +3104,7 @@ public abstract class Ability implements Serializable
 			if (b.getWeather().namesies() == Namesies.HAILING_EFFECT)
 			{
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 			}
 		}
 
@@ -3712,11 +3725,14 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect
+	private static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, TypeCondition, NameChanger
 	{
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
-		private String actualName;
+		private String illusionName;
+		private Type[] illusionType;
+		private PokemonInfo illusionSpecies;
+		private boolean illusionShiny;
 
 		public Illusion()
 		{
@@ -3727,44 +3743,102 @@ public abstract class Ability implements Serializable
 		{
 			Illusion x = (Illusion)(new Illusion().activate());
 			x.activated = false;
-			x.actualName = actualName;
 			return x;
+		}
+
+		public boolean isActive()
+		{
+			return activated;
 		}
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			List<ActivePokemon> team = b.getTrainer(victim.user()).getTeam();
-			ActivePokemon illusion = team.get(team.size()-1);
+			// No Illusion today...
+			if (!activated)
+			{
+				return;
+			}
 			
-			if (!illusion.canFight()) return;
-			if (illusion.getPokemonInfo().getNumber() == victim.getPokemonInfo().getNumber()) return;
-			
-			activated = true;
-			actualName = victim.getName(); // TODO: When the Pokemon is sent out, it displays the actual name, instead of the illusion name
-			
-			victim.setNickname(illusion.getName()); // TODO: Find a better workaround for this, the Illusion name is appearing in the Switch Pokemon menu
-			b.addMessage("", illusion.getPokemonInfo(), illusion.isShiny(), false, victim.user());
-			b.addMessage("", illusion.getName(), victim.user());
-			b.addMessage("", illusion.getType(b), victim.user());
-			b.addMessage("", illusion.getGender(), victim.user());
+			// Display the Illusion changes
+			b.addMessage("", illusionSpecies, illusionShiny, false, victim.user());
+			b.addMessage("", victim);
 		}
 
 		public void switchOut(ActivePokemon switchee)
 		{
 			activated = false;
-			switchee.setNickname(actualName);
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (!activated) return;
+			// If the Illusion is already broken, no worries
+			if (!activated)
+			{
+				return;
+			}
+			
 			activated = false;
-			victim.setNickname(actualName);
-			b.addMessage(actualName + "'s Illusion was broken!");
+			b.addMessage(victim.getName() + "'s Illusion was broken!");
+			
 			b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
-			b.addMessage("", actualName, victim.user());
-			b.addMessage("", victim.getType(b), victim.user());
-			b.addMessage("", victim.getGender(), victim.user());
+			b.addMessage("", victim);
+		}
+
+		public Type[] getType(Battle b, ActivePokemon p, Boolean display)
+		{
+			if (display && activated)
+			{
+				return illusionType;
+			}
+			
+			return p.getActualType();
+		}
+
+		public String getNameChange()
+		{
+			return activated ? illusionName : null;
+		}
+
+		public void setNameChange(Battle b, ActivePokemon victim)
+		{
+			List<ActivePokemon> team = b.getTrainer(victim.user()).getTeam();
+			ActivePokemon illusion = null;
+			
+			// Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
+			for (int i = team.size() - 1; i > 0; i--)
+			{
+				ActivePokemon temp = team.get(i);
+				
+				// If the Pokemon in back cannot fight for any reason -- do nothing
+				if (!temp.canFight())
+				{
+					continue;
+				}
+				
+				// If the Pokemon in back is the same species at the current Pokemon -- do nothing
+				if (temp.getPokemonInfo().getNumber() == victim.getPokemonInfo().getNumber())
+				{
+					continue;
+				}
+				
+				// Otherwise, we've found our Illusion!
+				illusion = temp;
+				break;
+			}
+			
+			// No valid Pokemon to be as an illusion -- do not activate
+			if (illusion == null)
+			{
+				return;
+			}
+			
+			// Otherwise, we're in the illusion
+			activated = true;
+			
+			illusionName = illusion.getName();
+			illusionType = illusion.getActualType();
+			illusionSpecies = illusion.getPokemonInfo();
+			illusionShiny = illusion.isShiny();
 		}
 	}
 
@@ -4141,7 +4215,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class Multitype extends Ability 
+	private static class Multitype extends Ability implements TypeCondition
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4154,9 +4228,20 @@ public abstract class Ability implements Serializable
 		{
 			return (Multitype)(new Multitype().activate());
 		}
+
+		public Type[] getType(Battle b, ActivePokemon p, Boolean display)
+		{
+			Item item = p.getHeldItem(b);
+			if (item instanceof PlateItem)
+			{
+				return new Type[] { ((PlateItem)item).getType(), Type.NONE };
+			}
+			
+			return p.getActualType();
+		}
 	}
 
-	private static class Forecast extends Ability 
+	private static class Forecast extends Ability implements TypeCondition
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4168,6 +4253,11 @@ public abstract class Ability implements Serializable
 		public Forecast newInstance()
 		{
 			return (Forecast)(new Forecast().activate());
+		}
+
+		public Type[] getType(Battle b, ActivePokemon p, Boolean display)
+		{
+			return new Type[] { b.getWeather().getElement(), Type.NONE };
 		}
 	}
 
@@ -4461,8 +4551,8 @@ public abstract class Ability implements Serializable
 		{
 			if (victim.hasStatus() && (int)(Math.random()*3) == 0)
 			{
-				b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 				victim.removeStatus();
+				b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
 			}
 		}
 	}

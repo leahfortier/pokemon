@@ -5,7 +5,6 @@ import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
-import item.hold.PlateItem;
 import item.hold.PowerItem;
 
 import java.awt.Color;
@@ -39,6 +38,7 @@ import battle.effect.ItemCondition;
 import battle.effect.LevitationEffect;
 import battle.effect.MoveListCondition;
 import battle.effect.MultiTurnMove;
+import battle.effect.NameChanger;
 import battle.effect.OpponentTrappingEffect;
 import battle.effect.PokemonEffect;
 import battle.effect.StallingEffect;
@@ -502,7 +502,6 @@ public class ActivePokemon implements Serializable
 		Object stat = Global.getInvoke(b.getEffectsList(this), StatsCondition.class, "getStat", this, s);
 		if (stat != null)
 		{
-			System.out.println("GET STAT: " + this.getName() + " " + s.getName() + " " + (int)stat);
 			return (int)stat;
 		}
 		
@@ -547,7 +546,7 @@ public class ActivePokemon implements Serializable
 		// Add EXP
 		totalEXP += gain;
 		b.addMessage(nickname + " gained " + gain + " EXP points!");
-		if (front) b.addMessage("", Math.min(1, expRatio()));
+		if (front) b.addMessage("", this, Math.min(1, expRatio()), false);
 		
 		// Add EVs
 		Item i = getHeldItem(b);
@@ -578,13 +577,19 @@ public class ActivePokemon implements Serializable
 		// Grow to the next level
 		level++;
 		if (print) b.addMessage(nickname + " grew to level " + level + "!");
-		if (print && front) b.addMessage("", level, Math.min(1, expRatio()));
+		if (print && front) b.addMessage("", this, Math.min(1, expRatio()), true);
 		
-		// Change stats 
-		int[] prevStats = stats.clone(), gain = new int[Stat.NUM_STATS];
+		// Change stats -- keep track of the gains
+		int[] prevStats = stats.clone();
+		int[] gain = new int[Stat.NUM_STATS];
 		setStats();
-		for (int i = 0; i < Stat.NUM_STATS; i++) gain[i] = stats[i] - prevStats[i];
-		if (print && front) b.addMessage("", hp, gain, stats, playerPokemon);
+		for (int i = 0; i < Stat.NUM_STATS; i++) 
+		{
+			gain[i] = stats[i] - prevStats[i];
+		}
+		
+		// TODO: Is this supposed to be for the front Pokemon only? Don't we want to see a gain update for other Pokemon in the party?
+		if (print && front) b.addMessage("", this, gain, stats);
 		
 		// Learn new moves
 		for (Namesies s : pokemon.getMoves(level)) 
@@ -618,21 +623,18 @@ public class ActivePokemon implements Serializable
 		
 		// Set name if it was not given a nickname
 		if (sameName) nickname = pokemon.getName();
-		if (print && front) b.addMessage("", nickname, playerPokemon);
-		if (print && front) b.addMessage("", getType(b), playerPokemon);
 		
 		// Change stats
 		int[] prevStats = stats.clone(), gain = new int[Stat.NUM_STATS];
 		setStats();
 		for (int i = 0; i < Stat.NUM_STATS; i++) gain[i] = stats[i] - prevStats[i];
 		
-		if (print && front) b.addMessage("", hp, stats[Stat.HP.index()], playerPokemon);
 		if (print && front) b.addMessage("", pokemon, shiny, true, playerPokemon);
 		
 		String message = name + " evolved into " + pokemon.getName() + "!";
 		
 		if (print) b.addMessage(message);
-		if (print && front) b.addMessage("", hp, gain, stats, playerPokemon);
+		if (print && front) b.addMessage("", this, gain, stats);
 		
 		// Learn new moves
 		List<Namesies> levelMoves = pokemon.getMoves(level);
@@ -873,32 +875,26 @@ public class ActivePokemon implements Serializable
 		return pokemon.getType();
 	}
 	
-	public Type[] getType(Battle b) 
+	public Type[] getDisplayType(Battle b)
 	{
-		if (hasAbility(Namesies.MULTITYPE_ABILITY))
+		return getType(b, true);
+	}
+	
+	public Type[] getType(Battle b) 
+	{	
+		return getType(b, false);
+	}
+	
+	private Type[] getType(Battle b, boolean displayOnly)
+	{
+		// Guarantee the change-type effect to be first
+		Object[] invokees = b.getEffectsList(this, this.getEffect(Namesies.CHANGE_TYPE_EFFECT));
+		
+		Object changeType = Global.getInvoke(invokees, TypeCondition.class, "getType", b, this, displayOnly);
+		if (changeType != null)
 		{
-			Item item = getHeldItem(b);
-			if (item instanceof PlateItem)
-			{
-				return new Type[] {((PlateItem)item).getType(), Type.NONE};
-			}
-			
-			return new Type[] {Type.NORMAL, Type.NONE};
+			return (Type[])changeType;
 		}
-		
-		if (hasAbility(Namesies.FORECAST_ABILITY))
-		{			
-			return new Type[] { b.getWeather().getElement(), Type.NONE};
-		}
-		
-		// Check if the Pokemon has had its type changed during the battle
-		PokemonEffect changeType = getEffect(Namesies.CHANGE_TYPE_EFFECT);
-		if (changeType != null) 
-			return ((TypeCondition)changeType).getType();
-		
-		PokemonEffect transformed = getEffect(Namesies.TRANSFORMED_EFFECT);
-		if (transformed != null) 
-			return ((TypeCondition)transformed).getType();
 		
 		return getActualType();
 	}
@@ -934,9 +930,21 @@ public class ActivePokemon implements Serializable
 		return Global.getHPColor(getHPRatio());
 	}
 	
-	public String getName()
+	public String getActualName()
 	{
 		return nickname;
+	}
+	
+	public String getName()
+	{
+		Object[] invokees = { this.getAbility() };
+		Object changedName = Global.getInvoke(invokees, NameChanger.class, "getNameChange");
+		if (changedName != null)
+		{
+			return (String)changedName;
+		}
+		
+		return getActualName();
 	}
 	
 	public void setNickname(String nickity)
@@ -981,9 +989,10 @@ public class ActivePokemon implements Serializable
 		// Deady
 		if (hp == 0)
 		{
+			b.addMessage("", this);
+			
 			Status.die(this);
-			b.addMessage("", hp, playerPokemon);
-			b.addMessage(nickname + " fainted!", StatusCondition.FAINTED, playerPokemon);
+			b.addMessage(nickname + " fainted!", this);
 			
 			ActivePokemon murderer = b.getOtherPokemon(user());
 
@@ -1132,7 +1141,8 @@ public class ActivePokemon implements Serializable
 			if (brace != null)
 			{
 				taken -= heal(1);
-				b.addMessage("", hp, playerPokemon);
+				
+				b.addMessage("", this);
 				b.addMessage(brace.braceMessage(this));				
 			}
 		}
@@ -1141,7 +1151,8 @@ public class ActivePokemon implements Serializable
 		{
 			return taken;
 		}
-		b.addMessage("", hp, playerPokemon);
+		
+		b.addMessage("", this);
 		
 		// Check if the Pokemon fainted and also handle Focus Punch
 		if (hasEffect(Namesies.FOCUSING_EFFECT))
@@ -1234,8 +1245,8 @@ public class ActivePokemon implements Serializable
 			heal(amount);
 		}
 		
-		b.addMessage("", victim.hp, victim.user());
-		b.addMessage("", hp, user());
+		b.addMessage("", victim);
+		b.addMessage("", this);
 	}
 	
 	// Returns true if the Pokemon is currently levitating for any reason

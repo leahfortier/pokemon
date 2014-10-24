@@ -1780,8 +1780,8 @@ Wake-Up Slap:
 	ApplyEffects: 
 	if (victim.hasStatus(StatusCondition.ASLEEP))
 	{
-		b.addMessage(victim.getName() + " woke up!", StatusCondition.NONE, victim.user());
 		victim.removeStatus();
+		b.addMessage(victim.getName() + " woke up!", victim);
 	}
 	###
 *
@@ -2398,7 +2398,9 @@ Trick-or-Treat:
 	Int: ChangeTypeMove
 	Effect: Pokemon ChangeType
 	ChangeType: 
-	return new Type[] {victim.getType(b)[0], Type.GHOST};
+	Type primary = victim.getType(b)[0];
+			
+	return new Type[] {primary, primary == Type.GHOST ? Type.NONE : Type.GHOST};
 	###
 	Desc: The user takes the target trick-or-treating. This adds Ghost type to the target's type.
 	PP: 20
@@ -2410,7 +2412,9 @@ Forest's Curse:
 	Int: ChangeTypeMove
 	Effect: Pokemon ChangeType
 	ChangeType:
-	return new Type[] {victim.getType(b)[0], Type.GRASS};
+	Type primary = victim.getType(b)[0];
+			
+	return new Type[] {primary, primary == Type.GRASS ? Type.NONE : Type.GRASS};
 	###
 	Desc: The user puts a forest curse on the target. Afflicted targets are now Grass type as well.
 	PP: 20
@@ -3034,7 +3038,7 @@ Heal Pulse:
 	double fraction = user.hasAbility(Namesies.MEGA_LAUNCHER_ABILITY) ? .75 : .5;
 	
 	victim.healHealthFraction(fraction);
-	b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+	b.addMessage(victim.getName() + "'s health was restored!", victim);
 	###
 *
 Metal Sound:
@@ -3876,7 +3880,7 @@ Refresh:
 	if (user.hasStatus())
 	{
 		user.removeStatus();
-		b.addMessage(user.getName() + " cured itself of its status condition!", StatusCondition.NONE, user.user());
+		b.addMessage(user.getName() + " cured itself of its status condition!", user);
 		return;
 	}
 	
@@ -4657,8 +4661,8 @@ Pain Split:
 	user.setHP(share);
 	victim.setHP(share);
 	
-	b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user.getHP(), user.user());
-	b.addMessage("", victim.getHP(), victim.user());
+	b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user);
+	b.addMessage("", victim);
 	###
 	MoveType: No_Magic_Coat
 *
@@ -4793,7 +4797,7 @@ Present:
 	}
 	
 	o.healHealthFraction(1/4.0);
-	b.addMessage(o.getName() + "'s health was restored!", o.getHP(), o.user());
+	b.addMessage(o.getName() + "'s health was restored!", o);
 	###
 *
 Steel Wing:
@@ -4997,8 +5001,8 @@ Smelling Salts:
 	ApplyEffects: 
 	if (victim.hasStatus(StatusCondition.PARALYZED))
 	{
-		b.addMessage(victim.getName() + " was cured from its paralysis!", StatusCondition.NONE, victim.user());
 		victim.removeStatus();
+		b.addMessage(victim.getName() + " was cured from its paralysis!", victim);
 	}
 	###
 *
@@ -5966,7 +5970,7 @@ Switcheroo:
 	Cat: Status
 	Acc: 100
 	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
-	SwitchItemMessage: user.getName() + " switched items with " + victim.getName() + "!"
+	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
 	MoveType: Assistless
 *	
 Trick:
@@ -5976,7 +5980,7 @@ Trick:
 	Acc: 100
 	Cat: Status
 	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
-	SwitchItemMessage: user.getName() + " switched items with " + victim.getName() + "!"
+	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
 	MoveType: Assistless
 *
 Memento:

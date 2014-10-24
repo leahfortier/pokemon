@@ -160,7 +160,7 @@ GrassyTerrain:
 	if (!victim.fullHealth() && !victim.isLevitating(b))
 	{
 		victim.healHealthFraction(1/16.0);
-		b.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", victim);
 	}
 	###
 	GetMultiplier:

@@ -36,6 +36,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	{
 		if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 		victim.addEffect(this.newInstance());
+		
+		b.addMessage("", caster);
+		b.addMessage("", victim);
 	}
 	
 	public abstract PokemonEffect newInstance();
@@ -1729,7 +1732,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			while (victim.getAttributes().removeEffect(this.namesies));
 			
 			super.cast(b, caster, victim, source, printCast);
-			b.addMessage("", type, victim.user());
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1739,10 +1741,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void subside(Battle b, ActivePokemon p)
 		{
-			b.addMessage("", p.getType(b), p.user());
+			b.addMessage("", p);
 		}
 
-		public Type[] getType()
+		public Type[] getType(Battle b, ActivePokemon p, Boolean display)
 		{
 			return type;
 		}
@@ -2382,7 +2384,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				victim.heal((int)(healAmount*.3));
 			}
 			
-			b.addMessage(victim.getName() + " restored some HP due to ingrain!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + " restored some HP due to ingrain!", victim);
 		}
 	}
 
@@ -2541,8 +2543,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			if (wakey.hasStatus(StatusCondition.ASLEEP))
 			{
-				b.addMessage("The uproar woke up " + wakey.getName() + "!", StatusCondition.NONE, wakey.user());
 				wakey.removeStatus();
+				b.addMessage("The uproar woke up " + wakey.getName() + "!", wakey);
 			}
 		}
 
@@ -2640,7 +2642,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				victim.heal((int)(healAmount*.3));
 			}
 			
-			b.addMessage(victim.getName() + " restored some HP due to aqua ring!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + " restored some HP due to aqua ring!", victim);
 		}
 	}
 
@@ -2783,7 +2785,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
-			return !(b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || victim.hasEffect(this.namesies));
+			return !(b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(Namesies.ILLUSION_ABILITY) && caster.getAbility().isActive())) || victim.hasEffect(this.namesies));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
@@ -2819,7 +2821,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// Castaway
 			super.cast(b, caster, victim, source, printCast);
 			b.addMessage("", transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user());
-			b.addMessage("", victim.getType(b), victim.user());
+			b.addMessage("", victim);
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2837,7 +2839,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return stats[stat.index()];
 		}
 
-		public Type[] getType()
+		public Type[] getType(Battle b, ActivePokemon p, Boolean display)
 		{
 			return type;
 		}
@@ -2869,7 +2871,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			hp = victim.reduceHealthFraction(b, .25) + 1;
 			super.cast(b, caster, victim, source, printCast);
-			b.addMessage("", victim.getHP(), victim.user());
+			b.addMessage("", victim);
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)

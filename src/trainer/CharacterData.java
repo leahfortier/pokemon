@@ -341,7 +341,7 @@ public class CharacterData extends Trainer implements Serializable
 		}
 		else
 		{
-			if (b != null) b.addMessage(p.getName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!");
+			if (b != null) b.addMessage(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!");
 			pc.depositPokemon(p);
 		}
 	}

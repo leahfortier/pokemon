@@ -140,10 +140,12 @@ public abstract class Status implements Serializable
 		Status s = getStatus(status, victim);
 		if (s.applies(b, caster, victim))
 		{
-			b.addMessage(castMessage, status, victim.user());
 			victim.setStatus(s);
+			b.addMessage(castMessage, victim);
+			
 			synchronizeCheck(b, caster, victim, status);
 			berryCheck(b, victim, status);
+			
 			return true;
 		}
 		return false;
@@ -175,8 +177,9 @@ public abstract class Status implements Serializable
 			}
 			
 			caster.setStatus(s);
+			b.addMessage(s.getAbilityCastMessage(victim, caster), caster);
+			
 			berryCheck(b, caster, status);
-			b.addMessage(s.getAbilityCastMessage(victim, caster), status, caster.user());
 		}
 	}
 	
@@ -296,7 +299,7 @@ public abstract class Status implements Serializable
 				}
 				
 				victim.healHealthFraction(1/8.0);
-				b.addMessage(victim.getName() + "'s Poison Heal restored its health!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s " + Namesies.POISON_HEAL_ABILITY + " restored its health!", victim);
 				return;
 			}
 			
@@ -358,8 +361,9 @@ public abstract class Status implements Serializable
 		{
 			if (numTurns == 0)
 			{
-				b.addMessage(p.getName() + " woke up!", StatusCondition.NONE, p.user());
 				p.removeStatus();
+				b.addMessage(p.getName() + " woke up!", p);
+				
 				return true;
 			}
 			
@@ -446,8 +450,9 @@ public abstract class Status implements Serializable
 			// 20% chance to thaw out each turn
 			if (Math.random()*100 < 20 || p.getAttack().isMoveType(MoveType.DEFROST))
 			{
-				b.addMessage(p.getName() + " thawed out!", StatusCondition.NONE, p.user());
 				p.removeStatus();
+				b.addMessage(p.getName() + " thawed out!", p);
+				
 				return true;
 			}
 			
@@ -470,8 +475,8 @@ public abstract class Status implements Serializable
 			// Fire-type moves defrost the user
 			if (user.isAttackType(Type.FIRE))
 			{
-				b.addMessage(victim.getName() + " thawed out!", StatusCondition.NONE, victim.user());
 				victim.removeStatus();
+				b.addMessage(victim.getName() + " thawed out!", victim);
 			}
 		}
 	}

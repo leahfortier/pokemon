@@ -31,6 +31,9 @@ public abstract class TeamEffect extends Effect implements Serializable
 	{
 		if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 		b.getTrainer(victim.user()).addEffect(this);
+		
+		b.addMessage("", caster);
+		b.addMessage("", victim);
 	}
 
 	public static TeamEffect getEffect(Namesies name)
@@ -475,7 +478,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 			}
 			
 			p.healHealthFraction(1/2.0);
-			b.addMessage(casterName + "'s wish came true!", p.getHP(), p.user());
+			b.addMessage(casterName + "'s wish came true!", p);
 		}
 	}
 
@@ -628,8 +631,8 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			victim.healHealthFraction(1);
 			victim.removeStatus();
-			b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim.getHP(), victim.user());
-			b.addMessage("", StatusCondition.NONE, victim.user());
+			
+			b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim);
 			super.active = false;
 		}
 	}

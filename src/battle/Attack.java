@@ -363,7 +363,7 @@ public abstract class Attack implements Serializable
 			return false;
 		}
 		
-		b.addMessage("It doesn't affect " + opp.getName() + "!");		
+		b.addMessage("It doesn't affect " + opp.getName() + "!");
 		Global.invoke(new Object[] { p.getAttack() }, CrashDamageMove.class, "crash", b, p);
 		
 		return true;
@@ -1508,7 +1508,7 @@ public abstract class Attack implements Serializable
 				break;
 			}
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -1532,7 +1532,7 @@ public abstract class Attack implements Serializable
 			
 			victim.healHealthFraction(1/2.0);
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -2524,7 +2524,7 @@ public abstract class Attack implements Serializable
 				break;
 			}
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -3040,7 +3040,7 @@ public abstract class Attack implements Serializable
 			healFail = false;
 			victim.healHealthFraction(1/2.0);
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -3465,7 +3465,7 @@ public abstract class Attack implements Serializable
 				break;
 			}
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -4217,8 +4217,8 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.hasStatus(StatusCondition.ASLEEP))
 			{
-				b.addMessage(victim.getName() + " woke up!", StatusCondition.NONE, victim.user());
 				victim.removeStatus();
+				b.addMessage(victim.getName() + " woke up!", victim);
 			}
 		}
 	}
@@ -4324,7 +4324,7 @@ public abstract class Attack implements Serializable
 				break;
 			}
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -4509,7 +4509,7 @@ public abstract class Attack implements Serializable
 			
 			victim.healHealthFraction(1/1.0);
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -5204,7 +5204,9 @@ public abstract class Attack implements Serializable
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return new Type[] {victim.getType(b)[0], Type.GHOST};
+			Type primary = victim.getType(b)[0];
+			
+			return new Type[] {primary, primary == Type.GHOST ? Type.NONE : Type.GHOST};
 		}
 	}
 
@@ -5221,7 +5223,9 @@ public abstract class Attack implements Serializable
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return new Type[] {victim.getType(b)[0], Type.GRASS};
+			Type primary = victim.getType(b)[0];
+			
+			return new Type[] {primary, primary == Type.GRASS ? Type.NONE : Type.GRASS};
 		}
 	}
 
@@ -5338,6 +5342,7 @@ public abstract class Attack implements Serializable
 			
 			item = userItem;
 			super.applyEffects(b, user, victim);
+			
 			item = victimItem;
 			super.applyEffects(b, user, user);
 		}
@@ -6277,7 +6282,7 @@ public abstract class Attack implements Serializable
 			
 			victim.healHealthFraction(1/2.0);
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -6303,7 +6308,7 @@ public abstract class Attack implements Serializable
 			double fraction = user.hasAbility(Namesies.MEGA_LAUNCHER_ABILITY) ? .75 : .5;
 			
 			victim.healHealthFraction(fraction);
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -7894,7 +7899,7 @@ public abstract class Attack implements Serializable
 			if (user.hasStatus())
 			{
 				user.removeStatus();
-				b.addMessage(user.getName() + " cured itself of its status condition!", StatusCondition.NONE, user.user());
+				b.addMessage(user.getName() + " cured itself of its status condition!", user);
 				return;
 			}
 			
@@ -7983,7 +7988,7 @@ public abstract class Attack implements Serializable
 			
 			victim.healHealthFraction(1/2.0);
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -9115,8 +9120,8 @@ public abstract class Attack implements Serializable
 			user.setHP(share);
 			victim.setHP(share);
 			
-			b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user.getHP(), user.user());
-			b.addMessage("", victim.getHP(), victim.user());
+			b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user);
+			b.addMessage("", victim);
 		}
 	}
 
@@ -9298,7 +9303,7 @@ public abstract class Attack implements Serializable
 			}
 			
 			o.healHealthFraction(1/4.0);
-			b.addMessage(o.getName() + "'s health was restored!", o.getHP(), o.user());
+			b.addMessage(o.getName() + "'s health was restored!", o);
 		}
 	}
 
@@ -9419,7 +9424,7 @@ public abstract class Attack implements Serializable
 			
 			victim.healHealthFraction(1/2.0);
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -9601,6 +9606,7 @@ public abstract class Attack implements Serializable
 			
 			item = userItem;
 			super.applyEffects(b, user, victim);
+			
 			item = victimItem;
 			super.applyEffects(b, user, user);
 		}
@@ -9702,8 +9708,8 @@ public abstract class Attack implements Serializable
 		{
 			if (victim.hasStatus(StatusCondition.PARALYZED))
 			{
-				b.addMessage(victim.getName() + " was cured from its paralysis!", StatusCondition.NONE, victim.user());
 				victim.removeStatus();
+				b.addMessage(victim.getName() + " was cured from its paralysis!", victim);
 			}
 		}
 	}
@@ -10036,7 +10042,7 @@ public abstract class Attack implements Serializable
 			
 			victim.healHealthFraction(1/2.0);
 			
-			b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s health was restored!", victim);
 		}
 	}
 
@@ -11474,6 +11480,7 @@ public abstract class Attack implements Serializable
 			
 			item = userItem;
 			super.applyEffects(b, user, victim);
+			
 			item = victimItem;
 			super.applyEffects(b, user, user);
 		}
@@ -11501,7 +11508,7 @@ public abstract class Attack implements Serializable
 
 		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
 		{
-			return user.getName() + " switched items with " + victim.getName() + "!";
+			return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -11528,6 +11535,7 @@ public abstract class Attack implements Serializable
 			
 			item = userItem;
 			super.applyEffects(b, user, victim);
+			
 			item = victimItem;
 			super.applyEffects(b, user, user);
 		}
@@ -11555,7 +11563,7 @@ public abstract class Attack implements Serializable
 
 		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
 		{
-			return user.getName() + " switched items with " + victim.getName() + "!";
+			return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -11582,6 +11590,7 @@ public abstract class Attack implements Serializable
 			
 			item = userItem;
 			super.applyEffects(b, user, victim);
+			
 			item = victimItem;
 			super.applyEffects(b, user, user);
 		}

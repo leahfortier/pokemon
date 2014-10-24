@@ -189,7 +189,7 @@ Wish:
 	}
 	
 	p.healHealthFraction(1/2.0);
-	b.addMessage(casterName + "'s wish came true!", p.getHP(), p.user());
+	b.addMessage(casterName + "'s wish came true!", p);
 	###
 	Cast: 
 	casterName = caster.getName();
@@ -253,8 +253,8 @@ HealSwitch:
 	Enter: 
 	victim.healHealthFraction(1);
 	victim.removeStatus();
-	b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim.getHP(), victim.user());
-	b.addMessage("", StatusCondition.NONE, victim.user());
+	
+	b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim);
 	super.active = false;
 	###
 	Cast: 

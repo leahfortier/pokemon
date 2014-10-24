@@ -486,7 +486,6 @@ ChangeType:
 	while (victim.getAttributes().removeEffect(this.namesies));
 	
 	super.cast(b, caster, victim, source, printCast);
-	b.addMessage("", type, victim.user());
 	###
 	GetTypeCondition:
 	return type;
@@ -494,7 +493,7 @@ ChangeType:
 	CastMessage: castMessage(victim)
 	CanHave: True
 	Subside: 
-	b.addMessage("", p.getType(b), p.user());
+	b.addMessage("", p);
 	###
 *
 ChangeAbility:
@@ -777,7 +776,7 @@ Ingrain:
 		victim.heal((int)(healAmount*.3));
 	}
 	
-	b.addMessage(victim.getName() + " restored some HP due to ingrain!", victim.getHP(), victim.user());
+	b.addMessage(victim.getName() + " restored some HP due to ingrain!", victim);
 	###
 	CastMessage: victim.getName() + " planted its roots!"
 	Cast: 
@@ -874,8 +873,8 @@ Uproar:
 	{
 		if (wakey.hasStatus(StatusCondition.ASLEEP))
 		{
-			b.addMessage("The uproar woke up " + wakey.getName() + "!", StatusCondition.NONE, wakey.user());
 			wakey.removeStatus();
+			b.addMessage("The uproar woke up " + wakey.getName() + "!", wakey);
 		}	
 	}
 	###
@@ -906,7 +905,7 @@ AquaRing:
 		victim.heal((int)(healAmount*.3));
 	}
 	
-	b.addMessage(victim.getName() + " restored some HP due to aqua ring!", victim.getHP(), victim.user());
+	b.addMessage(victim.getName() + " restored some HP due to aqua ring!", victim);
 	###
 	CastMessage: user.getName() + " surrounded itself with a veil of water!"
 *
@@ -989,9 +988,9 @@ Transformed:
 	// Castaway
 	super.cast(b, caster, victim, source, printCast);
 	b.addMessage("", transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user());
-	b.addMessage("", victim.getType(b), victim.user());
+	b.addMessage("", victim);
 	###
-	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies)
+	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(Namesies.ILLUSION_ABILITY) && caster.getAbility().isActive()))
 	Int: MoveListCondition, StatsCondition, TypeCondition
 	GetMoveList:
 	return moveList;
@@ -1016,7 +1015,7 @@ Substitute:
 	Cast: 
 	hp = victim.reduceHealthFraction(b, .25) + 1;
 	super.cast(b, caster, victim, source, printCast);
-	b.addMessage("", victim.getHP(), victim.user());
+	b.addMessage("", victim);
 	###
 	FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
 	ValidMove: 

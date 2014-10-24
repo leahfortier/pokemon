@@ -58,7 +58,7 @@ Rain Dish:
 	if (b.getWeather().namesies() == Namesies.RAINING_EFFECT)
 	{
 		victim.healHealthFraction(1/16.0);
-		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 	}
 	###
 *
@@ -75,8 +75,8 @@ Shed Skin:
 	ApplyEndTurn: 
 	if (victim.hasStatus() && (int)(Math.random()*3) == 0)
 	{
-		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 		victim.removeStatus();
+		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
 	}
 	###
 *
@@ -210,6 +210,9 @@ Flash Fire:
 	Activate: 
 	x.activated = false;
 	###
+	IsActive:
+	return activated;
+	###
 	Int: DamageBlocker, PowerChangeEffect
 	Block: 
 	return attacking == Type.FIRE;
@@ -284,7 +287,7 @@ Dry Skin:
 	else if (b.getWeather().namesies() == Namesies.RAINING_EFFECT && !victim.fullHealth())
 	{
 		victim.healHealthFraction(1/8.0);
-		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 	}
 	###
 	AbsorbType: Water
@@ -444,7 +447,7 @@ Hydration:
 	if (b.getWeather().namesies() == Namesies.RAINING_EFFECT && victim.hasStatus())
 	{
 		victim.removeStatus();
-		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
+		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
 	}
 	###
 *
@@ -947,7 +950,7 @@ Ice Body:
 	if (b.getWeather().namesies() == Namesies.HAILING_EFFECT)
 	{
 		victim.healHealthFraction(1/16.0);
-		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 	}
 	###
 	WeatherBlock: 
@@ -1166,42 +1169,95 @@ Weak Armor:
 Illusion:
 	Field: 
 	private boolean activated;
-	private String actualName;
+	private String illusionName;
+	private Type[] illusionType;
+	private PokemonInfo illusionSpecies;
+	private boolean illusionShiny;
 	###
 	Activate: 
 	x.activated = false;
-	x.actualName = actualName;
 	###
-	Int: EntryEffect, SwitchOutEffect, TakeDamageEffect
+	Int: EntryEffect, SwitchOutEffect, TakeDamageEffect, TypeCondition, NameChanger
 	Enter: 
+	// No Illusion today...
+	if (!activated)
+	{
+		return;
+	}
+	
+	// Display the Illusion changes
+	b.addMessage("", illusionSpecies, illusionShiny, false, victim.user());
+	b.addMessage("", victim);
+	###
+	GetNameChange:
+	return activated ? illusionName : null;
+	###
+	SetNameChange:
 	List<ActivePokemon> team = b.getTrainer(victim.user()).getTeam();
-	ActivePokemon illusion = team.get(team.size()-1);
+	ActivePokemon illusion = null;
 	
-	if (!illusion.canFight()) return;
-	if (illusion.getPokemonInfo().getNumber() == victim.getPokemonInfo().getNumber()) return;
-
+	// Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
+	for (int i = team.size() - 1; i > 0; i--)
+	{ 
+		ActivePokemon temp = team.get(i);
+		
+		// If the Pokemon in back cannot fight for any reason -- do nothing
+		if (!temp.canFight())
+		{
+			continue;
+		}
+		
+		// If the Pokemon in back is the same species at the current Pokemon -- do nothing
+		if (temp.getPokemonInfo().getNumber() == victim.getPokemonInfo().getNumber())
+		{
+			continue;
+		}	
+		
+		// Otherwise, we've found our Illusion!
+		illusion = temp;
+		break;
+	}
+	
+	// No valid Pokemon to be as an illusion -- do not activate
+	if (illusion == null)
+	{
+		return;
+	}
+	
+	// Otherwise, we're in the illusion
 	activated = true;
-	actualName = victim.getName(); // TODO: When the Pokemon is sent out, it displays the actual name, instead of the illusion name
 	
-	victim.setNickname(illusion.getName()); // TODO: Find a better workaround for this, the Illusion name is appearing in the Switch Pokemon menu
-	b.addMessage("", illusion.getPokemonInfo(), illusion.isShiny(), false, victim.user());
-	b.addMessage("", illusion.getName(), victim.user());
-	b.addMessage("", illusion.getType(b), victim.user());
-	b.addMessage("", illusion.getGender(), victim.user());
+	illusionName = illusion.getName();
+	illusionType = illusion.getActualType();
+	illusionSpecies = illusion.getPokemonInfo();
+	illusionShiny = illusion.isShiny();
 	###
 	SwitchOut: 
 	activated = false;
-	switchee.setNickname(actualName);
 	###
 	OnTakeDamage: 
-	if (!activated) return;
+	// If the Illusion is already broken, no worries
+	if (!activated) 
+	{
+		return;
+	}
+	
 	activated = false;
-	victim.setNickname(actualName);
-	b.addMessage(actualName + "'s Illusion was broken!");
+	b.addMessage(victim.getName() + "'s Illusion was broken!");
+	
 	b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
-	b.addMessage("", actualName, victim.user());
-	b.addMessage("", victim.getType(b), victim.user());
-	b.addMessage("", victim.getGender(), victim.user());
+	b.addMessage("", victim);
+	###
+	GetTypeCondition:
+	if (display && activated)
+	{
+		return illusionType;
+	}
+	
+	return p.getActualType();
+	###
+	IsActive:
+	return activated;
 	###
 	Desc: Comes out disguised as the Pok\u00e9mon in back.
 *
@@ -1318,9 +1374,23 @@ Gluttony:
 *
 Multitype:
 	Desc: Changes type to match the held Plate.
+	Int: TypeCondition
+	GetTypeCondition:
+	Item item = p.getHeldItem(b);
+	if (item instanceof PlateItem)
+	{
+		return new Type[] { ((PlateItem)item).getType(), Type.NONE };
+	}
+	
+	return p.getActualType();
+	###
 *
 Forecast:
 	Desc: Changes with the weather.
+	Int: TypeCondition
+	GetTypeCondition:
+	return new Type[] { b.getWeather().getElement(), Type.NONE };
+	###
 *
 Bulletproof:
 	Desc: Protects the Pok\u00e9mon from some ball and bomb moves.
@@ -1397,8 +1467,8 @@ Healer:
 	ApplyEndTurn: 
 	if (victim.hasStatus() && (int)(Math.random()*3) == 0)
 	{
-		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", StatusCondition.NONE, victim.user());
 		victim.removeStatus();
+		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
 	}
 	###
 *

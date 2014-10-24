@@ -158,7 +158,7 @@ public class BattleView extends View
 		
 		private void resetVals(ActivePokemon p)
 		{
-			resetVals(p.getHP(), p.getStatus().getType(), p.getType(currentBattle), p.isShiny(), p.getPokemonInfo(), 
+			resetVals(p.getHP(), p.getStatus().getType(), p.getDisplayType(currentBattle), p.isShiny(), p.getPokemonInfo(), 
 					p.getName(), p.getMaxHP(), p.getLevel(), p.getGender(), p.expRatio());
 		}
 		
@@ -1373,7 +1373,7 @@ public class BattleView extends View
 		g.setFont(Global.getFont(30));
 		g.setColor(Color.WHITE);
 		
-		Global.drawWrappedText(g, "What will " + plyr.getName() + " do?", 20, 485, 400);
+		Global.drawWrappedText(g, "What will " + plyr.getActualName() + " do?", 20, 485, 400);
 		for (Button b: menuButtons)
 			b.draw(g);
 	}
@@ -1446,7 +1446,7 @@ public class BattleView extends View
 			// Name
 			g.setFont(Global.getFont(16));
 			g.setColor(Color.BLACK);
-			String nameStr = selectedPkm.getName();
+			String nameStr = selectedPkm.getActualName();
 			g.drawString(nameStr, 62, 269);
 			
 			// Description
@@ -1459,7 +1459,7 @@ public class BattleView extends View
 			// Name and Gender
 			g.setFont(Global.getFont(16));
 			g.setColor(Color.BLACK);
-			String nameStr = selectedPkm.getName() + " " + selectedPkm.getGender().getCharacter();
+			String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter();
 			g.drawString(nameStr, 62, 269);
 			
 			// Status Condition

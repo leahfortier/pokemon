@@ -8,7 +8,6 @@ import main.Global;
 import main.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
-import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import trainer.CharacterData;
@@ -32,13 +31,13 @@ import battle.effect.Effect;
 import battle.effect.EndTurnEffect;
 import battle.effect.EntryEffect;
 import battle.effect.MultiTurnMove;
+import battle.effect.NameChanger;
 import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentPowerChangeEffect;
 import battle.effect.PokemonEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.PriorityChangeEffect;
-import battle.effect.Status.StatusCondition;
 import battle.effect.TeamEffect;
 import battle.effect.Weather;
 
@@ -120,44 +119,39 @@ public class Battle
 		return turn;
 	}
 	
+	// Just a plain old regular message
 	public void addMessage(String message)
 	{
 		messages.add(new MessageUpdate(message));
 	}
 	
-	public void addMessage(String message, int hp, boolean target)
+	public void addMessage(String message, ActivePokemon p)
 	{
-		messages.add(new MessageUpdate(message, hp, target));
+		messages.add(new MessageUpdate(message));
+		
+		messages.add(new MessageUpdate(p.getHP(), p.user()));
+		messages.add(new MessageUpdate(p.getHP(), p.getMaxHP(), p.user()));
+		messages.add(new MessageUpdate(p.getStatus().getType(), p.user()));
+		messages.add(new MessageUpdate(p.getDisplayType(this), p.user()));
+		messages.add(new MessageUpdate(p.getName(), p.user()));
+		messages.add(new MessageUpdate(p.getGender(), p.user()));
 	}
 	
-	public void addMessage(String message, int hp, int maxHP, boolean target)
+	public void addMessage(String message, ActivePokemon p, boolean switching)
 	{
-		messages.add(new MessageUpdate(message, hp, maxHP, target));
+		messages.add(new MessageUpdate(message, p, this));
 	}
 	
-	public void addMessage(String message, int hp, int[] statGains, int[] stats, boolean target)
+	public void addMessage(String message, ActivePokemon gainer, int[] statGains, int[] stats)
 	{
-		messages.add(new MessageUpdate(message, hp, statGains, stats, target));
+		this.addMessage("", gainer);
+		messages.add(new MessageUpdate(statGains, stats));
 	}
 	
-	public void addMessage(String message, StatusCondition status, boolean target)
-	{
-		messages.add(new MessageUpdate(message, status, target));
-	}
-	
+	// Image update
 	public void addMessage(String message, PokemonInfo pokemon, boolean shiny, boolean animation, boolean target)
 	{
 		messages.add(new MessageUpdate(message, pokemon, shiny, animation, target));
-	}
-	
-	public void addMessage(String message, Type[] type, boolean target)
-	{
-		messages.add(new MessageUpdate(message, type, target));
-	}
-	
-	public void addMessage(String message, ActivePokemon p)
-	{
-		messages.add(new MessageUpdate(message, p, this));
 	}
 	
 	public void addMessage(String message, Update update)
@@ -170,26 +164,13 @@ public class Battle
 		messages.add(new MessageUpdate(message, duration));
 	}
 	
-	public void addMessage(String message, float expRatio)
+	public void addMessage(String message, ActivePokemon gainer, float expRatio, boolean levelUp)
 	{
-		messages.add(new MessageUpdate(message, expRatio));
+		this.addMessage(message, gainer);
+		messages.add(new MessageUpdate(gainer.getLevel(), expRatio, levelUp));
 	}
 	
-	public void addMessage(String message, int level, float expRatio)
-	{
-		messages.add(new MessageUpdate(message, level, expRatio));
-	}
-	
-	public void addMessage(String message, String name, boolean target)
-	{
-		messages.add(new MessageUpdate(message, name, target));
-	}
-	
-	public void addMessage(String message, Gender gender, boolean target)
-	{
-		messages.add(new MessageUpdate(message, gender, target));
-	}
-	
+	// Learning a move
 	public void addMessage(String message, ActivePokemon p, Move move)
 	{
 		messages.add(new MessageUpdate(message, p, move));
@@ -228,11 +209,11 @@ public class Battle
 		for (BattleEffect e : getEffects()) System.out.println("B " + e);
 		if (weather.namesies() != Namesies.CLEAR_SKIES_EFFECT) System.out.println("W " + weather);
 		
-		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? player.front().getName() + " " : "") + player.front().getStage(i) + (i == 6 ? "\n" : " "));
-		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? opponent.front().getName() + " " : "") + opponent.front().getStage(i) + (i == 6 ? "\n" : " "));
+		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? player.front().getActualName() + " " : "") + player.front().getStage(i) + (i == 6 ? "\n" : " "));
+		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? opponent.front().getActualName() + " " : "") + opponent.front().getStage(i) + (i == 6 ? "\n" : " "));
 		
-		System.out.println(player.front().getName() + " " + player.front().getAbility().getName() + " " + player.front().getHeldItem(this).getName());
-		System.out.println(opponent.front().getName() + " " + opponent.front().getAbility().getName() + " " + opponent.front().getHeldItem(this).getName());
+		System.out.println(player.front().getActualName() + " " + player.front().getAbility().getName() + " " + player.front().getHeldItem(this).getName());
+		System.out.println(opponent.front().getActualName() + " " + opponent.front().getAbility().getName() + " " + opponent.front().getHeldItem(this).getName());
 	}
 	
 	// Handles events that occur at the beginning of each turn. Returns the two Pokemon currently in battle
@@ -341,6 +322,8 @@ public class Battle
 	
 	public void enterBattle(ActivePokemon enterer)
 	{
+		Global.invoke(this.getEffectsList(enterer), NameChanger.class, "setNameChange", this, enterer);
+		
 		String enterMessage = "";
 		if (enterer.user()) enterMessage = "Go! " + enterer.getName() + "!";
 		else if (opponent instanceof Trainer) enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
@@ -370,14 +353,11 @@ public class Battle
 		{
 			enterer.resetAttributes();
 		}
+			
+		addMessage(enterMessage, enterer, true);
 		
-        // TODO: I don't think this is sending the message properly, switched to Squirtle and had Bulbasaur's type colors at first	
-		addMessage(enterMessage, enterer);
-		
-		// TODO: Test the invoke
 		enterer.getAttributes().setUsed(true);
-		Object[] list = getEffectsList(enterer);
-		Global.invoke(list, EntryEffect.class, "enter", this, enterer);
+		Global.invoke(getEffectsList(enterer), EntryEffect.class, "enter", this, enterer);
 		
 		getTrainer(!enterer.user()).resetUsed();
 	}
@@ -511,10 +491,6 @@ public class Battle
 		}
 		
 		me.endAttack(this, o, success, reduce);
-		
-		// Hopefully this doesn't mess anything up but update type at the end of each attack TODO: I'm pretty sure it will -- try with Illusion or something
-		addMessage("", me.getType(this), me.user());
-		addMessage("", o.getType(this), o.user());
 	}
 	
 	public void printAttacking(ActivePokemon p)
@@ -550,6 +526,12 @@ public class Battle
 	public Object[] getEffectsList(ActivePokemon p, Object... additionalItems)
 	{
 		List<Object> list = new ArrayList<>();
+		
+		for (Object additionalItem : additionalItems)
+		{
+			list.add(additionalItem);
+		}
+		
 		list.addAll(p.getEffects());
 		list.addAll(getEffects(p.user()));
 		list.addAll(getEffects());
@@ -557,11 +539,6 @@ public class Battle
 		list.add(p.getAbility());
 		list.add(p.getHeldItem(this));
 		list.add(weather);
-		
-		for (Object additionalItem : additionalItems)
-		{
-			list.add(additionalItem);
-		}
 		
 		return list.toArray();
 	}
@@ -608,7 +585,7 @@ public class Battle
 		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 		
-		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n", me.getName(), me.getAttack().getName(), level, power, random, attackStat, defenseStat, stab, adv, damage);
+		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n", me.getActualName(), me.getAttack().getName(), level, power, random, attackStat, defenseStat, stab, adv, damage);
 		
 		damage *= getDamageModifier(me, o); 
 		damage *= criticalHit(me, o);

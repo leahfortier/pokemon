@@ -42,7 +42,7 @@ SelfHealingMove:
 		###
 		End:
 		
-		b.addMessage(victim.getName() + "'s health was restored!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s health was restored!", victim);
 		###
 		Try:
 		victim.healHealthFraction(1/{0}.0);
@@ -149,6 +149,7 @@ Override:
 
 		item = userItem;
 		super.applyEffects(b, user, victim);
+		
 		item = victimItem;
 		super.applyEffects(b, user, user);
 		###
@@ -663,7 +664,20 @@ EntryEffect:
 ***
 TypeCondition:
 	GetTypeCondition:	
-		Header: Type[] getType()
+		Header: Type[] getType(Battle b, ActivePokemon p, Boolean display)
+	*
+***
+NameChanger:
+	GetNameChange:
+		Header: String getNameChange()
+	*
+	SetNameChange:
+		Header: void setNameChange(Battle b, ActivePokemon victim)
+	*
+***
+Override:
+	IsActive:
+		Header: boolean isActive()
 	*
 ***
 Override:
@@ -840,7 +854,7 @@ Override:
 		AddMapField: AlternateEffect:
 		// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
 		victim.healHealthFraction(1/4.0);
-		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim.getHP(), victim.user());
+		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
 		###
 	*
 ***
@@ -1423,14 +1437,13 @@ GainableEffectBerry:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 		}
 		
-		b.addMessage(message, user.getStatus().getType(), user.user());
-		b.addMessage("", user.getHP(), user.user());
+		b.addMessage(message, user);
 		
 		if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 		{
 			b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 			user.healHealthFraction(1/3.0);
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage("", user);
 		}
 		
 		// Eat dat berry!!
