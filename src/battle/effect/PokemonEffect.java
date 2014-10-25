@@ -802,9 +802,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Test with a field move I think this should be included here as well
 			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
 			{
 				return true;
 			}
@@ -873,9 +872,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Test with a field move I think this should be included here as well
 			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
 			{
 				return true;
 			}
@@ -939,9 +937,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Test with a field move I think this should be included here as well
 			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
 			{
 				return true;
 			}
@@ -1005,9 +1002,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Test with a field move I think this should be included here as well
 			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
 			{
 				return true;
 			}
@@ -1071,9 +1067,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Test with a field move I think this should be included here as well
 			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
 			{
 				return true;
 			}
@@ -1132,9 +1127,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Test with a field move I think this should be included here as well
 			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p))
 			{
 				return true;
 			}
@@ -1771,6 +1765,9 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
+			Ability oldAbility = victim.getAbility();
+			oldAbility.deactivate(b, victim);
+			
 			ChangeAbilityMove changey = (ChangeAbilityMove)source.getSource(b, caster);
 			ability = changey.getAbility(b, caster, victim);
 			message = changey.getMessage(b, caster, victim);
@@ -1982,7 +1979,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			// TODO: Test this effect again
 			unableMoves = new ArrayList<>();
 			for (Move m : caster.getMoves(b))
 			{
@@ -2896,12 +2892,19 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: Soundbase moves bypass the substitute and also Infiltrator
-			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING))
+			// Self-target and field moves are always successful
+			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD))
 			{
 				return true;
 			}
 			
+			// Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
+			if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(Namesies.INFILTRATOR_ABILITY))
+			{
+				return true;
+			}
+			
+			// Print the failure for status moves
 			if (user.getAttack().getCategory() == Category.STATUS)
 			{
 				b.addMessage(this.getFailMessage(b, user, victim));
@@ -3087,7 +3090,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class HalfWeight extends PokemonEffect implements IntegerCondition
+	private static class HalfWeight extends PokemonEffect implements HalfWeightEffect
 	{
 		private static final long serialVersionUID = 1L;
 		private int layers;
@@ -3106,24 +3109,14 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			HalfWeight e = (HalfWeight)victim.getEffect(this.namesies);
-			if (e == null) super.cast(b, caster, victim, source, printCast);
-			else e.layers++;
+			HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies);
+			if (halfWeight == null) super.cast(b, caster, victim, source, printCast);
+			else halfWeight.layers++;
 		}
 
-		public int getAmount()
+		public int getHalfAmount(Integer halfAmount)
 		{
-			return layers;
-		}
-
-		public void decrease(int amount)
-		{
-			layers -= amount;
-		}
-
-		public void increase(int amount)
-		{
-			layers += amount;
+			return halfAmount + layers;
 		}
 	}
 

@@ -195,9 +195,8 @@ public class CharacterData extends Trainer implements Serializable
 		{
 			if (p.isEgg() && p.hatch())
 			{
-				// TODO: Show hatch animation
 				evolvingPokemon = p;
-				messages = new DialogueSequence("Huh?", null, null, new String[]{"Evolution_View_Trigger"});
+				messages = new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"});
 				this.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
 				
 				// Only one hatch per step

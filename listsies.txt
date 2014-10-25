@@ -1,0 +1,879 @@
+Bulbasaur:
+	Added moves:
+		Worry Seed
+Ivysaur:
+	Removed moves:
+		Seed Bomb
+	Added moves:
+		Worry Seed
+Venusaur:
+	Removed moves:
+		Seed Bomb
+	Added moves:
+		Worry Seed
+		Petal Blizzard
+Beedrill:
+	Added moves:
+		Fell Stinger
+Ekans:
+	Added moves:
+		Belch
+Arbok:
+	Added moves:
+		Belch
+Pikachu:
+	Added moves:
+		Play Nice
+		Nuzzle
+Sandshrew:
+	Added moves:
+		Magnitude
+		Swords Dance
+		Dig
+		Earthquake
+Sandslash:
+	Added moves:
+		Magnitude
+		Swords Dance
+		Dig
+		Earthquake
+Clefairy:
+	Added moves:
+		Moonblast
+		Body Slam
+		Disarming Voice
+Clefable:
+	Added moves:
+		Disarming Voice
+Vulpix:
+	Added moves:
+		Baby-Doll Eyes
+		Hex
+		Feint Attack
+Ninetales:
+	Removed moves:
+		Ember
+	Added moves:
+		Flamethrower
+		Imprison
+Jigglypuff:
+	Added moves:
+		Play Nice
+		Disarming Voice
+Wigglytuff:
+	Added moves:
+		Double-Edge
+		Play Rough
+Zubat:
+	Added moves:
+		Swift
+Golbat:
+	Added moves:
+		Swift
+Oddish:
+	Added moves:
+		Grassy Terrain
+Gloom:
+	Added moves:
+		Petal Blizzard
+		Grassy Terrain
+Vileplume:
+	Added moves:
+		Petal Blizzard
+Dugtrio:
+	Added moves:
+		Rototiller
+Persian:
+	Added moves:
+		Play Rough
+		Swift
+Psyduck:
+	Added moves:
+		Aqua Tail
+Golduck:
+	Added moves:
+		Aqua Tail
+Growlithe:
+	Added moves:
+		Outrage
+Tentacruel:
+	Added moves:
+		Reflect Type
+Magnemite:
+	Added moves:
+		Flash Cannon
+Magneton:
+	Added moves:
+		Electric Terrain
+		Flash Cannon
+Grimer:
+	Added moves:
+		Belch
+Muk:
+	Added moves:
+		Belch
+Cloyster:
+	Added moves:
+		Hydro Pump
+		Shell Smash
+Onix:
+	Added moves:
+		Dig
+		Rock Slide
+Kingler:
+	Added moves:
+		Fury Cutter
+Voltorb:
+	Added moves:
+		Eerie Impulse
+Electrode:
+	Added moves:
+		Eerie Impulse
+		Magnetic Flux
+Exeggcute:
+	Removed moves:
+		Psychic
+		Giga Drain
+	Added moves:
+		Worry Seed
+		Extrasensory
+Koffing:
+	Added moves:
+		Belch
+Weezing:
+	Added moves:
+		Belch
+Tangela:
+	Added moves:
+		Grassy Terrain
+		Giga Drain
+Staryu:
+	Added moves:
+		Brine
+Starmie:
+	Added moves:
+		Hydro Pump
+Mr. Mime:
+	Added moves:
+		Misty Terrain
+		Teeter Dance
+		Psywave
+Jynx:
+	Added moves:
+		Draining Kiss
+Electabuzz:
+	Added moves:
+		Thunder Wave
+Magmar:
+	Added moves:
+		Clear Smog
+Pinsir:
+	Added moves:
+		Storm Throw
+Eevee:
+	Added moves:
+		Double-Edge
+		Covet
+		Refresh
+		Baby-Doll Eyes
+		Charm
+		Swift
+Vaporeon:
+	Removed moves:
+		Bite
+	Added moves:
+		Water Pulse
+Flareon:
+	Removed moves:
+		Fire Blast
+	Added moves:
+		Flare Blitz
+Articuno:
+	Added moves:
+		Freeze-Dry
+		Hurricane
+Zapdos:
+	Added moves:
+		Zap Cannon
+Moltres:
+	Added moves:
+		Hurricane
+Meganium:
+	Added moves:
+		Petal Blizzard
+Spinarak:
+	Added moves:
+		Sticky Web
+Ariados:
+	Added moves:
+		Sticky Web
+		Fell Stinger
+		Venom Drench
+Crobat:
+	Added moves:
+		Swift
+Chinchou:
+	Added moves:
+		Electrify
+Lanturn:
+	Added moves:
+		Eerie Impulse
+		Electrify
+Togepi:
+	Removed moves:
+		Captivate
+	Added moves:
+		Draining Kiss
+Togetic:
+	Removed moves:
+		Captivate
+		Soft-Boiled
+	Added moves:
+		Fairy Wind
+		Moonblast
+		Draining Kiss
+Mareep:
+	Added moves:
+		Confuse Ray
+		Take Down
+Flaaffy:
+	Added moves:
+		Confuse Ray
+		Take Down
+Ampharos:
+	Added moves:
+		Confuse Ray
+		Magnetic Flux
+		Take Down
+		Electrify
+		Zap Cannon
+		Dragon Pulse
+Bellossom:
+	Added moves:
+		Petal Blizzard
+Marill:
+	Added moves:
+		Superpower
+		Disarming Voice
+		Play Rough
+		Water Sport
+		Bubble
+Azumarill:
+	Added moves:
+		Superpower
+		Disarming Voice
+		Play Rough
+		Water Sport
+		Bubble
+Sudowoodo:
+	Added moves:
+		Counter
+		Stone Edge
+Hoppip:
+	Removed moves:
+		Seed Bomb
+	Added moves:
+		Worry Seed
+		Fairy Wind
+Skiploom:
+	Removed moves:
+		Seed Bomb
+	Added moves:
+		Worry Seed
+		Fairy Wind
+Jumpluff:
+	Removed moves:
+		Seed Bomb
+	Added moves:
+		Worry Seed
+		Fairy Wind
+Sunkern:
+	Removed moves:
+		Bullet Seed
+	Added moves:
+		Double-Edge
+		Worry Seed
+		Natural Gift
+		Solar Beam
+Sunflora:
+	Removed moves:
+		Endeavor
+	Added moves:
+		Double-Edge
+		Flower Shield
+		Worry Seed
+		Natural Gift
+		Petal Blizzard
+		Giga Drain
+Dunsparce:
+	Added moves:
+		Double-Edge
+		Drill Run
+		Endure
+Gligar:
+	Added moves:
+		Sky Uppercut
+Steelix:
+	Added moves:
+		Dig
+		Rock Slide
+		Gyro Ball
+Snubbull:
+	Removed moves:
+		Take Down
+	Added moves:
+		Play Rough
+Granbull:
+	Removed moves:
+		Take Down
+	Added moves:
+		Play Rough
+Qwilfish:
+	Added moves:
+		Fell Stinger
+		Bubble
+Shuckle:
+	Added moves:
+		Sticky Web
+		Rock Throw
+		Shell Smash
+		Rock Slide
+		Stone Edge
+Heracross:
+	Added moves:
+		Bullet Seed
+		Arm Thrust
+		Pin Missile
+		Chip Away
+Sneasel:
+	Added moves:
+		Punishment
+		Snatch
+Teddiursa:
+	Removed moves:
+		Leer
+	Added moves:
+		Play Nice
+		Baby-Doll Eyes
+Ursaring:
+	Added moves:
+		Play Nice
+Swinub:
+	Added moves:
+		Flail
+Piloswine:
+	Added moves:
+		Thrash
+Corsola:
+	Added moves:
+		Iron Defense
+		Flail
+		Endure
+Remoraid:
+	Added moves:
+		Hydro Pump
+Octillery:
+	Added moves:
+		Hydro Pump
+Mantine:
+	Added moves:
+		Dive
+		Air Slash
+Hitmontop:
+	Added moves:
+		Drill Run
+Elekid:
+	Added moves:
+		Thunder Wave
+Magby:
+	Added moves:
+		Clear Smog
+Entei:
+	Added moves:
+		Sacred Fire
+Mightyena:
+	Added moves:
+		Crunch
+Zigzagoon:
+	Added moves:
+		Baby-Doll Eyes
+Linoone:
+	Added moves:
+		Rototiller
+		Play Rough
+Wingull:
+	Added moves:
+		Air Cutter
+Pelipper:
+	Added moves:
+		Brine
+Gardevoir:
+	Added moves:
+		Misty Terrain
+		Moonblast
+Surskit:
+	Added moves:
+		Sticky Web
+Shroomish:
+	Removed moves:
+		Bullet Seed
+	Added moves:
+		Worry Seed
+Shedinja:
+	Added moves:
+		Phantom Force
+Exploud:
+	Added moves:
+		Boomburst
+Azurill:
+	Added moves:
+		Bounce
+		Bubble Beam
+		Water Sport
+		Disarming Voice
+Nosepass:
+	Added moves:
+		Rock Blast
+		Spark
+Skitty:
+	Added moves:
+		Play Rough
+Mawile:
+	Added moves:
+		Growl
+		Fairy Wind
+		Play Rough
+		Taunt
+Medicham:
+	Added moves:
+		Zen Headbutt
+Manectric:
+	Added moves:
+		Electric Terrain
+Plusle:
+	Added moves:
+		Play Nice
+		Nuzzle
+Minun:
+	Added moves:
+		Play Nice
+		Nuzzle
+Illumise:
+	Added moves:
+		Play Nice
+Roselia:
+	Added moves:
+		Petal Blizzard
+Gulpin:
+	Added moves:
+		Belch
+Swalot:
+	Added moves:
+		Belch
+Numel:
+	Added moves:
+		Curse
+		Yawn
+Camerupt:
+	Added moves:
+		Curse
+		Yawn
+Torkoal:
+	Added moves:
+		Flame Wheel
+Trapinch:
+	Added moves:
+		Superpower
+		Rock Slide
+		Bide
+		Mud-Slap
+		Bulldoze
+Vibrava:
+	Added moves:
+		Rock Slide
+		Bide
+		Mud-Slap
+		Bulldoze
+		Earth Power
+Flygon:
+	Added moves:
+		Rock Slide
+		Bide
+		Mud-Slap
+		Bulldoze
+		Earth Power
+Swablu:
+	Added moves:
+		Round
+		Moonblast
+Altaria:
+	Added moves:
+		Round
+		Moonblast
+Zangoose:
+	Added moves:
+		Revenge
+Seviper:
+	Added moves:
+		Gastro Acid
+		Venom Drench
+		Belch
+Lunatone:
+	Added moves:
+		Rock Slide
+		Moonblast
+		Stone Edge
+Solrock:
+	Added moves:
+		Stone Edge
+		Psychic
+Metang:
+	Added moves:
+		Miracle Eye
+Metagross:
+	Added moves:
+		Miracle Eye
+Bibarel:
+	Added moves:
+		Rototiller
+Kricketune:
+	Added moves:
+		Sticky Web
+		Fell Stinger
+Shinx:
+	Added moves:
+		Baby-Doll Eyes
+Luxray:
+	Added moves:
+		Electric Terrain
+Budew:
+	Removed moves:
+		Bullet Seed
+	Added moves:
+		Worry Seed
+Roserade:
+	Added moves:
+		Venom Drench
+		Grassy Terrain
+Combee:
+	Added moves:
+		Bug Buzz
+Vespiquen:
+	Added moves:
+		Air Slash
+		Fell Stinger
+Pachirisu:
+	Added moves:
+		Nuzzle
+Buizel:
+	Added moves:
+		Hydro Pump
+		Double Hit
+Floatzel:
+	Added moves:
+		Hydro Pump
+		Double Hit
+Cherubi:
+	Removed moves:
+		Giga Drain
+	Added moves:
+		Worry Seed
+		Petal Blizzard
+Cherrim:
+	Removed moves:
+		Giga Drain
+	Added moves:
+		Worry Seed
+		Petal Blizzard
+Drifloon:
+	Added moves:
+		Amnesia
+Drifblim:
+	Added moves:
+		Phantom Force
+		Amnesia
+Buneary:
+	Removed moves:
+		Covet
+	Added moves:
+		Sweet Kiss
+		Baby-Doll Eyes
+Lopunny:
+	Removed moves:
+		Covet
+		Fake Tears
+	Added moves:
+		Rototiller
+		Draining Kiss
+		Captivate
+Mismagius:
+	Added moves:
+		Phantom Force
+		Power Gem
+Honchkrow:
+	Added moves:
+		Sucker Punch
+Glameow:
+	Added moves:
+		Play Rough
+Stunky:
+	Added moves:
+		Belch
+Skuntank:
+	Added moves:
+		Belch
+Bronzor:
+	Added moves:
+		Metal Sound
+		Psywave
+Bronzong:
+	Added moves:
+		Metal Sound
+		Psywave
+Bonsly:
+	Removed moves:
+		Slam
+	Added moves:
+		Counter
+Chatot:
+	Added moves:
+		Confide
+Munchlax:
+	Removed moves:
+		Recycle
+	Added moves:
+		Belly Drum
+Lucario:
+	Removed moves:
+		Force Palm
+		Dark Pulse
+	Added moves:
+		Power-Up Punch
+Skorupi:
+	Added moves:
+		Night Slash
+		Pursuit
+		Fell Stinger
+Drapion:
+	Added moves:
+		Night Slash
+		Pursuit
+		Fell Stinger
+Croagunk:
+	Added moves:
+		Belch
+Toxicroak:
+	Added moves:
+		Belch
+Mantyke:
+	Added moves:
+		Dive
+		Air Slash
+Weavile:
+	Added moves:
+		Punishment
+		Snatch
+Magnezone:
+	Added moves:
+		Electric Terrain
+		Magnetic Flux
+		Flash Cannon
+Tangrowth:
+	Added moves:
+		Grassy Terrain
+		Giga Drain
+Electivire:
+	Added moves:
+		Electric Terrain
+		Electrify
+		Thunder Wave
+Magmortar:
+	Added moves:
+		Clear Smog
+Togekiss:
+	Added moves:
+		Moonblast
+Gliscor:
+	Added moves:
+		Sky Uppercut
+Mamoswine:
+	Added moves:
+		Thrash
+Probopass:
+	Added moves:
+		Rock Blast
+		Spark
+Cresselia:
+	Added moves:
+		Moonblast
+Shaymin:
+	Removed moves:
+		Seed Bomb
+	Added moves:
+		Worry Seed
+Watchog:
+	Added moves:
+		Rototiller
+Lillipup:
+	Added moves:
+		Baby-Doll Eyes
+		Play Rough
+Herdier:
+	Added moves:
+		Play Rough
+Stoutland:
+	Added moves:
+		Play Rough
+Purrloin:
+	Added moves:
+		Play Rough
+Liepard:
+	Added moves:
+		Play Rough
+Pansage:
+	Added moves:
+		Play Nice
+Pansear:
+	Added moves:
+		Play Nice
+Panpour:
+	Added moves:
+		Play Nice
+Zebstrika:
+	Added moves:
+		Electrify
+Excadrill:
+	Added moves:
+		Rototiller
+Audino:
+	Added moves:
+		Play Nice
+Sewaddle:
+	Added moves:
+		Sticky Web
+Leavanny:
+	Removed moves:
+		Seed Bomb
+	Added moves:
+		Fell Stinger
+		Me First
+Whirlipede:
+	Added moves:
+		Venom Drench
+Scolipede:
+	Added moves:
+		Venom Drench
+Cottonee:
+	Added moves:
+		Fairy Wind
+Whimsicott:
+	Added moves:
+		Moonblast
+Petilil:
+	Removed moves:
+		Covet
+	Added moves:
+		Fairy Wind
+Lilligant:
+	Added moves:
+		Petal Blizzard
+Basculin:
+	Added moves:
+		Tail Whip
+Maractus:
+	Added moves:
+		Petal Blizzard
+Trubbish:
+	Added moves:
+		Belch
+Garbodor:
+	Added moves:
+		Belch
+Minccino:
+	Removed moves:
+		Growl
+	Added moves:
+		Baby-Doll Eyes
+Gothita:
+	Added moves:
+		Play Nice
+Gothorita:
+	Added moves:
+		Play Nice
+Gothitelle:
+	Added moves:
+		Play Nice
+Vanilluxe:
+	Added moves:
+		Freeze-Dry
+Emolga:
+	Added moves:
+		Nuzzle
+Escavalier:
+	Added moves:
+		Double-Edge
+		Fell Stinger
+Foongus:
+	Removed moves:
+		Sludge Bomb
+	Added moves:
+		Gastro Acid
+Amoonguss:
+	Removed moves:
+		Sludge Bomb
+	Added moves:
+		Gastro Acid
+Galvantula:
+	Added moves:
+		Sticky Web
+Klinklang:
+	Added moves:
+		Magnetic Flux
+Eelektross:
+	Added moves:
+		Electrify
+		Coil
+		Thrash
+		Zap Cannon
+		Gastro Acid
+Chandelure:
+	Added moves:
+		Pain Split
+Cubchoo:
+	Added moves:
+		Play Nice
+Beartic:
+	Added moves:
+		Play Nice
+		Aqua Jet
+Cryogonal:
+	Added moves:
+		Freeze-Dry
+Stunfisk:
+	Added moves:
+		Tackle
+		Water Gun
+Mienshao:
+	Removed moves:
+		Quick Guard
+	Added moves:
+		Dual Chop
+Golurk:
+	Added moves:
+		Phantom Force
+Heatmor:
+	Added moves:
+		Tackle
+		Hone Claws
+Volcarona:
+	Added moves:
+		Flare Blitz
+		Flame Wheel
+		Thrash
+		Amnesia
+Genesect:
+	Added moves:
+		Fell Stinger
+Meowstic:
+	Added moves:
+		Assist

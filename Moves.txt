@@ -76,9 +76,10 @@ Toxic:
 	Effect: Pokemon BadPoison
 	Cat: Status
 	Acc: 90
-	GetAccuracy:
-	// TODO: Lock-on accuracy if used by a Poison-type Pokemon
-	return super.accuracy;
+	Int: AccuracyBypassEffect
+	BypassAccuracy:
+	// Poison-type Pokemon bypass accuracy
+	return attacking.isType(b, Type.POISON);
 	###
 *
 Ember:
@@ -3844,7 +3845,6 @@ Focus Punch:
 	super.applyEffects(b, me, me);
 	###
 	ApplyDamage:
-	// TODO: Test this I don't think it's working right -- particularly with printing and such -- like where's the error
 	if (me.hasEffect(Namesies.FOCUSING_EFFECT)) 
 	{
 		super.applyDamage(me, o, b);
@@ -5013,7 +5013,6 @@ Assist:
 	Cat: Status
 	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Metronomeless, Assistless
 	Apply: 
-	// TODO: Roar and whirlwind and multi-turn moves should be assistless
 	List<Attack> attacks = new ArrayList<>();
 	for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
 	{

@@ -33,6 +33,7 @@ import battle.effect.Effect;
 import battle.effect.Effect.CastSource;
 import battle.effect.FaintEffect;
 import battle.effect.GroundedEffect;
+import battle.effect.HalfWeightEffect;
 import battle.effect.IntegerCondition;
 import battle.effect.ItemCondition;
 import battle.effect.LevitationEffect;
@@ -275,8 +276,6 @@ public class ActivePokemon implements Serializable
 		}
 		
 		eggSteps--;
-
-//		System.out.println(pokemon.getName() + " Egg Steps: " + eggSteps);
 		
 		if (eggSteps > 0)
 		{
@@ -291,7 +290,10 @@ public class ActivePokemon implements Serializable
 	
 	public String getEggMessage()
 	{
-		if (!isEgg()) Global.error("Only Eggs can have egg messages.");
+		if (!isEgg()) 
+		{
+			Global.error("Only Eggs can have egg messages.");
+		}
 		
 		if (eggSteps > 10*255) return "Wonder what's inside? It needs more time though.";
 		else if (eggSteps > 5*255) return "It moves around inside sometimes. It must be close to hatching.";
@@ -545,7 +547,7 @@ public class ActivePokemon implements Serializable
 		
 		// Add EXP
 		totalEXP += gain;
-		b.addMessage(nickname + " gained " + gain + " EXP points!");
+		b.addMessage(getActualName() + " gained " + gain + " EXP points!");
 		if (front) b.addMessage("", this, Math.min(1, expRatio()), false);
 		
 		// Add EVs
@@ -576,7 +578,7 @@ public class ActivePokemon implements Serializable
 		
 		// Grow to the next level
 		level++;
-		if (print) b.addMessage(nickname + " grew to level " + level + "!");
+		if (print) b.addMessage(getActualName() + " grew to level " + level + "!");
 		if (print && front) b.addMessage("", this, Math.min(1, expRatio()), true);
 		
 		// Change stats -- keep track of the gains
@@ -617,7 +619,8 @@ public class ActivePokemon implements Serializable
 		ability = Ability.evolutionAssign(this, ev.getEvolution());
 		
 		String name = nickname;
-		if (print) b.addMessage(nickname + " is evolving!");			
+		if (print) b.addMessage(getActualName() + " is evolving!");
+		
 		pokemon = ev.getEvolution();
 		if (print) b.getPlayer().getPokedex().setStatus(this, PokedexStatus.CAUGHT);
 		
@@ -657,7 +660,7 @@ public class ActivePokemon implements Serializable
 		{
 			if (b != null) 
 			{
-				b.addMessage(nickname + " learned " + m.getAttack().getName() + "!");
+				b.addMessage(getActualName() + " learned " + m.getAttack().getName() + "!");
 			}
 			
 			addMove(b, m, moves.size() - 1);
@@ -671,15 +674,15 @@ public class ActivePokemon implements Serializable
 		}
 		
 		b.addMessage(" ", this, m);
-		b.addMessage(nickname + " did not learn " + m.getAttack().getName() + ".");
+		b.addMessage(getActualName() + " did not learn " + m.getAttack().getName() + ".");
 		
 		// Wait I think this is in a motherfucking for loop because this is really poorly and hackily implemented...
 		for (int i = 0; i < moves.size(); i++)
 		{
-			b.addMessage(nickname + " forgot how to use " + moves.get(i).getAttack().getName() + "...");	
+			b.addMessage(getActualName() + " forgot how to use " + moves.get(i).getAttack().getName() + "...");	
 		}
 		
-		b.addMessage("...and " + nickname + " learned " + m.getAttack().getName() + "!");
+		b.addMessage("...and " + getActualName() + " learned " + m.getAttack().getName() + "!");
 	}
 	
 	public void addMove(Battle b, Move m, int index)
@@ -947,11 +950,6 @@ public class ActivePokemon implements Serializable
 		return getActualName();
 	}
 	
-	public void setNickname(String nickity)
-	{
-		nickname = nickity;
-	}
-	
 	public BattleAttributes getAttributes()
 	{
 		return attributes;
@@ -992,7 +990,7 @@ public class ActivePokemon implements Serializable
 			b.addMessage("", this);
 			
 			Status.die(this);
-			b.addMessage(nickname + " fainted!", this);
+			b.addMessage(getName() + " fainted!", this);
 			
 			ActivePokemon murderer = b.getOtherPokemon(user());
 
@@ -1030,7 +1028,7 @@ public class ActivePokemon implements Serializable
 		if (trapped != null)
 		{
 			// TODO: Add a more specific message here like the OpponentTrappingEffect
-			return nickname + " cannot be recalled at this time!";
+			return getName() + " cannot be recalled at this time!";
 		}
 		
 		// The opponent has an effect that prevents escape
@@ -1112,7 +1110,11 @@ public class ActivePokemon implements Serializable
 	// Reduces hp by amount, returns the actual amount of hp that was reduced
 	public int reduceHealth(Battle b, int amount)
 	{
-		if (amount == 0) return 0;
+		// Not actually reducing health...
+		if (amount == 0) 
+		{
+			return 0;
+		}
 		
 		// Substitute absorbs the damage instead of the Pokemon
 		IntegerCondition e = (IntegerCondition)getEffect(Namesies.SUBSTITUTE_EFFECT);
@@ -1123,6 +1125,10 @@ public class ActivePokemon implements Serializable
 			{
 				b.addMessage("The substitute broke!");
 				attributes.removeEffect(Namesies.SUBSTITUTE_EFFECT);
+			}
+			else
+			{
+				b.addMessage("The substitute absorbed the hit!");
 			}
 			
 			return 0;
@@ -1157,7 +1163,7 @@ public class ActivePokemon implements Serializable
 		// Check if the Pokemon fainted and also handle Focus Punch
 		if (hasEffect(Namesies.FOCUSING_EFFECT))
 		{
-			b.addMessage(nickname + " lost its focus and couldn't move!");
+			b.addMessage(getName() + " lost its focus and couldn't move!");
 			attributes.removeEffect(Namesies.FOCUSING_EFFECT);
 			addEffect(PokemonEffect.getEffect(Namesies.FLINCH_EFFECT));
 		}
@@ -1221,7 +1227,7 @@ public class ActivePokemon implements Serializable
 	{
 		if (victim.hasAbility(Namesies.LIQUID_OOZE_ABILITY))
 		{
-			b.addMessage(victim.getName() + "'s " + Namesies.LIQUID_OOZE_ABILITY.getName() + " caused " + nickname + " to lose health instead!");
+			b.addMessage(victim.getName() + "'s " + Namesies.LIQUID_OOZE_ABILITY.getName() + " caused " + getName() + " to lose health instead!");
 			reduceHealth(b, amount);
 			return;
 		}
@@ -1354,16 +1360,12 @@ public class ActivePokemon implements Serializable
 		return pokemon.namesies() == name;
 	}
 	
-	// TODO: There should be a weight effect here instead of all this motherfucking hardcoding...
 	public double getWeight(Battle b)
 	{
-		int halfAmount = hasAbility(Namesies.LIGHT_METAL_ABILITY) && !b.getOtherPokemon(playerPokemon).breaksTheMold() ? 1 : 0;
-		if (isHoldingItem(b, Namesies.FLOAT_STONE_ITEM)) 
-			halfAmount++;
+		Object[] invokees = b.getEffectsList(this);
+		ActivePokemon moldBreaker = b.getOtherPokemon(user());
 		
-		PokemonEffect halfWeight = getEffect(Namesies.HALF_WEIGHT_EFFECT);
-		if (halfWeight != null) 
-			halfAmount += ((IntegerCondition)halfWeight).getAmount();
+		int halfAmount = (int)Global.updateInvoke(0, moldBreaker, invokees, HalfWeightEffect.class, "getHalfAmount", 0);
 		
 		return pokemon.getWeight()/Math.pow(2, halfAmount);
 	}

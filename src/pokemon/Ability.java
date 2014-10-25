@@ -40,6 +40,7 @@ import battle.effect.EndBattleEffect;
 import battle.effect.EndTurnEffect;
 import battle.effect.EntryEffect;
 import battle.effect.FaintEffect;
+import battle.effect.HalfWeightEffect;
 import battle.effect.IgnoreStageEffect;
 import battle.effect.ItemCondition;
 import battle.effect.ModifyStageValueEffect;
@@ -83,7 +84,6 @@ public abstract class Ability implements Serializable
 		description = desc;
 	}
 	
-	// TODO: Is this correct...?
 	protected Ability activate() 
 	{
 		return this;
@@ -108,6 +108,9 @@ public abstract class Ability implements Serializable
 	{
 		return true;
 	}
+	
+	// Called when this ability is going to changed to a different ability -- can be overidden as necessary
+	public void deactivate(Battle b, ActivePokemon victim) {}
 	
 	// Abilities that block damage
 	public static boolean blockAttack(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -155,7 +158,7 @@ public abstract class Ability implements Serializable
 		Namesies prev = p.getAbility().namesies();
 		if (ev.hasAbility(prev)) 
 		{
-			return p.getAbility();
+			return p.getAbility().newInstance();
 		}
 		
 		Namesies other = getOtherAbility(p.getPokemonInfo(), prev).namesies();
@@ -1146,6 +1149,13 @@ public abstract class Ability implements Serializable
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// Grass-type Pokemon, Pokemon with Overcoat, and Pokemon holding the Safety Goggles are immune to Effect Spore
+			if (user.isType(b, Type.GRASS) || user.hasAbility(Namesies.OVERCOAT_ABILITY) || user.isHoldingItem(b, Namesies.SAFETY_GOGGLES_ITEM))
+			{
+				return;
+			}
+			
+			// 30% chance to Paralyze, Poison, or induce Sleep
 			if (Math.random()*100 < 30)
 			{
 				Status.giveStatus(b, victim, user, statuses[(int)(Math.random()*statuses.length)], true);
@@ -1188,14 +1198,21 @@ public abstract class Ability implements Serializable
 
 		public boolean block(Type attacking, ActivePokemon victim)
 		{
-			return attacking == Type.WATER && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
+			return attacking == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
-			// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
+			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!");
+			
+			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+			{
+				return;
+			}
+			
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
+			b.addMessage(victim.getName() + "'s HP was restored instead!", victim);
 		}
 	}
 
@@ -2174,14 +2191,21 @@ public abstract class Ability implements Serializable
 
 		public boolean block(Type attacking, ActivePokemon victim)
 		{
-			return attacking == Type.WATER && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
+			return attacking == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
-			// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
+			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!");
+			
+			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+			{
+				return;
+			}
+			
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
+			b.addMessage(victim.getName() + "'s HP was restored instead!", victim);
 		}
 	}
 
@@ -2201,14 +2225,21 @@ public abstract class Ability implements Serializable
 
 		public boolean block(Type attacking, ActivePokemon victim)
 		{
-			return attacking == Type.ELECTRIC && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
+			return attacking == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim)
 		{
-			// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
+			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!");
+			
+			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+			{
+				return;
+			}
+			
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
+			b.addMessage(victim.getName() + "'s HP was restored instead!", victim);
 		}
 	}
 
@@ -3114,7 +3145,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class LightMetal extends Ability 
+	private static class LightMetal extends Ability implements HalfWeightEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3126,6 +3157,11 @@ public abstract class Ability implements Serializable
 		public LightMetal newInstance()
 		{
 			return (LightMetal)(new LightMetal().activate());
+		}
+
+		public int getHalfAmount(Integer halfAmount)
+		{
+			return halfAmount + 1;
 		}
 	}
 
@@ -3733,6 +3769,21 @@ public abstract class Ability implements Serializable
 		private Type[] illusionType;
 		private PokemonInfo illusionSpecies;
 		private boolean illusionShiny;
+		
+		private void breakIllusion(Battle b, ActivePokemon victim)
+		{
+			// If the Illusion is already broken, no worries
+			if (!activated)
+			{
+				return;
+			}
+			
+			activated = false;
+			b.addMessage(victim.getName() + "'s Illusion was broken!");
+			
+			b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
+			b.addMessage("", victim);
+		}
 
 		public Illusion()
 		{
@@ -3749,6 +3800,11 @@ public abstract class Ability implements Serializable
 		public boolean isActive()
 		{
 			return activated;
+		}
+
+		public void deactivate(Battle b, ActivePokemon victim)
+		{
+			breakIllusion(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon victim)
@@ -3771,17 +3827,7 @@ public abstract class Ability implements Serializable
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// If the Illusion is already broken, no worries
-			if (!activated)
-			{
-				return;
-			}
-			
-			activated = false;
-			b.addMessage(victim.getName() + "'s Illusion was broken!");
-			
-			b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
-			b.addMessage("", victim);
+			breakIllusion(b, victim);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon p, Boolean display)

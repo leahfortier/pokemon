@@ -294,9 +294,7 @@ public abstract class Attack implements Serializable
 	
 	public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 	{
-		// TODO: Just switched the order of these and changed the last parameter in canApplyEffects to target instead of o -- pretty sure it is right but should def be tested thoroughly
 		ActivePokemon target = getTarget(b, me, o);
-		boolean applyEffects = canApplyEffects(b, me, target);
 		
 		// Don't do anything for moves that are uneffective
 		if (!effective(b, me, target))
@@ -310,10 +308,8 @@ public abstract class Attack implements Serializable
 			applyDamage(me, o, b);
 		}
 		
-		// TODO: I really think the canApplyEffects method needs to be called after apply damage is called especially if something is going to be printed
-		
 		// If you got it, flaunt it
-		if (applyEffects) 
+		if (canApplyEffects(b, me, target))
 		{
 			applyEffects(b, me, target);
 		}
@@ -373,7 +369,6 @@ public abstract class Attack implements Serializable
 	private boolean effective(Battle b, ActivePokemon me, ActivePokemon o)
 	{
 		// Self-target moves and field moves don't need to take type advantage always work
-		// TODO: Try with Snatch and see if it works -- might need to do me == o instead of this.isSelfTarget()
 		if (this.isSelfTarget() || this.isMoveType(MoveType.FIELD))
 		{
 			return true;
@@ -1226,7 +1221,7 @@ public abstract class Attack implements Serializable
 		}
 	}
 
-	private static class Toxic extends Attack 
+	private static class Toxic extends Attack implements AccuracyBypassEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1237,10 +1232,10 @@ public abstract class Attack implements Serializable
 			super.effects.add(Effect.getEffect(Namesies.BAD_POISON_EFFECT, EffectType.POKEMON));
 		}
 
-		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
 		{
-			// TODO: Lock-on accuracy if used by a Poison-type Pokemon
-			return super.accuracy;
+			// Poison-type Pokemon bypass accuracy
+			return attacking.isType(b, Type.POISON);
 		}
 	}
 
@@ -7848,7 +7843,6 @@ public abstract class Attack implements Serializable
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// TODO: Test this I don't think it's working right -- particularly with printing and such -- like where's the error
 			if (me.hasEffect(Namesies.FOCUSING_EFFECT))
 			{
 				super.applyDamage(me, o, b);
@@ -9729,7 +9723,6 @@ public abstract class Attack implements Serializable
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// TODO: Roar and whirlwind and multi-turn moves should be assistless
 			List<Attack> attacks = new ArrayList<>();
 			for (ActivePokemon p : b.getTrainer(me.user()).getTeam())
 			{

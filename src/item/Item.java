@@ -58,6 +58,7 @@ import battle.effect.EffectBlockerEffect;
 import battle.effect.EndTurnEffect;
 import battle.effect.EntryEffect;
 import battle.effect.GroundedEffect;
+import battle.effect.HalfWeightEffect;
 import battle.effect.ItemCondition;
 import battle.effect.LevitationEffect;
 import battle.effect.OpponentPowerChangeEffect;
@@ -1375,7 +1376,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class FloatStone extends Item implements HoldItem
+	private static class FloatStone extends Item implements HoldItem, HalfWeightEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1392,6 +1393,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public int getHalfAmount(Integer halfAmount)
+		{
+			return halfAmount + 1;
 		}
 	}
 
@@ -12070,7 +12076,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Stat stat = Stat.getStat(rand, true);
 			if (user.getAttributes().modifyStage(user, user, 1, stat, b, source))
 			{
-				// TODO: Test this and such
 				useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 				return true;
 			}

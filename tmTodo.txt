@@ -1,0 +1,97 @@
+Remove:
+	Grass Pledge
+	Fire Pledge
+	Water Pledge
+	Helping Hand
+	After You
+	
+Check Gen 6 Pokemon:
+	Covet
+	Bug Bite
+	Drill Run
+	Bounce
+	Signal Beam
+	Iron Head
+	Super Fang
+	Uproar
+	Seed Bomb
+	Dual Chop
+	Low Kick
+	Gunk Shot
+	Fire Punch
+	Thunder Punch
+	Ice Punch
+	Last Resort
+	Iron Defense
+	Magnet Rise
+	Magic Coat
+	Block
+	Hyper Voice
+	Electroweb
+	Icy Wind
+	Iron Tail
+	Aqua Tail
+	Earth Power
+	Zen Headbutt
+	Foul Play
+	Superpower
+	Gravity
+	Dragon Pulse
+	Dark Pulse
+	Bind
+	Snore
+	Heal Bell
+	Knock Off
+	Synthesis
+	Roost
+	Sky Attack
+	Role Play
+	Heat Wave
+	Giga Drain
+	Drain Punch
+	Pain Split
+	Tailwind
+	Worry Seed
+	Gastro Acid
+	Magic Room
+	Wonder Room
+	Spite
+	Recycle
+	Trick
+	Stealth Rock
+	Outrage
+	Endeavor
+	Sleep Talk
+	Skill Swap
+	Snatch
+	
+Check Gens 5 and 6:
+	Air Cutter
+	Ancient Power
+	Dive
+	Fury Cutter
+	Mud-Slap
+	Ominous Wind
+	Rollout
+	String Shot
+	Sucker Punch
+	Swift
+	Twister
+	Vacuum Wave
+	Headbutt
+	
+Check Gen 4, 5, and 6:
+	Body Slam
+	Counter
+	Defense Curl
+	Dream Eater
+	Endure
+	Mega Kick
+	Mega Punch
+	Psych Up
+	Seismic Toss
+	Softboiled
+	Double-Edge
+	Dynamic Punch
+	Metronome
+	Mimic

@@ -269,6 +269,13 @@ Effect Spore:
 	private static StatusCondition[] statuses = new StatusCondition[] {StatusCondition.PARALYZED, StatusCondition.POISONED, StatusCondition.ASLEEP};
 	###
 	Contact: 
+	// Grass-type Pokemon, Pokemon with Overcoat, and Pokemon holding the Safety Goggles are immune to Effect Spore
+	if (user.isType(b, Type.GRASS) || user.hasAbility(Namesies.OVERCOAT_ABILITY) || user.isHoldingItem(b, Namesies.SAFETY_GOGGLES_ITEM))
+	{
+		return;
+	}
+	
+	// 30% chance to Paralyze, Poison, or induce Sleep
 	if (Math.random()*100 < 30)
 	{
 		Status.giveStatus(b, victim, user, statuses[(int)(Math.random()*statuses.length)], true);
@@ -959,6 +966,8 @@ Ice Body:
 *
 Light Metal:
 	Desc: Halves the Pok\u00e9mon's weight.
+	Int: HalfWeightEffect
+	HalfAmount: 1
 *
 Drizzle:
 	Desc: The Pok\u00e9mon makes it rain if it appears in battle.
@@ -1173,9 +1182,27 @@ Illusion:
 	private Type[] illusionType;
 	private PokemonInfo illusionSpecies;
 	private boolean illusionShiny;
+	
+	private void breakIllusion(Battle b, ActivePokemon victim)
+	{
+		// If the Illusion is already broken, no worries
+		if (!activated) 
+		{
+			return;
+		}
+		
+		activated = false;
+		b.addMessage(victim.getName() + "'s Illusion was broken!");
+		
+		b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
+		b.addMessage("", victim);
+	}
 	###
 	Activate: 
 	x.activated = false;
+	###
+	Deactivate:
+	breakIllusion(b, victim);
 	###
 	Int: EntryEffect, SwitchOutEffect, TakeDamageEffect, TypeCondition, NameChanger
 	Enter: 
@@ -1236,17 +1263,7 @@ Illusion:
 	activated = false;
 	###
 	OnTakeDamage: 
-	// If the Illusion is already broken, no worries
-	if (!activated) 
-	{
-		return;
-	}
-	
-	activated = false;
-	b.addMessage(victim.getName() + "'s Illusion was broken!");
-	
-	b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
-	b.addMessage("", victim);
+	breakIllusion(b, victim);
 	###
 	GetTypeCondition:
 	if (display && activated)

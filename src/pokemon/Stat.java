@@ -105,8 +105,7 @@ public enum Stat
 		
 		ActivePokemon attacking = s.user ? p : opp;
 		list = b.getEffectsList(p, attacking.getAttack());
-	
-		// TODO: Test this
+		
 		s = (Stat)Global.updateInvoke(0, list, StatSwitchingEffect.class, "switchStat", s);
 		
 		// Apply stage changes
@@ -119,7 +118,6 @@ public enum Stat
 		if (stage > 0) stat *= ((s.modifier + stage)/s.modifier);
 	    else if (stage < 0) stat *= (s.modifier/(s.modifier - stage));
 		
-		// TODO: Test this (if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stat;)
 		ActivePokemon moldBreaker  = s.user ? null : opp;
 		
 		// Applies stat changes to each for each item in list
@@ -139,7 +137,7 @@ public enum Stat
 		
 //		int temp = stage;
 		
-		// Update the stage due to effects TODO: Test moldbreaker again (if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stage;)
+		// Update the stage due to effects
 		ActivePokemon moldBreaker = s.user ? null : opp;
 		stage = (int)Global.updateInvoke(0, moldBreaker, list, StageChangingEffect.class, "adjustStage", stage, s, p, opp, b);
 		

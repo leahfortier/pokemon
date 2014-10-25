@@ -294,11 +294,12 @@ Toxic Orb:
 		###
 *
 Float Stone
-	Int: HoldItem
+	Int: HoldItem, HalfWeightEffect
 	Cat: Misc
 	Desc: This item, when attached to a Pok\u00e9mon, halves the Pok\u00e9mon's weight for use with attacks that deal with weight
 	Price: 200
 	Fling: 30
+	HalfAmount: 1
 *
 Focus Band
 	Int: HoldItem, BracingEffect
@@ -2507,7 +2508,6 @@ Starf Berry:
 		Stat stat = Stat.getStat(rand, true);
 		if (user.getAttributes().modifyStage(user, user, 1, stat, b, source))
 		{
-			// TODO: Test this and such
 			useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 			return true;
 		}

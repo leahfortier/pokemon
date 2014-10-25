@@ -507,6 +507,9 @@ ChangeAbility:
 	x.message = message;
 	###
 	Cast: 
+	Ability oldAbility = victim.getAbility();
+	oldAbility.deactivate(b, victim);
+	
 	ChangeAbilityMove changey = (ChangeAbilityMove)source.getSource(b, caster);
 	ability = changey.getAbility(b, caster, victim);
 	message = changey.getMessage(b, caster, victim);
@@ -629,7 +632,6 @@ Imprison:
 	x.unableMoves = unableMoves;
 	###
 	Cast:
-	// TODO: Test this effect again
 	unableMoves = new ArrayList<>();
 	for (Move m : caster.getMoves(b))
 	{
@@ -1019,13 +1021,20 @@ Substitute:
 	###
 	FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
 	ValidMove: 
-	// TODO: Soundbase moves bypass the substitute and also Infiltrator
-	if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING))
+	// Self-target and field moves are always successful
+	if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD))
 	{
 		return true;
 	}
 	
-	if (user.getAttack().getCategory() == Category.STATUS) 
+	// Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
+	if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(Namesies.INFILTRATOR_ABILITY))
+	{
+		return true;
+	}
+	
+	// Print the failure for status moves
+	if (user.getAttack().getCategory() == Category.STATUS)
 	{
 		b.addMessage(this.getFailMessage(b, user, victim));
 	}
@@ -1115,15 +1124,15 @@ HalfWeight:
 	###
 	CanHave: True
 	Cast: 
-	HalfWeight e = (HalfWeight)victim.getEffect(this.namesies);
-	if (e == null) super.cast(b, caster, victim, source, printCast);
-	else e.layers++;
+	HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies);
+	if (halfWeight == null) super.cast(b, caster, victim, source, printCast);
+	else halfWeight.layers++;
 	###
 	Activate: 
 	x.layers = 1;
 	###
-	Int: IntegerCondition
-	IntegerName: layers
+	Int: HalfWeightEffect
+	HalfAmount: layers
 *
 PowerTrick:
 	CanHave: True

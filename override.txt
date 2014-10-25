@@ -468,9 +468,8 @@ Override:
 		###
 		AddMapField: ProtectingCondition: true
 		AddMapField: OpponentCanAttack:
-		// TODO: Test with a field move I think this should be included here as well
 		// Self-target moves, moves that penetrate Protect, and other conditions
-		if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) 
+		if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) 
 		{
 			return true;
 		}
@@ -681,6 +680,11 @@ Override:
 	*
 ***
 Override:
+	Deactivate:
+		Header: void deactivate(Battle b, ActivePokemon victim)
+	*
+***
+Override:
 	GetTurns:
 		Header: int getTurns()
 	*
@@ -849,12 +853,27 @@ Override:
 	AbsorbType:
 		AddInterface: DamageBlocker
 		AddMapField: Block:
-		return attacking == Type.{00} && !victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT);
+		return attacking == Type.{00};
 		###
 		AddMapField: AlternateEffect:
-		// TODO: Srsly considering changing the heal block to be here instead -- like I don't think they should take damage when they have heal block it makes no sense
+		b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!");
+		
+		// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
+		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+		{
+			return;
+		}
+		
 		victim.healHealthFraction(1/4.0);
-		b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
+		b.addMessage(victim.getName() + "'s HP was restored instead!", victim);
+		###
+	*
+***
+HalfWeightEffect:
+	HalfAmount:
+		Header: int getHalfAmount(Integer halfAmount)
+		Body:
+		return halfAmount + {0};
 		###
 	*
 ***
