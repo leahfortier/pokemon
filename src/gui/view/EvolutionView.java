@@ -17,6 +17,7 @@ import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
+import trainer.Pokedex.PokedexStatus;
 
 public class EvolutionView extends View
 {	
@@ -72,6 +73,7 @@ public class EvolutionView extends View
 				{
 					state = State.END;
 					setFinalMessage();
+					addToPokedex();
 				}
 				break;
 			case END:
@@ -116,8 +118,8 @@ public class EvolutionView extends View
 		g.setFont(Global.getFont(30));
 		g.setColor(Color.WHITE);
 		
-		int preIndex = isEgg?0x10000: preEvolution.getImageNumber(evolvingPokemon.isShiny());
-		int postIndex = isEgg?preEvolution.getImageNumber(evolvingPokemon.isShiny()): postEvolution.getImageNumber(evolvingPokemon.isShiny());
+		int preIndex = isEgg ? 0x10000 : preEvolution.getImageNumber(evolvingPokemon.isShiny());
+		int postIndex = isEgg ? preEvolution.getImageNumber(evolvingPokemon.isShiny()) : postEvolution.getImageNumber(evolvingPokemon.isShiny());
 		
 		BufferedImage currEvolution = pokemonTiles.getTile(preIndex);
 		BufferedImage nextEvolution = pokemonTiles.getTile(postIndex);
@@ -190,7 +192,8 @@ public class EvolutionView extends View
 	{
 		evolvingPokemon = pokemon;
 		preEvolution = pokemon.getPokemonInfo();
-		if(evolve != null)
+		
+		if (evolve != null)
 			postEvolution = evolve.getEvolution();
 		else
 			isEgg = true;
@@ -204,19 +207,31 @@ public class EvolutionView extends View
 		}
 		else
 		{
-			message = "Your "+preEvolution.getName()+" is evolving!";
+			message = "Your " + preEvolution.getName() + " is evolving!";
+		}
+	}
+	
+	private void addToPokedex()
+	{	
+		if (isEgg)
+		{
+			player.getPokedex().setStatus(preEvolution, PokedexStatus.CAUGHT);
+		}
+		else
+		{
+			player.getPokedex().setStatus(postEvolution, PokedexStatus.CAUGHT);			
 		}
 	}
 	
 	private void setFinalMessage()
 	{
-		if(isEgg)
+		if (isEgg)
 		{
-			message = "Your egg hatched into a "+preEvolution.getName()+"!";
+			message = "Your egg hatched into a " + preEvolution.getName()  +"!";
 		}
 		else
 		{
-			message = "Your "+preEvolution.getName()+" evolved into a "+postEvolution.getName()+"!";
+			message = "Your " + preEvolution.getName() + " evolved into a " + postEvolution.getName()+"!";
 		}
 	}
 	

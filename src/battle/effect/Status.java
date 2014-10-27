@@ -51,7 +51,31 @@ public abstract class Status implements Serializable
 	}
 	
 	protected abstract String getCastMessage(ActivePokemon p);
-	public abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
+	protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
+
+	protected abstract String getRemoveMessage(ActivePokemon victim);
+	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
+	
+	public static void removeStatus(Battle b, ActivePokemon victim, CastSource source)
+	{
+		b.addMessage(getRemoveStatus(b, victim, source), victim);
+	}
+	
+	public static String getRemoveStatus(Battle b, ActivePokemon victim, CastSource source)
+	{
+		StatusCondition status = victim.getStatus().getType();
+		victim.removeStatus();
+		
+		switch (source)
+		{
+			case ABILITY:
+				return getStatus(status, victim).getSourceRemoveMessage(victim, victim.getAbility().getName());
+			case HELD_ITEM:
+				return getStatus(status, victim).getSourceRemoveMessage(victim, victim.getHeldItem(b).getName());
+			default:
+				return getStatus(status, victim).getRemoveMessage(victim);
+		}
+	}
 	
 	public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status)
 	{
@@ -212,6 +236,16 @@ public abstract class Status implements Serializable
 		{
 			return "";
 		}
+
+		public String getRemoveMessage(ActivePokemon victim)
+		{
+			return "";
+		}
+		
+		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+		{
+			return "";
+		}
 	}
 	
 	private static class Fainted extends Status 
@@ -231,6 +265,16 @@ public abstract class Status implements Serializable
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim)
 		{
 			return abilify.getName() + "'s " + abilify.getAbility().getName() + " caused " + victim.getName() + " to faint!";
+		}
+
+		public String getRemoveMessage(ActivePokemon victim)
+		{
+			return "";
+		}
+		
+		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+		{
+			return "";
 		}
 	}
 	
@@ -272,6 +316,16 @@ public abstract class Status implements Serializable
 		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			return (int)(stat*(s == Stat.SPEED && !p.hasAbility(Namesies.QUICK_FEET_ABILITY) ? .25 : 1));
+		}
+
+		public String getRemoveMessage(ActivePokemon victim)
+		{
+			return victim.getName() + " is no longer paralyzed!";
+		}
+
+		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+		{
+			return victim.getName() + "'s " + sourceName + " cured it of its paralysis!";
 		}
 	}
 	
@@ -323,6 +377,16 @@ public abstract class Status implements Serializable
 		{
 			return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect(Namesies.BAD_POISON_EFFECT) ? " badly " : " ") + "poisoned " + victim.getName() + "!";
 		}
+
+		public String getRemoveMessage(ActivePokemon victim)
+		{
+			return victim.getName() + " is no longer poisoned!";
+		}
+		
+		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+		{
+			return victim.getName() + "'s " + sourceName + " cured it of its poison!";
+		}
 	}
 	
 	private static class Asleep extends Status implements BeforeTurnEffect
@@ -361,8 +425,7 @@ public abstract class Status implements Serializable
 		{
 			if (numTurns == 0)
 			{
-				p.removeStatus();
-				b.addMessage(p.getName() + " woke up!", p);
+				Status.removeStatus(b, p, CastSource.EFFECT);
 				
 				return true;
 			}
@@ -385,6 +448,16 @@ public abstract class Status implements Serializable
 		public void setTurns(int turns)
 		{
 			numTurns = turns;
+		}
+
+		public String getRemoveMessage(ActivePokemon victim)
+		{
+			return victim.getName() + " woke up!";
+		}
+		
+		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+		{
+			return victim.getName() + "'s " + sourceName + " caused it to wake up!";
 		}
 	}
 	
@@ -428,6 +501,16 @@ public abstract class Status implements Serializable
 		{
 			return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(Namesies.GUTS_ABILITY) ? .5 : 1));
 		}
+
+		public String getRemoveMessage(ActivePokemon victim)
+		{
+			return victim.getName() + " is no longer burned!";
+		}
+		
+		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+		{
+			return victim.getName() + "'s " + sourceName + " cured it of its burn!";
+		}
 	}
 	
 	private static class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect
@@ -450,8 +533,7 @@ public abstract class Status implements Serializable
 			// 20% chance to thaw out each turn
 			if (Math.random()*100 < 20 || p.getAttack().isMoveType(MoveType.DEFROST))
 			{
-				p.removeStatus();
-				b.addMessage(p.getName() + " thawed out!", p);
+				Status.removeStatus(b, p, CastSource.EFFECT);
 				
 				return true;
 			}
@@ -475,9 +557,18 @@ public abstract class Status implements Serializable
 			// Fire-type moves defrost the user
 			if (user.isAttackType(Type.FIRE))
 			{
-				victim.removeStatus();
-				b.addMessage(victim.getName() + " thawed out!", victim);
+				Status.removeStatus(b, victim, CastSource.EFFECT);
 			}
+		}
+
+		public String getRemoveMessage(ActivePokemon victim)
+		{
+			return victim.getName() + " thawed out!";
+		}
+		
+		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+		{
+			return victim.getName() + "'s " + sourceName + " thawed it out!";
 		}
 	}
 }

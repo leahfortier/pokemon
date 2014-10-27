@@ -13,22 +13,15 @@ None:
 *
 Overgrow:
 	Desc: Powers up Grass-type moves in a pinch.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-	return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.GRASS ? 1.5 : 1;
-	###
+	PinchAbility: Grass
 *
 Chlorophyll:
 	Desc: Boosts the Pok\u00e9mon’s Speed in sunshine.
-	ToModify: Speed
-	ModifyMultiplier: 2 b.getWeather().namesies() == Namesies.SUNNY_EFFECT
+	SpeedWeather: Sunny
 *
 Blaze:
 	Desc: Powers up Fire-type moves in a pinch.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-	return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.FIRE ? 1.5 : 1;
-	###
+	PinchAbility: Fire
 *
 Solar Power:
 	Desc: Boosts Sp. Atk, but lowers HP in sunshine.
@@ -46,10 +39,7 @@ Solar Power:
 *
 Torrent:
 	Desc: Powers up Water-type moves in a pinch.
-	GetMultiplier: 
-	return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.WATER ? 1.5 : 1;
-	###
-	Int: PowerChangeEffect
+	PinchAbility: Water
 *
 Rain Dish:
 	Desc: The Pok\u00e9mon gradually recovers HP in rain.
@@ -71,14 +61,7 @@ Shield Dust:
 *
 Shed Skin:
 	Desc: The Pok\u00e9mon may heal its own status problems.
-	Int: EndTurnEffect
-	ApplyEndTurn: 
-	if (victim.hasStatus() && (int)(Math.random()*3) == 0)
-	{
-		victim.removeStatus();
-		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
-	}
-	###
+	EndTurnStatusCure: (int)(Math.random()*3) == 0
 *
 Compoundeyes:
 	Desc: The Pok\u00e9mon’s accuracy is boosted.
@@ -94,10 +77,7 @@ Tinted Lens:
 *
 Swarm:
 	Desc: Powers up Bug-type moves in a pinch.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-	return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.BUG ? 1.5 : 1;
-	###
+	PinchAbility: Bug
 *
 Sniper:
 	Desc: Powers up moves if they become critical hits.
@@ -108,7 +88,6 @@ Keen Eye:
 	StatProtect: 
 	return stat == Stat.ACCURACY;
 	###
-	StatProtectMessage: p.getName() + "'s " + this.getName() + " prevents its accuracy from being lowered!"
 	IgnoreStage:
 	return s == Stat.EVASION;
 	###
@@ -134,14 +113,8 @@ Intimidate:
 	###
 *
 Static:
-	Int: PhysicalContactEffect
 	Desc: Contact with the Pok\u00e9mon may cause paralysis.
-	Contact: 
-	if (Math.random()*100 < 30)
-	{
-		Status.giveStatus(b, victim, user, StatusCondition.PARALYZED, true);
-	}
-	###
+	StatusContact: Paralyzed
 *
 Lightningrod:
 	Desc: The Pok\u00e9mon draws in all Electric-type moves.
@@ -150,25 +123,15 @@ Lightningrod:
 *
 Sand Veil:
 	Desc: Raises the Pok\u00e9mon’s evasion during a sandstorm by one level.
-	Int: StageChangingEffect
-	StageChange: 
-	return s == Stat.EVASION && b.getWeather().namesies() == Namesies.SANDSTORM_EFFECT ? stage + 1 : stage;
-	###
+	WeatherEvasion: Sandstorm
 *
 Sand Rush:
 	Desc: Speed rises in a Sandstorm.
-	ToModify: Speed
-	ModifyMultiplier: 2 b.getWeather().namesies() == Namesies.SANDSTORM_EFFECT
+	SpeedWeather: Sandstorm
 *
 Poison Point:
 	Desc: Contact with the Pok\u00e9mon may poison the foe.
-	Int: PhysicalContactEffect
-	Contact: 
-	if (Math.random()*100 < 30)
-	{
-		Status.giveStatus(b, victim, user, StatusCondition.POISONED, true);
-	}
-	###
+	StatusContact: Poisoned
 *
 Rivalry:
 	Desc: Raises Attack if the foe is of the same gender.
@@ -226,11 +189,7 @@ Flash Fire:
 	###
 *
 Drought:
-	Int: EntryEffect
-	Enter: 
-	b.addEffect(Weather.getEffect(Namesies.SUNNY_EFFECT).newInstance());
-	b.addMessage(victim.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
-	###
+	WeatherStarter: Sunny made the sunlight turn harsh
 	Desc: The Pok\u00e9mon makes it sunny if it is in battle.
 *
 Frisk:
@@ -318,57 +277,42 @@ Technician:
 *
 Limber:
 	Desc: The Pok\u00e9mon is protected from paralysis.
-	Int: StatusPreventionEffect
-	StatusPrevent: 
-	return status == StatusCondition.PARALYZED;
-	###
-	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents paralysis!"
+	StatusPreventAbility: Paralyzed paralysis
 *
 Damp:
 	Desc: Prevents combatants from self destructing.
 	Int: BeforeTurnEffect, OpponentBeforeTurnEffect
-	CanAttack:
-	if (p.getAttack().namesies() == Namesies.SELF_DESTRUCT_ATTACK || p.getAttack().namesies() == Namesies.EXPLOSION_ATTACK)
+	Field:
+	private boolean checkeroo(Battle b, ActivePokemon attacking, ActivePokemon abilify)
 	{
-		b.printAttacking(p);
-		b.addMessage(p.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
-		return false;
+		if (attacking.getAttack().namesies() == Namesies.SELF_DESTRUCT_ATTACK || attacking.getAttack().namesies() == Namesies.EXPLOSION_ATTACK)
+		{
+			b.printAttacking(attacking);
+			b.addMessage(abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!");
+			return false;
+		}
+		
+		return true;
 	}
-	return true;
+	###
+	CanAttack:
+	return checkeroo(b, p, p);
 	###
 	OpponentCanAttack: 
-	if (p.getAttack().namesies() == Namesies.SELF_DESTRUCT_ATTACK || p.getAttack().namesies() == Namesies.EXPLOSION_ATTACK)
-	{
-		b.printAttacking(p);
-		b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
-		return false;
-	}
-	return true;
+	return checkeroo(b, p, opp);
 	###
 *
 Cloud Nine:
 	Desc: Eliminates the effects of weather.
-	Int: EntryEffect
-	Enter: 
-	b.addEffect(Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT));
-	b.addMessage(victim.getName() + "'s " + this.getName() + " eliminated the weather!");
-	###
+	WeatherEliminate: True
 *
 Vital Spirit:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
-	Int: StatusPreventionEffect
-	StatusPrevent: 
-	return status == StatusCondition.ASLEEP;
-	###
-	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents sleep!"
+	StatusPreventAbility: Asleep sleep
 *
 Insomnia:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
-	Int: StatusPreventionEffect
-	StatusPrevent: 
-	return status == StatusCondition.ASLEEP;
-	###
-	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents sleep!"
+	StatusPreventAbility: Asleep sleep
 *
 Anger Point:
 	Desc: Raises Attack upon taking a critical hit.
@@ -397,7 +341,6 @@ Clear Body:
 	StatProtect: 
 	return true;
 	###
-	StatProtectMessage: p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!"
 *
 Liquid Ooze:
 	Desc: Inflicts damage on foes using any draining move.
@@ -411,7 +354,7 @@ Sturdy:
 	Bracing: 
 	return fullHealth;
 	###
-	BraceMessage: bracer.getName() + "'s Sturdy endured the hit!"
+	BraceMessage: bracer.getName() + "'s " + this.getName() + " endured the hit!"
 *
 Oblivious:
 	Desc: Prevents the Pok\u00e9mon from becoming infatuated.
@@ -449,14 +392,7 @@ Thick Fat:
 *
 Hydration:
 	Desc: Heals status problems if it is raining.
-	Int: EndTurnEffect
-	ApplyEndTurn: 
-	if (b.getWeather().namesies() == Namesies.RAINING_EFFECT && victim.hasStatus())
-	{
-		victim.removeStatus();
-		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
-	}
-	###
+	EndTurnStatusCure: b.getWeather().namesies() == Namesies.RAINING_EFFECT
 *
 Shell Armor:
 	Desc: The Pok\u00e9mon is protected against critical hits.
@@ -520,20 +456,10 @@ Hyper Cutter:
 	StatProtect: 
 	return stat == Stat.ATTACK;
 	###
-	StatProtectMessage: p.getName() + "'s Hyper Cutter prevents its attack from being lowered!"
 *
 Soundproof:
 	Desc: Gives full immunity to all sound-based moves.
-	Int: OpponentBeforeTurnEffect
-	OpponentCanAttack: 
-	if (p.getAttack().isMoveType(MoveType.SOUND_BASED))
-	{
-		b.printAttacking(p);
-		b.addMessage(opp.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
-		return false;
-	}
-	return true;
-	###
+	MoveTypePrevent: Sound_Based
 *
 Reckless:
 	Desc: Powers up moves that have recoil damage.
@@ -559,7 +485,10 @@ Natural Cure:
 	Desc: All status problems are healed upon switching out.
 	Int: SwitchOutEffect
 	SwitchOut: 
-	if (!switchee.hasStatus(StatusCondition.FAINTED)) switchee.removeStatus();
+	if (!switchee.hasStatus(StatusCondition.FAINTED)) 
+	{
+		switchee.removeStatus();
+	}
 	###
 *
 Serene Grace:
@@ -571,7 +500,7 @@ Leaf Guard:
 	StatusPrevent: 
 	return b.getWeather().namesies() == Namesies.SUNNY_EFFECT;
 	###
-	StatusPreventMessage: victim.getName() + "'s Leaf Guard prevents status conditions!"
+	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
 *
 Scrappy:
 	Desc: Enables moves to hit Ghost-type foes.
@@ -580,16 +509,11 @@ Scrappy:
 *
 Swift Swim:
 	Desc: Boosts the Pok\u00e9mon’s Speed in rain.
-	ToModify: Speed
-	ModifyMultiplier: 2 b.getWeather().namesies() == Namesies.RAINING_EFFECT
+	SpeedWeather: Raining
 *
 Water Veil:
 	Desc: Prevents the Pok\u00e9mon from getting a burn.
-	Int: StatusPreventionEffect
-	StatusPrevent: 
-	return status == StatusCondition.BURNED;
-	###
-	StatusPreventMessage: victim.getName() + "'s Water Veil prevents burns!"
+	StatusPreventAbility: Burned burns
 *
 Filter:
 	Desc: Powers down super-effective moves.
@@ -600,13 +524,7 @@ Filter:
 *
 Flame Body:
 	Desc: Contact with the Pok\u00e9mon may burn the foe.
-	Int: PhysicalContactEffect
-	Contact: 
-	if (Math.random()*100 < 30)
-	{
-		Status.giveStatus(b, victim, user, StatusCondition.BURNED, true);
-	}
-	###
+	StatusContact: Burned
 *
 Rattled:
 	Desc: Some move types scare it and boost its Speed.
@@ -679,14 +597,9 @@ Download:
 	int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
 	int baseSpecialDefense = otherInfo.getStat(Stat.SP_DEFENSE.index());
 	
-	if (baseDefense < baseSpecialDefense)
-	{
-		victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
-	}
-	else
-	{
-		victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
-	}
+	Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
+	
+	victim.getAttributes().modifyStage(victim, victim, 1, toRaise, b, CastSource.ABILITY);
 	###
 *
 Pressure:
@@ -698,18 +611,11 @@ Pressure:
 *
 Immunity:
 	Desc: Prevents the Pok\u00e9mon from getting poisoned.
-	Int: StatusPreventionEffect
-	StatusPrevent: 
-	return status == StatusCondition.POISONED;
-	###
-	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents it from being poisoned!"
+	StatusPreventAbility: Poisoned poisoned
 *
 Snow Cloak:
 	Desc: Raises the Pok\u00e9mon’s evasion during a hailstorm by one level.
-	Int: StageChangingEffect
-	StageChange: 
-	return s == Stat.EVASION && b.getWeather().namesies() == Namesies.HAILING_EFFECT ? stage + 1 : stage;
-	###
+	WeatherEvasion: Hailing
 *
 Marvel Scale:
 	Desc: Boosts Defense if there is a status problem.
@@ -783,11 +689,7 @@ Overcoat:
 *
 Magma Armor:
 	Desc: Prevents the Pok\u00e9mon from becoming frozen.
-	Int: StatusPreventionEffect
-	StatusPrevent: 
-	return status == StatusCondition.FROZEN;
-	###
-	StatusPreventMessage: victim.getName() + "'s Magma Armor prevents freezing!"
+	StatusPreventAbility: Frozen freezing
 *
 Suction Cups:
 	Desc: Negates all moves that force switching out.
@@ -797,17 +699,16 @@ Steadfast:
 *
 Sand Stream:
 	Desc: The Pok\u00e9mon summons a sandstorm in battle.
-	Int: EntryEffect
-	Enter: 
-	b.addEffect(Weather.getEffect(Namesies.SANDSTORM_EFFECT).newInstance());
-	b.addMessage(victim.getName() + "'s " + this.getName() + " whipped up a sand storm!");
-	###
+	WeatherStarter: Sandstorm whipped up a sandstorm
 *
 Regenerator:
 	Desc: Restores a little HP when withdrawn from battle.
 	Int: SwitchOutEffect
 	SwitchOut: 
-	if (!switchee.hasStatus(StatusCondition.FAINTED)) switchee.healHealthFraction(1/3.0);
+	if (!switchee.hasStatus(StatusCondition.FAINTED)) 
+	{
+		switchee.healHealthFraction(1/3.0);
+	}
 	###
 *
 Poison Heal:
@@ -901,7 +802,6 @@ White Smoke:
 	StatProtect: 
 	return true;
 	###
-	StatProtectMessage: p.getName() + "'s White Smoke prevents its stats from being lowered!"
 *
 Toxic Boost:
 	Desc: Powers up physical attacks when poisoned.
@@ -971,19 +871,11 @@ Light Metal:
 *
 Drizzle:
 	Desc: The Pok\u00e9mon makes it rain if it appears in battle.
-	Int: EntryEffect
-	Enter: 
-	b.addEffect(Weather.getEffect(Namesies.RAINING_EFFECT).newInstance());
-	b.addMessage(victim.getName() + "'s " + this.getName() + " started a downpour!");
-	###
+	WeatherStarter: Raining started a downpour
 *
 Air Lock:
 	Desc: Eliminates the effects of weather.
-	Int: EntryEffect
-	Enter: 
-	b.addEffect(Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT));
-	b.addMessage(victim.getName() + "'s " + this.getName() + " eliminated the weather!");
-	###
+	WeatherEliminate: True
 *
 Defiant:
 	Desc: Boosts the Attack stat when a stat is lowered.
@@ -1004,6 +896,7 @@ Aftermath:
 	Desc: Damages the attacker landing the finishing hit.
 	Int: PhysicalContactEffect
 	Contact: 
+	// TODO: Pretty sure this doesn't work anymore
 	if (victim.isFainted(b))
 	{
 		b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
@@ -1031,11 +924,7 @@ Sand Force:
 *
 Snow Warning:
 	Desc: The Pok\u00e9mon summons a hailstorm in battle.
-	Int: EntryEffect
-	Enter: 
-	b.addEffect(Weather.getEffect(Namesies.HAILING_EFFECT).newInstance());
-	b.addMessage(victim.getName() + "'s " + this.getName() + " caused it to hail!");
-	###
+	WeatherStarter: Hailing caused it to hail
 *
 Motor Drive:
 	BlockType: Electric
@@ -1116,7 +1005,6 @@ Big Pecks:
 	StatProtect: 
 	return stat == Stat.DEFENSE;
 	###
-	StatProtectMessage: p.getName() + "'s Big Pecks prevents its defense from being lowered!"
 *
 Poison Touch:
 	Desc: May poison targets when a Pok\u00e9mon makes contact.
@@ -1348,7 +1236,11 @@ Harvest:
 	Int: EndTurnEffect
 	ApplyEndTurn: 
 	PokemonEffect consumed = victim.getEffect(Namesies.CONSUMED_ITEM_EFFECT);
-	if (consumed == null || victim.isHoldingItem(b)) return;
+	if (consumed == null || victim.isHoldingItem(b)) 
+	{
+		return;
+	}
+	
 	Item restored = ((ItemCondition)consumed).getItem();
 	if (restored instanceof Berry && (b.getWeather().namesies() == Namesies.SUNNY_EFFECT || Math.random() < .5))
 	{
@@ -1411,17 +1303,7 @@ Forecast:
 *
 Bulletproof:
 	Desc: Protects the Pok\u00e9mon from some ball and bomb moves.
-	Int: OpponentBeforeTurnEffect
-	OpponentCanAttack:
-	if (p.getAttack().isMoveType(MoveType.BOMB_BALL))
-	{
-		b.printAttacking(p);
-		b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
-		return false;
-	}
-	
-	return true;
-	###
+	MoveTypePrevent: Bomb_Ball
 *
 Aura Break:
 	Desc: The effects of Aura Abilities are reversed.
@@ -1469,25 +1351,14 @@ Tough Claws:
 *
 Sweet Veil:
 	Desc: Prevents itself and ally Pok\u00e9mon from falling asleep.
-	Int: StatusPreventionEffect
-	StatusPrevent: 
-	return status == StatusCondition.ASLEEP;
-	###
-	StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents sleep!"
+	StatusPreventAbility: Asleep sleep
 *
 Aroma Veil:
 	Desc: Protects allies from attacks that effect their mental state.
 *
 Healer:
 	Desc: The Pok\u00e9mon may heal its own status problems.
-	Int: EndTurnEffect
-	ApplyEndTurn: 
-	if (victim.hasStatus() && (int)(Math.random()*3) == 0)
-	{
-		victim.removeStatus();
-		b.addMessage(victim.getName() + "'s " + this.getName() + " cured it of its status condition!", victim);
-	}
-	###
+	EndTurnStatusCure: (int)(Math.random()*3) == 0
 *
 Pixilate:
 	Desc: Normal-type moves become Fairy-type moves.
@@ -1553,7 +1424,6 @@ Flower Veil:
 	StatProtect: 
 	return victim.isType(b, Type.GRASS);
 	###
-	StatProtectMessage: p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!"
 *
 Gale Wings:
 	Desc: Gives priority to Flying-type moves.

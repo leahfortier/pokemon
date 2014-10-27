@@ -346,7 +346,7 @@ public class Battle
 		// Document sighting in the Pokedex
 		if (!enterer.user()) 
 		{
-			player.getPokedex().setStatus(enterer, PokedexStatus.SEEN, isWildBattle() ? player.getRouteName() : "");
+			player.getPokedex().setStatus(enterer.getPokemonInfo(), PokedexStatus.SEEN, isWildBattle() ? player.getRouteName() : "");
 		}
 		
 		if (reset) 
@@ -374,10 +374,8 @@ public class Battle
 		
 		ActivePokemon plyr = player.front(), opp = opponent.front();
 		
-		String trapMessage = plyr.canEscape(this);
-		if (trapMessage.length() > 0)
+		if (!plyr.canEscape(this))
 		{
-			addMessage(trapMessage);
 			return false;
 		}
 		

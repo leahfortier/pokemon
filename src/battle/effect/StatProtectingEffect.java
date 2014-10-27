@@ -7,5 +7,5 @@ import battle.Battle;
 public interface StatProtectingEffect 
 {
 	public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat);
-	public String preventionMessage(ActivePokemon p);
+	public String preventionMessage(ActivePokemon p, Stat s);
 }

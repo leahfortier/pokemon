@@ -62,22 +62,10 @@ Gravity:
 	###
 *
 WaterSport:
-	Int: PowerChangeEffect
-	GetMultiplier: 
-	return user.getAttackType() == Type.FIRE ? .33 : 1;
-	###
-	CastMessage: "Fire's power was weakened!"
-	NumTurns: 5
-	SubsideMessage: "The effects of Water Sport wore off."
+	Sporty: Fire Fire Water
 *
 MudSport:
-	NumTurns: 5
-	SubsideMessage: "The effects of Mud Sport wore off."
-	Int: PowerChangeEffect
-	GetMultiplier:
-	return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
-	###
-	CastMessage: "Electricity's power was weakened!"
+	Sporty: Electric Electricity Mud
 *
 WonderRoom:
 	Int: StatSwitchingEffect
@@ -86,55 +74,13 @@ WonderRoom:
 	if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
 	return s;
 	###
-	NumTurns: 5
-	SubsideMessage: "The dimensions of the wonder room returned to normal."
-	CastMessage: user.getName() + " twisted the dimensions to switch defense and special defense!"
-	CanHave: True
-	Cast: 
-	Effect wonder = Effect.getEffect(b.getEffects(), Namesies.WONDER_ROOM_EFFECT);
-	if (wonder == null)
-	{
-		super.cast(b, caster, victim, source, printCast);
-		return;
-	}
-	
-	b.addMessage(wonder.getSubsideMessage(caster));
-	Effect.removeEffect(b.getEffects(), Namesies.WONDER_ROOM_EFFECT);
-	###
+	SpecialRoom: wonder switch defense and special defense
 *
 TrickRoom:
-	NumTurns: 5
-	SubsideMessage: "The dimensions of the trick room returned to normal."
-	CastMessage: user.getName() + " twisted the dimensions to switch speeds!"
-	CanHave: True
-	Cast: 
-	Effect tricksies = Effect.getEffect(b.getEffects(), this.namesies);
-	if (tricksies == null)
-	{
-		super.cast(b, caster, victim, source, printCast);
-		return;
-	}
-	
-	b.addMessage(tricksies.getSubsideMessage(caster));
-	Effect.removeEffect(b.getEffects(), this.namesies);
-	###
+	SpecialRoom: trick switch speeds
 *
 MagicRoom:
-	NumTurns: 5
-	SubsideMessage: "The dimensions of the magic room returned to normal."
-	CastMessage: user.getName() + " twisted the dimensions to prevent using items!"
-	CanHave: True
-	Cast: 
-	Effect magics = Effect.getEffect(b.getEffects(), this.namesies);
-	if (magics == null)
-	{
-		super.cast(b, caster, victim, source, printCast);
-		return;
-	}
-	
-	b.addMessage(magics.getSubsideMessage(caster));
-	Effect.removeEffect(b.getEffects(), this.namesies);
-	###
+	SpecialRoom: magic prevent using items
 *
 MistyTerrain:
 	CastMessage: "Mist swirled around the battlefield!"

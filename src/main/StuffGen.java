@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 import main.Namesies.NamesiesType;
 import pokemon.PokemonInfo;
 import battle.Attack;
-import battle.Attack.Category;
 
 public class StuffGen 
 {
@@ -215,29 +214,6 @@ public class StuffGen
 		if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
 		{
 			Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + className);
-		}
-		
-		// Just some light error-checking
-		if (gen == Generator.ATTACK_GEN)
-		{
-			Category category = Category.valueOf(fields.get("Cat").toUpperCase());
-			if (category == Category.STATUS)
-			{
-				if (fields.containsKey("Pow"))
-				{
-					Global.error("Status moves shouldn't have power (" + className + ").");
-				}
-			}
-			else
-			{
-				if (!fields.containsKey("Pow") && !fields.containsKey("GetPow") 
-						&& !fields.containsKey("FixedDamage") && !fields.containsKey("OHKO")
-						&& !fields.containsKey("ApplyDamage") && !fields.containsKey("Countering")
-						&& !fields.containsKey("Apply"))
-				{
-					Global.error("Non-status moves must include a power (" + className + ").");
-				}
-			}
 		}
 		
 		// NumTurns matches to both MinTurns and MaxTurns
@@ -791,14 +767,16 @@ public class StuffGen
 	{
 		body = body.replace("@ClassName", className);
 		body = body.replace("@SuperClass", gen.superClass.toUpperCase());
+		
 		body = body.replace("{0}", fieldValue);
 		body = body.replace("{00}", fieldValue.toUpperCase());
-
+		
 		String[] mcSplit = fieldValue.split(" ");
 		for (int i = 0; i < mcSplit.length; i++)
 		{
 			body = body.replace(String.format("{%d}", i + 1), mcSplit[i]);
 			body = body.replace(String.format("{%d%d}", i + 1, i + 1), mcSplit[i].toUpperCase());
+			body = body.replace(String.format("{%d_}", i + 1), mcSplit[i].replaceAll("_", " "));
 			
 			String pattern = String.format("{%d-}", i + 1);
 			if (body.contains(pattern))
@@ -1122,11 +1100,6 @@ public class StuffGen
 		String className = fields.get("ClassName");
 		
 		StringBuilder methods = new StringBuilder();
-	
-		if (failureInfo != null)
-		{
-			methods.append(failureInfo.writeFailure(gen, fields));
-		}
 		
 		// Add all the interfaces to the interface list
 		List<String> currentInterfaces = new ArrayList<>();
@@ -1165,6 +1138,11 @@ public class StuffGen
 			
 			currentInterfaces = nextInterfaces;
 			nextInterfaces = new ArrayList<>();
+		}
+		
+		if (failureInfo != null)
+		{
+			methods.insert(0, failureInfo.writeFailure(gen, fields));
 		}
 		
 		return methods.toString();
@@ -1221,6 +1199,10 @@ public class StuffGen
 				else if (fieldKey.equals("MoveType"))
 				{
 					mapField += ", " + addFieldValue;
+				}
+				else if (fieldKey.equals("Field"))
+				{
+					mapField += addFieldValue;
 				}
 				else
 				{

@@ -172,12 +172,6 @@ public class CharacterData extends Trainer implements Serializable
 			repelSteps--;
 			if (repelSteps == 0)
 			{
-				// TODO: Display message that the effects have worn off
-				// Josh suggestion: Create a message variable in this class and have mapView 
-				// check to see if there is a message. If there is a message and no current dialogue, 
-				// set the message as the current dialogue.
-				// Do you think that would work?
-				
 				// TODO: Give choice if you want to use another. 
 				// Game variable needed
 				messages = new DialogueSequence("The effects of repel have worn off.", null, null, null);
@@ -197,7 +191,6 @@ public class CharacterData extends Trainer implements Serializable
 			{
 				evolvingPokemon = p;
 				messages = new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"});
-				this.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
 				
 				// Only one hatch per step
 				break;
@@ -301,7 +294,8 @@ public class CharacterData extends Trainer implements Serializable
 			b.addMessage(getName() + " defeated " + opp.getName() + "!", Update.WIN_BATTLE);
 			addGlobal(b.getWinGlobal());
 			
-			int datCash = opp.getDatCashMoney()*(hasEffect(Namesies.DOUBLE_MONEY_EFFECT) ? 2 : 1);
+			// I've decided that the next line of code is the best line in this entire codebase
+			int datCash = opp.getDatCashMoney()*(hasEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT) ? 2 : 1);
 			b.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
 		}
@@ -331,7 +325,7 @@ public class CharacterData extends Trainer implements Serializable
 		if (!pokedex.caught(p.getPokemonInfo().namesies()))
 		{
 			if (b != null) b.addMessage(p.getPokemonInfo().getName() + " was registered in the Pok\u00e9dex!");
-			if (!p.isEgg()) pokedex.setStatus(p, PokedexStatus.CAUGHT);			
+			if (!p.isEgg()) pokedex.setStatus(p.getPokemonInfo(), PokedexStatus.CAUGHT);			
 		}
 		
 		if (team.size() < MAX_POKEMON)

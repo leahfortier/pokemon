@@ -163,6 +163,11 @@ public abstract class BattleEffect extends Effect
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return user.getAttackType() == Type.FIRE ? .33 : 1;
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return "Fire's power was weakened!";
@@ -171,11 +176,6 @@ public abstract class BattleEffect extends Effect
 		public String getSubsideMessage(ActivePokemon victim)
 		{
 			return "The effects of Water Sport wore off.";
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.FIRE ? .33 : 1;
 		}
 	}
 
@@ -198,6 +198,11 @@ public abstract class BattleEffect extends Effect
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return "Electricity's power was weakened!";
@@ -206,11 +211,6 @@ public abstract class BattleEffect extends Effect
 		public String getSubsideMessage(ActivePokemon victim)
 		{
 			return "The effects of Mud Sport wore off.";
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
 		}
 	}
 
@@ -228,17 +228,25 @@ public abstract class BattleEffect extends Effect
 			return (WonderRoom)(new WonderRoom().activate());
 		}
 
+		public Stat switchStat(Stat s)
+		{
+			if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
+			if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
+			return s;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			Effect wonder = Effect.getEffect(b.getEffects(), Namesies.WONDER_ROOM_EFFECT);
-			if (wonder == null)
+			Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
+			if (roomsies == null)
 			{
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
 			
-			b.addMessage(wonder.getSubsideMessage(caster));
-			Effect.removeEffect(b.getEffects(), Namesies.WONDER_ROOM_EFFECT);
+			// Remove the effect if it's already in play
+			b.addMessage(roomsies.getSubsideMessage(caster));
+			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -249,13 +257,6 @@ public abstract class BattleEffect extends Effect
 		public String getSubsideMessage(ActivePokemon victim)
 		{
 			return "The dimensions of the wonder room returned to normal.";
-		}
-
-		public Stat switchStat(Stat s)
-		{
-			if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
-			if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
-			return s;
 		}
 	}
 
@@ -275,14 +276,15 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			Effect tricksies = Effect.getEffect(b.getEffects(), this.namesies);
-			if (tricksies == null)
+			Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
+			if (roomsies == null)
 			{
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
 			
-			b.addMessage(tricksies.getSubsideMessage(caster));
+			// Remove the effect if it's already in play
+			b.addMessage(roomsies.getSubsideMessage(caster));
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
@@ -313,14 +315,15 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			Effect magics = Effect.getEffect(b.getEffects(), this.namesies);
-			if (magics == null)
+			Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
+			if (roomsies == null)
 			{
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
 			
-			b.addMessage(magics.getSubsideMessage(caster));
+			// Remove the effect if it's already in play
+			b.addMessage(roomsies.getSubsideMessage(caster));
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 

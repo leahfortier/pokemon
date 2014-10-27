@@ -804,7 +804,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 	}
 
@@ -1254,6 +1254,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: Try to generalize with self-switching moves
 			Team t = b.getTrainer(victim.user());
 			if (t instanceof WildPokemon) return;
 			
@@ -1358,11 +1359,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 			// Badly poisons the pelted
-			if (Status.applies(StatusCondition.POISONED, b, pelted, pelted))
-			{
-				pelted.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
-				Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was badly poisoned by the " + this.name + "!");
-			}
+			applyEndTurn(pelted, b);
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b)
@@ -1457,6 +1454,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				bracer.consumeItem(b);
 				return true;
 			}
+			
 			return false;
 		}
 
@@ -2679,7 +2677,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return stage + 2;
 			}
 			
-			return 0;
+			return stage;
 		}
 	}
 
@@ -2736,6 +2734,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return;
 			}
 			
+			// TODO: Generalize this with other item stealing effects
 			item = this;
 			PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.HELD_ITEM, false);
 			
@@ -2849,9 +2848,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return true;
 		}
 
-		public String preventionMessage(ActivePokemon p)
+		public String preventionMessage(ActivePokemon p, Stat s)
 		{
-			return p.getName() + "'s " + this.name + " prevented its stats from being lowered!";
+			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
@@ -3040,11 +3039,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 	}
 
-	private static class OddIncense extends Item implements HoldItem, PowerChangeEffect
+	private static class OddIncense extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3054,14 +3053,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.PSYCHIC;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.PSYCHIC))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -3071,16 +3070,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
 		}
 	}
 
@@ -3109,7 +3098,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class RockIncense extends Item implements HoldItem, PowerChangeEffect
+	private static class RockIncense extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3119,14 +3108,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.ROCK;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.ROCK))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -3137,19 +3126,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class RoseIncense extends Item implements HoldItem, PowerChangeEffect
+	private static class RoseIncense extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3159,14 +3138,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.GRASS;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.GRASS))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -3177,19 +3156,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class SeaIncense extends Item implements HoldItem, PowerChangeEffect
+	private static class SeaIncense extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3199,14 +3168,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.WATER;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.WATER))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -3217,19 +3186,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class WaveIncense extends Item implements HoldItem, PowerChangeEffect
+	private static class WaveIncense extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3239,14 +3198,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9600;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.WATER;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.WATER))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -3256,16 +3215,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
 		}
 	}
 
@@ -4130,7 +4079,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IceGem()
 		{
-			super(Namesies.ICE_GEM_ITEM, "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.", BagCategory.MISC, 106);
+			super(Namesies.ICE_GEM_ITEM, "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once", BagCategory.MISC, 106);
 			super.price = 100;
 		}
 
@@ -4675,7 +4624,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class BlackBelt extends Item implements HoldItem, PowerChangeEffect
+	private static class BlackBelt extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4685,14 +4634,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.FIGHTING;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.FIGHTING))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -4703,19 +4652,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class BlackGlasses extends Item implements HoldItem, PowerChangeEffect
+	private static class BlackGlasses extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4725,14 +4664,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.FIGHTING;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.DARK))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -4743,19 +4682,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class Charcoal extends Item implements HoldItem, PowerChangeEffect
+	private static class Charcoal extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4765,14 +4694,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.FIRE;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.FIRE))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -4783,19 +4712,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class DragonFang extends Item implements HoldItem, PowerChangeEffect
+	private static class DragonFang extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4805,14 +4724,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.DRAGON;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.DRAGON))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -4823,19 +4742,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class HardStone extends Item implements HoldItem, PowerChangeEffect
+	private static class HardStone extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4845,14 +4754,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.ROCK;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.ROCK))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -4863,19 +4772,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class Magnet extends Item implements HoldItem, PowerChangeEffect
+	private static class Magnet extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4885,14 +4784,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.ELECTRIC;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.ELECTRIC))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -4903,19 +4802,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class MetalCoat extends Item implements HoldItem, PowerChangeEffect, PokemonUseItem
+	private static class MetalCoat extends Item implements PowerChangeEffect, HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4930,6 +4819,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.isAttackType(Type.STEEL))
+			{
+				return 1.2;
+			}
+			
+			return 1;
+		}
+
 		public int flingDamage()
 		{
 			return 30;
@@ -4937,11 +4836,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.isAttackType(Type.STEEL) ? 1.2 : 1;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -4958,7 +4852,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class MiracleSeed extends Item implements HoldItem, PowerChangeEffect
+	private static class MiracleSeed extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -4968,14 +4862,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.GRASS;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.GRASS))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -4986,19 +4880,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class MysticWater extends Item implements HoldItem, PowerChangeEffect
+	private static class MysticWater extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5008,14 +4892,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.WATER;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.WATER))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5026,19 +4910,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class NeverMeltIce extends Item implements HoldItem, PowerChangeEffect
+	private static class NeverMeltIce extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5048,14 +4922,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.ICE;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.ICE))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5066,19 +4940,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class PoisonBarb extends Item implements HoldItem, PowerChangeEffect
+	private static class PoisonBarb extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5088,14 +4952,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.POISON;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.POISON))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5105,22 +4969,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			// Poisons the pelted
 			Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
 		}
 	}
 
-	private static class SharpBeak extends Item implements HoldItem, PowerChangeEffect
+	private static class SharpBeak extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5130,14 +4983,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.FLYING;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.FLYING))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5148,19 +5001,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class SilkScarf extends Item implements HoldItem, PowerChangeEffect
+	private static class SilkScarf extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5170,14 +5013,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.NORMAL;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.NORMAL))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5188,19 +5031,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class SilverPowder extends Item implements HoldItem, PowerChangeEffect
+	private static class SilverPowder extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5210,14 +5043,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.BUG;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.BUG))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5228,19 +5061,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class SoftSand extends Item implements HoldItem, PowerChangeEffect
+	private static class SoftSand extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5250,14 +5073,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.GROUND;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.GROUND))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5268,19 +5091,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class SpellTag extends Item implements HoldItem, PowerChangeEffect
+	private static class SpellTag extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5290,14 +5103,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.GHOST;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.GHOST))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5308,19 +5121,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
 	}
 
-	private static class TwistedSpoon extends Item implements HoldItem, PowerChangeEffect
+	private static class TwistedSpoon extends Item implements PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -5330,14 +5133,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 9800;
 		}
 
-		public Type getType()
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			return Type.PSYCHIC;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			if (user.isAttackType(Type.PSYCHIC))
+			{
+				return 1.2;
+			}
+			
+			return 1;
 		}
 
 		public int flingDamage()
@@ -5347,16 +5150,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
 		}
 	}
 
@@ -6408,6 +6201,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class Antidote extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public Antidote()
 		{
@@ -6423,7 +6217,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public int flingDamage()
@@ -6442,7 +6236,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -6455,6 +6249,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class Awakening extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public Awakening()
 		{
@@ -6470,7 +6265,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public int flingDamage()
@@ -6489,7 +6284,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -6502,6 +6297,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class BurnHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public BurnHeal()
 		{
@@ -6517,7 +6313,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public int flingDamage()
@@ -6536,7 +6332,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -6549,6 +6345,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class IceHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public IceHeal()
 		{
@@ -6564,7 +6361,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public int flingDamage()
@@ -6583,7 +6380,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -6596,6 +6393,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public ParalyzeHeal()
 		{
@@ -6611,7 +6409,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public int flingDamage()
@@ -6630,7 +6428,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -6640,7 +6438,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class FullHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class FullHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -6656,9 +6454,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " was cured of its status condition!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
+			// Does not apply to the dead
+			if (p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
+			
+			// YOU'RE FINE
+			if (!p.hasStatus())
+			{
+				return false;
+			}
 			
 			p.removeStatus();
 			return true;
@@ -6667,15 +6484,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return use(b.getPlayer(), p);
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted)
-		{
 		}
 	}
 
@@ -6698,8 +6506,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (p.hasStatus(StatusCondition.FAINTED)) return false;
-			if (!p.hasStatus() && p.fullHealth()) return false;
+			// Does not apply to the dead
+			if (p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
+			
+			// Does not apply to the fully healed -- status condition or otherwise
+			if (!p.hasStatus() && p.fullHealth())
+			{
+				return false;
+			}
 			
 			p.removeStatus();
 			p.healHealthFraction(1);
@@ -6823,7 +6640,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class Ether extends Item implements MoveUseItem, HoldItem
+	private static class Ether extends Item implements HoldItem, MoveUseItem
 	{
 		private static final long serialVersionUID = 1L;
 		private String restore;
@@ -6840,13 +6657,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Move m)
-		{
-			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP(10);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
@@ -6855,9 +6665,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
+
+		public boolean use(ActivePokemon p, Move m)
+		{
+			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
+			restore = m.getAttack().getName();
+			return m.increasePP(10);
+		}
 	}
 
-	private static class MaxEther extends Item implements MoveUseItem, HoldItem
+	private static class MaxEther extends Item implements HoldItem, MoveUseItem
 	{
 		private static final long serialVersionUID = 1L;
 		private String restore;
@@ -6874,13 +6691,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Move m)
-		{
-			// TODO: Same as ether
-			restore = m.getAttack().getName();
-			return m.increasePP(m.getMaxPP());
-		}
-
 		public int flingDamage()
 		{
 			return 30;
@@ -6888,6 +6698,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public boolean use(ActivePokemon p, Move m)
+		{
+			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
+			restore = m.getAttack().getName();
+			return m.increasePP(m.getMaxPP());
 		}
 	}
 
@@ -7391,12 +7208,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was revived!";
+			return p.getName() + " was partially revived!";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+			// Only applies to the dead
+			if (!p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
 			
 			p.removeStatus();
 			p.healHealthFraction(.5);
@@ -7419,7 +7240,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class MaxRevive extends Item implements PokemonUseItem, HoldItem
+	private static class MaxRevive extends Item implements PokemonUseItem, BattleUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -7437,12 +7258,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+			// Only applies to the dead
+			if (!p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
 			
 			p.removeStatus();
 			p.healHealthFraction(1);
 			
 			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -7455,7 +7285,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class RevivalHerb extends Item implements PokemonUseItem, HoldItem
+	private static class RevivalHerb extends Item implements PokemonUseItem, BattleUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -7473,6 +7303,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
+			// Only applies to the dead
 			if (!p.hasStatus(StatusCondition.FAINTED))
 			{
 				return false;
@@ -7482,6 +7313,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 			p.healHealthFraction(1);
 			
 			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(b.getPlayer(), p);
 		}
 
 		public int flingDamage()
@@ -7597,7 +7433,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			PokemonEffect gSpesh = PokemonEffect.getEffect(Namesies.GUARD_SPECIAL_EFFECT);
-			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) return false;
+			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM))
+			{
+				return false;
+			}
 			
 			gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
 			return true;
@@ -8851,7 +8690,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return new double[] {3, 0};
 			}
 			
-			else return new double[] {1, 0};
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -8953,6 +8792,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class CheriBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public CheriBerry()
 		{
@@ -8968,7 +8809,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -8978,7 +8819,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -8987,17 +8828,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			return holdMessage;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -9006,7 +8849,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9051,6 +8894,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public ChestoBerry()
 		{
@@ -9066,7 +8911,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -9076,7 +8921,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -9085,17 +8930,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			return holdMessage;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -9104,7 +8951,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9149,6 +8996,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class PechaBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public PechaBerry()
 		{
@@ -9164,7 +9013,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -9174,7 +9023,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -9183,17 +9032,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			return holdMessage;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -9202,7 +9053,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9247,6 +9098,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class RawstBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public RawstBerry()
 		{
@@ -9262,7 +9115,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -9272,7 +9125,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -9281,17 +9134,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			return holdMessage;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -9300,7 +9155,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9345,6 +9200,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class AspearBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public AspearBerry()
 		{
@@ -9360,7 +9217,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -9370,7 +9227,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -9379,17 +9236,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			return holdMessage;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -9398,7 +9257,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9426,7 +9285,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Type naturalGiftType()
 		{
-			return Type.GRASS;
+			return Type.ICE;
 		}
 
 		public int flingDamage()
@@ -9440,7 +9299,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LeppaBerry extends Item implements EndTurnEffect, MoveUseItem, GainableEffectBerry
+	private static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, MoveUseItem
 	{
 		private static final long serialVersionUID = 1L;
 		private String restore;
@@ -9457,7 +9316,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!";
 		}
@@ -9469,38 +9328,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 				if (m.getPP() == 0)
 				{
 					use(victim, m);
-					b.addMessage(getHoldSuccessMessage(victim));
+					b.addMessage(getHoldSuccessMessage(b, victim));
 					victim.consumeItem(b);
 					break;
 				}
 			}
 		}
 
-		public boolean use(ActivePokemon p, Move m)
-		{
-			restore = m.getAttack().getName();
-			return m.increasePP(10);
-		}
-
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			List<Move> list = new ArrayList<>();
+			Move lowestPPMove = null;
+			double lowestPPRatio = 1;
+			
 			for (Move m : user.getMoves(b))
 			{
-				if (m.getPP() < m.getMaxPP())
+				double ratio = (double)m.getPP()/m.getMaxPP();
+				if (ratio < lowestPPRatio)
 				{
-					list.add(m);
+					lowestPPRatio = ratio;
+					lowestPPMove = m;
 				}
 			}
 			
-			int size = list.size();
-			if (size == 0)
+			// All moves have full PP
+			if (lowestPPMove == null)
 			{
 				return false;
 			}
 			
-			// TODO: This should probably heal the move with the smallest PP ratio, not at random
-			use(user, list.get((int)(Math.random()*size)));
+			use(user, lowestPPMove);
 			
 			String message = "";
 			switch (source)
@@ -9509,7 +9365,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9528,6 +9384,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
+		}
+
+		public boolean use(ActivePokemon p, Move m)
+		{
+			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
+			restore = m.getAttack().getName();
+			return m.increasePP(10);
 		}
 
 		public int naturalGiftPower()
@@ -9567,7 +9430,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
@@ -9606,7 +9469,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9664,7 +9527,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " snapped out of its confusion!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
 		}
@@ -9694,7 +9557,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9736,9 +9599,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LumBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class LumBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String holdMessage;
 
 		public LumBerry()
 		{
@@ -9754,7 +9618,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED))
+			// Does not apply to the dead
+			if (p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
+			
+			// YOU'RE FINE
+			if (!p.hasStatus())
 			{
 				return false;
 			}
@@ -9768,17 +9639,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			return holdMessage;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			// Does not apply to the dead
+			if (user.hasStatus(StatusCondition.FAINTED))
 			{
 				return false;
 			}
+			
+			// YOU'RE FINE
+			if (!user.hasStatus())
+			{
+				return false;
+			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -9787,7 +9667,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -9845,7 +9725,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
@@ -9884,7 +9764,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -10272,11 +10152,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.FIRE;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10289,7 +10164,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.FIRE && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10319,11 +10194,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.WATER;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10336,7 +10206,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.WATER && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10366,11 +10236,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.ELECTRIC;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10383,7 +10248,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.ELECTRIC && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10413,11 +10278,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.GRASS;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10430,7 +10290,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.GRASS && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10460,11 +10320,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.ICE;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10477,7 +10332,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.ICE && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10507,11 +10362,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.FIGHTING;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10524,7 +10374,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.FIGHTING && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10554,11 +10404,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.POISON;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10571,7 +10416,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.POISON && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10601,11 +10446,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.GROUND;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10618,7 +10458,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.GROUND && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10648,11 +10488,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.FLYING;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10665,7 +10500,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.FLYING && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10695,11 +10530,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.PSYCHIC;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10712,7 +10542,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.PSYCHIC && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10742,11 +10572,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.BUG;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10759,7 +10584,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.BUG && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10789,11 +10614,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.ROCK;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10806,7 +10626,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.ROCK && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10836,11 +10656,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.GHOST;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10853,7 +10668,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.GHOST && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10883,11 +10698,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.DRAGON;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10900,7 +10710,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.DRAGON && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10930,11 +10740,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.DARK;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10947,7 +10752,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.DARK && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10977,11 +10782,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.STEEL;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -10994,7 +10794,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.STEEL && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -11024,11 +10824,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.NORMAL;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -11041,7 +10836,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.NORMAL && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -11071,11 +10866,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Type getType()
-		{
-			return Type.FAIRY;
-		}
-
 		public int naturalGiftPower()
 		{
 			return 80;
@@ -11088,7 +10878,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.FAIRY && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -11118,24 +10908,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
-			return Stat.ATTACK;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.ATTACK.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.ATTACK, b, source))
 			{
 				return true;
 			}
@@ -11162,7 +10947,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -11214,24 +10999,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
-			return Stat.DEFENSE;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.DEFENSE.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, source))
 			{
 				return true;
 			}
@@ -11258,7 +11038,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -11310,24 +11090,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
-			return Stat.SPEED;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.SPEED.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.SPEED, b, source))
 			{
 				return true;
 			}
@@ -11354,7 +11129,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -11406,24 +11181,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
-			return Stat.SP_ATTACK;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.SP_ATTACK.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.SP_ATTACK, b, source))
 			{
 				return true;
 			}
@@ -11450,7 +11220,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -11502,24 +11272,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
-			return Stat.SP_DEFENSE;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.SP_DEFENSE, b, source))
 			{
 				return true;
 			}
@@ -11546,7 +11311,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -11598,24 +11363,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 20;
 		}
 
-		public Stat toRaise()
-		{
-			return Stat.ACCURACY;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.ACCURACY.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.ACCURACY, b, source))
 			{
 				return true;
 			}
@@ -11642,7 +11402,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -11961,7 +11721,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " is getting pumped!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + " is getting pumped due to its " + this.name + "!";
 		}
@@ -11992,7 +11752,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
@@ -12051,7 +11811,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return useMessage;
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return holdMessage;
 		}
@@ -12102,7 +11862,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");

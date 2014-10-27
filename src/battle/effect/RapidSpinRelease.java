@@ -1,8 +1,9 @@
 package battle.effect;
 
 import pokemon.ActivePokemon;
+import battle.Battle;
 
 public interface RapidSpinRelease 
 {
-	public String getReleaseMessage(ActivePokemon p);
+	public void releaseRapidSpin(Battle b, ActivePokemon p);
 }

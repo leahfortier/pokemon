@@ -590,7 +590,7 @@ public class ActivePokemon implements Serializable
 			gain[i] = stats[i] - prevStats[i];
 		}
 		
-		// TODO: Is this supposed to be for the front Pokemon only? Don't we want to see a gain update for other Pokemon in the party?
+		// TODO: Show gain update for other Pokemon in the party
 		if (print && front) b.addMessage("", this, gain, stats);
 		
 		// Learn new moves
@@ -622,7 +622,7 @@ public class ActivePokemon implements Serializable
 		if (print) b.addMessage(getActualName() + " is evolving!");
 		
 		pokemon = ev.getEvolution();
-		if (print) b.getPlayer().getPokedex().setStatus(this, PokedexStatus.CAUGHT);
+		if (print) b.getPlayer().getPokedex().setStatus(this.getPokemonInfo(), PokedexStatus.CAUGHT);
 		
 		// Set name if it was not given a nickname
 		if (sameName) nickname = pokemon.getName();
@@ -1014,12 +1014,12 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Returns the empty string if the Pokemon can switch, and the appropriate fail message if they cannot
-	public String canEscape(Battle b)
+	public boolean canEscape(Battle b)
 	{
 		// Shed Shell always allows escape
 		if (isHoldingItem(b, Namesies.SHED_SHELL_ITEM)) 
 		{
-			return "";
+			return true;
 		}
 		
 		// Check if the user is under an effect that prevents escape
@@ -1027,8 +1027,8 @@ public class ActivePokemon implements Serializable
 		Object trapped = Global.checkInvoke(true, invokees, TrappingEffect.class, "isTrapped", b, this);
 		if (trapped != null)
 		{
-			// TODO: Add a more specific message here like the OpponentTrappingEffect
-			return getName() + " cannot be recalled at this time!";
+			b.addMessage(((TrappingEffect)trapped).trappingMessage(this));
+			return false;
 		}
 		
 		// The opponent has an effect that prevents escape
@@ -1037,10 +1037,12 @@ public class ActivePokemon implements Serializable
 		trapped = Global.checkInvoke(true, invokees, OpponentTrappingEffect.class, "trapOpponent", b, this);
 		if (trapped != null)
 		{
-			return ((OpponentTrappingEffect)trapped).trappingMessage(this, other);
+			b.addMessage(((OpponentTrappingEffect)trapped).opponentTrappingMessage(this, other));
+			return false;
 		}
 		
-		return "";
+		// Safe and sound
+		return true;
 	}
 	
 	public boolean hasEffect(Namesies effect)

@@ -103,7 +103,7 @@ Amulet Coin
 	Price: 100
 	Fling: 30
 	Enter:
-		TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 *
 Big Root
@@ -226,6 +226,7 @@ Eject Button
 	Price: 200
 	Fling: 30
 	OnTakeDamage:
+		// TODO: Try to generalize with self-switching moves
 		Team t = b.getTrainer(victim.user());
 		if (t instanceof WildPokemon) return;
 
@@ -266,9 +267,7 @@ Flame Orb:
 	ApplyEndTurn:
 		Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
 		###
-	FlingEffect:
-		Status.giveStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.name + "!");
-		###
+	StatusFling: burned
 *
 Toxic Orb:
 	Int: HoldItem, EndTurnEffect
@@ -286,11 +285,7 @@ Toxic Orb:
 		###
 	FlingEffect:
 		// Badly poisons the pelted
-		if (Status.applies(StatusCondition.POISONED, b, pelted, pelted))
-		{
-			pelted.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
-			Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was badly poisoned by the " + this.name + "!");
-		}
+		applyEndTurn(pelted, b);
 		###
 *
 Float Stone
@@ -322,6 +317,7 @@ Focus Sash
 			bracer.consumeItem(b);
 			return true;
 		}
+		
 		return false;
 		###
 	BraceMessage: bracer.getName() + " held on with its " + this.name + "!"
@@ -388,9 +384,7 @@ Light Ball:
 	Fling: 30
 	TwoModify: Attack Sp_Attack
 	ModifyMultiplier: 2 p.isPokemon(Namesies.PIKACHU_POKEMON)
-	FlingEffect:
-		Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
-		###
+	StatusFling: paralyzed
 *
 Light Clay
 	Int: HoldItem
@@ -675,7 +669,7 @@ Stick:
 			return stage + 2;
 		}
 		
-		return 0;
+		return stage;
 		###
 *
 Sticky Barb
@@ -713,7 +707,8 @@ Sticky Barb
 			user.giveItem(this);
 			return;
 		}
-	            
+	         
+		// TODO: Generalize this with other item stealing effects
 		item = this;
 		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.HELD_ITEM, false);
 
@@ -758,7 +753,6 @@ White Herb:
 		// NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
 		return true;
 		###
-	StatProtectMessage: p.getName() + "'s " + this.name + " prevented its stats from being lowered!"
 	FlingEffect:
 	// Restores negative stat changes to the pelted
 	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
@@ -822,19 +816,16 @@ Luck Incense
 	Price: 9600
 	Fling: 10
 	Enter:
-		TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 *
-Odd Incense
-	Int: HoldItem
-	Cat: Misc
+Odd Incense:
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.
 	Price: 9600
 	Fling: 10
-	EnhanceType: Psychic
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Psychic
 *
-Pure Incense
+Pure Incense:
 	Int: HoldItem, RepellingEffect
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.
@@ -842,41 +833,29 @@ Pure Incense
 	Fling: 10
 	RepelChance: .33
 *
-Rock Incense
-	Int: HoldItem
-	Cat: Misc
+Rock Incense:
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.
 	Price: 9600
 	Fling: 10
-	EnhanceType: Rock
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Rock
 *
-Rose Incense
-	Int: HoldItem
-	Cat: Misc
+Rose Incense:
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.
 	Price: 9600
 	Fling: 10
-	EnhanceType: Grass
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Grass
 *
-Sea Incense
-	Int: HoldItem
-	Cat: Misc
+Sea Incense:
 	Desc: An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.
 	Price: 9600
 	Fling: 10
-	EnhanceType: Water
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Water
 *
-Wave Incense
-	Int: HoldItem
-	Cat: Misc
+Wave Incense:
 	Desc: An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.
 	Price: 9600
 	Fling: 10
-	EnhanceType: Water
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Water
 *
 Draco Plate:
 	Int: PlateItem
@@ -985,121 +964,87 @@ Shock Drive:
 *
 Fire Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.
-	Price: 100
 	GemType: Fire
 *
 Water Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.
-	Price: 100
 	GemType: Water
 *
 Electric Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.
-	Price: 100
 	GemType: Electric
 *
 Grass Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.
-	Price: 100
 	GemType: Grass
 *
 Ice Gem:
 	Int: GemItem
-	Cat: Misc
-	Desc: A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.
-	Price: 100
+	Desc: A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once
 	GemType: Ice
 *
 Fighting Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.
-	Price: 100
 	GemType: Fighting
 *
 Poison Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.
-	Price: 100
 	GemType: Poison
 *
 Ground Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.
-	Price: 100
 	GemType: Ground
 *
 Flying Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.
-	Price: 100
 	GemType: Flying
 *
 Psychic Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.
-	Price: 100
 	GemType: Psychic
 *
 Bug Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.
-	Price: 100
 	GemType: Bug
 *
 Rock Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.
-	Price: 100
 	GemType: Rock
 *
 Ghost Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.
-	Price: 100
 	GemType: Ghost
 *
 Dragon Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.
-	Price: 100
 	GemType: Dragon
 *
 Dark Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.
-	Price: 100
 	GemType: Dark
 *
 Steel Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.
-	Price: 100
 	GemType: Steel
 *
 Normal Gem:
 	Int: GemItem
-	Cat: Misc
 	Desc: A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.
-	Price: 100
 	GemType: Normal
 *
 Leftovers
@@ -1118,164 +1063,109 @@ Leftovers
 	Price: 200
 	Fling: 10
 *
-Black Belt
-	Int: HoldItem
-	Cat: Misc
+Black Belt:
 	Desc: An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.
-	EnhanceType: Fighting
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Fighting
 *
-Black Glasses
-	Int: HoldItem
-	Cat: Misc
+Black Glasses:
 	Desc: An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.
-	EnhanceType: Fighting
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Dark
 *
-Charcoal
-	Int: HoldItem
-	Cat: Misc
+Charcoal:
 	Desc: An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.
-	EnhanceType: Fire
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Fire
 *
 Dragon Fang
-	Int: HoldItem
-	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.
-	EnhanceType: Dragon
 	Price: 9800
 	Fling: 70
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Dragon
 *
 Hard Stone
-	Int: HoldItem
-	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.
-	EnhanceType: Rock
 	Price: 9800
 	Fling: 100
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Rock
 *
-Magnet
-	Int: HoldItem
-	Cat: Misc
+Magnet:
 	Desc: An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.
-	EnhanceType: Electric
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Electric
 *
-Metal Coat
-	Int: HoldItem, PowerChangeEffect
+Metal Coat:
 	EvolutionItem: True
-	Cat: Misc
 	Desc: A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.
 	Price: 9800
 	Fling: 30
-	GetMultiplier:
-		return user.isAttackType(Type.STEEL) ? 1.2 : 1;
-		###
+	TypeEnhance: Steel
 *
-Miracle Seed
-	Int: HoldItem
-	Cat: Misc
+Miracle Seed:
 	Desc: An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.
-	EnhanceType: Grass
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Grass
 *
-Mystic Water
-	Int: HoldItem
-	Cat: Misc
+Mystic Water:
 	Desc: An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.
-	EnhanceType: Water
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Water
 *
-NeverMeltIce
-	Int: HoldItem
-	Cat: Misc
+NeverMeltIce:
 	Desc: An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.
-	EnhanceType: Ice
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Ice
 *
 Poison Barb
-	Int: HoldItem
-	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.
-	EnhanceType: Poison
 	Price: 9800
 	Fling: 70
-	TypeEnhanceMultiplier: 1.2
-	FlingEffect:
-		// Poisons the pelted
-		Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
-		###
+	TypeEnhance: Poison
+	StatusFling: poisoned
 *
-Sharp Beak
-	Int: HoldItem
-	Cat: Misc
+Sharp Beak:
 	Desc: An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.
-	EnhanceType: Flying
 	Price: 9800
 	Fling: 50
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Flying
 *
-Silk Scarf
-	Int: HoldItem
-	Cat: Misc
+Silk Scarf:
 	Desc: An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.
-	EnhanceType: Normal
 	Price: 9800
 	Fling: 10
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Normal
 *
-Silver Powder
-	Int: HoldItem
-	Cat: Misc
+Silver Powder:
 	Desc: An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.
-	EnhanceType: Bug
 	Price: 9800
 	Fling: 10
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Bug
 *
-Soft Sand
-	Int: HoldItem
-	Cat: Misc
+Soft Sand:
 	Desc: An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.
-	EnhanceType: Ground
 	Price: 9800
 	Fling: 10
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Ground
 *
-Spell Tag
-	Int: HoldItem
-	Cat: Misc
+Spell Tag:
 	Desc: An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.
-	EnhanceType: Ghost
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Ghost
 *
-Twisted Spoon
-	Int: HoldItem
-	Cat: Misc
+Twisted Spoon:
 	Desc: An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.
-	EnhanceType: Psychic
 	Price: 9800
 	Fling: 30
-	TypeEnhanceMultiplier: 1.2
+	TypeEnhance: Psychic
 *
 Dawn Stone
 	Int: HoldItem
@@ -1535,20 +1425,13 @@ Paralyze Heal
 	Price: 200
 	Fling: 30
 *
-Full Heal
-	Int: PokemonUseItem, BattleUseItem, HoldItem
+Full Heal:
+	Int: HoldItem
 	Cat: Medicine
-	BattleCat: Status
 	Desc: A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.
 	Price: 250
 	Fling: 30
-	PokemonUse:
-		if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
-		
-		p.removeStatus();
-		return true;
-		###
-	SuccessMessage: p.getName() + " was cured of its status condition!"
+	FullHeal: True
 *
 Full Restore:
 	Int: PokemonUseItem, HoldItem, BattleUseItem
@@ -1558,8 +1441,17 @@ Full Restore:
 	Price: 3000
 	Fling: 30
 	PokemonUse:
-		if (p.hasStatus(StatusCondition.FAINTED)) return false;
-		if (!p.hasStatus() && p.fullHealth()) return false;
+		// Does not apply to the dead
+		if (p.hasStatus(StatusCondition.FAINTED)) 
+		{
+			return false;
+		}
+		
+		// Does not apply to the fully healed -- status condition or otherwise
+		if (!p.hasStatus() && p.fullHealth()) 
+		{
+			return false;
+		}
 		
 		p.removeStatus();
 		p.healHealthFraction(1);
@@ -1578,38 +1470,20 @@ Max Elixir
 	Elixir: m.getMaxPP()
 *
 Ether:
-	Int: MoveUseItem, HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
 	Desc: It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.
 	Price: 1200
+	Ether: 10
+	Int: HoldItem
+	Cat: Medicine
 	Fling: 30
-	MoveUse:
-		// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-		restore = m.getAttack().getName();
-		return m.increasePP(10);
-		###
-	Field: 
-	private String restore;
-	###
-	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 *
 Max Ether
-	Int: MoveUseItem, HoldItem
-	Cat: Medicine
-	BattleCat: HP_PP
 	Desc: It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.
 	Price: 2000
+	Ether: m.getMaxPP()
+	Int: HoldItem
+	Cat: Medicine
 	Fling: 30
-	MoveUse:
-		// TODO: Same as ether
-		restore = m.getAttack().getName();
-		return m.increasePP(m.getMaxPP());
-		###	
-	Field: 
-	private String restore;
-	###
-	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 *
 Berry Juice:
 	Desc: A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.
@@ -1679,58 +1553,19 @@ Max Potion
 	SuccessMessage: p.getName() + "'s health was restored!"
 *
 Revive
-	Int: PokemonUseItem, BattleUseItem, HoldItem
-	Cat: Medicine
-	BattleCat: Status
 	Desc: A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.
 	Price: 1500
-	Fling: 30
-	PokemonUse:
-		if (!p.hasStatus(StatusCondition.FAINTED)) return false;
-		
-		p.removeStatus();
-		p.healHealthFraction(.5);
-		
-		return true;
-		###
-	SuccessMessage: p.getName() + " was revived!"
+	Revive: .5 partially
 *
 Max Revive
-	Int: PokemonUseItem, HoldItem
-	Cat: Medicine
-	BattleCat: Status
 	Desc: A medicine that revives a fainted Pok\u00e9mon. It fully restores the Pok\u00e9mon's HP.
 	Price: 4000
-	Fling: 30
-	PokemonUse:
-		if (!p.hasStatus(StatusCondition.FAINTED)) return false;
-		
-		p.removeStatus();
-		p.healHealthFraction(1);
-		
-		return true;
-		###
-	SuccessMessage: p.getName() + " was fully revived!"
+	Revive: 1 fully
 *
 Revival Herb:
-	Int: PokemonUseItem, HoldItem
-	Cat: Medicine
-	BattleCat: Status
 	Desc: A very bitter medicinal herb. It revives a fainted Pok\u00e9mon, fully restoring its HP.
 	Price: 2800
-	Fling: 30
-	PokemonUse:
-		if (!p.hasStatus(StatusCondition.FAINTED)) 
-		{
-			return false;
-		}
-		
-		p.removeStatus();
-		p.healHealthFraction(1);
-		
-		return true;
-		###
-	SuccessMessage: p.getName() + " was fully revived!"
+	Revive: 1 fully
 *
 Sacred Ash:
 	Int: TrainerUseItem, HoldItem, BattleUseItem
@@ -1783,7 +1618,10 @@ Guard Spec.
 	Fling: 30
 	BattleUse:
 		PokemonEffect gSpesh = PokemonEffect.getEffect(Namesies.GUARD_SPECIAL_EFFECT);
-		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) return false;
+		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) 
+		{
+			return false;
+		}
 
 		gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
 		return true;
@@ -1869,34 +1707,14 @@ Swift Wing:
 	Wing: Speed
 *
 PP Max:
-	Int: MoveUseItem, HoldItem
-	Cat: Stat
 	Desc: It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.
-	MoveUse:
-		increase = m.getAttack().getName();
-		return m.increaseMaxPP(3);
-		###
 	Price: 9800
-	Fling: 30
-	Field: 
-		private String increase;
-		###
-	SuccessMessage: p.getName() + "'s " + increase + "'s Max PP was increased!"
+	PPIncrease: 3
 *
 PP Up:
-	Int: MoveUseItem, HoldItem
-	Cat: Stat
 	Desc: It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.
-	MoveUse:
-		increase = m.getAttack().getName();
-		return m.increaseMaxPP(1);
-		###
 	Price: 9800
-	Fling: 30
-	Field: 
-	private String increase;
-	###
-	SuccessMessage: p.getName() + "'s " + increase + "'s Max PP was increased!"
+	PPIncrease: 1
 *
 Rare Candy
 	Int: HoldItem, PokemonUseItem
@@ -2084,7 +1902,7 @@ Quick Ball:
 			return new double[] {3, 0};
 		}
 		
-		else return new double[] {1, 0};
+		return new double[] {1, 0};
 		###
 *
 Repeat Ball:
@@ -2155,11 +1973,10 @@ Aspear Berry
 	BattleCat: Status
 	Desc: If held by a Pok\u00e9mon, it defrosts it.
 	StatusRemove: Frozen
-	NGType: Grass
+	NGType: Ice
 *
 Leppa Berry:
-	Int: EndTurnEffect, MoveUseItem, GainableEffectBerry
-	BattleCat: HP_PP
+	Int: EndTurnEffect, GainableEffectBerry
 	Desc: If held by a Pok\u00e9mon, it restores a move's PP by 10.
 	NGType: Fighting
 	NGPow: 80
@@ -2169,39 +1986,35 @@ Leppa Berry:
 			if (m.getPP() == 0)
 			{
 				use(victim, m);
-				b.addMessage(getHoldSuccessMessage(victim));
+				b.addMessage(getHoldSuccessMessage(b, victim));
 				victim.consumeItem(b);
 				break;
 			}
 		}
 		###
 	GainEffect:
-		List<Move> list = new ArrayList<>();
+		Move lowestPPMove = null;
+		double lowestPPRatio = 1;
+		
 		for (Move m : user.getMoves(b))
 		{
-			if (m.getPP() < m.getMaxPP())
+			double ratio = (double)m.getPP()/m.getMaxPP();
+			if (ratio < lowestPPRatio)
 			{
-				list.add(m);
+				lowestPPRatio = ratio;
+				lowestPPMove = m;
 			}
 		}
 		
-		int size = list.size();
-		if (size == 0) 
+		// All moves have full PP
+		if (lowestPPMove == null)
 		{
 			return false;
 		}
 		
-		// TODO: This should probably heal the move with the smallest PP ratio, not at random
-		use(user, list.get((int)(Math.random()*size)));
+		use(user, lowestPPMove);
 		###
-	MoveUse:
-		restore = m.getAttack().getName();
-		return m.increasePP(10);
-		###
-	Field: 
-		private String restore;
-		###
-	SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
+	Ether: 10
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
 Oran Berry:
@@ -2242,20 +2055,25 @@ Persim Berry:
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
 *
 Lum Berry:
-	Int: PokemonUseItem, BattleUseItem, StatusBerry 
-	BattleCat: Status
+	Int: StatusBerry
 	Desc: If held by a Pok\u00e9mon, it recovers from any status problem.
 	NGType: Flying
-	PokemonUse:
-		if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) 
-		{
-			return false;
-		}
-		
-		p.removeStatus();
-		return true;
-		###
-	SuccessMessage: p.getName() + " was cured of its status condition!"
+	FullHeal: True
+	GainEffect:
+	// Does not apply to the dead
+	if (user.hasStatus(StatusCondition.FAINTED))
+	{
+		return false;
+	}
+	
+	// YOU'RE FINE
+	if (!user.hasStatus())
+	{
+		return false;
+	}
+	
+	holdMessage = Status.getRemoveStatus(b, user, source);
+	###
 *
 Sitrus Berry
 	BattleCat: HP_PP
@@ -2309,123 +2127,105 @@ Tamato Berry
 *
 Occa Berry
 	Desc: Weakens a supereffective Fire-type attack against the holding Pok\u00e9mon.
-	NGType: Fire
-	SuperEffectivePowerReduceBerryType: Fire
+	SuperEffectivePowerReduceBerry: Fire
 *
 Passho Berry
 	Desc: Weakens a supereffective Water-type attack against the holding Pok\u00e9mon.
-	NGType: Water
-	SuperEffectivePowerReduceBerryType: Water
+	SuperEffectivePowerReduceBerry: Water
 *
 Wacan Berry
 	Desc: Weakens a supereffective Electric-type attack against the holding Pok\u00e9mon.
-	NGType: Electric
-	SuperEffectivePowerReduceBerryType: Electric
+	SuperEffectivePowerReduceBerry: Electric
 *
 Rindo Berry
 	Desc: Weakens a supereffective Grass-type attack against the holding Pok\u00e9mon.
-	NGType: Grass
-	SuperEffectivePowerReduceBerryType: Grass
+	SuperEffectivePowerReduceBerry: Grass
 *
 Yache Berry
 	Desc: Weakens a supereffective Ice-type attack against the holding Pok\u00e9mon.
-	NGType: Ice
-	SuperEffectivePowerReduceBerryType: Ice
+	SuperEffectivePowerReduceBerry: Ice
 *
 Chople Berry
 	Desc: Weakens a supereffective Fighting-type attack against the holding Pok\u00e9mon.
-	NGType: Fighting
-	SuperEffectivePowerReduceBerryType: Fighting
+	SuperEffectivePowerReduceBerry: Fighting
 *
 Kebia Berry
 	Desc: Weakens a supereffective Poison-type attack against the holding Pok\u00e9mon.
-	NGType: Poison
-	SuperEffectivePowerReduceBerryType: Poison
+	SuperEffectivePowerReduceBerry: Poison
 *
 Shuca Berry
 	Desc: Weakens a supereffective Ground-type attack against the holding Pok\u00e9mon.
-	NGType: Ground
-	SuperEffectivePowerReduceBerryType: Ground
+	SuperEffectivePowerReduceBerry: Ground
 *
 Coba Berry
 	Desc: Weakens a supereffective Flying-type attack against the holding Pok\u00e9mon.
-	NGType: Flying
-	SuperEffectivePowerReduceBerryType: Flying
+	SuperEffectivePowerReduceBerry: Flying
 *
 Payapa Berry
 	Desc: Weakens a supereffective Psychic-type attack against the holding Pok\u00e9mon.
-	NGType: Psychic
-	SuperEffectivePowerReduceBerryType: Psychic
+	SuperEffectivePowerReduceBerry: Psychic
 *
 Tanga Berry
 	Desc: Weakens a supereffective Bug-type attack against the holding Pok\u00e9mon.
-	NGType: Bug
-	SuperEffectivePowerReduceBerryType: Bug
+	SuperEffectivePowerReduceBerry: Bug
 *
 Charti Berry
 	Desc: Weakens a supereffective Rock-type attack against the holding Pok\u00e9mon.
-	NGType: Rock
-	SuperEffectivePowerReduceBerryType: Rock
+	SuperEffectivePowerReduceBerry: Rock
 *
 Kasib Berry
 	Desc: Weakens a supereffective Ghost-type attack against the holding Pok\u00e9mon.
-	NGType: Ghost
-	SuperEffectivePowerReduceBerryType: Ghost
+	SuperEffectivePowerReduceBerry: Ghost
 *
 Haban Berry
 	Desc: Weakens a supereffective Dragon-type attack against the holding Pok\u00e9mon.
-	NGType: Dragon
-	SuperEffectivePowerReduceBerryType: Dragon
+	SuperEffectivePowerReduceBerry: Dragon
 *
 Colbur Berry:
 	Desc: Weakens a supereffective Dark-type attack against the holding Pok\u00e9mon.
-	NGType: Dark
-	SuperEffectivePowerReduceBerryType: Dark
+	SuperEffectivePowerReduceBerry: Dark
 *
 Babiri Berry:
 	Desc: Weakens a supereffective Steel-type attack against the holding Pok\u00e9mon.
-	NGType: Steel
-	SuperEffectivePowerReduceBerryType: Steel
+	SuperEffectivePowerReduceBerry: Steel
 *
 Chilan Berry
 	Desc: Weakens a supereffective Normal-type attack against the holding Pok\u00e9mon.
-	NGType: Normal
-	SuperEffectivePowerReduceBerryType: Normal
+	SuperEffectivePowerReduceBerry: Normal
 *
 Roseli Berry:
 	Desc: Weakens a supereffective Fairy-type attack against the holding Pok\u00e9mon.
-	NGType: Fairy
-	SuperEffectivePowerReduceBerryType: Fairy
+	SuperEffectivePowerReduceBerry: Fairy
 *
 Liechi Berry
 	Desc: If held by a Pok\u00e9mon, it raises its Attack stat in a pinch.
 	NGType: Grass
-	HealthTriggeredStageIncreaseBerryStat: Attack
+	HealthTriggeredStageIncreaseBerry: Attack
 *
 Ganlon Berry
 	Desc: If held by a Pok\u00e9mon, it raises its Defense stat in a pinch.
 	NGType: Ice
-	HealthTriggeredStageIncreaseBerryStat: Defense
+	HealthTriggeredStageIncreaseBerry: Defense
 *
 Salac Berry
 	Desc: If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.
 	NGType: Fighting
-	HealthTriggeredStageIncreaseBerryStat: Speed
+	HealthTriggeredStageIncreaseBerry: Speed
 *
 Petaya Berry
 	Desc: If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.
 	NGType: Poison
-	HealthTriggeredStageIncreaseBerryStat: Sp_Attack
+	HealthTriggeredStageIncreaseBerry: Sp_Attack
 *
 Apicot Berry
 	Desc: If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.
 	NGType: Ground
-	HealthTriggeredStageIncreaseBerryStat: Sp_Defense
+	HealthTriggeredStageIncreaseBerry: Sp_Defense
 *
 Micle Berry:
 	Desc: If held by a Pok\u00e9mon, it raises its Accuracy stat in a pinch.
 	NGType: Rock
-	HealthTriggeredStageIncreaseBerryStat: Accuracy
+	HealthTriggeredStageIncreaseBerry: Accuracy
 *
 Kee Berry:
 	Desc: If held by a Pok\u00e9mon, this Berry will increase the Pok\u00e9mon's Defense stat when hit by a physical attack.

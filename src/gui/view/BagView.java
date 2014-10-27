@@ -27,7 +27,6 @@ import main.InputControl.Control;
 import main.Type;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
-import trainer.Pokedex.PokedexStatus;
 import trainer.Trainer;
 import battle.Move;
 import battle.effect.Status.StatusCondition;
@@ -153,7 +152,6 @@ public class BagView extends View
 		if (success)
 		{
 			addMessage(player.getName() + " used the " + selectedItem.getName() + "! " + ((UseItem)selectedItem).getSuccessMessage(p));
-			if (p != null) player.getPokedex().setStatus(p, PokedexStatus.CAUGHT); // TODO: This is hopefully a temporary solution to updating the Pokedex for Evolution by stone
 		}
 		else
 		{

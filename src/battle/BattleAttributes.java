@@ -258,7 +258,7 @@ public class BattleAttributes implements Serializable
 			{
 				if (print)
 				{
-					b.addMessage(((StatProtectingEffect)prevent).preventionMessage(victim));
+					b.addMessage(((StatProtectingEffect)prevent).preventionMessage(victim, stat));
 				}
 				
 				return false;
