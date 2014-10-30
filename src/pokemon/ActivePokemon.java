@@ -10,7 +10,6 @@ import item.hold.PowerItem;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -47,7 +46,6 @@ import battle.effect.Status.StatusCondition;
 import battle.effect.TeamEffect;
 import battle.effect.TrappingEffect;
 import battle.effect.TypeCondition;
-import breeding.Breeding;
 
 public class ActivePokemon implements Serializable
 {
@@ -87,6 +85,11 @@ public class ActivePokemon implements Serializable
 	private Type hiddenPowerType;
 	private boolean isEgg;
 	private int eggSteps;
+	
+	public void setGender(Gender gender)
+	{
+		this.gender = gender;
+	}
 
 	public ActivePokemon(PokemonInfo p, int lev, boolean wild, boolean user)
 	{
@@ -128,11 +131,12 @@ public class ActivePokemon implements Serializable
 	{
 		this(babyInfo, 1, false, true);
 		
+		moves = Breeding.getBabyMoves(daddy, mommy, babyInfo);
 		IVs = Breeding.getBabyIVs(daddy, mommy);
+		nature = Breeding.getBabyNature(daddy, mommy);
+		hiddenPowerType = computeHiddenPowerType();
 		setStats();
 		setCharacteristic();
-		hiddenPowerType = computeHiddenPowerType();
-		nature = Breeding.getBabyNature(daddy, mommy);
 	}
 	
 	/*

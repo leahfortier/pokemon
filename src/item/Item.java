@@ -10,6 +10,7 @@ import item.hold.ConsumableItem;
 import item.hold.DriveItem;
 import item.hold.GemItem;
 import item.hold.HoldItem;
+import item.hold.IncenseItem;
 import item.hold.PlateItem;
 import item.hold.PowerItem;
 import item.use.BallItem;
@@ -25,6 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import main.Global;
 import main.Namesies;
@@ -35,6 +37,7 @@ import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.Evolution;
 import pokemon.Evolution.EvolutionCheck;
+import pokemon.PokemonInfo;
 import pokemon.Stat;
 import trainer.CharacterData;
 import trainer.Team;
@@ -197,6 +200,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 	public int hashCode()
 	{
 		return name.hashCode();
+	}
+	
+	public static void processIncenseItems()
+	{
+		Set<String> itemStringKeySet = map.keySet();
+		for (String itemString : itemStringKeySet)
+		{
+			Item item = map.get(itemString);
+			if (!(item instanceof IncenseItem))
+				continue;
+			
+			PokemonInfo.addIncenseBaby(((IncenseItem)item).getBaby());
+		}
 	}
 
 	public static void loadItems()
@@ -611,6 +627,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 		map.put("Surf TM", new SurfTM());
 		map.put("Strength TM", new StrengthTM());
 		map.put("Waterfall TM", new WaterfallTM());
+
+		processIncenseItems();
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -2643,7 +2661,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class FullIncense extends Item implements HoldItem, StallingEffect
+	private static class FullIncense extends Item implements HoldItem, StallingEffect, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2657,9 +2675,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.MUNCHLAX_POKEMON;
+		}
 	}
 
-	private static class LaxIncense extends Item implements StatChangingEffect, HoldItem
+	private static class LaxIncense extends Item implements StatChangingEffect, HoldItem, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2699,9 +2722,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.WYNAUT_POKEMON;
+		}
 	}
 
-	private static class LuckIncense extends Item implements HoldItem, EntryEffect
+	private static class LuckIncense extends Item implements HoldItem, EntryEffect, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2720,9 +2748,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.HAPPINY_POKEMON;
+		}
 	}
 
-	private static class OddIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class OddIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2756,9 +2789,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.MIME_JR_POKEMON;
+		}
 	}
 
-	private static class PureIncense extends Item implements HoldItem, RepellingEffect
+	private static class PureIncense extends Item implements HoldItem, RepellingEffect, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2777,9 +2815,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return .33;
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.CHINGLING_POKEMON;
+		}
 	}
 
-	private static class RockIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class RockIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2813,9 +2856,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.BONSLY_POKEMON;
+		}
 	}
 
-	private static class RoseIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class RoseIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2849,9 +2897,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.BUDEW_POKEMON;
+		}
 	}
 
-	private static class SeaIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class SeaIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2885,9 +2938,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.AZURILL_POKEMON;
+		}
 	}
 
-	private static class WaveIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class WaveIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2920,6 +2978,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.MANTYKE_POKEMON;
 		}
 	}
 

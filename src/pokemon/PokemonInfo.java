@@ -14,12 +14,12 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
-import battle.Attack;
 import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;
 import main.StuffGen;
 import main.Type;
+import battle.Attack;
 
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 {
@@ -30,6 +30,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private static HashMap<String, PokemonInfo> map;
 	private static PokemonInfo[] info;
 	private static List<PokemonInfo> baseEvolution;
+	private static HashSet<Namesies> incenseBabies = new HashSet<>();
 	
 	private int number;
 	private String name;
@@ -494,4 +495,20 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	{
 		return eggGroups;
 	}
+	
+	public boolean hasEggMove(Namesies move)
+	{
+		return eggMoves.contains(move);
+	}
+	
+	public boolean isIncenseBaby()
+	{
+		return incenseBabies.contains(namesies);
+	}
+	
+	public static void addIncenseBaby(Namesies incenseBaby)
+	{
+		incenseBabies.add(incenseBaby);
+	}
+	
 }

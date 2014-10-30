@@ -808,7 +808,7 @@ Lax Incense
 	Baby: Wynaut
 *
 Luck Incense
-	Int: HoldItem, EntryEffect
+	Int: HoldItem, EntryEffect, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.
 	Price: 9600
@@ -816,59 +816,66 @@ Luck Incense
 	Enter:
 		TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
+	Baby: Happiny
 *
 Odd Incense
-	Int: HoldItem
+	Int: HoldItem, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.
 	Price: 9600
 	Fling: 10
 	EnhanceType: Psychic
 	TypeEnhanceMultiplier: 1.2
+	Baby: Mime_Jr
 *
 Pure Incense
-	Int: HoldItem, RepellingEffect
+	Int: HoldItem, RepellingEffect, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.
 	Price: 9600
 	Fling: 10
 	RepelChance: .33
+	Baby: Chingling
 *
 Rock Incense
-	Int: HoldItem
+	Int: HoldItem, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.
 	Price: 9600
 	Fling: 10
 	EnhanceType: Rock
 	TypeEnhanceMultiplier: 1.2
+	Baby: Bonsly
 *
 Rose Incense
-	Int: HoldItem
+	Int: HoldItem, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.
 	Price: 9600
 	Fling: 10
 	EnhanceType: Grass
 	TypeEnhanceMultiplier: 1.2
+	Baby: Budew
 *
 Sea Incense
-	Int: HoldItem
+	Int: HoldItem, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.
 	Price: 9600
 	Fling: 10
 	EnhanceType: Water
 	TypeEnhanceMultiplier: 1.2
+	Baby: Azurill
 *
 Wave Incense
-	Int: HoldItem
+	Int: HoldItem, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.
 	Price: 9600
 	Fling: 10
 	EnhanceType: Water
 	TypeEnhanceMultiplier: 1.2
+	Baby: Mantyke
 *
 Draco Plate:
 	Int: PlateItem

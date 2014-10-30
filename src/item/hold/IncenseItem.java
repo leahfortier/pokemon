@@ -1,9 +1,9 @@
 package item.hold;
 
-import pokemon.PokemonInfo;
+import main.Namesies;
 
 public interface IncenseItem
 {
-	// Huggies and kissies for mommy
-	public PokemonInfo getBaby();
+	// Huggies and kissies for mommy and daddy
+	public Namesies getBaby();
 }
