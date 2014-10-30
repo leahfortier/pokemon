@@ -1568,7 +1568,15 @@ public class BattleView extends View
 			ActivePokemon pkm = list.get(i);
 			
 			// Draw tab
-			g.setColor(pkm.getActualType()[0].getColor());
+			if(pkm.isEgg())
+			{
+				g.setColor(Type.getColors(selectedPkm)[0]);				
+			}
+			else 
+			{
+				g.setColor(pkm.getActualType()[0].getColor());
+			}
+			
 			g.fillRect(32 + i*59, 192, 59, 34);
 			if (i == selectedPokemonTab) g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
 			else g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);

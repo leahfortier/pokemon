@@ -839,8 +839,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x1), "Map Entrance"), "5")); 		//transition enter trigger
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x5), "PokeCenter"), "6")); 		//PokeCenter transition trigger
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x6), "Transition Building"), "7")); 	//Transition Building transition trigger
-		//triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0xd), "Group"), "8")); 				//Group trigger
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0xc), "Event"), "8")); 				//Event trigger
+		//triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0xd), "Group"), "9")); 				//Group trigger
 		
 	}
 	
@@ -1316,7 +1316,15 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						//Trigger was created, move to single selection
 						else 
 						{
-							toolList.setSelectedIndex(1);
+							// TODO stop hard coding things
+							if(tileList.getSelectedIndex() == 3) //If wild battle trigger, rectangle tool.
+							{
+								toolList.setSelectedIndex(2);
+							}
+							else
+							{
+								toolList.setSelectedIndex(1);								
+							}
 						}
 					}
 					else if (!triggerToolMoveSelected)
@@ -1576,10 +1584,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			if (tileList.isSelectionEmpty() || !pressed)
 				return;
 		
-			pressed = false;
-
 			int mhx = (int)Math.floor((mouseHoverX - mapX)*1.0/tileSize);
 			int mhy = (int)Math.floor((mouseHoverY - mapY)*1.0/tileSize);
+
+			pressed = false;
 			
 			int tx = Math.min(startX, mhx);
 			int ty = Math.min(startY, mhy);
@@ -1617,6 +1625,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 		public void pressed(int x, int y) 
 		{
+			if (tileList.isSelectionEmpty())
+				return;
+			
 			startX = (int)Math.floor((x - mapX)*1.0/tileSize);
 			startY = (int)Math.floor((y - mapY)*1.0/tileSize);
 		
@@ -1627,19 +1638,23 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 		public void draw(Graphics g) 
 		{
-			if (!pressed)
-				return;
-		
 			int mhx = (int)Math.floor((mouseHoverX - mapX)*1.0/tileSize);
 			int mhy = (int)Math.floor((mouseHoverY - mapY)*1.0/tileSize);
 			
-			int tx = Math.min(startX, mhx);
-			int ty = Math.min(startY, mhy);
-			int bx = Math.max(startX, mhx);
-			int by = Math.max(startY, mhy);
-			
 			g.setColor(Color.red);
-			g.drawRect(tx*tileSize + mapX, ty*tileSize + mapY, tileSize*(bx - tx + 1), tileSize*(by - ty + 1));
+			if (!pressed)
+			{
+				g.drawRect(mhx*tileSize + mapX, mhy*tileSize + mapY, tileSize, tileSize);
+			}
+			else
+			{
+				int tx = Math.min(startX, mhx);
+				int ty = Math.min(startY, mhy);
+				int bx = Math.max(startX, mhx);
+				int by = Math.max(startY, mhy);
+				
+				g.drawRect(tx*tileSize + mapX, ty*tileSize + mapY, tileSize*(bx - tx + 1), tileSize*(by - ty + 1));
+			}
 		}
 
 		public String toString() 
