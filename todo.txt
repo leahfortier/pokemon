@@ -67,4 +67,11 @@ Things to test:
 		if (this instanceof Ability && caster.breaksTheMold()) return false;
 		
 	Test fixed damage moves or basically anything that takes advantage of the new tryDamage method
-	Should probably just let Nidoran be 100% male again
+
+Should probably just let Nidoran be 100% male again
+
+Pokemon that go out of bounds:
+	Xerneas
+	Aurorus
+	
+	We need to do whatever thing we did for levitating Pokemon before so it doesn't look like they're sitting on the ground... Wait actually we never did that -- that needs to happends srsly

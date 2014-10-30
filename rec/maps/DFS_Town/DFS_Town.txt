@@ -356,10 +356,11 @@ TriggerData Edge_1_Wild_Pokemon {
 	48 27
 	48 28
 	WildBattle
-	encounterRate: VeryCommon
-	pokemon: Pidgey 2-4 40%
-	pokemon: Bidoof 2-4 30%
+	encounterRate: VERY_COMMON
+	pokemon: Pidgey 2-4 30%
+	pokemon: Bidoof 2-4 25%
 	pokemon: Sentret 2-4 20%
+	pokemon: Fletchling 2-4 15%
 	pokemon: Lillipup 2-4 10%
 }
 

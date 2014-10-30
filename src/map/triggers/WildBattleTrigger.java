@@ -24,10 +24,54 @@ public class WildBattleTrigger extends Trigger
 {
 	private static final Pattern eventTriggerPattern = Pattern.compile("(?:encounterRate:\\s*(\\w+)|pokemon:\\s*(\\w+)\\s+(\\d+)-(\\d+)\\s+(\\d+)%)");
 
-	public int[] probability, lowLevel, highLevel;
-	public String[] pokemon;
-	public double encounterRate;
-	public String encounterRateString;
+	public WildEncounter[] wildEncounters;
+	public EncounterRate encounterRate;
+	
+	public static enum EncounterRate
+	{
+		VERY_COMMON(15),
+		COMMON(12.75),
+		SEMI_RARE(10.125),
+		RARE(4.995),
+		VERY_RARE(1.875);
+		
+		private double rate;
+		
+		private EncounterRate(double rate)
+		{
+			this.rate = rate;
+		}
+		
+		public static String[] ENCOUNTER_RATE_NAMES;
+		static
+		{
+			ENCOUNTER_RATE_NAMES = new String[EncounterRate.values().length];
+			for (int i = 0; i < ENCOUNTER_RATE_NAMES.length; i++)
+			{
+				ENCOUNTER_RATE_NAMES[i] = EncounterRate.values()[i].name();
+			}
+		}
+	}
+	
+	public static class WildEncounter
+	{
+		public Namesies pokemon;
+		
+		public int minLevel;
+		public int maxLevel;
+
+		public int probability;
+		
+		public WildEncounter(String pokemon, String minLevel, String maxLevel, String probability)
+		{
+			this.pokemon = Namesies.getValueOf(pokemon, NamesiesType.POKEMON);
+			
+			this.minLevel = Integer.parseInt(minLevel);
+			this.maxLevel = Integer.parseInt(maxLevel);
+			
+			this.probability = Integer.parseInt(probability);
+		}
+	}
 
 	public WildBattleTrigger(String name, String function)
 	{
@@ -37,92 +81,97 @@ public class WildBattleTrigger extends Trigger
 		Matcher m = eventTriggerPattern.matcher(function);
 		while (m.find())
 		{
-			if (m.group(2) != null) ++count;
+			if (m.group(2) != null) 
+			{
+				++count;
+			}
 		}
 		
-		probability = new int[count];
-		lowLevel = new int[count];
-		highLevel = new int[count];
-		pokemon = new String[count];
+		wildEncounters = new WildEncounter[count];
+		
+		int totalProbability = 0;
 
 		int index = 0;
 		m = eventTriggerPattern.matcher(function);
+		
+		System.out.println(function);
+		
 		while (m.find())
 		{
-			if (m.group(1) != null) encounterRate = convEncounterRate(encounterRateString = m.group(1));
+			if (m.group(1) != null) 
+			{
+				encounterRate = EncounterRate.valueOf(m.group(1));
+			}
 			else 
 			{
-				pokemon[index] = m.group(2);
-				lowLevel[index] = Integer.parseInt(m.group(3));
-				highLevel[index] = Integer.parseInt(m.group(4));
-				probability[index] = Integer.parseInt(m.group(5));
+				wildEncounters[index] = new WildEncounter(m.group(2), m.group(3), m.group(4), m.group(5));
+				totalProbability += wildEncounters[index].probability;
 				
 				index++;
 			}
-		}		
+		}
+		
+		if (totalProbability != 100)
+		{
+			Global.error(name + " wild battle trigger probabilities add up to " + totalProbability + ", not 100.");
+		}
 	}
 	
-	public WildBattleTrigger(String name, int[] probability, int[] lowLevel, int[] highLevel, String[] pokemon, String encounterRate) 
+	public WildBattleTrigger(String name, WildEncounter[] wildEncounters, EncounterRate encounterRate) 
 	{
 		super(name, "");
 		
-		this.probability = probability;
-		this.lowLevel = lowLevel;
-		this.highLevel = highLevel;
-		this.pokemon = pokemon;
-		this.encounterRateString = encounterRate;
-		this.encounterRate = convEncounterRate(encounterRate);
-	}
-	
-	private double convEncounterRate(String s)
-	{
-		switch (s.toLowerCase())
-		{
-			case "verycommon":
-//				return 10;
-				return 15;
-			case "common":
-//				return 8.5;
-				return 12.75;
-			case "semi-rare":
-//				return 6.75;
-				return 10.125;
-			case "rare":
-//				return 3.33;
-				return 4.995;
-			case "veryrare":
-//				return 1.25;
-				return 1.875;
-			default:
-				Global.error("Invalid encounter rate: " + s);
-				return 1;
-		}
+		this.wildEncounters = wildEncounters;
+		this.encounterRate = encounterRate;
 	}
 
+	private int getRandomEncounterIndex()
+	{
+		int sum = 0, random = (int) (Math.random() * 100);
+		for (int i = 0; i < wildEncounters.length; i++)
+		{
+			sum += wildEncounters[i].probability;
+			
+			if (random < sum) 
+			{
+				return i;
+			}
+		}
+		
+		Global.error("Probabilities don't add to 100 for " + this.name + " wild battle trigger.");
+		return -1;
+	}
+	
 	public void execute(Game game)
 	{
 		super.execute(game);
-		double rand = Math.random()*187.5/encounterRate;
+		double rand = Math.random()*187.5/encounterRate.rate;
 				
 		if (rand < 1) 
 		{
 			WildPokemon o = legendaryEncounter(game.charData);
 			if (o == null)
 			{
-				int index = Global.getPercentageIndex(probability);
-				int level = (int)(Math.random()*(highLevel[index] - lowLevel[index] + 1) + lowLevel[index]);
+				WildEncounter encounter = wildEncounters[getRandomEncounterIndex()];
 				
-				Namesies namesies = Namesies.getValueOf(pokemon[index], NamesiesType.POKEMON);
-				o = new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(namesies), level, true, false));				
+				int level = (int)(Math.random()*(encounter.maxLevel - encounter.minLevel + 1) + encounter.minLevel);
+				
+				o = new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(encounter.pokemon), level, true, false));				
 			}
 			
 			// Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
 			if (game.charData.front().getLevel() >= o.front().getLevel())
 			{
-				if (game.charData.isUsingRepel()) return;
+				if (game.charData.isUsingRepel()) 
+				{
+					return;
+				}
 				
 				Item item = game.charData.front().getActualHeldItem();
-				if (item instanceof RepellingEffect && Math.random() < ((RepellingEffect)item).chance()) return;
+				if (item instanceof RepellingEffect && Math.random() < ((RepellingEffect)item).chance()) 
+				{
+					return;
+				}
 			}
 		
 			boolean seenWildPokemon = game.charData.getPokedex().getStatus(o.front().getPokemonInfo().namesies()) == PokedexStatus.NOT_SEEN;
@@ -149,11 +198,11 @@ public class WildBattleTrigger extends Trigger
 	public String triggerDataAsString() 
 	{
 		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
-		ret.append("\tencounterRate: " + encounterRateString + "\n");
+		ret.append("\tencounterRate: " + encounterRate.name() + "\n");
 		
-		for (int currPokemon = 0; currPokemon < pokemon.length; ++currPokemon) 
+		for (WildEncounter wildEncounter : wildEncounters) 
 		{
-			ret.append("\tpokemon: " + pokemon[currPokemon] + " " + lowLevel[currPokemon] + "-" + highLevel[currPokemon] +" " + probability[currPokemon] + "%\n");
+			ret.append(String.format("\tpokemon: %s %d-%d %d%%n", wildEncounter.pokemon.getName(), wildEncounter.minLevel, wildEncounter.maxLevel, wildEncounter.probability));
 		}
 		
 		return ret.toString();
