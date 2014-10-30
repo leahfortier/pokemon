@@ -1048,7 +1048,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getEffect(Namesies.SUNNY_EFFECT).newInstance());
-			b.addMessage(victim.getName() + "'s " + this.getName() + " made!");
+			b.addMessage(victim.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
 		}
 	}
 
@@ -2742,7 +2742,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getEffect(Namesies.SANDSTORM_EFFECT).newInstance());
-			b.addMessage(victim.getName() + "'s " + this.getName() + " whipped!");
+			b.addMessage(victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
 		}
 	}
 
@@ -3182,7 +3182,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getEffect(Namesies.RAINING_EFFECT).newInstance());
-			b.addMessage(victim.getName() + "'s " + this.getName() + " started!");
+			b.addMessage(victim.getName() + "'s " + this.getName() + " started a downpour!");
 		}
 	}
 
@@ -3367,7 +3367,7 @@ public abstract class Ability implements Serializable
 		public void enter(Battle b, ActivePokemon victim)
 		{
 			b.addEffect(Weather.getEffect(Namesies.HAILING_EFFECT).newInstance());
-			b.addMessage(victim.getName() + "'s " + this.getName() + " caused!");
+			b.addMessage(victim.getName() + "'s " + this.getName() + " caused it to hail!");
 		}
 	}
 

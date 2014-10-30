@@ -1219,7 +1219,7 @@ Override:
 		AddInterface: EntryEffect
 		AddMapField: Enter: 
 		b.addEffect(Weather.getEffect(Namesies.{11}_EFFECT).newInstance());
-		b.addMessage(victim.getName() + "'s " + this.getName() + " {2}!");
+		b.addMessage(victim.getName() + "'s " + this.getName() + " {2-}!");
 		###
 	*
 ***
