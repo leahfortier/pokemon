@@ -10,10 +10,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
-import pokemon.ActivePokemon;
-
-import battle.Battle;
+import java.util.Random;
 
 import main.Game;
 import main.Game.ViewMode;
@@ -26,8 +23,10 @@ import map.entity.Entity;
 import map.entity.NPCEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
+import pokemon.ActivePokemon;
 import sound.SoundTitle;
 import trainer.CharacterData;
+import battle.Battle;
 
 public class MapView extends View{
 	public String currentMapName;
@@ -64,22 +63,30 @@ public class MapView extends View{
 	};
 	VisualState state;
 	
+	private enum WeatherState{
+		NORMAL, SUN, RAIN, FOG, SNOW
+	};
+	WeatherState weatherState;
+	
 	int selectedButton;
 	Button[] menuButtons;
 	String[] menuText = {"Pok\u00E9dex", "Pok\u00E9mon", "Bag", "Player___", "Options", "Save", "Exit", "Return"};
 	
-//	private int[] rainHeight;
-//	private Random rand = new Random();
-//	private int lightningFrame;
+	private int[] rainHeight;
+	private Random rand = new Random();
+	private int lightningFrame;
+	
 	public MapView(){
 		currentMapName = "";
 		currentAreaName = "";
 		currentDialogue = null;
-//		rainHeight = new int[Global.GAME_SIZE.width/2];
+		rainHeight = new int[Global.GAME_SIZE.width/2];
 		state = VisualState.MAP;
 		selectedButton = 0;
 		
 		areaDisplayTime = 0;
+		
+		weatherState = WeatherState.NORMAL;
 		
 		menuButtons = new Button[8];
 		for (int i = 0; i < menuButtons.length; i++) //RIGHT, UP, LEFT, DOWN
@@ -150,37 +157,7 @@ public class MapView extends View{
 			drawAreaTransitionAnimation(g);
 		}
 		
-		/*/sun
-		g.setColor(new Color(255, 255, 255, 64));
-		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-		*/
-		
-		/*/ rain
-		g.setColor(new Color(0,0,0, 64));
-		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-		g.setColor(new Color(50,50,255, 128));
-		for (int i = 0; i < rainHeight.length; i++)
-			if (rainHeight[i] != 0){
-				g.drawRect(i*2, rainHeight[i] - 40, 1, 40);
-				rainHeight[i] += 50;
-				if (rainHeight[i] > Global.GAME_SIZE.height + 40)
-					rainHeight[i] = 0;
-			}
-		for (int i = 0; i < 50; i++){
-				int x = rand.nextInt(rainHeight.length);
-				if (rainHeight[x] == 0)
-					rainHeight[x] = 1 + rand.nextInt(40);
-			}
-		
-		if (rand.nextInt(80) == 0 || (lightningFrame > 80 && rand.nextInt(4) == 0)){
-			lightningFrame = 128;
-		}
-		if (lightningFrame > 0){
-			g.setColor(new Color(255,255,255, lightningFrame));
-			g.fillRect(0,0,Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-			lightningFrame = 7*lightningFrame/8 - 1;
-		}else lightningFrame = 0;
-		*/
+		drawWeatherEffects(g);
 		
 		switch (state)
 		{
@@ -228,6 +205,56 @@ public class MapView extends View{
 			default:
 				break;
 		}
+	}
+	
+	private void drawWeatherEffects(Graphics g)
+	{
+		switch(weatherState)
+		{
+			case SUN:
+				drawSun(g);
+				break;
+			case RAIN:
+				drawRain(g);
+				break;
+			case NORMAL:
+			default:
+				break;
+		}
+	}
+	
+	private void drawSun(Graphics g)
+	{
+		g.setColor(new Color(255, 255, 255, 64));
+		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+	}
+	
+	private void drawRain(Graphics g)
+	{
+		g.setColor(new Color(0,0,0, 64));
+		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+		g.setColor(new Color(50,50,255, 128));
+		for (int i = 0; i < rainHeight.length; i++)
+			if (rainHeight[i] != 0){
+				g.drawRect(i*2, rainHeight[i] - 40, 1, 40);
+				rainHeight[i] += 50;
+				if (rainHeight[i] > Global.GAME_SIZE.height + 40)
+					rainHeight[i] = 0;
+			}
+		for (int i = 0; i < 50; i++){
+				int x = rand.nextInt(rainHeight.length);
+				if (rainHeight[x] == 0)
+					rainHeight[x] = 1 + rand.nextInt(40);
+			}
+		
+		if (rand.nextInt(80) == 0 || (lightningFrame > 80 && rand.nextInt(4) == 0)){
+			lightningFrame = 128;
+		}
+		if (lightningFrame > 0){
+			g.setColor(new Color(255,255,255, lightningFrame));
+			g.fillRect(0,0,Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+			lightningFrame = 7*lightningFrame/8 - 1;
+		}else lightningFrame = 0;
 	}
 	
 	private void drawAreaTransitionAnimation(Graphics g)
