@@ -258,7 +258,7 @@ public class BattleAttributes implements Serializable
 			{
 				if (print)
 				{
-					b.addMessage(((StatProtectingEffect)prevent).preventionMessage(victim));
+					b.addMessage(((StatProtectingEffect)prevent).preventionMessage(victim, stat));
 				}
 				
 				return false;
@@ -278,8 +278,7 @@ public class BattleAttributes implements Serializable
 			// THIS LOW
 			if (print) b.addMessage(victim.getName() + "'s " + statName + " cannot be lowered any further!");
 			return false;
-		}
-		
+		}		
 		
 		String change = "", victimName = caster == victim ? "its" : victim.getName() + "'s";
 		if (val >= 2) change =  "sharply raised";

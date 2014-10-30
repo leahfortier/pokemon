@@ -11,7 +11,6 @@ import main.Global;
 import main.Namesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
-import battle.Move;
 import battle.effect.Effect;
 import battle.effect.Status.StatusCondition;
 import battle.effect.SwitchOutEffect;
@@ -192,7 +191,6 @@ public abstract class Trainer implements Team, Serializable
 		for (ActivePokemon p : team)
 		{
 			p.fullyHeal();
-			for (Move m : p.getMoves()) m.resetPP();
 		}
 	}
 	
@@ -210,26 +208,23 @@ public abstract class Trainer implements Team, Serializable
 		setFront(valid.get((int)(Math.random()*valid.size())));
 	}
 	
-	public boolean canSwitch (Battle b, int switchIndex)
+	public boolean canSwitch(Battle b, int switchIndex)
 	{
 		// This Pokemon is already out!!
-		if (switchIndex == frontIndex) return false;
+		if (switchIndex == frontIndex) 
+		{
+			return false;
+		}
 		
-		ActivePokemon toSwitch = team.get(switchIndex), curr = front();
+		ActivePokemon curr = front();
+		ActivePokemon toSwitch = team.get(switchIndex);
 		
 		// Cannot switch to a fainted Pokemon, and if current Pokemon is dead then you must switch!
 		if (!toSwitch.canFight()) return false;
 		if (curr.hasStatus(StatusCondition.FAINTED)) return true;
 		
 		// Front Pokemon is alive -- Check if they are able to switch out, if not, display the appropriate message
-		String trapMessage = curr.canEscape(b);
-		if  (trapMessage.length() > 0)
-		{
-			b.addMessage(trapMessage);
-			return false;
-		}
-		
-		return true;
+		return curr.canEscape(b);
 	}
 	
 	// Returns true if the trainer has Pokemon (other than the one that is currently fighting) that is able to fight
@@ -237,9 +232,17 @@ public abstract class Trainer implements Team, Serializable
 	{
 		for (int i = 0; i < team.size(); i++)
 		{
-			if (i == frontIndex) continue;
-			if (team.get(i).canFight()) return true;
+			if (i == frontIndex) 
+			{
+				continue;
+			}
+			
+			if (team.get(i).canFight()) 
+			{
+				return true;
+			}
 		}
+		
 		return false;
 	}
 	

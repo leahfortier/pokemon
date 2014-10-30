@@ -26,9 +26,7 @@ import main.InputControl;
 import main.InputControl.Control;
 import main.Type;
 import pokemon.ActivePokemon;
-import pokemon.Stat;
 import trainer.CharacterData;
-import trainer.Pokedex.PokedexStatus;
 import trainer.Trainer;
 import battle.Move;
 import battle.effect.Status.StatusCondition;
@@ -154,7 +152,6 @@ public class BagView extends View
 		if (success)
 		{
 			addMessage(player.getName() + " used the " + selectedItem.getName() + "! " + ((UseItem)selectedItem).getSuccessMessage(p));
-			if (p != null) player.getPokedex().setStatus(p, PokedexStatus.CAUGHT); // TODO: This is hopefully a temporary solution to updating the Pokedex for Evolution by stone
 		}
 		else
 		{
@@ -203,7 +200,7 @@ public class BagView extends View
 		{
 			if (moveButtons[i].checkConsumePress())
 			{
-				Move m = selectedPokemon.getMove(i);
+				Move m = selectedPokemon.getActualMoves().get(i);
 				
 				addUseMessages(player.getBag().useMoveItem(selectedItem, selectedPokemon, m), selectedPokemon);
 			}
@@ -439,10 +436,12 @@ public class BagView extends View
 		
 		// Draw moves
 		if (state == BagState.MOVE_SELECT)
-		{
-			for (int i = 0; i < selectedPokemon.getMoves().size(); i++)
+		{ 
+			List<Move> moveList = selectedPokemon.getActualMoves();
+			
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				Move m = selectedPokemon.getMove(i);
+				Move m = moveList.get(i);
 				g.translate(moveButtons[i].x, moveButtons[i].y);
 				
 				g.setColor(m.getAttack().getActualType().getColor());
@@ -488,13 +487,13 @@ public class BagView extends View
 				{
 					g.setColor(Color.BLACK);
 					g.setFont(Global.getFont(14));
-					g.drawString(p.getName(), 50, 22);	
+					g.drawString(p.getActualName(), 50, 22);	
 				}
 				else
 				{
 					g.setColor(Color.BLACK);
 					g.setFont(Global.getFont(14));
-					g.drawString(p.getName() + " " + p.getGender().getCharacter(), 50, 22);
+					g.drawString(p.getActualName() + " " + p.getGender().getCharacter(), 50, 22);
 					g.drawString("Lv" + p.getLevel(), 153, 22);
 					s = p.getStatus().getType().getName();
 					g.drawString(s, Global.rightX(s, 293, 14), 22);
@@ -509,7 +508,7 @@ public class BagView extends View
 					g.setColor(Color.BLACK);
 					g.setFont(Global.getFont(12));
 					g.drawString(p.getActualHeldItem().getName(), 50, 47);
-					s = p.getHP() + "/" + p.getStat(Stat.HP);
+					s = p.getHP() + "/" + p.getMaxHP();
 					g.drawString(s, Global.rightX(s, 293, 12), 47);
 					
 					if (p.hasStatus(StatusCondition.FAINTED))
@@ -621,7 +620,7 @@ public class BagView extends View
 		
 		for (int i = 0; i < Move.MAX_MOVES; i++)
 		{
-			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getMoves().size());
+			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
 		}
 		
 		giveButton.setActive(selectedItem instanceof HoldItem);

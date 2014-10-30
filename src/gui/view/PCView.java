@@ -288,7 +288,7 @@ public class PCView extends View
 			g.setColor(Color.BLACK);
 			g.setFont(Global.getFont(20));
 			
-			g.drawString(selected.getName(), 541, 82);
+			g.drawString(selected.getActualName(), 541, 82);
 			
 			g.setFont(Global.getFont(16));
 			g.drawString(selected.getEggMessage(), 427, 179); // TODO: Wrapped text
@@ -298,7 +298,7 @@ public class PCView extends View
 			g.setColor(Color.BLACK);
 			g.setFont(Global.getFont(20));
 			
-			g.drawString(selected.getName() + " " + selected.getGender().getCharacter(), 541, 82);
+			g.drawString(selected.getActualName() + " " + selected.getGender().getCharacter(), 541, 82);
 			s = "Lv" + selected.getLevel();
 			g.drawString(s, Global.rightX(s, 740, 20), 82);
 			g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);

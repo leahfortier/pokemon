@@ -15,26 +15,25 @@ import map.triggers.TriggerData;
 import map.triggers.WildBattleTrigger;
 import mapMaker.data.MapMakerTriggerData;
 
-public class WildBattleTriggerOptionsDialog extends JPanel {
-	
+public class WildBattleTriggerOptionsDialog extends JPanel 
+{
 	private static final long serialVersionUID = -7378035463487486331L;
 	
 	public JComboBox<String> comboBox;
 	private JButton btnEdit;
 	HashMap<String, TriggerData> wildBattleTriggers;
-	MapMakerTriggerData mapMakerTriggerData;
+	MapMakerTriggerData mapMakerTriggerData;	
 	
-	
-	
-	public WildBattleTriggerOptionsDialog(HashMap<String, TriggerData> givenWildBattleTriggers, MapMakerTriggerData givenMapMakerTriggerData) {
-		
+	public WildBattleTriggerOptionsDialog(HashMap<String, TriggerData> givenWildBattleTriggers, MapMakerTriggerData givenMapMakerTriggerData) 
+	{
 		this.wildBattleTriggers = givenWildBattleTriggers;
 		this.mapMakerTriggerData = givenMapMakerTriggerData;
 		
 		JButton btnCreate = new JButton("Create New");
-		btnCreate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+		btnCreate.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
 				TriggerData td = editWildBattleTrigger(null, (JButton)e.getSource());
 				
 				if (td == null)
@@ -43,7 +42,8 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 				wildBattleTriggers.put(td.name, td);
 				comboBox.addItem(td.name);
 				
-				if (wildBattleTriggers.size() == 1) {
+				if (wildBattleTriggers.size() == 1) 
+				{
 					btnEdit.setEnabled(true);
 				}
 			}
@@ -52,12 +52,12 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 		String[] items = new String[givenWildBattleTriggers.size()];
 		comboBox = new JComboBox<String>(givenWildBattleTriggers.keySet().toArray(items));
 		
-		
 		btnEdit = new JButton("Edit");
 		btnEdit.setEnabled(items.length != 0);
-		btnEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
+		btnEdit.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
 				TriggerData trigger = wildBattleTriggers.get((String)comboBox.getSelectedItem());
 				
 				TriggerData td = editWildBattleTrigger(trigger, (JButton)e.getSource());
@@ -69,7 +69,8 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 				
 				comboBox.removeAllItems();
 				String[] items = new String[wildBattleTriggers.size()];
-				for (String item: wildBattleTriggers.keySet().toArray(items)) {
+				for (String item: wildBattleTriggers.keySet().toArray(items)) 
+				{
 					comboBox.addItem(item);
 				}
 			}
@@ -99,12 +100,12 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 		setLayout(groupLayout);
 	}
 	
-	public TriggerData editWildBattleTrigger(TriggerData trigger, JButton button) {
-		
-
+	public TriggerData editWildBattleTrigger(TriggerData trigger, JButton button) 
+	{
 		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
 		
-		if (trigger != null) {
+		if (trigger != null) 
+		{
 			dialog.initialize(new WildBattleTrigger(trigger.name, trigger.triggerContents));
 		}
 		

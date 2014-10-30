@@ -112,7 +112,11 @@ public class SoundPlayer
 			soundEffectPlayer.close();
 		}
 
-		createPlayer(soundEffect);
+		// SRSLY
+		if (!muted)
+		{
+			createPlayer(soundEffect);	
+		}
 	}
 	
 	public boolean soundEffectIsPlaying() 

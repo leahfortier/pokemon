@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -15,7 +16,6 @@ import java.util.regex.Pattern;
 import main.Namesies.NamesiesType;
 import pokemon.PokemonInfo;
 import battle.Attack;
-import battle.Attack.Category;
 
 public class StuffGen 
 {
@@ -202,7 +202,7 @@ public class StuffGen
 			}
 			
 			fields.put(key, value);
-//			System.out.println(name + " " + key + " " + value);
+//			System.out.println(className + " " + key + " " + value);
 		}
 		
 		fields.put("Namesies", className);
@@ -214,28 +214,6 @@ public class StuffGen
 		if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
 		{
 			Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + className);
-		}
-		
-		// Just some light error-checking
-		if (gen == Generator.ATTACK_GEN)
-		{
-			Category category = Category.valueOf(fields.get("Cat").toUpperCase());
-			if (category == Category.STATUS)
-			{
-				if (fields.containsKey("Pow"))
-				{
-					Global.error("Status moves shouldn't have power (" + className + ").");
-				}
-			}
-			else
-			{
-				if (!fields.containsKey("Pow") && !fields.containsKey("GetPow") 
-						&& !fields.containsKey("FixedDamage") && !fields.containsKey("OHKO")
-						&& !fields.containsKey("Apply"))
-				{
-					Global.error("Non-status moves must include a power (" + className + ").");
-				}
-			}
 		}
 		
 		// NumTurns matches to both MinTurns and MaxTurns
@@ -790,14 +768,39 @@ public class StuffGen
 	{
 		body = body.replace("@ClassName", className);
 		body = body.replace("@SuperClass", gen.superClass.toUpperCase());
+		
 		body = body.replace("{0}", fieldValue);
 		body = body.replace("{00}", fieldValue.toUpperCase());
-
+		
 		String[] mcSplit = fieldValue.split(" ");
 		for (int i = 0; i < mcSplit.length; i++)
 		{
 			body = body.replace(String.format("{%d}", i + 1), mcSplit[i]);
-			body = body.replace(String.format("{%d%d}", i + 1, i + 1), mcSplit[i].toUpperCase());	
+			body = body.replace(String.format("{%d%d}", i + 1, i + 1), mcSplit[i].toUpperCase());
+			body = body.replace(String.format("{%d_}", i + 1), mcSplit[i].replaceAll("_", " "));
+			
+			String pattern = String.format("{%d-}", i + 1);
+			if (body.contains(pattern))
+			{
+				if (i + 1 == 1)
+				{
+					Global.error("Don't use {1-}, instead use {0} (ClassName = " + className + ")");
+				}
+				
+				String text = mcSplit[i];
+				for (int j = i + 1; j < mcSplit.length; j++)
+				{
+					if (body.contains("{" + (j + 1)))
+					{
+						System.out.println(body);
+						Global.error(j + " Cannot have any more parameters once you split through. (ClassName = " + className + ")");
+					}
+					
+					text += " " + mcSplit[j];
+				}
+				
+				body = body.replace(pattern, text);
+			}
 		}
 		
 		return body;
@@ -812,6 +815,8 @@ public class StuffGen
 		
 		overrideMethods = new ArrayList<>();
 		interfaceMethods = new HashMap<>();
+		
+		HashSet<String> fieldNames = new HashSet<>();
 		
 		while (in.hasNext())
 		{
@@ -839,6 +844,13 @@ public class StuffGen
 				
 				String fieldName = line.replace(":", "");
 				list.add(new SimpleEntry<>(fieldName, new MethodInfo(in, isInterfaceMethod)));
+				
+				if (fieldNames.contains(fieldName))
+				{
+					Global.error("Duplicate field name " + fieldName + " in override.txt");
+				}
+				
+				fieldNames.add(fieldName);
 			}
 			
 			if (isInterfaceMethod)
@@ -1086,46 +1098,62 @@ public class StuffGen
 	
 	private static String getAdditionalMethods(Generator gen, HashMap<String, String> fields, List<String> interfaces)
 	{
+		String className = fields.get("ClassName");
+		
 		StringBuilder methods = new StringBuilder();
-	
-		if (failureInfo != null)
-		{
-			methods.append(failureInfo.writeFailure(gen, fields));
-		}
 		
-		addMethodInfo(gen, methods, overrideMethods, fields, interfaces, "");
-		
+		// Add all the interfaces to the interface list
+		List<String> currentInterfaces = new ArrayList<>();
 		if (fields.containsKey("Int"))
 		{
 			for (String interfaceName : fields.get("Int").split(", "))
 			{
-				interfaces.add(interfaceName);
+				currentInterfaces.add(interfaceName);
 			}
 			
 			fields.remove("Int");
 		}
 		
-		for (int i = 0; i < interfaces.size(); i++)
+		List<String> nextInterfaces = new ArrayList<>();
+		
+		boolean moreFields = true;
+		while (moreFields)
 		{
-			String interfaceName = interfaces.get(i).replace("Hidden-", "");
+			moreFields = addMethodInfo(gen, methods, overrideMethods, fields, currentInterfaces, "");
 			
-			List<Entry<String, MethodInfo>> list = interfaceMethods.get(interfaceName);
-			if (list == null)
+			for (int i = 0; i < currentInterfaces.size(); i++)
 			{
-				Global.error("Invalid interface name " + interfaceName + " for " + fields.get("ClassName"));
+				String interfaceName = currentInterfaces.get(i);
+				interfaces.add(interfaceName);
+				
+				interfaceName = interfaceName.replace("Hidden-", "");
+				
+				List<Entry<String, MethodInfo>> list = interfaceMethods.get(interfaceName);
+				if (list == null)
+				{
+					Global.error("Invalid interface name " + interfaceName + " for " + className);
+				}
+				
+				moreFields |= addMethodInfo(gen, methods, list, fields, nextInterfaces, interfaceName);
 			}
 			
-			addMethodInfo(gen, methods, list, fields, interfaces, interfaceName);
+			currentInterfaces = nextInterfaces;
+			nextInterfaces = new ArrayList<>();
 		}
 		
-		addMethodInfo(gen, methods, overrideMethods, fields, null, "");
+		if (failureInfo != null)
+		{
+			methods.insert(0, failureInfo.writeFailure(gen, fields));
+		}
 		
 		return methods.toString();
 	}
 	
 	// Interface name should be empty if it is an override
-	private static void addMethodInfo(Generator gen, StringBuilder methods, List<Entry<String, MethodInfo>> methodList, HashMap<String, String> fields, List<String> interfaces, String interfaceName)
+	private static boolean addMethodInfo(Generator gen, StringBuilder methods, List<Entry<String, MethodInfo>> methodList, HashMap<String, String> fields, List<String> interfaces, String interfaceName)
 	{
+		boolean added = false;
+		
 		String className = fields.get("ClassName");
 		
 		for (Entry<String, MethodInfo> pair : methodList)
@@ -1156,26 +1184,26 @@ public class StuffGen
 			
 			for (String addInterface : methodInfo.addInterfaces)
 			{
-				if (interfaces == null)
-				{
-					Global.error("Cannot add interfaces during second pass through overrides.");
-				}
-				
 				interfaces.add(addInterface);
 			}
 			
 			for (Entry<String, String> addField : methodInfo.addMapFields)
 			{
 				String fieldKey = addField.getKey();
+				String addFieldValue = replaceBody(gen, addField.getValue(), className, fieldValue);
 				
 				String mapField = fields.get(fieldKey);
 				if (mapField == null)
 				{
-					mapField = addField.getValue();
+					mapField = addFieldValue;
 				}
 				else if (fieldKey.equals("MoveType"))
 				{
-					mapField += ", " + addField.getValue();
+					mapField += ", " + addFieldValue;
+				}
+				else if (fieldKey.equals("Field"))
+				{
+					mapField += addFieldValue;
 				}
 				else
 				{
@@ -1186,8 +1214,11 @@ public class StuffGen
 				fields.put(fieldKey, mapField);
 			}
 			
-			fields.remove(fieldName);	
+			fields.remove(fieldName);
+			added = true;
 		}
+		
+		return added;
 	}
 	
 	private static Entry<String, String> getFieldPair(Scanner in, String line)

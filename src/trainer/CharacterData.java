@@ -23,7 +23,6 @@ import map.DialogueSequence;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
-import pokemon.Stat;
 import trainer.Pokedex.PokedexStatus;
 import battle.Battle;
 import battle.MessageUpdate;
@@ -48,7 +47,7 @@ public class CharacterData extends Trainer implements Serializable
 	public String areaName;
 	HashSet<String> definedGlobals;
 	
-	//Used for map globals.
+	// Used for map globals.
 	public String previousMapName;
 	public String mapEntranceName;
 	
@@ -173,12 +172,6 @@ public class CharacterData extends Trainer implements Serializable
 			repelSteps--;
 			if (repelSteps == 0)
 			{
-				// TODO: Display message that the effects have worn off
-				// Josh suggestion: Create a message variable in this class and have mapView 
-				// check to see if there is a message. If there is a message and no current dialogue, 
-				// set the message as the current dialogue.
-				// Do you think that would work?
-				
 				// TODO: Give choice if you want to use another. 
 				// Game variable needed
 				messages = new DialogueSequence("The effects of repel have worn off.", null, null, null);
@@ -196,10 +189,8 @@ public class CharacterData extends Trainer implements Serializable
 		{
 			if (p.isEgg() && p.hatch())
 			{
-				// TODO: Show hatch animation
 				evolvingPokemon = p;
-				messages = new DialogueSequence("Huh?", null, null, new String[]{"Evolution_View_Trigger"});
-				this.getPokedex().setStatus(p, Pokedex.PokedexStatus.CAUGHT);
+				messages = new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"});
 				
 				// Only one hatch per step
 				break;
@@ -303,7 +294,8 @@ public class CharacterData extends Trainer implements Serializable
 			b.addMessage(getName() + " defeated " + opp.getName() + "!", Update.WIN_BATTLE);
 			addGlobal(b.getWinGlobal());
 			
-			int datCash = opp.getDatCashMoney()*(hasEffect(Namesies.DOUBLE_MONEY_EFFECT) ? 2 : 1);
+			// I've decided that the next line of code is the best line in this entire codebase
+			int datCash = opp.getDatCashMoney()*(hasEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT) ? 2 : 1);
 			b.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
 		}
@@ -333,7 +325,7 @@ public class CharacterData extends Trainer implements Serializable
 		if (!pokedex.caught(p.getPokemonInfo().namesies()))
 		{
 			if (b != null) b.addMessage(p.getPokemonInfo().getName() + " was registered in the Pok\u00e9dex!");
-			if (!p.isEgg()) pokedex.setStatus(p, PokedexStatus.CAUGHT);			
+			if (!p.isEgg()) pokedex.setStatus(p.getPokemonInfo(), PokedexStatus.CAUGHT);			
 		}
 		
 		if (team.size() < MAX_POKEMON)
@@ -342,7 +334,7 @@ public class CharacterData extends Trainer implements Serializable
 		}
 		else
 		{
-			if (b != null) b.addMessage(p.getName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!");
+			if (b != null) b.addMessage(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!");
 			pc.depositPokemon(p);
 		}
 	}
@@ -383,7 +375,7 @@ public class CharacterData extends Trainer implements Serializable
 		b.addMessage(name + " threw the " + ((Item)ball).getName() + "!");
 		
 		ActivePokemon c = b.getOtherPokemon(true);
-		int maxHP = c.getStat(Stat.HP), hp = c.getHP(), catchRate = c.getPokemonInfo().getCatchRate();
+		int maxHP = c.getMaxHP(), hp = c.getHP(), catchRate = c.getPokemonInfo().getCatchRate();
 		double[] ballInfo = ball.catchRate(front(), c, b);
 		double ballMod = ballInfo[0], ballAdd = ballInfo[1], statusMod = c.getStatus().getType().getCatchModifier();
 		

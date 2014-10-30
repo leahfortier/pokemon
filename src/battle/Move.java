@@ -204,7 +204,7 @@ public class Move implements Serializable
 	private static List<Move> getUsableMoves(Battle b, ActivePokemon p)
 	{
 		List<Move> usable = new ArrayList<Move>();
-		for (Move m : p.getMoves())
+		for (Move m : p.getMoves(b))
 		{
 			if (validMove(b, p, m, false))
 			{
@@ -258,7 +258,7 @@ public class Move implements Serializable
 		double[] move = new double[usable.size()];
 		Arrays.fill(move, 1);
 		
-		//multiplies by effectiveness
+		// Multiplies by effectiveness
 		for (int i = 0; i < usable.size(); i++)
 		{
 			// TODO: Honestly this shouldn't be using the basic advantage it should be using actual advantage
@@ -277,7 +277,8 @@ public class Move implements Serializable
 		{
 			if (value < range[i])
 			{
-				return usable.get(i);
+				// Temporarily removing AI because it makes testing difficult when I need a random move
+//				return usable.get(i);
 			}
 		}
 		

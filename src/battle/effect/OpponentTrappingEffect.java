@@ -6,5 +6,5 @@ import battle.Battle;
 public interface OpponentTrappingEffect 
 {
 	public boolean trapOpponent(Battle b, ActivePokemon p);
-	public String trappingMessage(ActivePokemon escaper, ActivePokemon trapper);
+	public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper);
 }

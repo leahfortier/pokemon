@@ -1,8 +1,10 @@
 package battle.effect;
 
 import pokemon.ActivePokemon;
+import battle.Battle;
+
 
 public interface DefogRelease 
 {
-	public String getDefogReleaseMessage(ActivePokemon victim);
+	public void releaseDefog(Battle b, ActivePokemon victim);
 }

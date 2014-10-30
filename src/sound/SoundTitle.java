@@ -8,6 +8,8 @@ public enum SoundTitle
 	MAIN_MENU_TUNE("dancemix", true),
 	CREDITS_TUNE("doubletrouble", true),
 	NEW_GAME("04-welcome-to-the-world-of-pokemon", true),
+	//NEW_GAME("101 Opening", true),
+	EVOLUTION_VIEW("141 Evolution", true),
 	
 	// Area Tunes
 	PLAYER_HOUSE("05-chat-with-mom", true),
@@ -23,11 +25,19 @@ public enum SoundTitle
 	DEADLOCK_THEME("55-rocket-hideout", true),
 	
 	// Battley things
-	WILD_POKEMON_BATTLE("09-wild-pokemon-battle-theme", true),
-	WILD_POKEMON_DEFEATED("10-wild-pokemon-defeated", true),
-	TRAINER_SPOTTED("21-trainer-challenge-theme-1", true),
-	TRAINER_BATTLE("22-trainer-battle-theme-1", true),
-	TRAINER_DEFEATED("23-trainer-defeated", true),
+	//Old
+//	WILD_POKEMON_BATTLE("09-wild-pokemon-battle-theme", true),
+//	WILD_POKEMON_DEFEATED("10-wild-pokemon-defeated", true),
+//	TRAINER_SPOTTED("21-trainer-challenge-theme-1", true),
+//	TRAINER_BATTLE("22-trainer-battle-theme-1", true),
+//	TRAINER_DEFEATED("23-trainer-defeated", true),
+	
+	WILD_POKEMON_BATTLE("107 Battle VS Wild Pokemon", true),
+	WILD_POKEMON_DEFEATED("108 Victory VS Wild Pokemon", true),
+	TRAINER_SPOTTED("127 Trainer Appears Boy Chapter", true),
+	TRAINER_BATTLE("115 Battle VS Trainer", true),
+	TRAINER_DEFEATED("116 Victory VS Trainer", true),
+	
 	
 	// Sound effects
 	POKE_CENTER_HEAL("dundundundundun", false),

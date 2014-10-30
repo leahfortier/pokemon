@@ -7,4 +7,5 @@ import battle.Battle;
 public interface TrappingEffect
 {
 	public boolean isTrapped(Battle b, ActivePokemon p);
+	public String trappingMessage(ActivePokemon trapped);
 }

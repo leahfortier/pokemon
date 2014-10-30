@@ -122,6 +122,8 @@ public class BattleView extends View
 	private int logPage;
 	private ArrayList<String> logMessages;
 	
+	private List<Move> selectedMoveList;
+	
 	// The last move that a Pokemon used
 	private int lastMoveUsed;
 	
@@ -156,8 +158,8 @@ public class BattleView extends View
 		
 		private void resetVals(ActivePokemon p)
 		{
-			resetVals(p.getHP(), p.getStatus().getType(), p.getType(currentBattle), p.isShiny(), p.getPokemonInfo(), 
-					p.getName(), p.getStat(Stat.HP), p.getLevel(), p.getGender(), p.expRatio());
+			resetVals(p.getHP(), p.getStatus().getType(), p.getDisplayType(currentBattle), p.isShiny(), p.getPokemonInfo(), 
+					p.getName(), p.getMaxHP(), p.getLevel(), p.getGender(), p.expRatio());
 		}
 		
 		// Resets all the values in a state
@@ -693,16 +695,15 @@ public class BattleView extends View
 		
 		// Get the Pokemon that is attacking and their corresponsing move list
 		ActivePokemon front = currentBattle.getPlayer().front();
-		List<Move> moves = front.getMoves();
 		
-		for (int i = 0; i < moves.size(); i++)
+		for (int i = 0; i < selectedMoveList.size(); i++)
 		{
 			if (moveButtons[i].checkConsumePress())
 			{
 				lastMoveUsed = i;
 				
 				// Execute the move if valid
-				if (Move.validMove(currentBattle, front, moves.get(i), true))
+				if (Move.validMove(currentBattle, front, selectedMoveList.get(i), true))
 				{
 					currentBattle.getPlayer().performAction(currentBattle, Action.FIGHT);
 					setVisualState(VisualState.MESSAGE);
@@ -1110,9 +1111,9 @@ public class BattleView extends View
 			case FIGHT:
 			case INVALID_FIGHT:
 				selectedButton = lastMoveUsed;
-				List<Move> moves = currentBattle.getPlayer().front().getMoves();
+				selectedMoveList = currentBattle.getPlayer().front().getMoves(currentBattle);
 				for (int i = 0; i < Move.MAX_MOVES; i++) 
-					moveButtons[i].setActive(i < moves.size());
+					moveButtons[i].setActive(i < selectedMoveList.size());
 				
 				for (Button b: moveButtons)
 					b.setForceHover(false);
@@ -1323,7 +1324,7 @@ public class BattleView extends View
 		g.drawImage(tiles.getTile(0x20), 415, 440, null);
 		g.drawImage(tiles.getTile(0x21), 0, 440, null);
 		
-		List<Move> moves = plyr.getMoves();
+		List<Move> moves = plyr.getMoves(currentBattle);
 		for (int y = 0, i = 0; y < 2; y++)
 		{
 			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
@@ -1372,7 +1373,7 @@ public class BattleView extends View
 		g.setFont(Global.getFont(30));
 		g.setColor(Color.WHITE);
 		
-		Global.drawWrappedText(g, "What will " + plyr.getName() + " do?", 20, 485, 400);
+		Global.drawWrappedText(g, "What will " + plyr.getActualName() + " do?", 20, 485, 400);
 		for (Button b: menuButtons)
 			b.draw(g);
 	}
@@ -1445,7 +1446,7 @@ public class BattleView extends View
 			// Name
 			g.setFont(Global.getFont(16));
 			g.setColor(Color.BLACK);
-			String nameStr = selectedPkm.getName();
+			String nameStr = selectedPkm.getActualName();
 			g.drawString(nameStr, 62, 269);
 			
 			// Description
@@ -1458,7 +1459,7 @@ public class BattleView extends View
 			// Name and Gender
 			g.setFont(Global.getFont(16));
 			g.setColor(Color.BLACK);
-			String nameStr = selectedPkm.getName() + " " + selectedPkm.getGender().getCharacter();
+			String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter();
 			g.drawString(nameStr, 62, 269);
 			
 			// Status Condition
@@ -1567,7 +1568,15 @@ public class BattleView extends View
 			ActivePokemon pkm = list.get(i);
 			
 			// Draw tab
-			g.setColor(pkm.getActualType()[0].getColor());
+			if(pkm.isEgg())
+			{
+				g.setColor(Type.getColors(selectedPkm)[0]);				
+			}
+			else 
+			{
+				g.setColor(pkm.getActualType()[0].getColor());
+			}
+			
 			g.fillRect(32 + i*59, 192, 59, 34);
 			if (i == selectedPokemonTab) g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
 			else g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);
@@ -1645,7 +1654,7 @@ public class BattleView extends View
 	{
 		g.drawImage(tiles.getTile(0x3), 0, 439, null);
 		
-		List<Move> moves = learnedPokemon.getMoves();
+		List<Move> moves = learnedPokemon.getActualMoves();
 		for (int y = 0, i = 0; y < 2; y++)
 		{
 			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
@@ -1830,15 +1839,5 @@ public class BattleView extends View
 	{
 		System.out.println("moved to front cycle started");
 		cycleMessage(false);
-		
-		if (currentBattle.isWildBattle())
-		{
-			Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
-		}
-		else
-		{
-			// TODO: Get trainer battle music
-			Global.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
-		}
 	}
 }

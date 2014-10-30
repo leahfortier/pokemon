@@ -221,17 +221,18 @@ TriggerData Bloom_Filter_Wild_Pokemon {
 	45 19
 	46 19
 	WildBattle
-	encounterRate: VeryCommon
+	encounterRate: VERY_COMMON
 	pokemon: Caterpie 4-6 20%
 	pokemon: Jigglypuff 4-6 15%
 	pokemon: Paras 4-6 7%
 	pokemon: Yanma 4-6 6%
-	pokemon: Budew 4-6 10%
+	pokemon: Budew 4-6 5%
 	pokemon: Ralts 4-6 4%
 	pokemon: Solosis 4-6 4%
 	pokemon: Elgyem 4-6 4%
 	pokemon: Ledyba 4-6 15%
-	pokemon: Hoppip 4-6 10%
+	pokemon: Hoppip 4-6 5%
 	pokemon: Oddish 4-6 5%
+	pokemon: Flabebe 4-6 10%
 }
 

@@ -41,3 +41,8 @@ TypeFairy.png				00000052
 
 
 Background01.png	00000100
+
+
+GrassCircleOpponent.png 		00010000
+PokeBallBattleIntroTop.png		00100000
+PokeBallBattleIntroBottom.png		00100001

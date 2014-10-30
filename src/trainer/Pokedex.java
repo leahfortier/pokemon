@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import main.Namesies;
-import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 
 public class Pokedex implements Serializable
@@ -51,14 +50,14 @@ public class Pokedex implements Serializable
 		return pokedex.get(name).status;
 	}
 	
-	public boolean setStatus(ActivePokemon p, PokedexStatus status)
+	public boolean setStatus(PokemonInfo p, PokedexStatus status)
 	{
 		return setStatus(p, status, null);
 	}
 	
-	public boolean setStatus(ActivePokemon p, PokedexStatus status, String wildLocation)
+	public boolean setStatus(PokemonInfo p, PokedexStatus status, String wildLocation)
 	{
-		Namesies pokemon = p.getPokemonInfo().namesies();
+		Namesies pokemon = p.namesies();
 		PokedexInfo info = pokedex.get(pokemon); 
 		info.addLocation(wildLocation);
 		

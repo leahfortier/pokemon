@@ -69,6 +69,23 @@ public enum Stat
 	public static final int MAX_EVS = 510;
 	public static final int MAX_STAT_EVS = 255;
 	
+	public static final Stat[] STATS;
+	static
+	{
+		STATS = new Stat[NUM_STATS];
+		int i = 0;
+		
+		for (Stat s : Stat.values()) 
+		{
+			if (s.onlyBattle == InBattle.ONLY)
+			{
+				continue;
+			}
+			
+			STATS[i++] = s;
+		}
+	}
+	
 	// Generates a new stat
 	public static int getStat(int statIndex, int level, int baseStat, int IV, int EV, double natureVal)
 	{
@@ -88,13 +105,12 @@ public enum Stat
 		
 		ActivePokemon attacking = s.user ? p : opp;
 		list = b.getEffectsList(p, attacking.getAttack());
-	
-		// TODO: Test this
+		
 		s = (Stat)Global.updateInvoke(0, list, StatSwitchingEffect.class, "switchStat", s);
 		
 		// Apply stage changes
 		int stage = getStage(list, s, p, opp, b);
-		int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(s);
+		int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(b, s);
 		
 //		int temp = stat;
 		
@@ -102,13 +118,15 @@ public enum Stat
 		if (stage > 0) stat *= ((s.modifier + stage)/s.modifier);
 	    else if (stage < 0) stat *= (s.modifier/(s.modifier - stage));
 		
-		// TODO: Test this (if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stat;)
 		ActivePokemon moldBreaker  = s.user ? null : opp;
 		
 		// Applies stat changes to each for each item in list
 		stat = (int)Global.updateInvoke(0, moldBreaker, list, StatChangingEffect.class, "modify", stat, p, opp, s, b);
 		
 //		System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
+		
+		// Just to be safe
+		stat = Math.max(1, stat);
 		
 		return stat;
 	}
@@ -119,7 +137,7 @@ public enum Stat
 		
 //		int temp = stage;
 		
-		// Update the stage due to effects TODO: Test moldbreaker again (if (this instanceof Ability && !s.user() && opp.breaksTheMold()) return stage;)
+		// Update the stage due to effects
 		ActivePokemon moldBreaker = s.user ? null : opp;
 		stage = (int)Global.updateInvoke(0, moldBreaker, list, StageChangingEffect.class, "adjustStage", stage, s, p, opp, b);
 		

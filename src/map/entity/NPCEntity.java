@@ -11,9 +11,9 @@ import main.InputControl;
 import map.MapData;
 
 public class NPCEntity extends Entity
-{	
+{
 	public static final int NPC_SIGHT_DISTANCE = 5;
-	
+
 	private String trigger;
 	private String name;
 	private String path;
@@ -22,26 +22,26 @@ public class NPCEntity extends Entity
 	private int waitTime;
 	private boolean hasAttention;
 	private int spriteIndex;
-	
+
 	private boolean trainer;
 	private boolean walkToPlayer;
 	private boolean walkingToPlayer;
-	
+
 	private String[] firstDialogue;
 	private String[] secondDialogue;
 	private String trainerInfo;
 	private String itemInfo;
 	private String firstTriggers;
 	private String secondTriggers;
-	
+
 	private int defaultX;
 	private int defaultY;
 	private int defaultDirection;
-	
+
 	private boolean dataCreated;
-	
-	//Unused
-	public NPCEntity(int x, int y, String trigger, String path, int direction, int index) 
+
+	// Unused
+	public NPCEntity(int x, int y, String trigger, String path, int direction, int index)
 	{
 		super(x, y);
 		this.trigger = trigger;
@@ -50,15 +50,15 @@ public class NPCEntity extends Entity
 		hasAttention = false;
 		spriteIndex = index;
 		transitionDirection = direction;
-		
+
 		defaultX = x;
 		defaultY = y;
 		defaultDirection = direction;
-		
+
 		dataCreated = true;
 	}
-	
-	public NPCEntity(String name, int x, int y, String trigger, String path, int direction, int index, String[] firstDialogue, String[] secondDialogue, String trainerInfo, String itemInfo, String firstTriggers, String secondTriggers, boolean walkToPlayer) 
+
+	public NPCEntity(String name, int x, int y, String trigger, String path, int direction, int index, String[] firstDialogue, String[] secondDialogue, String trainerInfo, String itemInfo, String firstTriggers, String secondTriggers, boolean walkToPlayer)
 	{
 		super(x, y);
 		this.name = name;
@@ -69,7 +69,7 @@ public class NPCEntity extends Entity
 		hasAttention = false;
 		spriteIndex = index;
 		transitionDirection = direction;
-		
+
 		this.walkToPlayer = walkToPlayer;
 		walkingToPlayer = false;
 		trainer = trainerInfo != null;
@@ -79,33 +79,33 @@ public class NPCEntity extends Entity
 		this.itemInfo = itemInfo;
 		this.firstTriggers = firstTriggers;
 		this.secondTriggers = secondTriggers;
-		
+
 		defaultX = x;
 		defaultY = y;
 		defaultDirection = direction;
-		
+
 		dataCreated = firstDialogue.length == 0;
 	}
-	
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) 
+
+	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view)
 	{
 		super.update(dt, entity, map, input, view);
-		
+
 		if (waitTime != 0)
 			waitTime -= dt;
-		
+
 		if (waitTime < 0)
 			waitTime = 0;
-		
+
 		if (transitionTime == 0 && waitTime == 0 && !hasAttention)
 		{
 			String path = this.path;
 			if (tempPath != null)
 			{
 				path = tempPath;
-				//System.out.println(path);
+				// System.out.println(path);
 			}
-			
+
 			switch (path.charAt(pathIndex))
 			{
 				case 'r':
@@ -115,10 +115,10 @@ public class NPCEntity extends Entity
 						entity[charX][charY] = null;
 						charX++;
 						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						waitTime = 5 * Global.TIME_BETWEEN_TILES / 4;
 						pathIndex++;
 					}
-					
+
 					transitionDirection = 0;
 					break;
 				case 'u':
@@ -128,10 +128,10 @@ public class NPCEntity extends Entity
 						entity[charX][charY] = null;
 						charY--;
 						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						waitTime = 5 * Global.TIME_BETWEEN_TILES / 4;
 						pathIndex++;
 					}
-					
+
 					transitionDirection = 1;
 					break;
 				case 'l':
@@ -141,10 +141,10 @@ public class NPCEntity extends Entity
 						entity[charX][charY] = null;
 						charX--;
 						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						waitTime = 5 * Global.TIME_BETWEEN_TILES / 4;
 						pathIndex++;
 					}
-					
+
 					transitionDirection = 2;
 					break;
 				case 'd':
@@ -154,10 +154,10 @@ public class NPCEntity extends Entity
 						entity[charX][charY] = null;
 						charY++;
 						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						waitTime = 5 * Global.TIME_BETWEEN_TILES / 4;
 						pathIndex++;
 					}
-					
+
 					transitionDirection = 3;
 					break;
 				case 'w':
@@ -165,7 +165,7 @@ public class NPCEntity extends Entity
 					pathIndex++;
 					break;
 			}
-			
+
 			pathIndex %= path.length();
 			if (pathIndex == 0 && tempPath != null)
 			{
@@ -173,77 +173,78 @@ public class NPCEntity extends Entity
 			}
 		}
 	}
-	
-	public void walkTowards(int steps, int direction) 
+
+	public void walkTowards(int steps, int direction)
 	{
 		tempPath = "w";
 		for (int i = 0; i < steps; ++i)
 		{
 			tempPath += pathDir[direction];
 		}
-		
+
 		pathIndex = 0;
 		walkingToPlayer = true;
 	}
-	
-	protected BufferedImage getFrame(GameData data) 
+
+	protected BufferedImage getFrame(GameData data)
 	{
 		TileSet trainerTiles = data.getTrainerTiles();
 		if (transitionTime > 0)
-			return trainerTiles.getTile(12*spriteIndex + 1 + transitionDirection + 4*(1 + runFrame));
-		
-		else 
-			return trainerTiles.getTile(12*spriteIndex + 1 + transitionDirection);
+		{
+			return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection + 4 * (1 + runFrame));
+		}
+
+		return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection);
 	}
 
-	public String getTrigger() 
+	public String getTrigger()
 	{
 		return trigger;
 	}
 
-	public int getTransitionTime() 
+	public int getTransitionTime()
 	{
-		return Global.TIME_BETWEEN_TILES*2;
+		return Global.TIME_BETWEEN_TILES * 2;
 	}
 
-	public void getAttention(int d) 
+	public void getAttention(int d)
 	{
 		transitionDirection = d;
 		hasAttention = true;
 	}
-	
+
 	public boolean getWalkToPlayer()
 	{
 		return walkToPlayer;
 	}
-	
+
 	public boolean getWalkingToPlayer()
 	{
 		return walkingToPlayer;
 	}
-	
-	//TODO: create NPCTrainerEntity
-	public String getWalkTrigger() 
+
+	// TODO: create NPCTrainerEntity
+	public String getWalkTrigger()
 	{
-		return walkToPlayer?name + "_T1":"";
+		return walkToPlayer ? name + "_T1" : "";
 	}
-	
-	public String getFirstTrigger() 
+
+	public String getFirstTrigger()
 	{
 		return name + "_T1";
 	}
-	
-	public String getSecondTrigger() 
+
+	public String getSecondTrigger()
 	{
-		return secondDialogue.length > 0 ? name + "_T2": null;
+		return secondDialogue.length > 0 ? name + "_T2" : null;
 	}
-	
-	public boolean isTrainer() 
+
+	public boolean isTrainer()
 	{
 		return trainer;
 	}
-	
-	public void reset() 
+
+	public void reset()
 	{
 		charX = defaultX;
 		charY = defaultY;

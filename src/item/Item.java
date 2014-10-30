@@ -8,6 +8,7 @@ import item.berry.HealthTriggeredBerry;
 import item.berry.StatusBerry;
 import item.hold.ConsumableItem;
 import item.hold.DriveItem;
+import item.hold.EVItem;
 import item.hold.GemItem;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
@@ -60,6 +61,7 @@ import battle.effect.EffectBlockerEffect;
 import battle.effect.EndTurnEffect;
 import battle.effect.EntryEffect;
 import battle.effect.GroundedEffect;
+import battle.effect.HalfWeightEffect;
 import battle.effect.ItemCondition;
 import battle.effect.LevitationEffect;
 import battle.effect.OpponentPowerChangeEffect;
@@ -254,6 +256,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 		map.put("Focus Band", new FocusBand());
 		map.put("Focus Sash", new FocusSash());
 		map.put("Grip Claw", new GripClaw());
+		map.put("Adamant Orb", new AdamantOrb());
+		map.put("Lustrous Orb", new LustrousOrb());
 		map.put("Griseous Orb", new GriseousOrb());
 		map.put("Iron Ball", new IronBall());
 		map.put("Lagging Tail", new LaggingTail());
@@ -360,8 +364,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 		map.put("Spell Tag", new SpellTag());
 		map.put("Twisted Spoon", new TwistedSpoon());
 		map.put("Dawn Stone", new DawnStone());
-		map.put("DeepSeaScale", new DeepSeaScale());
-		map.put("DeepSeaTooth", new DeepSeaTooth());
+		map.put("Deep Sea Scale", new DeepSeaScale());
+		map.put("Deep Sea Tooth", new DeepSeaTooth());
 		map.put("Dragon Scale", new DragonScale());
 		map.put("Dubious Disc", new DubiousDisc());
 		map.put("Dusk Stone", new DuskStone());
@@ -417,24 +421,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 		map.put("X Accuracy", new XAccuracy());
 		map.put("X Attack", new XAttack());
 		map.put("X Defend", new XDefend());
-		map.put("X Sp. Def", new XSpDef());
 		map.put("X Special", new XSpecial());
+		map.put("X Sp. Def", new XSpDef());
 		map.put("X Speed", new XSpeed());
-		map.put("Calcium", new Calcium());
-		map.put("Carbos", new Carbos());
-		map.put("Clever Wing", new CleverWing());
-		map.put("Health Wing", new HealthWing());
 		map.put("HP Up", new HPUp());
-		map.put("Genius Wing", new GeniusWing());
+		map.put("Protein", new Protein());
 		map.put("Iron", new Iron());
+		map.put("Calcium", new Calcium());
+		map.put("Zinc", new Zinc());
+		map.put("Carbos", new Carbos());
+		map.put("Health Wing", new HealthWing());
 		map.put("Muscle Wing", new MuscleWing());
+		map.put("Resist Wing", new ResistWing());
+		map.put("Genius Wing", new GeniusWing());
+		map.put("Clever Wing", new CleverWing());
+		map.put("Swift Wing", new SwiftWing());
 		map.put("PP Max", new PPMax());
 		map.put("PP Up", new PPUp());
-		map.put("Protein", new Protein());
 		map.put("Rare Candy", new RareCandy());
-		map.put("Resist Wing", new ResistWing());
-		map.put("Swift Wing", new SwiftWing());
-		map.put("Zinc", new Zinc());
 		map.put("Cherish Ball", new CherishBall());
 		map.put("Dive Ball", new DiveBall());
 		map.put("Dusk Ball", new DuskBall());
@@ -647,6 +651,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 9001;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class Syrup extends Item implements TrainerUseItem
@@ -744,19 +752,18 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (checkModify(b, user, victim))
+			if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM))
 			{
 				victim.consumeItem(b);
 			}
@@ -776,6 +783,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -805,9 +816,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 	}
 
@@ -825,6 +840,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class BindingBand extends Item implements HoldItem
@@ -840,6 +859,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -858,13 +881,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
 			if (victim.isType(b, Type.POISON))
 			{
-				if (victim.fullHealth()) return;
+				// Don't heal if at full health
+				if (victim.fullHealth())
+				{
+					return;
+				}
+				
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+				b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 			}
 			else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
 			{
@@ -874,7 +906,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class BrightPowder extends Item implements StatChangingEffect, HoldItem
+	private static class BrightPowder extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -889,30 +921,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.EVASION;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return true;
+			return 10;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 1.1;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && true)
 			{
-				stat *= modifyMultiplier();
+				stat *= 1.1;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 30;
 		}
 	}
 
@@ -926,26 +952,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.ELECTRIC && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (checkModify(b, user, victim))
+			if (user.getAttackType() == Type.ELECTRIC && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM))
 			{
 				victim.consumeItem(b);
 			}
 		}
 	}
 
-	private static class ChoiceBand extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	private static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -955,22 +980,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 100;
 		}
 
-		public Stat toIncrease()
-		{
-			return Stat.ATTACK;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (s == toIncrease())
-			{
-				stat *= 1.5;
-			}
-			
-			return stat;
-		}
-
 		public boolean usable(ActivePokemon p, Move m)
 		{
 			Move last = p.getAttributes().getLastMoveUsed();
@@ -991,9 +1000,29 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.ATTACK;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
+		}
 	}
 
-	private static class ChoiceScarf extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	private static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1003,22 +1032,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Stat toIncrease()
-		{
-			return Stat.SPEED;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (s == toIncrease())
-			{
-				stat *= 1.5;
-			}
-			
-			return stat;
-		}
-
 		public boolean usable(ActivePokemon p, Move m)
 		{
 			Move last = p.getAttributes().getLastMoveUsed();
@@ -1039,9 +1052,29 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
+		}
 	}
 
-	private static class ChoiceSpecs extends Item implements StatChangingEffect, AttackSelectionEffect, HoldItem
+	private static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1051,22 +1084,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			super.price = 200;
 		}
 
-		public Stat toIncrease()
-		{
-			return Stat.SP_ATTACK;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (s == toIncrease())
-			{
-				stat *= 1.5;
-			}
-			
-			return stat;
-		}
-
 		public boolean usable(ActivePokemon p, Move m)
 		{
 			Move last = p.getAttributes().getLastMoveUsed();
@@ -1086,6 +1103,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SP_ATTACK;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -1102,6 +1139,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double chance()
@@ -1125,6 +1166,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 60;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public Namesies getWeatherType()
 		{
 			return Namesies.RAINING_EFFECT;
@@ -1144,6 +1189,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 60;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public Namesies getWeatherType()
@@ -1167,6 +1216,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 40;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public Namesies getWeatherType()
 		{
 			return Namesies.HAILING_EFFECT;
@@ -1186,6 +1239,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public Namesies getWeatherType()
@@ -1209,8 +1266,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: Try to generalize with self-switching moves
 			Team t = b.getTrainer(victim.user());
 			if (t instanceof WildPokemon) return;
 			
@@ -1240,6 +1302,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class ExpertBelt extends Item implements HoldItem, PowerChangeEffect
@@ -1255,6 +1321,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1275,7 +1345,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 10;
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			Status.giveStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.name + "!");
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b)
@@ -1296,11 +1371,18 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 10;
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			// Badly poisons the pelted
+			applyEndTurn(pelted, b);
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
+			// Badly poisons the holder at the end of the turn
 			if (Status.applies(StatusCondition.POISONED, b, victim, victim))
 			{
 				victim.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
@@ -1309,7 +1391,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class FloatStone extends Item implements HoldItem
+	private static class FloatStone extends Item implements HoldItem, HalfWeightEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1322,6 +1404,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public int getHalfAmount(Integer halfAmount)
+		{
+			return halfAmount + 1;
 		}
 	}
 
@@ -1338,6 +1429,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
@@ -1366,6 +1461,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
 		{
 			if (fullHealth)
@@ -1373,6 +1472,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				bracer.consumeItem(b);
 				return true;
 			}
+			
 			return false;
 		}
 
@@ -1396,6 +1496,90 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 90;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+	}
+
+	private static class AdamantOrb extends Item implements HoldItem, PowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public AdamantOrb()
+		{
+			super(Namesies.ADAMANT_ORB_ITEM, "A brightly gleaming orb to be held by Dialga. It boosts the power of Dragon- and Steel-type moves.", BagCategory.MISC, 30);
+			super.price = 10000;
+		}
+
+		public boolean canUseOrb(ActivePokemon user)
+		{
+			if (!user.isPokemon(Namesies.DIALGA_POKEMON))
+			{
+				return false;
+			}
+			
+			return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL);
+		}
+
+		public int flingDamage()
+		{
+			return 60;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (canUseOrb(user))
+			{
+				return 1.2;
+			}
+			
+			return 1;
+		}
+	}
+
+	private static class LustrousOrb extends Item implements HoldItem, PowerChangeEffect
+	{
+		private static final long serialVersionUID = 1L;
+
+		public LustrousOrb()
+		{
+			super(Namesies.LUSTROUS_ORB_ITEM, "A beautifully glowing orb to be held by Palkia. It boosts the power of Dragon- and Water-type moves.", BagCategory.MISC, 31);
+			super.price = 10000;
+		}
+
+		public boolean canUseOrb(ActivePokemon user)
+		{
+			if (!user.isPokemon(Namesies.PALKIA_POKEMON))
+			{
+				return false;
+			}
+			
+			return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER);
+		}
+
+		public int flingDamage()
+		{
+			return 60;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (canUseOrb(user))
+			{
+				return 1.2;
+			}
+			
+			return 1;
+		}
 	}
 
 	private static class GriseousOrb extends Item implements HoldItem, PowerChangeEffect
@@ -1404,8 +1588,18 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GriseousOrb()
 		{
-			super(Namesies.GRISEOUS_ORB_ITEM, "A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.", BagCategory.MISC, 30);
-			super.price = 200;
+			super(Namesies.GRISEOUS_ORB_ITEM, "A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.", BagCategory.MISC, 32);
+			super.price = 10000;
+		}
+
+		public boolean canUseOrb(ActivePokemon user)
+		{
+			if (!user.isPokemon(Namesies.GIRATINA_POKEMON))
+			{
+				return false;
+			}
+			
+			return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST);
 		}
 
 		public int flingDamage()
@@ -1413,27 +1607,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 60;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isPokemon(Namesies.GIRATINA_POKEMON))
+			if (canUseOrb(user))
 			{
-				if (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST))
-				{
-					return 1.2;
-				}
+				return 1.2;
 			}
 			
 			return 1;
 		}
 	}
 
-	private static class IronBall extends Item implements StatChangingEffect, HoldItem, GroundedEffect
+	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public IronBall()
 		{
-			super(Namesies.IRON_BALL_ITEM, "A Pok\u00e9mon held item that cuts Speed. It makes Flying-type and levitating holders susceptible to Ground moves.", BagCategory.MISC, 31);
+			super(Namesies.IRON_BALL_ITEM, "A Pok\u00e9mon held item that cuts Speed. It makes Flying-type and levitating holders susceptible to Ground moves.", BagCategory.MISC, 33);
 			super.price = 200;
 		}
 
@@ -1442,30 +1637,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SPEED;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return true;
+			return 130;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return .5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && true)
 			{
-				stat *= modifyMultiplier();
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 130;
 		}
 	}
 
@@ -1475,13 +1664,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LaggingTail()
 		{
-			super(Namesies.LAGGING_TAIL_ITEM, "An item to be held by a Pok\u00e9mon. It is tremendously heavy and makes the holder move slower than usual.", BagCategory.MISC, 32);
+			super(Namesies.LAGGING_TAIL_ITEM, "An item to be held by a Pok\u00e9mon. It is tremendously heavy and makes the holder move slower than usual.", BagCategory.MISC, 34);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -1491,13 +1684,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LifeOrb()
 		{
-			super(Namesies.LIFE_ORB_ITEM, "An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.", BagCategory.MISC, 33);
+			super(Namesies.LIFE_ORB_ITEM, "An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.", BagCategory.MISC, 35);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1517,13 +1714,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LightBall extends Item implements StatChangingEffect, HoldItem
+	private static class LightBall extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public LightBall()
 		{
-			super(Namesies.LIGHT_BALL_ITEM, "An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.", BagCategory.MISC, 34);
+			super(Namesies.LIGHT_BALL_ITEM, "An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.", BagCategory.MISC, 36);
 			super.price = 100;
 		}
 
@@ -1532,30 +1729,25 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.ATTACK || s == Stat.SP_ATTACK;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return p.isPokemon(Namesies.PIKACHU_POKEMON);
+			return 30;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 2;
+			Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.PIKACHU_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 2;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 30;
 		}
 	}
 
@@ -1565,13 +1757,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LightClay()
 		{
-			super(Namesies.LIGHT_CLAY_ITEM, "A Pok\u00e9mon held item that extends the duration of barrier moves like Light Screen and Reflect used by the holder.", BagCategory.MISC, 35);
+			super(Namesies.LIGHT_CLAY_ITEM, "A Pok\u00e9mon held item that extends the duration of barrier moves like Light Screen and Reflect used by the holder.", BagCategory.MISC, 37);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -1581,13 +1777,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LuckyEgg()
 		{
-			super(Namesies.LUCKY_EGG_ITEM, "An item to be held by a Pok\u00e9mon. It is an egg filled with happiness that earns extra Exp. Points in battle.", BagCategory.MISC, 36);
+			super(Namesies.LUCKY_EGG_ITEM, "An item to be held by a Pok\u00e9mon. It is an egg filled with happiness that earns extra Exp. Points in battle.", BagCategory.MISC, 38);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -1597,13 +1797,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LuckyPunch()
 		{
-			super(Namesies.LUCKY_PUNCH_ITEM, "An item to be held by Chansey. It is a pair of gloves that boosts Chansey's critical-hit ratio.", BagCategory.MISC, 37);
+			super(Namesies.LUCKY_PUNCH_ITEM, "An item to be held by Chansey. It is a pair of gloves that boosts Chansey's critical-hit ratio.", BagCategory.MISC, 39);
 			super.price = 10;
 		}
 
 		public int flingDamage()
 		{
 			return 40;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public int increaseCritStage(Integer stage, ActivePokemon p)
@@ -1623,13 +1827,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LuminousMoss()
 		{
-			super(Namesies.LUMINOUS_MOSS_ITEM, "If the holder is hit by an Water-type attack, the holder's Special Defense stat is increased one stage. The item is consumed.", BagCategory.MISC, 38);
+			super(Namesies.LUMINOUS_MOSS_ITEM, "If the holder is hit by an Water-type attack, the holder's Special Defense stat is increased one stage. The item is consumed.", BagCategory.MISC, 40);
 			super.price = 200;
-		}
-
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM);
 		}
 
 		public int flingDamage()
@@ -1637,23 +1836,32 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (checkModify(b, user, victim))
+			if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM))
 			{
 				victim.consumeItem(b);
 			}
 		}
 	}
 
-	private static class MachoBrace extends Item implements PowerItem
+	private static class MachoBrace extends Item implements EVItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public MachoBrace()
 		{
-			super(Namesies.MACHO_BRACE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.", BagCategory.MISC, 39);
+			super(Namesies.MACHO_BRACE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stiff and heavy brace that promotes strong growth but lowers Speed.", BagCategory.MISC, 41);
 			super.price = 3000;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
 		}
 
 		public int[] getEVs(int[] vals)
@@ -1666,25 +1874,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
 		}
 
-		public Stat toIncrease()
-		{
-			Global.error("toIncrease() method in " + super.name +" is unimplemented.");
-			return null;
-		}
-
 		public int flingDamage()
 		{
 			return 60;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -1696,7 +1903,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MentalHerb()
 		{
-			super(Namesies.MENTAL_HERB_ITEM, "An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.", BagCategory.MISC, 40);
+			super(Namesies.MENTAL_HERB_ITEM, "An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.", BagCategory.MISC, 42);
 			super.price = 100;
 		}
 
@@ -1705,8 +1912,18 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			if (pelted.hasEffect(Namesies.INFATUATED_EFFECT))
+			{
+				pelted.getAttributes().removeEffect(Namesies.INFATUATED_EFFECT);
+				b.addMessage(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
+			}
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
+			// TODO: Has nothing to do with Mental Herb, but the item Power Herb is not implemented yet
 			boolean used = false;
 			for (int i = 0; i < effects.length; i++)
 			{
@@ -1718,17 +1935,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 					b.addMessage(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
 				}
 			}
-			if (used) victim.consumeItem(b);
+			
+			if (used)
+			{
+				victim.consumeItem(b);
+			}
 		}
 	}
 
-	private static class MetalPowder extends Item implements StatChangingEffect, HoldItem
+	private static class MetalPowder extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public MetalPowder()
 		{
-			super(Namesies.METAL_POWDER_ITEM, "When this item is held by a Ditto, the holder's initial Defence & Special Defence stats are increased by 50%", BagCategory.MISC, 41);
+			super(Namesies.METAL_POWDER_ITEM, "When this item is held by a Ditto, the holder's initial Defence & Special Defence stats are increased by 50%", BagCategory.MISC, 43);
 			super.price = 10;
 		}
 
@@ -1737,30 +1958,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return p.isPokemon(Namesies.DITTO_POKEMON);
+			return 10;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 1.5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.DITTO_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 1.5;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 10;
 		}
 	}
 
@@ -1770,13 +1985,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Metronome()
 		{
-			super(Namesies.METRONOME_ITEM, "A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.", BagCategory.MISC, 42);
+			super(Namesies.METRONOME_ITEM, "A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.", BagCategory.MISC, 44);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1791,7 +2010,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MuscleBand()
 		{
-			super(Namesies.MUSCLE_BAND_ITEM, "An item to be held by a Pok\u00e9mon. It is a headband that slightly boosts the power of physical moves.", BagCategory.MISC, 43);
+			super(Namesies.MUSCLE_BAND_ITEM, "An item to be held by a Pok\u00e9mon. It is a headband that slightly boosts the power of physical moves.", BagCategory.MISC, 45);
 			super.price = 200;
 		}
 
@@ -1800,231 +2019,295 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
 			return user.getAttack().getCategory() == Category.PHYSICAL ? 1.1 : 1;
 		}
 	}
 
-	private static class PowerAnklet extends Item implements PowerItem
+	private static class PowerAnklet extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public PowerAnklet()
 		{
-			super(Namesies.POWER_ANKLET_ITEM, "A Pok\u00e9mon held item that promotes Speed gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 44);
+			super(Namesies.POWER_ANKLET_ITEM, "A Pok\u00e9mon held item that promotes Speed gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 46);
 			super.price = 3000;
+		}
+
+		public Stat powerStat()
+		{
+			return Stat.SPEED;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
 		}
 
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.SPEED;
 		}
 
 		public int flingDamage()
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class PowerBand extends Item implements PowerItem
+	private static class PowerBand extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public PowerBand()
 		{
-			super(Namesies.POWER_BAND_ITEM, "A Pok\u00e9mon held item that promotes Sp. Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 45);
+			super(Namesies.POWER_BAND_ITEM, "A Pok\u00e9mon held item that promotes Sp. Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 47);
 			super.price = 3000;
+		}
+
+		public Stat powerStat()
+		{
+			return Stat.SP_DEFENSE;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
 		}
 
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.SP_DEFENSE;
 		}
 
 		public int flingDamage()
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class PowerBelt extends Item implements PowerItem
+	private static class PowerBelt extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public PowerBelt()
 		{
-			super(Namesies.POWER_BELT_ITEM, "A Pok\u00e9mon held item that promotes Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 46);
+			super(Namesies.POWER_BELT_ITEM, "A Pok\u00e9mon held item that promotes Def gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 48);
 			super.price = 3000;
+		}
+
+		public Stat powerStat()
+		{
+			return Stat.DEFENSE;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
 		}
 
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.DEFENSE;
 		}
 
 		public int flingDamage()
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class PowerBracer extends Item implements PowerItem
+	private static class PowerBracer extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public PowerBracer()
 		{
-			super(Namesies.POWER_BRACER_ITEM, "A Pok\u00e9mon held item that promotes Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 47);
+			super(Namesies.POWER_BRACER_ITEM, "A Pok\u00e9mon held item that promotes Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 49);
 			super.price = 3000;
+		}
+
+		public Stat powerStat()
+		{
+			return Stat.ATTACK;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
 		}
 
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.ATTACK;
 		}
 
 		public int flingDamage()
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class PowerLens extends Item implements PowerItem
+	private static class PowerLens extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public PowerLens()
 		{
-			super(Namesies.POWER_LENS_ITEM, "A Pok\u00e9mon held item that promotes Sp. Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 48);
+			super(Namesies.POWER_LENS_ITEM, "A Pok\u00e9mon held item that promotes Sp. Att gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 50);
 			super.price = 3000;
+		}
+
+		public Stat powerStat()
+		{
+			return Stat.SP_ATTACK;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
 		}
 
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.SP_ATTACK;
 		}
 
 		public int flingDamage()
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class PowerWeight extends Item implements PowerItem
+	private static class PowerWeight extends Item implements PowerItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public PowerWeight()
 		{
-			super(Namesies.POWER_WEIGHT_ITEM, "A Pok\u00e9mon held item that promotes HP gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 49);
+			super(Namesies.POWER_WEIGHT_ITEM, "A Pok\u00e9mon held item that promotes HP gain on leveling, but reduces the Speed stat.", BagCategory.MISC, 51);
 			super.price = 3000;
+		}
+
+		public Stat powerStat()
+		{
+			return Stat.HP;
+		}
+
+		public boolean isModifyStat(Stat s)
+		{
+			return s == Stat.SPEED;
 		}
 
 		public int[] getEVs(int[] vals)
 		{
-			vals[toIncrease().index()] += 4;
+			vals[powerStat().index()] += 4;
 			return vals;
 		}
 
-		public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
-			if (s == Stat.SPEED)
+			int stat = statValue;
+			if (isModifyStat(s) && true)
 			{
-				return stat / 2;
+				stat *= .5;
 			}
 			
 			return stat;
 		}
 
-		public Stat toIncrease()
-		{
-			return Stat.HP;
-		}
-
 		public int flingDamage()
 		{
 			return 70;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -2034,7 +2317,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public QuickClaw()
 		{
-			super(Namesies.QUICK_CLAW_ITEM, "An item to be held by a Pok\u00e9mon. A light, sharp claw that lets the bearer move first occasionally.", BagCategory.MISC, 50);
+			super(Namesies.QUICK_CLAW_ITEM, "An item to be held by a Pok\u00e9mon. A light, sharp claw that lets the bearer move first occasionally.", BagCategory.MISC, 52);
 			super.price = 100;
 		}
 
@@ -2042,15 +2325,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 80;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class QuickPowder extends Item implements StatChangingEffect, HoldItem
+	private static class QuickPowder extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public QuickPowder()
 		{
-			super(Namesies.QUICK_POWDER_ITEM, "An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.", BagCategory.MISC, 51);
+			super(Namesies.QUICK_POWDER_ITEM, "An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.", BagCategory.MISC, 53);
 			super.price = 10;
 		}
 
@@ -2059,30 +2346,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SPEED;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return p.isPokemon(Namesies.DITTO_POKEMON);
+			return 10;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 1.5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.DITTO_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 1.5;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 10;
 		}
 	}
 
@@ -2092,7 +2373,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RedCard()
 		{
-			super(Namesies.RED_CARD_ITEM, "A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.", BagCategory.MISC, 52);
+			super(Namesies.RED_CARD_ITEM, "A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.", BagCategory.MISC, 54);
 			super.price = 200;
 		}
 
@@ -2101,8 +2382,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
+			// TODO: Generalize this code with that of moves like U-Turn
 			Team t = b.getTrainer(user.user());
 			if (t instanceof WildPokemon) return;
 			
@@ -2124,13 +2410,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RingTarget()
 		{
-			super(Namesies.RING_TARGET_ITEM, "Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.", BagCategory.MISC, 53);
+			super(Namesies.RING_TARGET_ITEM, "Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.", BagCategory.MISC, 55);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public Type[] getAdvantageChange(Type attacking, Type[] defending)
@@ -2153,13 +2443,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RockyHelmet()
 		{
-			super(Namesies.ROCKY_HELMET_ITEM, "If the holder of this item takes damage, the attacker will also be damaged upon contact.", BagCategory.MISC, 54);
+			super(Namesies.ROCKY_HELMET_ITEM, "If the holder of this item takes damage, the attacker will also be damaged upon contact.", BagCategory.MISC, 56);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 60;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2169,19 +2463,33 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class SafetyGoggles extends Item implements EffectBlockerEffect, HoldItem, WeatherBlockerEffect
+	private static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, EffectBlockerEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public SafetyGoggles()
 		{
-			super(Namesies.SAFETY_GOGGLES_ITEM, "An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.", BagCategory.MISC, 55);
+			super(Namesies.SAFETY_GOGGLES_ITEM, "An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.", BagCategory.MISC, 57);
 			super.price = 200;
 		}
 
 		public String getPreventMessage(ActivePokemon victim)
 		{
 			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean block(Namesies weather)
+		{
+			return true;
 		}
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2198,16 +2506,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return false;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public boolean block(Namesies weather)
-		{
-			return true;
-		}
 	}
 
 	private static class ScopeLens extends Item implements HoldItem, CritStageEffect
@@ -2216,13 +2514,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ScopeLens()
 		{
-			super(Namesies.SCOPE_LENS_ITEM, "An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.", BagCategory.MISC, 56);
+			super(Namesies.SCOPE_LENS_ITEM, "An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.", BagCategory.MISC, 58);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public int increaseCritStage(Integer stage, ActivePokemon p)
@@ -2237,13 +2539,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ShedShell()
 		{
-			super(Namesies.SHED_SHELL_ITEM, "A tough, discarded carapace to be held by a Pok\u00e9mon. It enables the holder to switch with a waiting Pok\u00e9mon in battle.", BagCategory.MISC, 57);
+			super(Namesies.SHED_SHELL_ITEM, "A tough, discarded carapace to be held by a Pok\u00e9mon. It enables the holder to switch with a waiting Pok\u00e9mon in battle.", BagCategory.MISC, 59);
 			super.price = 100;
 		}
 
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -2253,7 +2559,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ShellBell()
 		{
-			super(Namesies.SHELL_BELL_ITEM, "An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.", BagCategory.MISC, 58);
+			super(Namesies.SHELL_BELL_ITEM, "An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.", BagCategory.MISC, 60);
 			super.price = 200;
 		}
 
@@ -2262,12 +2568,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
-			if (user.fullHealth()) return;
+			if (user.fullHealth())
+			{
+				return;
+			}
+			
 			user.heal((int)Math.ceil(damage/8.0));
 			// TODO: This looks really bad when paired with Explosion
-			b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user.getHP(), user.user());
+			b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user);
 		}
 	}
 
@@ -2277,13 +2591,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SmokeBall()
 		{
-			super(Namesies.SMOKE_BALL_ITEM, "An item to be held by a Pok\u00e9mon. It enables the holder to flee from any wild Pok\u00e9mon without fail.", BagCategory.MISC, 59);
+			super(Namesies.SMOKE_BALL_ITEM, "An item to be held by a Pok\u00e9mon. It enables the holder to flee from any wild Pok\u00e9mon without fail.", BagCategory.MISC, 61);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -2293,13 +2611,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Snowball()
 		{
-			super(Namesies.SNOWBALL_ITEM, "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.", BagCategory.MISC, 60);
+			super(Namesies.SNOWBALL_ITEM, "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.", BagCategory.MISC, 62);
 			super.price = 200;
-		}
-
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.getAttackType() == Type.ICE && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM);
 		}
 
 		public int flingDamage()
@@ -2307,22 +2620,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (checkModify(b, user, victim))
+			if (user.getAttackType() == Type.ICE && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM))
 			{
 				victim.consumeItem(b);
 			}
 		}
 	}
 
-	private static class SoulDew extends Item implements StatChangingEffect, HoldItem
+	private static class SoulDew extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public SoulDew()
 		{
-			super(Namesies.SOUL_DEW_ITEM, "If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.", BagCategory.MISC, 61);
+			super(Namesies.SOUL_DEW_ITEM, "If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.", BagCategory.MISC, 63);
 			super.price = 10;
 		}
 
@@ -2331,30 +2648,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON);
+			return 30;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 1.5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 1.5;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 10;
 		}
 	}
 
@@ -2364,13 +2675,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Stick()
 		{
-			super(Namesies.STICK_ITEM, "An item to be held by Farfetch'd. It is a very long and stiff stalk of leek that boosts the critical-hit ratio.", BagCategory.MISC, 62);
+			super(Namesies.STICK_ITEM, "An item to be held by Farfetch'd. It is a very long and stiff stalk of leek that boosts the critical-hit ratio.", BagCategory.MISC, 64);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 60;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public int increaseCritStage(Integer stage, ActivePokemon p)
@@ -2380,7 +2695,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return stage + 2;
 			}
 			
-			return 0;
+			return stage;
 		}
 	}
 
@@ -2391,13 +2706,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public StickyBarb()
 		{
-			super(Namesies.STICKY_BARB_ITEM, "A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.", BagCategory.MISC, 63);
+			super(Namesies.STICKY_BARB_ITEM, "A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.", BagCategory.MISC, 65);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b)
@@ -2419,7 +2738,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 				user.reduceHealthFraction(b, 1/8.0);
 			}
 			
-			if (user.isHoldingItem(b) || user.isFainted(b)) return;
+			if (user.isHoldingItem(b) || user.isFainted(b))
+			{
+				return;
+			}
+			
 			b.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
 			
 			if (b.isWildBattle())
@@ -2429,8 +2752,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return;
 			}
 			
+			// TODO: Generalize this with other item stealing effects
 			item = this;
 			PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.HELD_ITEM, false);
+			
 			item = Item.noneItem();
 			PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
@@ -2441,13 +2766,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class ThickClub extends Item implements StatChangingEffect, HoldItem
+	private static class ThickClub extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public ThickClub()
 		{
-			super(Namesies.THICK_CLUB_ITEM, "An item to be held by Cubone or Marowak. It is a hard bone of some sort that boosts the Attack stat.", BagCategory.MISC, 64);
+			super(Namesies.THICK_CLUB_ITEM, "An item to be held by Cubone or Marowak. It is a hard bone of some sort that boosts the Attack stat.", BagCategory.MISC, 66);
 			super.price = 500;
 		}
 
@@ -2456,30 +2781,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.ATTACK;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON);
+			return 90;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 2;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 2;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 90;
 		}
 	}
 
@@ -2489,13 +2808,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WeaknessPolicy()
 		{
-			super(Namesies.WEAKNESS_POLICY_ITEM, "An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.", BagCategory.MISC, 65);
+			super(Namesies.WEAKNESS_POLICY_ITEM, "An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.", BagCategory.MISC, 67);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2514,7 +2837,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WhiteHerb()
 		{
-			super(Namesies.WHITE_HERB_ITEM, "An item to be held by a Pok\u00e9mon. It restores any lowered stat in battle. It can be used only once.", BagCategory.MISC, 66);
+			super(Namesies.WHITE_HERB_ITEM, "An item to be held by a Pok\u00e9mon. It restores any lowered stat in battle. It can be used only once.", BagCategory.MISC, 68);
 			super.price = 100;
 		}
 
@@ -2523,25 +2846,39 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			// Restores negative stat changes to the pelted
+			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
+			{
+				if (pelted.getStage(i) < 0)
+				{
+					pelted.getAttributes().setStage(i, 0);
+				}
+			}
+			
+			b.addMessage("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
+		}
+
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)
 		{
 			// NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
 			return true;
 		}
 
-		public String preventionMessage(ActivePokemon p)
+		public String preventionMessage(ActivePokemon p, Stat s)
 		{
-			return p.getName() + "'s " + this.name + " prevented its stats from being lowered!";
+			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
-	private static class WideLens extends Item implements StatChangingEffect, HoldItem
+	private static class WideLens extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public WideLens()
 		{
-			super(Namesies.WIDE_LENS_ITEM, "An item to be held by a Pok\u00e9mon. It is a magnifying lens that slightly boosts the accuracy of moves.", BagCategory.MISC, 67);
+			super(Namesies.WIDE_LENS_ITEM, "An item to be held by a Pok\u00e9mon. It is a magnifying lens that slightly boosts the accuracy of moves.", BagCategory.MISC, 69);
 			super.price = 200;
 		}
 
@@ -2550,40 +2887,34 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.ACCURACY;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return true;
+			return 10;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 1.1;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && true)
 			{
-				stat *= modifyMultiplier();
+				stat *= 1.1;
 			}
 			
 			return stat;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
 	}
 
-	private static class WiseGlasses extends Item implements StatChangingEffect, HoldItem
+	private static class WiseGlasses extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public WiseGlasses()
 		{
-			super(Namesies.WISE_GLASSES_ITEM, "An item to be held by a Pok\u00e9mon. It is a thick pair of glasses that slightly boosts the power of special moves.", BagCategory.MISC, 68);
+			super(Namesies.WISE_GLASSES_ITEM, "An item to be held by a Pok\u00e9mon. It is a thick pair of glasses that slightly boosts the power of special moves.", BagCategory.MISC, 70);
 			super.price = 200;
 		}
 
@@ -2592,40 +2923,34 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_ATTACK;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return true;
+			return 10;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 1.1;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && true)
 			{
-				stat *= modifyMultiplier();
+				stat *= 1.1;
 			}
 			
 			return stat;
 		}
-
-		public int flingDamage()
-		{
-			return 10;
-		}
 	}
 
-	private static class ZoomLens extends Item implements StatChangingEffect, HoldItem
+	private static class ZoomLens extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public ZoomLens()
 		{
-			super(Namesies.ZOOM_LENS_ITEM, "An item to be held by a Pok\u00e9mon. If the holder moves after its target, its accuracy will be boosted.", BagCategory.MISC, 69);
+			super(Namesies.ZOOM_LENS_ITEM, "An item to be held by a Pok\u00e9mon. If the holder moves after its target, its accuracy will be boosted.", BagCategory.MISC, 71);
 			super.price = 200;
 		}
 
@@ -2634,30 +2959,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.ACCURACY;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return !b.isFirstAttack();
+			return 10;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 1.2;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && !b.isFirstAttack())
 			{
-				stat *= modifyMultiplier();
+				stat *= 1.2;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 10;
 		}
 	}
 
@@ -2667,13 +2986,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FullIncense()
 		{
-			super(Namesies.FULL_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.", BagCategory.MISC, 70);
+			super(Namesies.FULL_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.", BagCategory.MISC, 72);
 			super.price = 9600;
 		}
 
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public Namesies getBaby()
@@ -2682,13 +3005,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LaxIncense extends Item implements StatChangingEffect, HoldItem, IncenseItem
+	private static class LaxIncense extends Item implements HoldItem, IncenseItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public LaxIncense()
 		{
-			super(Namesies.LAX_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.", BagCategory.MISC, 71);
+			super(Namesies.LAX_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.", BagCategory.MISC, 73);
 			super.price = 9600;
 		}
 
@@ -2697,35 +3020,29 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.EVASION;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return true;
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.1;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 10;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public Namesies getBaby()
 		{
 			return Namesies.WYNAUT_POKEMON;
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.1;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -2735,7 +3052,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LuckIncense()
 		{
-			super(Namesies.LUCK_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 72);
+			super(Namesies.LUCK_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 74);
 			super.price = 9600;
 		}
 
@@ -2744,9 +3061,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public void enter(Battle b, ActivePokemon victim)
 		{
-			TeamEffect.getEffect(Namesies.DOUBLE_MONEY_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 
 		public Namesies getBaby()
@@ -2755,31 +3076,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class OddIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
+	private static class OddIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public OddIncense()
 		{
-			super(Namesies.ODD_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.", BagCategory.MISC, 73);
+			super(Namesies.ODD_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.", BagCategory.MISC, 75);
 			super.price = 9600;
 		}
 
-		public Type getType()
+		public Namesies getBaby()
 		{
-			return Type.PSYCHIC;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
+			return Namesies.MIME_JR_POKEMON;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.PSYCHIC))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -2790,9 +3106,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public Namesies getBaby()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return Namesies.MIME_JR_POKEMON;
 		}
 	}
 
@@ -2802,13 +3117,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PureIncense()
 		{
-			super(Namesies.PURE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 74);
+			super(Namesies.PURE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 76);
 			super.price = 9600;
 		}
 
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double chance()
@@ -2822,72 +3141,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class RockIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
+	private static class RockIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public RockIncense()
 		{
-			super(Namesies.ROCK_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.", BagCategory.MISC, 75);
+			super(Namesies.ROCK_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.", BagCategory.MISC, 77);
 			super.price = 9600;
-		}
-
-		public Type getType()
-		{
-			return Type.ROCK;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			if (user.isAttackType(getType()))
-			{
-				return getMultiplier();
-			}
-			
-			return 1;
-		}
-
-		public int flingDamage()
-		{
-			return 10;
 		}
 
 		public Namesies getBaby()
 		{
 			return Namesies.BONSLY_POKEMON;
 		}
-	}
-
-	private static class RoseIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public RoseIncense()
-		{
-			super(Namesies.ROSE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.", BagCategory.MISC, 76);
-			super.price = 9600;
-		}
-
-		public Type getType()
-		{
-			return Type.GRASS;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
-		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.ROCK))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -2896,39 +3169,33 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+	}
+
+	private static class RoseIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public RoseIncense()
+		{
+			super(Namesies.ROSE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.", BagCategory.MISC, 78);
+			super.price = 9600;
 		}
 
 		public Namesies getBaby()
 		{
 			return Namesies.BUDEW_POKEMON;
 		}
-	}
-
-	private static class SeaIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public SeaIncense()
-		{
-			super(Namesies.SEA_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 77);
-			super.price = 9600;
-		}
-
-		public Type getType()
-		{
-			return Type.WATER;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
-		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.GRASS))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -2937,39 +3204,33 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+	}
+
+	private static class SeaIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public SeaIncense()
+		{
+			super(Namesies.SEA_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 79);
+			super.price = 9600;
 		}
 
 		public Namesies getBaby()
 		{
 			return Namesies.AZURILL_POKEMON;
 		}
-	}
-
-	private static class WaveIncense extends Item implements PowerChangeEffect, HoldItem, IncenseItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public WaveIncense()
-		{
-			super(Namesies.WAVE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 78);
-			super.price = 9600;
-		}
-
-		public Type getType()
-		{
-			return Type.WATER;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
-		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.WATER))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -2980,9 +3241,43 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+	}
+
+	private static class WaveIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public WaveIncense()
+		{
+			super(Namesies.WAVE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 80);
+			super.price = 9600;
+		}
+
 		public Namesies getBaby()
 		{
 			return Namesies.MANTYKE_POKEMON;
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.isAttackType(Type.WATER))
+			{
+				return 1.2;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -2992,7 +3287,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DracoPlate()
 		{
-			super(Namesies.DRACO_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dragon-type moves.", BagCategory.MISC, 79);
+			super(Namesies.DRACO_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dragon-type moves.", BagCategory.MISC, 81);
 			super.price = 1000;
 		}
 
@@ -3004,6 +3299,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3023,7 +3322,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DreadPlate()
 		{
-			super(Namesies.DREAD_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dark-type moves.", BagCategory.MISC, 80);
+			super(Namesies.DREAD_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Dark-type moves.", BagCategory.MISC, 82);
 			super.price = 1000;
 		}
 
@@ -3035,6 +3334,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3054,7 +3357,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public EarthPlate()
 		{
-			super(Namesies.EARTH_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ground-type moves.", BagCategory.MISC, 81);
+			super(Namesies.EARTH_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ground-type moves.", BagCategory.MISC, 83);
 			super.price = 1000;
 		}
 
@@ -3066,6 +3369,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3085,7 +3392,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FistPlate()
 		{
-			super(Namesies.FIST_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fighting-type moves.", BagCategory.MISC, 82);
+			super(Namesies.FIST_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fighting-type moves.", BagCategory.MISC, 84);
 			super.price = 1000;
 		}
 
@@ -3097,6 +3404,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3116,7 +3427,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FlamePlate()
 		{
-			super(Namesies.FLAME_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fire-type moves.", BagCategory.MISC, 83);
+			super(Namesies.FLAME_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fire-type moves.", BagCategory.MISC, 85);
 			super.price = 1000;
 		}
 
@@ -3128,6 +3439,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3147,7 +3462,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IciclePlate()
 		{
-			super(Namesies.ICICLE_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ice-type moves.", BagCategory.MISC, 84);
+			super(Namesies.ICICLE_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ice-type moves.", BagCategory.MISC, 86);
 			super.price = 1000;
 		}
 
@@ -3159,6 +3474,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3178,7 +3497,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public InsectPlate()
 		{
-			super(Namesies.INSECT_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Bug-type moves.", BagCategory.MISC, 85);
+			super(Namesies.INSECT_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Bug-type moves.", BagCategory.MISC, 87);
 			super.price = 1000;
 		}
 
@@ -3190,6 +3509,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3209,7 +3532,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IronPlate()
 		{
-			super(Namesies.IRON_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Steel-type moves.", BagCategory.MISC, 86);
+			super(Namesies.IRON_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Steel-type moves.", BagCategory.MISC, 88);
 			super.price = 1000;
 		}
 
@@ -3221,6 +3544,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3240,7 +3567,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MeadowPlate()
 		{
-			super(Namesies.MEADOW_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Grass-type moves.", BagCategory.MISC, 87);
+			super(Namesies.MEADOW_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Grass-type moves.", BagCategory.MISC, 89);
 			super.price = 1000;
 		}
 
@@ -3252,6 +3579,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3271,7 +3602,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MindPlate()
 		{
-			super(Namesies.MIND_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Psychic-type moves.", BagCategory.MISC, 88);
+			super(Namesies.MIND_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Psychic-type moves.", BagCategory.MISC, 90);
 			super.price = 1000;
 		}
 
@@ -3283,6 +3614,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3302,7 +3637,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PixiePlate()
 		{
-			super(Namesies.PIXIE_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fairy-type moves.", BagCategory.MISC, 89);
+			super(Namesies.PIXIE_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Fairy-type moves.", BagCategory.MISC, 91);
 			super.price = 1000;
 		}
 
@@ -3314,6 +3649,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3333,7 +3672,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SkyPlate()
 		{
-			super(Namesies.SKY_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Flying-type moves.", BagCategory.MISC, 90);
+			super(Namesies.SKY_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Flying-type moves.", BagCategory.MISC, 92);
 			super.price = 1000;
 		}
 
@@ -3345,6 +3684,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3364,7 +3707,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SplashPlate()
 		{
-			super(Namesies.SPLASH_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Water-type moves.", BagCategory.MISC, 91);
+			super(Namesies.SPLASH_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Water-type moves.", BagCategory.MISC, 93);
 			super.price = 1000;
 		}
 
@@ -3376,6 +3719,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3395,7 +3742,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SpookyPlate()
 		{
-			super(Namesies.SPOOKY_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ghost-type moves.", BagCategory.MISC, 92);
+			super(Namesies.SPOOKY_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Ghost-type moves.", BagCategory.MISC, 94);
 			super.price = 1000;
 		}
 
@@ -3407,6 +3754,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3426,7 +3777,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public StonePlate()
 		{
-			super(Namesies.STONE_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Rock-type moves.", BagCategory.MISC, 93);
+			super(Namesies.STONE_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Rock-type moves.", BagCategory.MISC, 95);
 			super.price = 1000;
 		}
 
@@ -3438,6 +3789,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3457,7 +3812,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ToxicPlate()
 		{
-			super(Namesies.TOXIC_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Poison-type moves.", BagCategory.MISC, 94);
+			super(Namesies.TOXIC_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Poison-type moves.", BagCategory.MISC, 96);
 			super.price = 1000;
 		}
 
@@ -3469,6 +3824,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3488,7 +3847,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ZapPlate()
 		{
-			super(Namesies.ZAP_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Electric-type moves.", BagCategory.MISC, 95);
+			super(Namesies.ZAP_PLATE_ITEM, "An item to be held by a Pok\u00e9mon. It is a stone tablet that boosts the power of Electric-type moves.", BagCategory.MISC, 97);
 			super.price = 1000;
 		}
 
@@ -3500,6 +3859,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3519,7 +3882,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BurnDrive()
 		{
-			super(Namesies.BURN_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to a Fire-type move.", BagCategory.MISC, 96);
+			super(Namesies.BURN_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to a Fire-type move.", BagCategory.MISC, 98);
 			super.price = 1000;
 		}
 
@@ -3532,6 +3895,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class ChillDrive extends Item implements DriveItem
@@ -3540,7 +3907,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ChillDrive()
 		{
-			super(Namesies.CHILL_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to an Ice-type move.", BagCategory.MISC, 97);
+			super(Namesies.CHILL_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to an Ice-type move.", BagCategory.MISC, 99);
 			super.price = 1000;
 		}
 
@@ -3553,6 +3920,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class DouseDrive extends Item implements DriveItem
@@ -3561,7 +3932,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DouseDrive()
 		{
-			super(Namesies.DOUSE_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.", BagCategory.MISC, 98);
+			super(Namesies.DOUSE_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.", BagCategory.MISC, 100);
 			super.price = 1000;
 		}
 
@@ -3574,6 +3945,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class ShockDrive extends Item implements DriveItem
@@ -3582,7 +3957,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ShockDrive()
 		{
-			super(Namesies.SHOCK_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.", BagCategory.MISC, 99);
+			super(Namesies.SHOCK_DRIVE_ITEM, "A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.", BagCategory.MISC, 101);
 			super.price = 1000;
 		}
 
@@ -3595,6 +3970,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 70;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class FireGem extends Item implements GemItem
@@ -3603,7 +3982,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FireGem()
 		{
-			super(Namesies.FIRE_GEM_ITEM, "A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.", BagCategory.MISC, 100);
+			super(Namesies.FIRE_GEM_ITEM, "A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.", BagCategory.MISC, 102);
 			super.price = 100;
 		}
 
@@ -3631,6 +4010,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class WaterGem extends Item implements GemItem
@@ -3639,7 +4022,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WaterGem()
 		{
-			super(Namesies.WATER_GEM_ITEM, "A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.", BagCategory.MISC, 101);
+			super(Namesies.WATER_GEM_ITEM, "A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.", BagCategory.MISC, 103);
 			super.price = 100;
 		}
 
@@ -3667,6 +4050,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class ElectricGem extends Item implements GemItem
@@ -3675,7 +4062,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ElectricGem()
 		{
-			super(Namesies.ELECTRIC_GEM_ITEM, "A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.", BagCategory.MISC, 102);
+			super(Namesies.ELECTRIC_GEM_ITEM, "A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.", BagCategory.MISC, 104);
 			super.price = 100;
 		}
 
@@ -3703,6 +4090,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class GrassGem extends Item implements GemItem
@@ -3711,7 +4102,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GrassGem()
 		{
-			super(Namesies.GRASS_GEM_ITEM, "A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.", BagCategory.MISC, 103);
+			super(Namesies.GRASS_GEM_ITEM, "A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.", BagCategory.MISC, 105);
 			super.price = 100;
 		}
 
@@ -3739,6 +4130,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class IceGem extends Item implements GemItem
@@ -3747,7 +4142,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public IceGem()
 		{
-			super(Namesies.ICE_GEM_ITEM, "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.", BagCategory.MISC, 104);
+			super(Namesies.ICE_GEM_ITEM, "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once", BagCategory.MISC, 106);
 			super.price = 100;
 		}
 
@@ -3775,6 +4170,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class FightingGem extends Item implements GemItem
@@ -3783,7 +4182,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FightingGem()
 		{
-			super(Namesies.FIGHTING_GEM_ITEM, "A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.", BagCategory.MISC, 105);
+			super(Namesies.FIGHTING_GEM_ITEM, "A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.", BagCategory.MISC, 107);
 			super.price = 100;
 		}
 
@@ -3811,6 +4210,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class PoisonGem extends Item implements GemItem
@@ -3819,7 +4222,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PoisonGem()
 		{
-			super(Namesies.POISON_GEM_ITEM, "A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.", BagCategory.MISC, 106);
+			super(Namesies.POISON_GEM_ITEM, "A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.", BagCategory.MISC, 108);
 			super.price = 100;
 		}
 
@@ -3847,6 +4250,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class GroundGem extends Item implements GemItem
@@ -3855,7 +4262,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GroundGem()
 		{
-			super(Namesies.GROUND_GEM_ITEM, "A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.", BagCategory.MISC, 107);
+			super(Namesies.GROUND_GEM_ITEM, "A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.", BagCategory.MISC, 109);
 			super.price = 100;
 		}
 
@@ -3883,6 +4290,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class FlyingGem extends Item implements GemItem
@@ -3891,7 +4302,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FlyingGem()
 		{
-			super(Namesies.FLYING_GEM_ITEM, "A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.", BagCategory.MISC, 108);
+			super(Namesies.FLYING_GEM_ITEM, "A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.", BagCategory.MISC, 110);
 			super.price = 100;
 		}
 
@@ -3919,6 +4330,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class PsychicGem extends Item implements GemItem
@@ -3927,7 +4342,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PsychicGem()
 		{
-			super(Namesies.PSYCHIC_GEM_ITEM, "A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.", BagCategory.MISC, 109);
+			super(Namesies.PSYCHIC_GEM_ITEM, "A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.", BagCategory.MISC, 111);
 			super.price = 100;
 		}
 
@@ -3955,6 +4370,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class BugGem extends Item implements GemItem
@@ -3963,7 +4382,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BugGem()
 		{
-			super(Namesies.BUG_GEM_ITEM, "A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.", BagCategory.MISC, 110);
+			super(Namesies.BUG_GEM_ITEM, "A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.", BagCategory.MISC, 112);
 			super.price = 100;
 		}
 
@@ -3991,6 +4410,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class RockGem extends Item implements GemItem
@@ -3999,7 +4422,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RockGem()
 		{
-			super(Namesies.ROCK_GEM_ITEM, "A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.", BagCategory.MISC, 111);
+			super(Namesies.ROCK_GEM_ITEM, "A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.", BagCategory.MISC, 113);
 			super.price = 100;
 		}
 
@@ -4027,6 +4450,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class GhostGem extends Item implements GemItem
@@ -4035,7 +4462,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GhostGem()
 		{
-			super(Namesies.GHOST_GEM_ITEM, "A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.", BagCategory.MISC, 112);
+			super(Namesies.GHOST_GEM_ITEM, "A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.", BagCategory.MISC, 114);
 			super.price = 100;
 		}
 
@@ -4063,6 +4490,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class DragonGem extends Item implements GemItem
@@ -4071,7 +4502,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DragonGem()
 		{
-			super(Namesies.DRAGON_GEM_ITEM, "A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.", BagCategory.MISC, 113);
+			super(Namesies.DRAGON_GEM_ITEM, "A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.", BagCategory.MISC, 115);
 			super.price = 100;
 		}
 
@@ -4099,6 +4530,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class DarkGem extends Item implements GemItem
@@ -4107,7 +4542,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DarkGem()
 		{
-			super(Namesies.DARK_GEM_ITEM, "A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.", BagCategory.MISC, 114);
+			super(Namesies.DARK_GEM_ITEM, "A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.", BagCategory.MISC, 116);
 			super.price = 100;
 		}
 
@@ -4135,6 +4570,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class SteelGem extends Item implements GemItem
@@ -4143,7 +4582,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SteelGem()
 		{
-			super(Namesies.STEEL_GEM_ITEM, "A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.", BagCategory.MISC, 115);
+			super(Namesies.STEEL_GEM_ITEM, "A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.", BagCategory.MISC, 117);
 			super.price = 100;
 		}
 
@@ -4171,6 +4610,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class NormalGem extends Item implements GemItem
@@ -4179,7 +4622,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public NormalGem()
 		{
-			super(Namesies.NORMAL_GEM_ITEM, "A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.", BagCategory.MISC, 116);
+			super(Namesies.NORMAL_GEM_ITEM, "A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.", BagCategory.MISC, 118);
 			super.price = 100;
 		}
 
@@ -4207,6 +4650,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class Leftovers extends Item implements HoldItem, EndTurnEffect
@@ -4215,13 +4662,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Leftovers()
 		{
-			super(Namesies.LEFTOVERS_ITEM, "An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.", BagCategory.MISC, 117);
+			super(Namesies.LEFTOVERS_ITEM, "An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.", BagCategory.MISC, 119);
 			super.price = 200;
 		}
 
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b)
@@ -4232,7 +4683,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			victim.healHealthFraction(1/16.0);
-			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim.getHP(), victim.user());
+			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 		}
 	}
 
@@ -4242,25 +4693,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BlackBelt()
 		{
-			super(Namesies.BLACK_BELT_ITEM, "An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.", BagCategory.MISC, 118);
+			super(Namesies.BLACK_BELT_ITEM, "An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.", BagCategory.MISC, 120);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.FIGHTING;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.FIGHTING))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4269,6 +4710,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4278,25 +4723,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BlackGlasses()
 		{
-			super(Namesies.BLACK_GLASSES_ITEM, "An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.", BagCategory.MISC, 119);
+			super(Namesies.BLACK_GLASSES_ITEM, "An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.", BagCategory.MISC, 121);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.FIGHTING;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.DARK))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4305,6 +4740,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4314,25 +4753,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Charcoal()
 		{
-			super(Namesies.CHARCOAL_ITEM, "An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.", BagCategory.MISC, 120);
+			super(Namesies.CHARCOAL_ITEM, "An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.", BagCategory.MISC, 122);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.FIRE;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.FIRE))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4341,6 +4770,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4350,25 +4783,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DragonFang()
 		{
-			super(Namesies.DRAGON_FANG_ITEM, "An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.", BagCategory.MISC, 121);
+			super(Namesies.DRAGON_FANG_ITEM, "An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.", BagCategory.MISC, 123);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.DRAGON;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.DRAGON))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4376,7 +4799,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 30;
+			return 70;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4386,25 +4813,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HardStone()
 		{
-			super(Namesies.HARD_STONE_ITEM, "An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.", BagCategory.MISC, 122);
+			super(Namesies.HARD_STONE_ITEM, "An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.", BagCategory.MISC, 124);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.ROCK;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.ROCK))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4412,7 +4829,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 30;
+			return 100;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4422,25 +4843,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Magnet()
 		{
-			super(Namesies.MAGNET_ITEM, "An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.", BagCategory.MISC, 123);
+			super(Namesies.MAGNET_ITEM, "An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.", BagCategory.MISC, 125);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.ELECTRIC;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.ELECTRIC))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4450,21 +4861,44 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class MetalCoat extends Item implements PokemonUseItem, HoldItem, PowerChangeEffect
+	private static class MetalCoat extends Item implements PowerChangeEffect, HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public MetalCoat()
 		{
-			super(Namesies.METAL_COAT_ITEM, "A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.", BagCategory.MISC, 124);
+			super(Namesies.METAL_COAT_ITEM, "A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.", BagCategory.MISC, 126);
 			super.price = 9800;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		{
+			if (user.isAttackType(Type.STEEL))
+			{
+				return 1.2;
+			}
+			
+			return 1;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -4478,16 +4912,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
-			return user.isAttackType(Type.STEEL) ? 1.2 : 1;
 		}
 	}
 
@@ -4497,25 +4921,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MiracleSeed()
 		{
-			super(Namesies.MIRACLE_SEED_ITEM, "An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.", BagCategory.MISC, 125);
+			super(Namesies.MIRACLE_SEED_ITEM, "An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.", BagCategory.MISC, 127);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.GRASS;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.GRASS))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4524,6 +4938,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4533,25 +4951,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MysticWater()
 		{
-			super(Namesies.MYSTIC_WATER_ITEM, "An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.", BagCategory.MISC, 126);
+			super(Namesies.MYSTIC_WATER_ITEM, "An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.", BagCategory.MISC, 128);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.WATER;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.WATER))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4560,6 +4968,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4569,25 +4981,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public NeverMeltIce()
 		{
-			super(Namesies.NEVER_MELT_ICE_ITEM, "An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.", BagCategory.MISC, 127);
+			super(Namesies.NEVER_MELT_ICE_ITEM, "An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.", BagCategory.MISC, 129);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.ICE;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.ICE))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4596,6 +4998,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4605,25 +5011,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PoisonBarb()
 		{
-			super(Namesies.POISON_BARB_ITEM, "An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.", BagCategory.MISC, 128);
+			super(Namesies.POISON_BARB_ITEM, "An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.", BagCategory.MISC, 130);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.POISON;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.POISON))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4631,7 +5027,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 30;
+			return 70;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
 		}
 	}
 
@@ -4641,25 +5042,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SharpBeak()
 		{
-			super(Namesies.SHARP_BEAK_ITEM, "An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.", BagCategory.MISC, 129);
+			super(Namesies.SHARP_BEAK_ITEM, "An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.", BagCategory.MISC, 131);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.FLYING;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.FLYING))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4667,7 +5058,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 30;
+			return 50;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4677,25 +5072,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SilkScarf()
 		{
-			super(Namesies.SILK_SCARF_ITEM, "An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.", BagCategory.MISC, 130);
+			super(Namesies.SILK_SCARF_ITEM, "An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.", BagCategory.MISC, 132);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.NORMAL;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.NORMAL))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4703,7 +5088,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 30;
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4713,25 +5102,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SilverPowder()
 		{
-			super(Namesies.SILVER_POWDER_ITEM, "An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.", BagCategory.MISC, 131);
+			super(Namesies.SILVER_POWDER_ITEM, "An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.", BagCategory.MISC, 133);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.BUG;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.BUG))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4739,7 +5118,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 30;
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4749,25 +5132,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SoftSand()
 		{
-			super(Namesies.SOFT_SAND_ITEM, "An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.", BagCategory.MISC, 132);
+			super(Namesies.SOFT_SAND_ITEM, "An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.", BagCategory.MISC, 134);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.GROUND;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.GROUND))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4775,7 +5148,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public int flingDamage()
 		{
-			return 30;
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4785,25 +5162,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SpellTag()
 		{
-			super(Namesies.SPELL_TAG_ITEM, "An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.", BagCategory.MISC, 133);
+			super(Namesies.SPELL_TAG_ITEM, "An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.", BagCategory.MISC, 135);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.GHOST;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.GHOST))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4812,6 +5179,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -4821,25 +5192,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public TwistedSpoon()
 		{
-			super(Namesies.TWISTED_SPOON_ITEM, "An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.", BagCategory.MISC, 134);
+			super(Namesies.TWISTED_SPOON_ITEM, "An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.", BagCategory.MISC, 136);
 			super.price = 9800;
-		}
-
-		public Type getType()
-		{
-			return Type.PSYCHIC;
-		}
-
-		public double getMultiplier()
-		{
-			return 1.2;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.isAttackType(getType()))
+			if (user.isAttackType(Type.PSYCHIC))
 			{
-				return getMultiplier();
+				return 1.2;
 			}
 			
 			return 1;
@@ -4849,21 +5210,34 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class DawnStone extends Item implements PokemonUseItem, HoldItem
+	private static class DawnStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public DawnStone()
 		{
-			super(Namesies.DAWN_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It sparkles like eyes.", BagCategory.MISC, 135);
+			super(Namesies.DAWN_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It sparkles like eyes.", BagCategory.MISC, 137);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -4878,20 +5252,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
 	}
 
-	private static class DeepSeaScale extends Item implements StatChangingEffect, PokemonUseItem, HoldItem
+	private static class DeepSeaScale extends Item implements HoldItem, StatChangingEffect, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public DeepSeaScale()
 		{
-			super(Namesies.DEEP_SEA_SCALE_ITEM, "An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.", BagCategory.MISC, 136);
+			super(Namesies.DEEP_SEA_SCALE_ITEM, "An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.", BagCategory.MISC, 138);
 			super.price = 200;
 		}
 
@@ -4900,27 +5269,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 2;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 2;
 			}
 			
 			return stat;
@@ -4938,20 +5306,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class DeepSeaTooth extends Item implements StatChangingEffect, PokemonUseItem, HoldItem
+	private static class DeepSeaTooth extends Item implements HoldItem, StatChangingEffect, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public DeepSeaTooth()
 		{
-			super(Namesies.DEEP_SEA_TOOTH_ITEM, "An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.", BagCategory.MISC, 137);
+			super(Namesies.DEEP_SEA_TOOTH_ITEM, "An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.", BagCategory.MISC, 139);
 			super.price = 200;
 		}
 
@@ -4960,27 +5323,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_ATTACK;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return p.isPokemon(Namesies.CLAMPERL_POKEMON);
-		}
-
-		public double modifyMultiplier()
-		{
-			return 2;
-		}
-
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 90;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.isPokemon(Namesies.CLAMPERL_POKEMON))
 			{
-				stat *= modifyMultiplier();
+				stat *= 2;
 			}
 			
 			return stat;
@@ -4998,60 +5360,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 90;
-		}
 	}
 
-	private static class DragonScale extends Item implements PokemonUseItem, HoldItem
+	private static class DragonScale extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public DragonScale()
 		{
-			super(Namesies.DRAGON_SCALE_ITEM, "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC, 138);
+			super(Namesies.DRAGON_SCALE_ITEM, "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC, 140);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-			if (base == null)
-			{
-				return false;
-			}
-			
-			player.setEvolution(p, base);
-			return true;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
 		}
-	}
 
-	private static class DubiousDisc extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public DubiousDisc()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.DUBIOUS_DISC_ITEM, "A transparent device overflowing with dubious data. Its producer is unknown.", BagCategory.MISC, 139);
-			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return "";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5065,27 +5397,69 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
+		}
+	}
+
+	private static class DubiousDisc extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public DubiousDisc()
+		{
+			super(Namesies.DUBIOUS_DISC_ITEM, "A transparent device overflowing with dubious data. Its producer is unknown.", BagCategory.MISC, 141);
+			super.price = 2100;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "";
 		}
 
 		public int flingDamage()
 		{
 			return 50;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			if (base == null)
+			{
+				return false;
+			}
+			
+			player.setEvolution(p, base);
+			return true;
+		}
 	}
 
-	private static class DuskStone extends Item implements PokemonUseItem, HoldItem
+	private static class DuskStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public DuskStone()
 		{
-			super(Namesies.DUSK_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as dark as dark can be.", BagCategory.MISC, 140);
+			super(Namesies.DUSK_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as dark as dark can be.", BagCategory.MISC, 142);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5100,60 +5474,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
 	}
 
-	private static class Electirizer extends Item implements PokemonUseItem, HoldItem
+	private static class Electirizer extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Electirizer()
 		{
-			super(Namesies.ELECTIRIZER_ITEM, "A box packed with a tremendous amount of electric energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 141);
+			super(Namesies.ELECTIRIZER_ITEM, "A box packed with a tremendous amount of electric energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 143);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-			if (base == null)
-			{
-				return false;
-			}
-			
-			player.setEvolution(p, base);
-			return true;
 		}
 
 		public int flingDamage()
 		{
 			return 80;
 		}
-	}
 
-	private static class FireStone extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public FireStone()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.FIRE_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.", BagCategory.MISC, 142);
-			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return "";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5167,21 +5511,54 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
+		}
+	}
+
+	private static class FireStone extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public FireStone()
+		{
+			super(Namesies.FIRE_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.", BagCategory.MISC, 144);
+			super.price = 2100;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "";
 		}
 
 		public int flingDamage()
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			if (base == null)
+			{
+				return false;
+			}
+			
+			player.setEvolution(p, base);
+			return true;
+		}
 	}
 
-	private static class KingsRock extends Item implements PokemonUseItem, HoldItem, ApplyDamageEffect
+	private static class KingsRock extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public KingsRock()
 		{
-			super(Namesies.KINGS_ROCK_ITEM, "An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.", BagCategory.MISC, 143);
+			super(Namesies.KINGS_ROCK_ITEM, "An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.", BagCategory.MISC, 145);
 			super.price = 100;
 		}
 
@@ -5203,14 +5580,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return true;
 		}
 
-		public int flingDamage()
-		{
-			return 30;
-		}
-
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
 		{
-			// TODO: IF HIT BEFORE THE OPPONENT MOVES (FLING) THE OPPONENT FLINCHES!
 			if (Math.random()*100 < 10)
 			{
 				PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
@@ -5221,21 +5592,45 @@ public abstract class Item implements Comparable<Item>, Serializable
 				}
 			}
 		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
+			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM))
+			{
+				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
+				b.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
+			}
+		}
 	}
 
-	private static class LeafStone extends Item implements PokemonUseItem, HoldItem
+	private static class LeafStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public LeafStone()
 		{
-			super(Namesies.LEAF_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.", BagCategory.MISC, 144);
+			super(Namesies.LEAF_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.", BagCategory.MISC, 146);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5250,60 +5645,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class Magmarizer extends Item implements PokemonUseItem, HoldItem
+	private static class Magmarizer extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Magmarizer()
 		{
-			super(Namesies.MAGMARIZER_ITEM, "A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 145);
+			super(Namesies.MAGMARIZER_ITEM, "A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 147);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-			if (base == null)
-			{
-				return false;
-			}
-			
-			player.setEvolution(p, base);
-			return true;
 		}
 
 		public int flingDamage()
 		{
 			return 80;
 		}
-	}
 
-	private static class MoonStone extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public MoonStone()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.MOON_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.", BagCategory.MISC, 146);
-			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return "";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5317,27 +5682,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
+		}
+	}
+
+	private static class MoonStone extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public MoonStone()
+		{
+			super(Namesies.MOON_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.", BagCategory.MISC, 148);
+			super.price = 2100;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "";
 		}
 
 		public int flingDamage()
 		{
 			return 30;
 		}
-	}
 
-	private static class OvalStone extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public OvalStone()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.OVAL_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.", BagCategory.MISC, 147);
-			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return "";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5352,10 +5721,43 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
+	}
+
+	private static class OvalStone extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public OvalStone()
+		{
+			super(Namesies.OVAL_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.", BagCategory.MISC, 149);
+			super.price = 2100;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "";
+		}
 
 		public int flingDamage()
 		{
 			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			if (base == null)
+			{
+				return false;
+			}
+			
+			player.setEvolution(p, base);
+			return true;
 		}
 	}
 
@@ -5365,7 +5767,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Everstone()
 		{
-			super(Namesies.EVERSTONE_ITEM, "An item to be held by a Pok\u00e9mon. The Pok\u00e9mon holding this peculiar stone is prevented from evolving.", BagCategory.MISC, 148);
+			super(Namesies.EVERSTONE_ITEM, "An item to be held by a Pok\u00e9mon. The Pok\u00e9mon holding this peculiar stone is prevented from evolving.", BagCategory.MISC, 150);
 			super.price = 200;
 		}
 
@@ -5373,15 +5775,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class PrismScale extends Item implements PokemonUseItem, HoldItem
+	private static class PrismScale extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public PrismScale()
 		{
-			super(Namesies.PRISM_SCALE_ITEM, "A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.", BagCategory.MISC, 149);
+			super(Namesies.PRISM_SCALE_ITEM, "A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.", BagCategory.MISC, 151);
 			super.price = 500;
 		}
 
@@ -5390,6 +5796,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
@@ -5402,26 +5817,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class Protector extends Item implements PokemonUseItem, HoldItem
+	private static class Protector extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Protector()
 		{
-			super(Namesies.PROTECTOR_ITEM, "A protective item of some sort. It is extremely stiff and heavy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 150);
+			super(Namesies.PROTECTOR_ITEM, "A protective item of some sort. It is extremely stiff and heavy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 152);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5436,20 +5855,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 80;
-		}
 	}
 
-	private static class RazorClaw extends Item implements PokemonUseItem, HoldItem, CritStageEffect
+	private static class RazorClaw extends Item implements HoldItem, CritStageEffect, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public RazorClaw()
 		{
-			super(Namesies.RAZOR_CLAW_ITEM, "An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.", BagCategory.MISC, 151);
+			super(Namesies.RAZOR_CLAW_ITEM, "An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.", BagCategory.MISC, 153);
 			super.price = 2100;
 		}
 
@@ -5458,37 +5872,41 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return "";
 		}
 
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-			if (base == null)
-			{
-				return false;
-			}
-			
-			player.setEvolution(p, base);
-			return true;
-		}
-
 		public int flingDamage()
 		{
 			return 80;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public int increaseCritStage(Integer stage, ActivePokemon p)
 		{
 			return stage + 1;
 		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			if (base == null)
+			{
+				return false;
+			}
+			
+			player.setEvolution(p, base);
+			return true;
+		}
 	}
 
-	private static class RazorFang extends Item implements PokemonUseItem, HoldItem, ApplyDamageEffect
+	private static class RazorFang extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public RazorFang()
 		{
-			super(Namesies.RAZOR_FANG_ITEM, "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`", BagCategory.MISC, 152);
+			super(Namesies.RAZOR_FANG_ITEM, "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`", BagCategory.MISC, 154);
 			super.price = 2100;
 		}
 
@@ -5508,11 +5926,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
-		}
-
-		public int flingDamage()
-		{
-			return 30;
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
@@ -5527,55 +5940,45 @@ public abstract class Item implements Comparable<Item>, Serializable
 				}
 			}
 		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
+			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM))
+			{
+				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
+				b.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
+			}
+		}
 	}
 
-	private static class ReaperCloth extends Item implements PokemonUseItem, HoldItem
+	private static class ReaperCloth extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public ReaperCloth()
 		{
-			super(Namesies.REAPER_CLOTH_ITEM, "A cloth imbued with horrifyingly strong spiritual energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 153);
+			super(Namesies.REAPER_CLOTH_ITEM, "A cloth imbued with horrifyingly strong spiritual energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 155);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-			if (base == null)
-			{
-				return false;
-			}
-			
-			player.setEvolution(p, base);
-			return true;
 		}
 
 		public int flingDamage()
 		{
 			return 10;
 		}
-	}
 
-	private static class Sachet extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public Sachet()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.SACHET_ITEM, "A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pokémon.", BagCategory.MISC, 154);
-			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return "";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5589,27 +5992,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
+		}
+	}
+
+	private static class Sachet extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Sachet()
+		{
+			super(Namesies.SACHET_ITEM, "A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pok\u00e9mon.", BagCategory.MISC, 156);
+			super.price = 2100;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "";
 		}
 
 		public int flingDamage()
 		{
 			return 30;
 		}
-	}
 
-	private static class ShinyStone extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public ShinyStone()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.SHINY_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It shines with a dazzling light.", BagCategory.MISC, 155);
-			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return "";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5623,27 +6030,69 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			player.setEvolution(p, base);
 			return true;
+		}
+	}
+
+	private static class ShinyStone extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ShinyStone()
+		{
+			super(Namesies.SHINY_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It shines with a dazzling light.", BagCategory.MISC, 157);
+			super.price = 2100;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return "";
 		}
 
 		public int flingDamage()
 		{
 			return 80;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			Evolution ev = p.getPokemonInfo().getEvolution();
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			if (base == null)
+			{
+				return false;
+			}
+			
+			player.setEvolution(p, base);
+			return true;
+		}
 	}
 
-	private static class SunStone extends Item implements PokemonUseItem, HoldItem
+	private static class SunStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public SunStone()
 		{
-			super(Namesies.SUN_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.", BagCategory.MISC, 156);
+			super(Namesies.SUN_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.", BagCategory.MISC, 158);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5658,26 +6107,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class ThunderStone extends Item implements PokemonUseItem, HoldItem
+	private static class ThunderStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public ThunderStone()
 		{
-			super(Namesies.THUNDER_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.", BagCategory.MISC, 157);
+			super(Namesies.THUNDER_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.", BagCategory.MISC, 159);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5692,26 +6145,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class UpGrade extends Item implements PokemonUseItem, HoldItem
+	private static class UpGrade extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public UpGrade()
 		{
-			super(Namesies.UP_GRADE_ITEM, "A transparent device filled with all sorts of data. It was produced by Silph Co.", BagCategory.MISC, 158);
+			super(Namesies.UP_GRADE_ITEM, "A transparent device filled with all sorts of data. It was produced by Silph Co.", BagCategory.MISC, 160);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5726,26 +6183,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class WaterStone extends Item implements PokemonUseItem, HoldItem
+	private static class WaterStone extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public WaterStone()
 		{
-			super(Namesies.WATER_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.", BagCategory.MISC, 159);
+			super(Namesies.WATER_STONE_ITEM, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.", BagCategory.MISC, 161);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5760,26 +6221,30 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class WhippedDream extends Item implements PokemonUseItem, HoldItem
+	private static class WhippedDream extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public WhippedDream()
 		{
-			super(Namesies.WHIPPED_DREAM_ITEM, "A soft and sweet treat made of fluffy, puffy, whipped and whirled cream. It is loved by a certain Pokémon.", BagCategory.MISC, 160);
+			super(Namesies.WHIPPED_DREAM_ITEM, "A soft and sweet treat made of fluffy, puffy, whipped and whirled cream. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 162);
 			super.price = 2100;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
 			return "";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5794,20 +6259,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			player.setEvolution(p, base);
 			return true;
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class Antidote extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class Antidote extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public Antidote()
 		{
-			super(Namesies.ANTIDOTE_ITEM, "A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.", BagCategory.MEDICINE, 161);
+			super(Namesies.ANTIDOTE_ITEM, "A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.", BagCategory.MEDICINE, 163);
 			super.price = 100;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5819,7 +6280,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5829,7 +6299,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -5837,20 +6307,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class Awakening extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class Awakening extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public Awakening()
 		{
-			super(Namesies.AWAKENING_ITEM, "A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE, 162);
+			super(Namesies.AWAKENING_ITEM, "A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE, 164);
 			super.price = 250;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5862,7 +6328,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5872,7 +6347,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -5880,20 +6355,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class BurnHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class BurnHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public BurnHeal()
 		{
-			super(Namesies.BURN_HEAL_ITEM, "A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.", BagCategory.MEDICINE, 163);
+			super(Namesies.BURN_HEAL_ITEM, "A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.", BagCategory.MEDICINE, 165);
 			super.price = 250;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5905,7 +6376,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5915,7 +6395,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -5923,20 +6403,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class IceHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class IceHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public IceHeal()
 		{
-			super(Namesies.ICE_HEAL_ITEM, "A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE, 164);
+			super(Namesies.ICE_HEAL_ITEM, "A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE, 166);
 			super.price = 250;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5948,7 +6424,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -5958,7 +6443,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -5966,20 +6451,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class ParalyzeHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	private static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		public ParalyzeHeal()
 		{
-			super(Namesies.PARALYZE_HEAL_ITEM, "A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.", BagCategory.MEDICINE, 165);
+			super(Namesies.PARALYZE_HEAL_ITEM, "A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.", BagCategory.MEDICINE, 167);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -5991,12 +6472,70 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			if (!p.hasStatus(toRemove()))
+			{
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(b.getPlayer(), p);
+		}
+	}
+
+	private static class FullHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public FullHeal()
+		{
+			super(Namesies.FULL_HEAL_ITEM, "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 168);
+			super.price = 250;
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was cured of its status condition!";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			// Does not apply to the dead
+			if (p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
+			
+			// YOU'RE FINE
+			if (!p.hasStatus())
 			{
 				return false;
 			}
@@ -6009,46 +6548,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return use(b.getPlayer(), p);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-	}
-
-	private static class FullHeal extends Item implements PokemonUseItem, BattleUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public FullHeal()
-		{
-			super(Namesies.FULL_HEAL_ITEM, "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 166);
-			super.price = 250;
-			super.bcat.add(BattleBagCategory.STATUS);
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + " was cured of its status condition!";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED)) return false;
-			
-			p.removeStatus();
-			return true;
-		}
-
-		public boolean use(ActivePokemon p, Battle b)
-		{
-			return use(b.getPlayer(), p);
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
 	private static class FullRestore extends Item implements PokemonUseItem, HoldItem, BattleUseItem
@@ -6057,7 +6556,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FullRestore()
 		{
-			super(Namesies.FULL_RESTORE_ITEM, "A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 167);
+			super(Namesies.FULL_RESTORE_ITEM, "A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 169);
 			super.price = 3000;
 			super.bcat.add(BattleBagCategory.HP_PP);
 			super.bcat.add(BattleBagCategory.STATUS);
@@ -6070,8 +6569,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (p.hasStatus(StatusCondition.FAINTED)) return false;
-			if (!p.hasStatus() && p.fullHealth()) return false;
+			// Does not apply to the dead
+			if (p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
+			
+			// Does not apply to the fully healed -- status condition or otherwise
+			if (!p.hasStatus() && p.fullHealth())
+			{
+				return false;
+			}
 			
 			p.removeStatus();
 			p.healHealthFraction(1);
@@ -6083,6 +6591,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return use(b.getPlayer(), p);
@@ -6092,12 +6604,27 @@ public abstract class Item implements Comparable<Item>, Serializable
 	private static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
+		private boolean use(List<Move> moves)
+		{
+			boolean changed = false;
+			for (Move m : moves)
+			{
+				changed |= m.increasePP(increaseAmount(m));
+			}
+			
+			return changed;
+		}
 
 		public Elixir()
 		{
-			super(Namesies.ELIXIR_ITEM, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 168);
+			super(Namesies.ELIXIR_ITEM, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 170);
 			super.price = 3000;
 			super.bcat.add(BattleBagCategory.HP_PP);
+		}
+
+		public int increaseAmount(Move m)
+		{
+			return 10;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -6107,34 +6634,48 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			boolean changed = false;
-			for (Move m : p.getMoves())
-			{
-				changed |= m.increasePP(10);
-			}
-			return changed;
+			return use(p.getActualMoves());
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(b.getPlayer(), p);
+			return use(p.getMoves(b));
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
 	private static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
+		private boolean use(List<Move> moves)
+		{
+			boolean changed = false;
+			for (Move m : moves)
+			{
+				changed |= m.increasePP(increaseAmount(m));
+			}
+			
+			return changed;
+		}
 
 		public MaxElixir()
 		{
-			super(Namesies.MAX_ELIXIR_ITEM, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 169);
+			super(Namesies.MAX_ELIXIR_ITEM, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 171);
 			super.price = 4500;
 			super.bcat.add(BattleBagCategory.HP_PP);
+		}
+
+		public int increaseAmount(Move m)
+		{
+			return m.getMaxPP();
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -6144,34 +6685,32 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			boolean changed = false;
-			for (Move m : p.getMoves())
-			{
-				changed |= m.increasePP(m.getMaxPP());
-			}
-			
-			return changed;
+			return use(p.getActualMoves());
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
-			return use(b.getPlayer(), p);
+			return use(p.getMoves(b));
 		}
 
 		public int flingDamage()
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class Ether extends Item implements MoveUseItem, HoldItem
+	private static class Ether extends Item implements HoldItem, MoveUseItem
 	{
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
 		public Ether()
 		{
-			super(Namesies.ETHER_ITEM, "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.", BagCategory.MEDICINE, 170);
+			super(Namesies.ETHER_ITEM, "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.", BagCategory.MEDICINE, 172);
 			super.price = 1200;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6181,27 +6720,31 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(ActivePokemon p, Move m)
 		{
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
 			restore = m.getAttack().getName();
 			return m.increasePP(10);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class MaxEther extends Item implements MoveUseItem, HoldItem
+	private static class MaxEther extends Item implements HoldItem, MoveUseItem
 	{
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
 		public MaxEther()
 		{
-			super(Namesies.MAX_ETHER_ITEM, "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.", BagCategory.MEDICINE, 171);
+			super(Namesies.MAX_ETHER_ITEM, "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.", BagCategory.MEDICINE, 173);
 			super.price = 2000;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6211,16 +6754,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
-		public boolean use(ActivePokemon p, Move m)
-		{
-			// TODO: Same as ether
-			restore = m.getAttack().getName();
-			return m.increasePP(m.getMaxPP());
-		}
-
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(ActivePokemon p, Move m)
+		{
+			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
+			restore = m.getAttack().getName();
+			return m.increasePP(m.getMaxPP());
 		}
 	}
 
@@ -6230,7 +6777,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BerryJuice()
 		{
-			super(Namesies.BERRY_JUICE_ITEM, "A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 172);
+			super(Namesies.BERRY_JUICE_ITEM, "A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 174);
 			super.price = 100;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6258,6 +6805,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -6267,7 +6818,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SweetHeart()
 		{
-			super(Namesies.SWEET_HEART_ITEM, "Very sweet chocolate. It restores the HP of one Pok\u00e9mon by only 20 points.", BagCategory.MEDICINE, 173);
+			super(Namesies.SWEET_HEART_ITEM, "Very sweet chocolate. It restores the HP of one Pok\u00e9mon by only 20 points.", BagCategory.MEDICINE, 175);
 			super.price = 100;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6295,6 +6846,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -6304,7 +6859,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Potion()
 		{
-			super(Namesies.POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 174);
+			super(Namesies.POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 176);
 			super.price = 100;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6333,6 +6888,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class EnergyPowder extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6341,7 +6900,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public EnergyPowder()
 		{
-			super(Namesies.ENERGY_POWDER_ITEM, "A very bitter medicine powder. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 175);
+			super(Namesies.ENERGY_POWDER_ITEM, "A very bitter medicine powder. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 177);
 			super.price = 500;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6370,6 +6929,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class FreshWater extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6378,7 +6941,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FreshWater()
 		{
-			super(Namesies.FRESH_WATER_ITEM, "Water with a high mineral content. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 176);
+			super(Namesies.FRESH_WATER_ITEM, "Water with a high mineral content. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 178);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6407,6 +6970,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class SuperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6415,7 +6982,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SuperPotion()
 		{
-			super(Namesies.SUPER_POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 177);
+			super(Namesies.SUPER_POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 179);
 			super.price = 700;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6444,6 +7011,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class SodaPop extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6452,7 +7023,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SodaPop()
 		{
-			super(Namesies.SODA_POP_ITEM, "A fizzy soda drink. It restores the HP of one Pok\u00e9mon by 60 points.", BagCategory.MEDICINE, 178);
+			super(Namesies.SODA_POP_ITEM, "A fizzy soda drink. It restores the HP of one Pok\u00e9mon by 60 points.", BagCategory.MEDICINE, 180);
 			super.price = 300;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6481,6 +7052,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class Lemonade extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6489,7 +7064,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Lemonade()
 		{
-			super(Namesies.LEMONADE_ITEM, "A very sweet drink. It restores the HP of one Pok\u00e9mon by 80 points.", BagCategory.MEDICINE, 179);
+			super(Namesies.LEMONADE_ITEM, "A very sweet drink. It restores the HP of one Pok\u00e9mon by 80 points.", BagCategory.MEDICINE, 181);
 			super.price = 350;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6518,6 +7093,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class MoomooMilk extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6526,7 +7105,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MoomooMilk()
 		{
-			super(Namesies.MOOMOO_MILK_ITEM, "Milk with a very high nutrition content. It restores the HP of one Pok\u00e9mon by 100 points.", BagCategory.MEDICINE, 180);
+			super(Namesies.MOOMOO_MILK_ITEM, "Milk with a very high nutrition content. It restores the HP of one Pok\u00e9mon by 100 points.", BagCategory.MEDICINE, 182);
 			super.price = 500;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6555,6 +7134,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class EnergyRoot extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6563,7 +7146,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public EnergyRoot()
 		{
-			super(Namesies.ENERGY_ROOT_ITEM, "A very bitter root. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 181);
+			super(Namesies.ENERGY_ROOT_ITEM, "A very bitter root. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 183);
 			super.price = 800;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6592,6 +7175,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class HyperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6600,7 +7187,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HyperPotion()
 		{
-			super(Namesies.HYPER_POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 182);
+			super(Namesies.HYPER_POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 184);
 			super.price = 1200;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6629,6 +7216,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class MaxPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6637,7 +7228,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MaxPotion()
 		{
-			super(Namesies.MAX_POTION_ITEM, "A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.", BagCategory.MEDICINE, 183);
+			super(Namesies.MAX_POTION_ITEM, "A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.", BagCategory.MEDICINE, 185);
 			super.price = 2500;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -6661,6 +7252,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class Revive extends Item implements PokemonUseItem, BattleUseItem, HoldItem
@@ -6669,19 +7264,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Revive()
 		{
-			super(Namesies.REVIVE_ITEM, "A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE, 184);
+			super(Namesies.REVIVE_ITEM, "A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE, 186);
 			super.price = 1500;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was revived!";
+			return p.getName() + " was partially revived!";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
+			// Only applies to the dead
+			if (!p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
 			
 			p.removeStatus();
 			p.healHealthFraction(.5);
@@ -6698,15 +7297,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class MaxRevive extends Item implements PokemonUseItem, HoldItem
+	private static class MaxRevive extends Item implements PokemonUseItem, BattleUseItem, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public MaxRevive()
 		{
-			super(Namesies.MAX_REVIVE_ITEM, "A medicine that revives a fainted Pok\u00e9mon. It fully restores the Pok\u00e9mon's HP.", BagCategory.MEDICINE, 185);
+			super(Namesies.MAX_REVIVE_ITEM, "A medicine that revives a fainted Pok\u00e9mon. It fully restores the Pok\u00e9mon's HP.", BagCategory.MEDICINE, 187);
 			super.price = 4000;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -6718,38 +7321,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (!p.hasStatus(StatusCondition.FAINTED)) return false;
-			
-			p.removeStatus();
-			p.healHealthFraction(1);
-			
-			return true;
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-	}
-
-	private static class RevivalHerb extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public RevivalHerb()
-		{
-			super(Namesies.REVIVAL_HERB_ITEM, "A very bitter medicinal herb. It revives a fainted Pok\u00e9mon, fully restoring its HP.", BagCategory.MEDICINE, 186);
-			super.price = 2800;
-			super.bcat.add(BattleBagCategory.STATUS);
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + " was fully revived!";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
+			// Only applies to the dead
 			if (!p.hasStatus(StatusCondition.FAINTED))
 			{
 				return false;
@@ -6761,9 +7333,63 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return true;
 		}
 
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(b.getPlayer(), p);
+		}
+
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+	}
+
+	private static class RevivalHerb extends Item implements PokemonUseItem, BattleUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public RevivalHerb()
+		{
+			super(Namesies.REVIVAL_HERB_ITEM, "A very bitter medicinal herb. It revives a fainted Pok\u00e9mon, fully restoring its HP.", BagCategory.MEDICINE, 188);
+			super.price = 2800;
+			super.bcat.add(BattleBagCategory.STATUS);
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " was fully revived!";
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			// Only applies to the dead
+			if (!p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
+			
+			p.removeStatus();
+			p.healHealthFraction(1);
+			
+			return true;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(b.getPlayer(), p);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -6773,7 +7399,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SacredAsh()
 		{
-			super(Namesies.SACRED_ASH_ITEM, "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE, 187);
+			super(Namesies.SACRED_ASH_ITEM, "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE, 189);
 			super.price = 4000;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -6803,6 +7429,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 30;
 		}
 
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return use((Trainer)b.getTrainer(p.user()));
@@ -6815,7 +7445,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DireHit()
 		{
-			super(Namesies.DIRE_HIT_ITEM, "It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 188);
+			super(Namesies.DIRE_HIT_ITEM, "It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 190);
 			super.price = 650;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6841,6 +7471,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class GuardSpec extends Item implements BattleUseItem, HoldItem
@@ -6849,7 +7483,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GuardSpec()
 		{
-			super(Namesies.GUARD_SPEC_ITEM, "An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.", BagCategory.STAT, 189);
+			super(Namesies.GUARD_SPEC_ITEM, "An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.", BagCategory.STAT, 191);
 			super.price = 700;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6862,7 +7496,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			PokemonEffect gSpesh = PokemonEffect.getEffect(Namesies.GUARD_SPECIAL_EFFECT);
-			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) return false;
+			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM))
+			{
+				return false;
+			}
 			
 			gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
 			return true;
@@ -6872,15 +7509,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class XAccuracy extends Item implements BattleUseItem, HoldItem
+	private static class XAccuracy extends Item implements HoldItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public XAccuracy()
 		{
-			super(Namesies.XACCURACY_ITEM, "An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 190);
+			super(Namesies.XACCURACY_ITEM, "An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 192);
 			super.price = 950;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6895,24 +7536,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
 	}
 
-	private static class XAttack extends Item implements BattleUseItem, HoldItem
+	private static class XAttack extends Item implements HoldItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public XAttack()
 		{
-			super(Namesies.XATTACK_ITEM, "An item that raises the Attack stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 191);
+			super(Namesies.XATTACK_ITEM, "An item that raises the Attack stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 193);
 			super.price = 500;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -6927,31 +7572,35 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
 	}
 
-	private static class XDefend extends Item implements BattleUseItem, HoldItem
+	private static class XDefend extends Item implements HoldItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public XDefend()
 		{
-			super(Namesies.XDEFEND_ITEM, "An item that raises the Defense stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 192);
+			super(Namesies.XDEFEND_ITEM, "An item that raises the Defense stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 194);
 			super.price = 550;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
 
 		public Stat toIncrease()
 		{
-			return Stat.SP_DEFENSE;
+			return Stat.DEFENSE;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -6959,56 +7608,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b)
-		{
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
 		}
-	}
 
-	private static class XSpDef extends Item implements BattleUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public XSpDef()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.XSP_DEF_ITEM, "An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 193);
-			super.price = 350;
-			super.bcat.add(BattleBagCategory.BATTLE);
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.SP_DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class XSpecial extends Item implements BattleUseItem, HoldItem
+	private static class XSpecial extends Item implements HoldItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public XSpecial()
 		{
-			super(Namesies.XSPECIAL_ITEM, "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 194);
+			super(Namesies.XSPECIAL_ITEM, "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 195);
 			super.price = 350;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -7023,24 +7644,64 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
+	}
+
+	private static class XSpDef extends Item implements HoldItem, BattleUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public XSpDef()
+		{
+			super(Namesies.XSP_DEF_ITEM, "An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 196);
+			super.price = 350;
+			super.bcat.add(BattleBagCategory.BATTLE);
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.SP_DEFENSE;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
 		public int flingDamage()
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
 	}
 
-	private static class XSpeed extends Item implements BattleUseItem, HoldItem
+	private static class XSpeed extends Item implements HoldItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public XSpeed()
 		{
-			super(Namesies.XSPEED_ITEM, "An item that raises the Speed stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 195);
+			super(Namesies.XSPEED_ITEM, "An item that raises the Speed stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 197);
 			super.price = 350;
 			super.bcat.add(BattleBagCategory.BATTLE);
 		}
@@ -7055,24 +7716,157 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(ActivePokemon p, Battle b)
 		{
 			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+		}
+	}
+
+	private static class HPUp extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public HPUp()
+		{
+			super(Namesies.HPUP_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 198);
+			super.price = 9800;
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.HP;
+		}
+
+		public int increaseAmount()
+		{
+			return 10;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
 		public int flingDamage()
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
 	}
 
-	private static class Calcium extends Item implements PokemonUseItem, HoldItem
+	private static class Protein extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Protein()
+		{
+			super(Namesies.PROTEIN_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 199);
+			super.price = 9800;
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.ATTACK;
+		}
+
+		public int increaseAmount()
+		{
+			return 10;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+	}
+
+	private static class Iron extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Iron()
+		{
+			super(Namesies.IRON_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 200);
+			super.price = 9800;
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.DEFENSE;
+		}
+
+		public int increaseAmount()
+		{
+			return 10;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
+	}
+
+	private static class Calcium extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Calcium()
 		{
-			super(Namesies.CALCIUM_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Atk (Special Attack) stat of a single Pok\u00e9mon.", BagCategory.STAT, 196);
+			super(Namesies.CALCIUM_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Atk (Special Attack) stat of a single Pok\u00e9mon.", BagCategory.STAT, 201);
 			super.price = 9800;
 		}
 
@@ -7091,6 +7885,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
@@ -7098,20 +7901,58 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return p.addEVs(toAdd);
 		}
+	}
+
+	private static class Zinc extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public Zinc()
+		{
+			super(Namesies.ZINC_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Def (Special Defense) stat of a single Pok\u00e9mon.", BagCategory.STAT, 202);
+			super.price = 9800;
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.SP_DEFENSE;
+		}
+
+		public int increaseAmount()
+		{
+			return 10;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
 
 		public int flingDamage()
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
+		}
 	}
 
-	private static class Carbos extends Item implements PokemonUseItem, HoldItem
+	private static class Carbos extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Carbos()
 		{
-			super(Namesies.CARBOS_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT, 197);
+			super(Namesies.CARBOS_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT, 203);
 			super.price = 9800;
 		}
 
@@ -7130,43 +7971,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
-			
-			return p.addEVs(toAdd);
-		}
-
 		public int flingDamage()
 		{
 			return 30;
 		}
-	}
 
-	private static class CleverWing extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public CleverWing()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.CLEVER_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Def stat of a single Pok\u00e9mon.", BagCategory.STAT, 198);
-			super.price = 3000;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.SP_ATTACK;
-		}
-
-		public int increaseAmount()
-		{
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -7176,20 +7987,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return p.addEVs(toAdd);
 		}
-
-		public int flingDamage()
-		{
-			return 20;
-		}
 	}
 
-	private static class HealthWing extends Item implements PokemonUseItem, HoldItem
+	private static class HealthWing extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public HealthWing()
 		{
-			super(Namesies.HEALTH_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 199);
+			super(Namesies.HEALTH_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 204);
 			super.price = 3000;
 		}
 
@@ -7208,6 +8014,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
+		public int flingDamage()
+		{
+			return 20;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
@@ -7215,31 +8030,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return p.addEVs(toAdd);
 		}
-
-		public int flingDamage()
-		{
-			return 20;
-		}
 	}
 
-	private static class HPUp extends Item implements PokemonUseItem, HoldItem
+	private static class MuscleWing extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
-		public HPUp()
+		public MuscleWing()
 		{
-			super(Namesies.HPUP_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT, 200);
-			super.price = 9800;
+			super(Namesies.MUSCLE_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 205);
+			super.price = 3000;
 		}
 
 		public Stat toIncrease()
 		{
-			return Stat.HP;
+			return Stat.ATTACK;
 		}
 
 		public int increaseAmount()
 		{
-			return 10;
+			return 1;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -7247,6 +8057,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
+		public int flingDamage()
+		{
+			return 20;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
 			int[] toAdd = new int[Stat.NUM_STATS];
@@ -7254,20 +8073,58 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return p.addEVs(toAdd);
 		}
+	}
+
+	private static class ResistWing extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public ResistWing()
+		{
+			super(Namesies.RESIST_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 206);
+			super.price = 3000;
+		}
+
+		public Stat toIncrease()
+		{
+			return Stat.DEFENSE;
+		}
+
+		public int increaseAmount()
+		{
+			return 1;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
+		}
 
 		public int flingDamage()
 		{
-			return 30;
+			return 20;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			int[] toAdd = new int[Stat.NUM_STATS];
+			toAdd[toIncrease().index()] += increaseAmount();
+			
+			return p.addEVs(toAdd);
 		}
 	}
 
-	private static class GeniusWing extends Item implements PokemonUseItem, HoldItem
+	private static class GeniusWing extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public GeniusWing()
 		{
-			super(Namesies.GENIUS_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Atk stat of a single Pok\u00e9mon.", BagCategory.STAT, 201);
+			super(Namesies.GENIUS_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Atk stat of a single Pok\u00e9mon.", BagCategory.STAT, 207);
 			super.price = 3000;
 		}
 
@@ -7286,43 +8143,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
-			
-			return p.addEVs(toAdd);
-		}
-
 		public int flingDamage()
 		{
 			return 20;
 		}
-	}
 
-	private static class Iron extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public Iron()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.IRON_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 202);
-			super.price = 9800;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.DEFENSE;
-		}
-
-		public int increaseAmount()
-		{
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -7332,26 +8159,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return p.addEVs(toAdd);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class MuscleWing extends Item implements PokemonUseItem, HoldItem
+	private static class CleverWing extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
-		public MuscleWing()
+		public CleverWing()
 		{
-			super(Namesies.MUSCLE_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 203);
+			super(Namesies.CLEVER_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Sp. Def stat of a single Pok\u00e9mon.", BagCategory.STAT, 208);
 			super.price = 3000;
 		}
 
 		public Stat toIncrease()
 		{
-			return Stat.ATTACK;
+			return Stat.SP_DEFENSE;
 		}
 
 		public int increaseAmount()
@@ -7364,99 +8186,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
-			
-			return p.addEVs(toAdd);
-		}
-
 		public int flingDamage()
 		{
 			return 20;
 		}
-	}
 
-	private static class PPMax extends Item implements MoveUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-		private String increase;
-
-		public PPMax()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.PPMAX_ITEM, "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 204);
-			super.price = 9800;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + increase + "'s Max PP was increased!";
-		}
-
-		public boolean use(ActivePokemon p, Move m)
-		{
-			increase = m.getAttack().getName();
-			return m.increaseMaxPP(3);
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-	}
-
-	private static class PPUp extends Item implements MoveUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-		private String increase;
-
-		public PPUp()
-		{
-			super(Namesies.PPUP_ITEM, "It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 205);
-			super.price = 9800;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + increase + "'s Max PP was increased!";
-		}
-
-		public boolean use(ActivePokemon p, Move m)
-		{
-			increase = m.getAttack().getName();
-			return m.increaseMaxPP(1);
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-	}
-
-	private static class Protein extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public Protein()
-		{
-			super(Namesies.PROTEIN_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT, 206);
-			super.price = 9800;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.ATTACK;
-		}
-
-		public int increaseAmount()
-		{
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -7466,80 +8202,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			return p.addEVs(toAdd);
 		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
 	}
 
-	private static class RareCandy extends Item implements HoldItem, PokemonUseItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public RareCandy()
-		{
-			super(Namesies.RARE_CANDY_ITEM, "A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.", BagCategory.STAT, 207);
-			super.price = 4800;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + " gained a level!";
-		}
-
-		public int flingDamage()
-		{
-			return 30;
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			// TODO: Need Level Up to be implemented -- also handle the message accordingly
-			return false;
-		}
-	}
-
-	private static class ResistWing extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public ResistWing()
-		{
-			super(Namesies.RESIST_WING_ITEM, "An item for use on a Pok\u00e9mon. It slightly increases the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT, 208);
-			super.price = 3000;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.DEFENSE;
-		}
-
-		public int increaseAmount()
-		{
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
-			
-			return p.addEVs(toAdd);
-		}
-
-		public int flingDamage()
-		{
-			return 20;
-		}
-	}
-
-	private static class SwiftWing extends Item implements PokemonUseItem, HoldItem
+	private static class SwiftWing extends Item implements HoldItem, PokemonUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -7564,43 +8229,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
-			
-			return p.addEVs(toAdd);
-		}
-
 		public int flingDamage()
 		{
 			return 20;
 		}
-	}
 
-	private static class Zinc extends Item implements PokemonUseItem, HoldItem
-	{
-		private static final long serialVersionUID = 1L;
-
-		public Zinc()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			super(Namesies.ZINC_ITEM, "A nutritious drink for Pok\u00e9mon. It raises the base Sp. Def (Special Defense) stat of a single Pok\u00e9mon.", BagCategory.STAT, 210);
-			super.price = 9800;
-		}
-
-		public Stat toIncrease()
-		{
-			return Stat.SP_DEFENSE;
-		}
-
-		public int increaseAmount()
-		{
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p)
-		{
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -7609,11 +8244,101 @@ public abstract class Item implements Comparable<Item>, Serializable
 			toAdd[toIncrease().index()] += increaseAmount();
 			
 			return p.addEVs(toAdd);
+		}
+	}
+
+	private static class PPMax extends Item implements MoveUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+		private String increase;
+
+		public PPMax()
+		{
+			super(Namesies.PPMAX_ITEM, "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 210);
+			super.price = 9800;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + increase + "'s Max PP was increased!";
+		}
+
+		public boolean use(ActivePokemon p, Move m)
+		{
+			increase = m.getAttack().getName();
+			return m.increaseMaxPP(3);
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+	}
+
+	private static class PPUp extends Item implements MoveUseItem, HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+		private String increase;
+
+		public PPUp()
+		{
+			super(Namesies.PPUP_ITEM, "It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 211);
+			super.price = 9800;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + "'s " + increase + "'s Max PP was increased!";
+		}
+
+		public boolean use(ActivePokemon p, Move m)
+		{
+			increase = m.getAttack().getName();
+			return m.increaseMaxPP(1);
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+	}
+
+	private static class RareCandy extends Item implements HoldItem, PokemonUseItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public RareCandy()
+		{
+			super(Namesies.RARE_CANDY_ITEM, "A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.", BagCategory.STAT, 212);
+			super.price = 4800;
+		}
+
+		public String getSuccessMessage(ActivePokemon p)
+		{
+			return p.getName() + " gained a level!";
+		}
+
+		public int flingDamage()
+		{
+			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			// TODO: Need Level Up to be implemented -- also handle the message accordingly
+			return false;
 		}
 	}
 
@@ -7623,7 +8348,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public CherishBall()
 		{
-			super(Namesies.CHERISH_BALL_ITEM, "A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.", BagCategory.BALL, 211);
+			super(Namesies.CHERISH_BALL_ITEM, "A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.", BagCategory.BALL, 213);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7644,7 +8369,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DiveBall()
 		{
-			super(Namesies.DIVE_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.", BagCategory.BALL, 212);
+			super(Namesies.DIVE_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.", BagCategory.BALL, 214);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7667,7 +8392,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DuskBall()
 		{
-			super(Namesies.DUSK_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.", BagCategory.BALL, 213);
+			super(Namesies.DUSK_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.", BagCategory.BALL, 215);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7690,15 +8415,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public FastBall()
 		{
-			super(Namesies.FAST_BALL_ITEM, "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.", BagCategory.BALL, 214);
+			super(Namesies.FAST_BALL_ITEM, "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.", BagCategory.BALL, 216);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (o.getStat(Stat.SPEED) >= 100) return new double[] {4, 0};
-			else return new double[] {1, 0};
+			// If the opponent has a base speed of 100 or higher, multiplier is 4
+			if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100)
+			{
+				return new double[] {4, 0};
+			}
+			
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -7712,7 +8442,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GreatBall()
 		{
-			super(Namesies.GREAT_BALL_ITEM, "A good, high-performance Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.", BagCategory.BALL, 215);
+			super(Namesies.GREAT_BALL_ITEM, "A good, high-performance Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.", BagCategory.BALL, 217);
 			super.price = 600;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7733,7 +8463,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HealBall()
 		{
-			super(Namesies.HEAL_BALL_ITEM, "A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.", BagCategory.BALL, 216);
+			super(Namesies.HEAL_BALL_ITEM, "A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.", BagCategory.BALL, 218);
 			super.price = 300;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7745,8 +8475,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void afterCaught(ActivePokemon p)
 		{
-			p.healHealthFraction(1);
-			for (Move m : p.getMoves()) m.increasePP(m.getAttack().getPP());
+			p.fullyHeal();
 		}
 	}
 
@@ -7756,7 +8485,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HeavyBall()
 		{
-			super(Namesies.HEAVY_BALL_ITEM, "A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.", BagCategory.BALL, 217);
+			super(Namesies.HEAVY_BALL_ITEM, "A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.", BagCategory.BALL, 219);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7787,7 +8516,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LevelBall()
 		{
-			super(Namesies.LEVEL_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.", BagCategory.BALL, 218);
+			super(Namesies.LEVEL_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.", BagCategory.BALL, 220);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7811,7 +8540,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LoveBall()
 		{
-			super(Namesies.LOVE_BALL_ITEM, "Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.", BagCategory.BALL, 219);
+			super(Namesies.LOVE_BALL_ITEM, "Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.", BagCategory.BALL, 221);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7833,7 +8562,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LureBall()
 		{
-			super(Namesies.LURE_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.", BagCategory.BALL, 220);
+			super(Namesies.LURE_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.", BagCategory.BALL, 222);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7855,7 +8584,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LuxuryBall()
 		{
-			super(Namesies.LUXURY_BALL_ITEM, "A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.", BagCategory.BALL, 221);
+			super(Namesies.LUXURY_BALL_ITEM, "A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.", BagCategory.BALL, 223);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7877,7 +8606,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MasterBall()
 		{
-			super(Namesies.MASTER_BALL_ITEM, "The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.", BagCategory.BALL, 222);
+			super(Namesies.MASTER_BALL_ITEM, "The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.", BagCategory.BALL, 224);
 			super.price = 0;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7898,7 +8627,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MoonBall()
 		{
-			super(Namesies.MOON_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.", BagCategory.BALL, 223);
+			super(Namesies.MOON_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.", BagCategory.BALL, 225);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7925,7 +8654,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public NestBall()
 		{
-			super(Namesies.NEST_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.", BagCategory.BALL, 224);
+			super(Namesies.NEST_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.", BagCategory.BALL, 226);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7948,7 +8677,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public NetBall()
 		{
-			super(Namesies.NET_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.", BagCategory.BALL, 225);
+			super(Namesies.NET_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.", BagCategory.BALL, 227);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7970,7 +8699,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PokeBall()
 		{
-			super(Namesies.POKE_BALL_ITEM, "A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.", BagCategory.BALL, 226);
+			super(Namesies.POKE_BALL_ITEM, "A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.", BagCategory.BALL, 228);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -7991,7 +8720,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PremierBall()
 		{
-			super(Namesies.PREMIER_BALL_ITEM, "A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.", BagCategory.BALL, 227);
+			super(Namesies.PREMIER_BALL_ITEM, "A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.", BagCategory.BALL, 229);
 			super.price = 200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -8012,7 +8741,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public QuickBall()
 		{
-			super(Namesies.QUICK_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.", BagCategory.BALL, 228);
+			super(Namesies.QUICK_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.", BagCategory.BALL, 230);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -8024,7 +8753,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return new double[] {3, 0};
 			}
 			
-			else return new double[] {1, 0};
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -8038,7 +8767,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RepeatBall()
 		{
-			super(Namesies.REPEAT_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.", BagCategory.BALL, 229);
+			super(Namesies.REPEAT_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.", BagCategory.BALL, 231);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -8064,7 +8793,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SafariBall()
 		{
-			super(Namesies.SAFARI_BALL_ITEM, "A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.", BagCategory.BALL, 230);
+			super(Namesies.SAFARI_BALL_ITEM, "A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.", BagCategory.BALL, 232);
 			super.bcat.add(BattleBagCategory.BALL);
 		}
 
@@ -8084,7 +8813,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public TimerBall()
 		{
-			super(Namesies.TIMER_BALL_ITEM, "A somewhat different Ball that becomes progressively better the more turns there are in a battle.", BagCategory.BALL, 231);
+			super(Namesies.TIMER_BALL_ITEM, "A somewhat different Ball that becomes progressively better the more turns there are in a battle.", BagCategory.BALL, 233);
 			super.price = 1000;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -8108,7 +8837,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public UltraBall()
 		{
-			super(Namesies.ULTRA_BALL_ITEM, "An ultra-performance Ball that provides a higher Pok\u00e9mon catch rate than a Great Ball.", BagCategory.BALL, 232);
+			super(Namesies.ULTRA_BALL_ITEM, "An ultra-performance Ball that provides a higher Pok\u00e9mon catch rate than a Great Ball.", BagCategory.BALL, 234);
 			super.price = 1200;
 			super.bcat.add(BattleBagCategory.BALL);
 		}
@@ -8123,13 +8852,15 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class CheriBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class CheriBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public CheriBerry()
 		{
-			super(Namesies.CHERI_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from paralysis.", BagCategory.BERRY, 233);
+			super(Namesies.CHERI_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from paralysis.", BagCategory.BERRY, 235);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8141,7 +8872,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -8151,7 +8882,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -8160,12 +8891,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
+		{
+			return holdMessage;
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -8174,20 +8912,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -8211,19 +8948,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
-	private static class ChestoBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public ChestoBerry()
 		{
-			super(Namesies.CHESTO_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from sleep.", BagCategory.BERRY, 234);
+			super(Namesies.CHESTO_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from sleep.", BagCategory.BERRY, 236);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8235,7 +8974,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -8245,7 +8984,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -8254,12 +8993,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
+		{
+			return holdMessage;
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -8268,20 +9014,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -8305,19 +9050,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
-	private static class PechaBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class PechaBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public PechaBerry()
 		{
-			super(Namesies.PECHA_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from poison.", BagCategory.BERRY, 235);
+			super(Namesies.PECHA_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from poison.", BagCategory.BERRY, 237);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8329,7 +9076,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -8339,7 +9086,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -8348,12 +9095,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
+		{
+			return holdMessage;
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -8362,20 +9116,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -8399,19 +9152,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
-	private static class RawstBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class RawstBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public RawstBerry()
 		{
-			super(Namesies.RAWST_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from a burn.", BagCategory.BERRY, 236);
+			super(Namesies.RAWST_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from a burn.", BagCategory.BERRY, 238);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8423,7 +9178,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -8433,7 +9188,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -8442,12 +9197,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
+		{
+			return holdMessage;
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -8456,20 +9218,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -8493,19 +9254,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
-	private static class AspearBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class AspearBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String message;
+		private String holdMessage;
 
 		public AspearBerry()
 		{
-			super(Namesies.ASPEAR_BERRY_ITEM, "If held by a Pok\u00e9mon, it defrosts it.", BagCategory.BERRY, 237);
+			super(Namesies.ASPEAR_BERRY_ITEM, "If held by a Pok\u00e9mon, it defrosts it.", BagCategory.BERRY, 239);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8517,7 +9280,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + " was cured of its status condition!";
+			return message;
 		}
 
 		public boolean use(CharacterData player, ActivePokemon p)
@@ -8527,7 +9290,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 			return true;
 		}
 
@@ -8536,12 +9299,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
+		{
+			return holdMessage;
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			if (!user.hasStatus(toRemove()))
 			{
 				return false;
 			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -8550,20 +9320,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -8579,7 +9348,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Type naturalGiftType()
 		{
-			return Type.GRASS;
+			return Type.ICE;
 		}
 
 		public int flingDamage()
@@ -8587,20 +9356,20 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
-	private static class LeppaBerry extends Item implements EndTurnEffect, MoveUseItem, GainableEffectBerry
+	private static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, MoveUseItem
 	{
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
 		public LeppaBerry()
 		{
-			super(Namesies.LEPPA_BERRY_ITEM, "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 238);
+			super(Namesies.LEPPA_BERRY_ITEM, "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 240);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -8610,49 +9379,47 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s PP for " + restore + " PP was restored!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
-			for (Move m : victim.getMoves())
+			for (Move m : victim.getMoves(b))
 			{
 				if (m.getPP() == 0)
 				{
 					use(victim, m);
-					b.addMessage(getHoldSuccessMessage(victim));
+					b.addMessage(getHoldSuccessMessage(b, victim));
 					victim.consumeItem(b);
 					break;
 				}
 			}
 		}
 
-		public boolean use(ActivePokemon p, Move m)
-		{
-			restore = m.getAttack().getName();
-			return m.increasePP(10);
-		}
-
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			List<Move> list = new ArrayList<>();
-			for (Move m : user.getMoves())
+			Move lowestPPMove = null;
+			double lowestPPRatio = 1;
+			
+			for (Move m : user.getMoves(b))
 			{
-				if (m.getPP() < m.getMaxPP())
+				double ratio = (double)m.getPP()/m.getMaxPP();
+				if (ratio < lowestPPRatio)
 				{
-					list.add(m);
+					lowestPPRatio = ratio;
+					lowestPPMove = m;
 				}
 			}
 			
-			int size = list.size();
-			if (size == 0)
+			// All moves have full PP
+			if (lowestPPMove == null)
 			{
 				return false;
 			}
 			
-			use(user, list.get((int)(Math.random()*size)));
+			use(user, lowestPPMove);
 			
 			String message = "";
 			switch (source)
@@ -8661,26 +9428,32 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
 			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
 			
 			return true;
+		}
+
+		public boolean use(ActivePokemon p, Move m)
+		{
+			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
+			restore = m.getAttack().getName();
+			return m.increasePP(10);
 		}
 
 		public int naturalGiftPower()
@@ -8697,22 +9470,22 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
-	private static class OranBerry extends Item implements PokemonUseItem, BattleUseItem, HealthTriggeredBerry
+	private static class OranBerry extends Item implements HealthTriggeredBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
 
 		public OranBerry()
 		{
-			super(Namesies.ORAN_BERRY_ITEM, "If held by a Pok\u00e9mon, it heals the user by just 10 HP.", BagCategory.BERRY, 239);
+			super(Namesies.ORAN_BERRY_ITEM, "If held by a Pok\u00e9mon, it heals the user by just 10 HP.", BagCategory.BERRY, 241);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.HP_PP);
-		}
-
-		public int healAmount()
-		{
-			return 10;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
@@ -8720,19 +9493,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + " was healed by its " + this.name + "!";
-		}
-
-		public boolean use(CharacterData player, ActivePokemon p)
-		{
-			return p.heal(healAmount()) != 0;
-		}
-
-		public boolean use(ActivePokemon p, Battle b)
-		{
-			return use(b.getPlayer(), p);
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
@@ -8743,6 +9506,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public double healthTriggerRatio()
 		{
 			return 1/3.0;
+		}
+
+		public boolean use(CharacterData player, ActivePokemon p)
+		{
+			return p.heal(10) != 0;
+		}
+
+		public boolean use(ActivePokemon p, Battle b)
+		{
+			return use(b.getPlayer(), p);
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
@@ -8759,20 +9532,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -8795,6 +9567,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry
@@ -8803,7 +9580,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PersimBerry()
 		{
-			super(Namesies.PERSIM_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 240);
+			super(Namesies.PERSIM_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 242);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -8813,7 +9590,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " snapped out of its confusion!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
 		}
@@ -8843,20 +9620,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -8879,15 +9655,21 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
-	private static class LumBerry extends Item implements PokemonUseItem, BattleUseItem, StatusBerry
+	private static class LumBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem
 	{
 		private static final long serialVersionUID = 1L;
+		private String holdMessage;
 
 		public LumBerry()
 		{
-			super(Namesies.LUM_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from any status problem.", BagCategory.BERRY, 241);
+			super(Namesies.LUM_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from any status problem.", BagCategory.BERRY, 243);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.STATUS);
 		}
@@ -8899,7 +9681,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			if (!p.hasStatus() || p.hasStatus(StatusCondition.FAINTED))
+			// Does not apply to the dead
+			if (p.hasStatus(StatusCondition.FAINTED))
+			{
+				return false;
+			}
+			
+			// YOU'RE FINE
+			if (!p.hasStatus())
 			{
 				return false;
 			}
@@ -8913,12 +9702,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return use(b.getPlayer(), p);
 		}
 
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
+		{
+			return holdMessage;
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (!use(user, b))
+			// Does not apply to the dead
+			if (user.hasStatus(StatusCondition.FAINTED))
 			{
 				return false;
 			}
+			
+			// YOU'RE FINE
+			if (!user.hasStatus())
+			{
+				return false;
+			}
+			
+			holdMessage = Status.getRemoveStatus(b, user, source);
 			
 			String message = "";
 			switch (source)
@@ -8927,20 +9730,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -8964,9 +9766,9 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return 10;
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return p.getName() + "'s " + this.getName() + " cured it of its status condition!";
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
@@ -8976,7 +9778,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SitrusBerry()
 		{
-			super(Namesies.SITRUS_BERRY_ITEM, "If held by a Pok\u00e9mon, it heals the user by a little.", BagCategory.BERRY, 242);
+			super(Namesies.SITRUS_BERRY_ITEM, "If held by a Pok\u00e9mon, it heals the user by a little.", BagCategory.BERRY, 244);
 			super.price = 20;
 			super.bcat.add(BattleBagCategory.HP_PP);
 		}
@@ -8986,7 +9788,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
@@ -9025,20 +9827,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -9061,6 +9862,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class RazzBerry extends Item implements Berry
@@ -9069,7 +9875,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RazzBerry()
 		{
-			super(Namesies.RAZZ_BERRY_ITEM, "A very valuable berry. Useful for aquiring value.", BagCategory.BERRY, 243);
+			super(Namesies.RAZZ_BERRY_ITEM, "A very valuable berry. Useful for aquiring value.", BagCategory.BERRY, 245);
 			super.price = 60000;
 		}
 
@@ -9087,6 +9893,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class PomegBerry extends Item implements Berry, PokemonUseItem
@@ -9095,7 +9905,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PomegBerry()
 		{
-			super(Namesies.POMEG_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base HP.", BagCategory.BERRY, 244);
+			super(Namesies.POMEG_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base HP.", BagCategory.BERRY, 246);
 			super.price = 20;
 		}
 
@@ -9134,6 +9944,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class KelpsyBerry extends Item implements Berry, PokemonUseItem
@@ -9142,7 +9956,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public KelpsyBerry()
 		{
-			super(Namesies.KELPSY_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Attack stat.", BagCategory.BERRY, 245);
+			super(Namesies.KELPSY_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Attack stat.", BagCategory.BERRY, 247);
 			super.price = 20;
 		}
 
@@ -9180,6 +9994,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9189,7 +10007,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public QualotBerry()
 		{
-			super(Namesies.QUALOT_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Defense stat.", BagCategory.BERRY, 246);
+			super(Namesies.QUALOT_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Defense stat.", BagCategory.BERRY, 248);
 			super.price = 20;
 		}
 
@@ -9227,6 +10045,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9236,7 +10058,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HondewBerry()
 		{
-			super(Namesies.HONDEW_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Sp. Atk stat.", BagCategory.BERRY, 247);
+			super(Namesies.HONDEW_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Sp. Atk stat.", BagCategory.BERRY, 249);
 			super.price = 20;
 		}
 
@@ -9274,6 +10096,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9283,7 +10109,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GrepaBerry()
 		{
-			super(Namesies.GREPA_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Sp. Def stat.", BagCategory.BERRY, 248);
+			super(Namesies.GREPA_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Sp. Def stat.", BagCategory.BERRY, 250);
 			super.price = 20;
 		}
 
@@ -9321,6 +10147,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9330,7 +10160,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public TamatoBerry()
 		{
-			super(Namesies.TAMATO_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Speed.", BagCategory.BERRY, 249);
+			super(Namesies.TAMATO_BERRY_ITEM, "Using it on a Pok\u00e9mon lowers its base Speed.", BagCategory.BERRY, 251);
 			super.price = 20;
 		}
 
@@ -9369,6 +10199,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class OccaBerry extends Item implements Berry, OpponentPowerChangeEffect
@@ -9377,13 +10211,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public OccaBerry()
 		{
-			super(Namesies.OCCA_BERRY_ITEM, "Weakens a supereffective Fire-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 250);
+			super(Namesies.OCCA_BERRY_ITEM, "Weakens a supereffective Fire-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 252);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.FIRE;
 		}
 
 		public int naturalGiftPower()
@@ -9398,7 +10227,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.FIRE && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9411,6 +10240,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9420,13 +10253,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PasshoBerry()
 		{
-			super(Namesies.PASSHO_BERRY_ITEM, "Weakens a supereffective Water-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 251);
+			super(Namesies.PASSHO_BERRY_ITEM, "Weakens a supereffective Water-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 253);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.WATER;
 		}
 
 		public int naturalGiftPower()
@@ -9441,7 +10269,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.WATER && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9454,6 +10282,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9463,13 +10295,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WacanBerry()
 		{
-			super(Namesies.WACAN_BERRY_ITEM, "Weakens a supereffective Electric-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 252);
+			super(Namesies.WACAN_BERRY_ITEM, "Weakens a supereffective Electric-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 254);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.ELECTRIC;
 		}
 
 		public int naturalGiftPower()
@@ -9484,7 +10311,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.ELECTRIC && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9497,6 +10324,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9506,13 +10337,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RindoBerry()
 		{
-			super(Namesies.RINDO_BERRY_ITEM, "Weakens a supereffective Grass-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 253);
+			super(Namesies.RINDO_BERRY_ITEM, "Weakens a supereffective Grass-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 255);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.GRASS;
 		}
 
 		public int naturalGiftPower()
@@ -9527,7 +10353,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.GRASS && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9540,6 +10366,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9549,13 +10379,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public YacheBerry()
 		{
-			super(Namesies.YACHE_BERRY_ITEM, "Weakens a supereffective Ice-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 254);
+			super(Namesies.YACHE_BERRY_ITEM, "Weakens a supereffective Ice-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 256);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.ICE;
 		}
 
 		public int naturalGiftPower()
@@ -9570,7 +10395,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.ICE && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9583,6 +10408,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9592,13 +10421,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ChopleBerry()
 		{
-			super(Namesies.CHOPLE_BERRY_ITEM, "Weakens a supereffective Fighting-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 255);
+			super(Namesies.CHOPLE_BERRY_ITEM, "Weakens a supereffective Fighting-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 257);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.FIGHTING;
 		}
 
 		public int naturalGiftPower()
@@ -9613,7 +10437,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.FIGHTING && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9626,6 +10450,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9635,13 +10463,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public KebiaBerry()
 		{
-			super(Namesies.KEBIA_BERRY_ITEM, "Weakens a supereffective Poison-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 256);
+			super(Namesies.KEBIA_BERRY_ITEM, "Weakens a supereffective Poison-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 258);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.POISON;
 		}
 
 		public int naturalGiftPower()
@@ -9656,7 +10479,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.POISON && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9669,6 +10492,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9678,13 +10505,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ShucaBerry()
 		{
-			super(Namesies.SHUCA_BERRY_ITEM, "Weakens a supereffective Ground-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 257);
+			super(Namesies.SHUCA_BERRY_ITEM, "Weakens a supereffective Ground-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 259);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.GROUND;
 		}
 
 		public int naturalGiftPower()
@@ -9699,7 +10521,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.GROUND && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9712,6 +10534,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9721,13 +10547,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public CobaBerry()
 		{
-			super(Namesies.COBA_BERRY_ITEM, "Weakens a supereffective Flying-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 258);
+			super(Namesies.COBA_BERRY_ITEM, "Weakens a supereffective Flying-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 260);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.FLYING;
 		}
 
 		public int naturalGiftPower()
@@ -9742,7 +10563,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.FLYING && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9755,6 +10576,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9764,13 +10589,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PayapaBerry()
 		{
-			super(Namesies.PAYAPA_BERRY_ITEM, "Weakens a supereffective Psychic-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 259);
+			super(Namesies.PAYAPA_BERRY_ITEM, "Weakens a supereffective Psychic-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 261);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.PSYCHIC;
 		}
 
 		public int naturalGiftPower()
@@ -9785,7 +10605,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.PSYCHIC && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9798,6 +10618,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9807,13 +10631,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public TangaBerry()
 		{
-			super(Namesies.TANGA_BERRY_ITEM, "Weakens a supereffective Bug-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 260);
+			super(Namesies.TANGA_BERRY_ITEM, "Weakens a supereffective Bug-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 262);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.BUG;
 		}
 
 		public int naturalGiftPower()
@@ -9828,7 +10647,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.BUG && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9841,6 +10660,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9850,13 +10673,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ChartiBerry()
 		{
-			super(Namesies.CHARTI_BERRY_ITEM, "Weakens a supereffective Rock-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 261);
+			super(Namesies.CHARTI_BERRY_ITEM, "Weakens a supereffective Rock-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 263);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.ROCK;
 		}
 
 		public int naturalGiftPower()
@@ -9871,7 +10689,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.ROCK && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9884,6 +10702,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9893,13 +10715,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public KasibBerry()
 		{
-			super(Namesies.KASIB_BERRY_ITEM, "Weakens a supereffective Ghost-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 262);
+			super(Namesies.KASIB_BERRY_ITEM, "Weakens a supereffective Ghost-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 264);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.GHOST;
 		}
 
 		public int naturalGiftPower()
@@ -9914,7 +10731,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.GHOST && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9927,6 +10744,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9936,13 +10757,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HabanBerry()
 		{
-			super(Namesies.HABAN_BERRY_ITEM, "Weakens a supereffective Dragon-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 263);
+			super(Namesies.HABAN_BERRY_ITEM, "Weakens a supereffective Dragon-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 265);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.DRAGON;
 		}
 
 		public int naturalGiftPower()
@@ -9957,7 +10773,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.DRAGON && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -9970,6 +10786,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -9979,13 +10799,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ColburBerry()
 		{
-			super(Namesies.COLBUR_BERRY_ITEM, "Weakens a supereffective Dark-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 264);
+			super(Namesies.COLBUR_BERRY_ITEM, "Weakens a supereffective Dark-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 266);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.DARK;
 		}
 
 		public int naturalGiftPower()
@@ -10000,7 +10815,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.DARK && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10013,6 +10828,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -10022,13 +10841,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BabiriBerry()
 		{
-			super(Namesies.BABIRI_BERRY_ITEM, "Weakens a supereffective Steel-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 265);
+			super(Namesies.BABIRI_BERRY_ITEM, "Weakens a supereffective Steel-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 267);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.STEEL;
 		}
 
 		public int naturalGiftPower()
@@ -10043,7 +10857,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.STEEL && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10056,6 +10870,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -10065,13 +10883,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ChilanBerry()
 		{
-			super(Namesies.CHILAN_BERRY_ITEM, "Weakens a supereffective Normal-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 266);
+			super(Namesies.CHILAN_BERRY_ITEM, "Weakens a supereffective Normal-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 268);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.NORMAL;
 		}
 
 		public int naturalGiftPower()
@@ -10086,7 +10899,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.NORMAL && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10099,6 +10912,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -10108,13 +10925,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RoseliBerry()
 		{
-			super(Namesies.ROSELI_BERRY_ITEM, "Weakens a supereffective Fairy-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 267);
+			super(Namesies.ROSELI_BERRY_ITEM, "Weakens a supereffective Fairy-type attack against the holding Pok\u00e9mon.", BagCategory.BERRY, 269);
 			super.price = 20;
-		}
-
-		public Type getType()
-		{
-			return Type.FAIRY;
 		}
 
 		public int naturalGiftPower()
@@ -10129,7 +10941,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			if (user.getAttackType() == getType() && Type.getAdvantage(user, victim, b) > 1)
+			if (user.getAttackType() == Type.FAIRY && Type.getAdvantage(user, victim, b) > 1)
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 				victim.consumeItem(b);
@@ -10143,6 +10955,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class LiechiBerry extends Item implements HealthTriggeredBerry
@@ -10151,28 +10967,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LiechiBerry()
 		{
-			super(Namesies.LIECHI_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Attack stat in a pinch.", BagCategory.BERRY, 268);
+			super(Namesies.LIECHI_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Attack stat in a pinch.", BagCategory.BERRY, 270);
 			super.price = 20;
-		}
-
-		public Stat toRaise()
-		{
-			return Stat.ATTACK;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.ATTACK.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.ATTACK, b, source))
 			{
 				return true;
 			}
@@ -10199,20 +11010,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -10235,6 +11045,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class GanlonBerry extends Item implements HealthTriggeredBerry
@@ -10243,28 +11058,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public GanlonBerry()
 		{
-			super(Namesies.GANLON_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Defense stat in a pinch.", BagCategory.BERRY, 269);
+			super(Namesies.GANLON_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Defense stat in a pinch.", BagCategory.BERRY, 271);
 			super.price = 20;
-		}
-
-		public Stat toRaise()
-		{
-			return Stat.DEFENSE;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.DEFENSE.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, source))
 			{
 				return true;
 			}
@@ -10291,20 +11101,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -10327,6 +11136,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class SalacBerry extends Item implements HealthTriggeredBerry
@@ -10335,28 +11149,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SalacBerry()
 		{
-			super(Namesies.SALAC_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 270);
+			super(Namesies.SALAC_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 272);
 			super.price = 20;
-		}
-
-		public Stat toRaise()
-		{
-			return Stat.SPEED;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.SPEED.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.SPEED, b, source))
 			{
 				return true;
 			}
@@ -10383,20 +11192,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -10419,6 +11227,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class PetayaBerry extends Item implements HealthTriggeredBerry
@@ -10427,28 +11240,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public PetayaBerry()
 		{
-			super(Namesies.PETAYA_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 271);
+			super(Namesies.PETAYA_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 273);
 			super.price = 20;
-		}
-
-		public Stat toRaise()
-		{
-			return Stat.SP_ATTACK;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.SP_ATTACK.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.SP_ATTACK, b, source))
 			{
 				return true;
 			}
@@ -10475,20 +11283,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -10511,6 +11318,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class ApicotBerry extends Item implements HealthTriggeredBerry
@@ -10519,28 +11331,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public ApicotBerry()
 		{
-			super(Namesies.APICOT_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 272);
+			super(Namesies.APICOT_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 274);
 			super.price = 20;
-		}
-
-		public Stat toRaise()
-		{
-			return Stat.SP_DEFENSE;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.SP_DEFENSE, b, source))
 			{
 				return true;
 			}
@@ -10567,20 +11374,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -10603,6 +11409,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class MicleBerry extends Item implements HealthTriggeredBerry
@@ -10611,28 +11422,23 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MicleBerry()
 		{
-			super(Namesies.MICLE_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Accuracy stat in a pinch.", BagCategory.BERRY, 273);
+			super(Namesies.MICLE_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its Accuracy stat in a pinch.", BagCategory.BERRY, 275);
 			super.price = 20;
-		}
-
-		public Stat toRaise()
-		{
-			return Stat.ACCURACY;
 		}
 
 		public String getSuccessMessage(ActivePokemon p)
 		{
-			return p.getName() + "'s " + toRaise().getName() + " increased!";
+			return p.getName() + "'s " + Stat.ACCURACY.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return "";
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			if (user.getAttributes().modifyStage(user, user, 1, toRaise(), b, source))
+			if (user.getAttributes().modifyStage(user, user, 1, Stat.ACCURACY, b, source))
 			{
 				return true;
 			}
@@ -10659,20 +11465,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -10695,6 +11500,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class KeeBerry extends Item implements Berry, TakeDamageEffect
@@ -10703,7 +11513,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public KeeBerry()
 		{
-			super(Namesies.KEE_BERRY_ITEM, "If held by a Pokémon, this Berry will increase the Pokémon's Defense stat when hit by a physical attack.", BagCategory.BERRY, 274);
+			super(Namesies.KEE_BERRY_ITEM, "If held by a Pok\u00e9mon, this Berry will increase the Pok\u00e9mon's Defense stat when hit by a physical attack.", BagCategory.BERRY, 276);
 			super.price = 20;
 		}
 
@@ -10734,6 +11544,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class MarangaBerry extends Item implements Berry, TakeDamageEffect
@@ -10742,7 +11556,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MarangaBerry()
 		{
-			super(Namesies.MARANGA_BERRY_ITEM, "If held by a Pokémon, this Berry will increase the Pokémon's Sp. Defense stat when hit by a special attack.", BagCategory.BERRY, 275);
+			super(Namesies.MARANGA_BERRY_ITEM, "If held by a Pok\u00e9mon, this Berry will increase the Pok\u00e9mon's Sp. Defense stat when hit by a special attack.", BagCategory.BERRY, 277);
 			super.price = 20;
 		}
 
@@ -10773,6 +11587,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class JabocaBerry extends Item implements Berry, TakeDamageEffect
@@ -10781,7 +11599,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public JabocaBerry()
 		{
-			super(Namesies.JABOCA_BERRY_ITEM, "If held by a Pokémon and a physical attack lands, the attacker also takes damage.", BagCategory.BERRY, 276);
+			super(Namesies.JABOCA_BERRY_ITEM, "If held by a Pok\u00e9mon and a physical attack lands, the attacker also takes damage.", BagCategory.BERRY, 278);
 			super.price = 20;
 		}
 
@@ -10814,6 +11632,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class RowapBerry extends Item implements Berry, TakeDamageEffect
@@ -10822,7 +11644,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RowapBerry()
 		{
-			super(Namesies.ROWAP_BERRY_ITEM, "If held by a Pokémon and a special attack lands, the attacker also takes damage.", BagCategory.BERRY, 277);
+			super(Namesies.ROWAP_BERRY_ITEM, "If held by a Pok\u00e9mon and a special attack lands, the attacker also takes damage.", BagCategory.BERRY, 279);
 			super.price = 20;
 		}
 
@@ -10855,6 +11677,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class CustapBerry extends Item implements Berry, PriorityChangeEffect
@@ -10863,7 +11689,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public CustapBerry()
 		{
-			super(Namesies.CUSTAP_BERRY_ITEM, "If held by a Pokémon, it gets to move first just once in a pinch.", BagCategory.BERRY, 278);
+			super(Namesies.CUSTAP_BERRY_ITEM, "If held by a Pok\u00e9mon, it gets to move first just once in a pinch.", BagCategory.BERRY, 280);
 			super.price = 20;
 		}
 
@@ -10896,6 +11722,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
 	private static class EnigmaBerry extends Item implements Berry, TakeDamageEffect
@@ -10904,7 +11734,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public EnigmaBerry()
 		{
-			super(Namesies.ENIGMA_BERRY_ITEM, "If held by a Pokémon, it restores its HP if it is hit by any supereffective attack.", BagCategory.BERRY, 279);
+			super(Namesies.ENIGMA_BERRY_ITEM, "If held by a Pok\u00e9mon, it restores its HP if it is hit by any supereffective attack.", BagCategory.BERRY, 281);
 			super.price = 20;
 		}
 
@@ -10924,7 +11754,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			{
 				b.addMessage(victim.getName() + "'s " + this.name + " restored its health!");
 				victim.healHealthFraction(.25);
-				b.addMessage("", victim.getHP(), victim.user());
+				b.addMessage("", victim);
 				victim.consumeItem(b);
 			}
 		}
@@ -10932,6 +11762,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -10941,7 +11775,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public LansatBerry()
 		{
-			super(Namesies.LANSAT_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its critical-hit ratio in a pinch.", BagCategory.BERRY, 280);
+			super(Namesies.LANSAT_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises its critical-hit ratio in a pinch.", BagCategory.BERRY, 282);
 			super.price = 20;
 		}
 
@@ -10950,7 +11784,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return p.getName() + " is getting pumped!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return p.getName() + " is getting pumped due to its " + this.name + "!";
 		}
@@ -10981,20 +11815,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11017,6 +11850,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class StarfBerry extends Item implements HealthTriggeredBerry
@@ -11027,7 +11865,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public StarfBerry()
 		{
-			super(Namesies.STARF_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises a random stat in a pinch.", BagCategory.BERRY, 281);
+			super(Namesies.STARF_BERRY_ITEM, "If held by a Pok\u00e9mon, it raises a random stat in a pinch.", BagCategory.BERRY, 283);
 			super.price = 20;
 		}
 
@@ -11036,7 +11874,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return useMessage;
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p)
+		public String getHoldSuccessMessage(Battle b, ActivePokemon p)
 		{
 			return holdMessage;
 		}
@@ -11061,7 +11899,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Stat stat = Stat.getStat(rand, true);
 			if (user.getAttributes().modifyStage(user, user, 1, stat, b, source))
 			{
-				// TODO: Test this and such
 				useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 				return true;
 			}
@@ -11088,20 +11925,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 				message = getSuccessMessage(user);
 				break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(user);
+				message = getHoldSuccessMessage(b, user);
 				break;
 				default:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 			}
 			
-			b.addMessage(message, user.getStatus().getType(), user.user());
-			b.addMessage("", user.getHP(), user.user());
+			b.addMessage(message, user);
 			
 			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
 			{
 				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 				user.healHealthFraction(1/3.0);
-				b.addMessage("", user.getHP(), user.user());
+				b.addMessage("", user);
 			}
 			
 			// Eat dat berry!!
@@ -11124,6 +11960,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 10;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+		}
 	}
 
 	private static class CometShard extends Item implements HoldItem
@@ -11132,13 +11973,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public CometShard()
 		{
-			super(Namesies.COMET_SHARD_ITEM, "A shard which fell to the ground when a comet approached. A maniac will buy it for a high price.", BagCategory.MISC, 282);
+			super(Namesies.COMET_SHARD_ITEM, "A shard which fell to the ground when a comet approached. A maniac will buy it for a high price.", BagCategory.MISC, 284);
 			super.price = 120000;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11148,13 +11993,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public TinyMushroom()
 		{
-			super(Namesies.TINY_MUSHROOM_ITEM, "A small and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 283);
+			super(Namesies.TINY_MUSHROOM_ITEM, "A small and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 285);
 			super.price = 500;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11164,13 +12013,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BigMushroom()
 		{
-			super(Namesies.BIG_MUSHROOM_ITEM, "A large and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 284);
+			super(Namesies.BIG_MUSHROOM_ITEM, "A large and rare mushroom. It is sought after by collectors.", BagCategory.MISC, 286);
 			super.price = 5000;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11180,13 +12033,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BalmMushroom()
 		{
-			super(Namesies.BALM_MUSHROOM_ITEM, "A rare mushroom which gives off a nice fragrance. A maniac will buy it for a high price.", BagCategory.MISC, 285);
+			super(Namesies.BALM_MUSHROOM_ITEM, "A rare mushroom which gives off a nice fragrance. A maniac will buy it for a high price.", BagCategory.MISC, 287);
 			super.price = 50000;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11196,13 +12053,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Nugget()
 		{
-			super(Namesies.NUGGET_ITEM, "A nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.", BagCategory.MISC, 286);
+			super(Namesies.NUGGET_ITEM, "A nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.", BagCategory.MISC, 288);
 			super.price = 10000;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11212,13 +12073,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BigNugget()
 		{
-			super(Namesies.BIG_NUGGET_ITEM, "A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.", BagCategory.MISC, 287);
+			super(Namesies.BIG_NUGGET_ITEM, "A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.", BagCategory.MISC, 289);
 			super.price = 60000;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11228,13 +12093,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Pearl()
 		{
-			super(Namesies.PEARL_ITEM, "A somewhat-small pearl that sparkles in a pretty silver color. It can be sold cheaply to shops.", BagCategory.MISC, 288);
+			super(Namesies.PEARL_ITEM, "A somewhat-small pearl that sparkles in a pretty silver color. It can be sold cheaply to shops.", BagCategory.MISC, 290);
 			super.price = 1400;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11244,13 +12113,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public BigPearl()
 		{
-			super(Namesies.BIG_PEARL_ITEM, "A quite-large pearl that sparkles in a pretty silver color. It can be sold at a high price to shops.", BagCategory.MISC, 289);
+			super(Namesies.BIG_PEARL_ITEM, "A quite-large pearl that sparkles in a pretty silver color. It can be sold at a high price to shops.", BagCategory.MISC, 291);
 			super.price = 7500;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11260,13 +12133,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Stardust()
 		{
-			super(Namesies.STARDUST_ITEM, "Lovely, red-colored sand with a loose, silky feel. It can be sold at a high price to shops.", BagCategory.MISC, 290);
+			super(Namesies.STARDUST_ITEM, "Lovely, red-colored sand with a loose, silky feel. It can be sold at a high price to shops.", BagCategory.MISC, 292);
 			super.price = 2000;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11276,13 +12153,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public StarPiece()
 		{
-			super(Namesies.STAR_PIECE_ITEM, "A shard of a pretty gem that sparkles in a red color. It can be sold at a high price to shops.", BagCategory.MISC, 291);
+			super(Namesies.STAR_PIECE_ITEM, "A shard of a pretty gem that sparkles in a red color. It can be sold at a high price to shops.", BagCategory.MISC, 293);
 			super.price = 9800;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11292,13 +12173,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public RareBone()
 		{
-			super(Namesies.RARE_BONE_ITEM, "A bone that is extremely valuable for Pok\u00e9mon archeology. It can be sold for a high price to shops.", BagCategory.MISC, 292);
+			super(Namesies.RARE_BONE_ITEM, "A bone that is extremely valuable for Pok\u00e9mon archeology. It can be sold for a high price to shops.", BagCategory.MISC, 294);
 			super.price = 10000;
 		}
 
 		public int flingDamage()
 		{
 			return 100;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11308,7 +12193,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Honey()
 		{
-			super(Namesies.HONEY_ITEM, "A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in grass, caves, or on special trees.", BagCategory.MISC, 293);
+			super(Namesies.HONEY_ITEM, "A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in grass, caves, or on special trees.", BagCategory.MISC, 295);
 			super.price = 100;
 		}
 
@@ -11316,15 +12201,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return 30;
 		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
+		}
 	}
 
-	private static class Eviolite extends Item implements StatChangingEffect, HoldItem
+	private static class Eviolite extends Item implements HoldItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Eviolite()
 		{
-			super(Namesies.EVIOLITE_ITEM, "A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pok\u00e9mon that can still evolve.", BagCategory.MISC, 294);
+			super(Namesies.EVIOLITE_ITEM, "A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def of a Pok\u00e9mon that can still evolve.", BagCategory.MISC, 296);
 			super.price = 200;
 		}
 
@@ -11333,30 +12222,24 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
+		public int flingDamage()
 		{
-			return p.getPokemonInfo().getEvolution().canEvolve();
+			return 40;
 		}
 
-		public double modifyMultiplier()
+		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
-			return 1.5;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
+			if (isModifyStat(s) && p.getPokemonInfo().getEvolution().canEvolve())
 			{
-				stat *= modifyMultiplier();
+				stat *= 1.5;
 			}
 			
 			return stat;
-		}
-
-		public int flingDamage()
-		{
-			return 40;
 		}
 	}
 
@@ -11366,13 +12249,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public HeartScale()
 		{
-			super(Namesies.HEART_SCALE_ITEM, "A pretty, heart-shaped scale that is extremely rare. It glows faintly in the colors of the rainbow.", BagCategory.MISC, 295);
+			super(Namesies.HEART_SCALE_ITEM, "A pretty, heart-shaped scale that is extremely rare. It glows faintly in the colors of the rainbow.", BagCategory.MISC, 297);
 			super.price = 100;
 		}
 
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 
@@ -11382,7 +12269,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public Repel()
 		{
-			super(Namesies.REPEL_ITEM, "An item that prevents weak wild Pok\u00e9mon from appearing for 100 steps after its use.", BagCategory.MISC, 296);
+			super(Namesies.REPEL_ITEM, "An item that prevents weak wild Pok\u00e9mon from appearing for 100 steps after its use.", BagCategory.MISC, 298);
 			super.price = 350;
 		}
 
@@ -11399,6 +12286,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(Trainer t)
@@ -11425,7 +12316,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public SuperRepel()
 		{
-			super(Namesies.SUPER_REPEL_ITEM, "An item that prevents weak wild Pok\u00e9mon from appearing for 200 steps after its use.", BagCategory.MISC, 297);
+			super(Namesies.SUPER_REPEL_ITEM, "An item that prevents weak wild Pok\u00e9mon from appearing for 200 steps after its use.", BagCategory.MISC, 299);
 			super.price = 500;
 		}
 
@@ -11442,6 +12333,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(Trainer t)
@@ -11468,7 +12363,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public MaxRepel()
 		{
-			super(Namesies.MAX_REPEL_ITEM, "An item that prevents weak wild Pok\u00e9mon from appearing for 250 steps after its use.", BagCategory.MISC, 298);
+			super(Namesies.MAX_REPEL_ITEM, "An item that prevents weak wild Pok\u00e9mon from appearing for 250 steps after its use.", BagCategory.MISC, 300);
 			super.price = 700;
 		}
 
@@ -11485,6 +12380,10 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean use(Trainer t)
@@ -11511,7 +12410,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public AbilityCapsule()
 		{
-			super(Namesies.ABILITY_CAPSULE_ITEM, "A capsule that allows a Pokémon with two Abilities to switch between these Abilities when it is used.", BagCategory.MISC, 299);
+			super(Namesies.ABILITY_CAPSULE_ITEM, "A capsule that allows a Pok\u00e9mon with two Abilities to switch between these Abilities when it is used.", BagCategory.MISC, 301);
 			super.price = 1000;
 		}
 
@@ -11533,13 +12432,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class AssaultVest extends Item implements StatChangingEffect, HoldItem, AttackSelectionEffect
+	private static class AssaultVest extends Item implements HoldItem, AttackSelectionEffect, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public AssaultVest()
 		{
-			super(Namesies.ASSAULT_VEST_ITEM, "An item to be held by a Pokémon. This offensive vest raises Sp. Def but prevents the use of status moves.", BagCategory.MISC, 300);
+			super(Namesies.ASSAULT_VEST_ITEM, "An item to be held by a Pok\u00e9mon. This offensive vest raises Sp. Def but prevents the use of status moves.", BagCategory.MISC, 302);
 			super.price = 1000;
 		}
 
@@ -11548,30 +12447,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 			return s == Stat.SP_DEFENSE;
 		}
 
-		public boolean modifyCondition(Battle b, ActivePokemon p, ActivePokemon opp)
-		{
-			return true;
-		}
-
-		public double modifyMultiplier()
-		{
-			return 1.5;
-		}
-
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
-			int stat = statValue;
-			if (isModifyStat(s) && modifyCondition(b, p, opp))
-			{
-				stat *= modifyMultiplier();
-			}
-			
-			return stat;
-		}
-
 		public int flingDamage()
 		{
 			return 30;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 
 		public boolean usable(ActivePokemon p, Move m)
@@ -11582,6 +12464,17 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public String getUnusableMessage(ActivePokemon p)
 		{
 			return p.getName() + "'s " + this.name + " prevents the use of status moves!";
+		}
+
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
+		{
+			int stat = statValue;
+			if (isModifyStat(s) && true)
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
 		}
 	}
 
@@ -11604,7 +12497,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -11616,19 +12509,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -11665,7 +12558,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -11677,19 +12570,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -11726,7 +12619,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -11738,19 +12631,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -11787,7 +12680,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -11799,19 +12692,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -11848,7 +12741,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -11860,19 +12753,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -11909,7 +12802,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -11921,19 +12814,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -11970,7 +12863,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -11982,19 +12875,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12031,7 +12924,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12043,19 +12936,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12092,7 +12985,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12104,19 +12997,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12153,7 +13046,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12165,19 +13058,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12214,7 +13107,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12226,19 +13119,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12275,7 +13168,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12287,19 +13180,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12336,7 +13229,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12348,19 +13241,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12397,7 +13290,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12409,19 +13302,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12458,7 +13351,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12470,19 +13363,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12519,7 +13412,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12531,19 +13424,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12580,7 +13473,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12592,19 +13485,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12641,7 +13534,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12653,19 +13546,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12702,7 +13595,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12714,19 +13607,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12763,7 +13656,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12775,19 +13668,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12824,7 +13717,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12836,19 +13729,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12885,7 +13778,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12897,19 +13790,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -12946,7 +13839,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -12958,19 +13851,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13007,7 +13900,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13019,19 +13912,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13068,7 +13961,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13080,19 +13973,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13129,7 +14022,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13141,19 +14034,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13190,7 +14083,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13202,19 +14095,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13251,7 +14144,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13263,19 +14156,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13312,7 +14205,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13324,19 +14217,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13373,7 +14266,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13385,19 +14278,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13434,7 +14327,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13446,19 +14339,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13495,7 +14388,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13507,19 +14400,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13556,7 +14449,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13568,19 +14461,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13617,7 +14510,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13629,19 +14522,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13678,7 +14571,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13690,19 +14583,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13739,7 +14632,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13751,19 +14644,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13800,7 +14693,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13812,19 +14705,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13861,7 +14754,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13873,19 +14766,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13922,7 +14815,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13934,19 +14827,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -13983,7 +14876,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -13995,19 +14888,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14044,7 +14937,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14056,19 +14949,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14105,7 +14998,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14117,19 +15010,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14166,7 +15059,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14178,19 +15071,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14227,7 +15120,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14239,19 +15132,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14288,7 +15181,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14300,19 +15193,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14349,7 +15242,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14361,19 +15254,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14410,7 +15303,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14422,19 +15315,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14471,7 +15364,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14483,19 +15376,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14532,7 +15425,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14544,19 +15437,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14593,7 +15486,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14605,19 +15498,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14654,7 +15547,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14666,19 +15559,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14715,7 +15608,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14727,19 +15620,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14776,7 +15669,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14788,19 +15681,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14837,7 +15730,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14849,19 +15742,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14898,7 +15791,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14910,19 +15803,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -14959,7 +15852,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -14971,19 +15864,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15020,7 +15913,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15032,19 +15925,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15081,7 +15974,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15093,19 +15986,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15142,7 +16035,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15154,19 +16047,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15203,7 +16096,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15215,19 +16108,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15264,7 +16157,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15276,19 +16169,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15325,7 +16218,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15337,19 +16230,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15386,7 +16279,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15398,19 +16291,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15447,7 +16340,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15459,19 +16352,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15508,7 +16401,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15520,19 +16413,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15569,7 +16462,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15581,19 +16474,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15630,7 +16523,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15642,19 +16535,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15691,7 +16584,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15703,19 +16596,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15752,7 +16645,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15764,19 +16657,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15813,7 +16706,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15825,19 +16718,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15874,7 +16767,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15886,19 +16779,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15935,7 +16828,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -15947,19 +16840,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -15996,7 +16889,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16008,19 +16901,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16057,7 +16950,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16069,19 +16962,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16118,7 +17011,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16130,19 +17023,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16179,7 +17072,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16191,19 +17084,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16240,7 +17133,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16252,19 +17145,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16301,7 +17194,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16313,19 +17206,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16362,7 +17255,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16374,19 +17267,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16423,7 +17316,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16435,19 +17328,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16484,7 +17377,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16496,19 +17389,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16545,7 +17438,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16557,19 +17450,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16606,7 +17499,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16618,19 +17511,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16667,7 +17560,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16679,19 +17572,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16728,7 +17621,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16740,19 +17633,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16789,7 +17682,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16801,19 +17694,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16850,7 +17743,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16862,19 +17755,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16911,7 +17804,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16923,19 +17816,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -16972,7 +17865,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -16984,19 +17877,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17033,7 +17926,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17045,19 +17938,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17094,7 +17987,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17106,19 +17999,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17155,7 +18048,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17167,19 +18060,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17216,7 +18109,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17228,19 +18121,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17277,7 +18170,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17289,19 +18182,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17338,7 +18231,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17350,19 +18243,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17386,7 +18279,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public DazzlingGleamTM()
 		{
-			super(Namesies.DAZZLING_GLEAM_TM_ITEM, "The user damages opposing PokÃ©mon by emitting a powerful flash.", BagCategory.TM, 2017);
+			super(Namesies.DAZZLING_GLEAM_TM_ITEM, "The user damages opposing Pokémon by emitting a powerful flash.", BagCategory.TM, 2017);
 		}
 
 		public Attack getAttack()
@@ -17399,7 +18292,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17411,19 +18304,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17460,7 +18353,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17472,19 +18365,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17521,7 +18414,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17533,19 +18426,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17582,7 +18475,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17594,19 +18487,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17643,7 +18536,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17655,19 +18548,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17704,7 +18597,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17716,19 +18609,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;
@@ -17765,7 +18658,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
-			if (p.hasMove(attack.namesies()))
+			if (p.hasActualMove(attack.namesies()))
 			{
 				return false;
 			}
@@ -17777,19 +18670,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			Move tmMove = new Move(attack);
-			int numMoves = p.getMoves().size();
+			List<Move> moveList = p.getActualMoves();
 			
 			// If they don't have a full move list, append to the end
-			if (numMoves < Move.MAX_MOVES)
+			if (moveList.size() < Move.MAX_MOVES)
 			{
-				p.addMove(null, tmMove, numMoves);
+				p.addMove(null, tmMove, moveList.size());
 				return true;
 			}
 			
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < numMoves; i++)
+			for (int i = 0; i < moveList.size(); i++)
 			{
-				if (p.getMove(i).getAttack().namesies() == m.getAttack().namesies())
+				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
 				{
 					p.addMove(null, tmMove, i);
 					return true;

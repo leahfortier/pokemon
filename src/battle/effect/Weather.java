@@ -18,10 +18,10 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	
 	protected Type weatherElement;
 	
-	public Weather(Namesies namesies, Type weather)
+	public Weather(Namesies namesies, Type weatherElement)
 	{
 		super(namesies, -1, -1, true);
-		weatherElement = weather;
+		this.weatherElement = weatherElement;
 	}
 	
 	public Type getElement()
@@ -33,6 +33,9 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	{
 		super.cast(b, caster, victim, source, printCast);
 		b.getWeather().setTurns(getTurns(b, caster));
+		
+		b.addMessage("", caster);
+		b.addMessage("", victim);
 	}
 	
 	private int getTurns(Battle b, ActivePokemon caster)
@@ -44,24 +47,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		}
 		
 		return 5;
-	}
-	
-	protected void buffet(Battle b, ActivePokemon p, Type[] immunees, String message)
-	{
-		for (Type type : immunees)
-			if (p.isType(b, type))
-				return;
-		
-		Object[] list = b.getEffectsList(p);
-		Object checkeroo = Global.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
-		if (checkeroo != null)
-		{
-			return;
-		}
-
-		// Buffety buffety buffet
-		b.addMessage(message);
-		p.reduceHealthFraction(b, 1/16.0);
 	}
 	
 	public abstract Weather newInstance();
@@ -166,10 +151,12 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			{
 				if (p.isAttackType(Type.WATER))
 				{
+					// Water is fiddy percent stronger in tha weathz
 					stat *= 1.5;
 				}
 				else if (p.isAttackType(Type.FIRE))
 				{
+					// Fire is fiddy percent weaker in tha weathz
 					stat *= .5;
 				}
 			}
@@ -219,12 +206,12 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			{
 				if (p.isAttackType(Type.FIRE))
 				{
-					// Fire is fiddy percent stronger in tha sun
+					// Fire is fiddy percent stronger in tha weathz
 					stat *= 1.5;
 				}
 				else if (p.isAttackType(Type.WATER))
 				{
-					// Water is fiddy percent weaker in tha sun
+					// Water is fiddy percent weaker in tha weathz
 					stat *= .5;
 				}
 			}
@@ -237,10 +224,24 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 		private static Type[] immunees = new Type[] {Type.ROCK, Type.GROUND, Type.STEEL};
-		
-		private String getBuffetMessage(ActivePokemon p)
+		private void buffet(Battle b, ActivePokemon p)
 		{
-			return p.getName() + " is buffeted by the sandstorm!";
+			// Don't buffet the immune!
+			for (Type type : immunees)
+			if (p.isType(b, type))
+			return;
+			
+			// Srsly don't buffet the immune!!
+			Object[] list = b.getEffectsList(p);
+			Object checkeroo = Global.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
+			if (checkeroo != null)
+			{
+				return;
+			}
+			
+			// Buffety buffety buffet
+			b.addMessage(p.getName() + " is buffeted by the sandstorm!");
+			p.reduceHealthFraction(b, 1/16.0);
 		}
 
 		public Sandstorm()
@@ -268,19 +269,29 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return "The sandstorm subsided.";
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b)
+		public boolean isModifyStat(Stat s)
 		{
-			b.addMessage("The sandstorm rages.");
-			
-			ActivePokemon other = b.getOtherPokemon(victim.user());
-			buffet(b, victim, immunees, getBuffetMessage(victim));
-			buffet(b, other, immunees, getBuffetMessage(other));
+			return s == Stat.SP_DEFENSE;
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
-			return (int)(stat*(s == Stat.SP_DEFENSE && p.isType(b, Type.ROCK) ? 1.5 : 1));
+			if (isModifyStat(s) && p.isType(b, Type.ROCK))
+			{
+				stat *= 1.5;
+			}
+			
+			return stat;
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b)
+		{
+			b.addMessage("The sandstorm rages");
+			
+			ActivePokemon other = b.getOtherPokemon(victim.user());
+			buffet(b, victim);
+			buffet(b, other);
 		}
 	}
 
@@ -288,10 +299,24 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 		private static Type[] immunees = new Type[] {Type.ICE};
-		
-		private String getBuffetMessage(ActivePokemon p)
+		private void buffet(Battle b, ActivePokemon p)
 		{
-			return p.getName() + " is buffeted by the hail!";
+			// Don't buffet the immune!
+			for (Type type : immunees)
+			if (p.isType(b, type))
+			return;
+			
+			// Srsly don't buffet the immune!!
+			Object[] list = b.getEffectsList(p);
+			Object checkeroo = Global.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
+			if (checkeroo != null)
+			{
+				return;
+			}
+			
+			// Buffety buffety buffet
+			b.addMessage(p.getName() + " is buffeted by the hail!");
+			p.reduceHealthFraction(b, 1/16.0);
 		}
 
 		public Hailing()
@@ -324,8 +349,8 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			b.addMessage("The hail continues to fall.");
 			
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			buffet(b, victim, immunees, getBuffetMessage(victim));
-			buffet(b, other, immunees, getBuffetMessage(other));
+			buffet(b, victim);
+			buffet(b, other);
 		}
 	}
 }

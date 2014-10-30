@@ -17,44 +17,16 @@ Failure:
 ***
 
 Reflect:
-	Int: StatChangingEffect, DefogRelease
-	NumTurns: 5
-	ModifyStat: 
-	return stat*(s == Stat.DEFENSE && !opp.hasAbility(Namesies.INFILTRATOR_ABILITY) ? 2 : 1);
-	###
-	CastMessage: user.getName() + " raised the defense of its team!"
-	SubsideMessage: "The effects of reflect faded."
-	Defog: "The effects of reflect faded."
-	Cast: 
-	super.cast(b, caster, victim, source, printCast);
-	if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM))
-	{
-		Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
-	}
-	###
+	Int: BarrierEffect
+	Barrier: Defense reflect
 *
 LightScreen:
-	Int: StatChangingEffect, DefogRelease
-	NumTurns: 5
-	ModifyStat: 
-	return stat*(s == Stat.SP_DEFENSE && !opp.hasAbility(Namesies.INFILTRATOR_ABILITY) ? 2 : 1);
-	###
-	CastMessage: user.getName() + " raised the special defense of its team!"
-	SubsideMessage: "The effects of light screen faded."
-	Defog: "The effects of light screen faded."
-	Cast: 
-	super.cast(b, caster, victim, source, printCast);
-	if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM)) 
-	{
-		Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
-	}
-	###
+	Int: BarrierEffect
+	Barrier: Sp_Defense light screen
 *
 Tailwind:
-	Int: StatChangingEffect
-	ModifyStat: 
-	return stat*(s == Stat.SPEED ? 2 : 1);
-	###
+	ToModify: Speed
+	ModifyMultiplier: 2 true
 	NumTurns: 4
 	SubsideMessage: "The effects of tailwind faded."
 	CastMessage: user.getName() + " raised the speed of its team!"
@@ -189,7 +161,7 @@ Wish:
 	}
 	
 	p.healHealthFraction(1/2.0);
-	b.addMessage(casterName + "'s wish came true!", p.getHP(), p.user());
+	b.addMessage(casterName + "'s wish came true!", p);
 	###
 	Cast: 
 	casterName = caster.getName();
@@ -203,44 +175,10 @@ LuckyChant:
 	Int: CritBlockerEffect
 *
 FutureSight:
-	NumTurns: 2
-	NextTurnSubside: True
-	Field: 
-	private ActivePokemon theSeeer;
-	###
-	Activate: 
-	x.theSeeer = theSeeer;
-	###
-	Subside: 
-	b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
-	theSeeer.setMove(new Move(Attack.getAttack(Namesies.FUTURE_SIGHT_ATTACK)));
-	theSeeer.getAttack().applyDamage(theSeeer, p, b);
-	###
-	Cast: 
-	theSeeer = caster;
-	super.cast(b, caster, victim, source, printCast);
-	###
-	CastMessage: theSeeer.getName() + " foresaw an attack!"
+	FutureAttackEffect: Future_Sight
 *
 DoomDesire:
-	NumTurns: 2
-	NextTurnSubside: True
-	Field: 
-	private ActivePokemon theSeeer;
-	###
-	Activate: 
-	x.theSeeer = theSeeer;
-	###
-	Subside: 
-	b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
-	theSeeer.setMove(new Move(Attack.getAttack(Namesies.DOOM_DESIRE_ATTACK)));
-	theSeeer.getAttack().applyDamage(theSeeer, p, b);
-	###
-	Cast: 
-	theSeeer = caster;
-	super.cast(b, caster, victim, source, printCast);
-	###
-	CastMessage: theSeeer.getName() + " foresaw an attack!"
+	FutureAttackEffect: Doom_Desire
 *
 HealSwitch:
 	Field: 
@@ -253,8 +191,8 @@ HealSwitch:
 	Enter: 
 	victim.healHealthFraction(1);
 	victim.removeStatus();
-	b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim.getHP(), victim.user());
-	b.addMessage("", StatusCondition.NONE, victim.user());
+	
+	b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim);
 	super.active = false;
 	###
 	Cast: 
@@ -287,5 +225,5 @@ PayDay:
 	player.getDatCashMoney(coins);
 	###
 *
-DoubleMoney:
+GetDatCashMoneyTwice:
 *

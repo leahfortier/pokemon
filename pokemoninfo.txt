@@ -13665,7 +13665,7 @@ Whirlpool
 1 0 0 0 0 0 
 Level 171 27
 2
-5 DeepSeaScale
+5 Deep Sea Scale
 5 Prism Scale
 50
 Volt Absorb
@@ -13750,7 +13750,7 @@ Whirlpool
 2 0 0 0 0 0 
 None
 2
-5 DeepSeaScale
+5 Deep Sea Scale
 5 Prism Scale
 50
 Volt Absorb
@@ -25465,7 +25465,7 @@ Thrash
 0 1 0 0 0 0 
 Level 319 30
 1
-5 DeepSeaTooth
+5 Deep Sea Tooth
 50
 Rough Skin
 Speed Boost
@@ -25550,7 +25550,7 @@ Thrash
 0 2 0 0 0 0 
 None
 1
-5 DeepSeaTooth
+5 Deep Sea Tooth
 50
 Rough Skin
 Speed Boost
@@ -29373,8 +29373,8 @@ Water Pulse
 255
 0 0 1 0 0 0 
 Multi 2
-Item 367  DeepSeaTooth
-Item 368  DeepSeaScale
+Item 367  Deep Sea Tooth
+Item 368  Deep Sea Scale
 1
 5 Big Pearl
 50
@@ -29445,7 +29445,7 @@ Water Pulse
 0 1 1 0 0 0 
 None
 1
-5 DeepSeaTooth
+5 Deep Sea Tooth
 50
 Swift Swim
 Water Veil
@@ -29517,7 +29517,7 @@ Water Pulse
 0 0 0 2 0 0 
 None
 1
-5 DeepSeaScale
+5 Deep Sea Scale
 50
 Swift Swim
 Hydration
@@ -29602,7 +29602,7 @@ Zen Headbutt
 1 0 1 0 0 0 
 None
 1
-5 DeepSeaScale
+5 Deep Sea Scale
 87
 Swift Swim
 Rock Head
@@ -43924,8 +43924,8 @@ Whirlpool
 0 0 0 0 0 2 
 None
 2
-5 DeepSeaTooth
-5 DeepSeaScale
+5 Deep Sea Tooth
+5 Deep Sea Scale
 50
 Reckless
 Rock Head

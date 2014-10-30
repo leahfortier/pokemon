@@ -66,38 +66,37 @@ public class MessageUpdate
 	}
 	
 	// YEAH THAT'S RIGHT HEALTH UPDATE
-	public MessageUpdate(String m, int h, boolean t)
+	public MessageUpdate(int h, boolean t)
 	{
-		this(m);
+		this("");
 		hp = h;
 		playerTarget = t;
 	}
 	
 	// Update to maximum HP
-	public MessageUpdate(String m, int h, int max, boolean t)
+	public MessageUpdate(int h, int max, boolean t)
 	{
-		this(m);
+		this("");
 		hp = h;
 		maxHP = max;
 		playerTarget = t;
 	}
 	
 	// Show stat gains
-	public MessageUpdate(String m, int h, int[] gains, int[] stats, boolean t)
+	public MessageUpdate(int[] gains, int[] stats)
 	{
-		this(m);
-		hp = h;
+		this("");
 		maxHP = stats[Stat.HP.index()];
 		statGains = gains;
 		newStats = stats;
 		updateType = Update.STAT_GAIN;
-		playerTarget = t;
+		playerTarget = true;
 	}
 	
 	// OOOOHH SOMEONE'S GOT DAT STATUS CONDITION
-	public MessageUpdate(String m, StatusCondition s, boolean t)
+	public MessageUpdate(StatusCondition s, boolean t)
 	{
-		this(m);
+		this("");
 		status = s;
 		playerTarget = t;
 	}
@@ -113,9 +112,9 @@ public class MessageUpdate
 	}
 	
 	// Type Update!
-	public MessageUpdate(String m, Type[] typesies, boolean t)
+	public MessageUpdate(Type[] typesies, boolean t)
 	{
-		this(m);
+		this("");
 		type = typesies;
 		playerTarget = t;
 	}
@@ -128,11 +127,11 @@ public class MessageUpdate
 		switchPokemon = true;
 		hp = p.getHP();
 		status = p.getStatus().getType();
-		type = p.getType(b);
+		type = p.getDisplayType(b);
 		shiny = p.isShiny();
 		pokemon = p.getPokemonInfo();
 		name = p.getName();
-		maxHP = p.getStat(Stat.HP);
+		maxHP = p.getMaxHP();
 		level = p.getLevel();
 		gender = p.getGender();
 		expRatio = p.expRatio();
@@ -147,34 +146,31 @@ public class MessageUpdate
 	}
 	
 	// EXP Gain update
-	public MessageUpdate(String m, float ratio)
+	public MessageUpdate(int lvl, float ratio, boolean levelUp)
 	{
-		this(m);
+		this("");
+		
 		playerTarget = true;
 		expRatio = ratio;
-	}
-	
-	// Level up update
-	public MessageUpdate(String m, int lev, float ratio)
-	{
-		this(m);
-		playerTarget = true;
-		level = lev;
-		expRatio = ratio;
+		
+		if (levelUp)
+		{
+			level = lvl;
+		}
 	}
 	
 	// Name change update
-	public MessageUpdate(String m, String n, boolean t)
+	public MessageUpdate(String n, boolean t)
 	{
-		this(m);
+		this("");
 		name = n;
 		playerTarget = t;
 	}
 	
 	// Gender change update
-	public MessageUpdate(String m, Gender g, boolean t)
+	public MessageUpdate(Gender g, boolean t)
 	{
-		this(m);
+		this("");
 		gender = g;
 		playerTarget = t;
 	}
