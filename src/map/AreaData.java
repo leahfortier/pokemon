@@ -1,7 +1,6 @@
 package map;
 
 import gui.GameData;
-import gui.view.MapView.WeatherState;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,8 +9,12 @@ public class AreaData {
 
 	public static final Pattern areaSoundConditionPattern = Pattern.compile("(?:([()&|!\\w]+)\\s*:\\s*)?([\\w-]+)");
 	
+	public enum WeatherState{
+		NORMAL, SUN, RAIN, FOG, SNOW
+	};
+	
 	public enum TerrainType{
-		GRASS, BUILDING, CAVE, SAND, WATER, SNOW, ICE
+		GRASS, BUILDING, CAVE, SAND, WATER, SNOW, ICE 
 	};
 	
 	private String name;
@@ -30,7 +33,7 @@ public class AreaData {
 		
 		this.musicCondition = musicCondition;
 		
-		this.weather = name.equals("Edge 1")?WeatherState.RAIN:WeatherState.valueOf(weather);
+		this.weather = WeatherState.valueOf(weather);
 	}
 	
 	public void addMusicTriggers(GameData data)

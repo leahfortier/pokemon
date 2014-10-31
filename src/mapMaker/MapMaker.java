@@ -60,6 +60,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
 import main.Global;
+import map.AreaData.TerrainType;
+import map.AreaData.WeatherState;
 import map.entity.NPCEntityData;
 import mapMaker.data.MapMakerTriggerData;
 import mapMaker.data.PlaceableTrigger;
@@ -459,21 +461,35 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 							{
 								color = permuteColor(color, areaIndexMap);
 								
-								//Save index file with new area
-								File areaIndexFile = new File(root.getPath() + FILE_SLASH + mapAreaIndexFileName);  
-							
-								try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(areaIndexFile, true)))) 
-								{
-								    out.println("\"" + newAreaName + "\"\t\t" + (Long.toString(color.getRGB() & 0xFFFFFFFFL, 16) ));
-								}
-								catch (IOException ex) 
-								{
-									ex.printStackTrace();
-								}
+								//Get terrain type
+								TerrainType terrainType = (TerrainType)JOptionPane.showInputDialog(this, "Terrain Type", "Please specify the terrain type:", JOptionPane.PLAIN_MESSAGE, null, TerrainType.values(), TerrainType.GRASS);
 								
-								//Add area to the list.
-								areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, color), color.getRGB() + ""));
-								areaIndexMap.put(color.getRGB(), newAreaName);
+								if(terrainType != null)
+								{
+									
+									//Get weather type
+									WeatherState weatherState = (WeatherState)JOptionPane.showInputDialog(this, "Weather State", "Please specify the weather state:", JOptionPane.PLAIN_MESSAGE, null, WeatherState.values(), WeatherState.NORMAL);
+									
+									if(weatherState != null)
+									{
+									
+										//Save index file with new area
+										File areaIndexFile = new File(root.getPath() + FILE_SLASH + mapAreaIndexFileName);  
+									
+										try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(areaIndexFile, true)))) 
+										{
+										    out.println("\"" + newAreaName + "\"\t\t" + (Long.toString(color.getRGB() & 0xFFFFFFFFL, 16) ) + "\t\t" +weatherState+"\t\t" +terrainType);
+										}
+										catch (IOException ex) 
+										{
+											ex.printStackTrace();
+										}
+										
+										//Add area to the list.
+										areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, color), color.getRGB() + ""));
+										areaIndexMap.put(color.getRGB(), newAreaName);
+									}
+								}
 							}
 						}
 						//Area exists, add to model.

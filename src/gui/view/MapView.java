@@ -18,6 +18,7 @@ import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
 import map.AreaData;
+import map.AreaData.WeatherState;
 import map.DialogueSequence;
 import map.MapData;
 import map.entity.Entity;
@@ -33,7 +34,7 @@ import battle.Battle;
 
 public class MapView extends View{
 	public String currentMapName;
-	public String currentAreaName;
+	public AreaData currentArea;
 	public MapData currentMap;
 	public Trigger currentMusicTrigger;
 	public String queuedDialogueName;
@@ -66,9 +67,6 @@ public class MapView extends View{
 	};
 	VisualState state;
 	
-	public enum WeatherState{
-		NORMAL, SUN, RAIN, FOG, SNOW
-	};
 	WeatherState weatherState;
 	
 	int selectedButton;
@@ -81,7 +79,7 @@ public class MapView extends View{
 	
 	public MapView(){
 		currentMapName = "";
-		currentAreaName = "";
+		currentArea = null;
 		currentDialogue = null;
 		rainHeight = new int[Global.GAME_SIZE.width/2];
 		state = VisualState.MAP;
@@ -274,7 +272,7 @@ public class MapView extends View{
 	{
 		int fontSize = 30;
 		
-		int width = (currentAreaName.length() + 3) * fontSize/2;
+		int width = (currentArea.getAreaName().length() + 3) * fontSize/2;
 		int height = fontSize + fontSize/2;
 		
 		int borderSize = 2;
@@ -308,7 +306,7 @@ public class MapView extends View{
 		
 		g.setFont(Global.getFont(fontSize));
 		g.setColor(Color.white);
-		Global.drawStringCenterX(currentAreaName, (width + (2*graySize))/2, yValue + fontSize/3 + graySize + height/2, g);
+		Global.drawStringCenterX(currentArea.getAreaName(), (width + (2*graySize))/2, yValue + fontSize/3 + graySize + height/2, g);
 	}
 	
 	// Display battle intro animation.
@@ -388,7 +386,7 @@ public class MapView extends View{
 				currentMap.setCharacterToEntrance(character, character.mapEntranceName);
 			}
 			
-			currentAreaName = "";
+			currentArea = null;
 			
 			entities = currentMap.populateEntities(character, game.data);
 			
@@ -415,9 +413,11 @@ public class MapView extends View{
 		
 		//New area
 		AreaData area = game.data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
-		if (!area.getAreaName().equals(currentAreaName))
+		if (currentArea == null || !area.getAreaName().equals(currentArea.getAreaName()))
 		{
-			currentAreaName = character.areaName = area.getAreaName();
+			character.areaName = area.getAreaName();
+			currentArea = area;
+
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
 			weatherState = area.getWeather();
 			
@@ -623,9 +623,9 @@ public class MapView extends View{
 		{
 			currentMusicTrigger.execute(game);
 		}
-		else
+		else if(currentArea != null)
 		{
-			System.err.println("No music specified for current area " + currentAreaName + ".");
+			System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
 			Global.soundPlayer.playMusic(SoundTitle.DEFAULT_TUNE);
 		}
 	}
@@ -649,6 +649,8 @@ public class MapView extends View{
 		battleImageSlideRight = null;
 		this.seenWild = seenWild;
 		
+		this.battle.setTerrainType(currentArea.getTerrain());
+		
 		if (battle.isWildBattle())
 		{
 			Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
@@ -664,7 +666,7 @@ public class MapView extends View{
 	{
 		if(battle.isWildBattle())
 		{
-			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x00010000);
+			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x300 + currentArea.getTerrain().ordinal());
 			
 			ActivePokemon p = battle.getOpponent().front();
 			battleImageSlideRight = game.data.getPokemonTilesLarge().getTile(p.getPokemonInfo().getImageNumber(p.isShiny()));

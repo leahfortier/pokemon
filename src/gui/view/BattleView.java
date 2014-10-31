@@ -1755,9 +1755,16 @@ public class BattleView extends View
 		ActivePokemon enmy = currentBattle.getOpponent().front();
 		TileSet tiles = data.getBattleTiles();
 		
-		// TODO: get background based on terrain type (0x100 + terrainType.ordinal())
-		g.drawImage(tiles.getTile(0x100), 0, 0, null);
+		//Get background based on terrain type
+		int terrainTypeIndex = currentBattle.getTerrainType().ordinal();
+		g.drawImage(tiles.getTile(0x100 + terrainTypeIndex), 0, 0, null);
 
+		//Player's battle circle
+		g.drawImage(tiles.getTile(0x200 + terrainTypeIndex), 0, 331, null);
+		
+		//Opponent battle circle
+		g.drawImage(tiles.getTile(0x300 + terrainTypeIndex), 450, 192, null);
+		
 		if (playerAnimation.isEmpty())
 		{
 			if (enemyAnimation.isEmpty())
