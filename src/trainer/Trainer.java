@@ -151,6 +151,7 @@ public abstract class Trainer implements Team, Serializable
 		return cashMoney;
 	}
 	
+	// Money in da bank
 	public void getDatCashMoney(int datCash)
 	{
 		cashMoney += datCash;

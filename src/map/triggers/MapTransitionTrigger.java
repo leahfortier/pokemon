@@ -3,12 +3,13 @@ package map.triggers;
 import java.util.regex.Matcher;
 
 import main.Game;
+import map.entity.MovableEntity.Direction;
 
 public class MapTransitionTrigger extends Trigger
 {
 	public String mapName;
 	public int newX, newY;
-	public int direction = -1;
+	public Direction direction = null;
 	public String mapEntranceName;
 	
 	public MapTransitionTrigger(String name, String contents) 
@@ -30,7 +31,8 @@ public class MapTransitionTrigger extends Trigger
 					newY = Integer.parseInt(m.group(2));
 					break;
 				case "direction":
-					direction = Integer.parseInt(m.group(2));
+					int directionIndex = Integer.parseInt(m.group(2));
+					direction = directionIndex == -1 ? null : Direction.values()[directionIndex];
 					break;
 				case "mapEntrance":
 					mapEntranceName = m.group(2);
@@ -39,13 +41,13 @@ public class MapTransitionTrigger extends Trigger
 		}
 	}
 	
-	public MapTransitionTrigger(String name, String conditionString, String mapName, String mapEntranceName, int direction) 
+	public MapTransitionTrigger(String name, String conditionString, String mapName, String mapEntranceName, int directionIndex) 
 	{
 		super(name, conditionString);
 		
 		this.mapName = mapName;
 		this.mapEntranceName = mapEntranceName;
-		this.direction = direction;
+		this.direction = directionIndex == -1 ? null : Direction.values()[directionIndex];;
 	}
 	
 	public void execute(Game game) 
@@ -59,7 +61,7 @@ public class MapTransitionTrigger extends Trigger
 			game.charData.setLocation(newX, newY);
 		}
 		
-		if (direction != -1)
+		if (direction != null)
 			game.charData.setDirection(direction);
 		
 		game.charData.mapReset = true;
@@ -75,7 +77,7 @@ public class MapTransitionTrigger extends Trigger
 		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
 		ret.append("\tnextMap: " + mapName + "\n"+
 				"\tmapEntrance: " + mapEntranceName + "\n" +
-				(direction == -1 ? "" : "\tdirection: " + direction + "\n"));
+				(direction == null ? "" : "\tdirection: " + direction + "\n"));
 		
 		return ret.toString();
 	}

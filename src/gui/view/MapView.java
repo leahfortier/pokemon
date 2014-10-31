@@ -20,6 +20,8 @@ import main.InputControl.Control;
 import map.DialogueSequence;
 import map.MapData;
 import map.entity.Entity;
+import map.entity.MovableEntity.Direction;
+import map.entity.MovableEntity;
 import map.entity.NPCEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
@@ -139,10 +141,10 @@ public class MapView extends View{
 					if (nx < 0 || ny < 0 || nx >= entities.length || ny >= entities[0].length)
 						continue;
 					
-					if (entities[nx][ny] != null)
+					if (entities[nx][ny] != null && entities[nx][ny] instanceof MovableEntity)
 					{
-						int td = entities[nx][ny].getDirection();
-						if (d != 0 && ((td == 0) || (td == 3)))
+						Direction td = ((MovableEntity)entities[nx][ny]).getDirection();
+						if (d != 0 && ((td == Direction.RIGHT) || (td == Direction.DOWN)))
 							continue;
 						
 						entities[nx][ny].draw(g, data, drawX, drawY, d > 0);
@@ -379,7 +381,8 @@ public class MapView extends View{
 			
 			entities = currentMap.populateEntities(character, game.data);
 			
-			int prevDir = character.direction;
+			Direction prevDir = character.direction;
+			
 			playerEntity = new PlayerEntity(character);
 			playerEntity.setDirection(prevDir);
 			entities[character.locationX][character.locationY] = playerEntity;
@@ -529,30 +532,32 @@ public class MapView extends View{
 		
 		startX = (int) (-drawX/Global.TILESIZE);
 		startY = (int) (-drawY/Global.TILESIZE);
+		
 		endX = startX + tilesX + 6;
 		endY = startY + tilesY + 6;
 		
-		//Check for any NPCs facing the player
+		// Check for any NPCs facing the player
 		if (!playerEntity.isStalled() && state == VisualState.MAP)
 		{
 			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; ++dist)
 			{
-				for (int dir = 0; dir < Entity.tdx.length; ++dir)
+				// TODO: Move to movable entity
+				for (Direction direction : Direction.values())
 				{
-					int x = playerEntity.charX + Entity.tdx[dir]*dist;
-					int y = playerEntity.charY + Entity.tdy[dir]*dist;
+					int x = playerEntity.charX - direction.dx*dist;
+					int y = playerEntity.charY - direction.dy*dist;
 				
 					if (!currentMap.inBounds(x, y))
 						continue;
 					
-					if (entities[x][y] != null && entities[x][y] instanceof NPCEntity && entities[x][y].isFacing(playerEntity.charX, playerEntity.charY) && ((NPCEntity)entities[x][y]).getWalkToPlayer())
+					if (entities[x][y] != null && entities[x][y] instanceof NPCEntity && ((NPCEntity)entities[x][y]).isFacing(playerEntity.charX, playerEntity.charY) && ((NPCEntity)entities[x][y]).getWalkToPlayer())
 					{
 						NPCEntity npc = (NPCEntity)entities[x][y];
 						if (!npc.getWalkingToPlayer() && game.data.getTrigger(npc.getWalkTrigger()).isTriggered(game.charData))
 						{
 							playerEntity.stall();
-							npc.setDirection(dir);
-							npc.walkTowards(dist - 1, dir);
+							npc.setDirection(direction);
+							npc.walkTowards(dist - 1, direction);
 							
 							if (npc.isTrainer())
 							{
@@ -569,7 +574,8 @@ public class MapView extends View{
 			if (e != null && (state == VisualState.MAP || e != playerEntity))
 				e.update(dt, entities, currentMap, input, this);
 		
-		if (state == VisualState.MAP) playerEntity.triggerCheck(game, currentMap);
+		if (state == VisualState.MAP) 
+			playerEntity.triggerCheck(game, currentMap);
 		
 		while (!removeQueue.isEmpty())
 		{

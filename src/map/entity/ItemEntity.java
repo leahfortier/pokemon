@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import main.InputControl;
 import map.DialogueSequence;
 import map.MapData;
+import map.entity.MovableEntity.Direction;
 import map.triggers.Trigger;
 
 public class ItemEntity extends Entity
@@ -37,7 +38,6 @@ public class ItemEntity extends Entity
 
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) 
 	{
-		super.update(dt, entity, map, input, view);
 		if (hasTriggered)
 		{
 			view.removeEntity(this);
@@ -54,12 +54,7 @@ public class ItemEntity extends Entity
 		return trigger;
 	}
 
-	public int getTransitionTime() 
-	{
-		return 0;
-	}
-
-	public void getAttention(int d) 
+	public void getAttention(Direction direction)
 	{
 		hasTriggered = true;
 	}

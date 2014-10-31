@@ -1518,7 +1518,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						break; 
 					case "1": 
 						NPCEntityData npc = (NPCEntityData) triggerData.getPlaceableTrigger().entity;
-						img = trainerTileMap.get(12*npc.spriteIndex + 1 +npc.defaultDirection);
+						img = trainerTileMap.get(12*npc.spriteIndex + 1 + npc.defaultDirection.ordinal()); // TODO: This should call a function
 						break;
 					case "2": 
 						img = mapMakerTileMap.get(4);

@@ -1,7 +1,6 @@
 package map.entity;
 
 import gui.GameData;
-import gui.TileSet;
 import gui.view.MapView;
 
 import java.awt.Dimension;
@@ -18,10 +17,8 @@ import map.MapData.WalkType;
 import map.triggers.Trigger;
 import trainer.CharacterData;
 
-public class PlayerEntity extends Entity
+public class PlayerEntity extends MovableEntity
 {
-	private static Control[] directionKeys = new Control[] {Control.RIGHT, Control.UP, Control.LEFT, Control.DOWN};
-
 	private CharacterData charData;
 	private boolean justMoved;
 	private String npcTrigger;
@@ -32,7 +29,8 @@ public class PlayerEntity extends Entity
 
 	public PlayerEntity(CharacterData data)
 	{
-		super(data.locationX, data.locationY);
+		super(data.locationX, data.locationY, 0, data.direction);
+		
 		charData = data;
 		justMoved = true;
 		stalled = false;
@@ -77,26 +75,26 @@ public class PlayerEntity extends Entity
 			}
 			else
 			{
-				for (int i = 0; i < directionKeys.length; i++)
+				for (Direction direction : Direction.values())
 				{
-					if (input.isDown(directionKeys[i]) && transitionTime == 0 && !stalled && trainerTrigger == null)
+					if (input.isDown(direction.key) && transitionTime == 0 && !stalled && trainerTrigger == null)
 					{
-						if (transitionDirection != i)
+						if (transitionDirection != direction)
 						{
-							transitionDirection = i;
+							transitionDirection = direction;
 							continue;
 						}
 
-						int dx = charData.locationX + fdx[i];
-						int dy = charData.locationY + fdy[i];
+						int dx = charData.locationX + direction.dx;
+						int dy = charData.locationY + direction.dy;
 						
 						WalkType curPassValue = map.getPassValue(charData.locationX, charData.locationY);
 						WalkType passValue = map.getPassValue(dx, dy);
 						
-						if (isPassable(passValue, i) && entity[dx][dy] == null)
+						if (isPassable(passValue, direction) && entity[dx][dy] == null)
 						{
 							// dx += getWalkTypeAdditionalMove(passValue, i);
-							dy += getWalkTypeAdditionalMove(curPassValue, passValue, i);
+							dy += getWalkTypeAdditionalMove(curPassValue, passValue, direction);
 
 							entity[dx][dy] = this;
 							entity[charData.locationX][charData.locationY] = null;
@@ -120,13 +118,13 @@ public class PlayerEntity extends Entity
 
 			if (spacePressed)
 			{
-				int x = fdx[transitionDirection] + charX;
-				int y = fdy[transitionDirection] + charY;
+				int x = transitionDirection.dx + charX;
+				int y = transitionDirection.dy + charY;
 				
 				if (!(x < 0 || y < 0 || x >= entity.length || y >= entity[0].length) && (entity[x][y] != null))
 				{
 					npcTrigger = entity[x][y].getTrigger();
-					entity[x][y].getAttention((transitionDirection + 2) % 4);
+					entity[x][y].getAttention(transitionDirection.opposite);
 					
 					if (entity[x][y] instanceof NPCEntity && ((NPCEntity) entity[x][y]).isTrainer())
 						trainerTrigger = entity[x][y].getTrigger();
@@ -135,10 +133,10 @@ public class PlayerEntity extends Entity
 			
 			if (stalled)
 			{
-				for (int dir = 0; dir < tdx.length; ++dir)
+				for (Direction direction : Direction.values())
 				{
-					int x = tdx[dir] + charX;
-					int y = tdy[dir] + charY;
+					int x = charX - direction.dx;
+					int y = charY - direction.dy;
 					
 					if (!(x < 0 || y < 0 || x >= entity.length || y >= entity[0].length) && (entity[x][y] != null))
 					{
@@ -146,8 +144,8 @@ public class PlayerEntity extends Entity
 						if (entity[x][y] instanceof NPCEntity && ((NPCEntity) entity[x][y]).isTrainer())
 							trainerTrigger = entity[x][y].getTrigger();
 						
-						entity[x][y].getAttention(dir);
-						charData.direction = transitionDirection = (dir + 2) % tdx.length;
+						entity[x][y].getAttention(direction);
+						charData.direction = transitionDirection = direction.opposite;
 						stalled = false;
 					}
 				}
@@ -158,18 +156,37 @@ public class PlayerEntity extends Entity
 		justCreated = false;
 	}
 
-	public int getWalkTypeAdditionalMove(WalkType prev, WalkType next, int dir)
+	public int getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction)
 	{
-		if (dir == 1 || dir == 3)
+		if (direction == Direction.UP || direction == Direction.DOWN)
+		{
 			return 0;
-		if (dir == 2 && next == WalkType.STAIRS_UP_LEFT)
-			return -1;
-		if (dir == 2 && next == WalkType.STAIRS_UP_RIGHT)
-			return 1;
-		if (dir == 0 && prev == WalkType.STAIRS_UP_LEFT)
-			return 1;
-		if (dir == 0 && prev == WalkType.STAIRS_UP_RIGHT)
-			return -1;
+		}
+		
+		if (direction == Direction.LEFT)
+		{
+			if (next == WalkType.STAIRS_UP_LEFT)
+			{
+				return Direction.UP.dy;
+			}
+			else if (next == WalkType.STAIRS_UP_RIGHT)
+			{
+				return Direction.DOWN.dy;
+			}
+		}
+		
+		if (direction == Direction.RIGHT)
+		{
+			if (prev == WalkType.STAIRS_UP_LEFT)
+			{
+				return Direction.DOWN.dy;
+			}
+			else if (prev == WalkType.STAIRS_UP_RIGHT)
+			{
+				return Direction.UP.dy;
+			}
+		}
+		
 		return 0;
 	}
 
@@ -203,23 +220,14 @@ public class PlayerEntity extends Entity
 		}
 	}
 
-	protected BufferedImage getFrame(GameData data)
-	{
-		TileSet trainerTiles = data.getTrainerTiles();
-		if (transitionTime > 0)
-			return trainerTiles.getTile(1 + transitionDirection + 4 * (1 + runFrame));
-		
-		return trainerTiles.getTile(1 + transitionDirection);
-	}
-
 	public float[] getDrawLocation(Dimension d)
 	{
 		float[] res = new float[2];
 		if (transitionTime > 0)
 		{
 			float len = Math.max(0f, (Global.TIME_BETWEEN_TILES - (float) transitionTime/*-dt*/) / Global.TIME_BETWEEN_TILES);
-			res[0] = d.width / 2 - (charData.locationX + tdx[transitionDirection] * len) * Global.TILESIZE;
-			res[1] = d.height / 2 - (charData.locationY + tdy[transitionDirection] * len) * Global.TILESIZE;
+			res[0] = d.width / 2 - (charData.locationX - transitionDirection.dx * len) * Global.TILESIZE;
+			res[1] = d.height / 2 - (charData.locationY - transitionDirection.dy * len) * Global.TILESIZE;
 		}
 		else
 		{
@@ -240,9 +248,9 @@ public class PlayerEntity extends Entity
 		return Global.TIME_BETWEEN_TILES;
 	}
 
-	public void getAttention(int d)
+	public void getAttention(Direction direction)
 	{
-		transitionDirection = d;
+		transitionDirection = direction;
 		stalled = true;
 	}
 

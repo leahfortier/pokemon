@@ -7,43 +7,34 @@ import java.awt.image.BufferedImage;
 
 import main.InputControl;
 import map.MapData;
+import map.entity.MovableEntity.Direction;
 
-public class TriggerEntity extends Entity{
+public class TriggerEntity extends Entity
+{
 	private String trigger;
 
-	public TriggerEntity(int x, int y, String trigger) {
+	public TriggerEntity(int x, int y, String trigger) 
+	{
 		super(x, y);
 		this.trigger = trigger;
 
 	}
 
-	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
-		super.update(dt, entity, map, input, view);
-		
-	}
+	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {}
 
-	@Override
-	protected BufferedImage getFrame(GameData data) {
+	protected BufferedImage getFrame(GameData data) 
+	{
+		// TODO: Make constant for empty image because this looks weird
 		return data.getTrainerTiles().getTile(-1);
 	}
 
-	@Override
-	public String getTrigger() {
+	public String getTrigger() 
+	{
 		return trigger;
 	}
 
-	@Override
-	public int getTransitionTime() {
-		return 0;
-	}
-
-	@Override
-	public void getAttention(int d) {
-		transitionDirection = d;
-	}
+	public void getAttention(Direction direction) {}
 	
-	@Override
-	public void addData(GameData data){ }
-	public void reset() { }
+	public void addData(GameData data) {}
+	public void reset() {}
 }

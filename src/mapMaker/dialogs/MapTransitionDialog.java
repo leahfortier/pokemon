@@ -129,7 +129,7 @@ public class MapTransitionDialog extends JPanel {
 	public void setMapTransition(MapTransitionTrigger mapTransition) {
 		destinationComboBox.setSelectedItem(mapTransition.mapName);
 		entranceComboBox.setSelectedItem(mapTransition.mapEntranceName);
-		directionComboBox.setSelectedIndex(mapTransition.direction +1);
+		directionComboBox.setSelectedIndex(mapTransition.direction.ordinal() + 1);
 	}
 	
 	public MapTransitionTrigger getMapTransition(String name) {

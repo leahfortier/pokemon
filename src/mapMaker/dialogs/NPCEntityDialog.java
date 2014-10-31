@@ -324,7 +324,7 @@ public class NPCEntityDialog extends JPanel {
 	
 	public void setNPCData(NPCEntityData npc, String name) {
 		nameTextField.setText(name);
-		directionComboBox.setSelectedIndex(npc.defaultDirection);
+		directionComboBox.setSelectedIndex(npc.defaultDirection.ordinal());
 		spriteComboBox.setSelectedIndex(npc.spriteIndex);
 		
 		conditionTextField.setText(npc.condition.getOriginalConditionString().replace("&"," & ").replace("|"," | "));

@@ -20,6 +20,7 @@ import main.Game.ViewMode;
 import main.Global;
 import main.Namesies;
 import map.DialogueSequence;
+import map.entity.MovableEntity.Direction;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
@@ -41,7 +42,8 @@ public class CharacterData extends Trainer implements Serializable
 	public static final int START_MONEY = 3000;
 	
 	public int locationX, locationY;
-	public int direction;
+	public Direction direction;
+	
 	public boolean mapReset;
 	public String mapName;
 	public String areaName;
@@ -88,7 +90,7 @@ public class CharacterData extends Trainer implements Serializable
 		Arrays.fill(badges, false);
 		repelSteps = 0;
 		
-		direction = 3;
+		direction = Direction.DOWN;
 		
 		seconds = 0;
 		timeSinceUpdate = System.currentTimeMillis();
@@ -213,9 +215,9 @@ public class CharacterData extends Trainer implements Serializable
 		return areaName;
 	}
 
-	public void setDirection(int d)
+	public void setDirection(Direction direction)
 	{
-		direction = d;
+		this.direction = direction;
 	}
 	
 	public void setPokeCenter()
@@ -228,7 +230,7 @@ public class CharacterData extends Trainer implements Serializable
 	{
 		setMap(lastPCMap, lastPCMapEntrance);
 
-		direction = 3;
+		direction = Direction.DOWN;
 		mapReset = true;
 	}
 	

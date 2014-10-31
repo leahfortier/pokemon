@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.Global;
+import map.entity.MovableEntity.Direction;
 
 public class NPCEntityData extends EntityData{
 	private static final Pattern multiVariablePattern = Pattern.compile("(\\w+)(?:\\[(\\d+)\\])?:\\s*(?:(\\w+)|\"([^\"]*)\")");
@@ -12,7 +13,7 @@ public class NPCEntityData extends EntityData{
 	private NPCEntity entity;
 	public String path;
 	public int spriteIndex;
-	public int defaultDirection;
+	public Direction defaultDirection;
 	
 	public String[] firstDialogue;
 	public String[] secondDialogue;
@@ -24,12 +25,13 @@ public class NPCEntityData extends EntityData{
 	
 	public int walkToPlayer;
 	
-	public NPCEntityData(String name, String contents){
+	public NPCEntityData(String name, String contents)
+	{
 		super (name,contents);
 
 		entity = null;
 		
-		defaultDirection = 0;
+		defaultDirection = Direction.DOWN;
 		spriteIndex = 0;
 		path = "w";
 		
@@ -60,7 +62,7 @@ public class NPCEntityData extends EntityData{
 				spriteIndex = Integer.parseInt(m.group(3));
 				break;
 			case "direction":
-				defaultDirection = Integer.parseInt(m.group(3));
+				defaultDirection = Direction.values()[Integer.parseInt(m.group(3))];
 				break;
 			case "firstDialogue":
 				val = Integer.parseInt(m.group(2));
@@ -124,7 +126,8 @@ public class NPCEntityData extends EntityData{
 		
 		this.x = x;
 		this.y = y;
-		defaultDirection = direction;
+		
+		defaultDirection = Direction.values()[direction];
 	}
 	
 	
