@@ -6,9 +6,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import trainer.CharacterData;
-
 import main.Global;
+import map.AreaData;
 import map.DialogueSequence;
 import map.MapData;
 import map.triggers.BadgeTrigger;
@@ -23,6 +22,7 @@ import map.triggers.SoundTrigger;
 import map.triggers.TrainerBattleTrigger;
 import map.triggers.Trigger;
 import map.triggers.WildBattleTrigger;
+import trainer.CharacterData;
 
 public class GameData
 {
@@ -33,7 +33,7 @@ public class GameData
 	
 	public static final String DATA_LOCATION = "rec" + Global.FILE_SLASH;
 	private HashMap<String, MapData> maps;
-	private HashMap<Integer, String> areas;
+	private HashMap<Integer, AreaData> areas;
 	private HashMap<String, Trigger> triggers;
 	private HashMap<String, DialogueSequence> dialogues;
 	private TileSet mapTiles, battleTiles, pokemonTilesLarge, pokemonTilesMedium, pokemonTilesSmall, itemTiles, trainerTiles, pauseMenuTiles, partyTiles, mainMenuTiles, bagTiles;
@@ -83,33 +83,11 @@ public class GameData
 		{
 			String areaName = m.group(1);
 			int value = (int) Long.parseLong(m.group(2), 16);
-			areas.put(value, areaName);
 			
-			if(m.group(3) != null)
-			{
-				//GroupTrigger areaGroupTrigger = new GroupTrigger("GroupTrigger_AreaSound_for_"+areaName, "");
-				StringBuilder groupTriggers = new StringBuilder();
-				String areaNameDisplay = areaName.replace(' ', '_').replaceAll("\\W", "");
-				
-				Matcher areaSoundMatcher = areaSoundConditionPattern.matcher(m.group(3));
-				while(areaSoundMatcher.find())
-				{
-					String condition = areaSoundMatcher.group(1);
-					String musicName = areaSoundMatcher.group(2);
-					String soundTriggerName = "SoundTrigger_AreaSound_for_"+areaNameDisplay+"_MusicName_"+musicName;
-					
-//					System.out.println(condition + " : " + musicName);
-					
-					addTrigger("Sound", soundTriggerName, (condition != null? "condition: "+condition: "") + "\nmusicName: "+musicName);
-					groupTriggers.append("trigger: "+soundTriggerName +"\n");
-				}
-				
-				addTrigger("Group", "GroupTrigger_AreaSound_for_"+areaNameDisplay, groupTriggers.toString());
-				
-				//musicForAreas.put(areaName, m.group(3));
-				//System.out.println(m.group(3));
-			}
-			//System.out.println("Area " +areaName +" loaded.");
+			// TODO: Add terrain and weather state to area index file
+			AreaData area = new AreaData(areaName, value, "NORMAL", "GRASS", m.group(3));
+			areas.put(value, area);
+			area.addMusicTriggers(this);
 		}
 	}
 
@@ -175,8 +153,7 @@ public class GameData
 	{
 		return maps.get(name);
 	}
-	
-	public String getArea(int color)
+	public AreaData getArea(int color)
 	{
 		return areas.containsKey(color)? areas.get(color): areas.get(0);
 	}

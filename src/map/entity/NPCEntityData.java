@@ -62,7 +62,14 @@ public class NPCEntityData extends EntityData{
 				spriteIndex = Integer.parseInt(m.group(3));
 				break;
 			case "direction":
-				defaultDirection = Direction.values()[Integer.parseInt(m.group(3))];
+				String direction = m.group(3);
+				try
+				{
+					defaultDirection = Direction.values()[Integer.parseInt(direction)];
+				}
+				catch (NumberFormatException e) {
+					defaultDirection = Direction.valueOf(direction);
+				}
 				break;
 			case "firstDialogue":
 				val = Integer.parseInt(m.group(2));

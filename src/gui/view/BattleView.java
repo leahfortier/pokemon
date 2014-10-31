@@ -1755,7 +1755,8 @@ public class BattleView extends View
 		ActivePokemon enmy = currentBattle.getOpponent().front();
 		TileSet tiles = data.getBattleTiles();
 		
-		g.drawImage(tiles.getTile(0x100), 0, 0, null);		
+		// TODO: get background based on terrain type (0x100 + terrainType.ordinal())
+		g.drawImage(tiles.getTile(0x100), 0, 0, null);
 
 		if (playerAnimation.isEmpty())
 		{
@@ -1774,25 +1775,25 @@ public class BattleView extends View
 		}
 		
 		// Draw Status Box Backgrounds
-		g.translate(42, 52);
-		enemyAnimation.drawStatusBox(g, 1, enmy, data.getPokemonTilesMedium(), 565, 185);
-		g.translate(-42, -52);
-
 		g.translate(463,  304);
 		playerAnimation.drawStatusBox(g, 0, plyr, data.getPokemonTilesLarge(), 190 - 463, 412 - 304);
 		g.translate(-463, -304);
+
+		g.translate(42, 52);
+		enemyAnimation.drawStatusBox(g, 1, enmy, data.getPokemonTilesMedium(), 565, 185);
+		g.translate(-42, -52);
 
 		// Draw Status Box Foregrounds
 		g.drawImage(tiles.getTile(1), 0, 0, null);
 		
 		// Draw Status Box Text
-		g.translate(42,  52);
-		enemyAnimation.drawStatusBoxText(g, 1, tiles, enmy);
-		g.translate(-42, -52);
-		
 		g.translate(463,  304);
 		playerAnimation.drawStatusBoxText(g, 0, tiles, plyr);
 		g.translate(-463, -304);
+		
+		g.translate(42,  52);
+		enemyAnimation.drawStatusBoxText(g, 1, tiles, enmy);
+		g.translate(-42, -52);
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		

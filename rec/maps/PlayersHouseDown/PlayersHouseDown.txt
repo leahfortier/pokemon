@@ -7,7 +7,7 @@ NPC PlayersHouseDown_NPC_Mom_01{
 	startY: 4
 	path: w
 	spriteIndex: 13
-	direction: 3
+	direction: DOWN
 	walkToPlayer: false
 	firstDialogue[0]: "It's nice when you come to visit, but please get a job."
 }

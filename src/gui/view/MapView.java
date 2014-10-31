@@ -17,11 +17,12 @@ import main.Game.ViewMode;
 import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
+import map.AreaData;
 import map.DialogueSequence;
 import map.MapData;
 import map.entity.Entity;
-import map.entity.MovableEntity.Direction;
 import map.entity.MovableEntity;
+import map.entity.MovableEntity.Direction;
 import map.entity.NPCEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
@@ -65,7 +66,7 @@ public class MapView extends View{
 	};
 	VisualState state;
 	
-	private enum WeatherState{
+	public enum WeatherState{
 		NORMAL, SUN, RAIN, FOG, SNOW
 	};
 	WeatherState weatherState;
@@ -132,6 +133,7 @@ public class MapView extends View{
 					g.drawImage(img, dx + (Global.TILESIZE - img.getWidth()), dy + (Global.TILESIZE - img.getHeight()), null);
 				}
 				
+				//draw entities, and check for entities above and to the left of this location to see if they just moved out and draw them again.
 				for (int d = 0; d < ddx.length; d++)
 				{
 					int nx, ny;
@@ -141,25 +143,34 @@ public class MapView extends View{
 					if (nx < 0 || ny < 0 || nx >= entities.length || ny >= entities[0].length)
 						continue;
 					
-					if (entities[nx][ny] != null && entities[nx][ny] instanceof MovableEntity)
+					if (entities[nx][ny] != null)
 					{
-						Direction td = ((MovableEntity)entities[nx][ny]).getDirection();
-						if (d != 0 && ((td == Direction.RIGHT) || (td == Direction.DOWN)))
+						//If entity is a movable entity and they are moving right or down, do not draw them again.
+						if(entities[nx][ny] instanceof MovableEntity)
+						{
+							Direction td = ((MovableEntity)entities[nx][ny]).getDirection();
+							if (d != 0 && ((td == Direction.RIGHT) || (td == Direction.DOWN)))
+								continue;
+						}
+						//Not a movable entity, only draw once.
+						else if(d != 0)
+						{
 							continue;
+						}
 						
 						entities[nx][ny].draw(g, data, drawX, drawY, d > 0);
 					}
 				}
 			}
 		}
+
+		drawWeatherEffects(g);
 		
 		//Area Transition
 		if (areaDisplayTime > 0)
 		{
 			drawAreaTransitionAnimation(g);
 		}
-		
-		drawWeatherEffects(g);
 		
 		switch (state)
 		{
@@ -403,13 +414,15 @@ public class MapView extends View{
 		}
 		
 		//New area
-		if (!game.data.getArea(currentMap.getAreaName(character.locationX, character.locationY)).equals(currentAreaName))
+		AreaData area = game.data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
+		if (!area.getAreaName().equals(currentAreaName))
 		{
-			currentAreaName = character.areaName = game.data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
+			currentAreaName = character.areaName = area.getAreaName();
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
+			weatherState = area.getWeather();
 			
 			//Queue to play new area's music.
-			currentMusicTrigger = game.data.getTrigger("GroupTrigger_AreaSound_for_"+currentAreaName.replace(' ', '_').replaceAll("\\W", ""));
+			currentMusicTrigger = game.data.getTrigger(area.getMusicTriggerName());
 			//System.out.println(currentMusicTrigger);
 			
 			playAreaMusic(game);

@@ -94,7 +94,7 @@ public class WildBattleTrigger extends Trigger
 		int index = 0;
 		m = eventTriggerPattern.matcher(function);
 		
-		System.out.println(function);
+		//System.out.println(function);
 		
 		while (m.find())
 		{
