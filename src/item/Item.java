@@ -11,6 +11,7 @@ import item.hold.DriveItem;
 import item.hold.EVItem;
 import item.hold.GemItem;
 import item.hold.HoldItem;
+import item.hold.IncenseItem;
 import item.hold.PlateItem;
 import item.hold.PowerItem;
 import item.use.BallItem;
@@ -26,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import main.Global;
 import main.Namesies;
@@ -36,6 +38,7 @@ import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.Evolution;
 import pokemon.Evolution.EvolutionCheck;
+import pokemon.PokemonInfo;
 import pokemon.Stat;
 import trainer.CharacterData;
 import trainer.Team;
@@ -199,6 +202,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 	public int hashCode()
 	{
 		return name.hashCode();
+	}
+	
+	public static void processIncenseItems()
+	{
+		Set<String> itemStringKeySet = map.keySet();
+		for (String itemString : itemStringKeySet)
+		{
+			Item item = map.get(itemString);
+			if (!(item instanceof IncenseItem))
+				continue;
+			
+			PokemonInfo.addIncenseBaby(((IncenseItem)item).getBaby());
+		}
 	}
 
 	public static void loadItems()
@@ -615,6 +631,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 		map.put("Surf TM", new SurfTM());
 		map.put("Strength TM", new StrengthTM());
 		map.put("Waterfall TM", new WaterfallTM());
+
+		processIncenseItems();
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -2962,7 +2980,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class FullIncense extends Item implements HoldItem, StallingEffect
+	private static class FullIncense extends Item implements HoldItem, StallingEffect, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2980,9 +2998,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.MUNCHLAX_POKEMON;
+		}
 	}
 
-	private static class LaxIncense extends Item implements HoldItem, StatChangingEffect
+	private static class LaxIncense extends Item implements HoldItem, IncenseItem, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3006,6 +3029,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 		}
 
+		public Namesies getBaby()
+		{
+			return Namesies.WYNAUT_POKEMON;
+		}
+
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
 		{
 			int stat = statValue;
@@ -3018,7 +3046,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class LuckIncense extends Item implements HoldItem, EntryEffect
+	private static class LuckIncense extends Item implements HoldItem, EntryEffect, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3041,9 +3069,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.HAPPINY_POKEMON;
+		}
 	}
 
-	private static class OddIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class OddIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3051,6 +3084,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			super(Namesies.ODD_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.", BagCategory.MISC, 75);
 			super.price = 9600;
+		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.MIME_JR_POKEMON;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3073,7 +3111,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class PureIncense extends Item implements HoldItem, RepellingEffect
+	private static class PureIncense extends Item implements HoldItem, RepellingEffect, IncenseItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3096,9 +3134,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			return .33;
 		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.CHINGLING_POKEMON;
+		}
 	}
 
-	private static class RockIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class RockIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3106,6 +3149,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			super(Namesies.ROCK_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.", BagCategory.MISC, 77);
 			super.price = 9600;
+		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.BONSLY_POKEMON;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3128,7 +3176,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class RoseIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class RoseIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3136,6 +3184,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			super(Namesies.ROSE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.", BagCategory.MISC, 78);
 			super.price = 9600;
+		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.BUDEW_POKEMON;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3158,7 +3211,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class SeaIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class SeaIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3166,6 +3219,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			super(Namesies.SEA_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 79);
 			super.price = 9600;
+		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.AZURILL_POKEMON;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -3188,7 +3246,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class WaveIncense extends Item implements PowerChangeEffect, HoldItem
+	private static class WaveIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -3196,6 +3254,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			super(Namesies.WAVE_INCENSE_ITEM, "An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC, 80);
 			super.price = 9600;
+		}
+
+		public Namesies getBaby()
+		{
+			return Namesies.MANTYKE_POKEMON;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)

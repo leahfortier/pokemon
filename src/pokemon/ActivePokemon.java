@@ -58,6 +58,7 @@ public class ActivePokemon implements Serializable
 	public static final Pattern pokemonParameterPattern = Pattern.compile("(?:(Shiny)|(Moves:)\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+)\\s*[*]|(Egg)|(Item:)\\s*([\\w \\-'.]+)[*])", Pattern.UNICODE_CHARACTER_CLASS);
 	
 	public static final int MAX_LEVEL = 100;
+	public static final int MAX_IV = 31;
 	
 	private static final String[][] characteristics = 
 		{{"Loves to eat", "Proud of its power", "Sturdy body", "Highly curious", "Strong willed", "Likes to run"},
@@ -87,6 +88,11 @@ public class ActivePokemon implements Serializable
 	private Type hiddenPowerType;
 	private boolean isEgg;
 	private int eggSteps;
+	
+	public void setGender(Gender gender)
+	{
+		this.gender = gender;
+	}
 
 	public ActivePokemon(PokemonInfo p, int lev, boolean wild, boolean user)
 	{
@@ -124,23 +130,16 @@ public class ActivePokemon implements Serializable
 		nickname = "Egg";
 	}
 	
-	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy)
+	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo)
 	{
-		this(mommy.getPokemonInfo().getBaseEvolution(), 1, false, true);
+		this(babyInfo, 1, false, true);
 		
-		setIVs(daddy, mommy);
+		moves = Breeding.getBabyMoves(daddy, mommy, babyInfo);
+		IVs = Breeding.getBabyIVs(daddy, mommy);
+		nature = Breeding.getBabyNature(daddy, mommy);
+		hiddenPowerType = computeHiddenPowerType();
 		setStats();
 		setCharacteristic();
-		hiddenPowerType = computeHiddenPowerType();
-		
-		ArrayList<Nature> naturesToChooseFrom = new ArrayList<>();
-		if (daddy.getActualHeldItem().namesies() == Namesies.EVERSTONE_ITEM)
-			naturesToChooseFrom.add(daddy.getNature());
-		if (mommy.getActualHeldItem().namesies() == Namesies.EVERSTONE_ITEM)
-			naturesToChooseFrom.add(mommy.getNature());
-		
-		if (naturesToChooseFrom.size() > 0)
-			nature = naturesToChooseFrom.get((int)(Math.random() * naturesToChooseFrom.size()));
 	}
 	
 	/*
@@ -340,7 +339,7 @@ public class ActivePokemon implements Serializable
 	{
 		IVs = new int[Stat.NUM_STATS];
 		for (int i = 0; i < IVs.length; i++) 
-			IVs[i] = (int)(Math.random()*32);
+			IVs[i] = (int)(Math.random() * (MAX_IV + 1));
 	}
 	
 	private void setIVs(ActivePokemon daddy, ActivePokemon mommy)
@@ -385,10 +384,9 @@ public class ActivePokemon implements Serializable
 			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
 		}
 		
-		// TODO: I think you already did this but haven't committed yet so to avoid merge conflicts I'll just a note here instead of fixing it BUT WE REALLY SHOULD BE USING A CONSTANT INSTEAD OF 32
 		for (int i = 0; i < IVs.length; i++)
 			if (IVs[i] == -1)
-				IVs[i] = (int)(Math.random()*32);
+				IVs[i] = (int)(Math.random() * (MAX_IV + 1));
 	}
 	
 	private void setCharacteristic()

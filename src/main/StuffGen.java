@@ -340,6 +340,7 @@ public class StuffGen
 				break;
 			case ITEM_GEN:
 				addTMs(out, classes, indexOut);
+				out.append("\n\t\tprocessIncenseItems();\n");
 				printToFile(ITEM_TILES_PATH + "index.txt", indexOut);
 			default:
 				break;

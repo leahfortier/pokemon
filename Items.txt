@@ -794,23 +794,25 @@ Zoom Lens
 	ModifyMultiplier: 1.2 !b.isFirstAttack()
 *
 Full Incense
-	Int: HoldItem, StallingEffect
+	Int: HoldItem, StallingEffect, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.
 	Price: 9600
 	Fling: 10
+	Baby: Munchlax
 *
 Lax Incense
-	Int: HoldItem
+	Int: HoldItem, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.
 	Price: 9600
 	Fling: 10
 	ToModify: Evasion
+	Baby: Wynaut
 	ModifyMultiplier: 1.1 true
 *
 Luck Incense
-	Int: HoldItem, EntryEffect
+	Int: HoldItem, EntryEffect, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.
 	Price: 9600
@@ -818,44 +820,57 @@ Luck Incense
 	Enter:
 		TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
+	Baby: Happiny
 *
+
 Odd Incense:
+	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.
 	Price: 9600
 	Fling: 10
 	TypeEnhance: Psychic
+	Baby: Mime_Jr
 *
-Pure Incense:
-	Int: HoldItem, RepellingEffect
+Pure Incense
+	Int: HoldItem, RepellingEffect, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.
 	Price: 9600
 	Fling: 10
 	RepelChance: .33
+	Baby: Chingling
 *
 Rock Incense:
+	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.
 	Price: 9600
 	Fling: 10
 	TypeEnhance: Rock
+	Baby: Bonsly
 *
 Rose Incense:
+	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.
 	Price: 9600
 	Fling: 10
 	TypeEnhance: Grass
+	Baby: Budew
 *
 Sea Incense:
+	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.
 	Price: 9600
 	Fling: 10
 	TypeEnhance: Water
+	Baby: Azurill
 *
 Wave Incense:
+	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.
 	Price: 9600
 	Fling: 10
 	TypeEnhance: Water
+	Baby: Mantyke
 *
 Draco Plate:
 	Int: PlateItem
