@@ -28,8 +28,7 @@ public class GameData
 {
 	public static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
 	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}");
-	public static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*((?:(?:[()&|!\\w]+\\s*:\\s*)?[\\w-]+\\s*,?\\s*)+)?");
-	public static final Pattern areaSoundConditionPattern = Pattern.compile("(?:([()&|!\\w]+)\\s*:\\s*)?([\\w-]+)");
+	public static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*(\\w+)\\s*(\\w+)\\s*([()&|!\\w-:,]+)?");
 	
 	public static final String DATA_LOCATION = "rec" + Global.FILE_SLASH;
 	private HashMap<String, MapData> maps;
@@ -84,8 +83,7 @@ public class GameData
 			String areaName = m.group(1);
 			int value = (int) Long.parseLong(m.group(2), 16);
 			
-			// TODO: Add terrain and weather state to area index file
-			AreaData area = new AreaData(areaName, value, "NORMAL", "GRASS", m.group(3));
+			AreaData area = new AreaData(areaName, value,  m.group(3),  m.group(4), m.group(5));
 			areas.put(value, area);
 			area.addMusicTriggers(this);
 		}

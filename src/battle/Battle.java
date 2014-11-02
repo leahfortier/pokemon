@@ -7,6 +7,7 @@ import java.util.List;
 import main.Global;
 import main.Namesies;
 import main.Type;
+import map.AreaData.TerrainType;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
@@ -53,6 +54,7 @@ public class Battle
 	private int escapeAttempts;
 	private ArrayDeque<MessageUpdate> messages;
 	private String winGlobal;
+	private TerrainType terrainType;
 	
 	public Battle(CharacterData p, Opponent o)
 	{
@@ -117,6 +119,16 @@ public class Battle
 	public int getTurn()
 	{
 		return turn;
+	}
+	
+	public TerrainType getTerrainType()
+	{
+		return terrainType;
+	}
+	
+	public void setTerrainType(TerrainType terrainType)
+	{
+		this.terrainType = terrainType;
 	}
 	
 	// Just a plain old regular message

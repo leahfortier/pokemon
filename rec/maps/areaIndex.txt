@@ -1,28 +1,27 @@
 #Name used for blank areas
-"Void"						00000000	DEFAULT_TUNE
+"Void"						00000000	NORMAL		CAVE		DEFAULT_TUNE
 
 #Maximum tested area name length:
 #*************************************************
 
-"Main"						ffc8c8c8	PLAYER_HOUSE
+"Main"						ffc8c8c8	NORMAL		BUILDING		PLAYER_HOUSE
 
-"DFS Town"					ffff220b	DFS_TOWN
-"Professor Maple's Lab"		ffd86048	POKE_LAB
-"Edge 1"					ff1a8524	EDGE_1
+"DFS Town"					ffff220b	NORMAL		GRASS			DFS_TOWN
+"Professor Maple's Lab"		ffd86048	NORMAL		BUILDING		POKE_LAB
+"Edge 1"					ff1a8524	RAIN		GRASS			EDGE_1
 
-"Pok\u00e9mon Center"		ffe03000	POKE_CENTER
-"Information Center"		ff0059e3	TRANSITION_BUILDING
-"House"						ff000000
+"Pok\u00e9mon Center"		ffe03000	NORMAL		BUILDING		POKE_CENTER
+"Information Center"		ff0059e3	NORMAL		BUILDING		TRANSITION_BUILDING
+"House"						ff000000	NORMAL		BUILDING		
 
-"RSA Town"					ff6d5d45	RSA_TOWN
-"Bloom Filter Meadow"		ffacd462	BLOOM_FILTER_MEADOW
-"Tomasulo Town"				ffffff00	TOM_TOWN
-"Tomasulo Town Gym"			ffffff33	POKE_GYM
+"RSA Town"					ff6d5d45	NORMAL		GRASS			RSA_TOWN
+"Bloom Filter Meadow"		ffacd462	SUN			GRASS			BLOOM_FILTER_MEADOW
+"Tomasulo Town"				ffffff00	NORMAL		BUILDING		TOM_TOWN
+"Tomasulo Town Gym"			ffffff33	NORMAL		BUILDING		POKE_GYM
 
-"Wind Valley"				ff66ff66
-"Power Plant Floor 1"		ffcccccc	VisitedTomTownPowerPlant:TOM_TOWN,!VisitedTomTownPowerPlant:DEADLOCK_THEME
-"Power Plant Floor 2"		ffcbcbcb	VisitedTomTownPowerPlant:TOM_TOWN,!VisitedTomTownPowerPlant:DEADLOCK_THEME
-"Power Plant Floor 3"		ffcacaca	VisitedTomTownPowerPlant:TOM_TOWN,!VisitedTomTownPowerPlant:DEADLOCK_THEME
-"Power Plant Basement"		ffc9c9c9	VisitedTomTownPowerPlant:TOM_TOWN,!VisitedTomTownPowerPlant:DEADLOCK_THEME
-
+"Valley of the Wind"		ff66ff66	NORMAL		GRASS		
+"Power Plant Floor 1"		ffcccccc	NORMAL		BUILDING		VisitedTomTownPowerPlant:TOM_TOWN,!VisitedTomTownPowerPlant:DEADLOCK_THEME
+"Power Plant Floor 2"		ffcbcbcb	NORMAL		BUILDING		VisitedTomTownPowerPlant:TOM_TOWN,!VisitedTomTownPowerPlant:DEADLOCK_THEME
+"Power Plant Floor 3"		ffcacaca	NORMAL		BUILDING		VisitedTomTownPowerPlant:TOM_TOWN,!VisitedTomTownPowerPlant:DEADLOCK_THEME
+"Power Plant Basement"		ffc9c9c9	NORMAL		BUILDING		VisitedTomTownPowerPlant:TOM_TOWN,!VisitedTomTownPowerPlant:DEADLOCK_THEME
 
