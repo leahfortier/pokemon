@@ -11,6 +11,7 @@ import map.triggers.Trigger;
 
 public class DialogueSequence 
 {
+	// TODO: This is the same pattern as the one in the NPCEntityData class -- should they be the same?
 	protected static final Pattern multiVariablePattern = Pattern.compile("(\\w+)(?:\\[(\\d+)\\])?:\\s*(?:(\\w+)|\"([^\"]*)\")");
 
 	public String name;
@@ -25,6 +26,7 @@ public class DialogueSequence
 	
 		int max = -1;
 		
+		// TODO: Srsly what's with the size 100 arrays?
 		next = new String[100];
 		triggers = new String[100];
 		choices = new String[100];
