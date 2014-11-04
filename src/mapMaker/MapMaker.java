@@ -1332,7 +1332,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						//Trigger was created, move to single selection
 						else 
 						{
-							// TODO stop hard coding things
+							// TODO: Stop hard coding things
 							if(tileList.getSelectedIndex() == 3) //If wild battle trigger, rectangle tool.
 							{
 								toolList.setSelectedIndex(2);

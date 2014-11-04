@@ -70,18 +70,20 @@ public class DialogueSequence
 		text = message;
 		
 		int max = 0;
-		max = Math.max(max, next == null?0:next.length);
-		max = Math.max(max, choices == null?0:choices.length);
-		max = Math.max(max, triggers == null?0:triggers.length);
+		max = Math.max(max, next == null ? 0 : next.length);
+		max = Math.max(max, choices == null ? 0 : choices.length);
+		max = Math.max(max, triggers == null ? 0 : triggers.length);
 		
 		if(next == null)
 		{
 			next = new String[max];
 		}
+		
 		if(choices == null)
 		{
 			choices = new String[max];
 		}
+		
 		if(triggers == null)
 		{
 			triggers = new String[max];
@@ -114,6 +116,6 @@ public class DialogueSequence
 	
 	public String toString()
 	{
-		return "Name: "+name +" Text: " +text +" Next: "+Arrays.toString(next) +" Choices: "+Arrays.toString(choices) +" Triggers: "+Arrays.toString(triggers);
+		return "Name: " + name + " Text: " + text + " Next: " + Arrays.toString(next) + " Choices: " + Arrays.toString(choices) + " Triggers: " + Arrays.toString(triggers);
 	}
 }
