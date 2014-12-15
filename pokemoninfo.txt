@@ -20,7 +20,7 @@ Grass Poison
 33 Synthesis
 37 Seed Bomb
 39 Solar Beam
-27
+28
 Toxic
 Venoshock
 Hidden Power
@@ -44,6 +44,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -101,7 +102,7 @@ Grass Poison
 36 Worry Seed
 39 Synthesis
 44 Solar Beam
-27
+28
 Toxic
 Venoshock
 Hidden Power
@@ -125,6 +126,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -185,7 +187,7 @@ Grass Poison
 45 Synthesis
 50 Petal Blizzard
 53 Solar Beam
-32
+33
 Roar
 Toxic
 Venoshock
@@ -214,6 +216,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -267,7 +270,7 @@ Fire None
 37 Flamethrower
 43 Fire Spin
 46 Inferno
-34
+35
 Hone Claws
 Dragon Claw
 Toxic
@@ -298,6 +301,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -351,7 +355,7 @@ Fire None
 43 Flamethrower
 50 Fire Spin
 54 Inferno
-34
+35
 Hone Claws
 Dragon Claw
 Toxic
@@ -382,6 +386,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -444,7 +449,7 @@ Fire Flying
 62 Inferno
 71 Heat Wave
 77 Flare Blitz
-46
+47
 Hone Claws
 Dragon Claw
 Roar
@@ -486,6 +491,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -541,7 +547,7 @@ Water None
 34 Iron Defense
 37 Rain Dance
 40 Hydro Pump
-27
+29
 Toxic
 Hail
 Hidden Power
@@ -564,11 +570,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 16
 Aqua Jet
 Aqua Ring
@@ -623,7 +631,7 @@ Water None
 40 Iron Defense
 44 Rain Dance
 48 Hydro Pump
-27
+29
 Toxic
 Hail
 Hidden Power
@@ -646,11 +654,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 16
 Aqua Jet
 Aqua Ring
@@ -707,7 +717,7 @@ Water None
 46 Iron Defense
 53 Rain Dance
 60 Hydro Pump
-38
+40
 Roar
 Toxic
 Hail
@@ -740,12 +750,14 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 16
 Aqua Jet
 Aqua Ring
@@ -849,7 +861,7 @@ Bug Flying
 40 Captivate
 42 Bug Buzz
 46 Quiver Dance
-32
+33
 Toxic
 Venoshock
 Hidden Power
@@ -881,6 +893,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 0
 45
@@ -966,7 +979,7 @@ Bug Poison
 37 Poison Jab
 40 Endeavor
 45 Fell Stinger
-34
+35
 Toxic
 Venoshock
 Hidden Power
@@ -999,6 +1012,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 0
@@ -1037,7 +1051,7 @@ Normal Flying
 45 Mirror Move
 49 Air Slash
 53 Hurricane
-20
+21
 Toxic
 Hidden Power
 Sunny Day
@@ -1056,6 +1070,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 9
@@ -1104,7 +1119,7 @@ Normal Flying
 52 Mirror Move
 57 Air Slash
 62 Hurricane
-20
+21
 Toxic
 Hidden Power
 Sunny Day
@@ -1123,6 +1138,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 9
@@ -1173,7 +1189,7 @@ Normal Flying
 56 Mirror Move
 62 Air Slash
 68 Hurricane
-22
+23
 Toxic
 Hidden Power
 Sunny Day
@@ -1194,6 +1210,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 9
@@ -1239,7 +1256,7 @@ Normal None
 28 Super Fang
 31 Double-Edge
 34 Endeavor
-30
+31
 Toxic
 Hidden Power
 Sunny Day
@@ -1268,6 +1285,7 @@ U-turn
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Cut
 11
@@ -1320,7 +1338,7 @@ Normal None
 34 Super Fang
 39 Double-Edge
 44 Endeavor
-35
+36
 Roar
 Toxic
 Hidden Power
@@ -1353,6 +1371,7 @@ U-turn
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -1402,7 +1421,7 @@ Normal Flying
 29 Assurance
 33 Roost
 37 Drill Peck
-22
+23
 Toxic
 Hidden Power
 Sunny Day
@@ -1423,6 +1442,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 11
@@ -1473,7 +1493,7 @@ Normal Flying
 41 Roost
 47 Drill Peck
 53 Drill Run
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -1496,6 +1516,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 11
@@ -1548,7 +1569,7 @@ Poison None
 41 Haze
 44 Coil
 49 Gunk Shot
-29
+30
 Toxic
 Venoshock
 Hidden Power
@@ -1575,6 +1596,7 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 Strength
@@ -1634,7 +1656,7 @@ Poison None
 51 Haze
 56 Coil
 63 Gunk Shot
-32
+33
 Toxic
 Venoshock
 Hidden Power
@@ -1664,6 +1686,7 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 Strength
@@ -1717,7 +1740,7 @@ Electric None
 42 Discharge
 45 Light Screen
 50 Thunder
-28
+29
 Toxic
 Hidden Power
 Light Screen
@@ -1744,6 +1767,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Strength
 16
@@ -1789,7 +1813,7 @@ Electric None
 0 Tail Whip
 0 Quick Attack
 0 Thunderbolt
-32
+33
 Toxic
 Hidden Power
 Hyper Beam
@@ -1820,6 +1844,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Strength
 16
@@ -1877,7 +1902,7 @@ Ground None
 38 Swords Dance
 42 Sandstorm
 46 Earthquake
-33
+34
 Hone Claws
 Toxic
 Hidden Power
@@ -1908,6 +1933,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -1964,7 +1990,7 @@ Ground None
 38 Swords Dance
 42 Sandstorm
 46 Earthquake
-37
+38
 Hone Claws
 Toxic
 Hidden Power
@@ -1999,6 +2025,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -2049,7 +2076,7 @@ Poison None
 37 Crunch
 43 Captivate
 45 Poison Fang
-30
+31
 Hone Claws
 Toxic
 Venoshock
@@ -2077,6 +2104,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -2128,7 +2156,7 @@ Poison None
 43 Crunch
 50 Captivate
 58 Poison Fang
-30
+31
 Hone Claws
 Toxic
 Venoshock
@@ -2156,6 +2184,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -2203,7 +2232,7 @@ Poison Ground
 35 Body Slam
 43 Earth Power
 58 Superpower
-53
+54
 Hone Claws
 Roar
 Toxic
@@ -2252,6 +2281,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -2305,7 +2335,7 @@ Poison None
 37 Poison Jab
 43 Captivate
 45 Horn Drill
-29
+30
 Hone Claws
 Toxic
 Venoshock
@@ -2332,6 +2362,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -2385,7 +2416,7 @@ Poison None
 43 Poison Jab
 50 Captivate
 58 Horn Drill
-29
+30
 Hone Claws
 Toxic
 Venoshock
@@ -2412,6 +2443,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -2459,7 +2491,7 @@ Poison Ground
 35 Thrash
 43 Earth Power
 58 Megahorn
-52
+53
 Hone Claws
 Roar
 Toxic
@@ -2507,6 +2539,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -2571,7 +2604,7 @@ Fairy None
 50 Meteor Mash
 55 Healing Wish
 58 Wish
-44
+45
 Psyshock
 Calm Mind
 Toxic
@@ -2612,6 +2645,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -2659,7 +2693,7 @@ Fairy None
 0 Double Slap
 0 Minimize
 0 Metronome
-47
+48
 Psyshock
 Calm Mind
 Toxic
@@ -2703,6 +2737,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -2765,7 +2800,7 @@ Fire None
 44 Grudge
 47 Captivate
 50 Inferno
-26
+27
 Roar
 Toxic
 Hidden Power
@@ -2790,6 +2825,7 @@ Psych Up
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 14
@@ -2834,7 +2870,7 @@ Fire None
 0 Quick Attack
 0 Confuse Ray
 0 Safeguard
-32
+33
 Psyshock
 Calm Mind
 Roar
@@ -2865,6 +2901,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 14
@@ -2919,7 +2956,7 @@ Normal Fairy
 48 Hyper Voice
 50 Disarming Voice
 53 Double-Edge
-43
+44
 Toxic
 Hidden Power
 Sunny Day
@@ -2959,6 +2996,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -3004,7 +3042,7 @@ Normal Fairy
 0 Disable
 0 Defense Curl
 0 Double Slap
-46
+47
 Toxic
 Hidden Power
 Sunny Day
@@ -3047,6 +3085,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -3099,7 +3138,7 @@ Poison Flying
 37 Poison Fang
 41 Haze
 45 Air Slash
-27
+28
 Toxic
 Venoshock
 Hidden Power
@@ -3125,6 +3164,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 14
@@ -3178,7 +3218,7 @@ Poison Flying
 42 Poison Fang
 47 Haze
 52 Air Slash
-29
+30
 Toxic
 Venoshock
 Hidden Power
@@ -3206,6 +3246,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 14
@@ -3256,7 +3297,7 @@ Grass Poison
 37 Giga Drain
 41 Petal Dance
 45 Grassy Terrain
-24
+25
 Toxic
 Venoshock
 Hidden Power
@@ -3277,6 +3318,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -3327,7 +3369,7 @@ Grass Poison
 50 Petal Blizzard
 53 Petal Dance
 56 Grassy Terrain
-25
+26
 Toxic
 Venoshock
 Hidden Power
@@ -3349,6 +3391,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -3392,7 +3435,7 @@ Grass Poison
 50 Petal Blizzard
 53 Petal Dance
 65 Solar Beam
-28
+29
 Toxic
 Venoshock
 Hidden Power
@@ -3417,6 +3460,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -3463,7 +3507,7 @@ Bug Grass
 43 Aromatherapy
 49 Cross Poison
 54 X-Scissor
-32
+33
 Hone Claws
 Toxic
 Venoshock
@@ -3493,6 +3537,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -3551,7 +3596,7 @@ Bug Grass
 51 Aromatherapy
 59 Cross Poison
 66 X-Scissor
-34
+35
 Hone Claws
 Toxic
 Venoshock
@@ -3583,6 +3628,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -3639,7 +3685,7 @@ Bug Poison
 37 Zen Headbutt
 41 Poison Fang
 47 Psychic
-21
+22
 Toxic
 Venoshock
 Hidden Power
@@ -3660,6 +3706,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 10
 Agility
@@ -3713,7 +3760,7 @@ Bug Poison
 55 Psychic
 59 Bug Buzz
 63 Quiver Dance
-28
+29
 Toxic
 Venoshock
 Hidden Power
@@ -3741,6 +3788,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 10
 Agility
@@ -3789,7 +3837,7 @@ Ground None
 37 Slash
 40 Earthquake
 45 Fissure
-27
+28
 Hone Claws
 Toxic
 Hidden Power
@@ -3815,6 +3863,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 13
@@ -3871,7 +3920,7 @@ Ground None
 45 Slash
 50 Earthquake
 57 Fissure
-31
+32
 Hone Claws
 Toxic
 Hidden Power
@@ -3901,6 +3950,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 13
@@ -3953,7 +4003,7 @@ Normal None
 46 Captivate
 49 Night Slash
 50 Feint
-33
+34
 Hone Claws
 Toxic
 Hidden Power
@@ -3984,6 +4034,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -4043,7 +4094,7 @@ Normal None
 56 Captivate
 61 Night Slash
 65 Feint
-37
+38
 Hone Claws
 Roar
 Toxic
@@ -4078,6 +4129,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -4132,7 +4184,7 @@ Water None
 43 Amnesia
 46 Hydro Pump
 50 Wonder Room
-34
+36
 Hone Claws
 Psyshock
 Calm Mind
@@ -4162,11 +4214,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 15
 Clear Smog
 Confuse Ray
@@ -4222,7 +4276,7 @@ Water None
 49 Amnesia
 54 Hydro Pump
 60 Wonder Room
-38
+40
 Hone Claws
 Psyshock
 Calm Mind
@@ -4256,11 +4310,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 15
 Clear Smog
 Confuse Ray
@@ -4313,7 +4369,7 @@ Fighting None
 45 Punishment
 49 Close Combat
 53 Final Gambit
-40
+41
 Hone Claws
 Toxic
 Bulk Up
@@ -4351,6 +4407,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -4406,7 +4463,7 @@ Fighting None
 53 Punishment
 59 Close Combat
 63 Final Gambit
-43
+44
 Hone Claws
 Toxic
 Bulk Up
@@ -4447,6 +4504,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -4502,7 +4560,7 @@ Fire None
 41 Heat Wave
 43 Outrage
 45 Flare Blitz
-29
+30
 Roar
 Toxic
 Hidden Power
@@ -4529,6 +4587,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Confide
 Strength
@@ -4573,7 +4632,7 @@ Fire None
 0 Odor Sleuth
 0 Fire Fang
 34 Extreme Speed
-33
+34
 Roar
 Toxic
 Hidden Power
@@ -4604,6 +4663,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Confide
 Strength
@@ -4655,7 +4715,7 @@ Water None
 35 Wake-Up Slap
 38 Hydro Pump
 41 Mud Bomb
-22
+24
 Toxic
 Hail
 Hidden Power
@@ -4675,9 +4735,11 @@ Scald
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 13
 Bubble Beam
 Encore
@@ -4727,7 +4789,7 @@ Water None
 43 Wake-Up Slap
 48 Hydro Pump
 53 Mud Bomb
-29
+31
 Toxic
 Hail
 Hidden Power
@@ -4752,11 +4814,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Bubble Beam
 Encore
@@ -4802,7 +4866,7 @@ Water Fighting
 32 Dynamic Punch
 43 Mind Reader
 53 Circle Throw
-38
+40
 Toxic
 Hail
 Bulk Up
@@ -4836,11 +4900,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Bubble Beam
 Encore
@@ -4877,7 +4943,7 @@ Medium Slow
 Psychic None
 1
 0 Teleport
-35
+36
 Psyshock
 Calm Mind
 Toxic
@@ -4911,6 +4977,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 11
@@ -4962,7 +5029,7 @@ Psychic None
 46 Psychic
 48 Future Sight
 50 Trick
-35
+36
 Psyshock
 Calm Mind
 Toxic
@@ -4996,6 +5063,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 11
@@ -5047,7 +5115,7 @@ Psychic None
 46 Psychic
 48 Future Sight
 50 Trick
-38
+39
 Psyshock
 Calm Mind
 Toxic
@@ -5084,6 +5152,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 11
@@ -5133,7 +5202,7 @@ Fighting None
 43 Cross Chop
 46 Scary Face
 49 Dynamic Punch
-36
+37
 Toxic
 Bulk Up
 Hidden Power
@@ -5167,6 +5236,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -5223,7 +5293,7 @@ Fighting None
 44 Cross Chop
 51 Scary Face
 55 Dynamic Punch
-36
+37
 Toxic
 Bulk Up
 Hidden Power
@@ -5257,6 +5327,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -5314,7 +5385,7 @@ Fighting None
 44 Cross Chop
 51 Scary Face
 55 Dynamic Punch
-39
+40
 Toxic
 Bulk Up
 Hidden Power
@@ -5351,6 +5422,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -5404,7 +5476,7 @@ Grass Poison
 39 Razor Leaf
 41 Slam
 47 Wring Out
-25
+26
 Toxic
 Venoshock
 Hidden Power
@@ -5427,6 +5499,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -5481,7 +5554,7 @@ Grass Poison
 39 Razor Leaf
 41 Slam
 47 Wring Out
-25
+26
 Toxic
 Venoshock
 Hidden Power
@@ -5504,6 +5577,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -5553,7 +5627,7 @@ Grass Poison
 27 Leaf Tornado
 47 Leaf Storm
 47 Leaf Blade
-27
+28
 Toxic
 Venoshock
 Hidden Power
@@ -5578,6 +5652,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -5633,7 +5708,7 @@ Water Poison
 47 Hydro Pump
 50 Sludge Wave
 54 Wring Out
-30
+32
 Toxic
 Hail
 Venoshock
@@ -5659,11 +5734,13 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 Cut
 Surf
 Waterfall
+Dive
 11
 Acupressure
 Aqua Ring
@@ -5717,7 +5794,7 @@ Water Poison
 52 Hydro Pump
 56 Sludge Wave
 61 Wring Out
-32
+34
 Toxic
 Hail
 Venoshock
@@ -5745,11 +5822,13 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 Cut
 Surf
 Waterfall
+Dive
 11
 Acupressure
 Aqua Ring
@@ -5799,7 +5878,7 @@ Rock Ground
 43 Explosion
 46 Double-Edge
 50 Stone Edge
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -5829,6 +5908,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -5881,7 +5961,7 @@ Rock Ground
 53 Explosion
 58 Double-Edge
 64 Stone Edge
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -5911,6 +5991,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -5965,7 +6046,7 @@ Rock Ground
 58 Double-Edge
 64 Stone Edge
 69 Heavy Slam
-37
+38
 Roar
 Toxic
 Hidden Power
@@ -5999,6 +6080,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -6049,7 +6131,7 @@ Fire None
 41 Fire Blast
 45 Bounce
 49 Flare Blitz
-23
+24
 Toxic
 Hidden Power
 Sunny Day
@@ -6071,6 +6153,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 Strength
 10
@@ -6125,7 +6208,7 @@ Fire None
 41 Fire Blast
 45 Bounce
 49 Flare Blitz
-26
+27
 Toxic
 Hidden Power
 Sunny Day
@@ -6150,6 +6233,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 Strength
 10
@@ -6200,7 +6284,7 @@ Water Psychic
 49 Rain Dance
 54 Psych Up
 58 Heal Pulse
-39
+41
 Psyshock
 Calm Mind
 Toxic
@@ -6237,9 +6321,11 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 Surf
 Strength
+Dive
 11
 Belch
 Belly Drum
@@ -6295,7 +6381,7 @@ Water Psychic
 55 Rain Dance
 62 Psych Up
 68 Heal Pulse
-46
+48
 Psyshock
 Calm Mind
 Toxic
@@ -6339,9 +6425,11 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
+Dive
 11
 Belch
 Belly Drum
@@ -6392,7 +6480,7 @@ Electric Steel
 49 Magnet Rise
 53 Gyro Ball
 57 Zap Cannon
-26
+27
 Toxic
 Hidden Power
 Sunny Day
@@ -6418,6 +6506,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Wild Charge
+Secret Power
 Confide
 0
 190
@@ -6464,7 +6553,7 @@ Electric Steel
 62 Magnet Rise
 67 Gyro Ball
 73 Zap Cannon
-28
+29
 Toxic
 Hidden Power
 Sunny Day
@@ -6492,6 +6581,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Wild Charge
+Secret Power
 Confide
 0
 60
@@ -6535,7 +6625,7 @@ Normal Flying
 45 False Swipe
 49 Air Slash
 55 Brave Bird
-26
+27
 Toxic
 Hidden Power
 Sunny Day
@@ -6559,6 +6649,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Cut
 Fly
@@ -6613,7 +6704,7 @@ Normal Flying
 41 Drill Peck
 46 Endeavor
 50 Thrash
-19
+20
 Toxic
 Hidden Power
 Sunny Day
@@ -6631,6 +6722,7 @@ Steel Wing
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Fly
 10
@@ -6681,7 +6773,7 @@ Normal Flying
 47 Drill Peck
 54 Endeavor
 60 Thrash
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -6704,6 +6796,7 @@ Giga Impact
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Fly
 10
@@ -6755,7 +6848,7 @@ Water None
 47 Ice Beam
 51 Safeguard
 53 Hail
-22
+24
 Toxic
 Hail
 Hidden Power
@@ -6775,9 +6868,11 @@ Fling
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 17
 Belch
 Disable
@@ -6838,7 +6933,7 @@ Water Ice
 55 Ice Beam
 61 Safeguard
 65 Hail
-25
+27
 Toxic
 Hail
 Hidden Power
@@ -6861,9 +6956,11 @@ Frost Breath
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 17
 Belch
 Disable
@@ -6920,7 +7017,7 @@ Poison None
 43 Gunk Shot
 46 Belch
 48 Memento
-36
+37
 Toxic
 Venoshock
 Hidden Power
@@ -6954,6 +7051,7 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -7010,7 +7108,7 @@ Poison None
 49 Gunk Shot
 53 Belch
 57 Memento
-42
+43
 Toxic
 Venoshock
 Hidden Power
@@ -7049,6 +7147,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -7105,7 +7204,7 @@ Water None
 52 Ice Beam
 56 Shell Smash
 61 Hydro Pump
-19
+21
 Toxic
 Hail
 Hidden Power
@@ -7123,8 +7222,10 @@ Payback
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
+Dive
 12
 Aqua Ring
 Avalanche
@@ -7170,7 +7271,7 @@ Water Ice
 13 Spike Cannon
 28 Spikes
 50 Icicle Crash
-24
+26
 Toxic
 Hail
 Hidden Power
@@ -7193,8 +7294,10 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
+Dive
 12
 Aqua Ring
 Avalanche
@@ -7245,7 +7348,7 @@ Ghost Poison
 40 Destiny Bond
 43 Hex
 47 Nightmare
-33
+34
 Toxic
 Venoshock
 Hidden Power
@@ -7276,6 +7379,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
@@ -7331,7 +7435,7 @@ Ghost Poison
 50 Destiny Bond
 55 Hex
 61 Nightmare
-36
+37
 Toxic
 Venoshock
 Hidden Power
@@ -7365,6 +7469,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
@@ -7420,7 +7525,7 @@ Ghost Poison
 50 Destiny Bond
 55 Hex
 61 Nightmare
-44
+45
 Toxic
 Venoshock
 Hidden Power
@@ -7460,6 +7565,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Dazzling Gleam
@@ -7521,7 +7627,7 @@ Rock Ground
 46 Stone Edge
 49 Double-Edge
 52 Sandstorm
-34
+35
 Roar
 Toxic
 Hidden Power
@@ -7553,6 +7659,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -7604,7 +7711,7 @@ Psychic None
 53 Nasty Plot
 57 Psyshock
 61 Future Sight
-35
+36
 Psyshock
 Calm Mind
 Toxic
@@ -7637,6 +7744,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -7696,7 +7804,7 @@ Psychic None
 53 Nasty Plot
 57 Psyshock
 61 Future Sight
-38
+39
 Psyshock
 Calm Mind
 Toxic
@@ -7732,6 +7840,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -7783,7 +7892,7 @@ Water None
 39 Brine
 41 Crabhammer
 45 Flail
-31
+33
 Hone Claws
 Toxic
 Hail
@@ -7811,10 +7920,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Strength
+Dive
 11
 Agility
 Amnesia
@@ -7865,7 +7976,7 @@ Water None
 51 Brine
 56 Crabhammer
 63 Flail
-33
+35
 Hone Claws
 Toxic
 Hail
@@ -7895,10 +8006,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Strength
+Dive
 11
 Agility
 Amnesia
@@ -7947,7 +8060,7 @@ Electric None
 43 Gyro Ball
 47 Explosion
 50 Mirror Coat
-25
+26
 Toxic
 Hidden Power
 Taunt
@@ -7972,6 +8085,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 0
 190
@@ -8013,7 +8127,7 @@ Electric None
 51 Gyro Ball
 57 Explosion
 62 Mirror Coat
-27
+28
 Toxic
 Hidden Power
 Taunt
@@ -8040,6 +8154,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 0
 60
@@ -8077,7 +8192,7 @@ Grass Psychic
 43 Solar Beam
 47 Extrasensory
 50 Bestow
-30
+31
 Toxic
 Hidden Power
 Sunny Day
@@ -8105,6 +8220,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Nature Power
 Confide
 Strength
@@ -8152,7 +8268,7 @@ Grass Psychic
 27 Egg Bomb
 37 Wood Hammer
 47 Leaf Storm
-33
+34
 Psyshock
 Toxic
 Hidden Power
@@ -8183,6 +8299,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Nature Power
 Confide
 Strength
@@ -8236,7 +8353,7 @@ Ground None
 41 Endeavor
 43 Double-Edge
 47 Retaliate
-36
+37
 Toxic
 Hidden Power
 Sunny Day
@@ -8270,6 +8387,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -8323,7 +8441,7 @@ Ground None
 49 Endeavor
 53 Double-Edge
 59 Retaliate
-40
+41
 Toxic
 Hidden Power
 Sunny Day
@@ -8361,6 +8479,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -8416,7 +8535,7 @@ Fighting None
 53 Mega Kick
 57 Close Combat
 61 Reversal
-30
+31
 Toxic
 Bulk Up
 Hidden Power
@@ -8444,6 +8563,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -8499,7 +8619,7 @@ Fighting None
 56 Focus Punch
 61 Counter
 66 Close Combat
-29
+30
 Toxic
 Bulk Up
 Hidden Power
@@ -8526,6 +8646,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -8575,7 +8696,7 @@ Normal None
 49 Screech
 53 Power Whip
 57 Wring Out
-44
+45
 Toxic
 Hidden Power
 Sunny Day
@@ -8615,6 +8736,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -8669,7 +8791,7 @@ Poison None
 40 Destiny Bond
 42 Belch
 45 Memento
-32
+33
 Toxic
 Venoshock
 Hidden Power
@@ -8700,6 +8822,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 12
@@ -8753,7 +8876,7 @@ Poison None
 46 Destiny Bond
 50 Belch
 54 Memento
-34
+35
 Toxic
 Venoshock
 Hidden Power
@@ -8786,6 +8909,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 12
@@ -8836,7 +8960,7 @@ Ground Rock
 56 Earthquake
 63 Horn Drill
 67 Megahorn
-36
+38
 Roar
 Toxic
 Hidden Power
@@ -8845,6 +8969,7 @@ Ice Beam
 Blizzard
 Protect
 Rain Dance
+Smack Down
 Thunderbolt
 Thunder
 Earthquake
@@ -8871,6 +8996,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 16
@@ -8930,7 +9056,7 @@ Ground Rock
 62 Earthquake
 71 Horn Drill
 77 Megahorn
-47
+48
 Roar
 Toxic
 Hidden Power
@@ -8973,6 +9099,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -9034,7 +9161,7 @@ Normal None
 46 Light Screen
 50 Healing Wish
 54 Double-Edge
-50
+51
 Calm Mind
 Toxic
 Hail
@@ -9081,6 +9208,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -9137,7 +9265,7 @@ Grass None
 46 Wring Out
 48 Grassy Terrain
 50 Power Whip
-27
+28
 Toxic
 Hidden Power
 Sunny Day
@@ -9163,6 +9291,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 11
@@ -9212,7 +9341,7 @@ Normal None
 46 Outrage
 49 Sucker Punch
 50 Reversal
-46
+47
 Roar
 Toxic
 Hail
@@ -9254,6 +9383,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -9305,7 +9435,7 @@ Water None
 35 Hydro Pump
 38 Dragon Dance
 42 Dragon Pulse
-20
+22
 Toxic
 Hail
 Hidden Power
@@ -9323,9 +9453,11 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 13
 Aurora Beam
 Clear Smog
@@ -9376,7 +9508,7 @@ Water None
 40 Hydro Pump
 48 Dragon Dance
 57 Dragon Pulse
-22
+24
 Toxic
 Hail
 Hidden Power
@@ -9396,9 +9528,11 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 13
 Aurora Beam
 Clear Smog
@@ -9448,7 +9582,7 @@ Water None
 47 Agility
 50 Soak
 57 Megahorn
-20
+22
 Toxic
 Hail
 Hidden Power
@@ -9466,9 +9600,11 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 11
 Aqua Tail
 Body Slam
@@ -9518,7 +9654,7 @@ Water None
 56 Agility
 63 Soak
 72 Megahorn
-22
+24
 Toxic
 Hail
 Hidden Power
@@ -9538,9 +9674,11 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 11
 Aqua Tail
 Body Slam
@@ -9589,7 +9727,7 @@ Water None
 43 Power Gem
 48 Cosmic Power
 52 Hydro Pump
-29
+31
 Toxic
 Hail
 Hidden Power
@@ -9615,10 +9753,12 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Dazzling Gleam
 Confide
 Surf
 Waterfall
+Dive
 0
 225
 0 0 0 0 0 1 
@@ -9648,7 +9788,7 @@ Water Psychic
 0 Recover
 0 Swift
 22 Confuse Ray
-35
+37
 Psyshock
 Toxic
 Hail
@@ -9680,10 +9820,12 @@ Sleep Talk
 Substitute
 Flash Cannon
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 Surf
 Waterfall
+Dive
 0
 60
 0 0 0 0 0 2 
@@ -9731,7 +9873,7 @@ Psychic Fairy
 43 Role Play
 46 Baton Pass
 50 Safeguard
-45
+46
 Psyshock
 Calm Mind
 Toxic
@@ -9774,6 +9916,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -9829,7 +9972,7 @@ Bug Flying
 50 Air Slash
 57 Swords Dance
 61 Feint
-30
+31
 Toxic
 Hidden Power
 Sunny Day
@@ -9858,6 +10001,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 11
@@ -9912,7 +10056,7 @@ Ice Psychic
 49 Wring Out
 55 Perish Song
 60 Blizzard
-40
+41
 Psyshock
 Calm Mind
 Toxic
@@ -9951,6 +10095,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
 Confide
 8
@@ -9998,7 +10143,7 @@ Electric None
 42 Screech
 49 Thunderbolt
 55 Thunder
-32
+33
 Toxic
 Hidden Power
 Hyper Beam
@@ -10028,6 +10173,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -10080,7 +10226,7 @@ Fire None
 42 Sunny Day
 49 Flamethrower
 55 Fire Blast
-30
+31
 Toxic
 Hidden Power
 Sunny Day
@@ -10108,6 +10254,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -10163,7 +10310,7 @@ Bug None
 40 Swords Dance
 43 Superpower
 47 Guillotine
-35
+36
 Toxic
 Bulk Up
 Hidden Power
@@ -10196,6 +10343,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -10243,7 +10391,7 @@ Normal None
 48 Swagger
 50 Thrash
 63 Giga Impact
-36
+37
 Toxic
 Hidden Power
 Sunny Day
@@ -10277,6 +10425,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
@@ -10337,7 +10486,7 @@ Water Dragon
 41 Hydro Pump
 44 Dragon Dance
 47 Hyper Beam
-39
+41
 Roar
 Toxic
 Hail
@@ -10372,11 +10521,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Surf
 Strength
 Waterfall
+Dive
 0
 45
 0 2 0 0 0 0 
@@ -10413,7 +10564,7 @@ Water Ice
 43 Safeguard
 47 Hydro Pump
 50 Sheer Cold
-31
+33
 Roar
 Toxic
 Hail
@@ -10441,10 +10592,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 14
 Ancient Power
 Avalanche
@@ -10521,7 +10674,7 @@ Normal None
 37 Double-Edge
 41 Last Resort
 45 Trump Card
-18
+19
 Toxic
 Hidden Power
 Sunny Day
@@ -10539,6 +10692,7 @@ Retaliate
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 14
 Captivate
@@ -10597,7 +10751,7 @@ Water None
 37 Muddy Water
 41 Last Resort
 45 Hydro Pump
-29
+31
 Roar
 Toxic
 Hail
@@ -10623,10 +10777,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 14
 Captivate
 Charm
@@ -10675,7 +10831,7 @@ Electric None
 37 Discharge
 41 Last Resort
 45 Thunder
-31
+32
 Roar
 Toxic
 Hidden Power
@@ -10705,6 +10861,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Strength
 14
@@ -10755,7 +10912,7 @@ Fire None
 37 Lava Plume
 41 Last Resort
 45 Flare Blitz
-29
+30
 Roar
 Toxic
 Hidden Power
@@ -10783,6 +10940,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 14
@@ -10835,7 +10993,7 @@ Normal None
 50 Tri Attack
 56 Magic Coat
 62 Zap Cannon
-31
+32
 Psyshock
 Toxic
 Hidden Power
@@ -10866,6 +11024,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 0
 45
@@ -10903,7 +11062,7 @@ Rock Water
 46 Rock Blast
 50 Shell Smash
 55 Hydro Pump
-27
+29
 Toxic
 Hail
 Hidden Power
@@ -10928,9 +11087,11 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 14
 Aurora Beam
 Bide
@@ -10983,7 +11144,7 @@ Rock Water
 56 Rock Blast
 67 Shell Smash
 75 Hydro Pump
-30
+32
 Toxic
 Hail
 Hidden Power
@@ -11011,9 +11172,11 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 14
 Aurora Beam
 Bide
@@ -11061,7 +11224,7 @@ Rock Water
 41 Metal Sound
 46 Ancient Power
 50 Wring Out
-28
+29
 Hone Claws
 Toxic
 Hail
@@ -11087,6 +11250,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Waterfall
@@ -11141,7 +11305,7 @@ Rock Water
 54 Ancient Power
 63 Wring Out
 72 Night Slash
-37
+39
 Hone Claws
 Toxic
 Hail
@@ -11174,11 +11338,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
 Surf
 Waterfall
+Dive
 12
 Aurora Beam
 Bubble Beam
@@ -11230,7 +11396,7 @@ Rock Flying
 65 Hyper Beam
 73 Rock Slide
 81 Giga Impact
-41
+42
 Hone Claws
 Dragon Claw
 Roar
@@ -11269,6 +11435,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Fly
 Strength
@@ -11318,7 +11485,7 @@ Normal None
 49 Crunch
 50 Heavy Slam
 57 Giga Impact
-41
+42
 Toxic
 Hidden Power
 Sunny Day
@@ -11356,6 +11523,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
@@ -11412,7 +11580,7 @@ Ice Flying
 78 Sheer Cold
 85 Roost
 92 Hurricane
-29
+30
 Roar
 Toxic
 Hail
@@ -11440,6 +11608,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Fly
 0
@@ -11481,7 +11650,7 @@ Electric Flying
 78 Thunder
 85 Roost
 92 Zap Cannon
-32
+33
 Roar
 Toxic
 Hidden Power
@@ -11512,6 +11681,7 @@ U-turn
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Fly
 0
@@ -11554,7 +11724,7 @@ Fire Flying
 78 Sky Attack
 85 Roost
 92 Hurricane
-32
+33
 Roar
 Toxic
 Hidden Power
@@ -11585,6 +11755,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Fly
 0
@@ -11622,7 +11793,7 @@ Dragon None
 51 Dragon Dance
 55 Outrage
 61 Hyper Beam
-29
+30
 Toxic
 Hail
 Hidden Power
@@ -11649,6 +11820,7 @@ Dragon Tail
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
@@ -11701,7 +11873,7 @@ Dragon None
 61 Dragon Dance
 67 Outrage
 75 Hyper Beam
-29
+30
 Toxic
 Hail
 Hidden Power
@@ -11728,6 +11900,7 @@ Dragon Tail
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
@@ -11787,7 +11960,7 @@ Dragon Flying
 67 Outrage
 75 Hyper Beam
 81 Hurricane
-51
+53
 Hone Claws
 Dragon Claw
 Roar
@@ -11832,6 +12005,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -11839,6 +12013,7 @@ Fly
 Surf
 Strength
 Waterfall
+Dive
 11
 Aqua Jet
 Dragon Breath
@@ -11891,7 +12066,7 @@ Psychic None
 86 Mist
 93 Me First
 100 Psystrike
-59
+60
 Psyshock
 Calm Mind
 Toxic
@@ -11948,6 +12123,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -11985,7 +12161,7 @@ Psychic None
 80 Baton Pass
 90 Nasty Plot
 100 Aura Sphere
-102
+104
 Hone Claws
 Dragon Claw
 Psyshock
@@ -12077,6 +12253,7 @@ Flash Cannon
 Trick Room
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Nature Power
 Dark Pulse
@@ -12088,6 +12265,7 @@ Fly
 Surf
 Strength
 Waterfall
+Dive
 0
 45
 3 0 0 0 0 0 
@@ -12124,7 +12302,7 @@ Grass None
 39 Safeguard
 42 Aromatherapy
 45 Solar Beam
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -12146,6 +12324,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -12202,7 +12381,7 @@ Grass None
 46 Safeguard
 50 Aromatherapy
 54 Solar Beam
-26
+27
 Toxic
 Hidden Power
 Sunny Day
@@ -12225,6 +12404,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -12285,7 +12465,7 @@ Grass None
 60 Aromatherapy
 66 Solar Beam
 70 Petal Blizzard
-31
+32
 Toxic
 Hidden Power
 Sunny Day
@@ -12313,6 +12493,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -12369,7 +12550,7 @@ Fire None
 49 Rollout
 55 Double-Edge
 58 Eruption
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -12391,6 +12572,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Nature Power
 Confide
 Cut
@@ -12446,7 +12628,7 @@ Fire None
 57 Rollout
 64 Double-Edge
 68 Eruption
-28
+29
 Roar
 Toxic
 Hidden Power
@@ -12471,6 +12653,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -12531,7 +12714,7 @@ Fire None
 61 Rollout
 69 Double-Edge
 74 Eruption
-40
+41
 Roar
 Toxic
 Hidden Power
@@ -12567,6 +12750,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -12624,7 +12808,7 @@ Water None
 43 Aqua Tail
 48 Superpower
 50 Hydro Pump
-31
+33
 Hone Claws
 Dragon Claw
 Toxic
@@ -12651,11 +12835,13 @@ Rock Slide
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Power-Up Punch
 Confide
 Cut
 Surf
 Waterfall
+Dive
 14
 Ancient Power
 Aqua Jet
@@ -12709,7 +12895,7 @@ Water None
 51 Aqua Tail
 57 Superpower
 60 Hydro Pump
-34
+36
 Hone Claws
 Dragon Claw
 Roar
@@ -12738,12 +12924,14 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
 Surf
 Strength
 Waterfall
+Dive
 14
 Ancient Power
 Aqua Jet
@@ -12799,7 +12987,7 @@ Water None
 63 Aqua Tail
 71 Superpower
 76 Hydro Pump
-40
+42
 Hone Claws
 Dragon Claw
 Roar
@@ -12834,12 +13022,14 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
 Surf
 Strength
 Waterfall
+Dive
 14
 Ancient Power
 Aqua Jet
@@ -12890,7 +13080,7 @@ Normal None
 39 Baton Pass
 42 Me First
 47 Hyper Voice
-33
+34
 Hone Claws
 Toxic
 Hidden Power
@@ -12920,6 +13110,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -12975,7 +13166,7 @@ Normal None
 46 Baton Pass
 50 Me First
 56 Hyper Voice
-40
+41
 Hone Claws
 Toxic
 Hidden Power
@@ -13011,6 +13202,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -13069,7 +13261,7 @@ Normal Flying
 49 Psycho Shift
 53 Roost
 57 Dream Eater
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -13093,6 +13285,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Fly
 10
@@ -13146,7 +13339,7 @@ Normal Flying
 57 Psycho Shift
 62 Roost
 67 Dream Eater
-27
+28
 Toxic
 Hidden Power
 Sunny Day
@@ -13172,6 +13365,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Fly
 10
@@ -13218,7 +13412,7 @@ Bug Flying
 33 Swift
 38 Double-Edge
 41 Bug Buzz
-30
+31
 Toxic
 Hidden Power
 Sunny Day
@@ -13247,6 +13441,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Power-Up Punch
 Confide
 12
@@ -13297,7 +13492,7 @@ Bug Flying
 41 Swift
 48 Double-Edge
 53 Bug Buzz
-35
+36
 Toxic
 Hidden Power
 Sunny Day
@@ -13330,6 +13525,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -13382,7 +13578,7 @@ Bug Poison
 43 Poison Jab
 47 Cross Poison
 50 Sticky Web
-25
+26
 Hone Claws
 Toxic
 Venoshock
@@ -13407,6 +13603,7 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 11
 Baton Pass
@@ -13461,7 +13658,7 @@ Bug Poison
 50 Poison Jab
 55 Cross Poison
 58 Sticky Web
-27
+28
 Hone Claws
 Toxic
 Venoshock
@@ -13488,6 +13685,7 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 11
 Baton Pass
@@ -13538,7 +13736,7 @@ Poison Flying
 42 Poison Fang
 47 Haze
 52 Air Slash
-31
+32
 Toxic
 Venoshock
 Hidden Power
@@ -13567,6 +13765,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dark Pulse
 Confide
 Fly
@@ -13621,7 +13820,7 @@ Water Electric
 45 Hydro Pump
 47 Electrify
 50 Charge
-27
+29
 Toxic
 Hail
 Hidden Power
@@ -13645,10 +13844,12 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Dazzling Gleam
 Confide
 Surf
 Waterfall
+Dive
 11
 Agility
 Amnesia
@@ -13704,7 +13905,7 @@ Water Electric
 57 Hydro Pump
 60 Electrify
 64 Charge
-29
+31
 Toxic
 Hail
 Hidden Power
@@ -13730,10 +13931,12 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Dazzling Gleam
 Confide
 Surf
 Waterfall
+Dive
 11
 Agility
 Amnesia
@@ -13774,7 +13977,7 @@ Electric None
 10 Sweet Kiss
 13 Thunder Wave
 18 Nasty Plot
-24
+25
 Toxic
 Hidden Power
 Light Screen
@@ -13798,6 +14001,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 16
 Bestow
@@ -13844,7 +14048,7 @@ Fairy None
 10 Sweet Kiss
 13 Copycat
 16 Magical Leaf
-32
+33
 Psyshock
 Toxic
 Hidden Power
@@ -13876,6 +14080,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 14
 Amnesia
@@ -13921,7 +14126,7 @@ Normal Fairy
 9 Pound
 13 Sweet Kiss
 17 Copycat
-32
+33
 Toxic
 Hidden Power
 Sunny Day
@@ -13953,6 +14158,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 13
 Captivate
@@ -14004,7 +14210,7 @@ Fairy None
 45 Double-Edge
 49 Last Resort
 53 Soft-Boiled
-33
+34
 Psyshock
 Toxic
 Hidden Power
@@ -14036,6 +14242,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dazzling Gleam
 Confide
 12
@@ -14090,7 +14297,7 @@ Fairy Flying
 45 Double-Edge
 49 Last Resort
 53 Moonblast
-41
+42
 Psyshock
 Toxic
 Hidden Power
@@ -14129,6 +14336,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dazzling Gleam
 Confide
 Fly
@@ -14181,7 +14389,7 @@ Psychic Flying
 47 Power Swap
 47 Guard Swap
 50 Psychic
-33
+34
 Psyshock
 Calm Mind
 Toxic
@@ -14213,6 +14421,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 13
@@ -14266,7 +14475,7 @@ Psychic Flying
 54 Power Swap
 59 Guard Swap
 66 Psychic
-36
+37
 Psyshock
 Calm Mind
 Toxic
@@ -14300,6 +14509,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 Fly
@@ -14352,7 +14562,7 @@ Electric None
 39 Signal Beam
 43 Light Screen
 46 Thunder
-22
+23
 Toxic
 Hidden Power
 Light Screen
@@ -14374,6 +14584,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 11
 Agility
@@ -14424,7 +14635,7 @@ Electric None
 47 Signal Beam
 52 Light Screen
 56 Thunder
-28
+29
 Toxic
 Hidden Power
 Light Screen
@@ -14450,6 +14661,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -14507,7 +14719,7 @@ Electric None
 57 Light Screen
 62 Thunder
 65 Dragon Pulse
-32
+33
 Toxic
 Hidden Power
 Hyper Beam
@@ -14537,6 +14749,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -14581,7 +14794,7 @@ Grass None
 23 Magical Leaf
 50 Petal Blizzard
 53 Leaf Storm
-28
+29
 Toxic
 Venoshock
 Hidden Power
@@ -14606,6 +14819,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -14656,7 +14870,7 @@ Water Fairy
 37 Superpower
 40 Hydro Pump
 45 Play Rough
-27
+29
 Toxic
 Hail
 Hidden Power
@@ -14679,11 +14893,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Amnesia
 Aqua Jet
@@ -14736,7 +14952,7 @@ Water Fairy
 42 Superpower
 46 Hydro Pump
 50 Play Rough
-31
+33
 Toxic
 Hail
 Hidden Power
@@ -14763,11 +14979,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Amnesia
 Aqua Jet
@@ -14821,7 +15039,7 @@ Rock None
 40 Double-Edge
 43 Stone Edge
 47 Hammer Arm
-34
+35
 Calm Mind
 Toxic
 Hidden Power
@@ -14852,6 +15070,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -14893,7 +15112,7 @@ Water None
 27 Swagger
 37 Bounce
 48 Hyper Voice
-34
+36
 Toxic
 Hail
 Hidden Power
@@ -14923,11 +15142,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Bubble Beam
 Encore
@@ -14982,7 +15203,7 @@ Grass Flying
 43 Giga Drain
 46 Bounce
 49 Memento
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -15006,6 +15227,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 10
@@ -15061,7 +15283,7 @@ Grass Flying
 52 Giga Drain
 56 Bounce
 60 Memento
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -15085,6 +15307,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 10
@@ -15140,7 +15363,7 @@ Grass Flying
 59 Giga Drain
 64 Bounce
 69 Memento
-27
+28
 Toxic
 Hidden Power
 Sunny Day
@@ -15166,6 +15389,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 10
@@ -15213,7 +15437,7 @@ Normal None
 36 Fling
 39 Nasty Plot
 43 Last Resort
-38
+39
 Hone Claws
 Toxic
 Hidden Power
@@ -15248,6 +15472,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -15303,7 +15528,7 @@ Grass None
 37 Double-Edge
 40 Sunny Day
 43 Seed Bomb
-23
+24
 Toxic
 Hidden Power
 Sunny Day
@@ -15324,6 +15549,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -15380,7 +15606,7 @@ Grass None
 40 Sunny Day
 43 Leaf Storm
 50 Petal Blizzard
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -15403,6 +15629,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -15455,7 +15682,7 @@ Bug Flying
 49 U-turn
 54 Air Slash
 57 Bug Buzz
-23
+24
 Toxic
 Hidden Power
 Sunny Day
@@ -15478,6 +15705,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 10
 Double-Edge
@@ -15524,7 +15752,7 @@ Water Ground
 43 Mist
 43 Haze
 47 Muddy Water
-29
+31
 Toxic
 Hail
 Hidden Power
@@ -15551,9 +15779,11 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 15
 Acid Spray
 Ancient Power
@@ -15604,7 +15834,7 @@ Water Ground
 48 Mist
 48 Haze
 53 Muddy Water
-40
+42
 Toxic
 Hail
 Hidden Power
@@ -15640,11 +15870,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 15
 Acid Spray
 Ancient Power
@@ -15694,7 +15926,7 @@ Psychic None
 37 Psychic
 41 Last Resort
 45 Power Swap
-32
+33
 Psyshock
 Calm Mind
 Toxic
@@ -15724,6 +15956,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 Cut
@@ -15775,7 +16008,7 @@ Dark None
 37 Mean Look
 41 Last Resort
 45 Guard Swap
-30
+31
 Toxic
 Hidden Power
 Sunny Day
@@ -15802,6 +16035,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -15856,7 +16090,7 @@ Dark Flying
 55 Sucker Punch
 61 Torment
 65 Roost
-32
+33
 Calm Mind
 Toxic
 Hidden Power
@@ -15885,6 +16119,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -15944,7 +16179,7 @@ Water Psychic
 49 Trump Card
 54 Psych Up
 58 Heal Pulse
-47
+49
 Psyshock
 Calm Mind
 Toxic
@@ -15988,10 +16223,12 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
+Dive
 11
 Belch
 Belly Drum
@@ -16039,7 +16276,7 @@ Ghost None
 46 Perish Song
 50 Grudge
 55 Power Gem
-35
+36
 Calm Mind
 Toxic
 Hidden Power
@@ -16072,6 +16309,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
@@ -16175,7 +16413,7 @@ Normal Psychic
 37 Psychic
 41 Zen Headbutt
 46 Crunch
-38
+39
 Psyshock
 Calm Mind
 Toxic
@@ -16211,6 +16449,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Dazzling Gleam
 Confide
 Strength
@@ -16263,7 +16502,7 @@ Bug None
 39 Iron Defense
 42 Gyro Ball
 45 Double-Edge
-29
+30
 Toxic
 Venoshock
 Hidden Power
@@ -16291,6 +16530,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 11
@@ -16348,7 +16588,7 @@ Bug Steel
 60 Magnet Rise
 64 Zap Cannon
 70 Heavy Slam
-34
+35
 Toxic
 Venoshock
 Hidden Power
@@ -16381,6 +16621,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Strength
 11
@@ -16433,7 +16674,7 @@ Normal None
 43 Drill Run
 46 Endeavor
 49 Flail
-41
+42
 Calm Mind
 Toxic
 Hidden Power
@@ -16473,6 +16714,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Strength
 13
@@ -16524,7 +16766,7 @@ Ground Flying
 45 Sky Uppercut
 50 Swords Dance
 55 Guillotine
-45
+46
 Hone Claws
 Toxic
 Venoshock
@@ -16566,6 +16808,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -16631,7 +16874,7 @@ Steel Ground
 46 Stone Edge
 49 Double-Edge
 52 Sandstorm
-38
+39
 Roar
 Toxic
 Hidden Power
@@ -16665,6 +16908,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Dark Pulse
 Confide
@@ -16716,7 +16960,7 @@ Fairy None
 37 Play Rough
 43 Payback
 49 Crunch
-43
+44
 Roar
 Toxic
 Bulk Up
@@ -16755,6 +16999,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Power-Up Punch
 Dazzling Gleam
@@ -16813,7 +17058,7 @@ Fairy None
 51 Payback
 59 Crunch
 67 Outrage
-49
+50
 Roar
 Toxic
 Bulk Up
@@ -16858,6 +17103,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Power-Up Punch
 Dazzling Gleam
@@ -16922,7 +17168,7 @@ Water Poison
 53 Destiny Bond
 57 Hydro Pump
 60 Fell Stinger
-29
+31
 Toxic
 Hail
 Venoshock
@@ -16949,9 +17195,11 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 10
 Acid Spray
 Aqua Jet
@@ -17003,7 +17251,7 @@ Bug Steel
 50 Iron Head
 57 Swords Dance
 61 Feint
-36
+37
 Toxic
 Venoshock
 Hidden Power
@@ -17037,6 +17285,7 @@ U-turn
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -17092,7 +17341,7 @@ Bug Rock
 45 Guard Split
 49 Stone Edge
 53 Sticky Web
-32
+33
 Toxic
 Venoshock
 Hidden Power
@@ -17123,6 +17372,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 8
@@ -17173,7 +17423,7 @@ Bug Fighting
 37 Feint
 43 Reversal
 46 Megahorn
-38
+39
 Toxic
 Bulk Up
 Venoshock
@@ -17209,6 +17459,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -17259,7 +17510,7 @@ Dark Ice
 40 Snatch
 44 Punishment
 47 Ice Shard
-46
+47
 Hone Claws
 Calm Mind
 Toxic
@@ -17299,6 +17550,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -17361,7 +17613,7 @@ Normal None
 43 Snore
 50 Thrash
 57 Fling
-36
+37
 Hone Claws
 Roar
 Toxic
@@ -17394,6 +17646,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -17453,7 +17706,7 @@ Normal None
 49 Snore
 58 Thrash
 67 Hammer Arm
-41
+42
 Hone Claws
 Roar
 Toxic
@@ -17491,6 +17744,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -17545,7 +17799,7 @@ Fire None
 46 Body Slam
 50 Flamethrower
 55 Earth Power
-26
+27
 Toxic
 Hidden Power
 Sunny Day
@@ -17570,6 +17824,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 12
@@ -17623,7 +17878,7 @@ Fire Rock
 52 Body Slam
 59 Flamethrower
 67 Earth Power
-38
+39
 Toxic
 Hidden Power
 Sunny Day
@@ -17659,6 +17914,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -17710,7 +17966,7 @@ Ice Ground
 40 Flail
 44 Blizzard
 48 Amnesia
-27
+28
 Roar
 Toxic
 Hail
@@ -17736,6 +17992,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 13
@@ -17792,7 +18049,7 @@ Ice Ground
 46 Earthquake
 52 Blizzard
 58 Amnesia
-30
+31
 Roar
 Toxic
 Hail
@@ -17821,6 +18078,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 13
@@ -17876,7 +18134,7 @@ Water Rock
 45 Mirror Coat
 47 Earth Power
 50 Flail
-37
+38
 Calm Mind
 Toxic
 Hail
@@ -17910,6 +18168,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Surf
@@ -17963,7 +18222,7 @@ Water None
 42 Hydro Pump
 46 Hyper Beam
 50 Soak
-28
+30
 Toxic
 Hidden Power
 Sunny Day
@@ -17989,9 +18248,11 @@ Thunder Wave
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 14
 Acid Spray
 Aurora Beam
@@ -18046,7 +18307,7 @@ Water None
 52 Hydro Pump
 58 Hyper Beam
 64 Soak
-34
+36
 Toxic
 Hidden Power
 Sunny Day
@@ -18078,9 +18339,11 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 14
 Acid Spray
 Aurora Beam
@@ -18117,7 +18380,7 @@ Fast
 Ice Flying
 1
 0 Present
-23
+24
 Toxic
 Hail
 Hidden Power
@@ -18138,6 +18401,7 @@ Frost Breath
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Power-Up Punch
 Confide
 Fly
@@ -18196,7 +18460,7 @@ Water Flying
 39 Aqua Ring
 46 Bounce
 49 Hydro Pump
-27
+29
 Toxic
 Hail
 Hidden Power
@@ -18221,9 +18485,11 @@ Rock Slide
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 9
 Amnesia
 Haze
@@ -18269,7 +18535,7 @@ Steel Flying
 42 Air Slash
 45 Slash
 50 Night Slash
-33
+34
 Roar
 Toxic
 Hidden Power
@@ -18299,6 +18565,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -18351,7 +18618,7 @@ Dark Fire
 49 Crunch
 52 Nasty Plot
 56 Inferno
-33
+34
 Roar
 Toxic
 Hidden Power
@@ -18382,6 +18649,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -18441,7 +18709,7 @@ Dark Fire
 56 Crunch
 60 Nasty Plot
 65 Inferno
-36
+37
 Roar
 Toxic
 Hidden Power
@@ -18474,6 +18742,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -18530,7 +18799,7 @@ Water Dragon
 40 Hydro Pump
 48 Dragon Dance
 57 Dragon Pulse
-22
+24
 Toxic
 Hail
 Hidden Power
@@ -18550,9 +18819,11 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 13
 Aurora Beam
 Clear Smog
@@ -18601,7 +18872,7 @@ Ground None
 33 Charm
 37 Last Resort
 42 Double-Edge
-22
+23
 Roar
 Toxic
 Hidden Power
@@ -18622,6 +18893,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 12
@@ -18674,7 +18946,7 @@ Ground None
 39 Scary Face
 46 Earthquake
 54 Giga Impact
-28
+29
 Roar
 Toxic
 Hidden Power
@@ -18701,6 +18973,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 12
@@ -18755,7 +19028,7 @@ Normal None
 56 Magic Coat
 62 Zap Cannon
 67 Hyper Beam
-31
+32
 Psyshock
 Toxic
 Hidden Power
@@ -18786,6 +19059,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 0
 45
@@ -18825,7 +19099,7 @@ Normal None
 49 Imprison
 50 Captivate
 55 Me First
-37
+38
 Psyshock
 Calm Mind
 Roar
@@ -18862,6 +19136,7 @@ Sleep Talk
 Substitute
 Trick Room
 Wild Charge
+Secret Power
 Confide
 11
 Bite
@@ -18931,7 +19206,7 @@ Fighting None
 0 Covet
 0 Fake Out
 0 Foresight
-24
+25
 Toxic
 Bulk Up
 Hidden Power
@@ -18954,6 +19229,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 10
@@ -19008,7 +19284,7 @@ Fighting None
 50 Detect
 55 Close Combat
 60 Endeavor
-29
+30
 Toxic
 Bulk Up
 Hidden Power
@@ -19036,6 +19312,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 10
@@ -19084,7 +19361,7 @@ Ice Psychic
 41 Copycat
 45 Perish Song
 48 Blizzard
-32
+33
 Psyshock
 Calm Mind
 Toxic
@@ -19116,6 +19393,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 8
 Captivate
@@ -19161,7 +19439,7 @@ Electric None
 36 Screech
 40 Thunderbolt
 43 Thunder
-27
+28
 Toxic
 Hidden Power
 Light Screen
@@ -19187,6 +19465,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 11
@@ -19237,7 +19516,7 @@ Fire None
 36 Sunny Day
 40 Flamethrower
 43 Fire Blast
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -19261,6 +19540,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 14
@@ -19313,7 +19593,7 @@ Normal None
 41 Gyro Ball
 48 Heal Bell
 50 Wake-Up Slap
-39
+40
 Toxic
 Hidden Power
 Sunny Day
@@ -19349,6 +19629,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
@@ -19406,7 +19687,7 @@ Normal None
 46 Light Screen
 50 Healing Wish
 54 Double-Edge
-51
+52
 Calm Mind
 Toxic
 Hail
@@ -19454,6 +19735,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -19507,7 +19789,7 @@ Electric None
 71 Rain Dance
 78 Calm Mind
 85 Thunder
-35
+36
 Calm Mind
 Roar
 Toxic
@@ -19539,6 +19821,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Confide
 Cut
@@ -19582,7 +19865,7 @@ Fire None
 71 Fire Blast
 78 Calm Mind
 85 Eruption
-36
+37
 Calm Mind
 Roar
 Toxic
@@ -19615,6 +19898,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Confide
 Cut
@@ -19657,7 +19941,7 @@ Water None
 71 Hydro Pump
 78 Calm Mind
 85 Blizzard
-32
+34
 Calm Mind
 Roar
 Toxic
@@ -19685,11 +19969,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Confide
 Cut
 Surf
 Waterfall
+Dive
 0
 3
 0 0 1 0 2 0 
@@ -19725,7 +20011,7 @@ Rock Ground
 46 Earthquake
 50 Stone Edge
 55 Hyper Beam
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -19755,6 +20041,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -19809,7 +20096,7 @@ Rock Ground
 54 Earthquake
 60 Stone Edge
 67 Hyper Beam
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -19839,6 +20126,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -19897,7 +20185,7 @@ Rock Dark
 63 Stone Edge
 73 Hyper Beam
 82 Giga Impact
-53
+54
 Hone Claws
 Dragon Claw
 Roar
@@ -19944,6 +20232,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -20001,7 +20290,7 @@ Psychic Flying
 85 Natural Gift
 93 Calm Mind
 99 Sky Attack
-47
+49
 Psyshock
 Calm Mind
 Roar
@@ -20044,11 +20333,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Fly
 Surf
 Strength
 Waterfall
+Dive
 0
 3
 0 0 0 0 3 0 
@@ -20086,7 +20377,7 @@ Fire Flying
 85 Natural Gift
 93 Calm Mind
 99 Sky Attack
-47
+48
 Calm Mind
 Roar
 Toxic
@@ -20131,6 +20422,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Fly
 Strength
@@ -20170,7 +20462,7 @@ Psychic Grass
 73 Healing Wish
 82 Leaf Storm
 91 Perish Song
-39
+40
 Calm Mind
 Toxic
 Hidden Power
@@ -20206,6 +20498,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -20244,7 +20537,7 @@ Grass None
 41 Detect
 46 Giga Drain
 50 Energy Ball
-31
+32
 Toxic
 Hidden Power
 Sunny Day
@@ -20271,6 +20564,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -20327,7 +20621,7 @@ Grass None
 47 Detect
 53 False Swipe
 59 Leaf Storm
-34
+35
 Toxic
 Hidden Power
 Sunny Day
@@ -20357,6 +20651,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -20415,7 +20710,7 @@ Grass None
 51 Detect
 59 False Swipe
 67 Leaf Storm
-42
+43
 Hone Claws
 Dragon Claw
 Roar
@@ -20453,6 +20748,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -20507,7 +20803,7 @@ Fire None
 34 Slash
 37 Mirror Move
 43 Flamethrower
-30
+31
 Hone Claws
 Toxic
 Hidden Power
@@ -20535,6 +20831,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -20587,7 +20884,7 @@ Fire Fighting
 43 Mirror Move
 50 Sky Uppercut
 54 Flare Blitz
-37
+38
 Hone Claws
 Toxic
 Bulk Up
@@ -20621,6 +20918,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -20678,7 +20976,7 @@ Fire Fighting
 49 Brave Bird
 59 Sky Uppercut
 66 Flare Blitz
-45
+46
 Hone Claws
 Roar
 Toxic
@@ -20720,6 +21018,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -20772,7 +21071,7 @@ Water None
 37 Protect
 42 Hydro Pump
 46 Endeavor
-26
+28
 Toxic
 Hail
 Hidden Power
@@ -20795,10 +21094,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 16
 Ancient Power
 Avalanche
@@ -20850,7 +21151,7 @@ Water Ground
 42 Protect
 46 Earthquake
 53 Endeavor
-31
+33
 Toxic
 Hail
 Hidden Power
@@ -20877,11 +21178,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 16
 Ancient Power
 Avalanche
@@ -20935,7 +21238,7 @@ Water Ground
 52 Earthquake
 61 Endeavor
 69 Hammer Arm
-36
+38
 Roar
 Toxic
 Hail
@@ -20967,11 +21270,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 16
 Ancient Power
 Avalanche
@@ -21024,7 +21329,7 @@ Dark None
 45 Take Down
 49 Sucker Punch
 53 Crunch
-27
+28
 Roar
 Toxic
 Hidden Power
@@ -21049,6 +21354,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -21106,7 +21412,7 @@ Dark None
 57 Thief
 62 Sucker Punch
 65 Crunch
-30
+31
 Roar
 Toxic
 Hidden Power
@@ -21133,6 +21439,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -21187,7 +21494,7 @@ Normal None
 41 Rest
 45 Belly Drum
 49 Fling
-31
+32
 Hone Claws
 Toxic
 Hidden Power
@@ -21216,6 +21523,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
@@ -21268,7 +21576,7 @@ Normal None
 53 Rest
 59 Belly Drum
 65 Fling
-36
+37
 Hone Claws
 Roar
 Toxic
@@ -21301,6 +21609,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
@@ -21400,7 +21709,7 @@ Bug Flying
 38 Giga Drain
 41 Bug Buzz
 45 Quiver Dance
-29
+30
 Toxic
 Venoshock
 Hidden Power
@@ -21429,6 +21738,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 0
 45
@@ -21489,7 +21799,7 @@ Bug Poison
 38 Toxic
 41 Bug Buzz
 45 Quiver Dance
-30
+31
 Toxic
 Venoshock
 Hidden Power
@@ -21519,6 +21829,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 0
 45
@@ -21554,7 +21865,7 @@ Water Grass
 31 Zen Headbutt
 37 Rain Dance
 45 Energy Ball
-27
+29
 Toxic
 Hail
 Hidden Power
@@ -21579,9 +21890,11 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Surf
+Dive
 10
 Counter
 Flail
@@ -21624,7 +21937,7 @@ Water Grass
 31 Zen Headbutt
 37 Uproar
 45 Hydro Pump
-34
+36
 Hone Claws
 Toxic
 Hail
@@ -21653,12 +21966,14 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 10
 Counter
 Flail
@@ -21694,7 +22009,7 @@ Water Grass
 0 Growl
 0 Mega Drain
 0 Nature Power
-37
+39
 Hone Claws
 Toxic
 Hail
@@ -21726,12 +22041,14 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 10
 Counter
 Flail
@@ -21770,7 +22087,7 @@ Grass None
 21 Synthesis
 31 Sunny Day
 43 Explosion
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -21794,6 +22111,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 13
@@ -21841,7 +22159,7 @@ Grass Dark
 37 Razor Wind
 43 Swagger
 49 Extrasensory
-41
+42
 Toxic
 Hidden Power
 Sunny Day
@@ -21876,6 +22194,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Nature Power
 Dark Pulse
@@ -21923,7 +22242,7 @@ Grass Dark
 0 Razor Leaf
 19 Leaf Tornado
 49 Leaf Storm
-45
+46
 Toxic
 Hidden Power
 Sunny Day
@@ -21962,6 +22281,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Nature Power
 Dark Pulse
@@ -22013,7 +22333,7 @@ Normal Flying
 34 Aerial Ace
 43 Agility
 53 Air Slash
-21
+22
 Toxic
 Hidden Power
 Sunny Day
@@ -22033,6 +22353,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 12
@@ -22083,7 +22404,7 @@ Normal Flying
 38 Aerial Ace
 49 Agility
 61 Air Slash
-23
+24
 Toxic
 Hidden Power
 Sunny Day
@@ -22105,6 +22426,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 12
@@ -22155,7 +22477,7 @@ Water Flying
 42 Aerial Ace
 46 Air Slash
 49 Hurricane
-24
+25
 Toxic
 Hail
 Hidden Power
@@ -22178,6 +22500,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 10
@@ -22233,7 +22556,7 @@ Water Flying
 52 Tailwind
 58 Hydro Pump
 63 Hurricane
-30
+31
 Toxic
 Hail
 Hidden Power
@@ -22261,6 +22584,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 Surf
@@ -22310,7 +22634,7 @@ Psychic Fairy
 45 Hypnosis
 49 Dream Eater
 54 Stored Power
-36
+37
 Psyshock
 Calm Mind
 Toxic
@@ -22345,6 +22669,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 11
@@ -22397,7 +22722,7 @@ Psychic Fairy
 53 Hypnosis
 59 Dream Eater
 64 Stored Power
-36
+37
 Psyshock
 Calm Mind
 Toxic
@@ -22432,6 +22757,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 11
@@ -22491,7 +22817,7 @@ Psychic Fairy
 73 Dream Eater
 80 Stored Power
 85 Moonblast
-40
+41
 Psyshock
 Calm Mind
 Toxic
@@ -22530,6 +22856,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 11
@@ -22574,7 +22901,7 @@ Bug Water
 37 Haze
 43 Baton Pass
 46 Sticky Web
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -22598,6 +22925,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 11
 Aqua Jet
@@ -22650,7 +22978,7 @@ Bug Flying
 54 Whirlwind
 61 Bug Buzz
 68 Quiver Dance
-30
+31
 Toxic
 Hidden Power
 Sunny Day
@@ -22680,6 +23008,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 11
 Aqua Jet
@@ -22726,7 +23055,7 @@ Grass None
 37 Giga Drain
 41 Seed Bomb
 45 Spore
-22
+23
 Toxic
 Venoshock
 Hidden Power
@@ -22748,6 +23077,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 9
 Bullet Seed
@@ -22796,7 +23126,7 @@ Grass Fighting
 37 Mind Reader
 41 Seed Bomb
 45 Dynamic Punch
-37
+38
 Toxic
 Bulk Up
 Venoshock
@@ -22830,6 +23160,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -22875,7 +23206,7 @@ Normal None
 37 Chip Away
 43 Counter
 49 Flail
-36
+37
 Hone Claws
 Toxic
 Bulk Up
@@ -22908,6 +23239,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -22957,7 +23289,7 @@ Normal None
 43 Chip Away
 49 Focus Punch
 55 Reversal
-42
+43
 Hone Claws
 Roar
 Toxic
@@ -22996,6 +23328,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -23050,7 +23383,7 @@ Normal None
 55 Fling
 61 Punishment
 67 Hammer Arm
-45
+46
 Hone Claws
 Roar
 Toxic
@@ -23092,6 +23425,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -23137,7 +23471,7 @@ Bug Ground
 31 Mud-Slap
 38 Metal Claw
 45 Dig
-23
+24
 Hone Claws
 Toxic
 Hidden Power
@@ -23159,6 +23493,7 @@ X-Scissor
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 8
@@ -23207,7 +23542,7 @@ Bug Flying
 38 Agility
 45 Baton Pass
 52 X-Scissor
-30
+31
 Hone Claws
 Toxic
 Hidden Power
@@ -23236,6 +23571,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Cut
 8
@@ -23280,7 +23616,7 @@ Bug Ghost
 47 Phantom Force
 50 Heal Block
 59 Shadow Ball
-29
+30
 Hone Claws
 Toxic
 Hidden Power
@@ -23308,6 +23644,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 8
@@ -23351,7 +23688,7 @@ Normal None
 45 Rest
 45 Sleep Talk
 50 Hyper Voice
-25
+26
 Roar
 Toxic
 Hidden Power
@@ -23376,6 +23713,7 @@ Retaliate
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 10
 Circle Throw
@@ -23425,7 +23763,7 @@ Normal None
 57 Rest
 57 Sleep Talk
 65 Hyper Voice
-37
+38
 Roar
 Toxic
 Hidden Power
@@ -23460,6 +23798,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -23518,7 +23857,7 @@ Normal None
 71 Hyper Voice
 79 Hyper Beam
 85 Boomburst
-41
+42
 Roar
 Toxic
 Hidden Power
@@ -23556,6 +23895,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
@@ -23609,7 +23949,7 @@ Fighting None
 40 Close Combat
 43 Reversal
 46 Heavy Slam
-31
+32
 Toxic
 Bulk Up
 Hidden Power
@@ -23637,6 +23977,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
@@ -23694,7 +24035,7 @@ Fighting None
 52 Close Combat
 57 Reversal
 62 Heavy Slam
-35
+36
 Toxic
 Bulk Up
 Hidden Power
@@ -23726,6 +24067,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
@@ -23774,7 +24116,7 @@ Normal Fairy
 16 Disarming Voice
 20 Slam
 23 Bounce
-20
+21
 Toxic
 Hail
 Hidden Power
@@ -23792,6 +24134,7 @@ Scald
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
@@ -23844,7 +24187,7 @@ Rock None
 46 Stone Edge
 50 Lock-On
 50 Zap Cannon
-31
+32
 Toxic
 Hidden Power
 Sunny Day
@@ -23873,6 +24216,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dazzling Gleam
 Confide
 Strength
@@ -23922,7 +24266,7 @@ Normal None
 42 Double-Edge
 46 Captivate
 49 Play Rough
-33
+34
 Calm Mind
 Toxic
 Hidden Power
@@ -23955,6 +24299,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 13
 Baton Pass
@@ -23996,7 +24341,7 @@ Normal None
 0 Attract
 0 Sing
 0 Double Slap
-37
+38
 Calm Mind
 Toxic
 Hidden Power
@@ -24032,6 +24377,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Strength
 13
@@ -24091,7 +24437,7 @@ Dark Ghost
 53 Zen Headbutt
 57 Shadow Ball
 60 Mean Look
-43
+44
 Hone Claws
 Calm Mind
 Toxic
@@ -24129,6 +24475,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -24187,7 +24534,7 @@ Steel Fairy
 50 Spit Up
 56 Iron Head
 60 Play Rough
-44
+45
 Toxic
 Hidden Power
 Sunny Day
@@ -24228,6 +24575,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -24284,7 +24632,7 @@ Steel Rock
 43 Heavy Slam
 46 Double-Edge
 50 Metal Burst
-28
+29
 Hone Claws
 Roar
 Toxic
@@ -24310,6 +24658,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -24365,7 +24714,7 @@ Steel Rock
 51 Heavy Slam
 56 Double-Edge
 62 Metal Burst
-29
+30
 Hone Claws
 Roar
 Toxic
@@ -24392,6 +24741,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -24447,7 +24797,7 @@ Steel Rock
 57 Heavy Slam
 65 Double-Edge
 74 Metal Burst
-52
+53
 Hone Claws
 Dragon Claw
 Roar
@@ -24494,6 +24844,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -24549,7 +24900,7 @@ Fighting Psychic
 43 Power Trick
 46 Reversal
 50 Recover
-36
+37
 Psyshock
 Calm Mind
 Toxic
@@ -24583,6 +24934,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -24643,7 +24995,7 @@ Fighting Psychic
 49 Power Trick
 55 Reversal
 62 Recover
-39
+40
 Psyshock
 Calm Mind
 Toxic
@@ -24680,6 +25032,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -24732,7 +25085,7 @@ Electric None
 44 Charge
 49 Wild Charge
 52 Thunder
-26
+27
 Roar
 Toxic
 Hidden Power
@@ -24756,6 +25109,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Snarl
 Confide
 Strength
@@ -24814,7 +25168,7 @@ Electric None
 61 Wild Charge
 66 Thunder
 70 Electric Terrain
-29
+30
 Roar
 Toxic
 Hidden Power
@@ -24841,6 +25195,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Snarl
 Confide
 Strength
@@ -24901,7 +25256,7 @@ Electric None
 50 Last Resort
 56 Nasty Plot
 63 Entrainment
-24
+25
 Toxic
 Hidden Power
 Light Screen
@@ -24925,6 +25280,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 5
 Discharge
@@ -24974,7 +25330,7 @@ Electric None
 51 Trump Card
 56 Nasty Plot
 63 Entrainment
-24
+25
 Toxic
 Hidden Power
 Light Screen
@@ -24998,6 +25354,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 5
 Discharge
@@ -25038,7 +25395,7 @@ Bug None
 37 Zen Headbutt
 41 Bug Buzz
 45 Double-Edge
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -25069,6 +25426,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -25113,7 +25471,7 @@ Bug None
 37 Zen Headbutt
 41 Bug Buzz
 45 Covet
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -25144,6 +25502,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -25193,7 +25552,7 @@ Grass Poison
 43 Aromatherapy
 46 Synthesis
 50 Petal Blizzard
-27
+28
 Toxic
 Venoshock
 Hidden Power
@@ -25217,6 +25576,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -25273,7 +25633,7 @@ Poison None
 49 Gastro Acid
 54 Wring Out
 59 Gunk Shot
-26
+27
 Toxic
 Venoshock
 Hidden Power
@@ -25297,6 +25657,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -25352,7 +25713,7 @@ Poison None
 59 Gastro Acid
 66 Wring Out
 73 Gunk Shot
-30
+31
 Toxic
 Venoshock
 Hidden Power
@@ -25380,6 +25741,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -25426,7 +25788,7 @@ Water Dark
 31 Aqua Jet
 36 Agility
 38 Take Down
-26
+28
 Toxic
 Hail
 Hidden Power
@@ -25448,11 +25810,13 @@ Retaliate
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
 Surf
 Waterfall
+Dive
 7
 Ancient Power
 Brine
@@ -25502,7 +25866,7 @@ Water Dark
 45 Agility
 50 Skull Bash
 56 Night Slash
-35
+37
 Roar
 Toxic
 Hail
@@ -25532,12 +25896,14 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
 Surf
 Strength
 Waterfall
+Dive
 7
 Ancient Power
 Brine
@@ -25583,7 +25949,7 @@ Water None
 44 Bounce
 47 Hydro Pump
 50 Heavy Slam
-26
+28
 Roar
 Toxic
 Hail
@@ -25606,10 +25972,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Aqua Ring
 Body Slam
@@ -25663,7 +26031,7 @@ Water None
 54 Bounce
 62 Hydro Pump
 70 Heavy Slam
-28
+30
 Roar
 Toxic
 Hail
@@ -25688,10 +26056,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Aqua Ring
 Body Slam
@@ -25741,7 +26111,7 @@ Fire Ground
 40 Earthquake
 43 Flamethrower
 47 Double-Edge
-29
+30
 Toxic
 Hidden Power
 Sunny Day
@@ -25768,6 +26138,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -25829,7 +26200,7 @@ Fire Ground
 46 Earthquake
 52 Eruption
 59 Fissure
-37
+38
 Roar
 Toxic
 Hidden Power
@@ -25864,6 +26235,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -25928,7 +26300,7 @@ Fire None
 55 Heat Wave
 60 Inferno
 65 Shell Smash
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -25959,6 +26331,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -26007,7 +26380,7 @@ Psychic None
 40 Payback
 44 Psychic
 50 Bounce
-31
+32
 Psyshock
 Calm Mind
 Toxic
@@ -26038,6 +26411,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 11
 Amnesia
@@ -26091,7 +26465,7 @@ Psychic None
 46 Payback
 52 Psychic
 60 Bounce
-39
+40
 Psyshock
 Calm Mind
 Toxic
@@ -26129,6 +26503,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
 Confide
 11
@@ -26178,7 +26553,7 @@ Normal None
 46 Double-Edge
 50 Flail
 50 Thrash
-32
+34
 Calm Mind
 Toxic
 Hidden Power
@@ -26204,10 +26579,12 @@ Psych Up
 Rock Slide
 Dream Eater
 Swagger
+Sleep Talk
 Substitute
 Trick Room
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -26269,7 +26646,7 @@ Ground None
 61 Feint
 67 Superpower
 73 Fissure
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -26292,6 +26669,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 10
@@ -26343,7 +26721,7 @@ Ground Dragon
 39 Earth Power
 44 Sandstorm
 49 Hyper Beam
-28
+29
 Toxic
 Hidden Power
 Sunny Day
@@ -26369,6 +26747,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Fly
 Strength
@@ -26422,7 +26801,7 @@ Ground Dragon
 45 Dragon Tail
 49 Hyper Beam
 55 Dragon Claw
-38
+39
 Hone Claws
 Dragon Claw
 Toxic
@@ -26457,6 +26836,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Fly
@@ -26508,7 +26888,7 @@ Grass None
 49 Cotton Spore
 53 Sandstorm
 57 Destiny Bond
-28
+29
 Toxic
 Venoshock
 Hidden Power
@@ -26532,6 +26912,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dark Pulse
 Power-Up Punch
@@ -26597,7 +26978,7 @@ Grass Dark
 59 Cotton Spore
 65 Sandstorm
 71 Destiny Bond
-34
+35
 Toxic
 Venoshock
 Hidden Power
@@ -26626,6 +27007,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dark Pulse
 Power-Up Punch
@@ -26688,7 +27070,7 @@ Normal Flying
 42 Dragon Pulse
 48 Perish Song
 50 Moonblast
-26
+27
 Toxic
 Hidden Power
 Sunny Day
@@ -26712,6 +27094,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 Fly
@@ -26768,7 +27151,7 @@ Dragon Flying
 57 Perish Song
 60 Moonblast
 64 Sky Attack
-37
+38
 Hone Claws
 Dragon Claw
 Roar
@@ -26803,6 +27186,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dazzling Gleam
 Confide
 Fly
@@ -26852,7 +27236,7 @@ Normal None
 40 Taunt
 43 Swords Dance
 47 Close Combat
-45
+46
 Hone Claws
 Roar
 Toxic
@@ -26895,6 +27279,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -26952,7 +27337,7 @@ Poison None
 46 Belch
 48 Coil
 50 Wring Out
-32
+33
 Toxic
 Venoshock
 Hidden Power
@@ -26982,6 +27367,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Strength
@@ -27038,7 +27424,7 @@ Rock Psychic
 49 Explosion
 50 Moonblast
 53 Magic Room
-41
+42
 Psyshock
 Calm Mind
 Toxic
@@ -27079,6 +27465,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 0
 45
@@ -27121,7 +27508,7 @@ Rock Psychic
 45 Solar Beam
 49 Explosion
 53 Wonder Room
-45
+46
 Psyshock
 Calm Mind
 Toxic
@@ -27166,6 +27553,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 0
 45
@@ -27204,7 +27592,7 @@ Water Ground
 39 Earthquake
 43 Future Sight
 47 Fissure
-23
+25
 Toxic
 Hail
 Hidden Power
@@ -27225,9 +27613,11 @@ Bulldoze
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 10
 Dragon Dance
 Earth Power
@@ -27277,7 +27667,7 @@ Water Ground
 45 Earthquake
 51 Future Sight
 57 Fissure
-29
+31
 Toxic
 Hail
 Hidden Power
@@ -27303,10 +27693,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 10
 Dragon Dance
 Earth Power
@@ -27351,7 +27743,7 @@ Water None
 44 Swords Dance
 47 Crunch
 53 Guillotine
-35
+36
 Hone Claws
 Toxic
 Hail
@@ -27382,6 +27774,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
@@ -27439,7 +27832,7 @@ Water Dark
 52 Swords Dance
 57 Crunch
 65 Guillotine
-42
+44
 Hone Claws
 Toxic
 Hail
@@ -27474,6 +27867,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Nature Power
 Dark Pulse
@@ -27482,6 +27876,7 @@ Cut
 Surf
 Strength
 Waterfall
+Dive
 13
 Ancient Power
 Aqua Jet
@@ -27533,7 +27928,7 @@ Ground Psychic
 41 Sandstorm
 45 Heal Block
 49 Explosion
-39
+40
 Psyshock
 Calm Mind
 Toxic
@@ -27571,6 +27966,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 0
@@ -27614,7 +28010,7 @@ Ground Psychic
 47 Sandstorm
 54 Heal Block
 61 Explosion
-44
+45
 Psyshock
 Calm Mind
 Toxic
@@ -27656,6 +28052,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Dazzling Gleam
 Confide
 Strength
@@ -27693,7 +28090,7 @@ Rock Grass
 57 Spit Up
 57 Swallow
 64 Wring Out
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -27718,6 +28115,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 9
 Barrier
@@ -27769,7 +28167,7 @@ Rock Grass
 66 Spit Up
 66 Swallow
 76 Wring Out
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -27801,6 +28199,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 9
@@ -27846,7 +28245,7 @@ Rock Bug
 49 Rock Blast
 55 Crush Claw
 61 X-Scissor
-28
+29
 Hone Claws
 Toxic
 Hidden Power
@@ -27873,6 +28272,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 9
@@ -27920,7 +28320,7 @@ Rock Bug
 55 Rock Blast
 67 Crush Claw
 73 X-Scissor
-35
+36
 Hone Claws
 Toxic
 Hidden Power
@@ -27953,6 +28353,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -27989,7 +28390,7 @@ Water None
 0 Splash
 15 Tackle
 30 Flail
-20
+22
 Toxic
 Hail
 Hidden Power
@@ -28007,9 +28408,11 @@ Scald
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 12
 Brine
 Captivate
@@ -28057,7 +28460,7 @@ Water None
 41 Attract
 45 Safeguard
 49 Aqua Ring
-26
+28
 Toxic
 Hail
 Hidden Power
@@ -28081,9 +28484,11 @@ Dragon Tail
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 12
 Brine
 Captivate
@@ -28129,7 +28534,7 @@ Normal None
 40 Hydro Pump
 40 Fire Blast
 40 Blizzard
-32
+33
 Toxic
 Hail
 Hidden Power
@@ -28161,6 +28566,7 @@ Psych Up
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 10
 Amnesia
@@ -28214,7 +28620,7 @@ Normal None
 49 Shadow Claw
 55 Ancient Power
 58 Synchronoise
-43
+44
 Hone Claws
 Toxic
 Hidden Power
@@ -28254,6 +28660,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -28306,7 +28713,7 @@ Ghost None
 42 Snatch
 46 Grudge
 50 Trick
-33
+34
 Calm Mind
 Toxic
 Hidden Power
@@ -28337,6 +28744,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
@@ -28391,7 +28799,7 @@ Ghost None
 46 Snatch
 52 Grudge
 58 Trick
-38
+39
 Calm Mind
 Toxic
 Hidden Power
@@ -28427,6 +28835,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
@@ -28477,7 +28886,7 @@ Ghost None
 41 Mean Look
 46 Payback
 49 Future Sight
-33
+34
 Calm Mind
 Toxic
 Hidden Power
@@ -28509,6 +28918,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 10
@@ -28566,7 +28976,7 @@ Ghost None
 49 Mean Look
 58 Payback
 61 Future Sight
-43
+44
 Calm Mind
 Toxic
 Hidden Power
@@ -28606,6 +29016,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -28663,7 +29074,7 @@ Grass Flying
 61 Solar Beam
 67 Natural Gift
 71 Leaf Storm
-32
+33
 Roar
 Toxic
 Hidden Power
@@ -28691,6 +29102,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -28746,7 +29158,7 @@ Psychic None
 49 Heal Pulse
 54 Synchronoise
 57 Healing Wish
-33
+34
 Psyshock
 Calm Mind
 Toxic
@@ -28778,6 +29190,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 9
@@ -28834,7 +29247,7 @@ Dark None
 57 Razor Wind
 60 Me First
 65 Perish Song
-53
+54
 Hone Claws
 Calm Mind
 Toxic
@@ -28883,6 +29296,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -28966,7 +29380,7 @@ Ice None
 37 Ice Shard
 40 Hail
 46 Blizzard
-21
+22
 Toxic
 Hail
 Hidden Power
@@ -28987,6 +29401,7 @@ Frost Breath
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 10
 Avalanche
@@ -29038,7 +29453,7 @@ Ice None
 40 Hail
 51 Blizzard
 59 Sheer Cold
-31
+32
 Toxic
 Hail
 Hidden Power
@@ -29068,6 +29483,7 @@ Frost Breath
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 10
@@ -29116,7 +29532,7 @@ Ice Water
 37 Snore
 43 Blizzard
 49 Sheer Cold
-26
+28
 Toxic
 Hail
 Hidden Power
@@ -29139,10 +29555,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Aqua Ring
 Belly Drum
@@ -29191,7 +29609,7 @@ Ice Water
 39 Snore
 47 Blizzard
 55 Sheer Cold
-27
+29
 Roar
 Toxic
 Hail
@@ -29215,10 +29633,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Aqua Ring
 Belly Drum
@@ -29269,7 +29689,7 @@ Ice Water
 44 Ice Fang
 52 Blizzard
 65 Sheer Cold
-29
+31
 Roar
 Toxic
 Hail
@@ -29295,10 +29715,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 13
 Aqua Ring
 Belly Drum
@@ -29338,7 +29760,7 @@ Water None
 0 Whirlpool
 0 Iron Defense
 50 Shell Smash
-19
+21
 Toxic
 Hail
 Hidden Power
@@ -29355,9 +29777,11 @@ Scald
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 11
 Aqua Ring
 Barrier
@@ -29405,7 +29829,7 @@ Water None
 42 Crunch
 46 Aqua Tail
 50 Hydro Pump
-23
+25
 Toxic
 Hail
 Hidden Power
@@ -29426,9 +29850,11 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 11
 Aqua Ring
 Barrier
@@ -29474,7 +29900,7 @@ Water None
 42 Psychic
 46 Aqua Tail
 50 Hydro Pump
-26
+28
 Toxic
 Hail
 Hidden Power
@@ -29498,9 +29924,11 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 11
 Aqua Ring
 Barrier
@@ -29551,7 +29979,7 @@ Water Rock
 64 Rest
 71 Hydro Pump
 78 Head Smash
-33
+35
 Calm Mind
 Toxic
 Hail
@@ -29582,9 +30010,11 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 12
 Amnesia
 Aqua Tail
@@ -29633,7 +30063,7 @@ Water None
 46 Aqua Ring
 50 Captivate
 55 Safeguard
-21
+23
 Toxic
 Hail
 Hidden Power
@@ -29652,9 +30082,11 @@ Psych Up
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 10
 Aqua Jet
 Aqua Ring
@@ -29699,7 +30131,7 @@ Dragon None
 46 Crunch
 50 Dragon Claw
 55 Double-Edge
-28
+29
 Hone Claws
 Dragon Claw
 Roar
@@ -29725,6 +30157,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -29777,7 +30210,7 @@ Dragon None
 50 Crunch
 55 Dragon Claw
 61 Double-Edge
-28
+29
 Hone Claws
 Dragon Claw
 Roar
@@ -29803,6 +30236,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -29860,7 +30294,7 @@ Dragon Flying
 61 Dragon Claw
 70 Double-Edge
 80 Dragon Tail
-37
+38
 Hone Claws
 Dragon Claw
 Roar
@@ -29894,6 +30328,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Fly
@@ -29971,7 +30406,7 @@ Steel Psychic
 44 Meteor Mash
 47 Iron Defense
 50 Hyper Beam
-39
+40
 Hone Claws
 Psyshock
 Toxic
@@ -30007,6 +30442,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -30050,7 +30486,7 @@ Steel Psychic
 45 Hammer Arm
 53 Iron Defense
 62 Hyper Beam
-40
+41
 Hone Claws
 Psyshock
 Toxic
@@ -30087,6 +30523,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -30129,7 +30566,7 @@ Rock None
 73 Stone Edge
 81 Hammer Arm
 89 Hyper Beam
-36
+37
 Toxic
 Hidden Power
 Sunny Day
@@ -30163,6 +30600,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -30203,7 +30641,7 @@ Ice None
 73 Ice Beam
 81 Hammer Arm
 89 Hyper Beam
-37
+38
 Toxic
 Hail
 Hidden Power
@@ -30238,6 +30676,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -30281,7 +30720,7 @@ Steel None
 73 Flash Cannon
 81 Hammer Arm
 89 Hyper Beam
-38
+39
 Hone Claws
 Toxic
 Hidden Power
@@ -30317,6 +30756,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -30365,7 +30805,7 @@ Dragon Psychic
 75 Guard Split
 80 Dragon Pulse
 85 Healing Wish
-49
+51
 Hone Claws
 Dragon Claw
 Psyshock
@@ -30410,11 +30850,13 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 Fly
 Surf
 Waterfall
+Dive
 0
 3
 0 0 0 0 3 0 
@@ -30460,7 +30902,7 @@ Dragon Psychic
 75 Power Split
 80 Dragon Pulse
 85 Memento
-49
+51
 Hone Claws
 Dragon Claw
 Psyshock
@@ -30505,11 +30947,13 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 Fly
 Surf
 Waterfall
+Dive
 0
 3
 0 0 0 3 0 0 
@@ -30544,7 +30988,7 @@ Water None
 75 Sheer Cold
 80 Double-Edge
 90 Hydro Pump
-34
+36
 Calm Mind
 Roar
 Toxic
@@ -30575,10 +31019,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 0
 5
 0 0 0 3 0 0 
@@ -30613,7 +31059,7 @@ Ground None
 75 Fissure
 80 Solar Beam
 90 Fire Blast
-48
+49
 Hone Claws
 Dragon Claw
 Roar
@@ -30658,6 +31104,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -30696,7 +31143,7 @@ Dragon Flying
 75 Extreme Speed
 80 Hyper Beam
 90 Dragon Pulse
-52
+54
 Hone Claws
 Dragon Claw
 Roar
@@ -30744,11 +31191,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Fly
 Surf
 Strength
 Waterfall
+Dive
 0
 3
 0 2 0 1 0 0 
@@ -30786,7 +31235,7 @@ Steel Psychic
 60 Cosmic Power
 65 Last Resort
 70 Doom Desire
-39
+40
 Psyshock
 Calm Mind
 Toxic
@@ -30823,6 +31272,7 @@ U-turn
 Substitute
 Flash Cannon
 Trick Room
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -30862,7 +31312,7 @@ Psychic None
 81 Recover
 89 Psycho Boost
 97 Hyper Beam
-50
+51
 Psyshock
 Calm Mind
 Toxic
@@ -30908,6 +31358,7 @@ Substitute
 Flash Cannon
 Trick Room
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -30946,7 +31397,7 @@ Grass None
 37 Crunch
 41 Giga Drain
 45 Leaf Storm
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -30968,6 +31419,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -31022,7 +31474,7 @@ Grass None
 42 Crunch
 47 Giga Drain
 52 Leaf Storm
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -31044,6 +31496,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -31102,7 +31555,7 @@ Grass Ground
 45 Crunch
 51 Giga Drain
 57 Leaf Storm
-35
+36
 Roar
 Toxic
 Hidden Power
@@ -31134,6 +31587,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -31188,7 +31642,7 @@ Fire None
 39 Acrobatics
 41 Slack Off
 47 Flamethrower
-37
+38
 Hone Claws
 Toxic
 Bulk Up
@@ -31222,6 +31676,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -31276,7 +31731,7 @@ Fire Fighting
 46 Acrobatics
 49 Slack Off
 56 Flare Blitz
-42
+43
 Hone Claws
 Toxic
 Bulk Up
@@ -31315,6 +31770,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -31371,7 +31827,7 @@ Fire Fighting
 52 Acrobatics
 58 Calm Mind
 68 Flare Blitz
-50
+51
 Hone Claws
 Calm Mind
 Roar
@@ -31418,6 +31874,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -31470,7 +31927,7 @@ Water None
 36 Mist
 39 Drill Peck
 43 Hydro Pump
-27
+29
 Toxic
 Hail
 Hidden Power
@@ -31494,10 +31951,12 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 Surf
 Waterfall
+Dive
 13
 Agility
 Aqua Ring
@@ -31548,7 +32007,7 @@ Water None
 42 Mist
 46 Drill Peck
 50 Hydro Pump
-31
+33
 Hone Claws
 Toxic
 Hail
@@ -31575,11 +32034,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Strength
 Waterfall
+Dive
 13
 Agility
 Aqua Ring
@@ -31632,7 +32093,7 @@ Water Steel
 46 Mist
 52 Drill Peck
 59 Hydro Pump
-40
+42
 Hone Claws
 Roar
 Toxic
@@ -31668,11 +32129,13 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Strength
 Waterfall
+Dive
 13
 Agility
 Aqua Ring
@@ -31720,7 +32183,7 @@ Normal Flying
 33 Agility
 37 Brave Bird
 41 Final Gambit
-21
+22
 Toxic
 Hidden Power
 Sunny Day
@@ -31740,6 +32203,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 13
@@ -31790,7 +32254,7 @@ Normal Flying
 38 Agility
 43 Brave Bird
 48 Final Gambit
-22
+23
 Toxic
 Hidden Power
 Sunny Day
@@ -31811,6 +32275,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 13
@@ -31863,7 +32328,7 @@ Normal Flying
 41 Agility
 49 Brave Bird
 57 Final Gambit
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -31886,6 +32351,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 13
@@ -31935,7 +32401,7 @@ Normal None
 37 Super Fang
 41 Superpower
 45 Curse
-29
+30
 Toxic
 Hidden Power
 Sunny Day
@@ -31963,6 +32429,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 12
@@ -32013,7 +32480,7 @@ Normal Water
 43 Super Fang
 48 Superpower
 53 Curse
-37
+39
 Toxic
 Hidden Power
 Sunny Day
@@ -32046,11 +32513,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Strength
 Waterfall
+Dive
 12
 Aqua Tail
 Defense Curl
@@ -32129,7 +32598,7 @@ Bug None
 44 Sticky Web
 46 Bug Buzz
 50 Perish Song
-31
+32
 Hone Claws
 Toxic
 Hidden Power
@@ -32157,6 +32626,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -32196,7 +32666,7 @@ Electric None
 37 Scary Face
 41 Discharge
 45 Wild Charge
-25
+26
 Roar
 Toxic
 Hidden Power
@@ -32219,6 +32689,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Snarl
 Confide
 Strength
@@ -32269,7 +32740,7 @@ Electric None
 43 Scary Face
 48 Discharge
 53 Wild Charge
-25
+26
 Roar
 Toxic
 Hidden Power
@@ -32292,6 +32763,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Snarl
 Confide
 Strength
@@ -32345,7 +32817,7 @@ Electric None
 56 Discharge
 63 Wild Charge
 67 Electric Terrain
-27
+28
 Roar
 Toxic
 Hidden Power
@@ -32370,6 +32842,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Snarl
 Confide
 Strength
@@ -32414,7 +32887,7 @@ Grass Poison
 13 Mega Drain
 16 Leech Seed
 19 Worry Seed
-26
+27
 Toxic
 Venoshock
 Hidden Power
@@ -32437,6 +32910,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -32483,7 +32957,7 @@ Grass Poison
 0 Mega Drain
 0 Magical Leaf
 0 Sweet Scent
-29
+30
 Toxic
 Venoshock
 Hidden Power
@@ -32509,6 +32983,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -32561,7 +33036,7 @@ Rock None
 37 Zen Headbutt
 42 Screech
 46 Head Smash
-38
+39
 Roar
 Toxic
 Hidden Power
@@ -32597,6 +33072,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -32645,7 +33121,7 @@ Rock None
 43 Zen Headbutt
 51 Screech
 58 Head Smash
-45
+46
 Roar
 Toxic
 Hidden Power
@@ -32686,6 +33162,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -32735,7 +33212,7 @@ Rock Steel
 37 Metal Burst
 42 Iron Head
 46 Heavy Slam
-36
+37
 Roar
 Toxic
 Hidden Power
@@ -32770,6 +33247,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Strength
 12
@@ -32820,7 +33298,7 @@ Rock Steel
 43 Metal Burst
 51 Iron Head
 58 Heavy Slam
-38
+39
 Roar
 Toxic
 Hidden Power
@@ -32857,6 +33335,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Strength
 12
@@ -32935,7 +33414,7 @@ Bug Grass
 41 Attract
 44 Psychic
 47 Leaf Storm
-36
+37
 Toxic
 Venoshock
 Hidden Power
@@ -32971,6 +33450,7 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 0
 45
@@ -33008,7 +33488,7 @@ Bug Flying
 44 Psychic
 47 Bug Buzz
 50 Quiver Dance
-32
+33
 Toxic
 Venoshock
 Hidden Power
@@ -33040,6 +33520,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 0
 45
@@ -33110,7 +33591,7 @@ Bug Flying
 49 Swagger
 53 Destiny Bond
 57 Fell Stinger
-30
+31
 Hone Claws
 Toxic
 Venoshock
@@ -33139,6 +33620,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Cut
 0
@@ -33178,7 +33660,7 @@ Electric None
 41 Discharge
 45 Last Resort
 49 Hyper Fang
-26
+27
 Toxic
 Hidden Power
 Light Screen
@@ -33203,6 +33685,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Cut
 12
@@ -33252,7 +33735,7 @@ Water None
 38 Aqua Tail
 41 Agility
 45 Hydro Pump
-27
+29
 Toxic
 Hail
 Bulk Up
@@ -33275,11 +33758,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 14
 Aqua Ring
 Aqua Tail
@@ -33335,7 +33820,7 @@ Water None
 46 Aqua Tail
 51 Agility
 57 Hydro Pump
-34
+36
 Roar
 Toxic
 Hail
@@ -33365,11 +33850,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
 Strength
 Waterfall
+Dive
 14
 Aqua Ring
 Aqua Tail
@@ -33418,7 +33905,7 @@ Grass None
 37 Solar Beam
 40 Lucky Chant
 47 Petal Blizzard
-21
+22
 Toxic
 Hidden Power
 Sunny Day
@@ -33437,6 +33924,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -33490,7 +33978,7 @@ Grass None
 43 Solar Beam
 48 Lucky Chant
 50 Petal Blizzard
-23
+24
 Toxic
 Hidden Power
 Sunny Day
@@ -33511,6 +33999,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -33560,7 +34049,7 @@ Water None
 29 Body Slam
 37 Muddy Water
 46 Recover
-19
+21
 Toxic
 Hail
 Hidden Power
@@ -33578,8 +34067,10 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
+Dive
 16
 Acid Armor
 Amnesia
@@ -33630,7 +34121,7 @@ Water Ground
 29 Body Slam
 41 Muddy Water
 54 Recover
-34
+36
 Toxic
 Hail
 Hidden Power
@@ -33661,10 +34152,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 16
 Acid Armor
 Amnesia
@@ -33718,7 +34211,7 @@ Normal None
 36 Fling
 39 Nasty Plot
 43 Last Resort
-40
+41
 Hone Claws
 Toxic
 Hidden Power
@@ -33755,6 +34248,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -33809,7 +34303,7 @@ Ghost Flying
 40 Amnesia
 44 Baton Pass
 50 Explosion
-32
+33
 Calm Mind
 Toxic
 Hidden Power
@@ -33840,6 +34334,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 10
@@ -33892,7 +34387,7 @@ Ghost Flying
 52 Baton Pass
 60 Explosion
 65 Phantom Force
-35
+36
 Calm Mind
 Toxic
 Hidden Power
@@ -33925,6 +34420,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 Fly
@@ -33977,7 +34473,7 @@ Normal None
 50 Entrainment
 56 Bounce
 63 Healing Wish
-27
+28
 Toxic
 Hidden Power
 Sunny Day
@@ -34002,6 +34498,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -34067,7 +34564,7 @@ Normal None
 53 Entrainment
 56 Bounce
 63 Healing Wish
-34
+35
 Toxic
 Hidden Power
 Sunny Day
@@ -34098,6 +34595,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -34151,7 +34649,7 @@ Ghost None
 0 Psywave
 0 Spite
 0 Astonish
-38
+39
 Calm Mind
 Toxic
 Hidden Power
@@ -34187,6 +34685,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
@@ -34236,7 +34735,7 @@ Dark Flying
 55 Night Slash
 65 Roost
 75 Dark Pulse
-35
+36
 Calm Mind
 Toxic
 Hidden Power
@@ -34268,6 +34767,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -34322,7 +34822,7 @@ Normal None
 44 Attract
 48 Hone Claws
 50 Play Rough
-32
+33
 Hone Claws
 Toxic
 Hidden Power
@@ -34353,6 +34853,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Cut
 10
@@ -34403,7 +34904,7 @@ Normal None
 45 Body Slam
 52 Attract
 60 Hone Claws
-36
+37
 Hone Claws
 Roar
 Toxic
@@ -34438,6 +34939,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Cut
 10
@@ -34479,7 +34981,7 @@ Psychic None
 17 Uproar
 22 Last Resort
 25 Entrainment
-32
+33
 Psyshock
 Calm Mind
 Toxic
@@ -34510,6 +35012,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 9
@@ -34557,7 +35060,7 @@ Poison Dark
 43 Memento
 46 Belch
 49 Explosion
-33
+34
 Hone Claws
 Roar
 Toxic
@@ -34587,6 +35090,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -34642,7 +35146,7 @@ Poison Dark
 51 Memento
 56 Belch
 61 Explosion
-37
+38
 Hone Claws
 Roar
 Toxic
@@ -34675,6 +35179,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -34731,7 +35236,7 @@ Steel Psychic
 41 Payback
 45 Heal Block
 49 Heavy Slam
-36
+37
 Psyshock
 Calm Mind
 Toxic
@@ -34767,6 +35272,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Trick Room
+Secret Power
 Confide
 0
 255
@@ -34811,7 +35317,7 @@ Steel Psychic
 46 Payback
 52 Heal Block
 58 Heavy Slam
-41
+42
 Psyshock
 Calm Mind
 Toxic
@@ -34851,6 +35357,7 @@ Substitute
 Flash Cannon
 Trick Room
 Rock Smash
+Secret Power
 Confide
 Strength
 0
@@ -34888,7 +35395,7 @@ Rock None
 33 Counter
 36 Sucker Punch
 40 Double-Edge
-25
+26
 Calm Mind
 Toxic
 Hidden Power
@@ -34912,6 +35419,7 @@ Rock Slide
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 9
@@ -34962,7 +35470,7 @@ Psychic Fairy
 43 Role Play
 46 Baton Pass
 50 Safeguard
-37
+38
 Psyshock
 Calm Mind
 Toxic
@@ -34999,6 +35507,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 14
 Charm
@@ -35041,7 +35550,7 @@ Normal None
 5 Copycat
 9 Refresh
 12 Sweet Kiss
-30
+31
 Toxic
 Hail
 Hidden Power
@@ -35071,6 +35580,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 10
 Aromatherapy
@@ -35125,7 +35635,7 @@ Normal Flying
 49 Synchronoise
 50 Feather Dance
 57 Hyper Voice
-23
+24
 Toxic
 Hidden Power
 Sunny Day
@@ -35147,6 +35657,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 10
@@ -35194,7 +35705,7 @@ Ghost Dark
 37 Nasty Plot
 43 Memento
 49 Dark Pulse
-32
+33
 Calm Mind
 Toxic
 Hidden Power
@@ -35224,6 +35735,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -35267,7 +35779,7 @@ Dragon Ground
 27 Dragon Claw
 31 Dig
 37 Dragon Rush
-32
+33
 Hone Claws
 Dragon Claw
 Roar
@@ -35297,6 +35809,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -35347,7 +35860,7 @@ Dragon Ground
 33 Dragon Claw
 40 Dig
 49 Dragon Rush
-32
+33
 Hone Claws
 Dragon Claw
 Roar
@@ -35377,6 +35890,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -35431,7 +35945,7 @@ Dragon Ground
 40 Dig
 48 Crunch
 55 Dragon Rush
-41
+42
 Hone Claws
 Dragon Claw
 Roar
@@ -35469,6 +35983,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
@@ -35528,7 +36043,7 @@ Normal None
 49 Natural Gift
 52 Snatch
 57 Last Resort
-36
+37
 Toxic
 Hidden Power
 Sunny Day
@@ -35561,6 +36076,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
@@ -35609,7 +36125,7 @@ Fighting None
 29 Reversal
 47 Nasty Plot
 50 Final Gambit
-33
+34
 Roar
 Toxic
 Bulk Up
@@ -35640,6 +36156,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -35700,7 +36217,7 @@ Fighting Steel
 55 Close Combat
 60 Dragon Pulse
 65 Extreme Speed
-42
+43
 Hone Claws
 Calm Mind
 Roar
@@ -35739,6 +36256,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -35789,7 +36307,7 @@ Ground None
 37 Earthquake
 44 Double-Edge
 50 Fissure
-22
+23
 Roar
 Toxic
 Hidden Power
@@ -35810,6 +36328,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 10
@@ -35859,7 +36378,7 @@ Ground None
 40 Earthquake
 50 Double-Edge
 60 Fissure
-25
+26
 Roar
 Toxic
 Hidden Power
@@ -35883,6 +36402,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 10
@@ -35933,7 +36453,7 @@ Poison Bug
 45 Crunch
 47 Fell Stinger
 49 Cross Poison
-38
+39
 Hone Claws
 Toxic
 Venoshock
@@ -35968,6 +36488,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -36027,7 +36548,7 @@ Poison Dark
 49 Crunch
 53 Fell Stinger
 57 Cross Poison
-46
+47
 Hone Claws
 Roar
 Toxic
@@ -36069,6 +36590,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -36124,7 +36646,7 @@ Poison Fighting
 45 Sludge Bomb
 47 Belch
 50 Flatter
-40
+41
 Toxic
 Bulk Up
 Venoshock
@@ -36161,6 +36683,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -36220,7 +36743,7 @@ Poison Fighting
 54 Sludge Bomb
 58 Belch
 62 Flatter
-45
+46
 Toxic
 Bulk Up
 Venoshock
@@ -36261,6 +36784,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -36317,7 +36841,7 @@ Grass None
 41 Crunch
 47 Wring Out
 50 Power Whip
-27
+28
 Toxic
 Hidden Power
 Sunny Day
@@ -36342,6 +36866,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -36390,7 +36915,7 @@ Water None
 45 Bounce
 49 Silver Wind
 54 Soak
-25
+27
 Toxic
 Hail
 Hidden Power
@@ -36412,10 +36937,12 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Nature Power
 Confide
 Surf
 Waterfall
+Dive
 11
 Agility
 Aqua Tail
@@ -36467,7 +36994,7 @@ Water None
 53 Bounce
 59 Silver Wind
 66 Soak
-26
+28
 Toxic
 Hail
 Hidden Power
@@ -36491,9 +37018,11 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 11
 Agility
 Aqua Tail
@@ -36542,7 +37071,7 @@ Water Flying
 39 Aqua Ring
 46 Bounce
 49 Hydro Pump
-24
+26
 Toxic
 Hail
 Hidden Power
@@ -36564,9 +37093,11 @@ Rock Slide
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 11
 Amnesia
 Haze
@@ -36611,7 +37142,7 @@ Grass Ice
 36 Wood Hammer
 41 Blizzard
 46 Sheer Cold
-25
+26
 Toxic
 Hail
 Hidden Power
@@ -36636,6 +37167,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 11
 Avalanche
@@ -36685,7 +37217,7 @@ Grass Ice
 36 Wood Hammer
 47 Blizzard
 58 Sheer Cold
-36
+37
 Toxic
 Hail
 Hidden Power
@@ -36720,6 +37252,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 11
@@ -36775,7 +37308,7 @@ Dark Ice
 40 Snatch
 44 Punishment
 47 Dark Pulse
-49
+50
 Hone Claws
 Calm Mind
 Toxic
@@ -36818,6 +37351,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -36887,7 +37421,7 @@ Electric Steel
 62 Magnet Rise
 67 Gyro Ball
 73 Zap Cannon
-28
+29
 Toxic
 Hidden Power
 Sunny Day
@@ -36915,6 +37449,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Wild Charge
+Secret Power
 Confide
 0
 30
@@ -36957,7 +37492,7 @@ Normal None
 53 Power Whip
 57 Wring Out
 61 Gyro Ball
-47
+48
 Toxic
 Hidden Power
 Sunny Day
@@ -37000,6 +37535,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -37060,7 +37596,7 @@ Ground Rock
 71 Horn Drill
 77 Megahorn
 86 Rock Wrecker
-48
+49
 Roar
 Toxic
 Hidden Power
@@ -37104,6 +37640,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -37168,7 +37705,7 @@ Grass None
 50 Grassy Terrain
 53 Power Whip
 56 Block
-39
+40
 Toxic
 Hidden Power
 Sunny Day
@@ -37204,6 +37741,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -37261,7 +37799,7 @@ Electric None
 55 Thunder
 62 Giga Impact
 65 Electric Terrain
-40
+41
 Toxic
 Hidden Power
 Taunt
@@ -37299,6 +37837,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -37354,7 +37893,7 @@ Fire None
 49 Flamethrower
 55 Fire Blast
 62 Hyper Beam
-38
+39
 Toxic
 Hidden Power
 Sunny Day
@@ -37390,6 +37929,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -37435,7 +37975,7 @@ Fairy Flying
 0 Extreme Speed
 0 Aura Sphere
 0 Air Slash
-41
+42
 Psyshock
 Toxic
 Hidden Power
@@ -37474,6 +38014,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dazzling Gleam
 Confide
 Fly
@@ -37532,7 +38073,7 @@ Bug Flying
 49 U-turn
 54 Air Slash
 57 Bug Buzz
-27
+28
 Toxic
 Hidden Power
 Sunny Day
@@ -37559,6 +38100,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 10
 Double-Edge
@@ -37605,7 +38147,7 @@ Grass None
 37 Sunny Day
 41 Last Resort
 45 Leaf Blade
-31
+32
 Roar
 Toxic
 Hidden Power
@@ -37634,6 +38176,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -37685,7 +38228,7 @@ Ice None
 37 Hail
 41 Last Resort
 45 Blizzard
-27
+28
 Roar
 Toxic
 Hail
@@ -37711,6 +38254,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 14
@@ -37770,7 +38314,7 @@ Ground Flying
 45 Sky Uppercut
 50 Swords Dance
 55 Guillotine
-47
+48
 Hone Claws
 Toxic
 Venoshock
@@ -37814,6 +38358,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -37874,7 +38419,7 @@ Ice Ground
 46 Earthquake
 52 Blizzard
 58 Scary Face
-30
+31
 Roar
 Toxic
 Hail
@@ -37903,6 +38448,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 13
@@ -37958,7 +38504,7 @@ Normal None
 56 Magic Coat
 62 Zap Cannon
 67 Hyper Beam
-33
+34
 Psyshock
 Toxic
 Hidden Power
@@ -37990,6 +38536,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 0
@@ -38035,7 +38582,7 @@ Psychic Fighting
 53 Protect
 59 Close Combat
 64 Stored Power
-57
+58
 Psyshock
 Calm Mind
 Toxic
@@ -38088,6 +38635,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -38146,7 +38694,7 @@ Rock Steel
 46 Stone Edge
 50 Lock-On
 50 Zap Cannon
-34
+35
 Toxic
 Hidden Power
 Sunny Day
@@ -38178,6 +38726,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Dazzling Gleam
 Confide
 Strength
@@ -38230,7 +38779,7 @@ Ghost None
 49 Mean Look
 58 Payback
 61 Future Sight
-44
+45
 Calm Mind
 Toxic
 Hidden Power
@@ -38271,6 +38820,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -38325,7 +38875,7 @@ Ice Ghost
 40 Hail
 51 Blizzard
 59 Destiny Bond
-34
+35
 Toxic
 Hail
 Hidden Power
@@ -38359,6 +38909,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 10
 Avalanche
@@ -38408,7 +38959,7 @@ Electric Ghost
 50 Hex
 57 Charge
 64 Discharge
-27
+28
 Toxic
 Hidden Power
 Sunny Day
@@ -38434,6 +38985,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 0
@@ -38472,7 +39024,7 @@ Psychic None
 61 Flail
 66 Natural Gift
 76 Memento
-39
+40
 Psyshock
 Calm Mind
 Toxic
@@ -38509,6 +39061,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -38548,7 +39101,7 @@ Psychic None
 61 Copycat
 66 Natural Gift
 76 Healing Wish
-40
+41
 Psyshock
 Calm Mind
 Toxic
@@ -38586,6 +39139,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -38624,7 +39178,7 @@ Psychic None
 61 Last Resort
 66 Natural Gift
 76 Explosion
-45
+46
 Psyshock
 Calm Mind
 Toxic
@@ -38667,6 +39221,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -38704,7 +39259,7 @@ Steel Dragon
 42 Iron Tail
 46 Roar Of Time
 50 Flash Cannon
-47
+48
 Hone Claws
 Dragon Claw
 Roar
@@ -38749,6 +39304,7 @@ Substitute
 Flash Cannon
 Trick Room
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -38786,7 +39342,7 @@ Water Dragon
 42 Aqua Tail
 46 Spacial Rend
 50 Hydro Pump
-48
+50
 Hone Claws
 Dragon Claw
 Roar
@@ -38831,10 +39387,12 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Strength
+Dive
 0
 30
 0 0 0 3 0 0 
@@ -38874,7 +39432,7 @@ Fire Steel
 81 Heat Wave
 88 Stone Edge
 96 Magma Storm
-38
+39
 Roar
 Toxic
 Hidden Power
@@ -38909,6 +39467,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Dark Pulse
 Confide
@@ -38950,7 +39509,7 @@ Normal None
 75 Crush Grip
 90 Heavy Slam
 100 Giga Impact
-35
+36
 Toxic
 Hidden Power
 Sunny Day
@@ -38982,6 +39541,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -39020,7 +39580,7 @@ Ghost Dragon
 42 Shadow Claw
 46 Shadow Force
 50 Hex
-44
+45
 Hone Claws
 Dragon Claw
 Calm Mind
@@ -39060,6 +39620,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -39103,7 +39664,7 @@ Psychic None
 84 Lunar Dance
 93 Psychic
 99 Moonblast
-33
+34
 Psyshock
 Calm Mind
 Toxic
@@ -39136,6 +39697,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Confide
 0
 3
@@ -39169,7 +39731,7 @@ Water None
 54 Aqua Ring
 61 Dive
 69 Rain Dance
-24
+26
 Toxic
 Hail
 Hidden Power
@@ -39190,10 +39752,12 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 Surf
 Waterfall
+Dive
 0
 30
 1 0 0 0 0 0 
@@ -39228,7 +39792,7 @@ Water None
 61 Dive
 69 Rain Dance
 76 Heart Swap
-33
+35
 Calm Mind
 Toxic
 Hail
@@ -39258,10 +39822,12 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 Surf
 Waterfall
+Dive
 0
 3
 3 0 0 0 0 0 
@@ -39295,7 +39861,7 @@ Dark None
 75 Nasty Plot
 84 Dream Eater
 93 Dark Pulse
-52
+53
 Calm Mind
 Toxic
 Hidden Power
@@ -39342,6 +39908,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -39381,7 +39948,7 @@ Grass None
 82 Sweet Kiss
 91 Healing Wish
 100 Seed Flare
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -39403,6 +39970,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -39442,7 +40010,7 @@ Normal None
 80 Hyper Beam
 90 Perish Song
 100 Judgment
-70
+72
 Hone Claws
 Dragon Claw
 Psyshock
@@ -39505,6 +40073,7 @@ Substitute
 Flash Cannon
 Trick Room
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -39513,6 +40082,7 @@ Fly
 Surf
 Strength
 Waterfall
+Dive
 0
 3
 3 0 0 0 0 0 
@@ -39551,7 +40121,7 @@ Psychic Fire
 81 Final Gambit
 89 Stored Power
 97 Overheat
-45
+46
 Psyshock
 Toxic
 Hidden Power
@@ -39594,6 +40164,7 @@ Substitute
 Trick Room
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -39633,7 +40204,7 @@ Grass None
 37 Wring Out
 40 Gastro Acid
 43 Leaf Storm
-27
+28
 Calm Mind
 Toxic
 Hidden Power
@@ -39658,6 +40229,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -39712,7 +40284,7 @@ Grass None
 44 Wring Out
 48 Gastro Acid
 52 Leaf Storm
-27
+28
 Calm Mind
 Toxic
 Hidden Power
@@ -39737,6 +40309,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -39791,7 +40364,7 @@ Grass None
 50 Wring Out
 56 Gastro Acid
 62 Leaf Storm
-32
+33
 Calm Mind
 Toxic
 Hidden Power
@@ -39820,6 +40393,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -39872,7 +40446,7 @@ Fire None
 37 Head Smash
 39 Roar
 43 Flare Blitz
-29
+30
 Roar
 Toxic
 Hidden Power
@@ -39900,6 +40474,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Strength
 11
@@ -39954,7 +40529,7 @@ Fire Fighting
 44 Head Smash
 47 Roar
 52 Flare Blitz
-38
+39
 Roar
 Toxic
 Hidden Power
@@ -39990,6 +40565,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -40046,7 +40622,7 @@ Fire Fighting
 50 Head Smash
 55 Roar
 62 Flare Blitz
-44
+45
 Roar
 Toxic
 Bulk Up
@@ -40088,6 +40664,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -40139,7 +40716,7 @@ Water None
 37 Retaliate
 41 Swords Dance
 43 Hydro Pump
-30
+32
 Toxic
 Hail
 Hidden Power
@@ -40166,10 +40743,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Waterfall
+Dive
 8
 Air Slash
 Assurance
@@ -40218,7 +40797,7 @@ Water None
 44 Retaliate
 49 Swords Dance
 52 Hydro Pump
-30
+32
 Toxic
 Hail
 Hidden Power
@@ -40245,10 +40824,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Waterfall
+Dive
 8
 Air Slash
 Assurance
@@ -40299,7 +40880,7 @@ Water None
 50 Retaliate
 57 Swords Dance
 62 Hydro Pump
-34
+36
 Toxic
 Hail
 Hidden Power
@@ -40329,11 +40910,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Strength
 Waterfall
+Dive
 8
 Air Slash
 Assurance
@@ -40379,7 +40962,7 @@ Normal None
 31 Mean Look
 33 Baton Pass
 36 Slam
-22
+23
 Toxic
 Hidden Power
 Sunny Day
@@ -40400,6 +40983,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 7
@@ -40450,7 +41034,7 @@ Normal None
 36 Mean Look
 39 Baton Pass
 43 Slam
-35
+36
 Toxic
 Hidden Power
 Sunny Day
@@ -40482,6 +41066,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -40529,7 +41114,7 @@ Normal None
 36 Last Resort
 40 Giga Impact
 45 Play Rough
-26
+27
 Roar
 Toxic
 Hidden Power
@@ -40554,6 +41139,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Confide
 11
@@ -40602,7 +41188,7 @@ Normal None
 42 Last Resort
 47 Giga Impact
 52 Play Rough
-29
+30
 Roar
 Toxic
 Hidden Power
@@ -40628,6 +41214,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Confide
 Surf
@@ -40681,7 +41268,7 @@ Normal None
 51 Last Resort
 59 Giga Impact
 63 Play Rough
-31
+32
 Roar
 Toxic
 Hidden Power
@@ -40709,6 +41296,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Confide
 Surf
@@ -40762,7 +41350,7 @@ Dark None
 42 Nasty Plot
 46 Sucker Punch
 49 Play Rough
-32
+33
 Hone Claws
 Toxic
 Hidden Power
@@ -40791,6 +41379,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -40845,7 +41434,7 @@ Dark None
 50 Nasty Plot
 55 Sucker Punch
 58 Play Rough
-35
+36
 Hone Claws
 Toxic
 Hidden Power
@@ -40877,6 +41466,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -40927,7 +41517,7 @@ Grass None
 37 Recycle
 40 Natural Gift
 43 Crunch
-31
+32
 Hone Claws
 Toxic
 Hidden Power
@@ -40956,6 +41546,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -40997,7 +41588,7 @@ Grass None
 0 Lick
 0 Fury Swipes
 0 Seed Bomb
-37
+38
 Hone Claws
 Toxic
 Hidden Power
@@ -41031,6 +41622,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -41085,7 +41677,7 @@ Fire None
 37 Recycle
 40 Natural Gift
 43 Crunch
-34
+35
 Hone Claws
 Toxic
 Hidden Power
@@ -41118,6 +41710,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 11
@@ -41158,7 +41751,7 @@ Fire None
 0 Lick
 0 Fury Swipes
 0 Flame Burst
-40
+41
 Hone Claws
 Toxic
 Hidden Power
@@ -41196,6 +41789,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -41249,7 +41843,7 @@ Water None
 37 Recycle
 40 Natural Gift
 43 Crunch
-33
+35
 Hone Claws
 Toxic
 Hail
@@ -41279,10 +41873,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
 Waterfall
+Dive
 11
 Aqua Ring
 Aqua Tail
@@ -41321,7 +41917,7 @@ Water None
 0 Lick
 0 Fury Swipes
 0 Scald
-39
+41
 Hone Claws
 Toxic
 Hail
@@ -41356,11 +41952,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
 Surf
 Waterfall
+Dive
 11
 Aqua Ring
 Aqua Tail
@@ -41412,7 +42010,7 @@ Psychic None
 41 Dream Eater
 43 Telekinesis
 47 Stored Power
-32
+33
 Psyshock
 Calm Mind
 Toxic
@@ -41443,6 +42041,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 9
@@ -41479,7 +42078,7 @@ Psychic None
 0 Lucky Chant
 0 Psybeam
 0 Hypnosis
-34
+35
 Psyshock
 Calm Mind
 Toxic
@@ -41512,6 +42111,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 9
@@ -41559,7 +42159,7 @@ Normal Flying
 43 Facade
 46 Tailwind
 50 Sky Attack
-21
+22
 Toxic
 Hidden Power
 Sunny Day
@@ -41579,6 +42179,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 8
@@ -41628,7 +42229,7 @@ Normal Flying
 50 Facade
 54 Tailwind
 59 Sky Attack
-21
+22
 Toxic
 Hidden Power
 Sunny Day
@@ -41648,6 +42249,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 8
@@ -41697,7 +42299,7 @@ Normal Flying
 55 Facade
 60 Tailwind
 66 Sky Attack
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -41720,6 +42322,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 8
@@ -41764,7 +42367,7 @@ Electric None
 36 Agility
 39 Wild Charge
 43 Thrash
-22
+23
 Toxic
 Hidden Power
 Light Screen
@@ -41786,6 +42389,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 10
 Double Kick
@@ -41837,7 +42441,7 @@ Electric None
 47 Wild Charge
 53 Thrash
 58 Electrify
-26
+27
 Toxic
 Hidden Power
 Hyper Beam
@@ -41863,6 +42467,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 10
 Double Kick
@@ -41909,7 +42514,7 @@ Rock None
 33 Sandstorm
 36 Stone Edge
 40 Explosion
-25
+26
 Toxic
 Hidden Power
 Protect
@@ -41932,6 +42537,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -41983,7 +42589,7 @@ Rock None
 42 Sandstorm
 48 Stone Edge
 55 Explosion
-25
+26
 Toxic
 Hidden Power
 Protect
@@ -42006,6 +42612,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -42057,7 +42664,7 @@ Rock None
 42 Sandstorm
 48 Stone Edge
 55 Explosion
-28
+29
 Toxic
 Hidden Power
 Hyper Beam
@@ -42083,6 +42690,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Strength
@@ -42131,7 +42739,7 @@ Psychic Flying
 36 Future Sight
 41 Psychic
 47 Endeavor
-38
+39
 Psyshock
 Calm Mind
 Toxic
@@ -42168,6 +42776,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Confide
 Fly
 11
@@ -42219,7 +42828,7 @@ Psychic Flying
 36 Future Sight
 41 Psychic
 47 Endeavor
-40
+41
 Psyshock
 Calm Mind
 Toxic
@@ -42258,6 +42867,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Confide
 Fly
 11
@@ -42307,7 +42917,7 @@ Ground None
 40 Sandstorm
 43 Drill Run
 47 Fissure
-30
+31
 Hone Claws
 Toxic
 Hidden Power
@@ -42335,6 +42945,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -42386,7 +42997,7 @@ Ground Steel
 49 Sandstorm
 55 Drill Run
 62 Fissure
-33
+34
 Hone Claws
 Toxic
 Hidden Power
@@ -42417,6 +43028,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -42465,7 +43077,7 @@ Normal None
 45 Simple Beam
 50 Double-Edge
 55 Last Resort
-45
+46
 Psyshock
 Calm Mind
 Toxic
@@ -42507,6 +43119,7 @@ Sleep Talk
 Substitute
 Trick Room
 Wild Charge
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -42561,7 +43174,7 @@ Fighting None
 43 Stone Edge
 46 Focus Punch
 49 Superpower
-32
+33
 Toxic
 Bulk Up
 Hidden Power
@@ -42591,6 +43204,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -42643,7 +43257,7 @@ Fighting None
 49 Stone Edge
 53 Focus Punch
 57 Superpower
-32
+33
 Toxic
 Bulk Up
 Hidden Power
@@ -42673,6 +43287,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -42725,7 +43340,7 @@ Fighting None
 49 Stone Edge
 53 Focus Punch
 57 Superpower
-36
+37
 Toxic
 Bulk Up
 Hidden Power
@@ -42759,6 +43374,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -42807,7 +43423,7 @@ Water None
 38 Echoed Voice
 42 Hydro Pump
 45 Hyper Voice
-20
+21
 Toxic
 Hail
 Hidden Power
@@ -42826,6 +43442,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 8
@@ -42875,7 +43492,7 @@ Water Ground
 42 Echoed Voice
 47 Hydro Pump
 51 Hyper Voice
-22
+23
 Toxic
 Hail
 Hidden Power
@@ -42896,6 +43513,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 8
@@ -42947,7 +43565,7 @@ Water Ground
 49 Echoed Voice
 53 Hydro Pump
 59 Hyper Voice
-37
+38
 Toxic
 Hail
 Venoshock
@@ -42981,6 +43599,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Surf
@@ -43031,7 +43650,7 @@ Fighting None
 45 Brick Break
 48 Superpower
 50 Reversal
-34
+35
 Toxic
 Bulk Up
 Hidden Power
@@ -43063,6 +43682,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -43104,7 +43724,7 @@ Fighting None
 45 Quick Guard
 48 Close Combat
 50 Reversal
-34
+35
 Toxic
 Bulk Up
 Hidden Power
@@ -43136,6 +43756,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -43171,7 +43792,7 @@ Bug Grass
 31 Sticky Web
 36 Bug Buzz
 43 Flail
-25
+26
 Calm Mind
 Toxic
 Hidden Power
@@ -43194,6 +43815,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -43234,7 +43856,7 @@ Bug Grass
 0 Bug Bite
 0 Razor Leaf
 20 Protect
-25
+26
 Calm Mind
 Toxic
 Hidden Power
@@ -43257,6 +43879,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -43307,7 +43930,7 @@ Bug Grass
 43 Entrainment
 46 Swords Dance
 50 Leaf Storm
-37
+38
 Hone Claws
 Calm Mind
 Toxic
@@ -43342,6 +43965,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -43391,7 +44015,7 @@ Bug Poison
 38 Venoshock
 40 Rock Climb
 43 Double-Edge
-22
+23
 Toxic
 Venoshock
 Hidden Power
@@ -43413,6 +44037,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 6
 Pin Missile
@@ -43461,7 +44086,7 @@ Bug Poison
 43 Venom Drench
 46 Rock Climb
 50 Double-Edge
-22
+23
 Toxic
 Venoshock
 Hidden Power
@@ -43483,6 +44108,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 6
 Pin Missile
@@ -43533,7 +44159,7 @@ Bug Poison
 50 Rock Climb
 55 Double-Edge
 65 Megahorn
-33
+34
 Toxic
 Venoshock
 Hidden Power
@@ -43564,6 +44190,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -43613,7 +44240,7 @@ Grass Fairy
 40 Sunny Day
 44 Endeavor
 46 Solar Beam
-22
+23
 Toxic
 Hidden Power
 Sunny Day
@@ -43633,6 +44260,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -43675,7 +44303,7 @@ Grass Fairy
 28 Tailwind
 46 Hurricane
 50 Moonblast
-31
+32
 Toxic
 Hidden Power
 Sunny Day
@@ -43704,6 +44332,7 @@ Sleep Talk
 U-turn
 Substitute
 Trick Room
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -43754,7 +44383,7 @@ Grass None
 40 Sunny Day
 44 Heal Bell
 46 Leaf Storm
-21
+22
 Toxic
 Hidden Power
 Sunny Day
@@ -43773,6 +44402,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -43814,7 +44444,7 @@ Grass None
 28 Quiver Dance
 46 Petal Dance
 50 Petal Blizzard
-25
+26
 Toxic
 Hidden Power
 Sunny Day
@@ -43837,6 +44467,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 Cut
@@ -43889,7 +44520,7 @@ Water None
 46 Flail
 50 Final Gambit
 56 Thrash
-20
+22
 Toxic
 Hail
 Hidden Power
@@ -43906,10 +44537,12 @@ Scald
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 Surf
 Waterfall
+Dive
 9
 Agility
 Brine
@@ -43959,7 +44592,7 @@ Ground Dark
 40 Sandstorm
 43 Earthquake
 46 Thrash
-32
+33
 Hone Claws
 Roar
 Toxic
@@ -43988,6 +44621,7 @@ Rock Slide
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -44043,7 +44677,7 @@ Ground Dark
 44 Sandstorm
 48 Earthquake
 52 Thrash
-40
+41
 Hone Claws
 Roar
 Toxic
@@ -44078,6 +44712,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -44136,7 +44771,7 @@ Ground Dark
 48 Sandstorm
 54 Earthquake
 60 Outrage
-48
+49
 Hone Claws
 Dragon Claw
 Roar
@@ -44179,6 +44814,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -44233,7 +44869,7 @@ Fire None
 35 Taunt
 39 Superpower
 42 Overheat
-34
+35
 Roar
 Toxic
 Hidden Power
@@ -44265,6 +44901,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -44320,7 +44957,7 @@ Fire None
 39 Taunt
 47 Superpower
 54 Overheat
-45
+46
 Roar
 Toxic
 Bulk Up
@@ -44363,6 +45000,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -44419,7 +45057,7 @@ Grass None
 50 Solar Beam
 55 Cotton Guard
 57 Wood Hammer
-20
+21
 Toxic
 Hidden Power
 Sunny Day
@@ -44438,6 +45076,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 9
@@ -44486,7 +45125,7 @@ Bug Rock
 37 Shell Smash
 41 Flail
 43 Rock Wrecker
-33
+34
 Hone Claws
 Toxic
 Hidden Power
@@ -44516,6 +45155,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -44570,7 +45210,7 @@ Bug Rock
 43 Shell Smash
 50 Flail
 55 Rock Wrecker
-35
+36
 Hone Claws
 Toxic
 Hidden Power
@@ -44602,6 +45242,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -44654,7 +45295,7 @@ Dark Fighting
 45 Rock Climb
 48 Focus Punch
 50 Head Smash
-40
+41
 Dragon Claw
 Roar
 Toxic
@@ -44690,6 +45331,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -44747,7 +45389,7 @@ Dark Fighting
 51 Rock Climb
 58 Focus Punch
 65 Head Smash
-43
+44
 Dragon Claw
 Roar
 Toxic
@@ -44786,6 +45428,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -44842,7 +45485,7 @@ Psychic Flying
 44 Psychic
 48 Cosmic Power
 50 Sky Attack
-39
+40
 Psyshock
 Calm Mind
 Toxic
@@ -44878,6 +45521,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
@@ -44925,7 +45569,7 @@ Ghost None
 41 Grudge
 45 Mean Look
 49 Destiny Bond
-28
+29
 Calm Mind
 Toxic
 Hidden Power
@@ -44952,6 +45596,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 9
@@ -45003,7 +45648,7 @@ Ghost None
 45 Grudge
 51 Mean Look
 57 Destiny Bond
-31
+32
 Calm Mind
 Toxic
 Hidden Power
@@ -45033,6 +45678,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 9
@@ -45084,7 +45730,7 @@ Water Rock
 45 Rock Slide
 48 Rain Dance
 50 Hydro Pump
-29
+31
 Toxic
 Hidden Power
 Ice Beam
@@ -45110,10 +45756,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 10
 Bide
 Body Slam
@@ -45164,7 +45812,7 @@ Water Rock
 51 Rock Slide
 56 Rain Dance
 61 Hydro Pump
-32
+34
 Toxic
 Hidden Power
 Ice Beam
@@ -45193,10 +45841,12 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
 Waterfall
+Dive
 10
 Bide
 Body Slam
@@ -45246,7 +45896,7 @@ Rock Flying
 45 Rock Slide
 48 Dragon Claw
 50 Thrash
-34
+35
 Hone Claws
 Dragon Claw
 Roar
@@ -45279,6 +45929,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 8
@@ -45329,7 +45980,7 @@ Rock Flying
 51 Rock Slide
 56 Dragon Claw
 61 Thrash
-39
+40
 Hone Claws
 Dragon Claw
 Roar
@@ -45366,6 +46017,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Fly
@@ -45415,7 +46067,7 @@ Poison None
 42 Belch
 45 Gunk Shot
 47 Explosion
-22
+23
 Toxic
 Venoshock
 Hidden Power
@@ -45436,6 +46088,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 8
@@ -45488,7 +46141,7 @@ Poison None
 49 Belch
 54 Gunk Shot
 59 Explosion
-31
+32
 Toxic
 Venoshock
 Hidden Power
@@ -45518,6 +46171,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dark Pulse
 Confide
 8
@@ -45568,7 +46222,7 @@ Dark None
 49 Nasty Plot
 53 Imprison
 57 Night Daze
-35
+36
 Hone Claws
 Calm Mind
 Roar
@@ -45600,6 +46254,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -45656,7 +46311,7 @@ Dark None
 54 Nasty Plot
 59 Imprison
 64 Night Daze
-42
+43
 Hone Claws
 Calm Mind
 Roar
@@ -45695,6 +46350,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -45746,7 +46402,7 @@ Normal None
 43 Hyper Voice
 45 Last Resort
 49 Iron Tail
-26
+27
 Calm Mind
 Toxic
 Hidden Power
@@ -45771,6 +46427,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 9
@@ -45810,7 +46467,7 @@ Normal None
 0 Tickle
 0 Sing
 0 Tail Slap
-31
+32
 Calm Mind
 Toxic
 Hidden Power
@@ -45840,6 +46497,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 9
@@ -45890,7 +46548,7 @@ Psychic None
 40 Telekinesis
 46 Charm
 48 Magic Room
-37
+39
 Psyshock
 Calm Mind
 Toxic
@@ -45927,6 +46585,8 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
+Dark Pulse
 Confide
 7
 Captivate
@@ -45976,7 +46636,7 @@ Psychic None
 43 Telekinesis
 50 Charm
 53 Magic Room
-37
+39
 Psyshock
 Calm Mind
 Toxic
@@ -46013,6 +46673,8 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
+Dark Pulse
 Confide
 7
 Captivate
@@ -46062,7 +46724,7 @@ Psychic None
 45 Telekinesis
 54 Charm
 59 Magic Room
-42
+44
 Psyshock
 Calm Mind
 Toxic
@@ -46103,6 +46765,8 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
+Dark Pulse
 Power-Up Punch
 Confide
 7
@@ -46150,7 +46814,7 @@ Psychic None
 40 Skill Swap
 46 Heal Block
 48 Wonder Room
-34
+35
 Psyshock
 Calm Mind
 Toxic
@@ -46184,6 +46848,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Trick Room
+Secret Power
 Confide
 7
 Acid Armor
@@ -46233,7 +46898,7 @@ Psychic None
 43 Skill Swap
 50 Heal Block
 53 Wonder Room
-34
+35
 Psyshock
 Calm Mind
 Toxic
@@ -46267,6 +46932,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Trick Room
+Secret Power
 Confide
 7
 Acid Armor
@@ -46317,7 +46983,7 @@ Psychic None
 45 Skill Swap
 54 Heal Block
 59 Wonder Room
-42
+43
 Psyshock
 Calm Mind
 Toxic
@@ -46357,6 +47023,7 @@ Substitute
 Flash Cannon
 Trick Room
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -46404,7 +47071,7 @@ Water Flying
 37 Tailwind
 41 Brave Bird
 46 Hurricane
-21
+23
 Toxic
 Hail
 Hidden Power
@@ -46423,9 +47090,11 @@ Scald
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Fly
 Surf
+Dive
 8
 Air Cutter
 Brine
@@ -46473,7 +47142,7 @@ Water Flying
 40 Tailwind
 47 Brave Bird
 55 Hurricane
-23
+25
 Toxic
 Hail
 Hidden Power
@@ -46494,9 +47163,11 @@ Giga Impact
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Fly
 Surf
+Dive
 8
 Air Cutter
 Brine
@@ -46541,7 +47212,7 @@ Ice None
 44 Mirror Coat
 49 Blizzard
 53 Sheer Cold
-21
+22
 Toxic
 Hail
 Hidden Power
@@ -46562,6 +47233,7 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 8
 Autotomize
@@ -46610,7 +47282,7 @@ Ice None
 47 Mirror Coat
 53 Blizzard
 58 Sheer Cold
-21
+22
 Toxic
 Hail
 Hidden Power
@@ -46631,6 +47303,7 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 8
 Autotomize
@@ -46682,7 +47355,7 @@ Ice None
 50 Mirror Coat
 59 Blizzard
 67 Sheer Cold
-23
+24
 Toxic
 Hail
 Hidden Power
@@ -46705,6 +47378,7 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 8
 Autotomize
@@ -46750,7 +47424,7 @@ Normal Grass
 41 Nature Power
 46 Double-Edge
 51 Solar Beam
-26
+27
 Toxic
 Hidden Power
 Sunny Day
@@ -46775,6 +47449,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Nature Power
 Confide
 9
@@ -46826,7 +47501,7 @@ Normal Grass
 44 Nature Power
 52 Double-Edge
 60 Solar Beam
-31
+32
 Toxic
 Hidden Power
 Sunny Day
@@ -46855,6 +47530,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -46904,7 +47580,7 @@ Electric Flying
 42 Volt Switch
 46 Agility
 50 Discharge
-28
+29
 Toxic
 Hidden Power
 Taunt
@@ -46931,6 +47607,7 @@ Sleep Talk
 U-turn
 Substitute
 Wild Charge
+Secret Power
 Confide
 Cut
 10
@@ -46980,7 +47657,7 @@ Bug None
 49 Flail
 52 Swords Dance
 56 Double-Edge
-22
+23
 Toxic
 Hidden Power
 Protect
@@ -47001,6 +47678,7 @@ Poison Jab
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Cut
 9
@@ -47054,7 +47732,7 @@ Bug Steel
 52 Swords Dance
 56 Giga Impact
 60 Fell Stinger
-26
+27
 Toxic
 Hidden Power
 Hyper Beam
@@ -47079,6 +47757,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 9
@@ -47126,7 +47805,7 @@ Grass Poison
 43 Solar Beam
 45 Gastro Acid
 50 Spore
-22
+23
 Toxic
 Venoshock
 Hidden Power
@@ -47147,6 +47826,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 8
@@ -47199,7 +47879,7 @@ Grass Poison
 49 Solar Beam
 54 Gastro Acid
 62 Spore
-24
+25
 Toxic
 Venoshock
 Hidden Power
@@ -47222,6 +47902,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Confide
 8
@@ -47270,7 +47951,7 @@ Water Ghost
 49 Hydro Pump
 55 Wring Out
 61 Water Spout
-33
+35
 Toxic
 Hail
 Hidden Power
@@ -47299,11 +47980,13 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
 Surf
 Waterfall
+Dive
 6
 Acid Armor
 Confuse Ray
@@ -47349,7 +48032,7 @@ Water Ghost
 53 Hydro Pump
 61 Wring Out
 69 Water Spout
-35
+37
 Toxic
 Hail
 Hidden Power
@@ -47380,11 +48063,13 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Dazzling Gleam
 Confide
 Surf
 Waterfall
+Dive
 6
 Acid Armor
 Confuse Ray
@@ -47432,7 +48117,7 @@ Water None
 53 Refresh
 57 Healing Wish
 61 Hydro Pump
-25
+27
 Calm Mind
 Toxic
 Hail
@@ -47455,9 +48140,11 @@ Psych Up
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 6
 Endure
 Mirror Coat
@@ -47501,7 +48188,7 @@ Bug Electric
 40 Sucker Punch
 45 Discharge
 48 Bug Buzz
-27
+28
 Toxic
 Hidden Power
 Light Screen
@@ -47527,6 +48214,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 Cut
 8
@@ -47577,7 +48265,7 @@ Bug Electric
 54 Discharge
 60 Bug Buzz
 65 Sticky Web
-30
+31
 Toxic
 Hidden Power
 Hyper Beam
@@ -47606,6 +48294,7 @@ Swagger
 Sleep Talk
 Substitute
 Wild Charge
+Secret Power
 Confide
 Cut
 8
@@ -47652,7 +48341,7 @@ Grass Steel
 47 Payback
 52 Flash Cannon
 55 Explosion
-26
+27
 Hone Claws
 Toxic
 Hidden Power
@@ -47677,6 +48366,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Confide
 9
@@ -47729,7 +48419,7 @@ Grass Steel
 53 Payback
 61 Flash Cannon
 67 Explosion
-37
+38
 Hone Claws
 Toxic
 Hidden Power
@@ -47763,6 +48453,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -47813,7 +48504,7 @@ Steel None
 50 Lock-On
 54 Zap Cannon
 57 Hyper Beam
-21
+22
 Toxic
 Hidden Power
 Hyper Beam
@@ -47834,6 +48525,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 0
 130
@@ -47871,7 +48563,7 @@ Steel None
 56 Lock-On
 60 Zap Cannon
 64 Hyper Beam
-21
+22
 Toxic
 Hidden Power
 Hyper Beam
@@ -47892,6 +48584,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 0
 60
@@ -47932,7 +48625,7 @@ Steel None
 66 Zap Cannon
 72 Hyper Beam
 76 Magnetic Flux
-24
+25
 Toxic
 Hidden Power
 Hyper Beam
@@ -47956,6 +48649,7 @@ Flash Cannon
 Trick Room
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 0
 30
@@ -48021,7 +48715,7 @@ Electric None
 64 Gastro Acid
 69 Zap Cannon
 74 Thrash
-24
+25
 Toxic
 Hidden Power
 Light Screen
@@ -48045,6 +48739,7 @@ U-turn
 Substitute
 Flash Cannon
 Wild Charge
+Secret Power
 Confide
 0
 60
@@ -48077,7 +48772,7 @@ Electric None
 0 Acid
 0 Discharge
 0 Crunch
-39
+40
 Hone Claws
 Dragon Claw
 Roar
@@ -48113,6 +48808,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -48156,7 +48852,7 @@ Psychic None
 50 Power Split
 53 Synchronoise
 56 Wonder Room
-35
+36
 Psyshock
 Calm Mind
 Toxic
@@ -48190,6 +48886,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 9
@@ -48245,7 +48942,7 @@ Psychic None
 58 Power Split
 63 Synchronoise
 68 Wonder Room
-37
+38
 Psyshock
 Calm Mind
 Toxic
@@ -48281,6 +48978,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 9
@@ -48330,7 +49028,7 @@ Ghost Fire
 49 Shadow Ball
 55 Pain Split
 61 Overheat
-34
+35
 Calm Mind
 Toxic
 Hidden Power
@@ -48363,6 +49061,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 8
@@ -48413,7 +49112,7 @@ Ghost Fire
 53 Shadow Ball
 61 Pain Split
 69 Overheat
-34
+35
 Calm Mind
 Toxic
 Hidden Power
@@ -48446,6 +49145,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 8
@@ -48482,7 +49182,7 @@ Ghost Fire
 0 Confuse Ray
 0 Flame Burst
 0 Hex
-36
+37
 Calm Mind
 Toxic
 Hidden Power
@@ -48517,6 +49217,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 8
@@ -48564,7 +49265,7 @@ Dragon None
 50 Guillotine
 56 Outrage
 61 Giga Impact
-32
+33
 Hone Claws
 Dragon Claw
 Roar
@@ -48594,6 +49295,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -48647,7 +49349,7 @@ Dragon None
 54 Guillotine
 60 Outrage
 66 Giga Impact
-34
+35
 Hone Claws
 Dragon Claw
 Roar
@@ -48679,6 +49381,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -48733,7 +49436,7 @@ Dragon None
 58 Guillotine
 66 Outrage
 74 Giga Impact
-42
+43
 Hone Claws
 Dragon Claw
 Roar
@@ -48772,6 +49475,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
@@ -48823,7 +49527,7 @@ Ice None
 49 Hail
 53 Thrash
 57 Sheer Cold
-30
+31
 Hone Claws
 Toxic
 Hail
@@ -48849,6 +49553,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -48907,7 +49612,7 @@ Ice None
 53 Hail
 59 Thrash
 66 Sheer Cold
-41
+43
 Hone Claws
 Roar
 Toxic
@@ -48944,11 +49649,13 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
 Surf
 Strength
+Dive
 9
 Assurance
 Avalanche
@@ -49004,7 +49711,7 @@ Ice None
 53 Solar Beam
 57 Night Slash
 61 Sheer Cold
-25
+26
 Toxic
 Hail
 Hidden Power
@@ -49029,6 +49736,7 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Confide
 0
 25
@@ -49067,7 +49775,7 @@ Bug None
 49 Recover
 50 Guard Swap
 56 Final Gambit
-18
+19
 Toxic
 Venoshock
 Hidden Power
@@ -49085,6 +49793,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 10
 Baton Pass
@@ -49137,7 +49846,7 @@ Bug None
 49 Recover
 52 Power Swap
 56 Final Gambit
-23
+24
 Toxic
 Venoshock
 Hidden Power
@@ -49160,6 +49869,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 10
 Baton Pass
@@ -49211,7 +49921,7 @@ Ground Electric
 50 Revenge
 55 Flail
 61 Fissure
-30
+31
 Toxic
 Hidden Power
 Protect
@@ -49240,6 +49950,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 12
@@ -49292,7 +50003,7 @@ Fighting None
 50 High Jump Kick
 57 Reversal
 61 Aura Sphere
-38
+39
 Calm Mind
 Toxic
 Bulk Up
@@ -49328,6 +50039,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -49381,7 +50093,7 @@ Fighting None
 56 High Jump Kick
 63 Reversal
 70 Aura Sphere
-40
+41
 Calm Mind
 Toxic
 Bulk Up
@@ -49419,6 +50131,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -49467,7 +50180,7 @@ Dragon None
 49 Rock Climb
 55 Superpower
 62 Outrage
-46
+47
 Hone Claws
 Dragon Claw
 Roar
@@ -49507,6 +50220,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -49562,7 +50276,7 @@ Ground Ghost
 45 Earthquake
 50 Hammer Arm
 55 Focus Punch
-32
+33
 Toxic
 Hidden Power
 Ice Beam
@@ -49592,6 +50306,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Strength
@@ -49637,7 +50352,7 @@ Ground Ghost
 60 Hammer Arm
 70 Focus Punch
 75 Phantom Force
-40
+41
 Toxic
 Hidden Power
 Ice Beam
@@ -49674,6 +50389,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Fly
@@ -49716,7 +50432,7 @@ Dark Steel
 54 Iron Head
 57 Swords Dance
 62 Guillotine
-40
+41
 Hone Claws
 Toxic
 Hidden Power
@@ -49752,6 +50468,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -49808,7 +50525,7 @@ Dark Steel
 57 Iron Head
 63 Swords Dance
 71 Guillotine
-44
+45
 Hone Claws
 Toxic
 Hidden Power
@@ -49848,6 +50565,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -49896,7 +50614,7 @@ Normal None
 50 Thrash
 56 Swords Dance
 61 Giga Impact
-31
+32
 Toxic
 Hidden Power
 Sunny Day
@@ -49924,6 +50642,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
@@ -49974,7 +50693,7 @@ Normal Flying
 55 Whirlwind
 59 Brave Bird
 64 Thrash
-29
+30
 Hone Claws
 Toxic
 Bulk Up
@@ -50000,6 +50719,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Fly
@@ -50048,7 +50768,7 @@ Normal Flying
 57 Whirlwind
 63 Brave Bird
 70 Thrash
-31
+32
 Hone Claws
 Toxic
 Bulk Up
@@ -50076,6 +50796,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Fly
@@ -50117,7 +50838,7 @@ Dark Flying
 55 Whirlwind
 59 Brave Bird
 64 Mirror Move
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -50146,6 +50867,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -50202,7 +50924,7 @@ Dark Flying
 57 Whirlwind
 63 Brave Bird
 70 Mirror Move
-35
+36
 Toxic
 Hidden Power
 Sunny Day
@@ -50233,6 +50955,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -50285,7 +51008,7 @@ Fire None
 50 Spit Up
 50 Swallow
 61 Inferno
-32
+33
 Hone Claws
 Toxic
 Hidden Power
@@ -50315,6 +51038,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -50369,7 +51093,7 @@ Bug Steel
 56 Iron Defense
 61 Guillotine
 66 Metal Sound
-31
+32
 Hone Claws
 Toxic
 Hidden Power
@@ -50398,6 +51122,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -50444,7 +51169,7 @@ Dark Dragon
 50 Scary Face
 58 Hyper Voice
 62 Outrage
-25
+26
 Roar
 Toxic
 Hidden Power
@@ -50467,6 +51192,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Strength
@@ -50519,7 +51245,7 @@ Dark Dragon
 55 Scary Face
 64 Hyper Voice
 71 Outrage
-25
+26
 Roar
 Toxic
 Hidden Power
@@ -50542,6 +51268,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Strength
@@ -50596,7 +51323,7 @@ Dark Dragon
 55 Scary Face
 68 Hyper Voice
 79 Outrage
-46
+47
 Roar
 Toxic
 Hidden Power
@@ -50638,6 +51365,7 @@ U-turn
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Fly
@@ -50686,7 +51414,7 @@ Bug Fire
 80 Amnesia
 90 Thrash
 100 Flare Blitz
-27
+28
 Calm Mind
 Toxic
 Hidden Power
@@ -50713,6 +51441,7 @@ Sleep Talk
 U-turn
 Substitute
 Wild Charge
+Secret Power
 Confide
 7
 Endure
@@ -50767,7 +51496,7 @@ Bug Fire
 80 Morning Sun
 90 Hurricane
 100 Fiery Dance
-33
+34
 Calm Mind
 Toxic
 Hidden Power
@@ -50799,6 +51528,7 @@ Sleep Talk
 U-turn
 Substitute
 Wild Charge
+Secret Power
 Confide
 Fly
 7
@@ -50848,7 +51578,7 @@ Steel Fighting
 61 Work Up
 67 Metal Burst
 73 Close Combat
-36
+37
 Hone Claws
 Calm Mind
 Roar
@@ -50882,6 +51612,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -50923,7 +51654,7 @@ Rock Fighting
 61 Work Up
 67 Stone Edge
 73 Close Combat
-37
+38
 Calm Mind
 Roar
 Toxic
@@ -50958,6 +51689,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Strength
@@ -51000,7 +51732,7 @@ Grass Fighting
 61 Work Up
 67 Leaf Blade
 73 Close Combat
-36
+37
 Calm Mind
 Roar
 Toxic
@@ -51033,6 +51765,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Cut
@@ -51079,7 +51812,7 @@ Flying None
 73 Dark Pulse
 79 Hammer Arm
 85 Thrash
-38
+39
 Toxic
 Bulk Up
 Hidden Power
@@ -51114,6 +51847,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Fly
@@ -51160,7 +51894,7 @@ Electric Flying
 73 Dark Pulse
 79 Hammer Arm
 85 Thrash
-43
+44
 Toxic
 Bulk Up
 Hidden Power
@@ -51200,6 +51934,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Fly
@@ -51241,7 +51976,7 @@ Dragon Fire
 85 Outrage
 92 Hyper Voice
 100 Blue Flare
-43
+44
 Hone Claws
 Dragon Claw
 Toxic
@@ -51281,6 +52016,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Fly
@@ -51322,7 +52058,7 @@ Dragon Electric
 85 Outrage
 92 Hyper Voice
 100 Bolt Strike
-44
+45
 Hone Claws
 Dragon Claw
 Toxic
@@ -51363,6 +52099,7 @@ Substitute
 Flash Cannon
 Wild Charge
 Rock Smash
+Secret Power
 Confide
 Cut
 Fly
@@ -51408,7 +52145,7 @@ Ground Flying
 73 Stone Edge
 79 Hammer Arm
 85 Outrage
-39
+40
 Calm Mind
 Toxic
 Bulk Up
@@ -51445,6 +52182,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Confide
 Fly
 Strength
@@ -51484,7 +52222,7 @@ Dragon Ice
 78 Blizzard
 85 Outrage
 92 Hyper Voice
-41
+42
 Hone Claws
 Dragon Claw
 Toxic
@@ -51522,6 +52260,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 Fly
@@ -51561,7 +52300,7 @@ Water Fighting
 61 Work Up
 67 Hydro Pump
 73 Close Combat
-34
+35
 Calm Mind
 Roar
 Toxic
@@ -51592,6 +52331,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Cut
 Surf
@@ -51632,7 +52372,7 @@ Normal Psychic
 71 Role Play
 78 Close Combat
 85 Perish Song
-48
+49
 Hone Claws
 Psyshock
 Calm Mind
@@ -51677,6 +52417,7 @@ U-turn
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Power-Up Punch
 Dazzling Gleam
 Confide
@@ -51723,7 +52464,7 @@ Bug Steel
 66 Zap Cannon
 73 Hyper Beam
 77 Self-Destruct
-39
+40
 Hone Claws
 Toxic
 Hidden Power
@@ -51760,6 +52501,7 @@ Sleep Talk
 U-turn
 Substitute
 Flash Cannon
+Secret Power
 Dark Pulse
 Confide
 Fly
@@ -51798,7 +52540,7 @@ Grass None
 42 Body Slam
 45 Pain Split
 48 Wood Hammer
-43
+44
 Roar
 Toxic
 Bulk Up
@@ -51837,6 +52579,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -51885,7 +52628,7 @@ Grass None
 48 Body Slam
 52 Pain Split
 55 Wood Hammer
-44
+45
 Hone Claws
 Roar
 Toxic
@@ -51925,6 +52668,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -51980,7 +52724,7 @@ Grass Fighting
 60 Hammer Arm
 70 Giga Impact
 75 Spiky Shield
-49
+50
 Hone Claws
 Dragon Claw
 Roar
@@ -52025,6 +52769,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -52074,7 +52819,7 @@ Fire None
 43 Sunny Day
 46 Magic Room
 48 Fire Blast
-33
+34
 Psyshock
 Toxic
 Hidden Power
@@ -52105,6 +52850,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -52149,7 +52895,7 @@ Fire None
 51 Sunny Day
 53 Magic Room
 55 Fire Blast
-33
+34
 Psyshock
 Toxic
 Hidden Power
@@ -52180,6 +52926,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -52231,7 +52978,7 @@ Fire Psychic
 61 Fire Blast
 69 Future Sight
 75 Mystical Fire
-38
+40
 Psyshock
 Calm Mind
 Toxic
@@ -52267,7 +53014,9 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Power-Up Punch
+Dazzling Gleam
 Confide
 Cut
 4
@@ -52309,7 +53058,7 @@ Water None
 39 Bounce
 43 Double Team
 48 Hydro Pump
-34
+36
 Toxic
 Hidden Power
 Taunt
@@ -52338,12 +53087,14 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
 Surf
 Strength
 Waterfall
+Dive
 6
 Bestow
 Camouflage
@@ -52385,7 +53136,7 @@ Water None
 44 Bounce
 48 Double Team
 55 Hydro Pump
-35
+37
 Toxic
 Hidden Power
 Taunt
@@ -52414,6 +53165,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -52421,6 +53173,7 @@ Cut
 Surf
 Strength
 Waterfall
+Dive
 6
 Bestow
 Camouflage
@@ -52469,7 +53222,7 @@ Water Dark
 60 Hydro Pump
 70 Night Slash
 75 Water Shuriken
-37
+39
 Toxic
 Hidden Power
 Taunt
@@ -52500,6 +53253,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -52507,6 +53261,7 @@ Cut
 Surf
 Strength
 Waterfall
+Dive
 6
 Bestow
 Camouflage
@@ -52550,7 +53305,7 @@ Normal None
 42 Super Fang
 47 Facade
 49 Earthquake
-36
+37
 Toxic
 Bulk Up
 Hidden Power
@@ -52581,6 +53336,7 @@ U-turn
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -52631,7 +53387,7 @@ Normal Ground
 53 Facade
 57 Earthquake
 60 Hammer Arm
-39
+40
 Toxic
 Bulk Up
 Hidden Power
@@ -52665,6 +53421,7 @@ U-turn
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -52709,7 +53466,7 @@ Normal Flying
 41 Me First
 45 Tailwind
 48 Steel Wing
-24
+25
 Toxic
 Hidden Power
 Sunny Day
@@ -52732,6 +53489,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 3
@@ -52773,7 +53531,7 @@ Fire Flying
 46 Me First
 51 Tailwind
 55 Steel Wing
-28
+29
 Toxic
 Hidden Power
 Sunny Day
@@ -52800,6 +53558,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 3
@@ -52844,7 +53603,7 @@ Fire Flying
 55 Tailwind
 60 Steel Wing
 64 Brave Bird
-33
+34
 Hone Claws
 Toxic
 Bulk Up
@@ -52876,6 +53635,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 Fly
 3
@@ -52973,7 +53733,7 @@ Bug Flying
 45 Quiver Dance
 50 Hurricane
 55 Powder
-32
+33
 Calm Mind
 Toxic
 Hidden Power
@@ -53005,6 +53765,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Confide
 2
 Poison Powder
@@ -53044,7 +53805,7 @@ Fire Normal
 43 Hyper Voice
 46 Incinerate
 50 Overheat
-34
+35
 Roar
 Toxic
 Hidden Power
@@ -53075,6 +53836,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -53120,7 +53882,7 @@ Fire Normal
 48 Hyper Voice
 51 Incinerate
 57 Overheat
-36
+37
 Roar
 Toxic
 Hidden Power
@@ -53153,6 +53915,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -53196,7 +53959,7 @@ Fairy Grass
 41 Moonblast
 45 Petal Dance
 48 Solar Beam
-24
+25
 Calm Mind
 Toxic
 Hidden Power
@@ -53218,6 +53981,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -53259,7 +54023,7 @@ Fairy Grass
 46 Moonblast
 51 Petal Dance
 58 Solar Beam
-24
+25
 Calm Mind
 Toxic
 Hidden Power
@@ -53281,6 +54045,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -53320,7 +54085,7 @@ Fairy Grass
 0 Moonblast
 0 Petal Dance
 0 Aromatherapy
-27
+28
 Calm Mind
 Toxic
 Hidden Power
@@ -53345,6 +54110,7 @@ Grass Knot
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -53388,7 +54154,7 @@ Grass None
 42 Horn Leech
 45 Leaf Blade
 50 Milk Drink
-30
+31
 Roar
 Toxic
 Bulk Up
@@ -53415,6 +54181,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Surf
@@ -53462,7 +54229,7 @@ Grass None
 58 Milk Drink
 60 Earthquake
 65 Aerial Ace
-34
+35
 Roar
 Toxic
 Bulk Up
@@ -53493,6 +54260,7 @@ Sleep Talk
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Nature Power
 Confide
 Surf
@@ -53535,7 +54303,7 @@ Fighting None
 42 Entrainment
 45 Parting Shot
 48 Sky Uppercut
-39
+40
 Roar
 Toxic
 Bulk Up
@@ -53569,6 +54337,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -53620,7 +54389,7 @@ Fighting Dark
 57 Hammer Arm
 65 Taunt
 70 Low Sweep
-53
+54
 Hone Claws
 Dragon Claw
 Roar
@@ -53667,6 +54436,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Power-Up Punch
@@ -53712,7 +54482,7 @@ Normal None
 38 Charm
 42 Sucker Punch
 48 Cotton Guard
-29
+30
 Roar
 Toxic
 Hidden Power
@@ -53738,6 +54508,7 @@ U-turn
 Substitute
 Wild Charge
 Rock Smash
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -53777,7 +54548,7 @@ Psychic None
 19 Fake Out
 22 Disarming Voice
 25 Psyshock
-33
+34
 Psyshock
 Calm Mind
 Toxic
@@ -53808,6 +54579,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -53857,7 +54629,7 @@ Psychic None
 48 Sucker Punch
 50 Misty Terrain
 53 Quick Guard
-38
+39
 Psyshock
 Calm Mind
 Toxic
@@ -53892,6 +54664,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Power-Up Punch
 Confide
@@ -53936,7 +54709,7 @@ Steel Ghost
 39 Power Trick
 42 Iron Head
 47 Sacred Sword
-24
+25
 Toxic
 Hidden Power
 Protect
@@ -53959,6 +54732,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 3
@@ -54000,7 +54774,7 @@ Steel Ghost
 41 Power Trick
 45 Iron Head
 51 Sacred Sword
-24
+25
 Toxic
 Hidden Power
 Protect
@@ -54023,6 +54797,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 3
@@ -54063,7 +54838,7 @@ Steel Ghost
 0 Aerial Ace
 0 King's Shield
 0 Sacred Sword
-29
+30
 Toxic
 Hidden Power
 Sunny Day
@@ -54091,6 +54866,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Cut
 3
@@ -54133,7 +54909,7 @@ Fairy None
 44 Skill Swap
 48 Psychic
 50 Disarming Voice
-30
+31
 Calm Mind
 Toxic
 Hidden Power
@@ -54162,6 +54938,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 4
@@ -54210,7 +54987,7 @@ Fairy None
 53 Disarming Voice
 57 Reflect
 64 Psych Up
-34
+35
 Psyshock
 Calm Mind
 Toxic
@@ -54243,6 +55020,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Trick Room
+Secret Power
 Dazzling Gleam
 Confide
 4
@@ -54287,7 +55065,7 @@ Fairy None
 49 Play Rough
 58 Light Screen
 67 Safeguard
-27
+28
 Calm Mind
 Toxic
 Hidden Power
@@ -54312,6 +55090,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 Surf
@@ -54356,7 +55135,7 @@ Fairy None
 49 Play Rough
 58 Light Screen
 67 Safeguard
-29
+30
 Calm Mind
 Toxic
 Hidden Power
@@ -54383,6 +55162,7 @@ Dream Eater
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 Surf
@@ -54429,7 +55209,7 @@ Dark Psychic
 43 Slash
 46 Night Slash
 48 Superpower
-34
+35
 Calm Mind
 Toxic
 Hidden Power
@@ -54461,6 +55241,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -54510,7 +55291,7 @@ Dark Psychic
 43 Slash
 46 Night Slash
 48 Superpower
-37
+38
 Psyshock
 Calm Mind
 Toxic
@@ -54545,6 +55326,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -54590,7 +55372,7 @@ Rock Water
 41 Night Slash
 45 Razor Shell
 49 Cross Chop
-50
+51
 Hone Claws
 Toxic
 Hidden Power
@@ -54635,6 +55417,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -54685,7 +55468,7 @@ Rock Water
 55 Cross Chop
 60 Stone Edge
 65 Skull Bash
-55
+56
 Hone Claws
 Dragon Claw
 Toxic
@@ -54735,6 +55518,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Nature Power
 Power-Up Punch
 Confide
@@ -54781,7 +55565,7 @@ Poison Water
 38 Sludge Bomb
 42 Hydro Pump
 49 Dragon Pulse
-22
+24
 Toxic
 Hail
 Venoshock
@@ -54801,9 +55585,11 @@ Scald
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 5
 Acid Armor
 Haze
@@ -54850,7 +55636,7 @@ Poison Dragon
 53 Dragon Pulse
 59 Dragon Tail
 67 Twister
-27
+29
 Toxic
 Hail
 Venoshock
@@ -54875,9 +55661,11 @@ Dragon Tail
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 Surf
 Waterfall
+Dive
 5
 Acid Armor
 Haze
@@ -54917,7 +55705,7 @@ Water None
 39 Smack Down
 43 Aqua Jet
 48 Muddy Water
-26
+28
 Toxic
 Venoshock
 Hidden Power
@@ -54940,10 +55728,12 @@ Sleep Talk
 U-turn
 Substitute
 Flash Cannon
+Secret Power
 Confide
 Cut
 Surf
 Waterfall
+Dive
 4
 Aqua Jet
 Crabhammer
@@ -54989,7 +55779,7 @@ Water None
 57 Dark Pulse
 63 Dragon Pulse
 67 Aura Sphere
-31
+33
 Toxic
 Venoshock
 Hidden Power
@@ -55016,11 +55806,13 @@ Sleep Talk
 U-turn
 Substitute
 Flash Cannon
+Secret Power
 Dark Pulse
 Confide
 Cut
 Surf
 Waterfall
+Dive
 4
 Aqua Jet
 Crabhammer
@@ -55059,7 +55851,7 @@ Electric Normal
 40 Volt Switch
 45 Electrify
 49 Thunderbolt
-34
+35
 Toxic
 Hidden Power
 Light Screen
@@ -55090,6 +55882,7 @@ Sleep Talk
 U-turn
 Substitute
 Wild Charge
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -55126,7 +55919,7 @@ Electric Normal
 0 Thunder
 0 Charge
 0 Parabolic Charge
-37
+38
 Toxic
 Hidden Power
 Hyper Beam
@@ -55160,6 +55953,7 @@ Sleep Talk
 U-turn
 Substitute
 Wild Charge
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -55204,7 +55998,7 @@ Rock Dragon
 40 Thrash
 44 Earthquake
 49 Horn Drill
-30
+31
 Hone Claws
 Dragon Claw
 Roar
@@ -55232,6 +56026,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Strength
@@ -55282,7 +56077,7 @@ Rock Dragon
 58 Head Smash
 68 Rock Slide
 75 Giga Impact
-32
+33
 Hone Claws
 Dragon Claw
 Roar
@@ -55312,6 +56107,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Dark Pulse
 Confide
 Strength
@@ -55361,7 +56157,7 @@ Rock Ice
 50 Ice Beam
 57 Hyper Beam
 65 Blizzard
-41
+42
 Calm Mind
 Roar
 Toxic
@@ -55400,6 +56196,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Dark Pulse
 Confide
@@ -55449,7 +56246,7 @@ Rock Ice
 63 Hyper Beam
 74 Blizzard
 77 Freeze-Dry
-45
+46
 Calm Mind
 Roar
 Toxic
@@ -55492,6 +56289,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Nature Power
 Dark Pulse
 Confide
@@ -55535,7 +56333,7 @@ Fairy None
 37 Moonblast
 41 Last Resort
 45 Psych Up
-29
+30
 Psyshock
 Calm Mind
 Toxic
@@ -55562,6 +56360,7 @@ Psych Up
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Dazzling Gleam
 Confide
 Cut
@@ -55617,7 +56416,7 @@ Fighting Flying
 48 Sky Attack
 55 Sky Drop
 60 Swords Dance
-45
+46
 Hone Claws
 Toxic
 Bulk Up
@@ -55658,6 +56457,7 @@ Sleep Talk
 U-turn
 Substitute
 Rock Smash
+Secret Power
 Power-Up Punch
 Confide
 Cut
@@ -55707,7 +56507,7 @@ Electric Fairy
 42 Play Rough
 45 Thunder
 50 Discharge
-30
+31
 Toxic
 Hidden Power
 Sunny Day
@@ -55736,6 +56536,7 @@ Sleep Talk
 U-turn
 Substitute
 Wild Charge
+Secret Power
 Confide
 Cut
 3
@@ -55778,7 +56579,7 @@ Rock Fairy
 50 Moonblast
 60 Light Screen
 70 Safeguard
-31
+32
 Calm Mind
 Toxic
 Hail
@@ -55807,6 +56608,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -55842,7 +56644,7 @@ Dragon Water
 32 Body Slam
 38 Muddy Water
 42 Dragon Pulse
-19
+20
 Toxic
 Hidden Power
 Sunny Day
@@ -55861,6 +56663,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 6
 Acid Armor
@@ -55900,7 +56703,7 @@ Dragon Water
 32 Body Slam
 38 Muddy Water
 47 Dragon Pulse
-21
+22
 Toxic
 Hidden Power
 Sunny Day
@@ -55921,6 +56724,7 @@ Infestation
 Swagger
 Sleep Talk
 Substitute
+Secret Power
 Confide
 6
 Acid Armor
@@ -55965,7 +56769,7 @@ Dragon Water
 50 Aqua Tail
 55 Power Whip
 63 Outrage
-34
+35
 Toxic
 Hail
 Hidden Power
@@ -55998,6 +56802,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 6
@@ -56043,7 +56848,7 @@ Steel Fairy
 43 Play Rough
 44 Magic Room
 50 Heal Block
-28
+29
 Psyshock
 Calm Mind
 Toxic
@@ -56070,6 +56875,7 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Dazzling Gleam
 Confide
 4
@@ -56111,7 +56917,7 @@ Ghost Grass
 45 Phantom Force
 49 Wood Hammer
 54 Horn Leech
-34
+35
 Toxic
 Hidden Power
 Sunny Day
@@ -56141,6 +56947,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Nature Power
 Dark Pulse
 Confide
@@ -56188,7 +56995,7 @@ Ghost Grass
 49 Wood Hammer
 55 Shadow Claw
 62 Horn Leech
-42
+43
 Hone Claws
 Calm Mind
 Toxic
@@ -56225,6 +57032,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Nature Power
 Dark Pulse
 Power-Up Punch
@@ -56272,7 +57080,7 @@ Ghost Grass
 40 Trick-or-Treat
 42 Pain Split
 48 Seed Bomb
-37
+38
 Toxic
 Hidden Power
 Sunny Day
@@ -56307,6 +57115,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Nature Power
 Dark Pulse
 Confide
@@ -56356,7 +57165,7 @@ Ghost Grass
 63 Trick-or-Treat
 70 Shadow Ball
 75 Explosion
-40
+41
 Toxic
 Hidden Power
 Sunny Day
@@ -56394,6 +57203,7 @@ Sleep Talk
 Substitute
 Trick Room
 Rock Smash
+Secret Power
 Nature Power
 Dark Pulse
 Confide
@@ -56437,7 +57247,7 @@ Ice None
 43 Blizzard
 47 Recover
 49 Double-Edge
-28
+29
 Toxic
 Hail
 Hidden Power
@@ -56463,6 +57273,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
@@ -56513,7 +57324,7 @@ Ice None
 56 Double-Edge
 60 Skull Bash
 65 Crunch
-33
+34
 Roar
 Toxic
 Hail
@@ -56544,6 +57355,7 @@ Sleep Talk
 Substitute
 Flash Cannon
 Rock Smash
+Secret Power
 Confide
 Surf
 Strength
@@ -56590,7 +57402,7 @@ Flying Dragon
 43 Super Fang
 48 Air Slash
 58 Hurricane
-33
+34
 Toxic
 Hidden Power
 Sunny Day
@@ -56620,6 +57432,7 @@ Sleep Talk
 U-turn
 Substitute
 Wild Charge
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -56671,7 +57484,7 @@ Flying Dragon
 62 Hurricane
 70 Dragon Pulse
 75 Boomburst
-39
+40
 Hone Claws
 Dragon Claw
 Toxic
@@ -56707,6 +57520,7 @@ Sleep Talk
 U-turn
 Substitute
 Wild Charge
+Secret Power
 Dark Pulse
 Confide
 Cut
@@ -56754,7 +57568,7 @@ Fairy None
 80 Close Combat
 88 Giga Impact
 93 Outrage
-35
+36
 Psyshock
 Calm Mind
 Roar
@@ -56786,6 +57600,7 @@ Swagger
 Sleep Talk
 Substitute
 Flash Cannon
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
@@ -56829,7 +57644,7 @@ Dark Flying
 80 Sucker Punch
 88 Hyper Beam
 93 Sky Attack
-37
+38
 Hone Claws
 Dragon Claw
 Toxic
@@ -56862,6 +57677,7 @@ Swagger
 Sleep Talk
 U-turn
 Substitute
+Secret Power
 Snarl
 Dark Pulse
 Confide
@@ -56906,7 +57722,7 @@ Dragon Ground
 80 Coil
 88 Extreme Speed
 93 Outrage
-28
+29
 Toxic
 Hidden Power
 Sunny Day
@@ -56933,6 +57749,7 @@ Swagger
 Sleep Talk
 Substitute
 Rock Smash
+Secret Power
 Confide
 Strength
 0
@@ -56973,7 +57790,7 @@ Rock Fairy
 50 Diamond Storm
 60 Light Screen
 70 Safeguard
-34
+35
 Psyshock
 Calm Mind
 Toxic
@@ -57005,6 +57822,7 @@ Swagger
 Sleep Talk
 Substitute
 Trick Room
+Secret Power
 Nature Power
 Dazzling Gleam
 Confide
