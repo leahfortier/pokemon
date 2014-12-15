@@ -1155,6 +1155,8 @@ public abstract class Attack implements Serializable
 		map.put("Cut", new Cut());
 		map.put("Dazzling Gleam", new DazzlingGleam());
 		map.put("Strength", new Strength());
+		map.put("Origin Pulse", new OriginPulse());
+		map.put("Precipice Blades", new PrecipiceBlades());
 
 		for (String s : map.keySet())
 		{
@@ -13120,6 +13122,31 @@ public abstract class Attack implements Serializable
 			super(Namesies.STRENGTH_ATTACK, "The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.", 15, Type.NORMAL, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	private static class OriginPulse extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public OriginPulse()
+		{
+			super(Namesies.ORIGIN_PULSE_ATTACK, "The user attacks opposing Pokémon with countless beams of light that glow a deep and brilliant blue.", 10, Type.WATER, Category.SPECIAL);
+			super.power = 110;
+			super.accuracy = 85;
+		}
+	}
+
+	private static class PrecipiceBlades extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public PrecipiceBlades()
+		{
+			super(Namesies.PRECIPICE_BLADES_ATTACK, "The user attacks opposing Pokémon by manifesting the power of the land in fearsome blades of stone.", 10, Type.GROUND, Category.PHYSICAL);
+			super.power = 120;
+			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}

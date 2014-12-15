@@ -597,6 +597,8 @@ public enum Namesies
 	CUT_ATTACK("Cut"),
 	DAZZLING_GLEAM_ATTACK("Dazzling Gleam"),
 	STRENGTH_ATTACK("Strength"),
+	ORIGIN_PULSE_ATTACK("Origin Pulse"),
+	PRECIPICE_BLADES_ATTACK("Precipice Blades"),
 	LEECH_SEED_EFFECT("LeechSeed"),
 	BAD_POISON_EFFECT("BadPoison"),
 	FLINCH_EFFECT("Flinch"),

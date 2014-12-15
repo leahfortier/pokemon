@@ -6385,3 +6385,19 @@ Strength:
 	Cat: Physical
 	Acc: 100
 *
+Origin Pulse:
+	Desc: The user attacks opposing Pokémon with countless beams of light that glow a deep and brilliant blue.
+	Type: Water
+	Pow: 110
+	Cat: Special
+	Acc: 85
+	PP: 10
+*
+Precipice Blades:
+	Desc: The user attacks opposing Pokémon by manifesting the power of the land in fearsome blades of stone.
+	PP: 10
+	Type: Ground
+	Cat: Physical
+	Pow: 120
+	Acc: 85
+*
