@@ -65,9 +65,9 @@ public class Move implements Serializable
 		return ready;
 	}
 	
-	public void switchReady(Battle b)
+	public void switchReady(Battle b, ActivePokemon user)
 	{
-		if (attack.isMultiTurn(b)) 
+		if (attack.isMultiTurn(b, user)) 
 		{
 			ready = !ready;
 		}

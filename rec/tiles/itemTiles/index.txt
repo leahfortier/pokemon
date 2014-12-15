@@ -301,6 +301,7 @@ superrepel.png 0000012b
 maxrepel.png 0000012c
 abilitycapsule.png 0000012d
 assaultvest.png 0000012e
+powerherb.png 0000012f
 normaltm.png 000007d0
 firetm.png 000007d1
 watertm.png 000007d2

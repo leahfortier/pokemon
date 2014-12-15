@@ -673,13 +673,14 @@ LockOn:
 Telekinesis:
 	NumTurns: 4
 	CastMessage: victim.getName() + " was levitated due to " + user.getName() + "'s telekinesis!"
-	FailCondition: victim.hasEffect(Namesies.INGRAIN_EFFECT)
+	FailCondition: victim.isGrounded(b)
 	SubsideMessage: victim.getName() + " is no longer under the effects of telekinesis."
 	Int: LevitationEffect, OpponentAccuracyBypassEffect
 	OpponentBypassAccuracy:
 	// Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
 	return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO) && !defending.isSemiInvulnerable();
 	###
+	FallMessage: "The effects of telekinesis were cancelled!"
 *
 Ingrain:
 	Int: TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect
@@ -704,45 +705,14 @@ Ingrain:
 	CastMessage: victim.getName() + " planted its roots!"
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-			
-	// TODO: Look into to see if this can be somehow combined with Gravity
-	if (victim.hasEffect(Namesies.MAGNET_RISE_EFFECT))
-	{
-		Effect.removeEffect(victim.getEffects(), Namesies.MAGNET_RISE_EFFECT);
-		b.addMessage("The effects of " + victim.getName() + "'s magnet rise were cancelled due to ingrain!");
-	}
-	
-	if (victim.hasEffect(Namesies.TELEKINESIS_EFFECT))
-	{
-		Effect.removeEffect(victim.getEffects(), Namesies.TELEKINESIS_EFFECT);
-		b.addMessage("The effects of telekinesis were cancelled due to ingrain!");
-	}
+	removeLevitation(b, victim);
 	###
 *
 Grounded:
 	Int: GroundedEffect
-	Cast: 
-	// TODO: Find a way to combine this with gravity or something like that
+	Cast:
 	super.cast(b, caster, victim, source, printCast);
-	
-	if (victim.isSemiInvulnerableFlying())
-	{
-		victim.getMove().switchReady(b);
-		b.addMessage(victim.getName() + " fell to the ground!");
-	}
-	
-	// TODO: Also Magnet rise needs to fail when used when the Pokemon is Grounded
-	if (victim.hasEffect(Namesies.MAGNET_RISE_EFFECT))
-	{
-		Effect.removeEffect(victim.getEffects(), Namesies.MAGNET_RISE_EFFECT);
-		b.addMessage("The effects of " + victim.getName() + "'s magnet rise was cancelled!");
-	}
-	
-	if (victim.hasEffect(Namesies.TELEKINESIS_EFFECT))
-	{
-		Effect.removeEffect(victim.getEffects(), Namesies.TELEKINESIS_EFFECT);
-		b.addMessage("The effects of telekinesis were cancelled!");
-	}
+	removeLevitation(b, victim);
 	###
 *
 Curse:
@@ -774,8 +744,9 @@ MagnetRise:
 	Int: LevitationEffect, PassableEffect
 	NumTurns: 5
 	CastMessage: user.getName() + " levitated with electromagnetism!"
-	FailCondition: victim.hasEffect(Namesies.INGRAIN_EFFECT)
+	FailCondition: victim.isGrounded(b)
 	SubsideMessage: victim.getName() + " is no longer under the effects of magnet rise."
+	FallMessage: "The effects of " + fallen.getName() + "'s magnet rise were cancelled!"
 *
 Uproar:
 	NumTurns: 3

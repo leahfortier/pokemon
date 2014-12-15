@@ -18,7 +18,7 @@ Failure:
 
 Gravity:
 	NumTurns: 5
-	Int: GroundedEffect, StageChangingEffect, BeforeTurnEffect
+	Int: GroundedEffect, StageChangingEffect
 	StageChange: 
 	return s == Stat.EVASION ? stage - 2 : stage;
 	###
@@ -28,38 +28,7 @@ Gravity:
 	removeLevitation(b, caster);
 	removeLevitation(b, victim);
 	###
-	Field: 
-	private void removeLevitation(Battle b, ActivePokemon p)
-	{
-		if (p.isSemiInvulnerableFlying())
-		{
-			p.getMove().switchReady(b);
-			b.addMessage(p.getName() + " fell due to the gravity!");
-		}
-		
-		if (p.hasEffect(Namesies.MAGNET_RISE_EFFECT))
-		{
-			Effect.removeEffect(p.getEffects(), Namesies.MAGNET_RISE_EFFECT);
-			b.addMessage("The effects of " + p.getName() + "'s magnet rise were cancelled due to the gravity!");
-		}
-		
-		if (p.hasEffect(Namesies.TELEKINESIS_EFFECT))
-		{
-			Effect.removeEffect(p.getEffects(), Namesies.TELEKINESIS_EFFECT);
-			b.addMessage("The effects of telekinesis were cancelled due to the gravity!");
-		}
-	}
-	###
 	SubsideMessage: "The gravity returned to normal."
-	CanAttack: 
-	if (p.getAttack().isMoveType(MoveType.AIRBORNE))
-	{
-		b.printAttacking(p);
-		b.addMessage(this.getFailMessage(b, p, opp));
-		return false;
-	}
-	return true;
-	###
 *
 WaterSport:
 	Sporty: Fire Fire Water
@@ -85,8 +54,8 @@ MagicRoom:
 MistyTerrain:
 	CastMessage: "Mist swirled around the battlefield!"
 	SubsideMessage: "The mist disappeared from the battlefield."
-	NumTurns: 5
-	Int: StatusPreventionEffect, PowerChangeEffect
+	Terrain: Misty
+	Int: StatusPreventionEffect, PowerChangeEffect, TerrainEffect
 	StatusPrevent: 
 	// Levitating Pokemon are immune to the mist
 	return !victim.isLevitating(b);
@@ -100,8 +69,8 @@ MistyTerrain:
 GrassyTerrain:
 	CastMessage: "Grass sprouted around the battlefield!"
 	SubsideMessage: "The grass withered and died."
-	NumTurns: 5
-	Int: EndTurnEffect, PowerChangeEffect
+	Terrain: Grass
+	Int: EndTurnEffect, PowerChangeEffect, TerrainEffect
 	ApplyEndTurn:
 	if (!victim.fullHealth() && !victim.isLevitating(b))
 	{
@@ -117,8 +86,8 @@ GrassyTerrain:
 ElectricTerrain:
 	CastMessage: "Electricity crackled around the battlefield!"
 	SubsideMessage: "The electricity dissipated."
-	NumTurns: 5
-	Int: StatusPreventionEffect, PowerChangeEffect
+	Terrain: Electric
+	Int: StatusPreventionEffect, PowerChangeEffect, TerrainEffect
 	StatusPrevent:
 	return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
 	###

@@ -86,6 +86,7 @@ public class TrainerBattleTrigger extends Trigger
 	{
 		super.execute(game);
 		t.healAll();
+		
 		Battle b = new Battle(game.charData, (Opponent) t, winGlobal);
 
 		((BattleView) game.viewMap.get(ViewMode.BATTLE_VIEW)).setBattle(b);

@@ -16,6 +16,7 @@ import java.util.List;
 import main.Global;
 import main.Namesies;
 import main.Type;
+import map.AreaData.TerrainType;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
@@ -262,9 +263,21 @@ public abstract class Attack implements Serializable
 		return false;
 	}
 	
-	public boolean isMultiTurn(Battle b)
+	public boolean isMultiTurn(Battle b, ActivePokemon user)
 	{
-		return this instanceof MultiTurnMove;
+		if (this instanceof MultiTurnMove)
+		{
+			// The Power Herb item allows multi-turn moves that charge first to skip the charge turn -- BUT ONLY ONCE
+			if (((MultiTurnMove)this).chargesFirst() && user.isHoldingItem(b, Namesies.POWER_HERB_ITEM))
+			{
+				user.consumeItem(b);
+				return false;
+			}
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public Type getActualType()
@@ -1650,9 +1663,9 @@ public abstract class Attack implements Serializable
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean isMultiTurn(Battle b)
+		public boolean isMultiTurn(Battle b, ActivePokemon user)
 		{
-			return b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
+			return super.isMultiTurn(b, user) && b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o)
@@ -11016,7 +11029,17 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			// TODO: BATTLE LOCATION
+			TerrainType terrain = b.getTerrainType();
+			
+			super.status = terrain.getStatusCondition();
+			super.statChanges = terrain.getStatChanges();
+			super.effects = terrain.getEffects();
+			
+			super.applyEffects(b, user, victim);
+			
+			super.status = StatusCondition.NONE;
+			super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+			super.effects = new ArrayList<>();
 		}
 	}
 
@@ -11650,7 +11673,7 @@ public abstract class Attack implements Serializable
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
-			return new Type[] {Type.NORMAL, Type.NONE}; // TODO: Battle environments
+			return new Type[] {b.getTerrainType().getType(), Type.NONE};
 		}
 	}
 
@@ -11962,13 +11985,12 @@ public abstract class Attack implements Serializable
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 		{
-			return Attack.getAttack(Namesies.TRI_ATTACK_ATTACK).getAccuracy(b, me, o);
+			return b.getTerrainType().getAttack().getAccuracy(b, me, o);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// TODO: Battle environments
-			me.callNewMove(b, o, new Move(Attack.getAttack(Namesies.TRI_ATTACK_ATTACK)));
+			me.callNewMove(b, o, new Move(b.getTerrainType().getAttack()));
 		}
 	}
 

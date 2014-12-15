@@ -121,7 +121,7 @@ MultiTurnMove:
 ***
 Override:
 	IsMultiTurn:
-		Header: boolean isMultiTurn(Battle b)
+		Header: boolean isMultiTurn(Battle b, ActivePokemon user)
 	*
 ***
 Override:
@@ -1116,8 +1116,65 @@ CritStageEffect:
 	*
 ***
 LevitationEffect:
+	FallMessage:
+		Header: void fall(Battle b, ActivePokemon fallen)
+		Body:
+		b.addMessage({0});
+		Effect.removeEffect(fallen.getEffects(), this.namesies());
+		###
+	*
 ***
 GroundedEffect:
+	RemoveLevitation:
+		Header: void removeLevitation(Battle b, ActivePokemon p)
+		Optional: True
+		Default:
+		if (p.isSemiInvulnerableFlying())
+		{
+			p.getMove().switchReady(b, p);
+			b.addMessage(p.getName() + " fell to the ground!");
+		}
+		
+		Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+		###
+		AddInterface: BeforeTurnEffect
+		AddMapField: CanAttack:
+		// TODO: Look up if this is actually true for Ingrain and Magnet Rise and Iron Ball -- it probably should be
+		if (p.getAttack().isMoveType(MoveType.AIRBORNE))
+		{
+			b.printAttacking(p);
+			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			return false;
+		}
+		
+		return true;
+		###
+	*
+***
+TerrainEffect:
+	Terrain:
+		AddMapField: Cast:
+		// Remove all other Terrain Effects
+		for (int i = 0; i < b.getEffects().size(); i++)
+		{
+			Effect effect = b.getEffects().get(i);
+			if (effect instanceof TerrainEffect)
+			{
+				b.getEffects().remove(i);
+				i--;
+			}
+		}
+		
+		super.cast(b, caster, victim, source, printCast);
+		b.setTerrainType(TerrainType.{00}, false); // TODO: Need to send a terrain change message
+		###
+		AddMapField: Subside:
+		super.subside(b, p);
+		b.resetTerrain();
+		###
+		AddMapField: MinTurns: 5
+		AddMapField: MaxTurns: 5
+	*
 ***
 EndBattleEffect:
 	EndBattle:

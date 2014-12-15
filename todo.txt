@@ -45,11 +45,7 @@ MAP TILES
 	the map in all locations and then draw the map as usual. Then again, to avoid all of the 
 	unnecessary rendering, I could just get Jeb to add grass tiles to the bottom of all tree tiles. 
 
-Look into rewriting MoldBreaker because it sucks
-Semi-invulnerable moves shouldn't get a menu in between turns
-Look at differences in Roar and other exit battle moves
 There is a bug with the buttons in bag view particularly the give and take ones
-Look at Forecast and Multitype again and the fix -- I don't think they actually work -- try paired with Illusion, should make some sort of changeType thing or use a similar effect that already exists, Protean should go in this category as well
 
 Diancie needs a base exp yield and a capture rate whenever that gets updated
 

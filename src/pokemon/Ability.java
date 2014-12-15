@@ -34,6 +34,7 @@ import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
+import battle.effect.Effect;
 import battle.effect.Effect.CastSource;
 import battle.effect.EffectBlockerEffect;
 import battle.effect.EndBattleEffect;
@@ -43,6 +44,7 @@ import battle.effect.FaintEffect;
 import battle.effect.HalfWeightEffect;
 import battle.effect.IgnoreStageEffect;
 import battle.effect.ItemCondition;
+import battle.effect.LevitationEffect;
 import battle.effect.ModifyStageValueEffect;
 import battle.effect.NameChanger;
 import battle.effect.OpponentAccuracyBypassEffect;
@@ -1738,7 +1740,7 @@ public abstract class Ability implements Serializable
 		}
 	}
 
-	private static class Levitate extends Ability 
+	private static class Levitate extends Ability implements LevitationEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1750,6 +1752,12 @@ public abstract class Ability implements Serializable
 		public Levitate newInstance()
 		{
 			return (Levitate)(new Levitate().activate());
+		}
+
+		public void fall(Battle b, ActivePokemon fallen)
+		{
+			b.addMessage(fallen.getName() + " is no longer levitating!");
+			Effect.removeEffect(fallen.getEffects(), this.namesies());
 		}
 	}
 

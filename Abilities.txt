@@ -407,6 +407,8 @@ Skill Link:
 *
 Levitate:
 	Desc: Gives full immunity to all Ground-type moves.
+	Int: LevitationEffect
+	FallMessage: fallen.getName() + " is no longer levitating!"
 *
 Forewarn:
 	Desc: Determines what moves the foe has.

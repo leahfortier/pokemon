@@ -33,6 +33,7 @@ import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;
 import main.Type;
+import map.AreaData.TerrainType;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
@@ -53,9 +54,11 @@ import battle.Move;
 import battle.effect.AdvantageChanger;
 import battle.effect.ApplyDamageEffect;
 import battle.effect.AttackSelectionEffect;
+import battle.effect.BeforeTurnEffect;
 import battle.effect.BracingEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
+import battle.effect.Effect;
 import battle.effect.Effect.CastSource;
 import battle.effect.EffectBlockerEffect;
 import battle.effect.EndTurnEffect;
@@ -529,6 +532,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		map.put("Max Repel", new MaxRepel());
 		map.put("Ability Capsule", new AbilityCapsule());
 		map.put("Assault Vest", new AssaultVest());
+		map.put("Power Herb", new PowerHerb());
 		map.put("Hone Claws TM", new HoneClawsTM());
 		map.put("Dragon Claw TM", new DragonClawTM());
 		map.put("Psyshock TM", new PsyshockTM());
@@ -787,6 +791,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+		}
+
+		public void fall(Battle b, ActivePokemon fallen)
+		{
+			b.addMessage(fallen.getName() + " is no longer floating with its " + this.name + "!");
+			Effect.removeEffect(fallen.getEffects(), this.namesies());
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1622,7 +1632,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 	}
 
-	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect
+	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect, BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -1644,6 +1654,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+			// Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
+			removeLevitation(b, pelted);
+		}
+
+		public void removeLevitation(Battle b, ActivePokemon p)
+		{
+			if (p.isSemiInvulnerableFlying())
+			{
+				p.getMove().switchReady(b, p);
+				b.addMessage(p.getName() + " fell to the ground!");
+			}
+			
+			Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
@@ -1655,6 +1678,19 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			return stat;
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			// TODO: Look up if this is actually true for Ingrain and Magnet Rise and Iron Ball -- it probably should be
+			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
+			{
+				b.printAttacking(p);
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return false;
+			}
+			
+			return true;
 		}
 	}
 
@@ -1923,7 +1959,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void applyEndTurn(ActivePokemon victim, Battle b)
 		{
-			// TODO: Has nothing to do with Mental Herb, but the item Power Herb is not implemented yet
 			boolean used = false;
 			for (int i = 0; i < effects.length; i++)
 			{
@@ -8337,8 +8372,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p)
 		{
-			// TODO: Need Level Up to be implemented -- also handle the message accordingly
-			return false;
+			// TODO: Doesn't show animation if it causes an evolution
+			return p.levelUp(null);
 		}
 	}
 
@@ -8376,9 +8411,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// TODO: How do I see if the user is underwater, surfing, or fishing?
-			if (false) return new double[] {3.5, 0};
-			else return new double[] {1, 0};
+			// TODO: Not sure yet if this will cover fishing
+			if (b.getTerrainType() == TerrainType.WATER)
+			{
+				return new double[] {3.5, 0};
+			}
+			
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -8399,9 +8438,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			// TODO: How do I see if the user is in a dark environment?
-			if (false) return new double[] {3.5, 0};
-			else return new double[] {1, 0};
+			if (b.getTerrainType() == TerrainType.CAVE)
+			{
+				return new double[] {3.5, 0};
+			}
+			
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -8547,8 +8589,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (me.getGender() == o.getGender()) return new double[] {8, 0};
-			else return new double[] {1, 0};
+			if (me.getGender() == o.getGender())
+			{
+				return new double[] {8, 0};
+			}
+			
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -8569,8 +8615,13 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (false) return new double[] {3, 0};
-			else return new double[] {1, 0};
+			// TODO: Fishing
+			if (false)
+			{
+				return new double[] {3, 0};
+			}
+			
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -8684,8 +8735,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		{
-			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) return new double[] {3, 0};
-			else return new double[] {1, 0};
+			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG))
+			{
+				return new double[] {3, 0};
+			}
+			
+			return new double[] {1, 0};
 		}
 
 		public void afterCaught(ActivePokemon p)
@@ -11791,7 +11846,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		{
-			// TODO: Yes I realize this is Lansat Berry and not Honey, but functionality needs to be implemented for Honey
 			PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, source, false);
 			return true;
 		}
@@ -12204,6 +12258,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted)
 		{
+			// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
 		}
 	}
 
@@ -12475,6 +12530,26 @@ public abstract class Item implements Comparable<Item>, Serializable
 			}
 			
 			return stat;
+		}
+	}
+
+	private static class PowerHerb extends Item implements HoldItem
+	{
+		private static final long serialVersionUID = 1L;
+
+		public PowerHerb()
+		{
+			super(Namesies.POWER_HERB_ITEM, "A single-use item to be held by a Pokémon. It allows the immediate use of a move that charges on the first turn.", BagCategory.MISC, 303);
+			super.price = 100;
+		}
+
+		public int flingDamage()
+		{
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted)
+		{
 		}
 	}
 

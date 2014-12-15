@@ -364,6 +364,12 @@ public class Global
 					continue;
 				}
 				
+				// This is for the hasInvoke overload, where you're just checking if it is an instance of the interface but have no methods to call
+				if (methodName.length() == 0)
+				{
+					return invokee;
+				}
+				
 				// YEAH TRY CATCH BLOCKS ARE THE GREATEST
 				try 
 				{
@@ -507,5 +513,11 @@ public class Global
 	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
 	{
 		Global.invoke(-1, -1, false, false, b, p, opp, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void where you need to split early if an activePokemon is deadsie
+	public static <T> boolean hasInvoke(Object[] invokees, Class<T> className)
+	{
+		return Global.invoke(-1, -1, false, false, null, null, null, null, invokees, className, "", new Object[0]) != null;
 	}
 }

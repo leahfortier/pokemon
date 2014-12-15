@@ -649,7 +649,7 @@ public class MapView extends View{
 		battleImageSlideRight = null;
 		this.seenWild = seenWild;
 		
-		this.battle.setTerrainType(currentArea.getTerrain());
+		this.battle.setTerrainType(currentArea.getTerrain(), true);
 		
 		if (battle.isWildBattle())
 		{

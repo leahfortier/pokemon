@@ -27,6 +27,7 @@ import main.InputControl;
 import main.InputControl.Control;
 import main.Namesies;
 import main.Type;
+import map.AreaData.TerrainType;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
@@ -651,8 +652,8 @@ public class BattleView extends View
 			currentBattle.runAway();
 			cycleMessage(false);
 		}
-		// Show Fight View
-		else if (fightBtn.checkConsumePress())
+		// Show Fight View TODO: Semi-invulnerable moves look awful and weird
+		else if (fightBtn.checkConsumePress() || currentBattle.getPlayer().front().isSemiInvulnerable())
 		{
 			setVisualState(VisualState.FIGHT);
 			
@@ -1145,7 +1146,10 @@ public class BattleView extends View
 	
 	private void cycleMessage(boolean updated)
 	{
-		if (!updated) setVisualState(VisualState.MENU);
+		if (!updated) 
+		{
+			setVisualState(VisualState.MENU);
+		}
 		
 		Queue<MessageUpdate> messages = currentBattle.getMessages();
 		
@@ -1754,16 +1758,16 @@ public class BattleView extends View
 		ActivePokemon plyr = currentBattle.getPlayer().front();
 		ActivePokemon enmy = currentBattle.getOpponent().front();
 		TileSet tiles = data.getBattleTiles();
-		
-		//Get background based on terrain type
-		int terrainTypeIndex = currentBattle.getTerrainType().ordinal();
-		g.drawImage(tiles.getTile(0x100 + terrainTypeIndex), 0, 0, null);
+		 
+		// Get background based on terrain type
+		TerrainType terrainType = currentBattle.getTerrainType();
+		g.drawImage(tiles.getTile(terrainType.getBackgroundIndex()), 0, 0, null);
 
-		//Player's battle circle
-		g.drawImage(tiles.getTile(0x200 + terrainTypeIndex), 0, 331, null);
+		// Player's battle circle
+		g.drawImage(tiles.getTile(terrainType.getPlayerCircleIndex()), 0, 331, null);
 		
-		//Opponent battle circle
-		g.drawImage(tiles.getTile(0x300 + terrainTypeIndex), 450, 192, null);
+		// Opponent battle circle
+		g.drawImage(tiles.getTile(terrainType.getOpponentCircleIndex()), 450, 192, null);
 		
 		if (playerAnimation.isEmpty())
 		{

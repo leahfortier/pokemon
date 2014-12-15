@@ -2389,7 +2389,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
-			return !(victim.hasEffect(Namesies.INGRAIN_EFFECT) || victim.hasEffect(this.namesies));
+			return !(victim.isGrounded(b) || victim.hasEffect(this.namesies));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2402,6 +2402,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			return victim.getName() + " is no longer under the effects of telekinesis.";
 		}
 
+		public void fall(Battle b, ActivePokemon fallen)
+		{
+			b.addMessage("The effects of telekinesis were cancelled!");
+			Effect.removeEffect(fallen.getEffects(), this.namesies());
+		}
+
 		public boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
 		{
 			// Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
@@ -2409,7 +2415,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 	}
 
-	private static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect
+	private static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect, BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2431,19 +2437,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
 			super.cast(b, caster, victim, source, printCast);
-			
-			// TODO: Look into to see if this can be somehow combined with Gravity
-			if (victim.hasEffect(Namesies.MAGNET_RISE_EFFECT))
-			{
-				Effect.removeEffect(victim.getEffects(), Namesies.MAGNET_RISE_EFFECT);
-				b.addMessage("The effects of " + victim.getName() + "'s magnet rise were cancelled due to ingrain!");
-			}
-			
-			if (victim.hasEffect(Namesies.TELEKINESIS_EFFECT))
-			{
-				Effect.removeEffect(victim.getEffects(), Namesies.TELEKINESIS_EFFECT);
-				b.addMessage("The effects of telekinesis were cancelled due to ingrain!");
-			}
+			removeLevitation(b, victim);
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2476,9 +2470,33 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			
 			b.addMessage(victim.getName() + " restored some HP due to ingrain!", victim);
 		}
+
+		public void removeLevitation(Battle b, ActivePokemon p)
+		{
+			if (p.isSemiInvulnerableFlying())
+			{
+				p.getMove().switchReady(b, p);
+				b.addMessage(p.getName() + " fell to the ground!");
+			}
+			
+			Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			// TODO: Look up if this is actually true for Ingrain and Magnet Rise and Iron Ball -- it probably should be
+			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
+			{
+				b.printAttacking(p);
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return false;
+			}
+			
+			return true;
+		}
 	}
 
-	private static class Grounded extends PokemonEffect implements GroundedEffect
+	private static class Grounded extends PokemonEffect implements GroundedEffect, BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -2499,27 +2517,32 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 		{
-			// TODO: Find a way to combine this with gravity or something like that
 			super.cast(b, caster, victim, source, printCast);
-			
-			if (victim.isSemiInvulnerableFlying())
+			removeLevitation(b, victim);
+		}
+
+		public void removeLevitation(Battle b, ActivePokemon p)
+		{
+			if (p.isSemiInvulnerableFlying())
 			{
-				victim.getMove().switchReady(b);
-				b.addMessage(victim.getName() + " fell to the ground!");
+				p.getMove().switchReady(b, p);
+				b.addMessage(p.getName() + " fell to the ground!");
 			}
 			
-			// TODO: Also Magnet rise needs to fail when used when the Pokemon is Grounded
-			if (victim.hasEffect(Namesies.MAGNET_RISE_EFFECT))
+			Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		{
+			// TODO: Look up if this is actually true for Ingrain and Magnet Rise and Iron Ball -- it probably should be
+			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
 			{
-				Effect.removeEffect(victim.getEffects(), Namesies.MAGNET_RISE_EFFECT);
-				b.addMessage("The effects of " + victim.getName() + "'s magnet rise was cancelled!");
+				b.printAttacking(p);
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				return false;
 			}
 			
-			if (victim.hasEffect(Namesies.TELEKINESIS_EFFECT))
-			{
-				Effect.removeEffect(victim.getEffects(), Namesies.TELEKINESIS_EFFECT);
-				b.addMessage("The effects of telekinesis were cancelled!");
-			}
+			return true;
 		}
 	}
 
@@ -2611,7 +2634,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 		{
-			return !(victim.hasEffect(Namesies.INGRAIN_EFFECT) || victim.hasEffect(this.namesies));
+			return !(victim.isGrounded(b) || victim.hasEffect(this.namesies));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2622,6 +2645,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public String getSubsideMessage(ActivePokemon victim)
 		{
 			return victim.getName() + " is no longer under the effects of magnet rise.";
+		}
+
+		public void fall(Battle b, ActivePokemon fallen)
+		{
+			b.addMessage("The effects of " + fallen.getName() + "'s magnet rise were cancelled!");
+			Effect.removeEffect(fallen.getEffects(), this.namesies());
 		}
 	}
 

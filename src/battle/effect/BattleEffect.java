@@ -2,8 +2,10 @@ package battle.effect;
 
 import java.util.HashMap;
 
+import main.Global;
 import main.Namesies;
 import main.Type;
+import map.AreaData.TerrainType;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.Attack.MoveType;
@@ -74,26 +76,6 @@ public abstract class BattleEffect extends Effect
 	private static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect, BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
-		private void removeLevitation(Battle b, ActivePokemon p)
-		{
-			if (p.isSemiInvulnerableFlying())
-			{
-				p.getMove().switchReady(b);
-				b.addMessage(p.getName() + " fell due to the gravity!");
-			}
-			
-			if (p.hasEffect(Namesies.MAGNET_RISE_EFFECT))
-			{
-				Effect.removeEffect(p.getEffects(), Namesies.MAGNET_RISE_EFFECT);
-				b.addMessage("The effects of " + p.getName() + "'s magnet rise were cancelled due to the gravity!");
-			}
-			
-			if (p.hasEffect(Namesies.TELEKINESIS_EFFECT))
-			{
-				Effect.removeEffect(p.getEffects(), Namesies.TELEKINESIS_EFFECT);
-				b.addMessage("The effects of telekinesis were cancelled due to the gravity!");
-			}
-		}
 
 		public Gravity()
 		{
@@ -127,6 +109,17 @@ public abstract class BattleEffect extends Effect
 			return "The gravity returned to normal.";
 		}
 
+		public void removeLevitation(Battle b, ActivePokemon p)
+		{
+			if (p.isSemiInvulnerableFlying())
+			{
+				p.getMove().switchReady(b, p);
+				b.addMessage(p.getName() + " fell to the ground!");
+			}
+			
+			Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+		}
+
 		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
 		{
 			return s == Stat.EVASION ? stage - 2 : stage;
@@ -134,12 +127,14 @@ public abstract class BattleEffect extends Effect
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
+			// TODO: Look up if this is actually true for Ingrain and Magnet Rise and Iron Ball -- it probably should be
 			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
 			{
 				b.printAttacking(p);
-				b.addMessage(this.getFailMessage(b, p, opp));
+				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return false;
 			}
+			
 			return true;
 		}
 	}
@@ -338,7 +333,7 @@ public abstract class BattleEffect extends Effect
 		}
 	}
 
-	private static class MistyTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect
+	private static class MistyTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -383,9 +378,32 @@ public abstract class BattleEffect extends Effect
 			// Dragon type moves have halved power during the misty terrain
 			return user.getAttackType() == Type.DRAGON && !user.isLevitating(b) ? .5 : 1;
 		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+		{
+			// Remove all other Terrain Effects
+			for (int i = 0; i < b.getEffects().size(); i++)
+			{
+				Effect effect = b.getEffects().get(i);
+				if (effect instanceof TerrainEffect)
+				{
+					b.getEffects().remove(i);
+					i--;
+				}
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+			b.setTerrainType(TerrainType.MISTY, false); // TODO: Need to send a terrain change message
+		}
+
+		public void subside(Battle b, ActivePokemon p)
+		{
+			super.subside(b, p);
+			b.resetTerrain();
+		}
 	}
 
-	private static class GrassyTerrain extends BattleEffect implements EndTurnEffect, PowerChangeEffect
+	private static class GrassyTerrain extends BattleEffect implements EndTurnEffect, PowerChangeEffect, TerrainEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -428,9 +446,32 @@ public abstract class BattleEffect extends Effect
 			// Grass-type moves are 50% stronger with the grassy terrain
 			return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
 		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+		{
+			// Remove all other Terrain Effects
+			for (int i = 0; i < b.getEffects().size(); i++)
+			{
+				Effect effect = b.getEffects().get(i);
+				if (effect instanceof TerrainEffect)
+				{
+					b.getEffects().remove(i);
+					i--;
+				}
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+			b.setTerrainType(TerrainType.GRASS, false); // TODO: Need to send a terrain change message
+		}
+
+		public void subside(Battle b, ActivePokemon p)
+		{
+			super.subside(b, p);
+			b.resetTerrain();
+		}
 	}
 
-	private static class ElectricTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect
+	private static class ElectricTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -473,6 +514,29 @@ public abstract class BattleEffect extends Effect
 		{
 			// Electric-type moves are 50% stronger with the electric terrain
 			return user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b) ? 1.5 : 1;
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+		{
+			// Remove all other Terrain Effects
+			for (int i = 0; i < b.getEffects().size(); i++)
+			{
+				Effect effect = b.getEffects().get(i);
+				if (effect instanceof TerrainEffect)
+				{
+					b.getEffects().remove(i);
+					i--;
+				}
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+			b.setTerrainType(TerrainType.ELECTRIC, false); // TODO: Need to send a terrain change message
+		}
+
+		public void subside(Battle b, ActivePokemon p)
+		{
+			super.subside(b, p);
+			b.resetTerrain();
 		}
 	}
 }

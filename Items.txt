@@ -88,6 +88,7 @@ Air Balloon:
 	Desc: When held by a Pok\u00e9mon, the Pok\u00e9mon will float into the air. When the holder is attacked, this item will burst.
 	Price: 200
 	Fling: 10
+	FallMessage: fallen.getName() + " is no longer floating with its " + this.name + "!"
 	Enter:
 		b.addMessage(victim.getName() + " floats with its " + this.name + "!");
 		###
@@ -349,6 +350,10 @@ Iron Ball:
 	Fling: 130
 	ToModify: Speed
 	ModifyMultiplier: .5 true
+	FlingEffect:
+	// Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
+	removeLevitation(b, pelted);
+	###
 *
 Lagging Tail:
 	Int: HoldItem, StallingEffect
@@ -450,7 +455,6 @@ Mental Herb:
 		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
 		###
 	ApplyEndTurn:
-		// TODO: Has nothing to do with Mental Herb, but the item Power Herb is not implemented yet
 		boolean used = false;
 		for (int i = 0; i < effects.length; i++)
 		{
@@ -1736,8 +1740,8 @@ Rare Candy:
 	Cat: Stat
 	Desc: A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.
 	PokemonUse:
-		// TODO: Need Level Up to be implemented -- also handle the message accordingly
-		return false;
+		// TODO: Doesn't show animation if it causes an evolution
+		return p.levelUp(null);
 		###
 	SuccessMessage: p.getName() + " gained a level!"
 	Price: 4800
@@ -1756,9 +1760,13 @@ Dive Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.
 	Price: 1000
 	CatchRate:
-		// TODO: How do I see if the user is underwater, surfing, or fishing?
-		if (false) return new double[] {3.5, 0};
-		else return new double[] {1, 0};
+		// TODO: Not sure yet if this will cover fishing
+		if (b.getTerrainType() == TerrainType.WATER)
+		{
+			return new double[] {3.5, 0};
+		}
+		
+		return new double[] {1, 0};
 		###
 *
 Dusk Ball:
@@ -1766,9 +1774,12 @@ Dusk Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.
 	Price: 1000
 	CatchRate:
-		// TODO: How do I see if the user is in a dark environment?
-		if (false) return new double[] {3.5, 0};
-		else return new double[] {1, 0};
+		if (b.getTerrainType() == TerrainType.CAVE) 
+		{
+			return new double[] {3.5, 0};
+		}
+		
+		return new double[] {1, 0};
 		###
 *
 Fast Ball:
@@ -1834,8 +1845,12 @@ Love Ball:
 	Desc: Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.
 	Price: 200
 	CatchRate:
-		if (me.getGender() == o.getGender()) return new double[] {8, 0};
-		else return new double[] {1, 0};
+		if (me.getGender() == o.getGender()) 
+		{
+			return new double[] {8, 0};
+		}
+		
+		return new double[] {1, 0};
 		###
 *
 Lure Ball:
@@ -1843,8 +1858,13 @@ Lure Ball:
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.
 	Price: 200
 	CatchRate:
-		if (false) return new double[] {3, 0};
-		else return new double[] {1, 0};
+		// TODO: Fishing
+		if (false) 
+		{
+			return new double[] {3, 0};
+		}
+		
+		return new double[] {1, 0};
 		###
 *
 Luxury Ball:
@@ -1891,8 +1911,12 @@ Net Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.
 	Price: 1000
 	CatchRate:
-		if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) return new double[] {3, 0};
-		else return new double[] {1, 0};
+		if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) 
+		{
+			return new double[] {3, 0};
+		}
+		
+		return new double[] {1, 0};
 		###
 *
 Pok\u00e9 Ball:
@@ -2291,7 +2315,6 @@ Lansat Berry:
 	NGPow: 100
 	HealthTriggerRatio: 4
 	HealthTrigger:
-		// TODO: Yes I realize this is Lansat Berry and not Honey, but functionality needs to be implemented for Honey
 		PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, source, false);
 		return true;
 		###
@@ -2420,6 +2443,9 @@ Honey:
 	Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in grass, caves, or on special trees.
 	Fling: 30
 	Price: 100
+	FlingEffect:
+	// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
+	###
 *
 Eviolite:
 	Int: HoldItem
@@ -2481,4 +2507,11 @@ Assault Vest:
 	###
 	UnusableMessage: p.getName() + "'s " + this.name + " prevents the use of status moves!"
 	Fling: 30
+*
+Power Herb:
+	Desc: A single-use item to be held by a Pokémon. It allows the immediate use of a move that charges on the first turn.
+	Price: 100
+	Int: HoldItem
+	Fling: 10
+	Cat: Misc
 *

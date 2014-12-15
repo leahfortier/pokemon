@@ -1177,6 +1177,7 @@ public enum Namesies
 	MAX_REPEL_ITEM("Max Repel"),
 	ABILITY_CAPSULE_ITEM("Ability Capsule"),
 	ASSAULT_VEST_ITEM("Assault Vest"),
+	POWER_HERB_ITEM("Power Herb"),
 	HONE_CLAWS_TM_ITEM("Hone Claws TM"),
 	DRAGON_CLAW_TM_ITEM("Dragon Claw TM"),
 	PSYSHOCK_TM_ITEM("Psyshock TM"),

@@ -29,7 +29,6 @@ import battle.BattleAttributes;
 import battle.Move;
 import battle.effect.AbilityCondition;
 import battle.effect.BracingEffect;
-import battle.effect.Effect;
 import battle.effect.Effect.CastSource;
 import battle.effect.FaintEffect;
 import battle.effect.GroundedEffect;
@@ -61,11 +60,11 @@ public class ActivePokemon implements Serializable
 	public static final int MAX_IV = 31;
 	
 	private static final String[][] characteristics = 
-		{{"Loves to eat", "Proud of its power", "Sturdy body", "Highly curious", "Strong willed", "Likes to run"},
-		 {"Takes plenty of siestas", "Likes to thrash about", "Capable of taking hits", "Mischievous", "Somewhat vain", "Alert to sounds"},
-		 {"Nods off a lot", "A little quick tempered", "Highly persistent", "Thoroughly cunning", "Strongly defiant", "Impetuous and silly"},
-		 {"Scatters things often", "Likes to fight", "Good endurance", "Often lost in thought", "Hates to lose", "Somewhat of a clown"},
-		 {"Likes to relax", "Quick tempered", "Good perseverance", "Very finicky", "Somewhat stubborn", "Quick to flee"}};
+		{{"Loves to eat",            "Proud of its power",      "Sturdy body",            "Highly curious",        "Strong willed",     "Likes to run"},
+		 {"Takes plenty of siestas", "Likes to thrash about",   "Capable of taking hits", "Mischievous",           "Somewhat vain",     "Alert to sounds"},
+		 {"Nods off a lot",          "A little quick tempered", "Highly persistent",      "Thoroughly cunning",    "Strongly defiant",  "Impetuous and silly"},
+		 {"Scatters things often",   "Likes to fight",          "Good endurance",         "Often lost in thought", "Hates to lose",     "Somewhat of a clown"},
+		 {"Likes to relax",          "Quick tempered",          "Good perseverance",      "Very finicky",          "Somewhat stubborn", "Quick to flee"}};
 	
 	private PokemonInfo pokemon;
 	private String nickname;
@@ -565,14 +564,15 @@ public class ActivePokemon implements Serializable
 		}
 	}
 
-	private boolean levelUp(Battle b)
+	public boolean levelUp(Battle b)
 	{
 		if (level == MAX_LEVEL) 
 		{
 			return false;
 		}
 		
-		boolean print = b != null, front = print && b.getPlayer().front() == this;
+		boolean print = b != null;
+		boolean front = print && b.getPlayer().front() == this;
 		
 		// Grow to the next level
 		level++;
@@ -700,6 +700,7 @@ public class ActivePokemon implements Serializable
 	public void callNewMove(Battle b, ActivePokemon opp, Move m)
 	{
 		Move temp = getMove();
+		m.setAttributes(b, this, opp);
 		setMove(m);
 		b.printAttacking(this);
 		getAttack().apply(this, opp, b);
@@ -1255,26 +1256,23 @@ public class ActivePokemon implements Serializable
 		b.addMessage("", this);
 	}
 	
+	public boolean isGrounded(Battle b)
+	{
+		return Global.hasInvoke(b.getEffectsList(this), GroundedEffect.class);
+	}
+	
 	// Returns true if the Pokemon is currently levitating for any reason
 	public boolean isLevitating(Battle b)
 	{
-		boolean levitation = false;
-		
-		// Check effects that cause user to be grounded/levitating -- Grounded effect overrules Levitation effect
-		Object[] effects = b.getEffectsList(this);
-		for (Object e : effects)
+		// Grounded effect take precedence over levitation effects
+		if (isGrounded(b))
 		{
-			if (Effect.isInactiveEffect(e)) 
-				continue;
-			
-			if (e instanceof GroundedEffect) return false;
-			if (e instanceof LevitationEffect) levitation = true;
+			return false;
 		}
 		
-		if (levitation) return true;
-		
-		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker.
-		if (hasAbility(Namesies.LEVITATE_ABILITY) && !b.getOtherPokemon(playerPokemon).breaksTheMold())
+		// Obvs levitating if you have a levitation effect
+		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE GLOBAL.HASINVOKE FUCK YES YOU GO GLENN COCO
+		if (Global.hasInvoke(b.getEffectsList(this), LevitationEffect.class))
 		{
 			return true;
 		}
@@ -1373,7 +1371,7 @@ public class ActivePokemon implements Serializable
 	public void startAttack(Battle b, ActivePokemon opp)
 	{
 		this.getAttributes().setAttacking(true);
-		this.getMove().switchReady(b);
+		this.getMove().switchReady(b, this); // TODO: I don't think this works right because this is happening before you check if they're able to attack and honestly they shouldn't really switch until the end of the turn
 		this.getMove().setAttributes(b, this, opp);
 	}
 	

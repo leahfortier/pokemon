@@ -321,7 +321,7 @@ Solar Beam:
 	}
 	###
 	IsMultiTurn: 
-	return b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
+	return super.isMultiTurn(b, user) && b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
 	###
 *
 Flamethrower:
@@ -5386,7 +5386,17 @@ Secret Power:
 	Cat: Physical
 	Acc: 100
 	ApplyEffects: 
-	// TODO: BATTLE LOCATION
+	TerrainType terrain = b.getTerrainType();
+			
+	super.status = terrain.getStatusCondition();
+	super.statChanges = terrain.getStatChanges();
+	super.effects = terrain.getEffects();
+	
+	super.applyEffects(b, user, victim);
+	
+	super.status = StatusCondition.NONE;
+	super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+	super.effects = new ArrayList<>();
 	###
 	EffChance: 30
 *
@@ -5618,7 +5628,7 @@ Camouflage:
 	Effect: Pokemon ChangeType
 	Int: ChangeTypeMove
 	ChangeType: 
-	return new Type[] {Type.NORMAL, Type.NONE}; // TODO: Battle environments
+	return new Type[] {b.getTerrainType().getType(), Type.NONE};
 	###
 *
 Recycle:
@@ -5757,11 +5767,10 @@ Nature Power:
 	Type: Normal
 	MoveType: Assistless, Metronomeless, No_Magic_Coat
 	Apply: 
-	// TODO: Battle environments
-	me.callNewMove(b, o, new Move(Attack.getAttack(Namesies.TRI_ATTACK_ATTACK)));
+	me.callNewMove(b, o, new Move(b.getTerrainType().getAttack()));
 	###
 	GetAccuracy: 
-	return Attack.getAttack(Namesies.TRI_ATTACK_ATTACK).getAccuracy(b, me, o);
+	return b.getTerrainType().getAttack().getAccuracy(b, me, o);
 	###
 *
 Entrainment:

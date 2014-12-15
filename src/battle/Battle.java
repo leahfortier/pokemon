@@ -54,7 +54,8 @@ public class Battle
 	private int escapeAttempts;
 	private ArrayDeque<MessageUpdate> messages;
 	private String winGlobal;
-	private TerrainType terrainType;
+	private TerrainType baseTerrain;
+	private TerrainType currentTerrain;
 	
 	public Battle(CharacterData p, Opponent o)
 	{
@@ -123,12 +124,22 @@ public class Battle
 	
 	public TerrainType getTerrainType()
 	{
-		return terrainType;
+		return currentTerrain;
 	}
 	
-	public void setTerrainType(TerrainType terrainType)
+	public void setTerrainType(TerrainType terrainType, boolean base)
 	{
-		this.terrainType = terrainType;
+		if (base)
+		{
+			this.baseTerrain = terrainType;
+		}
+		
+		this.currentTerrain = terrainType;
+	}
+	
+	public void resetTerrain()
+	{
+		this.currentTerrain = baseTerrain;
 	}
 	
 	// Just a plain old regular message
