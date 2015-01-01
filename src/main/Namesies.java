@@ -995,6 +995,7 @@ public enum Namesies
 	DARK_GEM_ITEM("Dark Gem"),
 	STEEL_GEM_ITEM("Steel Gem"),
 	NORMAL_GEM_ITEM("Normal Gem"),
+	FAIRY_GEM_ITEM("Fairy Gem"),
 	LEFTOVERS_ITEM("Leftovers"),
 	BLACK_BELT_ITEM("Black Belt"),
 	BLACK_GLASSES_ITEM("Black Glasses"),

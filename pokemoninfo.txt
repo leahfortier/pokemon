@@ -597,8 +597,9 @@ Yawn
 45
 0 0 1 0 0 0 
 Level 8 16
-1
+2
 5 Mystic Water
+1 Black Glasses
 87
 Torrent
 Rain Dish
@@ -1616,7 +1617,8 @@ Switcheroo
 255
 0 1 0 0 0 0 
 Level 24 22
-0
+1
+5 Binding Band
 50
 Intimidate
 Shed Skin
@@ -1706,8 +1708,9 @@ Switcheroo
 90
 0 2 0 0 0 0 
 None
-1
+2
 5 Poison Barb
+5 Binding Band
 50
 Intimidate
 Shed Skin
@@ -1954,8 +1957,9 @@ Rototiller
 255
 0 0 1 0 0 0 
 Level 28 22
-1
+2
 5 Quick Claw
+5 Grip Claw
 50
 Sand Veil
 Sand Rush
@@ -2046,9 +2050,10 @@ Rototiller
 90
 0 0 2 0 0 0 
 None
-2
+3
 5 Quick Claw
 5 Soft Sand
+5 Grip Claw
 50
 Sand Veil
 Sand Rush
@@ -2848,8 +2853,9 @@ Tail Slap
 190
 0 0 0 0 0 1 
 Item 38  Fire Stone
-1
-100 Rawst Berry
+2
+95 Rawst Berry
+5 Charcoal
 25
 Flash Fire
 Drought
@@ -2924,8 +2930,9 @@ Tail Slap
 75
 0 0 0 0 1 1 
 None
-1
-100 Rawst Berry
+2
+95 Rawst Berry
+5 Charcoal
 25
 Flash Fire
 Drought
@@ -3345,7 +3352,8 @@ Tickle
 255
 0 0 0 1 0 0 
 Level 44 21
-0
+1
+5 Absorb Bulb
 50
 Chlorophyll
 Run Away
@@ -3421,7 +3429,8 @@ Tickle
 Multi 2
 Item 45  Leaf Stone
 Item 182  Sun Stone
-0
+1
+5 Absorb Bulb
 50
 Chlorophyll
 Stench
@@ -3488,7 +3497,8 @@ Tickle
 45
 0 0 0 3 0 0 
 None
-0
+1
+5 Absorb Bulb
 50
 Chlorophyll
 Effect Spore
@@ -4065,9 +4075,10 @@ Tail Whip
 255
 0 0 0 0 0 1 
 Level 53 28
-2
+3
 5 Quick Claw
 5 Nugget
+5 Amulet Coin
 50
 Pickup
 Technician
@@ -4160,8 +4171,9 @@ Tail Whip
 90
 0 0 0 0 0 2 
 None
-1
+2
 5 Quick Claw
+5 Amulet Coin
 50
 Limber
 Technician
@@ -5365,7 +5377,7 @@ Thunder Punch
 Tickle
 90
 0 2 0 0 0 0 
-Item 68  Focus Band
+Item 68 Focus Band
 1
 5 Focus Band
 75
@@ -5776,8 +5788,9 @@ Tickle
 190
 0 0 0 0 1 0 
 Level 73 30
-1
+2
 5 Poison Barb
+5 Binding Band
 50
 Clear Body
 Liquid Ooze
@@ -5866,8 +5879,9 @@ Tickle
 60
 0 0 0 0 2 0 
 None
-1
+2
 5 Poison Barb
+5 Binding Band
 50
 Clear Body
 Liquid Ooze
@@ -9654,7 +9668,8 @@ Sleep Talk
 225
 0 1 0 0 0 0 
 Level 119 33
-0
+1
+5 Mystic Water
 50
 Swift Swim
 Water Veil
@@ -9728,7 +9743,8 @@ Sleep Talk
 60
 0 2 0 0 0 0 
 None
-0
+1
+5 Mystic Water
 50
 Swift Swim
 Water Veil
@@ -10009,7 +10025,8 @@ Bug Flying
 50 Air Slash
 57 Swords Dance
 61 Feint
-31
+32
+Fly
 Toxic
 Hidden Power
 Sunny Day
@@ -11912,7 +11929,8 @@ Dragon None
 61 Dragon Dance
 67 Outrage
 75 Hyper Beam
-30
+31
+Fly
 Toxic
 Hail
 Hidden Power
@@ -14885,7 +14903,8 @@ Tickle
 45
 0 0 0 0 3 0 
 None
-0
+1
+5 Absorb Bulb
 50
 Chlorophyll
 Healer
@@ -16815,7 +16834,8 @@ Ground Flying
 45 Sky Uppercut
 50 Swords Dance
 55 Guillotine
-46
+47
+Fly
 Hone Claws
 Toxic
 Venoshock
@@ -17817,7 +17837,8 @@ Yawn
 60
 0 2 0 0 0 0 
 None
-0
+1
+5 Honey
 50
 Guts
 Quick Feet
@@ -17894,7 +17915,8 @@ Swallow
 190
 0 0 0 1 0 0 
 Level 219 38
-0
+1
+5 Heat Rock
 50
 Magma Armor
 Flame Body
@@ -17987,7 +18009,8 @@ Swallow
 75
 0 0 2 0 0 0 
 None
-0
+1
+5 Heat Rock
 50
 Magma Armor
 Flame Body
@@ -18245,8 +18268,9 @@ Water Pulse
 60
 0 0 1 0 1 0 
 None
-1
+2
 5 Hard Stone
+1 Luminous Moss
 25
 Hustle
 Natural Cure
@@ -18639,8 +18663,9 @@ Whirlwind
 25
 0 0 2 0 0 0 
 None
-1
+2
 5 Sharp Beak
+5 Metal Coat
 50
 Keen Eye
 Sturdy
@@ -21623,8 +21648,10 @@ Trick
 255
 0 0 0 0 0 1 
 Level 264 20
-1
+3
 5 Oran Berry
+10 Potion
+5 Revive
 50
 Pickup
 Gluttony
@@ -21711,9 +21738,11 @@ Trick
 90
 0 0 0 0 0 2 
 None
-2
+4
 5 Sitrus Berry
 50 Oran Berry
+10 Potion
+5 Max Revive
 50
 Pickup
 Gluttony
@@ -21741,7 +21770,9 @@ Bug None
 Multi 2
 Gender Female Level 266 7
 Gender Male Level 268 7
-0
+2
+10 Pecha Berry
+5 Bright Powder
 50
 Shield Dust
 Run Away
@@ -22000,7 +22031,8 @@ Water Gun
 255
 0 0 0 0 1 0 
 Level 271 14
-0
+1
+5 Mental Herb
 50
 Swift Swim
 Rain Dish
@@ -22081,7 +22113,8 @@ Water Gun
 120
 0 0 0 0 2 0 
 Item 272  Water Stone
-0
+1
+5 Mental Herb
 50
 Swift Swim
 Rain Dish
@@ -22156,7 +22189,8 @@ Water Gun
 45
 0 0 0 0 3 0 
 None
-0
+1
+5 Mental Herb
 50
 Swift Swim
 Rain Dish
@@ -22224,7 +22258,8 @@ Worry Seed
 255
 0 0 1 0 0 0 
 Level 274 14
-0
+1
+5 Power Herb
 50
 Chlorophyll
 Early Bird
@@ -22313,7 +22348,8 @@ Worry Seed
 120
 0 2 0 0 0 0 
 Item 275  Leaf Stone
-0
+1
+5 Power Herb
 50
 Chlorophyll
 Early Bird
@@ -22401,7 +22437,8 @@ Worry Seed
 45
 0 3 0 0 0 0 
 None
-0
+1
+5 Power Herb
 50
 Chlorophyll
 Early Bird
@@ -22617,7 +22654,13 @@ Water Sport
 190
 0 0 0 0 0 1 
 Level 279 25
-0
+6
+1 Health Wing
+1 Muscle Wing
+1 Resist Wing
+1 Genius Wing
+1 Clever Wing
+1 Swift Wing
 50
 Keen Eye
 Rain Dish
@@ -22703,7 +22746,14 @@ Water Sport
 45
 0 0 2 0 0 0 
 None
-0
+7
+2 Health Wing
+2 Muscle Wing
+2 Resist Wing
+2 Genius Wing
+2 Clever Wing
+2 Swift Wing
+5 Lucky Egg
 50
 Keen Eye
 Rain Dish
@@ -23050,7 +23100,8 @@ Signal Beam
 200
 0 0 0 0 0 1 
 Level 284 22
-0
+1
+5 Honey
 50
 Swift Swim
 Rain Dish
@@ -23202,8 +23253,10 @@ Worry Seed
 255
 1 0 0 0 0 0 
 Level 286 23
-1
+3
 5 Kebia Berry
+10 Tiny Mushroom
+5 Big Mushroom
 50
 Effect Spore
 Poison Heal
@@ -23288,8 +23341,10 @@ Worry Seed
 90
 0 2 0 0 0 0 
 None
-1
+3
 5 Kebia Berry
+10 Tiny Mushroom
+5 Big Mushroom
 50
 Effect Spore
 Poison Heal
@@ -23620,7 +23675,8 @@ Silver Wind
 255
 0 0 1 0 0 0 
 Level 291 20
-0
+1
+5 Soft Sand
 50
 Compoundeyes
 Run Away
@@ -24113,7 +24169,8 @@ Wake-Up Slap
 180
 1 0 0 0 0 0 
 Level 297 24
-0
+1
+5 Black Belt
 75
 Thick Fat
 Guts
@@ -24203,8 +24260,9 @@ Wake-Up Slap
 200
 2 0 0 0 0 0 
 None
-1
+2
 5 King's Rock
+5 Black Belt
 75
 Thick Fat
 Guts
@@ -24612,7 +24670,8 @@ Trick
 45
 0 1 1 0 0 0 
 None
-0
+1
+5 Wide Lens
 50
 Keen Eye
 Stall
@@ -24713,8 +24772,9 @@ Tickle
 45
 0 1 1 0 0 0 
 None
-1
+2
 5 Occa Berry
+5 Iron Ball
 50
 Hyper Cutter
 Intimidate
@@ -25405,8 +25465,10 @@ Substitute
 Wild Charge
 Secret Power
 Confide
-5
+7
+Charm
 Discharge
+Fake Tears
 Lucky Chant
 Sing
 Sweet Kiss
@@ -25414,7 +25476,8 @@ Wish
 200
 0 0 0 0 0 1 
 None
-0
+1
+5 Cell Battery
 50
 Static
 Lightningrod
@@ -25478,8 +25541,10 @@ Substitute
 Wild Charge
 Secret Power
 Confide
-5
+7
+Charm
 Discharge
+Fake Tears
 Lucky Chant
 Sing
 Sweet Kiss
@@ -25487,7 +25552,8 @@ Wish
 200
 0 0 0 0 0 1 
 None
-0
+1
+5 Cell Battery
 50
 Static
 Volt Absorb
@@ -25565,7 +25631,8 @@ Trick
 150
 0 0 0 0 0 1 
 None
-0
+1
+5 Bright Powder
 100
 Prankster
 Swarm
@@ -25644,7 +25711,8 @@ Silver Wind
 150
 0 0 0 0 0 1 
 None
-0
+1
+5 Bright Powder
 0
 Oblivious
 Tinted Lens
@@ -26472,7 +26540,8 @@ Yawn
 90
 0 0 2 0 0 0 
 None
-0
+1
+5 Heat Rock
 50
 White Smoke
 Shell Armor
@@ -27516,8 +27585,9 @@ Wring Out
 90
 0 1 0 1 0 0 
 None
-1
-100 Persim Berry
+2
+95 Persim Berry
+5 Shed Shell
 50
 Shed Skin
 Infiltrator
@@ -27598,9 +27668,10 @@ Confide
 45
 0 0 0 2 0 0 
 None
-2
+3
 5 Moon Stone
 1 Comet Shard
+5 Stardust
 -1
 Levitate
 None
@@ -27684,9 +27755,10 @@ Confide
 45
 0 2 0 0 0 0 
 None
-2
+3
 5 Sun Stone
 1 Comet Shard
+5 Stardust
 -1
 Levitate
 None
@@ -28105,7 +28177,8 @@ Confide
 255
 0 0 0 0 1 0 
 Level 344 36
-0
+1
+5 Light Clay
 -1
 Levitate
 None
@@ -28193,7 +28266,8 @@ Strength
 90
 0 0 0 0 2 0 
 None
-0
+1
+5 Light Clay
 -1
 Levitate
 None
@@ -29100,7 +29174,8 @@ Dusclops
 159
 Fast
 Ghost None
-24
+25
+0 Phantom Force
 0 Future Sight
 0 Fire Punch
 0 Ice Punch
@@ -29356,8 +29431,9 @@ Wish
 45
 0 0 0 1 1 0 
 None
-1
+2
 5 Colbur Berry
+5 Cleanse Tag
 50
 Levitate
 None
@@ -29470,7 +29546,8 @@ Zen Headbutt
 30
 0 2 0 0 0 0 
 None
-0
+1
+5 Life Orb
 50
 Pressure
 Super Luck
@@ -29568,9 +29645,10 @@ Weather Ball
 1 0 0 0 0 0 
 Multi 2
 Level 362 42
-Gender Female Item 478  Dawn Stone
-1
+Gender Female Item 478 Dawn Stone
+2
 5 Babiri Berry
+5 Snowball
 50
 Inner Focus
 Ice Body
@@ -29652,9 +29730,10 @@ Weather Ball
 75
 2 0 0 0 0 0 
 None
-2
+3
 5 Babiri Berry
 5 NeverMeltIce
+5 Snowball
 50
 Inner Focus
 Ice Body
@@ -29957,8 +30036,9 @@ Water Pulse
 Multi 2
 Item 367  Deep Sea Tooth
 Item 368  Deep Sea Scale
-1
+2
 5 Big Pearl
+5 Pearl
 50
 Shell Armor
 Rattled
@@ -34512,7 +34592,8 @@ Weather Ball
 125
 1 0 0 0 0 0 
 Level 426 28
-0
+1
+5 Air Balloon
 50
 Aftermath
 Unburden
@@ -38481,7 +38562,8 @@ Ground Flying
 45 Sky Uppercut
 50 Swords Dance
 55 Guillotine
-48
+49
+Fly
 Hone Claws
 Toxic
 Venoshock
@@ -38927,7 +39009,8 @@ Dusknoir
 236
 Fast
 Ghost None
-24
+25
+0 Phantom Force
 0 Future Sight
 0 Fire Punch
 0 Ice Punch
@@ -39100,8 +39183,9 @@ Weather Ball
 75
 0 0 0 0 0 2 
 None
-1
+2
 5 Babiri Berry
+5 Snowball
 0
 Snow Cloak
 Cursed Body
@@ -43486,7 +43570,7 @@ Reversal
 Smelling Salts
 90
 0 2 0 0 0 0 
-Item 534  Black Belt
+Item 534 Black Belt
 0
 75
 Guts
@@ -56806,7 +56890,25 @@ Confide
 30
 0 0 1 0 1 0 
 None
-0
+18
+1 Fire Gem
+1 Fighting Gem
+1 Ground Gem
+1 Rock Gem
+1 Electric Gem
+1 Grass Gem
+1 Bug Gem
+1 Poison Gem
+1 Water Gem
+1 Ice Gem
+1 Psychic Gem
+1 Ghost Gem
+1 Dark Gem
+1 Dragon Gem
+1 Fairy Gem
+1 Steel Gem
+1 Normal Gem
+1 Flying Gem
 -1
 Clear Body
 Sturdy

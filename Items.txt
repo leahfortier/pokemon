@@ -1066,6 +1066,11 @@ Normal Gem:
 	Desc: A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.
 	GemType: Normal
 *
+Fairy Gem:
+	Int: GemItem
+	Desc: A gem with an ordinary essence. When held, it strengthens the power of a Fairy-type move only once.
+	GemType: Fairy
+*
 Leftovers:
 	Int: HoldItem, EndTurnEffect
 	Cat: Misc

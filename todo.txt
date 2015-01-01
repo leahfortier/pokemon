@@ -71,3 +71,5 @@ Pokemon that go out of bounds:
 	Aurorus
 	
 	We need to do whatever thing we did for levitating Pokemon before so it doesn't look like they're sitting on the ground... Wait actually we never did that -- that needs to happends srsly
+	
+Change Machoke's method of evolution to a belt

@@ -85,6 +85,10 @@ public class StuffGen
 		}
 		
 		writeNamesies();
+		
+//		pokemonInfoStuff();
+		
+//		compareMoves();
 	}
 	
 	private static void createNamesies(String name, String className, NamesiesType superClass)
@@ -1505,16 +1509,109 @@ public class StuffGen
 		}
 	}
 	
+	private static void compareMoves()
+	{
+		Scanner oldFile = openFile("oldMoves.txt");
+		Scanner newFile = openFile("newMoves.txt");
+		
+		PrintStream out = openOutputFile("out.txt");
+		
+		int pokemon = 0;
+		
+		while (oldFile.hasNext())
+		{
+			pokemon++;
+			
+			HashSet<String> oldMoves = new HashSet<String>();
+			HashSet<String> newMoves = new HashSet<String>();
+
+			HashSet<String> removed = new HashSet<String>();
+			HashSet<String> added = new HashSet<String>();
+			
+			int numOld = oldFile.nextInt();
+			int numNew = newFile.nextInt();
+			
+			oldFile.nextLine();
+			newFile.nextLine();
+			
+			for (int i = 0; i < numOld; i++)
+			{
+				oldFile.nextInt();
+				String attack = oldFile.nextLine().trim();
+				
+				oldMoves.add(attack);
+				removed.add(attack);
+			}
+			
+			for (int i = 0; i < numNew; i++)
+			{
+				newFile.nextInt();
+				String attack = newFile.nextLine().trim();
+				
+				newMoves.add(attack);
+				added.add(attack);
+			}
+			
+			for (String attack : newMoves)
+			{
+				removed.remove(attack);
+			}
+			
+			for (String attack : oldMoves)
+			{
+				added.remove(attack);
+			}
+			
+			if (removed.size() > 0 || added.size() > 0)
+			{
+				out.println(PokemonInfo.getPokemonInfo(pokemon).getName() + ":");
+				
+				if (removed.size() > 0)
+				{
+					out.println("\tRemoved:");
+					for (String attack : removed)
+					{
+						out.println("\t\t" + attack);
+					}					
+				}
+				
+				if (added.size() > 0)
+				{
+					out.println("\tAdded:");
+					for (String attack : added)
+					{
+						out.println("\t\t" + attack);
+					}					
+				}				
+				
+				out.println();
+			}
+		}
+	}
+	
+	private static PrintStream openOutputFile(String fileName)
+	{
+		PrintStream out = null;
+		try 
+		{
+			out = new PrintStream(fileName);
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return out;
+	}
+	
 	// Used for editing pokemoninfo.txt
 	private static void pokemonInfoStuff()
 	{
 		Scanner in = openFile("pokemoninfo.txt");
-		PrintStream out = null;
-		try {
-			out = new PrintStream("out.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+//		Scanner attacks = openFile("newMoves.txt");
+		
+		PrintStream out = openOutputFile("out.txt");
+		PrintStream temp = openOutputFile("oldMoves.txt");
 
 		while (in.hasNext())
 		{
@@ -1525,9 +1622,11 @@ public class StuffGen
 			out.println(in.nextLine()); // Growth Rate
 			out.println(in.nextLine()); // Type1 Type2			
 			readMoves(in, out); // Level Up Moves
+			readMoves(in, out); // TM Moves
+			readMoves(in, temp); // Egg Moves
 			out.println(in.nextLine()); // Catch Rate
 			out.println(in.nextLine()); // EVs
-			readEvolution(in, out); // Evolution  
+			readEvolution(in, out); // Evolution
 			readHoldItems(in, out); // Wild Items
 			out.println(in.nextLine()); // Male Ratio
 			out.println(in.nextLine()); // Ability 1
@@ -1539,6 +1638,7 @@ public class StuffGen
 			out.println(in.nextLine()); // Egg Group 2
 			
 			out.println(in.nextLine()); // New Line
+			temp.println();
 		}
 	}
 	
@@ -1547,7 +1647,11 @@ public class StuffGen
 		int numMoves = in.nextInt();
 		out.println(numMoves); // Number of Moves 
 		in.nextLine();
-		for (int i = 0; i < numMoves; i++) out.println(in.nextLine()); // Each move and level
+		
+		for (int i = 0; i < numMoves; i++) 
+		{
+			out.println(in.nextLine()); // Each move and level
+		}
 	}
 	
 	private static void readEvolution(Scanner in, PrintStream out)
@@ -1557,10 +1661,15 @@ public class StuffGen
 		{
 			int x = in.nextInt();
 			out.println(type + " " + x);
-			for (int i = 0; i < x; i++) readEvolution(in, out);
+			for (int i = 0; i < x; i++) 
+			{
+				readEvolution(in, out);
+			}
+			
 			return;
 		}
-		out.println(type + " " + in.nextLine());
+		
+		out.println(type + in.nextLine());
 	}
 	
 	private static void readHoldItems(Scanner in, PrintStream out)
