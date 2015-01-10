@@ -789,6 +789,7 @@ public abstract class Attack implements Serializable
 		map.put("Cross Chop", new CrossChop());
 		map.put("Punishment", new Punishment());
 		map.put("Close Combat", new CloseCombat());
+		map.put("Dragon Ascent", new DragonAscent());
 		map.put("Flame Wheel", new FlameWheel());
 		map.put("Reversal", new Reversal());
 		map.put("Extreme Speed", new ExtremeSpeed());
@@ -4424,7 +4425,7 @@ public abstract class Attack implements Serializable
 
 		public WillOWisp()
 		{
-			super(Namesies.WILL_OWISP_ATTACK, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", 15, Type.FIRE, Category.STATUS);
+			super(Namesies.WILL_O_WISP_ATTACK, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", 15, Type.FIRE, Category.STATUS);
 			super.accuracy = 85;
 			super.status = StatusCondition.BURNED;
 		}
@@ -4776,7 +4777,7 @@ public abstract class Attack implements Serializable
 
 		public XScissor()
 		{
-			super(Namesies.XSCISSOR_ATTACK, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", 15, Type.BUG, Category.PHYSICAL);
+			super(Namesies.X_SCISSOR_ATTACK, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", 15, Type.BUG, Category.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5506,6 +5507,22 @@ public abstract class Attack implements Serializable
 		public CloseCombat()
 		{
 			super(Namesies.CLOSE_COMBAT_ATTACK, "The user fights the target up close without guarding itself. It also cuts the user's Defense and Sp. Def.", 5, Type.FIGHTING, Category.PHYSICAL);
+			super.power = 120;
+			super.accuracy = 100;
+			super.selfTarget = true;
+			super.statChanges[Stat.DEFENSE.index()] = -1;
+			super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	private static class DragonAscent extends Attack 
+	{
+		private static final long serialVersionUID = 1L;
+
+		public DragonAscent()
+		{
+			super(Namesies.DRAGON_ASCENT_ATTACK, "After soaring upward, the user attacks its target by dropping out of the sky at high speeds, although it lowers its own Defense and Sp. Def in the process.", 5, Type.FLYING, Category.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
 			super.selfTarget = true;
@@ -11758,7 +11775,7 @@ public abstract class Attack implements Serializable
 
 		public UTurn()
 		{
-			super(Namesies.UTURN_ATTACK, "After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.", 20, Type.BUG, Category.PHYSICAL);
+			super(Namesies.U_TURN_ATTACK, "After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.", 20, Type.BUG, Category.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -12291,7 +12308,7 @@ public abstract class Attack implements Serializable
 
 		public VCreate()
 		{
-			super(Namesies.VCREATE_ATTACK, "With a hot flame on its forehead, the user hurls itself at its target. It lowers the user's Defense, Sp. Def, and Speed stats.", 5, Type.FIRE, Category.PHYSICAL);
+			super(Namesies.V_CREATE_ATTACK, "With a hot flame on its forehead, the user hurls itself at its target. It lowers the user's Defense, Sp. Def, and Speed stats.", 5, Type.FIRE, Category.PHYSICAL);
 			super.power = 180;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.METRONOMELESS);

@@ -14,12 +14,12 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
+import battle.Attack;
 import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;
 import main.StuffGen;
 import main.Type;
-import battle.Attack;
 
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 {
@@ -40,8 +40,9 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	private GrowthRate growthRate;
 	private Type[] type;
 	private TreeMap<Integer, List<Namesies>> levelUpMoves;
-	private HashSet<Namesies> tmMoves;
+	private HashSet<Namesies> tmMoves; // TODO: These three can probably be just put into one list -- I don't think there is a need to separate them (but investigate first before changing)
 	private HashSet<Namesies> eggMoves;
+	private HashSet<Namesies> tutorMoves;
 	private int catchRate;
 	private int[] givenEVs;
 	private Evolution evolution;
@@ -57,9 +58,9 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 	
 	public PokemonInfo(int number, String name, int[] baseStats, int baseExp, String growthRate, 
 			String type1, String type2, TreeMap<Integer, List<Namesies>> levelUpMoves, HashSet<Namesies> tmMoves, 
-			HashSet<Namesies> eggMoves, int catchRate, int[] givenEVs, Evolution evolution, List<WildHoldItem> wildHoldItems,  
-			int genderRatio, String ability1, String ability2, String classification, int height, double weight, 
-			String flavorText, int eggSteps, String eggGroup1, String eggGroup2)
+			HashSet<Namesies> eggMoves, HashSet<Namesies> tutorMoves, int catchRate, int[] givenEVs, Evolution evolution, 
+			List<WildHoldItem> wildHoldItems, int genderRatio, String ability1, String ability2, String classification, 
+			int height, double weight, String flavorText, int eggSteps, String eggGroup1, String eggGroup2)
 	{	
 		this.number = number;
 		this.name = name;
@@ -71,6 +72,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.levelUpMoves = levelUpMoves;
 		this.tmMoves = tmMoves;
 		this.eggMoves = eggMoves;
+		this.tutorMoves = tutorMoves;
 		this.catchRate = catchRate;
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
@@ -338,11 +340,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			in.nextLine();
 			
 			info[num] = new PokemonInfo(num, in.nextLine().trim(), sixIntArray(in),
-					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.next(), in.next(), 
-					createLevelUpMoves(in), createMovesHashSet(in), createMovesHashSet(in), in.nextInt(), 
-					sixIntArray(in), Evolution.readEvolution(in), WildHoldItem.createList(in), in.nextInt(), 
-					in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim(), in.nextLine().trim(), 
-					in.nextInt(), in.nextDouble(), in.nextLine().trim(), in.nextInt(), 
+					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.next(), in.next(),
+					createLevelUpMoves(in), createMovesHashSet(in), createMovesHashSet(in), createMovesHashSet(in),
+					in.nextInt(), sixIntArray(in), Evolution.readEvolution(in), WildHoldItem.createList(in),
+					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim(), 
+					in.nextLine().trim(), in.nextInt(), in.nextDouble(), in.nextLine().trim(), in.nextInt(), 
 					in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim());
 			
 			map.put(info[num].getName(), info[num]);
@@ -376,8 +378,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			}
 			
 			String attackName = in.nextLine().trim();
-//			Namesies namesies = Namesies.getValueOf(attackName, NamesiesType.ATTACK);
-			Namesies namesies = Attack.getAttackFromName(attackName).namesies();
+			Namesies namesies = Namesies.getValueOf(attackName, NamesiesType.ATTACK);
 			
 			levelUpMoves.get(level).add(namesies);
 		}
@@ -394,9 +395,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		for (int i = 0; i < numMoves; i++)
 		{
 			String attackName = in.nextLine().trim();
-//			Namesies namesies = Namesies.getValueOf(attackName, NamesiesType.ATTACK);
-			Namesies namesies = Attack.getAttackFromName(attackName).namesies();
 			
+			Namesies namesies = Namesies.getValueOf(attackName, NamesiesType.ATTACK);
 			tmMoves.add(namesies);
 		}
 		

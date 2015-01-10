@@ -16077,7 +16077,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public WillOWispTM()
 		{
-			super(Namesies.WILL_OWISP_TM_ITEM, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", BagCategory.TM, 2001);
+			super(Namesies.WILL_O_WISP_TM_ITEM, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", BagCategory.TM, 2001);
 		}
 
 		public Attack getAttack()
@@ -17297,7 +17297,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public XScissorTM()
 		{
-			super(Namesies.XSCISSOR_TM_ITEM, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", BagCategory.TM, 2011);
+			super(Namesies.X_SCISSOR_TM_ITEM, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", BagCategory.TM, 2011);
 		}
 
 		public Attack getAttack()
@@ -17785,7 +17785,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public UTurnTM()
 		{
-			super(Namesies.UTURN_TM_ITEM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM, 2011);
+			super(Namesies.U_TURN_TM_ITEM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM, 2011);
 		}
 
 		public Attack getAttack()

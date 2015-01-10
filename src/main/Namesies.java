@@ -174,7 +174,7 @@ public enum Namesies
 	MIMIC_ATTACK("Mimic"),
 	METEOR_MASH_ATTACK("Meteor Mash"),
 	IMPRISON_ATTACK("Imprison"),
-	WILL_OWISP_ATTACK("Will-O-Wisp"),
+	WILL_O_WISP_ATTACK("Will-O-Wisp"),
 	PAYBACK_ATTACK("Payback"),
 	EXTRASENSORY_ATTACK("Extrasensory"),
 	FIRE_BLAST_ATTACK("Fire Blast"),
@@ -194,7 +194,7 @@ public enum Namesies
 	AROMATHERAPY_ATTACK("Aromatherapy"),
 	SPORE_ATTACK("Spore"),
 	CROSS_POISON_ATTACK("Cross Poison"),
-	XSCISSOR_ATTACK("X-Scissor"),
+	X_SCISSOR_ATTACK("X-Scissor"),
 	FORESIGHT_ATTACK("Foresight"),
 	ODOR_SLEUTH_ATTACK("Odor Sleuth"),
 	MIRACLE_EYE_ATTACK("Miracle Eye"),
@@ -231,6 +231,7 @@ public enum Namesies
 	CROSS_CHOP_ATTACK("Cross Chop"),
 	PUNISHMENT_ATTACK("Punishment"),
 	CLOSE_COMBAT_ATTACK("Close Combat"),
+	DRAGON_ASCENT_ATTACK("Dragon Ascent"),
 	FLAME_WHEEL_ATTACK("Flame Wheel"),
 	REVERSAL_ATTACK("Reversal"),
 	EXTREME_SPEED_ATTACK("Extreme Speed"),
@@ -532,7 +533,7 @@ public enum Namesies
 	CAMOUFLAGE_ATTACK("Camouflage"),
 	RECYCLE_ATTACK("Recycle"),
 	PARTING_SHOT_ATTACK("Parting Shot"),
-	UTURN_ATTACK("U-turn"),
+	U_TURN_ATTACK("U-turn"),
 	BATON_PASS_ATTACK("Baton Pass"),
 	PERISH_SONG_ATTACK("Perish Song"),
 	DRAGON_TAIL_ATTACK("Dragon Tail"),
@@ -548,7 +549,7 @@ public enum Namesies
 	RELIC_SONG_ATTACK("Relic Song"),
 	SNARL_ATTACK("Snarl"),
 	ICE_BURN_ATTACK("Ice Burn"),
-	VCREATE_ATTACK("V-create"),
+	V_CREATE_ATTACK("V-create"),
 	SURF_ATTACK("Surf"),
 	VOLT_TACKLE_ATTACK("Volt Tackle"),
 	FOCUS_BLAST_ATTACK("Focus Blast"),
@@ -1238,7 +1239,7 @@ public enum Namesies
 	CHARGE_BEAM_TM_ITEM("Charge Beam TM"),
 	SKY_DROP_TM_ITEM("Sky Drop TM"),
 	INCINERATE_TM_ITEM("Incinerate TM"),
-	WILL_OWISP_TM_ITEM("Will-O-Wisp TM"),
+	WILL_O_WISP_TM_ITEM("Will-O-Wisp TM"),
 	ACROBATICS_TM_ITEM("Acrobatics TM"),
 	EMBARGO_TM_ITEM("Embargo TM"),
 	EXPLOSION_TM_ITEM("Explosion TM"),
@@ -1258,7 +1259,7 @@ public enum Namesies
 	BULLDOZE_TM_ITEM("Bulldoze TM"),
 	FROST_BREATH_TM_ITEM("Frost Breath TM"),
 	ROCK_SLIDE_TM_ITEM("Rock Slide TM"),
-	XSCISSOR_TM_ITEM("X-Scissor TM"),
+	X_SCISSOR_TM_ITEM("X-Scissor TM"),
 	DRAGON_TAIL_TM_ITEM("Dragon Tail TM"),
 	INFESTATION_TM_ITEM("Infestation TM"),
 	POISON_JAB_TM_ITEM("Poison Jab TM"),
@@ -1266,7 +1267,7 @@ public enum Namesies
 	GRASS_KNOT_TM_ITEM("Grass Knot TM"),
 	SWAGGER_TM_ITEM("Swagger TM"),
 	SLEEP_TALK_TM_ITEM("Sleep Talk TM"),
-	UTURN_TM_ITEM("U-turn TM"),
+	U_TURN_TM_ITEM("U-turn TM"),
 	SUBSTITUTE_TM_ITEM("Substitute TM"),
 	FLASH_CANNON_TM_ITEM("Flash Cannon TM"),
 	TRICK_ROOM_TM_ITEM("Trick Room TM"),
@@ -2017,31 +2018,31 @@ public enum Namesies
 		return this.name;
 	}
 	
-	public static Namesies getValueOf(String className, NamesiesType superClass)
+	public static Namesies getValueOf(String name, NamesiesType superClass)
 	{
-		return Namesies.valueOf(Namesies.getNamesies(className, superClass));
+		return Namesies.valueOf(Namesies.getNamesies(name, superClass));
 	}
 	
-	public static String getNamesies(String className, NamesiesType superClass)
+	public static String getNamesies(String name, NamesiesType superClass)
 	{
-		className = className.replace(" ", "");
+		name = name.replace(" ", "").replace("u00e9", "e");
 		
-		char[] classChar = (className + "_" + superClass).toCharArray();
-		String enumName = classChar[0] + "";
+		char[] nameChar = (name + "_" + superClass).toCharArray();
+		String enumName = nameChar[0] + "";
 		
-		for (int i = 1; i < classChar.length; i++)
+		for (int i = 1; i < nameChar.length; i++)
 		{
-			if (isUpper(classChar[i]) && !isUpper(classChar[i - 1]) && classChar[i - 1] != '_')
+			if (((isUpper(nameChar[i]) && !isUpper(nameChar[i - 1])) || nameChar[i] == '-') && nameChar[i - 1] != '_' && enumName.charAt(enumName.length() - 1) != '_')
 			{
 				enumName += "_";
 			}
 			
-			if (isSpecial(classChar[i]))
+			if (isSpecial(nameChar[i]))
 			{
 				continue;
 			}
 			
-			enumName += classChar[i];
+			enumName += nameChar[i];
 		}
 		
 		return enumName.toUpperCase();

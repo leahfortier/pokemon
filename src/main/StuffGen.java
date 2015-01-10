@@ -91,9 +91,9 @@ public class StuffGen
 //		compareMoves();
 	}
 	
-	private static void createNamesies(String name, String className, NamesiesType superClass)
+	private static void createNamesies(String name, NamesiesType superClass)
 	{
-		String enumName = Namesies.getNamesies(className, superClass);
+		String enumName = Namesies.getNamesies(name, superClass);
 		namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
 		firstNamesies = false;
 	}
@@ -122,7 +122,7 @@ public class StuffGen
 			
 			if (canPrint)
 			{
-				out.append(line + "\n");	
+				out.append(line + "\n");
 			}
 			
 			if (line.contains("// EVERYTHING BELOW IS GENERATED ###"))
@@ -136,7 +136,7 @@ public class StuffGen
 				for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
 				{
 					PokemonInfo info = PokemonInfo.getPokemonInfo(i);
-					createNamesies(info.getName(), info.getName(), NamesiesType.POKEMON);
+					createNamesies(info.getName(), NamesiesType.POKEMON);
 				}
 				
 				out.append(namesies);
@@ -183,7 +183,7 @@ public class StuffGen
 		return className;
 	}
 	
-	private static HashMap<String, String> readFields(Scanner in, Generator gen, String className, int index)
+	private static HashMap<String, String> readFields(Scanner in, Generator gen, String name, String className, int index)
 	{
 		HashMap<String, String> fields = new HashMap<>();
 		
@@ -209,7 +209,7 @@ public class StuffGen
 //			System.out.println(className + " " + key + " " + value);
 		}
 		
-		fields.put("Namesies", className);
+		fields.put("Namesies", name);
 		fields.put("ClassName", className);
 		
 		fields.put("Index", index + "");
@@ -259,7 +259,7 @@ public class StuffGen
 	
 	private static void addClass(Generator gen, StringBuilder out, StringBuilder classes, String name, String className, HashMap<String, String> fields)
 	{
-		createNamesies(name, className, gen.appendsies);
+		createNamesies(name, gen.appendsies);
 		
 		// Mappity map
 		if (gen.mappity)
@@ -325,7 +325,7 @@ public class StuffGen
 			String className = writeClassName(name);
 			
 			// Read in all of the fields
-			HashMap<String, String> fields = readFields(in, gen, className, index);
+			HashMap<String, String> fields = readFields(in, gen, name, className, index);
 			
 			addClass(gen, out, classes, name, className, fields);
 			
@@ -428,14 +428,14 @@ public class StuffGen
 			String attackName = in.nextLine().trim();
 			String className = writeClassName(attackName);
 			
-			Attack attack = Attack.getAttack(Namesies.getValueOf(className, NamesiesType.ATTACK));
+			Attack attack = Attack.getAttack(Namesies.getValueOf(attackName, NamesiesType.ATTACK));
 			
 			String itemName = attackName + " TM";
 			className += "TM";
 			
 			HashMap<String, String> fields = new HashMap<>();
 			fields.put("ClassName", className);
-			fields.put("Namesies", className);
+			fields.put("Namesies", attackName + "_TM");
 			fields.put("Index", TM_BASE_INDEX + attack.getActualType().getIndex() + "");
 			fields.put("Desc", attack.getDescription());
 			fields.put("TM", attackName);
@@ -1608,10 +1608,10 @@ public class StuffGen
 	private static void pokemonInfoStuff()
 	{
 		Scanner in = openFile("pokemoninfo.txt");
-//		Scanner attacks = openFile("newMoves.txt");
+		Scanner attacks = openFile("newMoves.txt");
 		
 		PrintStream out = openOutputFile("out.txt");
-		PrintStream temp = openOutputFile("oldMoves.txt");
+//		PrintStream temp = openOutputFile("oldMoves.txt");
 
 		while (in.hasNext())
 		{
@@ -1623,7 +1623,8 @@ public class StuffGen
 			out.println(in.nextLine()); // Type1 Type2			
 			readMoves(in, out); // Level Up Moves
 			readMoves(in, out); // TM Moves
-			readMoves(in, temp); // Egg Moves
+			readMoves(in, out); // Egg Moves
+			readMoves(attacks, out); // Move Tutor Moves
 			out.println(in.nextLine()); // Catch Rate
 			out.println(in.nextLine()); // EVs
 			readEvolution(in, out); // Evolution
@@ -1638,7 +1639,7 @@ public class StuffGen
 			out.println(in.nextLine()); // Egg Group 2
 			
 			out.println(in.nextLine()); // New Line
-			temp.println();
+			attacks.nextLine();
 		}
 	}
 	

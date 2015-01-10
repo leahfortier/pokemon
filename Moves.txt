@@ -2318,6 +2318,16 @@ Close Combat:
 	SelfTarget: True
 	StatChange: 2 Defense -1 Sp_defense -1
 *
+Dragon Ascent:
+	Desc: After soaring upward, the user attacks its target by dropping out of the sky at high speeds, although it lowers its own Defense and Sp. Def in the process.
+	PP: 5
+	Pow: 120
+	Acc: 100
+	Cat: Physical
+	Type: Flying
+	SelfTarget: True
+	StatChange: 2 Defense -1 Sp_Defense -1
+*
 Flame Wheel:
 	MoveType: Defrost
 	PP: 25

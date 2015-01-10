@@ -65,6 +65,14 @@ Petal Dance
 Power Whip
 Skull Bash
 Sludge
+7
+Bind
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 45
 0 0 0 1 0 0 
 Level 2 16
@@ -147,6 +155,14 @@ Petal Dance
 Power Whip
 Skull Bash
 Sludge
+7
+Bind
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 45
 0 0 0 1 1 0 
 Level 3 32
@@ -237,6 +253,16 @@ Petal Dance
 Power Whip
 Skull Bash
 Sludge
+9
+Bind
+Block
+Giga Drain
+Knock Off
+Outrage
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 45
 0 0 0 2 1 0 
 None
@@ -321,6 +347,14 @@ Flare Blitz
 Focus Punch
 Metal Claw
 Outrage
+7
+Dragon Pulse
+Fire Punch
+Focus Punch
+Heat Wave
+Iron Tail
+Snore
+Thunder Punch
 45
 0 0 0 0 0 1 
 Level 5 16
@@ -406,6 +440,14 @@ Flare Blitz
 Focus Punch
 Metal Claw
 Outrage
+7
+Dragon Pulse
+Fire Punch
+Focus Punch
+Heat Wave
+Iron Tail
+Snore
+Thunder Punch
 45
 0 0 0 1 0 1 
 Level 6 36
@@ -512,6 +554,16 @@ Flare Blitz
 Focus Punch
 Metal Claw
 Outrage
+9
+Dragon Pulse
+Fire Punch
+Focus Punch
+Heat Wave
+Iron Tail
+Outrage
+Snore
+Tailwind
+Thunder Punch
 45
 0 0 0 3 0 0 
 None
@@ -594,6 +646,17 @@ Muddy Water
 Refresh
 Water Spout
 Yawn
+10
+Aqua Tail
+Dragon Pulse
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Tail
+Snore
+Water Pulse
+Zen Headbutt
 45
 0 0 1 0 0 0 
 Level 8 16
@@ -679,6 +742,17 @@ Muddy Water
 Refresh
 Water Spout
 Yawn
+10
+Aqua Tail
+Dragon Pulse
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Tail
+Snore
+Water Pulse
+Zen Headbutt
 45
 0 0 1 0 1 0 
 Level 9 36
@@ -776,6 +850,19 @@ Muddy Water
 Refresh
 Water Spout
 Yawn
+12
+Aqua Tail
+Dragon Pulse
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Tail
+Outrage
+Signal Beam
+Snore
+Water Pulse
+Zen Headbutt
 45
 0 0 0 0 3 0 
 None
@@ -802,6 +889,10 @@ Bug None
 15 Bug Bite
 0
 0
+3
+Bug Bite
+Electroweb
+Snore
 255
 1 0 0 0 0 0 
 Level 11 7
@@ -826,6 +917,10 @@ Bug None
 7 Harden
 0
 0
+3
+Bug Bite
+Electroweb
+Iron Defense
 120
 0 0 2 0 0 0 
 Level 12 10
@@ -897,6 +992,14 @@ Substitute
 Secret Power
 Confide
 0
+7
+Bug Bite
+Electroweb
+Giga Drain
+Signal Beam
+Skill Swap
+Snore
+Tailwind
 45
 0 0 0 2 1 0 
 None
@@ -923,6 +1026,9 @@ Bug Poison
 15 Bug Bite
 0
 0
+2
+Bug Bite
+Electroweb
 255
 0 0 0 0 0 1 
 Level 14 7
@@ -947,6 +1053,10 @@ Bug Poison
 7 Harden
 0
 0
+3
+Bug Bite
+Electroweb
+Iron Defense
 120
 0 0 2 0 0 0 
 Level 15 10
@@ -1017,6 +1127,15 @@ Secret Power
 Confide
 Cut
 0
+8
+Bug Bite
+Drill Run
+Electroweb
+Endeavor
+Giga Drain
+Knock Off
+Snore
+Tailwind
 45
 0 2 0 0 1 0 
 None
@@ -1083,6 +1202,12 @@ Feint Attack
 Foresight
 Pursuit
 Steel Wing
+Uproar
+5
+Heat Wave
+Sky Attack
+Snore
+Tailwind
 Uproar
 255
 0 0 0 0 0 1 
@@ -1151,6 +1276,12 @@ Feint Attack
 Foresight
 Pursuit
 Steel Wing
+Uproar
+5
+Heat Wave
+Sky Attack
+Snore
+Tailwind
 Uproar
 120
 0 0 0 0 0 2 
@@ -1223,6 +1354,12 @@ Feint Attack
 Foresight
 Pursuit
 Steel Wing
+Uproar
+5
+Heat Wave
+Sky Attack
+Snore
+Tailwind
 Uproar
 45
 0 0 0 0 0 3 
@@ -1301,6 +1438,17 @@ Revenge
 Reversal
 Screech
 Uproar
+10
+Covet
+Endeavor
+Icy Wind
+Iron Tail
+Last Resort
+Shock Wave
+Snore
+Super Fang
+Uproar
+Zen Headbutt
 255
 0 0 0 0 0 1 
 Level 20 20
@@ -1388,6 +1536,17 @@ Revenge
 Reversal
 Screech
 Uproar
+10
+Covet
+Endeavor
+Icy Wind
+Iron Tail
+Last Resort
+Shock Wave
+Snore
+Super Fang
+Uproar
+Zen Headbutt
 127
 0 0 0 0 0 2 
 None
@@ -1458,6 +1617,13 @@ Steel Wing
 Tri Attack
 Uproar
 Whirlwind
+6
+Drill Run
+Heat Wave
+Sky Attack
+Snore
+Tailwind
+Uproar
 255
 0 0 0 0 0 1 
 Level 22 20
@@ -1532,6 +1698,13 @@ Steel Wing
 Tri Attack
 Uproar
 Whirlwind
+6
+Drill Run
+Heat Wave
+Sky Attack
+Snore
+Tailwind
+Uproar
 90
 0 0 0 0 0 2 
 None
@@ -1614,6 +1787,17 @@ Snatch
 Spite
 Sucker Punch
 Switcheroo
+10
+Aqua Tail
+Bind
+Gastro Acid
+Giga Drain
+Gunk Shot
+Iron Tail
+Seed Bomb
+Snatch
+Snore
+Spite
 255
 0 1 0 0 0 0 
 Level 24 22
@@ -1705,6 +1889,17 @@ Snatch
 Spite
 Sucker Punch
 Switcheroo
+10
+Aqua Tail
+Bind
+Gastro Acid
+Giga Drain
+Gunk Shot
+Iron Tail
+Seed Bomb
+Snatch
+Snore
+Spite
 90
 0 2 0 0 0 0 
 None
@@ -1792,6 +1987,17 @@ Thunder Punch
 Tickle
 Wish
 Volt Tackle
+10
+Covet
+Electroweb
+Focus Punch
+Iron Tail
+Knock Off
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
 190
 0 0 0 0 0 2 
 Item 26  Thunder Stone
@@ -1869,6 +2075,17 @@ Thunder Punch
 Tickle
 Wish
 Volt Tackle
+10
+Covet
+Electroweb
+Focus Punch
+Iron Tail
+Knock Off
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
 75
 0 0 0 0 0 3 
 None
@@ -1954,6 +2171,15 @@ Night Slash
 Rapid Spin
 Rock Climb
 Rototiller
+8
+Covet
+Earth Power
+Focus Punch
+Iron Tail
+Knock Off
+Snore
+Stealth Rock
+Super Fang
 255
 0 0 1 0 0 0 
 Level 28 22
@@ -2047,6 +2273,15 @@ Night Slash
 Rapid Spin
 Rock Climb
 Rototiller
+8
+Covet
+Earth Power
+Focus Punch
+Iron Tail
+Knock Off
+Snore
+Stealth Rock
+Super Fang
 90
 0 0 2 0 0 0 
 None
@@ -2130,6 +2365,12 @@ Skull Bash
 Supersonic
 Take Down
 Venom Drench
+5
+Iron Tail
+Shock Wave
+Snore
+Super Fang
+Water Pulse
 235
 1 0 0 0 0 0 
 Level 30 16
@@ -2210,6 +2451,12 @@ Skull Bash
 Supersonic
 Take Down
 Venom Drench
+5
+Iron Tail
+Shock Wave
+Snore
+Super Fang
+Water Pulse
 120
 2 0 0 0 0 0 
 Item 31  Moon Stone
@@ -2309,6 +2556,25 @@ Skull Bash
 Supersonic
 Take Down
 Venom Drench
+18
+Aqua Tail
+Dragon Pulse
+Drill Run
+Earth Power
+Fire Punch
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Stealth Rock
+Super Fang
+Superpower
+Thunder Punch
+Uproar
+Water Pulse
 45
 3 0 0 0 0 0 
 None
@@ -2388,6 +2654,13 @@ Sucker Punch
 Supersonic
 Take Down
 Venom Drench
+6
+Drill Run
+Iron Tail
+Shock Wave
+Snore
+Super Fang
+Water Pulse
 235
 0 1 0 0 0 0 
 Multi 2
@@ -2469,6 +2742,13 @@ Sucker Punch
 Supersonic
 Take Down
 Venom Drench
+6
+Drill Run
+Iron Tail
+Shock Wave
+Snore
+Super Fang
+Water Pulse
 120
 0 2 0 0 0 0 
 Item 34  Moon Stone
@@ -2567,6 +2847,25 @@ Sucker Punch
 Supersonic
 Take Down
 Venom Drench
+18
+Aqua Tail
+Dragon Pulse
+Drill Run
+Earth Power
+Fire Punch
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Stealth Rock
+Super Fang
+Superpower
+Thunder Punch
+Uproar
+Water Pulse
 45
 0 3 0 0 0 0 
 None
@@ -2672,6 +2971,34 @@ Splash
 Stored Power
 Tickle
 Wish
+27
+Bounce
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Gravity
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Last Resort
+Magic Coat
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Snatch
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 150
 2 0 0 0 0 0 
 Item 36  Moon Stone
@@ -2764,6 +3091,34 @@ Splash
 Stored Power
 Tickle
 Wish
+27
+Bounce
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Gravity
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Last Resort
+Magic Coat
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Snatch
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 25
 3 0 0 0 0 0 
 None
@@ -2850,6 +3205,16 @@ Power Swap
 Secret Power
 Spite
 Tail Slap
+9
+Covet
+Foul Play
+Heat Wave
+Iron Tail
+Pain Split
+Role Play
+Snore
+Spite
+Zen Headbutt
 190
 0 0 0 0 0 1 
 Item 38  Fire Stone
@@ -2927,6 +3292,16 @@ Power Swap
 Secret Power
 Spite
 Tail Slap
+9
+Covet
+Foul Play
+Heat Wave
+Iron Tail
+Pain Split
+Role Play
+Snore
+Spite
+Zen Headbutt
 75
 0 0 0 0 1 1 
 None
@@ -3024,6 +3399,30 @@ Present
 Punishment
 Sleep Talk
 Wish
+23
+Bounce
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Gravity
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Knock Off
+Last Resort
+Magic Coat
+Pain Split
+Recycle
+Role Play
+Shock Wave
+Snatch
+Snore
+Stealth Rock
+Thunder Punch
+Water Pulse
 170
 2 0 0 0 0 0 
 Item 40  Moon Stone
@@ -3113,6 +3512,31 @@ Present
 Punishment
 Sleep Talk
 Wish
+24
+Bounce
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Gravity
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Knock Off
+Last Resort
+Magic Coat
+Magic Room
+Pain Split
+Recycle
+Role Play
+Shock Wave
+Snatch
+Snore
+Stealth Rock
+Thunder Punch
+Water Pulse
 50
 3 0 0 0 0 0 
 None
@@ -3192,6 +3616,15 @@ Quick Attack
 Steel Wing
 Venom Drench
 Whirlwind
+Zen Headbutt
+8
+Giga Drain
+Heat Wave
+Snatch
+Snore
+Super Fang
+Tailwind
+Uproar
 Zen Headbutt
 255
 0 0 0 0 0 1 
@@ -3278,6 +3711,15 @@ Steel Wing
 Venom Drench
 Whirlwind
 Zen Headbutt
+8
+Giga Drain
+Heat Wave
+Snatch
+Snore
+Super Fang
+Tailwind
+Uproar
+Zen Headbutt
 90
 0 0 0 0 0 2 
 Item 169  Dusk Stone
@@ -3349,6 +3791,13 @@ Secret Power
 Synthesis
 Teeter Dance
 Tickle
+6
+Gastro Acid
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 255
 0 0 0 1 0 0 
 Level 44 21
@@ -3424,6 +3873,14 @@ Secret Power
 Synthesis
 Teeter Dance
 Tickle
+7
+Drain Punch
+Gastro Acid
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 120
 0 0 0 2 0 0 
 Multi 2
@@ -3494,6 +3951,14 @@ Secret Power
 Synthesis
 Teeter Dance
 Tickle
+7
+Drain Punch
+Gastro Acid
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 45
 0 0 0 3 0 0 
 None
@@ -3577,6 +4042,14 @@ Pursuit
 Rototiller
 Screech
 Sweet Scent
+7
+Bug Bite
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 190
 0 1 0 0 0 0 
 Level 47 24
@@ -3668,6 +4141,14 @@ Pursuit
 Rototiller
 Screech
 Sweet Scent
+7
+Bug Bite
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 75
 0 2 1 0 0 0 
 None
@@ -3739,6 +4220,13 @@ Secret Power
 Signal Beam
 Skill Swap
 Toxic Spikes
+6
+Bug Bite
+Giga Drain
+Signal Beam
+Skill Swap
+Snore
+Zen Headbutt
 190
 0 0 0 0 1 0 
 Level 49 31
@@ -3821,6 +4309,14 @@ Secret Power
 Signal Beam
 Skill Swap
 Toxic Spikes
+7
+Bug Bite
+Giga Drain
+Signal Beam
+Skill Swap
+Snore
+Tailwind
+Zen Headbutt
 75
 0 0 0 1 0 1 
 None
@@ -3900,6 +4396,10 @@ Pursuit
 Reversal
 Screech
 Uproar
+3
+Earth Power
+Snore
+Stealth Rock
 255
 0 0 0 0 0 1 
 Level 51 26
@@ -3987,6 +4487,10 @@ Pursuit
 Reversal
 Screech
 Uproar
+3
+Earth Power
+Snore
+Stealth Rock
 50
 0 0 0 0 0 2 
 None
@@ -4072,6 +4576,22 @@ Punishment
 Snatch
 Spite
 Tail Whip
+15
+Covet
+Foul Play
+Gunk Shot
+Hyper Voice
+Icy Wind
+Iron Tail
+Knock Off
+Last Resort
+Seed Bomb
+Shock Wave
+Snatch
+Snore
+Spite
+Uproar
+Water Pulse
 255
 0 0 0 0 0 1 
 Level 53 28
@@ -4168,6 +4688,22 @@ Punishment
 Snatch
 Spite
 Tail Whip
+15
+Covet
+Foul Play
+Gunk Shot
+Hyper Voice
+Icy Wind
+Iron Tail
+Knock Off
+Last Resort
+Seed Bomb
+Shock Wave
+Snatch
+Snore
+Spite
+Uproar
+Water Pulse
 90
 0 0 0 0 0 2 
 None
@@ -4259,6 +4795,19 @@ Simple Beam
 Sleep Talk
 Synchronoise
 Yawn
+12
+Aqua Tail
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Role Play
+Signal Beam
+Snore
+Water Pulse
+Wonder Room
+Worry Seed
+Zen Headbutt
 190
 0 0 0 1 0 0 
 Level 55 33
@@ -4355,6 +4904,20 @@ Simple Beam
 Sleep Talk
 Synchronoise
 Yawn
+13
+Aqua Tail
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Role Play
+Signal Beam
+Snore
+Water Pulse
+Wonder Room
+Worry Seed
+Zen Headbutt
 75
 0 0 0 2 0 0 
 None
@@ -4446,6 +5009,23 @@ Revenge
 Reversal
 Sleep Talk
 Smelling Salts
+16
+Covet
+Dual Chop
+Endeavor
+Fire Punch
+Focus Punch
+Gunk Shot
+Ice Punch
+Iron Tail
+Low Kick
+Outrage
+Role Play
+Seed Bomb
+Snore
+Spite
+Thunder Punch
+Uproar
 190
 0 1 0 0 0 0 
 Level 57 28
@@ -4543,6 +5123,23 @@ Revenge
 Reversal
 Sleep Talk
 Smelling Salts
+16
+Covet
+Dual Chop
+Endeavor
+Fire Punch
+Focus Punch
+Gunk Shot
+Ice Punch
+Iron Tail
+Low Kick
+Outrage
+Role Play
+Seed Bomb
+Snore
+Spite
+Thunder Punch
+Uproar
 75
 0 2 0 0 0 0 
 None
@@ -4627,6 +5224,12 @@ Howl
 Iron Tail
 Morning Sun
 Thrash
+5
+Covet
+Heat Wave
+Iron Tail
+Outrage
+Snore
 190
 0 1 0 0 0 0 
 Item 59  Fire Stone
@@ -4703,6 +5306,14 @@ Howl
 Iron Tail
 Morning Sun
 Thrash
+7
+Covet
+Dragon Pulse
+Heat Wave
+Iron Head
+Iron Tail
+Outrage
+Snore
 75
 0 2 0 0 0 0 
 None
@@ -4776,6 +5387,11 @@ Refresh
 Splash
 Water Pulse
 Water Sport
+4
+Endeavor
+Icy Wind
+Snore
+Water Pulse
 255
 0 0 0 0 0 1 
 Level 61 25
@@ -4857,6 +5473,13 @@ Refresh
 Splash
 Water Pulse
 Water Sport
+6
+Endeavor
+Focus Punch
+Ice Punch
+Icy Wind
+Snore
+Water Pulse
 120
 0 0 0 0 0 2 
 Multi 2
@@ -4943,6 +5566,13 @@ Refresh
 Splash
 Water Pulse
 Water Sport
+6
+Endeavor
+Focus Punch
+Ice Punch
+Icy Wind
+Snore
+Water Pulse
 45
 0 0 3 0 0 0 
 None
@@ -5014,6 +5644,28 @@ Power Trick
 Psycho Shift
 Skill Swap
 Thunder Punch
+21
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Gravity
+Ice Punch
+Iron Tail
+Knock Off
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 200
 0 0 0 1 0 0 
 Level 64 16
@@ -5100,6 +5752,28 @@ Power Trick
 Psycho Shift
 Skill Swap
 Thunder Punch
+21
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Gravity
+Ice Punch
+Iron Tail
+Knock Off
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 100
 0 0 0 2 0 0 
 Item 65  Twisted Spoon
@@ -5189,6 +5863,28 @@ Power Trick
 Psycho Shift
 Skill Swap
 Thunder Punch
+21
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Gravity
+Ice Punch
+Iron Tail
+Knock Off
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 50
 0 0 0 3 0 0 
 None
@@ -5281,6 +5977,17 @@ Rolling Kick
 Smelling Salts
 Thunder Punch
 Tickle
+10
+Dual Chop
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Role Play
+Snore
+Superpower
+Thunder Punch
 180
 0 1 0 0 0 0 
 Level 67 28
@@ -5375,6 +6082,17 @@ Rolling Kick
 Smelling Salts
 Thunder Punch
 Tickle
+10
+Dual Chop
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Role Play
+Snore
+Superpower
+Thunder Punch
 90
 0 2 0 0 0 0 
 Item 68 Focus Band
@@ -5473,6 +6191,17 @@ Rolling Kick
 Smelling Salts
 Thunder Punch
 Tickle
+10
+Dual Chop
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Role Play
+Snore
+Superpower
+Thunder Punch
 45
 0 3 0 0 0 0 
 None
@@ -5549,6 +6278,15 @@ Power Whip
 Synthesis
 Tickle
 Weather Ball
+Worry Seed
+8
+Bind
+Gastro Acid
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Synthesis
 Worry Seed
 255
 0 1 0 0 0 0 
@@ -5628,6 +6366,15 @@ Synthesis
 Tickle
 Weather Ball
 Worry Seed
+8
+Bind
+Gastro Acid
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 120
 0 2 0 0 0 0 
 Item 71  Leaf Stone
@@ -5702,6 +6449,15 @@ Power Whip
 Synthesis
 Tickle
 Weather Ball
+Worry Seed
+8
+Bind
+Gastro Acid
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Synthesis
 Worry Seed
 45
 0 3 0 0 0 0 
@@ -5785,6 +6541,14 @@ Mirror Coat
 Muddy Water
 Rapid Spin
 Tickle
+7
+Bind
+Giga Drain
+Icy Wind
+Knock Off
+Magic Coat
+Snore
+Water Pulse
 190
 0 0 0 0 1 0 
 Level 73 30
@@ -5876,6 +6640,14 @@ Mirror Coat
 Muddy Water
 Rapid Spin
 Tickle
+7
+Bind
+Giga Drain
+Icy Wind
+Knock Off
+Magic Coat
+Snore
+Water Pulse
 60
 0 0 0 0 2 0 
 None
@@ -5959,6 +6731,16 @@ Focus Punch
 Hammer Arm
 Mega Punch
 Rock Climb
+9
+Block
+Earth Power
+Fire Punch
+Focus Punch
+Iron Defense
+Snore
+Stealth Rock
+Superpower
+Thunder Punch
 255
 0 0 1 0 0 0 
 Level 75 25
@@ -6044,6 +6826,16 @@ Focus Punch
 Hammer Arm
 Mega Punch
 Rock Climb
+9
+Block
+Earth Power
+Fire Punch
+Focus Punch
+Iron Defense
+Snore
+Stealth Rock
+Superpower
+Thunder Punch
 120
 0 0 2 0 0 0 
 Item 76  Hard Stone
@@ -6135,6 +6927,17 @@ Focus Punch
 Hammer Arm
 Mega Punch
 Rock Climb
+10
+Block
+Earth Power
+Fire Punch
+Focus Punch
+Iron Defense
+Iron Head
+Snore
+Stealth Rock
+Superpower
+Thunder Punch
 45
 0 0 3 0 0 0 
 None
@@ -6207,6 +7010,12 @@ Hypnosis
 Low Kick
 Morning Sun
 Thrash
+5
+Bounce
+Heat Wave
+Iron Tail
+Low Kick
+Snore
 190
 0 0 0 0 0 1 
 Level 78 40
@@ -6287,6 +7096,13 @@ Hypnosis
 Low Kick
 Morning Sun
 Thrash
+6
+Bounce
+Drill Run
+Heat Wave
+Iron Tail
+Low Kick
+Snore
 60
 0 0 0 0 0 2 
 None
@@ -6376,6 +7192,20 @@ Mud Sport
 Sleep Talk
 Snore
 Stomp
+Wonder Room
+Zen Headbutt
+13
+Aqua Tail
+Block
+Icy Wind
+Iron Tail
+Magic Coat
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Trick
+Water Pulse
 Wonder Room
 Zen Headbutt
 190
@@ -6482,6 +7312,25 @@ Snore
 Stomp
 Wonder Room
 Zen Headbutt
+18
+Aqua Tail
+Block
+Drain Punch
+Focus Punch
+Foul Play
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Tail
+Magic Coat
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 75
 0 0 2 0 0 0 
 None
@@ -6549,6 +7398,16 @@ Wild Charge
 Secret Power
 Confide
 0
+9
+Electroweb
+Gravity
+Iron Defense
+Magic Coat
+Magnet Rise
+Recycle
+Shock Wave
+Signal Beam
+Snore
 190
 0 0 0 1 0 0 
 Level 82 30
@@ -6625,6 +7484,16 @@ Wild Charge
 Secret Power
 Confide
 0
+9
+Electroweb
+Gravity
+Iron Defense
+Magic Coat
+Magnet Rise
+Recycle
+Shock Wave
+Signal Beam
+Snore
 60
 0 0 0 2 0 0 
 Item 462  Thunder Stone
@@ -6711,6 +7580,16 @@ Roost
 Simple Beam
 Steel Wing
 Trump Card
+9
+Covet
+Heat Wave
+Iron Tail
+Knock Off
+Last Resort
+Sky Attack
+Snore
+Tailwind
+Uproar
 45
 0 1 0 0 0 0 
 None
@@ -6778,6 +7657,11 @@ Mirror Move
 Natural Gift
 Quick Attack
 Supersonic
+4
+Endeavor
+Knock Off
+Snore
+Uproar
 190
 0 1 0 0 0 0 
 Level 85 31
@@ -6852,6 +7736,12 @@ Mirror Move
 Natural Gift
 Quick Attack
 Supersonic
+5
+Endeavor
+Knock Off
+Sky Attack
+Snore
+Uproar
 45
 0 2 0 0 0 0 
 None
@@ -6932,6 +7822,14 @@ Sleep Talk
 Spit Up
 Stockpile
 Swallow
+Water Pulse
+7
+Aqua Tail
+Drill Run
+Icy Wind
+Iron Tail
+Signal Beam
+Snore
 Water Pulse
 190
 0 0 0 0 1 0 
@@ -7020,6 +7918,14 @@ Sleep Talk
 Spit Up
 Stockpile
 Swallow
+Water Pulse
+7
+Aqua Tail
+Drill Run
+Icy Wind
+Iron Tail
+Signal Beam
+Snore
 Water Pulse
 75
 0 0 0 0 2 0 
@@ -7110,6 +8016,15 @@ Shadow Sneak
 Spit Up
 Stockpile
 Swallow
+8
+Fire Punch
+Giga Drain
+Gunk Shot
+Ice Punch
+Pain Split
+Shock Wave
+Snore
+Thunder Punch
 190
 1 0 0 0 0 0 
 Level 89 38
@@ -7208,6 +8123,17 @@ Shadow Sneak
 Spit Up
 Stockpile
 Swallow
+10
+Block
+Fire Punch
+Focus Punch
+Giga Drain
+Gunk Shot
+Ice Punch
+Pain Split
+Shock Wave
+Snore
+Thunder Punch
 75
 1 1 0 0 0 0 
 None
@@ -7282,6 +8208,11 @@ Screech
 Take Down
 Twineedle
 Water Pulse
+4
+Icy Wind
+Iron Defense
+Snore
+Water Pulse
 190
 0 0 1 0 0 0 
 Item 91  Water Stone
@@ -7353,6 +8284,12 @@ Rock Blast
 Screech
 Take Down
 Twineedle
+Water Pulse
+5
+Icy Wind
+Iron Defense
+Signal Beam
+Snore
 Water Pulse
 60
 0 0 2 0 0 0 
@@ -7440,6 +8377,22 @@ Reflect Type
 Scary Face
 Smog
 Thunder Punch
+15
+Fire Punch
+Foul Play
+Giga Drain
+Ice Punch
+Icy Wind
+Knock Off
+Pain Split
+Skill Swap
+Snatch
+Snore
+Spite
+Thunder Punch
+Trick
+Uproar
+Wonder Room
 190
 0 0 0 1 0 0 
 Level 93 25
@@ -7530,6 +8483,22 @@ Reflect Type
 Scary Face
 Smog
 Thunder Punch
+15
+Fire Punch
+Foul Play
+Giga Drain
+Ice Punch
+Icy Wind
+Knock Off
+Pain Split
+Skill Swap
+Snatch
+Snore
+Spite
+Thunder Punch
+Trick
+Uproar
+Wonder Room
 90
 0 0 0 2 0 0 
 Item 94  Spell Tag
@@ -7628,6 +8597,25 @@ Reflect Type
 Scary Face
 Smog
 Thunder Punch
+18
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Giga Drain
+Ice Punch
+Icy Wind
+Knock Off
+Pain Split
+Role Play
+Skill Swap
+Snatch
+Snore
+Spite
+Thunder Punch
+Trick
+Uproar
+Wonder Room
 45
 0 0 0 3 0 0 
 None
@@ -7717,6 +8705,15 @@ Rock Climb
 Rollout
 Rototiller
 Stealth Rock
+8
+Bind
+Block
+Dragon Pulse
+Earth Power
+Iron Head
+Iron Tail
+Snore
+Stealth Rock
 45
 0 0 1 0 0 0 
 Item 208  Metal Coat
@@ -7805,6 +8802,24 @@ Role Play
 Secret Power
 Skill Swap
 Thunder Punch
+17
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Ice Punch
+Low Kick
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Zen Headbutt
 190
 0 0 0 0 1 0 
 Level 97 26
@@ -7901,6 +8916,24 @@ Role Play
 Secret Power
 Skill Swap
 Thunder Punch
+17
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Ice Punch
+Low Kick
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Zen Headbutt
 75
 0 0 0 0 2 0 
 None
@@ -7982,6 +9015,13 @@ Haze
 Knock Off
 Slam
 Tickle
+6
+Icy Wind
+Iron Defense
+Knock Off
+Snore
+Superpower
+Water Pulse
 225
 0 1 0 0 0 0 
 Level 99 28
@@ -8068,6 +9108,13 @@ Haze
 Knock Off
 Slam
 Tickle
+6
+Icy Wind
+Iron Defense
+Knock Off
+Snore
+Superpower
+Water Pulse
 60
 0 2 0 0 0 0 
 None
@@ -8133,6 +9180,13 @@ Wild Charge
 Secret Power
 Confide
 0
+6
+Foul Play
+Magic Coat
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 190
 0 0 0 0 0 1 
 Level 101 30
@@ -8203,6 +9257,13 @@ Wild Charge
 Secret Power
 Confide
 0
+6
+Foul Play
+Magic Coat
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 60
 0 0 0 0 0 2 
 None
@@ -8285,6 +9346,16 @@ Nature Power
 Power Swap
 Skill Swap
 Synthesis
+9
+Block
+Giga Drain
+Gravity
+Seed Bomb
+Skill Swap
+Snore
+Synthesis
+Uproar
+Worry Seed
 90
 0 0 1 0 0 0 
 Item 103  Leaf Stone
@@ -8364,6 +9435,17 @@ Nature Power
 Power Swap
 Skill Swap
 Synthesis
+10
+Block
+Giga Drain
+Gravity
+Low Kick
+Seed Bomb
+Skill Swap
+Snore
+Synthesis
+Worry Seed
+Zen Headbutt
 45
 0 0 0 2 0 0 
 None
@@ -8448,6 +9530,21 @@ Iron Head
 Perish Song
 Screech
 Skull Bash
+14
+Earth Power
+Endeavor
+Fire Punch
+Focus Punch
+Icy Wind
+Iron Defense
+Iron Head
+Iron Tail
+Knock Off
+Low Kick
+Snore
+Stealth Rock
+Thunder Punch
+Uproar
 190
 0 0 1 0 0 0 
 Level 105 28
@@ -8540,6 +9637,22 @@ Iron Head
 Perish Song
 Screech
 Skull Bash
+15
+Earth Power
+Endeavor
+Fire Punch
+Focus Punch
+Icy Wind
+Iron Defense
+Iron Head
+Iron Tail
+Knock Off
+Low Kick
+Outrage
+Snore
+Stealth Rock
+Thunder Punch
+Uproar
 75
 0 0 2 0 0 0 
 None
@@ -8624,6 +9737,15 @@ Mind Reader
 Pursuit
 Rapid Spin
 Vacuum Wave
+8
+Bounce
+Covet
+Focus Punch
+Knock Off
+Low Kick
+Role Play
+Snore
+Superpower
 45
 0 2 0 0 0 0 
 None
@@ -8707,6 +9829,16 @@ Mind Reader
 Pursuit
 Rapid Spin
 Vacuum Wave
+9
+Covet
+Drain Punch
+Fire Punch
+Focus Punch
+Ice Punch
+Low Kick
+Role Play
+Snore
+Thunder Punch
 45
 0 0 0 0 2 0 
 None
@@ -8801,6 +9933,20 @@ Sleep Talk
 Smelling Salts
 Snore
 Zen Headbutt
+13
+Aqua Tail
+Bind
+Fire Punch
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Shock Wave
+Snore
+Thunder Punch
+Water Pulse
+Zen Headbutt
 45
 2 0 0 0 0 0 
 None
@@ -8884,6 +10030,12 @@ Spite
 Stockpile
 Swallow
 Toxic Spikes
+5
+Pain Split
+Shock Wave
+Snore
+Spite
+Uproar
 190
 0 0 1 0 0 0 
 Level 110 35
@@ -8971,6 +10123,12 @@ Spite
 Stockpile
 Swallow
 Toxic Spikes
+5
+Pain Split
+Shock Wave
+Snore
+Spite
+Uproar
 60
 0 0 2 0 0 0 
 None
@@ -9063,6 +10221,20 @@ Rock Climb
 Rototiller
 Skull Bash
 Thunder Fang
+13
+Aqua Tail
+Dragon Pulse
+Drill Run
+Earth Power
+Endeavor
+Icy Wind
+Iron Tail
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Uproar
 120
 0 0 1 0 0 0 
 Level 112 42
@@ -9169,6 +10341,26 @@ Rock Climb
 Rototiller
 Skull Bash
 Thunder Fang
+19
+Aqua Tail
+Block
+Dragon Pulse
+Drill Run
+Earth Power
+Endeavor
+Fire Punch
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Thunder Punch
+Uproar
 60
 0 2 0 0 0 0 
 Item 464  Protector
@@ -9271,6 +10463,28 @@ Mud Bomb
 Natural Gift
 Present
 Seismic Toss
+21
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Gravity
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Tail
+Last Resort
+Recycle
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Stealth Rock
+Thunder Punch
+Water Pulse
+Zen Headbutt
 30
 2 0 0 0 0 0 
 Item 242  Shiny Stone
@@ -9353,6 +10567,17 @@ Mega Drain
 Natural Gift
 Nature Power
 Power Swap
+10
+Bind
+Endeavor
+Giga Drain
+Knock Off
+Pain Split
+Seed Bomb
+Shock Wave
+Snore
+Synthesis
+Worry Seed
 45
 0 0 1 0 0 0 
 Move 465  Ancient Power
@@ -9450,6 +10675,24 @@ Hammer Arm
 Stomp
 Trump Card
 Uproar
+17
+Aqua Tail
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Outrage
+Shock Wave
+Snore
+Spite
+Thunder Punch
+Uproar
+Water Pulse
 45
 2 0 0 0 0 0 
 None
@@ -9518,6 +10761,14 @@ Outrage
 Razor Wind
 Signal Beam
 Splash
+Water Pulse
+7
+Bounce
+Dragon Pulse
+Icy Wind
+Outrage
+Signal Beam
+Snore
 Water Pulse
 225
 0 0 0 1 0 0 
@@ -9595,6 +10846,14 @@ Razor Wind
 Signal Beam
 Splash
 Water Pulse
+7
+Bounce
+Dragon Pulse
+Icy Wind
+Outrage
+Signal Beam
+Snore
+Water Pulse
 75
 0 0 1 1 0 0 
 Item 230  Dragon Scale
@@ -9665,6 +10924,15 @@ Psybeam
 Signal Beam
 Skull Bash
 Sleep Talk
+8
+Aqua Tail
+Bounce
+Drill Run
+Icy Wind
+Knock Off
+Signal Beam
+Snore
+Water Pulse
 225
 0 1 0 0 0 0 
 Level 119 33
@@ -9740,6 +11008,15 @@ Psybeam
 Signal Beam
 Skull Bash
 Sleep Talk
+8
+Aqua Tail
+Bounce
+Drill Run
+Icy Wind
+Knock Off
+Signal Beam
+Snore
+Water Pulse
 60
 0 2 0 0 0 0 
 None
@@ -9813,6 +11090,15 @@ Surf
 Waterfall
 Dive
 0
+8
+Gravity
+Icy Wind
+Magic Coat
+Pain Split
+Recycle
+Signal Beam
+Snore
+Water Pulse
 225
 0 0 0 0 0 1 
 Item 121  Water Stone
@@ -9880,6 +11166,18 @@ Surf
 Waterfall
 Dive
 0
+11
+Gravity
+Icy Wind
+Magic Coat
+Pain Split
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Trick
+Water Pulse
+Wonder Room
 60
 0 0 0 0 0 2 
 None
@@ -9986,6 +11284,28 @@ Power Split
 Teeter Dance
 Trick
 Wake-Up Slap
+21
+Covet
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Ice Punch
+Icy Wind
+Iron Defense
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 45
 0 0 0 0 2 0 
 None
@@ -10070,6 +11390,11 @@ Razor Wind
 Reversal
 Silver Wind
 Steel Wing
+4
+Bug Bite
+Knock Off
+Snore
+Tailwind
 45
 0 1 0 0 0 0 
 Item 212  Metal Coat
@@ -10161,6 +11486,24 @@ Miracle Eye
 Nasty Plot
 Wake-Up Slap
 Wish
+17
+Covet
+Drain Punch
+Focus Punch
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Signal Beam
+Skill Swap
+Snore
+Trick
+Water Pulse
+Zen Headbutt
 45
 0 0 0 2 0 0 
 None
@@ -10243,6 +11586,20 @@ Ice Punch
 Karate Chop
 Meditate
 Rolling Kick
+13
+Covet
+Dual Chop
+Electroweb
+Fire Punch
+Focus Punch
+Ice Punch
+Iron Tail
+Low Kick
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
 45
 0 0 0 0 0 2 
 Item 466  Electirizer
@@ -10326,6 +11683,16 @@ Mach Punch
 Mega Punch
 Power Swap
 Screech
+Thunder Punch
+9
+Covet
+Dual Chop
+Fire Punch
+Focus Punch
+Heat Wave
+Iron Tail
+Low Kick
+Snore
 Thunder Punch
 45
 0 0 0 2 0 0 
@@ -10412,6 +11779,15 @@ Fury Attack
 Me First
 Quick Attack
 Superpower
+8
+Bind
+Bug Bite
+Focus Punch
+Iron Defense
+Knock Off
+Snore
+Stealth Rock
+Superpower
 45
 0 2 0 0 0 0 
 None
@@ -10485,6 +11861,19 @@ Confide
 Surf
 Strength
 0
+12
+Endeavor
+Icy Wind
+Iron Head
+Iron Tail
+Outrage
+Role Play
+Shock Wave
+Snore
+Spite
+Uproar
+Water Pulse
+Zen Headbutt
 45
 0 1 0 0 0 1 
 None
@@ -10510,6 +11899,8 @@ Water None
 30 Flail
 0
 0
+1
+Bounce
 255
 0 0 0 0 0 1 
 Level 130 20
@@ -10585,6 +11976,18 @@ Strength
 Waterfall
 Dive
 0
+11
+Aqua Tail
+Bounce
+Dragon Pulse
+Icy Wind
+Iron Head
+Iron Tail
+Outrage
+Snore
+Spite
+Uproar
+Water Pulse
 45
 0 2 0 0 0 0 
 None
@@ -10669,6 +12072,22 @@ Refresh
 Sleep Talk
 Tickle
 Whirlpool
+15
+Aqua Tail
+Block
+Dragon Pulse
+Drill Run
+Heal Bell
+Hyper Voice
+Icy Wind
+Iron Head
+Iron Tail
+Outrage
+Shock Wave
+Signal Beam
+Snore
+Water Pulse
+Zen Headbutt
 45
 2 0 0 0 0 0 
 None
@@ -10690,6 +12109,7 @@ Medium Fast
 Normal None
 1
 0 Transform
+0
 0
 0
 35
@@ -10765,6 +12185,13 @@ Synchronoise
 Tickle
 Wish
 Yawn
+6
+Covet
+Heal Bell
+Hyper Voice
+Iron Tail
+Last Resort
+Snore
 45
 0 0 0 0 1 0 
 Multi 8
@@ -10854,6 +12281,17 @@ Synchronoise
 Tickle
 Wish
 Yawn
+10
+Aqua Tail
+Covet
+Heal Bell
+Hyper Voice
+Icy Wind
+Iron Tail
+Last Resort
+Signal Beam
+Snore
+Water Pulse
 45
 2 0 0 0 0 0 
 None
@@ -10935,6 +12373,16 @@ Synchronoise
 Tickle
 Wish
 Yawn
+9
+Covet
+Heal Bell
+Hyper Voice
+Iron Tail
+Last Resort
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 45
 0 0 0 0 0 2 
 None
@@ -11014,6 +12462,15 @@ Synchronoise
 Tickle
 Wish
 Yawn
+8
+Covet
+Heal Bell
+Heat Wave
+Hyper Voice
+Iron Tail
+Last Resort
+Snore
+Superpower
 45
 0 2 0 0 0 0 
 None
@@ -11083,6 +12540,23 @@ Trick Room
 Secret Power
 Confide
 0
+16
+Electroweb
+Foul Play
+Gravity
+Icy Wind
+Iron Tail
+Last Resort
+Magic Coat
+Magnet Rise
+Pain Split
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Trick
+Wonder Room
+Zen Headbutt
 45
 0 0 0 1 0 0 
 Item 233  Up-Grade
@@ -11163,6 +12637,15 @@ Toxic Spikes
 Water Pulse
 Whirlpool
 Wring Out
+8
+Bind
+Earth Power
+Icy Wind
+Iron Defense
+Knock Off
+Snore
+Stealth Rock
+Water Pulse
 45
 0 0 1 0 0 0 
 Level 139 40
@@ -11248,6 +12731,15 @@ Toxic Spikes
 Water Pulse
 Whirlpool
 Wring Out
+8
+Bind
+Earth Power
+Icy Wind
+Iron Defense
+Knock Off
+Snore
+Stealth Rock
+Water Pulse
 45
 0 0 2 0 0 0 
 None
@@ -11323,6 +12815,15 @@ Mud Shot
 Rapid Spin
 Screech
 Take Down
+8
+Earth Power
+Giga Drain
+Icy Wind
+Iron Defense
+Knock Off
+Snore
+Stealth Rock
+Water Pulse
 45
 0 0 1 0 0 0 
 Level 141 40
@@ -11414,6 +12915,18 @@ Mud Shot
 Rapid Spin
 Screech
 Take Down
+11
+Aqua Tail
+Earth Power
+Giga Drain
+Icy Wind
+Iron Defense
+Knock Off
+Low Kick
+Snore
+Stealth Rock
+Superpower
+Water Pulse
 45
 0 2 0 0 0 0 
 None
@@ -11505,6 +13018,17 @@ Roost
 Steel Wing
 Tailwind
 Whirlwind
+10
+Aqua Tail
+Dragon Pulse
+Earth Power
+Heat Wave
+Iron Head
+Iron Tail
+Sky Attack
+Snore
+Stealth Rock
+Tailwind
 45
 0 0 0 0 0 2 
 None
@@ -11595,6 +13119,26 @@ Lick
 Natural Gift
 Pursuit
 Whirlwind
+19
+Block
+Covet
+Fire Punch
+Focus Punch
+Gunk Shot
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Head
+Last Resort
+Outrage
+Recycle
+Seed Bomb
+Shock Wave
+Snore
+Superpower
+Thunder Punch
+Water Pulse
+Zen Headbutt
 25
 2 0 0 0 0 0 
 None
@@ -11668,6 +13212,13 @@ Secret Power
 Confide
 Fly
 0
+6
+Icy Wind
+Signal Beam
+Sky Attack
+Snore
+Tailwind
+Water Pulse
 3
 0 0 0 0 3 0 
 None
@@ -11741,6 +13292,13 @@ Secret Power
 Confide
 Fly
 0
+6
+Heat Wave
+Shock Wave
+Signal Beam
+Sky Attack
+Snore
+Tailwind
 3
 0 0 0 3 0 0 
 None
@@ -11815,6 +13373,11 @@ Secret Power
 Confide
 Fly
 0
+4
+Heat Wave
+Sky Attack
+Snore
+Tailwind
 3
 0 0 0 3 0 0 
 None
@@ -11891,6 +13454,16 @@ Haze
 Iron Tail
 Mist
 Supersonic
+Water Pulse
+9
+Aqua Tail
+Bind
+Dragon Pulse
+Icy Wind
+Iron Tail
+Outrage
+Shock Wave
+Snore
 Water Pulse
 45
 0 1 0 0 0 0 
@@ -11972,6 +13545,16 @@ Haze
 Iron Tail
 Mist
 Supersonic
+Water Pulse
+9
+Aqua Tail
+Bind
+Dragon Pulse
+Icy Wind
+Iron Tail
+Outrage
+Shock Wave
+Snore
 Water Pulse
 45
 0 2 0 0 0 0 
@@ -12083,6 +13666,24 @@ Iron Tail
 Mist
 Supersonic
 Water Pulse
+17
+Aqua Tail
+Bind
+Dragon Pulse
+Fire Punch
+Focus Punch
+Heat Wave
+Ice Punch
+Icy Wind
+Iron Head
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Superpower
+Tailwind
+Thunder Punch
+Water Pulse
 45
 0 3 0 0 0 0 
 None
@@ -12185,6 +13786,31 @@ Power-Up Punch
 Confide
 Strength
 0
+24
+Aqua Tail
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Gravity
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 3
 0 0 0 3 0 0 
 None
@@ -12324,6 +13950,65 @@ Strength
 Waterfall
 Dive
 0
+58
+Aqua Tail
+Bind
+Block
+Bounce
+Bug Bite
+Covet
+Dragon Pulse
+Drain Punch
+Drill Run
+Dual Chop
+Earth Power
+Electroweb
+Endeavor
+Fire Punch
+Focus Punch
+Foul Play
+Gastro Acid
+Giga Drain
+Gravity
+Gunk Shot
+Heal Bell
+Heat Wave
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Head
+Iron Tail
+Knock Off
+Last Resort
+Low Kick
+Magic Coat
+Magic Room
+Magnet Rise
+Outrage
+Pain Split
+Recycle
+Role Play
+Seed Bomb
+Shock Wave
+Signal Beam
+Skill Swap
+Sky Attack
+Snatch
+Snore
+Spite
+Stealth Rock
+Super Fang
+Superpower
+Synthesis
+Tailwind
+Thunder Punch
+Trick
+Uproar
+Water Pulse
+Wonder Room
+Worry Seed
+Zen Headbutt
 45
 3 0 0 0 0 0 
 None
@@ -12401,6 +14086,14 @@ Nature Power
 Refresh
 Vine Whip
 Wring Out
+7
+Giga Drain
+Iron Tail
+Magic Coat
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 45
 0 0 0 0 1 0 
 Level 153 16
@@ -12482,6 +14175,14 @@ Nature Power
 Refresh
 Vine Whip
 Wring Out
+7
+Giga Drain
+Iron Tail
+Magic Coat
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 45
 0 0 1 0 1 0 
 Level 154 32
@@ -12571,6 +14272,15 @@ Nature Power
 Refresh
 Vine Whip
 Wring Out
+8
+Giga Drain
+Iron Tail
+Magic Coat
+Outrage
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 45
 0 0 1 0 2 0 
 None
@@ -12648,6 +14358,10 @@ Nature Power
 Quick Attack
 Reversal
 Thrash
+3
+Covet
+Heat Wave
+Snore
 45
 0 0 0 0 0 1 
 Level 156 16
@@ -12730,6 +14444,11 @@ Nature Power
 Quick Attack
 Reversal
 Thrash
+4
+Covet
+Focus Punch
+Heat Wave
+Snore
 45
 0 0 0 1 0 1 
 Level 157 32
@@ -12828,6 +14547,14 @@ Nature Power
 Quick Attack
 Reversal
 Thrash
+7
+Covet
+Fire Punch
+Focus Punch
+Heat Wave
+Low Kick
+Snore
+Thunder Punch
 45
 0 0 0 3 0 0 
 None
@@ -12914,6 +14641,19 @@ Mud Sport
 Thrash
 Water Pulse
 Water Sport
+12
+Aqua Tail
+Block
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Snore
+Spite
+Superpower
+Uproar
+Water Pulse
 45
 0 1 0 0 0 0 
 Level 159 18
@@ -13004,6 +14744,19 @@ Mud Sport
 Thrash
 Water Pulse
 Water Sport
+12
+Aqua Tail
+Block
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Snore
+Spite
+Superpower
+Uproar
+Water Pulse
 45
 0 1 1 0 0 0 
 Level 160 30
@@ -13102,6 +14855,21 @@ Mud Sport
 Thrash
 Water Pulse
 Water Sport
+14
+Aqua Tail
+Block
+Dragon Pulse
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Outrage
+Snore
+Spite
+Superpower
+Uproar
+Water Pulse
 45
 0 2 1 0 0 0 
 None
@@ -13186,6 +14954,23 @@ Pursuit
 Reversal
 Slash
 Trick
+16
+Aqua Tail
+Covet
+Fire Punch
+Focus Punch
+Hyper Voice
+Ice Punch
+Iron Tail
+Knock Off
+Last Resort
+Shock Wave
+Snore
+Super Fang
+Thunder Punch
+Trick
+Uproar
+Water Pulse
 255
 0 1 0 0 0 0 
 Level 162 15
@@ -13279,6 +15064,23 @@ Pursuit
 Reversal
 Slash
 Trick
+16
+Aqua Tail
+Covet
+Fire Punch
+Focus Punch
+Hyper Voice
+Ice Punch
+Iron Tail
+Knock Off
+Last Resort
+Shock Wave
+Snore
+Super Fang
+Thunder Punch
+Trick
+Uproar
+Water Pulse
 90
 0 0 0 0 0 2 
 None
@@ -13356,6 +15158,16 @@ Sky Attack
 Supersonic
 Whirlwind
 Wing Attack
+9
+Heat Wave
+Hyper Voice
+Magic Coat
+Recycle
+Sky Attack
+Snore
+Tailwind
+Uproar
+Zen Headbutt
 255
 1 0 0 0 0 0 
 Level 164 20
@@ -13436,6 +15248,16 @@ Sky Attack
 Supersonic
 Whirlwind
 Wing Attack
+9
+Heat Wave
+Hyper Voice
+Magic Coat
+Recycle
+Sky Attack
+Snore
+Tailwind
+Uproar
+Zen Headbutt
 90
 2 0 0 0 0 0 
 None
@@ -13514,6 +15336,17 @@ Psybeam
 Screech
 Silver Wind
 Tailwind
+10
+Bug Bite
+Drain Punch
+Focus Punch
+Giga Drain
+Ice Punch
+Knock Off
+Snore
+Tailwind
+Thunder Punch
+Uproar
 255
 0 0 0 0 1 0 
 Level 166 18
@@ -13599,6 +15432,17 @@ Psybeam
 Screech
 Silver Wind
 Tailwind
+10
+Bug Bite
+Drain Punch
+Focus Punch
+Giga Drain
+Ice Punch
+Knock Off
+Snore
+Tailwind
+Thunder Punch
+Uproar
 90
 0 0 0 0 2 0 
 None
@@ -13674,6 +15518,14 @@ Signal Beam
 Sonic Boom
 Toxic Spikes
 Twineedle
+7
+Bounce
+Bug Bite
+Electroweb
+Foul Play
+Giga Drain
+Signal Beam
+Snore
 255
 0 1 0 0 0 0 
 Level 168 22
@@ -13756,6 +15608,14 @@ Signal Beam
 Sonic Boom
 Toxic Spikes
 Twineedle
+7
+Bounce
+Bug Bite
+Electroweb
+Foul Play
+Giga Drain
+Signal Beam
+Snore
 90
 0 2 0 0 0 0 
 None
@@ -13844,6 +15704,16 @@ Steel Wing
 Venom Drench
 Whirlwind
 Zen Headbutt
+9
+Giga Drain
+Heat Wave
+Sky Attack
+Snatch
+Snore
+Super Fang
+Tailwind
+Uproar
+Zen Headbutt
 90
 0 0 0 0 0 3 
 None
@@ -13922,6 +15792,14 @@ Shock Wave
 Soak
 Water Pulse
 Whirlpool
+7
+Bounce
+Heal Bell
+Icy Wind
+Shock Wave
+Signal Beam
+Snore
+Water Pulse
 190
 1 0 0 0 0 0 
 Level 171 27
@@ -14010,6 +15888,15 @@ Shock Wave
 Soak
 Water Pulse
 Whirlpool
+8
+Aqua Tail
+Bounce
+Heal Bell
+Icy Wind
+Shock Wave
+Signal Beam
+Snore
+Water Pulse
 75
 2 0 0 0 0 0 
 None
@@ -14081,6 +15968,16 @@ Thunder Punch
 Tickle
 Wish
 Volt Tackle
+9
+Covet
+Electroweb
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
+Uproar
 190
 0 0 0 0 0 1 
 Item 25  Sun Stone
@@ -14158,6 +16055,25 @@ Splash
 Stored Power
 Tickle
 Wish
+18
+Covet
+Endeavor
+Gravity
+Hyper Voice
+Icy Wind
+Iron Tail
+Last Resort
+Magic Coat
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Snore
+Trick
+Uproar
+Water Pulse
+Wonder Room
+Zen Headbutt
 150
 0 0 0 0 1 0 
 Item 35  Sun Stone
@@ -14235,6 +16151,23 @@ Present
 Punishment
 Sleep Talk
 Wish
+16
+Bounce
+Covet
+Endeavor
+Gravity
+Heal Bell
+Hyper Voice
+Icy Wind
+Last Resort
+Magic Coat
+Pain Split
+Recycle
+Role Play
+Shock Wave
+Snore
+Uproar
+Water Pulse
 170
 1 0 0 0 0 0 
 Item 39  Sun Stone
@@ -14319,6 +16252,20 @@ Present
 Psycho Shift
 Secret Power
 Stored Power
+13
+Covet
+Endeavor
+Heal Bell
+Hyper Voice
+Last Resort
+Magic Coat
+Shock Wave
+Signal Beam
+Snore
+Trick
+Uproar
+Water Pulse
+Zen Headbutt
 190
 0 0 0 0 1 0 
 Item 176  Sun Stone
@@ -14414,6 +16361,23 @@ Present
 Psycho Shift
 Secret Power
 Stored Power
+16
+Covet
+Drain Punch
+Endeavor
+Focus Punch
+Heal Bell
+Heat Wave
+Hyper Voice
+Last Resort
+Magic Coat
+Shock Wave
+Signal Beam
+Snore
+Tailwind
+Trick
+Water Pulse
+Zen Headbutt
 75
 0 0 0 0 2 0 
 Item 468  Shiny Stone
@@ -14498,6 +16462,19 @@ Skill Swap
 Steel Wing
 Sucker Punch
 Synchronoise
+Zen Headbutt
+12
+Giga Drain
+Heat Wave
+Magic Coat
+Magic Room
+Pain Split
+Signal Beam
+Skill Swap
+Sky Attack
+Snore
+Tailwind
+Trick
 Zen Headbutt
 190
 0 0 0 1 0 0 
@@ -14591,6 +16568,20 @@ Steel Wing
 Sucker Punch
 Synchronoise
 Zen Headbutt
+13
+Foul Play
+Giga Drain
+Heat Wave
+Magic Coat
+Magic Room
+Pain Split
+Signal Beam
+Skill Swap
+Sky Attack
+Snore
+Tailwind
+Trick
+Zen Headbutt
 75
 0 0 0 1 0 1 
 None
@@ -14662,6 +16653,14 @@ Odor Sleuth
 Sand Attack
 Screech
 Take Down
+7
+Electroweb
+Heal Bell
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 235
 0 0 0 1 0 0 
 Level 180 15
@@ -14741,6 +16740,17 @@ Odor Sleuth
 Sand Attack
 Screech
 Take Down
+10
+Electroweb
+Fire Punch
+Focus Punch
+Heal Bell
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
 120
 0 0 0 2 0 0 
 Level 181 30
@@ -14831,6 +16841,19 @@ Odor Sleuth
 Sand Attack
 Screech
 Take Down
+12
+Dragon Pulse
+Electroweb
+Fire Punch
+Focus Punch
+Heal Bell
+Iron Tail
+Magnet Rise
+Outrage
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
 45
 0 0 0 3 0 0 
 None
@@ -14900,6 +16923,15 @@ Secret Power
 Synthesis
 Teeter Dance
 Tickle
+8
+Drain Punch
+Gastro Acid
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Uproar
+Worry Seed
 45
 0 0 0 0 3 0 
 None
@@ -14981,6 +17013,19 @@ Refresh
 Superpower
 Supersonic
 Water Sport
+12
+Aqua Tail
+Bounce
+Covet
+Focus Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Snore
+Superpower
+Water Pulse
 190
 2 0 0 0 0 0 
 Level 184 18
@@ -15067,6 +17112,19 @@ Refresh
 Superpower
 Supersonic
 Water Sport
+12
+Aqua Tail
+Bounce
+Covet
+Focus Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Snore
+Superpower
+Water Pulse
 75
 3 0 0 0 0 0 
 None
@@ -15152,6 +17210,19 @@ Rollout
 Sand Tomb
 Self-Destruct
 Stealth Rock
+12
+Block
+Covet
+Earth Power
+Fire Punch
+Focus Punch
+Foul Play
+Ice Punch
+Low Kick
+Role Play
+Snore
+Stealth Rock
+Thunder Punch
 65
 0 0 2 0 0 0 
 None
@@ -15230,6 +17301,15 @@ Refresh
 Splash
 Water Pulse
 Water Sport
+8
+Bounce
+Endeavor
+Focus Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Snore
+Water Pulse
 45
 0 0 0 0 3 0 
 None
@@ -15307,6 +17387,13 @@ Encore
 Endure
 Grassy Terrain
 Seed Bomb
+Worry Seed
+6
+Bounce
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
 Worry Seed
 255
 0 0 0 0 1 0 
@@ -15387,6 +17474,13 @@ Encore
 Endure
 Grassy Terrain
 Seed Bomb
+Worry Seed
+6
+Bounce
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
 Worry Seed
 120
 0 0 0 0 0 2 
@@ -15469,6 +17563,13 @@ Encore
 Endure
 Grassy Terrain
 Seed Bomb
+Worry Seed
+6
+Bounce
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
 Worry Seed
 45
 0 0 0 0 0 3 
@@ -15559,6 +17660,27 @@ Screech
 Slam
 Spite
 Switcheroo
+20
+Bounce
+Covet
+Fire Punch
+Focus Punch
+Foul Play
+Gunk Shot
+Ice Punch
+Iron Tail
+Knock Off
+Last Resort
+Low Kick
+Role Play
+Seed Bomb
+Shock Wave
+Snatch
+Snore
+Spite
+Thunder Punch
+Uproar
+Water Pulse
 45
 0 0 0 0 0 1 
 Move 424  Double Hit
@@ -15633,6 +17755,15 @@ Morning Sun
 Natural Gift
 Nature Power
 Sweet Scent
+8
+Earth Power
+Endeavor
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Uproar
+Worry Seed
 235
 0 0 0 1 0 0 
 Item 192  Sun Stone
@@ -15713,6 +17844,15 @@ Morning Sun
 Natural Gift
 Nature Power
 Sweet Scent
+8
+Earth Power
+Endeavor
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Uproar
+Worry Seed
 120
 0 0 0 2 0 0 
 None
@@ -15785,6 +17925,13 @@ Secret Power
 Signal Beam
 Silver Wind
 Whirlwind
+6
+Bug Bite
+Giga Drain
+Signal Beam
+Snore
+Tailwind
+Uproar
 75
 0 0 0 0 0 1 
 Move 469  Ancient Power
@@ -15867,6 +18014,14 @@ Sleep Talk
 Spit Up
 Stockpile
 Swallow
+7
+Aqua Tail
+Earth Power
+Ice Punch
+Icy Wind
+Iron Tail
+Snore
+Water Pulse
 255
 1 0 0 0 0 0 
 Level 195 20
@@ -15960,6 +18115,15 @@ Sleep Talk
 Spit Up
 Stockpile
 Swallow
+8
+Aqua Tail
+Earth Power
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Snore
+Water Pulse
 90
 2 0 0 0 0 0 
 None
@@ -16042,6 +18206,19 @@ Synchronoise
 Tickle
 Wish
 Yawn
+12
+Covet
+Heal Bell
+Hyper Voice
+Iron Tail
+Last Resort
+Magic Coat
+Magic Room
+Signal Beam
+Skill Swap
+Snore
+Trick
+Zen Headbutt
 45
 0 0 0 2 0 0 
 None
@@ -16122,6 +18299,17 @@ Synchronoise
 Tickle
 Wish
 Yawn
+10
+Covet
+Foul Play
+Heal Bell
+Hyper Voice
+Iron Tail
+Last Resort
+Snatch
+Snore
+Spite
+Wonder Room
 45
 0 0 0 0 2 0 
 None
@@ -16207,6 +18395,16 @@ Screech
 Sky Attack
 Whirlwind
 Wing Attack
+9
+Foul Play
+Heat Wave
+Icy Wind
+Sky Attack
+Snatch
+Snore
+Spite
+Tailwind
+Uproar
 30
 0 0 0 0 0 1 
 Item 430  Dusk Stone
@@ -16308,6 +18506,25 @@ Snore
 Stomp
 Wonder Room
 Zen Headbutt
+18
+Aqua Tail
+Block
+Drain Punch
+Focus Punch
+Foul Play
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Tail
+Magic Coat
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 70
 0 0 0 0 3 0 
 None
@@ -16394,6 +18611,22 @@ Skill Swap
 Spite
 Sucker Punch
 Wonder Room
+15
+Foul Play
+Heal Bell
+Hyper Voice
+Icy Wind
+Magic Coat
+Magic Room
+Pain Split
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Spite
+Trick
+Uproar
+Wonder Room
 45
 0 0 0 0 1 0 
 Item 429  Dusk Stone
@@ -16415,6 +18648,7 @@ Medium Fast
 Psychic None
 1
 0 Hidden Power
+0
 0
 0
 225
@@ -16443,6 +18677,7 @@ Psychic None
 0 Destiny Bond
 1
 Safeguard
+0
 0
 45
 2 0 0 0 0 0 
@@ -16535,6 +18770,20 @@ Secret Power
 Skill Swap
 Take Down
 Wish
+13
+Foul Play
+Gravity
+Hyper Voice
+Iron Tail
+Magic Coat
+Recycle
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Trick
+Uproar
+Zen Headbutt
 60
 0 0 0 2 0 0 
 None
@@ -16613,6 +18862,15 @@ Sand Tomb
 Stealth Rock
 Swift
 Toxic Spikes
+8
+Bug Bite
+Drill Run
+Giga Drain
+Gravity
+Iron Defense
+Pain Split
+Snore
+Stealth Rock
 190
 0 0 1 0 0 0 
 Level 205 31
@@ -16704,6 +18962,18 @@ Sand Tomb
 Stealth Rock
 Swift
 Toxic Spikes
+11
+Block
+Bug Bite
+Drill Run
+Giga Drain
+Gravity
+Iron Defense
+Magnet Rise
+Pain Split
+Signal Beam
+Snore
+Stealth Rock
 75
 0 0 2 0 0 0 
 None
@@ -16799,6 +19069,21 @@ Secret Power
 Sleep Talk
 Snore
 Trump Card
+14
+Aqua Tail
+Bind
+Drill Run
+Endeavor
+Iron Tail
+Last Resort
+Magic Coat
+Pain Split
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Water Pulse
+Zen Headbutt
 190
 1 0 0 0 0 0 
 None
@@ -16897,6 +19182,15 @@ Razor Wind
 Rock Climb
 Sand Tomb
 Wing Attack
+8
+Aqua Tail
+Bug Bite
+Earth Power
+Iron Tail
+Knock Off
+Snore
+Stealth Rock
+Tailwind
 60
 0 0 1 0 0 0 
 Item 472  Razor Fang
@@ -16992,6 +19286,17 @@ Rock Blast
 Rock Climb
 Rollout
 Rototiller
+Stealth Rock
+10
+Aqua Tail
+Bind
+Block
+Dragon Pulse
+Earth Power
+Iron Head
+Iron Tail
+Magnet Rise
+Snore
 Stealth Rock
 25
 0 0 2 0 0 0 
@@ -17090,6 +19395,21 @@ Present
 Smelling Salts
 Snore
 Thunder Fang
+14
+Covet
+Fire Punch
+Focus Punch
+Heal Bell
+Hyper Voice
+Ice Punch
+Last Resort
+Low Kick
+Shock Wave
+Snore
+Super Fang
+Superpower
+Thunder Punch
+Water Pulse
 190
 0 1 0 0 0 0 
 Level 210 23
@@ -17194,6 +19514,23 @@ Present
 Smelling Salts
 Snore
 Thunder Fang
+16
+Covet
+Fire Punch
+Focus Punch
+Heal Bell
+Hyper Voice
+Ice Punch
+Iron Tail
+Last Resort
+Low Kick
+Outrage
+Shock Wave
+Snore
+Super Fang
+Superpower
+Thunder Punch
+Water Pulse
 75
 0 2 0 0 0 0 
 None
@@ -17279,6 +19616,15 @@ Flail
 Haze
 Signal Beam
 Supersonic
+Water Pulse
+8
+Aqua Tail
+Bounce
+Icy Wind
+Pain Split
+Shock Wave
+Signal Beam
+Snore
 Water Pulse
 45
 0 1 0 0 0 0 
@@ -17370,6 +19716,14 @@ Razor Wind
 Reversal
 Silver Wind
 Steel Wing
+7
+Bug Bite
+Iron Defense
+Iron Head
+Knock Off
+Snore
+Superpower
+Tailwind
 25
 0 2 0 0 0 0 
 None
@@ -17453,6 +19807,14 @@ Mud-Slap
 Rock Blast
 Sand Tomb
 Sweet Scent
+7
+Bind
+Bug Bite
+Earth Power
+Gastro Acid
+Knock Off
+Snore
+Stealth Rock
 190
 0 0 1 0 1 0 
 None
@@ -17543,6 +19905,13 @@ Pursuit
 Revenge
 Rock Blast
 Seismic Toss
+6
+Bug Bite
+Focus Punch
+Iron Defense
+Knock Off
+Low Kick
+Snore
 45
 0 2 0 0 0 0 
 None
@@ -17643,6 +20012,17 @@ Icicle Crash
 Punishment
 Pursuit
 Spite
+10
+Focus Punch
+Foul Play
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Low Kick
+Snatch
+Snore
+Spite
 60
 0 0 0 0 0 1 
 Item 461  Razor Claw
@@ -17736,6 +20116,18 @@ Seismic Toss
 Sleep Talk
 Take Down
 Yawn
+11
+Covet
+Fire Punch
+Focus Punch
+Gunk Shot
+Hyper Voice
+Ice Punch
+Last Resort
+Seed Bomb
+Snore
+Superpower
+Thunder Punch
 120
 0 1 0 0 0 0 
 Level 217 30
@@ -17834,6 +20226,20 @@ Seismic Toss
 Sleep Talk
 Take Down
 Yawn
+13
+Covet
+Fire Punch
+Focus Punch
+Gunk Shot
+Hyper Voice
+Ice Punch
+Last Resort
+Low Kick
+Seed Bomb
+Snore
+Superpower
+Thunder Punch
+Uproar
 60
 0 2 0 0 0 0 
 None
@@ -17912,6 +20318,12 @@ Smokescreen
 Spit Up
 Stockpile
 Swallow
+5
+Earth Power
+Heat Wave
+Iron Defense
+Pain Split
+Snore
 190
 0 0 0 1 0 0 
 Level 219 38
@@ -18006,6 +20418,13 @@ Smokescreen
 Spit Up
 Stockpile
 Swallow
+6
+Earth Power
+Heat Wave
+Iron Defense
+Pain Split
+Snore
+Stealth Rock
 75
 0 0 2 0 0 0 
 None
@@ -18085,6 +20504,13 @@ Icicle Spear
 Mud Shot
 Stealth Rock
 Take Down
+6
+Earth Power
+Endeavor
+Icy Wind
+Snore
+Stealth Rock
+Superpower
 225
 0 1 0 0 0 0 
 Level 221 33
@@ -18171,6 +20597,13 @@ Icicle Spear
 Mud Shot
 Stealth Rock
 Take Down
+6
+Earth Power
+Endeavor
+Icy Wind
+Snore
+Stealth Rock
+Superpower
 75
 1 1 0 0 0 0 
 Move 473  Ancient Power
@@ -18265,6 +20698,15 @@ Mist
 Nature Power
 Screech
 Water Pulse
+8
+Earth Power
+Endeavor
+Icy Wind
+Iron Defense
+Magic Coat
+Snore
+Stealth Rock
+Water Pulse
 60
 0 0 1 0 1 0 
 None
@@ -18346,6 +20788,14 @@ Supersonic
 Swift
 Water Pulse
 Water Spout
+7
+Bounce
+Gunk Shot
+Icy Wind
+Seed Bomb
+Signal Beam
+Snore
+Water Pulse
 190
 0 0 0 1 0 0 
 Level 224 25
@@ -18437,6 +20887,15 @@ Supersonic
 Swift
 Water Pulse
 Water Spout
+8
+Bind
+Bounce
+Gunk Shot
+Icy Wind
+Seed Bomb
+Signal Beam
+Snore
+Water Pulse
 75
 0 1 0 1 0 0 
 None
@@ -18498,6 +20957,18 @@ Quick Attack
 Rapid Spin
 Spikes
 Splash
+11
+Bounce
+Focus Punch
+Gunk Shot
+Ice Punch
+Icy Wind
+Recycle
+Seed Bomb
+Signal Beam
+Sky Attack
+Snore
+Water Pulse
 45
 0 0 0 0 0 1 
 None
@@ -18578,6 +21049,17 @@ Slam
 Splash
 Twister
 Water Sport
+10
+Aqua Tail
+Bounce
+Gunk Shot
+Icy Wind
+Iron Head
+Seed Bomb
+Signal Beam
+Snore
+Tailwind
+Water Pulse
 25
 0 0 0 0 2 0 
 None
@@ -18660,6 +21142,14 @@ Pursuit
 Sky Attack
 Stealth Rock
 Whirlwind
+7
+Icy Wind
+Iron Defense
+Iron Head
+Sky Attack
+Snore
+Stealth Rock
+Tailwind
 25
 0 0 2 0 0 0 
 None
@@ -18748,6 +21238,17 @@ Reversal
 Spite
 Sucker Punch
 Thunder Fang
+10
+Foul Play
+Heat Wave
+Hyper Voice
+Iron Tail
+Role Play
+Snatch
+Snore
+Spite
+Super Fang
+Uproar
 120
 0 0 0 1 0 0 
 Level 229 24
@@ -18842,6 +21343,17 @@ Reversal
 Spite
 Sucker Punch
 Thunder Fang
+10
+Foul Play
+Heat Wave
+Hyper Voice
+Iron Tail
+Role Play
+Snatch
+Snore
+Spite
+Super Fang
+Uproar
 45
 0 0 0 2 0 0 
 None
@@ -18918,6 +21430,15 @@ Razor Wind
 Signal Beam
 Splash
 Water Pulse
+8
+Bounce
+Dragon Pulse
+Icy Wind
+Iron Head
+Outrage
+Signal Beam
+Snore
+Water Pulse
 45
 0 1 0 1 1 0 
 None
@@ -18989,6 +21510,18 @@ Ice Shard
 Mud-Slap
 Play Rough
 Snore
+11
+Earth Power
+Endeavor
+Gunk Shot
+Hyper Voice
+Iron Tail
+Knock Off
+Last Resort
+Seed Bomb
+Snore
+Stealth Rock
+Superpower
 120
 1 0 0 0 0 0 
 Level 232 25
@@ -19069,6 +21602,21 @@ Ice Shard
 Mud-Slap
 Play Rough
 Snore
+14
+Block
+Bounce
+Earth Power
+Endeavor
+Gunk Shot
+Hyper Voice
+Iron Defense
+Iron Tail
+Knock Off
+Last Resort
+Seed Bomb
+Snore
+Stealth Rock
+Superpower
 60
 0 1 1 0 0 0 
 None
@@ -19142,6 +21690,23 @@ Trick Room
 Secret Power
 Confide
 0
+16
+Electroweb
+Foul Play
+Gravity
+Icy Wind
+Iron Tail
+Last Resort
+Magic Coat
+Magnet Rise
+Pain Split
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Trick
+Wonder Room
+Zen Headbutt
 45
 0 0 0 2 0 0 
 Item 474  Dubious Disc
@@ -19230,6 +21795,20 @@ Rage
 Spite
 Thrash
 Zen Headbutt
+13
+Bounce
+Gravity
+Iron Tail
+Last Resort
+Magic Room
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Spite
+Uproar
+Zen Headbutt
 45
 0 1 0 0 0 0 
 None
@@ -19260,6 +21839,7 @@ Normal None
 71 Sketch
 81 Sketch
 91 Sketch
+0
 0
 0
 45
@@ -19323,6 +21903,12 @@ Mind Reader
 Pursuit
 Rapid Spin
 Vacuum Wave
+5
+Covet
+Low Kick
+Role Play
+Snore
+Uproar
 75
 0 1 0 0 0 0 
 Multi 3
@@ -19406,6 +21992,12 @@ Mind Reader
 Pursuit
 Rapid Spin
 Vacuum Wave
+5
+Covet
+Endeavor
+Low Kick
+Role Play
+Snore
 45
 0 0 0 0 2 0 
 None
@@ -19484,6 +22076,22 @@ Miracle Eye
 Nasty Plot
 Wake-Up Slap
 Wish
+15
+Covet
+Heal Bell
+Ice Punch
+Icy Wind
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Signal Beam
+Skill Swap
+Snore
+Trick
+Uproar
+Water Pulse
+Zen Headbutt
 45
 0 0 0 1 0 0 
 Level 124 30
@@ -19560,6 +22168,20 @@ Ice Punch
 Karate Chop
 Meditate
 Rolling Kick
+13
+Covet
+Dual Chop
+Electroweb
+Fire Punch
+Focus Punch
+Ice Punch
+Low Kick
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
+Uproar
 45
 0 0 0 0 0 1 
 Level 125 30
@@ -19638,6 +22260,16 @@ Mega Punch
 Power Swap
 Screech
 Thunder Punch
+9
+Covet
+Dual Chop
+Fire Punch
+Focus Punch
+Heat Wave
+Iron Tail
+Snore
+Thunder Punch
+Uproar
 45
 0 0 0 0 0 1 
 Level 126 30
@@ -19728,6 +22360,21 @@ Punishment
 Reversal
 Seismic Toss
 Sleep Talk
+14
+Block
+Fire Punch
+Focus Punch
+Heal Bell
+Ice Punch
+Icy Wind
+Iron Head
+Iron Tail
+Shock Wave
+Snore
+Stealth Rock
+Thunder Punch
+Water Pulse
+Zen Headbutt
 45
 0 0 2 0 0 0 
 None
@@ -19831,6 +22478,29 @@ Mud Bomb
 Natural Gift
 Present
 Seismic Toss
+22
+Block
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Gravity
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Tail
+Last Resort
+Recycle
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Stealth Rock
+Thunder Punch
+Water Pulse
+Zen Headbutt
 30
 3 0 0 0 0 0 
 None
@@ -19907,6 +22577,13 @@ Confide
 Cut
 Strength
 0
+6
+Iron Head
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 3
 0 0 0 1 0 2 
 None
@@ -19984,6 +22661,11 @@ Confide
 Cut
 Strength
 0
+4
+Heat Wave
+Iron Head
+Iron Tail
+Snore
 3
 1 2 0 0 0 0 
 None
@@ -20057,6 +22739,14 @@ Surf
 Waterfall
 Dive
 0
+7
+Icy Wind
+Iron Head
+Iron Tail
+Signal Beam
+Snore
+Tailwind
+Water Pulse
 3
 0 0 1 0 2 0 
 None
@@ -20139,6 +22829,17 @@ Outrage
 Pursuit
 Stealth Rock
 Stomp
+10
+Earth Power
+Iron Defense
+Iron Head
+Iron Tail
+Outrage
+Snore
+Spite
+Stealth Rock
+Superpower
+Uproar
 45
 0 1 0 0 0 0 
 Level 247 30
@@ -20224,6 +22925,17 @@ Outrage
 Pursuit
 Stealth Rock
 Stomp
+10
+Earth Power
+Iron Defense
+Iron Head
+Iron Tail
+Outrage
+Snore
+Spite
+Stealth Rock
+Superpower
+Uproar
 45
 0 2 0 0 0 0 
 Level 248 55
@@ -20333,6 +23045,28 @@ Outrage
 Pursuit
 Stealth Rock
 Stomp
+21
+Aqua Tail
+Block
+Dragon Pulse
+Earth Power
+Fire Punch
+Focus Punch
+Foul Play
+Ice Punch
+Iron Defense
+Iron Head
+Iron Tail
+Low Kick
+Outrage
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Thunder Punch
+Uproar
+Water Pulse
 45
 0 3 0 0 0 0 
 None
@@ -20421,6 +23155,25 @@ Strength
 Waterfall
 Dive
 0
+18
+Aqua Tail
+Dragon Pulse
+Earth Power
+Giga Drain
+Hyper Voice
+Icy Wind
+Iron Head
+Iron Tail
+Shock Wave
+Signal Beam
+Skill Swap
+Sky Attack
+Snore
+Tailwind
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 3
 0 0 0 0 3 0 
 None
@@ -20507,6 +23260,18 @@ Confide
 Fly
 Strength
 0
+11
+Earth Power
+Giga Drain
+Heat Wave
+Hyper Voice
+Iron Head
+Shock Wave
+Signal Beam
+Sky Attack
+Snore
+Tailwind
+Zen Headbutt
 3
 0 0 0 0 3 0 
 None
@@ -20584,6 +23349,26 @@ Dazzling Gleam
 Confide
 Cut
 0
+19
+Earth Power
+Giga Drain
+Heal Bell
+Last Resort
+Magic Coat
+Magic Room
+Seed Bomb
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Synthesis
+Trick
+Uproar
+Water Pulse
+Wonder Room
+Worry Seed
+Zen Headbutt
 45
 3 0 0 0 0 0 
 None
@@ -20668,6 +23453,18 @@ Mud Sport
 Natural Gift
 Razor Wind
 Synthesis
+Worry Seed
+11
+Drain Punch
+Endeavor
+Focus Punch
+Giga Drain
+Iron Tail
+Low Kick
+Seed Bomb
+Snore
+Synthesis
+Thunder Punch
 Worry Seed
 45
 0 0 0 0 0 1 
@@ -20760,6 +23557,18 @@ Mud Sport
 Natural Gift
 Razor Wind
 Synthesis
+Worry Seed
+11
+Drain Punch
+Endeavor
+Focus Punch
+Giga Drain
+Iron Tail
+Low Kick
+Seed Bomb
+Snore
+Synthesis
+Thunder Punch
 Worry Seed
 45
 0 0 0 0 0 2 
@@ -20864,6 +23673,21 @@ Natural Gift
 Razor Wind
 Synthesis
 Worry Seed
+14
+Dragon Pulse
+Drain Punch
+Dual Chop
+Endeavor
+Focus Punch
+Giga Drain
+Iron Tail
+Low Kick
+Outrage
+Seed Bomb
+Snore
+Synthesis
+Thunder Punch
+Worry Seed
 45
 0 0 0 0 0 3 
 None
@@ -20944,6 +23768,12 @@ Low Kick
 Night Slash
 Reversal
 Smelling Salts
+5
+Bounce
+Heat Wave
+Last Resort
+Low Kick
+Snore
 45
 0 0 0 1 0 0 
 Level 256 16
@@ -21035,6 +23865,16 @@ Low Kick
 Night Slash
 Reversal
 Smelling Salts
+9
+Bounce
+Dual Chop
+Fire Punch
+Focus Punch
+Heat Wave
+Last Resort
+Low Kick
+Snore
+Thunder Punch
 45
 0 1 0 1 0 0 
 Level 257 36
@@ -21138,6 +23978,19 @@ Low Kick
 Night Slash
 Reversal
 Smelling Salts
+12
+Bounce
+Dual Chop
+Fire Punch
+Focus Punch
+Heat Wave
+Knock Off
+Last Resort
+Low Kick
+Role Play
+Snore
+Superpower
+Thunder Punch
 45
 0 3 0 0 0 0 
 None
@@ -21218,6 +24071,17 @@ Stomp
 Uproar
 Whirlpool
 Yawn
+10
+Aqua Tail
+Earth Power
+Endeavor
+Icy Wind
+Iron Tail
+Low Kick
+Snore
+Superpower
+Uproar
+Water Pulse
 45
 0 1 0 0 0 0 
 Level 259 16
@@ -21306,6 +24170,19 @@ Stomp
 Uproar
 Whirlpool
 Yawn
+12
+Aqua Tail
+Earth Power
+Endeavor
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Snore
+Stealth Rock
+Superpower
+Uproar
+Water Pulse
 45
 0 2 0 0 0 0 
 Level 260 36
@@ -21401,6 +24278,21 @@ Stomp
 Uproar
 Whirlpool
 Yawn
+14
+Aqua Tail
+Earth Power
+Endeavor
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Outrage
+Snore
+Stealth Rock
+Superpower
+Uproar
+Water Pulse
 45
 0 3 0 0 0 0 
 None
@@ -21479,6 +24371,16 @@ Snatch
 Sucker Punch
 Thunder Fang
 Yawn
+9
+Covet
+Foul Play
+Hyper Voice
+Iron Tail
+Snatch
+Snore
+Spite
+Super Fang
+Uproar
 255
 0 1 0 0 0 0 
 Level 262 18
@@ -21566,6 +24468,16 @@ Snatch
 Sucker Punch
 Thunder Fang
 Yawn
+9
+Covet
+Foul Play
+Hyper Voice
+Iron Tail
+Snatch
+Snore
+Spite
+Super Fang
+Uproar
 127
 0 2 0 0 0 0 
 None
@@ -21645,6 +24557,19 @@ Simple Beam
 Sleep Talk
 Tickle
 Trick
+12
+Covet
+Gunk Shot
+Hyper Voice
+Icy Wind
+Iron Tail
+Last Resort
+Seed Bomb
+Shock Wave
+Snore
+Super Fang
+Trick
+Water Pulse
 255
 0 0 0 0 0 1 
 Level 264 20
@@ -21735,6 +24660,19 @@ Simple Beam
 Sleep Talk
 Tickle
 Trick
+12
+Covet
+Gunk Shot
+Hyper Voice
+Icy Wind
+Iron Tail
+Last Resort
+Seed Bomb
+Shock Wave
+Snore
+Super Fang
+Trick
+Water Pulse
 90
 0 0 0 0 0 2 
 None
@@ -21765,6 +24703,10 @@ Bug None
 15 Bug Bite
 0
 0
+3
+Bug Bite
+Electroweb
+Snore
 255
 1 0 0 0 0 0 
 Multi 2
@@ -21793,6 +24735,10 @@ Bug None
 7 Harden
 0
 0
+3
+Bug Bite
+Electroweb
+Iron Defense
 120
 0 0 2 0 0 0 
 Level 267 10
@@ -21859,6 +24805,13 @@ Substitute
 Secret Power
 Confide
 0
+6
+Bug Bite
+Electroweb
+Giga Drain
+Signal Beam
+Snore
+Tailwind
 45
 0 0 0 3 0 0 
 None
@@ -21885,6 +24838,10 @@ Bug None
 7 Harden
 0
 0
+3
+Bug Bite
+Electroweb
+Iron Defense
 120
 0 0 2 0 0 0 
 Level 269 10
@@ -21952,6 +24909,13 @@ Substitute
 Secret Power
 Confide
 0
+6
+Bug Bite
+Electroweb
+Giga Drain
+Signal Beam
+Snore
+Tailwind
 45
 0 0 0 0 3 0 
 None
@@ -22028,6 +24992,15 @@ Synthesis
 Teeter Dance
 Tickle
 Water Gun
+8
+Giga Drain
+Icy Wind
+Seed Bomb
+Snore
+Synthesis
+Uproar
+Water Pulse
+Zen Headbutt
 255
 0 0 0 0 1 0 
 Level 271 14
@@ -22110,6 +25083,21 @@ Synthesis
 Teeter Dance
 Tickle
 Water Gun
+14
+Drain Punch
+Fire Punch
+Giga Drain
+Hyper Voice
+Ice Punch
+Icy Wind
+Knock Off
+Seed Bomb
+Snore
+Synthesis
+Thunder Punch
+Uproar
+Water Pulse
+Zen Headbutt
 120
 0 0 0 0 2 0 
 Item 272  Water Stone
@@ -22186,6 +25174,22 @@ Synthesis
 Teeter Dance
 Tickle
 Water Gun
+15
+Drain Punch
+Fire Punch
+Focus Punch
+Giga Drain
+Hyper Voice
+Ice Punch
+Icy Wind
+Knock Off
+Seed Bomb
+Snore
+Synthesis
+Thunder Punch
+Uproar
+Water Pulse
+Zen Headbutt
 45
 0 0 0 0 3 0 
 None
@@ -22254,6 +25258,14 @@ Power Swap
 Quick Attack
 Razor Wind
 Take Down
+Worry Seed
+7
+Foul Play
+Giga Drain
+Seed Bomb
+Snore
+Spite
+Synthesis
 Worry Seed
 255
 0 0 1 0 0 0 
@@ -22345,6 +25357,15 @@ Quick Attack
 Razor Wind
 Take Down
 Worry Seed
+8
+Foul Play
+Giga Drain
+Low Kick
+Seed Bomb
+Snore
+Spite
+Synthesis
+Worry Seed
 120
 0 2 0 0 0 0 
 Item 275  Leaf Stone
@@ -22434,6 +25455,19 @@ Quick Attack
 Razor Wind
 Take Down
 Worry Seed
+12
+Bounce
+Foul Play
+Giga Drain
+Icy Wind
+Knock Off
+Low Kick
+Seed Bomb
+Snore
+Spite
+Synthesis
+Tailwind
+Worry Seed
 45
 0 3 0 0 0 0 
 None
@@ -22503,6 +25537,12 @@ Sky Attack
 Steel Wing
 Supersonic
 Whirlwind
+5
+Endeavor
+Heat Wave
+Sky Attack
+Snore
+Tailwind
 200
 0 0 0 0 0 1 
 Level 277 22
@@ -22579,6 +25619,12 @@ Sky Attack
 Steel Wing
 Supersonic
 Whirlwind
+5
+Endeavor
+Heat Wave
+Sky Attack
+Snore
+Tailwind
 45
 0 0 0 0 0 2 
 None
@@ -22651,6 +25697,15 @@ Roost
 Soak
 Twister
 Water Sport
+8
+Icy Wind
+Knock Off
+Shock Wave
+Sky Attack
+Snore
+Tailwind
+Uproar
+Water Pulse
 190
 0 0 0 0 0 1 
 Level 279 25
@@ -22743,6 +25798,17 @@ Roost
 Soak
 Twister
 Water Sport
+10
+Gunk Shot
+Icy Wind
+Knock Off
+Seed Bomb
+Shock Wave
+Sky Attack
+Snore
+Tailwind
+Uproar
+Water Pulse
 45
 0 0 2 0 0 0 
 None
@@ -22837,6 +25903,24 @@ Misty Terrain
 Shadow Sneak
 Skill Swap
 Synchronoise
+17
+Fire Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Magic Coat
+Magic Room
+Pain Split
+Recycle
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 235
 0 0 0 1 0 0 
 Level 281 20
@@ -22927,6 +26011,24 @@ Misty Terrain
 Shadow Sneak
 Skill Swap
 Synchronoise
+17
+Fire Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Magic Coat
+Magic Room
+Pain Split
+Recycle
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 120
 0 0 0 2 0 0 
 Multi 2
@@ -23028,6 +26130,25 @@ Misty Terrain
 Shadow Sneak
 Skill Swap
 Synchronoise
+18
+Fire Punch
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Magic Coat
+Magic Room
+Pain Split
+Recycle
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 45
 0 0 0 3 0 0 
 None
@@ -23097,6 +26218,13 @@ Mud Shot
 Power Split
 Psybeam
 Signal Beam
+6
+Bug Bite
+Giga Drain
+Icy Wind
+Signal Beam
+Snore
+Water Pulse
 200
 0 0 0 0 0 1 
 Level 284 22
@@ -23182,6 +26310,14 @@ Mud Shot
 Power Split
 Psybeam
 Signal Beam
+7
+Bug Bite
+Giga Drain
+Icy Wind
+Signal Beam
+Snore
+Tailwind
+Water Pulse
 75
 0 0 0 1 1 0 
 None
@@ -23249,6 +26385,15 @@ Focus Punch
 Natural Gift
 Seed Bomb
 Wake-Up Slap
+Worry Seed
+8
+Drain Punch
+Focus Punch
+Giga Drain
+Seed Bomb
+Snatch
+Snore
+Synthesis
 Worry Seed
 255
 1 0 0 0 0 0 
@@ -23338,6 +26483,18 @@ Natural Gift
 Seed Bomb
 Wake-Up Slap
 Worry Seed
+11
+Drain Punch
+Focus Punch
+Giga Drain
+Iron Tail
+Seed Bomb
+Snatch
+Snore
+Superpower
+Synthesis
+Thunder Punch
+Worry Seed
 90
 0 2 0 0 0 0 
 None
@@ -23421,6 +26578,17 @@ Slash
 Sleep Talk
 Snore
 Tickle
+10
+Covet
+Fire Punch
+Focus Punch
+Gunk Shot
+Ice Punch
+Icy Wind
+Shock Wave
+Snore
+Thunder Punch
+Water Pulse
 255
 1 0 0 0 0 0 
 Level 288 18
@@ -23510,6 +26678,19 @@ Slash
 Sleep Talk
 Snore
 Tickle
+12
+Covet
+Fire Punch
+Focus Punch
+Gunk Shot
+Ice Punch
+Icy Wind
+Low Kick
+Shock Wave
+Snore
+Thunder Punch
+Uproar
+Water Pulse
 120
 0 0 0 0 0 2 
 Level 289 36
@@ -23607,6 +26788,19 @@ Slash
 Sleep Talk
 Snore
 Tickle
+12
+Block
+Covet
+Fire Punch
+Focus Punch
+Gunk Shot
+Ice Punch
+Icy Wind
+Low Kick
+Shock Wave
+Snore
+Thunder Punch
+Water Pulse
 45
 3 0 0 0 0 0 
 None
@@ -23672,6 +26866,11 @@ Final Gambit
 Gust
 Night Slash
 Silver Wind
+4
+Bug Bite
+Giga Drain
+Snore
+Spite
 255
 0 0 1 0 0 0 
 Level 291 20
@@ -23751,6 +26950,12 @@ Final Gambit
 Gust
 Night Slash
 Silver Wind
+5
+Bug Bite
+Giga Drain
+Snore
+Spite
+Uproar
 120
 0 0 0 0 0 2 
 None
@@ -23824,6 +27029,12 @@ Final Gambit
 Gust
 Night Slash
 Silver Wind
+5
+Bug Bite
+Giga Drain
+Snore
+Spite
+Trick
 45
 2 0 0 0 0 0 
 None
@@ -23895,6 +27106,18 @@ Smelling Salts
 Smokescreen
 Snore
 Take Down
+11
+Endeavor
+Fire Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Shock Wave
+Snore
+Thunder Punch
+Uproar
+Water Pulse
+Zen Headbutt
 190
 1 0 0 0 0 0 
 Level 294 20
@@ -23983,6 +27206,19 @@ Smelling Salts
 Smokescreen
 Snore
 Take Down
+12
+Endeavor
+Fire Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Low Kick
+Shock Wave
+Snore
+Thunder Punch
+Uproar
+Water Pulse
+Zen Headbutt
 120
 2 0 0 0 0 0 
 Level 295 40
@@ -24082,6 +27318,20 @@ Smelling Salts
 Smokescreen
 Snore
 Take Down
+13
+Endeavor
+Fire Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Low Kick
+Outrage
+Shock Wave
+Snore
+Thunder Punch
+Uproar
+Water Pulse
+Zen Headbutt
 45
 3 0 0 0 0 0 
 None
@@ -24166,6 +27416,16 @@ Focus Punch
 Foresight
 Revenge
 Wake-Up Slap
+9
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Role Play
+Snore
+Superpower
+Thunder Punch
 180
 1 0 0 0 0 0 
 Level 297 24
@@ -24257,6 +27517,17 @@ Focus Punch
 Foresight
 Revenge
 Wake-Up Slap
+10
+Fire Punch
+Focus Punch
+Ice Punch
+Iron Head
+Knock Off
+Low Kick
+Role Play
+Snore
+Superpower
+Thunder Punch
 200
 2 0 0 0 0 0 
 None
@@ -24324,6 +27595,16 @@ Slam
 Soak
 Tickle
 Water Sport
+9
+Bounce
+Covet
+Hyper Voice
+Icy Wind
+Iron Tail
+Knock Off
+Snore
+Uproar
+Water Pulse
 150
 1 0 0 0 0 0 
 Item 183  Water Stone
@@ -24400,6 +27681,20 @@ Endure
 Magnitude
 Rollout
 Stealth Rock
+13
+Block
+Earth Power
+Fire Punch
+Gravity
+Ice Punch
+Iron Defense
+Magic Coat
+Magnet Rise
+Pain Split
+Shock Wave
+Snore
+Stealth Rock
+Thunder Punch
 255
 0 0 1 0 0 0 
 Item 476  Thunder Stone
@@ -24489,6 +27784,18 @@ Tickle
 Uproar
 Wish
 Zen Headbutt
+11
+Covet
+Heal Bell
+Hyper Voice
+Icy Wind
+Iron Tail
+Last Resort
+Shock Wave
+Snore
+Uproar
+Water Pulse
+Zen Headbutt
 255
 0 0 0 0 0 1 
 Item 301  Moon Stone
@@ -24567,6 +27874,18 @@ Sucker Punch
 Tickle
 Uproar
 Wish
+Zen Headbutt
+11
+Covet
+Heal Bell
+Hyper Voice
+Icy Wind
+Iron Tail
+Last Resort
+Shock Wave
+Snore
+Uproar
+Water Pulse
 Zen Headbutt
 60
 1 0 0 0 0 1 
@@ -24667,6 +27986,28 @@ Nasty Plot
 Recover
 Sucker Punch
 Trick
+21
+Fire Punch
+Focus Punch
+Foul Play
+Gravity
+Ice Punch
+Icy Wind
+Knock Off
+Low Kick
+Magic Coat
+Pain Split
+Role Play
+Shock Wave
+Signal Beam
+Snatch
+Snore
+Spite
+Thunder Punch
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 45
 0 1 1 0 0 0 
 None
@@ -24769,6 +28110,22 @@ Slam
 Sucker Punch
 Thunder Fang
 Tickle
+15
+Focus Punch
+Foul Play
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Head
+Knock Off
+Last Resort
+Magnet Rise
+Pain Split
+Snatch
+Snore
+Stealth Rock
+Super Fang
+Thunder Punch
 45
 0 1 1 0 0 0 
 None
@@ -24852,6 +28209,20 @@ Smelling Salts
 Stealth Rock
 Stomp
 Superpower
+13
+Earth Power
+Endeavor
+Iron Defense
+Iron Head
+Iron Tail
+Magnet Rise
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Uproar
+Water Pulse
 180
 0 0 1 0 0 0 
 Level 305 32
@@ -24937,6 +28308,20 @@ Smelling Salts
 Stealth Rock
 Stomp
 Superpower
+13
+Earth Power
+Endeavor
+Iron Defense
+Iron Head
+Iron Tail
+Magnet Rise
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Uproar
+Water Pulse
 90
 0 0 2 0 0 0 
 Level 306 42
@@ -25045,6 +28430,30 @@ Smelling Salts
 Stealth Rock
 Stomp
 Superpower
+23
+Aqua Tail
+Block
+Dragon Pulse
+Earth Power
+Endeavor
+Fire Punch
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Head
+Iron Tail
+Low Kick
+Magnet Rise
+Outrage
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Thunder Punch
+Uproar
+Water Pulse
 45
 0 0 3 0 0 0 
 None
@@ -25136,6 +28545,22 @@ Psycho Cut
 Quick Guard
 Secret Power
 Thunder Punch
+15
+Drain Punch
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Low Kick
+Magic Coat
+Pain Split
+Recycle
+Role Play
+Signal Beam
+Snore
+Thunder Punch
+Trick
+Zen Headbutt
 180
 0 0 0 0 0 1 
 Level 308 37
@@ -25236,6 +28661,22 @@ Psycho Cut
 Quick Guard
 Secret Power
 Thunder Punch
+15
+Drain Punch
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Low Kick
+Magic Coat
+Pain Split
+Recycle
+Role Play
+Signal Beam
+Snore
+Thunder Punch
+Trick
+Zen Headbutt
 90
 0 0 0 0 0 2 
 None
@@ -25312,6 +28753,13 @@ Shock Wave
 Swift
 Switcheroo
 Thunder Fang
+Uproar
+6
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 Uproar
 120
 0 0 0 0 0 1 
@@ -25398,6 +28846,13 @@ Swift
 Switcheroo
 Thunder Fang
 Uproar
+6
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Uproar
 45
 0 0 0 0 0 2 
 None
@@ -25473,6 +28928,16 @@ Lucky Chant
 Sing
 Sweet Kiss
 Wish
+9
+Electroweb
+Iron Tail
+Last Resort
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
+Uproar
 200
 0 0 0 0 0 1 
 None
@@ -25549,6 +29014,16 @@ Lucky Chant
 Sing
 Sweet Kiss
 Wish
+9
+Electroweb
+Iron Tail
+Last Resort
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
+Uproar
 200
 0 0 0 0 0 1 
 None
@@ -25628,6 +29103,19 @@ Encore
 Seismic Toss
 Silver Wind
 Trick
+12
+Bug Bite
+Focus Punch
+Giga Drain
+Ice Punch
+Shock Wave
+Signal Beam
+Snore
+Tailwind
+Thunder Punch
+Trick
+Water Pulse
+Zen Headbutt
 150
 0 0 0 0 0 1 
 None
@@ -25708,6 +29196,18 @@ Encore
 Fake Tears
 Growth
 Silver Wind
+11
+Bug Bite
+Covet
+Focus Punch
+Giga Drain
+Ice Punch
+Shock Wave
+Snore
+Tailwind
+Thunder Punch
+Water Pulse
+Zen Headbutt
 150
 0 0 0 0 0 1 
 None
@@ -25789,6 +29289,13 @@ Seed Bomb
 Sleep Powder
 Spikes
 Synthesis
+6
+Covet
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 150
 0 0 0 2 0 0 
 Item 407  Shiny Stone
@@ -25864,6 +29371,19 @@ Mud-Slap
 Pain Split
 Smog
 Venom Drench
+12
+Fire Punch
+Gastro Acid
+Giga Drain
+Gunk Shot
+Ice Punch
+Pain Split
+Seed Bomb
+Shock Wave
+Snatch
+Snore
+Thunder Punch
+Water Pulse
 225
 1 0 0 0 0 0 
 Level 317 26
@@ -25948,6 +29468,20 @@ Mud-Slap
 Pain Split
 Smog
 Venom Drench
+13
+Block
+Fire Punch
+Gastro Acid
+Giga Drain
+Gunk Shot
+Ice Punch
+Pain Split
+Seed Bomb
+Shock Wave
+Snatch
+Snore
+Thunder Punch
+Water Pulse
 75
 2 0 0 0 0 0 
 None
@@ -26020,6 +29554,15 @@ Double-Edge
 Hydro Pump
 Swift
 Thrash
+8
+Bounce
+Icy Wind
+Snore
+Spite
+Super Fang
+Uproar
+Water Pulse
+Zen Headbutt
 225
 0 1 0 0 0 0 
 Level 319 30
@@ -26108,6 +29651,15 @@ Double-Edge
 Hydro Pump
 Swift
 Thrash
+8
+Bounce
+Icy Wind
+Snore
+Spite
+Super Fang
+Uproar
+Water Pulse
+Zen Headbutt
 60
 0 2 0 0 0 0 
 None
@@ -26187,6 +29739,13 @@ Snore
 Soak
 Thrash
 Tickle
+Zen Headbutt
+6
+Bounce
+Hyper Voice
+Icy Wind
+Snore
+Water Pulse
 Zen Headbutt
 125
 1 0 0 0 0 0 
@@ -26273,6 +29832,15 @@ Soak
 Thrash
 Tickle
 Zen Headbutt
+8
+Block
+Bounce
+Hyper Voice
+Icy Wind
+Iron Head
+Snore
+Water Pulse
+Zen Headbutt
 60
 2 0 0 0 0 0 
 None
@@ -26356,6 +29924,12 @@ Stockpile
 Stomp
 Swallow
 Yawn
+5
+Earth Power
+Heat Wave
+Iron Head
+Snore
+Stealth Rock
 255
 0 0 0 1 0 0 
 Level 323 33
@@ -26453,6 +30027,12 @@ Stockpile
 Stomp
 Swallow
 Yawn
+5
+Earth Power
+Heat Wave
+Iron Head
+Snore
+Stealth Rock
 150
 0 1 0 1 0 0 
 None
@@ -26537,6 +30117,14 @@ Skull Bash
 Sleep Talk
 Superpower
 Yawn
+7
+Earth Power
+Heat Wave
+Iron Defense
+Iron Tail
+Snore
+Stealth Rock
+Superpower
 90
 0 0 2 0 0 0 
 None
@@ -26617,6 +30205,22 @@ Simple Beam
 Skill Swap
 Trick
 Whirlwind
+Zen Headbutt
+15
+Bounce
+Covet
+Heal Bell
+Icy Wind
+Iron Tail
+Magic Coat
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
 Zen Headbutt
 255
 0 0 0 0 1 0 
@@ -26712,6 +30316,27 @@ Skill Swap
 Trick
 Whirlwind
 Zen Headbutt
+20
+Bounce
+Covet
+Drain Punch
+Fire Punch
+Focus Punch
+Heal Bell
+Ice Punch
+Icy Wind
+Iron Tail
+Magic Coat
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Zen Headbutt
 60
 0 0 0 0 2 0 
 None
@@ -26799,6 +30424,27 @@ Smelling Salts
 Trick
 Water Pulse
 Wish
+20
+Covet
+Drain Punch
+Fire Punch
+Focus Punch
+Hyper Voice
+Ice Punch
+Icy Wind
+Last Resort
+Low Kick
+Recycle
+Role Play
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Uproar
+Water Pulse
+Zen Headbutt
 255
 0 0 0 1 0 0 
 None
@@ -26874,6 +30520,13 @@ Gust
 Mud Shot
 Quick Attack
 Signal Beam
+6
+Bug Bite
+Earth Power
+Giga Drain
+Signal Beam
+Snore
+Superpower
 255
 0 1 0 0 0 0 
 Level 329 35
@@ -26954,6 +30607,18 @@ Gust
 Mud Shot
 Quick Attack
 Signal Beam
+11
+Bug Bite
+Dragon Pulse
+Earth Power
+Giga Drain
+Heat Wave
+Outrage
+Signal Beam
+Snore
+Superpower
+Tailwind
+Uproar
 120
 0 1 0 0 0 1 
 Level 330 45
@@ -27044,6 +30709,21 @@ Gust
 Mud Shot
 Quick Attack
 Signal Beam
+14
+Bug Bite
+Dragon Pulse
+Earth Power
+Fire Punch
+Giga Drain
+Heat Wave
+Iron Tail
+Outrage
+Signal Beam
+Snore
+Superpower
+Tailwind
+Thunder Punch
+Uproar
 45
 0 1 0 0 0 2 
 None
@@ -27128,6 +30808,19 @@ Seed Bomb
 Smelling Salts
 Switcheroo
 Teeter Dance
+Worry Seed
+12
+Block
+Drain Punch
+Focus Punch
+Giga Drain
+Low Kick
+Role Play
+Seed Bomb
+Snore
+Spite
+Synthesis
+Thunder Punch
 Worry Seed
 190
 0 0 0 1 0 0 
@@ -27227,6 +30920,21 @@ Smelling Salts
 Switcheroo
 Teeter Dance
 Worry Seed
+14
+Block
+Drain Punch
+Focus Punch
+Foul Play
+Giga Drain
+Low Kick
+Role Play
+Seed Bomb
+Snore
+Spite
+Superpower
+Synthesis
+Thunder Punch
+Worry Seed
 60
 0 1 0 1 0 0 
 None
@@ -27305,6 +31013,16 @@ Pursuit
 Rage
 Roost
 Steel Wing
+9
+Dragon Pulse
+Heal Bell
+Heat Wave
+Hyper Voice
+Outrage
+Sky Attack
+Snore
+Tailwind
+Uproar
 255
 0 0 0 0 1 0 
 Level 334 35
@@ -27398,6 +31116,18 @@ Pursuit
 Rage
 Roost
 Steel Wing
+11
+Dragon Pulse
+Heal Bell
+Heat Wave
+Hyper Voice
+Iron Tail
+Outrage
+Sky Attack
+Snore
+Tailwind
+Uproar
+Wonder Room
 45
 0 0 0 0 2 0 
 None
@@ -27496,6 +31226,21 @@ Metal Claw
 Night Slash
 Quick Guard
 Razor Wind
+14
+Endeavor
+Fire Punch
+Focus Punch
+Giga Drain
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Last Resort
+Low Kick
+Shock Wave
+Snore
+Thunder Punch
+Water Pulse
 90
 0 2 0 0 0 0 
 None
@@ -27582,6 +31327,15 @@ Stockpile
 Swallow
 Switcheroo
 Wring Out
+8
+Aqua Tail
+Bind
+Gastro Acid
+Giga Drain
+Iron Tail
+Knock Off
+Snatch
+Snore
 90
 0 1 0 1 0 0 
 None
@@ -27665,6 +31419,20 @@ Trick Room
 Secret Power
 Confide
 0
+13
+Earth Power
+Gravity
+Icy Wind
+Iron Head
+Magic Coat
+Magic Room
+Pain Split
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Zen Headbutt
 45
 0 0 0 2 0 0 
 None
@@ -27752,6 +31520,21 @@ Trick Room
 Secret Power
 Confide
 0
+14
+Earth Power
+Gravity
+Heat Wave
+Iron Defense
+Iron Head
+Magic Coat
+Pain Split
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Wonder Room
+Zen Headbutt
 45
 0 2 0 0 0 0 
 None
@@ -27827,6 +31610,13 @@ Spark
 Take Down
 Thrash
 Whirlpool
+6
+Aqua Tail
+Bounce
+Earth Power
+Icy Wind
+Snore
+Water Pulse
 190
 1 0 0 0 0 0 
 Level 340 30
@@ -27910,6 +31700,14 @@ Spark
 Take Down
 Thrash
 Whirlpool
+7
+Aqua Tail
+Bounce
+Earth Power
+Icy Wind
+Snore
+Water Pulse
+Zen Headbutt
 75
 2 0 0 0 0 0 
 None
@@ -27996,6 +31794,15 @@ Mud Sport
 Superpower
 Switcheroo
 Trump Card
+8
+Endeavor
+Icy Wind
+Iron Defense
+Knock Off
+Snore
+Spite
+Superpower
+Water Pulse
 205
 0 1 0 0 0 0 
 Level 342 30
@@ -28094,6 +31901,15 @@ Mud Sport
 Superpower
 Switcheroo
 Trump Card
+8
+Endeavor
+Icy Wind
+Iron Defense
+Knock Off
+Snore
+Spite
+Superpower
+Water Pulse
 155
 0 2 0 0 0 0 
 None
@@ -28174,6 +31990,19 @@ Secret Power
 Dazzling Gleam
 Confide
 0
+12
+Drill Run
+Earth Power
+Gravity
+Magic Coat
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Trick
+Wonder Room
+Zen Headbutt
 255
 0 0 0 0 1 0 
 Level 344 36
@@ -28263,6 +32092,19 @@ Dazzling Gleam
 Confide
 Strength
 0
+12
+Drill Run
+Earth Power
+Gravity
+Magic Coat
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Trick
+Wonder Room
+Zen Headbutt
 90
 0 0 0 0 2 0 
 None
@@ -28336,6 +32178,17 @@ Recover
 Stealth Rock
 Tickle
 Wring Out
+10
+Bind
+Earth Power
+Gastro Acid
+Giga Drain
+Pain Split
+Seed Bomb
+Snore
+Stealth Rock
+Synthesis
+Worry Seed
 45
 0 0 0 0 1 0 
 Level 346 40
@@ -28420,6 +32273,18 @@ Recover
 Stealth Rock
 Tickle
 Wring Out
+11
+Bind
+Block
+Earth Power
+Gastro Acid
+Giga Drain
+Pain Split
+Seed Bomb
+Snore
+Stealth Rock
+Synthesis
+Worry Seed
 45
 0 0 0 0 2 0 
 None
@@ -28495,6 +32360,14 @@ Knock Off
 Rapid Spin
 Sand Attack
 Screech
+Water Pulse
+7
+Bug Bite
+Earth Power
+Iron Defense
+Knock Off
+Snore
+Stealth Rock
 Water Pulse
 45
 0 1 0 0 0 0 
@@ -28580,6 +32453,19 @@ Rapid Spin
 Sand Attack
 Screech
 Water Pulse
+12
+Aqua Tail
+Block
+Bug Bite
+Earth Power
+Iron Defense
+Iron Tail
+Knock Off
+Low Kick
+Snore
+Stealth Rock
+Superpower
+Water Pulse
 45
 0 2 0 0 0 0 
 None
@@ -28639,6 +32525,12 @@ Mirror Coat
 Mist
 Mud Sport
 Tickle
+5
+Dragon Pulse
+Icy Wind
+Iron Tail
+Snore
+Water Pulse
 255
 0 0 0 0 0 1 
 Item 350  Prism Scale
@@ -28718,6 +32610,16 @@ Mirror Coat
 Mist
 Mud Sport
 Tickle
+9
+Aqua Tail
+Bind
+Dragon Pulse
+Icy Wind
+Iron Head
+Iron Tail
+Magic Coat
+Snore
+Water Pulse
 60
 0 0 0 0 2 0 
 None
@@ -28796,6 +32698,13 @@ Hex
 Lucky Chant
 Ominous Wind
 Reflect Type
+6
+Icy Wind
+Last Resort
+Shock Wave
+Snore
+Tailwind
+Water Pulse
 45
 1 0 0 0 0 0 
 None
@@ -28893,6 +32802,31 @@ Recover
 Skill Swap
 Snatch
 Trick
+24
+Aqua Tail
+Bind
+Drain Punch
+Fire Punch
+Focus Punch
+Foul Play
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Last Resort
+Low Kick
+Magic Coat
+Recycle
+Role Play
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Water Pulse
+Wonder Room
 200
 0 0 0 0 1 0 
 None
@@ -28977,6 +32911,20 @@ Ominous Wind
 Phantom Force
 Pursuit
 Shadow Sneak
+13
+Foul Play
+Icy Wind
+Knock Off
+Magic Coat
+Magic Room
+Pain Split
+Role Play
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Spite
+Trick
 225
 0 1 0 0 0 0 
 Level 354 37
@@ -29070,6 +33018,20 @@ Ominous Wind
 Phantom Force
 Pursuit
 Shadow Sneak
+13
+Foul Play
+Icy Wind
+Knock Off
+Magic Coat
+Magic Room
+Pain Split
+Role Play
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Spite
+Trick
 45
 0 2 0 0 0 0 
 None
@@ -29152,6 +33114,16 @@ Memento
 Ominous Wind
 Pain Split
 Skill Swap
+9
+Gravity
+Icy Wind
+Pain Split
+Skill Swap
+Snatch
+Snore
+Spite
+Trick
+Wonder Room
 190
 0 0 0 0 1 0 
 Level 356 37
@@ -29256,6 +33228,21 @@ Memento
 Ominous Wind
 Pain Split
 Skill Swap
+14
+Bind
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Icy Wind
+Pain Split
+Skill Swap
+Snatch
+Snore
+Spite
+Thunder Punch
+Trick
+Wonder Room
 90
 0 0 1 0 1 0 
 Item 477  Reaper Cloth
@@ -29343,6 +33330,15 @@ Nature Power
 Razor Wind
 Slam
 Synthesis
+8
+Dragon Pulse
+Giga Drain
+Outrage
+Seed Bomb
+Snore
+Synthesis
+Tailwind
+Worry Seed
 200
 2 0 0 0 0 0 
 None
@@ -29428,6 +33424,24 @@ Recover
 Skill Swap
 Stored Power
 Wish
+17
+Bind
+Gravity
+Heal Bell
+Hyper Voice
+Icy Wind
+Knock Off
+Last Resort
+Magic Coat
+Recycle
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Uproar
+Zen Headbutt
 45
 0 0 0 1 1 0 
 None
@@ -29543,6 +33557,21 @@ Play Rough
 Punishment
 Sucker Punch
 Zen Headbutt
+14
+Bounce
+Foul Play
+Icy Wind
+Iron Tail
+Knock Off
+Magic Coat
+Role Play
+Shock Wave
+Snatch
+Snore
+Spite
+Superpower
+Water Pulse
+Zen Headbutt
 30
 0 2 0 0 0 0 
 None
@@ -29573,6 +33602,7 @@ Psychic None
 15 Destiny Bond
 1
 Safeguard
+0
 0
 125
 1 0 0 0 0 0 
@@ -29641,6 +33671,12 @@ Rollout
 Spikes
 Switcheroo
 Weather Ball
+5
+Block
+Icy Wind
+Snore
+Spite
+Water Pulse
 190
 1 0 0 0 0 0 
 Multi 2
@@ -29727,6 +33763,15 @@ Rollout
 Spikes
 Switcheroo
 Weather Ball
+8
+Block
+Icy Wind
+Iron Head
+Signal Beam
+Snore
+Spite
+Super Fang
+Water Pulse
 75
 2 0 0 0 0 0 
 None
@@ -29808,6 +33853,14 @@ Swallow
 Water Pulse
 Water Sport
 Yawn
+7
+Aqua Tail
+Icy Wind
+Iron Tail
+Signal Beam
+Snore
+Super Fang
+Water Pulse
 255
 1 0 0 0 0 0 
 Level 364 32
@@ -29888,6 +33941,14 @@ Swallow
 Water Pulse
 Water Sport
 Yawn
+7
+Aqua Tail
+Icy Wind
+Iron Tail
+Signal Beam
+Snore
+Super Fang
+Water Pulse
 120
 2 0 0 0 0 0 
 Level 365 44
@@ -29972,6 +34033,16 @@ Swallow
 Water Pulse
 Water Sport
 Yawn
+9
+Aqua Tail
+Block
+Icy Wind
+Iron Head
+Iron Tail
+Signal Beam
+Snore
+Super Fang
+Water Pulse
 45
 3 0 0 0 0 0 
 None
@@ -30030,6 +34101,11 @@ Mud Sport
 Muddy Water
 Refresh
 Supersonic
+Water Pulse
+4
+Icy Wind
+Iron Defense
+Snore
 Water Pulse
 255
 0 0 1 0 0 0 
@@ -30108,6 +34184,15 @@ Muddy Water
 Refresh
 Supersonic
 Water Pulse
+8
+Aqua Tail
+Bind
+Bounce
+Icy Wind
+Snatch
+Snore
+Super Fang
+Water Pulse
 60
 0 1 1 0 0 0 
 None
@@ -30184,6 +34269,14 @@ Mud Sport
 Muddy Water
 Refresh
 Supersonic
+Water Pulse
+7
+Aqua Tail
+Bind
+Bounce
+Icy Wind
+Signal Beam
+Snore
 Water Pulse
 60
 0 0 0 2 0 0 
@@ -30271,6 +34364,15 @@ Sleep Talk
 Snore
 Water Sport
 Zen Headbutt
+8
+Aqua Tail
+Bounce
+Earth Power
+Icy Wind
+Snore
+Stealth Rock
+Water Pulse
+Zen Headbutt
 25
 1 0 1 0 0 0 
 None
@@ -30342,6 +34444,11 @@ Mud Sport
 Splash
 Supersonic
 Water Sport
+4
+Bounce
+Icy Wind
+Snore
+Water Pulse
 225
 0 0 0 0 0 1 
 None
@@ -30417,6 +34524,12 @@ Fire Fang
 Hydro Pump
 Thrash
 Twister
+5
+Dragon Pulse
+Hyper Voice
+Outrage
+Snore
+Zen Headbutt
 45
 0 1 0 0 0 0 
 Level 372 30
@@ -30497,6 +34610,13 @@ Fire Fang
 Hydro Pump
 Thrash
 Twister
+6
+Dragon Pulse
+Hyper Voice
+Iron Defense
+Outrage
+Snore
+Zen Headbutt
 45
 0 0 2 0 0 0 
 Level 373 50
@@ -30590,6 +34710,16 @@ Fire Fang
 Hydro Pump
 Thrash
 Twister
+9
+Aqua Tail
+Dragon Pulse
+Heat Wave
+Hyper Voice
+Iron Tail
+Outrage
+Snore
+Tailwind
+Zen Headbutt
 45
 0 3 0 0 0 0 
 None
@@ -30615,6 +34745,10 @@ Steel Psychic
 0 Take Down
 0
 0
+3
+Iron Defense
+Iron Head
+Zen Headbutt
 3
 0 0 1 0 0 0 
 Level 375 20
@@ -30694,6 +34828,19 @@ Confide
 Cut
 Strength
 0
+12
+Gravity
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Head
+Magnet Rise
+Signal Beam
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Zen Headbutt
 3
 0 0 2 0 0 0 
 Level 376 45
@@ -30775,6 +34922,20 @@ Confide
 Cut
 Strength
 0
+13
+Block
+Gravity
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Head
+Magnet Rise
+Signal Beam
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Zen Headbutt
 3
 0 0 3 0 0 0 
 None
@@ -30852,6 +35013,21 @@ Power-Up Punch
 Confide
 Strength
 0
+14
+Block
+Drain Punch
+Earth Power
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Iron Defense
+Iron Head
+Shock Wave
+Snore
+Stealth Rock
+Superpower
+Thunder Punch
 3
 0 0 3 0 0 0 
 None
@@ -30929,6 +35105,18 @@ Power-Up Punch
 Confide
 Strength
 0
+11
+Block
+Focus Punch
+Gravity
+Ice Punch
+Icy Wind
+Iron Head
+Shock Wave
+Signal Beam
+Snore
+Superpower
+Thunder Punch
 3
 0 0 0 0 3 0 
 None
@@ -31009,6 +35197,19 @@ Power-Up Punch
 Confide
 Strength
 0
+12
+Block
+Focus Punch
+Gravity
+Ice Punch
+Iron Defense
+Iron Head
+Magnet Rise
+Shock Wave
+Snore
+Stealth Rock
+Superpower
+Thunder Punch
 3
 0 0 2 0 1 0 
 None
@@ -31102,6 +35303,21 @@ Surf
 Waterfall
 Dive
 0
+14
+Covet
+Dragon Pulse
+Icy Wind
+Last Resort
+Magic Coat
+Magic Room
+Outrage
+Role Play
+Shock Wave
+Snore
+Tailwind
+Trick
+Water Pulse
+Zen Headbutt
 3
 0 0 0 0 3 0 
 None
@@ -31195,6 +35411,19 @@ Surf
 Waterfall
 Dive
 0
+12
+Dragon Pulse
+Icy Wind
+Last Resort
+Magic Coat
+Outrage
+Shock Wave
+Snore
+Tailwind
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 3
 0 0 0 3 0 0 
 None
@@ -31267,6 +35496,16 @@ Strength
 Waterfall
 Dive
 0
+9
+Aqua Tail
+Block
+Icy Wind
+Iron Head
+Shock Wave
+Signal Beam
+Snore
+Uproar
+Water Pulse
 5
 0 0 0 3 0 0 
 None
@@ -31352,6 +35591,18 @@ Confide
 Cut
 Strength
 0
+11
+Block
+Dragon Pulse
+Earth Power
+Fire Punch
+Iron Head
+Iron Tail
+Shock Wave
+Snore
+Stealth Rock
+Thunder Punch
+Uproar
 5
 0 3 0 0 0 0 
 None
@@ -31441,6 +35692,22 @@ Strength
 Waterfall
 Dive
 0
+15
+Aqua Tail
+Bind
+Dragon Ascent
+Dragon Pulse
+Earth Power
+Hyper Voice
+Icy Wind
+Iron Head
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Tailwind
+Uproar
+Water Pulse
 3
 0 2 0 1 0 0 
 None
@@ -31519,6 +35786,28 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 0
+21
+Drain Punch
+Fire Punch
+Gravity
+Ice Punch
+Icy Wind
+Iron Defense
+Iron Head
+Last Resort
+Magic Coat
+Magic Room
+Recycle
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Uproar
+Water Pulse
+Zen Headbutt
 3
 3 0 0 0 0 0 
 None
@@ -31607,6 +35896,32 @@ Confide
 Cut
 Strength
 0
+25
+Bind
+Drain Punch
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Icy Wind
+Knock Off
+Low Kick
+Magic Coat
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
+Superpower
+Iron Defense
 3
 0 1 0 1 0 1
 None
@@ -31681,6 +35996,16 @@ Superpower
 Swallow
 Thrash
 Tickle
+Worry Seed
+9
+Earth Power
+Giga Drain
+Iron Tail
+Seed Bomb
+Snore
+Stealth Rock
+Superpower
+Synthesis
 Worry Seed
 45
 0 1 0 0 0 0 
@@ -31758,6 +36083,16 @@ Superpower
 Swallow
 Thrash
 Tickle
+Worry Seed
+9
+Earth Power
+Giga Drain
+Iron Tail
+Seed Bomb
+Snore
+Stealth Rock
+Superpower
+Synthesis
 Worry Seed
 45
 0 1 1 0 0 0 
@@ -31850,6 +36185,19 @@ Swallow
 Thrash
 Tickle
 Worry Seed
+12
+Block
+Earth Power
+Giga Drain
+Iron Head
+Iron Tail
+Outrage
+Seed Bomb
+Snore
+Stealth Rock
+Superpower
+Synthesis
+Worry Seed
 45
 0 2 1 0 0 0 
 None
@@ -31937,6 +36285,20 @@ Heat Wave
 Quick Guard
 Submission
 Thunder Punch
+13
+Covet
+Endeavor
+Fire Punch
+Focus Punch
+Gunk Shot
+Heat Wave
+Iron Tail
+Low Kick
+Role Play
+Snore
+Stealth Rock
+Thunder Punch
+Uproar
 45
 0 0 0 0 0 1 
 Level 391 14
@@ -32030,6 +36392,20 @@ Focus Punch
 Heat Wave
 Quick Guard
 Submission
+Thunder Punch
+13
+Covet
+Dual Chop
+Endeavor
+Fire Punch
+Focus Punch
+Gunk Shot
+Heat Wave
+Iron Tail
+Low Kick
+Role Play
+Snore
+Stealth Rock
 Thunder Punch
 45
 0 0 0 1 0 1 
@@ -32135,6 +36511,20 @@ Heat Wave
 Quick Guard
 Submission
 Thunder Punch
+13
+Covet
+Dual Chop
+Endeavor
+Fire Punch
+Focus Punch
+Gunk Shot
+Heat Wave
+Iron Tail
+Low Kick
+Role Play
+Snore
+Stealth Rock
+Thunder Punch
 45
 0 1 0 1 0 1 
 None
@@ -32213,6 +36603,13 @@ Mud-Slap
 Snore
 Supersonic
 Yawn
+6
+Covet
+Icy Wind
+Signal Beam
+Snore
+Stealth Rock
+Water Pulse
 45
 0 0 0 1 0 0 
 Level 394 16
@@ -32297,6 +36694,13 @@ Mud-Slap
 Snore
 Supersonic
 Yawn
+6
+Covet
+Icy Wind
+Signal Beam
+Snore
+Stealth Rock
+Water Pulse
 45
 0 0 0 2 0 0 
 Level 395 36
@@ -32392,6 +36796,15 @@ Mud-Slap
 Snore
 Supersonic
 Yawn
+8
+Covet
+Icy Wind
+Iron Defense
+Knock Off
+Signal Beam
+Snore
+Stealth Rock
+Water Pulse
 45
 0 0 0 3 0 0 
 None
@@ -32461,6 +36874,12 @@ Revenge
 Roost
 Sand Attack
 Steel Wing
+Uproar
+5
+Endeavor
+Heat Wave
+Snore
+Tailwind
 Uproar
 255
 0 0 0 0 0 1 
@@ -32533,6 +36952,12 @@ Revenge
 Roost
 Sand Attack
 Steel Wing
+Uproar
+5
+Endeavor
+Heat Wave
+Snore
+Tailwind
 Uproar
 120
 0 0 0 0 0 2 
@@ -32609,6 +37034,13 @@ Revenge
 Roost
 Sand Attack
 Steel Wing
+Uproar
+6
+Endeavor
+Heat Wave
+Sky Attack
+Snore
+Tailwind
 Uproar
 45
 0 3 0 0 0 0 
@@ -32687,6 +37119,17 @@ Rollout
 Skull Bash
 Sleep Talk
 Water Sport
+10
+Aqua Tail
+Covet
+Icy Wind
+Iron Tail
+Last Resort
+Shock Wave
+Snore
+Stealth Rock
+Super Fang
+Superpower
 255
 1 0 0 0 0 0 
 Level 400 15
@@ -32775,6 +37218,19 @@ Rollout
 Skull Bash
 Sleep Talk
 Water Sport
+12
+Aqua Tail
+Covet
+Focus Punch
+Icy Wind
+Iron Tail
+Last Resort
+Shock Wave
+Snore
+Stealth Rock
+Super Fang
+Superpower
+Water Pulse
 127
 0 2 0 0 0 0 
 None
@@ -32804,6 +37260,11 @@ Bug None
 1
 Struggle Bug
 0
+4
+Bug Bite
+Endeavor
+Snore
+Uproar
 255
 0 0 1 0 0 0 
 Level 402 10
@@ -32874,6 +37335,14 @@ Confide
 Cut
 Strength
 0
+7
+Bug Bite
+Endeavor
+Heal Bell
+Hyper Voice
+Knock Off
+Snore
+Uproar
 45
 0 2 0 0 0 0 
 None
@@ -32949,6 +37418,12 @@ Signal Beam
 Swift
 Take Down
 Thunder Fang
+5
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 235
 0 1 0 0 0 0 
 Level 404 15
@@ -33023,6 +37498,12 @@ Signal Beam
 Swift
 Take Down
 Thunder Fang
+5
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 120
 0 2 0 0 0 0 
 Level 405 30
@@ -33102,6 +37583,13 @@ Signal Beam
 Swift
 Take Down
 Thunder Fang
+6
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Superpower
 45
 0 3 0 0 0 0 
 None
@@ -33170,6 +37658,14 @@ Seed Bomb
 Sleep Powder
 Spikes
 Synthesis
+7
+Covet
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Uproar
+Worry Seed
 255
 0 0 0 1 0 0 
 Item 315  Leaf Stone
@@ -33243,6 +37739,13 @@ Seed Bomb
 Sleep Powder
 Spikes
 Synthesis
+6
+Covet
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 75
 0 0 0 3 0 0 
 None
@@ -33329,6 +37832,21 @@ Slam
 Stomp
 Thrash
 Whirlwind
+14
+Dragon Pulse
+Earth Power
+Endeavor
+Fire Punch
+Iron Head
+Iron Tail
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Thunder Punch
+Uproar
+Zen Headbutt
 45
 0 1 0 0 0 0 
 Level 409 30
@@ -33421,6 +37939,24 @@ Slam
 Stomp
 Thrash
 Whirlwind
+17
+Dragon Pulse
+Earth Power
+Endeavor
+Fire Punch
+Focus Punch
+Iron Head
+Iron Tail
+Outrage
+Pain Split
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Thunder Punch
+Uproar
+Zen Headbutt
 45
 0 2 0 0 0 0 
 None
@@ -33503,6 +38039,15 @@ Headbutt
 Rock Blast
 Scary Face
 Screech
+Stealth Rock
+8
+Earth Power
+Iron Defense
+Iron Head
+Iron Tail
+Magnet Rise
+Shock Wave
+Snore
 Stealth Rock
 45
 0 0 1 0 0 0 
@@ -33592,6 +38137,18 @@ Rock Blast
 Scary Face
 Screech
 Stealth Rock
+11
+Block
+Earth Power
+Iron Defense
+Iron Head
+Iron Tail
+Magic Coat
+Magnet Rise
+Outrage
+Shock Wave
+Snore
+Stealth Rock
 45
 0 0 2 0 0 0 
 None
@@ -33620,6 +38177,10 @@ Bug None
 Hidden Power
 Protect
 0
+3
+Bug Bite
+Electroweb
+Snore
 120
 0 0 0 0 1 0 
 Multi 2
@@ -33694,6 +38255,24 @@ Flash Cannon
 Secret Power
 Confide
 0
+17
+Bug Bite
+Electroweb
+Endeavor
+Giga Drain
+Seed Bomb
+Signal Beam
+Skill Swap
+Snore
+Synthesis
+Uproar
+Worry Seed
+Earth Power
+Stealth Rock
+Gunk Shot
+Iron Defense
+Iron Head
+Magnet Rise
 45
 0 0 0 0 2 0
 None
@@ -33764,6 +38343,14 @@ Substitute
 Secret Power
 Confide
 0
+7
+Bug Bite
+Electroweb
+Giga Drain
+Signal Beam
+Skill Swap
+Snore
+Tailwind
 45
 0 1 0 1 0 0 
 None
@@ -33791,6 +38378,11 @@ Bug Flying
 29 Bug Buzz
 0
 0
+4
+Bug Bite
+Endeavor
+Snore
+Tailwind
 120
 0 0 0 0 0 1 
 Gender Female Level 416 21
@@ -33865,6 +38457,12 @@ Secret Power
 Confide
 Cut
 0
+5
+Bug Bite
+Endeavor
+Signal Beam
+Snore
+Tailwind
 45
 0 0 1 0 1 0 
 None
@@ -33942,6 +38540,19 @@ Electrify
 Iron Tail
 Rollout
 Tail Whip
+12
+Covet
+Electroweb
+Gunk Shot
+Iron Tail
+Last Resort
+Magnet Rise
+Seed Bomb
+Shock Wave
+Snore
+Super Fang
+Thunder Punch
+Uproar
 200
 0 0 0 0 0 1 
 None
@@ -34021,6 +38632,14 @@ Slash
 Soak
 Switcheroo
 Tail Slap
+7
+Aqua Tail
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Snore
+Water Pulse
 190
 0 0 0 0 0 1 
 Level 419 26
@@ -34113,6 +38732,15 @@ Slash
 Soak
 Switcheroo
 Tail Slap
+8
+Aqua Tail
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Low Kick
+Snore
+Water Pulse
 75
 0 0 0 0 0 2 
 None
@@ -34184,6 +38812,12 @@ Seed Bomb
 Sweet Scent
 Tickle
 Weather Ball
+5
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 190
 0 0 0 1 0 0 
 Level 421 25
@@ -34259,6 +38893,12 @@ Seed Bomb
 Sweet Scent
 Tickle
 Weather Ball
+5
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 75
 0 0 0 2 0 0 
 None
@@ -34329,6 +38969,12 @@ Stockpile
 Swallow
 Trump Card
 Yawn
+5
+Earth Power
+Icy Wind
+Pain Split
+Snore
+Water Pulse
 190
 1 0 0 0 0 0 
 Level 423 30
@@ -34416,6 +39062,13 @@ Stockpile
 Swallow
 Trump Card
 Yawn
+6
+Block
+Earth Power
+Icy Wind
+Pain Split
+Snore
+Water Pulse
 75
 2 0 0 0 0 0 
 None
@@ -34509,6 +39162,27 @@ Screech
 Slam
 Spite
 Switcheroo
+20
+Bounce
+Covet
+Fire Punch
+Focus Punch
+Foul Play
+Gunk Shot
+Ice Punch
+Iron Tail
+Knock Off
+Last Resort
+Low Kick
+Role Play
+Seed Bomb
+Shock Wave
+Snatch
+Snore
+Spite
+Thunder Punch
+Uproar
+Water Pulse
 45
 0 0 0 0 0 2 
 None
@@ -34589,6 +39263,19 @@ Hypnosis
 Memento
 Tailwind
 Weather Ball
+12
+Bind
+Icy Wind
+Knock Off
+Magic Coat
+Pain Split
+Recycle
+Shock Wave
+Skill Swap
+Snore
+Spite
+Tailwind
+Trick
 125
 1 0 0 0 0 0 
 Level 426 28
@@ -34677,6 +39364,19 @@ Hypnosis
 Memento
 Tailwind
 Weather Ball
+12
+Bind
+Icy Wind
+Knock Off
+Magic Coat
+Pain Split
+Recycle
+Shock Wave
+Skill Swap
+Snore
+Spite
+Tailwind
+Trick
 60
 2 0 0 0 0 0 
 None
@@ -34763,6 +39463,25 @@ Sweet Kiss
 Switcheroo
 Teeter Dance
 Thunder Punch
+18
+Bounce
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Heal Bell
+Hyper Voice
+Ice Punch
+Iron Tail
+Last Resort
+Low Kick
+Magic Coat
+Shock Wave
+Snore
+Thunder Punch
+Uproar
+Water Pulse
 190
 0 0 0 0 0 1 
 Item 428  Shiny Stone
@@ -34862,6 +39581,25 @@ Sweet Kiss
 Switcheroo
 Teeter Dance
 Thunder Punch
+18
+Bounce
+Covet
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Heal Bell
+Hyper Voice
+Ice Punch
+Iron Tail
+Last Resort
+Low Kick
+Magic Coat
+Shock Wave
+Snore
+Thunder Punch
+Uproar
+Water Pulse
 60
 0 0 0 0 0 2 
 None
@@ -34946,6 +39684,22 @@ Shadow Sneak
 Skill Swap
 Spite
 Sucker Punch
+Wonder Room
+15
+Foul Play
+Heal Bell
+Hyper Voice
+Icy Wind
+Magic Coat
+Magic Room
+Pain Split
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Spite
+Trick
+Uproar
 Wonder Room
 45
 0 0 0 1 1 0 
@@ -35032,6 +39786,17 @@ Screech
 Sky Attack
 Whirlwind
 Wing Attack
+10
+Foul Play
+Heat Wave
+Icy Wind
+Sky Attack
+Snatch
+Snore
+Spite
+Superpower
+Tailwind
+Uproar
 30
 0 2 0 0 0 0 
 None
@@ -35111,6 +39876,18 @@ Sand Attack
 Snatch
 Tail Whip
 Wake-Up Slap
+11
+Covet
+Foul Play
+Hyper Voice
+Iron Tail
+Knock Off
+Last Resort
+Shock Wave
+Snatch
+Snore
+Super Fang
+Water Pulse
 190
 0 0 0 0 0 1 
 Level 432 38
@@ -35197,6 +39974,18 @@ Sand Attack
 Snatch
 Tail Whip
 Wake-Up Slap
+11
+Covet
+Foul Play
+Hyper Voice
+Iron Tail
+Knock Off
+Last Resort
+Shock Wave
+Snatch
+Snore
+Super Fang
+Water Pulse
 75
 0 0 0 0 0 2 
 None
@@ -35270,6 +40059,24 @@ Recover
 Skill Swap
 Stored Power
 Wish
+17
+Bind
+Gravity
+Heal Bell
+Hyper Voice
+Icy Wind
+Knock Off
+Last Resort
+Magic Coat
+Recycle
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Uproar
+Zen Headbutt
 120
 0 0 0 1 0 0 
 Item 358  Moon Stone
@@ -35354,6 +40161,11 @@ Punishment
 Pursuit
 Scary Face
 Smog
+4
+Foul Play
+Iron Tail
+Snatch
+Snore
 225
 0 0 0 0 0 1 
 Level 435 34
@@ -35444,6 +40256,11 @@ Punishment
 Pursuit
 Scary Face
 Smog
+4
+Foul Play
+Iron Tail
+Snatch
+Snore
 60
 2 0 0 0 0 0 
 None
@@ -35520,6 +40337,16 @@ Trick Room
 Secret Power
 Confide
 0
+9
+Gravity
+Iron Defense
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Trick
+Wonder Room
 255
 0 0 1 0 0 0 
 Level 437 33
@@ -35606,6 +40433,19 @@ Secret Power
 Confide
 Strength
 0
+12
+Block
+Gravity
+Iron Defense
+Iron Head
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Trick
+Wonder Room
+Zen Headbutt
 90
 0 0 1 0 1 0 
 None
@@ -35677,6 +40517,16 @@ Rollout
 Sand Tomb
 Self-Destruct
 Stealth Rock
+9
+Block
+Covet
+Earth Power
+Foul Play
+Low Kick
+Role Play
+Snore
+Stealth Rock
+Uproar
 255
 0 0 1 0 0 0 
 Move 185  Mimic
@@ -35769,6 +40619,23 @@ Power Split
 Teeter Dance
 Trick
 Wake-Up Slap
+16
+Covet
+Drain Punch
+Focus Punch
+Icy Wind
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Uproar
+Wonder Room
 145
 0 0 0 0 1 0 
 Move 122  Mimic
@@ -35838,6 +40705,21 @@ Metronome
 Mud Bomb
 Natural Gift
 Present
+14
+Covet
+Drain Punch
+Endeavor
+Gravity
+Heal Bell
+Hyper Voice
+Icy Wind
+Last Resort
+Recycle
+Shock Wave
+Snore
+Uproar
+Water Pulse
+Zen Headbutt
 130
 1 0 0 0 0 0 
 Item 113  Oval Stone
@@ -35916,6 +40798,14 @@ Night Shade
 Sleep Talk
 Steel Wing
 Supersonic
+7
+Heat Wave
+Hyper Voice
+Role Play
+Sky Attack
+Snore
+Tailwind
+Uproar
 30
 0 1 0 0 0 0 
 None
@@ -35994,6 +40884,18 @@ Nightmare
 Pain Split
 Shadow Sneak
 Smokescreen
+11
+Foul Play
+Icy Wind
+Pain Split
+Shock Wave
+Snatch
+Snore
+Spite
+Trick
+Uproar
+Water Pulse
+Wonder Room
 100
 0 0 1 0 1 0 
 None
@@ -36072,6 +40974,14 @@ Sand Tomb
 Scary Face
 Thrash
 Twister
+7
+Dragon Pulse
+Earth Power
+Iron Head
+Iron Tail
+Outrage
+Snore
+Stealth Rock
 45
 0 1 0 0 0 0 
 Level 444 24
@@ -36153,6 +41063,15 @@ Sand Tomb
 Scary Face
 Thrash
 Twister
+8
+Dragon Pulse
+Dual Chop
+Earth Power
+Iron Head
+Iron Tail
+Outrage
+Snore
+Stealth Rock
 45
 0 2 0 0 0 0 
 Level 445 48
@@ -36247,6 +41166,16 @@ Sand Tomb
 Scary Face
 Thrash
 Twister
+9
+Aqua Tail
+Dragon Pulse
+Dual Chop
+Earth Power
+Iron Head
+Iron Tail
+Outrage
+Snore
+Stealth Rock
 45
 0 3 0 0 0 0 
 None
@@ -36338,6 +41267,25 @@ Pursuit
 Self-Destruct
 Whirlwind
 Zen Headbutt
+18
+Covet
+Fire Punch
+Focus Punch
+Gunk Shot
+Hyper Voice
+Ice Punch
+Icy Wind
+Last Resort
+Recycle
+Seed Bomb
+Shock Wave
+Snatch
+Snore
+Superpower
+Thunder Punch
+Uproar
+Water Pulse
+Zen Headbutt
 50
 1 0 0 0 0 0 
 Item 143  Lax Incense
@@ -36420,6 +41368,19 @@ Low Kick
 Mind Reader
 Sky Uppercut
 Vacuum Wave
+12
+Drain Punch
+Dual Chop
+Focus Punch
+Ice Punch
+Iron Defense
+Iron Tail
+Low Kick
+Magnet Rise
+Role Play
+Snore
+Thunder Punch
+Zen Headbutt
 75
 0 1 0 0 0 0 
 Item 448  Dawn Stone
@@ -36521,6 +41482,21 @@ Low Kick
 Mind Reader
 Sky Uppercut
 Vacuum Wave
+14
+Dragon Pulse
+Drain Punch
+Dual Chop
+Focus Punch
+Ice Punch
+Iron Defense
+Iron Tail
+Low Kick
+Magnet Rise
+Role Play
+Snore
+Thunder Punch
+Water Pulse
+Zen Headbutt
 45
 0 1 0 1 0 0 
 None
@@ -36587,6 +41563,13 @@ Spit Up
 Stockpile
 Swallow
 Whirlwind
+6
+Earth Power
+Iron Tail
+Snore
+Stealth Rock
+Superpower
+Water Pulse
 140
 0 0 1 0 0 0 
 Level 450 34
@@ -36661,6 +41644,14 @@ Spit Up
 Stockpile
 Swallow
 Whirlwind
+7
+Earth Power
+Iron Head
+Iron Tail
+Snore
+Stealth Rock
+Superpower
+Water Pulse
 60
 0 0 2 0 0 0 
 None
@@ -36751,6 +41742,12 @@ Screech
 Slash
 Twineedle
 Whirlwind
+5
+Aqua Tail
+Bug Bite
+Iron Tail
+Knock Off
+Snore
 120
 0 0 1 0 0 0 
 Level 452 40
@@ -36854,6 +41851,12 @@ Screech
 Slash
 Twineedle
 Whirlwind
+5
+Aqua Tail
+Bug Bite
+Iron Tail
+Knock Off
+Snore
 45
 0 0 2 0 0 0 
 None
@@ -36949,6 +41952,23 @@ Quick Guard
 Smelling Salts
 Vacuum Wave
 Wake-Up Slap
+16
+Bounce
+Drain Punch
+Dual Chop
+Focus Punch
+Foul Play
+Gunk Shot
+Ice Punch
+Icy Wind
+Knock Off
+Low Kick
+Role Play
+Snatch
+Snore
+Spite
+Super Fang
+Thunder Punch
 140
 0 1 0 0 0 0 
 Level 454 37
@@ -37051,6 +42071,23 @@ Quick Guard
 Smelling Salts
 Vacuum Wave
 Wake-Up Slap
+16
+Bounce
+Drain Punch
+Dual Chop
+Focus Punch
+Foul Play
+Gunk Shot
+Ice Punch
+Icy Wind
+Knock Off
+Low Kick
+Role Play
+Snatch
+Snore
+Spite
+Super Fang
+Thunder Punch
 75
 0 2 0 0 0 0 
 None
@@ -37124,6 +42161,16 @@ Razor Leaf
 Slam
 Sleep Powder
 Stun Spore
+Synthesis
+Worry Seed
+9
+Bind
+Bug Bite
+Gastro Acid
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
 Synthesis
 Worry Seed
 200
@@ -37200,6 +42247,14 @@ Signal Beam
 Splash
 Sweet Kiss
 Tickle
+7
+Aqua Tail
+Bounce
+Icy Wind
+Signal Beam
+Snore
+Tailwind
+Water Pulse
 190
 0 0 0 0 0 1 
 Level 457 31
@@ -37280,6 +42335,14 @@ Signal Beam
 Splash
 Sweet Kiss
 Tickle
+7
+Aqua Tail
+Bounce
+Icy Wind
+Signal Beam
+Snore
+Tailwind
+Water Pulse
 75
 0 0 0 0 0 2 
 None
@@ -37355,6 +42418,12 @@ Splash
 Tailwind
 Twister
 Water Sport
+5
+Bounce
+Icy Wind
+Signal Beam
+Snore
+Water Pulse
 25
 0 0 0 0 1 0 
 Item 226  Water Stone
@@ -37426,6 +42495,17 @@ Natural Gift
 Seed Bomb
 Skull Bash
 Stomp
+10
+Giga Drain
+Ice Punch
+Icy Wind
+Iron Tail
+Role Play
+Seed Bomb
+Snore
+Synthesis
+Water Pulse
+Worry Seed
 120
 0 1 0 0 0 0 
 Level 460 40
@@ -37512,6 +42592,20 @@ Natural Gift
 Seed Bomb
 Skull Bash
 Stomp
+13
+Block
+Focus Punch
+Giga Drain
+Ice Punch
+Icy Wind
+Iron Tail
+Outrage
+Role Play
+Seed Bomb
+Snore
+Synthesis
+Water Pulse
+Worry Seed
 60
 0 1 0 1 0 0 
 None
@@ -37620,6 +42714,17 @@ Icicle Crash
 Punishment
 Pursuit
 Spite
+10
+Focus Punch
+Foul Play
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Low Kick
+Snatch
+Snore
+Spite
 45
 0 1 0 0 0 1 
 None
@@ -37699,6 +42804,17 @@ Wild Charge
 Secret Power
 Confide
 0
+10
+Electroweb
+Gravity
+Iron Defense
+Iron Head
+Magic Coat
+Magnet Rise
+Recycle
+Shock Wave
+Signal Beam
+Snore
 30
 0 0 0 3 0 0 
 None
@@ -37800,6 +42916,21 @@ Muddy Water
 Sleep Talk
 Smelling Salts
 Snore
+Zen Headbutt
+14
+Aqua Tail
+Bind
+Block
+Fire Punch
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Shock Wave
+Snore
+Thunder Punch
+Water Pulse
 Zen Headbutt
 30
 3 0 0 0 0 0 
@@ -37911,6 +43042,27 @@ Rock Climb
 Rototiller
 Skull Bash
 Thunder Fang
+20
+Aqua Tail
+Block
+Dragon Pulse
+Drill Run
+Earth Power
+Endeavor
+Fire Punch
+Focus Punch
+Ice Punch
+Icy Wind
+Iron Head
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Superpower
+Thunder Punch
+Uproar
 30
 0 3 0 0 0 0 
 None
@@ -38006,6 +43158,18 @@ Mega Drain
 Natural Gift
 Nature Power
 Power Swap
+11
+Bind
+Block
+Endeavor
+Giga Drain
+Knock Off
+Pain Split
+Seed Bomb
+Shock Wave
+Snore
+Synthesis
+Worry Seed
 30
 0 0 2 0 0 0 
 None
@@ -38101,6 +43265,20 @@ Ice Punch
 Karate Chop
 Meditate
 Rolling Kick
+13
+Covet
+Dual Chop
+Electroweb
+Fire Punch
+Focus Punch
+Ice Punch
+Iron Tail
+Low Kick
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
 30
 0 3 0 0 0 0 
 None
@@ -38196,6 +43374,16 @@ Mega Punch
 Power Swap
 Screech
 Thunder Punch
+9
+Covet
+Dual Chop
+Fire Punch
+Focus Punch
+Heat Wave
+Iron Tail
+Low Kick
+Snore
+Thunder Punch
 30
 0 0 0 3 0 0 
 None
@@ -38279,6 +43467,24 @@ Present
 Psycho Shift
 Secret Power
 Stored Power
+17
+Covet
+Drain Punch
+Endeavor
+Focus Punch
+Heal Bell
+Heat Wave
+Hyper Voice
+Last Resort
+Magic Coat
+Shock Wave
+Signal Beam
+Sky Attack
+Snore
+Tailwind
+Trick
+Water Pulse
+Zen Headbutt
 30
 0 0 0 2 1 0 
 None
@@ -38361,6 +43567,13 @@ Secret Power
 Signal Beam
 Silver Wind
 Whirlwind
+6
+Bug Bite
+Giga Drain
+Signal Beam
+Snore
+Tailwind
+Uproar
 30
 0 2 0 0 0 0 
 None
@@ -38443,6 +43656,18 @@ Synchronoise
 Tickle
 Wish
 Yawn
+11
+Covet
+Giga Drain
+Heal Bell
+Hyper Voice
+Iron Tail
+Knock Off
+Last Resort
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 45
 0 0 2 0 0 0 
 None
@@ -38520,6 +43745,17 @@ Synchronoise
 Tickle
 Wish
 Yawn
+10
+Aqua Tail
+Covet
+Heal Bell
+Hyper Voice
+Icy Wind
+Iron Tail
+Last Resort
+Signal Beam
+Snore
+Water Pulse
 45
 0 0 0 2 0 0 
 None
@@ -38627,6 +43863,16 @@ Razor Wind
 Rock Climb
 Sand Tomb
 Wing Attack
+9
+Aqua Tail
+Bug Bite
+Earth Power
+Iron Tail
+Knock Off
+Sky Attack
+Snore
+Stealth Rock
+Tailwind
 30
 0 0 2 0 0 0 
 None
@@ -38714,6 +43960,16 @@ Icicle Spear
 Mud Shot
 Stealth Rock
 Take Down
+9
+Block
+Earth Power
+Endeavor
+Icy Wind
+Iron Head
+Knock Off
+Snore
+Stealth Rock
+Superpower
 50
 0 3 0 0 0 0 
 None
@@ -38789,6 +44045,23 @@ Secret Power
 Dark Pulse
 Confide
 0
+16
+Electroweb
+Foul Play
+Gravity
+Icy Wind
+Iron Tail
+Last Resort
+Magic Coat
+Magnet Rise
+Pain Split
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Trick
+Uproar
+Zen Headbutt
 30
 0 0 0 3 0 0 
 None
@@ -38904,6 +44177,28 @@ Misty Terrain
 Shadow Sneak
 Skill Swap
 Synchronoise
+21
+Drain Punch
+Dual Chop
+Fire Punch
+Focus Punch
+Hyper Voice
+Ice Punch
+Knock Off
+Low Kick
+Magic Coat
+Magic Room
+Pain Split
+Recycle
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 45
 0 3 0 0 0 0 
 None
@@ -38989,6 +44284,21 @@ Endure
 Magnitude
 Rollout
 Stealth Rock
+14
+Block
+Earth Power
+Fire Punch
+Gravity
+Ice Punch
+Iron Defense
+Iron Head
+Magic Coat
+Magnet Rise
+Pain Split
+Shock Wave
+Snore
+Stealth Rock
+Thunder Punch
 60
 0 0 1 0 2 0 
 None
@@ -39092,6 +44402,21 @@ Memento
 Ominous Wind
 Pain Split
 Skill Swap
+14
+Bind
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Icy Wind
+Pain Split
+Skill Swap
+Snatch
+Snore
+Spite
+Thunder Punch
+Trick
+Wonder Room
 45
 0 0 1 0 2 0 
 None
@@ -39180,6 +44505,18 @@ Rollout
 Spikes
 Switcheroo
 Weather Ball
+11
+Block
+Ice Punch
+Icy Wind
+Pain Split
+Shock Wave
+Signal Beam
+Snatch
+Snore
+Spite
+Trick
+Water Pulse
 75
 0 0 0 0 0 2 
 None
@@ -39248,6 +44585,17 @@ Secret Power
 Dark Pulse
 Confide
 0
+10
+Electroweb
+Foul Play
+Pain Split
+Shock Wave
+Signal Beam
+Snatch
+Snore
+Spite
+Trick
+Uproar
 45
 0 0 0 1 0 1 
 None
@@ -39325,6 +44673,28 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 0
+21
+Fire Punch
+Foul Play
+Giga Drain
+Heal Bell
+Ice Punch
+Iron Tail
+Knock Off
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 3
 0 0 2 0 1 0 
 None
@@ -39403,6 +44773,25 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 0
+18
+Fire Punch
+Ice Punch
+Iron Tail
+Knock Off
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Water Pulse
+Wonder Room
+Zen Headbutt
 3
 0 1 0 1 1 0 
 None
@@ -39485,6 +44874,27 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 0
+20
+Fire Punch
+Ice Punch
+Iron Tail
+Knock Off
+Last Resort
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Stealth Rock
+Thunder Punch
+Trick
+Uproar
+Water Pulse
+Wonder Room
+Zen Headbutt
 3
 0 2 0 1 0 0 
 None
@@ -39568,6 +44978,19 @@ Confide
 Cut
 Strength
 0
+12
+Dragon Pulse
+Earth Power
+Gravity
+Hyper Voice
+Iron Defense
+Iron Head
+Iron Tail
+Magnet Rise
+Outrage
+Shock Wave
+Snore
+Stealth Rock
 30
 0 0 0 3 0 0 
 None
@@ -39653,6 +45076,17 @@ Surf
 Strength
 Dive
 0
+10
+Aqua Tail
+Dragon Pulse
+Earth Power
+Focus Punch
+Gravity
+Hyper Voice
+Outrage
+Shock Wave
+Snore
+Water Pulse
 30
 0 0 0 3 0 0 
 None
@@ -39732,6 +45166,16 @@ Dark Pulse
 Confide
 Strength
 0
+9
+Bug Bite
+Dragon Pulse
+Earth Power
+Heat Wave
+Iron Defense
+Iron Head
+Snore
+Stealth Rock
+Uproar
 3
 0 0 0 3 0 0 
 None
@@ -39806,6 +45250,22 @@ Power-Up Punch
 Confide
 Strength
 0
+15
+Block
+Drain Punch
+Earth Power
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Icy Wind
+Iron Head
+Knock Off
+Shock Wave
+Snore
+Superpower
+Thunder Punch
+Zen Headbutt
 3
 0 3 0 0 0 0 
 None
@@ -39886,6 +45346,22 @@ Cut
 Fly
 Strength
 0
+15
+Aqua Tail
+Dragon Pulse
+Earth Power
+Gravity
+Hyper Voice
+Icy Wind
+Iron Head
+Iron Tail
+Outrage
+Pain Split
+Shock Wave
+Snore
+Spite
+Magic Coat
+Tailwind
 3
 3 0 0 0 0 0 
 None
@@ -39959,6 +45435,17 @@ Trick Room
 Secret Power
 Confide
 0
+10
+Gravity
+Icy Wind
+Magic Coat
+Magic Room
+Recycle
+Signal Beam
+Skill Swap
+Snore
+Trick
+Zen Headbutt
 3
 0 0 0 0 3 0 
 None
@@ -40018,6 +45505,17 @@ Surf
 Waterfall
 Dive
 0
+10
+Bounce
+Covet
+Heal Bell
+Icy Wind
+Knock Off
+Last Resort
+Signal Beam
+Snore
+Uproar
+Water Pulse
 30
 1 0 0 0 0 0 
 None
@@ -40088,6 +45586,18 @@ Surf
 Waterfall
 Dive
 0
+11
+Bounce
+Covet
+Heal Bell
+Icy Wind
+Knock Off
+Last Resort
+Signal Beam
+Skill Swap
+Snore
+Uproar
+Water Pulse
 3
 3 0 0 0 0 0 
 None
@@ -40175,6 +45685,19 @@ Confide
 Cut
 Strength
 0
+12
+Drain Punch
+Focus Punch
+Foul Play
+Icy Wind
+Knock Off
+Last Resort
+Shock Wave
+Snatch
+Snore
+Spite
+Trick
+Wonder Room
 3
 0 0 0 2 0 1 
 None
@@ -40234,6 +45757,18 @@ Nature Power
 Dazzling Gleam
 Confide
 0
+11
+Covet
+Earth Power
+Endeavor
+Giga Drain
+Last Resort
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
+Zen Headbutt
+Tailwind
 45
 3 0 0 0 0 0
 None
@@ -40343,6 +45878,30 @@ Strength
 Waterfall
 Dive
 0
+23
+Aqua Tail
+Dragon Pulse
+Earth Power
+Giga Drain
+Gravity
+Heat Wave
+Hyper Voice
+Icy Wind
+Iron Defense
+Iron Head
+Iron Tail
+Last Resort
+Magic Coat
+Outrage
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Stealth Rock
+Tailwind
+Trick
+Water Pulse
+Zen Headbutt
 3
 3 0 0 0 0 0 
 None
@@ -40428,6 +45987,21 @@ Power-Up Punch
 Dazzling Gleam
 Confide
 0
+14
+Bounce
+Fire Punch
+Heat Wave
+Last Resort
+Magic Coat
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Thunder Punch
+Trick
+Uproar
+Zen Headbutt
 3
 3 0 0 0 0 0 
 None
@@ -40504,6 +46078,18 @@ Natural Gift
 Pursuit
 Sweet Scent
 Twister
+11
+Aqua Tail
+Bind
+Gastro Acid
+Giga Drain
+Iron Tail
+Knock Off
+Seed Bomb
+Snatch
+Snore
+Synthesis
+Worry Seed
 45
 0 0 0 0 0 1 
 Level 496 17
@@ -40584,6 +46170,18 @@ Natural Gift
 Pursuit
 Sweet Scent
 Twister
+11
+Aqua Tail
+Bind
+Gastro Acid
+Giga Drain
+Iron Tail
+Knock Off
+Seed Bomb
+Snatch
+Snore
+Synthesis
+Worry Seed
 45
 0 0 0 0 0 2 
 Level 497 36
@@ -40669,6 +46267,20 @@ Natural Gift
 Pursuit
 Sweet Scent
 Twister
+13
+Aqua Tail
+Bind
+Dragon Pulse
+Gastro Acid
+Giga Drain
+Iron Tail
+Knock Off
+Outrage
+Seed Bomb
+Snatch
+Snore
+Synthesis
+Worry Seed
 45
 0 0 0 0 0 3 
 None
@@ -40748,6 +46360,14 @@ Sucker Punch
 Superpower
 Thrash
 Yawn
+7
+Covet
+Endeavor
+Heat Wave
+Iron Tail
+Snore
+Superpower
+Zen Headbutt
 45
 1 0 0 0 0 0 
 Level 499 17
@@ -40840,6 +46460,18 @@ Sucker Punch
 Superpower
 Thrash
 Yawn
+11
+Covet
+Endeavor
+Fire Punch
+Focus Punch
+Heat Wave
+Iron Tail
+Low Kick
+Snore
+Superpower
+Thunder Punch
+Zen Headbutt
 45
 0 2 0 0 0 0 
 Level 500 36
@@ -40939,6 +46571,20 @@ Sucker Punch
 Superpower
 Thrash
 Yawn
+13
+Block
+Covet
+Endeavor
+Fire Punch
+Focus Punch
+Heat Wave
+Iron Head
+Iron Tail
+Low Kick
+Snore
+Superpower
+Thunder Punch
+Zen Headbutt
 45
 0 3 0 0 0 0 
 None
@@ -41017,6 +46663,13 @@ Detect
 Night Slash
 Screech
 Trump Card
+6
+Aqua Tail
+Covet
+Icy Wind
+Iron Tail
+Snore
+Water Pulse
 45
 0 0 0 1 0 0 
 Level 502 17
@@ -41098,6 +46751,13 @@ Detect
 Night Slash
 Screech
 Trump Card
+6
+Aqua Tail
+Covet
+Icy Wind
+Iron Tail
+Snore
+Water Pulse
 45
 0 0 0 2 0 0 
 Level 503 36
@@ -41185,6 +46845,16 @@ Detect
 Night Slash
 Screech
 Trump Card
+9
+Aqua Tail
+Block
+Covet
+Icy Wind
+Iron Tail
+Knock Off
+Snore
+Superpower
+Water Pulse
 45
 0 0 0 3 0 0 
 None
@@ -41253,6 +46923,19 @@ Iron Tail
 Pursuit
 Revenge
 Screech
+12
+Aqua Tail
+Covet
+Endeavor
+Gunk Shot
+Iron Tail
+Last Resort
+Low Kick
+Seed Bomb
+Shock Wave
+Snore
+Super Fang
+Zen Headbutt
 255
 0 1 0 0 0 0 
 Level 505 20
@@ -41338,6 +47021,25 @@ Iron Tail
 Pursuit
 Revenge
 Screech
+18
+Aqua Tail
+Covet
+Endeavor
+Fire Punch
+Focus Punch
+Gunk Shot
+Ice Punch
+Iron Tail
+Knock Off
+Last Resort
+Low Kick
+Seed Bomb
+Shock Wave
+Signal Beam
+Snore
+Super Fang
+Thunder Punch
+Zen Headbutt
 255
 0 2 0 0 0 0 
 None
@@ -41413,6 +47115,13 @@ Pursuit
 Sand Attack
 Thunder Fang
 Yawn
+6
+Covet
+Hyper Voice
+Last Resort
+Shock Wave
+Snore
+Uproar
 255
 0 1 0 0 0 0 
 Level 507 16
@@ -41492,6 +47201,13 @@ Pursuit
 Sand Attack
 Thunder Fang
 Yawn
+6
+Covet
+Hyper Voice
+Last Resort
+Shock Wave
+Snore
+Uproar
 120
 0 2 0 0 0 0 
 Level 508 32
@@ -41576,6 +47292,15 @@ Pursuit
 Sand Attack
 Thunder Fang
 Yawn
+8
+Covet
+Hyper Voice
+Iron Head
+Last Resort
+Shock Wave
+Snore
+Superpower
+Uproar
 45
 0 3 0 0 0 0 
 None
@@ -41657,6 +47382,19 @@ Feint Attack
 Foul Play
 Pay Day
 Yawn
+12
+Covet
+Foul Play
+Gunk Shot
+Hyper Voice
+Iron Tail
+Knock Off
+Role Play
+Seed Bomb
+Snatch
+Snore
+Spite
+Trick
 255
 0 0 0 0 0 1 
 Level 510 20
@@ -41744,6 +47482,19 @@ Feint Attack
 Foul Play
 Pay Day
 Yawn
+12
+Covet
+Foul Play
+Gunk Shot
+Hyper Voice
+Iron Tail
+Knock Off
+Role Play
+Seed Bomb
+Snatch
+Snore
+Spite
+Trick
 90
 0 0 0 0 0 2 
 None
@@ -41825,6 +47576,23 @@ Magical Leaf
 Nasty Plot
 Role Play
 Tickle
+16
+Covet
+Endeavor
+Focus Punch
+Gastro Acid
+Giga Drain
+Gunk Shot
+Iron Tail
+Knock Off
+Low Kick
+Recycle
+Role Play
+Seed Bomb
+Snore
+Synthesis
+Uproar
+Worry Seed
 190
 0 0 0 0 0 1 
 Item 512  Leaf Stone
@@ -41902,6 +47670,24 @@ Magical Leaf
 Nasty Plot
 Role Play
 Tickle
+17
+Covet
+Endeavor
+Focus Punch
+Gastro Acid
+Giga Drain
+Gunk Shot
+Iron Tail
+Knock Off
+Low Kick
+Recycle
+Role Play
+Seed Bomb
+Snore
+Superpower
+Synthesis
+Uproar
+Worry Seed
 75
 0 0 0 0 0 2 
 None
@@ -41988,6 +47774,21 @@ Nasty Plot
 Role Play
 Sleep Talk
 Tickle
+14
+Covet
+Endeavor
+Fire Punch
+Focus Punch
+Gastro Acid
+Gunk Shot
+Heat Wave
+Iron Tail
+Knock Off
+Low Kick
+Recycle
+Role Play
+Snore
+Uproar
 190
 0 0 0 0 0 1 
 Item 514  Fire Stone
@@ -42068,6 +47869,22 @@ Nasty Plot
 Role Play
 Sleep Talk
 Tickle
+15
+Covet
+Endeavor
+Fire Punch
+Focus Punch
+Gastro Acid
+Gunk Shot
+Heat Wave
+Iron Tail
+Knock Off
+Low Kick
+Recycle
+Role Play
+Snore
+Superpower
+Uproar
 75
 0 0 0 0 0 2 
 None
@@ -42154,6 +47971,23 @@ Mud Sport
 Nasty Plot
 Role Play
 Tickle
+16
+Aqua Tail
+Covet
+Endeavor
+Focus Punch
+Gastro Acid
+Gunk Shot
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Low Kick
+Recycle
+Role Play
+Snore
+Uproar
+Water Pulse
 190
 0 0 0 0 0 1 
 Item 516  Water Stone
@@ -42234,6 +48068,24 @@ Mud Sport
 Nasty Plot
 Role Play
 Tickle
+17
+Aqua Tail
+Covet
+Endeavor
+Focus Punch
+Gastro Acid
+Gunk Shot
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Low Kick
+Recycle
+Role Play
+Snore
+Superpower
+Uproar
+Water Pulse
 75
 0 0 0 0 0 2 
 None
@@ -42317,6 +48169,19 @@ Secret Power
 Sleep Talk
 Sonic Boom
 Swift
+12
+Gravity
+Heal Bell
+Magic Coat
+Pain Split
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Trick
+Wonder Room
+Worry Seed
+Zen Headbutt
 190
 1 0 0 0 0 0 
 Item 518  Moon Stone
@@ -42387,6 +48252,19 @@ Secret Power
 Sleep Talk
 Sonic Boom
 Swift
+12
+Gravity
+Heal Bell
+Magic Coat
+Pain Split
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Trick
+Wonder Room
+Worry Seed
+Zen Headbutt
 75
 2 0 0 0 0 0 
 None
@@ -42454,6 +48332,12 @@ Night Slash
 Steel Wing
 Uproar
 Wish
+5
+Heat Wave
+Sky Attack
+Snore
+Tailwind
+Uproar
 255
 0 1 0 0 0 0 
 Level 520 21
@@ -42524,6 +48408,12 @@ Night Slash
 Steel Wing
 Uproar
 Wish
+5
+Heat Wave
+Sky Attack
+Snore
+Tailwind
+Uproar
 120
 0 2 0 0 0 0 
 Level 521 32
@@ -42597,6 +48487,12 @@ Night Slash
 Steel Wing
 Uproar
 Wish
+5
+Heat Wave
+Sky Attack
+Snore
+Tailwind
+Uproar
 45
 0 3 0 0 0 0 
 None
@@ -42665,6 +48561,13 @@ Screech
 Shock Wave
 Snatch
 Take Down
+6
+Bounce
+Magnet Rise
+Shock Wave
+Signal Beam
+Snatch
+Snore
 190
 0 0 0 0 0 1 
 Level 523 27
@@ -42743,6 +48646,13 @@ Screech
 Shock Wave
 Snatch
 Take Down
+6
+Bounce
+Magnet Rise
+Shock Wave
+Signal Beam
+Snatch
+Snore
 75
 0 0 0 0 0 2 
 None
@@ -42813,6 +48723,13 @@ Lock-On
 Magnitude
 Rock Tomb
 Take Down
+6
+Block
+Earth Power
+Gravity
+Iron Defense
+Snore
+Stealth Rock
 255
 0 0 1 0 0 0 
 Level 525 25
@@ -42888,6 +48805,13 @@ Lock-On
 Magnitude
 Rock Tomb
 Take Down
+6
+Block
+Earth Power
+Gravity
+Iron Defense
+Snore
+Stealth Rock
 120
 0 1 1 0 0 0 
 Item 526  Hard Stone
@@ -42966,6 +48890,15 @@ Lock-On
 Magnitude
 Rock Tomb
 Take Down
+8
+Block
+Earth Power
+Gravity
+Iron Defense
+Iron Head
+Snore
+Stealth Rock
+Superpower
 45
 0 3 0 0 0 0 
 None
@@ -43054,6 +48987,21 @@ Stored Power
 Supersonic
 Synchronoise
 Venom Drench
+14
+Endeavor
+Giga Drain
+Heat Wave
+Knock Off
+Magic Coat
+Shock Wave
+Signal Beam
+Skill Swap
+Snore
+Super Fang
+Tailwind
+Trick
+Uproar
+Zen Headbutt
 190
 0 0 0 0 0 1 
 Item 528  Moon Stone
@@ -43145,6 +49093,22 @@ Stored Power
 Supersonic
 Synchronoise
 Venom Drench
+15
+Endeavor
+Giga Drain
+Heat Wave
+Knock Off
+Magic Coat
+Shock Wave
+Signal Beam
+Skill Swap
+Sky Attack
+Snore
+Super Fang
+Tailwind
+Trick
+Uproar
+Zen Headbutt
 45
 0 0 0 0 0 2 
 None
@@ -43221,6 +49185,12 @@ Rapid Spin
 Rock Climb
 Skull Bash
 Submission
+5
+Drill Run
+Earth Power
+Iron Defense
+Snore
+Stealth Rock
 120
 0 1 0 0 0 0 
 Level 530 31
@@ -43304,6 +49274,14 @@ Rapid Spin
 Rock Climb
 Skull Bash
 Submission
+7
+Drill Run
+Earth Power
+Iron Defense
+Iron Head
+Magnet Rise
+Snore
+Stealth Rock
 60
 0 2 0 0 0 0 
 None
@@ -43402,6 +49380,30 @@ Sleep Talk
 Sweet Kiss
 Wish
 Yawn
+23
+Covet
+Drain Punch
+Fire Punch
+Focus Punch
+Gravity
+Heal Bell
+Hyper Voice
+Ice Punch
+Icy Wind
+Iron Tail
+Knock Off
+Last Resort
+Low Kick
+Magic Coat
+Pain Split
+Role Play
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Uproar
+Zen Headbutt
 255
 2 0 0 0 0 0 
 None
@@ -43485,6 +49487,17 @@ Foresight
 Mach Punch
 Reversal
 Smelling Salts
+10
+Block
+Drain Punch
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Snore
+Superpower
+Thunder Punch
 180
 0 1 0 0 0 0 
 Level 533 25
@@ -43568,6 +49581,17 @@ Foresight
 Mach Punch
 Reversal
 Smelling Salts
+10
+Block
+Drain Punch
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Snore
+Superpower
+Thunder Punch
 90
 0 2 0 0 0 0 
 Item 534 Black Belt
@@ -43655,6 +49679,17 @@ Foresight
 Mach Punch
 Reversal
 Smelling Salts
+10
+Block
+Drain Punch
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Snore
+Superpower
+Thunder Punch
 45
 0 3 0 0 0 0 
 None
@@ -43719,6 +49754,15 @@ Mud Sport
 Refresh
 Sleep Talk
 Snore
+Water Pulse
+8
+Bounce
+Earth Power
+Endeavor
+Hyper Voice
+Icy Wind
+Snore
+Uproar
 Water Pulse
 255
 0 0 0 0 0 1 
@@ -43790,6 +49834,18 @@ Mud Sport
 Refresh
 Sleep Talk
 Snore
+Water Pulse
+11
+Bounce
+Earth Power
+Endeavor
+Focus Punch
+Gastro Acid
+Hyper Voice
+Icy Wind
+Snore
+Stealth Rock
+Uproar
 Water Pulse
 120
 2 0 0 0 0 0 
@@ -43879,6 +49935,22 @@ Refresh
 Sleep Talk
 Snore
 Water Pulse
+15
+Bounce
+Drain Punch
+Earth Power
+Endeavor
+Focus Punch
+Gastro Acid
+Hyper Voice
+Ice Punch
+Icy Wind
+Knock Off
+Low Kick
+Snore
+Stealth Rock
+Uproar
+Water Pulse
 45
 3 0 0 0 0 0 
 None
@@ -43953,6 +50025,19 @@ Power-Up Punch
 Confide
 Strength
 0
+12
+Bind
+Block
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Pain Split
+Snore
+Superpower
+Thunder Punch
+Zen Headbutt
 45
 2 0 0 0 0 0 
 None
@@ -44027,6 +50112,19 @@ Power-Up Punch
 Confide
 Strength
 0
+12
+Block
+Dual Chop
+Fire Punch
+Focus Punch
+Ice Punch
+Knock Off
+Low Kick
+Pain Split
+Snore
+Superpower
+Thunder Punch
+Zen Headbutt
 45
 0 2 0 0 0 0 
 None
@@ -44095,6 +50193,17 @@ Mind Reader
 Razor Wind
 Screech
 Silver Wind
+10
+Bug Bite
+Electroweb
+Giga Drain
+Iron Defense
+Magic Coat
+Seed Bomb
+Signal Beam
+Snore
+Synthesis
+Worry Seed
 255
 0 0 1 0 0 0 
 Level 541 20
@@ -44159,6 +50268,17 @@ Mind Reader
 Razor Wind
 Screech
 Silver Wind
+10
+Bug Bite
+Electroweb
+Giga Drain
+Iron Defense
+Magic Coat
+Seed Bomb
+Signal Beam
+Snore
+Synthesis
+Worry Seed
 120
 0 0 2 0 0 0 
 Item 542  Leaf Stone
@@ -44245,6 +50365,19 @@ Mind Reader
 Razor Wind
 Screech
 Silver Wind
+12
+Bug Bite
+Electroweb
+Giga Drain
+Heal Bell
+Iron Defense
+Knock Off
+Magic Coat
+Seed Bomb
+Signal Beam
+Snore
+Synthesis
+Worry Seed
 45
 0 3 0 0 0 0 
 None
@@ -44312,6 +50445,12 @@ Spikes
 Take Down
 Toxic Spikes
 Twineedle
+5
+Bug Bite
+Endeavor
+Iron Defense
+Signal Beam
+Snore
 255
 0 0 1 0 0 0 
 Level 544 22
@@ -44383,6 +50522,12 @@ Spikes
 Take Down
 Toxic Spikes
 Twineedle
+5
+Bug Bite
+Endeavor
+Iron Defense
+Signal Beam
+Snore
 120
 0 0 2 0 0 0 
 Level 545 30
@@ -44467,6 +50612,16 @@ Spikes
 Take Down
 Toxic Spikes
 Twineedle
+9
+Aqua Tail
+Bug Bite
+Endeavor
+Iron Defense
+Iron Tail
+Signal Beam
+Snatch
+Snore
+Superpower
 45
 0 0 0 0 0 3 
 None
@@ -44541,6 +50696,15 @@ Natural Gift
 Switcheroo
 Tickle
 Worry Seed
+8
+Covet
+Endeavor
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Tailwind
+Worry Seed
 190
 0 0 0 0 0 1 
 Item 547  Sun Stone
@@ -44613,6 +50777,15 @@ Natural Gift
 Switcheroo
 Tickle
 Worry Seed
+8
+Covet
+Endeavor
+Giga Drain
+Knock Off
+Seed Bomb
+Snore
+Tailwind
+Worry Seed
 75
 0 0 0 0 0 2 
 None
@@ -44682,6 +50855,14 @@ Ingrain
 Natural Gift
 Sweet Scent
 Worry Seed
+7
+Covet
+Giga Drain
+Heal Bell
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 190
 0 0 0 1 0 0 
 Item 549  Sun Stone
@@ -44746,6 +50927,15 @@ Healing Wish
 Ingrain
 Natural Gift
 Sweet Scent
+Worry Seed
+8
+Covet
+Giga Drain
+Heal Bell
+Role Play
+Seed Bomb
+Snore
+Synthesis
 Worry Seed
 75
 0 0 0 2 0 0 
@@ -44819,6 +51009,15 @@ Rage
 Revenge
 Swift
 Whirlpool
+8
+Aqua Tail
+Bounce
+Endeavor
+Icy Wind
+Snore
+Superpower
+Uproar
+Zen Headbutt
 25
 0 0 0 0 0 2 
 None
@@ -44903,6 +51102,16 @@ Mean Look
 Pursuit
 Rock Climb
 Thunder Fang
+Uproar
+9
+Aqua Tail
+Earth Power
+Foul Play
+Iron Tail
+Snatch
+Snore
+Spite
+Stealth Rock
 Uproar
 180
 0 1 0 0 0 0 
@@ -44996,6 +51205,19 @@ Mean Look
 Pursuit
 Rock Climb
 Thunder Fang
+Uproar
+12
+Aqua Tail
+Earth Power
+Focus Punch
+Foul Play
+Iron Tail
+Knock Off
+Low Kick
+Snatch
+Snore
+Spite
+Stealth Rock
 Uproar
 90
 0 2 0 0 0 0 
@@ -45099,6 +51321,23 @@ Pursuit
 Rock Climb
 Thunder Fang
 Uproar
+16
+Aqua Tail
+Block
+Dragon Pulse
+Earth Power
+Focus Punch
+Foul Play
+Iron Tail
+Knock Off
+Low Kick
+Outrage
+Snatch
+Snore
+Spite
+Stealth Rock
+Superpower
+Uproar
 45
 0 3 0 0 0 0 
 None
@@ -45182,6 +51421,16 @@ Sleep Talk
 Snatch
 Take Down
 Yawn
+9
+Endeavor
+Fire Punch
+Focus Punch
+Heat Wave
+Snatch
+Snore
+Superpower
+Uproar
+Zen Headbutt
 120
 0 1 0 0 0 0 
 Level 555 35
@@ -45281,6 +51530,16 @@ Sleep Talk
 Snatch
 Take Down
 Yawn
+9
+Endeavor
+Fire Punch
+Focus Punch
+Heat Wave
+Snatch
+Snore
+Superpower
+Uproar
+Zen Headbutt
 60
 0 2 0 0 0 0
 None
@@ -45355,6 +51614,18 @@ Leech Seed
 Seed Bomb
 Spikes
 Wood Hammer
+Worry Seed
+11
+Bounce
+Drain Punch
+Endeavor
+Giga Drain
+Hyper Voice
+Knock Off
+Seed Bomb
+Snore
+Synthesis
+Uproar
 Worry Seed
 255
 0 0 0 2 0 0 
@@ -45437,6 +51708,13 @@ Night Slash
 Rototiller
 Sand Tomb
 Spikes
+6
+Block
+Bug Bite
+Iron Defense
+Knock Off
+Snore
+Stealth Rock
 190
 0 0 1 0 0 0 
 Level 558 34
@@ -45524,6 +51802,13 @@ Night Slash
 Rototiller
 Sand Tomb
 Spikes
+6
+Block
+Bug Bite
+Iron Defense
+Knock Off
+Snore
+Stealth Rock
 75
 0 0 2 0 0 0 
 None
@@ -45615,6 +51900,25 @@ Feint Attack
 Fire Punch
 Ice Punch
 Quick Guard
+Thunder Punch
+Zen Headbutt
+18
+Dragon Pulse
+Drain Punch
+Dual Chop
+Fire Punch
+Focus Punch
+Foul Play
+Ice Punch
+Iron Defense
+Iron Head
+Iron Tail
+Knock Off
+Low Kick
+Snatch
+Snore
+Spite
+Super Fang
 Thunder Punch
 Zen Headbutt
 180
@@ -45714,6 +52018,26 @@ Ice Punch
 Quick Guard
 Thunder Punch
 Zen Headbutt
+19
+Dragon Pulse
+Drain Punch
+Dual Chop
+Fire Punch
+Focus Punch
+Foul Play
+Ice Punch
+Iron Defense
+Iron Head
+Iron Tail
+Knock Off
+Low Kick
+Outrage
+Snatch
+Snore
+Spite
+Super Fang
+Thunder Punch
+Zen Headbutt
 90
 0 0 1 0 1 0 
 None
@@ -45801,6 +52125,20 @@ Roost
 Skill Swap
 Steel Wing
 Stored Power
+13
+Gravity
+Heat Wave
+Icy Wind
+Magic Coat
+Magic Room
+Shock Wave
+Signal Beam
+Skill Swap
+Sky Attack
+Snore
+Tailwind
+Trick
+Zen Headbutt
 45
 0 0 0 2 0 0 
 None
@@ -45876,6 +52214,21 @@ Memento
 Nasty Plot
 Nightmare
 Toxic Spikes
+14
+Block
+Iron Defense
+Knock Off
+Magic Coat
+Pain Split
+Role Play
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Spite
+Trick
+Wonder Room
+Zen Headbutt
 190
 0 0 1 0 0 0 
 Level 563 34
@@ -45958,6 +52311,21 @@ Memento
 Nasty Plot
 Nightmare
 Toxic Spikes
+14
+Block
+Iron Defense
+Knock Off
+Magic Coat
+Pain Split
+Role Play
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Spite
+Trick
+Wonder Room
+Zen Headbutt
 90
 0 0 2 0 0 0 
 None
@@ -46040,6 +52408,18 @@ Rock Throw
 Slam
 Water Pulse
 Whirlpool
+11
+Aqua Tail
+Block
+Earth Power
+Icy Wind
+Iron Defense
+Iron Tail
+Knock Off
+Snore
+Stealth Rock
+Water Pulse
+Zen Headbutt
 45
 0 0 1 0 0 0 
 Level 565 37
@@ -46125,6 +52505,21 @@ Rock Throw
 Slam
 Water Pulse
 Whirlpool
+14
+Aqua Tail
+Block
+Earth Power
+Icy Wind
+Iron Defense
+Iron Head
+Iron Tail
+Knock Off
+Low Kick
+Snore
+Stealth Rock
+Superpower
+Water Pulse
+Zen Headbutt
 45
 0 0 2 0 0 0 
 None
@@ -46208,6 +52603,21 @@ Head Smash
 Knock Off
 Steel Wing
 Switcheroo
+14
+Aqua Tail
+Bounce
+Dragon Pulse
+Earth Power
+Endeavor
+Heat Wave
+Iron Defense
+Iron Tail
+Knock Off
+Snore
+Stealth Rock
+Tailwind
+Uproar
+Zen Headbutt
 45
 0 1 0 0 0 0 
 Level 567 37
@@ -46297,6 +52707,23 @@ Head Smash
 Knock Off
 Steel Wing
 Switcheroo
+16
+Aqua Tail
+Bounce
+Dragon Pulse
+Earth Power
+Endeavor
+Heat Wave
+Iron Defense
+Iron Tail
+Knock Off
+Outrage
+Sky Attack
+Snore
+Stealth Rock
+Tailwind
+Uproar
+Zen Headbutt
 45
 0 2 0 0 0 0 
 None
@@ -46367,6 +52794,15 @@ Rollout
 Sand Attack
 Self-Destruct
 Spikes
+8
+Drain Punch
+Giga Drain
+Gunk Shot
+Pain Split
+Recycle
+Seed Bomb
+Snore
+Spite
 190
 0 0 0 0 0 1 
 Level 569 36
@@ -46450,6 +52886,15 @@ Rollout
 Sand Attack
 Self-Destruct
 Spikes
+8
+Drain Punch
+Giga Drain
+Gunk Shot
+Pain Split
+Recycle
+Seed Bomb
+Snore
+Spite
 60
 0 2 0 0 0 0 
 None
@@ -46536,6 +52981,17 @@ Extrasensory
 Memento
 Snatch
 Sucker Punch
+10
+Bounce
+Covet
+Foul Play
+Hyper Voice
+Knock Off
+Snatch
+Snore
+Spite
+Trick
+Uproar
 75
 0 0 0 1 0 0 
 Level 571 30
@@ -46632,6 +53088,18 @@ Extrasensory
 Memento
 Snatch
 Sucker Punch
+11
+Bounce
+Covet
+Foul Play
+Hyper Voice
+Knock Off
+Low Kick
+Snatch
+Snore
+Spite
+Trick
+Uproar
 45
 0 0 0 2 0 0 
 None
@@ -46707,6 +53175,18 @@ Knock Off
 Mud-Slap
 Sleep Talk
 Tail Whip
+11
+Aqua Tail
+Covet
+Gunk Shot
+Hyper Voice
+Iron Tail
+Knock Off
+Last Resort
+Seed Bomb
+Shock Wave
+Snore
+Uproar
 255
 0 0 0 0 0 1 
 Item 573  Shiny Stone
@@ -46777,6 +53257,18 @@ Knock Off
 Mud-Slap
 Sleep Talk
 Tail Whip
+11
+Aqua Tail
+Covet
+Gunk Shot
+Hyper Voice
+Iron Tail
+Knock Off
+Last Resort
+Seed Bomb
+Shock Wave
+Snore
+Uproar
 60
 0 0 0 0 0 2 
 None
@@ -46863,6 +53355,23 @@ Mean Look
 Miracle Eye
 Mirror Coat
 Uproar
+16
+Covet
+Foul Play
+Gravity
+Heal Bell
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Uproar
+Zen Headbutt
 200
 0 0 0 0 1 0 
 Level 575 32
@@ -46951,6 +53460,23 @@ Mean Look
 Miracle Eye
 Mirror Coat
 Uproar
+16
+Covet
+Foul Play
+Gravity
+Heal Bell
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Uproar
+Zen Headbutt
 100
 0 0 0 0 2 0 
 Level 576 41
@@ -47044,6 +53570,23 @@ Mean Look
 Miracle Eye
 Mirror Coat
 Uproar
+16
+Covet
+Foul Play
+Gravity
+Heal Bell
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Uproar
+Zen Headbutt
 50
 0 0 0 0 3 0 
 None
@@ -47125,6 +53668,21 @@ Imprison
 Night Shade
 Secret Power
 Trick
+14
+Endeavor
+Gravity
+Iron Defense
+Magic Coat
+Pain Split
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Wonder Room
+Zen Headbutt
 200
 0 0 0 1 0 0 
 Level 578 32
@@ -47209,6 +53767,21 @@ Imprison
 Night Shade
 Secret Power
 Trick
+14
+Endeavor
+Gravity
+Iron Defense
+Magic Coat
+Pain Split
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Wonder Room
+Zen Headbutt
 100
 0 0 0 2 0 0 
 Level 579 41
@@ -47302,6 +53875,28 @@ Imprison
 Night Shade
 Secret Power
 Trick
+21
+Drain Punch
+Endeavor
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Iron Defense
+Knock Off
+Magic Coat
+Pain Split
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Superpower
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 50
 0 0 0 3 0 0 
 None
@@ -47371,6 +53966,13 @@ Me First
 Mirror Move
 Mud Sport
 Steel Wing
+6
+Endeavor
+Icy Wind
+Snore
+Tailwind
+Uproar
+Water Pulse
 190
 1 0 0 0 0 0 
 Level 581 35
@@ -47444,6 +54046,14 @@ Me First
 Mirror Move
 Mud Sport
 Steel Wing
+7
+Endeavor
+Icy Wind
+Sky Attack
+Snore
+Tailwind
+Uproar
+Water Pulse
 45
 0 0 0 0 0 2 
 None
@@ -47510,6 +54120,15 @@ Iron Defense
 Magnet Rise
 Natural Gift
 Powder Snow
+Water Pulse
+8
+Icy Wind
+Iron Defense
+Magic Coat
+Magnet Rise
+Signal Beam
+Snore
+Uproar
 Water Pulse
 255
 0 0 0 1 0 0 
@@ -47580,6 +54199,15 @@ Iron Defense
 Magnet Rise
 Natural Gift
 Powder Snow
+Water Pulse
+8
+Icy Wind
+Iron Defense
+Magic Coat
+Magnet Rise
+Signal Beam
+Snore
+Uproar
 Water Pulse
 120
 0 0 0 2 0 0 
@@ -47656,6 +54284,15 @@ Magnet Rise
 Natural Gift
 Powder Snow
 Water Pulse
+8
+Icy Wind
+Iron Defense
+Magic Coat
+Magnet Rise
+Signal Beam
+Snore
+Uproar
+Water Pulse
 45
 0 0 0 3 0 0 
 None
@@ -47727,6 +54364,14 @@ Grass Whistle
 Natural Gift
 Odor Sleuth
 Sleep Talk
+Synthesis
+Worry Seed
+7
+Bounce
+Giga Drain
+Last Resort
+Seed Bomb
+Snore
 Synthesis
 Worry Seed
 190
@@ -47811,6 +54456,14 @@ Odor Sleuth
 Sleep Talk
 Synthesis
 Worry Seed
+7
+Bounce
+Giga Drain
+Last Resort
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 75
 0 2 0 0 0 0 
 None
@@ -47888,6 +54541,16 @@ Iron Tail
 Roost
 Shock Wave
 Tickle
+9
+Covet
+Electroweb
+Iron Tail
+Knock Off
+Last Resort
+Shock Wave
+Signal Beam
+Snore
+Tailwind
 200
 0 0 0 0 0 2 
 None
@@ -47958,6 +54621,14 @@ Knock Off
 Megahorn
 Pursuit
 Screech
+7
+Bug Bite
+Drill Run
+Giga Drain
+Iron Defense
+Knock Off
+Signal Beam
+Snore
 200
 0 1 0 0 0 0 
 Item 589  Metal Coat
@@ -48037,6 +54708,15 @@ Knock Off
 Megahorn
 Pursuit
 Screech
+8
+Bug Bite
+Drill Run
+Giga Drain
+Iron Defense
+Iron Head
+Knock Off
+Signal Beam
+Snore
 75
 0 2 0 0 0 0 
 None
@@ -48105,6 +54785,14 @@ Growth
 Poison Powder
 Rollout
 Stun Spore
+7
+Foul Play
+Gastro Acid
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 190
 1 0 0 0 0 0 
 Level 591 39
@@ -48181,6 +54869,14 @@ Growth
 Poison Powder
 Rollout
 Stun Spore
+7
+Foul Play
+Gastro Acid
+Giga Drain
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 75
 2 0 0 0 0 0 
 None
@@ -48261,6 +54957,17 @@ Constrict
 Mist
 Pain Split
 Recover
+10
+Bind
+Giga Drain
+Icy Wind
+Magic Coat
+Pain Split
+Shock Wave
+Snore
+Spite
+Trick
+Water Pulse
 190
 0 0 0 0 1 0 
 Level 593 40
@@ -48344,6 +55051,17 @@ Constrict
 Mist
 Pain Split
 Recover
+10
+Bind
+Giga Drain
+Icy Wind
+Magic Coat
+Pain Split
+Shock Wave
+Snore
+Spite
+Trick
+Water Pulse
 60
 0 0 0 0 2 0 
 None
@@ -48419,6 +55137,14 @@ Mist
 Pain Split
 Refresh
 Tickle
+7
+Bounce
+Icy Wind
+Knock Off
+Magic Coat
+Pain Split
+Snore
+Water Pulse
 75
 2 0 0 0 0 0 
 None
@@ -48493,6 +55219,16 @@ Pin Missile
 Poison Sting
 Pursuit
 Rock Climb
+9
+Bounce
+Bug Bite
+Electroweb
+Gastro Acid
+Giga Drain
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 190
 0 0 0 0 0 1 
 Level 596 36
@@ -48573,6 +55309,16 @@ Pin Missile
 Poison Sting
 Pursuit
 Rock Climb
+9
+Bounce
+Bug Bite
+Electroweb
+Gastro Acid
+Giga Drain
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 75
 0 0 0 0 0 2 
 None
@@ -48644,6 +55390,18 @@ Leech Seed
 Rock Climb
 Seed Bomb
 Spikes
+Stealth Rock
+Worry Seed
+11
+Endeavor
+Giga Drain
+Gravity
+Iron Defense
+Iron Head
+Knock Off
+Magnet Rise
+Seed Bomb
+Snore
 Stealth Rock
 Worry Seed
 255
@@ -48735,6 +55493,19 @@ Seed Bomb
 Spikes
 Stealth Rock
 Worry Seed
+12
+Block
+Endeavor
+Giga Drain
+Gravity
+Iron Defense
+Iron Head
+Knock Off
+Magnet Rise
+Seed Bomb
+Snore
+Stealth Rock
+Worry Seed
 90
 0 0 2 0 0 0 
 None
@@ -48795,6 +55566,17 @@ Rock Smash
 Secret Power
 Confide
 0
+10
+Bind
+Gravity
+Iron Defense
+Magic Coat
+Magnet Rise
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Uproar
 130
 0 0 1 0 0 0 
 Level 600 38
@@ -48857,6 +55639,17 @@ Rock Smash
 Secret Power
 Confide
 0
+10
+Bind
+Gravity
+Iron Defense
+Magic Coat
+Magnet Rise
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Uproar
 60
 0 0 2 0 0 0 
 Level 601 49
@@ -48925,6 +55718,17 @@ Rock Smash
 Secret Power
 Confide
 0
+10
+Bind
+Gravity
+Iron Defense
+Magic Coat
+Magnet Rise
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Uproar
 30
 0 0 3 0 0 0 
 None
@@ -48953,6 +55757,8 @@ Electric None
 Charge Beam
 Thunder Wave
 0
+1
+Magnet Rise
 190
 0 0 0 0 0 1 
 Level 603 39
@@ -49015,6 +55821,19 @@ Wild Charge
 Secret Power
 Confide
 0
+12
+Aqua Tail
+Bind
+Bounce
+Gastro Acid
+Giga Drain
+Iron Tail
+Knock Off
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Super Fang
 60
 0 2 0 0 0 0 
 Item 604  Thunder Stone
@@ -49087,6 +55906,26 @@ Confide
 Cut
 Strength
 0
+19
+Aqua Tail
+Bind
+Bounce
+Dragon Pulse
+Drain Punch
+Fire Punch
+Focus Punch
+Gastro Acid
+Giga Drain
+Iron Tail
+Knock Off
+Magnet Rise
+Outrage
+Shock Wave
+Signal Beam
+Snore
+Super Fang
+Superpower
+Thunder Punch
 30
 0 3 0 0 0 0 
 None
@@ -49172,6 +56011,21 @@ Nasty Plot
 Power Swap
 Skill Swap
 Teleport
+14
+Gravity
+Magic Coat
+Pain Split
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Uproar
+Wonder Room
+Zen Headbutt
 255
 0 0 0 1 0 0 
 Level 606 42
@@ -49264,6 +56118,21 @@ Nasty Plot
 Power Swap
 Skill Swap
 Teleport
+14
+Gravity
+Magic Coat
+Pain Split
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Trick
+Uproar
+Wonder Room
+Zen Headbutt
 90
 0 0 0 2 0 0 
 None
@@ -49346,6 +56215,13 @@ Endure
 Haze
 Heat Wave
 Power Split
+6
+Heat Wave
+Pain Split
+Shock Wave
+Snore
+Spite
+Trick
 190
 0 0 0 1 0 0 
 Level 608 41
@@ -49430,6 +56306,13 @@ Endure
 Haze
 Heat Wave
 Power Split
+6
+Heat Wave
+Pain Split
+Shock Wave
+Snore
+Spite
+Trick
 90
 0 0 0 2 0 0 
 Item 609  Dusk Stone
@@ -49502,6 +56385,13 @@ Endure
 Haze
 Heat Wave
 Power Split
+6
+Heat Wave
+Pain Split
+Shock Wave
+Snore
+Spite
+Trick
 45
 0 0 0 3 0 0 
 None
@@ -49583,6 +56473,16 @@ Iron Tail
 Night Slash
 Razor Wind
 Reversal
+9
+Aqua Tail
+Dragon Pulse
+Dual Chop
+Endeavor
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Superpower
 75
 0 1 0 0 0 0 
 Level 611 38
@@ -49669,6 +56569,17 @@ Iron Tail
 Night Slash
 Razor Wind
 Reversal
+10
+Aqua Tail
+Dragon Pulse
+Dual Chop
+Endeavor
+Iron Tail
+Low Kick
+Outrage
+Shock Wave
+Snore
+Superpower
 60
 0 2 0 0 0 0 
 Level 612 48
@@ -49764,6 +56675,17 @@ Iron Tail
 Night Slash
 Razor Wind
 Reversal
+10
+Aqua Tail
+Dragon Pulse
+Dual Chop
+Endeavor
+Iron Tail
+Low Kick
+Outrage
+Shock Wave
+Snore
+Superpower
 45
 0 3 0 0 0 0 
 None
@@ -49842,6 +56764,15 @@ Night Slash
 Play Rough
 Sleep Talk
 Yawn
+8
+Covet
+Focus Punch
+Ice Punch
+Icy Wind
+Low Kick
+Snore
+Superpower
+Water Pulse
 120
 0 1 0 0 0 0 
 Level 614 37
@@ -49939,6 +56870,15 @@ Night Slash
 Play Rough
 Sleep Talk
 Yawn
+8
+Covet
+Focus Punch
+Ice Punch
+Icy Wind
+Low Kick
+Snore
+Superpower
+Water Pulse
 60
 0 2 0 0 0 0 
 None
@@ -50012,6 +56952,15 @@ Flash Cannon
 Secret Power
 Confide
 0
+8
+Bind
+Icy Wind
+Iron Defense
+Knock Off
+Magic Coat
+Signal Beam
+Snore
+Water Pulse
 25
 0 0 0 0 2 0 
 None
@@ -50079,6 +57028,12 @@ Mind Reader
 Mud-Slap
 Pursuit
 Spikes
+5
+Bug Bite
+Gastro Acid
+Giga Drain
+Signal Beam
+Snore
 200
 0 0 1 0 0 0 
 Item 617  Shed Shell
@@ -50156,6 +57111,13 @@ Mind Reader
 Mud-Slap
 Pursuit
 Spikes
+6
+Bug Bite
+Gastro Acid
+Giga Drain
+Knock Off
+Signal Beam
+Snore
 75
 0 0 0 0 0 2 
 None
@@ -50240,6 +57202,21 @@ Sleep Talk
 Spark
 Spite
 Yawn
+14
+Aqua Tail
+Bounce
+Earth Power
+Electroweb
+Endeavor
+Foul Play
+Magnet Rise
+Pain Split
+Shock Wave
+Snore
+Spite
+Stealth Rock
+Uproar
+Water Pulse
 75
 2 0 0 0 0 0 
 None
@@ -50326,6 +57303,15 @@ Low Kick
 Me First
 Smelling Salts
 Vital Throw
+8
+Bounce
+Drain Punch
+Dual Chop
+Focus Punch
+Knock Off
+Low Kick
+Role Play
+Snore
 180
 0 1 0 0 0 0 
 Level 620 50
@@ -50418,6 +57404,15 @@ Low Kick
 Me First
 Smelling Salts
 Vital Throw
+8
+Bounce
+Drain Punch
+Dual Chop
+Focus Punch
+Knock Off
+Low Kick
+Role Play
+Snore
 45
 0 2 0 0 0 0 
 None
@@ -50514,6 +57509,21 @@ Pursuit
 Snatch
 Sucker Punch
 Thunder Fang
+14
+Aqua Tail
+Dragon Pulse
+Fire Punch
+Gunk Shot
+Heat Wave
+Iron Head
+Iron Tail
+Outrage
+Shock Wave
+Snatch
+Snore
+Stealth Rock
+Superpower
+Thunder Punch
 45
 0 2 0 0 0 0 
 None
@@ -50585,6 +57595,24 @@ Power-Up Punch
 Confide
 Strength
 0
+17
+Block
+Drain Punch
+Earth Power
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Icy Wind
+Iron Defense
+Low Kick
+Magic Coat
+Shock Wave
+Signal Beam
+Snore
+Stealth Rock
+Superpower
+Thunder Punch
 190
 0 1 0 0 0 0 
 Level 623 43
@@ -50669,6 +57697,25 @@ Confide
 Fly
 Strength
 0
+18
+Block
+Drain Punch
+Earth Power
+Fire Punch
+Focus Punch
+Gravity
+Ice Punch
+Icy Wind
+Iron Defense
+Low Kick
+Magic Coat
+Shock Wave
+Signal Beam
+Snore
+Stealth Rock
+Superpower
+Thunder Punch
+Zen Headbutt
 90
 0 2 0 0 0 0 
 None
@@ -50757,6 +57804,19 @@ Quick Guard
 Revenge
 Stealth Rock
 Sucker Punch
+12
+Dual Chop
+Foul Play
+Iron Defense
+Iron Head
+Knock Off
+Low Kick
+Magnet Rise
+Role Play
+Snatch
+Snore
+Spite
+Stealth Rock
 120
 0 1 0 0 0 0 
 Level 625 52
@@ -50854,6 +57914,19 @@ Quick Guard
 Revenge
 Stealth Rock
 Sucker Punch
+12
+Dual Chop
+Foul Play
+Iron Defense
+Iron Head
+Knock Off
+Low Kick
+Magnet Rise
+Role Play
+Snatch
+Snore
+Spite
+Stealth Rock
 45
 0 2 0 0 0 0 
 None
@@ -50931,6 +58004,14 @@ Mud-Slap
 Rock Climb
 Skull Bash
 Stomp
+7
+Endeavor
+Iron Head
+Outrage
+Snore
+Superpower
+Uproar
+Zen Headbutt
 45
 0 2 0 0 0 0 
 None
@@ -50999,6 +58080,11 @@ Cut
 Fly
 Strength
 0
+4
+Heat Wave
+Snore
+Superpower
+Tailwind
 190
 0 1 0 0 0 0 
 Level 628 54
@@ -51076,6 +58162,13 @@ Cut
 Fly
 Strength
 0
+6
+Heat Wave
+Sky Attack
+Snore
+Superpower
+Tailwind
+Zen Headbutt
 60
 0 2 0 0 0 0 
 None
@@ -51155,6 +58248,14 @@ Mean Look
 Roost
 Scary Face
 Steel Wing
+7
+Block
+Foul Play
+Heat Wave
+Knock Off
+Snatch
+Snore
+Tailwind
 190
 0 0 1 0 0 0 
 Level 630 54
@@ -51243,6 +58344,15 @@ Mean Look
 Roost
 Scary Face
 Steel Wing
+8
+Block
+Foul Play
+Heat Wave
+Knock Off
+Sky Attack
+Snatch
+Snore
+Tailwind
 60
 0 0 0 2 0 0 
 None
@@ -51328,6 +58438,21 @@ Sleep Talk
 Sucker Punch
 Tickle
 Wrap
+14
+Bind
+Bug Bite
+Fire Punch
+Focus Punch
+Gastro Acid
+Giga Drain
+Heat Wave
+Knock Off
+Low Kick
+Recycle
+Snatch
+Snore
+Superpower
+Thunder Punch
 90
 0 0 0 2 0 0 
 None
@@ -51407,6 +58532,13 @@ Feint Attack
 Rock Climb
 Screech
 Thunder Fang
+6
+Bug Bite
+Endeavor
+Iron Defense
+Iron Head
+Snore
+Superpower
 90
 0 0 2 0 0 0 
 None
@@ -51481,6 +58613,18 @@ Head Smash
 Ice Fang
 Screech
 Thunder Fang
+11
+Aqua Tail
+Dragon Pulse
+Earth Power
+Hyper Voice
+Outrage
+Shock Wave
+Snore
+Spite
+Superpower
+Uproar
+Zen Headbutt
 45
 0 1 0 0 0 0 
 Level 634 50
@@ -51557,6 +58701,18 @@ Head Smash
 Ice Fang
 Screech
 Thunder Fang
+11
+Aqua Tail
+Dragon Pulse
+Earth Power
+Hyper Voice
+Outrage
+Shock Wave
+Snore
+Spite
+Superpower
+Uproar
+Zen Headbutt
 45
 0 2 0 0 0 0 
 Level 635 64
@@ -51656,6 +58812,22 @@ Head Smash
 Ice Fang
 Screech
 Thunder Fang
+15
+Aqua Tail
+Dragon Pulse
+Earth Power
+Heat Wave
+Hyper Voice
+Iron Tail
+Outrage
+Shock Wave
+Signal Beam
+Snore
+Spite
+Superpower
+Tailwind
+Uproar
+Zen Headbutt
 45
 0 0 0 3 0 0 
 None
@@ -51724,6 +58896,14 @@ Harden
 Magnet Rise
 Morning Sun
 String Shot
+Zen Headbutt
+7
+Bug Bite
+Giga Drain
+Heat Wave
+Magnet Rise
+Signal Beam
+Snore
 Zen Headbutt
 45
 0 1 0 0 0 0 
@@ -51813,6 +58993,15 @@ Magnet Rise
 Morning Sun
 String Shot
 Zen Headbutt
+8
+Bug Bite
+Giga Drain
+Heat Wave
+Magnet Rise
+Signal Beam
+Snore
+Tailwind
+Zen Headbutt
 15
 0 0 0 3 0 0 
 None
@@ -51891,6 +59080,16 @@ Confide
 Cut
 Strength
 0
+9
+Block
+Bounce
+Iron Defense
+Iron Head
+Magnet Rise
+Snore
+Stealth Rock
+Superpower
+Zen Headbutt
 3
 0 0 3 0 0 0 
 None
@@ -51968,6 +59167,14 @@ Confide
 Cut
 Strength
 0
+7
+Block
+Earth Power
+Iron Head
+Snore
+Stealth Rock
+Superpower
+Zen Headbutt
 3
 0 3 0 0 0 0 
 None
@@ -52045,6 +59252,16 @@ Confide
 Cut
 Strength
 0
+9
+Block
+Bounce
+Giga Drain
+Seed Bomb
+Snore
+Superpower
+Synthesis
+Worry Seed
+Zen Headbutt
 3
 0 0 0 0 3 0 
 None
@@ -52127,6 +59344,17 @@ Confide
 Fly
 Strength
 0
+10
+Foul Play
+Heat Wave
+Icy Wind
+Iron Tail
+Knock Off
+Role Play
+Snore
+Superpower
+Tailwind
+Uproar
 3
 0 3 0 0 0 0
 None
@@ -52214,6 +59442,17 @@ Confide
 Fly
 Strength
 0
+10
+Electroweb
+Foul Play
+Iron Tail
+Knock Off
+Role Play
+Shock Wave
+Snore
+Superpower
+Thunder Punch
+Uproar
 3
 0 3 0 0 0 0 
 None
@@ -52296,6 +59535,15 @@ Cut
 Fly
 Strength
 0
+8
+Dragon Pulse
+Earth Power
+Heat Wave
+Hyper Voice
+Outrage
+Snore
+Tailwind
+Zen Headbutt
 45
 0 0 0 3 0 0 
 None
@@ -52379,6 +59627,18 @@ Cut
 Fly
 Strength
 0
+11
+Dragon Pulse
+Earth Power
+Hyper Voice
+Magnet Rise
+Outrage
+Shock Wave
+Signal Beam
+Snore
+Tailwind
+Thunder Punch
+Zen Headbutt
 45
 0 3 0 0 0 0 
 None
@@ -52461,6 +59721,17 @@ Confide
 Fly
 Strength
 0
+10
+Block
+Earth Power
+Gravity
+Iron Tail
+Knock Off
+Outrage
+Role Play
+Snore
+Stealth Rock
+Superpower
 3
 0 3 0 0 0 0
 None
@@ -52540,6 +59811,17 @@ Cut
 Fly
 Strength
 0
+10
+Dragon Pulse
+Earth Power
+Endeavor
+Hyper Voice
+Icy Wind
+Iron Head
+Outrage
+Signal Beam
+Snore
+Zen Headbutt
 3
 1 1 0 1 0 0
 None
@@ -52611,6 +59893,16 @@ Cut
 Surf
 Strength
 0
+9
+Aqua Tail
+Bounce
+Covet
+Endeavor
+Icy Wind
+Last Resort
+Snore
+Superpower
+Water Pulse
 3
 0 0 0 3 0 0 
 None
@@ -52697,6 +59989,33 @@ Dazzling Gleam
 Confide
 Strength
 0
+26
+Covet
+Drain Punch
+Dual Chop
+Fire Punch
+Focus Punch
+Gravity
+Heal Bell
+Hyper Voice
+Ice Punch
+Knock Off
+Last Resort
+Low Kick
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Uproar
+Wonder Room
+Zen Headbutt
 3
 0 0 0 1 1 1
 None
@@ -52780,6 +60099,22 @@ Dark Pulse
 Confide
 Fly
 0
+15
+Bug Bite
+Electroweb
+Giga Drain
+Gravity
+Gunk Shot
+Iron Defense
+Iron Head
+Last Resort
+Magic Coat
+Magnet Rise
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Zen Headbutt
 3
 0 1 0 1 0 1 
 None
@@ -52867,6 +60202,25 @@ Quick Guard
 Rollout
 Spikes
 Synthesis
+18
+Drain Punch
+Dual Chop
+Endeavor
+Focus Punch
+Giga Drain
+Iron Defense
+Iron Head
+Iron Tail
+Low Kick
+Pain Split
+Seed Bomb
+Snore
+Super Fang
+Superpower
+Synthesis
+Thunder Punch
+Worry Seed
+Zen Headbutt
 45
 0 0 1 0 0 0 
 Level 651 16
@@ -52956,6 +60310,25 @@ Quick Guard
 Rollout
 Spikes
 Synthesis
+18
+Drain Punch
+Dual Chop
+Endeavor
+Focus Punch
+Giga Drain
+Iron Defense
+Iron Head
+Iron Tail
+Low Kick
+Pain Split
+Seed Bomb
+Snore
+Super Fang
+Superpower
+Synthesis
+Thunder Punch
+Worry Seed
+Zen Headbutt
 45
 0 0 2 0 0 0 
 Level 652 36
@@ -53057,6 +60430,26 @@ Quick Guard
 Rollout
 Spikes
 Synthesis
+19
+Block
+Drain Punch
+Dual Chop
+Endeavor
+Focus Punch
+Giga Drain
+Iron Defense
+Iron Head
+Iron Tail
+Low Kick
+Pain Split
+Seed Bomb
+Snore
+Super Fang
+Superpower
+Synthesis
+Thunder Punch
+Worry Seed
+Zen Headbutt
 45
 0 0 3 0 0 0 
 None
@@ -53133,6 +60526,14 @@ Heat Wave
 Hypnosis
 Magic Coat
 Wish
+7
+Covet
+Foul Play
+Heat Wave
+Iron Tail
+Magic Coat
+Magic Room
+Snore
 45
 0 0 0 1 0 0 
 Level 654 16
@@ -53209,6 +60610,24 @@ Heat Wave
 Hypnosis
 Magic Coat
 Wish
+17
+Covet
+Fire Punch
+Foul Play
+Heat Wave
+Iron Tail
+Low Kick
+Magic Coat
+Magic Room
+Recycle
+Shock Wave
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 45
 0 0 0 2 0 0 
 Level 655 36
@@ -53298,6 +60717,26 @@ Heat Wave
 Hypnosis
 Magic Coat
 Wish
+19
+Covet
+Fire Punch
+Foul Play
+Heat Wave
+Iron Tail
+Low Kick
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Skill Swap
+Snatch
+Snore
+Thunder Punch
+Trick
+Wonder Room
+Zen Headbutt
 45
 0 0 0 3 0 0 
 None
@@ -53376,6 +60815,14 @@ Mind Reader
 Mud Sport
 Toxic Spikes
 Water Sport
+7
+Bounce
+Icy Wind
+Role Play
+Snatch
+Snore
+Spite
+Water Pulse
 45
 0 0 0 0 0 1 
 Level 657 16
@@ -53455,6 +60902,17 @@ Mind Reader
 Mud Sport
 Toxic Spikes
 Water Sport
+10
+Bounce
+Gunk Shot
+Ice Punch
+Icy Wind
+Low Kick
+Role Play
+Snatch
+Snore
+Spite
+Water Pulse
 45
 0 0 0 0 0 2 
 Level 658 36
@@ -53543,6 +61001,17 @@ Mind Reader
 Mud Sport
 Toxic Spikes
 Water Sport
+10
+Bounce
+Gunk Shot
+Ice Punch
+Icy Wind
+Low Kick
+Role Play
+Snatch
+Snore
+Spite
+Water Pulse
 45
 0 0 0 0 0 3 
 None
@@ -53621,6 +61090,15 @@ Strength
 Defense Curl
 Rollout
 Spikes
+8
+Bounce
+Endeavor
+Iron Head
+Iron Tail
+Last Resort
+Recycle
+Snore
+Super Fang
 255
 0 0 0 0 0 1 
 Level 660 20
@@ -53706,6 +61184,28 @@ Strength
 Defense Curl
 Rollout
 Spikes
+21
+Bounce
+Earth Power
+Endeavor
+Fire Punch
+Focus Punch
+Foul Play
+Gastro Acid
+Gunk Shot
+Ice Punch
+Iron Head
+Iron Tail
+Knock Off
+Last Resort
+Low Kick
+Recycle
+Snatch
+Snore
+Super Fang
+Superpower
+Thunder Punch
+Uproar
 255
 2 0 0 0 0 0 
 None
@@ -53769,6 +61269,11 @@ Fly
 3
 Quick Guard
 Snatch
+Tailwind
+4
+Heat Wave
+Snatch
+Snore
 Tailwind
 255
 0 0 0 0 0 1 
@@ -53838,6 +61343,11 @@ Fly
 3
 Quick Guard
 Snatch
+Tailwind
+4
+Heat Wave
+Snatch
+Snore
 Tailwind
 255
 0 0 0 0 0 2 
@@ -53916,6 +61426,11 @@ Fly
 Quick Guard
 Snatch
 Tailwind
+4
+Heat Wave
+Snatch
+Snore
+Tailwind
 255
 0 0 0 0 0 3 
 None
@@ -53944,6 +61459,8 @@ Bug None
 2
 Poison Powder
 Stun Spore
+1
+Bug Bite
 255
 0 0 1 0 0 0 
 Level 665 9
@@ -53971,6 +61488,10 @@ Protect
 2
 Poison Powder
 Stun Spore
+3
+Bug Bite
+Electroweb
+Iron Defense
 255
 0 0 2 0 0 0 
 Level 666 12
@@ -54044,6 +61565,14 @@ Confide
 2
 Poison Powder
 Stun Spore
+7
+Bug Bite
+Electroweb
+Endeavor
+Giga Drain
+Signal Beam
+Snore
+Tailwind
 255
 1 0 0 1 0 1 
 None
@@ -54120,6 +61649,13 @@ Entrainment
 Fire Spin
 Snatch
 Yawn
+6
+Endeavor
+Heat Wave
+Hyper Voice
+Iron Tail
+Snatch
+Snore
 200
 0 0 0 1 0 0 
 Level 668 35
@@ -54199,6 +61735,14 @@ Entrainment
 Fire Spin
 Snatch
 Yawn
+7
+Bounce
+Endeavor
+Heat Wave
+Hyper Voice
+Iron Tail
+Snatch
+Snore
 200
 0 0 0 2 0 0 
 None
@@ -54263,6 +61807,16 @@ Confide
 Camouflage
 Captivate
 Copycat
+9
+Covet
+Endeavor
+Giga Drain
+Heal Bell
+Magic Coat
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 255
 0 0 0 0 1 0 
 Level 670 19
@@ -54327,6 +61881,16 @@ Confide
 Camouflage
 Captivate
 Copycat
+9
+Covet
+Endeavor
+Giga Drain
+Heal Bell
+Magic Coat
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 255
 0 0 0 0 2 0 
 Item 671 Shiny Stone
@@ -54392,6 +61956,16 @@ Confide
 Camouflage
 Captivate
 Copycat
+9
+Covet
+Endeavor
+Giga Drain
+Heal Bell
+Magic Coat
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
 255
 0 0 0 0 3 0 
 None
@@ -54464,6 +62038,14 @@ Strength
 Defense Curl
 Milk Drink
 Rollout
+7
+Giga Drain
+Iron Tail
+Seed Bomb
+Snore
+Synthesis
+Worry Seed
+Zen Headbutt
 160
 1 0 0 0 0 0 
 Level 673 32
@@ -54543,6 +62125,16 @@ Strength
 Defense Curl
 Milk Drink
 Rollout
+9
+Bounce
+Giga Drain
+Iron Tail
+Seed Bomb
+Snore
+Superpower
+Synthesis
+Worry Seed
+Zen Headbutt
 160
 2 0 0 0 0 0 
 None
@@ -54623,6 +62215,28 @@ Foul Play
 Me First
 Quick Guard
 Storm Throw
+21
+Block
+Covet
+Drain Punch
+Dual Chop
+Endeavor
+Fire Punch
+Focus Punch
+Foul Play
+Gunk Shot
+Hyper Voice
+Ice Punch
+Iron Head
+Knock Off
+Low Kick
+Snatch
+Snore
+Spite
+Superpower
+Thunder Punch
+Uproar
+Zen Headbutt
 128
 0 1 0 0 0 0 
 Level 675 32
@@ -54723,6 +62337,29 @@ Foul Play
 Me First
 Quick Guard
 Storm Throw
+22
+Block
+Covet
+Drain Punch
+Dual Chop
+Endeavor
+Fire Punch
+Focus Punch
+Foul Play
+Gunk Shot
+Hyper Voice
+Ice Punch
+Iron Head
+Knock Off
+Low Kick
+Outrage
+Snatch
+Snore
+Spite
+Superpower
+Thunder Punch
+Uproar
+Zen Headbutt
 128
 0 2 0 0 0 0 
 None
@@ -54793,6 +62430,15 @@ Mimic
 Refresh
 Role Play
 Work Up
+8
+Endeavor
+Hyper Voice
+Iron Tail
+Last Resort
+Role Play
+Snore
+Uproar
+Zen Headbutt
 120
 0 0 0 0 0 1 
 None
@@ -54862,6 +62508,22 @@ Assist
 Barrier
 Trick
 Yawn
+15
+Covet
+Gravity
+Heal Bell
+Iron Tail
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Snatch
+Snore
+Trick
+Wonder Room
+Zen Headbutt
 228
 0 0 0 0 0 1 
 Level 678 25
@@ -54948,6 +62610,22 @@ Assist
 Barrier
 Trick
 Yawn
+15
+Covet
+Gravity
+Heal Bell
+Iron Tail
+Magic Coat
+Magic Room
+Recycle
+Role Play
+Shock Wave
+Signal Beam
+Snatch
+Snore
+Trick
+Wonder Room
+Zen Headbutt
 228
 0 0 0 0 0 2 
 None
@@ -55013,6 +62691,13 @@ Cut
 Destiny Bond
 Metal Sound
 Shadow Sneak
+6
+Iron Defense
+Iron Head
+Magnet Rise
+Shock Wave
+Snore
+Spite
 222
 0 0 1 0 0 0 
 Level 680 35
@@ -55078,6 +62763,13 @@ Cut
 Destiny Bond
 Metal Sound
 Shadow Sneak
+6
+Iron Defense
+Iron Head
+Magnet Rise
+Shock Wave
+Snore
+Spite
 222
 0 0 2 0 0 0 
 Item 681 Dusk Stone
@@ -55147,6 +62839,14 @@ Cut
 Destiny Bond
 Metal Sound
 Shadow Sneak
+7
+Block
+Iron Defense
+Iron Head
+Magnet Rise
+Shock Wave
+Snore
+Spite
 222
 0 0 2 0 1 0 
 None
@@ -55220,6 +62920,13 @@ Captivate
 Disable
 Refresh
 Wish
+6
+Covet
+Endeavor
+Heal Bell
+Magic Coat
+Skill Swap
+Snore
 200
 1 0 0 0 0 0 
 Item 683 Sachet
@@ -55302,6 +63009,14 @@ Captivate
 Disable
 Refresh
 Wish
+7
+Covet
+Drain Punch
+Endeavor
+Heal Bell
+Magic Coat
+Skill Swap
+Snore
 200
 2 0 0 0 0 0 
 None
@@ -55372,6 +63087,13 @@ Surf
 Belly Drum
 Copycat
 Yawn
+6
+Covet
+Endeavor
+Gastro Acid
+Heal Bell
+Magic Coat
+Snore
 200
 0 0 1 0 0 0 
 Item 685 Whipped Dream
@@ -55444,6 +63166,14 @@ Surf
 Belly Drum
 Copycat
 Yawn
+7
+Covet
+Drain Punch
+Endeavor
+Gastro Acid
+Heal Bell
+Magic Coat
+Snore
 200
 0 0 2 0 0 0 
 None
@@ -55525,6 +63255,15 @@ Destiny Bond
 Flatter
 Power Split
 Simple Beam
+8
+Bind
+Foul Play
+Knock Off
+Role Play
+Snatch
+Snore
+Spite
+Superpower
 120
 0 1 0 0 0 0 
 Level 687 30
@@ -55610,6 +63349,17 @@ Destiny Bond
 Flatter
 Power Split
 Simple Beam
+10
+Bind
+Block
+Foul Play
+Knock Off
+Role Play
+Signal Beam
+Snatch
+Snore
+Spite
+Superpower
 120
 0 2 0 0 0 0 
 None
@@ -55702,6 +63452,14 @@ Strength
 Switcheroo
 Tickle
 Water Sport
+7
+Dual Chop
+Endeavor
+Icy Wind
+Iron Defense
+Snore
+Stealth Rock
+Water Pulse
 255
 0 1 0 0 0 0 
 Level 689 39
@@ -55803,6 +63561,17 @@ Strength
 Switcheroo
 Tickle
 Water Sport
+10
+Dual Chop
+Earth Power
+Endeavor
+Icy Wind
+Iron Defense
+Low Kick
+Snore
+Stealth Rock
+Superpower
+Water Pulse
 255
 0 2 0 0 0 0 
 None
@@ -55870,6 +63639,17 @@ Haze
 Play Rough
 Toxic Spikes
 Venom Drench
+10
+Aqua Tail
+Bounce
+Dragon Pulse
+Gunk Shot
+Icy Wind
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Water Pulse
 225
 0 0 0 0 1 0 
 Level 691 48
@@ -55946,6 +63726,17 @@ Haze
 Play Rough
 Toxic Spikes
 Venom Drench
+10
+Aqua Tail
+Bounce
+Dragon Pulse
+Gunk Shot
+Icy Wind
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Water Pulse
 225
 0 0 0 0 2 0 
 None
@@ -56013,6 +63804,14 @@ Aqua Jet
 Crabhammer
 Endure
 Entrainment
+7
+Aqua Tail
+Bounce
+Dragon Pulse
+Icy Wind
+Iron Tail
+Snore
+Water Pulse
 155
 0 0 0 1 0 0 
 Level 693 37
@@ -56092,6 +63891,14 @@ Aqua Jet
 Crabhammer
 Endure
 Entrainment
+7
+Aqua Tail
+Bounce
+Dragon Pulse
+Icy Wind
+Iron Tail
+Snore
+Water Pulse
 155
 0 0 0 2 0 0 
 None
@@ -56166,6 +63973,13 @@ Agility
 Camouflage
 Electric Terrain
 Glare
+6
+Electroweb
+Iron Tail
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
 90
 0 0 0 0 0 1 
 Item 695 Sun Stone
@@ -56237,6 +64051,18 @@ Agility
 Camouflage
 Electric Terrain
 Glare
+11
+Dragon Pulse
+Electroweb
+Fire Punch
+Hyper Voice
+Iron Tail
+Low Kick
+Magnet Rise
+Shock Wave
+Signal Beam
+Snore
+Thunder Punch
 90
 0 0 0 1 0 1 
 None
@@ -56312,6 +64138,19 @@ Ice Fang
 Poison Fang
 Rock Polish
 Thunder Fang
+12
+Block
+Dragon Pulse
+Earth Power
+Hyper Voice
+Iron Defense
+Iron Head
+Iron Tail
+Outrage
+Snore
+Stealth Rock
+Superpower
+Zen Headbutt
 45
 0 1 0 0 0 0 
 Level 697 39
@@ -56393,6 +64232,19 @@ Ice Fang
 Poison Fang
 Rock Polish
 Thunder Fang
+12
+Block
+Dragon Pulse
+Earth Power
+Hyper Voice
+Iron Defense
+Iron Head
+Iron Tail
+Outrage
+Snore
+Stealth Rock
+Superpower
+Zen Headbutt
 45
 0 2 0 0 0 0 
 None
@@ -56480,6 +64332,20 @@ Discharge
 Haze
 Magnet Rise
 Mirror Coat
+13
+Aqua Tail
+Earth Power
+Hyper Voice
+Icy Wind
+Iron Defense
+Iron Head
+Iron Tail
+Magnet Rise
+Outrage
+Snore
+Stealth Rock
+Water Pulse
+Zen Headbutt
 45
 1 0 0 0 0 0 
 Level 699 39
@@ -56573,6 +64439,20 @@ Discharge
 Haze
 Magnet Rise
 Mirror Coat
+13
+Aqua Tail
+Earth Power
+Hyper Voice
+Icy Wind
+Iron Defense
+Iron Head
+Iron Tail
+Magnet Rise
+Outrage
+Snore
+Stealth Rock
+Water Pulse
+Zen Headbutt
 45
 2 0 0 0 0 0 
 None
@@ -56653,6 +64533,15 @@ Synchronoise
 Tickle
 Wish
 Yawn
+8
+Covet
+Heal Bell
+Hyper Voice
+Iron Tail
+Last Resort
+Magic Coat
+Skill Swap
+Snore
 45
 0 0 0 0 2 0 
 None
@@ -56744,6 +64633,22 @@ Entrainment
 Me First
 Mud Sport
 Quick Guard
+15
+Bounce
+Drain Punch
+Dual Chop
+Endeavor
+Fire Punch
+Focus Punch
+Iron Head
+Last Resort
+Low Kick
+Sky Attack
+Snore
+Superpower
+Tailwind
+Thunder Punch
+Zen Headbutt
 128
 0 2 0 0 0 0 
 None
@@ -56817,6 +64722,18 @@ Cut
 Covet
 Eerie Impulse
 Natural Gift
+11
+Covet
+Electroweb
+Iron Tail
+Last Resort
+Magnet Rise
+Recycle
+Shock Wave
+Signal Beam
+Snore
+Super Fang
+Thunder Punch
 200
 0 0 0 0 0 2 
 None
@@ -56887,6 +64804,17 @@ Nature Power
 Dazzling Gleam
 Confide
 0
+10
+Covet
+Earth Power
+Gravity
+Iron Defense
+Magic Coat
+Magnet Rise
+Skill Swap
+Snore
+Stealth Rock
+Wonder Room
 30
 0 0 1 0 1 0 
 None
@@ -56964,6 +64892,13 @@ Curse
 Endure
 Iron Tail
 Poison Tail
+6
+Dragon Pulse
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Water Pulse
 20
 0 0 0 0 1 0 
 Level 705 40
@@ -57025,6 +64960,13 @@ Curse
 Endure
 Iron Tail
 Poison Tail
+6
+Dragon Pulse
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Water Pulse
 20
 0 0 0 0 2 0 
 Level 706 50
@@ -57104,6 +65046,18 @@ Curse
 Endure
 Iron Tail
 Poison Tail
+11
+Aqua Tail
+Dragon Pulse
+Fire Punch
+Focus Punch
+Iron Tail
+Outrage
+Shock Wave
+Snore
+Superpower
+Thunder Punch
+Water Pulse
 20
 0 0 0 0 3 0 
 None
@@ -57175,6 +65129,16 @@ Iron Defense
 Lock-On
 Switcheroo
 Thief
+9
+Covet
+Foul Play
+Iron Defense
+Last Resort
+Magic Coat
+Magic Room
+Magnet Rise
+Recycle
+Snore
 60
 0 0 1 0 0 0 
 None
@@ -57250,6 +65214,18 @@ Bestow
 Grudge
 Imprison
 Venom Drench
+11
+Foul Play
+Giga Drain
+Magic Coat
+Pain Split
+Role Play
+Seed Bomb
+Skill Swap
+Snore
+Spite
+Trick
+Worry Seed
 150
 0 1 0 0 0 0 
 Item 709 Big Root
@@ -57336,6 +65312,20 @@ Bestow
 Grudge
 Imprison
 Venom Drench
+13
+Block
+Drain Punch
+Foul Play
+Giga Drain
+Magic Coat
+Pain Split
+Role Play
+Seed Bomb
+Skill Swap
+Snore
+Spite
+Trick
+Worry Seed
 150
 0 2 0 0 0 0 
 None
@@ -57415,6 +65405,18 @@ Confide
 Bestow
 Destiny Bond
 Disable
+11
+Foul Play
+Giga Drain
+Magic Coat
+Pain Split
+Role Play
+Seed Bomb
+Skill Swap
+Spite
+Synthesis
+Trick
+Worry Seed
 190
 0 0 1 0 0 0 
 Item 711 Miracle Seed
@@ -57503,6 +65505,18 @@ Confide
 Bestow
 Destiny Bond
 Disable
+11
+Foul Play
+Giga Drain
+Magic Coat
+Pain Split
+Role Play
+Seed Bomb
+Skill Swap
+Spite
+Synthesis
+Trick
+Worry Seed
 190
 0 0 2 0 0 0 
 None
@@ -57574,6 +65588,11 @@ Barrier
 Mirror Coat
 Mist
 Recover
+4
+Icy Wind
+Iron Defense
+Snore
+Water Pulse
 255
 0 0 1 0 0 0 
 Level 713 37
@@ -57656,6 +65675,14 @@ Barrier
 Mirror Coat
 Mist
 Recover
+7
+Block
+Icy Wind
+Iron Defense
+Iron Head
+Snore
+Superpower
+Water Pulse
 255
 0 0 2 0 0 0 
 None
@@ -57734,6 +65761,19 @@ Outrage
 Snatch
 Switcheroo
 Tailwind
+12
+Dragon Pulse
+Heat Wave
+Hyper Voice
+Iron Tail
+Outrage
+Sky Attack
+Snatch
+Snore
+Super Fang
+Tailwind
+Uproar
+Water Pulse
 200
 0 0 0 0 0 1 
 Level 715 48
@@ -57822,6 +65862,19 @@ Outrage
 Snatch
 Switcheroo
 Tailwind
+12
+Dragon Pulse
+Heat Wave
+Hyper Voice
+Iron Tail
+Outrage
+Sky Attack
+Snatch
+Snore
+Super Fang
+Tailwind
+Uproar
+Water Pulse
 200
 0 0 0 0 0 2 
 None
@@ -57898,6 +65951,15 @@ Dazzling Gleam
 Confide
 Cut
 0
+8
+Block
+Endeavor
+Gravity
+Hyper Voice
+Outrage
+Snore
+Wonder Room
+Zen Headbutt
 70
 3 0 0 0 0 0 
 None
@@ -57976,6 +66038,16 @@ Confide
 Cut
 Fly
 0
+9
+Block
+Foul Play
+Heat Wave
+Hyper Voice
+Knock Off
+Sky Attack
+Snore
+Tailwind
+Zen Headbutt
 70
 3 0 0 0 0 0 
 None
@@ -58045,6 +66117,20 @@ Secret Power
 Confide
 Strength
 0
+13
+Bind
+Block
+Dragon Pulse
+Earth Power
+Hyper Voice
+Iron Tail
+Outrage
+Pain Split
+Shock Wave
+Snore
+Spite
+Superpower
+Zen Headbutt
 3
 3 0 0 0 0 0 
 None
@@ -58119,6 +66205,19 @@ Nature Power
 Dazzling Gleam
 Confide
 0
+12
+Covet
+Earth Power
+Endeavor
+Gravity
+Heal Bell
+Iron Defense
+Last Resort
+Magnet Rise
+Skill Swap
+Snore
+Stealth Rock
+Wonder Room
 3
 0 0 1 0 2 0 
 None
