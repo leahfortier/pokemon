@@ -14,7 +14,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
-import battle.Attack;
+import sun.security.action.GetLongAction;
 import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;
@@ -510,4 +510,40 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		incenseBabies.add(incenseBaby);
 	}
 	
+	// Returns what level the Pokemon will learn the given attack, returns -1 if they cannot learn it by level up
+	public int levelLearned(Namesies attack)
+	{
+		for (Integer level : getLevelUpMoves().keySet())
+		{
+			for (Namesies levelUpMove : getLevelUpMoves().get(level))
+			{
+				if (attack == levelUpMove)
+				{
+					return level;
+				}
+			}
+		}
+		
+		return -1;
+	}
+	
+	public boolean canLearnByTM(Namesies tmName)
+	{
+		return tmMoves.contains(tmName);
+	}
+	
+	public boolean canLearnByTutor(Namesies tutorMove)
+	{
+		return tutorMoves.contains(tutorMove);
+	}
+	
+	public boolean canLearnByBreeding(Namesies eggMove)
+	{
+		return eggMoves.contains(eggMove);
+	}
+	
+	public boolean canLearnMove(Namesies attack)
+	{
+		return levelLearned(attack) != -1 || canLearnByTM(attack) || canLearnByTutor(attack) || canLearnByBreeding(attack);
+	}
 }

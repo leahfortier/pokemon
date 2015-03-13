@@ -19,11 +19,11 @@ import main.InputControl.Control;
 import main.StuffGen;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
-import trainer.CharacterData;
 import battle.Attack;
 import battle.effect.BattleEffect;
 import battle.effect.PokemonEffect;
 import battle.effect.TeamEffect;
+import trainer.CharacterData;
 
 public class GameFrame
 {
@@ -53,6 +53,8 @@ public class GameFrame
 			g.data.testMaps(new CharacterData(g));
 			
 			System.out.println("GEN GEN GEN");
+			
+//			new TeamPlanner();
 			
 			return;
 		}

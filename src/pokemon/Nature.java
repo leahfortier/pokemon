@@ -18,11 +18,22 @@ public class Nature implements Serializable
 	private int hindering;
 	private String name;
 	
+	private static int getRandomNatureStatIndex()
+	{
+		return (int)(Math.random()*(Stat.NUM_STATS - 1) + 1);
+	}
+	
 	public Nature()
 	{
-		beneficial = (int)(Math.random()*5 + 1);
-		hindering = (int)(Math.random()*5 + 1);
-		name = natures[beneficial][hindering];
+		this(getRandomNatureStatIndex(), getRandomNatureStatIndex());
+	}
+	
+	public Nature(int beneficialStat, int hinderingStat)
+	{
+		this.beneficial = beneficialStat;
+		this.hindering = hinderingStat;
+		
+		this.name = natures[beneficial][hindering];
 	}
 	
 	public String getName()

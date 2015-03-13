@@ -93,31 +93,41 @@ public class ActivePokemon implements Serializable
 		this.gender = gender;
 	}
 
-	public ActivePokemon(PokemonInfo p, int lev, boolean wild, boolean user)
+	public ActivePokemon(PokemonInfo pokemonSpecies, int level, boolean isWild, boolean user)
 	{
-		pokemon = p;
-		nickname = p.getName();
-		level = lev;
+		this.pokemon = pokemonSpecies;
+		this.nickname = pokemonSpecies.getName();
+		this.level = level;
+		
 		setIVs();
-		nature = new Nature();
+		
+		this.nature = new Nature();
 		setCharacteristic();
-		EVs = new int[Stat.NUM_STATS];
-		stats = new int[Stat.NUM_STATS];
+		
+		this.EVs = new int[Stat.NUM_STATS];
+		this.stats = new int[Stat.NUM_STATS];
 		setStats();
-		hp = stats[Stat.HP.index()];
-		playerPokemon = user;
-		attributes = new BattleAttributes();
+		
+		this.hp = stats[Stat.HP.index()];
+		this.playerPokemon = user;
+		this.attributes = new BattleAttributes();
+		
 		removeStatus();
-		totalEXP = GrowthRate.getEXP(pokemon.getGrowthRate(), level);
-		totalEXP += (int)(Math.random()*expToNextLevel());
-		gender = Gender.getGender(pokemon.getMaleRatio());
-		shiny = user || wild ? (int)(Math.random()*8192) == 13 : false;
+		
+		this.totalEXP = GrowthRate.getEXP(pokemon.getGrowthRate(), this.level);
+		this.totalEXP += (int)(Math.random()*expToNextLevel());
+		this.gender = Gender.getGender(pokemon.getMaleRatio());
+		this.shiny = user || isWild ? (int)(Math.random()*8192) == 13 : false;
+		
 		setMoves();
-		ability = Ability.assign(pokemon);
-		hiddenPowerType = computeHiddenPowerType();
-		heldItem = wild ? WildHoldItem.getWildHoldItem(pokemon.getWildItems()) : (HoldItem)Item.noneItem();
-		isEgg = false;
-		eggSteps = 0;
+		
+		this.ability = Ability.assign(this.pokemon);
+		this.hiddenPowerType = computeHiddenPowerType();
+		
+		this.heldItem = isWild ? WildHoldItem.getWildHoldItem(this.pokemon.getWildItems()) : (HoldItem)Item.noneItem();
+		
+		this.isEgg = false;
+		this.eggSteps = 0;
 	}
 	
 	// Constructor for Eggs

@@ -2020,10 +2020,17 @@ public enum Namesies
 	
 	public static Namesies getValueOf(String name, NamesiesType superClass)
 	{
-		return Namesies.valueOf(Namesies.getNamesies(name, superClass));
+		Namesies value = Namesies.valueOf(Namesies.getNamesiesString(name, superClass));
+		
+		if (value == null)
+		{
+			Global.error(name + " does not have a valid Namesies value with super class " + superClass);
+		}
+		
+		return value;
 	}
 	
-	public static String getNamesies(String name, NamesiesType superClass)
+	public static String getNamesiesString(String name, NamesiesType superClass)
 	{
 		name = name.replace(" ", "").replace("u00e9", "e");
 		

@@ -93,7 +93,7 @@ public class StuffGen
 	
 	private static void createNamesies(String name, NamesiesType superClass)
 	{
-		String enumName = Namesies.getNamesies(name, superClass);
+		String enumName = Namesies.getNamesiesString(name, superClass);
 		namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
 		firstNamesies = false;
 	}
@@ -1017,7 +1017,7 @@ public class StuffGen
 				if (enumType.equals("Namesies"))
 				{
 					String appendsies = splitInfo[index++];
-					value = Namesies.getNamesies(fieldValue, NamesiesType.valueOf(appendsies.toUpperCase()));
+					value = Namesies.getNamesiesString(fieldValue, NamesiesType.valueOf(appendsies.toUpperCase()));
 				}
 				else
 				{
