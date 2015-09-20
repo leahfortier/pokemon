@@ -87,12 +87,8 @@ public class ActivePokemon implements Serializable
 	private Type hiddenPowerType;
 	private boolean isEgg;
 	private int eggSteps;
-	
-	public void setGender(Gender gender)
-	{
-		this.gender = gender;
-	}
 
+	// General constructor for an active Pokemon (user is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
 	public ActivePokemon(PokemonInfo pokemonSpecies, int level, boolean isWild, boolean user)
 	{
 		this.pokemon = pokemonSpecies;
@@ -269,6 +265,23 @@ public class ActivePokemon implements Serializable
 		}
 
 		return p;
+	}
+	
+	public void setGender(Gender gender)
+	{
+		this.gender = gender;
+	}
+	
+	// Does not include shiny -- this is for the small party tiles
+	public int getTinyImageIndex()
+	{
+		return this.isEgg ? PokemonInfo.EGG_IMAGE : pokemon.getNumber();
+	}
+	
+	// Larger image index
+	public int getImageIndex()
+	{
+		return this.isEgg() ? PokemonInfo.EGG_IMAGE : PokemonInfo.getImageNumber(this.getPokemonInfo().getNumber(), this.isShiny());
 	}
 	
 	public boolean isEgg()
@@ -508,7 +521,7 @@ public class ActivePokemon implements Serializable
 	
 	public int getStat(Battle b, Stat s)
 	{
-		Object stat = Global.getInvoke(b.getEffectsList(this), StatsCondition.class, "getStat", this, s);
+		Object stat = Battle.getInvoke(b.getEffectsList(this), StatsCondition.class, "getStat", this, s);
 		if (stat != null)
 		{
 			return (int)stat;
@@ -520,7 +533,7 @@ public class ActivePokemon implements Serializable
 	public List<Move> getMoves(Battle b)
 	{
 		Move[] moveArray = this.moves.toArray(new Move[0]);		
-		moveArray = (Move[])Global.updateInvoke(1, b.getEffectsList(this), MoveListCondition.class, "getMoveList", this, moveArray);
+		moveArray = (Move[])Battle.updateInvoke(1, b.getEffectsList(this), MoveListCondition.class, "getMoveList", this, moveArray);
 		List<Move> moveList = Arrays.asList(moveArray); 
 		
 		return moveList;
@@ -902,7 +915,7 @@ public class ActivePokemon implements Serializable
 		// Guarantee the change-type effect to be first
 		Object[] invokees = b.getEffectsList(this, this.getEffect(Namesies.CHANGE_TYPE_EFFECT));
 		
-		Object changeType = Global.getInvoke(invokees, TypeCondition.class, "getType", b, this, displayOnly);
+		Object changeType = Battle.getInvoke(invokees, TypeCondition.class, "getType", b, this, displayOnly);
 		if (changeType != null)
 		{
 			return (Type[])changeType;
@@ -950,7 +963,7 @@ public class ActivePokemon implements Serializable
 	public String getName()
 	{
 		Object[] invokees = { this.getAbility() };
-		Object changedName = Global.getInvoke(invokees, NameChanger.class, "getNameChange");
+		Object changedName = Battle.getInvoke(invokees, NameChanger.class, "getNameChange");
 		if (changedName != null)
 		{
 			return (String)changedName;
@@ -1004,13 +1017,13 @@ public class ActivePokemon implements Serializable
 			ActivePokemon murderer = b.getOtherPokemon(user());
 
 			// Apply effects which occur when the user faints
-			Global.invoke(getEffects().toArray(), FaintEffect.class, "deathwish", b, this, murderer);
+			Battle.invoke(getEffects().toArray(), FaintEffect.class, "deathwish", b, this, murderer);
 			
 			// If the pokemon fainted by direct result of an attack -- apply ability and attack deathwishes 
 			if (murderer.getAttributes().isAttacking())
 			{
 				Object[] invokees = new Object[] {murderer.getAttack(), murderer.getAbility()};
-				Global.invoke(invokees, FaintEffect.class, "deathwish", b, this, murderer);
+				Battle.invoke(invokees, FaintEffect.class, "deathwish", b, this, murderer);
 			}
 			
 			b.getEffects(playerPokemon).add(TeamEffect.getEffect(Namesies.DEAD_ALLY_EFFECT).newInstance());
@@ -1033,7 +1046,7 @@ public class ActivePokemon implements Serializable
 		
 		// Check if the user is under an effect that prevents escape
 		Object[] invokees = b.getEffectsList(this);
-		Object trapped = Global.checkInvoke(true, invokees, TrappingEffect.class, "isTrapped", b, this);
+		Object trapped = Battle.checkInvoke(true, invokees, TrappingEffect.class, "isTrapped", b, this);
 		if (trapped != null)
 		{
 			b.addMessage(((TrappingEffect)trapped).trappingMessage(this));
@@ -1043,7 +1056,7 @@ public class ActivePokemon implements Serializable
 		// The opponent has an effect that prevents escape
 		ActivePokemon other = b.getOtherPokemon(user());
 		invokees = b.getEffectsList(other);
-		trapped = Global.checkInvoke(true, invokees, OpponentTrappingEffect.class, "trapOpponent", b, this);
+		trapped = Battle.checkInvoke(true, invokees, OpponentTrappingEffect.class, "trapOpponent", b, this);
 		if (trapped != null)
 		{
 			b.addMessage(((OpponentTrappingEffect)trapped).opponentTrappingMessage(this, other));
@@ -1113,7 +1126,7 @@ public class ActivePokemon implements Serializable
 		}
 		
 		Object[] invokees = b.getEffectsList(this);
-		bracingEffect = (BracingEffect)Global.checkInvoke(true, b.getOtherPokemon(user()), invokees, BracingEffect.class, "isBracing", b, this, fullHealth);
+		bracingEffect = (BracingEffect)Battle.checkInvoke(true, b.getOtherPokemon(user()), invokees, BracingEffect.class, "isBracing", b, this, fullHealth);
 		
 		return bracingEffect;
 	}
@@ -1268,7 +1281,7 @@ public class ActivePokemon implements Serializable
 	
 	public boolean isGrounded(Battle b)
 	{
-		return Global.hasInvoke(b.getEffectsList(this), GroundedEffect.class);
+		return Battle.hasInvoke(b.getEffectsList(this), GroundedEffect.class);
 	}
 	
 	// Returns true if the Pokemon is currently levitating for any reason
@@ -1281,8 +1294,8 @@ public class ActivePokemon implements Serializable
 		}
 		
 		// Obvs levitating if you have a levitation effect
-		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE GLOBAL.HASINVOKE FUCK YES YOU GO GLENN COCO
-		if (Global.hasInvoke(b.getEffectsList(this), LevitationEffect.class))
+		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
+		if (Battle.hasInvoke(b.getEffectsList(this), LevitationEffect.class))
 		{
 			return true;
 		}
@@ -1373,7 +1386,7 @@ public class ActivePokemon implements Serializable
 		Object[] invokees = b.getEffectsList(this);
 		ActivePokemon moldBreaker = b.getOtherPokemon(user());
 		
-		int halfAmount = (int)Global.updateInvoke(0, moldBreaker, invokees, HalfWeightEffect.class, "getHalfAmount", 0);
+		int halfAmount = (int)Battle.updateInvoke(0, moldBreaker, invokees, HalfWeightEffect.class, "getHalfAmount", 0);
 		
 		return pokemon.getWeight()/Math.pow(2, halfAmount);
 	}

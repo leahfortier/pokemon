@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import main.Global;
 import main.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
@@ -89,7 +88,7 @@ public class Move implements Serializable
 		
 		// Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
 		Object[] invokees = b.getEffectsList(user);
-		type =  (Type)Global.updateInvoke(0, invokees, ChangeAttackTypeEffect.class, "changeAttackType", type);
+		type =  (Type)Battle.updateInvoke(0, invokees, ChangeAttackTypeEffect.class, "changeAttackType", type);
 		
 //		System.out.println(user.getName() + " " + attack.getName() + " Type: " + type.getName());
 		
@@ -166,7 +165,7 @@ public class Move implements Serializable
 	public static boolean forceMove(Battle b, ActivePokemon p)
 	{
 		// Forced moves
-		Object forcedMove = Global.getInvoke(p.getEffects().toArray(), ForceMoveEffect.class, "getMove");
+		Object forcedMove = Battle.getInvoke(p.getEffects().toArray(), ForceMoveEffect.class, "getMove");
 		if (forcedMove != null)
 		{
 			p.setMove((Move)forcedMove);
@@ -229,7 +228,7 @@ public class Move implements Serializable
 		}
 		
 		// BUT WHAT IF YOU HAVE A CONDITION THAT PREVENTS YOU FROM USING THAT MOVE?!!?! THEN WHAT?!!?!!
-		Object unusable = Global.checkInvoke(false, b.getEffectsList(p), AttackSelectionEffect.class, "usable", p, m);
+		Object unusable = Battle.checkInvoke(false, b.getEffectsList(p), AttackSelectionEffect.class, "usable", p, m);
 		if (unusable != null)
 		{
 			if (selecting)

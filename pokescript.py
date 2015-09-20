@@ -313,7 +313,7 @@ with open ("temp.txt", "w") as f:
 
         # If they have the same movelist for X/Y and R/S, then the movelist is displayed as Gen IV Level Up -- Otherwise, we want the updated R/S moves
         if not updateTable('Generation VI Level Up'):
-            # The special characters are really fucking things up so just start at the third character when comparing
+            # The special characters are really messing things up so just start at the third character when comparing
             updateTableIndex('S Level Up', 3)
 
         attacks = []

@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import main.Global;
+import main.FileIO;
 import map.triggers.EventTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;
@@ -66,7 +66,7 @@ public class TransitionBuildingData
 	{	
 		transitionBuildingTriggerFile = new File(mapMaker.root.getPath() + MapMaker.FILE_SLASH + TransitionBuildingTriggersFile);
 		
-		String fileText = Global.readEntireFile(transitionBuildingTriggerFile, false);
+		String fileText = FileIO.readEntireFile(transitionBuildingTriggerFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
 		while (m.find())
 		{

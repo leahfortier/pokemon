@@ -1,7 +1,6 @@
 package main;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -10,8 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import main.Namesies.NamesiesType;
 import pokemon.PokemonInfo;
@@ -21,19 +18,20 @@ public class StuffGen
 {
 	private static int TM_BASE_INDEX = 2000;
 	
-	private static String POKEMON_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "PokemonEffect.java";
-	private static String TEAM_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "TeamEffect.java";
-	private static String BATTLE_EFFECT_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "BattleEffect.java";
-	private static String WEATHER_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "effect" + Global.FILE_SLASH + "Weather.java";
-	private static String MOVE_PATH = "src" + Global.FILE_SLASH + "battle" + Global.FILE_SLASH + "Attack.java";
-	private static String ABILITY_PATH = "src" + Global.FILE_SLASH + "pokemon" + Global.FILE_SLASH + "Ability.java";
-	private static String ITEM_PATH = "src" + Global.FILE_SLASH + "item" + Global.FILE_SLASH + "Item.java";
-	private static String NAMESIES_PATH = "src" + Global.FILE_SLASH + "main" + Global.FILE_SLASH + "Namesies.java";
+	private static final String EFFECTS_FOLDER = FileIO.makePath("src", "battle", "effect");
+	private static final String POKEMON_EFFECT_PATH = EFFECTS_FOLDER + "PokemonEffect.java";
+	private static final String TEAM_EFFECT_PATH = EFFECTS_FOLDER + "TeamEffect.java";
+	private static final String BATTLE_EFFECT_PATH = EFFECTS_FOLDER + "BattleEffect.java";
+	private static final String WEATHER_PATH = EFFECTS_FOLDER + "Weather.java";
+	private static final String MOVE_PATH = FileIO.makePath("src", "battle") + "Attack.java";
+	private static final String ABILITY_PATH = FileIO.makePath("src", "pokemon") + "Ability.java";
+	private static final String ITEM_PATH = FileIO.makePath("src", "item") + "Item.java";
+	private static final String NAMESIES_PATH = FileIO.makePath("src", "main") + "Namesies.java";
 	
-	private static String ITEM_TILES_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "itemTiles" + Global.FILE_SLASH;
+	private static final String ITEM_TILES_PATH = FileIO.makePath("rec", "tiles", "itemTiles");
 	
-	private static String POKEMON_TILES_INDEX_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "pokemonTiles" + Global.FILE_SLASH + "index.txt";
-	private static String POKEMON_SMALL_TILES_INDEX_PATH = "rec" + Global.FILE_SLASH + "tiles" + Global.FILE_SLASH + "partyTiles" + Global.FILE_SLASH + "index.txt";
+	private static final String POKEMON_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "pokemonTiles") + "index.txt";
+	private static final String POKEMON_SMALL_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "partyTiles") + "index.txt";
 	
 	private enum Generator
 	{
@@ -89,6 +87,8 @@ public class StuffGen
 //		pokemonInfoStuff();
 		
 //		compareMoves();
+		
+//		DrawMetrics.FindMetrics.writeFontMetrics();
 	}
 	
 	private static void createNamesies(String name, NamesiesType superClass)
@@ -100,7 +100,7 @@ public class StuffGen
 	
 	private static void writeNamesies()
 	{
-		Scanner original = openFile(NAMESIES_PATH);
+		Scanner original = FileIO.openFile(NAMESIES_PATH);
 		StringBuilder out = new StringBuilder();
 		
 		boolean canPrint = true;
@@ -147,7 +147,7 @@ public class StuffGen
 			}
 		}
 		
-		printToFile(NAMESIES_PATH, out);
+		FileIO.printToFile(NAMESIES_PATH, out);
 		System.out.println("Namesies generated.");
 	}
 	
@@ -236,7 +236,7 @@ public class StuffGen
 	// Opens the original file and appends the beginning until the key to generate
 	private static StringBuilder startGen(Generator gen)
 	{
-		Scanner original = openFile(gen.outputPath);
+		Scanner original = FileIO.openFile(gen.outputPath);
 		StringBuilder out = new StringBuilder();
 		
 		while (original.hasNext())
@@ -300,7 +300,7 @@ public class StuffGen
 	{
 		StringBuilder out = startGen(gen);
 		
-		Scanner in = openFile(gen.inputPath);
+		Scanner in = FileIO.openFile(gen.inputPath);
 		readFileFormat(in);
 		
 		// StringBuilder for the classes (does not append to out directly because of the map)
@@ -345,7 +345,7 @@ public class StuffGen
 			case ITEM_GEN:
 				addTMs(out, classes, indexOut);
 				out.append("\n\t\tprocessIncenseItems();\n");
-				printToFile(ITEM_TILES_PATH + "index.txt", indexOut);
+				FileIO.printToFile(ITEM_TILES_PATH + "index.txt", indexOut);
 			default:
 				break;
 		}
@@ -358,7 +358,7 @@ public class StuffGen
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n"); // DON'T DO IT
 		out.append(classes + "}");
 		
-		printToFile(gen.outputPath, out);
+		FileIO.printToFile(gen.outputPath, out);
 	}
 	
 	private static String getActivationMethod(Generator gen, String className, HashMap<String, String> fields)
@@ -422,7 +422,7 @@ public class StuffGen
 			addImageIndex(indexOut, TM_BASE_INDEX + t.getIndex(), name, name.toLowerCase());
 		}
 		
-		Scanner in = openFile("tmList.txt");
+		Scanner in = FileIO.openFile("tmList.txt");
 		while (in.hasNext())
 		{
 			String attackName = in.nextLine().trim();
@@ -815,7 +815,7 @@ public class StuffGen
 	
 	private static void readFormat()
 	{
-		Scanner in = openFile("override.txt");
+		Scanner in = FileIO.openFile("override.txt");
 		
 		overrideMethods = new ArrayList<>();
 		interfaceMethods = new HashMap<>();
@@ -1351,33 +1351,6 @@ public class StuffGen
 		return s;
 	}
 	
-	public static void printToFile(String fileName, StringBuilder out)
-	{
-		try
-		{
-			new PrintStream(new File(fileName)).println(out);
-		}
-		catch (FileNotFoundException ex)
-		{
-			Global.error("STUPIDNESS");
-		}
-	}
-	
-	public static Scanner openFile(String fileName) 
-	{
-		Scanner in = null;
-		try
-		{
-			in = new Scanner(new File(fileName));
-		}
-		catch (FileNotFoundException ex)
-		{
-			Global.error(fileName + " not found");
-		}
-		
-		return in;
-	}
-	
 	private static String readFunction(Scanner in)
 	{
 		StringBuilder function = new StringBuilder();
@@ -1405,212 +1378,13 @@ public class StuffGen
 		return function.toString();
 	}
 	
-	// Stuff that shouldn't necessarily be in this file and isn't really used but has nowhere else to live
-	private static ArrayList<File> files;
-	
-	private static void plus()
-	{
-		files = new ArrayList<File>();
-		addFiles(new File("C:\\Users\\leahf_000\\Documents\\Pokemon++\\src"));
-		
-		for (File f : files)
-		{
-			Pattern p = Pattern.compile("[^ +\t]\\ + [^ +=]");
-			StringBuilder out = new StringBuilder();
-			
-			Scanner in = null;
-			try
-			{
-				in = new Scanner(f);
-			}
-			catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			
-			while (in.hasNext())
-			{
-				String line = in.nextLine();
-				
-				if (!line.contains("Pattern.compile"))
-				{
-					Matcher m = p.matcher(line);
-					
-					while (m.find())
-					{
-						String group = m.group();
-						String replace = m.group().replace("+", " + ");
-						
-						line = line.replace(group, replace);
-						System.out.println(line);
-					}
-				}
-				
-				out.append(line + "\n");
-			}
-			
-			out = new StringBuilder(out.substring(0, out.length() - 1));
-			
-			printToFile(f.getAbsolutePath(), out);
-//			System.out.println(f.getAbsolutePath() + "\n" + out);
-		}
-	}
-	
-	private static void longestString()
-	{
-		files = new ArrayList<File>();
-		addFiles(new File("C:\\Users\\!\\Documents\\GitHub\\Pokemon\\src"));
-		
-		String max = "";
-		for (File f : files)
-		{
-			Pattern p = Pattern.compile("addMessage[^,]*;");
-			
-			Scanner in = null;
-			try
-			{
-				in = new Scanner(f);
-			}
-			catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			
-			while (in.hasNext())
-			{
-				String line = in.nextLine();
-				Matcher m = p.matcher(line);
-				while (m.find())
-				{
-					String temp = line.substring(m.start() + 11, m.end() - 2);
-					if (temp.length() > max.length())
-						max = temp;
-				}
-			}
-		}
-		
-		System.out.println(max.length() + " " + max);
-	}
-	
-	private static void addFiles(File f)
-	{
-		File[] list = f.listFiles();
-
-		for (int i = 0; i < list.length; i++)
-		{
-			if (list[i].isFile())
-			{
-				files.add(list[i]);
-			}
-			else
-			{
-				addFiles(list[i]);
-			}
-		}
-	}
-	
-	private static void compareMoves()
-	{
-		Scanner oldFile = openFile("oldMoves.txt");
-		Scanner newFile = openFile("newMoves.txt");
-		
-		PrintStream out = openOutputFile("out.txt");
-		
-		int pokemon = 0;
-		
-		while (oldFile.hasNext())
-		{
-			pokemon++;
-			
-			HashSet<String> oldMoves = new HashSet<String>();
-			HashSet<String> newMoves = new HashSet<String>();
-
-			HashSet<String> removed = new HashSet<String>();
-			HashSet<String> added = new HashSet<String>();
-			
-			int numOld = oldFile.nextInt();
-			int numNew = newFile.nextInt();
-			
-			oldFile.nextLine();
-			newFile.nextLine();
-			
-			for (int i = 0; i < numOld; i++)
-			{
-				oldFile.nextInt();
-				String attack = oldFile.nextLine().trim();
-				
-				oldMoves.add(attack);
-				removed.add(attack);
-			}
-			
-			for (int i = 0; i < numNew; i++)
-			{
-				newFile.nextInt();
-				String attack = newFile.nextLine().trim();
-				
-				newMoves.add(attack);
-				added.add(attack);
-			}
-			
-			for (String attack : newMoves)
-			{
-				removed.remove(attack);
-			}
-			
-			for (String attack : oldMoves)
-			{
-				added.remove(attack);
-			}
-			
-			if (removed.size() > 0 || added.size() > 0)
-			{
-				out.println(PokemonInfo.getPokemonInfo(pokemon).getName() + ":");
-				
-				if (removed.size() > 0)
-				{
-					out.println("\tRemoved:");
-					for (String attack : removed)
-					{
-						out.println("\t\t" + attack);
-					}					
-				}
-				
-				if (added.size() > 0)
-				{
-					out.println("\tAdded:");
-					for (String attack : added)
-					{
-						out.println("\t\t" + attack);
-					}					
-				}				
-				
-				out.println();
-			}
-		}
-	}
-	
-	private static PrintStream openOutputFile(String fileName)
-	{
-		PrintStream out = null;
-		try 
-		{
-			out = new PrintStream(fileName);
-		} 
-		catch (FileNotFoundException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		return out;
-	}
-	
 	// Used for editing pokemoninfo.txt
 	private static void pokemonInfoStuff()
 	{
-		Scanner in = openFile("pokemoninfo.txt");
-		Scanner attacks = openFile("newMoves.txt");
+		Scanner in = FileIO.openFile("pokemoninfo.txt");
+		Scanner attacks = FileIO.openFile("newMoves.txt");
 		
-		PrintStream out = openOutputFile("out.txt");
+		PrintStream out = FileIO.openOutputFile("out.txt");
 //		PrintStream temp = openOutputFile("oldMoves.txt");
 
 		while (in.hasNext())
@@ -1678,7 +1452,8 @@ public class StuffGen
 		int num = in.nextInt();
 		out.println(num);
 		in.nextLine();
-		for (int i = 0; i < num; i++) out.println(in.nextLine());
+		for (int i = 0; i < num; i++) 
+			out.println(in.nextLine());
 	}
 	
 	private static void generatePokemonTileIndices()
@@ -1704,7 +1479,7 @@ public class StuffGen
 		out.append("pokeball.png 00011111\n");
 		out.append("egg.png 00010000\n");
 		
-		printToFile(POKEMON_TILES_INDEX_PATH, out);
+		FileIO.printToFile(POKEMON_TILES_INDEX_PATH, out);
 	}
 	
 	private static void generatePokemonPartyTileIndices()
@@ -1717,6 +1492,6 @@ public class StuffGen
 		
 		out.append("egg-small.png 00010000\n");
 		
-		printToFile(POKEMON_SMALL_TILES_INDEX_PATH, out);
+		FileIO.printToFile(POKEMON_SMALL_TILES_INDEX_PATH, out);
 	}
 }

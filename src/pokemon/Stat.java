@@ -106,7 +106,7 @@ public enum Stat
 		ActivePokemon attacking = s.user ? p : opp;
 		list = b.getEffectsList(p, attacking.getAttack());
 		
-		s = (Stat)Global.updateInvoke(0, list, StatSwitchingEffect.class, "switchStat", s);
+		s = (Stat)Battle.updateInvoke(0, list, StatSwitchingEffect.class, "switchStat", s);
 		
 		// Apply stage changes
 		int stage = getStage(list, s, p, opp, b);
@@ -121,7 +121,7 @@ public enum Stat
 		ActivePokemon moldBreaker  = s.user ? null : opp;
 		
 		// Applies stat changes to each for each item in list
-		stat = (int)Global.updateInvoke(0, moldBreaker, list, StatChangingEffect.class, "modify", stat, p, opp, s, b);
+		stat = (int)Battle.updateInvoke(0, moldBreaker, list, StatChangingEffect.class, "modify", stat, p, opp, s, b);
 		
 //		System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 		
@@ -139,7 +139,7 @@ public enum Stat
 		
 		// Update the stage due to effects
 		ActivePokemon moldBreaker = s.user ? null : opp;
-		stage = (int)Global.updateInvoke(0, moldBreaker, list, StageChangingEffect.class, "adjustStage", stage, s, p, opp, b);
+		stage = (int)Battle.updateInvoke(0, moldBreaker, list, StageChangingEffect.class, "adjustStage", stage, s, p, opp, b);
 		
 //		int temp2 = stage;
 		
@@ -147,7 +147,7 @@ public enum Stat
 		
 		// Effects that completely ignore stage changes
 		list = new Object[] { opp.getAbility(), attacking.getAttack() };
-		Object ignoreStage = Global.checkInvoke(true, p, list, IgnoreStageEffect.class, "ignoreStage", s);
+		Object ignoreStage = Battle.checkInvoke(true, p, list, IgnoreStageEffect.class, "ignoreStage", s);
 		if (ignoreStage != null)
 		{
 			stage = 0;

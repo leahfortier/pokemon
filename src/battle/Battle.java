@@ -1,5 +1,7 @@
 package battle;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +10,7 @@ import main.Global;
 import main.Namesies;
 import main.Type;
 import map.AreaData.TerrainType;
+import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
@@ -345,7 +348,7 @@ public class Battle
 	
 	public void enterBattle(ActivePokemon enterer)
 	{
-		Global.invoke(this.getEffectsList(enterer), NameChanger.class, "setNameChange", this, enterer);
+		Battle.invoke(this.getEffectsList(enterer), NameChanger.class, "setNameChange", this, enterer);
 		
 		String enterMessage = "";
 		if (enterer.user()) enterMessage = "Go! " + enterer.getName() + "!";
@@ -369,7 +372,7 @@ public class Battle
 		// Document sighting in the Pokedex
 		if (!enterer.user()) 
 		{
-			player.getPokedex().setStatus(enterer.getPokemonInfo(), PokedexStatus.SEEN, isWildBattle() ? player.getRouteName() : "");
+			player.getPokedex().setStatus(enterer.getPokemonInfo(), PokedexStatus.SEEN, isWildBattle() ? player.getAreaName() : "");
 		}
 		
 		if (reset) 
@@ -380,7 +383,7 @@ public class Battle
 		addMessage(enterMessage, enterer, true);
 		
 		enterer.getAttributes().setUsed(true);
-		Global.invoke(getEffectsList(enterer), EntryEffect.class, "enter", this, enterer);
+		Battle.invoke(getEffectsList(enterer), EntryEffect.class, "enter", this, enterer);
 		
 		getTrainer(!enterer.user()).resetUsed();
 	}
@@ -471,7 +474,7 @@ public class Battle
 		list.add(me.getAbility());
 		list.add(me.getHeldItem(this));
 		
-		Global.invoke(this, me, null, list.toArray(), EndTurnEffect.class, "applyEndTurn", me, this);
+		Battle.invoke(this, me, null, list.toArray(), EndTurnEffect.class, "applyEndTurn", me, this);
 		
 		me.isFainted(this);
 		
@@ -507,7 +510,7 @@ public class Battle
 			else
 			{
 				addMessage(me.getName() + "'s attack missed!");
-				Global.invoke(new Object[] {me.getAttack()}, CrashDamageMove.class, "crash", this, me);
+				Battle.invoke(new Object[] {me.getAttack()}, CrashDamageMove.class, "crash", this, me);
 			}			
 		}
 		
@@ -618,11 +621,11 @@ public class Battle
 	{
 		// User effects that effect user power
 		Object[] list = getEffectsList(me);
-		double modifier = Global.multiplyInvoke(1, list, PowerChangeEffect.class, "getMultiplier", this, me, o);
+		double modifier = Battle.multiplyInvoke(1, list, PowerChangeEffect.class, "getMultiplier", this, me, o);
 		
 		// Opponent effects that effects user power
 		list = getEffectsList(o);
-		modifier = Global.multiplyInvoke(modifier, me, list, OpponentPowerChangeEffect.class, "getOpponentMultiplier", this, me, o);
+		modifier = Battle.multiplyInvoke(modifier, me, list, OpponentPowerChangeEffect.class, "getOpponentMultiplier", this, me, o);
 		
 //		System.out.println(me.getName() + " Modifier: " + modifier);
 		return modifier;
@@ -632,7 +635,7 @@ public class Battle
 	private int criticalHit(ActivePokemon me, ActivePokemon o)
 	{
 		Object[] listsies = this.getEffectsList(o, me.getAttack());
-		Object blockCrits = Global.checkInvoke(true, me, listsies, CritBlockerEffect.class, "blockCrits");
+		Object blockCrits = Battle.checkInvoke(true, me, listsies, CritBlockerEffect.class, "blockCrits");
 		if (blockCrits != null)
 		{
 			return 1;
@@ -641,7 +644,7 @@ public class Battle
 		// Increase crit stage and such
 		int stage = 1;
 		listsies = this.getEffectsList(me);
-		stage = (int)Global.updateInvoke(0, listsies, CritStageEffect.class, "increaseCritStage", stage, me);
+		stage = (int)Battle.updateInvoke(0, listsies, CritStageEffect.class, "increaseCritStage", stage, me);
 		stage = Math.min(stage, critsicles.length); // Max it out, yo
 		
 		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || Math.random()*critsicles[stage - 1] < 1;
@@ -672,7 +675,7 @@ public class Battle
 		
 		// Effects that allow the user to bypass the accuracy check
 		Object[] invokees = this.getEffectsList(me, me.getAttack());
-		Object bypass = Global.checkInvoke(true, invokees, AccuracyBypassEffect.class, "bypassAccuracy", this, me, o);
+		Object bypass = Battle.checkInvoke(true, invokees, AccuracyBypassEffect.class, "bypassAccuracy", this, me, o);
 		if (bypass != null)
 		{
 			return true;
@@ -680,7 +683,7 @@ public class Battle
 		
 		// Opponent effects that always allow the user to hit them
 		invokees = this.getEffectsList(o);
-		bypass = Global.checkInvoke(true, invokees, OpponentAccuracyBypassEffect.class, "opponentBypassAccuracy", this, me, o);
+		bypass = Battle.checkInvoke(true, invokees, OpponentAccuracyBypassEffect.class, "opponentBypassAccuracy", this, me, o);
 		if (bypass != null)
 		{
 			return true;
@@ -713,7 +716,7 @@ public class Battle
 		Object[] invokees = getEffectsList(p);
 		
 		// False because we're checking if they 'cannot attack' from the 'canAttack' method
-		Object cannotAttack = Global.checkInvoke(false, this, p, opp, invokees, BeforeTurnEffect.class, "canAttack", p, opp, this);
+		Object cannotAttack = Battle.checkInvoke(false, this, p, opp, invokees, BeforeTurnEffect.class, "canAttack", p, opp, this);
 		if (cannotAttack != null)
 		{
 			return false;
@@ -721,7 +724,7 @@ public class Battle
 		
 		// Opponents effects that prevent you from attacking
 		invokees = getEffectsList(opp);
-		cannotAttack = Global.checkInvoke(false, this, p, opp, p, invokees, OpponentBeforeTurnEffect.class, "opposingCanAttack", p, opp, this);
+		cannotAttack = Battle.checkInvoke(false, this, p, opp, p, invokees, OpponentBeforeTurnEffect.class, "opposingCanAttack", p, opp, this);
 		if (cannotAttack != null)
 		{
 			return false;
@@ -747,7 +750,7 @@ public class Battle
 			int priority = p.getAttack().getPriority(this, p);
 			
 			Object[] invokees = this.getEffectsList(p);
-			priority = (int)Global.updateInvoke(2, invokees, PriorityChangeEffect.class, "changePriority", this, p, priority);
+			priority = (int)Battle.updateInvoke(2, invokees, PriorityChangeEffect.class, "changePriority", this, p, priority);
 			
 //			System.out.println(p.getAttack().getName() + " Priority: " + priority);
 			
@@ -795,5 +798,204 @@ public class Battle
 		
 		// Return the faster Pokemon (or slower if reversed)
 		return reverse ? oSpeed > pSpeed : oSpeed < pSpeed;
+	}
+	
+	private static <T> Object invoke(double multiplyBase, int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
+	{
+		// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
+		if (p != null && p.isFainted(b))
+		{
+			return null;
+		}
+		
+		if (opp != null && opp.isFainted(b))
+		{
+			return null;
+		}
+		
+		Class<?>[] parameterTypes = null;
+		
+		Object returnValue = null;
+		if (updateIndex != -1)
+		{
+			returnValue = parameterValues[updateIndex];
+		}
+		else if (multiplyBase != -1)
+		{
+			returnValue = multiplyBase;
+		}
+		
+		for (Object invokee : invokees)
+		{
+			// If the invokee is an instance of the class we are checking, do the things and stuff
+			if (className.isInstance(invokee))
+			{
+				// If this is an inactive effect, we don't want to do anything with it
+				if (Effect.isInactiveEffect(invokee)) 
+				{
+					continue;
+				}
+				
+				// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+				if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold())
+				{
+					continue;
+				}
+				
+				// This is for the hasInvoke overload, where you're just checking if it is an instance of the interface but have no methods to call
+				if (methodName.length() == 0)
+				{
+					return invokee;
+				}
+				
+				// YEAH TRY CATCH BLOCKS ARE THE GREATEST
+				try 
+				{
+					// Don't want to do this more than once because that would be totes inefficientz
+					if (parameterTypes == null)
+					{
+						// Get the parameter types -- THIS IS WHY WE HAVE TO DO INTEGER INSTEAD OF INT
+						parameterTypes = new Class<?>[parameterValues.length];
+						for (int i = 0; i < parameterTypes.length; i++)	
+						{
+							parameterTypes[i] = parameterValues[i].getClass();
+						}
+					}
+					
+					// Create and invoke the method -- THIS IS SO COOL THANK YOU MARCOD OF THE SEA
+					Method method = className.getMethod(methodName, parameterTypes);
+					Object methodReturn = method.invoke(invokee, parameterValues);
+					
+					// If we're just checking for a specific boolean, we can cut out early
+					if (isCheck && (boolean)methodReturn == check)
+					{
+						return invokee;
+					}
+					
+					// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
+					if (p != null && p.isFainted(b))
+					{
+						return invokee;
+					}
+					
+					if (opp != null && opp.isFainted(b))
+					{
+						return invokee;
+					}
+					
+					// Not a boolean return check, but we are checking the return value -- das what we want, das what we need, das what we crave
+					if (!isCheck && check)
+					{
+						return methodReturn;
+					}
+					
+					// If this is an update invoke, continuously update the result
+					if (updateIndex != -1)
+					{
+						parameterValues[updateIndex] = methodReturn;
+						returnValue = methodReturn;
+					}
+					
+					// If this is a multiply invoke, continuously multiply the result by the base
+					if (multiplyBase != -1)
+					{
+						multiplyBase *= (double)methodReturn;
+						returnValue = multiplyBase;
+					}
+				}
+				// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
+				catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+				{
+					Global.error("No such method " + methodName + " in class " + className.getName() + " or could not invoke such method.");
+				}
+			}	
+		}
+		
+		// We didn't find what we were looking for
+		return returnValue;
+	}
+	
+	// Used for calling methods that return booleans
+	public static <T> Object checkInvoke(boolean check, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Battle.invoke(-1, -1, true, check, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that return booleans and also exit early if p or opp are fainted
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Battle.invoke(-1, -1, true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that return booleans where mold breaker may be a factor to check
+	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Battle.invoke(-1, -1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that return booleans and also exit early if p or opp are fainted
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Battle.invoke(-1, -1, true, check, b, p, opp, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
+	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Battle.invoke(-1, -1, false, true, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
+	public static <T> Object getInvoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Battle.invoke(-1, -1, false, true, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want to continuously update the return value of -- it will return this value that you want so badly
+	public static <T> Object updateInvoke(int updateIndex, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Battle.invoke(-1, updateIndex, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that you want to continuously update the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
+	public static <T> Object updateInvoke(int updateIndex, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return Battle.invoke(-1, updateIndex, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that continuously multiply the results by the base value, returns this value
+	public static <T> double multiplyInvoke(double baseValue, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that continuously multiply the results by the base value where mold breaker may be a factor to check, returns this value
+	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void
+	public static <T> void invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		Battle.invoke(-1, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void where mold breaker may be a factor to check
+	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		Battle.invoke(-1, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void where you need to split early if an activePokemon is deadsies
+	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
+	{
+		Battle.invoke(-1, -1, false, false, b, p, opp, null, invokees, className, methodName, parameterValues);
+	}
+	
+	// Used for calling methods that are void where you need to split early if an activePokemon is deadsie
+	public static <T> boolean hasInvoke(Object[] invokees, Class<T> className)
+	{
+		return Battle.invoke(-1, -1, false, false, null, null, null, null, invokees, className, "", new Object[0]) != null;
 	}
 }

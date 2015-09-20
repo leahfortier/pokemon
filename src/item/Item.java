@@ -1667,7 +1667,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 				b.addMessage(p.getName() + " fell to the ground!");
 			}
 			
-			Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+			Battle.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
@@ -6289,6 +6289,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			
 			if (base == null)
 			{
 				return false;

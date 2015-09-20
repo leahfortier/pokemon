@@ -2,7 +2,6 @@ package battle.effect;
 
 import java.util.HashMap;
 
-import main.Global;
 import main.Namesies;
 import main.Type;
 import map.AreaData.TerrainType;
@@ -117,7 +116,7 @@ public abstract class BattleEffect extends Effect
 				b.addMessage(p.getName() + " fell to the ground!");
 			}
 			
-			Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+			Battle.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
 		}
 
 		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)

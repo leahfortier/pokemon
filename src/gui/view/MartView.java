@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.Button;
+import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 import item.Item;
@@ -15,8 +16,8 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.InputControl;
-import main.Namesies;
 import main.InputControl.Control;
+import main.Namesies;
 import main.Type;
 import trainer.CharacterData;
 
@@ -55,7 +56,6 @@ public class MartView extends View
 	private int pageNum;
 	private int selectedButton;
 	private int itemAmount;
-	private String message;
 	
 	private Item selectedItem;
 	private CharacterData player;
@@ -115,23 +115,6 @@ public class MartView extends View
 
 	public void update(int dt, InputControl input, Game game)
 	{
-		if (message != null)
-		{
-			if (input.mouseDown)
-			{
-				input.consumeMousePress();
-				message = null;
-			}
-			
-			if (input.isDown(Control.SPACE))
-			{
-				input.consumeKey(Control.SPACE);
-				message = null;
-			}
-			
-			return;
-		}
-		
 		selectedButton = Button.update(buttons, selectedButton, input);
 			
 		Iterator<Item> iter = forSaleItems.iterator();
@@ -209,8 +192,6 @@ public class MartView extends View
 	{
 		TileSet tiles = data.getMenuTiles();
 		TileSet itemTiles = data.getItemTiles();
-		TileSet battleTiles = data.getBattleTiles();
-		String s;
 		
 		// Background
 		g.drawImage(tiles.getTile(0x2), 0,0, null);
@@ -224,8 +205,8 @@ public class MartView extends View
 		
 		if (!amountLeftButton.isActive())
 		{
-			greyOut(g, amountLeftButton, false);
-			greyOut(g, amountRightButton, false);
+			amountLeftButton.greyOut(g, false);
+			amountRightButton.greyOut(g, false);
 		}
 		
 		// Item Display
@@ -233,23 +214,23 @@ public class MartView extends View
 		{
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItem.getIndex());
-			g.drawImage(img, 430 - img.getWidth()/2, 132 - img.getHeight()/2, null);
+			DrawMetrics.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
-			g.setFont(Global.getFont(20));
+			DrawMetrics.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
-			g.setFont(Global.getFont(14));
-			Global.drawWrappedText(g, selectedItem.getDesc(), 418, 156, 200, 5, 15);
+			DrawMetrics.setFont(g, 14);
+			DrawMetrics.drawWrappedText(g, selectedItem.getDesc(), 418, 156, 726 - amountLeftButton.x);
 			
-			g.setFont(Global.getFont(20));
+			DrawMetrics.setFont(g, 20);
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
 			
 			g.drawString(itemAmount + "", 568, 218);
 			View.drawArrows(g, amountLeftButton, amountRightButton, 35, 10);
 		}
 		
-		g.setFont(Global.getFont(12));
+		DrawMetrics.setFont(g, 12);
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
@@ -265,7 +246,7 @@ public class MartView extends View
 				g.drawImage(tiles.getTile(0x26), 0,0, null);
 				
 				BufferedImage img = itemTiles.getTile(item.getIndex());
-				g.drawImage(img, 14-img.getWidth()/2, 14-img.getHeight()/2, null);
+				DrawMetrics.drawCenteredImage(g, img, 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
 				
@@ -274,9 +255,8 @@ public class MartView extends View
 		}
 		
 		// Draw page numbers
-		g.setFont(Global.getFont(16));
-		s = (pageNum + 1) + "/" + totalPages();
-		g.drawString(s, Global.centerX(s, 573, 16), 466);
+		DrawMetrics.setFont(g, 16);
+		DrawMetrics.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
 		
 		// Left and Right arrows
 		View.drawArrows(g, shopLeftButton, shopRightButton);
@@ -292,7 +272,7 @@ public class MartView extends View
 		g.drawImage(tiles.getTile(0x25), 0, 0, null);
 		
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(18));
+		DrawMetrics.setFont(g, 18);
 		g.drawString("Money: " + Global.MONEY_SYMBOL + player.getDatCashMoney(), BOX_TEXT_X, BOX_TEXT_Y);
 		
 		g.translate(-SIDE_BOX_X, -MONEY_BOX_Y);
@@ -334,11 +314,11 @@ public class MartView extends View
 		
 		g.drawImage(tiles.getTile(0x25), 0, 0, null);
 		
-		g.setFont(Global.getFont(24));
+		DrawMetrics.setFont(g, 24);
 		g.setColor(Color.BLACK);
 		g.drawString("BUY", 120, 39);
 
-		greyOut(g, buyButton, true);
+		buyButton.greyOut(g, true);
 		
 		if (!buyButton.isActive())
 		{
@@ -350,40 +330,27 @@ public class MartView extends View
 		
 		// Return button
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(20));
+		DrawMetrics.setFont(g, 20);
 		g.drawImage(tiles.getTile(0x27), 410, 500, null);
-		g.drawString("Return", Global.centerX("Return", 573, 20), 525);
+		DrawMetrics.drawCenteredWidthString(g, "Return", 573, 525);
 		
 		// Tab
 		int tabX = 42 + 102, tabY = 42;
 		g.translate(tabX, tabY);
 		
-		g.setFont(Global.getFont(16));
+		DrawMetrics.setFont(g, 16);
 		g.setColor(BACKGROUND_COLOR);
 		g.fillRect(0, 0, 104, 52);
 		
 		g.drawImage(tiles.getTile(0x23), 0, 0, null);
 		
 		g.setColor(Color.BLACK);
-		
 		g.drawString("Pok\u00e9 Mart", 13, 30);
 		
 		g.translate(-tabX, -tabY);
 		
-		// Message
-		if (message != null)
-		{
-			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			g.setFont(Global.getFont(30));
-			g.setColor(Color.WHITE);
-			
-			Global.drawWrappedText(g, message, 30, 490, 750);
-		}
-		else
-		{
-			for (Button b : buttons)
-				b.draw(g);
-		}
+		for (Button b : buttons)
+			b.draw(g);
 	}
 
 	public ViewMode getViewModel()
@@ -417,13 +384,5 @@ public class MartView extends View
 	{
 		selectedItem = item;
 		itemAmount = selectedItem.getPrice() <= player.getDatCashMoney() ? 1 : 0;
-	}
-
-	private void greyOut(Graphics g, Button b, boolean totesBlacks)
-	{
-		Color temp = g.getColor();
-		g.setColor(totesBlacks ? Color.BLACK : g.getColor().darker());
-		g.fillRect(b.x, b.y, b.width, b.height);
-		g.setColor(temp);
 	}
 }

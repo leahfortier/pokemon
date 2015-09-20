@@ -85,7 +85,7 @@ public abstract class Status implements Serializable
 	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 	{
 		Object[] list = b.getEffectsList(victim);
-		Object statusPrevent = Global.checkInvoke(true, user, list, StatusPreventionEffect.class, "preventStatus", b, user, victim, type);
+		Object statusPrevent = Battle.checkInvoke(true, user, list, StatusPreventionEffect.class, "preventStatus", b, user, victim, type);
 		if (statusPrevent != null)
 		{
 			return ((StatusPreventionEffect)statusPrevent).statusPreventionMessage(victim); 
@@ -131,7 +131,7 @@ public abstract class Status implements Serializable
 		}
 		
 		Object[] list = b.getEffectsList(victim);
-		Object preventStatus = Global.checkInvoke(true, caster, list, StatusPreventionEffect.class, "preventStatus", b, caster, victim, type);
+		Object preventStatus = Battle.checkInvoke(true, caster, list, StatusPreventionEffect.class, "preventStatus", b, caster, victim, type);
 		if (preventStatus != null)
 		{
 			return false;

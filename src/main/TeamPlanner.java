@@ -30,15 +30,15 @@ public class TeamPlanner
 		
 		for (TeamMember member : team)
 		{
-//			member.printAllCoverage();
+			member.printAllCoverage();
 			
 			AttackTypeCoverage.addCoverage(coverage, member);
 			offensiveCoverage.countCoverage(member);
 		}
 		System.out.println();
 		
-//		AttackTypeCoverage.printCoverage(coverage);
-//		offensiveCoverage.printTableAndList();
+		AttackTypeCoverage.printCoverage(coverage);
+		offensiveCoverage.printTableAndList();
 		
 //		moveMatching("Psychic", "Surf");
 		
@@ -47,7 +47,7 @@ public class TeamPlanner
 	
 	private static List<TeamMember> readTeam()
 	{
-		Scanner in = StuffGen.openFile("teamPlanner.in");
+		Scanner in = FileIO.openFile("teamPlanner.in");
 		List<TeamMember> team = new ArrayList<>();
 		
 		System.out.println("Read Team");
@@ -59,6 +59,7 @@ public class TeamPlanner
 			
 			String ability = null;
 			String nature = null;
+			String item = null;
 			
 			List<String> moves = new ArrayList<>();
 			
@@ -86,6 +87,11 @@ public class TeamPlanner
 						
 						nature = value;
 						break;
+					case "Item":
+						if (nature != null) Global.error("Item already defined for " + pokemonName);
+						
+						item = value;
+						break;	
 					case "Moves":
 						while (true)
 						{
@@ -126,7 +132,7 @@ public class TeamPlanner
 				}
 			}
 			
-			TeamMember member = new TeamMember(pokemonName, nature, ability, moves);
+			TeamMember member = new TeamMember(pokemonName, nature, ability, item, moves);
 			team.add(member);
 		}
 		
@@ -300,14 +306,16 @@ public class TeamPlanner
 		List<Attack> moveList;
 		String nature;
 		String ability;
+		String item;
 		double[][] coverage;
 		int[][] coverageCount;
 		
-		public TeamMember(String pokemonName, String nature, String abililty, List<String> moves)
+		public TeamMember(String pokemonName, String nature, String ability, String item, List<String> moves)
 		{
 			this.pokemonSpecies = PokemonInfo.getPokemonInfo(Namesies.getValueOf(pokemonName, NamesiesType.POKEMON));
 			this.nature = nature;
-			this.ability = abililty;
+			this.ability = ability;
+			this.item = item;
 			
 			this.moveList = new ArrayList<>();
 			this.coverage = new double[types.length][types.length];
@@ -360,7 +368,7 @@ public class TeamPlanner
 				out.append(member.toString());
 			}
 			
-			StuffGen.printToFile("teamPlanner.out", out);
+			FileIO.printToFile("teamPlanner.out", out);
 		}
 		
 		public String toString()
@@ -381,6 +389,11 @@ public class TeamPlanner
 			
 			out.append("\n\tNature: " + nature);
 			out.append("\n\tAbility: " + ability);
+			
+			if (item != null)
+			{
+				out.append("\n\tItem: " + item);
+			}
 			
 			out.append("\n\tMoves:");
 			for (Attack attack : moveList)

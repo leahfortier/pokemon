@@ -135,7 +135,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			b.addMessage("The effects of reflect faded.");
 			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim.user()).remove(this);
 		}
@@ -205,7 +205,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			b.addMessage("The effects of light screen faded.");
 			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim.user()).remove(this);
 		}
@@ -315,7 +315,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			b.addMessage("The sticky web dispersed!");
 			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim.user()).remove(this);
 		}
@@ -369,7 +369,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			b.addMessage("The floating rocks dispersed!");
 			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim.user()).remove(this);
 		}
@@ -451,7 +451,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			b.addMessage("The toxic spikes dispersed!");
 			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim.user()).remove(this);
 		}
@@ -518,7 +518,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		{
 			b.addMessage("The spikes dispersed!");
 			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim.user()).remove(this);
 		}

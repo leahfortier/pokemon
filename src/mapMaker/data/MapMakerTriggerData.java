@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import main.Global;
+import main.FileIO;
 import map.MapData;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
@@ -123,7 +123,7 @@ public class MapMakerTriggerData
 
 		initialize(currentMapName, currentMapSize, mapMaker);
 
-		String fileText = Global.readEntireFileWithoutReplacements(mapTriggerFile, false);
+		String fileText = FileIO.readEntireFileWithoutReplacements(mapTriggerFile, false);
 
 		Matcher m = MapData.blockPattern.matcher(fileText);
 		while (m.find())
@@ -259,7 +259,7 @@ public class MapMakerTriggerData
 			HashSet<String> entranceNames = new HashSet<>();
 
 			File mapTextFile = new File(mapMaker.root.getPath() + MapMaker.FILE_SLASH + MapMaker.mapFolderName + MapMaker.FILE_SLASH + mapName + MapMaker.FILE_SLASH + mapName + ".txt");
-			String fileText = Global.readEntireFileWithoutReplacements(mapTextFile, false);
+			String fileText = FileIO.readEntireFileWithoutReplacements(mapTextFile, false);
 
 			Matcher m = MapData.blockPattern.matcher(fileText);
 			while (m.find())

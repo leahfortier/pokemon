@@ -15,12 +15,23 @@ import map.entity.MovableEntity.Direction;
 
 public abstract class Entity
 {
-	public int charX, charY;
+	protected int charX;
+	protected int charY;
 
 	public Entity(int x, int y)
 	{
 		charX = x;
 		charY = y;
+	}
+	
+	public int getX() 
+	{
+		return this.charX;
+	}
+	
+	public int getY() 
+	{
+		return this.charY;
 	}
 	
 	// Takes in the draw coordinates and returns the location of the entity where to draw it relative to the canvas

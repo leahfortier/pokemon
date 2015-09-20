@@ -137,24 +137,24 @@ public abstract class Attack implements Serializable
 		USER_FAINTS
 	}
 
-	public Attack(Namesies s, String d, int p, Type t, Category cat) 
+	public Attack(Namesies namesies, String description, int pp, Type type, Category category) 
 	{
-		namesies = s;
-		name = s.getName();
-		description = d;
-		pp = p;
-		type = t;
-		category = cat;
-		effects = new ArrayList<>();
-		moveTypes = new ArrayList<>();
-		power = 0;
-		accuracy = 10000;
-		selfTarget = false;
-		priority = 0;
-		status = StatusCondition.NONE;
-		statChanges = new int[Stat.NUM_BATTLE_STATS];
-		effectChance = 100;
-		printCast = true;
+		this.namesies = namesies;
+		this.name = namesies.getName();
+		this.description = description;
+		this.pp = pp;
+		this.type = type;
+		this.category = category;
+		this.effects = new ArrayList<>();
+		this.moveTypes = new ArrayList<>();
+		this.power = 0;
+		this.accuracy = 10000;
+		this.selfTarget = false;
+		this.priority = 0;
+		this.status = StatusCondition.NONE;
+		this.statChanges = new int[Stat.NUM_BATTLE_STATS];
+		this.effectChance = 100;
+		this.printCast = true;
 	}
 
 	public int getPriority(Battle b, ActivePokemon me) 
@@ -331,7 +331,7 @@ public abstract class Attack implements Serializable
 	private ActivePokemon getTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
 	{
 		Object[] invokees = b.getEffectsList(opponent);
-		Object swapTarget = Global.checkInvoke(true, user, invokees, TargetSwapperEffect.class, "swapTarget", b, user, opponent);
+		Object swapTarget = Battle.checkInvoke(true, user, invokees, TargetSwapperEffect.class, "swapTarget", b, user, opponent);
 		if (swapTarget != null)
 		{
 			return selfTarget ? opponent : user;
@@ -350,7 +350,7 @@ public abstract class Attack implements Serializable
 		
 		// Check the opponents effects and see if it will prevent effects from occurring
 		Object[] list = b.getEffectsList(o);
-		Object checkeroo = Global.checkInvoke(false, me, list, EffectBlockerEffect.class, "validMove", b, me, o);
+		Object checkeroo = Battle.checkInvoke(false, me, list, EffectBlockerEffect.class, "validMove", b, me, o);
 		if (checkeroo != null)
 		{
 			return false;
@@ -373,7 +373,7 @@ public abstract class Attack implements Serializable
 		}
 		
 		b.addMessage("It doesn't affect " + opp.getName() + "!");
-		Global.invoke(new Object[] { p.getAttack() }, CrashDamageMove.class, "crash", b, p);
+		Battle.invoke(new Object[] { p.getAttack() }, CrashDamageMove.class, "crash", b, p);
 		
 		return true;
 	}
@@ -425,7 +425,7 @@ public abstract class Attack implements Serializable
 		Object[] invokees = b.getEffectsList(me);
 		
 		// Apply a damage effect
-		Global.invoke(invokees, ApplyDamageEffect.class, "applyDamageEffect", b, me, o, damage);
+		Battle.invoke(invokees, ApplyDamageEffect.class, "applyDamageEffect", b, me, o, damage);
 		
 		if (me.isFainted(b))
 		{
@@ -433,7 +433,7 @@ public abstract class Attack implements Serializable
 		}
 		
 		// Take Recoil Damage
-		Global.invoke(new Object[] {this}, RecoilMove.class, "applyRecoil", b, me, damage);
+		Battle.invoke(new Object[] {this}, RecoilMove.class, "applyRecoil", b, me, damage);
 	
 		if (me.isFainted(b))
 		{
@@ -452,11 +452,11 @@ public abstract class Attack implements Serializable
 		// Effects that apply when a Pokemon makes physical contact with them
 		if (isMoveType(MoveType.PHYSICAL_CONTACT))
 		{
-			Global.invoke(invokees, PhysicalContactEffect.class, "contact", b, me, o);
+			Battle.invoke(invokees, PhysicalContactEffect.class, "contact", b, me, o);
 		}
 		
 		// Effects that apply to the opponent when they take damage
-		Global.invoke(invokees, TakeDamageEffect.class, "takeDamage", b, me, o);
+		Battle.invoke(invokees, TakeDamageEffect.class, "takeDamage", b, me, o);
 		
 		return;
 	}
@@ -1949,7 +1949,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			Global.invoke(b.getEffectsList(user), RapidSpinRelease.class, "releaseRapidSpin", b, user);
+			Battle.invoke(b.getEffectsList(user), RapidSpinRelease.class, "releaseRapidSpin", b, user);
 		}
 	}
 
@@ -7641,7 +7641,7 @@ public abstract class Attack implements Serializable
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 		{
-			Global.invoke(b.getEffectsList(b.getOtherPokemon(user.user())), BarrierEffect.class, "breakBarrier", b, user);
+			Battle.invoke(b.getEffectsList(b.getOtherPokemon(user.user())), BarrierEffect.class, "breakBarrier", b, user);
 		}
 	}
 
@@ -10672,7 +10672,7 @@ public abstract class Attack implements Serializable
 		{
 			super.applyEffects(b, user, victim);
 			
-			Global.invoke(b.getEffectsList(victim), DefogRelease.class, "releaseDefog", b, victim);
+			Battle.invoke(b.getEffectsList(victim), DefogRelease.class, "releaseDefog", b, victim);
 		}
 	}
 

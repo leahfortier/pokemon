@@ -14,18 +14,18 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
-import sun.security.action.GetLongAction;
+import main.FileIO;
 import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;
-import main.StuffGen;
 import main.Type;
 
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 {
 	private static final long serialVersionUID = 1L;
 
-	public static int NUM_POKEMON = 719;
+	public static final int NUM_POKEMON = 719;
+	public static final int EGG_IMAGE = 0x10000;
 	
 	private static HashMap<String, PokemonInfo> map;
 	private static PokemonInfo[] info;
@@ -68,7 +68,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.baseStats = baseStats;
 		this.baseExp = baseExp;
 		this.growthRate = GrowthRate.getRate(growthRate);
-		this.type = new Type[] {Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase())};
+		this.type = new Type[] { Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase()) };
 		this.levelUpMoves = levelUpMoves;
 		this.tmMoves = tmMoves;
 		this.eggMoves = eggMoves;
@@ -84,7 +84,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		this.weight = weight;
 		this.flavorText = flavorText;
 		this.eggSteps = eggSteps;
-		this.eggGroups = new String[] {eggGroup1, eggGroup2};
+		this.eggGroups = new String[] { eggGroup1, eggGroup2 };
 	}
 	
 	public Namesies[] setAbilities(String ability1, String ability2)
@@ -92,7 +92,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		Namesies first = Namesies.getValueOf(ability1, NamesiesType.ABILITY);
 		Namesies second = Namesies.getValueOf(ability2, NamesiesType.ABILITY);
 
-		return new Namesies[] {first, second};
+		return new Namesies[] { first, second };
 	}
 	
 	public Type[] getType()
@@ -296,7 +296,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			out.append(info.getName() + "\n");
 		}
 		
-		StuffGen.printToFile("BaseEvolutions.txt", out);
+		FileIO.printToFile("BaseEvolutions.txt", out);
 	}
 	
 	public static PokemonInfo getRandomBaseEvolution()
@@ -304,7 +304,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		if (baseEvolution == null)
 		{
 			baseEvolution = new ArrayList<>();
-			Scanner in = new Scanner(Global.readEntireFile(new File("BaseEvolutions.txt"), false));
+			Scanner in = new Scanner(FileIO.readEntireFile(new File("BaseEvolutions.txt"), false));
 			while (in.hasNext())
 			{
 				Namesies namesies = Namesies.getValueOf(in.nextLine().trim(), NamesiesType.POKEMON);
@@ -333,7 +333,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		map = new HashMap<String, PokemonInfo>();
 		info = new PokemonInfo[NUM_POKEMON + 1];
 
-		Scanner in = new Scanner(Global.readEntireFile(new File("pokemoninfo.txt"), false));
+		Scanner in = new Scanner(FileIO.readEntireFile(new File("pokemoninfo.txt"), false));
 		while (in.hasNext())
 		{
 			int num = in.nextInt();

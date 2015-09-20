@@ -1,11 +1,11 @@
 package gui;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import main.FileIO;
 import main.Global;
 import map.AreaData;
 import map.DialogueSequence;
@@ -26,16 +26,31 @@ import trainer.CharacterData;
 
 public class GameData
 {
-	public static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
-	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}");
-	public static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*(\\w+)\\s*(\\w+)\\s*([()&|!\\w-:,]+)?");
-	
-	public static final String DATA_LOCATION = "rec" + Global.FILE_SLASH;
+	private static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
+	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}"); // TODO: Make private again maybe
+	private static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*(\\w+)\\s*(\\w+)\\s*([()&|!\\w-:,]+)?");
+
+	private static final String TRIGGER_FOLDER = FileIO.makePath("rec", "triggers");
+	private static final String DIALOGUE_FOLDER = FileIO.makePath("rec", "dialogue");
+	private static final String MAPS_FOLDER = FileIO.makePath("rec", "maps");
+	private static final String AREA_LOCATION =  MAPS_FOLDER + "areaIndex.txt";
+
 	private HashMap<String, MapData> maps;
 	private HashMap<Integer, AreaData> areas;
 	private HashMap<String, Trigger> triggers;
 	private HashMap<String, DialogueSequence> dialogues;
-	private TileSet mapTiles, battleTiles, pokemonTilesLarge, pokemonTilesMedium, pokemonTilesSmall, itemTiles, trainerTiles, pauseMenuTiles, partyTiles, mainMenuTiles, bagTiles;
+
+	private TileSet mapTiles;
+	private TileSet battleTiles;
+	private TileSet pokemonTilesLarge;
+	private TileSet pokemonTilesMedium;
+	private TileSet pokemonTilesSmall;
+	private TileSet itemTiles;
+	private TileSet trainerTiles;
+	private TileSet pauseMenuTiles;
+	private TileSet partyTiles;
+	private TileSet mainMenuTiles;
+	private TileSet bagTiles;
 
 	public GameData()
 	{
@@ -46,79 +61,76 @@ public class GameData
 		loadMaps();
 	}
 
+	private void loadTiles()
+	{
+		mapTiles = new TileSet("mapTiles", 1.0f);
+		battleTiles = new TileSet("battleViewTiles", 1.0f);
+		pokemonTilesLarge = new TileSet("pokemonTiles", 2.9f);
+		pokemonTilesMedium = new TileSet("pokemonTiles", 2.3f);
+		pokemonTilesSmall = new TileSet("pokemonTiles", 1.0f);
+		pauseMenuTiles = new TileSet("pauseViewTiles", 1.0f);
+		itemTiles = new TileSet("itemTiles", 1.0f);
+		trainerTiles = new TileSet("trainerTiles", 1.0f);
+		partyTiles = new TileSet("partyTiles", 1.0f);
+		mainMenuTiles = new TileSet("mainMenuTiles", 1.0f);
+		bagTiles = new TileSet("bagTiles", 1.0f);
+	}
+
 	private void loadMaps()
 	{
 		maps = new HashMap<>();
-		File dir = new File(DATA_LOCATION + "maps" + Global.FILE_SLASH);
+		File dir = new File(MAPS_FOLDER);
+
 		for (File d : dir.listFiles())
 		{
-			if (d.getName().charAt(0) == '.' || d.getName().equals("areaIndex.txt")) continue;
+			if (d.getName().charAt(0) == '.' || d.getName().equals("areaIndex.txt"))
+				continue;
+
 			maps.put(d.getName(), new MapData(d, this));
 		}
 	}
-	
+
 	public void testMaps(CharacterData charData)
 	{
-		for (String map: maps.keySet())
+		for (String map : maps.keySet())
 		{
 			maps.get(map).populateEntities(charData, this);
 		}
 	}
-	
+
 	private void loadAreas()
 	{
 		areas = new HashMap<>();
-		
-		File indexFile = new File("rec" + Global.FILE_SLASH + "maps" + Global.FILE_SLASH + "areaIndex.txt");
+
+		File indexFile = new File(AREA_LOCATION);
 		if (!indexFile.exists())
 		{
-			System.err.println("Failed to find map area index file: " + indexFile.getName() +".");
-			return;
+			Global.error("Failed to find map area index file: " + indexFile.getName() + ".");
 		}
-		
-		String fileText = Global.readEntireFile(indexFile, false);
+
+		String fileText = FileIO.readEntireFile(indexFile, false);
+
 		Matcher m = areaIndexPattern.matcher(fileText);
 		while (m.find())
 		{
 			String areaName = m.group(1);
 			int value = (int) Long.parseLong(m.group(2), 16);
-			
-			AreaData area = new AreaData(areaName, value,  m.group(3),  m.group(4), m.group(5));
+
+			AreaData area = new AreaData(areaName, value, m.group(3), m.group(4), m.group(5));
 			areas.put(value, area);
 			area.addMusicTriggers(this);
-		}
-	}
-
-	private void loadTiles()
-	{
-		try
-		{
-			mapTiles = new TileSet("mapTiles", 1.0f);
-			battleTiles = new TileSet("battleViewTiles", 1.0f);
-			pokemonTilesLarge = new TileSet("pokemonTiles", 2.9f);
-			pokemonTilesMedium = new TileSet("pokemonTiles", 2.3f);
-			pokemonTilesSmall = new TileSet("pokemonTiles", 1.0f);
-			pauseMenuTiles = new TileSet("pauseViewTiles", 1.0f);
-			itemTiles = new TileSet("itemTiles", 1.0f);
-			trainerTiles = new TileSet("trainerTiles", 1.0f);
-			partyTiles = new TileSet("partyTiles", 1.0f);
-			mainMenuTiles = new TileSet("mainMenuTiles", 1.0f);
-			bagTiles = new TileSet("bagTiles", 1.0f);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
 		}
 	}
 
 	private void loadDialogue()
 	{
 		dialogues = new HashMap<>();
-		File dialogueFolder = new File(DATA_LOCATION + "dialogue" + Global.FILE_SLASH);
+		File dialogueFolder = new File(DIALOGUE_FOLDER);
 		for (File f : dialogueFolder.listFiles())
 		{
-			if (f.getName().charAt(0) == '.') continue;
-			String fileText = Global.readEntireFile(f, false);
+			if (f.getName().charAt(0) == '.')
+				continue;
+			String fileText = FileIO.readEntireFile(f, false);
 			Matcher m = dialogueBlockPattern.matcher(fileText);
 			while (m.find())
 			{
@@ -132,11 +144,12 @@ public class GameData
 	private void loadTriggers()
 	{
 		triggers = new HashMap<>();
-		File triggerFolder = new File(DATA_LOCATION + "triggers" + Global.FILE_SLASH);
+		File triggerFolder = new File(TRIGGER_FOLDER);
 		for (File f : triggerFolder.listFiles())
 		{
-			if (f.getName().charAt(0) == '.') continue;
-			String fileText = Global.readEntireFile(f, false);
+			if (f.getName().charAt(0) == '.')
+				continue;
+			String fileText = FileIO.readEntireFile(f, false);
 			Matcher m = triggerBlockPattern.matcher(fileText);
 			while (m.find())
 			{
@@ -151,11 +164,12 @@ public class GameData
 	{
 		return maps.get(name);
 	}
+
 	public AreaData getArea(int color)
 	{
-		return areas.containsKey(color)? areas.get(color): areas.get(0);
+		return areas.containsKey(color) ? areas.get(color) : areas.get(0);
 	}
-	
+
 	public Trigger getTrigger(String name)
 	{
 		return triggers.get(name);
@@ -171,8 +185,9 @@ public class GameData
 		DialogueSequence dialogue = new DialogueSequence(name, contents);
 		dialogues.put(name, dialogue);
 	}
-	
-	public static Trigger createTrigger(String type, String name, String contents) {
+
+	public static Trigger createTrigger(String type, String name, String contents)
+	{
 		Trigger trig = null;
 		switch (type)
 		{

@@ -4,16 +4,13 @@ import gui.GameFrame;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
-
-import main.Global;
+import main.FileIO;
 import map.entity.Entity;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
@@ -58,55 +55,40 @@ public class MapData
 	public MapData(File file, GameData gameData)
 	{
 		name = file.getName();
-		BufferedImage bgMap, fgMap, moveMap, areaM = null;
 		
-		String beginFilePath = file.getPath() + Global.FILE_SLASH + name;
-		try 
-		{	
-			bgMap = ImageIO.read(new File(beginFilePath + "_bg.png"));
-			fgMap = ImageIO.read(new File(beginFilePath + "_fg.png"));
-			moveMap = ImageIO.read(new File(beginFilePath + "_move.png"));
-			
-			File f = new File(beginFilePath + "_area.png");
-			if (f.exists())
-				areaM = ImageIO.read(f);
-		}
-		catch (IOException e) 
+		String beginFilePath = FileIO.makePath(file.getPath()) + name;
+		
+		BufferedImage bgMap = FileIO.readImage(beginFilePath + "_bg.png");
+		BufferedImage fgMap = FileIO.readImage(beginFilePath + "_fg.png");
+		BufferedImage moveMap = FileIO.readImage(beginFilePath + "_move.png");
+		
+		BufferedImage areaM = null;
+		File areaMapFile = new File(beginFilePath + "_area.png");
+		if (areaMapFile.exists())
 		{
-			e.printStackTrace();
-			return;
+			areaM = FileIO.readImage(areaMapFile);			
+		}
+		else
+		{
+			// If map doesn't have an image for areas, create and save an empty image for areas.
+			areaM = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			FileIO.writeImage(areaM, areaMapFile);
 		}
 		
 		width = bgMap.getWidth();
 		height = bgMap.getHeight();
+		
 		bgTile = bgMap.getRGB(0, 0, width, height, null, 0, width);
 		fgTile = fgMap.getRGB(0, 0, width, height, null, 0, width);
 		walkMap = moveMap.getRGB(0, 0, width, height, null, 0, width);
-		
-		//If map doesn't have an image for areas, create and save an empty image for areas.
-		if (areaM == null)
-		{
-			areaM = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			File areaMapFile = new File(beginFilePath + "_area.png");
-			try 
-			{
-				ImageIO.write(areaM, "png", areaMapFile);
-			}
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-			
-		}
-		
 		areaMap = areaM.getRGB(0, 0, width, height, null, 0, width);
 		
 		entities = new ArrayList<>();
 		triggers = new HashMap<>();
 		mapEntrances = new HashMap<>();
 		
-		File f = new File(file.getPath() + Global.FILE_SLASH + name + ".txt");
-		String fileText = Global.readEntireFile(f, false);
+		File f = new File(beginFilePath + ".txt");
+		String fileText = FileIO.readEntireFile(f, false);
 
 		Matcher m = blockPattern.matcher(fileText);
 		while (m.find())
@@ -263,7 +245,7 @@ public class MapData
 				Entity e = data.getEntity();
 				e.reset();
 				e.addData(gameData);
-				res[e.charX][e.charY] = e; 
+				res[e.getX()][e.getY()] = e; 
 			}
 		}
 		

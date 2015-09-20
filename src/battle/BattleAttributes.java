@@ -253,7 +253,7 @@ public class BattleAttributes implements Serializable
 		if (val < 0 && caster != victim)
 		{
 			Object[] list = b.getEffectsList(victim);
-			Object prevent = Global.checkInvoke(true, caster, list, StatProtectingEffect.class, "prevent", b, caster, victim, stat);
+			Object prevent = Battle.checkInvoke(true, caster, list, StatProtectingEffect.class, "prevent", b, caster, victim, stat);
 			if (prevent != null)
 			{
 				if (print)
@@ -299,7 +299,7 @@ public class BattleAttributes implements Serializable
 		if (val < 0 && caster != victim)
 		{
 			Object[] invokees = b.getEffectsList(victim);
-			Global.invoke(invokees, StatLoweredEffect.class, "takeItToTheNextLevel", b, caster, victim);
+			Battle.invoke(invokees, StatLoweredEffect.class, "takeItToTheNextLevel", b, caster, victim);
 		}
 		
 		return true;

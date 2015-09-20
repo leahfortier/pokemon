@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.Button;
+import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -11,7 +12,6 @@ import java.util.List;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
 import main.Type;
@@ -122,9 +122,8 @@ public class PokedexView extends View
 		g.drawImage(tiles.getTile(0x31), 40, 40, null);
 		
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(20));
-		String s = "Pok\u00e9dex";
-		g.drawString(s, Global.centerX(s, 214, 20), 65);
+		DrawMetrics.setFont(g, 20);
+		DrawMetrics.drawCenteredWidthString(g, "Pok\u00e9dex", 214, 65);
 		
 		for (int i = 0; i < PC.BOX_HEIGHT; i++)
 		{
@@ -138,8 +137,7 @@ public class PokedexView extends View
 				if (pokedex.getStatus(p.namesies()) == PokedexStatus.NOT_SEEN)
 				{
 					g.setColor(new Color(0, 0, 0, 64));
-					s = String.format("%03d", number);
-					g.drawString(s, Global.centerX(s, 18, 20), 27);
+					DrawMetrics.drawCenteredWidthString(g, String.format("%03d", number), 18, 27);
 				}
 				else
 				{
@@ -149,7 +147,7 @@ public class PokedexView extends View
 					}
 					
 					BufferedImage pkmImg = partyTiles.getTile(number);
-					g.drawImage(pkmImg, 20 - pkmImg.getWidth()/2, 20 - pkmImg.getHeight()/2, null);
+					DrawMetrics.drawCenteredImage(g, pkmImg, 20, 20);
 					
 					if (pokedex.getStatus(p.namesies()) == PokedexStatus.CAUGHT)
 					{
@@ -161,11 +159,10 @@ public class PokedexView extends View
 			}
 		}
 		
+		// Draw page numbers and arrows
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(16));
-		s = (pageNum + 1) + "/" + NUM_PAGES;
-		g.drawString(s, Global.centerX(s, 215, 20), 433);
-		
+		DrawMetrics.setFont(g, 16);
+		DrawMetrics.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, 215, 433);
 		View.drawArrows(g, leftButton, rightButton);
 		
 		// Seen/Caught
@@ -174,7 +171,7 @@ public class PokedexView extends View
 		g.drawImage(tiles.getTile(0x33), 40, 478, null);
 		
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(20));
+		DrawMetrics.setFont(g, 20);
 		g.drawString("Seen: " + pokedex.numSeen(), 70, 524);
 		g.drawString("Caught: " + pokedex.numCaught(), 70 + 54*3, 524);
 		
@@ -186,70 +183,80 @@ public class PokedexView extends View
 		
 		if (status == PokedexStatus.NOT_SEEN)
 		{
-			typeColors = new Color[] {Color.BLACK, Color.BLACK};	
+			typeColors = new Color[] { Color.BLACK, Color.BLACK };	
 		}
 		
 		g.setColor(typeColors[0]);
-		g.fillPolygon(new int[] {410, 759, 759, 410}, new int[] {40, 40, 96, 445}, 4);
+		g.fillPolygon(new int[] { 410, 759, 759, 410 }, new int[] { 40, 40, 96, 445 }, 4);
 		g.setColor(typeColors[1]);
-		g.fillPolygon(new int[] {410, 759, 759, 410}, new int[] {445, 96, 501, 501}, 4);
+		g.fillPolygon(new int[] { 410, 759, 759, 410 }, new int[] { 445, 96, 501, 501 }, 4);
 		
 		g.drawImage(tiles.getTile(0x34), 410, 40, null);
 		if (status == PokedexStatus.NOT_SEEN)
 		{
 			g.setColor(Color.BLACK);
-			g.setFont(Global.getFont(80));
+			DrawMetrics.setFont(g, 80);
 			g.drawString("?", 455, 137);
 		}
 		else
 		{
 			BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageNumber(false));
 			pkmImg.setRGB(0, 0, 0);
-			g.drawImage(pkmImg, 479 - pkmImg.getWidth()/2, 109 - pkmImg.getHeight()/2, null);
+			DrawMetrics.drawCenteredImage(g, pkmImg, 479, 109);
 		}
 		
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(20));
+		DrawMetrics.setFont(g, 20);
 		g.drawString(status == PokedexStatus.NOT_SEEN ? "?????" : selected.getName(), 541, 82);
-		s = "#" + String.format("%03d", selected.getNumber());
-		g.drawString(s, Global.rightX(s, 740, 20), 82);
+		DrawMetrics.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
 		
 		if (status != PokedexStatus.NOT_SEEN)
 		{
-			g.setFont(Global.getFont(16));
+			DrawMetrics.setFont(g, 16);
 			g.drawString("Type:", 541, 110);
 			
 			g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 596, 98, null);
-			if (type[1] != Type.NONE) g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 596 + 707 - 669, 98, null);
+			if (type[1] != Type.NONE) 
+			{
+				g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 596 + 707 - 669, 98, null);
+			}
 			
 			g.drawString((status == PokedexStatus.SEEN ? "???" : selected.getClassification()) + " Pok\u00e9mon", 427, 179);
 			g.drawString("Height: " + (status == PokedexStatus.SEEN ? "???'??\"" : String.format("%d'%02d\"", selected.getHeight()/12, selected.getHeight()%12)), 427, 198);
 			g.drawString("Weight: " + (status == PokedexStatus.SEEN ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
-			if (status == PokedexStatus.CAUGHT) Global.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350, 10, 21);
+			if (status == PokedexStatus.CAUGHT) 
+			{
+				DrawMetrics.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
+			}
 			
 			g.drawString("Locations:", 427, 340);
 			List<String> locations = pokedex.getLocations(selected.namesies());
 			for (int i = 0; i < locations.size(); i++)
 			{
-				g.setFont(Global.getFont(16));
 				g.drawString(locations.get(i), 457, 360 + i*18 + i/2);
 			}	
 		}
 		
 		// Buttons
-		g.setFont(Global.getFont(20));
+		DrawMetrics.setFont(g, 20);
 		
 		if (status != PokedexStatus.NOT_SEEN)
 		{
 			BufferedImage pkmImg = partyTiles.getTile(selected.getNumber());
-			for (int i = 0; i < 3; i++) g.drawImage(pkmImg, 464 + 120*i - pkmImg.getWidth()/2, 478 - pkmImg.getHeight()/2, null);			
+			for (int i = 0; i < 3; i++) 
+			{
+				DrawMetrics.drawCenteredImage(g, pkmImg, 464 + 120*i, 478);
+			}
 		}
 		
 		g.drawImage(tiles.getTile(0x36), 410, 522, null);
-		g.drawString("Return", Global.centerX("Return", 584, 20), 546);
+		DrawMetrics.drawCenteredWidthString(g, "Return", 584, 546);
 		
-		for (Button b : buttons) b.draw(g);
+		for (Button b : buttons) 
+		{
+			b.draw(g);
+		}
 	}
 	
 	private int getIndex(int i, int j)

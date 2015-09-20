@@ -22,11 +22,11 @@ public abstract class MovableEntity extends Entity
 		LEFT('l', -1, 0, Control.LEFT),
 		DOWN('d', 0, 1, Control.DOWN);
 		
-		public char character;
-		public int dx;
-		public int dy;
-		public Control key;
-		public Direction opposite;
+		public final char character;
+		public final int dx;
+		public final int dy;
+		public final Control key;
+		public Direction opposite; // Really this should be final but it won't let me include this in the constructor
 		
 		private Direction(char character, int dx, int dy, Control key)
 		{
@@ -59,10 +59,10 @@ public abstract class MovableEntity extends Entity
 	{
 		super(x, y);
 		
-		transitionDirection = startDirection;
+		this.transitionDirection = startDirection;
 		
-		transitionTime = 0;
-		runFrame = 0;
+		this.transitionTime = 0;
+		this.runFrame = 0;
 		
 		this.spriteIndex = spriteIndex;
 	}
@@ -81,7 +81,7 @@ public abstract class MovableEntity extends Entity
 			canvasCoordinates.x -= transitionDirection.dx * len;
 			canvasCoordinates.y -= transitionDirection.dy * len;
 			
-			// System.out.println(transitionTime +" " +len +" " +cx +" " + cy);
+			// System.out.println(transitionTime + " " +len + " " +cx + " " + cy);
 		}
 		
 		super.draw(g, data, canvasCoordinates);
@@ -89,13 +89,15 @@ public abstract class MovableEntity extends Entity
 	
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view)
 	{
-		if (transitionTime != 0)
-			transitionTime += dt;
+		if (transitionTime != 0) 
+		{
+			transitionTime += dt;	
+		}
 		
 		if (transitionTime > getTransitionTime())
 		{
 			transitionTime = 0;
-			runFrame = (runFrame + 1) % 2;
+			runFrame = (runFrame + 1)%2;
 		}
 	}
 	

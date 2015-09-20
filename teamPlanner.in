@@ -1,56 +1,58 @@
-Escavalier
-	Nature: Adamant, Impish, Careful
+Escavalier:
 	Ability: Shell Armor
+	Item: Quick Claw
 	Moves:
 		X-Scissor
 		Iron Head
 		Drill Run
 		Poison Jab
 	*
-***		
-Mamoswine
-	Nature: Careful
+***
+Mamoswine:
+	Item: Leftovers
 	Moves:
-		Earthquake
 		Icicle Crash
-		Stone Edge
+		Earthquake
 		Iron Head
+		Stone Edge
 	*
-***		
-Togekiss
+***
+Dragalge:
+	Item: Black Sludge
+	Moves:
+		Surf
+		Thunderbolt
+		Shadow Ball
+		Sludge Wave
+	*
+***
+Togekiss:
 	Nature: Timid
-	Ability: Serene Grace/Super Luck
+	Ability: Serene Grace
+	Item: King's Rock
 	Moves:
 		Dazzling Gleam
 		Air Slash
 		Aura Sphere
 		Flamethrower
 	*
-***	
-Dragalge
-	Nature: Modest
-	Ability: Poison Point
+***
+Pangoro:
+	Ability: Iron Fist
 	Moves:
-		Sludge Wave
-		Surf
-		Thunderbolt
-		Shadow Ball
+		Crunch
+		Fire Punch
+		Ice Punch
+		Drain Punch
 	*
-***	
-Gengar
+***
+Gengar:
+	Nature: Timid
+	Item: Big Root
 	Moves:
 		Shadow Ball
 		Sludge Bomb
 		Psychic
 		Giga Drain
-	*
-***	
-Pangoro
-	Ability: Iron Fist
-	Moves:
-		Drain Punch
-		Crunch
-		Ice Punch
-		Fire Punch
 	*
 ***

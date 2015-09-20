@@ -233,7 +233,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			
 			// Srsly don't buffet the immune!!
 			Object[] list = b.getEffectsList(p);
-			Object checkeroo = Global.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
+			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
 			if (checkeroo != null)
 			{
 				return;
@@ -308,7 +308,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			
 			// Srsly don't buffet the immune!!
 			Object[] list = b.getEffectsList(p);
-			Object checkeroo = Global.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
+			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
 			if (checkeroo != null)
 			{
 				return;

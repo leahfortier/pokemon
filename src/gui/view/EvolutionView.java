@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -22,17 +23,21 @@ import trainer.Pokedex.PokedexStatus;
 public class EvolutionView extends View
 {	
 	private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
+	
+	private static final float[] prevEvolutionScales = { 1f, 1f, 1f, 1f };
+	private static final float[] prevEvolutionOffsets = { 255f, 255f, 255f, 0f };
+	private static final float[] evolutionScales = { 1f, 1f, 1f, 1f };
+	private static final float[] evolutionOffsets = { 255f, 255f, 255f, 0f };
+	
 	private int animationEvolve;
 
-	private CharacterData player;
+	private final CharacterData player;
 	private ActivePokemon evolvingPokemon;
 	private PokemonInfo preEvolution;
 	private PokemonInfo postEvolution;
-	
 	private boolean isEgg;
 	
 	private State state;
-	
 	private String message;
 		
 	private enum State
@@ -92,7 +97,7 @@ public class EvolutionView extends View
 				}
 				else
 				{
-					if(!isEgg)
+					if (!isEgg)
 					{
 						evolvingPokemon.evolve(null, player.evolution);
 						game.setViewMode(ViewMode.BAG_VIEW);
@@ -115,46 +120,42 @@ public class EvolutionView extends View
 		
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
 		
-		g.setFont(Global.getFont(30));
+		DrawMetrics.setFont(g, 30);
 		g.setColor(Color.WHITE);
 		
-		int preIndex = isEgg ? 0x10000 : preEvolution.getImageNumber(evolvingPokemon.isShiny());
+		int preIndex = isEgg ? PokemonInfo.EGG_IMAGE : preEvolution.getImageNumber(evolvingPokemon.isShiny());
 		int postIndex = isEgg ? preEvolution.getImageNumber(evolvingPokemon.isShiny()) : postEvolution.getImageNumber(evolvingPokemon.isShiny());
 		
 		BufferedImage currEvolution = pokemonTiles.getTile(preIndex);
 		BufferedImage nextEvolution = pokemonTiles.getTile(postIndex);
 		
 		int drawWidth = Global.GAME_SIZE.width/2;
-		int drawHeight = Global.GAME_SIZE.height*5/8;
+		int drawHeight = Global.GAME_SIZE.height/2;
 		
 		switch (state)
 		{
 			case START:
-				g.drawImage(currEvolution, drawWidth-currEvolution.getWidth()/2, drawHeight-currEvolution.getHeight(), null);
+				DrawMetrics.drawCenteredImage(g, currEvolution, drawWidth, drawHeight);
 				break;
 			case EVOLVE:
 				evolveAnimation(g, currEvolution, nextEvolution, drawWidth, drawHeight);
 				break;
 			case END:
-				g.drawImage(nextEvolution, drawWidth-nextEvolution.getWidth()/2, drawHeight-nextEvolution.getHeight(), null);
+				DrawMetrics.drawCenteredImage(g, nextEvolution, drawWidth, drawHeight);
 				break;
 		}
 		
 		if (message != null)
 		{
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			Global.drawWrappedText(g, message, 30, 490, 750);
+			DrawMetrics.setFont(g, 30);
+			DrawMetrics.drawWrappedText(g, message, 30, 490, 750);
 		}
 	}
 	
 	private void evolveAnimation(Graphics g, BufferedImage currEvolution, BufferedImage nextEvolution, int px, int py)
 	{
 		Graphics2D g2d = (Graphics2D)g;
-		
-		float[] prevEvolutionScales = { 1f, 1f, 1f, 1f };
-		float[] prevEvolutionOffsets = { 255f, 255f, 255f, 0f };
-		float[] evolutionScales = { 1f, 1f, 1f, 1f };
-		float[] evolutionOffsets = { 255f, 255f, 255f, 0f };
 		
 		// Turn white
 		if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7)
@@ -174,13 +175,14 @@ public class EvolutionView extends View
 		else
 		{
 			prevEvolutionScales[3] = 0;
-			evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1-0.7f));
+			evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f));
 		}
 		
 		animationEvolve -= Global.MS_BETWEEN_FRAMES;
 		
-		g2d.drawImage(Global.colorImage(nextEvolution, evolutionScales, evolutionOffsets), px-nextEvolution.getWidth()/2, py-nextEvolution.getHeight(), null);
-		g2d.drawImage(Global.colorImage(currEvolution, prevEvolutionScales, prevEvolutionOffsets), px-currEvolution.getWidth()/2, py-currEvolution.getHeight(), null);
+		// TODO: Why does this need Graphics2D instead of just Graphics for just drawing an image? See if this can use the center function as well
+		g2d.drawImage(Global.colorImage(nextEvolution, evolutionScales, evolutionOffsets), px-nextEvolution.getWidth()/2, py-nextEvolution.getHeight()/2, null);
+		g2d.drawImage(Global.colorImage(currEvolution, prevEvolutionScales, prevEvolutionOffsets), px-currEvolution.getWidth()/2, py-currEvolution.getHeight()/2, null);
 	}
 
 	public ViewMode getViewModel()
@@ -193,15 +195,20 @@ public class EvolutionView extends View
 		evolvingPokemon = pokemon;
 		preEvolution = pokemon.getPokemonInfo();
 		
-		if (evolve != null)
-			postEvolution = evolve.getEvolution();
-		else
+		if (evolve == null)
+		{
 			isEgg = true;
+		}
+		else
+		{
+			isEgg = false;
+			postEvolution = evolve.getEvolution();
+		}
 	}
 	
 	private void setInitialMessage()
 	{
-		if(isEgg)
+		if (isEgg)
 		{
 			message = "Your egg is hatching!";
 		}
@@ -213,14 +220,7 @@ public class EvolutionView extends View
 	
 	private void addToPokedex()
 	{	
-		if (isEgg)
-		{
-			player.getPokedex().setStatus(preEvolution, PokedexStatus.CAUGHT);
-		}
-		else
-		{
-			player.getPokedex().setStatus(postEvolution, PokedexStatus.CAUGHT);			
-		}
+		player.getPokedex().setStatus(isEgg ? preEvolution : postEvolution, PokedexStatus.CAUGHT);
 	}
 	
 	private void setFinalMessage()

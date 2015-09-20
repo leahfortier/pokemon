@@ -1,6 +1,5 @@
 # The name of each move and its contents.
 # Blocks are separated by '*'
-# Also, homegroups are really stupid, but if you would like to join ours, here you go: wA43yC8BU2
 
 Constructor:
 	Namesies Enum Namesies Attack
@@ -467,7 +466,7 @@ Rapid Spin:
 	Type: Normal
 	Cat: Physical
 	ApplyEffects: 
-	Global.invoke(b.getEffectsList(user), RapidSpinRelease.class, "releaseRapidSpin", b, user);
+	Battle.invoke(b.getEffectsList(user), RapidSpinRelease.class, "releaseRapidSpin", b, user);
 	###
 *
 Reflect:
@@ -3430,7 +3429,7 @@ Brick Break:
 	Acc: 100
 	Cat: Physical
 	ApplyEffects: 
-	Global.invoke(b.getEffectsList(b.getOtherPokemon(user.user())), BarrierEffect.class, "breakBarrier", b, user);
+	Battle.invoke(b.getEffectsList(b.getOtherPokemon(user.user())), BarrierEffect.class, "breakBarrier", b, user);
 	###
 *
 High Jump Kick:
@@ -5165,7 +5164,7 @@ Defog:
 	ApplyEffects:
 	super.applyEffects(b, user, victim);
 	
-	Global.invoke(b.getEffectsList(victim), DefogRelease.class, "releaseDefog", b, victim);
+	Battle.invoke(b.getEffectsList(victim), DefogRelease.class, "releaseDefog", b, victim);
 	###
 *
 Horn Leech:

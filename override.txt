@@ -633,7 +633,7 @@ Override:
 		// Protect is a success!
 		b.printAttacking(p);
 		b.addMessage(opp.getName() + " is protecting itself!");
-		Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+		Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 	
 		// Additional Effects
 		protectingEffects(p, opp, b);
@@ -1069,7 +1069,7 @@ DefogRelease:
 		Body:
 		b.addMessage({0});
 		
-		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 		victim.getEffects().remove(this);
 		b.getEffects(victim.user()).remove(this);
 		###
@@ -1135,7 +1135,7 @@ GroundedEffect:
 			b.addMessage(p.getName() + " fell to the ground!");
 		}
 		
-		Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+		Battle.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
 		###
 		AddInterface: BeforeTurnEffect
 		AddMapField: CanAttack:
@@ -1468,7 +1468,7 @@ Override:
 			
 			// Srsly don't buffet the immune!!
 			Object[] list = b.getEffectsList(p);
-			Object checkeroo = Global.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
+			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
 			if (checkeroo != null)
 			{
 				return;

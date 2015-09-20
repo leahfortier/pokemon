@@ -3,13 +3,6 @@ package trainer;
 import item.Item;
 import item.use.BallItem;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +10,6 @@ import java.util.HashSet;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.Global;
 import main.Namesies;
 import map.DialogueSequence;
 import map.entity.MovableEntity.Direction;
@@ -79,25 +71,30 @@ public class CharacterData extends Trainer implements Serializable
 	public CharacterData(Game game)
 	{
 		super(DEFAULT_NAME, START_MONEY);
-		this.game = game;
+		this.initialize(game);
 		
 		definedGlobals = new HashSet<>();
-		logMessages = new ArrayList<>();
 		
 		pokedex = new Pokedex();
 		pc = new PC();
+		
 		badges = new boolean[NUM_BADGES];
 		Arrays.fill(badges, false);
+		
 		repelSteps = 0;
+		seconds = 0;
 		
 		direction = Direction.DOWN;
-		
-		seconds = 0;
-		timeSinceUpdate = System.currentTimeMillis();
-		
 		areaName = "";
-		
 		mapReset = false;
+	}
+	
+	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
+	public void initialize(Game game)
+	{
+		this.game = game;
+		this.logMessages = new ArrayList<>();
+		this.timeSinceUpdate = System.currentTimeMillis();
 	}
 	
 	public void setName(String s)
@@ -119,7 +116,7 @@ public class CharacterData extends Trainer implements Serializable
 		return numBadges;
 	}
 	
-	private void updateTimePlayed()
+	public void updateTimePlayed()
 	{
 		seconds += (System.currentTimeMillis() - timeSinceUpdate)/1000;
 		timeSinceUpdate = System.currentTimeMillis();
@@ -128,6 +125,11 @@ public class CharacterData extends Trainer implements Serializable
 	public long getTimePlayed()
 	{
 		return seconds + (System.currentTimeMillis() - timeSinceUpdate)/1000;
+	}
+	
+	public long getSeconds()
+	{
+		return this.seconds;
 	}
 	
 	public int getFileNum()
@@ -210,7 +212,7 @@ public class CharacterData extends Trainer implements Serializable
 		repelSteps += steps;
 	}
 	
-	public String getRouteName()
+	public String getAreaName()
 	{
 		return areaName;
 	}
@@ -306,11 +308,11 @@ public class CharacterData extends Trainer implements Serializable
 			b.addMessage("", Update.WIN_BATTLE);
 		}
 		
-		Global.invoke(getEffects().toArray(), EndBattleEffect.class, "afterBattle", this, b, front());
+		Battle.invoke(getEffects().toArray(), EndBattleEffect.class, "afterBattle", this, b, front());
 		
 		for (ActivePokemon p : team)
 		{
-			Global.invoke(new Object[] {p.getAbility()}, EndBattleEffect.class, "afterBattle", this, b, p);
+			Battle.invoke(new Object[] {p.getAbility()}, EndBattleEffect.class, "afterBattle", this, b, p);
 		}
 		
 		setFront();
@@ -345,10 +347,12 @@ public class CharacterData extends Trainer implements Serializable
 	public boolean canDeposit(ActivePokemon p)
 	{
 		// You can't deposit a Pokemon that you don't have
-		if (!team.contains(p)) return false;
+		if (!team.contains(p)) 
+			return false;
 		
 		// Eggs can always be deposited
-		if (p.isEgg()) return true;
+		if (p.isEgg()) 
+			return true;
 		
 		// Otherwise you can if you have at least one other Pokemon that is not an egg
 		return team.size() - totalEggs() > 1;
@@ -407,6 +411,7 @@ public class CharacterData extends Trainer implements Serializable
 	{
 		this.evolvingPokemon = pokemon;
 		this.evolution = evolution;
+		
 		game.setViewMode(ViewMode.EVOLUTION_VIEW);
 	}
 	
@@ -429,177 +434,6 @@ public class CharacterData extends Trainer implements Serializable
 		return logMessages;
 	}
 	
-	public void save(){
-		
-		//printGlobals();
-		
-		try
-		{
-			updateTimePlayed();
-
-			File saveDir = new File("saves" + Global.FILE_SLASH);
-			if (!saveDir.exists())
-				saveDir.mkdirs();
-			
-			FileOutputStream fout = new FileOutputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
-			ObjectOutputStream out = new ObjectOutputStream(fout);
-			out.writeObject(this);
-			out.close();
-			fout.close();
-			
-			PrintStream prevOut = new PrintStream("saves" + Global.FILE_SLASH + "Preview" + (fileNum + 1) + ".out");
-			prevOut.print(name + " " + seconds + " " + numBadges + " " + pokedex.numSeen());
-			prevOut.close();
-		}
-		catch(IOException z)
-		{
-			Global.error("Oh no! That didn't save quite right!");
-		}
-	}
-	
-	public static CharacterData load(int fileNum, Game game){
-		CharacterData loadChar = null;
-		
-		//updateSerVariables();
-		
-		try {
-			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
-			ObjectInputStream in = new ObjectInputStream(fin);
-			loadChar = (CharacterData) in.readObject();
-			loadChar.game = game;
-			loadChar.logMessages = new ArrayList<>();
-			in.close();
-			fin.close();
-		}
-		catch(IOException | ClassNotFoundException y){
-			Global.error("Oh no! That didn't load quite right!");
-		}
-		catch(NullPointerException n){
-			Global.error("Someone's been trying to cheat and edit this save file! Commence deletion!");
-		}
-		
-		loadChar.timeSinceUpdate = System.currentTimeMillis();
-		
-		//loadChar.updateGlobals(false);
-		
-		return loadChar;
-	}
-	
-	private static void updateSerVariables(int fileNum) 
-	{
-		try {
-			//Replace bytes of renamed variable name
-			FileInputStream fin = new FileInputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
-			byte[] bytes = new byte[fin.available()];
-			fin.read(bytes);
-			fin.close();
-			
-			boolean edited = false;
-			
-			byte[][][] variablesToUpdate = new byte[][][] {
-					
-					//Move.move to Move.attack
-					{
-						//Move.move: 00 04 6D 6F 76 65
-						//extra: 00 04 75 73 65 64 4C 00 04 6D 6F 76 65 74
-						{0x00, 0x04, 0x75, 0x73, 0x65, 0x64, 0x4C, 0x00, 0x04, 0x6D, 0x6F, 0x76, 0x65, 0x74},
-						//Move.attack: 00 06 61 74 74 61 63 6B
-						//extra: 00 04 75 73 65 64 4C 00 06 61 74 74 61 63 6B 74
-						{0x00, 0x04, 0x75, 0x73, 0x65, 0x64, 0x4C, 0x00, 0x06, 0x61, 0x74, 0x74, 0x61, 0x63, 0x6B, 0x74}
-					}
-					//next
-			};
-			
-			for(int currVariable = 0; currVariable < variablesToUpdate.length; ++currVariable)
-			{
-				byte[] newBytes = updateSerVariables(bytes, variablesToUpdate[currVariable][0], variablesToUpdate[currVariable][1]);
-				if(newBytes != null) 
-				{
-					bytes = newBytes;
-					edited = true;
-				}
-			}
-
-			//Replacement was found, resave the file.
-			if(edited) 
-			{
-				FileOutputStream out = new FileOutputStream("saves" + Global.FILE_SLASH + "File" + (fileNum + 1) + ".ser");
-				out.write(bytes);
-				out.close();
-			}
-		} 
-		catch (IOException ex)
-		{
-			Global.error("Couldn't update Move variable name.");
-		}
-	}
-	
-	private static byte[] updateSerVariables(byte[] bytes, byte[] find, byte[] replace)
-	{
-		boolean edited = false;
-		
-		StringBuilder findString = new StringBuilder();
-		for(byte b: find) 
-		{
-			findString.append((char)b);
-		}
-		
-		StringBuilder replaceString = new StringBuilder();
-		for(byte b: replace) 
-		{
-			replaceString.append((char)b);
-		}
-		
-		//Loop through the entire array of bytes.
-		for (int curr = 0; curr< bytes.length; ++curr) 
-		{
-			//Search the bytes for the search array.
-			int currLoc;
-			for (currLoc = 0; currLoc < find.length && currLoc < bytes.length && bytes[curr+currLoc] == find[currLoc]; ++currLoc);
-			
-			//If searched the entire search array, location was found.
-			if(currLoc == find.length)
-			{
-				System.out.println("Updating Serializable variable: " +findString.toString() +" with: "+replaceString.toString());
-				edited = true;
-				
-				//Make a copy of the bytes with the new length.
-				int dif = replace.length - find.length;
-				
-				//Move the end of the array over by the difference in the find and replace arrays.
-				//If difference is smaller, move bytes before copying the array.
-				if (dif < 0)
-				{
-					for(int newPos = bytes.length-1; newPos > curr; --newPos)
-					{
-						bytes[newPos+dif] = bytes[newPos];
-					}
-				}
-				
-				//Update the size of the bytes array.
-				bytes = Arrays.copyOf(bytes, bytes.length + dif);
-				
-				//Move the end of the array over by the difference in the find and replace arrays.
-				//If difference is larger, move bytes after copying the array. 
-				if(dif > 0)
-				{
-					for(int newPos = bytes.length-1; newPos > curr; --newPos)
-					{
-						bytes[newPos] = bytes[newPos-dif];
-					}
-				}
-				
-				//Add the replace array.
-				for(int newPos = 0; newPos < replace.length; ++newPos)
-				{
-					bytes[newPos+curr] = replace[newPos];
-				}
-			}
-		}
-		
-		return edited? bytes: null;
-	}
-	
 	private void printGlobals() 
 	{
 		//List all the globals for this saved character
@@ -610,7 +444,7 @@ public class CharacterData extends Trainer implements Serializable
 		System.out.println();
 	}
 	
-	private void updateGlobals (boolean printGlobals) 
+	private void updateGlobals(boolean printGlobals) 
 	{
 		if (printGlobals) 
 		{
@@ -650,7 +484,7 @@ public class CharacterData extends Trainer implements Serializable
 		}
 	}
 	
-	
+	// TODO: What is this? And is it still necessary?
 	//Convert globals from final class demo to latest commit before map maker trigger update
 	private void updateGlobals_from_2013_11_24_to_2014_01_30 () 
 	{

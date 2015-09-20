@@ -255,7 +255,7 @@ public class DevConsole
 		g.drawLine(0, 0, Global.GAME_SIZE.width, 0);
 
 		g.setColor(Color.WHITE);
-		g.setFont(Global.getFont(14));
+		DrawMetrics.setFont(g, 14);
 		g.drawString(currText, 2, 16);
 
 		g.translate(0, -Global.GAME_SIZE.height + 20);

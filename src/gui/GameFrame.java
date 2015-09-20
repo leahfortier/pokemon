@@ -19,11 +19,11 @@ import main.InputControl.Control;
 import main.StuffGen;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
+import trainer.CharacterData;
 import battle.Attack;
 import battle.effect.BattleEffect;
 import battle.effect.PokemonEffect;
 import battle.effect.TeamEffect;
-import trainer.CharacterData;
 
 public class GameFrame
 {
@@ -40,21 +40,13 @@ public class GameFrame
 			new StuffGen();
 			
 			// Make sure these don't throw any errors
-			PokemonInfo.loadPokemonInfo();
-			Attack.loadMoves();
-			PokemonEffect.loadEffects();
-			TeamEffect.loadEffects();
-			BattleEffect.loadEffects();
-			Ability.loadAbilities();
-			Item.loadItems();
+			loadAllTheThings();
 			
 			// Load all maps and test if all triggers and NPC data is correct.
 			Game g = new Game();
 			g.data.testMaps(new CharacterData(g));
 			
 			System.out.println("GEN GEN GEN");
-			
-//			new TeamPlanner();
 			
 			return;
 		}
@@ -65,6 +57,7 @@ public class GameFrame
 
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
+		
 		frame.getContentPane().add(gui);
 		frame.pack();
 		frame.setVisible(true);
@@ -76,6 +69,18 @@ public class GameFrame
 		gameThread.start();
 
 		gui.requestFocusInWindow();
+	}
+	
+	private static void loadAllTheThings()
+	{
+		PokemonInfo.loadPokemonInfo();
+		Attack.loadMoves();
+		PokemonEffect.loadEffects();
+		TeamEffect.loadEffects();
+		BattleEffect.loadEffects();
+		Ability.loadAbilities();
+		Item.loadItems();
+		DrawMetrics.loadFontMetricsMap();
 	}
 
 	private static class GameLoop implements Runnable
@@ -91,11 +96,15 @@ public class GameFrame
 		{
 			gui = canvas;
 			control = new InputControl();
+			
 			canvas.addKeyListener(control);
 			canvas.addMouseListener(control);
 			canvas.addMouseMotionListener(control);
 
-			if (DEV_MODE) console = new DevConsole();
+			if (DEV_MODE)
+			{
+				console = new DevConsole();
+			}
 		}
 
 		public void run()
@@ -103,18 +112,19 @@ public class GameFrame
 			gui.createBufferStrategy(2);
 			strategy = gui.getBufferStrategy();
 
-			// load font thingy
+			// Load font thingy
 			Graphics g = strategy.getDrawGraphics();
-			g.setColor(Color.black);
-			g.fillRect(0, 0, 800, 600);
-			g.setColor(Color.white);
-			g.setFont(Global.getFont(72));
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+			
+			g.setColor(Color.WHITE);
+			DrawMetrics.setFont(g, 72);
 			g.drawString("LOADING...", 30, 570);
 			g.dispose();
 			strategy.show();
 
 			game = new Game();
-			PokemonInfo.loadPokemonInfo();
+			loadAllTheThings();
 
 			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener()
 			{
@@ -126,15 +136,21 @@ public class GameFrame
 				{
 					long time = System.currentTimeMillis();
 					long dt = time - prevTime;
+					
 					fpsTime += dt;
 					prevTime = time;
+					
 					if (fpsTime > 1000)
 					{
 						fpsTime %= 1000;
 						frame.setTitle("Pokemon++          FPS:" + frameCount);
 						frameCount = 1;
 					}
-					else frameCount++;
+					else 
+					{
+						frameCount++;
+					}
+					
 					drawFrame((int) dt);
 				}
 			});
@@ -143,7 +159,7 @@ public class GameFrame
 			fpsTimer.start();
 		}
 
-		void drawFrame(int dt)
+		private void drawFrame(int dt)
 		{
 			game.update(dt, control);
 

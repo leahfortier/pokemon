@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.Button;
+import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -17,6 +18,7 @@ import main.Game.ViewMode;
 import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
+import main.Save;
 import map.AreaData;
 import map.AreaData.WeatherState;
 import map.DialogueSequence;
@@ -32,7 +34,16 @@ import sound.SoundTitle;
 import trainer.CharacterData;
 import battle.Battle;
 
-public class MapView extends View{
+public class MapView extends View
+{
+	private static final String[] MENU_TEXT = {"Pok\u00E9dex", "Pok\u00E9mon", "Bag", "Player___", "Options", "Save", "Exit", "Return"};
+	
+	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
+	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
+	
+	private static final int[] ddx = {0, -1, 0};
+	private static final int[] ddy = {0, 0, -1};
+	
 	public String currentMapName;
 	public AreaData currentArea;
 	public MapData currentMap;
@@ -43,8 +54,6 @@ public class MapView extends View{
 	private ArrayList<Entity> entityList;
 	private LinkedList<Entity> removeQueue;
 	private PlayerEntity playerEntity;
-	private int[] ddx = {0, -1, 0};
-	private int[] ddy = {0, 0, -1};
 	
 	private DialogueSequence currentDialogue;
 	private int dialogueSelection;
@@ -52,32 +61,31 @@ public class MapView extends View{
 	private float drawX, drawY;
 	
 	private int areaDisplayTime;
-	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	
 	private Battle battle;
 	private boolean seenWild;
 	private int battleAnimationTime;
-	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
+	
 	private BufferedImage battleImageSlideRight;
 	private BufferedImage battleImageSlideLeft;
 	
-	
-	private enum VisualState{
+	private enum VisualState
+	{
 		MESSAGE, MENU, MAP, BATTLE_ANIMATION
 	};
-	VisualState state;
 	
-	WeatherState weatherState;
+	private VisualState state;
+	private WeatherState weatherState;
 	
-	int selectedButton;
-	Button[] menuButtons;
-	String[] menuText = {"Pok\u00E9dex", "Pok\u00E9mon", "Bag", "Player___", "Options", "Save", "Exit", "Return"};
+	private int selectedButton;
+	private final Button[] menuButtons;
 	
 	private int[] rainHeight;
 	private Random rand = new Random();
 	private int lightningFrame;
 	
-	public MapView(){
+	public MapView()
+	{
 		currentMapName = "";
 		currentArea = null;
 		currentDialogue = null;
@@ -89,15 +97,23 @@ public class MapView extends View{
 		
 		weatherState = WeatherState.NORMAL;
 		
-		menuButtons = new Button[8];
-		for (int i = 0; i < menuButtons.length; i++) //RIGHT, UP, LEFT, DOWN
-			menuButtons[i] = new Button(558, 72*i + 10, 240, 70, Button.HoverAction.ARROW, new int[] {-1, i==0 ? 7 : i - 1, -1, i==7 ? 0 : i + 1});
+		menuButtons = new Button[MENU_TEXT.length];
+		
+		for (int i = 0; i < menuButtons.length; i++)
+		{
+			menuButtons[i] = new Button(558, 72*i + 10, 240, 70, Button.HoverAction.ARROW, 
+					new int[] {	Button.NO_TRANSITON, // Right 
+								Button.basicUp(i, menuButtons.length), // Up
+								Button.NO_TRANSITON, // Left
+								Button.basicDown(i, menuButtons.length) // Down
+							});
+		}
 	}
 	
 	public void draw(Graphics g, GameData data) 
 	{
 		g.setColor(Color.BLACK);
-		g.fillRect(0,0,Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
 		TileSet mapTiles = data.getMapTiles();
 		
@@ -106,8 +122,8 @@ public class MapView extends View{
 			for (int x = startX; x < endX; x++)
 			{
 				int bgTile = currentMap.getBgTile(x,y);
-				int dx = (int) (drawX) + x*Global.TILESIZE;
-				int dy = (int) (drawY) + y*Global.TILESIZE;
+				int dx = (int)drawX + x*Global.TILESIZE;
+				int dy = (int)drawY + y*Global.TILESIZE;
 				
 				if ((bgTile>>24) != 0)
 				{
@@ -176,11 +192,12 @@ public class MapView extends View{
 				BufferedImage bg = data.getBattleTiles().getTile(3);
 				g.drawImage(bg, 0, 439, null);
 				
-				g.setFont(Global.getFont(30));
-				g.setColor(Color.white);
-				//g.drawString(currentDialogue.text, 40, 490);
+				DrawMetrics.setFont(g, 30);
+				g.setColor(Color.WHITE);
 				
-				int h = Global.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
+				int height = DrawMetrics.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
+				
+				// TODO: wtf is this variable name
 				int i1 = 0;
 				
 				for (String choice: currentDialogue.choices)
@@ -189,20 +206,20 @@ public class MapView extends View{
 						break;
 				
 					if (i1 == dialogueSelection)
-						g.fillOval(50, h + i1*36, 10, 10);
+						g.fillOval(50, height + i1*36, 10, 10);
 					
-					g.drawString(choice, 80, h + (i1++)*36);
+					g.drawString(choice, 80, height + (i1++)*36);
 				}
 				break;
 			case MENU:
 				TileSet menuTiles = data.getMenuTiles();
 				
 				g.drawImage(menuTiles.getTile(1), 527, 0, null);
-				g.setFont(Global.getFont(40));
+				DrawMetrics.setFont(g, 40);
 				g.setColor(Color.black);
 				
-				for (int i = 0; i < menuText.length; i++)
-					g.drawString(menuText[i], 558, 59 + 72*i);
+				for (int i = 0; i < MENU_TEXT.length; i++)
+					g.drawString(MENU_TEXT[i], 558, 59 + 72*i);
 				
 				for (Button b: menuButtons)
 					b.draw(g);
@@ -272,41 +289,44 @@ public class MapView extends View{
 	{
 		int fontSize = 30;
 		
-		int width = (currentArea.getAreaName().length() + 3) * fontSize/2;
-		int height = fontSize + fontSize/2;
+		int insideWidth = DrawMetrics.getSuggestedWidth(currentArea.getAreaName(), fontSize);
+		int insideHeight = DrawMetrics.getSuggestedHeight(fontSize);
 		
 		int borderSize = 2;
 		int graySize = 10;
 		
+		int totalWidth = borderSize*2 + graySize*2 + insideWidth;
+		int totalHeight = borderSize*2 + graySize*2 + insideHeight;
+		
 		int yValue = 0;
 		
-		//Calculate exit location
+		// Calculate exit location
 		if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN < .2)
 		{
-			yValue = -1*(int)(((AREA_NAME_ANIMATION_LIFESPAN - areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (height + (2*graySize)));
+			yValue = -1*(int)(((AREA_NAME_ANIMATION_LIFESPAN - areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (insideHeight + (2*graySize)));
 		}
-		
-		//Calculate entrance location
+		// Calculate entrance location
 		else if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN > .8)
 		{
-			yValue = -1*(int)(((areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (height + (2*graySize)));
+			yValue = -1*(int)(((areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (insideHeight + 2*graySize));
 		}
 		
-		//Black border
+		// Black border
 		g.setColor(Color.BLACK);
-		g.fillRect(0, yValue, width + (2*graySize), height + (2*graySize));
+		g.fillRect(0, yValue, totalWidth, totalHeight);
 		
-		//Gray border
+		// Gray border
 		g.setColor(new Color(0x333333));
-		g.fillRect(borderSize, yValue + borderSize, width + (2*graySize) - (2*borderSize), height + (2*graySize) - (2*borderSize));
+		g.fillRect(borderSize, yValue + borderSize, insideWidth + 2*graySize, insideHeight + 2*graySize);
 		
-		//Lighter gray inside
+		// Lighter gray inside
 		g.setColor(new Color(0x666666));
-		g.fillRect(graySize, yValue + graySize, width, height);
+		g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
 		
-		g.setFont(Global.getFont(fontSize));
-		g.setColor(Color.white);
-		Global.drawStringCenterX(currentArea.getAreaName(), (width + (2*graySize))/2, yValue + fontSize/3 + graySize + height/2, g);
+		g.setColor(Color.WHITE);
+		DrawMetrics.setFont(g, fontSize);
+		
+		DrawMetrics.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
 	}
 	
 	// Display battle intro animation.
@@ -318,7 +338,7 @@ public class MapView extends View{
 		float moveInAnimationPercentage;
 		float fadeOutPercentage = 0.2f;
 		
-		if(battle.isWildBattle())
+		if (battle.isWildBattle())
 		{
 			drawHeighRight = drawHeightLeft = Global.GAME_SIZE.height * 5 / 8;
 			drawHeightLeft -= battleImageSlideLeft.getHeight()/2;
@@ -344,19 +364,19 @@ public class MapView extends View{
 			int dist = -battleImageSlideRight.getWidth()/2 -drawWidth;
 			dist = (int)(dist * normalizedTime);
 			
-			g.drawImage(battleImageSlideLeft, drawWidth-battleImageSlideLeft.getWidth()/2 + dist, drawHeightLeft, null);
+			g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2 + dist, drawHeightLeft, null);
 			
 			dist = Global.GAME_SIZE.width;
 			dist = (int)(dist * normalizedTime);
 			
-			g.drawImage(battleImageSlideRight, drawWidth-battleImageSlideRight.getWidth()/2 + dist, drawHeighRight, null);
+			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2 + dist, drawHeighRight, null);
 		}
 		
 		// Hold images
 		else 
 		{
-			g.drawImage(battleImageSlideLeft, drawWidth-battleImageSlideLeft.getWidth()/2, drawHeightLeft, null);
-			g.drawImage(battleImageSlideRight, drawWidth-battleImageSlideRight.getWidth()/2, drawHeighRight, null);
+			g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2, drawHeightLeft, null);
+			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2, drawHeighRight, null);
 			
 			//Fade to black before battle appears.
 			if (battleAnimationTime < BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage)
@@ -373,7 +393,7 @@ public class MapView extends View{
 	public void update(int dt, InputControl input, Game game) 
 	{
 		CharacterData character = game.charData;
-		menuText[3] = character.getName();
+		MENU_TEXT[3] = character.getName();
 
 		if (!currentMapName.equals(character.mapName) || character.mapReset)
 		{
@@ -512,7 +532,7 @@ public class MapView extends View{
 						break;
 					case 5: //save
 						// TODO: Question user if they would like to save first.
-						game.charData.save();
+						Save.save(game.charData);
 						currentDialogue = game.data.getDialogue("savedGame");
 						state = VisualState.MESSAGE;
 						break;
@@ -557,13 +577,13 @@ public class MapView extends View{
 				// TODO: Move to movable entity
 				for (Direction direction : Direction.values())
 				{
-					int x = playerEntity.charX - direction.dx*dist;
-					int y = playerEntity.charY - direction.dy*dist;
+					int x = playerEntity.getX() - direction.dx*dist;
+					int y = playerEntity.getY() - direction.dy*dist;
 				
 					if (!currentMap.inBounds(x, y))
 						continue;
 					
-					if (entities[x][y] != null && entities[x][y] instanceof NPCEntity && ((NPCEntity)entities[x][y]).isFacing(playerEntity.charX, playerEntity.charY) && ((NPCEntity)entities[x][y]).getWalkToPlayer())
+					if (entities[x][y] != null && entities[x][y] instanceof NPCEntity && ((NPCEntity)entities[x][y]).isFacing(playerEntity.getX(), playerEntity.getY()) && ((NPCEntity)entities[x][y]).getWalkToPlayer())
 					{
 						NPCEntity npc = (NPCEntity)entities[x][y];
 						if (!npc.getWalkingToPlayer() && game.data.getTrigger(npc.getWalkTrigger()).isTriggered(game.charData))
@@ -594,7 +614,7 @@ public class MapView extends View{
 		{
 			Entity e = removeQueue.removeFirst();
 			entityList.remove(e);
-			entities[e.charX][e.charY] = null;
+			entities[e.getX()][e.getY()] = null;
 		}
 		
 		//CharacterData has a message to display and no current message is being displayed.
@@ -664,12 +684,13 @@ public class MapView extends View{
 	
 	private void loadBattleImages(Game game)
 	{
-		if(battle.isWildBattle())
+		if (battle.isWildBattle())
 		{
 			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x300 + currentArea.getTerrain().ordinal());
 			
 			ActivePokemon p = battle.getOpponent().front();
-			battleImageSlideRight = game.data.getPokemonTilesLarge().getTile(p.getPokemonInfo().getImageNumber(p.isShiny()));
+			battleImageSlideRight = game.data.getPokemonTilesLarge().getTile(p.getImageIndex());
+			
 			if(seenWild)
 			{
 				battleImageSlideRight = Global.colorImage(battleImageSlideRight, new float[] {0,0,0,1}, new float[] {0,0,0,0});
@@ -684,7 +705,7 @@ public class MapView extends View{
 	
 	public void addEntity(Entity e)
 	{
-		entities[e.charX][e.charY] = e;
+		entities[e.getX()][e.getY()] = e;
 		entityList.add(e);
 	}
 	

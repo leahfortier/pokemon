@@ -76,7 +76,7 @@ public enum Type implements Serializable
 		invokees.add(attacking.getAbility());
 		
 		Type[] originalType = defending.getType(b);
-		Type[] defendingType = (Type[])Global.updateInvoke(1, invokees.toArray(), AdvantageChanger.class, "getAdvantageChange", moveType, originalType.clone());
+		Type[] defendingType = (Type[])Battle.updateInvoke(1, invokees.toArray(), AdvantageChanger.class, "getAdvantageChange", moveType, originalType.clone());
 		
 		// If nothing was updated, do special case check stupid things for fucking levitation which fucks everything up
 		if (defendingType[0] == originalType[0] && defendingType[1] == originalType[1] && moveType == GROUND)
@@ -99,7 +99,7 @@ public enum Type implements Serializable
 		
 		// Get the advantage and apply any multiplier that may come from the attack
 		double adv = getBasicAdvantage(moveType, defendingType[0])*getBasicAdvantage(moveType, defendingType[1]);
-		adv = Global.multiplyInvoke(adv, new Object[] {attacking.getAttack()}, AdvantageMultiplier.class, "multiplyAdvantage", moveType, defendingType);	
+		adv = Battle.multiplyInvoke(adv, new Object[] {attacking.getAttack()}, AdvantageMultiplier.class, "multiplyAdvantage", moveType, defendingType);	
 		
 		return adv;
 	}

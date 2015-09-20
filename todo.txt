@@ -70,6 +70,28 @@ Pokemon that go out of bounds:
 	Xerneas
 	Aurorus
 	
-	We need to do whatever thing we did for levitating Pokemon before so it doesn't look like they're sitting on the ground... Wait actually we never did that -- that needs to happends srsly
+	We need to do whatever thing we did for levitating Pokemon before so it doesn't look like they're sitting on the ground... Wait actually we never did that -- that needs to happens srsly
 	
 Change Machoke's method of evolution to a belt
+
+Make comments available for generator
+Private generator methods
+Disallow interfaces from input files
+remove Override/interface fields
+add optional fields
+allow hidden interfaces -- AddHiddenField (should add the field but not add the interfaces associated with that field)
+
+Get spacing fixed for switch statements
+Find a way to have multiple fields that are multiple words long:
+	Combine switchItem and switchItemMessage
+	combine abilityChange and AbilityMessage
+	combine opptrappingeffect and message
+	combine attackselection and message
+	name change set and get
+	status prevent and message
+	stat protect and message
+	bracing and message
+	damage blocker and alternate effect
+	
+make sure default methods still work properly like critstage and groundedEffect
+same with interfaces with no methods

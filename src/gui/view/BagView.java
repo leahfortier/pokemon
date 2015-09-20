@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.Button;
+import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 import item.Bag;
@@ -21,7 +22,6 @@ import java.util.Set;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
 import main.Type;
@@ -41,7 +41,7 @@ public class BagView extends View
 	private static final int ITEMS = PARTY + Trainer.MAX_POKEMON;
 	private static final int MOVES = ITEMS + ITEMS_PER_PAGE;
 	private static final int RETURN = NUM_BUTTONS - 1;
-	private static final int DISCARD = NUM_BUTTONS - 2;
+	private static final int TAKE = NUM_BUTTONS - 2;
 	private static final int USE = NUM_BUTTONS - 3;
 	private static final int GIVE = NUM_BUTTONS - 4;
 	private static final int RIGHT_ARROW = NUM_BUTTONS - 5;
@@ -52,16 +52,10 @@ public class BagView extends View
 	private final int[] secondaryColorx = {184, 308, 308, 124};
 	private final int[] secondaryColory = {0, 0, 61, 61};
 	
-	private final String[] useNames = {"Give", "Use", "Take"}; // TODO: Change take back to Discard
-	
 	private int pageNum;
 	private int selectedTab;
 	private int selectedButton;
 	private String message;
-	
-	private boolean giveClicked;
-	private boolean useClicked;
-	private boolean takeClicked;
 
 	private BagState state;
 	private Item selectedItem;
@@ -69,20 +63,109 @@ public class BagView extends View
 	private CharacterData player;
 	
 	private Button[] buttons;
+	
 	private Button[] tabButtons;
 	private Button[] partyButtons;
 	private Button[] moveButtons;
-	private Button giveButton;
-	private Button useButton;
-	private Button discardButton;
 	private Button[] itemButtons;
-	private Button leftButton;
-	private Button rightButton;
-	private Button returnButton;
 		
 	private enum BagState
 	{
 		ITEM_SELECT, POKEMON_SELECT, MOVE_SELECT;
+	}
+	
+	// TODO: There is a really annoying bug that sometimes happens where two buttons have hoverAction at the same time -- mainly one of the useButtons and generally the first Pokemon in the party, but the useButton is the active one and the party one just looks active and is really confusing
+	private enum UseState
+	{
+		GIVE("Give", BagView.GIVE, new UseButton() 
+				{
+					public void useButton(UseState state, BagView bagView, ActivePokemon p)
+					{
+						bagView.addMessage(bagView.player.getBag().giveItem(bagView.player, p, bagView.selectedItem));
+						state.deactivate(bagView);
+					}
+				}), 
+		USE("Use", BagView.USE, new UseButton() 
+				{
+					public void useButton(UseState state, BagView bagView, ActivePokemon p) 
+					{
+						if (p.isEgg())
+						{
+							UseState.addUseMessages(bagView, false, p);
+						}
+						else if (bagView.selectedItem instanceof PokemonUseItem) 
+						{
+							Bag bag = bagView.player.getBag(); 
+							UseState.addUseMessages(bagView, bag.useItem(bagView.player, bagView.selectedItem, p), p);
+						}
+						else if (bagView.selectedItem instanceof MoveUseItem)
+						{
+							bagView.selectedPokemon = p;
+							bagView.state = BagState.MOVE_SELECT;
+							
+							bagView.updateActiveButtons();
+						}
+					}
+				}),
+		// TODO: Change back to discard -- maybe have discard when over an item, and take when over a Pokemon
+		TAKE("Take", BagView.TAKE, new UseButton() 
+				{	
+					public void useButton(UseState state, BagView bagView, ActivePokemon p)
+					{
+						bagView.addMessage(bagView.player.getBag().takeItem(bagView.player, p));
+						state.deactivate(bagView);
+					}
+				});
+		
+		private static final UseState[] USE_STATE_VALUES = UseState.values();
+		
+		private final String displayName;
+		private final int buttonIndex;
+		private final UseButton useButton;
+		
+		private boolean clicked;
+		
+		private UseState(String displayName, int buttonIndex, UseButton useButton)
+		{
+			this.displayName = displayName;
+			this.buttonIndex = buttonIndex;
+			this.useButton = useButton;
+		}
+		
+		private void deactivate(BagView bagView) 
+		{
+			this.clicked = false;
+			bagView.selectedButton = this.buttonIndex;
+			bagView.state = BagState.ITEM_SELECT;
+			
+			if (bagView.player.getBag().getQuantity(bagView.selectedItem) == 0) 
+			{
+				bagView.changeCategory(bagView.selectedTab);
+			}
+			
+			bagView.updateActiveButtons();
+		}
+		
+		private static void addUseMessages(BagView bagView, boolean success, ActivePokemon p)
+		{	
+			Item selected = bagView.selectedItem;
+			
+			if (success)
+			{
+				bagView.addMessage(bagView.player.getName() + " used the " + selected.getName() + "! " + ((UseItem)selected).getSuccessMessage(p));
+			}
+			else
+			{
+				bagView.addMessage("It won't have any effect.");	
+			}
+			
+			UseState.USE.deactivate(bagView);
+		}
+		
+		private static interface UseButton
+		{
+			public void useButton(UseState state, BagView bagView, ActivePokemon p);
+		}
 	}
 
 	public BagView(CharacterData data)
@@ -108,7 +191,7 @@ public class BagView extends View
 			buttons[PARTY + i] = partyButtons[i] = new Button(72, 122 + 69*i, 308, 61, Button.HoverAction.BOX,
 					new int[] {i < Trainer.MAX_POKEMON/3 ? GIVE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Right
 							i == 0 ? 0 : PARTY + i - 1, // Up
-							i < Move.MAX_MOVES ? MOVES + i : (i < Trainer.MAX_POKEMON/3 ? DISCARD : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN)), // Left
+							i < Move.MAX_MOVES ? MOVES + i : (i < Trainer.MAX_POKEMON/3 ? TAKE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN)), // Left
 							i == Trainer.MAX_POKEMON -1 ? selectedTab : PARTY + i + 1}); // Down
 		}
 		
@@ -118,7 +201,7 @@ public class BagView extends View
 			buttons[MOVES + i] = moveButtons[i] = new Button(72, 122 + 69*i, 308, 61, Button.HoverAction.BOX, 
 					new int[] {PARTY + i, // Right
 							i == 0 ? 0 : MOVES + i - 1, // Up
-							i < Trainer.MAX_POKEMON/3 ? DISCARD : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Left, needs to behave like party buttons
+							i < Trainer.MAX_POKEMON/3 ? TAKE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Left, needs to behave like party buttons
 							i == 3 ? selectedTab : MOVES + i + 1}); // Down
 		}
 		
@@ -135,37 +218,19 @@ public class BagView extends View
 			}
 		}
 		
-		buttons[LEFT_ARROW] = leftButton = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] {RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN});
-		buttons[RIGHT_ARROW] = rightButton = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] {PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN});
+		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] {RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN});
+		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] {PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN});
 		
-		buttons[GIVE] = giveButton = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] {USE, selectedTab, PARTY, ITEMS});
-		buttons[USE] = useButton = new Button(518, 193, 110, 38, Button.HoverAction.BOX, new int[] {DISCARD, selectedTab, GIVE, ITEMS});
-		buttons[DISCARD] = discardButton = new Button(628, 193, 110, 38, Button.HoverAction.BOX, new int[] {PARTY, selectedTab, USE, ITEMS + 1});
+		buttons[GIVE] = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] {USE, selectedTab, PARTY, ITEMS});
+		buttons[USE] = new Button(518, 193, 110, 38, Button.HoverAction.BOX, new int[] {TAKE, selectedTab, GIVE, ITEMS});
+		buttons[TAKE] = new Button(628, 193, 110, 38, Button.HoverAction.BOX, new int[] {PARTY, selectedTab, USE, ITEMS + 1});
 		
-		buttons[RETURN] = returnButton = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] {PARTY, LEFT_ARROW, PARTY, selectedTab});
+		buttons[RETURN] = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] {PARTY, LEFT_ARROW, PARTY, selectedTab});
 		
 		movedToFront(null);
 	}
 	
-	private void addUseMessages(boolean success, ActivePokemon p)
-	{	
-		if (success)
-		{
-			addMessage(player.getName() + " used the " + selectedItem.getName() + "! " + ((UseItem)selectedItem).getSuccessMessage(p));
-		}
-		else
-		{
-			addMessage("It won't have any effect.");	
-		}
-		
-		useClicked = false;
-		state = BagState.ITEM_SELECT;
-		
-		if (player.getBag().getQuantity(selectedItem) == 0) 
-		{
-			changeCategory(selectedTab);
-		}
-	}
+	
 
 	public void update(int dt, InputControl input, Game game)
 	{
@@ -202,7 +267,7 @@ public class BagView extends View
 			{
 				Move m = selectedPokemon.getActualMoves().get(i);
 				
-				addUseMessages(player.getBag().useMoveItem(selectedItem, selectedPokemon, m), selectedPokemon);
+				UseState.addUseMessages(this, player.getBag().useMoveItem(selectedItem, selectedPokemon, m), selectedPokemon);
 			}
 		}
 		
@@ -210,48 +275,12 @@ public class BagView extends View
 		{
 			if (partyButtons[i].checkConsumePress())
 			{
-				ActivePokemon p = player.getTeam().get(i);
-				Bag bag = player.getBag();
-				
-				if (giveClicked)
+				for (UseState useState : UseState.USE_STATE_VALUES)
 				{
-					addMessage(bag.giveItem(player, p, selectedItem));
-					
-					giveClicked = false;
-					selectedButton = GIVE;
-					state = BagState.ITEM_SELECT;
-					
-					if (bag.getQuantity(selectedItem) == 0) 
+					if (useState.clicked)
 					{
-						changeCategory(selectedTab);
+						useState.useButton.useButton(useState, this, player.getTeam().get(i));
 					}
-					
-					updateActiveButtons();
-				}
-				else if (useClicked)
-				{			
-					if (p.isEgg())
-					{
-						addUseMessages(false, p);
-					}
-					else if (selectedItem instanceof PokemonUseItem) 
-					{
-						addUseMessages(bag.useItem(player, selectedItem, p), p);
-					}
-					else if (selectedItem instanceof MoveUseItem)
-					{
-						selectedPokemon = p;
-						state = BagState.MOVE_SELECT;
-					}
-					
-					updateActiveButtons();
-				}
-				else if (takeClicked)
-				{
-					addMessage(bag.takeItem(player, p));
-					takeClicked = false;
-					state = BagState.ITEM_SELECT;
-					updateActiveButtons();
 				}
 			}
 		}
@@ -272,60 +301,46 @@ public class BagView extends View
 			}
 		}
 		
-		if (giveButton.checkConsumePress())
+		// Check the use buttons
+		for (UseState useState : UseState.USE_STATE_VALUES)
 		{
-			if (!giveClicked) state = BagState.POKEMON_SELECT;
-			else state = BagState.ITEM_SELECT;
-			
-			giveClicked = !giveClicked;
-			useClicked = false;
-			takeClicked = false;
-			updateActiveButtons();
-		}
-		
-		if (useButton.checkConsumePress())
-		{
-			if (!useClicked) state = BagState.POKEMON_SELECT;
-			else state = BagState.ITEM_SELECT;
-			
-			useClicked = !useClicked;
-			giveClicked = false;
-			takeClicked = false;
-			updateActiveButtons();
-			
-			if (selectedItem instanceof TrainerUseItem)
+			if (buttons[useState.buttonIndex].checkConsumePress())
 			{
-				addUseMessages(player.getBag().useItem(selectedItem, player), null);
+				if (!useState.clicked) state = BagState.POKEMON_SELECT;
+				else state = BagState.ITEM_SELECT;
+				
+				useState.clicked = !useState.clicked;
+				
+				for (UseState otherState : UseState.USE_STATE_VALUES)
+				{
+					if (useState == otherState) continue;
+					otherState.clicked = false;
+				}
+				
+				updateActiveButtons();
+				
+				if (useState == UseState.USE && selectedItem instanceof TrainerUseItem)
+				{
+					UseState.addUseMessages(this, player.getBag().useItem(selectedItem, player), null);
+				}
 			}
 		}
 		
-		// Take has higher priority than discard so it is being implemented instead even though its location doesn't make sense
-		if (discardButton.checkConsumePress())
-		{
-			if (!takeClicked) state = BagState.POKEMON_SELECT;
-			else state = BagState.ITEM_SELECT;
-			
-			takeClicked = !takeClicked;
-			giveClicked = false;
-			useClicked = false;
-			updateActiveButtons();
-		}
-		
-		if (leftButton.checkConsumePress())
+		if (buttons[LEFT_ARROW].checkConsumePress())
 		{
 			if (pageNum == 0) pageNum = totalPages(list.size()) - 1; 
 			else pageNum--;
 			updateActiveButtons();
 		}
 		
-		if (rightButton.checkConsumePress())
+		if (buttons[RIGHT_ARROW].checkConsumePress())
 		{
 			if (pageNum == totalPages(list.size()) - 1) pageNum = 0;
 			else pageNum++;
 			updateActiveButtons();
 		}
 		
-		if (returnButton.checkConsumePress())
+		if (buttons[RETURN].checkConsumePress())
 		{
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
@@ -344,7 +359,6 @@ public class BagView extends View
 		TileSet partyTiles = data.getPartyTiles();
 		TileSet bagTiles = data.getBagTiles();
 		TileSet battleTiles = data.getBattleTiles();
-		String s;
 		
 		Bag bag = player.getBag();
 		List<ActivePokemon> team = player.getTeam();
@@ -362,46 +376,55 @@ public class BagView extends View
 		// Item Display
 		if (selectedItem != null)
 		{
-			// Grey out selected and inactive buttons
-			if (giveClicked) greyOut(g, giveButton, false);
-			if (useClicked) greyOut(g, useButton, false);
-			if (takeClicked) greyOut(g, discardButton, false);
-			if (!giveButton.isActive()) greyOut(g, giveButton, true);
-			if (!useButton.isActive()) greyOut(g, useButton, true);
-			if (!discardButton.isActive()) greyOut(g, discardButton, true);
+			for (UseState useState : UseState.USE_STATE_VALUES)
+			{
+				// Grey out selected buttons
+				if (useState.clicked)
+				{
+					buttons[useState.buttonIndex].greyOut(g, false);
+				}
+				
+				// Grey out inactive buttons
+				if (!buttons[useState.buttonIndex].isActive())
+				{
+					buttons[useState.buttonIndex].greyOut(g, true);
+				}
+			}
 
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItem.getIndex());
-			g.drawImage(img, 430 - img.getWidth()/2, 132 - img.getHeight()/2, null);
+			DrawMetrics.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
-			g.setFont(Global.getFont(20));
+			DrawMetrics.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
 			if (selectedItem.hasQuantity())
 			{
-				s = "x" + bag.getQuantity(selectedItem);
-				g.drawString(s, 726 - s.length()*10, 138);
+				DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(selectedItem), 726, 138);
 			}
 			
-			g.setFont(Global.getFont(14));
-			Global.drawWrappedText(g, selectedItem.getDesc(), 418, 156, 200, 5, 15);
+			DrawMetrics.setFont(g, 14);
+			DrawMetrics.drawWrappedText(g, selectedItem.getDesc(), 418, 156, 726 - buttons[GIVE].x);
 			
-			g.setFont(Global.getFont(20));
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
-			for (int i = 0; i < useNames.length; i++)
+			DrawMetrics.setFont(g, 20);
+			for (UseState useState : UseState.USE_STATE_VALUES)
 			{
-				g.drawString(useNames[i], 470 + 109*i - 14*useNames[i].length()/2, 193 + 25);
+				DrawMetrics.drawCenteredString(g, useState.displayName, buttons[useState.buttonIndex]);
 			}
 		}
 		
-		g.setFont(Global.getFont(12));
+		DrawMetrics.setFont(g, 12);
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
 		Set<Item> list = bag.getCategory(CATEGORIES[selectedTab]);
 		Iterator<Item> iter = list.iterator();
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) iter.next();
+		
+		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) 
+			iter.next();
+		
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++)
 		{
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++)
@@ -409,17 +432,14 @@ public class BagView extends View
 				g.translate(itemButtons[k].x, itemButtons[k].y);
 				Item item = iter.next();
 				
-				g.drawImage(tiles.getTile(0x26), 0,0, null);
-				
-				BufferedImage img = itemTiles.getTile(item.getIndex());
-				g.drawImage(img, 14 - img.getWidth()/2, 14-img.getHeight()/2, null);
+				g.drawImage(tiles.getTile(0x26), 0, 0, null);
+				DrawMetrics.drawCenteredImage(g, itemTiles.getTile(item.getIndex()), 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
 				
 				if (item.hasQuantity())
 				{
-					s = "x" + bag.getQuantity(item);
-					g.drawString(s, 142 - s.length()*7, 18);	
+					DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
 				}
 				
 				g.translate(-itemButtons[k].x, -itemButtons[k].y);
@@ -427,12 +447,11 @@ public class BagView extends View
 		}
 		
 		// Draw page numbers
-		g.setFont(Global.getFont(16));
-		s = (pageNum + 1) + "/" + totalPages(list.size());
-		g.drawString(s, Global.centerX(s, 573, 16), 466);
+		DrawMetrics.setFont(g, 16);
+		DrawMetrics.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(list.size()), 573, 466);
 		
 		// Left and Right arrows
-		View.drawArrows(g, leftButton, rightButton);
+		View.drawArrows(g, buttons[LEFT_ARROW], buttons[RIGHT_ARROW]);
 		
 		// Draw moves
 		if (state == BagState.MOVE_SELECT)
@@ -441,8 +460,9 @@ public class BagView extends View
 			
 			for (int i = 0; i < moveList.size(); i++)
 			{
-				Move m = moveList.get(i);
 				g.translate(moveButtons[i].x, moveButtons[i].y);
+				
+				Move m = moveList.get(i);
 				
 				g.setColor(m.getAttack().getActualType().getColor());
 				g.fillRect(0, 0, moveButtons[i].width, moveButtons[i].height);
@@ -453,11 +473,11 @@ public class BagView extends View
 				g.drawImage(battleTiles.getTile(m.getAttack().getCategory().getImageNumber()), 254, 33, null);
 				
 				g.setColor(Color.BLACK);
-				g.setFont(Global.getFont(14));
-				g.drawString("PP: " + m.getPP() + "/" + m.getMaxPP(), 166, moveButtons[i].height/2 + 5);
+				DrawMetrics.setFont(g, 14);
+				g.drawString("PP: " + m.getPP() + "/" + m.getMaxPP(), 166, moveButtons[i].height/2 + 5); // TODO: Center the height properly
 
 				g.setColor(Color.BLACK);
-				g.setFont(Global.getFont(20));
+				DrawMetrics.setFont(g, 20);
 				g.drawString(m.getAttack().getName(), 20, 38);
 				
 				g.translate(-moveButtons[i].x, -moveButtons[i].y);
@@ -480,40 +500,41 @@ public class BagView extends View
 				
 				g.drawImage(tiles.getTile(0x25), 0, 0, null);
 				
-				BufferedImage img = partyTiles.getTile(p.isEgg() ? 0x10000 : p.getPokemonInfo().getNumber());
-				g.drawImage(img, 30 - img.getWidth()/2, 30 - img.getHeight()/2, null);
+				BufferedImage img = partyTiles.getTile(p.getTinyImageIndex());
+				DrawMetrics.drawCenteredImage(g, img, 30, 30); // TODO: This looks slightly off
+				
+				g.setColor(Color.BLACK);
+				DrawMetrics.setFont(g, 14);
 				
 				if (p.isEgg())
 				{
-					g.setColor(Color.BLACK);
-					g.setFont(Global.getFont(14));
 					g.drawString(p.getActualName(), 50, 22);	
 				}
 				else
 				{
-					g.setColor(Color.BLACK);
-					g.setFont(Global.getFont(14));
+					// Name, Gender, and Level
 					g.drawString(p.getActualName() + " " + p.getGender().getCharacter(), 50, 22);
 					g.drawString("Lv" + p.getLevel(), 153, 22);
-					s = p.getStatus().getType().getName();
-					g.drawString(s, Global.rightX(s, 293, 14), 22);
 					
+					// Status condition
+					DrawMetrics.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
+					
+					// Draw HP Box
 					g.fillRect(50, 26, 244, 11);
 					g.setColor(Color.WHITE);
 					g.fillRect(52, 28, 240, 7);
-					
 					g.setColor(p.getHPColor());
 					g.fillRect(52, 28, (int)(p.getHPRatio()*240), 7);
 					
 					g.setColor(Color.BLACK);
-					g.setFont(Global.getFont(12));
+					DrawMetrics.setFont(g, 12);
+					
 					g.drawString(p.getActualHeldItem().getName(), 50, 47);
-					s = p.getHP() + "/" + p.getMaxHP();
-					g.drawString(s, Global.rightX(s, 293, 12), 47);
+					DrawMetrics.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
 					
 					if (p.hasStatus(StatusCondition.FAINTED))
 					{
-						g.setColor(new Color(0, 0, 0, 128));
+						g.setColor(new Color(0, 0, 0, 128)); // TODO: Look if this color appears in multiple place and see if it should be a constant
 						g.fillRect(0, 0, partyButtons[i].width, partyButtons[i].height);
 					}	
 				}
@@ -523,15 +544,16 @@ public class BagView extends View
 		}
 		
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(20));
+		DrawMetrics.setFont(g, 20);
+		
 		g.drawImage(tiles.getTile(0x27), 410, 500, null);
-		g.drawString("Return", Global.centerX("Return", 573, 20), 525);
+		DrawMetrics.drawCenteredWidthString(g, "Return", 573, 525);
 		
 		for (int i = 0; i < CATEGORIES.length; i++)
 		{
 			g.translate(tabButtons[i].x, tabButtons[i].y);
 			
-			g.setFont(Global.getFont(14));
+			DrawMetrics.setFont(g, 14);
 			g.setColor(CATEGORIES[i].getColor());
 			g.fillRect(0, 0, tabButtons[i].width, tabButtons[i].height);
 			
@@ -541,7 +563,7 @@ public class BagView extends View
 			g.setColor(Color.BLACK);
 			
 			BufferedImage img = bagTiles.getTile(CATEGORIES[i].getImageNumber());
-			g.drawImage(img, 16 - img.getWidth()/2, 26 - img.getHeight()/2, null);
+			DrawMetrics.drawCenteredImage(g, img, 16, 26);
 			g.drawString(CATEGORIES[i].getName(), 30, 30);
 			
 			g.translate(-tabButtons[i].x, -tabButtons[i].y);
@@ -550,10 +572,10 @@ public class BagView extends View
 		if (message != null)
 		{
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			g.setFont(Global.getFont(30));
 			g.setColor(Color.WHITE);
 			
-			Global.drawWrappedText(g, message, 30, 490, 750);
+			DrawMetrics.setFont(g, 30);
+			DrawMetrics.drawWrappedText(g, message, 30, 490, 750);
 		}
 		else
 		{
@@ -591,14 +613,6 @@ public class BagView extends View
 		return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
 	}
 	
-	private void greyOut(Graphics g, Button b, boolean totesBlacks)
-	{
-		Color temp = g.getColor();
-		g.setColor(totesBlacks ? Color.BLACK : g.getColor().darker());
-		g.fillRect(b.x, b.y, b.width, b.height);
-		g.setColor(temp);
-	}
-	
 	private void addMessage(String message)
 	{
 		this.message = message;
@@ -623,7 +637,7 @@ public class BagView extends View
 			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
 		}
 		
-		giveButton.setActive(selectedItem instanceof HoldItem);
-		useButton.setActive(selectedItem instanceof UseItem);
+		buttons[GIVE].setActive(selectedItem instanceof HoldItem);
+		buttons[USE].setActive(selectedItem instanceof UseItem);
 	}
 }

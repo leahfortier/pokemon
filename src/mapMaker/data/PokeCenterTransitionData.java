@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
-import main.Global;
+import main.FileIO;
 import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;
 import map.triggers.Trigger;
@@ -40,7 +40,7 @@ public class PokeCenterTransitionData {
 		
 		pokeCenterTransitionFile = new File(mapMaker.root.getPath() + MapMaker.FILE_SLASH + pokeCenterTransitionTriggersFile);
 		
-		String fileText = Global.readEntireFile(pokeCenterTransitionFile, false);
+		String fileText = FileIO.readEntireFile(pokeCenterTransitionFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
 		while (m.find())
 		{

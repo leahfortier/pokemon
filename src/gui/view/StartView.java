@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -10,6 +11,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.InputControl;
+import main.Namesies;
 import main.InputControl.Control;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;
@@ -131,7 +133,7 @@ public class StartView extends View
 		
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
 		
-		g.setFont(Global.getFont(30));
+		DrawMetrics.setFont(g, 30);
 		g.setColor(Color.WHITE);
 		
 		switch (state)
@@ -140,7 +142,7 @@ public class StartView extends View
 				g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);
 				if (ditto)
 				{
-					g.drawImage(pokemonTiles.getTile(PokemonInfo.getImageNumber(132, false)), 270, 255, null);
+					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(Namesies.DITTO_POKEMON).getImageNumber(false)), 270, 255, null);
 				}
 				break;
 			case NAME:
@@ -161,7 +163,8 @@ public class StartView extends View
 		if (message != null)
 		{
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			Global.drawWrappedText(g, message, 30, 490, 750);
+			DrawMetrics.setFont(g, 30);
+			DrawMetrics.drawWrappedText(g, message, 30, 490, 750);
 		}
 	}
 

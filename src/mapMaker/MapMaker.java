@@ -59,7 +59,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
-import main.Global;
+import main.FileIO;
 import map.AreaData.TerrainType;
 import map.AreaData.WeatherState;
 import map.entity.NPCEntityData;
@@ -710,7 +710,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		
 		if (areaIndexFile.exists()) 
 		{	
-			String fileText = Global.readEntireFile(areaIndexFile, false);
+			String fileText = FileIO.readEntireFile(areaIndexFile, false);
 			Matcher m = mapAreaPattern.matcher(fileText);
 			
 			while (m.find())

@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.Button;
+import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -28,14 +29,15 @@ public class PartyView extends View
 	private static final int RETURN = NUM_BUTTONS - 1;
 	private static final int SWITCH = NUM_BUTTONS - 2;
 	
-	private CharacterData charData;
+	private final CharacterData charData;
 	private final int[] primaryColorx = {41, 633, 167,  41};
 	private final int[] primaryColory = {93,  93, 559, 559};
 	private final int[] secondaryColorx = {633, 759, 759, 167};
 	private final int[] secondaryColory = { 93,  93, 559, 559};
 	
-	private Button[] buttons, tabButtons, moveButtons;
-	private Button switchButton, returnButton;
+	private final Button[] buttons, tabButtons, moveButtons;
+	private final Button switchButton, returnButton;
+	
 	private int selectedTab;
 	private int selectedButton;
 	private int switchTabIndex;
@@ -50,6 +52,7 @@ public class PartyView extends View
 		buttons = new Button[NUM_BUTTONS];
 		tabButtons = new Button[Trainer.MAX_POKEMON];
 		moveButtons = new Button[Move.MAX_MOVES];
+		
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) //r u l d
 		{
 			buttons[i] = tabButtons[i] = new Button(39 + i*120, 39, 122, 55, Button.HoverAction.BOX, 
@@ -142,25 +145,25 @@ public class PartyView extends View
 		
 		// Draw Pokemon Image
 		TileSet pkmTiles = data.getPokemonTilesSmall();
-		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.isEgg() ? 0x10000 : selectedPkm.getPokemonInfo().getImageNumber(selectedPkm.isShiny()));
-		g.drawImage(pkmImg, 121 - pkmImg.getWidth()/2, 174 - pkmImg.getHeight()/2, null);
+		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageIndex());
+		DrawMetrics.drawCenteredImage(g, pkmImg, 121, 174);
 		
 		if (selectedPkm.isEgg())
 		{
-			g.setFont(Global.getFont(20));
+			DrawMetrics.setFont(g, 20);
 			g.setColor(Color.BLACK);
 			
 			// Name
 			g.drawString(selectedPkm.getActualName(), 213, 147);
 			
-			g.setFont(Global.getFont(16));
+			DrawMetrics.setFont(g, 16);
 			
 			// Description
-			g.drawString(selectedPkm.getEggMessage(), 213, 170);
+			DrawMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 213, 170, 718 - 213);
 		}
 		else
 		{
-			g.setFont(Global.getFont(20));
+			DrawMetrics.setFont(g, 20);
 			g.setColor(Color.BLACK);
 			
 			// Name and Gender
@@ -186,23 +189,21 @@ public class PartyView extends View
 				g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 687, 133, null);
 			}
 			
-			g.setFont(Global.getFont(16));
+			DrawMetrics.setFont(g, 16);
 			
 			// Nature
 			g.drawString(selectedPkm.getNature().getName() +" Nature", 213, 170);
 			
 			// Total EXP
 			g.drawString("EXP:", 525, 170);
-			String expStr = "" + selectedPkm.getTotalEXP();
-			g.drawString(expStr, 718 - expStr.length()*7, 170);
+			DrawMetrics.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 718, 170);
 			
 			// Characteristic
 			g.drawString(selectedPkm.getCharacteristic(), 213, 190);
 			
 			// EXP To Next Level
 			g.drawString("To Next Lv:", 525, 190);
-			String expToNextLvStr = "" + selectedPkm.expToNextLevel();
-			g.drawString(expToNextLvStr, 718 - expToNextLvStr.length()*7, 190);
+			DrawMetrics.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 718, 190);
 			
 			// Held Item
 			g.drawString(selectedPkm.getActualHeldItem().getName(), 213, 211);
@@ -210,7 +211,9 @@ public class PartyView extends View
 			// Ability with description
 			String abilityStr = selectedPkm.getActualAbility().getName() + " - ";
 			g.drawString(abilityStr, 81, 272);
-			g.setFont(Global.getFont(12));
+			
+			// TODO: I hate this 
+			DrawMetrics.setFont(g, 12);
 			int dWidth = 81 + abilityStr.length()*9, dIndex = 0;
 			StringBuilder dStr = new StringBuilder();
 			String[] discriptionSplit = selectedPkm.getActualAbility().getDescription().split(" ");
@@ -234,7 +237,7 @@ public class PartyView extends View
 			g.setColor(selectedPkm.getHPColor());
 			g.fillRect(71, 329, (int)(155*selectedPkm.getHPRatio()), 10);
 			
-			g.setFont(Global.getFont(16));
+			DrawMetrics.setFont(g, 16);
 			g.setColor(Color.BLACK);
 			
 			// Stats Box
@@ -253,18 +256,16 @@ public class PartyView extends View
 			int[] evs = selectedPkm.getEVs();
 			
 			g.setColor(Color.BLACK);
-			g.setFont(Global.getFont(14));
+			DrawMetrics.setFont(g, 14);
 			for (int i = 0; i < Stat.NUM_STATS; i++)
 			{
-				String valStr = "" + stats[i];
-				if (i == Stat.HP.index()) valStr = selectedPkm.getHP() + "/" + stats[i];
-				g.drawString(valStr, 285 - valStr.length()*8, 19*i + 358);
+				String statString = "" + stats[i];
+				if (i == Stat.HP.index()) 
+					statString = selectedPkm.getHP() + "/" + stats[i];
 				
-				valStr = "" + ivs[i];
-				g.drawString(valStr, 327 - valStr.length()*8, 19*i + 358);
-				
-				valStr = "" + evs[i];
-				g.drawString(valStr, 371 - valStr.length()*8, 19*i + 358);
+				DrawMetrics.drawRightAlignedString(g, statString, 285, 19*i + 358);
+				DrawMetrics.drawRightAlignedString(g, "" + ivs[i], 327, 19*i + 358);
+				DrawMetrics.drawRightAlignedString(g, "" + evs[i], 371, 19*i + 358);
 			}
 			
 			// Move Box
@@ -275,32 +276,34 @@ public class PartyView extends View
 				
 				Move move = moves.get(i);
 				g.setColor(move.getAttack().getActualType().getColor());
-				g.fillRect(0, 0, 293, 40);
+				
+				g.fillRect(0, 0, moveButtons[i].width, moveButtons[i].height);
 				g.drawImage(tiles.getTile(0x18), 0, 0, null);
 				
 				g.setColor(Color.BLACK);
 				if (selectedButton == MOVES + i)
 				{
-					g.setFont(Global.getFont(10));
-					Global.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 
-							6, 11, 280, 6, 11);
+					DrawMetrics.setFont(g, 10);
+					DrawMetrics.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 6, 11, 280);
 				}
 				else
 				{
-					g.setFont(Global.getFont(14));
+					// Attack name
+					DrawMetrics.setFont(g, 14);
 					g.drawString(move.getAttack().getName(), 7, 16);
+					
+					// PP
 					g.drawString("PP:", 133, 16);
-					String ppStr = move.getPP() + "/" + move.getMaxPP();
-					g.drawString(ppStr, 205 - ppStr.length()*8, 16);
+					DrawMetrics.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), 205, 16);
 					
-					g.setFont(Global.getFont(12));
+					// Accuracy
+					DrawMetrics.setFont(g, 12);
 					g.drawString("Accuracy:", 7, 32);
-					String accStr = "" + move.getAttack().getAccuracyString();
-					g.drawString(accStr, 100 - accStr.length()*8, 32);
+					DrawMetrics.drawRightAlignedString(g, "" + move.getAttack().getAccuracyString(), 100, 32);
 					
+					// Power
 					g.drawString("Power:", 133, 32);
-					String powStr = move.getAttack().getPowerString();
-					g.drawString(powStr, 205 - powStr.length()*8, 32);
+					DrawMetrics.drawRightAlignedString(g, move.getAttack().getPowerString(), 205, 32);
 					
 					BufferedImage typeImage = typeTiles.getTile(move.getAttack().getActualType().getImageIndex());
 					g.drawImage(typeImage, 241, 4, null);
@@ -326,7 +329,7 @@ public class PartyView extends View
 		}
 		
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(20));
+		DrawMetrics.setFont(g, 20);
 		g.drawString("Switch!", 190, 518);
 		
 		// Return Box
@@ -334,26 +337,27 @@ public class PartyView extends View
 		g.drawString("Return", 547, 518);
 		
 		TileSet partyTiles = data.getPartyTiles();
-		g.setFont(Global.getFont(14));
+		DrawMetrics.setFont(g, 14);
 		
 		// Tabs
 		for (int i = 0; i < list.size(); i++)
 		{
-			ActivePokemon pkm = list.get(i);
 			g.translate(tabButtons[i].x, tabButtons[i].y);
+			
+			ActivePokemon pkm = list.get(i);
+			
 			typeColors = Type.getColors(pkm);
 			g.setColor(typeColors[0]);
 			g.fillRect(0, 0, 122, 55);
 			
-			if (selectedTab == i) g.drawImage(tiles.getTile(0x14), 0 ,0, null);
-			else g.drawImage(tiles.getTile(0x15), 0, 0, null);
+			int tileIndex = selectedTab == i ? 0x14 : 0x15;
+			g.drawImage(tiles.getTile(tileIndex), 0, 0, null);
 			
 			g.setColor(Color.BLACK);
 			g.drawString(pkm.getActualName(), 40, 34);
 			
-			pkmImg = partyTiles.getTile(pkm.getPokemonInfo().getNumber());
-			if (pkm.isEgg()) pkmImg = partyTiles.getTile(0x10000);
-			g.drawImage(pkmImg, 19 - pkmImg.getWidth()/2, 26 - pkmImg.getHeight()/2, null);
+			pkmImg = partyTiles.getTile(pkm.getTinyImageIndex());
+			DrawMetrics.drawCenteredImage(g, pkmImg, 19, 26);
 			
 			if (!pkm.canFight())
 			{

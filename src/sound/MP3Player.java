@@ -4,10 +4,10 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import main.Global;
-
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
+import main.FileIO;
+import main.Global;
 
 public class MP3Player extends Thread 
 {
@@ -54,18 +54,20 @@ public class MP3Player extends Thread
 	
 	private BufferedInputStream loadMP3File(String fileName) 
 	{
-		BufferedInputStream bis = null;
+		fileName += ".mp3";
+		
+		BufferedInputStream mp3 = null;
 		try 
 		{
-			FileInputStream fis = new FileInputStream("rec" + Global.FILE_SLASH + "snd" + Global.FILE_SLASH + fileName + ".mp3");
-			bis = new BufferedInputStream(fis);
+			FileInputStream fis = new FileInputStream(FileIO.makePath("rec", "snd") + fileName);
+			mp3 = new BufferedInputStream(fis);
 		}
 		catch (FileNotFoundException e) 
 		{
-			Global.error("Failed to load " + fileName + ".mp3:\n" + e);
+			Global.error("Failed to load " + fileName + ":\n" + e);
 		}
 		
-		return bis;
+		return mp3;
 	}
 	
 	public void close() 

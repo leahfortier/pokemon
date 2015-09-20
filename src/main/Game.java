@@ -17,7 +17,6 @@ import item.Item;
 import item.hold.HoldItem;
 
 import java.awt.Graphics;
-import java.io.File;
 import java.util.EnumMap;
 
 import pokemon.ActivePokemon;
@@ -91,7 +90,7 @@ public class Game
 
 	public void loadSave(int index) 
 	{
-		charData = CharacterData.load(index, this);
+		charData = Save.load(index, this);
 		setViews();
 	}
 	
@@ -115,16 +114,6 @@ public class Game
 //		BattleView battleView = new BattleView();
 //		battleView.setBattle(b);
 //		viewMap.put(ViewMode.BATTLE_VIEW, battleView);
-	}
-
-	public void deleteSave(int index) 
-	{
-		File file = new File("saves" + Global.FILE_SLASH + "File" + (index + 1) + ".ser");
-		File preview = new File("saves" + Global.FILE_SLASH + "Preview" + (index + 1) + ".out");
-		if (file.exists())
-			file.delete();
-		if (preview.exists())
-			preview.delete();
 	}
 	
 	public void setViews()

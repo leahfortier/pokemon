@@ -1,3 +1,3 @@
 package item.hold;
 
-public interface ConsumableItem {}
+public interface ConsumableItem extends HoldItem {}

@@ -12,26 +12,67 @@ import map.entity.MovableEntity.Direction;
 
 public class Button
 {
-	public int x, y, width, height;
-	private boolean hover, press, forceHover, active;
-	private ButtonHoverAction hoverAction;
-	private int[] transition;
+	public static final int NO_TRANSITON = -1;
+	
+	public final int x;
+	public final int y;
+	public final int width;
+	public final int height;
+	
+	private final ButtonHoverAction hoverAction;
+	private final int[] transition;
+	
+	private boolean hover;
+	private boolean press;
+	private boolean forceHover;
+	private boolean active;
 
-	public Button(int xx, int yy, int ww, int hh, HoverAction ha)
+	public Button(int x, int y, int w, int h, HoverAction hoverAction)
 	{
-		this(xx, yy, ww, hh, ha, new int[] {-1, -1, -1, -1});
+		this(x, y, w, h, hoverAction, new int[] { NO_TRANSITON, NO_TRANSITON, NO_TRANSITON, NO_TRANSITON });
 	}
 
-	public Button(int xx, int yy, int ww, int hh, HoverAction ha, int[] trans)
+	public Button(int x, int y, int width, int height, HoverAction hoverAction, int[] transition)
 	{
-		x = xx;
-		y = yy;
-		width = ww;
-		height = hh;
-		hoverAction = ha == null ? null : ha.hoverAction;
-		hover = press = forceHover = false;
-		active = true;
-		transition = trans;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		
+		this.hoverAction = hoverAction == null ? null : hoverAction.hoverAction;
+		
+		this.transition = transition;
+		
+		this.hover = false;
+		this.press = false;
+		this.forceHover = false;
+		this.active = true;
+	}
+	
+	public void draw(Graphics g)
+	{
+		if ((hover || forceHover) && active && hoverAction != null)
+			hoverAction.draw(g, this);
+	}
+	
+	public static int basicLeft(int currentIndex, int numCols)
+	{
+		return currentIndex == 0 ? numCols - 1 : currentIndex - 1;
+	}
+	
+	public static int basicRight(int currentIndex, int numCols)
+	{
+		return currentIndex == numCols - 1 ? 0 : currentIndex + 1;
+	}
+	
+	public static int basicUp(int currentIndex, int numRows)
+	{
+		return currentIndex == 0 ? numRows - 1 : currentIndex - 1;
+	}
+	
+	public static int basicDown(int currentIndex, int numRows)
+	{
+		return currentIndex == numRows - 1 ? 0 : currentIndex + 1;
 	}
 
 	public enum HoverAction
@@ -117,10 +158,10 @@ public class Button
 	{
 		int next = buttons[index].transition[direction.ordinal()];
 		
-		while (next != -1 && !buttons[next].isActive())
+		while (next != NO_TRANSITON && !buttons[next].isActive())
 			next = buttons[next].transition[direction.ordinal()];
 		
-		if (next == -1)
+		if (next == NO_TRANSITON)
 			return index;
 		
 		buttons[index].setForceHover(false);
@@ -134,13 +175,14 @@ public class Button
 		if (!active)
 			return;
 		
-		int mx = input.mouseX;
-		int my = input.mouseY;
-		
-		hover = press = false;
+		hover = false;
+		press = false;
 
 		if (input.isMouseInput())
 		{
+			int mx = input.mouseX;
+			int my = input.mouseY;
+			
 			if (mx >= x && my >= y && mx <= x + width && my <= y + height)
 			{
 				hover = true;
@@ -171,12 +213,6 @@ public class Button
 	public void update(InputControl input)
 	{
 		update(input, false);
-	}
-
-	public void draw(Graphics g)
-	{
-		if ((hover || forceHover) && active && hoverAction != null)
-			hoverAction.draw(g, this);
 	}
 
 	public boolean isHover()
@@ -213,5 +249,13 @@ public class Button
 	public void setActive(boolean set)
 	{
 		active = set;
+	}
+	
+	public void greyOut(Graphics g, boolean totesBlacks)
+	{
+		Color temp = g.getColor();
+		g.setColor(totesBlacks ? Color.BLACK : temp.darker());
+		g.fillRect(x, y, width, height);
+		g.setColor(temp);
 	}
 }

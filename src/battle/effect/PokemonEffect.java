@@ -887,7 +887,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -957,7 +957,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -1022,7 +1022,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -1087,7 +1087,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -1152,7 +1152,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -1212,7 +1212,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Global.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -1427,7 +1427,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			b.addMessage("The effects of " + victim.getName() + "'s Safeguard faded.");
 			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim.user()).remove(this);
 		}
@@ -2479,7 +2479,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				b.addMessage(p.getName() + " fell to the ground!");
 			}
 			
-			Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+			Battle.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
@@ -2529,7 +2529,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 				b.addMessage(p.getName() + " fell to the ground!");
 			}
 			
-			Global.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+			Battle.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
@@ -3081,7 +3081,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		{
 			b.addMessage("The mist faded.");
 			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim.user()).remove(this);
 		}

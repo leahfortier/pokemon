@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.DrawMetrics;
 import gui.GameData;
 
 import java.awt.Color;
@@ -8,9 +9,9 @@ import java.awt.Graphics;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.InputControl.Control;
 import main.Global;
 import main.InputControl;
+import main.InputControl.Control;
 import trainer.CharacterData;
 
 public class TrainerCardView extends View
@@ -41,7 +42,7 @@ public class TrainerCardView extends View
 		g.setColor(Color.WHITE);
 		
 		int x = 50, y = 50;
-		g.setFont(Global.getFont(50));
+		DrawMetrics.setFont(g, 50);
 		g.drawString("TRAINER " + charData.getName(), x, y);
 		
 		y += 100;
@@ -49,7 +50,7 @@ public class TrainerCardView extends View
 		g.drawString("$$$" + charData.getDatCashMoney() + " money in da bank.", x, y);
 		
 		y += 100;
-		g.setFont(Global.getFont(40));
+		DrawMetrics.setFont(g, 40);
 		g.drawString("Played " + formatTime(charData.getTimePlayed()), x, y);
 	}
 	

@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.DrawMetrics;
 import gui.GameData;
 
 import java.awt.Color;
@@ -8,9 +9,9 @@ import java.awt.Graphics;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.InputControl.Control;
 import main.Global;
 import main.InputControl;
+import main.InputControl.Control;
 
 public class OptionsView extends View
 {
@@ -53,8 +54,8 @@ public class OptionsView extends View
 		g.fillRect(0, 0, d.width, d.height);
 		
 		g.setColor(Color.WHITE);
-		g.setFont(Global.getFont(150));
-		g.drawString("VOLUME", d.width/2 - 245, d.height/4 + 50);
+		DrawMetrics.setFont(g, 150);
+		DrawMetrics.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
 		
 		if (musicOn)
 		{
@@ -65,7 +66,7 @@ public class OptionsView extends View
 			g.fillRect(d.width/2 - 200, d.height/2 - 50, 200, 100);
 			
 			g.setColor(Color.BLACK);
-			g.setFont(Global.getFont(100));
+			DrawMetrics.setFont(g, 100);
 			g.drawString("OFF", d.width/2 - 180, d.height/2 + 32);
 		}
 		else
@@ -77,7 +78,7 @@ public class OptionsView extends View
 			g.fillRect(d.width/2 - 200, d.height/2 - 50, 200, 100);
 			
 			g.setColor(Color.BLACK);
-			g.setFont(Global.getFont(100));
+			DrawMetrics.setFont(g, 100);
 			g.drawString("ON", d.width/2 + 40, d.height/2 + 32);
 		}
 		

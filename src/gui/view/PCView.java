@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.Button;
+import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -11,7 +12,6 @@ import java.util.List;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
 import main.Type;
@@ -211,10 +211,10 @@ public class PCView extends View
 		g.fillRect(40, 40, 350, 418);
 		g.drawImage(tiles.getTile(0x31), 40, 40, null);
 		
+		// Draw Box number
 		g.setColor(Color.BLACK);
-		g.setFont(Global.getFont(20));
-		String s = "Box " + (pc.getBoxNum() + 1);
-		g.drawString(s, Global.centerX(s, 214, 20), 65);
+		DrawMetrics.setFont(g, 20);
+		DrawMetrics.drawCenteredWidthString(g, "Box " + (pc.getBoxNum() + 1), 214, 65);
 		
 		for (int i = 0; i < PC.BOX_HEIGHT; i++)
 		{
@@ -230,16 +230,15 @@ public class PCView extends View
 					g.drawImage(tiles.getTile(0x32), 0, 0, null);
 				}
 				
-				BufferedImage pkmImg = partyTiles.getTile(p.isEgg() ? 0x10000 : p.getPokemonInfo().getNumber());
-				g.drawImage(pkmImg, 20 - pkmImg.getWidth()/2, 20 - pkmImg.getHeight()/2, null);
+				BufferedImage pkmImg = partyTiles.getTile(p.getTinyImageIndex());
+				DrawMetrics.drawCenteredImage(g, pkmImg, 20, 20);
 				
 				g.translate(-boxButtons[j][i].x, -boxButtons[j][i].y);
 			}
 		}
 		
-		g.setFont(Global.getFont(16));
-		s = (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes();
-		g.drawString(s, Global.centerX(s, 215, 20), 433);
+		DrawMetrics.setFont(g, 16);
+		DrawMetrics.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
 		
 		View.drawArrows(g, leftButton, rightButton);
 		
@@ -259,8 +258,8 @@ public class PCView extends View
 				g.drawImage(tiles.getTile(0x32), 0, 0, null);
 			}
 			
-			BufferedImage pkmImg = partyTiles.getTile(p.isEgg() ? 0x10000 : p.getPokemonInfo().getNumber());
-			g.drawImage(pkmImg, 20 - pkmImg.getWidth()/2, 20 - pkmImg.getHeight()/2, null);
+			BufferedImage pkmImg = partyTiles.getTile(p.getTinyImageIndex());
+			DrawMetrics.drawCenteredImage(g, pkmImg, 20, 20);
 			
 			g.translate(-partyButtons[i].x, -partyButtons[i].y);
 		}
@@ -274,33 +273,32 @@ public class PCView extends View
 		g.setColor(typeColors[1]);
 		g.fillPolygon(new int[] {410, 759, 759, 410}, new int[] {445, 96, 501, 501}, 4);
 		
-		if (switchClicked) greyOut(g, switchButton, false);
-		if (!releaseButton.isActive()) greyOut(g, releaseButton, true);
-		if (!depositWithdrawButton.isActive()) greyOut(g, depositWithdrawButton, true); 
-		else if (party && depositClicked) greyOut(g, depositWithdrawButton, false);
+		if (switchClicked) switchButton.greyOut(g, false);
+		if (!releaseButton.isActive()) releaseButton.greyOut(g, true);
+		if (!depositWithdrawButton.isActive()) depositWithdrawButton.greyOut(g, true); 
+		else if (party && depositClicked) depositWithdrawButton.greyOut(g, false);
 		
 		g.drawImage(tiles.getTile(0x34), 410, 40, null);
-		BufferedImage pkmImg = pokemonTiles.getTile(selected.isEgg() ? 0x10000 : selected.getPokemonInfo().getImageNumber(selected.isShiny()));
-		g.drawImage(pkmImg, 479 - pkmImg.getWidth()/2, 109 - pkmImg.getHeight()/2, null);
+		BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageIndex());
+		DrawMetrics.drawCenteredImage(g, pkmImg, 479, 109);
 		
 		if (selected.isEgg())
 		{
 			g.setColor(Color.BLACK);
-			g.setFont(Global.getFont(20));
+			DrawMetrics.setFont(g, 20);
 			
 			g.drawString(selected.getActualName(), 541, 82);
 			
-			g.setFont(Global.getFont(16));
-			g.drawString(selected.getEggMessage(), 427, 179); // TODO: Wrapped text
+			DrawMetrics.setFont(g, 16);
+			DrawMetrics.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
 		}
 		else
 		{
 			g.setColor(Color.BLACK);
-			g.setFont(Global.getFont(20));
+			DrawMetrics.setFont(g, 20);
 			
 			g.drawString(selected.getActualName() + " " + selected.getGender().getCharacter(), 541, 82);
-			s = "Lv" + selected.getLevel();
-			g.drawString(s, Global.rightX(s, 740, 20), 82);
+			DrawMetrics.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
 			g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
 			
 			int index = 0;
@@ -309,24 +307,29 @@ public class PCView extends View
 				g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 669, 97, null);
 				index = 1;
 			}
+			
 			g.drawImage(typeTiles.getTile(type[index].getImageIndex()), 707, 97, null);
 			
-			g.setFont(Global.getFont(16));
+			DrawMetrics.setFont(g, 16);
 			
+			// Total EXP
 			g.drawString("EXP:", 540, 135);
-			s = selected.getTotalEXP() + "";
-			g.drawString(s, Global.rightX(s, 740, 16), 135);
+			DrawMetrics.drawRightAlignedString(g, selected.getTotalEXP() + "", 740, 135);
 			
+			// EXP to the next level
 			g.drawString("To Next Lv:", 540, 156);
-			s = selected.expToNextLevel() + "";
-			g.drawString(s, Global.rightX(s, 740, 16), 156);
+			DrawMetrics.drawRightAlignedString(g, selected.expToNextLevel() + "", 740, 156);
 			
+			// Ability
 			g.drawString(selected.getAbility().getName(), 427, 179);
 			
-			s = selected.getActualHeldItem().getName();
-			g.drawString(s, Global.rightX(s, 740, 16), 179);
+			// Held Item
+			DrawMetrics.drawRightAlignedString(g, selected.getActualHeldItem().getName(), 740, 179);
 			
+			// Nature
 			g.drawString(selected.getNature().getName() + " Nature", 427, 198);
+			
+			// Characteristic
 			g.drawString(selected.getCharacteristic(), 427, 217);
 			
 			List<Move> moves = selected.getActualMoves();
@@ -338,45 +341,49 @@ public class PCView extends View
 				g.setColor(moves.get(i).getAttack().getActualType().getColor());
 				g.fillRect(x, y, 159, 31);
 				g.drawImage(tiles.getTile(0x35), x, y, null);
+				
 				g.setColor(Color.BLACK);
-				s = moves.get(i).getAttack().getName();
-				g.drawString(s, Global.centerX(s, x + 77, 16) - 3, y + 20);
+				DrawMetrics.drawCenteredWidthString(g, moves.get(i).getAttack().getName(), x + 159/2, y + 20);
 			}
 			
-			g.drawString("Stat", Global.rightX("Stat", 635, 16), 340);
-			g.drawString("IV", Global.rightX("IV", 681, 16), 340);
-			g.drawString("EV", Global.rightX("EV", 735, 16), 340);
+			DrawMetrics.drawRightAlignedString(g, "Stat", 635, 340);
+			DrawMetrics.drawRightAlignedString(g, "IV", 681, 340);
+			DrawMetrics.drawRightAlignedString(g, "EV", 735, 340);
 			
 			int[] stats = selected.getStats();
 			int[] ivs = selected.getIVs();
 			int[] evs = selected.getEVs();
+			
 			for (int i = 0; i < Stat.NUM_STATS; i++)
 			{
-				g.setFont(Global.getFont(16));
+				DrawMetrics.setFont(g, 16);
 				g.setColor(selected.getNature().getColor(i));
-				g.drawString(Stat.getStat(i, false).getName(), 427, 360 + i*18 + i/2);
+				g.drawString(Stat.getStat(i, false).getName(), 427, 360 + i*18 + i/2); // TODO: srsly what's with the i/2
 				
-				g.setFont(Global.getFont(14));
 				g.setColor(Color.BLACK);
-				g.drawString(stats[i] + "", Global.rightX(stats[i] + "", 635, 14), 360 + i*18 + i/2);
-				g.drawString(ivs[i] + "", Global.rightX(ivs[i] + "", 681, 14), 360 + i*18 + i/2);
-				g.drawString(evs[i] + "", Global.rightX(evs[i] + "", 735, 14), 360 + i*18 + i/2);
+				DrawMetrics.setFont(g, 14);
+				
+				// TODO: What's up with the + i/2 in the y????
+				DrawMetrics.drawRightAlignedString(g, stats[i] + "", 635, 360 + i*18 + i/2);
+				DrawMetrics.drawRightAlignedString(g, ivs[i] + "", 681, 360 + i*18 + i/2);
+				DrawMetrics.drawRightAlignedString(g, evs[i] + "", 735, 360 + i*18 + i/2);
 			}
 		}
 		
-		// Buttons
-		g.setFont(Global.getFont(20));
-		s = "Switch";
-		g.drawString(s, Global.centerX(s, 464, 20), 489);
-		s = party ? "Deposit" : "Withdraw";
-		g.drawString(s, Global.centerX(s, 584, 20), 489);
-		s = "Release";
-		g.drawString(s, Global.centerX(s, 699, 20), 489);
-		
+		// Return button box
 		g.drawImage(tiles.getTile(0x36), 410, 522, null);
-		g.drawString("Return", Global.centerX("Return", 584, 20), 546);
 		
-		for (Button b : buttons) b.draw(g);
+		// Buttons
+		DrawMetrics.setFont(g, 20);
+		DrawMetrics.drawCenteredWidthString(g, "Switch", 464, 489);
+		DrawMetrics.drawCenteredWidthString(g, party ? "Deposit" : "Withdraw", 584, 489);
+		DrawMetrics.drawCenteredWidthString(g, "Release", 699, 489);
+		DrawMetrics.drawCenteredWidthString(g, "Return", 584, 546);
+		
+		for (Button b : buttons) 
+		{
+			b.draw(g);
+		}
 	}
 
 	public ViewMode getViewModel()
@@ -389,14 +396,6 @@ public class PCView extends View
 		party = true;
 		selected = player.front();
 		updateActiveButtons();
-	}
-	
-	private void greyOut(Graphics g, Button b, boolean totesBlacks)
-	{
-		Color temp = g.getColor();
-		g.setColor(totesBlacks ? Color.BLACK : g.getColor().darker());
-		g.fillRect(b.x, b.y, b.width, b.height);
-		g.setColor(temp);
 	}
 
 	private void updateActiveButtons()
