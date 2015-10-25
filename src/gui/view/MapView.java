@@ -693,7 +693,7 @@ public class MapView extends View
 			
 			if(seenWild)
 			{
-				battleImageSlideRight = Global.colorImage(battleImageSlideRight, new float[] {0,0,0,1}, new float[] {0,0,0,0});
+				battleImageSlideRight = DrawMetrics.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0});
 			}
 		}
 		else

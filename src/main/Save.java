@@ -14,12 +14,15 @@ import java.util.Scanner;
 
 import trainer.CharacterData;
 
-public class Save
+public final class Save
 {
 	public static final int NUM_SAVES = 3;
 	
 	private static final String SAVE_FOLDER_PATH = FileIO.makePath("saves");
 	private static final String SETTINGS_PATH = SAVE_FOLDER_PATH + "settings.txt";
+	
+	// Utility class -- should not be instantiated
+	private Save() { Global.error("Save class cannot be instantiated."); }
 	
 	public static String formatTime(long l)
 	{
@@ -38,18 +41,17 @@ public class Save
 	
 	public static void save(CharacterData player)
 	{
-		//printGlobals();
+		player.updateTimePlayed();
+		
+		File saveDir = new File(SAVE_FOLDER_PATH);
+		if (!saveDir.exists())
+			saveDir.mkdirs();
 		
 		try
 		{
-			player.updateTimePlayed();
-			
-			File saveDir = new File(SAVE_FOLDER_PATH);
-			if (!saveDir.exists())
-				saveDir.mkdirs();
-			
 			FileOutputStream fout = new FileOutputStream(getSavePath(player.getFileNum()));
 			ObjectOutputStream out = new ObjectOutputStream(fout);
+			
 			out.writeObject(player);
 			out.close();
 			fout.close();
@@ -213,7 +215,6 @@ public class Save
 		return edited? bytes: null;
 	}
 
-	
 	public static void deleteSave(int index) 
 	{
 		FileIO.deleteFile(getSavePath(index));
@@ -222,17 +223,17 @@ public class Save
 	
 	public static class SavePreviewInfo
 	{
-		private String name;
-		private long time;
-		private int badges;
-		private int pokemonSeen;
+		private final String name;
+		private final long time;
+		private final int badges;
+		private final int pokemonSeen;
 
-		public SavePreviewInfo(String name, long time, int badges, int pokemonSeen)
+		public SavePreviewInfo(Scanner in)
 		{
-			this.name = name;
-			this.time = time;
-			this.badges = badges;
-			this.pokemonSeen = pokemonSeen;
+			this.name = in.next();
+			this.time = in.nextLong();
+			this.badges = in.nextInt();
+			this.pokemonSeen = in.nextInt();
 		}
 		
 		public String getName()
@@ -265,7 +266,7 @@ public class Save
 			if (file.exists())
 			{
 				Scanner in = FileIO.openFile(file);
-				saveInfo[i] = new SavePreviewInfo(in.next(), in.nextLong(), in.nextInt(), in.nextInt());
+				saveInfo[i] = new SavePreviewInfo(in);
 				in.close();
 			}
 		}

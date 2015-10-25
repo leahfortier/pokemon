@@ -213,10 +213,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		for (String itemString : itemStringKeySet)
 		{
 			Item item = map.get(itemString);
-			if (!(item instanceof IncenseItem))
-				continue;
-			
-			PokemonInfo.addIncenseBaby(((IncenseItem)item).getBaby());
+			if (item instanceof IncenseItem)
+			{
+				IncenseItem incense = (IncenseItem)item;
+				PokemonInfo.addIncenseBaby(incense.getBaby());	
+			}
 		}
 	}
 
@@ -6289,7 +6290,6 @@ public abstract class Item implements Comparable<Item>, Serializable
 		{
 			Evolution ev = p.getPokemonInfo().getEvolution();
 			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-			
 			if (base == null)
 			{
 				return false;
@@ -9006,28 +9006,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -9108,28 +9108,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -9210,28 +9210,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -9312,28 +9312,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -9414,28 +9414,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -9522,28 +9522,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public boolean use(ActivePokemon p, Move m)
@@ -9626,28 +9626,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -9714,28 +9714,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -9824,28 +9824,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -9921,28 +9921,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -11104,28 +11104,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -11195,28 +11195,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -11286,28 +11286,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -11377,28 +11377,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -11468,28 +11468,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -11559,28 +11559,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -11908,28 +11908,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()
@@ -12018,28 +12018,28 @@ public abstract class Item implements Comparable<Item>, Serializable
 			switch (source)
 			{
 				case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
+					message = getSuccessMessage(user);
+					break;
 				case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
+					message = getHoldSuccessMessage(b, user);
+					break;
 				default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-			}
-			
-			b.addMessage(message, user);
-			
-			if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-			{
-				b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
-				user.healHealthFraction(1/3.0);
-				b.addMessage("", user);
-			}
-			
-			// Eat dat berry!!
-			PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
-			
-			return true;
+					Global.error("Use item and held item are the only valid cast sources for berries.");
+				}
+				
+				b.addMessage(message, user);
+				
+				if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
+				{
+					b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+					user.healHealthFraction(1/3.0);
+					b.addMessage("", user);
+				}
+				
+				// Eat dat berry!!
+				PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+				
+				return true;
 		}
 
 		public int naturalGiftPower()

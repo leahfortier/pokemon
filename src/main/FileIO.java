@@ -185,7 +185,7 @@ public class FileIO
 		}
 	}
 	
-	public static void printToFile(String fileName, StringBuilder out)
+	public static void writeToFile(String fileName, StringBuilder out)
 	{
 		try
 		{

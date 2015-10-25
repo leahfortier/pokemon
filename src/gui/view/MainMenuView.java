@@ -18,73 +18,23 @@ import main.Save;
 import sound.SoundTitle;
 
 public class MainMenuView extends View
-{
-	private enum VisualState
-	{
-		MAIN(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE), 
-		LOAD(Save.NUM_SAVES + 2, SoundTitle.MAIN_MENU_TUNE), 
-		NEW(Save.NUM_SAVES + 1, SoundTitle.MAIN_MENU_TUNE), 
-		OPTIONS(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE), 
-		CREDITS(0, SoundTitle.CREDITS_TUNE);
-		
-		private final Button[] buttons;
-		private final SoundTitle tunes;
-		
-		private VisualState(int numButtons, SoundTitle tunes)
-		{
-			this.buttons = new Button[numButtons];
-			this.tunes = tunes;
-		}
-	};
-
-	private VisualState state;
-	
-	public enum Theme
-	{
-		BASIC(new Color(255, 210, 86), 
-				new ThemeDraw() 
-				{
-					public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex)
-					{
-						g.setColor(new Color(68, 123, 184));
-						g.fillRect(0, 0, 800, 600);
-						g.drawImage(tiles.getTile(0x01), 0, 0, null);	
-					} 
-				}),
-		SCENIC(new Color(68, 123, 184), new ThemeDraw() 
-		{
-			public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex)
-			{
-				float locRatio = 1.0f - (float) bgTime / (float) bgt[(bgIndex + 1) % bgt.length];
-				int xLoc = (int) (bgx[bgIndex] * locRatio + (1.0f - locRatio) * bgx[(bgIndex + 1) % bgt.length]);
-				int yLoc = (int) (bgy[bgIndex] * locRatio + (1.0f - locRatio) * bgy[(bgIndex + 1) % bgt.length]);
-			
-				g.drawImage(tiles.getTile(0x06), xLoc, yLoc, null);
-				g.drawImage(tiles.getTile(0x02), 0, 0, null);	
-			} 
-		});
-		
-		private final Color themeColor;
-		private final ThemeDraw draw;
-		
-		private Theme(Color themeColor, ThemeDraw draw)
-		{
-			this.themeColor = themeColor;
-			this.draw = draw;
-		}
-		
-		private static interface ThemeDraw
-		{
-			public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex);
-		}
-	};
-
-	private Theme theme;
-	
+{	
 	private static final int NUM_MAIN_BUTTONS = 4;
+
+	private static final int[] bgt = new int[] { 800, 1800, 1000, 2400, 1000 };
+	private static final int[] bgx = new int[] { -300, -400, -800, -800, -200 };
+	private static final int[] bgy = new int[] { -300, -130, -130, -500, -500 };
+	
+	private static final String creditsHoz = "TEAM ROCKET    TEAM ROCKET";
+	private static final String[] creditsText = { "", "Team Rocket", "", "Lead Programmers", "Leah Fortier", "Tyler Brazill", "Maxwell Miller", "",
+			"", "Graphic Designers", "Josh Linge", "Jeb Ralston", "Jessica May", "", "Writers", "Jeb Ralston", "Jessica May", "", 
+			"UML MASTER", "Jeb Ralston", "", "Nintendo", "", "Game Freak", "", "credits", "credits", "credits" };
 	
 	private static final String[] MAIN_HEADERS = { "Load Game", "New Game", "Options", "Quit" };
 	private static final String[] OPTIONS_HEADERS = { "Theme", "Mute", "Credits", "Return" };
+	
+	private VisualState state;
+	private Theme theme;
 	
 	private Save.SavePreviewInfo[] saveInfo;
 	
@@ -92,16 +42,11 @@ public class MainMenuView extends View
 	private boolean deletePressed;
 	private boolean musicStarted = false;
 
-	private int bgTime, bgIndex;
-	private static final int[] bgt = new int[] { 800, 1800, 1000, 2400, 1000 };
-	private static final int[] bgx = new int[] { -300, -400, -800, -800, -200 };
-	private static final int[] bgy = new int[] { -300, -130, -130, -500, -500 };
+	private int bgTime;
+	private int bgIndex;
 
-	private int creditsTime1, creditsTime2;
-	private String creditsHoz = "TEAM ROCKET    TEAM ROCKET";
-	private String[] creditsText = { "", "Team Rocket", "", "Lead Programmers", "Leah Fortier", "Tyler Brazill", "Maxwell Miller", "",
-			"", "Graphic Designers", "Josh Linge", "Jeb Ralston", "Jessica May", "", "Writers", "Jeb Ralston", "Jessica May", "", 
-			"UML MASTER", "Jeb Ralston", "", "Nintendo", "", "Game Freak", "", "credits", "credits", "credits" };
+	private int creditsTime1;
+	private int creditsTime2;
 
 	public MainMenuView()
 	{
@@ -194,10 +139,70 @@ public class MainMenuView extends View
 		state = VisualState.MAIN;
 		selectedButton = creditsTime1 = creditsTime2 = 0;
 	}
-
-	private void setVisualState(VisualState s)
+	
+	private enum VisualState
 	{
-		state = s;
+		MAIN(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE), 
+		LOAD(Save.NUM_SAVES + 2, SoundTitle.MAIN_MENU_TUNE), 
+		NEW(Save.NUM_SAVES + 1, SoundTitle.MAIN_MENU_TUNE), 
+		OPTIONS(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE), 
+		CREDITS(0, SoundTitle.CREDITS_TUNE);
+		
+		private final Button[] buttons;
+		private final SoundTitle tunes;
+		
+		private VisualState(int numButtons, SoundTitle tunes)
+		{
+			this.buttons = new Button[numButtons];
+			this.tunes = tunes;
+		} 
+	};
+	
+	public enum Theme
+	{
+		BASIC(new Color(255, 210, 86), 
+				new ThemeDraw() 
+				{
+					public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex)
+					{
+						g.setColor(new Color(68, 123, 184));
+						g.fillRect(0, 0, 800, 600);
+						g.drawImage(tiles.getTile(0x01), 0, 0, null);	
+					} 
+				}),
+		SCENIC(new Color(68, 123, 184), new ThemeDraw() 
+		{
+			public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex)
+			{
+				float locRatio = 1.0f - (float) bgTime / (float) bgt[(bgIndex + 1) % bgt.length];
+				int xLoc = (int) (bgx[bgIndex] * locRatio + (1.0f - locRatio) * bgx[(bgIndex + 1) % bgt.length]);
+				int yLoc = (int) (bgy[bgIndex] * locRatio + (1.0f - locRatio) * bgy[(bgIndex + 1) % bgt.length]);
+			
+				g.drawImage(tiles.getTile(0x06), xLoc, yLoc, null);
+				g.drawImage(tiles.getTile(0x02), 0, 0, null);	
+			} 
+		});
+		
+		private static final Theme[] THEME_VALUES = Theme.values();
+		
+		private final Color themeColor;
+		private final ThemeDraw draw;
+		
+		private Theme(Color themeColor, ThemeDraw draw)
+		{
+			this.themeColor = themeColor;
+			this.draw = draw;
+		}
+		
+		private static interface ThemeDraw
+		{
+			public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex);
+		}
+	};
+
+	private void setVisualState(VisualState newState)
+	{
+		state = newState;
 		selectedButton = creditsTime1 = creditsTime2 = 0;
 		
 		for (Button b : state.buttons)
@@ -279,15 +284,8 @@ public class MainMenuView extends View
 				{
 					case 0: // new
 					case 1:
-					case 2:
-						/*
-						 * if (saveInfo[pressed] != null){ // TODO: ask to delete
-						 * first 
-						 * 
-						 * }else{
-						 * 
-						 * }
-						 */
+					case 2: 
+						// TODO: Ask to delete
 						game.newSave(pressed);
 						game.setViewMode(ViewMode.START_VIEW);
 						break;
@@ -302,7 +300,7 @@ public class MainMenuView extends View
 				switch (pressed)
 				{
 					case 0: // theme
-						theme = (theme == Theme.BASIC ? Theme.SCENIC : Theme.BASIC);
+						theme = Theme.THEME_VALUES[(theme.ordinal() + 1)%Theme.THEME_VALUES.length];
 						Save.saveSettings(theme);
 						break;
 					case 1: // mute
@@ -320,6 +318,7 @@ public class MainMenuView extends View
 				}
 				break;
 			case CREDITS:
+				// TODO: These should be constants once I find out what they are
 				creditsTime1 += 10;
 				creditsTime1 %= 8000;
 				
@@ -328,11 +327,13 @@ public class MainMenuView extends View
 				break;
 		}
 
+		int nextIndex = (bgIndex + 1)%bgt.length;
 		bgTime += 10;
-		if (bgTime > bgt[(bgIndex + 1) % bgt.length])
+		
+		if (bgTime > bgt[nextIndex])
 		{
-			bgTime -= bgt[(bgIndex + 1) % bgt.length];
-			bgIndex = (bgIndex + 1) % bgt.length;
+			bgTime -= bgt[nextIndex];
+			bgIndex = nextIndex;
 		}
 		
 		if (input.isDown(Control.BACK))
@@ -356,6 +357,7 @@ public class MainMenuView extends View
 		
 		g.translate(-b.x, -b.y);
 		
+		// Should not be inside the translate or everything is fucked hxc
 		b.draw(g);
 	}
 	

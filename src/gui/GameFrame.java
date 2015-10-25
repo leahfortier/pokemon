@@ -85,12 +85,12 @@ public class GameFrame
 
 	private static class GameLoop implements Runnable
 	{
-		private Canvas gui;
+		private final Canvas gui;
+		private final InputControl control;
+		private final DevConsole console;
+		
 		private Game game;
-		private InputControl control;
 		private BufferStrategy strategy;
-
-		private DevConsole console;
 
 		public GameLoop(Canvas canvas)
 		{
@@ -101,10 +101,7 @@ public class GameFrame
 			canvas.addMouseListener(control);
 			canvas.addMouseMotionListener(control);
 
-			if (DEV_MODE)
-			{
-				console = new DevConsole();
-			}
+			console = DEV_MODE ? new DevConsole() : null;
 		}
 
 		public void run()

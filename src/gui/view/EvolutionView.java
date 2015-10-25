@@ -181,8 +181,8 @@ public class EvolutionView extends View
 		animationEvolve -= Global.MS_BETWEEN_FRAMES;
 		
 		// TODO: Why does this need Graphics2D instead of just Graphics for just drawing an image? See if this can use the center function as well
-		g2d.drawImage(Global.colorImage(nextEvolution, evolutionScales, evolutionOffsets), px-nextEvolution.getWidth()/2, py-nextEvolution.getHeight()/2, null);
-		g2d.drawImage(Global.colorImage(currEvolution, prevEvolutionScales, prevEvolutionOffsets), px-currEvolution.getWidth()/2, py-currEvolution.getHeight()/2, null);
+		g2d.drawImage(DrawMetrics.colorImage(nextEvolution, evolutionScales, evolutionOffsets), px-nextEvolution.getWidth()/2, py-nextEvolution.getHeight()/2, null);
+		g2d.drawImage(DrawMetrics.colorImage(currEvolution, prevEvolutionScales, prevEvolutionOffsets), px-currEvolution.getWidth()/2, py-currEvolution.getHeight()/2, null);
 	}
 
 	public ViewMode getViewModel()

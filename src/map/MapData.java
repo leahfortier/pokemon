@@ -24,33 +24,20 @@ public class MapData
 {
 	public static final Pattern blockPattern = Pattern.compile("((NPC|Item|Trigger|MapEntrance|TriggerData)\\s+)?(\\w+)\\s*\\{([^}]*)\\}");
 	
-	public static enum WalkType
-	{
-		WATER(0x0000FF), 
-		WALKABLE(0xFFFFFF), 
-		NOT_WALKABLE(0x000000), 
-		HOP_DOWN(0x00FF00), 
-		HOP_UP(0xFF0000), 
-		HOP_LEFT(0xFFFF00), 
-		HOP_RIGHT(0x00FFFF),
-		STAIRS_UP_RIGHT(0xFF00FF),
-		STAIRS_UP_LEFT(0xFFC800);
-		
-		int value;
-		
-		private WalkType(int v)
-		{
-			value = v;
-		}
-	};
+	public final String name;
 	
-	public String name;
-	private int[] bgTile, fgTile, walkMap, areaMap;
-	private HashMap<Integer, String> triggers;
-	private HashMap<String, Integer> mapEntrances;
+	private final int[] bgTile;
+	private final int[] fgTile;
+	private final int[] walkMap;
+	private final int[] areaMap;
 	
-	private int width, height;
-	private ArrayList<EntityData> entities;
+	private final HashMap<Integer, String> triggers;
+	private final HashMap<String, Integer> mapEntrances;
+	
+	private final int width;
+	private final int height;
+	
+	private final ArrayList<EntityData> entities;
 	
 	public MapData(File file, GameData gameData)
 	{
@@ -59,8 +46,15 @@ public class MapData
 		String beginFilePath = FileIO.makePath(file.getPath()) + name;
 		
 		BufferedImage bgMap = FileIO.readImage(beginFilePath + "_bg.png");
+		width = bgMap.getWidth();
+		height = bgMap.getHeight();
+		bgTile = bgMap.getRGB(0, 0, width, height, null, 0, width);
+		
 		BufferedImage fgMap = FileIO.readImage(beginFilePath + "_fg.png");
+		fgTile = fgMap.getRGB(0, 0, width, height, null, 0, width);
+		
 		BufferedImage moveMap = FileIO.readImage(beginFilePath + "_move.png");
+		walkMap = moveMap.getRGB(0, 0, width, height, null, 0, width);
 		
 		BufferedImage areaM = null;
 		File areaMapFile = new File(beginFilePath + "_area.png");
@@ -74,13 +68,6 @@ public class MapData
 			areaM = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			FileIO.writeImage(areaM, areaMapFile);
 		}
-		
-		width = bgMap.getWidth();
-		height = bgMap.getHeight();
-		
-		bgTile = bgMap.getRGB(0, 0, width, height, null, 0, width);
-		fgTile = fgMap.getRGB(0, 0, width, height, null, 0, width);
-		walkMap = moveMap.getRGB(0, 0, width, height, null, 0, width);
 		areaMap = areaM.getRGB(0, 0, width, height, null, 0, width);
 		
 		entities = new ArrayList<>();
@@ -146,6 +133,26 @@ public class MapData
 			}
 		}
 	}
+	
+	public static enum WalkType
+	{
+		WATER(0x0000FF), 
+		WALKABLE(0xFFFFFF), 
+		NOT_WALKABLE(0x000000), 
+		HOP_DOWN(0x00FF00), 
+		HOP_UP(0xFF0000), 
+		HOP_LEFT(0xFFFF00), 
+		HOP_RIGHT(0x00FFFF),
+		STAIRS_UP_RIGHT(0xFF00FF),
+		STAIRS_UP_LEFT(0xFFC800);
+		
+		private final int value;
+		
+		private WalkType(int v)
+		{
+			value = v;
+		}
+	};
 	
 	public static Integer getMapEntranceLocation(String contents, int width) 
 	{	

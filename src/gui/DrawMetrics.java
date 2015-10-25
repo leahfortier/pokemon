@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -17,6 +19,8 @@ import main.Global;
 
 public class DrawMetrics
 {
+	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
+	
 	private static final String FONT_METRICS_LOCATION = "fontMetrics.txt";
 	
 	// For wrapped text, the amount in between each letter
@@ -92,10 +96,49 @@ public class DrawMetrics
 		return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR*1.5);
 	}
 	
+	public static Color getHPColor(double ratio)
+	{
+		if (ratio < 0.25) return Color.RED;
+		else if (ratio < 0.5) return Color.YELLOW;
+		return Color.GREEN;
+	}
+	
 	public static void drawCenteredImage(Graphics g, BufferedImage image, int x, int y)
 	{
 		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2, null);
 	}
+	
+	public static BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) 
+	{
+		ColorModel colorModel = image.getColorModel();
+		boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
+		WritableRaster raster = image.copyData(null);
+		
+		image = new BufferedImage(colorModel, raster, isAlphaPremultiplied, null);
+		
+		int width = image.getWidth();
+        int height = image.getHeight();
+        
+        for (int x = 0; x < width; ++x) 
+        {
+            for (int y = 0; y < height; ++y) 
+            {
+                int[] pixels = raster.getPixel(x, y, (int[]) null);
+                
+                for (int currComponent = 0; currComponent < pixels.length; ++currComponent)
+                {
+                	pixels[currComponent] = (int)Math.round(pixels[currComponent] * scale[currComponent] + offset[currComponent]);
+                	pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
+                }
+                if (pixels[3] == 0)
+                {
+                	pixels[0] = pixels[1] = pixels[2] = 0;
+                }
+                raster.setPixel(x, y, pixels);
+            }
+        }
+        return image;
+    }
 	
 	public static int drawWrappedText(Graphics g, String str, int x, int y, int width)
 	{
@@ -275,7 +318,7 @@ public class DrawMetrics
 	            sb.append(fontMetrics.toString() + "\n");
 	        }
 	        
-	        FileIO.printToFile(FONT_METRICS_LOCATION, sb);
+	        FileIO.writeToFile(FONT_METRICS_LOCATION, sb);
 	    }
 	    
 	    private void reset(int fontSize)

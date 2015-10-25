@@ -10,6 +10,7 @@ import main.FileIO;
 
 public class TileSet
 {
+	public static final int EMPTY_IMAGE = -1;
 	private static final String IMAGE_NOT_FOUND_LOCATION = FileIO.makePath("rec") + "imageNotFound.png";
 	private static BufferedImage IMAGE_NOT_FOUND = null;
 	

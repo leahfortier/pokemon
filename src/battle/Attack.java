@@ -1497,19 +1497,19 @@ public abstract class Attack implements Serializable
 			switch (b.getWeather().namesies())
 			{
 				case CLEAR_SKIES_EFFECT:
-				victim.healHealthFraction(1/2.0);
-				break;
+					victim.healHealthFraction(1/2.0);
+					break;
 				case SUNNY_EFFECT:
-				victim.healHealthFraction(2/3.0);
-				break;
+					victim.healHealthFraction(2/3.0);
+					break;
 				case HAILING_EFFECT:
 				case RAINING_EFFECT:
 				case SANDSTORM_EFFECT:
-				victim.healHealthFraction(1/4.0);
-				break;
+					victim.healHealthFraction(1/4.0);
+					break;
 				default:
-				Global.error("Funky weather problems!!!!");
-				break;
+					Global.error("Funky weather problems!!!!");
+					break;
 			}
 			
 			b.addMessage(victim.getName() + "'s health was restored!", victim);
@@ -1677,14 +1677,14 @@ public abstract class Attack implements Serializable
 			{
 				case SUNNY_EFFECT:
 				case CLEAR_SKIES_EFFECT:
-				return super.power;
+					return super.power;
 				case HAILING_EFFECT:
 				case RAINING_EFFECT:
 				case SANDSTORM_EFFECT:
-				return super.power/2;
+					return super.power/2;
 				default:
-				Global.error("Funky weather problems!");
-				return -1;
+					Global.error("Funky weather problems!");
+					return -1;
 			}
 		}
 
@@ -2501,19 +2501,19 @@ public abstract class Attack implements Serializable
 			switch (b.getWeather().namesies())
 			{
 				case CLEAR_SKIES_EFFECT:
-				victim.healHealthFraction(1/2.0);
-				break;
+					victim.healHealthFraction(1/2.0);
+					break;
 				case SUNNY_EFFECT:
-				victim.healHealthFraction(2/3.0);
-				break;
+					victim.healHealthFraction(2/3.0);
+					break;
 				case HAILING_EFFECT:
 				case RAINING_EFFECT:
 				case SANDSTORM_EFFECT:
-				victim.healHealthFraction(1/4.0);
-				break;
+					victim.healHealthFraction(1/4.0);
+					break;
 				default:
-				Global.error("Funky weather problems!!!!");
-				break;
+					Global.error("Funky weather problems!!!!");
+					break;
 			}
 			
 			b.addMessage(victim.getName() + "'s health was restored!", victim);
@@ -3460,14 +3460,14 @@ public abstract class Attack implements Serializable
 			switch (stockpile.getTurns())
 			{
 				case 1:
-				victim.healHealthFraction(1/4.0);
-				break;
+					victim.healHealthFraction(1/4.0);
+					break;
 				case 2:
-				victim.healHealthFraction(1/2.0);
-				break;
+					victim.healHealthFraction(1/2.0);
+					break;
 				default:
-				victim.healHealthFraction(1);
-				break;
+					victim.healHealthFraction(1);
+					break;
 			}
 			
 			// Stockpile ends after Swallow is used
@@ -4336,19 +4336,19 @@ public abstract class Attack implements Serializable
 			switch (b.getWeather().namesies())
 			{
 				case CLEAR_SKIES_EFFECT:
-				victim.healHealthFraction(1/2.0);
-				break;
+					victim.healHealthFraction(1/2.0);
+					break;
 				case SUNNY_EFFECT:
-				victim.healHealthFraction(2/3.0);
-				break;
+					victim.healHealthFraction(2/3.0);
+					break;
 				case HAILING_EFFECT:
 				case RAINING_EFFECT:
 				case SANDSTORM_EFFECT:
-				victim.healHealthFraction(1/4.0);
-				break;
+					victim.healHealthFraction(1/4.0);
+					break;
 				default:
-				Global.error("Funky weather problems!!!!");
-				break;
+					Global.error("Funky weather problems!!!!");
+					break;
 			}
 			
 			b.addMessage(victim.getName() + "'s health was restored!", victim);
@@ -8587,15 +8587,15 @@ public abstract class Attack implements Serializable
 			switch (pp)
 			{
 				case 1:
-				return 190;
+					return 190;
 				case 2:
-				return 75;
+					return 75;
 				case 3:
-				return 60;
+					return 60;
 				case 4:
-				return 50;
+					return 50;
 				default:
-				return 40;
+					return 40;
 			}
 		}
 	}
@@ -11097,11 +11097,11 @@ public abstract class Attack implements Serializable
 			{
 				case MULTITYPE_ABILITY:
 				case STANCE_CHANGE_ABILITY:
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return;
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
 				default:
-				super.apply(me, o, b);
-			}
+					super.apply(me, o, b);
+				}
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -11362,11 +11362,11 @@ public abstract class Attack implements Serializable
 				case STANCE_CHANGE_ABILITY:
 				case IMPOSTER_ABILITY:
 				case ILLUSION_ABILITY:
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return;
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
 				default:
-				super.apply(me, o, b);
-			}
+					super.apply(me, o, b);
+				}
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -12034,11 +12034,11 @@ public abstract class Attack implements Serializable
 				case ILLUSION_ABILITY:
 				case TRACE_ABILITY:
 				case IMPOSTER_ABILITY:
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return;
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
 				default:
-				super.apply(me, o, b);
-			}
+					super.apply(me, o, b);
+				}
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -12088,11 +12088,11 @@ public abstract class Attack implements Serializable
 				case TRUANT_ABILITY:
 				case MULTITYPE_ABILITY:
 				case STANCE_CHANGE_ABILITY:
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return;
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
 				default:
-				super.apply(me, o, b);
-			}
+					super.apply(me, o, b);
+				}
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -12124,11 +12124,11 @@ public abstract class Attack implements Serializable
 				case TRUANT_ABILITY:
 				case MULTITYPE_ABILITY:
 				case STANCE_CHANGE_ABILITY:
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
-				return;
+					b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+					return;
 				default:
-				super.apply(me, o, b);
-			}
+					super.apply(me, o, b);
+				}
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -12155,9 +12155,9 @@ public abstract class Attack implements Serializable
 				case MULTITYPE_ABILITY:
 				case ILLUSION_ABILITY:
 				case STANCE_CHANGE_ABILITY:
-				return false;
+					return false;
 				default:
-				return true;
+					return true;
 			}
 		}
 

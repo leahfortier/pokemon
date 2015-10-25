@@ -1,10 +1,16 @@
 package battle;
 
+import gui.view.BattleView;
+import gui.view.BattleView.VisualState;
+import main.Game;
+import main.Game.ViewMode;
+import main.Global;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
+import sound.SoundTitle;
 import battle.effect.Status.StatusCondition;
 
 public class MessageUpdate 
@@ -32,16 +38,68 @@ public class MessageUpdate
 	
 	public static enum Update 
 	{
-		NONE, 
-		EXIT_BATTLE, 
-		PROMPT_SWITCH, 
-		FORCE_SWITCH, 
-		LEARN_MOVE, 
-		STAT_GAIN, 
-		ENTER_NAME, 
+		NONE,
+		ENTER_NAME,
 		APPEND_TO_NAME, 
 		SHOW_POKEMON,
-		WIN_BATTLE;
+		PROMPT_SWITCH(VisualState.POKEMON),
+		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION), 
+		STAT_GAIN(VisualState.STAT_GAIN),
+		EXIT_BATTLE(new PerformUpdate() {
+			public void performUpdate(BattleView battleView, Game game) {
+				game.setViewMode(ViewMode.MAP_VIEW);
+				battleView.clearUpdate();
+			}
+		}),  
+		FORCE_SWITCH(new PerformUpdate() {
+			public void performUpdate(BattleView battleView, Game game) {
+				battleView.setVisualState(VisualState.POKEMON);
+				battleView.setSwitchForced();
+				battleView.clearUpdate();
+			}
+		}),
+		WIN_BATTLE(new PerformUpdate() {
+			public void performUpdate(BattleView battleView, Game game) {
+				if (battleView.getCurrentBattle().isWildBattle())
+				{
+					Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
+				}
+				else
+				{
+					// TODO: Get trainer win music
+					Global.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
+				}
+			}
+		});
+		
+		private final PerformUpdate performUpdate;
+		
+		private Update() {
+			this(new PerformUpdate() {
+				public void performUpdate(BattleView battleView, Game game) {}
+			});
+		}
+		
+		private Update(final BattleView.VisualState visualState) {
+			this(new PerformUpdate() {
+				public void performUpdate(BattleView battleView, Game game) {
+					battleView.setVisualState(visualState);
+					battleView.clearUpdate();
+				}
+			});
+		}
+		
+		private Update(PerformUpdate performUpdate) {
+			this.performUpdate = performUpdate;
+		}
+		
+		public void performUpdate(BattleView battleView, Game game) {
+			this.performUpdate.performUpdate(battleView, game);
+		}
+		
+		private static interface PerformUpdate {
+			public void performUpdate(BattleView battleView, Game game);
+		}
 	}
 	
 	public MessageUpdate(String m)

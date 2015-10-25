@@ -19,11 +19,11 @@ public class MapTriggerData {
 	
 	private boolean saved;
 	
-	MapMaker mapMaker;
-	String currentMap;
+	private MapMaker mapMaker;
+	private String currentMap;
 	
-	HashMap<String, Trigger> triggers;
-	File triggerFile;
+	private HashMap<String, Trigger> triggers;
+	private File triggerFile;
 	
 	
 	public MapTriggerData(MapMaker mapMaker, String currentMap) {

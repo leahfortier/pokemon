@@ -18,13 +18,13 @@ public class PokeCenterTransitionData {
 	
 	public static final String pokeCenterTransitionTriggersFile = MapMaker.recFolderNme +MapMaker.FILE_SLASH +"triggers" + MapMaker.FILE_SLASH + "PokeCenterTransitionTriggers";
 	
-	GroupTrigger groupTrigger;
-	HashMap<String, MapTransitionTrigger> transitionTriggers;
+	private GroupTrigger groupTrigger;
+	private HashMap<String, MapTransitionTrigger> transitionTriggers;
 	
-	MapMaker mapMaker;
-	File pokeCenterTransitionFile;
+	private MapMaker mapMaker;
+	private File pokeCenterTransitionFile;
 	
-	boolean saved;
+	private boolean saved;
 	
 	public PokeCenterTransitionData(MapMaker mapMaker) {
 		this.mapMaker = mapMaker;

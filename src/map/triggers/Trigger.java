@@ -13,11 +13,11 @@ public abstract class Trigger
 	private static final Pattern globalPattern = Pattern.compile("global:\\s*([!]?\\w+)");
 	protected static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*([\\w -.']+)", Pattern.UNICODE_CHARACTER_CLASS);
 	
-	protected String name;
-	protected ArrayList<String> globals;
-	protected Condition condition;
+	protected final String name;
+	protected final ArrayList<String> globals;
+	protected final Condition condition;
 	
-	protected Trigger(String name, String str)
+	public Trigger(String name, String str)
 	{
 		this.name = name;
 		
@@ -33,7 +33,7 @@ public abstract class Trigger
 	}
 	
 	/**
-	 * Evaluate the function, Should only be triggered when a player moves into a map squared that is
+	 * Evaluate the function, Should only be triggered when a player moves into a map square that is
 	 * defined to trigger this event
 	 * @param data
 	 * @return

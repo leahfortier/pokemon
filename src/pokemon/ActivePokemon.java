@@ -1,5 +1,6 @@
 package pokemon;
 
+import gui.DrawMetrics;
 import item.Item;
 import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
@@ -952,7 +953,7 @@ public class ActivePokemon implements Serializable
 	
 	public Color getHPColor()
 	{
-		return Global.getHPColor(getHPRatio());
+		return DrawMetrics.getHPColor(getHPRatio());
 	}
 	
 	public String getActualName()

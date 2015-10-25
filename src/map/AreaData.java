@@ -18,8 +18,7 @@ import battle.effect.Status.StatusCondition;
 
 public class AreaData
 {
-
-	public static final Pattern areaSoundConditionPattern = Pattern.compile("(?:([()&|!\\w]+)\\s*:\\s*)?([\\w-]+)");
+	private static final Pattern areaSoundConditionPattern = Pattern.compile("(?:([()&|!\\w]+)\\s*:\\s*)?([\\w-]+)");
 
 	public enum WeatherState
 	{
@@ -38,12 +37,12 @@ public class AreaData
 		MISTY(Type.FAIRY, Namesies.MOONBLAST_ATTACK, Stat.SP_ATTACK),
 		ELECTRIC(Type.ELECTRIC, Namesies.THUNDERBOLT_ATTACK, StatusCondition.PARALYZED);
 		
-		private Type type;
-		private Attack attack;
+		private final Type type;
+		private final Attack attack;
 		
-		private StatusCondition status;
-		private int[] statChanges;
-		private List<Effect> effects;
+		private final StatusCondition status;
+		private final int[] statChanges;
+		private final List<Effect> effects;
 		
 		private int backgroundIndex;
 		private int playerCircleIndex;
@@ -54,7 +53,6 @@ public class AreaData
 			this.type = type;
 			this.attack = Attack.getAttack(attack);
 		
-			this.status = StatusCondition.NONE;
 			this.statChanges = new int[Stat.NUM_BATTLE_STATS];
 			this.effects = new ArrayList<>();
 			
@@ -62,17 +60,22 @@ public class AreaData
 			{
 				this.status = (StatusCondition)effect;
 			}
-			else if (effect instanceof Stat)
-			{
-				this.statChanges[((Stat)effect).index()] = -1;
-			}
-			else if (effect instanceof Namesies)
-			{
-				this.effects.add(PokemonEffect.getEffect((Namesies)effect));
-			}
 			else
 			{
-				Global.error("Invalid effect for terrain type " + this.name());
+				this.status = StatusCondition.NONE;
+				
+				if (effect instanceof Stat)
+				{
+					this.statChanges[((Stat)effect).index()] = -1;
+				}
+				else if (effect instanceof Namesies)
+				{
+					this.effects.add(PokemonEffect.getEffect((Namesies)effect));
+				}
+				else
+				{
+					Global.error("Invalid effect for terrain type " + this.name());
+				}	
 			}
 			
 			this.backgroundIndex = 0x100 + this.ordinal();
@@ -83,6 +86,7 @@ public class AreaData
 		static
 		{
 			// TODO: Need Terrain images for misty and electric terrain -- use snow and sand for now (for no particular reason)
+			// TODO: Once that's finished need to include final tags on all these variables
 			MISTY.backgroundIndex = SNOW.backgroundIndex;
 			ELECTRIC.backgroundIndex = SAND.backgroundIndex;
 			

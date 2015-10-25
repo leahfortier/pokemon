@@ -1685,17 +1685,17 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			switch (source)
 			{
 				case ATTACK:
-				critsies.focusEnergy = true;
-				break;
+					critsies.focusEnergy = true;
+					break;
 				case USE_ITEM:
-				critsies.direHit = true;
-				break;
+					critsies.direHit = true;
+					break;
 				case HELD_ITEM:
-				critsies.berrylicious = true;
-				break;
+					critsies.berrylicious = true;
+					break;
 				default:
-				Global.error("Unknown source for RaiseCrits effect.");
-			}
+					Global.error("Unknown source for RaiseCrits effect.");
+				}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1775,15 +1775,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			switch (castSource)
 			{
 				case ATTACK:
-				return victim.getName() + " was changed to " + changeType + " type!!";
+					return victim.getName() + " was changed to " + changeType + " type!!";
 				case ABILITY:
-				return victim.getName() + "'s " + ((Ability)typeSource).getName() + " changed it to the " + changeType + " type!!";
+					return victim.getName() + "'s " + ((Ability)typeSource).getName() + " changed it to the " + changeType + " type!!";
 				case HELD_ITEM:
-				return victim.getName() + "'s " + ((Item)typeSource).getName() + " changed it to the " + changeType + " type!!";
+					return victim.getName() + "'s " + ((Item)typeSource).getName() + " changed it to the " + changeType + " type!!";
 				
 				default:
-				Global.error("Invalid cast source for ChangeType " + castSource);
-				return null;
+					Global.error("Invalid cast source for ChangeType " + castSource);
+					return null;
 			}
 		}
 

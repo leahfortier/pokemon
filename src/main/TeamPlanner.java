@@ -368,7 +368,7 @@ public class TeamPlanner
 				out.append(member.toString());
 			}
 			
-			FileIO.printToFile("teamPlanner.out", out);
+			FileIO.writeToFile("teamPlanner.out", out);
 		}
 		
 		public String toString()

@@ -66,7 +66,7 @@ public class BattleView extends View
 	private static final int LOG_RIGHT_BUTTON = 1;
 	private static final int LOGS_PER_PAGE = 23;
 	
-	// Swicth Button in Pokemon View Button Index
+	// Switch Button in Pokemon View Button Index
 	private static final int POKEMON_SWITCH_BUTTON = Trainer.MAX_POKEMON;
 	
 	// Loss Constants <-- Super Meaningful Comment
@@ -137,12 +137,143 @@ public class BattleView extends View
 	private int[] statGains;
 	private int[] newStats;
 	
-	// Contains the different types of states a battle can be in
-	private enum VisualState
+	public BattleView()
 	{
-		MESSAGE, BAG, INVALID_BAG, FIGHT, INVALID_FIGHT, POKEMON, 
-		INVALID_POKEMON, MENU, LEARN_MOVE_QUESTION, LEARN_MOVE_DELETE,
-		USE_ITEM, STAT_GAIN, LOG_VIEW
+		playerAnimation = new PokemonAnimationState();
+		enemyAnimation = new PokemonAnimationState();
+	}
+	
+	public void setBattle(Battle b)
+	{		
+		currentBattle = b;
+		selectedBagTab = 0;
+		bagPage = 0;
+		selectedPokemonTab = 0;
+		selectedButton = 0;
+		lastMoveUsed = 0;
+		switchForced = false;
+		
+		playerAnimation.resetVals(b.getPlayer().front());
+		enemyAnimation.resetVals(b.getOpponent().front());
+		
+		playerAnimation.state.imageNumber = 0;
+		enemyAnimation.state.imageNumber = 0;
+		
+		learnedMove = null;
+		learnedPokemon = null;
+		
+		setVisualState(VisualState.MESSAGE);
+		update = Update.NONE;
+		
+		// Back Button
+		backButton = new Button(750, 560, 35, 20, null);
+		
+		// Menu Buttons
+		menuButtons = new Button[4];
+		menuButtons[FIGHT_BUTTON] = fightBtn = new Button(452, 473, 609 - 452, 515 - 473, Button.HoverAction.ARROW, new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON});
+		menuButtons[BAG_BUTTON] = bagBtn = new Button(628, 473, 724 - 628, 513 - 473, Button.HoverAction.ARROW, new int[] {SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON});
+		menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(452, 525, 609 - 452, 571 - 525, Button.HoverAction.ARROW, new int[] {RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON});
+		menuButtons[RUN_BUTTON] = runBtn = new Button(628, 525, 724 - 628, 571 - 525, Button.HoverAction.ARROW, new int[] {FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON});
+		
+		// Move Buttons
+		moveButtons = new Button[Move.MAX_MOVES];
+		for (int y = 0, i = 0; y < 2; y++)
+		{
+			for (int x = 0; x < Move.MAX_MOVES/2; x++, i++)
+			{
+				moveButtons[i] = new Button(22 + x*190, 440 + 21 + y*62, 183, 55, Button.HoverAction.BOX, 
+						new int[] { (i + 1)%Move.MAX_MOVES, // Right
+									((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up
+									((i - 1) + Move.MAX_MOVES)%Move.MAX_MOVES, // Left
+									(i + Move.MAX_MOVES/2)%Move.MAX_MOVES }); // Down
+			}
+		}
+		
+		// Learn Move Buttons
+		yesButton = new Button(moveButtons[2].x, moveButtons[2].y, moveButtons[2].width, moveButtons[2].height, Button.HoverAction.BOX);
+		noButton = new Button(moveButtons[3].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.HoverAction.BOX);
+		newMoveButton = new Button(moveButtons[3].x + moveButtons[3].width + moveButtons[2].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.HoverAction.BOX);
+		
+		// Bag View Buttons 
+		bagButtons = new Button[NUM_BAG_BUTTONS];
+		
+		bagTabButtons = new Button[bagCategories.length];
+		for (int i = 0; i < bagCategories.length; i++)
+		{
+			bagButtons[i] = bagTabButtons[i] = new Button(i*89 + 30, 190, 89, 28, Button.HoverAction.BOX, 
+					new int[] { (i + 1)%bagCategories.length, // Right
+								LAST_ITEM_BUTTON, // Up
+								(i - 1 + bagCategories.length)%bagCategories.length, // Left
+								ITEMS }); // Down
+		}
+		
+		bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, Button.HoverAction.BOX, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});
+		bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(250,435,35,20, Button.HoverAction.BOX, new int[] {-1, ITEMS + ITEMS_PER_PAGE - 1, BAG_LEFT_BUTTON, LAST_ITEM_BUTTON});
+		bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, Button.HoverAction.BOX, new int[] {-1, BAG_LEFT_BUTTON, -1, selectedBagTab});
+		
+		for (int y = 0, i = ITEMS; y < ITEMS_PER_PAGE/2; y++)
+		{
+			for (int x = 0; x < 2; x++, i++)
+			{
+				bagButtons[i] = new Button(55 + x*162, 243 + y*38, 148, 28, Button.HoverAction.BOX, 
+						new int[] { (i + 1 - ITEMS)%ITEMS_PER_PAGE + ITEMS, // Right
+									y == 0 ? selectedBagTab : i - 2, // Up
+									(i - 1 - ITEMS + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS, // Left
+									y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + 2 }); // Down
+			}
+		}
+		
+		// Pokemon Switch View Buttons
+		pokemonButtons = new Button[Trainer.MAX_POKEMON + 1];
+		
+		pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
+		{
+			pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, Button.HoverAction.BOX, 
+					new int[] { (i + 1)%Trainer.MAX_POKEMON, // Right
+								POKEMON_SWITCH_BUTTON, // Up
+								(i - 1 + Trainer.MAX_POKEMON)%Trainer.MAX_POKEMON, // Left
+								POKEMON_SWITCH_BUTTON }); // Down
+		}
+		
+		pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, Button.HoverAction.BOX, new int[]{-1, 0, -1, -1});
+	
+		logLeftButton = new Button(150, 550, 35, 20, Button.HoverAction.BOX, new int[] {LOG_RIGHT_BUTTON, -1, -1, -1});
+		logRightButton = new Button(200, 550, 35, 20, Button.HoverAction.BOX, new int[] {-1, -1, LOG_LEFT_BUTTON, -1});
+		logButtons = new Button[] {logLeftButton, logRightButton};
+		
+		
+		currentBattle.getPlayer().clearLogMessages();
+	}
+	
+	// Contains the different types of states a battle can be in
+	public static enum VisualState
+	{
+		MESSAGE(updateMessage),
+		BAG(updateBag), 
+		INVALID_BAG(updateBag), 
+		FIGHT(updateFight), 
+		INVALID_FIGHT(updateFight), 
+		POKEMON(updatePokemon), 
+		INVALID_POKEMON(updatePokemon), 
+		MENU(updateMenu), 
+		LEARN_MOVE_QUESTION(updateLearnMoveQuestion), 
+		LEARN_MOVE_DELETE(updateLearnMoveDelete),
+		USE_ITEM(updatePokemon), 
+		STAT_GAIN(updateMessage), 
+		LOG_VIEW(updateLog);
+		
+		private final UpdateVisualState updateVisualState;
+		
+		private VisualState(UpdateVisualState updateVisualState) {
+			this.updateVisualState = updateVisualState;
+		}
+		
+		public static interface UpdateVisualState {
+			public void update(BattleView view, InputControl input);
+			public void set(BattleView view);
+			public void draw(BattleView view, Graphics g, GameData data, TileSet tiles);
+		}
 	};
 	
 	// Handles animation and keeps track of the current state
@@ -299,6 +430,8 @@ public class BattleView extends View
 			}
 		}
 		
+		// TODO: Is this code duplicated in other places? Like the evolution view by any chance
+		// Might want to include a helper class that contains a generic method for different types of animations
 		private void catchAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
 		{
 			Graphics2D g2d = (Graphics2D)g;
@@ -363,8 +496,8 @@ public class BattleView extends View
 
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
 
-			g2d.drawImage(Global.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
-			g2d.drawImage(Global.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
+			g2d.drawImage(DrawMetrics.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
+			g2d.drawImage(DrawMetrics.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
 		}
 		
 		// hi :)
@@ -402,8 +535,8 @@ public class BattleView extends View
 			
 			BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber + (isEnemy^1));
 
-			g2d.drawImage(Global.colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
-			g2d.drawImage(Global.colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
+			g2d.drawImage(DrawMetrics.colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
+			g2d.drawImage(DrawMetrics.colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
 		}
 		
 		private void drawHealthBar(Graphics g)
@@ -423,7 +556,7 @@ public class BattleView extends View
 			else animationHP = 0;
 			
 			// Set the proper color for the ratio and fill in the health bar as appropriate
-			g.setColor(Global.getHPColor(ratio));
+			g.setColor(DrawMetrics.getHPColor(ratio));
 			if (animationHP > 0 && (animationHP/10)%2 == 0) g.setColor(g.getColor().darker());
 			g.fillRoundRect(113, 57, (int)((312 - 155)*ratio), 119 - 109, 5, 5);
 		}
@@ -445,7 +578,7 @@ public class BattleView extends View
 			g.fillRect(36, 107, 294 - 36, 115 - 107); //463,  304
 			
 			// Experience bar foreground
-			g.setColor(Global.EXP_BAR_COLOR);
+			g.setColor(DrawMetrics.EXP_BAR_COLOR);
 			g.fillRect(36, 107, (int)((294 - 36)*expRatio), 115 - 107);
 		}
 		
@@ -509,628 +642,975 @@ public class BattleView extends View
 		}
 	}
 	
-	public BattleView()
-	{
-		playerAnimation = new PokemonAnimationState();
-		enemyAnimation = new PokemonAnimationState();
-	}
-	
-	public void setBattle(Battle b)
-	{		
-		currentBattle = b;
-		selectedBagTab = 0;
-		bagPage = 0;
-		selectedPokemonTab = 0;
-		selectedButton = 0;
-		lastMoveUsed = 0;
-		switchForced = false;
-		
-		playerAnimation.resetVals(b.getPlayer().front());
-		enemyAnimation.resetVals(b.getOpponent().front());
-		
-		playerAnimation.state.imageNumber = 0;
-		enemyAnimation.state.imageNumber = 0;
-		
-		learnedMove = null;
-		learnedPokemon = null;
-		
-		setVisualState(VisualState.MESSAGE);
-		update = Update.NONE;
-		
-		// Back Button
-		backButton = new Button(750, 560, 35, 20, null);
-		
-		// Menu Buttons
-		menuButtons = new Button[4];
-		menuButtons[FIGHT_BUTTON] = fightBtn = new Button(452, 473, 609 - 452, 515 - 473, Button.HoverAction.ARROW, new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON});
-		menuButtons[BAG_BUTTON] = bagBtn = new Button(628, 473, 724 - 628, 513 - 473, Button.HoverAction.ARROW, new int[] {SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON});
-		menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(452, 525, 609 - 452, 571 - 525, Button.HoverAction.ARROW, new int[] {RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON});
-		menuButtons[RUN_BUTTON] = runBtn = new Button(628, 525, 724 - 628, 571 - 525, Button.HoverAction.ARROW, new int[] {FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON});
-		
-		// Move Buttons
-		moveButtons = new Button[Move.MAX_MOVES];
-		for (int y = 0, i = 0; y < 2; y++)
-		{
-			for (int x = 0; x < Move.MAX_MOVES/2; x++, i++)
-			{
-				moveButtons[i] = new Button(22 + x*190, 440 + 21 + y*62, 183, 55, Button.HoverAction.BOX, 
-						new int[] { (i + 1)%Move.MAX_MOVES, // Right
-									((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up
-									((i - 1) + Move.MAX_MOVES)%Move.MAX_MOVES, // Left
-									(i + Move.MAX_MOVES/2)%Move.MAX_MOVES }); // Down
-			}
-		}
-		
-		// Learn Move Buttons
-		yesButton = new Button(moveButtons[2].x, moveButtons[2].y, moveButtons[2].width, moveButtons[2].height, Button.HoverAction.BOX);
-		noButton = new Button(moveButtons[3].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.HoverAction.BOX);
-		newMoveButton = new Button(moveButtons[3].x + moveButtons[3].width + moveButtons[2].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.HoverAction.BOX);
-		
-		// Bag View Buttons 
-		bagButtons = new Button[NUM_BAG_BUTTONS];
-		
-		bagTabButtons = new Button[bagCategories.length];
-		for (int i = 0; i < bagCategories.length; i++)
-		{
-			bagButtons[i] = bagTabButtons[i] = new Button(i*89 + 30, 190, 89, 28, Button.HoverAction.BOX, 
-					new int[] { (i + 1)%bagCategories.length, // Right
-								LAST_ITEM_BUTTON, // Up
-								(i - 1 + bagCategories.length)%bagCategories.length, // Left
-								ITEMS }); // Down
-		}
-		
-		bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, Button.HoverAction.BOX, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});
-		bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(250,435,35,20, Button.HoverAction.BOX, new int[] {-1, ITEMS + ITEMS_PER_PAGE - 1, BAG_LEFT_BUTTON, LAST_ITEM_BUTTON});
-		bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, Button.HoverAction.BOX, new int[] {-1, BAG_LEFT_BUTTON, -1, selectedBagTab});
-		
-		for (int y = 0, i = ITEMS; y < ITEMS_PER_PAGE/2; y++)
-		{
-			for (int x = 0; x < 2; x++, i++)
-			{
-				bagButtons[i] = new Button(55 + x*162, 243 + y*38, 148, 28, Button.HoverAction.BOX, 
-						new int[] { (i + 1 - ITEMS)%ITEMS_PER_PAGE + ITEMS, // Right
-									y == 0 ? selectedBagTab : i - 2, // Up
-									(i - 1 - ITEMS + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS, // Left
-									y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + 2 }); // Down
-			}
-		}
-		
-		// Pokemon Switch View Buttons
-		pokemonButtons = new Button[Trainer.MAX_POKEMON + 1];
-		
-		pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
-		{
-			pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, Button.HoverAction.BOX, 
-					new int[] { (i + 1)%Trainer.MAX_POKEMON, // Right
-								POKEMON_SWITCH_BUTTON, // Up
-								(i - 1 + Trainer.MAX_POKEMON)%Trainer.MAX_POKEMON, // Left
-								POKEMON_SWITCH_BUTTON }); // Down
-		}
-		
-		pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, Button.HoverAction.BOX, new int[]{-1, 0, -1, -1});
-	
-		logLeftButton = new Button(150, 550, 35, 20, Button.HoverAction.BOX, new int[] {LOG_RIGHT_BUTTON, -1, -1, -1});
-		logRightButton = new Button(200, 550, 35, 20, Button.HoverAction.BOX, new int[] {-1, -1, LOG_LEFT_BUTTON, -1});
-		logButtons = new Button[] {logLeftButton, logRightButton};
-		
-		
-		currentBattle.getPlayer().clearLogMessages();
-	}
-	
 	// Updates when in the menu state
-	public void updateMenu(InputControl input)
-	{
-		// Update menu buttons
-		selectedButton = Button.update(menuButtons, selectedButton, input);
+	private static VisualState.UpdateVisualState updateMenu = new VisualState.UpdateVisualState() {
+
+		public void set(BattleView view) {
+			for (Button b: view.menuButtons)
+				b.setForceHover(false);
+		}
 		
-		// Show Bag View
-		if (bagBtn.checkConsumePress())
-		{
-			setVisualState(VisualState.BAG);
-		}
-		// Show Pokemon View
-		else if (pokemonBtn.checkConsumePress())
-		{
-			setVisualState(VisualState.POKEMON);
-		}
-		// Attempt escape
-		else if (runBtn.checkConsumePress())
-		{
-			setVisualState(VisualState.MESSAGE);
-			currentBattle.runAway();
-			cycleMessage(false);
-		}
-		// Show Fight View TODO: Semi-invulnerable moves look awful and weird
-		else if (fightBtn.checkConsumePress() || currentBattle.getPlayer().front().isSemiInvulnerable())
-		{
-			setVisualState(VisualState.FIGHT);
+		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+			g.drawImage(tiles.getTile(0x3), 0, 439, null);
+			g.drawImage(tiles.getTile(0x2), 0, 0, null);
 			
-			// Move is forced -- don't show menu, but execute the move
-			if (Move.forceMove(currentBattle, currentBattle.getPlayer().front()))
+			g.setColor(Color.WHITE);
+			
+			ActivePokemon playerPokemon = view.currentBattle.getPlayer().front();
+			
+			DrawMetrics.setFont(g, 30);
+			DrawMetrics.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
+			
+			for (Button b: view.menuButtons)
+				b.draw(g);
+		}
+		
+		public void update(BattleView view, InputControl input)
+		{
+			// Update menu buttons
+			view.selectedButton = Button.update(view.menuButtons, view.selectedButton, input);
+			
+			// Show Bag View
+			if (view.bagBtn.checkConsumePress())
 			{
-				currentBattle.getPlayer().performAction(currentBattle, Action.FIGHT);
-				setVisualState(VisualState.MESSAGE);
-				cycleMessage(false);
+				view.setVisualState(VisualState.BAG);
+			}
+			// Show Pokemon View
+			else if (view.pokemonBtn.checkConsumePress())
+			{
+				view.setVisualState(VisualState.POKEMON);
+			}
+			// Attempt escape
+			else if (view.runBtn.checkConsumePress())
+			{
+				view.setVisualState(VisualState.MESSAGE);
+				view.currentBattle.runAway();
+				view.cycleMessage(false);
+			}
+			// Show Fight View TODO: Semi-invulnerable moves look awful and weird
+			else if (view.fightBtn.checkConsumePress() || view.currentBattle.getPlayer().front().isSemiInvulnerable())
+			{
+				view.setVisualState(VisualState.FIGHT);
+				
+				// Move is forced -- don't show menu, but execute the move
+				if (Move.forceMove(view.currentBattle, view.currentBattle.getPlayer().front()))
+				{
+					view.currentBattle.getPlayer().performAction(view.currentBattle, Action.FIGHT);
+					view.setVisualState(VisualState.MESSAGE);
+					view.cycleMessage(false);
+				}
+			}
+			else if (input.isDown(Control.L))
+			{
+				input.consumeKey(Control.L);
+				view.logPage = 0;
+				view.logMessages = view.currentBattle.getPlayer().getLogMessages();
+				
+				if (view.logMessages.size() / LOGS_PER_PAGE > 0)
+				{
+					view.selectedButton = LOG_RIGHT_BUTTON;
+					view.logRightButton.setActive(true);
+					view.selectedButton = Button.update(view.logButtons, view.selectedButton, input);
+				}
+				else
+				{
+					view.logRightButton.setActive(false);
+				}
+				
+				view.logLeftButton.setActive(false);
+				view.setVisualState(VisualState.LOG_VIEW);
 			}
 		}
-		else if (input.isDown(Control.L))
-		{
-			input.consumeKey(Control.L);
-			logPage = 0;
-			logMessages = currentBattle.getPlayer().getLogMessages();
-			
-			if (logMessages.size() / LOGS_PER_PAGE > 0)
-			{
-				selectedButton = LOG_RIGHT_BUTTON;
-				logRightButton.setActive(true);
-				selectedButton = Button.update(logButtons, selectedButton, input);
-			}
-			else
-			{
-				logRightButton.setActive(false);
-			}
-			
-			logLeftButton.setActive(false);
-			setVisualState(VisualState.LOG_VIEW);
-		}
-	}
+	};
 	
 	// Updates when in fight mode (selecting a move menu)
-	private void updateFight(InputControl input)
-	{
-		// Update move buttons and the back button
-		selectedButton = Button.update(moveButtons, selectedButton, input);
-		backButton.update(input, false, Control.BACK);
+	private static VisualState.UpdateVisualState updateFight = new VisualState.UpdateVisualState() {
 		
-		// Get the Pokemon that is attacking and their corresponsing move list
-		ActivePokemon front = currentBattle.getPlayer().front();
+		public void set(BattleView view) {
+			view.selectedButton = view.lastMoveUsed;
+			view.selectedMoveList = view.currentBattle.getPlayer().front().getMoves(view.currentBattle);
+			for (int i = 0; i < Move.MAX_MOVES; i++) 
+				view.moveButtons[i].setActive(i < view.selectedMoveList.size());
+			
+			for (Button b: view.moveButtons)
+				b.setForceHover(false);
+		}
 		
-		for (int i = 0; i < selectedMoveList.size(); i++)
-		{
-			if (moveButtons[i].checkConsumePress())
+		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+			g.drawImage(tiles.getTile(0x20), 415, 440, null);
+			g.drawImage(tiles.getTile(0x21), 0, 440, null);
+			
+			ActivePokemon playerPokemon = view.currentBattle.getPlayer().front();
+			
+			List<Move> moves = playerPokemon.getMoves(view.currentBattle);
+			for (int y = 0, i = 0; y < 2; y++)
 			{
-				lastMoveUsed = i;
-				
-				// Execute the move if valid
-				if (Move.validMove(currentBattle, front, selectedMoveList.get(i), true))
+				for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
 				{
-					currentBattle.getPlayer().performAction(currentBattle, Action.FIGHT);
-					setVisualState(VisualState.MESSAGE);
-					cycleMessage(false);
+					int dx = 22 + x*190, dy = 440 + 21 + y*62;
+					g.translate(dx, dy);
+					
+					Move move = moves.get(i);
+					g.setColor(move.getAttack().getActualType().getColor());
+					g.fillRect(0, 0, 183, 55);
+					g.drawImage(tiles.getTile(0x22), 0, 0, null);
+					
+					g.setColor(Color.BLACK);
+					DrawMetrics.setFont(g, 22);
+					g.drawString(move.getAttack().getName(), 10, 26);
+					
+					DrawMetrics.setFont(g, 18);
+					DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+					
+					BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
+					g.drawImage(categoryImage, 12, 32, null);
+					
+					g.translate(-dx, -dy);
 				}
-				// An invalid move -- Don't let them select it
-				else
+			}
+			
+			String msgLine = view.state == VisualState.INVALID_FIGHT && view.message != null ? view.message : "Select a move!";
+			
+			g.setColor(Color.BLACK);
+			DrawMetrics.setFont(g, 30);
+			DrawMetrics.drawWrappedText(g, msgLine, 440, 485, 350); // TODO: Is this duplicated code?
+			
+			View.drawArrows(g, null, view.backButton);
+			
+			for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) 
+				view.moveButtons[i].draw(g);
+			
+			view.backButton.draw(g);
+		}
+		
+		public void update(BattleView view, InputControl input)
+		{
+			// Update move buttons and the back button
+			view.selectedButton = Button.update(view.moveButtons, view.selectedButton, input);
+			view.backButton.update(input, false, Control.BACK);
+			
+			// Get the Pokemon that is attacking and their corresponsing move list
+			ActivePokemon front = view.currentBattle.getPlayer().front();
+			
+			for (int i = 0; i < view.selectedMoveList.size(); i++)
+			{
+				if (view.moveButtons[i].checkConsumePress())
 				{
-					cycleMessage(false);
-					setVisualState(VisualState.INVALID_FIGHT);
+					view.lastMoveUsed = i;
+					
+					// Execute the move if valid
+					if (Move.validMove(view.currentBattle, front, view.selectedMoveList.get(i), true))
+					{
+						view.currentBattle.getPlayer().performAction(view.currentBattle, Action.FIGHT);
+						view.setVisualState(VisualState.MESSAGE);
+						view.cycleMessage(false);
+					}
+					// An invalid move -- Don't let them select it
+					else
+					{
+						view.cycleMessage(false);
+						view.setVisualState(VisualState.INVALID_FIGHT);
+					}
+				}
+			}
+			
+			// Return to main battle menu
+			if (view.backButton.checkConsumePress())
+			{
+				view.setVisualState(VisualState.MENU);
+			}
+		}
+	};
+	
+	private static VisualState.UpdateVisualState updateMessage = new VisualState.UpdateVisualState() {
+
+		public void set(BattleView view) {}
+
+		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+			g.drawImage(tiles.getTile(0x3), 0, 439, null);
+			
+			g.setColor(Color.WHITE);
+			DrawMetrics.setFont(g, 30);
+			
+			DrawMetrics.drawWrappedText(g, view.message, 30, 490, 720);
+			
+			if (view.state == VisualState.STAT_GAIN) {
+				g.drawImage(tiles.getTile(0x5), 0, 280, null);
+				g.setColor(Color.BLACK);
+				for (int i = 0; i < Stat.NUM_STATS; i++)
+				{
+					DrawMetrics.setFont(g, 16);
+					g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
+					
+					DrawMetrics.drawRightAlignedString(g, (view.statGains[i] < 0 ? "" : " + ") + view.statGains[i], 206, 314 + i*21);
+					DrawMetrics.drawRightAlignedString(g, view.newStats[i] + "", 247, 314 + i*21);
 				}
 			}
 		}
 		
-		// Return to main battle menu
-		if (backButton.checkConsumePress())
+		public void update(BattleView view, InputControl input)
 		{
-			setVisualState(VisualState.MENU);
+			boolean pressed = false;
+			
+			// Consume input for mouse clicks and spacebars
+			if (input.mouseDown)
+			{
+				pressed = true;
+				input.consumeMousePress();
+			}
+			if (input.isDown(Control.SPACE))
+			{
+				pressed = true;
+				input.consumeKey(Control.SPACE);
+			}
+			
+			// Don't go to the next message if an animation is playing 
+			if (pressed && view.message != null && !view.playerAnimation.isAnimationPlaying() && !view.enemyAnimation.isAnimationPlaying())
+			{
+				if (view.state == VisualState.STAT_GAIN) view.setVisualState(VisualState.MESSAGE);
+				view.cycleMessage(false);
+			}			
 		}
-	}
-	
-	private void updateMessage(InputControl input)
-	{
-		boolean pressed = false;
-		
-		// Consume input for mouse clicks and spacebars
-		if (input.mouseDown)
-		{
-			pressed = true;
-			input.consumeMousePress();
-		}
-		if (input.isDown(Control.SPACE))
-		{
-			pressed = true;
-			input.consumeKey(Control.SPACE);
-		}
-		
-		// Don't go to the next message if an animation is playing 
-		if (pressed && message != null && !playerAnimation.isAnimationPlaying() && !enemyAnimation.isAnimationPlaying())
-		{
-			if (state == VisualState.STAT_GAIN) setVisualState(VisualState.MESSAGE);
-			cycleMessage(false);
-		}
-	}
+	};
 	
 	// Handles updates for the bag view
-	private void updateBag(InputControl input)
-	{
-		// Update all bag buttons and the back button
-		selectedButton = Button.update(bagButtons, selectedButton, input);
-		backButton.update(input, false, Control.BACK);
-		
-		// Check tabs
-		for (int i = 0; i < bagCategories.length; i++)
-		{
-			if (bagTabButtons[i].checkConsumePress())
-			{
-				bagPage = 0;
-				selectedBagTab = i;
-				setVisualState(state); // To update active buttons
-			}
-		}
-		
-		CharacterData player = currentBattle.getPlayer();
-		Bag bag = player.getBag();
-		Set<Item> toDraw = bag.getCategory(bagCategories[selectedBagTab]);
-		Iterator<Item> iter = toDraw.iterator();
-		
-		for (int i = 0; i < bagPage*ITEMS_PER_PAGE; i++) iter.next();
-		for (int i = ITEMS; i < ITEMS + ITEMS_PER_PAGE && iter.hasNext(); i++)
-		{
-			Item item = iter.next();
-			if (bagButtons[i].checkConsumePress())
-			{				
-				// Pokemon Use Item -- Set item to be selected an change to Pokemon View
-				if (item instanceof PokemonUseItem)
-				{
-					selectedItem = item;
-					setVisualState(VisualState.USE_ITEM);
-					break;
-				}
-				// Otherwise, just use it on the battle if successful
-				else if (bag.battleUseItem(item, currentBattle.getPlayer().front(), currentBattle))
-				{
-					currentBattle.getPlayer().performAction(currentBattle, Action.ITEM);
-					setVisualState(VisualState.MENU);
-					cycleMessage(false);
-					break;
-				}
-				// If the item cannot be used, do not consume
-				else
-				{
-					cycleMessage(false);
-					setVisualState(VisualState.INVALID_BAG);
-				}
-			}
-		}
-		
-		// Selecting the Last Item Used Button
-		if (bagLastUsedBtn.checkConsumePress())
-		{
-			Item lastItemUsed = bag.getLastUsedItem();
-			if (lastItemUsed != Item.getItem(Namesies.NONE_ITEM) && bag.battleUseItem(lastItemUsed, player.front(), currentBattle))
-			{
-				player.performAction(currentBattle, Action.ITEM);
-				setVisualState(VisualState.MENU);
-				cycleMessage(false);
-			}
-			else
-			{
-				cycleMessage(false);
-				setVisualState(VisualState.INVALID_BAG);
-			}
-		}
-		
-		// Next page
-		if (bagRightButton.checkConsumePress())
-		{
-			if (bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1)) bagPage = 0;
-			else bagPage++;
+	private static VisualState.UpdateVisualState updateBag = new VisualState.UpdateVisualState() {
+
+		public void set(BattleView view) {
+			int pageSize = view.currentBattle.getPlayer().getBag().getCategory(bagCategories[view.selectedBagTab]).size();
 			
-			setVisualState(state); // To update active buttons
-		}
-		
-		// Previous Page
-		if (bagLeftButton.checkConsumePress())
-		{
-			if (bagPage == 0) bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1);
-			else bagPage--;
+			for (int i = 0; i < ITEMS_PER_PAGE; i++)
+				view.bagButtons[ITEMS + i].setActive(i < pageSize - view.bagPage*ITEMS_PER_PAGE);
 			
-			setVisualState(state); // To update active buttons
-		}
-		
-		// Return to main battle menu
-		if (backButton.checkConsumePress())
-		{
-			setVisualState(VisualState.MENU);
-		}
-	}
-	
-	private void updatePokemon(InputControl input)
-	{
-		// Update the buttons
-		selectedButton = Button.update(pokemonButtons, selectedButton, input);
-		backButton.update(input, false, Control.BACK);
-		
-		CharacterData player = currentBattle.getPlayer();
-		List<ActivePokemon> list = player.getTeam();
-		for (int i = 0; i < list.size(); i++)
-		{
-			if (pokemonTabButtons[i].checkConsumePress())
-			{
-				selectedPokemonTab = i;
-				setVisualState(state); //to update active buttons
-			}
-		}
-		
-		// Switch Switch Switcheroo
-		if (pokemonSwitchButton.checkConsumePress())
-		{
-			ActivePokemon selectedPkm = list.get(selectedPokemonTab);
+			view.bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != Item.getItem(Namesies.NONE_ITEM));
 			
-			// Use an item on this Pokemon instead of switching
-			if (state == VisualState.USE_ITEM)
-			{
-				// Valid item
-				if (player.getBag().battleUseItem(selectedItem, selectedPkm, currentBattle))
-				{
-					player.performAction(currentBattle, Action.ITEM);
-					setVisualState(VisualState.MENU);
-					cycleMessage(false);
-				}
-				// Invalid item
-				else
-				{
-					cycleMessage(false);
-					setVisualState(VisualState.INVALID_BAG);
-				}
-			}
-			// Actual switcheroo
-			else
-			{
-				if (player.canSwitch (currentBattle, selectedPokemonTab))
-				{
-					player.setFront(selectedPokemonTab);
-					currentBattle.enterBattle(player.front());
-					
-					if (!switchForced) player.performAction(currentBattle, Action.SWITCH);
-					
-					cycleMessage(false);
-					switchForced = false;
-					lastMoveUsed = 0;
-				}
-				else
-				{
-					cycleMessage(false);
-					setVisualState(VisualState.INVALID_POKEMON);
-				}
-			}
+			for (Button b: view.bagButtons)
+				b.setForceHover(false);
+			
 		}
 
-		// Return to main menu if applicable
-		if (backButton.checkConsumePress())
-		{
-			if (!switchForced) setVisualState(VisualState.MENU);
-		}
-	}
-	
-	private void updateLearnMoveQuestion(InputControl input)
-	{
-		yesButton.update(input);
-		noButton.update(input);
-		
-		if (noButton.checkConsumePress())
-		{
-			// This is all done really silly, so we need to do this
-			ArrayDeque<MessageUpdate> messages = currentBattle.getMessages();
-			MessageUpdate message = messages.poll();
-			for (int i = 0; i < Move.MAX_MOVES + 1; i++) messages.poll();
-			messages.push(message);
+		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+			g.drawImage(tiles.getTile(0x10), 0, 160, null);
+			g.drawImage(tiles.getTile(bagCategories[view.selectedBagTab].getImageNumber()), 30, 190, null);
+			g.drawImage(tiles.getTile(bagCategories[view.selectedBagTab].getImageNumber() - 4), 30, 492, null);
+			g.drawImage(tiles.getTile(0x20), 415, 440, null);
 			
-			setVisualState(VisualState.MESSAGE);
-			cycleMessage(false);
-		}
-		
-		if (yesButton.checkConsumePress())
-		{
-			setVisualState(VisualState.LEARN_MOVE_DELETE);
-		}
-	}
-	
-	private void updateLearnMoveDelete(InputControl input)
-	{
-		selectedButton = Button.update(moveButtons, selectedButton, input);
-		newMoveButton.update(input);
-		
-		for (int i = 0; i < moveButtons.length; i++)
-		{
-			if (moveButtons[i].checkConsumePress())
+			Bag bag = view.currentBattle.getPlayer().getBag();
+			
+			Set<Item> toDraw = bag.getCategory(bagCategories[view.selectedBagTab]);
+			TileSet itemTiles = data.getItemTiles();
+
+			DrawMetrics.setFont(g, 12);
+			Iterator<Item> iter = toDraw.iterator();
+			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) iter.next();
+			for (int y = 0; y < ITEMS_PER_PAGE/2; y++)
 			{
-				learnedPokemon.addMove(currentBattle, learnedMove, i);
-				
-				// This is all done really silly, so we need to do this
-				ArrayDeque<MessageUpdate> messages = currentBattle.getMessages();
-				MessageUpdate message = messages.poll();
-				for (int j = 0; j < Move.MAX_MOVES; j++)
+				for (int x = 0; x < 2 && iter.hasNext(); x++)
 				{
-					if (j == i) message = messages.poll();
-					else messages.poll();
+					int dx = 55 + x*162, dy = 243 + y*38;
+					
+					g.translate(dx, dy);
+					
+					// Draw box
+					g.drawImage(tiles.getTile(0x11), 0, 0, null);
+					
+					// Draw item image
+					Item i = iter.next();
+					BufferedImage img = itemTiles.getTile(i.getIndex());
+					DrawMetrics.drawCenteredImage(g, img, 14, 14);
+
+					// Item name
+					g.drawString(i.getName(), 28, 19);
+					
+					// Item quantity
+					DrawMetrics.drawRightAlignedString(g, "x" + view.currentBattle.getPlayer().getBag().getQuantity(i), 140, 19);
+					
+					g.translate(-dx, -dy);
 				}
+			}
+			
+			// Bag page number
+			DrawMetrics.setFont(g, 20);
+			DrawMetrics.drawCenteredWidthString(g, (view.bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
+			
+			// Left/Right Arrows
+			View.drawArrows(g, view.bagLeftButton, view.bagRightButton);
+			
+			// Last Item Used
+			Item lastUsedItem = bag.getLastUsedItem();
+			if (lastUsedItem != Item.getItem(Namesies.NONE_ITEM))
+			{
+				g.translate(214, 517);
+				DrawMetrics.setFont(g, 12);
+				g.drawImage(tiles.getTile(0x11), 0, 0, null);
+				
+				BufferedImage img = itemTiles.getTile(lastUsedItem.getIndex());
+				DrawMetrics.drawCenteredImage(g, img, 14, 14);
+
+				g.drawString(lastUsedItem.getName(), 28, 19);
+				DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(lastUsedItem), 140, 19);
+
+				g.translate(-214, -517);
+			}
+			
+			// Message text
+			String msgLine = view.state == VisualState.INVALID_BAG && view.message != null ? view.message : "Choose an item!";
+			g.setColor(Color.BLACK);
+			DrawMetrics.setFont(g, 30);
+			DrawMetrics.drawWrappedText(g, msgLine, 440, 495, 350);
+			
+			// Back Arrow
+			View.drawArrows(g, null, view.backButton);
+			
+			for (Button b: view.bagButtons) 
+				b.draw(g);
+			
+			view.backButton.draw(g);
+		}
+		
+		public void update(BattleView view, InputControl input)
+		{
+			// Update all bag buttons and the back button
+			view.selectedButton = Button.update(view.bagButtons, view.selectedButton, input);
+			view.backButton.update(input, false, Control.BACK);
+			
+			// Check tabs
+			for (int i = 0; i < bagCategories.length; i++)
+			{
+				if (view.bagTabButtons[i].checkConsumePress())
+				{
+					view.bagPage = 0;
+					view.selectedBagTab = i;
+					view.setVisualState(view.state); // To update active buttons
+				}
+			}
+			
+			CharacterData player = view.currentBattle.getPlayer();
+			Bag bag = player.getBag();
+			Set<Item> toDraw = bag.getCategory(bagCategories[view.selectedBagTab]);
+			Iterator<Item> iter = toDraw.iterator();
+			
+			// Skip ahead to the current page
+			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) iter.next();
+			
+			// Go through each item on the page
+			for (int i = ITEMS; i < ITEMS + ITEMS_PER_PAGE && iter.hasNext(); i++)
+			{
+				Item item = iter.next();
+				if (view.bagButtons[i].checkConsumePress())
+				{				
+					// Pokemon Use Item -- Set item to be selected an change to Pokemon View
+					if (item instanceof PokemonUseItem)
+					{
+						view.selectedItem = item;
+						view.setVisualState(VisualState.USE_ITEM);
+						break;
+					}
+					// Otherwise, just use it on the battle if successful
+					else if (bag.battleUseItem(item, view.currentBattle.getPlayer().front(), view.currentBattle))
+					{
+						view.currentBattle.getPlayer().performAction(view.currentBattle, Action.ITEM);
+						view.setVisualState(VisualState.MENU);
+						view.cycleMessage(false);
+						break;
+					}
+					// If the item cannot be used, do not consume
+					else
+					{
+						view.cycleMessage(false);
+						view.setVisualState(VisualState.INVALID_BAG);
+					}
+				}
+			}
+			
+			// Selecting the Last Item Used Button
+			if (view.bagLastUsedBtn.checkConsumePress())
+			{
+				Item lastItemUsed = bag.getLastUsedItem();
+				if (lastItemUsed != Item.getItem(Namesies.NONE_ITEM) && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle))
+				{
+					player.performAction(view.currentBattle, Action.ITEM);
+					view.setVisualState(VisualState.MENU);
+					view.cycleMessage(false);
+				}
+				else
+				{
+					view.cycleMessage(false);
+					view.setVisualState(VisualState.INVALID_BAG);
+				}
+			}
+			
+			// Next page
+			if (view.bagRightButton.checkConsumePress())
+			{
+				if (view.bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1)) view.bagPage = 0;
+				else view.bagPage++;
+				
+				view.setVisualState(view.state); // To update active buttons
+			}
+			
+			// Previous Page
+			if (view.bagLeftButton.checkConsumePress())
+			{
+				if (view.bagPage == 0) view.bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1);
+				else view.bagPage--;
+				
+				view.setVisualState(view.state); // To update active buttons
+			}
+			
+			// Return to main battle menu
+			if (view.backButton.checkConsumePress())
+			{
+				view.setVisualState(VisualState.MENU);
+			}
+		}
+	};
+	
+	private static VisualState.UpdateVisualState updatePokemon = new VisualState.UpdateVisualState() {
+
+		public void set(BattleView view) {
+			List<ActivePokemon> list = view.currentBattle.getPlayer().getTeam();
+			for (int i = 0; i < view.pokemonTabButtons.length; i++) 
+				view.pokemonTabButtons[i].setActive(i < list.size());
+			
+			if (view.state != VisualState.USE_ITEM) 
+				view.pokemonSwitchButton.setActive(list.get(view.selectedPokemonTab).canFight());
+			
+			for (Button b: view.pokemonButtons) 
+				b.setForceHover(false);
+		}
+
+		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+			// Draw Background
+			g.drawImage(tiles.getTile(0x10), 0, 160, null);
+			
+			// Get current Pokemon
+			List<ActivePokemon> list = view.currentBattle.getPlayer().getTeam();
+			ActivePokemon selectedPkm = list.get(view.selectedPokemonTab);
+			
+			// Draw type color polygons
+			Type[] type = selectedPkm.getActualType();
+			Color[] typeColors = Type.getColors(selectedPkm);
+			
+			g.translate(31, 224);
+			g.setColor(typeColors[0]);
+			g.fillPolygon(pkmnPrimaryColorx, pkmnPrimaryColory, 4);
+			g.translate(-31, -224);
+			
+			g.translate(36, 224);
+			g.setColor(typeColors[1]);
+			g.fillPolygon(pkmnSecondaryColorx, pkmnSecondaryColory, 4);
+			g.translate(-36, -224);
+			
+			// Draw Message Box
+			g.drawImage(tiles.getTile(0x20), 415, 440, null);
+			
+			// Draw Box Outlines for Pokemon Info
+			if (!selectedPkm.canFight()) // Fainted Pokemon and Eggs
+			{
+				g.drawImage(tiles.getTile(0x35), 30, 224, null);
+				g.drawImage(tiles.getTile(0x31), 55, 249, null);
+			}
+			else
+			{
+				g.drawImage(tiles.getTile(0x34), 30, 224, null);
+				g.drawImage(tiles.getTile(0x30), 55, 249, null);
+			}
+			
+			if (selectedPkm.isEgg())
+			{
+				// Name
+				DrawMetrics.setFont(g, 16);
+				g.setColor(Color.BLACK);
+				String nameStr = selectedPkm.getActualName();
+				g.drawString(nameStr, 62, 269);
+				
+				// Description
+				DrawMetrics.setFont(g, 14);
+				DrawMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
+			}
+			else
+			{
+				// Name and Gender
+				DrawMetrics.setFont(g, 16);
+				g.setColor(Color.BLACK);
+				String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter();
+				g.drawString(nameStr, 62, 269);
+				
+				// Status Condition
+				String statusStr = selectedPkm.getStatus().getType().getName();
+				g.drawString(statusStr, 179, 269);
+				
+				// Level
+				String levelStr = "Lv" + selectedPkm.getLevel();
+				g.drawString(levelStr, 220, 269);
+				
+				// Draw type tiles
+				if (type[1] == Type.NONE)
+				{
+					g.drawImage(tiles.getTile(type[0].getImageIndex()), 322, 255, null);
+				}
+				else
+				{
+					g.drawImage(tiles.getTile(type[0].getImageIndex()), 285, 255, null);
+					g.drawImage(tiles.getTile(type[1].getImageIndex()), 322, 255, null);
+				}
+				
+				// Ability
+				DrawMetrics.setFont(g, 14);
+				g.drawString(selectedPkm.getActualAbility().getName(), 62, 288);
+				
+				// Experience
+				g.drawString("EXP", 220, 288);
+				DrawMetrics.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
+
+				g.drawString(selectedPkm.getActualHeldItem().getName(), 62, 307);
+				
+				g.drawString("To Next Lv", 220, 307);
+				DrawMetrics.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
+				
+				// Experience Bar
+				float expRatio = selectedPkm.expRatio();
+				g.setColor(DrawMetrics.EXP_BAR_COLOR);
+				g.fillRect(222, 315, (int)(137*expRatio), 10);
+				
+				// HP Bar
+				g.setColor(selectedPkm.getHPColor());
+				g.fillRect(57, 341, (int)(137*selectedPkm.getHPRatio()), 10);
+				
+				// Write stat names
+				DrawMetrics.setFont(g, 16);
+				for (int i = 0; i < Stat.NUM_STATS; i++)
+				{
+					g.setColor(selectedPkm.getNature().getColor(i));
+					g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
+				}
+				
+				// Write stat values
+				g.setColor(Color.BLACK);
+				
+				int[] statsVal = selectedPkm.getStats();
+				for (int i = 0; i < Stat.NUM_STATS; i++)
+				{
+					String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statsVal[i] : "" + statsVal[i];
+					DrawMetrics.drawRightAlignedString(g, valStr, 188, 21*i + 372);
+				}
+				
+				// Draw Move List
+				List<Move> movesList = selectedPkm.getActualMoves();
+				for (int i = 0; i < movesList.size(); i++)
+				{
+					int dx = 228, dy = 359 + i*46;
+					g.translate(dx, dy);
+					
+					// Draw Color background
+					Move move = movesList.get(i);
+					g.setColor(move.getAttack().getActualType().getColor());
+					g.fillRect(0, 0, 125, 40);
+					g.drawImage(tiles.getTile(0x32), 0, 0, null);
+					
+					// Draw attack name
+					g.setColor(Color.BLACK);
+					g.drawString(move.getAttack().getName(), 7, 17);
+					
+					// Draw PP amount
+					DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
+					
+					BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
+					g.drawImage(categoryImage, 7, 21, null);
+					
+					g.translate(-dx, -dy);
+				}
+			}
+
+			// Draw Switch/Use text
+			DrawMetrics.setFont(g, 20);
+			if (view.state == VisualState.USE_ITEM) g.drawString("Use!", 103, 533);
+			else g.drawString("Switch!", 93, 533);
+			
+			// Draw tabs
+			TileSet partyTiles = data.getPartyTiles();
+			for (int i = 0; i < list.size(); i++)
+			{
+				ActivePokemon pkm = list.get(i);
+				
+				// Draw tab
+				if(pkm.isEgg())
+				{
+					g.setColor(Type.getColors(selectedPkm)[0]);				
+				}
+				else 
+				{
+					g.setColor(pkm.getActualType()[0].getColor());
+				}
+				
+				g.fillRect(32 + i*59, 192, 59, 34);
+				if (i == view.selectedPokemonTab) g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
+				else g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);
+				
+				// Draw Pokemon Image
+				BufferedImage img = partyTiles.getTile(pkm.getTinyImageIndex());
+				DrawMetrics.drawCenteredImage(g, img, 60 + i*59, 205);
+
+				// Fade out fainted Pokemon
+				if (!pkm.canFight())
+				{
+					g.setColor(new Color(0, 0, 0, 128));
+					g.fillRect(32 + i*59, 192, 59, 34);
+				}
+			}
+			
+			// Draw Message
+			g.setColor(Color.BLACK);
+			DrawMetrics.setFont(g, 30);
+			String msgLine = view.state == VisualState.INVALID_POKEMON && view.message != null ? view.message : "Select a Pok\u00e9mon!";
+			DrawMetrics.drawWrappedText(g, msgLine, 440, 485, 350);
+			
+			// Draw back arrow when applicable
+			if (!view.switchForced)
+			{
+				View.drawArrows(g, null, view.backButton);
+			}
+
+			for (int i = 0; i < list.size(); i++)
+				view.pokemonTabButtons[i].draw(g);
+			
+			if (view.state == VisualState.USE_ITEM || selectedPkm.canFight())
+				view.pokemonSwitchButton.draw(g);
+			
+			view.backButton.draw(g);
+		}
+		
+		public void update(BattleView view, InputControl input)
+		{
+			// Update the buttons
+			view.selectedButton = Button.update(view.pokemonButtons, view.selectedButton, input);
+			view.backButton.update(input, false, Control.BACK);
+			
+			CharacterData player = view.currentBattle.getPlayer();
+			List<ActivePokemon> list = player.getTeam();
+			for (int i = 0; i < list.size(); i++)
+			{
+				if (view.pokemonTabButtons[i].checkConsumePress())
+				{
+					view.selectedPokemonTab = i;
+					view.setVisualState(view.state); //to update active buttons
+				}
+			}
+			
+			// Switch Switch Switcheroo
+			if (view.pokemonSwitchButton.checkConsumePress())
+			{
+				ActivePokemon selectedPkm = list.get(view.selectedPokemonTab);
+				
+				// Use an item on this Pokemon instead of switching
+				if (view.state == VisualState.USE_ITEM)
+				{
+					// Valid item
+					if (player.getBag().battleUseItem(view.selectedItem, selectedPkm, view.currentBattle))
+					{
+						player.performAction(view.currentBattle, Action.ITEM);
+						view.setVisualState(VisualState.MENU);
+						view.cycleMessage(false);
+					}
+					// Invalid item
+					else
+					{
+						view.cycleMessage(false);
+						view.setVisualState(VisualState.INVALID_BAG);
+					}
+				}
+				// Actual switcheroo
+				else
+				{
+					if (player.canSwitch(view.currentBattle, view.selectedPokemonTab))
+					{
+						player.setFront(view.selectedPokemonTab);
+						view.currentBattle.enterBattle(player.front());
+						
+						if (!view.switchForced) player.performAction(view.currentBattle, Action.SWITCH);
+						
+						view.cycleMessage(false);
+						view.switchForced = false;
+						view.lastMoveUsed = 0;
+					}
+					else
+					{
+						view.cycleMessage(false);
+						view.setVisualState(VisualState.INVALID_POKEMON);
+					}
+				}
+			}
+	
+			// Return to main menu if applicable
+			if (view.backButton.checkConsumePress())
+			{
+				if (!view.switchForced) view.setVisualState(VisualState.MENU);
+			}
+		}
+	};
+		
+	private static VisualState.UpdateVisualState updateLearnMoveQuestion = new VisualState.UpdateVisualState() {
+
+		public void set(BattleView view) {}
+
+		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+			g.drawImage(tiles.getTile(0x3), 0, 439, null);
+			g.setColor(Color.white);
+			DrawMetrics.setFont(g, 25);
+			g.drawString("Delete a move in order to learn " + view.learnedMove.getAttack().getName() + "?", 30, 490);
+			
+			g.translate(view.yesButton.x, view.yesButton.y);
+			
+			g.setColor(Color.GREEN);
+			g.fillRect(0, 0, 183, 55);
+			g.drawImage(tiles.getTile(0x22), 0, 0, null);
+			
+			g.setColor(Color.BLACK);
+			DrawMetrics.setFont(g, 22);
+			g.drawString("Yes", 10, 26);
+			
+			g.translate(-view.yesButton.x, -view.yesButton.y);
+			
+			g.translate(view.noButton.x, view.noButton.y);
+			
+			g.setColor(Color.RED);
+			g.fillRect(0, 0, 183, 55);
+			g.drawImage(tiles.getTile(0x22), 0, 0, null);
+			
+			g.setColor(Color.BLACK);
+			DrawMetrics.setFont(g, 22);
+			g.drawString("No", 10, 26);
+			
+			g.translate(-view.noButton.x, -view.noButton.y);
+			
+			view.yesButton.draw(g);
+			view.noButton.draw(g);
+		}
+		
+		public void update(BattleView view, InputControl input)
+		{
+			view.yesButton.update(input);
+			view.noButton.update(input);
+			
+			if (view.noButton.checkConsumePress())
+			{
+				// This is all done really silly, so we need to do this
+				ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
+				MessageUpdate message = messages.poll();
+				for (int i = 0; i < Move.MAX_MOVES + 1; i++) messages.poll();
 				messages.push(message);
 				
-				setVisualState(VisualState.MESSAGE);
-				cycleMessage(false);
+				view.setVisualState(VisualState.MESSAGE);
+				view.cycleMessage(false);
+			}
+			
+			if (view.yesButton.checkConsumePress())
+			{
+				view.setVisualState(VisualState.LEARN_MOVE_DELETE);
 			}
 		}
-		
-		if (newMoveButton.checkConsumePress())
-		{
-			// This is all done really silly, so we need to do this
-			ArrayDeque<MessageUpdate> messages = currentBattle.getMessages();
-			MessageUpdate message = messages.poll();
-			for (int i = 0; i < Move.MAX_MOVES + 1; i++) messages.poll();
-			messages.push(message);
-			
-			setVisualState(VisualState.MESSAGE);
-			cycleMessage(false);
-		}
-	}
+	};
 	
-	public void updateLog(InputControl input)
-	{
-		selectedButton = Button.update(logButtons, selectedButton, input);
-		//logLeftButton.update(input);
-		//logRightButton.update(input);
-		backButton.update(input, false, Control.BACK);
-		
-		int maxLogPage = logMessages.size() / LOGS_PER_PAGE;
-		
-		if (logLeftButton.checkConsumePress())
-		{
-			selectedButton = LOG_LEFT_BUTTON;
-			logRightButton.setForceHover(false);
-			logPage = Math.max(0, logPage - 1);
-		}
-		if (logRightButton.checkConsumePress())
-		{
-			selectedButton = LOG_RIGHT_BUTTON;
-			logLeftButton.setForceHover(false);
-			logPage = Math.min(maxLogPage, logPage + 1);
-			
-		}
-		
-		logLeftButton.setActive(logPage > 0);
-		logRightButton.setActive(logPage < maxLogPage);
-		
-		if (logPage == 0 && maxLogPage > 0)
-			selectedButton = LOG_RIGHT_BUTTON;
-		else if (logPage == maxLogPage)
-			selectedButton = LOG_LEFT_BUTTON;
-		
-		if (backButton.checkConsumePress())
-		{
-			setVisualState(VisualState.MENU);
-		}
-	}
+	private static VisualState.UpdateVisualState updateLearnMoveDelete = new VisualState.UpdateVisualState() {
 
+		public void set(BattleView view) {}
+
+		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+			g.drawImage(tiles.getTile(0x3), 0, 439, null);
+			
+			List<Move> moves = view.learnedPokemon.getActualMoves();
+			for (int y = 0, i = 0; y < 2; y++)
+			{
+				for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
+				{
+					int dx = 22 + x*190, dy = 440 + 21 + y*62;
+					g.translate(dx, dy);
+					
+					Move move = moves.get(i);
+					g.setColor(move.getAttack().getActualType().getColor());
+					g.fillRect(0, 0, 183, 55);
+					g.drawImage(tiles.getTile(0x22), 0, 0, null);
+					
+					g.setColor(Color.BLACK);
+					DrawMetrics.setFont(g, 22);
+					g.drawString(move.getAttack().getName(), 10, 26);
+					
+					DrawMetrics.setFont(g, 18);
+					DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+					
+					BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
+					g.drawImage(categoryImage, 12, 32, null);
+					
+					g.translate(-dx, -dy);
+				}
+			}
+			
+			g.translate(view.newMoveButton.x, view.newMoveButton.y);
+			Move move = view.learnedMove;
+			Color boxColor = move.getAttack().getActualType().getColor();
+			g.setColor(boxColor);
+			g.fillRect(0, 0, 183, 55);
+			g.drawImage(tiles.getTile(0x22), 0, 0, null);
+			
+			g.setColor(Color.BLACK);
+			DrawMetrics.setFont(g, 22);
+			g.drawString(move.getAttack().getName(), 10, 26);
+			
+			DrawMetrics.setFont(g, 18);
+			DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+			
+			BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
+			g.drawImage(categoryImage, 12, 32, null);
+			
+			g.translate(-view.newMoveButton.x, -view.newMoveButton.y);
+			
+			String msgLine = "Select a move to delete!";
+			
+			g.setColor(Color.WHITE);
+			DrawMetrics.setFont(g, 25);
+			g.drawString(msgLine, view.newMoveButton.x, 485);
+			
+			for (int i = 0; i < moves.size(); i++) 
+				view.moveButtons[i].draw(g);
+			
+			view.newMoveButton.draw(g);
+		}
+		
+		public void update(BattleView view, InputControl input)
+		{
+			view.selectedButton = Button.update(view.moveButtons, view.selectedButton, input);
+			view.newMoveButton.update(input);
+			
+			for (int i = 0; i < view.moveButtons.length; i++)
+			{
+				if (view.moveButtons[i].checkConsumePress())
+				{
+					view.learnedPokemon.addMove(view.currentBattle, view.learnedMove, i);
+					
+					// This is all done really silly, so we need to do this
+					ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
+					MessageUpdate message = messages.poll();
+					for (int j = 0; j < Move.MAX_MOVES; j++)
+					{
+						if (j == i) message = messages.poll();
+						else messages.poll();
+					}
+					messages.push(message);
+					
+					view.setVisualState(VisualState.MESSAGE);
+					view.cycleMessage(false);
+				}
+			}
+			
+			if (view.newMoveButton.checkConsumePress())
+			{
+				// This is all done really silly, so we need to do this
+				ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
+				MessageUpdate message = messages.poll();
+				for (int i = 0; i < Move.MAX_MOVES + 1; i++) messages.poll();
+				messages.push(message);
+				
+				view.setVisualState(VisualState.MESSAGE);
+				view.cycleMessage(false);
+			}
+		}
+	};
+	
+	private static VisualState.UpdateVisualState updateLog = new VisualState.UpdateVisualState() {
+
+		public void set(BattleView view) {}
+
+		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+			g.drawImage(tiles.getTile(0x10), 0, 160, null);
+
+			int start = view.logMessages.size() - 1 - view.logPage * LOGS_PER_PAGE;
+			start = Math.max(0, start);
+			
+			int y = 200;
+			g.setColor(Color.WHITE);
+			DrawMetrics.setFont(g, 12);
+			for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15)
+				g.drawString(view.logMessages.get(i), 25, y);
+			
+			View.drawArrows(g, view.logLeftButton, view.logRightButton);
+			view.logLeftButton.draw(g);
+			view.logRightButton.draw(g);
+
+			// Draw Message Box
+			g.drawImage(tiles.getTile(0x20), 415, 440, null);
+					
+			g.setColor(Color.BLACK);
+			DrawMetrics.setFont(g, 40);
+			g.drawString("Bob Loblaw's", 440, 500);
+			g.drawString("Log Blog", 440, 550);
+			
+			// Draw back arrow when applicable
+			View.drawArrows(g, null, view.backButton);
+			view.backButton.draw(g);
+		}
+		
+		public void update(BattleView view, InputControl input)
+		{
+			view.selectedButton = Button.update(view.logButtons, view.selectedButton, input);
+			view.backButton.update(input, false, Control.BACK);
+			
+			int maxLogPage = view.logMessages.size()/LOGS_PER_PAGE;
+			
+			if (view.logLeftButton.checkConsumePress())
+			{
+				view.selectedButton = LOG_LEFT_BUTTON;
+				view.logRightButton.setForceHover(false);
+				view.logPage = Math.max(0, view.logPage - 1);
+			}
+			
+			if (view.logRightButton.checkConsumePress())
+			{
+				view.selectedButton = LOG_RIGHT_BUTTON;
+				view.logLeftButton.setForceHover(false);
+				view.logPage = Math.min(maxLogPage, view.logPage + 1);
+			}
+			
+			view.logLeftButton.setActive(view.logPage > 0);
+			view.logRightButton.setActive(view.logPage < maxLogPage);
+			
+			if (view.logPage == 0 && maxLogPage > 0)
+				view.selectedButton = LOG_RIGHT_BUTTON;
+			else if (view.logPage == maxLogPage)
+				view.selectedButton = LOG_LEFT_BUTTON;
+			
+			if (view.backButton.checkConsumePress())
+			{
+				view.setVisualState(VisualState.MENU);
+			}
+		}
+	};
+	
 	public void update(int dt, InputControl input, Game game) 
 	{
-		switch (state)
-		{
-			case MESSAGE:
-			case STAT_GAIN:
-				updateMessage(input);
-				break;
-			case MENU:
-				updateMenu(input);
-				break;
-			case FIGHT:
-			case INVALID_FIGHT:
-				updateFight(input);
-				break;			
-			case BAG:
-			case INVALID_BAG:
-				updateBag(input);
-				break;
-			case POKEMON:
-			case INVALID_POKEMON:
-			case USE_ITEM:
-				updatePokemon(input);
-				break;
-			case LEARN_MOVE_QUESTION:
-				updateLearnMoveQuestion(input);
-				break;
-			case LEARN_MOVE_DELETE:
-				updateLearnMoveDelete(input);
-				break;
-			case LOG_VIEW:
-				updateLog(input);
-				break;
-		}
-		
-		switch (update)
-		{
-			case LEARN_MOVE:
-				setVisualState(VisualState.LEARN_MOVE_QUESTION);
-				update = Update.NONE;
-				break;
-			case STAT_GAIN:
-				setVisualState(VisualState.STAT_GAIN);
-				update = Update.NONE;
-				break;
-			case FORCE_SWITCH:
-				setVisualState(VisualState.POKEMON);
-				switchForced = true;
-				update = Update.NONE;
-				break;
-			case PROMPT_SWITCH:
-				setVisualState(VisualState.POKEMON);
-				update = Update.NONE;
-				break;
-			case EXIT_BATTLE:
-				game.setViewMode(ViewMode.MAP_VIEW);
-				update = Update.NONE;
-				break;	
-			case WIN_BATTLE:
-				
-				if(currentBattle.isWildBattle())
-				{
-					Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
-				}
-				else
-				{
-					// TODO: Get trainer win music
-					Global.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
-				}
-				
-				break;
-			default:
-				break;				
-		}
+		state.updateVisualState.update(this, input);
+		update.performUpdate(this, game);
 	}
 	
-	private void setVisualState(VisualState newState)
+	public Battle getCurrentBattle() {
+		return this.currentBattle;
+	}
+	
+	public void setSwitchForced() {
+		this.switchForced = true;
+	}
+	
+	public void clearUpdate() {
+		this.update = Update.NONE;
+	}
+	
+	public void setVisualState(VisualState newState)
 	{
 		if (state != newState) selectedButton = 0;
 		state = newState;
 		
 		// Update the buttons that should be active
-		switch (state)
-		{
-			case BAG:
-			case INVALID_BAG:
-				int pageSize = currentBattle.getPlayer().getBag().getCategory(bagCategories[selectedBagTab]).size();
-				
-				for (int i = 0; i < ITEMS_PER_PAGE; i++)
-					bagButtons[ITEMS + i].setActive(i < pageSize - bagPage*ITEMS_PER_PAGE);
-				
-				bagLastUsedBtn.setActive(currentBattle.getPlayer().getBag().getLastUsedItem() != Item.getItem(Namesies.NONE_ITEM));
-				
-				for (Button b: bagButtons)
-					b.setForceHover(false);
-				
-				break;
-			case FIGHT:
-			case INVALID_FIGHT:
-				selectedButton = lastMoveUsed;
-				selectedMoveList = currentBattle.getPlayer().front().getMoves(currentBattle);
-				for (int i = 0; i < Move.MAX_MOVES; i++) 
-					moveButtons[i].setActive(i < selectedMoveList.size());
-				
-				for (Button b: moveButtons)
-					b.setForceHover(false);
-				break;
-			case POKEMON:
-			case INVALID_POKEMON:
-			case USE_ITEM:
-				List<ActivePokemon> list = currentBattle.getPlayer().getTeam();
-				for (int i = 0; i < pokemonTabButtons.length; i++) 
-					pokemonTabButtons[i].setActive(i < list.size());
-				
-				if (state != VisualState.USE_ITEM) 
-					pokemonSwitchButton.setActive(list.get(selectedPokemonTab).canFight());
-				
-				for (Button b: pokemonButtons) 
-					b.setForceHover(false);
-				
-				break;
-			case MENU:
-				for (Button b: menuButtons)
-					b.setForceHover(false);
-				
-				break;
-			case LOG_VIEW:
-			default:
-				break;
-		}
+		state.updateVisualState.set(this);
 	}
 	
 	private void cycleMessage(boolean updated)
@@ -1158,6 +1638,7 @@ public class BattleView extends View
 			}
 			else
 			{
+				// TODO: Fuck this I hate this
 				if (newMessage.healthUpdate())
 				{
 					state.startHpAnimation(newMessage.getHP());
@@ -1232,497 +1713,6 @@ public class BattleView extends View
 		}
 	}
 	
-	private void drawBag(Graphics g, GameData data, TileSet tiles)
-	{
-		g.drawImage(tiles.getTile(0x10), 0, 160, null);
-		g.drawImage(tiles.getTile(bagCategories[selectedBagTab].getImageNumber()), 30, 190, null);
-		g.drawImage(tiles.getTile(bagCategories[selectedBagTab].getImageNumber() - 4), 30, 492, null);
-		g.drawImage(tiles.getTile(0x20), 415, 440, null);
-		
-		Set<Item> toDraw = currentBattle.getPlayer().getBag().getCategory(bagCategories[selectedBagTab]);
-		TileSet itemTiles = data.getItemTiles();
-
-		DrawMetrics.setFont(g, 12);
-		Iterator<Item> iter = toDraw.iterator();
-		for (int i = 0; i < bagPage*ITEMS_PER_PAGE; i++) iter.next();
-		for (int y = 0; y < ITEMS_PER_PAGE/2; y++)
-		{
-			for (int x = 0; x < 2 && iter.hasNext(); x++)
-			{
-				int dx = 55 + x*162, dy = 243 + y*38;
-				
-				g.translate(dx, dy);
-				
-				// Draw box
-				g.drawImage(tiles.getTile(0x11), 0, 0, null);
-				
-				// Draw item image
-				Item i = iter.next();
-				BufferedImage img = itemTiles.getTile(i.getIndex());
-				DrawMetrics.drawCenteredImage(g, img, 14, 14);
-
-				// Item name
-				g.drawString(i.getName(), 28, 19);
-				
-				// Item quantity
-				DrawMetrics.drawRightAlignedString(g, "x" + currentBattle.getPlayer().getBag().getQuantity(i), 140, 19);
-				
-				g.translate(-dx, -dy);
-			}
-		}
-		
-		// Bag page number
-		DrawMetrics.setFont(g, 20);
-		DrawMetrics.drawCenteredWidthString(g, (bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
-		
-		// Left/Right Arrows
-		View.drawArrows(g, bagLeftButton, bagRightButton);
-		
-		// Last Item Used
-		Bag bag = currentBattle.getPlayer().getBag();
-		Item lastUsedItem = bag.getLastUsedItem();
-		if (lastUsedItem != Item.getItem(Namesies.NONE_ITEM))
-		{
-			g.translate(214, 517);
-			DrawMetrics.setFont(g, 12);
-			g.drawImage(tiles.getTile(0x11), 0, 0, null);
-			
-			BufferedImage img = itemTiles.getTile(lastUsedItem.getIndex());
-			DrawMetrics.drawCenteredImage(g, img, 14, 14);
-
-			g.drawString(lastUsedItem.getName(), 28, 19);
-			DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(lastUsedItem), 140, 19);
-
-			g.translate(-214, -517);
-		}
-		
-		// Message text
-		String msgLine = state == VisualState.INVALID_BAG && message != null ? message : "Choose an item!";
-		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 30);
-		DrawMetrics.drawWrappedText(g, msgLine, 440, 495, 350);
-		
-		// Back Arrow
-		View.drawArrows(g, null, backButton);
-		
-		for (Button b: bagButtons) 
-			b.draw(g);
-		
-		backButton.draw(g);
-	}
-	
-	private void drawFight(Graphics g, TileSet tiles, ActivePokemon plyr)
-	{
-		g.drawImage(tiles.getTile(0x20), 415, 440, null);
-		g.drawImage(tiles.getTile(0x21), 0, 440, null);
-		
-		List<Move> moves = plyr.getMoves(currentBattle);
-		for (int y = 0, i = 0; y < 2; y++)
-		{
-			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
-			{
-				int dx = 22 + x*190, dy = 440 + 21 + y*62;
-				g.translate(dx, dy);
-				
-				Move move = moves.get(i);
-				g.setColor(move.getAttack().getActualType().getColor());
-				g.fillRect(0, 0, 183, 55);
-				g.drawImage(tiles.getTile(0x22), 0, 0, null);
-				
-				g.setColor(Color.BLACK);
-				DrawMetrics.setFont(g, 22);
-				g.drawString(move.getAttack().getName(), 10, 26);
-				
-				DrawMetrics.setFont(g, 18);
-				DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
-				
-				BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
-				g.drawImage(categoryImage, 12, 32, null);
-				
-				g.translate(-dx, -dy);
-			}
-		}
-		
-		String msgLine = state == VisualState.INVALID_FIGHT && message != null ? message : "Select a move!";
-		
-		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 30);
-		DrawMetrics.drawWrappedText(g, msgLine, 440, 485, 350); // TODO: Is this duplicated code?
-		
-		View.drawArrows(g, null, backButton);
-		
-		for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) 
-			moveButtons[i].draw(g);
-		backButton.draw(g);
-	}
-	
-	private void drawMenu(Graphics g, TileSet tiles, ActivePokemon plyr)
-	{
-		g.drawImage(tiles.getTile(0x3), 0, 439, null);
-		g.drawImage(tiles.getTile(0x2), 0, 0, null);
-		
-		g.setColor(Color.WHITE);
-		
-		DrawMetrics.setFont(g, 30);
-		DrawMetrics.drawWrappedText(g, "What will " + plyr.getActualName() + " do?", 20, 485, 400);
-		
-		for (Button b: menuButtons)
-			b.draw(g);
-	}
-	
-	private void drawStatGain(Graphics g, TileSet tiles) 
-	{
-		g.drawImage(tiles.getTile(0x5), 0, 280, null);
-		g.setColor(Color.BLACK);
-		for (int i = 0; i < Stat.NUM_STATS; i++)
-		{
-			DrawMetrics.setFont(g, 16);
-			g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
-			
-			DrawMetrics.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
-			DrawMetrics.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
-		}
-	}
-	
-	private void drawMessage(Graphics g, TileSet tiles)
-	{
-		g.drawImage(tiles.getTile(0x3), 0, 439, null);
-		
-		g.setColor(Color.WHITE);
-		DrawMetrics.setFont(g, 30);
-		
-		DrawMetrics.drawWrappedText(g, message, 30, 490, 720);
-	}
-	
-	private void drawPokemonView(Graphics g, GameData data, TileSet tiles)
-	{
-		// Draw Background
-		g.drawImage(tiles.getTile(0x10), 0, 160, null);
-		
-		// Get current Pokemon
-		List<ActivePokemon> list = currentBattle.getPlayer().getTeam();
-		ActivePokemon selectedPkm = list.get(selectedPokemonTab);
-		
-		// Draw type color polygons
-		Type[] type = selectedPkm.getActualType();
-		Color[] typeColors = Type.getColors(selectedPkm);
-		
-		g.translate(31, 224);
-		g.setColor(typeColors[0]);
-		g.fillPolygon(pkmnPrimaryColorx, pkmnPrimaryColory, 4);
-		g.translate(-31, -224);
-		
-		g.translate(36, 224);
-		g.setColor(typeColors[1]);
-		g.fillPolygon(pkmnSecondaryColorx, pkmnSecondaryColory, 4);
-		g.translate(-36, -224);
-		
-		// Draw Message Box
-		g.drawImage(tiles.getTile(0x20), 415, 440, null);
-		
-		// Draw Box Outlines for Pokemon Info
-		if (!selectedPkm.canFight()) // Fainted Pokemon and Eggs
-		{
-			g.drawImage(tiles.getTile(0x35), 30, 224, null);
-			g.drawImage(tiles.getTile(0x31), 55, 249, null);
-		}
-		else
-		{
-			g.drawImage(tiles.getTile(0x34), 30, 224, null);
-			g.drawImage(tiles.getTile(0x30), 55, 249, null);
-		}
-		
-		if (selectedPkm.isEgg())
-		{
-			// Name
-			DrawMetrics.setFont(g, 16);
-			g.setColor(Color.BLACK);
-			String nameStr = selectedPkm.getActualName();
-			g.drawString(nameStr, 62, 269);
-			
-			// Description
-			DrawMetrics.setFont(g, 14);
-			DrawMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
-		}
-		else
-		{
-			// Name and Gender
-			DrawMetrics.setFont(g, 16);
-			g.setColor(Color.BLACK);
-			String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter();
-			g.drawString(nameStr, 62, 269);
-			
-			// Status Condition
-			String statusStr = selectedPkm.getStatus().getType().getName();
-			g.drawString(statusStr, 179, 269);
-			
-			// Level
-			String levelStr = "Lv" + selectedPkm.getLevel();
-			g.drawString(levelStr, 220, 269);
-			
-			// Draw type tiles
-			if (type[1] == Type.NONE)
-			{
-				g.drawImage(tiles.getTile(type[0].getImageIndex()), 322, 255, null);
-			}
-			else
-			{
-				g.drawImage(tiles.getTile(type[0].getImageIndex()), 285, 255, null);
-				g.drawImage(tiles.getTile(type[1].getImageIndex()), 322, 255, null);
-			}
-			
-			// Ability
-			DrawMetrics.setFont(g, 14);
-			g.drawString(selectedPkm.getActualAbility().getName(), 62, 288);
-			
-			// Experience
-			g.drawString("EXP", 220, 288);
-			DrawMetrics.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
-
-			g.drawString(selectedPkm.getActualHeldItem().getName(), 62, 307);
-			
-			g.drawString("To Next Lv", 220, 307);
-			DrawMetrics.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
-			
-			// Experience Bar
-			float expRatio = selectedPkm.expRatio();
-			g.setColor(Global.EXP_BAR_COLOR);
-			g.fillRect(222, 315, (int)(137*expRatio), 10);
-			
-			// HP Bar
-			g.setColor(selectedPkm.getHPColor());
-			g.fillRect(57, 341, (int)(137*selectedPkm.getHPRatio()), 10);
-			
-			// Write stat names
-			DrawMetrics.setFont(g, 16);
-			for (int i = 0; i < Stat.NUM_STATS; i++)
-			{
-				g.setColor(selectedPkm.getNature().getColor(i));
-				g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
-			}
-			
-			// Write stat values
-			g.setColor(Color.BLACK);
-			
-			int[] statsVal = selectedPkm.getStats();
-			for (int i = 0; i < Stat.NUM_STATS; i++)
-			{
-				String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statsVal[i] : "" + statsVal[i];
-				DrawMetrics.drawRightAlignedString(g, valStr, 188, 21*i + 372);
-			}
-			
-			// Draw Move List
-			List<Move> movesList = selectedPkm.getActualMoves();
-			for (int i = 0; i < movesList.size(); i++)
-			{
-				int dx = 228, dy = 359 + i*46;
-				g.translate(dx, dy);
-				
-				// Draw Color background
-				Move move = movesList.get(i);
-				g.setColor(move.getAttack().getActualType().getColor());
-				g.fillRect(0, 0, 125, 40);
-				g.drawImage(tiles.getTile(0x32), 0, 0, null);
-				
-				// Draw attack name
-				g.setColor(Color.BLACK);
-				g.drawString(move.getAttack().getName(), 7, 17);
-				
-				// Draw PP amount
-				DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
-				
-				BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
-				g.drawImage(categoryImage, 7, 21, null);
-				
-				g.translate(-dx, -dy);
-			}
-		}
-
-		// Draw Switch/Use text
-		DrawMetrics.setFont(g, 20);
-		if (state == VisualState.USE_ITEM) g.drawString("Use!", 103, 533);
-		else g.drawString("Switch!", 93, 533);
-		
-		// Draw tabs
-		TileSet partyTiles = data.getPartyTiles();
-		for (int i = 0; i < list.size(); i++)
-		{
-			ActivePokemon pkm = list.get(i);
-			
-			// Draw tab
-			if(pkm.isEgg())
-			{
-				g.setColor(Type.getColors(selectedPkm)[0]);				
-			}
-			else 
-			{
-				g.setColor(pkm.getActualType()[0].getColor());
-			}
-			
-			g.fillRect(32 + i*59, 192, 59, 34);
-			if (i == selectedPokemonTab) g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
-			else g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);
-			
-			// Draw Pokemon Image
-			BufferedImage img = partyTiles.getTile(pkm.getTinyImageIndex());
-			DrawMetrics.drawCenteredImage(g, img, 60 + i*59, 205);
-
-			// Fade out fainted Pokemon
-			if (!pkm.canFight())
-			{
-				g.setColor(new Color(0, 0, 0, 128));
-				g.fillRect(32 + i*59, 192, 59, 34);
-			}
-		}
-		
-		// Draw Message
-		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 30);
-		String msgLine = state == VisualState.INVALID_POKEMON && message != null ? message : "Select a Pok\u00e9mon!";
-		DrawMetrics.drawWrappedText(g, msgLine, 440, 485, 350);
-		
-		// Draw back arrow when applicable
-		if (!switchForced)
-		{
-			View.drawArrows(g, null, backButton);
-		}
-
-		for (int i = 0; i < list.size(); i++)
-			pokemonTabButtons[i].draw(g);
-		
-		if (state == VisualState.USE_ITEM || selectedPkm.canFight())
-			pokemonSwitchButton.draw(g);
-		
-		backButton.draw(g);
-	}
-
-	private void drawLearnMoveQuestion(Graphics g, TileSet tiles)
-	{
-		g.drawImage(tiles.getTile(0x3), 0, 439, null);
-		g.setColor(Color.white);
-		DrawMetrics.setFont(g, 25);
-		g.drawString("Delete a move in order to learn " + learnedMove.getAttack().getName() + "?", 30, 490);
-		
-		g.translate(yesButton.x, yesButton.y);
-		
-		g.setColor(Color.GREEN);
-		g.fillRect(0, 0, 183, 55);
-		g.drawImage(tiles.getTile(0x22), 0, 0, null);
-		
-		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 22);
-		g.drawString("Yes", 10, 26);
-		
-		g.translate(-yesButton.x, -yesButton.y);
-		
-		g.translate(noButton.x, noButton.y);
-		
-		g.setColor(Color.RED);
-		g.fillRect(0, 0, 183, 55);
-		g.drawImage(tiles.getTile(0x22), 0, 0, null);
-		
-		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 22);
-		g.drawString("No", 10, 26);
-		
-		g.translate(-noButton.x, -noButton.y);
-		
-		yesButton.draw(g);
-		noButton.draw(g);
-	}
-	
-	private void drawLearnMoveDelete(Graphics g, TileSet tiles)
-	{
-		g.drawImage(tiles.getTile(0x3), 0, 439, null);
-		
-		List<Move> moves = learnedPokemon.getActualMoves();
-		for (int y = 0, i = 0; y < 2; y++)
-		{
-			for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
-			{
-				int dx = 22 + x*190, dy = 440 + 21 + y*62;
-				g.translate(dx, dy);
-				
-				Move move = moves.get(i);
-				g.setColor(move.getAttack().getActualType().getColor());
-				g.fillRect(0, 0, 183, 55);
-				g.drawImage(tiles.getTile(0x22), 0, 0, null);
-				
-				g.setColor(Color.BLACK);
-				DrawMetrics.setFont(g, 22);
-				g.drawString(move.getAttack().getName(), 10, 26);
-				
-				DrawMetrics.setFont(g, 18);
-				DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
-				
-				BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
-				g.drawImage(categoryImage, 12, 32, null);
-				
-				g.translate(-dx, -dy);
-			}
-		}
-		
-		g.translate(newMoveButton.x, newMoveButton.y);
-		Move move = learnedMove;
-		Color boxColor = move.getAttack().getActualType().getColor();
-		g.setColor(boxColor);
-		g.fillRect(0, 0, 183, 55);
-		g.drawImage(tiles.getTile(0x22), 0, 0, null);
-		
-		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 22);
-		g.drawString(move.getAttack().getName(), 10, 26);
-		
-		DrawMetrics.setFont(g, 18);
-		DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
-		
-		BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
-		g.drawImage(categoryImage, 12, 32, null);
-		
-		g.translate(-newMoveButton.x, -newMoveButton.y);
-		
-		String msgLine = "Select a move to delete!";
-		
-		g.setColor(Color.WHITE);
-		DrawMetrics.setFont(g, 25);
-		g.drawString(msgLine, newMoveButton.x, 485);
-		
-		for (int i = 0; i < moves.size(); i++) 
-			moveButtons[i].draw(g);
-		
-		newMoveButton.draw(g);
-	}
-	
-	public void drawLog(Graphics g, TileSet tiles, CharacterData characterData)
-	{
-		g.drawImage(tiles.getTile(0x10), 0, 160, null);
-
-		int start = logMessages.size() - 1 - logPage * LOGS_PER_PAGE;
-		start = Math.max(0, start);
-		
-		int y = 200;
-		g.setColor(Color.WHITE);
-		DrawMetrics.setFont(g, 12);
-		for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15)
-			g.drawString(logMessages.get(i), 25, y);
-		
-		View.drawArrows(g, logLeftButton, logRightButton);
-		logLeftButton.draw(g);
-		logRightButton.draw(g);
-
-		// Draw Message Box
-		g.drawImage(tiles.getTile(0x20), 415, 440, null);
-				
-		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 40);
-		g.drawString("Bob Loblaw's", 440, 500);
-		g.drawString("Log Blog", 440, 550);
-		
-		// Draw back arrow when applicable
-		View.drawArrows(g, null, backButton);
-		backButton.draw(g);
-	}
-	
 	public void draw(Graphics g, GameData data) 
 	{
 		Dimension d = Global.GAME_SIZE;
@@ -1783,38 +1773,7 @@ public class BattleView extends View
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
-		switch (state)
-		{
-			case BAG:
-			case INVALID_BAG:
-				drawBag(g, data, tiles);
-				break;
-			case FIGHT:
-			case INVALID_FIGHT:
-				drawFight(g, tiles, plyr);
-				break;
-			case MENU:
-				drawMenu(g, tiles, plyr);
-				break;
-			case STAT_GAIN:
-				drawStatGain(g, tiles);
-			case MESSAGE:
-				drawMessage(g, tiles);
-				break;
-			case POKEMON:
-			case INVALID_POKEMON:
-			case USE_ITEM:
-				drawPokemonView(g, data, tiles);
-				break;
-			case LEARN_MOVE_QUESTION:
-				drawLearnMoveQuestion(g, tiles);
-				break;
-			case LEARN_MOVE_DELETE:
-				drawLearnMoveDelete(g, tiles);
-				break;
-			case LOG_VIEW:
-				drawLog(g, tiles, currentBattle.getPlayer());
-		}
+		state.updateVisualState.draw(this, g, data, tiles);
 	}
 
 	public ViewMode getViewModel() 

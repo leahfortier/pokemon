@@ -33,9 +33,10 @@ public class Game
 		MART_VIEW, OPTIONS_VIEW, START_VIEW, EVOLUTION_VIEW
 	}
 	
-	public GameData data;
+	public final GameData data;
+	public final EnumMap<ViewMode, View> viewMap;
+	
 	public CharacterData charData;
-	public EnumMap<ViewMode, View> viewMap;
 	private ViewMode currentViewMode;
 	private View currentView;
 	

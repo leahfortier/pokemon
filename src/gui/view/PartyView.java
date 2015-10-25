@@ -12,7 +12,6 @@ import java.util.List;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.Global;
 import main.InputControl;
 import main.InputControl.Control;
 import main.Type;
@@ -230,7 +229,7 @@ public class PartyView extends View
 			g.drawString(dStr.toString(), 81, 290);
 			
 			// EXP Bar
-			g.setColor(Global.EXP_BAR_COLOR);
+			g.setColor(DrawMetrics.EXP_BAR_COLOR);
 			g.fillRect(527, 214, (int)(202*selectedPkm.expRatio()), 10);
 			
 			// HP Bar

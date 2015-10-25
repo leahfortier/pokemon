@@ -296,7 +296,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 			out.append(info.getName() + "\n");
 		}
 		
-		FileIO.printToFile("BaseEvolutions.txt", out);
+		FileIO.writeToFile("BaseEvolutions.txt", out);
 	}
 	
 	public static PokemonInfo getRandomBaseEvolution()

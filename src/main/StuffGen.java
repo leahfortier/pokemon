@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import main.Namesies.NamesiesType;
+import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import battle.Attack;
 
@@ -23,13 +24,13 @@ public class StuffGen
 	private static final String TEAM_EFFECT_PATH = EFFECTS_FOLDER + "TeamEffect.java";
 	private static final String BATTLE_EFFECT_PATH = EFFECTS_FOLDER + "BattleEffect.java";
 	private static final String WEATHER_PATH = EFFECTS_FOLDER + "Weather.java";
+	
 	private static final String MOVE_PATH = FileIO.makePath("src", "battle") + "Attack.java";
 	private static final String ABILITY_PATH = FileIO.makePath("src", "pokemon") + "Ability.java";
 	private static final String ITEM_PATH = FileIO.makePath("src", "item") + "Item.java";
 	private static final String NAMESIES_PATH = FileIO.makePath("src", "main") + "Namesies.java";
 	
 	private static final String ITEM_TILES_PATH = FileIO.makePath("rec", "tiles", "itemTiles");
-	
 	private static final String POKEMON_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "pokemonTiles") + "index.txt";
 	private static final String POKEMON_SMALL_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "partyTiles") + "index.txt";
 	
@@ -43,12 +44,12 @@ public class StuffGen
 		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", NamesiesType.ABILITY, true, true),
 		ITEM_GEN("Items.txt", ITEM_PATH, "Item", NamesiesType.ITEM, false, true);
 		
-		private String inputPath;
-		private String outputPath;
-		private String superClass;
-		private NamesiesType appendsies;
-		private boolean activate;
-		private boolean mappity;
+		private final String inputPath;
+		private final String outputPath;
+		private final String superClass;
+		private final NamesiesType appendsies;
+		private final boolean activate;
+		private final boolean mappity;
 		
 		private Generator(String inputPath, String outputPath, String superClass, NamesiesType appendsies, boolean activate, boolean mappity)
 		{
@@ -59,16 +60,10 @@ public class StuffGen
 			this.activate = activate;
 			this.mappity = mappity;
 		}
-		
-		private void generate()
-		{
-			superGen(this);
-			System.out.println(this.inputPath + " generated.");
-		}
 	}
 	
-	private static StringBuilder namesies;
-	private static boolean firstNamesies;
+	private final StringBuilder namesies;
+	private boolean firstNamesies;
 	
 	public StuffGen()
 	{
@@ -79,10 +74,11 @@ public class StuffGen
 		
 		for (Generator generator : Generator.values())
 		{
-			generator.generate();
+			superGen(generator);
+			System.out.println(generator.inputPath + " generated.");
 		}
 		
-		writeNamesies();
+		writeNamesies();	
 		
 //		pokemonInfoStuff();
 		
@@ -91,14 +87,14 @@ public class StuffGen
 //		DrawMetrics.FindMetrics.writeFontMetrics();
 	}
 	
-	private static void createNamesies(String name, NamesiesType superClass)
+	private void createNamesies(String name, NamesiesType superClass)
 	{
 		String enumName = Namesies.getNamesiesString(name, superClass);
 		namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
 		firstNamesies = false;
 	}
 	
-	private static void writeNamesies()
+	private void writeNamesies()
 	{
 		Scanner original = FileIO.openFile(NAMESIES_PATH);
 		StringBuilder out = new StringBuilder();
@@ -147,7 +143,7 @@ public class StuffGen
 			}
 		}
 		
-		FileIO.printToFile(NAMESIES_PATH, out);
+		FileIO.writeToFile(NAMESIES_PATH, out);
 		System.out.println("Namesies generated.");
 	}
 	
@@ -206,7 +202,6 @@ public class StuffGen
 			}
 			
 			fields.put(key, value);
-//			System.out.println(className + " " + key + " " + value);
 		}
 		
 		fields.put("Namesies", name);
@@ -257,7 +252,7 @@ public class StuffGen
 		return out;
 	}
 	
-	private static void addClass(Generator gen, StringBuilder out, StringBuilder classes, String name, String className, HashMap<String, String> fields)
+	private void addClass(Generator gen, StringBuilder out, StringBuilder classes, String name, String className, HashMap<String, String> fields)
 	{
 		createNamesies(name, gen.appendsies);
 		
@@ -296,7 +291,7 @@ public class StuffGen
 		classes.append(classString);
 	}
 	
-	private static void superGen(Generator gen)
+	private void superGen(Generator gen)
 	{
 		StringBuilder out = startGen(gen);
 		
@@ -345,7 +340,7 @@ public class StuffGen
 			case ITEM_GEN:
 				addTMs(out, classes, indexOut);
 				out.append("\n\t\tprocessIncenseItems();\n");
-				FileIO.printToFile(ITEM_TILES_PATH + "index.txt", indexOut);
+				FileIO.writeToFile(ITEM_TILES_PATH + "index.txt", indexOut);
 			default:
 				break;
 		}
@@ -358,7 +353,7 @@ public class StuffGen
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n"); // DON'T DO IT
 		out.append(classes + "}");
 		
-		FileIO.printToFile(gen.outputPath, out);
+		FileIO.writeToFile(gen.outputPath, out);
 	}
 	
 	private static String getActivationMethod(Generator gen, String className, HashMap<String, String> fields)
@@ -408,7 +403,7 @@ public class StuffGen
 		return implementsString;
 	}
 	
-	private static void addTMs(StringBuilder out, StringBuilder classes, StringBuilder indexOut)
+	private void addTMs(StringBuilder out, StringBuilder classes, StringBuilder indexOut)
 	{
 		// Add the image index for each type (except for None)
 		for (Type t : Type.values())
@@ -453,6 +448,56 @@ public class StuffGen
 		}
 	
 		indexOut.append(String.format("%s.png %08x%n", imageName, index));
+	}
+	
+	private static class MethodFormatter {
+		
+		private int tabs;
+		private boolean inSwitch;
+		private boolean inCases;
+		
+		public MethodFormatter(int tabs) {
+			this.tabs = tabs;
+			
+			this.inSwitch = false;
+			this.inCases = false;
+		}
+		
+		public void appendLine(String line, StringBuilder method) {
+			
+			if (line.startsWith("switch (")) {
+				inSwitch = true;
+			}
+			
+			if (inSwitch) {
+				boolean inBefore = inCases;
+				inCases = line.startsWith("case ") || line.equals("default:");
+				
+				if (inBefore && !inCases) {
+					tabs++;
+				}
+			}
+			
+			if (line.contains("}") && !line.contains("{")) {
+				tabs--;
+				inSwitch = false;
+			}
+			
+			// Add the tabs
+			for (int i = 0; i < tabs; i++)
+				method.append("\t");
+			
+			// Actually write the line
+			method.append(line + "\n");
+			
+			if (inSwitch && (line.equals("break;") || line.startsWith("return ") || line.equals("return;"))) {
+				tabs--;
+			}
+			
+			if (line.contains("{") && !line.contains("}")) {
+				tabs++;
+			}
+		}
 	}
 	
 	private static class MethodInfo
@@ -610,30 +655,23 @@ public class StuffGen
 		
 		private static String writeFunction(String header, String body)
 		{
-			StringBuilder function = new StringBuilder();
-			function.append("\n\t\tpublic " + header.trim() + "\n\t\t{\n");
+			StringBuilder method = new StringBuilder();
+			method.append("\n\t\tpublic " + header.trim() + "\n\t\t{\n");
 			
-			int tabs = 3;
+			MethodFormatter formatter = new MethodFormatter(3);
 			
 			Scanner in = new Scanner(body);
 			while (in.hasNextLine())
 			{
 				String line = in.nextLine().trim();
-				
-				if (line.contains("}") && !line.contains("{")) 
-					tabs--;
-				
-				function.append(addTabs(tabs) + line + "\n");
-				
-				if (line.contains("{") && !line.contains("}")) 
-					tabs++;
+				formatter.appendLine(line, method);
 			}
 			
-			function.append("\t\t}\n");
+			method.append("\t\t}\n");
 			
 			in.close();
 			
-			return function.toString();
+			return method.toString();
 		}
 	}
 	
@@ -1341,21 +1379,10 @@ public class StuffGen
 		return MethodInfo.writeFunction(fields.get("ClassName") + "()", constructor.toString());
 	}
 	
-	private static String addTabs(int tabs)
-	{
-		String s = "";
-		
-		for (int i = 0; i < tabs; i++) 
-			s += "\t";
-		
-		return s;
-	}
-	
 	private static String readFunction(Scanner in)
 	{
-		StringBuilder function = new StringBuilder();
-		
-		int tabs = 2;
+		StringBuilder method = new StringBuilder();
+		MethodFormatter formatter = new MethodFormatter(2);
 		
 		while (in.hasNext()) 
 		{
@@ -1366,16 +1393,10 @@ public class StuffGen
 				break;
 			}
 			
-			if (line.contains("}") && !line.contains("{")) 
-				tabs--;
-			
-			function.append(addTabs(tabs) + line + "\n");
-			
-			if (line.contains("{") && !line.contains("}")) 
-				tabs++;
+			formatter.appendLine(line, method);
 		}
 		
-		return function.toString();
+		return method.toString();
 	}
 	
 	// Used for editing pokemoninfo.txt
@@ -1479,7 +1500,7 @@ public class StuffGen
 		out.append("pokeball.png 00011111\n");
 		out.append("egg.png 00010000\n");
 		
-		FileIO.printToFile(POKEMON_TILES_INDEX_PATH, out);
+		FileIO.writeToFile(POKEMON_TILES_INDEX_PATH, out);
 	}
 	
 	private static void generatePokemonPartyTileIndices()
@@ -1492,6 +1513,6 @@ public class StuffGen
 		
 		out.append("egg-small.png 00010000\n");
 		
-		FileIO.printToFile(POKEMON_SMALL_TILES_INDEX_PATH, out);
+		FileIO.writeToFile(POKEMON_SMALL_TILES_INDEX_PATH, out);
 	}
 }

@@ -1,6 +1,7 @@
 package map.entity;
 
 import gui.GameData;
+import gui.TileSet;
 import gui.view.MapView;
 
 import java.awt.image.BufferedImage;
@@ -11,7 +12,7 @@ import map.entity.MovableEntity.Direction;
 
 public class TriggerEntity extends Entity
 {
-	private String trigger;
+	private final String trigger;
 
 	public TriggerEntity(int x, int y, String trigger) 
 	{
@@ -24,8 +25,7 @@ public class TriggerEntity extends Entity
 
 	protected BufferedImage getFrame(GameData data) 
 	{
-		// TODO: Make constant for empty image because this looks weird
-		return data.getTrainerTiles().getTile(-1);
+		return data.getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
 	}
 
 	public String getTrigger() 

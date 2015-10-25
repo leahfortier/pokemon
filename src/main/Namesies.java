@@ -1,6 +1,5 @@
 package main;
 
-
 public enum Namesies
 {
 	// EVERYTHING BELOW IS GENERATED ###
