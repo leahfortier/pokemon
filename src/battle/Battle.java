@@ -1,7 +1,5 @@
 package battle;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -813,8 +811,6 @@ public class Battle
 			return null;
 		}
 		
-		Class<?>[] parameterTypes = null;
-		
 		Object returnValue = null;
 		if (updateIndex != -1)
 		{
@@ -848,65 +844,44 @@ public class Battle
 					return invokee;
 				}
 				
-				// YEAH TRY CATCH BLOCKS ARE THE GREATEST
-				try 
+				// Invoke the method and get what it returns
+				Object methodReturn = Global.dynamicMethodInvoke(className, methodName, invokee, parameterValues);
+				
+				// If we're just checking for a specific boolean, we can cut out early
+				if (isCheck && (boolean)methodReturn == check)
 				{
-					// Don't want to do this more than once because that would be totes inefficientz
-					if (parameterTypes == null)
-					{
-						// Get the parameter types -- THIS IS WHY WE HAVE TO DO INTEGER INSTEAD OF INT
-						parameterTypes = new Class<?>[parameterValues.length];
-						for (int i = 0; i < parameterTypes.length; i++)	
-						{
-							parameterTypes[i] = parameterValues[i].getClass();
-						}
-					}
-					
-					// Create and invoke the method -- THIS IS SO COOL THANK YOU MARCOD OF THE SEA
-					Method method = className.getMethod(methodName, parameterTypes);
-					Object methodReturn = method.invoke(invokee, parameterValues);
-					
-					// If we're just checking for a specific boolean, we can cut out early
-					if (isCheck && (boolean)methodReturn == check)
-					{
-						return invokee;
-					}
-					
-					// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
-					if (p != null && p.isFainted(b))
-					{
-						return invokee;
-					}
-					
-					if (opp != null && opp.isFainted(b))
-					{
-						return invokee;
-					}
-					
-					// Not a boolean return check, but we are checking the return value -- das what we want, das what we need, das what we crave
-					if (!isCheck && check)
-					{
-						return methodReturn;
-					}
-					
-					// If this is an update invoke, continuously update the result
-					if (updateIndex != -1)
-					{
-						parameterValues[updateIndex] = methodReturn;
-						returnValue = methodReturn;
-					}
-					
-					// If this is a multiply invoke, continuously multiply the result by the base
-					if (multiplyBase != -1)
-					{
-						multiplyBase *= (double)methodReturn;
-						returnValue = multiplyBase;
-					}
+					return invokee;
 				}
-				// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
-				catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+				
+				// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
+				if (p != null && p.isFainted(b))
 				{
-					Global.error("No such method " + methodName + " in class " + className.getName() + " or could not invoke such method.");
+					return invokee;
+				}
+				
+				if (opp != null && opp.isFainted(b))
+				{
+					return invokee;
+				}
+				
+				// Not a boolean return check, but we are checking the return value -- das what we want, das what we need, das what we crave
+				if (!isCheck && check)
+				{
+					return methodReturn;
+				}
+				
+				// If this is an update invoke, continuously update the result
+				if (updateIndex != -1)
+				{
+					parameterValues[updateIndex] = methodReturn;
+					returnValue = methodReturn;
+				}
+				
+				// If this is a multiply invoke, continuously multiply the result by the base
+				if (multiplyBase != -1)
+				{
+					multiplyBase *= (double)methodReturn;
+					returnValue = multiplyBase;
 				}
 			}	
 		}

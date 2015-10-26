@@ -18,25 +18,40 @@ import battle.effect.Effect.CastSource;
 public abstract class Status implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	protected StatusCondition type;
+	protected final StatusCondition type;
+	
+	protected Status(StatusCondition type) {
+		this.type = type;
+	}
+	
+	protected abstract String getCastMessage(ActivePokemon p);
+	protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
+
+	protected abstract String getRemoveMessage(ActivePokemon victim);
+	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
+	
+	// A method to be overidden if anything related to conflicted victim is necessary to create this status
+	protected void postCreateEffect(ActivePokemon victim) {}
 	
 	public static enum StatusCondition implements Serializable
 	{
-		NONE("", 1), 
-		FAINTED("FNT", 1),
-		PARALYZED("PRZ", 1.5), 
-		POISONED("PSN", 1.5), 
-		BURNED("BRN", 1.5),
-		ASLEEP("SLP", 2.5), 
-		FROZEN("FRZ", 2.5);
+		NONE("", 1, None.class), 
+		FAINTED("FNT", 1, Fainted.class),
+		PARALYZED("PRZ", 1.5, Paralyzed.class), 
+		POISONED("PSN", 1.5, Poisoned.class), 
+		BURNED("BRN", 1.5, Burned.class),
+		ASLEEP("SLP", 2.5, Asleep.class), 
+		FROZEN("FRZ", 2.5, Frozen.class);
 		
-		private String name;
-		private double catchModifier;
+		private final String name;
+		private final double catchModifier;
+		private final Class<? extends Status> statusClass;
 		
-		private StatusCondition(String name, double mod)
+		private StatusCondition(String name, double catchModifier, Class<? extends Status> statusClass)
 		{
 			this.name = name;
-			catchModifier = mod;
+			this.catchModifier = catchModifier;
+			this.statusClass = statusClass;
 		}
 		
 		public String getName()
@@ -50,11 +65,7 @@ public abstract class Status implements Serializable
 		}
 	}
 	
-	protected abstract String getCastMessage(ActivePokemon p);
-	protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
-
-	protected abstract String getRemoveMessage(ActivePokemon victim);
-	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
+	
 	
 	public static void removeStatus(Battle b, ActivePokemon victim, CastSource source)
 	{
@@ -94,28 +105,13 @@ public abstract class Status implements Serializable
 		return Effect.DEFAULT_FAIL_MESSAGE;
 	}
 	
+	// Creates a new status like a motherfucking champ
 	private static Status getStatus(StatusCondition s, ActivePokemon victim)
 	{
-		switch (s)
-		{
-			case NONE:
-				return new None();
-			case FAINTED:
-				return new Fainted();
-			case PARALYZED:
-				return new Paralyzed();
-			case POISONED:
-				return new Poisoned();
-			case BURNED:
-				return new Burned();
-			case FROZEN:
-				return new Frozen();
-			case ASLEEP:
-				return new Asleep(victim);
-			default:
-				Global.error("No such Status Condition " + s);
-				return null;
-		}
+		Status status = (Status)Global.dynamicInstantiaton(s.statusClass);
+		status.postCreateEffect(victim);
+		
+		return status;
 	}
 	
 	public static boolean applies(StatusCondition status, Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -218,13 +214,13 @@ public abstract class Status implements Serializable
 		p.setStatus(new Fainted());
 	}
 	
-	private static class None extends Status 
+	public static class None extends Status 
 	{
 		private static final long serialVersionUID = 1L;
 
 		public None()
 		{
-			super.type = StatusCondition.NONE;
+			super(StatusCondition.NONE);
 		}
 		
 		public String getCastMessage(ActivePokemon p)
@@ -248,13 +244,13 @@ public abstract class Status implements Serializable
 		}
 	}
 	
-	private static class Fainted extends Status 
+	public static class Fainted extends Status 
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Fainted()
 		{
-			super.type = StatusCondition.FAINTED;
+			super(StatusCondition.FAINTED);
 		}
 		
 		public String getCastMessage(ActivePokemon p)
@@ -278,13 +274,13 @@ public abstract class Status implements Serializable
 		}
 	}
 	
-	private static class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect
+	public static class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Paralyzed()
 		{
-			super.type = StatusCondition.PARALYZED;
+			super(StatusCondition.PARALYZED);
 		}
 		
 		// Electric-type Pokemon cannot be paralyzed
@@ -329,13 +325,13 @@ public abstract class Status implements Serializable
 		}
 	}
 	
-	private static class Poisoned extends Status implements EndTurnEffect
+	public static class Poisoned extends Status implements EndTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Poisoned()
 		{
-			super.type = StatusCondition.POISONED;
+			super(StatusCondition.POISONED);
 		}
 		
 		public void applyEndTurn(ActivePokemon victim, Battle b) 
@@ -389,19 +385,22 @@ public abstract class Status implements Serializable
 		}
 	}
 	
-	private static class Asleep extends Status implements BeforeTurnEffect
+	public static class Asleep extends Status implements BeforeTurnEffect
 	{
 		private static final long serialVersionUID = 1L;
 		private int numTurns;
 		
-		public Asleep(ActivePokemon victim)
+		public Asleep()
 		{
-			numTurns = (int)(Math.random()*3) + 1;
-			super.type = StatusCondition.ASLEEP;
-			
+			super(StatusCondition.ASLEEP);
+			this.numTurns = (int)(Math.random()*3) + 1;
+		}
+		
+		protected void postCreateEffect(ActivePokemon victim) 
+		{
 			if (victim.hasAbility(Namesies.EARLY_BIRD_ABILITY)) 
 			{
-				numTurns /= 2;
+				this.numTurns /= 2;
 			}
 		}
 
@@ -461,13 +460,13 @@ public abstract class Status implements Serializable
 		}
 	}
 	
-	private static class Burned extends Status implements EndTurnEffect, StatChangingEffect
+	public static class Burned extends Status implements EndTurnEffect, StatChangingEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Burned()
 		{
-			super.type = StatusCondition.BURNED;
+			super(StatusCondition.BURNED);
 		}
 		
 		public void applyEndTurn(ActivePokemon victim, Battle b) 
@@ -513,16 +512,16 @@ public abstract class Status implements Serializable
 		}
 	}
 	
-	private static class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect
+	public static class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect
 	{
 		private static final long serialVersionUID = 1L;
 
 		public Frozen()
 		{
-			super.type = StatusCondition.FROZEN;
+			super(StatusCondition.FROZEN);
 		}
 		
-		// Ice-type Pokemon cannot be frozen
+		// Ice-type Pokemon cannot be frozen and no one can frozen while sunny
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim)
 		{
 			return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE) && b.getWeather().namesies() != Namesies.SUNNY_EFFECT;

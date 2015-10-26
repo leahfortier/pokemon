@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.Game;
+import main.Global;
 import map.Condition;
 import trainer.CharacterData;
 
@@ -30,6 +31,14 @@ public abstract class Trigger
 		{
 			globals.add(m.group(1));
 		}		
+	}
+	
+	// Dynamically creates a trigger object from the created class name with name and contents as its constructor parameters :)
+	// P.S. This is so fucking cool
+	public static Trigger createTrigger(String type, String name, String contents)
+	{	
+		String triggerClassName = String.format("map.triggers.%sTrigger", type);
+		return (Trigger)Global.dynamicInstantiaton(triggerClassName, name, contents);
 	}
 	
 	/**

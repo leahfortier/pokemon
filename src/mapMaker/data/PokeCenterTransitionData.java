@@ -28,8 +28,8 @@ public class PokeCenterTransitionData {
 	
 	public PokeCenterTransitionData(MapMaker mapMaker) {
 		this.mapMaker = mapMaker;
-		groupTrigger = null;
-		transitionTriggers = new HashMap<>();
+		this.groupTrigger = null;
+		this.transitionTriggers = new HashMap<>();
 		
 		readTransitions();
 		
@@ -46,14 +46,14 @@ public class PokeCenterTransitionData {
 		{
 			String type = m.group(1);
 			String name = m.group(2);
-			Trigger trig = GameData.createTrigger(type, name, m.group(3));
+			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
 			
 			if (type.equals("Group")) {
-				groupTrigger = (GroupTrigger)trig;
+				groupTrigger = (GroupTrigger)trigger;
 			}
 			else if (type.equals("MapTransition")) {
-				MapTransitionTrigger transitionTrig = (MapTransitionTrigger)trig;
-				transitionTriggers.put(transitionTrig.mapName +"_" + transitionTrig.mapEntranceName, transitionTrig);
+				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
+				transitionTriggers.put(transitionTrigger.mapName +"_" + transitionTrigger.mapEntranceName, transitionTrigger);
 			}
 		}
 		
@@ -76,10 +76,10 @@ public class PokeCenterTransitionData {
 				"nextMap: " +mapName +"\n"+
 				"mapEntrance: " +entrance;
 		
-		MapTransitionTrigger transitionTrig = new MapTransitionTrigger(name, contents); 
-		transitionTriggers.put(transitionTrig.mapName +"_" + transitionTrig.mapEntranceName, transitionTrig);
+		MapTransitionTrigger transitionTrigger = new MapTransitionTrigger(name, contents); 
+		transitionTriggers.put(transitionTrigger.mapName +"_" + transitionTrigger.mapEntranceName, transitionTrigger);
 		
-		groupTrigger.triggers.add(groupTrigger.triggers.size() - 1, transitionTrig.getName());
+		groupTrigger.triggers.add(groupTrigger.triggers.size() - 1, transitionTrigger.getName());
 	}
 	
 	public void remove(String mapName, String entrance) {
@@ -104,8 +104,8 @@ public class PokeCenterTransitionData {
 			
 			for (String mapTransition: transitionTriggers.keySet()) {
 				
-				MapTransitionTrigger trig = transitionTriggers.get(mapTransition);
-				writer.write("MapTransitionTrigger " +trig.getName() +" {\n" + trig.triggerDataAsString() + "}\n\n");
+				MapTransitionTrigger trigger = transitionTriggers.get(mapTransition);
+				writer.write("MapTransitionTrigger " +trigger.getName() +" {\n" + trigger.triggerDataAsString() + "}\n\n");
 			}
 			
 			writer.close();

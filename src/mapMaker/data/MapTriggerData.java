@@ -49,11 +49,10 @@ public class MapTriggerData {
 		{
 			String type = m.group(1);
 			String name = m.group(2);
-			Trigger trig = GameData.createTrigger(type, name, m.group(3));
 			
-			System.out.println("Trigger: " +name);
+			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
 			
-			triggers.put(name, trig);
+			triggers.put(name, trigger);
 		}
 	}
 	

@@ -118,9 +118,9 @@ public abstract class Effect implements Serializable
 		return false;
 	}
 	
-	public static boolean isInactiveEffect(Object o)
+	public static boolean isInactiveEffect(Object object)
 	{
-		return o instanceof Effect && !((Effect)o).isActive();
+		return object instanceof Effect && !((Effect)object).isActive();
 	}
 	
 	public void deactivate()

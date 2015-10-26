@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.Dimension;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import javax.swing.JOptionPane;
 
@@ -57,5 +59,68 @@ public class Global
 		
 		Global.error("Chances array is improperly formatted.");
 		return -1;
+	}
+	
+	private static Class<?>[] getParameterTypes(Object[] parameterValues)
+	{
+		Class<?>[] parameterTypes = new Class<?>[parameterValues.length];
+		for (int i = 0; i < parameterValues.length; i++) 
+		{
+			parameterTypes[i] = parameterValues[i].getClass();
+		}
+		
+		return parameterTypes;
+	}
+	
+	public static Object dynamicMethodInvoke(Class<?> className, String methodName, Object invokee, Object... parameterValues) 
+	{
+		Class<?>[] parameterTypes = getParameterTypes(parameterValues);
+		
+		// YEAH TRY CATCH BLOCKS ARE THE GREATEST
+		try 
+		{
+			// Create and invoke the method -- THIS IS SO COOL THANK YOU MARCOD OF THE SEA
+			Method method = className.getMethod(methodName, parameterTypes);
+			Object methodReturn = method.invoke(invokee, parameterValues);
+			
+			return methodReturn;
+		}
+		// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
+		catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+		{
+			Global.error("No such method " + methodName + " in class " + className.getName() + " or could not invoke such method.");
+			return null;
+		}
+	}
+	
+	// Dynamic instantiation from the class name as a string
+	public static Object dynamicInstantiaton(String className, Object... parameterValues) 
+	{
+		try
+		{
+			return dynamicInstantiaton(Class.forName(className), parameterValues);
+		}
+		catch (ClassNotFoundException e)
+		{
+			Global.error("Invalid class name " + className + ". Could not instantiate.");
+			return null;
+		}
+	}
+	
+	// Returns a new object of type className where the constructor was called with parameterValues as parameters :) :) :)
+	public static Object dynamicInstantiaton(Class<?> className, Object... parameterValues) 
+	{
+		// Get the parameter types
+		Class<?>[] parameterTypes = getParameterTypes(parameterValues);
+		
+		try
+		{
+			return className.getConstructor(parameterTypes).newInstance(parameterValues);
+		}
+		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e)
+		{
+			Global.error("Could not instantiate class " + className + ".");
+			return null;
+		}
 	}
 }

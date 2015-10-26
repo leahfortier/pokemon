@@ -66,6 +66,7 @@ public abstract class Entity
 
 	protected boolean isPassable(WalkType type, Direction direction)
 	{
+		// TODO: I'm probobbly gonna want to generalize this at some point...
 		switch (type)
 		{
 			case HOP_RIGHT:

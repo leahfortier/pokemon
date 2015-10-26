@@ -111,7 +111,7 @@ public class ActivePokemon implements Serializable
 		
 		removeStatus();
 		
-		this.totalEXP = GrowthRate.getEXP(pokemon.getGrowthRate(), this.level);
+		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
 		this.totalEXP += (int)(Math.random()*expToNextLevel());
 		this.gender = Gender.getGender(pokemon.getMaleRatio());
 		this.shiny = user || isWild ? (int)(Math.random()*8192) == 13 : false;
@@ -552,14 +552,27 @@ public class ActivePokemon implements Serializable
 	
 	public int expToNextLevel()
 	{
-		if (level == MAX_LEVEL) return 0;
+		if (level == MAX_LEVEL) {
+			return 0;	
+		}
 		
-		return GrowthRate.getEXP(pokemon.getGrowthRate(), level + 1) - totalEXP;
+		return pokemon.getGrowthRate().getEXP(level + 1) - totalEXP;
 	}
 	
+	// TODO: Test this to make sure it still works (espesh level 100)
 	public float expRatio()
 	{
-		return 1.0f - (float)expToNextLevel()/(GrowthRate.getEXP(pokemon.getGrowthRate(), level + 1) - GrowthRate.getEXP(pokemon.getGrowthRate(), level));
+		if (level == MAX_LEVEL) {
+			return 0;
+		}
+		
+		int totalNextLevel = pokemon.getGrowthRate().getEXP(level + 1);
+		int totalCurrentLevel = pokemon.getGrowthRate().getEXP(level);
+		
+		int currentToNextLevel = expToNextLevel();
+		int totalToNextLevel = totalNextLevel - totalCurrentLevel;
+		
+		return 1.0f - (float)currentToNextLevel/totalToNextLevel;
 	}
 	
 	public void gainEXP(Battle b, int gain, ActivePokemon dead)
@@ -582,7 +595,7 @@ public class ActivePokemon implements Serializable
 		addEVs(vals);
 		
 		// Level up if applicable
-		while (totalEXP >= GrowthRate.getEXP(pokemon.getGrowthRate(), level + 1))
+		while (totalEXP >= pokemon.getGrowthRate().getEXP(level + 1))
 		{
 			levelUp(b);
 		}

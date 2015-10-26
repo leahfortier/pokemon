@@ -22,9 +22,9 @@ public class GroupTrigger extends Trigger{
 	public void execute(Game game){
 		super.execute(game);
 		for (String s: triggers){
-			Trigger trig = game.data.getTrigger(s);
-			if (trig != null && trig.isTriggered(game.charData)){
-				trig.execute(game);
+			Trigger trigger = game.data.getTrigger(s);
+			if (trigger != null && trigger.isTriggered(game.charData)){
+				trigger.execute(game);
 			}
 		}
 	}

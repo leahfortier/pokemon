@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import main.Namesies.NamesiesType;
-import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import battle.Attack;
 
@@ -1008,6 +1007,7 @@ public class StuffGen
 		{
 			String assignmentType = split[index++];
 			
+			// TODO: wtf is this and why is it in a switch if there's just one option??
 			switch (assignmentType)
 			{
 				case "List":

@@ -72,40 +72,40 @@ public class TransitionBuildingData
 		{
 			String type = m.group(1);
 			String name = m.group(2);
-			Trigger trig = GameData.createTrigger(type, name, m.group(3));
+			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
 			
 			if (type.equals("Group")) 
 			{
 				if (name.endsWith("EastDoor")) 
 				{
-					groupTriggers[0] = (GroupTrigger)trig;
+					groupTriggers[0] = (GroupTrigger)trigger;
 				}
 				else if (name.endsWith("WestDoor"))
 				{
-					groupTriggers[1] = (GroupTrigger)trig;
+					groupTriggers[1] = (GroupTrigger)trigger;
 				}
 				else if (name.endsWith("NorthDoor")) 
 				{
-					groupTriggers[2] = (GroupTrigger)trig;
+					groupTriggers[2] = (GroupTrigger)trigger;
 				}
 				else if (name.endsWith("SouthDoor")) 
 				{
-					groupTriggers[3] = (GroupTrigger)trig;
+					groupTriggers[3] = (GroupTrigger)trigger;
 				}
 				else if (name.equals("Info_Trigger"))
 				{
-					infoTriggerGT = (GroupTrigger)trig;
+					infoTriggerGT = (GroupTrigger)trigger;
 				}
 			}
 			else if (type.equals("Event"))
 			{
-				infoTriggers.add((EventTrigger)trig);
+				infoTriggers.add((EventTrigger)trigger);
 			}
 			else if (type.equals("MapTransition") && name.matches(TransitionBuildingTransitionNamePattern.pattern())) 
 			{
-				MapTransitionTrigger transitionTrig = (MapTransitionTrigger)trig;
+				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
 				
-				transitionTriggers.put(transitionTrig.mapName +"_" + transitionTrig.mapEntranceName, transitionTrig);
+				transitionTriggers.put(transitionTrigger.mapName +"_" + transitionTrigger.mapEntranceName, transitionTrigger);
 				
 				Matcher nameMatcher = TransitionBuildingTransitionNamePattern.matcher(name);
 				nameMatcher.find();
@@ -115,23 +115,23 @@ public class TransitionBuildingData
 				
 				TransitionBuildingPair pair = getTransitionPair(nameMatcher.group(1).equals("H"), map1, map2, Integer.parseInt(nameMatcher.group(4)));
 				
-				if (transitionTrig.mapName.equals(map1)) 
+				if (transitionTrigger.mapName.equals(map1)) 
 				{
-					pair.map1Entrance = transitionTrig.mapEntranceName;
+					pair.map1Entrance = transitionTrigger.mapEntranceName;
 				}
 				else
 				{
-					pair.map2Entrance = transitionTrig.mapEntranceName;
+					pair.map2Entrance = transitionTrigger.mapEntranceName;
 				}
 			}
 		}
 		
 		//Create missing transition group triggers
-		for (int currGroupTrig = 0; currGroupTrig < groupTriggers.length; ++currGroupTrig)
+		for (int currGroupTrigger = 0; currGroupTrigger < groupTriggers.length; ++currGroupTrigger)
 		{
-			if (groupTriggers[currGroupTrig] == null)
+			if (groupTriggers[currGroupTrigger] == null)
 			{
-				groupTriggers[currGroupTrig] = new GroupTrigger("GroupTrigger_TransitionBuilding_" + directions[currGroupTrig] + "Door", "");
+				groupTriggers[currGroupTrigger] = new GroupTrigger("GroupTrigger_TransitionBuilding_" + directions[currGroupTrigger] + "Door", "");
 			}
 		}
 		
@@ -278,16 +278,16 @@ public class TransitionBuildingData
 			
 			
 			//Info triggers
-			GroupTrigger gt = new GroupTrigger(infoTriggerGT.getName(),"");
+			GroupTrigger groupTrigger = new GroupTrigger(infoTriggerGT.getName(), "");
 			
 			for (TransitionBuildingPair pair: allTransitionPairs)
 			{
-				EventTrigger trig = pair.getInfoTrigger();
-				gt.triggers.add(trig.getName());
-				writer.write("EventTrigger " +trig.getName() +" {\n" + trig.triggerDataAsString() + "}\n\n");
+				EventTrigger trigger = pair.getInfoTrigger();
+				groupTrigger.triggers.add(trigger.getName());
+				writer.write("EventTrigger " + trigger.getName() + " {\n" + trigger.triggerDataAsString() + "}\n\n");
 			}
 			
-			writer.write("GroupTrigger " +gt.getName() +" {\n" + gt.triggerDataAsString() + "}\n\n");
+			writer.write("GroupTrigger " + groupTrigger.getName() + " {\n" + groupTrigger.triggerDataAsString() + "}\n\n");
 			writer.close();
 			
 			//Write to dialog file

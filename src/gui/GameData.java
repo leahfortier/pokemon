@@ -10,24 +10,13 @@ import main.Global;
 import map.AreaData;
 import map.DialogueSequence;
 import map.MapData;
-import map.triggers.BadgeTrigger;
-import map.triggers.ChangeViewTrigger;
-import map.triggers.EventTrigger;
-import map.triggers.GiveTrigger;
-import map.triggers.GroupTrigger;
-import map.triggers.HealPartyTrigger;
-import map.triggers.LastPokeCenterTrigger;
-import map.triggers.MapTransitionTrigger;
-import map.triggers.SoundTrigger;
-import map.triggers.TrainerBattleTrigger;
 import map.triggers.Trigger;
-import map.triggers.WildBattleTrigger;
 import trainer.CharacterData;
 
 public class GameData
 {
-	private static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
 	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}"); // TODO: Make private again maybe
+	private static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
 	private static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*(\\w+)\\s*(\\w+)\\s*([()&|!\\w-:,]+)?");
 
 	private static final String TRIGGER_FOLDER = FileIO.makePath("rec", "triggers");
@@ -186,54 +175,10 @@ public class GameData
 		dialogues.put(name, dialogue);
 	}
 
-	public static Trigger createTrigger(String type, String name, String contents)
-	{
-		Trigger trig = null;
-		switch (type)
-		{
-			case "Event":
-				trig = new EventTrigger(name, contents);
-				break;
-			case "MapTransition":
-				trig = new MapTransitionTrigger(name, contents);
-				break;
-			case "TrainerBattle":
-				trig = new TrainerBattleTrigger(name, contents);
-				break;
-			case "WildBattle":
-				trig = new WildBattleTrigger(name, contents);
-				break;
-			case "Group":
-				trig = new GroupTrigger(name, contents);
-				break;
-			case "Give":
-				trig = new GiveTrigger(name, contents);
-				break;
-			case "HealParty":
-				trig = new HealPartyTrigger(name, contents);
-				break;
-			case "LastPokeCenter":
-				trig = new LastPokeCenterTrigger(name, contents);
-				break;
-			case "Badge":
-				trig = new BadgeTrigger(name, contents);
-				break;
-			case "ChangeView":
-				trig = new ChangeViewTrigger(name, contents);
-				break;
-			case "Sound":
-				trig = new SoundTrigger(name, contents);
-				break;
-			default:
-				Global.error("Invalid trigger type " + type + ".");
-		}
-		return trig;
-	}
-
 	public void addTrigger(String type, String name, String contents)
 	{
-		Trigger trig = createTrigger(type, name, contents);
-		triggers.put(name, trig);
+		Trigger trigger = Trigger.createTrigger(type, name, contents);
+		triggers.put(name, trigger);
 	}
 
 	public TileSet getMapTiles()

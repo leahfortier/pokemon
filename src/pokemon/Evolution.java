@@ -32,6 +32,8 @@ public abstract class Evolution implements Serializable
 	public static Evolution readEvolution(Scanner in)
 	{
 		String type = in.next();
+		
+		// As much as I'd like to do a killer generic instantiation, I don't think the constructor should take in the Scanner
 		switch (type)
 		{
 			case "None":

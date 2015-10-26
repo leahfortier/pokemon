@@ -90,6 +90,8 @@ public class StartView extends View
 								break;
 							case APPEND_TO_NAME:
 								message = player.getName() + message;
+								state = State.DEFAULT;
+								break;
 							default:
 								state = State.DEFAULT;
 								break;
