@@ -2589,7 +2589,7 @@ None
 None
 
 32
-Nidoran
+Nidoran M
 46 57 40 40 40 50 
 55
 Medium Slow

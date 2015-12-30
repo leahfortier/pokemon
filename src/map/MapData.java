@@ -10,7 +10,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import main.FileIO;
 import map.entity.Entity;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
@@ -18,6 +17,7 @@ import map.entity.NPCEntityData;
 import map.entity.TriggerEntityData;
 import map.triggers.TriggerData;
 import trainer.CharacterData;
+import util.FileIO;
 
 
 public class MapData 

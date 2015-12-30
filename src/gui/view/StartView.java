@@ -10,12 +10,12 @@ import java.awt.Graphics;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.InputControl;
 import main.Namesies;
-import main.InputControl.Control;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;
 import trainer.CharacterData;
+import util.InputControl;
+import util.InputControl.Control;
 import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
 

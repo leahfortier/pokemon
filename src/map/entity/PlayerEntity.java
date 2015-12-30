@@ -10,12 +10,12 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
 import map.MapData;
 import map.MapData.WalkType;
 import map.triggers.Trigger;
 import trainer.CharacterData;
+import util.InputControl;
+import util.InputControl.Control;
 
 public class PlayerEntity extends MovableEntity
 {

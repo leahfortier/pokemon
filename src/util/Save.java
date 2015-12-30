@@ -1,4 +1,4 @@
-package main;
+package util;
 
 import gui.view.MainMenuView.Theme;
 
@@ -12,6 +12,8 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import main.Game;
+import main.Global;
 import trainer.CharacterData;
 
 public final class Save

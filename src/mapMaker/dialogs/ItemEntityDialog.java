@@ -18,6 +18,7 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import util.PokeString;
 import map.entity.ItemEntityData;
 import mapMaker.MapMaker;
 
@@ -47,9 +48,7 @@ public class ItemEntityDialog extends JPanel
 			  public void insertUpdate(DocumentEvent e) { checkItem(); }
 			  public void checkItem() 
 			  {
-				  // TODO: We srsly need a function that does the next string replaces in like global or something
-				  String itemName = itemTextField.getText().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642");
-				  itemName = convertToProperCase(itemName);
+				  String itemName = getItemName();
 				  if (!Item.isItem(itemName)) 
 				  {
 					  itemImageLabel.setIcon(null);
@@ -120,18 +119,18 @@ public class ItemEntityDialog extends JPanel
 		itemTextField.setText(item.getItem().replace('_', ' '));
 		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
-		int index = Item.getItemFromName(itemTextField.getText().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642")).getIndex();
+		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getIndex();
 		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
 	}
 	
 	public String getItemName() 
 	{
-		String itemName = itemTextField.getText().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642");
+		String itemName = PokeString.restoreSpecialFromUnicode(itemTextField.getText());
 		itemName = convertToProperCase(itemName);
 		return itemName;
 	}
 	
-	public ItemEntityData getItem(String name) 
+	public ItemEntityData getItem(String name)
 	{		
 		String item = getItemName();
 		
@@ -149,6 +148,7 @@ public class ItemEntityDialog extends JPanel
 				-1);
 	}
 	
+	// TODO: Look at this later when I have more time -- should this go into PokeString?
 	public String convertToProperCase(String string) 
 	{
 		StringBuilder s = new StringBuilder();

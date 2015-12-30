@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import util.PokeString;
 import map.entity.NPCEntityData;
 import mapMaker.MapMaker;
 
@@ -333,7 +334,7 @@ public class NPCEntityDialog extends JPanel {
 		for (String currentDialogue: npc.firstDialogue) {
 			dialogue.append(currentDialogue +"\n");
 		}
-		firstDialogueTextArea.setText(dialogue.toString().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642"));
+		firstDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
 		if (firstDialogueTextArea.getText().trim().length() == 0) {
 			firstDialogueTextArea.setText("I have no dialogue yet.");
 		}
@@ -345,7 +346,7 @@ public class NPCEntityDialog extends JPanel {
 			for (String currentDialogue: npc.secondDialogue) {
 				dialogue.append(currentDialogue +"\n");
 			}
-			secondDialogueTextArea.setText(dialogue.toString().replaceAll("\\\\u00e9", "\u00e9").replaceAll("\\\\u2640", "\u2640").replaceAll("\\\\u2642", "\u2642"));
+			secondDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
 		}
 		
 		pathTextField.setText(npc.path);
@@ -358,21 +359,31 @@ public class NPCEntityDialog extends JPanel {
 		secondTriggersTextArea.setText(npc.secondTriggers != null?npc.secondTriggers.replace("\t", ""):null);
 	}
 	
+	private static String getTrimmedAreaText(JTextArea textArea) {
+		String text = textArea.getText().trim();
+		
+		if (text.length() == 0) {
+			return null;
+		}
+		
+		return text.replace("\n", "\n\t\t");
+	}
+	
 	public NPCEntityData getNPC() {
 		return new NPCEntityData(nameTextField.getText(),
 				"condition: " + conditionTextField.getText().trim().replaceAll("\\s + ", ""),
 				-1, 
 				-1, 
 				null, 
-				pathTextField.getText().trim().length() == 0? "w": pathTextField.getText().trim(), 
+				pathTextField.getText().trim().length() == 0 ? "w" : pathTextField.getText().trim(), 
 				directionComboBox.getSelectedIndex(), 
 				spriteComboBox.getSelectedIndex(), 
-				firstDialogueTextArea.getText().replaceAll("\u00e9", "\\\\u00e9").replaceAll("\u2640", "\\\\u2640").replaceAll("\u2642", "\\\\u2642").trim().split("\n"), 
-				secondDialogueTextArea.getText().trim().length() == 0? (walkToPlayerCheckBox.isSelected()? new String[]{""}: null): secondDialogueTextArea.getText().replaceAll("\u00e9", "\\\\u00e9").replaceAll("\u2640", "\\\\u2640").replaceAll("\u2642", "\\\\u2642").trim().split("\n"), 
-				trainerDataTextArea.getText().trim().length() == 0? null: trainerDataTextArea.getText().trim().replace("\n", "\n\t\t"), 
-				giveItemsTextArea.getText().trim().length() == 0? null: giveItemsTextArea.getText().trim().replace("\n", "\n\t\t"), 
-				firstTriggersTextArea.getText().trim().length() == 0? null: firstTriggersTextArea.getText().trim().replace("\n", "\n\t\t"),
-				secondTriggersTextArea.getText().trim().length() == 0? null: secondTriggersTextArea.getText().trim().replace("\n", "\n\t\t"),
+				PokeString.convertSpecialToUnicode(firstDialogueTextArea.getText()).trim().split("\n"), 
+				secondDialogueTextArea.getText().trim().length() == 0? (walkToPlayerCheckBox.isSelected()? new String[]{""}: null): PokeString.convertSpecialToUnicode(secondDialogueTextArea.getText()).trim().split("\n"), 
+				getTrimmedAreaText(trainerDataTextArea),
+				getTrimmedAreaText(giveItemsTextArea),
+				getTrimmedAreaText(firstTriggersTextArea),
+				getTrimmedAreaText(secondTriggersTextArea),
 				walkToPlayerCheckBox.isSelected());
 	}
 }

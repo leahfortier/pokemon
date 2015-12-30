@@ -59,7 +59,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
-import main.FileIO;
+import util.FileIO;
 import map.AreaData.TerrainType;
 import map.AreaData.WeatherState;
 import map.entity.NPCEntityData;

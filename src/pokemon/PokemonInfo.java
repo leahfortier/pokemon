@@ -14,7 +14,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
-import main.FileIO;
+import util.FileIO;
 import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;

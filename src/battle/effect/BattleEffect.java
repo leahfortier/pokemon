@@ -126,7 +126,6 @@ public abstract class BattleEffect extends Effect
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Look up if this is actually true for Ingrain and Magnet Rise and Iron Ball -- it probably should be
 			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
 			{
 				b.printAttacking(p);
@@ -224,6 +223,7 @@ public abstract class BattleEffect extends Effect
 
 		public Stat switchStat(Stat s)
 		{
+			// Defense and Special Defense are swapped
 			if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
 			if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
 			return s;

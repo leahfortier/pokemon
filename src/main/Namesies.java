@@ -1,5 +1,7 @@
 package main;
 
+import util.PokeString;
+
 public enum Namesies
 {
 	// EVERYTHING BELOW IS GENERATED ###
@@ -1314,7 +1316,7 @@ public enum Namesies
 	NIDORAN_F_POKEMON("Nidoran F"),
 	NIDORINA_POKEMON("Nidorina"),
 	NIDOQUEEN_POKEMON("Nidoqueen"),
-	NIDORAN_POKEMON("Nidoran"),
+	NIDORAN_M_POKEMON("Nidoran M"),
 	NIDORINO_POKEMON("Nidorino"),
 	NIDOKING_POKEMON("Nidoking"),
 	CLEFAIRY_POKEMON("Clefairy"),
@@ -2019,7 +2021,7 @@ public enum Namesies
 	
 	public static Namesies getValueOf(String name, NamesiesType superClass)
 	{
-		Namesies value = Namesies.valueOf(Namesies.getNamesiesString(name, superClass));
+		Namesies value = Namesies.valueOf(PokeString.getNamesiesString(name, superClass));
 		
 		if (value == null)
 		{
@@ -2027,51 +2029,6 @@ public enum Namesies
 		}
 		
 		return value;
-	}
-	
-	public static String getNamesiesString(String name, NamesiesType superClass)
-	{
-		name = name.replace(" ", "").replace("u00e9", "e");
-		
-		char[] nameChar = (name + "_" + superClass).toCharArray();
-		String enumName = nameChar[0] + "";
-		
-		for (int i = 1; i < nameChar.length; i++)
-		{
-			if (((isUpper(nameChar[i]) && !isUpper(nameChar[i - 1])) || nameChar[i] == '-') && nameChar[i - 1] != '_' && enumName.charAt(enumName.length() - 1) != '_')
-			{
-				enumName += "_";
-			}
-			
-			if (isSpecial(nameChar[i]))
-			{
-				continue;
-			}
-			
-			enumName += nameChar[i];
-		}
-		
-		return enumName.toUpperCase();
-	}
-	
-	public static boolean isSpecial(char c)
-	{
-		return !isLower(c) && !isUpper(c) && !isNumber(c) && c != '_';
-	}
-	
-	public static boolean isUpper(char c)
-	{
-		return c >= 'A' && c <= 'Z';
-	}
-	
-	public static boolean isLower(char c)
-	{
-		return c >= 'a' && c <= 'z';
-	}
-	
-	public static boolean isNumber(char c)
-	{
-		return c >= '0' && c <= '9';
 	}
 	
 	public enum NamesiesType

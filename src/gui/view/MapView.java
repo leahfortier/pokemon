@@ -16,9 +16,6 @@ import java.util.Random;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
-import main.Save;
 import map.AreaData;
 import map.AreaData.WeatherState;
 import map.DialogueSequence;
@@ -32,6 +29,9 @@ import map.triggers.Trigger;
 import pokemon.ActivePokemon;
 import sound.SoundTitle;
 import trainer.CharacterData;
+import util.InputControl;
+import util.Save;
+import util.InputControl.Control;
 import battle.Battle;
 
 public class MapView extends View

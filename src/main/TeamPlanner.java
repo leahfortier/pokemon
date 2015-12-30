@@ -8,6 +8,7 @@ import main.Namesies.NamesiesType;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
+import util.FileIO;
 import battle.Attack;
 import battle.Attack.Category;
 

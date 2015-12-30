@@ -4,9 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import util.FileIO;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
-import main.FileIO;
 import main.Global;
 
 public class MP3Player extends Thread 

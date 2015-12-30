@@ -1,4 +1,4 @@
-package main;
+package util;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -13,7 +13,6 @@ import java.util.Map;
  * startTextCapture and wait until isDown(Control.ENTER, YOUR_KEY_HERE) or however you want to end input.
  * Then release the lock. Easy peasy.
  */
-
 public class InputControl implements MouseListener, KeyListener, MouseMotionListener
 {
 	public enum Control

@@ -14,7 +14,7 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import main.FileIO;
+import util.FileIO;
 import main.Global;
 
 public class DrawMetrics

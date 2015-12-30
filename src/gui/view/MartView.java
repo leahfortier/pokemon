@@ -15,11 +15,11 @@ import java.util.Iterator;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
 import main.Namesies;
 import main.Type;
 import trainer.CharacterData;
+import util.InputControl;
+import util.InputControl.Control;
 
 public class MartView extends View
 {

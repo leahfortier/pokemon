@@ -39,6 +39,7 @@ MudSport:
 WonderRoom:
 	Int: StatSwitchingEffect
 	SwitchStat: 
+	// Defense and Special Defense are swapped
 	if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
 	if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
 	return s;

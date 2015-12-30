@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import main.FileIO;
 import main.Global;
 import map.AreaData;
 import map.DialogueSequence;
 import map.MapData;
 import map.triggers.Trigger;
 import trainer.CharacterData;
+import util.FileIO;
 
 public class GameData
 {

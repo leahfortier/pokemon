@@ -6,7 +6,7 @@ import gui.view.MapView;
 
 import java.awt.image.BufferedImage;
 
-import main.InputControl;
+import util.InputControl;
 import map.MapData;
 import map.entity.MovableEntity.Direction;
 

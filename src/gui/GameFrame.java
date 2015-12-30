@@ -1,5 +1,6 @@
 package gui;
 
+import generator.StuffGen;
 import item.Item;
 
 import java.awt.Canvas;
@@ -14,12 +15,11 @@ import javax.swing.Timer;
 
 import main.Game;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
-import main.StuffGen;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
+import util.InputControl;
+import util.InputControl.Control;
 import battle.Attack;
 import battle.effect.BattleEffect;
 import battle.effect.PokemonEffect;

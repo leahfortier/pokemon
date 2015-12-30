@@ -8,9 +8,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 
+import util.InputControl;
+import util.InputControl.Control;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
 import map.MapData;
 
 public abstract class MovableEntity extends Entity

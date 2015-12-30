@@ -7,8 +7,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 
+import util.InputControl;
 import main.Global;
-import main.InputControl;
 import map.MapData;
 import map.MapData.WalkType;
 import map.entity.MovableEntity.Direction;

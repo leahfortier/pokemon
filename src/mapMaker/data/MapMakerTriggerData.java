@@ -20,7 +20,8 @@ import java.util.regex.Matcher;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import main.FileIO;
+import util.FileIO;
+import util.PokeString;
 import map.MapData;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
@@ -1323,13 +1324,12 @@ public class MapMakerTriggerData
 
 		do
 		{
-			itemEntityName = String.format("%s_Item_%s_%02d", currentMapName, itemType.replaceAll("\u00e9|\\\\u00e9", "e").replaceAll("\u2640|\\\\u2640", "O").replaceAll("\u2642|\\\\u2642", "O").replaceAll("[.'-]", ""), number++);
+			itemEntityName = String.format("%s_Item_%s_%02d", currentMapName, PokeString.removeSpecialSymbols(itemType), number++);
 		} while (entityNames.contains(itemEntityName));
 
 		System.out.println(itemEntityName);
 
-		// TODO: A function for this still needs to happen
-		item = new ItemEntityData(itemEntityName, "", itemType.replaceAll("\u00e9", "\\\\u00e9").replaceAll("\u2640", "\\\\u2640").replaceAll("\u2642", "\\\\u2642"), -1, -1);
+		item = new ItemEntityData(itemEntityName, "", PokeString.convertSpecialToUnicode(itemType), -1, -1);
 
 		ItemEntityData newItem = itemDialog.getItem(itemEntityName);
 
@@ -1358,10 +1358,14 @@ public class MapMakerTriggerData
 
 		// loop until valid name is created.
 		int number = 1;
+		
 		String NPCName = "";
+		newEntity.name = newEntity.name.equals("") ? "Nameless" : PokeString.removeSpecialCharacters(newEntity.name);
+		
+		// TODO: Should have a generic method to handle this naming criteria -- this loop is all over the fucking place
 		do
 		{
-			NPCName = String.format("%s_NPC_%s_%02d", currentMapName, newEntity.name.equals("") ? "Nameless" : newEntity.name.replaceAll("\u00e9|\\\\u00e9", "e").replaceAll("\u2640|\\\\u2640", "O").replaceAll("\u2642|\\\\u2642", "O"), number++);
+			NPCName = String.format("%s_NPC_%s_%02d", currentMapName, newEntity.name, number++);
 		} while (entityNames.contains(NPCName));
 
 		// System.out.println(NPCName);
@@ -1393,12 +1397,15 @@ public class MapMakerTriggerData
 
 		// loop until valid name is created.
 		int number = 1;
+		
 		String triggerEntityName = "";
+		newEntity.name = newEntity.name.equals("") ? "Nameless" : PokeString.removeSpecialCharacters(newEntity.name);
+		
 		do
 		{
-			triggerEntityName = String.format("%s_TriggerEntity_%s_%02d", currentMapName, newEntity.name.equals("") ? "Nameless" : newEntity.name.replaceAll("\u00e9|\\\\u00e9", "e").replaceAll("\u2640|\\\\u2640", "O").replaceAll("\u2642|\\\\u2642", "O"), number++);
+			triggerEntityName = String.format("%s_TriggerEntity_%s_%02d", currentMapName, newEntity.name, number++);
 		} while (entityNames.contains(triggerEntityName));
-
+		
 		newEntity.name = triggerEntityName;
 
 		return new PlaceableTrigger(newEntity);

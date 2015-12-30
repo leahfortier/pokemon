@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import main.FileIO;
+import util.FileIO;
 import map.triggers.EventTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;

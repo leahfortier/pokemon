@@ -12,13 +12,13 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
+import util.InputControl;
+import util.InputControl.Control;
 
 public class EvolutionView extends View
 {	

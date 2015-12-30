@@ -22,6 +22,8 @@ import java.util.EnumMap;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
+import util.InputControl;
+import util.Save;
 
 
 public class Game

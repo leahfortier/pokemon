@@ -1,9 +1,9 @@
 package map.entity;
 
+import util.InputControl;
 import gui.GameData;
 import gui.view.MapView;
 import main.Global;
-import main.InputControl;
 import map.MapData;
 
 public class NPCEntity extends MovableEntity
@@ -214,7 +214,7 @@ public class NPCEntity extends MovableEntity
 		}
 		
 		// If NPC gives items, add give item trigger
-		if (itemInfo!= null)
+		if (itemInfo != null)
 		{
 			data.addTrigger("Give", name + "_items", itemInfo);
 		}

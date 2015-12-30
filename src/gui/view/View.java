@@ -4,8 +4,8 @@ import gui.GameData;
 
 import java.awt.Graphics;
 
+import util.InputControl;
 import main.Game;
-import main.InputControl;
 
 public abstract class View 
 {

@@ -6,8 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import main.InputControl;
-import main.InputControl.Control;
+import util.InputControl;
+import util.InputControl.Control;
 import map.entity.MovableEntity.Direction;
 
 public class Button

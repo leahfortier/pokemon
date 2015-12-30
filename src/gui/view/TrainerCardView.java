@@ -10,9 +10,9 @@ import java.awt.Graphics;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
 import trainer.CharacterData;
+import util.InputControl;
+import util.InputControl.Control;
 
 public class TrainerCardView extends View
 {

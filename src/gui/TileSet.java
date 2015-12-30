@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import main.FileIO;
+import util.FileIO;
 
 public class TileSet
 {

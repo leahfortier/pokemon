@@ -12,10 +12,10 @@ import java.awt.Graphics;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
-import main.Save;
 import sound.SoundTitle;
+import util.InputControl;
+import util.Save;
+import util.InputControl.Control;
 
 public class MainMenuView extends View
 {	

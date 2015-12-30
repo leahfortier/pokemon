@@ -1,4 +1,4 @@
-package main;
+package util;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -11,15 +11,11 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+import main.Global;
+
 public class FileIO
 {
 	private static final String FILE_SLASH = File.separator;
-	
-	private static final String[][] SPECIAL_CHARACTERS = {
-		{"\\\\u00e9", "\u00e9"},	//Poke e
-		{"\\\\u2640", "\u2640"},	//female
-		{"\\\\u2642", "\u2642"}		//male
-	};
 	
 	public static void deleteFile(String fileName)
 	{
@@ -82,46 +78,10 @@ public class FileIO
 	 */
 	public static String readEntireFile(File file, boolean ignoreComments)
 	{
-		BufferedReader in = openFileBuffered(file);
-		StringBuilder build = new StringBuilder();
-		String line = null;
-		try
-		{
-			while ((line = in.readLine()) != null)
-			{
-				if (line.length() > 0 && (line.charAt(0) != '#' || ignoreComments))
-				{
-					build.append(line);
-					build.append("\n");
-				}
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			System.exit(1);
-		}
+		String fileText = readEntireFileWithoutReplacements(file, ignoreComments);
+		String restoreSpecial = PokeString.restoreSpecialFromUnicode(fileText);
 		
-		return removeSpecialCharacters(build.toString());
-	}
-	
-	public static String removeSpecialCharacters(String string)
-	{
-		for (int currCharacterSet = 0; currCharacterSet < SPECIAL_CHARACTERS.length; ++currCharacterSet)
-		{
-			string = string.replaceAll(SPECIAL_CHARACTERS[currCharacterSet][0], SPECIAL_CHARACTERS[currCharacterSet][1]);
-		}
-		
-		return string;
-	}
-	
-	public static String revertSpecialCharacters(String string)
-	{
-		for(int currCharacterSet = 0; currCharacterSet < SPECIAL_CHARACTERS.length; ++currCharacterSet)
-		{
-			string = string.replaceAll(SPECIAL_CHARACTERS[currCharacterSet][1], SPECIAL_CHARACTERS[currCharacterSet][0]);
-		}
-		return string;
+		return restoreSpecial;
 	}
 	
 	public static String readEntireFileWithoutReplacements(File file, boolean ignoreComments)

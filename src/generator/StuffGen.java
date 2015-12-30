@@ -1,4 +1,6 @@
-package main;
+package generator;
+
+import generator.PokeGen.Generator;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -10,172 +12,44 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import main.Global;
+import main.Namesies;
 import main.Namesies.NamesiesType;
+import main.Type;
 import pokemon.PokemonInfo;
+import util.FileIO;
+import util.PokeString;
 import battle.Attack;
 
 public class StuffGen 
 {
 	private static int TM_BASE_INDEX = 2000;
 	
-	private static final String EFFECTS_FOLDER = FileIO.makePath("src", "battle", "effect");
-	private static final String POKEMON_EFFECT_PATH = EFFECTS_FOLDER + "PokemonEffect.java";
-	private static final String TEAM_EFFECT_PATH = EFFECTS_FOLDER + "TeamEffect.java";
-	private static final String BATTLE_EFFECT_PATH = EFFECTS_FOLDER + "BattleEffect.java";
-	private static final String WEATHER_PATH = EFFECTS_FOLDER + "Weather.java";
-	
-	private static final String MOVE_PATH = FileIO.makePath("src", "battle") + "Attack.java";
-	private static final String ABILITY_PATH = FileIO.makePath("src", "pokemon") + "Ability.java";
-	private static final String ITEM_PATH = FileIO.makePath("src", "item") + "Item.java";
-	private static final String NAMESIES_PATH = FileIO.makePath("src", "main") + "Namesies.java";
-	
 	private static final String ITEM_TILES_PATH = FileIO.makePath("rec", "tiles", "itemTiles");
 	private static final String POKEMON_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "pokemonTiles") + "index.txt";
 	private static final String POKEMON_SMALL_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "partyTiles") + "index.txt";
 	
-	private enum Generator
-	{
-		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", NamesiesType.ATTACK, false, true),
-		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", NamesiesType.EFFECT, true, true),
-		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", NamesiesType.EFFECT, true, true),
-		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", NamesiesType.EFFECT, true, true),
-		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", NamesiesType.EFFECT, true, true),
-		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", NamesiesType.ABILITY, true, true),
-		ITEM_GEN("Items.txt", ITEM_PATH, "Item", NamesiesType.ITEM, false, true);
-		
-		private final String inputPath;
-		private final String outputPath;
-		private final String superClass;
-		private final NamesiesType appendsies;
-		private final boolean activate;
-		private final boolean mappity;
-		
-		private Generator(String inputPath, String outputPath, String superClass, NamesiesType appendsies, boolean activate, boolean mappity)
-		{
-			this.inputPath = inputPath;
-			this.outputPath = outputPath;
-			this.superClass = superClass;
-			this.appendsies = appendsies;
-			this.activate = activate;
-			this.mappity = mappity;
-		}
-	}
-	
-	private final StringBuilder namesies;
-	private boolean firstNamesies;
+	private final NamesiesGen namesiesGen;
 	
 	public StuffGen()
 	{
 		readFormat();
 		
-		namesies = new StringBuilder();
-		firstNamesies = true;
+		namesiesGen = new NamesiesGen();
 		
 		for (Generator generator : Generator.values())
 		{
 			superGen(generator);
-			System.out.println(generator.inputPath + " generated.");
+			System.out.println(generator.getInputPath() + " generated.");
 		}
 		
-		writeNamesies();	
+		namesiesGen.writeNamesies();
 		
 //		pokemonInfoStuff();
 		
 //		compareMoves();
 		
 //		DrawMetrics.FindMetrics.writeFontMetrics();
-	}
-	
-	private void createNamesies(String name, NamesiesType superClass)
-	{
-		String enumName = Namesies.getNamesiesString(name, superClass);
-		namesies.append((firstNamesies ? "" : ",\n") + "\t" + enumName + "(\"" + name + "\")");
-		firstNamesies = false;
-	}
-	
-	private void writeNamesies()
-	{
-		Scanner original = FileIO.openFile(NAMESIES_PATH);
-		StringBuilder out = new StringBuilder();
-		
-		boolean canPrint = true;
-		boolean outputNamesies = false;
-		
-		while (original.hasNext())
-		{
-			String line = original.nextLine();
-			
-			if (line.contains("// EVERYTHING ABOVE IS GENERATED ###"))
-			{
-				if (!outputNamesies || canPrint)
-				{
-					Global.error("Should not see everything above generated line until after the namesies have been printed");
-				}
-				
-				canPrint = true;
-			}
-			
-			if (canPrint)
-			{
-				out.append(line + "\n");
-			}
-			
-			if (line.contains("// EVERYTHING BELOW IS GENERATED ###"))
-			{
-				if (outputNamesies)
-				{
-					Global.error("Everything generated line should not be repeated.");
-				}
-				
-				// Add the Pokemon to namesies
-				for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
-				{
-					PokemonInfo info = PokemonInfo.getPokemonInfo(i);
-					createNamesies(info.getName(), NamesiesType.POKEMON);
-				}
-				
-				out.append(namesies);
-				out.append(";\n\n");
-				
-				outputNamesies = true;
-				canPrint = false;
-			}
-		}
-		
-		FileIO.writeToFile(NAMESIES_PATH, out);
-		System.out.println("Namesies generated.");
-	}
-	
-	// Creates the className from the name and adds to the appropriate fields
-	private static String writeClassName(String name)
-	{
-		String className = "";
-		for (int i = 0; i < name.length(); i++)
-		{
-			if (name.charAt(i) == '-')
-			{
-				if (Namesies.isLower(name.charAt(i + 1)))
-				{
-					char c = (char)(name.charAt(i + 1) - 'a' + 'A');
-					className += c;
-					i++;
-					continue;
-				}
-				
-				continue;
-			}
-			
-			if (Namesies.isSpecial(name.charAt(i)))
-			{
-				continue;
-			}
-			
-			className += name.charAt(i);
-		}
-		
-		className = className.replace("u00e9", "e");
-		
-		return className;
 	}
 	
 	private static HashMap<String, String> readFields(Scanner in, Generator gen, String name, String className, int index)
@@ -195,9 +69,8 @@ public class StuffGen
 			String key = pair.getKey();
 			String value = pair.getValue();
 			
-			if (fields.containsKey(key))
-			{
-				Global.error("Repeated field " + key + " for " + gen.superClass  + " " + className);
+			if (fields.containsKey(key)) {
+				Global.error("Repeated field " + key + " for " + gen.getSuperClass()  + " " + className);
 			}
 			
 			fields.put(key, value);
@@ -230,7 +103,7 @@ public class StuffGen
 	// Opens the original file and appends the beginning until the key to generate
 	private static StringBuilder startGen(Generator gen)
 	{
-		Scanner original = FileIO.openFile(gen.outputPath);
+		Scanner original = FileIO.openFile(gen.getOutputPath());
 		StringBuilder out = new StringBuilder();
 		
 		while (original.hasNext())
@@ -253,10 +126,10 @@ public class StuffGen
 	
 	private void addClass(Generator gen, StringBuilder out, StringBuilder classes, String name, String className, HashMap<String, String> fields)
 	{
-		createNamesies(name, gen.appendsies);
+		namesiesGen.createNamesies(name, gen.getNamesiesType());
 		
 		// Mappity map
-		if (gen.mappity)
+		if (gen.isMappity())
 		{
 			out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");	
 		}
@@ -277,7 +150,7 @@ public class StuffGen
 		// Write activation method if applicable
 		additionalMethods = getActivationMethod(gen, className, fields) + additionalMethods;
 		
-		String classString = createClass(className, gen.superClass, implementsString, extraFields, constructor, additionalMethods);
+		String classString = createClass(className, gen.getSuperClass(), implementsString, extraFields, constructor, additionalMethods);
 		
 		fields.remove("ClassName");
 		fields.remove("Index");
@@ -294,7 +167,7 @@ public class StuffGen
 	{
 		StringBuilder out = startGen(gen);
 		
-		Scanner in = FileIO.openFile(gen.inputPath);
+		Scanner in = FileIO.openFile(gen.getInputPath());
 		readFileFormat(in);
 		
 		// StringBuilder for the classes (does not append to out directly because of the map)
@@ -316,7 +189,7 @@ public class StuffGen
 			
 			// Get the name
 			String name = line.replace(":", "");
-			String className = writeClassName(name);
+			String className = PokeString.writeClassName(name);
 			
 			// Read in all of the fields
 			HashMap<String, String> fields = readFields(in, gen, name, className, index);
@@ -344,7 +217,7 @@ public class StuffGen
 				break;
 		}
 		
-		if (gen.mappity)
+		if (gen.isMappity())
 		{
 			out.append("\t}\n\n");	
 		}
@@ -352,12 +225,12 @@ public class StuffGen
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n"); // DON'T DO IT
 		out.append(classes + "}");
 		
-		FileIO.writeToFile(gen.outputPath, out);
+		FileIO.writeToFile(gen.getOutputPath(), out);
 	}
 	
 	private static String getActivationMethod(Generator gen, String className, HashMap<String, String> fields)
 	{
-		if (!gen.activate)
+		if (!gen.isActivate())
 		{
 			return "";
 		}
@@ -407,8 +280,7 @@ public class StuffGen
 		// Add the image index for each type (except for None)
 		for (Type t : Type.values())
 		{
-			if (t == Type.NONE)
-			{
+			if (t == Type.NONE) {
 				continue;
 			}
 			
@@ -420,7 +292,7 @@ public class StuffGen
 		while (in.hasNext())
 		{
 			String attackName = in.nextLine().trim();
-			String className = writeClassName(attackName);
+			String className = PokeString.writeClassName(attackName);
 			
 			Attack attack = Attack.getAttack(Namesies.getValueOf(attackName, NamesiesType.ATTACK));
 			
@@ -808,7 +680,7 @@ public class StuffGen
 	private static String replaceBody(Generator gen, String body, String className, String fieldValue)
 	{
 		body = body.replace("@ClassName", className);
-		body = body.replace("@SuperClass", gen.superClass.toUpperCase());
+		body = body.replace("@SuperClass", gen.getSuperClass().toUpperCase());
 		
 		body = body.replace("{0}", fieldValue);
 		body = body.replace("{00}", fieldValue.toUpperCase());
@@ -1003,22 +875,16 @@ public class StuffGen
 		String fieldName = split[index++];
 		String assignment = "super." + fieldName;
 		
-		if (split.length > index)
-		{
+		if (split.length > index) {
 			String assignmentType = split[index++];
-			
-			// TODO: wtf is this and why is it in a switch if there's just one option??
-			switch (assignmentType)
-			{
+			switch (assignmentType) {
 				case "List":
 					assignment += ".add(" + value + ");";
 					break;
 				default:
 					Global.error("Invalid parameter " + assignmentType);
 			}
-		}
-		else
-		{
+		} else {
 			assignment += " = " + value + ";";
 		}
 		
@@ -1055,7 +921,7 @@ public class StuffGen
 				if (enumType.equals("Namesies"))
 				{
 					String appendsies = splitInfo[index++];
-					value = Namesies.getNamesiesString(fieldValue, NamesiesType.valueOf(appendsies.toUpperCase()));
+					value = PokeString.getNamesiesString(fieldValue, NamesiesType.valueOf(appendsies.toUpperCase()));
 				}
 				else
 				{

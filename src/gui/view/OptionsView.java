@@ -7,11 +7,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import util.InputControl;
+import util.InputControl.Control;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.InputControl;
-import main.InputControl.Control;
 
 public class OptionsView extends View
 {

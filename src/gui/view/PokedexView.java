@@ -12,13 +12,13 @@ import java.util.List;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.InputControl;
-import main.InputControl.Control;
 import main.Type;
 import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.Pokedex;
 import trainer.Pokedex.PokedexStatus;
+import util.InputControl;
+import util.InputControl.Control;
 
 public class PokedexView extends View
 {

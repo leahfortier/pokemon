@@ -5,11 +5,12 @@ import gui.view.MapView;
 
 import java.awt.image.BufferedImage;
 
-import main.InputControl;
 import map.DialogueSequence;
 import map.MapData;
 import map.entity.MovableEntity.Direction;
 import map.triggers.Trigger;
+import util.InputControl;
+import util.PokeString;
 
 public class ItemEntity extends Entity
 {
@@ -71,8 +72,7 @@ public class ItemEntity extends Entity
 		
 		// TODO: Add support for multiple items.
 		// TODO: Add support for multiple placements of the same item on the same map
-		//		Add numbers to the end of entity name and condition?
-		
+		//		Add numbers to the end of entity name and condition?		
 		Trigger eventTrigger = data.getTrigger(name);
 		if (eventTrigger == null)
 			data.addTrigger("Event", name, "condition: !has" + name +" \n" +
@@ -80,7 +80,7 @@ public class ItemEntity extends Entity
 										   "dialogue: " + name
 										   );
 		
-		String itemTriggerName = "Item_" + item.replaceAll("\u00e9|\\\\u00e9", "e").replaceAll("\u2640|\\\\u2640", "O").replaceAll("\u2642|\\\\u2642", "O").replaceAll("[.'-]", "");
+		String itemTriggerName = "Item_" + PokeString.removeSpecialSymbols(item);
 		String itemName = item.replace("_", " ");
 		boolean vowelStart = ("" + item.charAt(0)).matches("[AEIOU]");
 		DialogueSequence d = data.getDialogue(name);

@@ -22,12 +22,12 @@ import java.util.Set;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.InputControl;
-import main.InputControl.Control;
 import main.Type;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer;
+import util.InputControl;
+import util.InputControl.Control;
 import battle.Move;
 import battle.effect.Status.StatusCondition;
 

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
-import main.FileIO;
+import util.FileIO;
 import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;
 import map.triggers.Trigger;

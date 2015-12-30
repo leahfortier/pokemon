@@ -12,14 +12,14 @@ import java.util.List;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.InputControl;
-import main.InputControl.Control;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.PC;
 import pokemon.Stat;
 import trainer.CharacterData;
 import trainer.Trainer;
+import util.InputControl;
+import util.InputControl.Control;
 import battle.Move;
 
 public class PCView extends View

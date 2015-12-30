@@ -2484,7 +2484,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Look up if this is actually true for Ingrain and Magnet Rise and Iron Ball -- it probably should be
 			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
 			{
 				b.printAttacking(p);
@@ -2534,7 +2533,6 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 		{
-			// TODO: Look up if this is actually true for Ingrain and Magnet Rise and Iron Ball -- it probably should be
 			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
 			{
 				b.printAttacking(p);
