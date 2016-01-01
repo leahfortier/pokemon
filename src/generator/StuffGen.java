@@ -35,20 +35,19 @@ public class StuffGen
 	{
 		readFormat();
 		
-		namesiesGen = new NamesiesGen();
+		this.namesiesGen = new NamesiesGen();
 		
+		// Go through each PokeGen and generate
 		for (Generator generator : Generator.values())
 		{
 			superGen(generator);
 			System.out.println(generator.getInputPath() + " generated.");
 		}
 		
-		namesiesGen.writeNamesies();
+		this.namesiesGen.writeNamesies();
 		
 //		pokemonInfoStuff();
-		
 //		compareMoves();
-		
 //		DrawMetrics.FindMetrics.writeFontMetrics();
 	}
 	
