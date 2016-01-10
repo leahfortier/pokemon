@@ -1,6 +1,5 @@
 package gui.view;
 
-import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -17,6 +16,7 @@ import pokemon.BaseEvolution;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
+import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 

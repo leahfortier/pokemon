@@ -1,4 +1,4 @@
-package gui;
+package util;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,7 +14,7 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import util.FileIO;
+import gui.Button;
 import main.Global;
 
 public class DrawMetrics

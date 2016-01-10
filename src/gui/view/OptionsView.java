@@ -1,12 +1,12 @@
 package gui.view;
 
-import gui.DrawMetrics;
 import gui.GameData;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 import main.Game;

@@ -1,323 +1,32 @@
 package generator;
 
-import generator.PokeGen.Generator;
-
-import java.io.File;
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
 import main.Global;
-import main.Namesies;
-import main.Namesies.NamesiesType;
-import main.Type;
 import pokemon.PokemonInfo;
 import util.FileIO;
-import util.PokeString;
-import battle.Attack;
 
 public class StuffGen 
 {
-	private static int TM_BASE_INDEX = 2000;
-	
-	private static final String ITEM_TILES_PATH = FileIO.makePath("rec", "tiles", "itemTiles");
 	private static final String POKEMON_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "pokemonTiles") + "index.txt";
 	private static final String POKEMON_SMALL_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "partyTiles") + "index.txt";
 	
-	private final NamesiesGen namesiesGen;
-	
 	public StuffGen()
 	{
-		readFormat();
-		
-		this.namesiesGen = new NamesiesGen();
-		
-		// Go through each PokeGen and generate
-		for (Generator generator : Generator.values())
-		{
-			superGen(generator);
-			System.out.println(generator.getInputPath() + " generated.");
-		}
-		
-		this.namesiesGen.writeNamesies();
+		NamesiesGen namesiesGen = new NamesiesGen();
+		new PokeGen(namesiesGen);
+		namesiesGen.writeNamesies();
 		
 //		pokemonInfoStuff();
 //		compareMoves();
 //		DrawMetrics.FindMetrics.writeFontMetrics();
-	}
-	
-	private static HashMap<String, String> readFields(Scanner in, Generator gen, String name, String className, int index)
-	{
-		HashMap<String, String> fields = new HashMap<>();
-		
-		while (in.hasNextLine())
-		{
-			String line = in.nextLine().trim();
-			if (line.equals("*"))
-			{
-				break;
-			}
-			
-			Entry<String, String> pair = getFieldPair(in, line);
-			
-			String key = pair.getKey();
-			String value = pair.getValue();
-			
-			if (fields.containsKey(key)) {
-				Global.error("Repeated field " + key + " for " + gen.getSuperClass()  + " " + className);
-			}
-			
-			fields.put(key, value);
-		}
-		
-		fields.put("Namesies", name);
-		fields.put("ClassName", className);
-		
-		fields.put("Index", index + "");
-		
-		// There will be problems if a Field move does not get the necessary methods
-		if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field"))
-		{
-			Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + className);
-		}
-		
-		// NumTurns matches to both MinTurns and MaxTurns
-		if (fields.containsKey("NumTurns"))
-		{
-			String numTurns = fields.get("NumTurns");
-			fields.put("MinTurns", numTurns);
-			fields.put("MaxTurns", numTurns);
-			
-			fields.remove("NumTurns");
-		}
-		
-		return fields;
-	}
-	
-	// Opens the original file and appends the beginning until the key to generate
-	private static StringBuilder startGen(Generator gen)
-	{
-		Scanner original = FileIO.openFile(gen.getOutputPath());
-		StringBuilder out = new StringBuilder();
-		
-		while (original.hasNext())
-		{
-			String line = original.nextLine();
-			out.append(line + "\n");
-			
-			if (line.contains("// EVERYTHING BELOW IS GENERATED ###"))
-			{
-				break;
-			}
-		}
-		
-		original.close();
-		
-		out.append("\n\t\t// List all of the classes we are loading\n");
-		
-		return out;
-	}
-	
-	private void addClass(Generator gen, StringBuilder out, StringBuilder classes, String name, String className, HashMap<String, String> fields)
-	{
-		namesiesGen.createNamesies(name, gen.getNamesiesType());
-		
-		// Mappity map
-		if (gen.isMappity())
-		{
-			out.append("\t\tmap.put(\"" + name + "\", new " + className + "());\n");	
-		}
-
-		List<String> interfaces = new ArrayList<>();
-		String additionalMethods = getAdditionalMethods(gen, fields, interfaces);
-		String constructor = getConstructor(fields, gen);
-
-		String implementsString = getImplementsString(interfaces);
-		
-		String extraFields = "";
-		if (fields.containsKey("Field"))
-		{
-			extraFields = fields.get("Field");
-			fields.remove("Field");
-		}
-		
-		// Write activation method if applicable
-		additionalMethods = getActivationMethod(gen, className, fields) + additionalMethods;
-		
-		String classString = createClass(className, gen.getSuperClass(), implementsString, extraFields, constructor, additionalMethods);
-		
-		fields.remove("ClassName");
-		fields.remove("Index");
-		
-		for (String s : fields.keySet())
-		{
-			Global.error("Unused field " + s + " for class " + className);
-		}
-		
-		classes.append(classString);
-	}
-	
-	private void superGen(Generator gen)
-	{
-		StringBuilder out = startGen(gen);
-		
-		Scanner in = FileIO.openFile(gen.getInputPath());
-		readFileFormat(in);
-		
-		// StringBuilder for the classes (does not append to out directly because of the map)
-		StringBuilder classes = new StringBuilder();
-		
-		// The image index file for the item generator
-		StringBuilder indexOut = new StringBuilder();
-		int index = 0;
-		
-		while (in.hasNext())
-		{
-			String line = in.nextLine().trim();
-			
-			// Ignore comments and white space at beginning of file
-			if (line.length() == 0 || line.charAt(0) == '#')
-			{
-				continue;
-			}
-			
-			// Get the name
-			String name = line.replace(":", "");
-			String className = PokeString.writeClassName(name);
-			
-			// Read in all of the fields
-			HashMap<String, String> fields = readFields(in, gen, name, className, index);
-			
-			addClass(gen, out, classes, name, className, fields);
-			
-			if (gen == Generator.ITEM_GEN)
-			{
-				addImageIndex(indexOut, index, name, className.toLowerCase());
-			}
-			
-			index++;
-		}
-		
-		switch (gen)
-		{
-			case ATTACK_GEN:
-				out.append("\n\t\tfor (String s : map.keySet())\n\t\t{\n\t\t\tmoveNames.add(s);\n\t\t}\n");
-				break;
-			case ITEM_GEN:
-				addTMs(out, classes, indexOut);
-				out.append("\n\t\tprocessIncenseItems();\n");
-				FileIO.writeToFile(ITEM_TILES_PATH + "index.txt", indexOut);
-			default:
-				break;
-		}
-		
-		if (gen.isMappity())
-		{
-			out.append("\t}\n\n");	
-		}
-		
-		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n"); // DON'T DO IT
-		out.append(classes + "}");
-		
-		FileIO.writeToFile(gen.getOutputPath(), out);
-	}
-	
-	private static String getActivationMethod(Generator gen, String className, HashMap<String, String> fields)
-	{
-		if (!gen.isActivate())
-		{
-			return "";
-		}
-		
-		String activation = "(" + className + ")(new " + className + "().activate())";
-		String activateHeader = className + " newInstance()";
-		
-		MethodInfo activateInfo;
-		if (fields.containsKey("Activate"))
-		{
-			String activateBegin = className + " x = " + activation + ";\n";
-			String activateEnd = "return x;";
-			
-			activateInfo = new MethodInfo(activateHeader, activateBegin, fields.get("Activate"), activateEnd);
-			
-			fields.remove("Activate");
-		}
-		else
-		{
-			activateInfo = new MethodInfo(activateHeader, "", "return " + activation + ";", "");
-		}
-		
-		return MethodInfo.writeFunction(gen, activateInfo, "", className);
-	}
-	
-	private static String getImplementsString(List<String> interfaces)
-	{
-		boolean implemented = false;
-		String implementsString = "";
-		
-		for (String interfaceName : interfaces)
-		{
-			if (interfaceName.contains("Hidden-"))
-			{
-				continue;
-			}
-			
-			implementsString += (implemented ? ", " : "implements ") + interfaceName;
-			implemented = true;
-		}
-		
-		return implementsString;
-	}
-	
-	private void addTMs(StringBuilder out, StringBuilder classes, StringBuilder indexOut)
-	{
-		// Add the image index for each type (except for None)
-		for (Type t : Type.values())
-		{
-			if (t == Type.NONE) {
-				continue;
-			}
-			
-			String name = t.getName() + "TM";
-			addImageIndex(indexOut, TM_BASE_INDEX + t.getIndex(), name, name.toLowerCase());
-		}
-		
-		Scanner in = FileIO.openFile("tmList.txt");
-		while (in.hasNext())
-		{
-			String attackName = in.nextLine().trim();
-			String className = PokeString.writeClassName(attackName);
-			
-			Attack attack = Attack.getAttack(Namesies.getValueOf(attackName, NamesiesType.ATTACK));
-			
-			String itemName = attackName + " TM";
-			className += "TM";
-			
-			HashMap<String, String> fields = new HashMap<>();
-			fields.put("ClassName", className);
-			fields.put("Namesies", attackName + "_TM");
-			fields.put("Index", TM_BASE_INDEX + attack.getActualType().getIndex() + "");
-			fields.put("Desc", attack.getDescription());
-			fields.put("TM", attackName);
-			
-			addClass(Generator.ITEM_GEN, out, classes, itemName, className, fields);
-		}
-	}
-	
-	private static void addImageIndex(StringBuilder indexOut, int index, String name, String imageName)
-	{
-		File imageFile = new File(ITEM_TILES_PATH + imageName + ".png");
-		if (!imageFile.exists()) 
-		{
-			System.err.println("Image for " + name + " does not exist." + imageFile.getAbsolutePath());
-		}
-	
-		indexOut.append(String.format("%s.png %08x%n", imageName, index));
 	}
 	
 	private static class MethodFormatter {
@@ -370,7 +79,7 @@ public class StuffGen
 		}
 	}
 	
-	private static class MethodInfo
+	public static class MethodInfo
 	{
 		private String header;
 		
@@ -482,7 +191,7 @@ public class StuffGen
 			}
 		}
 		
-		private static String writeFunction(Generator gen, MethodInfo method, String fieldValue, String className)
+		public static String writeFunction(MethodInfo method, String fieldValue, String className)
 		{
 			if (method.header == null)
 			{
@@ -518,12 +227,12 @@ public class StuffGen
 			}
 			
 			body = method.begin + body + method.end;
-			body = replaceBody(gen, body, className, fieldValue);
+			body = replaceBody(body, className, fieldValue);
 			
 			return MethodInfo.writeFunction(method.header, body);
 		}
 		
-		private static String writeFunction(String header, String body)
+		public static String writeFunction(String header, String body)
 		{
 			StringBuilder method = new StringBuilder();
 			method.append("\n\t\tpublic " + header.trim() + "\n\t\t{\n");
@@ -545,141 +254,103 @@ public class StuffGen
 		}
 	}
 	
-	private static class Failure
+	// Opens the original file and appends the beginning until the key to generate
+	public static StringBuilder startGen(final String fileName)
 	{
-		private String header; 
-		List<Entry<String, String>> failureInfo;
+		Scanner original = FileIO.openFile(fileName);
+		StringBuilder out = new StringBuilder();
 		
-		public Failure(Scanner in)
+		while (original.hasNext())
 		{
-			failureInfo = new ArrayList<>();
+			String line = original.nextLine();
+			out.append(line + "\n");
 			
-			while (in.hasNext())
+			if (line.contains("// EVERYTHING BELOW IS GENERATED ###"))
 			{
-				String line = in.nextLine().trim();
-				
-				if (line.equals("*"))
-				{
-					break;
-				}
-				
-				String[] split = line.split(" ", 2);
-				
-				String fieldName = split[0];
-				String fieldInfo = split[1];
-				
-				if (fieldName.equals("Header"))
-				{
-					this.header = fieldInfo;
-				}
-				else
-				{
-					failureInfo.add(new SimpleEntry<>(fieldName, fieldInfo));
-				}
+				break;
 			}
 		}
 		
-		private String writeFailure(Generator gen, HashMap<String, String> fields)
+		original.close();
+		return out;
+	}
+	
+	// Interface name should be empty if it is an override
+	public static boolean addMethodInfo(StringBuilder methods, List<Entry<String, MethodInfo>> methodList, Map<String, String> fields, List<String> interfaces, String interfaceName)
+	{
+		boolean added = false;
+		
+		String className = fields.get("ClassName");
+		
+		for (Entry<String, MethodInfo> pair : methodList)
 		{
-			String failure = "";
+			String fieldName = pair.getKey();
+			String fieldValue = fields.get(fieldName);
+
+			MethodInfo methodInfo = pair.getValue();
 			
-			String className = fields.get("ClassName");
-			boolean first = true;
-			
-			for (Entry<String, String> entry : failureInfo)
+			if (fieldValue == null)
 			{
-				String fieldName = entry.getKey();
-				String fieldInfo = entry.getValue();
-				
-				int index = 0;
-				String[] split = fieldInfo.split(" ");
-			
-				boolean not = false, list = false;
-				
-				String fieldType = split[index++];
-				if (fieldType.equals("List"))
+				// Overrides are not required to contain the field value
+				if (interfaceName.length() == 0)
 				{
-					list = true;
-					fieldType = split[index++]; 
-				}
-				
-				if (fieldType.equals("Not"))
-				{
-					not = true;
-					fieldType = split[index++];
-				}
-				
-				String defaultValue = "";
-				if (fieldType.equals("Default"))
-				{
-					defaultValue = split[index++];
-					fieldType = split[index++];
-				}
-				
-				String fieldValue = fields.get(fieldName);
-				if (fieldValue == null)
-				{
-					if (!not)
-					{
-						continue;
-					}
-					
-					fieldValue = defaultValue;
-				}
-				else if (not)
-				{
-					fields.remove(fieldName);
 					continue;
 				}
 				
-				String[] fieldValues = new String[] {fieldValue};
-				if (list)
+				if (methodInfo.required)
 				{
-					fieldValues = fieldValue.split(",");
-				}
-
-				int previousIndex = index;
-				
-				for (String value : fieldValues)
-				{
-					index = previousIndex;
-					
-					Entry<Integer, String> pair = getValue(split, value, index);
-					index = pair.getKey();
-					String pairValue = pair.getValue();
-
-					String body = "";
-					boolean space = false;
-					
-					for (; index < split.length; index++)
-					{
-						body += (space ? " " : "") + split[index];
-						space = true;
-					}
-					
-					body = replaceBody(gen, body, className, pairValue);
-					
-					failure += (first ? "" : " || ")  + body;
-					first = false;	
+					Global.error("Missing required field " + fieldName + " to implement interface " + interfaceName + " for class " + className);						
 				}
 				
-				fields.remove(fieldName);
+				fieldValue = "";
 			}
 			
-			if (failure.length() == 0)
+			String implementation = MethodInfo.writeFunction(methodInfo, fieldValue, className);
+			methods.append(implementation);
+			
+			for (String addInterface : methodInfo.addInterfaces)
 			{
-				return failure;
+				interfaces.add(addInterface);
 			}
 			
-			failure = "return !(" + failure + ");";
-			return MethodInfo.writeFunction(this.header, failure.toString());
+			for (Entry<String, String> addField : methodInfo.addMapFields)
+			{
+				String fieldKey = addField.getKey();
+				String addFieldValue = StuffGen.replaceBody(addField.getValue(), className, fieldValue);
+				
+				String mapField = fields.get(fieldKey);
+				if (mapField == null)
+				{
+					mapField = addFieldValue;
+				}
+				else if (fieldKey.equals("MoveType"))
+				{
+					mapField += ", " + addFieldValue;
+				}
+				else if (fieldKey.equals("Field"))
+				{
+					mapField += addFieldValue;
+				}
+				else
+				{
+					// Leave the map field as is -- including in the original fields overrides the override file
+//							System.out.println("Map Field (ClassName = " + className + "): " + mapField);
+				}
+				
+				fields.put(fieldKey, mapField);
+			}
+			
+			fields.remove(fieldName);
+			added = true;
 		}
+		
+		return added;
 	}
 	
-	private static String replaceBody(Generator gen, String body, String className, String fieldValue)
+	public static String replaceBody(String body, String className, String fieldValue)
 	{
 		body = body.replace("@ClassName", className);
-		body = body.replace("@SuperClass", gen.getSuperClass().toUpperCase());
+//		body = body.replace("@SuperClass", superClass.toUpperCase()); // TODO: Where is this used?
 		
 		body = body.replace("{0}", fieldValue);
 		body = body.replace("{00}", fieldValue.toUpperCase());
@@ -716,419 +387,36 @@ public class StuffGen
 		}
 		
 		return body;
-	}
+	}	
 	
-	private static List<Entry<String, MethodInfo>> overrideMethods;
-	private static HashMap<String, List<Entry<String, MethodInfo>>> interfaceMethods;
-	
-	private static void readFormat()
+	public static HashMap<String, String> readFields(Scanner in, String className)
 	{
-		Scanner in = FileIO.openFile("override.txt");
+		HashMap<String, String> fields = new HashMap<>();
 		
-		overrideMethods = new ArrayList<>();
-		interfaceMethods = new HashMap<>();
-		
-		HashSet<String> fieldNames = new HashSet<>();
-		
-		while (in.hasNext())
+		while (in.hasNextLine())
 		{
 			String line = in.nextLine().trim();
-			
-			// Ignore comments and white space at beginning of file
-			if (line.length() == 0 || line.charAt(0) == '#')
+			if (line.equals("*"))
 			{
-				continue;
-			}
-			
-			String interfaceName = line.replace(":", "");
-			List<Entry<String, MethodInfo>> list = new ArrayList<>();
-			
-			boolean isInterfaceMethod = !interfaceName.equals("Override");
-			
-			while (in.hasNextLine())
-			{
-				line = in.nextLine().trim();
-				
-				if (line.equals("***"))
-				{
-					break;
-				}
-				
-				String fieldName = line.replace(":", "");
-				list.add(new SimpleEntry<>(fieldName, new MethodInfo(in, isInterfaceMethod)));
-				
-				if (fieldNames.contains(fieldName))
-				{
-					Global.error("Duplicate field name " + fieldName + " in override.txt");
-				}
-				
-				fieldNames.add(fieldName);
-			}
-			
-			if (isInterfaceMethod)
-			{
-				interfaceMethods.put(interfaceName, list);	
-			}
-			else
-			{
-				if (list.size() != 1)
-				{
-					Global.error("Only interfaces can include multiple methods");
-				}
-				
-				overrideMethods.add(list.get(0));
-			}
-		}
-	}
-	
-	private static List<Entry<String, String>> constructorKeys;
-	private static List<Entry<String, String>> fieldKeys;
-	private static Failure failureInfo;
-	
-	private static void readFileFormat(Scanner in)
-	{
-		constructorKeys = new ArrayList<Entry<String, String>>();
-		fieldKeys = new ArrayList<Entry<String, String>>();
-		failureInfo = null;
-		
-		while (in.hasNext())
-		{
-			String line = in.nextLine().trim();
-			
-			// Ignore comments and white space at beginning of file
-			if (line.length() == 0 || line.charAt(0) == '#')
-			{
-				continue;
-			}
-			
-			if (line.equals("***"))
-			{
-				return;
-			}
-			
-			String formatType = line.replace(":", "");
-			
-			if (formatType.equals("Failure"))
-			{
-				failureInfo = new Failure(in);
-				continue;
-			}
-			
-			while (in.hasNextLine())
-			{
-				line = in.nextLine().trim();
-				if (line.equals("*"))
-				{
-					break;
-				}
-				
-				String[] split = line.split(" ", 2);
-				
-				String key = split[0].trim();
-				String value = split[1].trim();
-				
-				Entry<String, String> entry = new SimpleEntry<String, String>(key, value);
-				
-				switch (formatType)
-				{
-					case "Constructor":
-						constructorKeys.add(entry);
-						break;
-					case "Fields":
-						fieldKeys.add(entry);
-						break;
-					default:
-						Global.error("Invalid format type " + formatType);
-				}
-			}	
-		}
-	}
-	
-	private static String getAssignment(String assignmentInfo, String fieldValue)
-	{
-		int index = 0;
-		String[] split = assignmentInfo.split(" ");
-		
-		String type = split[index++];
-		if (type.equals("Multiple"))
-		{
-			StringBuilder assignments = new StringBuilder();
-			
-			assignmentInfo = assignmentInfo.substring("Multiple".length() + 1);
-			
-			boolean first = true;
-			
-			for (String value : fieldValue.split(","))
-			{
-				assignments.append((first ? "" : "\n") + getAssignment(assignmentInfo, value.trim()));
-				first = false;
-			}
-			
-			return assignments.toString();
-		}
-		
-		Entry<Integer, String> entry = getValue(split, fieldValue, index);
-		index = entry.getKey();
-		String value = entry.getValue();
-		
-		String fieldName = split[index++];
-		String assignment = "super." + fieldName;
-		
-		if (split.length > index) {
-			String assignmentType = split[index++];
-			switch (assignmentType) {
-				case "List":
-					assignment += ".add(" + value + ");";
-					break;
-				default:
-					Global.error("Invalid parameter " + assignmentType);
-			}
-		} else {
-			assignment += " = " + value + ";";
-		}
-		
-		return assignment;
-	}
-	
-	private static Entry<Integer, String> getValue(String[] splitInfo, String fieldValue, int index)
-	{
-		String type = splitInfo[index - 1];
-		String value;
-		
-		String[] mcSplit = fieldValue.split(" ");
-		
-		switch (type)
-		{
-			case "String":
-				value = "\"" + fieldValue + "\"";
 				break;
-			case "Int":
-				value = fieldValue;
-				break;
-			case "Boolean":
-				value = fieldValue.toLowerCase();
-				
-				if (!value.equals("false") && !value.equals("true"))
-				{
-					Global.error("Invalid boolean type " + value);
-				}
-				
-				break;
-			case "Enum":
-				String enumType = splitInfo[index++];
-				
-				if (enumType.equals("Namesies"))
-				{
-					String appendsies = splitInfo[index++];
-					value = PokeString.getNamesiesString(fieldValue, NamesiesType.valueOf(appendsies.toUpperCase()));
-				}
-				else
-				{
-					value = fieldValue.toUpperCase();	
-				}
-				
-				value = enumType + "." + value;
-				
-				break;
-			case "Function":
-				String functionName = splitInfo[index++];
-				int numParameters = Integer.parseInt(splitInfo[index++]);
-				
-				value = functionName + "(";
-				boolean first = true;
-				
-				for (int i = 0; i < numParameters; i++)
-				{
-					int mcSplitDex = Integer.parseInt(splitInfo[index++]);
-					String parameter;
-					
-					Entry<Integer, String> entry = getValue(splitInfo, mcSplit[mcSplitDex], index + 1);
-					index = entry.getKey();
-					parameter = entry.getValue();
-					
-					value += (first ? "" : ", ") + parameter;
-					first = false;
-				}
-				
-				value += ")";
-				break;
-			default:
-				Global.error("Invalid variable type " + type);
-				return null;
+			}
+			
+			Entry<String, String> pair = getFieldPair(in, line);
+			
+			String key = pair.getKey();
+			String value = pair.getValue();
+			
+			if (fields.containsKey(key)) {
+				Global.error("Repeated field " + key + " for " + className);
+			}
+			
+			fields.put(key, value);
 		}
 		
-		return new SimpleEntry<Integer, String>(index, value);
+		return fields;
 	}
 	
-	private static String getConstructorValue(Entry<String, String> pair, HashMap<String, String> fields)
-	{
-		int index = 0;
-		String[] split = pair.getValue().split(" ");
-		String type = split[index++];
-		
-		String fieldValue = null;
-		String className = fields.get("ClassName");
-		
-		if (type.equals("DefaultMap"))
-		{
-			String mapKey = split[index++];
-			fieldValue = fields.get(mapKey);
-			
-			if (fieldValue == null)
-			{
-				Global.error("Invalid map key " + mapKey + " for " + className);
-			}
-			
-			type = split[index++];
-		}
-		else if (type.equals("Default"))
-		{
-			fieldValue = split[index++];
-			type = split[index++];
-		}
-		
-		String key = pair.getKey();
-		
-		if (fields.containsKey(key))
-		{
-			fieldValue = fields.get(key);
-			fields.remove(key);
-		}
-		else if (fieldValue == null)
-		{
-			Global.error("Missing required constructor field " + key + " for " + className);
-		}
-	
-		String value =  getValue(split, fieldValue, index).getValue();
-		return value;
-	}
-	
-	private static String getAdditionalMethods(Generator gen, HashMap<String, String> fields, List<String> interfaces)
-	{
-		String className = fields.get("ClassName");
-		
-		StringBuilder methods = new StringBuilder();
-		
-		// Add all the interfaces to the interface list
-		List<String> currentInterfaces = new ArrayList<>();
-		if (fields.containsKey("Int"))
-		{
-			for (String interfaceName : fields.get("Int").split(", "))
-			{
-				currentInterfaces.add(interfaceName);
-			}
-			
-			fields.remove("Int");
-		}
-		
-		List<String> nextInterfaces = new ArrayList<>();
-		
-		boolean moreFields = true;
-		while (moreFields)
-		{
-			moreFields = addMethodInfo(gen, methods, overrideMethods, fields, currentInterfaces, "");
-			
-			for (int i = 0; i < currentInterfaces.size(); i++)
-			{
-				String interfaceName = currentInterfaces.get(i);
-				interfaces.add(interfaceName);
-				
-				interfaceName = interfaceName.replace("Hidden-", "");
-				
-				List<Entry<String, MethodInfo>> list = interfaceMethods.get(interfaceName);
-				if (list == null)
-				{
-					Global.error("Invalid interface name " + interfaceName + " for " + className);
-				}
-				
-				moreFields |= addMethodInfo(gen, methods, list, fields, nextInterfaces, interfaceName);
-			}
-			
-			currentInterfaces = nextInterfaces;
-			nextInterfaces = new ArrayList<>();
-		}
-		
-		if (failureInfo != null)
-		{
-			methods.insert(0, failureInfo.writeFailure(gen, fields));
-		}
-		
-		return methods.toString();
-	}
-	
-	// Interface name should be empty if it is an override
-	private static boolean addMethodInfo(Generator gen, StringBuilder methods, List<Entry<String, MethodInfo>> methodList, HashMap<String, String> fields, List<String> interfaces, String interfaceName)
-	{
-		boolean added = false;
-		
-		String className = fields.get("ClassName");
-		
-		for (Entry<String, MethodInfo> pair : methodList)
-		{
-			String fieldName = pair.getKey();
-			String fieldValue = fields.get(fieldName);
-
-			MethodInfo methodInfo = pair.getValue();
-			
-			if (fieldValue == null)
-			{
-				// Overrides are not required to contain the field value
-				if (interfaceName.length() == 0)
-				{
-					continue;
-				}
-				
-				if (methodInfo.required)
-				{
-					Global.error("Missing required field " + fieldName + " to implement interface " + interfaceName + " for class " + className);						
-				}
-				
-				fieldValue = "";
-			}
-			
-			String implementation = MethodInfo.writeFunction(gen, methodInfo, fieldValue, className);
-			methods.append(implementation);
-			
-			for (String addInterface : methodInfo.addInterfaces)
-			{
-				interfaces.add(addInterface);
-			}
-			
-			for (Entry<String, String> addField : methodInfo.addMapFields)
-			{
-				String fieldKey = addField.getKey();
-				String addFieldValue = replaceBody(gen, addField.getValue(), className, fieldValue);
-				
-				String mapField = fields.get(fieldKey);
-				if (mapField == null)
-				{
-					mapField = addFieldValue;
-				}
-				else if (fieldKey.equals("MoveType"))
-				{
-					mapField += ", " + addFieldValue;
-				}
-				else if (fieldKey.equals("Field"))
-				{
-					mapField += addFieldValue;
-				}
-				else
-				{
-					// Leave the map field as is -- including in the original fields overrides the override file
-//					System.out.println("Map Field (ClassName = " + className + "): " + mapField);
-				}
-				
-				fields.put(fieldKey, mapField);
-			}
-			
-			fields.remove(fieldName);
-			added = true;
-		}
-		
-		return added;
-	}
-	
-	private static Entry<String, String> getFieldPair(Scanner in, String line)
+	public static Entry<String, String> getFieldPair(Scanner in, String line)
 	{
 		String[] split = line.split(":", 2);
 		if (split.length != 2)
@@ -1147,7 +435,7 @@ public class StuffGen
 		return new SimpleEntry<>(key, value);
 	}
 	
-	private static String createClass(String className, String superClass, String interfaces, String extraFields, String constructor, String additional)
+	public static String createClass(String className, String superClass, String interfaces, String extraFields, String constructor, String additional)
 	{
 		StringBuilder classBuilder = new StringBuilder();
 		
@@ -1161,90 +449,7 @@ public class StuffGen
 		return classBuilder.toString();
 	}
 	
-	private static String getConstructor(HashMap<String, String> fields, Generator gen)
-	{
-		// TODO: More hardcoded nonsense
-		String category = "";
-		boolean physicalContact = false;
-		
-		if (gen == Generator.ATTACK_GEN)
-		{
-			category = fields.get("Cat");
-			physicalContact = category.equals("Physical");	
-		}
-		
-		StringBuilder constructor = new StringBuilder();
-		constructor.append("super(");
-		
-		boolean first = true;
-		for (Entry<String, String> pair : constructorKeys)
-		{
-			String value = getConstructorValue(pair, fields);
-			constructor.append((first ? "" : ", ") + value);
-			
-			first = false;
-		}
-		
-		constructor.append(");\n");
-		
-		for (Entry<String, String> pair : fieldKeys)
-		{
-			String fieldKey = pair.getKey();
-			
-			if (fields.containsKey(fieldKey))
-			{
-				String assignment = getAssignment(pair.getValue(), fields.get(fieldKey));
-				constructor.append(assignment + "\n");
-				fields.remove(fieldKey);
-			}
-		}
-		
-		// TODO: I don't like that this is hardcoded -- find a way to change it
-		if (fields.containsKey("StatChange"))
-		{
-			String[] mcSplit = fields.get("StatChange").split(" ");
-			
-			for (int i = 0, index = 1; i < Integer.parseInt(mcSplit[0]); i++)   
-			{
-				constructor.append("super.statChanges[Stat." + mcSplit[index++].toUpperCase() + ".index()] = " + mcSplit[index++] + ";\n");
-			}	
-			
-			fields.remove("StatChange");
-		}
-		
-		if (gen == Generator.ATTACK_GEN)
-		{
-			if (fields.containsKey("PhysicalContact"))
-			{
-				String physicalContactSpecified = fields.get("PhysicalContact");
-				
-				if (!physicalContactSpecified.equals("True") && !physicalContactSpecified.equals("False")) 
-					Global.error("True and false are the only valid fields for physical contact (Move " + fields.get("ClassName") + ")");
-				
-				physicalContact = Boolean.parseBoolean(physicalContactSpecified);
-				
-				if (category.contains("Status")) 
-					Global.error("Status moves never make physical contact (Move " + fields.get("ClassName") + ")");
-				
-				if (physicalContact && category.contains("Physical")) 
-					Global.error("Physical moves have implied physical contact (Move " + fields.get("ClassName") + ")");
-				
-				if (!physicalContact && category.contains("Special")) 
-					Global.error("Special moves have implied no physical contact (Move " + fields.get("ClassName") + ")");
-				
-				fields.remove("PhysicalContact");	
-			}
-			
-			if (physicalContact)
-			{
-				constructor.append("super.moveTypes.add(MoveType.PHYSICAL_CONTACT);\n");
-			}
-		}
-
-		return MethodInfo.writeFunction(fields.get("ClassName") + "()", constructor.toString());
-	}
-	
-	private static String readFunction(Scanner in)
+	public static String readFunction(Scanner in)
 	{
 		StringBuilder method = new StringBuilder();
 		MethodFormatter formatter = new MethodFormatter(2);

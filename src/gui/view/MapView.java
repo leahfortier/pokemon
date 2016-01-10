@@ -1,7 +1,6 @@
 package gui.view;
 
 import gui.Button;
-import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -29,6 +28,7 @@ import map.triggers.Trigger;
 import pokemon.ActivePokemon;
 import sound.SoundTitle;
 import trainer.CharacterData;
+import util.DrawMetrics;
 import util.InputControl;
 import util.Save;
 import util.InputControl.Control;

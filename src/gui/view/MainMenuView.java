@@ -1,7 +1,6 @@
 package gui.view;
 
 import gui.Button;
-import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -13,6 +12,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import sound.SoundTitle;
+import util.DrawMetrics;
 import util.InputControl;
 import util.Save;
 import util.InputControl.Control;

@@ -1,6 +1,5 @@
 package gui.view;
 
-import gui.DrawMetrics;
 import gui.GameData;
 
 import java.awt.Color;
@@ -11,6 +10,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import trainer.CharacterData;
+import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 

@@ -1,6 +1,5 @@
 package gui.view;
 
-import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 
@@ -14,6 +13,7 @@ import main.Namesies;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;
 import trainer.CharacterData;
+import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 import battle.MessageUpdate;

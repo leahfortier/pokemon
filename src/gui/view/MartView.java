@@ -1,7 +1,6 @@
 package gui.view;
 
 import gui.Button;
-import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 import item.Item;
@@ -18,6 +17,7 @@ import main.Global;
 import main.Namesies;
 import main.Type;
 import trainer.CharacterData;
+import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 

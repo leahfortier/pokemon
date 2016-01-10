@@ -1,7 +1,6 @@
 package gui.view;
 
 import gui.Button;
-import gui.DrawMetrics;
 import gui.GameData;
 import gui.TileSet;
 import item.Bag;
@@ -35,6 +34,7 @@ import sound.SoundTitle;
 import trainer.CharacterData;
 import trainer.Trainer;
 import trainer.Trainer.Action;
+import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 import battle.Battle;

@@ -1,6 +1,5 @@
 package pokemon;
 
-import gui.DrawMetrics;
 import item.Item;
 import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
@@ -24,6 +23,7 @@ import main.Type;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
 import trainer.Pokedex.PokedexStatus;
+import util.DrawMetrics;
 import battle.Attack;
 import battle.Battle;
 import battle.BattleAttributes;
