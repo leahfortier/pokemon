@@ -266,7 +266,7 @@ public class PokeGen {
 			activateInfo = new MethodInfo(activateHeader, "", "return " + activation + ";", "");
 		}
 		
-		return MethodInfo.writeFunction(activateInfo, "", className);
+		return MethodInfo.writeFunction(activateInfo, "", className, this.currentGen.superClass);
 	}
 	
 	private static void readFileFormat(Scanner in)
@@ -366,7 +366,7 @@ public class PokeGen {
 			}
 		}
 		
-		private String writeFailure(Map<String, String> fields)
+		private String writeFailure(Map<String, String> fields, String superClass)
 		{
 			String failure = "";
 			
@@ -444,7 +444,7 @@ public class PokeGen {
 						space = true;
 					}
 					
-					body = StuffGen.replaceBody(body, className, pairValue);
+					body = StuffGen.replaceBody(body, pairValue, className, superClass);
 					
 					failure += (first ? "" : " || ")  + body;
 					first = false;	
@@ -506,7 +506,7 @@ public class PokeGen {
 		return value;
 	}
 	
-	private static String getAdditionalMethods(Map<String, String> fields, List<String> interfaces)
+	private String getAdditionalMethods(Map<String, String> fields, List<String> interfaces)
 	{
 		String className = fields.get("ClassName");
 		
@@ -529,7 +529,7 @@ public class PokeGen {
 		boolean moreFields = true;
 		while (moreFields)
 		{
-			moreFields = StuffGen.addMethodInfo(methods, overrideMethods, fields, currentInterfaces, "");
+			moreFields = StuffGen.addMethodInfo(methods, overrideMethods, fields, currentInterfaces, "", this.currentGen.superClass);
 			
 			for (int i = 0; i < currentInterfaces.size(); i++)
 			{
@@ -544,7 +544,7 @@ public class PokeGen {
 					Global.error("Invalid interface name " + interfaceName + " for " + className);
 				}
 				
-				moreFields |= StuffGen.addMethodInfo(methods, list, fields, nextInterfaces, interfaceName);
+				moreFields |= StuffGen.addMethodInfo(methods, list, fields, nextInterfaces, interfaceName, this.currentGen.superClass);
 			}
 			
 			currentInterfaces = nextInterfaces;
@@ -553,7 +553,7 @@ public class PokeGen {
 		
 		if (failureInfo != null)
 		{
-			methods.insert(0, failureInfo.writeFailure(fields));
+			methods.insert(0, failureInfo.writeFailure(fields, this.currentGen.superClass));
 		}
 		
 		return methods.toString();

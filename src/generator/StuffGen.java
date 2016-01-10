@@ -191,7 +191,7 @@ public class StuffGen
 			}
 		}
 		
-		public static String writeFunction(MethodInfo method, String fieldValue, String className)
+		public static String writeFunction(MethodInfo method, String fieldValue, String className, String superClass)
 		{
 			if (method.header == null)
 			{
@@ -227,7 +227,7 @@ public class StuffGen
 			}
 			
 			body = method.begin + body + method.end;
-			body = replaceBody(body, className, fieldValue);
+			body = replaceBody(body, fieldValue, className, superClass);
 			
 			return MethodInfo.writeFunction(method.header, body);
 		}
@@ -276,7 +276,7 @@ public class StuffGen
 	}
 	
 	// Interface name should be empty if it is an override
-	public static boolean addMethodInfo(StringBuilder methods, List<Entry<String, MethodInfo>> methodList, Map<String, String> fields, List<String> interfaces, String interfaceName)
+	public static boolean addMethodInfo(StringBuilder methods, List<Entry<String, MethodInfo>> methodList, Map<String, String> fields, List<String> interfaces, String interfaceName, String superClass)
 	{
 		boolean added = false;
 		
@@ -305,7 +305,7 @@ public class StuffGen
 				fieldValue = "";
 			}
 			
-			String implementation = MethodInfo.writeFunction(methodInfo, fieldValue, className);
+			String implementation = MethodInfo.writeFunction(methodInfo, fieldValue, className, superClass);
 			methods.append(implementation);
 			
 			for (String addInterface : methodInfo.addInterfaces)
@@ -316,7 +316,7 @@ public class StuffGen
 			for (Entry<String, String> addField : methodInfo.addMapFields)
 			{
 				String fieldKey = addField.getKey();
-				String addFieldValue = StuffGen.replaceBody(addField.getValue(), className, fieldValue);
+				String addFieldValue = replaceBody(addField.getValue(), fieldValue, className, superClass);
 				
 				String mapField = fields.get(fieldKey);
 				if (mapField == null)
@@ -347,10 +347,10 @@ public class StuffGen
 		return added;
 	}
 	
-	public static String replaceBody(String body, String className, String fieldValue)
+	public static String replaceBody(String body, String fieldValue, String className, String superClass)
 	{
 		body = body.replace("@ClassName", className);
-//		body = body.replace("@SuperClass", superClass.toUpperCase()); // TODO: Where is this used?
+		body = body.replace("@SuperClass", superClass.toUpperCase());
 		
 		body = body.replace("{0}", fieldValue);
 		body = body.replace("{00}", fieldValue.toUpperCase());
