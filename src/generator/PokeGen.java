@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 
 import battle.Attack;
 import generator.StuffGen.MethodInfo;
@@ -163,7 +164,7 @@ public class PokeGen {
 		// Write activation method if applicable
 		additionalMethods = getActivationMethod(className, fields) + additionalMethods;
 		
-		String classString = StuffGen.createClass(className, this.currentGen.getSuperClass(), implementsString, extraFields, constructor, additionalMethods);
+		String classString = StuffGen.createClass(className, this.currentGen.getSuperClass(), implementsString, extraFields, constructor, additionalMethods, false);
 		
 		fields.remove("ClassName");
 		fields.remove("Index");
@@ -220,7 +221,7 @@ public class PokeGen {
 		switch (this.currentGen)
 		{
 			case ATTACK_GEN:
-				out.append("\n\t\tfor (String s : map.keySet())\n\t\t{\n\t\t\tmoveNames.add(s);\n\t\t}\n");
+				out.append("\n\t\tfor (String s : map.keySet()) {\n\t\t\tmoveNames.add(s);\n\t\t}\n");
 				break;
 			case ITEM_GEN:
 				addTMs(out, classes, indexOut);
@@ -666,19 +667,23 @@ public class PokeGen {
 			{
 				String physicalContactSpecified = fields.get("PhysicalContact");
 				
-				if (!physicalContactSpecified.equals("True") && !physicalContactSpecified.equals("False")) 
+				if (!physicalContactSpecified.equals("True") && !physicalContactSpecified.equals("False")) {
 					Global.error("True and false are the only valid fields for physical contact (Move " + fields.get("ClassName") + ")");
+				}
 				
 				physicalContact = Boolean.parseBoolean(physicalContactSpecified);
 				
-				if (category.contains("Status")) 
+				if (category.contains("Status"))  {
 					Global.error("Status moves never make physical contact (Move " + fields.get("ClassName") + ")");
+				}
 				
-				if (physicalContact && category.contains("Physical")) 
+				if (physicalContact && category.contains("Physical")) { 
 					Global.error("Physical moves have implied physical contact (Move " + fields.get("ClassName") + ")");
+				}
 				
-				if (!physicalContact && category.contains("Special")) 
+				if (!physicalContact && category.contains("Special")) { 
 					Global.error("Special moves have implied no physical contact (Move " + fields.get("ClassName") + ")");
+				}
 				
 				fields.remove("PhysicalContact");	
 			}
@@ -758,7 +763,7 @@ public class PokeGen {
 	}
 	
 	private static List<Entry<String, MethodInfo>> overrideMethods;
-	private static HashMap<String, List<Entry<String, MethodInfo>>> interfaceMethods;
+	private static Map<String, List<Entry<String, MethodInfo>>> interfaceMethods;
 	
 	private static void readFormat()
 	{
@@ -767,7 +772,7 @@ public class PokeGen {
 		overrideMethods = new ArrayList<>();
 		interfaceMethods = new HashMap<>();
 		
-		HashSet<String> fieldNames = new HashSet<>();
+		Set<String> fieldNames = new HashSet<>();
 		
 		while (in.hasNext())
 		{

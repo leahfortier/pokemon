@@ -1,8 +1,5 @@
 package gui;
 
-import generator.StuffGen;
-import item.Item;
-
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -13,30 +10,32 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import battle.Attack;
+import battle.effect.BattleEffect;
+import battle.effect.PokemonEffect;
+import battle.effect.TeamEffect;
+import generator.StuffGen;
+import item.Item;
 import main.Game;
 import main.Global;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
+import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
-import battle.Attack;
-import battle.effect.BattleEffect;
-import battle.effect.PokemonEffect;
-import battle.effect.TeamEffect;
 
 public class GameFrame
 {
 //	public static boolean GENERATE_STUFF = true;
 	public static boolean GENERATE_STUFF = false;
-	public static boolean DEV_MODE = true;
+	private static boolean DEV_MODE = true;
 
 	private static JFrame frame;
 
 	public static void main(String[] args)
 	{		
-		if (GENERATE_STUFF)
-		{
+		if (GENERATE_STUFF) {
 			new StuffGen();
 			
 			// Make sure these don't throw any errors
@@ -61,6 +60,7 @@ public class GameFrame
 		frame.getContentPane().add(gui);
 		frame.pack();
 		frame.setVisible(true);
+		
 		// frame.setResizable(false);
 		// frame.setSize(Global.GAME_SIZE);
 		// frame.pack();

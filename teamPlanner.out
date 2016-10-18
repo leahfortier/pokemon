@@ -1,67 +1,73 @@
-Escavalier:
-	Type: Bug/Steel
-	Stats: 70 135 105 60 105 20
-	Nature: Adamant, Impish, Careful, Jolly
-	Ability: Shell Armor
+Ninetales:
+	Type: Fire
+	Stats: 73 76 75 81 100 100
+	Nature: Modest
+	Ability: Flash Fire/Drought
+	Item: Shell Bell
 	Moves:
-		X-Scissor -- Level 44 or TM
-		Iron Head -- Level 37 or Move Tutor
-		Drill Run -- Move Tutor or Egg Move
-		Poison Jab -- TM
+		Flamethrower -- Heart Scale or TM
+		Energy Ball -- TM
+		Dark Pulse -- TM
+		Psyshock -- TM
 
-Mamoswine:
-	Type: Ice/Ground
-	Stats: 110 130 80 70 60 80
-	Nature: Adamant, Impish, Careful, Jolly
-	Ability: Oblivious/Snow Cloak
-	Moves:
-		Icicle Crash -- Egg Move
-		Earthquake -- Level 46 or TM
-		Iron Head -- Move Tutor
-		Stone Edge -- TM
-
-Dragalge:
-	Type: Poison/Dragon
-	Stats: 65 75 90 97 123 44
-	Nature: Bold, Modest, Calm, Timid
-	Ability: Poison Point/Poison Touch
+Lanturn:
+	Type: Water/Electric
+	Stats: 125 58 58 76 76 67
+	Nature: Modest
+	Ability: Volt Absorb
+	Item: Expert Belt
 	Moves:
 		Surf -- TM
 		Thunderbolt -- TM
-		Shadow Ball -- TM
-		Sludge Wave -- TM
+		Dazzling Gleam -- TM
+		Signal Beam -- Level 29 or Move Tutor
+
+Breloom:
+	Type: Grass/Fighting
+	Stats: 60 130 80 60 60 70
+	Nature: Jolly
+	Ability: Poison Heal
+	Item: Toxic Orb
+	Moves:
+		Seed Bomb -- Level 44 or Move Tutor or Egg Move
+		Drain Punch -- Move Tutor or Egg Move
+		Thunder Punch -- Move Tutor
+		Stone Edge -- TM
 
 Togekiss:
 	Type: Fairy/Flying
 	Stats: 85 50 95 120 115 80
 	Nature: Timid
-	Ability: Hustle/Serene Grace
+	Ability: Serene Grace
+	Item: King's Rock
 	Moves:
 		Dazzling Gleam -- TM
 		Air Slash -- Heart Scale
 		Aura Sphere -- Heart Scale
 		Flamethrower -- TM
 
-Pangoro:
-	Type: Fighting/Dark
-	Stats: 95 124 78 69 71 58
+Leavanny:
+	Type: Bug/Grass
+	Stats: 75 103 80 70 80 92
 	Nature: Adamant, Impish, Careful, Jolly
-	Ability: Iron Fist
+	Ability: Swarm/Chlorophyll
+	Item: Scope Lens
 	Moves:
-		Crunch -- Level 42
-		Fire Punch -- Move Tutor
-		Ice Punch -- Move Tutor
-		Drain Punch -- Move Tutor
+		X-Scissor -- Level 39 or TM
+		Leaf Blade -- Level 36
+		Shadow Claw -- TM
+		Poison Jab -- TM
 
-Gengar:
-	Type: Ghost/Poison
-	Stats: 60 65 60 130 75 110
-	Nature: Timid
-	Ability: Levitate
+Aurorus:
+	Type: Rock/Ice
+	Stats: 123 77 72 99 92 58
+	Nature: Bold, Modest, Calm, Timid
+	Ability: Refrigerate/Snow Warning
+	Item: Quick Claw
 	Moves:
-		Shadow Ball -- Level 33 or TM
-		Sludge Bomb -- TM
-		Psychic -- TM
-		Giga Drain -- Move Tutor
+		Ice Beam -- Level 56 or TM
+		Earth Power -- Move Tutor
+		Flash Cannon -- TM
+		Thunderbolt -- TM
 
 

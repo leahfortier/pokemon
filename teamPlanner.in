@@ -1,29 +1,33 @@
-Escavalier:
-	Ability: Shell Armor
-	Item: Quick Claw
+Ninetales:
+	Nature: Modest
+	Item: Shell Bell
 	Moves:
-		X-Scissor
-		Iron Head
-		Drill Run
-		Poison Jab
+		Flamethrower
+		Energy Ball
+		Dark Pulse
+		Psyshock
 	*
 ***
-Mamoswine:
-	Item: Leftovers
-	Moves:
-		Icicle Crash
-		Earthquake
-		Iron Head
-		Stone Edge
-	*
-***
-Dragalge:
-	Item: Black Sludge
+Lanturn:
+	Ability: Volt Absorb
+	Nature: Modest
+	Item: Expert Belt
 	Moves:
 		Surf
 		Thunderbolt
-		Shadow Ball
-		Sludge Wave
+		Dazzling Gleam
+		Signal Beam
+	*
+***
+Breloom:
+	Nature: Jolly
+	Ability: Poison Heal
+	Item: Toxic Orb
+	Moves:
+		Seed Bomb
+		Drain Punch
+		Thunder Punch
+		Stone Edge
 	*
 ***
 Togekiss:
@@ -37,22 +41,21 @@ Togekiss:
 		Flamethrower
 	*
 ***
-Pangoro:
-	Ability: Iron Fist
+Leavanny:
+	Item: Scope Lens
 	Moves:
-		Crunch
-		Fire Punch
-		Ice Punch
-		Drain Punch
+		X-Scissor
+		Leaf Blade
+		Shadow Claw
+		Poison Jab
 	*
 ***
-Gengar:
-	Nature: Timid
-	Item: Big Root
+Aurorus:
+	Item: Quick Claw
 	Moves:
-		Shadow Ball
-		Sludge Bomb
-		Psychic
-		Giga Drain
+		Ice Beam
+		Earth Power
+		Flash Cannon
+		Thunderbolt
 	*
 ***

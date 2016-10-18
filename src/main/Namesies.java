@@ -2019,12 +2019,10 @@ public enum Namesies
 		return this.name;
 	}
 	
-	public static Namesies getValueOf(String name, NamesiesType superClass)
-	{
+	public static Namesies getValueOf(String name, NamesiesType superClass) {
 		Namesies value = Namesies.valueOf(PokeString.getNamesiesString(name, superClass));
 		
-		if (value == null)
-		{
+		if (value == null) {
 			Global.error(name + " does not have a valid Namesies value with super class " + superClass);
 		}
 		

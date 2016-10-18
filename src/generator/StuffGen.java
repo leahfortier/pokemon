@@ -24,6 +24,8 @@ public class StuffGen
 		new PokeGen(namesiesGen);
 		namesiesGen.writeNamesies();
 		
+		new InterfaceGen();
+		
 //		pokemonInfoStuff();
 //		compareMoves();
 //		DrawMetrics.FindMetrics.writeFontMetrics();
@@ -235,7 +237,7 @@ public class StuffGen
 		public static String writeFunction(String header, String body)
 		{
 			StringBuilder method = new StringBuilder();
-			method.append("\n\t\tpublic " + header.trim() + "\n\t\t{\n");
+			method.append("\n\t\tpublic " + header.trim() + " {\n");
 			
 			MethodFormatter formatter = new MethodFormatter(3);
 			
@@ -416,7 +418,7 @@ public class StuffGen
 		return fields;
 	}
 	
-	public static Entry<String, String> getFieldPair(Scanner in, String line)
+	private static Entry<String, String> getFieldPair(Scanner in, String line)
 	{
 		String[] split = line.split(":", 2);
 		if (split.length != 2)
@@ -435,12 +437,25 @@ public class StuffGen
 		return new SimpleEntry<>(key, value);
 	}
 	
-	public static String createClass(String className, String superClass, String interfaces, String extraFields, String constructor, String additional)
-	{
+	public static String createClass(String className, String superClass, String interfaces, String extraFields, String constructor, String additional, boolean isInterface) {
+		
 		StringBuilder classBuilder = new StringBuilder();
 		
-		classBuilder.append("\n\tprivate static class " + className + " extends " + superClass + " " + interfaces + "\n\t{\n");
-		classBuilder.append("\t\tprivate static final long serialVersionUID = 1L;\n");
+		classBuilder.append("\n\t" + defineClass(className, isInterface));
+		
+		if (superClass != null && superClass.length() > 0) {
+			classBuilder.append(" extends " + superClass);
+		}
+		if (interfaces != null && interfaces.length() > 0) {
+			classBuilder.append(" "  + interfaces);
+		}
+		
+		classBuilder.append(" {\n");
+		
+		if (!isInterface) {
+			classBuilder.append("\t\tprivate static final long serialVersionUID = 1L;\n");	
+		}
+		
 		classBuilder.append(extraFields);
 		classBuilder.append(constructor);
 		classBuilder.append(additional);
@@ -449,17 +464,29 @@ public class StuffGen
 		return classBuilder.toString();
 	}
 	
-	public static String readFunction(Scanner in)
-	{
+	private static String defineClass(final String className, final boolean isInterface) {
+		final String accessModifier;
+		final String classType;
+		
+		if (isInterface) {
+			accessModifier = "public";
+			classType = "interface";
+		} else {
+			accessModifier = "private";
+			classType = "class";
+		}
+		
+		return accessModifier + " static " + classType + " " + className;
+	}
+	
+	private static String readFunction(Scanner in) {
 		StringBuilder method = new StringBuilder();
 		MethodFormatter formatter = new MethodFormatter(2);
 		
-		while (in.hasNext()) 
-		{
+		while (in.hasNext()) {
 			String line = in.nextLine().trim();
 			
-			if (line.equals("###"))
-			{
+			if (line.equals("###")) {
 				break;
 			}
 			

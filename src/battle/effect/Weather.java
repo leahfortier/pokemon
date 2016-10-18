@@ -91,61 +91,49 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class ClearSkies extends Weather 
-	{
+	private static class ClearSkies extends Weather {
 		private static final long serialVersionUID = 1L;
 
-		public ClearSkies()
-		{
+		public ClearSkies() {
 			super(Namesies.CLEAR_SKIES_EFFECT, Type.NORMAL);
 		}
 
-		public ClearSkies newInstance()
-		{
+		public ClearSkies newInstance() {
 			return (ClearSkies)(new ClearSkies().activate());
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b)
-		{
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
 		}
 	}
 
-	private static class Raining extends Weather implements StatChangingEffect
-	{
+	private static class Raining extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public Raining()
-		{
+		public Raining() {
 			super(Namesies.RAINING_EFFECT, Type.WATER);
 		}
 
-		public Raining newInstance()
-		{
+		public Raining newInstance() {
 			return (Raining)(new Raining().activate());
 		}
 
-		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-		{
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return "It started to rain!";
 		}
 
-		public String getSubsideMessage(ActivePokemon victim)
-		{
+		public String getSubsideMessage(ActivePokemon victim) {
 			return "The rain stopped.";
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b)
-		{
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			b.addMessage("The rain continues to pour.");
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
 			int stat = statValue;
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
 			{
@@ -165,42 +153,34 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		}
 	}
 
-	private static class Sunny extends Weather implements StatChangingEffect
-	{
+	private static class Sunny extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public Sunny()
-		{
+		public Sunny() {
 			super(Namesies.SUNNY_EFFECT, Type.FIRE);
 		}
 
-		public Sunny newInstance()
-		{
+		public Sunny newInstance() {
 			return (Sunny)(new Sunny().activate());
 		}
 
-		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-		{
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return "The sunlight turned harsh!";
 		}
 
-		public String getSubsideMessage(ActivePokemon victim)
-		{
+		public String getSubsideMessage(ActivePokemon victim) {
 			return "The sunlight faded.";
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b)
-		{
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			b.addMessage("The sunlight is strong.");
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
 			int stat = statValue;
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
 			{
@@ -220,8 +200,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		}
 	}
 
-	private static class Sandstorm extends Weather implements StatChangingEffect
-	{
+	private static class Sandstorm extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 		private static Type[] immunees = new Type[] {Type.ROCK, Type.GROUND, Type.STEEL};
 		private void buffet(Battle b, ActivePokemon p)
@@ -244,38 +223,31 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 
-		public Sandstorm()
-		{
+		public Sandstorm() {
 			super(Namesies.SANDSTORM_EFFECT, Type.ROCK);
 		}
 
-		public Sandstorm newInstance()
-		{
+		public Sandstorm newInstance() {
 			return (Sandstorm)(new Sandstorm().activate());
 		}
 
-		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-		{
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return "A sandstorm kicked up!";
 		}
 
-		public String getSubsideMessage(ActivePokemon victim)
-		{
+		public String getSubsideMessage(ActivePokemon victim) {
 			return "The sandstorm subsided.";
 		}
 
-		public boolean isModifyStat(Stat s)
-		{
+		public boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b)
-		{
+		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
 			int stat = statValue;
 			if (isModifyStat(s) && p.isType(b, Type.ROCK))
 			{
@@ -285,8 +257,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			return stat;
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b)
-		{
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			b.addMessage("The sandstorm rages");
 			
 			ActivePokemon other = b.getOtherPokemon(victim.user());
@@ -295,8 +266,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		}
 	}
 
-	private static class Hailing extends Weather 
-	{
+	private static class Hailing extends Weather {
 		private static final long serialVersionUID = 1L;
 		private static Type[] immunees = new Type[] {Type.ICE};
 		private void buffet(Battle b, ActivePokemon p)
@@ -319,33 +289,27 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 
-		public Hailing()
-		{
+		public Hailing() {
 			super(Namesies.HAILING_EFFECT, Type.ICE);
 		}
 
-		public Hailing newInstance()
-		{
+		public Hailing newInstance() {
 			return (Hailing)(new Hailing().activate());
 		}
 
-		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-		{
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-		{
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return "It started to hail!";
 		}
 
-		public String getSubsideMessage(ActivePokemon victim)
-		{
+		public String getSubsideMessage(ActivePokemon victim) {
 			return "The hail stopped.";
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b)
-		{
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			b.addMessage("The hail continues to fall.");
 			
 			ActivePokemon other = b.getOtherPokemon(victim.user());

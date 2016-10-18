@@ -109,8 +109,8 @@ public class FileIO {
 		}
 	}
 
-	public static Scanner openFile(String file) {
-		return openFile(new File(file));
+	public static Scanner openFile(String fileName) {
+		return openFile(new File(fileName));
 	}
 
 	public static Scanner openFile(File file) {

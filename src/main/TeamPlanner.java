@@ -41,7 +41,8 @@ public class TeamPlanner
 		AttackTypeCoverage.printCoverage(coverage);
 		offensiveCoverage.printTableAndList();
 		
-//		moveMatching("Psychic", "Surf");
+//		moveMatching("Flamethrower", "Signal Beam");
+//		moveMatching("Ice Beam", Type.GRASS);
 		
 		TeamMember.printTeam(team);
 	}
@@ -89,7 +90,7 @@ public class TeamPlanner
 						nature = value;
 						break;
 					case "Item":
-						if (nature != null) Global.error("Item already defined for " + pokemonName);
+						if (item != null) Global.error("Item already defined for " + pokemonName);
 						
 						item = value;
 						break;	
@@ -138,6 +139,24 @@ public class TeamPlanner
 		}
 		
 		return team;
+	}
+	
+	private static void moveMatching(String firstMoveName, Type type)
+	{
+		System.out.println("\nThe following Pokemon can learn " + firstMoveName + " and is type " + type);
+		
+		Namesies firstMove = Namesies.getValueOf(firstMoveName, NamesiesType.ATTACK);
+		
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
+		{
+			PokemonInfo p = PokemonInfo.getPokemonInfo(i);
+			Type[] types = p.getType();
+			
+			if (p.canLearnMove(firstMove) && (types[0] == type || types[1] == type))
+			{
+				System.out.println("\t" + p.getName());
+			}
+		}
 	}
 	
 	private static void moveMatching(String firstMoveName, String secondMoveName)
