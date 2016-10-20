@@ -26,10 +26,8 @@ import util.InputControl;
 import util.Save;
 
 
-public class Game
-{
-	public static enum ViewMode
-	{
+public class Game {
+	public static enum ViewMode {
 		MAP_VIEW, POKEDEX_VIEW, BATTLE_VIEW, BAG_VIEW, 
 		PARTY_VIEW, PC_VIEW, MAIN_MENU_VIEW, TRAINER_CARD_VIEW, 
 		MART_VIEW, OPTIONS_VIEW, START_VIEW, EVOLUTION_VIEW
@@ -42,8 +40,7 @@ public class Game
 	private ViewMode currentViewMode;
 	private View currentView;
 	
-	public Game()
-	{
+	public Game() {
 		data = new GameData();
 		
 		viewMap = new EnumMap<>(ViewMode.class);
