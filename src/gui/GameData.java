@@ -97,7 +97,7 @@ public class GameData
 			Global.error("Failed to find map area index file: " + indexFile.getName() + ".");
 		}
 
-		String fileText = FileIO.readEntireFile(indexFile, false);
+		String fileText = FileIO.readEntireFileWithReplacements(indexFile, false);
 
 		Matcher m = areaIndexPattern.matcher(fileText);
 		while (m.find())
@@ -119,7 +119,7 @@ public class GameData
 		{
 			if (f.getName().charAt(0) == '.')
 				continue;
-			String fileText = FileIO.readEntireFile(f, false);
+			String fileText = FileIO.readEntireFileWithReplacements(f, false);
 			Matcher m = dialogueBlockPattern.matcher(fileText);
 			while (m.find())
 			{
@@ -138,7 +138,7 @@ public class GameData
 		{
 			if (f.getName().charAt(0) == '.')
 				continue;
-			String fileText = FileIO.readEntireFile(f, false);
+			String fileText = FileIO.readEntireFileWithReplacements(f, false);
 			Matcher m = triggerBlockPattern.matcher(fileText);
 			while (m.find())
 			{

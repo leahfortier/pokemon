@@ -480,7 +480,7 @@ public enum Namesies
 	HEART_SWAP_ATTACK("Heart Swap"),
 	DARK_VOID_ATTACK("Dark Void"),
 	SEED_FLARE_ATTACK("Seed Flare"),
-	JUDGMENT_ATTACK("Judgment"),
+	JUDGEMENT_ATTACK("Judgement"),
 	SEARING_SHOT_ATTACK("Searing Shot"),
 	INCINERATE_ATTACK("Incinerate"),
 	OVERHEAT_ATTACK("Overheat"),

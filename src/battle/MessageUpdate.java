@@ -11,7 +11,7 @@ import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundTitle;
-import battle.effect.Status.StatusCondition;
+import battle.effect.generic.Status.StatusCondition;
 
 public class MessageUpdate 
 {

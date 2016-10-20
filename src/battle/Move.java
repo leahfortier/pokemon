@@ -11,7 +11,7 @@ import pokemon.ActivePokemon;
 import battle.effect.AttackSelectionEffect;
 import battle.effect.ChangeAttackTypeEffect;
 import battle.effect.ForceMoveEffect;
-import battle.effect.MultiTurnMove;
+import battle.effect.attack.MultiTurnMove;
 
 public class Move implements Serializable
 {

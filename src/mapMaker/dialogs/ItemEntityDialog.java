@@ -56,7 +56,7 @@ public class ItemEntityDialog extends JPanel
 					  return;
 				  }
 				  
-				  int index = Item.getItemFromName(itemName).getIndex();
+				  int index = Item.getItemFromName(itemName).getImageIndex();
 				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
 				  itemTextField.setBackground(new Color(0x90EE90));
 			  }
@@ -119,7 +119,7 @@ public class ItemEntityDialog extends JPanel
 		itemTextField.setText(item.getItem().replace('_', ' '));
 		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
-		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getIndex();
+		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getImageIndex();
 		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
 	}
 	

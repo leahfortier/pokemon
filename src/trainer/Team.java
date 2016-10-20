@@ -4,7 +4,7 @@ import java.util.List;
 
 import main.Namesies;
 import pokemon.ActivePokemon;
-import battle.effect.TeamEffect;
+import battle.effect.generic.TeamEffect;
 
 public interface Team // THIS IS A DUMB NAME SOMEONE HELP ME RENAME IT 
 {

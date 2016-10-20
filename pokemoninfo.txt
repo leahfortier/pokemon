@@ -45803,7 +45803,7 @@ Normal None
 70 Recover
 80 Hyper Beam
 90 Perish Song
-100 Judgment
+100 Judgement
 72
 Hone Claws
 Dragon Claw

@@ -1,61 +1,63 @@
-package battle.effect;
+package battle.effect.generic;
 
 import java.util.HashMap;
 
+import battle.MoveType;
+import battle.effect.BeforeTurnEffect;
+import battle.effect.EndTurnEffect;
+import battle.effect.GroundedEffect;
+import battle.effect.LevitationEffect;
+import battle.effect.PowerChangeEffect;
+import battle.effect.StageChangingEffect;
+import battle.effect.StatSwitchingEffect;
+import battle.effect.StatusPreventionEffect;
+import battle.effect.TerrainEffect;
 import main.Namesies;
 import main.Type;
 import map.AreaData.TerrainType;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import battle.Attack.MoveType;
 import battle.Battle;
-import battle.effect.Status.StatusCondition;
+import battle.effect.generic.Status.StatusCondition;
 
-public abstract class BattleEffect extends Effect 
-{
+public abstract class BattleEffect extends Effect {
 	private static final long serialVersionUID = 1L;
 	private static HashMap<String, BattleEffect> map;
-	
-	public BattleEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside)
-	{
+
+	public BattleEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
-	
+
 	public abstract BattleEffect newInstance();
-	
-	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
-	{
+
+	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 		b.addEffect(this.newInstance());
-		
+
 		b.addMessage("", caster);
 		b.addMessage("", victim);
 	}
-	
-	public static BattleEffect getEffect(Namesies name)
-	{
+
+	public static BattleEffect getEffect(Namesies name) {
 		String e = name.getName();
-		
-		if (map == null) 
-		{
+
+		if (map == null) {
 			loadEffects();
 		}
-		
-		if (map.containsKey(e))
-		{
+
+		if (map.containsKey(e)) {
 			return map.get(e);
 		}
-		
+
 		// Otherwise, check if it's a weather effect which will handle the error checking and such if it isn't there either
 		return Weather.getEffect(name);
 	}
 
 	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects()
-	{
+	public static void loadEffects() {
 		if (map != null) return;
 		map = new HashMap<>();
-		
+
 		// EVERYTHING BELOW IS GENERATED ###
 
 		// List all of the classes we are loading
@@ -75,7 +77,7 @@ public abstract class BattleEffect extends Effect
 	private static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
-		public Gravity() {
+		Gravity() {
 			super(Namesies.GRAVITY_EFFECT, 5, 5, false);
 		}
 
@@ -101,9 +103,8 @@ public abstract class BattleEffect extends Effect
 			return "The gravity returned to normal.";
 		}
 
-		public void removeLevitation(Battle b, ActivePokemon p) {
-			if (p.isSemiInvulnerableFlying())
-			{
+		private void removeLevitation(Battle b, ActivePokemon p) {
+			if (p.isSemiInvulnerableFlying()) {
 				p.getMove().switchReady(b, p);
 				b.addMessage(p.getName() + " fell to the ground!");
 			}
@@ -116,8 +117,7 @@ public abstract class BattleEffect extends Effect
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.AIRBORNE))
-			{
+			if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
 				b.printAttacking(p);
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return false;
@@ -130,7 +130,7 @@ public abstract class BattleEffect extends Effect
 	private static class WaterSport extends BattleEffect implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
-		public WaterSport() {
+		WaterSport() {
 			super(Namesies.WATER_SPORT_EFFECT, 5, 5, false);
 		}
 
@@ -158,7 +158,7 @@ public abstract class BattleEffect extends Effect
 	private static class MudSport extends BattleEffect implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
-		public MudSport() {
+		MudSport() {
 			super(Namesies.MUD_SPORT_EFFECT, 5, 5, false);
 		}
 
@@ -186,7 +186,7 @@ public abstract class BattleEffect extends Effect
 	private static class WonderRoom extends BattleEffect implements StatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
-		public WonderRoom() {
+		WonderRoom() {
 			super(Namesies.WONDER_ROOM_EFFECT, 5, 5, false);
 		}
 
@@ -203,8 +203,7 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
-			if (roomsies == null)
-			{
+			if (roomsies == null) {
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
@@ -226,7 +225,7 @@ public abstract class BattleEffect extends Effect
 	private static class TrickRoom extends BattleEffect {
 		private static final long serialVersionUID = 1L;
 
-		public TrickRoom() {
+		TrickRoom() {
 			super(Namesies.TRICK_ROOM_EFFECT, 5, 5, false);
 		}
 
@@ -236,8 +235,7 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
-			if (roomsies == null)
-			{
+			if (roomsies == null) {
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
@@ -259,7 +257,7 @@ public abstract class BattleEffect extends Effect
 	private static class MagicRoom extends BattleEffect {
 		private static final long serialVersionUID = 1L;
 
-		public MagicRoom() {
+		MagicRoom() {
 			super(Namesies.MAGIC_ROOM_EFFECT, 5, 5, false);
 		}
 
@@ -269,8 +267,7 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
-			if (roomsies == null)
-			{
+			if (roomsies == null) {
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
@@ -292,7 +289,7 @@ public abstract class BattleEffect extends Effect
 	private static class MistyTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect {
 		private static final long serialVersionUID = 1L;
 
-		public MistyTerrain() {
+		MistyTerrain() {
 			super(Namesies.MISTY_TERRAIN_EFFECT, 5, 5, false);
 		}
 
@@ -328,11 +325,9 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// Remove all other Terrain Effects
-			for (int i = 0; i < b.getEffects().size(); i++)
-			{
+			for (int i = 0; i < b.getEffects().size(); i++) {
 				Effect effect = b.getEffects().get(i);
-				if (effect instanceof TerrainEffect)
-				{
+				if (effect instanceof TerrainEffect) {
 					b.getEffects().remove(i);
 					i--;
 				}
@@ -351,7 +346,7 @@ public abstract class BattleEffect extends Effect
 	private static class GrassyTerrain extends BattleEffect implements EndTurnEffect, PowerChangeEffect, TerrainEffect {
 		private static final long serialVersionUID = 1L;
 
-		public GrassyTerrain() {
+		GrassyTerrain() {
 			super(Namesies.GRASSY_TERRAIN_EFFECT, 5, 5, false);
 		}
 
@@ -386,11 +381,9 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// Remove all other Terrain Effects
-			for (int i = 0; i < b.getEffects().size(); i++)
-			{
+			for (int i = 0; i < b.getEffects().size(); i++) {
 				Effect effect = b.getEffects().get(i);
-				if (effect instanceof TerrainEffect)
-				{
+				if (effect instanceof TerrainEffect) {
 					b.getEffects().remove(i);
 					i--;
 				}
@@ -409,7 +402,7 @@ public abstract class BattleEffect extends Effect
 	private static class ElectricTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect {
 		private static final long serialVersionUID = 1L;
 
-		public ElectricTerrain() {
+		ElectricTerrain() {
 			super(Namesies.ELECTRIC_TERRAIN_EFFECT, 5, 5, false);
 		}
 
@@ -444,11 +437,9 @@ public abstract class BattleEffect extends Effect
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// Remove all other Terrain Effects
-			for (int i = 0; i < b.getEffects().size(); i++)
-			{
+			for (int i = 0; i < b.getEffects().size(); i++) {
 				Effect effect = b.getEffects().get(i);
-				if (effect instanceof TerrainEffect)
-				{
+				if (effect instanceof TerrainEffect) {
 					b.getEffects().remove(i);
 					i--;
 				}

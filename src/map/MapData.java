@@ -75,7 +75,7 @@ public class MapData
 		mapEntrances = new HashMap<>();
 		
 		File f = new File(beginFilePath + ".txt");
-		String fileText = FileIO.readEntireFile(f, false);
+		String fileText = FileIO.readEntireFileWithReplacements(f, false);
 
 		Matcher m = blockPattern.matcher(fileText);
 		while (m.find())

@@ -9,11 +9,10 @@ import main.Namesies;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import battle.Attack.MoveType;
-import battle.effect.Effect;
-import battle.effect.Effect.CastSource;
+import battle.effect.generic.Effect;
+import battle.effect.generic.Effect.CastSource;
 import battle.effect.ModifyStageValueEffect;
-import battle.effect.PokemonEffect;
+import battle.effect.generic.PokemonEffect;
 import battle.effect.StatLoweredEffect;
 import battle.effect.StatProtectingEffect;
 

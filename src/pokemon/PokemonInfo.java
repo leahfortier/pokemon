@@ -304,7 +304,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		if (baseEvolution == null)
 		{
 			baseEvolution = new ArrayList<>();
-			Scanner in = new Scanner(FileIO.readEntireFile(new File("BaseEvolutions.txt"), false));
+			Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(new File("BaseEvolutions.txt"), false));
 			while (in.hasNext())
 			{
 				Namesies namesies = Namesies.getValueOf(in.nextLine().trim(), NamesiesType.POKEMON);
@@ -333,7 +333,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo>
 		map = new HashMap<String, PokemonInfo>();
 		info = new PokemonInfo[NUM_POKEMON + 1];
 
-		Scanner in = new Scanner(FileIO.readEntireFile(new File("pokemoninfo.txt"), false));
+		Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(new File("pokemoninfo.txt"), false));
 		while (in.hasNext())
 		{
 			int num = in.nextInt();

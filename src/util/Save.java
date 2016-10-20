@@ -24,7 +24,9 @@ public final class Save
 	private static final String SETTINGS_PATH = SAVE_FOLDER_PATH + "settings.txt";
 	
 	// Utility class -- should not be instantiated
-	private Save() { Global.error("Save class cannot be instantiated."); }
+	private Save() {
+		Global.error("Save class cannot be instantiated.");
+	}
 	
 	public static String formatTime(long l)
 	{

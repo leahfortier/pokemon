@@ -213,7 +213,7 @@ public class MartView extends View
 		if (selectedItem != null)
 		{
 			// Draw item image
-			BufferedImage img = itemTiles.getTile(selectedItem.getIndex());
+			BufferedImage img = itemTiles.getTile(selectedItem.getImageIndex());
 			DrawMetrics.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
@@ -221,7 +221,7 @@ public class MartView extends View
 			g.drawString(selectedItem.getName(), 448, 138);
 			
 			DrawMetrics.setFont(g, 14);
-			DrawMetrics.drawWrappedText(g, selectedItem.getDesc(), 418, 156, 726 - amountLeftButton.x);
+			DrawMetrics.drawWrappedText(g, selectedItem.getDescription(), 418, 156, 726 - amountLeftButton.x);
 			
 			DrawMetrics.setFont(g, 20);
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
@@ -245,7 +245,7 @@ public class MartView extends View
 				
 				g.drawImage(tiles.getTile(0x26), 0,0, null);
 				
-				BufferedImage img = itemTiles.getTile(item.getIndex());
+				BufferedImage img = itemTiles.getTile(item.getImageIndex());
 				DrawMetrics.drawCenteredImage(g, img, 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);

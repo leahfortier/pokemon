@@ -80,8 +80,8 @@ Disallow interfaces from input files
 remove Override/interface fields
 add optional fields
 allow hidden interfaces -- AddHiddenField (should add the field but not add the interfaces associated with that field)
+allow manually adding to the beginning or end of a method
 
-Get spacing fixed for switch statements
 Find a way to have multiple fields that are multiple words long:
 	Combine switchItem and switchItemMessage
 	combine abilityChange and AbilityMessage

@@ -2,7 +2,7 @@ package battle.effect;
 
 import pokemon.ActivePokemon;
 import battle.Battle;
-import battle.effect.Status.StatusCondition;
+import battle.effect.generic.Status.StatusCondition;
 
 public interface StatusPreventionEffect 
 {

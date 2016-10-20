@@ -7,13 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 
-import javax.swing.JFrame;
-import javax.swing.Timer;
+import javax.swing.*;
 
 import battle.Attack;
-import battle.effect.BattleEffect;
-import battle.effect.PokemonEffect;
-import battle.effect.TeamEffect;
+import battle.effect.generic.BattleEffect;
+import battle.effect.generic.PokemonEffect;
+import battle.effect.generic.TeamEffect;
 import generator.StuffGen;
 import item.Item;
 import main.Game;
@@ -41,7 +40,7 @@ public class GameFrame
 			// Make sure these don't throw any errors
 			loadAllTheThings();
 			
-			// Load all maps and test if all triggers and NPC data is correct.
+			// Load all maps and test if all triggers and NPC data is correct
 			Game g = new Game();
 			g.data.testMaps(new CharacterData(g));
 			
@@ -51,16 +50,17 @@ public class GameFrame
 		}
 
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		// frame.setSize(800, 622);
 
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
-		
+		frame.setResizable(false);
+
 		frame.getContentPane().add(gui);
 		frame.pack();
 		frame.setVisible(true);
-		
+
 		// frame.setResizable(false);
 		// frame.setSize(Global.GAME_SIZE);
 		// frame.pack();
@@ -92,7 +92,7 @@ public class GameFrame
 		private Game game;
 		private BufferStrategy strategy;
 
-		public GameLoop(Canvas canvas)
+		private GameLoop(Canvas canvas)
 		{
 			gui = canvas;
 			control = new InputControl();

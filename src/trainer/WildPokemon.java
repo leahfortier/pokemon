@@ -5,8 +5,8 @@ import java.util.List;
 
 import main.Namesies;
 import pokemon.ActivePokemon;
-import battle.effect.Effect;
-import battle.effect.TeamEffect;
+import battle.effect.generic.Effect;
+import battle.effect.generic.TeamEffect;
 
 public class WildPokemon implements Opponent 
 {

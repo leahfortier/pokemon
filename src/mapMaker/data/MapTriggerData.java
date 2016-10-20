@@ -43,7 +43,7 @@ public class MapTriggerData {
 		if (!triggerFile.exists())
 			return;
 		
-		String fileText = FileIO.readEntireFile(triggerFile, false);
+		String fileText = FileIO.readEntireFileWithReplacements(triggerFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
 		while (m.find())
 		{

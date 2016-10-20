@@ -113,6 +113,7 @@ MultiTurnMove:
 	*
 	ChargeMessage:
 		Header: String getChargeMessage(ActivePokemon user)
+		AccessModifier: Private
 		Body:
 		return {0};
 		###
@@ -126,26 +127,19 @@ Override:
 ***
 Override:
 	MultiStrike:
+		AddInterface: MultiStrikeMove
+		AddMapField: GetMinHits: {1}
+		AddMapField: GetMaxHits: {2}
 		AddMapField: ApplyDamage:
-		int minHits = {1};
-		int maxHits = {2};
-		
-		int hits = (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
-		
-		if (maxHits == 5 && me.hasAbility(Namesies.SKILL_LINK_ABILITY)) 
-		{
-			hits = 5;
-		}
+		int hits = this.getNumHits(me);
 		
 		int hit = 1;
-		for (; hit <= hits; hit++)
-		{
+		for (; hit <= hits; hit++) {
 			b.addMessage("Hit " + hit + "!");
 			super.applyDamage(me, o, b);
 			
 			// Stop attacking the dead
-			if (o.isFainted(b))
-			{
+			if (o.isFainted(b)) {
 				break;
 			}
 		}
@@ -153,6 +147,16 @@ Override:
 		// Print hits and gtfo
 		b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		###
+	*
+***
+MultiStrikeMove:
+	GetMinHits:
+		Header: int getMinHits()
+		Body: return {0};
+	*
+	GetMaxHits:
+		Header: int getMaxHits()
+		Body: return {0};
 	*
 ***
 ChangeTypeMove:
@@ -168,10 +172,8 @@ Override:
 Override:
 	SwitchItems:
 		AddMapField: ApplyEffects:
-		if ({0})
-		{
-			if (super.category == Category.STATUS) 
-			{
+		if ({0}) {
+			if (super.category == MoveCategory.STATUS) {
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			}
 			
@@ -181,8 +183,7 @@ Override:
 		Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
 		b.addMessage(getSwitchMessage(user, userItem, victim, victimItem));
 
-		if (b.isWildBattle())
-		{
+		if (b.isWildBattle()) {
 			user.giveItem((HoldItem)victimItem);
 			victim.giveItem((HoldItem)userItem);
 			return;
@@ -195,7 +196,7 @@ Override:
 		super.applyEffects(b, user, user);
 		###
 		AddMapField: Effect: Pokemon ChangeItem
-		AddInterface: ItemCondition
+		AddInterface: ItemHolder
 		AddMapField: Field:
 		private Item item;
 		###
@@ -208,6 +209,7 @@ Override:
 Override:
 	SwitchItemMessage:
 		Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
+		AccessModifier: Private
 		Body:
 		return {0};
 		###
@@ -232,15 +234,13 @@ Override:
 	OHKO:
 		AddMapField: ApplyDamage:
 		// Fails when the opponent is at a higher level than the user
-		if (me.getLevel() < o.getLevel())
-		{
+		if (me.getLevel() < o.getLevel()) {
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 		
 		// Sturdy prevents OHKO moves if the user is not a mold breaker
-		if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold())
-		{
+		if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold()) {
 			b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
 			return;
 		}
@@ -275,8 +275,7 @@ Override:
 		AddMapField: ModifyStat:
 		
 		// If the stat is a splitting stat, return the average between the user and the opponent
-		if (s == Stat.{11} || s == Stat.{22})
-		{
+		if (s == Stat.{11} || s == Stat.{22}) {
 			return (p.getStat(b, s) + opp.getStat(b, s))/2;
 		}
 		
@@ -309,8 +308,7 @@ Override:
 		return super.power*(o.hasStatus(StatusCondition.{00}) ? 2 : 1);
 		###
 		AddMapField: ApplyEffects:
-		if (victim.hasStatus(StatusCondition.{00}))
-		{
+		if (victim.hasStatus(StatusCondition.{00})) {
 			Status.removeStatus(b, victim, CastSource.ATTACK);
 		}
 		###
@@ -320,8 +318,7 @@ Override:
 	StormyMove:
 		AddMapField: GetAccuracy:
 		// Accuracy is only 50% when sunny
-		if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT)
-		{
+		if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT) {
 			return 50;
 		}
 		
@@ -358,14 +355,12 @@ Override:
 		int power = {0};
 		
 		// Power is halved during Grassy Terrain
-		if (b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT))
-		{
+		if (b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT)) {
 			power *= .5;
 		}
 		
 		// Power is double when the opponent is underground
-		if (o.isSemiInvulnerableDigging())
-		{
+		if (o.isSemiInvulnerableDigging()) {
 			power *= 2;
 		}
 		
@@ -405,8 +400,7 @@ BarrierEffect:
 		AddMapField: Defog: "The effects of {2-} faded."
 		AddMapField: Cast: 
 		super.cast(b, caster, victim, source, printCast);
-		if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM)) 
-		{
+		if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM)) {
 			Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
 		}
 		###
@@ -431,8 +425,7 @@ Override:
 		return victim.getName() + "'s ability was changed to " + Namesies.{00}_ABILITY.getName() + "!";
 		###
 		AddMapField: Apply: 
-		switch (o.getAbility().namesies())
-		{
+		switch (o.getAbility().namesies()) {
 			case TRUANT_ABILITY:
 			case MULTITYPE_ABILITY:
 			case STANCE_CHANGE_ABILITY:
@@ -478,8 +471,7 @@ Override:
 		AddMapField: MoveType: Sleep_Talk_Fail, Encoreless, Metronomeless, Assistless, No_Magic_Coat, Mirrorless
 		AddMapField: Apply: 
 		Move mirror = o.getAttributes().getLastMoveUsed();
-		if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS))
-		{
+		if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS)) {
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
@@ -498,8 +490,7 @@ Override:
 		int damageTaken = me.getAttributes().getDamageTaken();
 		
 		// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-		if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != Category.{00} || b.isFirstAttack())
-		{
+		if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != MoveCategory.{00} || b.isFirstAttack()) {
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
@@ -514,17 +505,14 @@ Override:
 		AddMapField: Priority: -6
 		AddMapField: ApplyEffects:
 		// Fails against the Suction Cups ability
-		if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold())
-		{
+		if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold()) {
 			b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
 			return;
 		}
 		
 		// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-		if (b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT))
-		{
-			if (super.category == Category.STATUS)
-			{
+		if (b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT)) {
+			if (super.category == MoveCategory.STATUS)  {
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			}
 			
@@ -532,11 +520,9 @@ Override:
 		}
 		
 		Team opponent = b.getTrainer(victim.user());
-		if (opponent instanceof WildPokemon)
-		{
+		if (opponent instanceof WildPokemon) {
 			// Fails against wild Pokemon of higher levels
-			if (victim.getLevel() > user.getLevel())
-			{
+			if (victim.getLevel() > user.getLevel()) {
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
@@ -548,11 +534,9 @@ Override:
 		}
 		
 		Trainer trainer = (Trainer)opponent;
-		if (!trainer.hasRemainingPokemon())
-		{
+		if (!trainer.hasRemainingPokemon()) {
 			// Fails against trainers on their last Pokemon
-			if (super.category == Category.STATUS)
-			{
+			if (super.category == MoveCategory.STATUS) {
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			}
 			
@@ -574,8 +558,7 @@ Override:
 		super.apply(me, o, b);
 		
 		Team t = b.getTrainer(me.user());
-		if (t instanceof WildPokemon)
-		{
+		if (t instanceof WildPokemon) {
 			// End the battle against a wild Pokemon
 			b.addMessage(me.getName() + " left the battle!");
 			b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
@@ -625,8 +608,7 @@ Override:
 		AddMapField: ProtectingCondition: true
 		AddMapField: OpponentCanAttack:
 		// Self-target moves, moves that penetrate Protect, and other conditions
-		if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) 
-		{
+		if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
 			return true;
 		}
 		
@@ -658,8 +640,7 @@ Override:
 Override: 
 	SuccessiveDecay:
 		AddMapField: Cast:
-		if (Math.random() > caster.getAttributes().getSuccessionDecayRate())
-		{
+		if (Math.random() > caster.getAttributes().getSuccessionDecayRate()) {
 			b.addMessage(this.getFailMessage(b, caster, victim));
 			return;
 		}
@@ -713,8 +694,7 @@ Override:
 		AddMapField: RapidSpin: user.getName() + " was released from {1_}!"
 		AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
 		AddMapField: ApplyEndTurn:
-		if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
-		{
+		if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 			return;
 		}
 		
@@ -742,12 +722,10 @@ Override:
 	UsedProof:
 		AddMapField: CanHave: True
 		AddMapField: Cast: 
-		if (!victim.hasEffect(this.namesies))
-		{
+		if (!victim.hasEffect(this.namesies)) {
 			super.cast(b, caster, victim, source, printCast);
 		}
-		else 
-		{
+		else {
 			b.addMessage(getCastMessage(b, caster, victim));
 		}
 		###
@@ -777,8 +755,7 @@ Override:
 Override:
 	ApplyError:
 		AddMapField: Apply:
-		if ({0})
-		{
+		if ({0}) {
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
@@ -847,8 +824,7 @@ Override:
 	ModifyMultiplier:
 		AddInterface: StatChangingEffect
 		AddMapField: ModifyStat:
-		if (isModifyStat(s) && {2-})
-		{
+		if (isModifyStat(s) && {2-}) {
 			stat *= {1};
 		}
 		
@@ -872,7 +848,7 @@ Override:
 		###
 	*
 ***
-MoveCondition:
+MoveHolder:
 	GetMove:
 		Header: Move getMove()
 	*
@@ -903,13 +879,20 @@ Override:
 		Header: boolean shouldSubside(Battle b, ActivePokemon victim)
 	*
 ***
+Override:
+	DoublePowerCondition:
+		AddMapField: GetPow: 
+		return super.power*({0} ? 2 : 1);
+		###
+	*
+***
 EntryEffect:
 	Enter:
 		Header: void enter(Battle b, ActivePokemon victim)
 	*
 ***
-TypeCondition:
-	GetTypeCondition:	
+TypeHolder:
+	GetTypeHolder:	
 		Header: Type[] getType(Battle b, ActivePokemon p, Boolean display)
 	*
 ***
@@ -957,7 +940,7 @@ OpponentPowerChangeEffect:
 		Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
-IntegerCondition:
+IntegerHolder:
 	IntegerName:
 		AddMapField: GetAmount: {0}
 		AddMapField: DecreaseAmount: {0}
@@ -1020,8 +1003,7 @@ Override:
 		AddMapField: CanHave: True
 		AddMapField: Cast: 
 		Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
-		if (roomsies == null)
-		{
+		if (roomsies == null) {
 			super.cast(b, caster, victim, source, printCast);
 			return;
 		}
@@ -1036,8 +1018,7 @@ Override:
 	MoveTypePrevent:
 		AddInterface: OpponentBeforeTurnEffect
 		AddMapField: OpponentCanAttack:
-		if (p.getAttack().isMoveType(MoveType.{00}))
-		{
+		if (p.getAttack().isMoveType(MoveType.{00})) {
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
 			return false;
@@ -1075,12 +1056,12 @@ DefogRelease:
 		###
 	*
 ***
-AbilityCondition:
+AbilityHolder:
 	GetAbility:
 		Header: Ability getAbility()
 	*
 ***
-ItemCondition:
+ItemHolder:
 	GetItem:
 		Header: Item getItem()
 	*
@@ -1096,12 +1077,12 @@ BracingEffect:
 		###
 	*
 ***
-MoveListCondition:
+MoveListHolder:
 	GetMoveList:
 		Header: Move[] getMoveList(ActivePokemon p, Move[] moves)
 	*
 ***
-StatsCondition:
+StatsHolder:
 	GetStat:
 		Header: int getStat(ActivePokemon user, Stat stat)
 	*
@@ -1127,10 +1108,10 @@ LevitationEffect:
 GroundedEffect:
 	RemoveLevitation:
 		Header: void removeLevitation(Battle b, ActivePokemon p)
+		AccessModifier: Private
 		Optional: True
 		Default:
-		if (p.isSemiInvulnerableFlying())
-		{
+		if (p.isSemiInvulnerableFlying()) {
 			p.getMove().switchReady(b, p);
 			b.addMessage(p.getName() + " fell to the ground!");
 		}
@@ -1139,8 +1120,7 @@ GroundedEffect:
 		###
 		AddInterface: BeforeTurnEffect
 		AddMapField: CanAttack:
-		if (p.getAttack().isMoveType(MoveType.AIRBORNE))
-		{
+		if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
 			b.printAttacking(p);
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return false;
@@ -1154,11 +1134,9 @@ TerrainEffect:
 	Terrain:
 		AddMapField: Cast:
 		// Remove all other Terrain Effects
-		for (int i = 0; i < b.getEffects().size(); i++)
-		{
+		for (int i = 0; i < b.getEffects().size(); i++) {
 			Effect effect = b.getEffects().get(i);
-			if (effect instanceof TerrainEffect)
-			{
+			if (effect instanceof TerrainEffect) {
 				b.getEffects().remove(i);
 				i--;
 			}
@@ -1215,8 +1193,7 @@ Override:
 		b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!");
 		
 		// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
-		{
+		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
 			return;
 		}
 		
@@ -1229,8 +1206,7 @@ Override:
 	EndTurnStatusCure:
 		AddInterface: EndTurnEffect
 		AddMapField: ApplyEndTurn: 
-		if (victim.hasStatus() && {0})
-		{
+		if (victim.hasStatus() && {0}) {
 			Status.removeStatus(b, victim, CastSource.ABILITY);
 		}
 		###
@@ -1256,8 +1232,7 @@ Override:
 Override:
 	StatusContact:
 		AddMapField: Contact: 
-		if (Math.random()*100 < 30)
-		{
+		if (Math.random()*100 < 30) {
 			Status.giveStatus(b, victim, user, StatusCondition.{00}, true);
 		}
 		###
@@ -1383,8 +1358,7 @@ Override:
 Override:
 	TypeTakeDamageStatIncrease:
 		AddMapField: OnTakeDamage:
-		if (user.getAttackType() == Type.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM))
-		{
+		if (user.getAttackType() == Type.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			victim.consumeItem(b);
 		}
 		###
@@ -1402,8 +1376,7 @@ Override:
 		AddInterface: AttackSelectionEffect
 		AddMapField: Usable:
 		Move last = p.getAttributes().getLastMoveUsed();
-		if (last == null || m == last)
-		{
+		if (last == null || m == last) {
 			return true;
 		}
 		
@@ -1458,18 +1431,18 @@ Override:
 Override:
 	BuffetMessage:
 		AddMapField: Field:
-		private void buffet(Battle b, ActivePokemon p)
-		{
+		private void buffet(Battle b, ActivePokemon p) {
 			// Don't buffet the immune!
-			for (Type type : immunees)
-				if (p.isType(b, type))
+			for (Type type : immunees) {
+				if (p.isType(b, type)) {
 					return;
+				}
+			}
 			
 			// Srsly don't buffet the immune!!
 			Object[] list = b.getEffectsList(p);
 			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
-			if (checkeroo != null)
-			{
+			if (checkeroo != null) {
 				return;
 			}
 
@@ -1496,15 +1469,12 @@ Override:
 	WeatherStatChange:
 		AddInterface: StatChangingEffect
 		AddMapField: ModifyStat:
-		if (s == Stat.ATTACK || s == Stat.SP_ATTACK)
-		{
-			if (p.isAttackType(Type.{11}))
-			{
+		if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
+			if (p.isAttackType(Type.{11})) {
 				// {1} is fiddy percent stronger in tha weathz
 				stat *= 1.5;
 			}
-			else if (p.isAttackType(Type.{22}))
-			{
+			else if (p.isAttackType(Type.{22})) {
 				// {2} is fiddy percent weaker in tha weathz
 				stat *= .5;
 			}
@@ -1538,8 +1508,7 @@ Override:
 		AddInterface: TargetSwapperEffect
 		AddMapField: TargetSwap:
 		Attack attack = user.getAttack();
-		if (!attack.isSelfTarget() && attack.getCategory() == Category.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT))
-		{
+		if (!attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
 			b.addMessage(opponent.getName() + "'s " + {0} + " reflected " + user.getName() + "'s move!");
 			return true;
 		}
@@ -1574,8 +1543,7 @@ GemItem:
 		###
 		AddInterface: Hidden-PowerChangeEffect
 		AddMapField: GetMultiplier:
-		if (user.isAttackType(getType()))
-		{
+		if (user.isAttackType(getType())) {
 			// Consume the item
 			b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
 			user.consumeItem(b);
@@ -1596,8 +1564,7 @@ Override:
 	TypeEnhance:
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-		if (user.isAttackType(Type.{00}))
-		{
+		if (user.isAttackType(Type.{00})) {
 			return 1.2;
 		}
 
@@ -1737,8 +1704,7 @@ Override:
 		AddMapField: PokemonUse:
 		Evolution ev = p.getPokemonInfo().getEvolution();
 		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
-		if (base == null)
-		{
+		if (base == null) {
 			return false;
 		}
 
@@ -1751,14 +1717,12 @@ Override:
 	FullHeal:
 		AddMapField: PokemonUse:
 		// Does not apply to the dead
-		if (p.hasStatus(StatusCondition.FAINTED)) 
-		{	
+		if (p.hasStatus(StatusCondition.FAINTED)) {	
 			return false;
 		}
 		
 		// YOU'RE FINE
-		if (!p.hasStatus())
-		{
+		if (!p.hasStatus()) {
 			return false;
 		}
 		
@@ -1781,8 +1745,7 @@ Override:
 		AddMapField: Fling: 30
 		AddMapField: PokemonUse:
 		// Only applies to the dead
-		if (!p.hasStatus(StatusCondition.FAINTED)) 
-		{
+		if (!p.hasStatus(StatusCondition.FAINTED)) {
 			return false;
 		}
 		
@@ -1803,8 +1766,7 @@ Override:
 		AddInterface: PokemonUseItem
 		AddInterface: BattleUseItem
 		AddMapField: PokemonUse:
-		if (!p.hasStatus(toRemove()))
-		{
+		if (!p.hasStatus(toRemove())) {
 			return false;
 		}
 
@@ -1902,10 +1864,12 @@ Override:
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
 		int[] vals = new int[Stat.NUM_STATS];
-		if (p.getEV(toDecrease().index()) > 110)
+		if (p.getEV(toDecrease().index()) > 110) {
 			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
-		else
+		}
+		else {
 			vals[toDecrease().index()] -= 10;
+		}
 
 		return p.addEVs(vals);
 		###
@@ -1920,8 +1884,7 @@ Override:
 		AddMapField: NGType: {0}
 		AddInterface: OpponentPowerChangeEffect
 		AddMapField: GetOppMultiplier:
-		if (user.getAttackType() == Type.{00} && Type.getAdvantage(user, victim, b) > 1)
-		{
+		if (user.getAttackType() == Type.{00} && Type.getAdvantage(user, victim, b) > 1) {
 			b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 			victim.consumeItem(b);
 			return .5;
@@ -1935,8 +1898,7 @@ Override:
 	HealthTriggeredStageIncreaseBerry:
 		AddInterface: HealthTriggeredBerry
 		AddMapField: HealthTrigger:
-		if (user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source))
-		{
+		if (user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source)) {
 			return true;
 		}
 
@@ -1952,14 +1914,13 @@ Override:
 	CategoryIncreaseBerry:
 		Header: boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
 		Body:
-		return user.getAttack().getCategory() == Category.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM);
+		return user.getAttack().getCategory() == MoveCategory.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM);
 		###
 		AddMapField: NGPow: 100
 		AddInterface: Berry
 		AddInterface: TakeDamageEffect
 		AddMapField: OnTakeDamage:
-		if (checkModify(b, user, victim))
-		{
+		if (checkModify(b, user, victim)) {
 			victim.consumeItem(b);
 		}
 		###
@@ -1967,16 +1928,15 @@ Override:
 ***
 Override:
 	CategoryDamagerBerry:
-		Header: Category getCategory()
+		Header: MoveCategory getCategory()
 		Body:
-		return Category.{00};
+		return MoveCategory.{00};
 		###
 		AddMapField: NGPow: 100
 		AddInterface: Berry
 		AddInterface: TakeDamageEffect
 		AddMapField: OnTakeDamage:
-		if (user.getAttack().getCategory() == getCategory())
-		{
+		if (user.getAttack().getCategory() == getCategory()) {
 			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 			victim.consumeItem(b);
@@ -1987,10 +1947,8 @@ Override:
 Override:
 	HealPartyStatus:
 		AddMapField: ApplyEffects:
-		for (ActivePokemon p : b.getTrainer(user.user()).getTeam())
-		{
-			if (!p.hasStatus(StatusCondition.FAINTED)) 
-			{
+		for (ActivePokemon p : b.getTrainer(user.user()).getTeam()) {
+			if (!p.hasStatus(StatusCondition.FAINTED)) {
 				p.removeStatus();
 			}
 		}
@@ -2064,8 +2022,7 @@ Override:
 		Attack attack = Attack.getAttack(Namesies.{00}_ATTACK);
 		
 		// Don't do anything for moves that are uneffective
-		if (!attack.effective(b, theSeeer, p))
-		{
+		if (!attack.effective(b, theSeeer, p)) {
 			return;
 		}
 		
@@ -2094,8 +2051,7 @@ Override:
 		private static Stat[] swapStats = { Stat.{11}, Stat.{22} };
 		###
 		AddMapField: ApplyEffects: 
-		for (Stat s : swapStats)
-		{
+		for (Stat s : swapStats) {
 			int statIndex = s.index();
 			
 			int userStat = user.getAttributes().getStage(statIndex);
@@ -2114,8 +2070,7 @@ StatusBerry:
 	StatusBerryGainEffect:
 		Optional: True
 		AddMapField: GainEffect:
-		if (!user.hasStatus(toRemove()))
-		{
+		if (!user.hasStatus(toRemove())) {
 			return false;
 		}
 
@@ -2135,8 +2090,7 @@ GainableEffectBerry:
 		End:
 		
 		String message = "";
-		switch (source)
-		{
+		switch (source) {
 			case USE_ITEM:
 				message = getSuccessMessage(user);
 				break;
@@ -2149,8 +2103,7 @@ GainableEffectBerry:
 		
 		b.addMessage(message, user);
 		
-		if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth())
-		{
+		if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth()) {
 			b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
 			user.healHealthFraction(1/3.0);
 			b.addMessage("", user);
@@ -2176,8 +2129,7 @@ HealthTriggeredBerry:
 		###
 		AddInterface: Hidden-GainableEffectBerry
 		AddMapField: GainEffect:
-		if (!useHealthTriggerBerry(b, user, source))
-		{
+		if (!useHealthTriggerBerry(b, user, source)) {
 			return false;
 		}
 		###
@@ -2217,14 +2169,12 @@ Override:
 		AddMapField: Fling: 30
 		AddInterface: TrainerUseItem
 		AddMapField: TrainerUse:
-		if (!(t instanceof CharacterData))
-		{
+		if (!(t instanceof CharacterData)) {
 			Global.error("Only the character should be using a Repel item");
 		}
 
 		CharacterData player = (CharacterData) t;
-		if (player.isUsingRepel())
-		{
+		if (player.isUsingRepel()) {
 			return false;
 		}
 
@@ -2252,13 +2202,11 @@ Override:
 		###
 		AddInterface: EffectBlockerEffect
 		AddMapField: ValidMove:
-		if (!user.getAttack().isMoveType(MoveType.POWDER)) 
-		{
+		if (!user.getAttack().isMoveType(MoveType.POWDER)) {
 			return true;
 		}
 		
-		if (user.getAttack().getCategory() == Category.STATUS) 
-		{
+		if (user.getAttack().getCategory() == MoveCategory.STATUS) {
 			b.addMessage(getPreventMessage(victim));
 		}
 		
@@ -2270,10 +2218,8 @@ AdvantageChanger:
 	AdvantageChange:
 		Header: Type[] getAdvantageChange(Type attacking, Type[] defending)
 		Body:
-		for (int i = 0; i < 2; i++)
-		{
-			if ({0})
-			{
+		for (int i = 0; i < 2; i++) {
+			if ({0}) {
 				defending[i] = Type.NONE;	
 			}
 		}
@@ -2315,8 +2261,7 @@ Override:
 		###
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-		if (user.getAttackType() == getAuraType())
-		{
+		if (user.getAttackType() == getAuraType()) {
 			return 1 + .33*(victim.hasAbility(Namesies.AURA_BREAK_ABILITY) ? -1 : 1);
 		}
 		
@@ -2331,8 +2276,7 @@ Override:
 		// Dead Pokemon and wild Pokemon cannot steal; 
 		// Cannot steal if victim is not holding an item or thief is already holding an item;
 		// Cannot steal from a Pokemon with the Sticky Hold ability 
-		if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY))
-		{
+		if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)) {
 			return;
 		}
 		
@@ -2340,8 +2284,7 @@ Override:
 		Item stolen = victim.getHeldItem(b);
 		b.addMessage(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!");
 		
-		if (b.isWildBattle())
-		{
+		if (b.isWildBattle()) {
 			victim.removeItem();
 			thief.giveItem((HoldItem)stolen);
 			return;
@@ -2353,7 +2296,7 @@ Override:
 		item = Item.noneItem();
 		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, thief, victim, CastSource.ABILITY, false);
 		###
-		AddInterface: ItemCondition
+		AddInterface: ItemHolder
 		AddMapField: Field:
 		private Item item;
 		###
@@ -2366,13 +2309,11 @@ Override:
 	ConsumeBerry:
 		AddMapField: ApplyEffects: 
 		Item i = victim.getHeldItem(b);
-		if (i instanceof Berry)
-		{
+		if (i instanceof Berry) {
 			b.addMessage(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!");
 			victim.consumeItem(b);
 			
-			if (i instanceof GainableEffectBerry)
-			{
+			if (i instanceof GainableEffectBerry) {
 				((GainableEffectBerry)i).gainBerryEffect(b, user, CastSource.USE_ITEM);
 			}
 		}
@@ -2413,8 +2354,7 @@ Override:
 		###
 		AddInterface: ChangeAttackTypeEffect
 		AddMapField: ChangeAttackType:
-		if (original == Type.NORMAL)
-		{
+		if (original == Type.NORMAL) {
 			this.activated = true;
 			return getType();
 		}
@@ -2449,18 +2389,15 @@ Override:
 	FlinchItem:
 		AddMapField: FlingEffect:
 		PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
-		if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM))
-		{
+		if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
 			flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
 			b.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
 		}
 		###
 		AddMapField: OnApplyDamage:
-		if (Math.random()*100 < 10)
-		{
+		if (Math.random()*100 < 10) {
 			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
-			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM))
-			{
+			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
 				b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 			}
@@ -2490,14 +2427,12 @@ Override:
 		Attack attack = getAttack();
 		
 		// Cannot learn if you already know the move
-		if (p.hasActualMove(attack.namesies()))
-		{
+		if (p.hasActualMove(attack.namesies())) {
 			return false;
 		}
 
 		// Cannot learn if the TM is not compatible with the Pokemon
-		if (!p.getPokemonInfo().isTmMove(attack.namesies()))
-		{
+		if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
 			return false;
 		}
 
@@ -2505,17 +2440,14 @@ Override:
 		List<Move> moveList = p.getActualMoves();
 
 		// If they don't have a full move list, append to the end
-		if (moveList.size() < Move.MAX_MOVES)
-		{
+		if (moveList.size() < Move.MAX_MOVES) {
 			p.addMove(null, tmMove, moveList.size());
 			return true;
 		}
 
 		// Otherwise, go through their moves and find the one that matches and replace with the TM move
-		for (int i = 0; i < moveList.size(); i++)
-		{
-			if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies())
-			{
+		for (int i = 0; i < moveList.size(); i++) {
+			if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
 				p.addMove(null, tmMove, i);
 				return true;
 			}
@@ -2531,10 +2463,8 @@ PriorityChangeEffect:
 	ChangePriority:
 		Header: int changePriority(Battle b, ActivePokemon user, Integer priority)
 		Body:
-		if ({0})
-		{
-			if (this instanceof ConsumableItem)
-			{
+		if ({0}) {
+			if (this instanceof ConsumableItem) {
 				user.consumeItem(b);
 			}
 			

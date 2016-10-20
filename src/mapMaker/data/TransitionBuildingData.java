@@ -66,7 +66,7 @@ public class TransitionBuildingData
 	{	
 		transitionBuildingTriggerFile = new File(mapMaker.root.getPath() + MapMaker.FILE_SLASH + TransitionBuildingTriggersFile);
 		
-		String fileText = FileIO.readEntireFile(transitionBuildingTriggerFile, false);
+		String fileText = FileIO.readEntireFileWithReplacements(transitionBuildingTriggerFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
 		while (m.find())
 		{

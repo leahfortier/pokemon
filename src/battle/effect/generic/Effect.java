@@ -1,4 +1,4 @@
-package battle.effect;
+package battle.effect.generic;
 
 import java.io.Serializable;
 import java.util.List;

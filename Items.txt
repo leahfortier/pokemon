@@ -506,7 +506,7 @@ Muscle Band:
 	Price: 200
 	Fling: 10
 	GetMultiplier:
-		return user.getAttack().getCategory() == Category.PHYSICAL ? 1.1 : 1;
+		return user.getAttack().getCategory() == MoveCategory.PHYSICAL ? 1.1 : 1;
 		###
 *
 Power Anklet:
@@ -677,7 +677,7 @@ Stick:
 		###
 *
 Sticky Barb:
-	Int: HoldItem, EndTurnEffect, PhysicalContactEffect, ItemCondition
+	Int: HoldItem, EndTurnEffect, PhysicalContactEffect, ItemHolder
 	Cat: Misc
 	Desc: A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.
 	Price: 200
@@ -2508,7 +2508,7 @@ Assault Vest:
 	ToModify: Sp_Defense
 	ModifyMultiplier: 1.5 true
 	Usable:
-	return m.getAttack().getCategory() != Attack.Category.STATUS;
+	return m.getAttack().getCategory() != MoveCategory.STATUS;
 	###
 	UnusableMessage: p.getName() + "'s " + this.name + " prevents the use of status moves!"
 	Fling: 30

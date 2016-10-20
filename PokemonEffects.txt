@@ -127,11 +127,11 @@ QuickGuard:
 *
 CraftyShield:
 	ProtectingEffect: True
-	ProtectingCondition: attacking.getAttack().getCategory() == Category.STATUS
+	ProtectingCondition: attacking.getAttack().getCategory() == MoveCategory.STATUS
 *
 MatBlock:
 	ProtectingEffect: True
-	ProtectingCondition: attacking.getAttack().getCategory() != Category.STATUS
+	ProtectingCondition: attacking.getAttack().getCategory() != MoveCategory.STATUS
 	Cast:
 	// No successive decay for this move
 	super.cast(b, caster, victim, source, printCast);
@@ -284,7 +284,7 @@ Encore:
 *
 Disable:
 	FailAbility: Aroma Veil
-	Int: AttackSelectionEffect, MoveCondition, BeforeTurnEffect
+	Int: AttackSelectionEffect, MoveHolder, BeforeTurnEffect
 	Field: 
 	private Move disabled;
 	private int turns;
@@ -393,12 +393,12 @@ RaiseCrits:
 	###
 *
 ChangeItem:
-	Int: ItemCondition
+	Int: ItemHolder
 	Activate: 
 	x.item = item;
 	###
 	Cast: 
-	item = ((ItemCondition)source.getSource(b, caster)).getItem();
+	item = ((ItemHolder)source.getSource(b, caster)).getItem();
 	while (victim.getAttributes().removeEffect(this.namesies));
 	super.cast(b, caster, victim, source, printCast);
 	###
@@ -411,7 +411,7 @@ ChangeItem:
 	CanHave: True
 *
 ChangeType:
-	Int: TypeCondition
+	Int: TypeHolder
 	Field: 
 	private Type[] type;
 	private ChangeTypeMove typeSource;
@@ -451,7 +451,7 @@ ChangeType:
 	
 	super.cast(b, caster, victim, source, printCast);
 	###
-	GetTypeCondition:
+	GetTypeHolder:
 	return type;
 	###
 	CastMessage: castMessage(victim)
@@ -461,7 +461,7 @@ ChangeType:
 	###
 *
 ChangeAbility:
-	Int: AbilityCondition
+	Int: AbilityHolder
 	Field: 
 	private Ability ability;
 	private String message;
@@ -533,7 +533,7 @@ Mimic:
 	Field: 
 	private Move mimicMove;
 	###
-	Int: MoveListCondition
+	Int: MoveListHolder
 	GetMoveList: 
 	Move[] list = new Move[moves.length];
 	for (int i = 0; i < list.length; i++)
@@ -647,7 +647,7 @@ Taunt:
 	}
 	###
 	Usable: 
-	return m.getAttack().getCategory() != Category.STATUS;
+	return m.getAttack().getCategory() != MoveCategory.STATUS;
 	###
 	UnusableMessage: "No!! Not while you're under the effects of taunt!!"
 	CanAttack:
@@ -886,19 +886,19 @@ Transformed:
 	b.addMessage("", victim);
 	###
 	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(Namesies.ILLUSION_ABILITY) && caster.getAbility().isActive()))
-	Int: MoveListCondition, StatsCondition, TypeCondition
+	Int: MoveListHolder, StatsHolder, TypeHolder
 	GetMoveList:
 	return moveList;
 	###
 	GetStat: 
 	return stats[stat.index()];
 	###
-	GetTypeCondition: 
+	GetTypeHolder: 
 	return type;
 	###
 *
 Substitute:
-	Int: IntegerCondition, PassableEffect, EffectBlockerEffect
+	Int: IntegerHolder, PassableEffect, EffectBlockerEffect
 	Field: 
 	private int hp;
 	###
@@ -927,7 +927,7 @@ Substitute:
 	}
 	
 	// Print the failure for status moves
-	if (user.getAttack().getCategory() == Category.STATUS)
+	if (user.getAttack().getCategory() == MoveCategory.STATUS)
 	{
 		b.addMessage(this.getFailMessage(b, user, victim));
 	}
@@ -959,7 +959,7 @@ Bide:
 	private int turns;
 	private int damage;
 	###
-	Int: ForceMoveEffect, EndTurnEffect, IntegerCondition
+	Int: ForceMoveEffect, EndTurnEffect, IntegerHolder
 	GetForceMove: 
 	return move;
 	###
@@ -1116,7 +1116,7 @@ Snatch:
 	Int: TargetSwapperEffect
 	TargetSwap:
 	Attack attack = user.getAttack();
-	if (attack.isSelfTarget() && attack.getCategory() == Category.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE))
+	if (attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE))
 	{
 		b.addMessage(opponent.getName() + " snatched " + user.getName() + "'s move!");
 		return true;
@@ -1185,7 +1185,7 @@ ConsumedItem:
 	while (victim.getAttributes().removeEffect(this.namesies));
 	super.cast(b, caster, victim, source, printCast);
 	###
-	Int: ItemCondition
+	Int: ItemHolder
 	GetItem: 
 	return consumed;
 	###

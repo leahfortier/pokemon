@@ -12,9 +12,9 @@ import main.Namesies;
 import main.Type;
 import pokemon.Stat;
 import battle.Attack;
-import battle.effect.Effect;
-import battle.effect.PokemonEffect;
-import battle.effect.Status.StatusCondition;
+import battle.effect.generic.Effect;
+import battle.effect.generic.PokemonEffect;
+import battle.effect.generic.Status.StatusCondition;
 
 public class AreaData
 {

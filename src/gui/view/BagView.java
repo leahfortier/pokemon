@@ -4,7 +4,7 @@ import gui.Button;
 import gui.GameData;
 import gui.TileSet;
 import item.Bag;
-import item.Bag.BagCategory;
+import item.BagCategory;
 import item.Item;
 import item.hold.HoldItem;
 import item.use.MoveUseItem;
@@ -29,7 +29,7 @@ import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 import battle.Move;
-import battle.effect.Status.StatusCondition;
+import battle.effect.generic.Status.StatusCondition;
 
 public class BagView extends View
 {
@@ -69,8 +69,7 @@ public class BagView extends View
 	private Button[] moveButtons;
 	private Button[] itemButtons;
 		
-	private enum BagState
-	{
+	private enum BagState {
 		ITEM_SELECT, POKEMON_SELECT, MOVE_SELECT;
 	}
 	
@@ -392,7 +391,7 @@ public class BagView extends View
 			}
 
 			// Draw item image
-			BufferedImage img = itemTiles.getTile(selectedItem.getIndex());
+			BufferedImage img = itemTiles.getTile(selectedItem.getImageIndex());
 			DrawMetrics.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
@@ -405,7 +404,7 @@ public class BagView extends View
 			}
 			
 			DrawMetrics.setFont(g, 14);
-			DrawMetrics.drawWrappedText(g, selectedItem.getDesc(), 418, 156, 726 - buttons[GIVE].x);
+			DrawMetrics.drawWrappedText(g, selectedItem.getDescription(), 418, 156, 726 - buttons[GIVE].x);
 			
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
 			DrawMetrics.setFont(g, 20);
@@ -433,7 +432,7 @@ public class BagView extends View
 				Item item = iter.next();
 				
 				g.drawImage(tiles.getTile(0x26), 0, 0, null);
-				DrawMetrics.drawCenteredImage(g, itemTiles.getTile(item.getIndex()), 14, 14);
+				DrawMetrics.drawCenteredImage(g, itemTiles.getTile(item.getImageIndex()), 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
 				

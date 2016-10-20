@@ -11,10 +11,10 @@ import main.Global;
 import main.Namesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
-import battle.effect.Effect;
-import battle.effect.Status.StatusCondition;
+import battle.effect.generic.Effect;
+import battle.effect.generic.Status.StatusCondition;
 import battle.effect.SwitchOutEffect;
-import battle.effect.TeamEffect;
+import battle.effect.generic.TeamEffect;
 
 public abstract class Trainer implements Team, Serializable
 {

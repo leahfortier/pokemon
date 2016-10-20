@@ -1,4 +1,6 @@
 package battle.effect;
 
 
-public interface ForceMoveEffect extends MoveCondition {}
+import battle.effect.holder.MoveHolder;
+
+public interface ForceMoveEffect extends MoveHolder {}

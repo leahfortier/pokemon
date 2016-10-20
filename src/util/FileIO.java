@@ -17,7 +17,7 @@ public class FileIO {
 	
 	private static final String FILE_SLASH = File.separator;
 	
-	public static void deleteFile(String fileName) {
+	static void deleteFile(String fileName) {
 		File file = new File(fileName);
 		if (file.exists()) {
 			file.delete();	
@@ -28,7 +28,7 @@ public class FileIO {
 		try {
 			ImageIO.write(image, "png", file);
 		}
-		catch (IOException e) {
+		catch (IOException exception) {
 			Global.error("Could not write image to file " + file.getName());
 		}
 	}
@@ -67,17 +67,22 @@ public class FileIO {
 	 * @param ignoreComments
 	 * @return
 	 */
-	public static String readEntireFile(File file, boolean ignoreComments) {
+	public static String readEntireFileWithReplacements(File file, boolean ignoreComments) {
 		String fileText = readEntireFileWithoutReplacements(file, ignoreComments);
 		String restoreSpecial = PokeString.restoreSpecialFromUnicode(fileText);
 		
 		return restoreSpecial;
 	}
-	
+
 	public static String readEntireFileWithoutReplacements(File file, boolean ignoreComments) {
 		BufferedReader in = openFileBuffered(file);
+		if (in == null) {
+			Global.error("Could not open file " + file.getName());
+			return null;
+		}
+
 		StringBuilder build = new StringBuilder();
-		String line = null;
+		String line;
 		
 		try {
 			while ((line = in.readLine()) != null) {
@@ -95,8 +100,15 @@ public class FileIO {
 		return build.toString();
 	}
 
-	public static BufferedReader openFileBuffered(String file) {
-		return openFileBuffered(new File(file));
+	public static String readEntireFile(String fileName) {
+		final Scanner in = openFile(fileName);
+		final StringBuilder out = new StringBuilder();
+
+		while (in.hasNextLine()) {
+			out.append(in.nextLine()).append("\n");
+		}
+
+		return out.toString();
 	}
 
 	public static BufferedReader openFileBuffered(File file) {
@@ -121,6 +133,19 @@ public class FileIO {
 			Global.error(file.getName() + " not found.");
 			return null;
 		}
+	}
+
+	// Overwrites the given file name with the content of out only if there is a difference
+	public static boolean overwriteFile(final String fileName, final StringBuilder out) {
+		final String previousFile = readEntireFile(fileName);
+		final String newFile = out.toString();
+
+		if (!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {
+			writeToFile(fileName, out);
+			return true;
+		}
+
+		return false;
 	}
 	
 	public static void writeToFile(String fileName, StringBuilder out) {

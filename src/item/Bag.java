@@ -8,7 +8,6 @@ import item.use.PokemonUseItem;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
 
-import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,109 +24,39 @@ import trainer.Trainer;
 import battle.Battle;
 import battle.Move;
 
-public class Bag implements Serializable
-{
+public class Bag implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Map<Item, Integer> items; // Item -> quantity
 	private Map<BagCategory, Set<Item>> bag;
 	private Map<BattleBagCategory, Set<Item>> battleBag;
 	private Item lastUsedItem;
-
-	public enum BagCategory implements Serializable
-	{
-		MEDICINE("Medicine", new Color(248, 120, 64), 0x1), 
-		BALL("Balls", new Color(232, 184, 40), 0x2), 
-		STAT("Stat", new Color(80, 128, 232), 0x3), 
-		KEY_ITEM("KeyItems", new Color(152, 88, 240), 0x4), 
-		TM("TMs", new Color(168, 232, 72), 0x5), 
-		BERRY("Berries", new Color(64, 192, 64), 0x6), 
-		MISC("Misc", new Color(232, 136, 192), 0x7);
-		
-		// Name to display in BagView
-		private String name;
-		private Color color;
-		private int imageNumber;
-		
-		private BagCategory(String name, Color color, int imageNumber)
-		{
-			this.name = name;
-			this.color = color;
-			this.imageNumber = imageNumber;
-		}
-		
-		public String getName()
-		{
-			return name;
-		}
-		
-		public Color getColor()
-		{
-			return color;
-		}
-		
-		public int getImageNumber()
-		{
-			return imageNumber;
-		}
-	}
 	
-	public enum BattleBagCategory implements Serializable
-	{
-		HP_PP("HP/PP", 0x16), STATUS("Status", 0x17), BALL("Balls", 0x18), BATTLE("Battle", 0x19);
-		
-		// Name to display in BagView
-		String name;
-		int imageNumber;
-		
-		private BattleBagCategory(String name, int imgNum)
-		{
-			this.name = name;
-			this.imageNumber = imgNum;
-		}
-		
-		public String getName()
-		{
-			return name;
-		}
-		
-		public int getImageNumber()
-		{
-			return imageNumber;
-		}
-	}
-	
-	public Bag()
-	{
+	public Bag() {
 		items = new TreeMap<>();
 		
 		bag = new HashMap<>();
-		for (BagCategory cat : BagCategory.values())
-		{
-			bag.put(cat, new TreeSet<Item>());
+		for (BagCategory cat : BagCategory.values()) {
+			bag.put(cat, new TreeSet<>());
 		}
 		
 		battleBag = new HashMap<>();
-		for (BattleBagCategory cat : BattleBagCategory.values())
-		{
-			battleBag.put(cat, new TreeSet<Item>());
+		for (BattleBagCategory cat : BattleBagCategory.values()) {
+			battleBag.put(cat, new TreeSet<>());
 		}
 		
 		lastUsedItem = Item.noneItem();
 	}
 	
-	public String giveItem(CharacterData player, ActivePokemon p, Item hold)
-	{
-		if (p.isEgg()) 
-		{
+	public String giveItem(CharacterData player, ActivePokemon p, Item hold) {
+		if (p.isEgg()) {
 			return "You can't give an item to an egg!";
 		}
 		
 		String s = "";
 		
 		Item item = p.getActualHeldItem();
-		if (item != Item.noneItem()) 
-		{
+		if (item != Item.noneItem()) {
 			player.getBag().addItem(item);
 			p.removeItem();
 			s += "Took the " + item.getName() + " from " + p.getActualName() + ". ";
@@ -140,16 +69,13 @@ public class Bag implements Serializable
 		return s;
 	}
 	
-	public String takeItem(CharacterData player, ActivePokemon p)
-	{
-		if (p.isEgg()) 
-		{
+	public String takeItem(CharacterData player, ActivePokemon p) {
+		if (p.isEgg()) {
 			return "Eggs can't hold anything. They're eggs.";
 		}
 		
 		Item item = p.getActualHeldItem();
-		if (item != Item.noneItem()) 
-		{
+		if (item != Item.noneItem()) {
 			player.getBag().addItem(item);
 			p.removeItem();
 			return "Took the " + item.getName() + " from " + p.getActualName() + ".";
@@ -158,55 +84,44 @@ public class Bag implements Serializable
 		return p.getActualName() + " is not holding anything.";
 	}
 	
-	public void addItem(Item i)
-	{
+	public void addItem(Item i) {
 		addItem(i, 1);
 	}
 	
-	public void addItem(Item i, int amt)
-	{
+	public void addItem(Item i, int amt) {
 		// Increment the items by the amount
-		if (items.containsKey(i)) 
-		{
+		if (items.containsKey(i)) {
 			items.put(i, items.get(i) + amt);
 		}
-		else 
-		{
+		else {
 			items.put(i, amt);
 		}
 		
 		// Update lists
-		for (Set<Item> set : getAllCategorySets(i)) 
-		{
+		for (Set<Item> set : getAllCategorySets(i)) {
 			set.add(i);
 		}
 	}
-	
-	private List<Set<Item>> getAllCategorySets(Item i)
-	{
-		List<Set<Item>> res = new ArrayList<Set<Item>>();
-		res.add(bag.get(i.cat));
-		for (BattleBagCategory c : i.bcat) 
-		{
-			res.add(battleBag.get(c));
+
+	private List<Set<Item>> getAllCategorySets(Item item) {
+		List<Set<Item>> categories = new ArrayList<>();
+		categories.add(bag.get(item.getBagCategory()));
+		for (BattleBagCategory battleBagCategory : item.getBattleBagCategories()) {
+			categories.add(battleBag.get(battleBagCategory));
 		}
-		
-		return res;
+
+		return categories;
 	}
 	
-	private void removeItem(Item i)
-	{
+	private void removeItem(Item item) {
 		// Trying to remove nonexistent items -- bad news
-		if (!items.containsKey(i) || items.get(i) <= 0)
-		{
-			Global.error("You can't remove an item you don't have! (" + i.getName() + ")");
+		if (!items.containsKey(item) || items.get(item) <= 0) {
+			Global.error("You can't remove an item you don't have! (" + item.getName() + ")");
 		}
 		
 		// Don't decrement for TMs or KeyItems
-		if (!i.hasQuantity())
-		{
-			if (items.get(i) != 1)
-			{
+		if (!item.hasQuantity()) {
+			if (items.get(item) != 1) {
 				Global.error("Must only have exactly quantity per TM/KeyItem");
 			}
 			
@@ -214,27 +129,35 @@ public class Bag implements Serializable
 		}
 		
 		// All other items -- decrement by one and remove from sets
-		items.put(i, items.get(i) - 1);
+		items.put(item, items.get(item) - 1);
 
-		if (items.get(i) == 0)
-		{
-			for (Set<Item> set : getAllCategorySets(i))
-			{			
-				set.remove(i);
+		if (items.get(item) == 0) {
+			for (Set<Item> set : getAllCategorySets(item)) {
+				set.remove(item);
 			}			
 		}
 
 	}
 	
-	public boolean useItem(Item i, Trainer t)
-	{
-		if (items.get(i) <= 0) 
-		{
+	public boolean useItem(Item item, Trainer trainer) {
+		if (items.get(item) <= 0) {
+			Global.error("You can't use that item (" + item.getName() + ") as you do not have no more.");
+		}
+		
+		if (item instanceof TrainerUseItem && ((TrainerUseItem)item).use(trainer)) {
+			removeItem(item);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean useItem(CharacterData player, Item i, ActivePokemon p) {
+		if (items.get(i) <= 0) {
 			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
 		}
 		
-		if (i instanceof TrainerUseItem && ((TrainerUseItem)i).use(t))
-		{
+		if (i instanceof PokemonUseItem && ((PokemonUseItem)i).use(player, p)) {
 			removeItem(i);
 			return true;
 		}
@@ -242,15 +165,12 @@ public class Bag implements Serializable
 		return false;
 	}
 	
-	public boolean useItem(CharacterData player, Item i, ActivePokemon p)
-	{
-		if (items.get(i) <= 0)
-		{
+	public boolean useMoveItem(Item i, ActivePokemon p, Move m) {
+		if (items.get(i) <= 0) {
 			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
 		}
 		
-		if (i instanceof PokemonUseItem && ((PokemonUseItem)i).use(player, p))
-		{
+		if (i instanceof MoveUseItem && ((MoveUseItem)i).use(p, m)) {
 			removeItem(i);
 			return true;
 		}
@@ -258,98 +178,80 @@ public class Bag implements Serializable
 		return false;
 	}
 	
-	public boolean useMoveItem(Item i, ActivePokemon p, Move m)
-	{
-		if (items.get(i) <= 0) 
-		{
-			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
+	public boolean battleUseItem(Item item, ActivePokemon activePokemon, Battle battle) {
+		if (items.get(item) <= 0) {
+			Global.error("You can't use that item (" + item.getName() + ") as you do not have no more.");
 		}
 		
-		if (i instanceof MoveUseItem && ((MoveUseItem)i).use(p, m)) 
-		{
-			removeItem(i);
-			return true;
+		final boolean res;
+		if (item instanceof BattleUseItem && battle != null)  {
+			res = ((BattleUseItem) item).use(activePokemon, battle);
 		}
-		
-		return false;
-	}
-	
-	public boolean battleUseItem(Item i, ActivePokemon p, Battle b)
-	{
-		if (items.get(i) <= 0) 
-		{
-			Global.error("You can't use that item (" + i.getName() + ") as you do not have no more.");
-		}
-		
-		boolean res = false;
-		
-		if (i instanceof BattleUseItem && b != null) 
-			res |= ((BattleUseItem)i).use(p, b);
-		else if (i instanceof PokemonUseItem)
-		{
+		else if (item instanceof PokemonUseItem) {
 			System.err.println("PokemonUseItem called from Bag.battleUseItem() instead of BattleUseItem.");
-			res |= ((PokemonUseItem)i).use(b.getPlayer(), p);
+			res = ((PokemonUseItem) item).use(battle.getPlayer(), activePokemon);
 		}
-		else if (i instanceof BallItem)
-			res |= b.getPlayer().catchPokemon(b, (BallItem)i);
-		
-		if (res)
-		{
-			if (i instanceof UseItem)
-			{
-				boolean front = b.getPlayer().front() == p;
+		else if (item instanceof BallItem) {
+			res = battle.getPlayer().catchPokemon(battle, (BallItem) item);
+		} else {
+			res = false;
+		}
+
+		if (res) {
+			if (item instanceof UseItem) {
+				boolean front = battle.getPlayer().front() == activePokemon;
 				
-				b.addMessage(((Trainer)b.getTrainer(p.user())).getName() + " used " + i.name + "!");
-				b.addMessage(((UseItem)i).getSuccessMessage(p));
+				battle.addMessage(((Trainer)battle.getTrainer(activePokemon.user())).getName() + " used " + item.name + "!");
+				battle.addMessage(((UseItem)item).getSuccessMessage(activePokemon));
 				
-				if (front) b.addMessage("", p);
+				if (front) {
+					battle.addMessage("", activePokemon);
+				}
 			}
 			
-			if (items.get(i) > 1) lastUsedItem = i;
-			else lastUsedItem = Item.noneItem();
+			if (items.get(item) > 1) {
+				lastUsedItem = item;
+			}
+			else {
+				lastUsedItem = Item.noneItem();
+			}
 			
-			removeItem(i);
+			removeItem(item);
 		}
-		else if (i instanceof UseItem) b.addMessage("It won't have any effect.");
+		else if (item instanceof UseItem) {
+			battle.addMessage("It won't have any effect.");
+		}
 
 		return res;
 	}
 	
-	public Set<Item> getCategory(BagCategory bc)
-	{		
+	public Set<Item> getCategory(BagCategory bc) {
 		return bag.get(bc);
 	}
 	
-	public Set<Item> getCategory(BattleBagCategory bc)
-	{
+	public Set<Item> getCategory(BattleBagCategory bc) {
 		return battleBag.get(bc);
 	}
 	
-	public Item getLastUsedItem()
-	{
+	public Item getLastUsedItem() {
 		return lastUsedItem;
 	}
 	
-	public int getQuantity(Item i)
-	{
-		if (items.containsKey(i)) 
-		{
-			return items.get(i);
+	public int getQuantity(Item item) {
+		if (items.containsKey(item)) {
+			return items.get(item);
 		}
 		
 		return 0;
 	}
 	
-	public String toString()
-	{
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (BagCategory bc : BagCategory.values()) 
-		{
-			sb.append(bc.name);
+		for (BagCategory bc : BagCategory.values()) {
+			sb.append(bc.getName());
 			sb.append("\n");
 			
-			for (Item i : items.keySet())
-			{
+			for (Item i : items.keySet()) {
 				sb.append('\t');
 				sb.append(i.getName());
 				sb.append('\n');

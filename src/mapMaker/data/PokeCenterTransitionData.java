@@ -40,7 +40,7 @@ public class PokeCenterTransitionData {
 		
 		pokeCenterTransitionFile = new File(mapMaker.root.getPath() + MapMaker.FILE_SLASH + pokeCenterTransitionTriggersFile);
 		
-		String fileText = FileIO.readEntireFile(pokeCenterTransitionFile, false);
+		String fileText = FileIO.readEntireFileWithReplacements(pokeCenterTransitionFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
 		while (m.find())
 		{

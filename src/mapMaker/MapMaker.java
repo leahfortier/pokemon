@@ -710,7 +710,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		
 		if (areaIndexFile.exists()) 
 		{	
-			String fileText = FileIO.readEntireFile(areaIndexFile, false);
+			String fileText = FileIO.readEntireFileWithReplacements(areaIndexFile, false);
 			Matcher m = mapAreaPattern.matcher(fileText);
 			
 			while (m.find())

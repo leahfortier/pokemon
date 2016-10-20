@@ -1,4 +1,4 @@
-package battle.effect;
+package battle.effect.attack;
 
 import battle.Battle;
 import pokemon.ActivePokemon;

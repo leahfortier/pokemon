@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import battle.MoveCategory;
 import main.Namesies.NamesiesType;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import util.FileIO;
 import battle.Attack;
-import battle.Attack.Category;
 
 public class TeamPlanner
 {
@@ -311,7 +311,7 @@ public class TeamPlanner
 		{
 			for (Attack attack : member.moveList)
 			{
-				if (attack.getCategory() != Category.STATUS)
+				if (attack.getCategory() != MoveCategory.STATUS)
 				{
 					Type attackType = attack.getActualType();
 					coverage[attackType.getIndex()].moves.add(member.pokemonSpecies.getName() + " - " + attack.getName());

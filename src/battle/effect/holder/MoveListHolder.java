@@ -1,9 +1,8 @@
-package battle.effect;
+package battle.effect.holder;
 
 import pokemon.ActivePokemon;
 import battle.Move;
 
-public interface MoveListCondition 
-{
+public interface MoveListHolder {
 	public Move[] getMoveList(ActivePokemon p, Move[] moves);
 }

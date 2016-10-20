@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import battle.MoveType;
 import pokemon.ActivePokemon;
-import battle.Attack.MoveType;
 import battle.Battle;
 import battle.effect.AdvantageChanger;
 import battle.effect.AdvantageMultiplier;
@@ -54,10 +54,8 @@ public enum Type implements Serializable
 		{1, .5,  1,  1,  1,  1,  2, .5,  1,  1,  1,  1,  1,  1,  2,  2, .5,  1, 1}, // Fairy
 		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1}}; // No Type
 
-	public static boolean blockAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
-	{
-		if (defending.isType(b, Type.GRASS) && attacking.getAttack().isMoveType(MoveType.POWDER))
-		{
+	public static boolean blockAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+		if (defending.isType(b, Type.GRASS) && attacking.getAttack().isMoveType(MoveType.POWDER)) {
 			b.addMessage(defending.getName() + " is immune to Powder moves!");
 			return true;
 		}
@@ -65,8 +63,7 @@ public enum Type implements Serializable
 		return false;
 	}
 	
-	public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b)
-	{
+	public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b) {
 		Type moveType = attacking.getAttackType(); 
 		
 		// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes 
@@ -79,19 +76,15 @@ public enum Type implements Serializable
 		Type[] defendingType = (Type[])Battle.updateInvoke(1, invokees.toArray(), AdvantageChanger.class, "getAdvantageChange", moveType, originalType.clone());
 		
 		// If nothing was updated, do special case check stupid things for fucking levitation which fucks everything up
-		if (defendingType[0] == originalType[0] && defendingType[1] == originalType[1] && moveType == GROUND)
-		{
+		if (defendingType[0] == originalType[0] && defendingType[1] == originalType[1] && moveType == GROUND) {
 			// Pokemon that are levitating cannot be hit by ground type moves
-			if (defending.isLevitating(b)) 
-			{
+			if (defending.isLevitating(b)) {
 				return 0;
 			}
 			
 			// If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
-			for (int i = 0; i < 2; i++)
-			{
-				if (defendingType[i] == FLYING)
-				{
+			for (int i = 0; i < 2; i++) {
+				if (defendingType[i] == FLYING) {
 					defendingType[i] = NONE;
 				}
 			}
@@ -104,25 +97,21 @@ public enum Type implements Serializable
 		return adv;
 	}
 	
-	public static double getBasicAdvantage(Type attacking, ActivePokemon defending, Battle b)
-	{
+	public static double getBasicAdvantage(Type attacking, ActivePokemon defending, Battle b) {
 		Type[] defendingType = defending.getType(b);
 		return getBasicAdvantage(attacking, defendingType[0])*getBasicAdvantage(attacking, defendingType[1]);
 	}
 	
-	public static double getBasicAdvantage(Type attacking, Type defending)
-	{
+	public static double getBasicAdvantage(Type attacking, Type defending) {
 		return typeAdvantage[attacking.index][defending.index];
 	}
 	
-	public static double getSTAB(Battle b, ActivePokemon p)
-	{
+	public static double getSTAB(Battle b, ActivePokemon p) {
 		Type[] pokemonType = p.getType(b);
 		Type attackType = p.getAttackType();
 		
 		// Same type -- STAB
-		if (pokemonType[0] == attackType || pokemonType[1] == attackType)
-		{
+		if (pokemonType[0] == attackType || pokemonType[1] == attackType) {
 			// The adaptability ability increases stab
 			return p.hasAbility(Namesies.ADAPTABILITY_ABILITY) ? 2 : 1.5;
 		}
@@ -136,65 +125,56 @@ public enum Type implements Serializable
 	private int hiddenIndex;
 	private int imageIndex;
 
-	private Type(int i, String n, Color c, int h, int img)
-	{
-		index = i;
-		name = n;
-		color = c;
-		hiddenIndex = h;
-		imageIndex = img;
+	Type(int index, String name, Color color, int hiddenIndex, int imageIndex) {
+		this.index = index;
+		this.name = name;
+		this.color = color;
+		this.hiddenIndex = hiddenIndex;
+		this.imageIndex = imageIndex;
 	}
 
-	public int getIndex()
-	{
-		return index;
+	public int getIndex() {
+		return this.index;
 	}
 
-	public String getName()
-	{
-		return name;
+	public String getName() {
+		return this.name;
 	}
 
-	public Color getColor()
-	{
-		return color;
+	public Color getColor() {
+		return this.color;
 	}
 	
-	public int getImageIndex()
-	{
-		return imageIndex;
+	public int getImageIndex() {
+		return this.imageIndex;
 	}
 
-	public Color getTextColor()
-	{
-		if (this == NORMAL)
-		{
+	public Color getTextColor() {
+		if (this == NORMAL) {
 			return new Color(180, 180, 200);
 		} 
-		else if (this == STEEL)
-		{
+		else if (this == STEEL) {
 			return new Color(160, 160, 170);
 		}
 		
 		return color;
 	}
 	
-	public static Color[] getColors(Type[] t)
-	{
+	public static Color[] getColors(Type[] t) {
 		return new Color[] {t[0].getColor(), t[t[1] == Type.NONE ? 0 : 1].getColor()};
 	}
 	
-	public static Color[] getColors(ActivePokemon p)
-	{
+	public static Color[] getColors(ActivePokemon p) {
 		return getColors(p.isEgg() ? new Type[] { Type.NORMAL, Type.NONE} : p.getActualType());
 	}
 	
-	public static Type getHiddenType(int hiddenIndex)
-	{
-		for (Type t : values())
-			if (t.hiddenIndex == hiddenIndex) 
+	public static Type getHiddenType(int hiddenIndex) {
+		for (Type t : values()) {
+			if (t.hiddenIndex == hiddenIndex) {
 				return t;
-		
+			}
+		}
+
 		Global.error("Invalid hidden type index " + hiddenIndex);
 		return null;
 	}

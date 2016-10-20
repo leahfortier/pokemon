@@ -9,8 +9,7 @@ import javax.swing.JOptionPane;
 import sound.SoundPlayer;
 
 // Loads and maintains game data.
-public class Global
-{
+public class Global {
 	// Title of the window
 	public static final String TITLE = "Pok\u00e9mon++";
 
@@ -33,26 +32,22 @@ public class Global
 	
 	public static SoundPlayer soundPlayer = new SoundPlayer();
 
-	public static <T> void swap(T[] arr)
-	{
+	public static <T> void swap(T[] arr) {
 		T temp = arr[0];
 		arr[0] = arr[1];
 		arr[1] = temp;
 	}
 
-	public static void error(String errorMessage)
-	{
+	public static void error(String errorMessage) {
 		JOptionPane.showMessageDialog(null, "Eggs aren't supposed to be green.", "ERROR", JOptionPane.ERROR_MESSAGE);
 		Thread.dumpStack();
 		System.err.println(errorMessage);
 		System.exit(1);
 	}
 
-	public static int getPercentageIndex(int[] chances)
-	{
+	public static int getPercentageIndex(int[] chances) {
 		int sum = 0, random = (int) (Math.random() * 100);
-		for (int i = 0; i < chances.length; i++)
-		{
+		for (int i = 0; i < chances.length; i++) {
 			sum += chances[i];
 			if (random < sum) return i;
 		}
@@ -61,47 +56,37 @@ public class Global
 		return -1;
 	}
 	
-	private static Class<?>[] getParameterTypes(Object[] parameterValues)
-	{
+	private static Class<?>[] getParameterTypes(Object[] parameterValues) {
 		Class<?>[] parameterTypes = new Class<?>[parameterValues.length];
-		for (int i = 0; i < parameterValues.length; i++) 
-		{
+		for (int i = 0; i < parameterValues.length; i++) {
 			parameterTypes[i] = parameterValues[i].getClass();
 		}
 		
 		return parameterTypes;
 	}
 	
-	public static Object dynamicMethodInvoke(Class<?> className, String methodName, Object invokee, Object... parameterValues) 
-	{
+	public static Object dynamicMethodInvoke(Class<?> className, String methodName, Object invokee, Object... parameterValues) {
 		Class<?>[] parameterTypes = getParameterTypes(parameterValues);
 		
 		// YEAH TRY CATCH BLOCKS ARE THE GREATEST
-		try 
-		{
+		try {
 			// Create and invoke the method -- THIS IS SO COOL THANK YOU MARCOD OF THE SEA
 			Method method = className.getMethod(methodName, parameterTypes);
-			Object methodReturn = method.invoke(invokee, parameterValues);
-			
-			return methodReturn;
+			return method.invoke(invokee, parameterValues);
 		}
 		// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
-		catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
-		{
+		catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			Global.error("No such method " + methodName + " in class " + className.getName() + " or could not invoke such method.");
 			return null;
 		}
 	}
 	
 	// Dynamic instantiation from the class name as a string
-	public static Object dynamicInstantiaton(String className, Object... parameterValues) 
-	{
-		try
-		{
+	public static Object dynamicInstantiaton(String className, Object... parameterValues) {
+		try {
 			return dynamicInstantiaton(Class.forName(className), parameterValues);
 		}
-		catch (ClassNotFoundException e)
-		{
+		catch (ClassNotFoundException e) {
 			Global.error("Invalid class name " + className + ". Could not instantiate.");
 			return null;
 		}
@@ -113,12 +98,10 @@ public class Global
 		// Get the parameter types
 		Class<?>[] parameterTypes = getParameterTypes(parameterValues);
 		
-		try
-		{
+		try {
 			return className.getConstructor(parameterTypes).newInstance(parameterValues);
 		}
-		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e)
-		{
+		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			Global.error("Could not instantiate class " + className + ".");
 			return null;
 		}

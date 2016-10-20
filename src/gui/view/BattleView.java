@@ -4,7 +4,7 @@ import gui.Button;
 import gui.GameData;
 import gui.TileSet;
 import item.Bag;
-import item.Bag.BattleBagCategory;
+import item.BattleBagCategory;
 import item.Item;
 import item.use.PokemonUseItem;
 
@@ -41,7 +41,7 @@ import battle.Battle;
 import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
 import battle.Move;
-import battle.effect.Status.StatusCondition;
+import battle.effect.generic.Status.StatusCondition;
 
 public class BattleView extends View 
 {
@@ -52,12 +52,12 @@ public class BattleView extends View
 	private static final int RUN_BUTTON = 3;
 	
 	// Battle Bag Categories
-	private static final BattleBagCategory[] bagCategories = BattleBagCategory.values();
+	private static final BattleBagCategory[] BATTLE_BAG_CATEGORIES = BattleBagCategory.values();
 	
 	// Bag Button Indexes
-	private static final int ITEMS = bagCategories.length;
+	private static final int ITEMS = BATTLE_BAG_CATEGORIES.length;
 	private static final int ITEMS_PER_PAGE = 10;
-	private static final int NUM_BAG_BUTTONS = bagCategories.length + ITEMS_PER_PAGE + 3;
+	private static final int NUM_BAG_BUTTONS = BATTLE_BAG_CATEGORIES.length + ITEMS_PER_PAGE + 3;
 	private static final int LAST_ITEM_BUTTON = NUM_BAG_BUTTONS - 1;
 	private static final int BAG_RIGHT_BUTTON = NUM_BAG_BUTTONS - 2;
 	private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
@@ -197,13 +197,13 @@ public class BattleView extends View
 		// Bag View Buttons 
 		bagButtons = new Button[NUM_BAG_BUTTONS];
 		
-		bagTabButtons = new Button[bagCategories.length];
-		for (int i = 0; i < bagCategories.length; i++)
+		bagTabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
+		for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++)
 		{
 			bagButtons[i] = bagTabButtons[i] = new Button(i*89 + 30, 190, 89, 28, Button.HoverAction.BOX, 
-					new int[] { (i + 1)%bagCategories.length, // Right
+					new int[] { (i + 1)% BATTLE_BAG_CATEGORIES.length, // Right
 								LAST_ITEM_BUTTON, // Up
-								(i - 1 + bagCategories.length)%bagCategories.length, // Left
+								(i - 1 + BATTLE_BAG_CATEGORIES.length)% BATTLE_BAG_CATEGORIES.length, // Left
 								ITEMS }); // Down
 		}
 		
@@ -247,7 +247,7 @@ public class BattleView extends View
 	}
 	
 	// Contains the different types of states a battle can be in
-	public static enum VisualState
+	public enum VisualState
 	{
 		MESSAGE(updateMessage),
 		BAG(updateBag), 
@@ -877,7 +877,7 @@ public class BattleView extends View
 	private static VisualState.UpdateVisualState updateBag = new VisualState.UpdateVisualState() {
 
 		public void set(BattleView view) {
-			int pageSize = view.currentBattle.getPlayer().getBag().getCategory(bagCategories[view.selectedBagTab]).size();
+			int pageSize = view.currentBattle.getPlayer().getBag().getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]).size();
 			
 			for (int i = 0; i < ITEMS_PER_PAGE; i++)
 				view.bagButtons[ITEMS + i].setActive(i < pageSize - view.bagPage*ITEMS_PER_PAGE);
@@ -891,13 +891,13 @@ public class BattleView extends View
 
 		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x10), 0, 160, null);
-			g.drawImage(tiles.getTile(bagCategories[view.selectedBagTab].getImageNumber()), 30, 190, null);
-			g.drawImage(tiles.getTile(bagCategories[view.selectedBagTab].getImageNumber() - 4), 30, 492, null);
+			g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[view.selectedBagTab].getImageNumber()), 30, 190, null);
+			g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[view.selectedBagTab].getImageNumber() - 4), 30, 492, null);
 			g.drawImage(tiles.getTile(0x20), 415, 440, null);
 			
 			Bag bag = view.currentBattle.getPlayer().getBag();
 			
-			Set<Item> toDraw = bag.getCategory(bagCategories[view.selectedBagTab]);
+			Set<Item> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
 			TileSet itemTiles = data.getItemTiles();
 
 			DrawMetrics.setFont(g, 12);
@@ -916,7 +916,7 @@ public class BattleView extends View
 					
 					// Draw item image
 					Item i = iter.next();
-					BufferedImage img = itemTiles.getTile(i.getIndex());
+					BufferedImage img = itemTiles.getTile(i.getImageIndex());
 					DrawMetrics.drawCenteredImage(g, img, 14, 14);
 
 					// Item name
@@ -944,7 +944,7 @@ public class BattleView extends View
 				DrawMetrics.setFont(g, 12);
 				g.drawImage(tiles.getTile(0x11), 0, 0, null);
 				
-				BufferedImage img = itemTiles.getTile(lastUsedItem.getIndex());
+				BufferedImage img = itemTiles.getTile(lastUsedItem.getImageIndex());
 				DrawMetrics.drawCenteredImage(g, img, 14, 14);
 
 				g.drawString(lastUsedItem.getName(), 28, 19);
@@ -975,7 +975,7 @@ public class BattleView extends View
 			view.backButton.update(input, false, Control.BACK);
 			
 			// Check tabs
-			for (int i = 0; i < bagCategories.length; i++)
+			for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++)
 			{
 				if (view.bagTabButtons[i].checkConsumePress())
 				{
@@ -987,7 +987,7 @@ public class BattleView extends View
 			
 			CharacterData player = view.currentBattle.getPlayer();
 			Bag bag = player.getBag();
-			Set<Item> toDraw = bag.getCategory(bagCategories[view.selectedBagTab]);
+			Set<Item> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
 			Iterator<Item> iter = toDraw.iterator();
 			
 			// Skip ahead to the current page

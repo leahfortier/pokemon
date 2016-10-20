@@ -6,24 +6,22 @@ import java.util.Map;
 import java.util.Scanner;
 
 import battle.Battle;
-import battle.effect.Effect;
-import battle.effect.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.Effect;
 import main.Global;
 import pokemon.ActivePokemon;
 import util.FileIO;
 
-public class InterfaceGen {
+class InterfaceGen {
 	
 	private static final String INTERFACE_INPUT = "interfaces.txt";
 	private static final String INTERFACE_PATH = FileIO.makePath("src", "battle", "effect") + "EffectInterfaces.java";
 	
-	public InterfaceGen() {
+	InterfaceGen() {
 		gen();
 		System.out.println("Interfaces generated");
 	}
 	
-	private static void gen()
-	{
+	private static void gen() {
 		final Scanner in = FileIO.openFile(INTERFACE_INPUT);
 		final StringBuilder out = StuffGen.startGen(INTERFACE_PATH);
 		
@@ -56,7 +54,7 @@ public class InterfaceGen {
 		private String headerComments;
 		private List<InterfaceMethod> methods;
 		
-		public Interface(final Scanner in, final String interfaceName) {
+		Interface(final Scanner in, final String interfaceName) {
 			this.interfaceName = interfaceName;
 			
 			this.headerComments = "";
@@ -102,15 +100,15 @@ public class InterfaceGen {
 		}
 		
 		// This is used when the user applies direct damage to an opponent, and has special effects associated
-		public interface ApplyDamageEffect  
+		interface ApplyDamageEffect
 		{
 			// b: The current battle
 			// user: The user of that attack, the one who is probably implementing this effect
 			// victim: The Pokemon that received the attack
 			// damage: The amount of damage that was dealt to victim by the user
-			public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage);
+			void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage);
 			
-			public static void performApplyDamageEffect(List<Object> invokees, Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
+			static void performApplyDamageEffect(List<Object> invokees, Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
 				
 				for (Object invokee : invokees) {
 					if (invokee instanceof ApplyDamageEffect) {
@@ -125,7 +123,7 @@ public class InterfaceGen {
 			}
 		}
 		
-		public String writeInterface() {
+		String writeInterface() {
 			
 			final String className = this.interfaceName;
 			final String superClass = null;
@@ -161,7 +159,7 @@ public class InterfaceGen {
 		private String comments;
 		private List<InvokeMethod> invokeMethods;
 		
-		public InterfaceMethod(final String methodName, Map<String, String> fields) {
+		InterfaceMethod(final String methodName, Map<String, String> fields) {
 			this.methodName = methodName;
 			
 			this.header = null;
@@ -204,7 +202,7 @@ public class InterfaceGen {
 	
 	private static abstract class InvokeMethod {
 		
-		public static enum InvokeType {
+		static enum InvokeType {
 			VOID("Void", new GetInvokeMethod() {
 				public InvokeMethod getInvokeMethod(final String value) {
 					return new VoidInvoke(value);
@@ -213,13 +211,13 @@ public class InterfaceGen {
 			private final String name;
 			private final GetInvokeMethod getInvokeMethod;
 			
-			private InvokeType(final String name, final GetInvokeMethod getInvokeMethod) {
+			InvokeType(final String name, final GetInvokeMethod getInvokeMethod) {
 				this.name = name;
 				this.getInvokeMethod = getInvokeMethod;
 			}
 			
-			private static interface GetInvokeMethod {
-				public InvokeMethod getInvokeMethod(final String value);
+			private interface GetInvokeMethod {
+				InvokeMethod getInvokeMethod(final String value);
 			}
 			
 			public InvokeMethod getInvokeMethod(String value) {
@@ -227,12 +225,12 @@ public class InterfaceGen {
 			}
 		}
 		
-		public static class VoidInvoke extends InvokeMethod {
+		static class VoidInvoke extends InvokeMethod {
 			
 			private final boolean moldBreaker;
 			private final boolean deadsies;
 			
-			public VoidInvoke(final String value) {
+			VoidInvoke(final String value) {
 				final Scanner in = new Scanner(value);
 				
 				this.moldBreaker = in.nextBoolean();

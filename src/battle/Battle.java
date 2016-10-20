@@ -19,29 +19,27 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
-import battle.Attack.Category;
-import battle.Attack.MoveType;
 import battle.MessageUpdate.Update;
 import battle.effect.AccuracyBypassEffect;
-import battle.effect.BattleEffect;
+import battle.effect.generic.BattleEffect;
 import battle.effect.BeforeTurnEffect;
-import battle.effect.CrashDamageMove;
+import battle.effect.attack.CrashDamageMove;
 import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
-import battle.effect.Effect;
+import battle.effect.generic.Effect;
 import battle.effect.EndTurnEffect;
 import battle.effect.EntryEffect;
-import battle.effect.MultiTurnMove;
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.NameChanger;
 import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentPowerChangeEffect;
-import battle.effect.PokemonEffect;
+import battle.effect.generic.PokemonEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.PriorityChangeEffect;
-import battle.effect.TeamEffect;
-import battle.effect.Weather;
+import battle.effect.generic.TeamEffect;
+import battle.effect.generic.Weather;
 
 public class Battle 
 {
@@ -62,7 +60,7 @@ public class Battle
 	{
 		player = p;
 		opponent = o;
-		effects = new ArrayList<BattleEffect>();
+		effects = new ArrayList<>();
 		player.resetEffects();
 		opponent.resetEffects();
 		turn = 0;
@@ -144,13 +142,11 @@ public class Battle
 	}
 	
 	// Just a plain old regular message
-	public void addMessage(String message)
-	{
+	public void addMessage(String message) {
 		messages.add(new MessageUpdate(message));
 	}
 	
-	public void addMessage(String message, ActivePokemon p)
-	{
+	public void addMessage(String message, ActivePokemon p) {
 		messages.add(new MessageUpdate(message));
 		
 		messages.add(new MessageUpdate(p.getHP(), p.user()));
@@ -160,64 +156,67 @@ public class Battle
 		messages.add(new MessageUpdate(p.getName(), p.user()));
 		messages.add(new MessageUpdate(p.getGender(), p.user()));
 	}
-	
-	public void addMessage(String message, ActivePokemon p, boolean switching)
-	{
+
+	// TODO: What is the point of switching?
+	public void addMessage(String message, ActivePokemon p, boolean switching) {
 		messages.add(new MessageUpdate(message, p, this));
 	}
 	
-	public void addMessage(String message, ActivePokemon gainer, int[] statGains, int[] stats)
-	{
+	public void addMessage(String message, ActivePokemon gainer, int[] statGains, int[] stats) {
 		this.addMessage("", gainer);
 		messages.add(new MessageUpdate(statGains, stats));
 	}
 	
 	// Image update
-	public void addMessage(String message, PokemonInfo pokemon, boolean shiny, boolean animation, boolean target)
-	{
+	public void addMessage(String message, PokemonInfo pokemon, boolean shiny, boolean animation, boolean target) {
 		messages.add(new MessageUpdate(message, pokemon, shiny, animation, target));
 	}
 	
-	public void addMessage(String message, Update update)
-	{
+	public void addMessage(String message, Update update) {
 		messages.add(new MessageUpdate(message, update));
 	}
 	
-	public void addMessage(String message, int duration)
-	{
+	public void addMessage(String message, int duration) {
 		messages.add(new MessageUpdate(message, duration));
 	}
 	
-	public void addMessage(String message, ActivePokemon gainer, float expRatio, boolean levelUp)
-	{
+	public void addMessage(String message, ActivePokemon gainer, float expRatio, boolean levelUp) {
 		this.addMessage(message, gainer);
 		messages.add(new MessageUpdate(gainer.getLevel(), expRatio, levelUp));
 	}
 	
 	// Learning a move
-	public void addMessage(String message, ActivePokemon p, Move move)
-	{
+	public void addMessage(String message, ActivePokemon p, Move move) {
 		messages.add(new MessageUpdate(message, p, move));
 	}
 	
-	public boolean hasEffect(Namesies effect)
-	{
+	public boolean hasEffect(Namesies effect) {
 		return Effect.hasEffect(effects, effect);
 	}
 	
-	public void fight()
-	{
+	public void fight() {
 		startTurn();
 
 		boolean playerFirst = speedPriority(player.front(), opponent.front());
-		
+
+		final ActivePokemon attackFirst;
+		final ActivePokemon attackSecond;
+
+		if (playerFirst) {
+			attackFirst = player.front();
+			attackSecond = opponent.front();
+		} else {
+			attackFirst = opponent.front();
+			attackSecond = player.front();
+		}
+
+		// First turn
 		firstAttacking = true;
-		if (playerFirst) executionSolution(player.front(), opponent.front());
-		else executionSolution(opponent.front(), player.front());
-		
+		executionSolution(attackFirst, attackSecond);
+
+		// Second turn
 		firstAttacking = false;
-		if (playerFirst) executionSolution(opponent.front(), player.front());
-		else executionSolution(player.front(), opponent.front());
+		executionSolution(attackSecond, attackFirst);
 		
 		endTurn();
 		
@@ -241,8 +240,7 @@ public class Battle
 	}
 	
 	// Handles events that occur at the beginning of each turn. Returns the two Pokemon currently in battle
-	private void startTurn()
-	{
+	private void startTurn() {
 		ActivePokemon plyr = player.front(), opp = opponent.front(); 
 		opp.setMove(Move.selectOpponentMove(this, opp));
 
@@ -251,25 +249,26 @@ public class Battle
 		opp.getAttributes().resetDamageTaken();
 		
 		// Fucking focus punch
-		if (isFighting(true)) plyr.getAttack().startTurn(this, plyr);
-		if (isFighting(false)) opp.getAttack().startTurn(this, opp);
+		if (isFighting(true)) {
+			plyr.getAttack().startTurn(this, plyr);
+		}
+		if (isFighting(false)) {
+			opp.getAttack().startTurn(this, opp);
+		}
 	}
 	
-	public boolean isFirstAttack()
-	{
+	public boolean isFirstAttack() {
 		return firstAttacking;
 	}
 	
 	// If the trainer selected an attack, this will return true - Wild Pokemon will always return true
 	// It will return false if the trainer tried to run, switched Pokemon, or used an item
-	private boolean isFighting(boolean team)
-	{
+	private boolean isFighting(boolean team) {
 		Team trainer = getTrainer(team);
 		return trainer instanceof WildPokemon || ((Trainer)trainer).getAction() == Action.FIGHT;
 	}
 	
-	private void endTurn()
-	{
+	private void endTurn() {
 		// Apply Effects
 		endTurnPokemonEffects(player.front());
 		endTurnPokemonEffects(opponent.front());
@@ -287,14 +286,14 @@ public class Battle
 		decrementWeather();
 	}
 	
-	private void deadUser()
-	{
+	private void deadUser() {
 		// Front Pokemon is still functioning
-		if (!player.front().isFainted(this)) return;
+		if (!player.front().isFainted(this)) {
+			return;
+		}
 		
 		// Dead Front Pokemon, but you still have others to spare -- force a switch
-		if (!player.blackout())
-		{
+		if (!player.blackout()) {
 			addMessage("What Pokemon would you like to switch to?", Update.FORCE_SWITCH);
 			return;
 		}
@@ -303,8 +302,7 @@ public class Battle
 		addMessage(player.getName() + " is out of usable Pok\u00e9mon! " + player.getName() + " blacked out!");
 		
 		// Sucks to suck
-		if (opponent instanceof Trainer)
-		{
+		if (opponent instanceof Trainer) {
 			Trainer opp = (Trainer)opponent;
 			int cashMoney = player.sucksToSuck(opp.getDatCashMoney());
 			addMessage(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!");
@@ -315,8 +313,7 @@ public class Battle
 		addMessage(" ", Update.EXIT_BATTLE);
 	}
 	
-	private void deadOpponent()
-	{
+	private void deadOpponent() {
 		ActivePokemon dead = opponent.front();
 		
 		// YOU'RE FINE
@@ -327,8 +324,7 @@ public class Battle
 		player.gainEXP(dead, this); 
 		
 		// You have achieved total victory
-		if (opponent.blackout())
-		{
+		if (opponent.blackout()) {
 			player.winBattle(this, opponent);
 			
 			// WE'RE DONE HERE
@@ -344,13 +340,16 @@ public class Battle
 		enterBattle(opp.front());
 	}
 	
-	public void enterBattle(ActivePokemon enterer)
-	{
+	public void enterBattle(ActivePokemon enterer) {
 		Battle.invoke(this.getEffectsList(enterer), NameChanger.class, "setNameChange", this, enterer);
 		
 		String enterMessage = "";
-		if (enterer.user()) enterMessage = "Go! " + enterer.getName() + "!";
-		else if (opponent instanceof Trainer) enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
+		if (enterer.user()) {
+			enterMessage = "Go! " + enterer.getName() + "!";
+		}
+		else if (opponent instanceof Trainer) {
+			enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
+		}
 		
 		enterBattle(enterer, enterMessage, true);
 	}
@@ -360,21 +359,17 @@ public class Battle
 		enterBattle(enterer, enterMessage, true);
 	}
 	
-	public void enterBattle(ActivePokemon enterer, String enterMessage, boolean reset)
-	{
-		if (enterer.isEgg()) 
-		{
+	public void enterBattle(ActivePokemon enterer, String enterMessage, boolean reset) {
+		if (enterer.isEgg()) {
 			Global.error("Eggs can't battle!!!");
 		}
 		
 		// Document sighting in the Pokedex
-		if (!enterer.user()) 
-		{
+		if (!enterer.user()) {
 			player.getPokedex().setStatus(enterer.getPokemonInfo(), PokedexStatus.SEEN, isWildBattle() ? player.getAreaName() : "");
 		}
 		
-		if (reset) 
-		{
+		if (reset) {
 			enterer.resetAttributes();
 		}
 			
@@ -386,20 +381,17 @@ public class Battle
 		getTrainer(!enterer.user()).resetUsed();
 	}
 	
-	public boolean runAway()
-	{
+	public boolean runAway() {
 		escapeAttempts++;
 		
-		if (opponent instanceof Trainer)
-		{
+		if (opponent instanceof Trainer) {
 			addMessage("There's no running from a trainer battle!");
 			return false;
 		}
 		
 		ActivePokemon plyr = player.front(), opp = opponent.front();
 		
-		if (!plyr.canEscape(this))
-		{
+		if (!plyr.canEscape(this)) {
 			return false;
 		}
 		
@@ -409,8 +401,7 @@ public class Battle
 		int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
 		if (Math.random()*256 < val 
 				|| plyr.getAbility() instanceof DefiniteEscape 
-				|| plyr.getHeldItem(this) instanceof DefiniteEscape)
-		{
+				|| plyr.getHeldItem(this) instanceof DefiniteEscape) {
 			addMessage("Got away safely!");
 			addMessage(" ", Update.EXIT_BATTLE);
 			return true;
@@ -421,37 +412,30 @@ public class Battle
 		return false;
 	}
 
-	private void decrementEffects(List<? extends Effect> effects, ActivePokemon p)
-	{
-		for (int i = 0; i < effects.size(); i++)
-		{
+	private void decrementEffects(List<? extends Effect> effects, ActivePokemon p) {
+		for (int i = 0; i < effects.size(); i++) {
 			Effect e = effects.get(i);
 			
 			boolean inactive = !e.isActive();
-			if (!inactive)
-			{
+			if (!inactive) {
 				e.decrement(this, p);
 				inactive = !e.isActive() && !e.nextTurnSubside();  
 			}
 			
-			if (inactive)
-			{
+			if (inactive) {
 				effects.remove(i--);
 				e.subside(this, p);
 				
 				// I think this is pretty much just for Future Sight...
-				if (p != null && p.isFainted(this))
-				{
+				if (p != null && p.isFainted(this)) {
 					return;
 				}
 			}
 		}
 	}
 	
-	private void decrementWeather()
-	{
-		if (!weather.isActive())
-		{
+	private void decrementWeather() {
+		if (!weather.isActive()) {
 			addMessage(weather.getSubsideMessage(player.front()));
 			weather = Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT);
 			return;
@@ -461,8 +445,7 @@ public class Battle
 		weather.decrement(this, player.front());
 	}
 	
-	private void endTurnPokemonEffects(ActivePokemon me)
-	{
+	private void endTurnPokemonEffects(ActivePokemon me) {
 		// Effects that need to be checked
 		List<Object> list = new ArrayList<>();
 		list.addAll(me.getEffects());
@@ -480,11 +463,9 @@ public class Battle
 		me.getAttributes().setFirstTurn(false);
 	}
 	
-	private void executionSolution(ActivePokemon me, ActivePokemon o)
-	{
+	private void executionSolution(ActivePokemon me, ActivePokemon o) {
 		// Don't do anything if they're not actually attacking
-		if (!isFighting(me.user()))
-		{
+		if (!isFighting(me.user())) {
 			return;
 		}
 
@@ -494,19 +475,16 @@ public class Battle
 		me.startAttack(this, o);
 		
 		// HOLD IT RIGHT THERE! YOU MAY NOT BE ABLE TO ATTACK!
-		if (ableToAttack(me, o))
-		{
+		if (ableToAttack(me, o)) {
 			// Made it, suckah!
 			printAttacking(me);
 			
 			// Check if the move actually hits!
-			if (accuracyCheck(me, o))
-			{
+			if (accuracyCheck(me, o)) {
 				executeAttack(me, o);
 				success = true;
 			}
-			else
-			{
+			else {
 				addMessage(me.getName() + "'s attack missed!");
 				Battle.invoke(new Object[] {me.getAttack()}, CrashDamageMove.class, "crash", this, me);
 			}			
@@ -515,42 +493,39 @@ public class Battle
 		me.endAttack(this, o, success, reduce);
 	}
 	
-	public void printAttacking(ActivePokemon p)
-	{
+	public void printAttacking(ActivePokemon p) {
 		addMessage((p.user() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
 		reduce = true;
 	}
 	
-	private void executeAttack(ActivePokemon me, ActivePokemon o)
-	{
+	private void executeAttack(ActivePokemon me, ActivePokemon o) {
 		me.getAttributes().count();
 		me.getAttack().apply(me, o, this);
 		me.getMove().use();
 		me.getAttributes().decay();
 	}
 	
-	public void addEffect(BattleEffect e)
-	{
-		if (e instanceof Weather) weather = (Weather)e; 
-		else effects.add(e);
+	public void addEffect(BattleEffect effect) {
+		if (effect instanceof Weather) {
+			weather = (Weather)effect;
+		}
+		else {
+			effects.add(effect);
+		}
 	}
 	
-	public List<BattleEffect> getEffects()
-	{
+	public List<BattleEffect> getEffects() {
 		return effects;
 	}	
 	
-	public List<TeamEffect> getEffects(boolean team)
-	{
+	public List<TeamEffect> getEffects(boolean team) {
 		return team ? player.getEffects() : opponent.getEffects();
 	}
 	
-	public Object[] getEffectsList(ActivePokemon p, Object... additionalItems)
-	{
+	public Object[] getEffectsList(ActivePokemon p, Object... additionalItems) {
 		List<Object> list = new ArrayList<>();
 		
-		for (Object additionalItem : additionalItems)
-		{
+		for (Object additionalItem : additionalItems) {
 			list.add(additionalItem);
 		}
 		
@@ -565,36 +540,31 @@ public class Battle
 		return list.toArray();
 	}
 	
-	public Team getTrainer(boolean team)
-	{
+	public Team getTrainer(boolean team) {
 		return team ? player : opponent;
 	}
 	
 	// Returns the current Pokemon that is out on the team opposite to the one passed in
-	public ActivePokemon getOtherPokemon(boolean team)
-	{
+	public ActivePokemon getOtherPokemon(boolean team) {
 		return team ? opponent.front() : player.front();
 	}
 	
-	public boolean isWildBattle()
-	{
+	public boolean isWildBattle() {
 		return opponent instanceof WildPokemon;
 	}
 	
-	public int damageCalc(ActivePokemon me, ActivePokemon o)
-	{
+	public int calculateDamage(ActivePokemon me, ActivePokemon o) {
 		int level = me.getLevel();
 		int power = me.getAttackPower();
 		int random = (int)(Math.random()*16) + 85;
 		
-		Stat attacking, defending;
-		if (me.getAttack().getCategory() == Category.PHYSICAL)
-		{
+		final Stat attacking;
+		final Stat defending;
+		if (me.getAttack().getCategory() == MoveCategory.PHYSICAL) {
 			attacking = Stat.ATTACK;
 			defending = Stat.DEFENSE;
 		}
-		else
-		{
+		else {
 			attacking = Stat.SP_ATTACK;
 			defending = Stat.SP_DEFENSE;
 		}
@@ -615,8 +585,7 @@ public class Battle
 		return damage;
 	}
 	
-	private double getDamageModifier(ActivePokemon me, ActivePokemon o)
-	{
+	private double getDamageModifier(ActivePokemon me, ActivePokemon o) {
 		// User effects that effect user power
 		Object[] list = getEffectsList(me);
 		double modifier = Battle.multiplyInvoke(1, list, PowerChangeEffect.class, "getMultiplier", this, me, o);
@@ -629,13 +598,11 @@ public class Battle
 		return modifier;
 	}
 	
-	private static int[] critsicles = { 16, 8, 4, 3, 2 };
-	private int criticalHit(ActivePokemon me, ActivePokemon o)
-	{
+	private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
+	private int criticalHit(ActivePokemon me, ActivePokemon o) {
 		Object[] listsies = this.getEffectsList(o, me.getAttack());
 		Object blockCrits = Battle.checkInvoke(true, me, listsies, CritBlockerEffect.class, "blockCrits");
-		if (blockCrits != null)
-		{
+		if (blockCrits != null) {
 			return 1;
 		}
 		
@@ -643,16 +610,14 @@ public class Battle
 		int stage = 1;
 		listsies = this.getEffectsList(me);
 		stage = (int)Battle.updateInvoke(0, listsies, CritStageEffect.class, "increaseCritStage", stage, me);
-		stage = Math.min(stage, critsicles.length); // Max it out, yo
+		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
 		
-		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || Math.random()*critsicles[stage - 1] < 1;
+		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || Math.random()* CRITSICLES[stage - 1] < 1;
 		
 		// Crit yo pants
-		if (crit)
-		{
+		if (crit) {
 			addMessage("It's a critical hit!!");
-			if (o.hasAbility(Namesies.ANGER_POINT_ABILITY))
-			{
+			if (o.hasAbility(Namesies.ANGER_POINT_ABILITY)) {
 				addMessage(o.getName() + "'s " + Namesies.ANGER_POINT_ABILITY.getName() + " raised its attack to the max!");
 				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 			}
@@ -663,33 +628,28 @@ public class Battle
 		return 1;
 	}
 	
-	public boolean accuracyCheck(ActivePokemon me, ActivePokemon o)
-	{
+	private boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
 		// Self-Target moves don't miss
-		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == Category.STATUS) 
-		{
+		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == MoveCategory.STATUS) {
 			return true;
 		}
 		
 		// Effects that allow the user to bypass the accuracy check
 		Object[] invokees = this.getEffectsList(me, me.getAttack());
 		Object bypass = Battle.checkInvoke(true, invokees, AccuracyBypassEffect.class, "bypassAccuracy", this, me, o);
-		if (bypass != null)
-		{
+		if (bypass != null) {
 			return true;
 		}
 		
 		// Opponent effects that always allow the user to hit them
 		invokees = this.getEffectsList(o);
 		bypass = Battle.checkInvoke(true, invokees, OpponentAccuracyBypassEffect.class, "opponentBypassAccuracy", this, me, o);
-		if (bypass != null)
-		{
+		if (bypass != null) {
 			return true;
 		}
 		
 		// Semi-invulnerable target -- automatic miss (unless a previous condition was triggered)
-		if (o.isSemiInvulnerable()) 
-		{
+		if (o.isSemiInvulnerable()) {
 			return false;
 		}
 		
@@ -702,11 +662,9 @@ public class Battle
 	
 	// Returns true if the Pokemon is able to execute their turn by checking effects that have been casted upon them
 	// This is where BeforeTurnEffects are handled
-	private boolean ableToAttack(ActivePokemon p, ActivePokemon opp)
-	{
+	private boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
 		// Dead Pokemon can't attack and it's not nice to attack a deady
-		if (p.isFainted(this) || opp.isFainted(this))
-		{
+		if (p.isFainted(this) || opp.isFainted(this)) {
 			return false;
 		}
 		
@@ -715,22 +673,19 @@ public class Battle
 		
 		// False because we're checking if they 'cannot attack' from the 'canAttack' method
 		Object cannotAttack = Battle.checkInvoke(false, this, p, opp, invokees, BeforeTurnEffect.class, "canAttack", p, opp, this);
-		if (cannotAttack != null)
-		{
+		if (cannotAttack != null) {
 			return false;
 		}
 		
 		// Opponents effects that prevent you from attacking
 		invokees = getEffectsList(opp);
 		cannotAttack = Battle.checkInvoke(false, this, p, opp, p, invokees, OpponentBeforeTurnEffect.class, "opposingCanAttack", p, opp, this);
-		if (cannotAttack != null)
-		{
+		if (cannotAttack != null) {
 			return false;
 		}
 		
 		// Multi-turn Moves
-		if (!p.getMove().isReady())
-		{
+		if (!p.getMove().isReady()) {
 			((MultiTurnMove)p.getAttack()).charge(p, this);
 			return false;
 		}
@@ -740,11 +695,9 @@ public class Battle
 	}
 	
 	// Returns the priority of the current action the player is performing
-	private int getPriority(ActivePokemon p)
-	{
+	private int getPriority(ActivePokemon p) {
 		// They are attacking -- return the priority of the attack
-		if (isFighting(p.user()))
-		{
+		if (isFighting(p.user())) {
 			int priority = p.getAttack().getPriority(this, p);
 			
 			Object[] invokees = this.getEffectsList(p);
@@ -759,21 +712,18 @@ public class Battle
 	}
 	
 	// Returns true if the player will be attacking first, and false if the opponent will be 
-	private boolean speedPriority(ActivePokemon plyr, ActivePokemon opp)
-	{
+	private boolean speedPriority(ActivePokemon plyr, ActivePokemon opp) {
 		// Higher priority always goes first -- Prankster increases the priority of status moves by one
 		int pPriority = getPriority(plyr), oPriority = getPriority(opp);
 		if (pPriority != oPriority) return pPriority > oPriority;
 		
 		// Quick Claw gives holder a 20% chance of striking first within its priority bracket
 		boolean pQuick = plyr.isHoldingItem(this, Namesies.QUICK_CLAW_ITEM), oQuick = opp.isHoldingItem(this, Namesies.QUICK_CLAW_ITEM);
-		if (pQuick && !oQuick && Math.random() < .2)
-		{
+		if (pQuick && !oQuick && Math.random() < .2) {
 			addMessage(plyr.getName() + "'s " + Namesies.QUICK_CLAW_ITEM.getName() + " allowed it to strike first!");
 			return true;
 		}
-		if (oQuick && !pQuick && Math.random() < .2)
-		{
+		if (oQuick && !pQuick && Math.random() < .2) {
 			addMessage(opp.getName() + "'s " + Namesies.QUICK_CLAW_ITEM.getName() + " allowed it to strike first!");
 			return false;
 		}		
@@ -798,49 +748,39 @@ public class Battle
 		return reverse ? oSpeed > pSpeed : oSpeed < pSpeed;
 	}
 	
-	private static <T> Object invoke(double multiplyBase, int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues)
-	{
+	private static <T> Object invoke(double multiplyBase, int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues) {
 		// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
-		if (p != null && p.isFainted(b))
-		{
+		if (p != null && p.isFainted(b)) {
 			return null;
 		}
 		
-		if (opp != null && opp.isFainted(b))
-		{
+		if (opp != null && opp.isFainted(b)) {
 			return null;
 		}
 		
 		Object returnValue = null;
-		if (updateIndex != -1)
-		{
+		if (updateIndex != -1) {
 			returnValue = parameterValues[updateIndex];
 		}
-		else if (multiplyBase != -1)
-		{
+		else if (multiplyBase != -1) {
 			returnValue = multiplyBase;
 		}
 		
-		for (Object invokee : invokees)
-		{
+		for (Object invokee : invokees) {
 			// If the invokee is an instance of the class we are checking, do the things and stuff
-			if (className.isInstance(invokee))
-			{
+			if (className.isInstance(invokee)) {
 				// If this is an inactive effect, we don't want to do anything with it
-				if (Effect.isInactiveEffect(invokee)) 
-				{
+				if (Effect.isInactiveEffect(invokee)) {
 					continue;
 				}
 				
 				// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-				if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold())
-				{
+				if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold()) {
 					continue;
 				}
 				
 				// This is for the hasInvoke overload, where you're just checking if it is an instance of the interface but have no methods to call
-				if (methodName.length() == 0)
-				{
+				if (methodName.length() == 0) {
 					return invokee;
 				}
 				
@@ -848,38 +788,32 @@ public class Battle
 				Object methodReturn = Global.dynamicMethodInvoke(className, methodName, invokee, parameterValues);
 				
 				// If we're just checking for a specific boolean, we can cut out early
-				if (isCheck && (boolean)methodReturn == check)
-				{
+				if (isCheck && (boolean)methodReturn == check) {
 					return invokee;
 				}
 				
 				// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
-				if (p != null && p.isFainted(b))
-				{
+				if (p != null && p.isFainted(b)) {
 					return invokee;
 				}
 				
-				if (opp != null && opp.isFainted(b))
-				{
+				if (opp != null && opp.isFainted(b)) {
 					return invokee;
 				}
 				
 				// Not a boolean return check, but we are checking the return value -- das what we want, das what we need, das what we crave
-				if (!isCheck && check)
-				{
+				if (!isCheck && check) {
 					return methodReturn;
 				}
 				
 				// If this is an update invoke, continuously update the result
-				if (updateIndex != -1)
-				{
+				if (updateIndex != -1) {
 					parameterValues[updateIndex] = methodReturn;
 					returnValue = methodReturn;
 				}
 				
 				// If this is a multiply invoke, continuously multiply the result by the base
-				if (multiplyBase != -1)
-				{
+				if (multiplyBase != -1) {
 					multiplyBase *= (double)methodReturn;
 					returnValue = multiplyBase;
 				}
@@ -891,86 +825,72 @@ public class Battle
 	}
 	
 	// Used for calling methods that return booleans
-	public static <T> Object checkInvoke(boolean check, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> Object checkInvoke(boolean check, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans and also exit early if p or opp are fainted
-	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans where mold breaker may be a factor to check
-	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans and also exit early if p or opp are fainted
-	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, b, p, opp, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
-	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, false, true, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
-	public static <T> Object getInvoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> Object getInvoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, false, true, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want to continuously update the return value of -- it will return this value that you want so badly
-	public static <T> Object updateInvoke(int updateIndex, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> Object updateInvoke(int updateIndex, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, updateIndex, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want to continuously update the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
-	public static <T> Object updateInvoke(int updateIndex, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> Object updateInvoke(int updateIndex, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, updateIndex, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that continuously multiply the results by the base value, returns this value
-	public static <T> double multiplyInvoke(double baseValue, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> double multiplyInvoke(double baseValue, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that continuously multiply the results by the base value where mold breaker may be a factor to check, returns this value
-	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void
-	public static <T> void invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> void invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		Battle.invoke(-1, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where mold breaker may be a factor to check
-	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		Battle.invoke(-1, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where you need to split early if an activePokemon is deadsies
-	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues)
-	{
+	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
 		Battle.invoke(-1, -1, false, false, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where you need to split early if an activePokemon is deadsie
-	public static <T> boolean hasInvoke(Object[] invokees, Class<T> className)
-	{
+	public static <T> boolean hasInvoke(Object[] invokees, Class<T> className) {
 		return Battle.invoke(-1, -1, false, false, null, null, null, null, invokees, className, "", new Object[0]) != null;
 	}
 }

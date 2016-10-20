@@ -28,27 +28,27 @@ import battle.Attack;
 import battle.Battle;
 import battle.BattleAttributes;
 import battle.Move;
-import battle.effect.AbilityCondition;
+import battle.effect.holder.AbilityHolder;
 import battle.effect.BracingEffect;
-import battle.effect.Effect.CastSource;
+import battle.effect.generic.Effect.CastSource;
 import battle.effect.FaintEffect;
 import battle.effect.GroundedEffect;
 import battle.effect.HalfWeightEffect;
-import battle.effect.IntegerCondition;
-import battle.effect.ItemCondition;
+import battle.effect.holder.IntegerHolder;
+import battle.effect.holder.ItemHolder;
 import battle.effect.LevitationEffect;
-import battle.effect.MoveListCondition;
-import battle.effect.MultiTurnMove;
+import battle.effect.holder.MoveListHolder;
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.NameChanger;
 import battle.effect.OpponentTrappingEffect;
-import battle.effect.PokemonEffect;
+import battle.effect.generic.PokemonEffect;
 import battle.effect.StallingEffect;
-import battle.effect.StatsCondition;
-import battle.effect.Status;
-import battle.effect.Status.StatusCondition;
-import battle.effect.TeamEffect;
+import battle.effect.holder.StatsHolder;
+import battle.effect.generic.Status;
+import battle.effect.generic.Status.StatusCondition;
+import battle.effect.generic.TeamEffect;
 import battle.effect.TrappingEffect;
-import battle.effect.TypeCondition;
+import battle.effect.holder.TypeHolder;
 
 public class ActivePokemon implements Serializable
 {
@@ -496,13 +496,15 @@ public class ActivePokemon implements Serializable
 		return ability;
 	}
 	
-	public Ability getAbility()
-	{
+	public Ability getAbility() {
+
 		// Check if the Pokemon has had its ability changed during the battle
-		PokemonEffect e = getEffect(Namesies.CHANGE_ABILITY_EFFECT);
-		if (e != null) return ((AbilityCondition)e).getAbility();
+		PokemonEffect effect = getEffect(Namesies.CHANGE_ABILITY_EFFECT);
+		if (effect != null) {
+			return ((AbilityHolder)effect).getAbility();
+		}
 		
-		return ability;
+		return this.ability;
 	}
 	
 	public int getStage(int index)
@@ -522,7 +524,7 @@ public class ActivePokemon implements Serializable
 	
 	public int getStat(Battle b, Stat s)
 	{
-		Object stat = Battle.getInvoke(b.getEffectsList(this), StatsCondition.class, "getStat", this, s);
+		Object stat = Battle.getInvoke(b.getEffectsList(this), StatsHolder.class, "getStat", this, s);
 		if (stat != null)
 		{
 			return (int)stat;
@@ -534,7 +536,7 @@ public class ActivePokemon implements Serializable
 	public List<Move> getMoves(Battle b)
 	{
 		Move[] moveArray = this.moves.toArray(new Move[0]);		
-		moveArray = (Move[])Battle.updateInvoke(1, b.getEffectsList(this), MoveListCondition.class, "getMoveList", this, moveArray);
+		moveArray = (Move[])Battle.updateInvoke(1, b.getEffectsList(this), MoveListHolder.class, "getMoveList", this, moveArray);
 		List<Move> moveList = Arrays.asList(moveArray); 
 		
 		return moveList;
@@ -929,7 +931,7 @@ public class ActivePokemon implements Serializable
 		// Guarantee the change-type effect to be first
 		Object[] invokees = b.getEffectsList(this, this.getEffect(Namesies.CHANGE_TYPE_EFFECT));
 		
-		Object changeType = Battle.getInvoke(invokees, TypeCondition.class, "getType", b, this, displayOnly);
+		Object changeType = Battle.getInvoke(invokees, TypeHolder.class, "getType", b, this, displayOnly);
 		if (changeType != null)
 		{
 			return (Type[])changeType;
@@ -1155,7 +1157,7 @@ public class ActivePokemon implements Serializable
 		}
 		
 		// Substitute absorbs the damage instead of the Pokemon
-		IntegerCondition e = (IntegerCondition)getEffect(Namesies.SUBSTITUTE_EFFECT);
+		IntegerHolder e = (IntegerHolder)getEffect(Namesies.SUBSTITUTE_EFFECT);
 		if (e != null)
 		{
 			e.decrease(amount);
@@ -1360,7 +1362,7 @@ public class ActivePokemon implements Serializable
 		
 		// Check if the Pokemon has had its item changed during the battle
 		PokemonEffect changeItem = getEffect(Namesies.CHANGE_ITEM_EFFECT);
-		Item item = changeItem == null ? getActualHeldItem() : ((ItemCondition)changeItem).getItem();
+		Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 		
 		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility(Namesies.UNNERVE_ABILITY))
 		{
