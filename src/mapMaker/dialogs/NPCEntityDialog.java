@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -23,10 +24,13 @@ import javax.swing.JTextField;
 import util.PokeString;
 import map.entity.NPCEntityData;
 import mapMaker.MapMaker;
+import util.StringUtils;
 
 public class NPCEntityDialog extends JPanel {
-	
 	private static final long serialVersionUID = -8061888140387296525L;
+
+	// TODO: There's shit like this all over the fucking place
+	private static final String[] facingDirections = new String[] {"Right", "Up", "Left", "Down"};
 
 	private JLabel label;
 	
@@ -57,10 +61,8 @@ public class NPCEntityDialog extends JPanel {
 			// Make JList and allow to edit selected or add new triggers. New triggers can be a name or from a new dialog.
 	
 	private MapMaker mapMaker;
-	private String[] facingDirections = new String[] {"Right", "Up", "Left", "Down"};
 	
-	public NPCEntityDialog(MapMaker givenMapMaker) 
-	{
+	public NPCEntityDialog(MapMaker givenMapMaker) {
 		this.mapMaker = givenMapMaker;
 		
 		label = new JLabel();
@@ -69,8 +71,8 @@ public class NPCEntityDialog extends JPanel {
 		final ImageIcon[] trainerSprites = getTrainerSprites();
 		
 		//spriteComboBox = new JComboBox<ImageIcon>(trainerSprites);
-		spriteComboBox = new JComboBox<ImageIcon>();
-		spriteComboBox.setModel(new DefaultComboBoxModel<ImageIcon>(trainerSprites));
+		spriteComboBox = new JComboBox<>();
+		spriteComboBox.setModel(new DefaultComboBoxModel<>(trainerSprites));
 		spriteComboBox.setSelectedIndex(1);
 		
 		label.setIcon(new ImageIcon(mapMaker.getTileFromSet("Trainer", 12 + 4)));
@@ -79,33 +81,32 @@ public class NPCEntityDialog extends JPanel {
 		
 		JLabel lblDirection = new JLabel("Direction");
 		
-		directionComboBox = new JComboBox<String>();
-		directionComboBox.setModel(new DefaultComboBoxModel<String>(facingDirections));
+		directionComboBox = new JComboBox<>();
+		directionComboBox.setModel(new DefaultComboBoxModel<>(facingDirections));
 		directionComboBox.setSelectedIndex(3);
 		
-		spriteComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
-				int direction = directionComboBox.getSelectedIndex();
-				BufferedImage img = mapMaker.getTileFromSet("Trainer", 12*index + 1 + direction);
-				img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
-				ImageIcon icon = new ImageIcon(img);
-				
-				label.setIcon(icon);
-			}
-		});
-		
-		directionComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
-				int direction = directionComboBox.getSelectedIndex();
-				BufferedImage img = mapMaker.getTileFromSet("Trainer", 12*index + 1 + direction);
-				img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
-				ImageIcon icon = new ImageIcon(img);
-				
-				label.setIcon(icon);
-			}
-		});
+		spriteComboBox.addActionListener(event -> {
+            int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
+            int direction = directionComboBox.getSelectedIndex();
+
+            BufferedImage img = mapMaker.getTileFromSet("Trainer", 12*index + 1 + direction);
+            img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
+
+			ImageIcon icon = new ImageIcon(img);
+            label.setIcon(icon);
+        });
+
+		// TODO: UMMM IS THIS EXACTLY THE SAME AS THE ONE ABOVE?? IF SO SRSLY WHAT THE FUCK
+		directionComboBox.addActionListener(event -> {
+            int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
+            int direction = directionComboBox.getSelectedIndex();
+
+            BufferedImage img = mapMaker.getTileFromSet("Trainer", 12*index + 1 + direction);
+            img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
+
+			ImageIcon icon = new ImageIcon(img);
+            label.setIcon(icon);
+        });
 		
 		JLabel nameLabel = new JLabel("Name");
 		
@@ -113,7 +114,6 @@ public class NPCEntityDialog extends JPanel {
 		nameTextField.setColumns(10);
 		
 		JLabel firstDialoguelabel = new JLabel("First Dialogue");
-		
 		JLabel secondDialoguelabel = new JLabel("Second Dialogue");
 		
 		walkToPlayerCheckBox = new JCheckBox("Walk to player");
@@ -167,24 +167,34 @@ public class NPCEntityDialog extends JPanel {
 		conditionTextField.setColumns(10);
 		
 		JButton btnEditTrainer = new JButton("Edit Trainer");
-		btnEditTrainer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				TrainerDataDialog dialog = new TrainerDataDialog();
-				
-				if (trainerDataTextArea.getText().trim().length() != 0)
-					dialog.setTrainerData(trainerDataTextArea.getText().trim());
+		btnEditTrainer.addActionListener(event -> {
 
-				Object[] options = {"Done", "Cancel"};
-				
-				int results = JOptionPane.showOptionDialog(mapMaker, dialog, "Trainer Data Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-				
-				if (results == JOptionPane.CLOSED_OPTION || results == 1)
-					return;
-				
-				trainerDataTextArea.setText(dialog.getTrainerData());
+            TrainerDataDialog dialog = new TrainerDataDialog();
+
+            if (!trainerDataTextArea.getText().trim().isEmpty()) {
+				dialog.setTrainerData(trainerDataTextArea.getText().trim());
 			}
-		});
+
+            Object[] options = {"Done", "Cancel"};
+
+            int results = JOptionPane.showOptionDialog(
+            		mapMaker,
+					dialog,
+					"Trainer Data Editor",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.PLAIN_MESSAGE,
+					null,
+					options,
+					options[0]
+			);
+
+            if (results == JOptionPane.CLOSED_OPTION || results == 1) {
+				return;
+			}
+
+            trainerDataTextArea.setText(dialog.getTrainerData());
+        });
+
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -246,6 +256,7 @@ public class NPCEntityDialog extends JPanel {
 								.addComponent(giveItemsLabel, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
 								.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)))))
 		);
+
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -309,13 +320,14 @@ public class NPCEntityDialog extends JPanel {
 							.addGap(4)
 							.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))))
 		);
+
 		setLayout(groupLayout);
 	}
 	
 	private ImageIcon[] getTrainerSprites() {
-		ArrayList<ImageIcon> icons = new ArrayList<>();
+		List<ImageIcon> icons = new ArrayList<>();
 		
-		for (int curr = 0; mapMaker.getTileFromSet("Trainer", 12*curr + 4) != null; ++curr) {
+		for (int curr = 0; mapMaker.getTileFromSet("Trainer", 12*curr + 4) != null; curr++) {
 			icons.add(new ImageIcon(mapMaker.getTileFromSet("Trainer", 12*curr + 4), "" + curr));
 		}
 		
@@ -332,26 +344,28 @@ public class NPCEntityDialog extends JPanel {
 		
 		StringBuilder dialogue = new StringBuilder();
 		for (String currentDialogue: npc.firstDialogue) {
-			dialogue.append(currentDialogue +"\n");
+			StringUtils.appendLine(dialogue, currentDialogue);
 		}
+
 		firstDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
-		if (firstDialogueTextArea.getText().trim().length() == 0) {
-			firstDialogueTextArea.setText("I have no dialogue yet.");
+		if (firstDialogueTextArea.getText().trim().isEmpty()) {
+			firstDialogueTextArea.setText("I have no dialogue yet."); // TODO: There should be a constant for the default expression and it should be more interesting than this
 		}
-		
 		
 		dialogue.delete(0, dialogue.length());
 		
 		if (npc.secondDialogue != null){
 			for (String currentDialogue: npc.secondDialogue) {
-				dialogue.append(currentDialogue +"\n");
+				StringUtils.appendLine(dialogue, currentDialogue);
 			}
+
 			secondDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
 		}
 		
 		pathTextField.setText(npc.path);
 		walkToPlayerCheckBox.setSelected(npc.walkToPlayer == 1);
-		
+
+		// TODO: make a method for this and fix the uggyness too fucking tired for that shit right now
 		giveItemsTextArea.setText(npc.itemInfo != null?npc.itemInfo.replace("\t", ""):null);
 		trainerDataTextArea.setText(npc.trainerInfo != null?npc.trainerInfo.replace("\t", ""):null);
 		
@@ -361,11 +375,11 @@ public class NPCEntityDialog extends JPanel {
 	
 	private static String getTrimmedAreaText(JTextArea textArea) {
 		String text = textArea.getText().trim();
-		
-		if (text.length() == 0) {
+		if (text.isEmpty()) {
 			return null;
 		}
-		
+
+		// TODO: Maybe make a method in the string util class that takes in the number of tabs to insert
 		return text.replace("\n", "\n\t\t");
 	}
 	
@@ -375,11 +389,13 @@ public class NPCEntityDialog extends JPanel {
 				-1, 
 				-1, 
 				null, 
-				pathTextField.getText().trim().length() == 0 ? "w" : pathTextField.getText().trim(), 
+				pathTextField.getText().trim().isEmpty() ? "w" : pathTextField.getText().trim(), // TODO: What is w -- should it be a constant?
 				directionComboBox.getSelectedIndex(), 
 				spriteComboBox.getSelectedIndex(), 
 				PokeString.convertSpecialToUnicode(firstDialogueTextArea.getText()).trim().split("\n"), 
-				secondDialogueTextArea.getText().trim().length() == 0? (walkToPlayerCheckBox.isSelected()? new String[]{""}: null): PokeString.convertSpecialToUnicode(secondDialogueTextArea.getText()).trim().split("\n"), 
+				secondDialogueTextArea.getText().trim().isEmpty()
+						? (walkToPlayerCheckBox.isSelected() ? new String[]{""} : null) // TODO: ??
+						: PokeString.convertSpecialToUnicode(secondDialogueTextArea.getText()).trim().split("\n"),
 				getTrimmedAreaText(trainerDataTextArea),
 				getTrimmedAreaText(giveItemsTextArea),
 				getTrimmedAreaText(firstTriggersTextArea),

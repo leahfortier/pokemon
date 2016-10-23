@@ -1,5 +1,6 @@
 package util;
 
+
 import main.Global;
 
 public class StringUtils {
@@ -16,5 +17,13 @@ public class StringUtils {
     // Adds a space to a non-empty string
     public static String addSpace(final String s) {
         return isNullOrEmpty(s) ? "" : s + " ";
+    }
+
+    public static void appendLine(final StringBuilder builder, final String message) {
+        builder.append(message).append("\n");
+    }
+
+    public static String empty() {
+        return "";
     }
 }

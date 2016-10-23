@@ -7,8 +7,7 @@ import battle.effect.StageChangingEffect;
 import battle.effect.StatChangingEffect;
 import battle.effect.StatSwitchingEffect;
 
-public enum Stat 
-{
+public enum Stat {
 	HP(0, "HP", "HP", -1, InBattle.NEVER, true), 
 	ATTACK(1, "Attack", "Attack", 2, InBattle.BOTH, true),
 	DEFENSE(2, "Defense", "Defense", 2, InBattle.BOTH, false), 
@@ -28,13 +27,14 @@ public enum Stat
 	// Never -- The stat is not used in battle (HP)
 	// Both -- used in and out of battle
 	// Only -- only used in battle (Accuracy/Evasion)
-	private static enum InBattle
-	{
-		NEVER, BOTH, ONLY
+	private enum InBattle {
+		NEVER,
+		BOTH,
+		ONLY,
 	}
-	
-	private Stat(int i, String n, String s, int m, InBattle b, boolean u)
-	{	
+
+	// TODO: FUCK THESE VARIABLE NAMES SRSLY WTF THESE ARE THE FUCKING WORST I BLAME ECLIPSE
+	Stat(int i, String n, String s, int m, InBattle b, boolean u) {
 		index = i;
 		name = n;
 		shortName = s;
@@ -43,23 +43,19 @@ public enum Stat
 		user = u;
 	}
 	
-	public int index()
-	{
+	public int index() {
 		return index;
 	}
 	
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 	
-	public String getShortName()
-	{
+	public String getShortName() {
 		return shortName;
 	}
 	
-	public boolean user()
-	{
+	public boolean user() {
 		return user;
 	}
 	
@@ -70,15 +66,12 @@ public enum Stat
 	public static final int MAX_STAT_EVS = 255;
 	
 	public static final Stat[] STATS;
-	static
-	{
+	static {
 		STATS = new Stat[NUM_STATS];
 		int i = 0;
 		
-		for (Stat s : Stat.values()) 
-		{
-			if (s.onlyBattle == InBattle.ONLY)
-			{
+		for (Stat s : Stat.values()) {
+			if (s.onlyBattle == InBattle.ONLY) {
 				continue;
 			}
 			
@@ -87,10 +80,8 @@ public enum Stat
 	}
 	
 	// Generates a new stat
-	public static int getStat(int statIndex, int level, int baseStat, int IV, int EV, double natureVal)
-	{
-		if (statIndex == HP.index)
-		{
+	public static int getStat(int statIndex, int level, int baseStat, int IV, int EV, double natureVal) {
+		if (statIndex == HP.index) {
 			return (int)(((IV + 2*baseStat + (EV/4.0))*level/100.0) + 10 + level);
 		}
 		
@@ -98,8 +89,7 @@ public enum Stat
 	}
 	
 	// Gets the stat of a Pokemon during battle
-	public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
-	{
+	public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
 		// Effects that manipulate stats
 		Object[] list;
 		
@@ -115,8 +105,12 @@ public enum Stat
 //		int temp = stat;
 		
 		// Modify stat based off stage
-		if (stage > 0) stat *= ((s.modifier + stage)/s.modifier);
-	    else if (stage < 0) stat *= (s.modifier/(s.modifier - stage));
+		if (stage > 0) {
+			stat *= ((s.modifier + stage)/s.modifier);
+		}
+	    else if (stage < 0) {
+			stat *= (s.modifier/(s.modifier - stage));
+		}
 		
 		ActivePokemon moldBreaker  = s.user ? null : opp;
 		
@@ -131,8 +125,7 @@ public enum Stat
 		return stat;
 	}
 	
-	private static int getStage(Object[] list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b)
-	{
+	private static int getStage(Object[] list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
 		int stage = p.getStage(s.index);
 		
 //		int temp = stage;
@@ -148,8 +141,7 @@ public enum Stat
 		// Effects that completely ignore stage changes
 		list = new Object[] { opp.getAbility(), attacking.getAttack() };
 		Object ignoreStage = Battle.checkInvoke(true, p, list, IgnoreStageEffect.class, "ignoreStage", s);
-		if (ignoreStage != null)
-		{
+		if (ignoreStage != null) {
 			stage = 0;
 		}
 		
@@ -162,14 +154,16 @@ public enum Stat
 	}
 	
 	// Returns the corresponding Stat based on the index passed in
-	public static Stat getStat(int index, boolean battle)
-	{
-		for (Stat s : values())
-		{
-			if (s.onlyBattle == InBattle.ONLY && !battle) continue;
-			if (s.onlyBattle == InBattle.NEVER && battle) continue;
+	public static Stat getStat(int index, boolean battle) {
+		for (Stat s : values()) {
+			if ((s.onlyBattle == InBattle.ONLY && !battle) ||
+					(s.onlyBattle == InBattle.NEVER && battle)) {
+				continue;
+			}
 			
-			if (s.index == index) return s;
+			if (s.index == index) {
+				return s;
+			}
 		}
 		
 		Global.error("Incorrect stat index " + index);

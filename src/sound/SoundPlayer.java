@@ -1,126 +1,105 @@
 package sound;
 
-public class SoundPlayer 
-{
+public class SoundPlayer {
 	private boolean muted;	
 	private SoundTitle music;
 	private	MP3Player musicPlayer;
 	private MP3Player soundEffectPlayer;
 	
-	public SoundPlayer() 
-	{
+	public SoundPlayer() {
 		music = null;
 		musicPlayer = null;
 		soundEffectPlayer = null;
 	}
 	
-	public boolean isMuted() 
-	{
+	public boolean isMuted() {
 		return muted;
 	}
 	
-	public void setMuted(boolean muted)
-	{
+	public void setMuted(boolean muted) {
 		this.muted = muted;
 	}
 	
-	public void playMusic(SoundTitle newMusic) 
-	{
-		// If we're trying to play the same song that's already playing
-		// don't do anything.
-		if (music == newMusic)
-		{
+	public void playMusic(SoundTitle newMusic) {
+
+		// If we're trying to play the same song that's already playing don't do anything.
+		if (music == newMusic) {
 			return;
 		}
 		
-		if (musicPlayer != null)
-		{
+		if (musicPlayer != null) {
 			musicPlayer.close();
 		}
 		
 		music = newMusic;
 		
-		if (!muted)
-		{
+		if (!muted) {
 			createPlayer(music);
 		}
 	}
 	
-	public void pauseMusic() 
-	{
-		if (musicPlayer != null)
-		{
+	private void pauseMusic() {
+		if (musicPlayer != null) {
 			musicPlayer.close();
 			musicPlayer = null;
 		}
 	}
 	
-	private void createPlayer(SoundTitle music)
-	{
+	private void createPlayer(SoundTitle music) {
 		MP3Player player = new MP3Player(music.getSoundTitle());
 		player.setLoop(music.isMusic());
 		player.start();
 		
-		if (music.isMusic())
-		{
+		if (music.isMusic()) {
 			musicPlayer = player;
 		}
-		else
-		{
+		else {
 			soundEffectPlayer = player;
 		}
 	}
 	
-	public void resumeMusic()
-	{
-		if (musicPlayer != null)
-		{
+	private void resumeMusic() {
+		if (musicPlayer != null) {
 			musicPlayer.close();
 		}
 		
-		if (music != null)
-		{
+		if (music != null) {
 			createPlayer(music);
 		}
 	}
 	
 	// Toggly Boggly
-	public void toggleMusic()
-	{
-		if (muted)
+	public void toggleMusic() {
+		if (muted) {
 			resumeMusic();
-		else
+		}
+		else {
 			pauseMusic();
+		}
 		
 		muted = !muted;
 	}
 	
-	public void stopSong() 
-	{
-		if (musicPlayer != null)
-		{
+	public void stopSong() {
+		if (musicPlayer != null) {
 			musicPlayer.close();
 			musicPlayer = null;
 			music = null;
 		}
 	}
 	
-	public void playSoundEffect(SoundTitle soundEffect) 
-	{
-		if (soundEffectPlayer != null)
-		{
+	public void playSoundEffect(SoundTitle soundEffect) {
+		if (soundEffectPlayer != null) {
 			soundEffectPlayer.close();
 		}
 
 		// SRSLY
-		if (!muted)
-		{
+		if (!muted) {
 			createPlayer(soundEffect);	
 		}
 	}
 	
-	public boolean soundEffectIsPlaying() 
-	{
+	public boolean soundEffectIsPlaying() {
 		return soundEffectPlayer != null && soundEffectPlayer.isAlive();
 	}
 }

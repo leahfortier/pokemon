@@ -17,8 +17,7 @@ import util.InputControl;
 import util.Save;
 import util.InputControl.Control;
 
-public class MainMenuView extends View
-{	
+public class MainMenuView extends View {
 	private static final int NUM_MAIN_BUTTONS = 4;
 
 	private static final int[] bgt = new int[] { 800, 1800, 1000, 2400, 1000 };
@@ -48,8 +47,7 @@ public class MainMenuView extends View
 	private int creditsTime1;
 	private int creditsTime2;
 
-	public MainMenuView()
-	{
+	public MainMenuView() {
 		selectedButton = 0;
 		
 		creditsTime1 = 0;
@@ -63,85 +61,97 @@ public class MainMenuView extends View
 		theme = Save.loadSettings();
 		saveInfo = Save.updateSaveData();
 
-		for (int i = 0; i < VisualState.MAIN.buttons.length; i++)
-		{
-			VisualState.MAIN.buttons[i] = new Button(200, 240 + i * 85, 400, 75, Button.HoverAction.BOX, 
+		for (int i = 0; i < VisualState.MAIN.buttons.length; i++) {
+			VisualState.MAIN.buttons[i] = new Button(
+					200,
+					240 + i*85,
+					400,
+					75,
+					Button.HoverAction.BOX,
 					new int[] { 
-						Button.NO_TRANSITON, // Right
+						Button.NO_TRANSITION, // Right
 						Button.basicUp(i, VisualState.MAIN.buttons.length), // Up 
-						Button.NO_TRANSITON, // Left
+						Button.NO_TRANSITION, // Left
 						Button.basicDown(i, VisualState.MAIN.buttons.length) // Down 
 					});
 		}	
 
-		for (int i = 0; i < Save.NUM_SAVES; i++)
-		{
-			VisualState.LOAD.buttons[i] = new Button(VisualState.MAIN.buttons[i].x, VisualState.MAIN.buttons[i].y, 
-											VisualState.MAIN.buttons[i].width, VisualState.MAIN.buttons[i].height, 
-											Button.HoverAction.BOX,
-											new int[] { 
-												Button.NO_TRANSITON, // Right
-												Button.basicUp(i, VisualState.LOAD.buttons.length), // Up
-												Button.NO_TRANSITON, // Left
-												i + 1 // Down
-											});
+		for (int i = 0; i < Save.NUM_SAVES; i++) {
+			VisualState.LOAD.buttons[i] = new Button(
+					VisualState.MAIN.buttons[i].x,
+					VisualState.MAIN.buttons[i].y,
+					VisualState.MAIN.buttons[i].width,
+					VisualState.MAIN.buttons[i].height,
+					Button.HoverAction.BOX,
+					new int[] {
+							Button.NO_TRANSITION, // Right
+							Button.basicUp(i, VisualState.LOAD.buttons.length), // Up
+							Button.NO_TRANSITION, // Left
+							i + 1 // Down
+					});
 		}
 			
-		VisualState.LOAD.buttons[Save.NUM_SAVES] = new Button(VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].x, 
-												VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].y, 
-												VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].width/2 - 5, 
-												VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].height, 
-												Button.HoverAction.BOX, 
-												new int[] { 
-													Save.NUM_SAVES + 1, // Right -- to the delete button 
-													Save.NUM_SAVES - 1, // Up -- to the last save file
-													Save.NUM_SAVES + 1, // Left -- to the delete button
-													0  // Down -- to the first save file
-												});
-		VisualState.LOAD.buttons[Save.NUM_SAVES + 1] = new Button(VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].x + VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].width/2 + 5,
-													VisualState.LOAD.buttons[Save.NUM_SAVES].y, 
-													VisualState.LOAD.buttons[Save.NUM_SAVES].width,
-													VisualState.LOAD.buttons[Save.NUM_SAVES].height, 
-													Button.HoverAction.BOX,
-													new int[] { 
-														Save.NUM_SAVES, // Right -- to the return button 
-														Save.NUM_SAVES - 1, // Up -- to the last save file
-														Save.NUM_SAVES, // Left -- to the return button
-														0 // Down -- to the first save file
-													});
+		VisualState.LOAD.buttons[Save.NUM_SAVES] = new Button(
+				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].x,
+				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].y,
+				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].width/2 - 5,
+				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].height,
+				Button.HoverAction.BOX,
+				new int[] {
+						Save.NUM_SAVES + 1, // Right -- to the delete button
+						Save.NUM_SAVES - 1, // Up -- to the last save file
+						Save.NUM_SAVES + 1, // Left -- to the delete button
+						0  // Down -- to the first save file
+				});
 
-		for (int i = 0; i < VisualState.NEW.buttons.length; i++)
-		{
-			VisualState.NEW.buttons[i] = new Button(VisualState.MAIN.buttons[i].x, VisualState.MAIN.buttons[i].y, 
-					VisualState.MAIN.buttons[i].width, VisualState.MAIN.buttons[i].height, 
+		VisualState.LOAD.buttons[Save.NUM_SAVES + 1] = new Button(
+				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].x + VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].width/2 + 5,
+				VisualState.LOAD.buttons[Save.NUM_SAVES].y,
+				VisualState.LOAD.buttons[Save.NUM_SAVES].width,
+				VisualState.LOAD.buttons[Save.NUM_SAVES].height,
+				Button.HoverAction.BOX,
+				new int[] {
+						Save.NUM_SAVES, // Right -- to the return button
+						Save.NUM_SAVES - 1, // Up -- to the last save file
+						Save.NUM_SAVES, // Left -- to the return button
+						0 // Down -- to the first save file
+				});
+
+		for (int i = 0; i < VisualState.NEW.buttons.length; i++) {
+			VisualState.NEW.buttons[i] = new Button(
+					VisualState.MAIN.buttons[i].x,
+					VisualState.MAIN.buttons[i].y,
+					VisualState.MAIN.buttons[i].width,
+					VisualState.MAIN.buttons[i].height,
 					Button.HoverAction.BOX, 
 					new int[] { 
-						Button.NO_TRANSITON, // Right
+						Button.NO_TRANSITION, // Right
 						Button.basicUp(i, VisualState.NEW.buttons.length), // Up
-						Button.NO_TRANSITON, // Left
+						Button.NO_TRANSITION, // Left
 						Button.basicDown(i, VisualState.NEW.buttons.length) // Down
 					});
 		}
 
-		for (int i = 0; i < VisualState.OPTIONS.buttons.length; i++)
-		{
-			VisualState.OPTIONS.buttons[i] = new Button(VisualState.MAIN.buttons[i].x, VisualState.MAIN.buttons[i].y, 
-											VisualState.MAIN.buttons[i].width, VisualState.MAIN.buttons[i].height,
-											Button.HoverAction.BOX,
-											new int[] { 
-													Button.NO_TRANSITON, // Right
-													Button.basicUp(i, VisualState.OPTIONS.buttons.length), // Up
-													Button.NO_TRANSITON, // Left
-													Button.basicDown(i, VisualState.OPTIONS.buttons.length) // Down
-												});
+		for (int i = 0; i < VisualState.OPTIONS.buttons.length; i++) {
+			VisualState.OPTIONS.buttons[i] = new Button(
+					VisualState.MAIN.buttons[i].x,
+					VisualState.MAIN.buttons[i].y,
+					VisualState.MAIN.buttons[i].width,
+					VisualState.MAIN.buttons[i].height,
+					Button.HoverAction.BOX,
+					new int[] {
+							Button.NO_TRANSITION, // Right
+							Button.basicUp(i, VisualState.OPTIONS.buttons.length), // Up
+							Button.NO_TRANSITION, // Left
+							Button.basicDown(i, VisualState.OPTIONS.buttons.length) // Down
+					});
 		}
 		
 		state = VisualState.MAIN;
 		selectedButton = creditsTime1 = creditsTime2 = 0;
 	}
 	
-	private enum VisualState
-	{
+	private enum VisualState {
 		MAIN(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE), 
 		LOAD(Save.NUM_SAVES + 2, SoundTitle.MAIN_MENU_TUNE), 
 		NEW(Save.NUM_SAVES + 1, SoundTitle.MAIN_MENU_TUNE), 
@@ -151,90 +161,69 @@ public class MainMenuView extends View
 		private final Button[] buttons;
 		private final SoundTitle tunes;
 		
-		private VisualState(int numButtons, SoundTitle tunes)
-		{
+		VisualState(int numButtons, SoundTitle tunes) {
 			this.buttons = new Button[numButtons];
 			this.tunes = tunes;
 		} 
-	};
+	}
 	
-	public enum Theme
-	{
-		BASIC(new Color(255, 210, 86), 
-				new ThemeDraw() 
-				{
-					public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex)
-					{
-						g.setColor(new Color(68, 123, 184));
-						g.fillRect(0, 0, 800, 600);
-						g.drawImage(tiles.getTile(0x01), 0, 0, null);	
-					} 
-				}),
-		SCENIC(new Color(68, 123, 184), new ThemeDraw() 
-		{
-			public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex)
-			{
-				float locRatio = 1.0f - (float) bgTime / (float) bgt[(bgIndex + 1) % bgt.length];
-				int xLoc = (int) (bgx[bgIndex] * locRatio + (1.0f - locRatio) * bgx[(bgIndex + 1) % bgt.length]);
-				int yLoc = (int) (bgy[bgIndex] * locRatio + (1.0f - locRatio) * bgy[(bgIndex + 1) % bgt.length]);
-			
-				g.drawImage(tiles.getTile(0x06), xLoc, yLoc, null);
-				g.drawImage(tiles.getTile(0x02), 0, 0, null);	
-			} 
-		});
-		
-		private static final Theme[] THEME_VALUES = Theme.values();
+	public enum Theme {
+		BASIC(new Color(255, 210, 86), (g, tiles, bgTime, bgIndex) -> {
+                    g.setColor(new Color(68, 123, 184));
+                    g.fillRect(0, 0, 800, 600);
+                    g.drawImage(tiles.getTile(0x01), 0, 0, null);
+                }),
+		SCENIC(new Color(68, 123, 184), (g, tiles, bgTime, bgIndex) -> {
+			float locRatio = 1.0f - (float) bgTime / (float) bgt[(bgIndex + 1) % bgt.length];
+            int xLoc = (int) (bgx[bgIndex]*locRatio + (1.0f - locRatio) * bgx[(bgIndex + 1)%bgt.length]);
+            int yLoc = (int) (bgy[bgIndex]*locRatio + (1.0f - locRatio) * bgy[(bgIndex + 1)%bgt.length]);
+
+            g.drawImage(tiles.getTile(0x06), xLoc, yLoc, null);
+            g.drawImage(tiles.getTile(0x02), 0, 0, null);
+        });
 		
 		private final Color themeColor;
 		private final ThemeDraw draw;
 		
-		private Theme(Color themeColor, ThemeDraw draw)
-		{
+		Theme(Color themeColor, ThemeDraw draw) {
 			this.themeColor = themeColor;
 			this.draw = draw;
 		}
 		
-		private static interface ThemeDraw
-		{
-			public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex);
+		private interface ThemeDraw {
+			void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex);
 		}
-	};
+	}
 
-	private void setVisualState(VisualState newState)
-	{
+	private void setVisualState(VisualState newState) {
 		state = newState;
 		selectedButton = creditsTime1 = creditsTime2 = 0;
 		
-		for (Button b : state.buttons)
+		for (Button b : state.buttons) {
 			b.setForceHover(false);
+		}
 		
 		Global.soundPlayer.playMusic(state.tunes);
 	}
 
-	public void update(int dt, InputControl input, Game game)
-	{
-		if (!musicStarted)
-		{
+	public void update(int dt, InputControl input, Game game) {
+		if (!musicStarted) {
 			musicStarted = true;
 			Global.soundPlayer.playMusic(state.tunes);
 		}
 		
 		int pressed = -1;
 		
-		if (state.buttons.length > 0)
-		{
+		if (state.buttons.length > 0) {
 			selectedButton = Button.update(state.buttons, selectedButton, input);
-			if (state.buttons[selectedButton].checkConsumePress())
-			{
+			if (state.buttons[selectedButton].checkConsumePress()) {
 				pressed = selectedButton;
 			}	
 		}
 		
-		switch (state)
-		{
+		switch (state) {
 			case MAIN:		
-				switch (pressed)
-				{
+				switch (pressed) {
 					case 0: // load
 						setVisualState(VisualState.LOAD);
 						break;
@@ -252,19 +241,16 @@ public class MainMenuView extends View
 				}
 				break;
 			case LOAD:
-				switch (pressed)
-				{
+				switch (pressed) {
 					case 0: // load
 					case 1:
 					case 2:
-						if (deletePressed && saveInfo[pressed] != null)
-						{
+						if (deletePressed && saveInfo[pressed] != null) {
 							deletePressed = false;
 							Save.deleteSave(pressed); // TODO: ask to delete first
 							saveInfo = Save.updateSaveData();
 						}
-						else if (saveInfo[pressed] != null)
-						{
+						else if (saveInfo[pressed] != null) {
 							game.loadSave(pressed);
 							game.setViewMode(ViewMode.MAP_VIEW);
 						}
@@ -280,8 +266,7 @@ public class MainMenuView extends View
 				}
 				break;
 			case NEW:
-				switch (pressed)
-				{
+				switch (pressed) {
 					case 0: // new
 					case 1:
 					case 2: 
@@ -297,10 +282,9 @@ public class MainMenuView extends View
 				}				
 				break;
 			case OPTIONS:
-				switch (pressed)
-				{
+				switch (pressed) {
 					case 0: // theme
-						theme = Theme.THEME_VALUES[(theme.ordinal() + 1)%Theme.THEME_VALUES.length];
+						theme = Theme.values()[(theme.ordinal() + 1)%Theme.values().length];
 						Save.saveSettings(theme);
 						break;
 					case 1: // mute
@@ -330,21 +314,19 @@ public class MainMenuView extends View
 		int nextIndex = (bgIndex + 1)%bgt.length;
 		bgTime += 10;
 		
-		if (bgTime > bgt[nextIndex])
-		{
+		if (bgTime > bgt[nextIndex]) {
 			bgTime -= bgt[nextIndex];
 			bgIndex = nextIndex;
 		}
 		
-		if (input.isDown(Control.BACK))
-		{
+		if (input.isDown(Control.BACK)) {
 			input.consumeKey(Control.BACK);
 			setVisualState(VisualState.MAIN);
 		}
 	}
-	
-	private void drawButton(Graphics g, TileSet tiles, Button b)
-	{
+
+	// TODO: I think there might be a method in the draw thingy that does thing
+	private void drawButton(Graphics g, TileSet tiles, Button b) {
 		g.translate(b.x, b.y);
 		
 		g.setColor(theme.themeColor);
@@ -361,32 +343,27 @@ public class MainMenuView extends View
 		b.draw(g);
 	}
 	
-	public void draw(Graphics g, GameData data)
-	{
+	public void draw(Graphics g, GameData data) {
 		TileSet tiles = data.getMainMenuTiles();
 
 		theme.draw.draw(g, tiles, bgTime, bgIndex);
 		
 		g.drawImage(tiles.getTile(0x03), 95, 54, null);
-		for (Button b : state.buttons)
-		{
+		for (Button b : state.buttons) {
 			drawButton(g, tiles, b);
 		}
 		
 		g.setColor(Color.BLACK);
-		switch (state)
-		{
+		switch (state) {
 			case MAIN:
 				DrawMetrics.setFont(g, 40);
-				for (int i = 0; i < NUM_MAIN_BUTTONS; i++)
-				{
+				for (int i = 0; i < NUM_MAIN_BUTTONS; i++) {
 					DrawMetrics.drawCenteredString(g, MAIN_HEADERS[i], state.buttons[i]);
 				}
 				break;
 			case LOAD:
 				// Draw each save information button
-				for (int i = 0; i < Save.NUM_SAVES; i++)
-				{
+				for (int i = 0; i < Save.NUM_SAVES; i++) {
 					drawSaveInformation(g, state.buttons[i], i, "Empty");
 				}
 				
@@ -396,8 +373,7 @@ public class MainMenuView extends View
 				DrawMetrics.drawCenteredString(g, "Delete", state.buttons[Save.NUM_SAVES + 1]);
 				break;
 			case NEW:
-				for (int i = 0; i < Save.NUM_SAVES; i++)
-				{
+				for (int i = 0; i < Save.NUM_SAVES; i++) {
 					drawSaveInformation(g, state.buttons[i], i, "New Save");
 				}
 				
@@ -406,8 +382,7 @@ public class MainMenuView extends View
 				break;
 			case OPTIONS:
 				DrawMetrics.setFont(g, 40);
-				for (int i = 0; i < NUM_MAIN_BUTTONS; i++)
-				{
+				for (int i = 0; i < NUM_MAIN_BUTTONS; i++) {
 					DrawMetrics.drawCenteredString(g, OPTIONS_HEADERS[i], state.buttons[i]);
 				}
 				break;
@@ -419,8 +394,7 @@ public class MainMenuView extends View
 		}
 	}
 	
-	private void drawCredits(Graphics g)
-	{
+	private void drawCredits(Graphics g) {
 		Dimension d = Global.GAME_SIZE;
 		g.setClip(0, 220, d.width, d.height - 240);
 
@@ -430,15 +404,12 @@ public class MainMenuView extends View
 
 		g.setColor(Color.BLACK);
 		
-		for (int i = 1; i < creditsText.length; i++)
-		{
-			if (creditsText[i - 1].equals(""))
-			{
+		for (int i = 1; i < creditsText.length; i++) {
+			if (creditsText[i - 1].isEmpty()) {
 				DrawMetrics.setFont(g, 40);
 				DrawMetrics.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
 			}
-			else
-			{
+			else {
 				DrawMetrics.setFont(g, 30);
 				DrawMetrics.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
 			}
@@ -447,13 +418,11 @@ public class MainMenuView extends View
 		g.setClip(0, 0, d.width, d.height);
 	}
 	
-	private void drawSaveInformation(Graphics g, Button b, int index, String emptyText)
-	{
+	private void drawSaveInformation(Graphics g, Button b, int index, String emptyText) {
 		g.setColor(Color.BLACK);
 		Save.SavePreviewInfo info = saveInfo[index];
 		
-		if (info != null)
-		{
+		if (info != null) {
 			g.translate(b.x, b.y);
 			
 			DrawMetrics.setFont(g, 20);
@@ -472,20 +441,17 @@ public class MainMenuView extends View
 			
 			g.translate(-b.x, -b.y);
 		}
-		else
-		{
+		else {
 			DrawMetrics.setFont(g, 30);
 			DrawMetrics.drawCenteredString(g, emptyText, b);
 		}
 	}
 
-	public ViewMode getViewModel()
-	{
+	public ViewMode getViewModel() {
 		return ViewMode.MAIN_MENU_VIEW;
 	}
 
-	public void movedToFront(Game game)
-	{
+	public void movedToFront(Game game) {
 		setVisualState(VisualState.MAIN);
 		saveInfo = Save.updateSaveData();
 	}

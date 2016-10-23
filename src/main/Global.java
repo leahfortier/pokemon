@@ -3,6 +3,7 @@ package main;
 import java.awt.Dimension;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -17,20 +18,22 @@ public class Global {
 	public static final Dimension GAME_SIZE = new Dimension(800, 600);
 
 	// Frame rate the game runs at
-	public static final int FRAMERATE = 30;
+	public static final int FRAME_RATE = 30;
 
 	// The time(ms) between each frame.
-	public static long MS_BETWEEN_FRAMES = 1000 / FRAMERATE;
+	public static long MS_BETWEEN_FRAMES = 1000 / FRAME_RATE;
 
 	// The size of each tile in the map
-	public static final int TILESIZE = 32;
+	public static final int TILE_SIZE = 32;
 
 	// The time(ms) it takes for the character to move from one tile on the map to another
 	public static final int TIME_BETWEEN_TILES = 128;
 
 	public static final String MONEY_SYMBOL = "\u00A5";
-	
-	public static SoundPlayer soundPlayer = new SoundPlayer();
+
+	public static final Random RANDOM = new Random();
+
+	public static final SoundPlayer soundPlayer = new SoundPlayer();
 
 	public static <T> void swap(T[] arr) {
 		T temp = arr[0];

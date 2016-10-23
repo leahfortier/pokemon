@@ -8,56 +8,46 @@ import pokemon.ActivePokemon;
 import battle.effect.generic.Effect;
 import battle.effect.generic.TeamEffect;
 
-public class WildPokemon implements Opponent 
-{
+public class WildPokemon implements Opponent {
 	private ActivePokemon p;
 	private List<TeamEffect> effects;
 	
-	public WildPokemon(ActivePokemon p)
-	{
+	public WildPokemon(ActivePokemon p) {
 		this.p = p;
 		effects = new ArrayList<>();
 	}
 	
-	public ActivePokemon front()
-	{
+	public ActivePokemon front() {
 		return p;
 	}
 	
-	public List<TeamEffect> getEffects()
-	{
+	public List<TeamEffect> getEffects() {
 		return effects;
 	}
 	
-	public void resetEffects()
-	{
+	public void resetEffects() {
 		effects = new ArrayList<>();
 	}
 	
-	public void resetUsed()
-	{
+	public void resetUsed() {
 		p.getAttributes().setUsed(true);
 	}
 	
-	public boolean hasEffect(Namesies effect)
-	{
+	public boolean hasEffect(Namesies effect) {
 		return Effect.hasEffect(effects, effect);
 	}
 	
-	public void addEffect(TeamEffect e)
-	{
+	public void addEffect(TeamEffect e) {
 		effects.add(e.newInstance());
 	}
 	
-	public List<ActivePokemon> getTeam()
-	{
+	public List<ActivePokemon> getTeam() {
 		List<ActivePokemon> list = new ArrayList<>();
 		list.add(p);
 		return list;
 	}
 	
-	public boolean blackout()
-	{
+	public boolean blackout() {
 		return !p.canFight();
 	}
 }

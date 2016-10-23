@@ -31,8 +31,7 @@ import util.InputControl.Control;
 import battle.Move;
 import battle.effect.generic.Status.StatusCondition;
 
-public class BagView extends View
-{
+public class BagView extends View {
 	private static final BagCategory[] CATEGORIES = BagCategory.values();
 	private static final int ITEMS_PER_PAGE = 10;
 	
@@ -47,10 +46,10 @@ public class BagView extends View
 	private static final int RIGHT_ARROW = NUM_BUTTONS - 5;
 	private static final int LEFT_ARROW = NUM_BUTTONS - 6;
 	
-	private final int[] primaryColorx = {0, 184, 124, 0};
-	private final int[] primaryColory = {0, 0, 61, 61};
-	private final int[] secondaryColorx = {184, 308, 308, 124};
-	private final int[] secondaryColory = {0, 0, 61, 61};
+	private final int[] primaryColorx = { 0, 184, 124, 0 };
+	private final int[] primaryColory = { 0, 0, 61, 61 };
+	private final int[] secondaryColorx = { 184, 308, 308, 124 };
+	private final int[] secondaryColory = { 0, 0, 61, 61 };
 	
 	private int pageNum;
 	private int selectedTab;
@@ -70,51 +69,38 @@ public class BagView extends View
 	private Button[] itemButtons;
 		
 	private enum BagState {
-		ITEM_SELECT, POKEMON_SELECT, MOVE_SELECT;
+		ITEM_SELECT,
+		POKEMON_SELECT,
+		MOVE_SELECT,
 	}
-	
+
+	// TODO: Should this be in its own file?
 	// TODO: There is a really annoying bug that sometimes happens where two buttons have hoverAction at the same time -- mainly one of the useButtons and generally the first Pokemon in the party, but the useButton is the active one and the party one just looks active and is really confusing
-	private enum UseState
-	{
-		GIVE("Give", BagView.GIVE, new UseButton() 
-				{
-					public void useButton(UseState state, BagView bagView, ActivePokemon p)
-					{
-						bagView.addMessage(bagView.player.getBag().giveItem(bagView.player, p, bagView.selectedItem));
-						state.deactivate(bagView);
-					}
-				}), 
-		USE("Use", BagView.USE, new UseButton() 
-				{
-					public void useButton(UseState state, BagView bagView, ActivePokemon p) 
-					{
-						if (p.isEgg())
-						{
-							UseState.addUseMessages(bagView, false, p);
-						}
-						else if (bagView.selectedItem instanceof PokemonUseItem) 
-						{
-							Bag bag = bagView.player.getBag(); 
-							UseState.addUseMessages(bagView, bag.useItem(bagView.player, bagView.selectedItem, p), p);
-						}
-						else if (bagView.selectedItem instanceof MoveUseItem)
-						{
-							bagView.selectedPokemon = p;
-							bagView.state = BagState.MOVE_SELECT;
-							
-							bagView.updateActiveButtons();
-						}
-					}
-				}),
+	private enum UseState {
+		GIVE("Give", BagView.GIVE, (state, bagView, p) -> {
+            bagView.addMessage(bagView.player.getBag().giveItem(bagView.player, p, bagView.selectedItem));
+            state.deactivate(bagView);
+        }),
+		USE("Use", BagView.USE, (state, bagView, p) -> {
+            if (p.isEgg()) {
+                UseState.addUseMessages(bagView, false, p);
+            }
+            else if (bagView.selectedItem instanceof PokemonUseItem) {
+                Bag bag = bagView.player.getBag();
+                UseState.addUseMessages(bagView, bag.useItem(bagView.player, bagView.selectedItem, p), p);
+            }
+            else if (bagView.selectedItem instanceof MoveUseItem) {
+                bagView.selectedPokemon = p;
+                bagView.state = BagState.MOVE_SELECT;
+
+                bagView.updateActiveButtons();
+            }
+        }),
 		// TODO: Change back to discard -- maybe have discard when over an item, and take when over a Pokemon
-		TAKE("Take", BagView.TAKE, new UseButton() 
-				{	
-					public void useButton(UseState state, BagView bagView, ActivePokemon p)
-					{
-						bagView.addMessage(bagView.player.getBag().takeItem(bagView.player, p));
-						state.deactivate(bagView);
-					}
-				});
+		TAKE("Take", BagView.TAKE, (state, bagView, p) -> {
+            bagView.addMessage(bagView.player.getBag().takeItem(bagView.player, p));
+            state.deactivate(bagView);
+        });
 		
 		private static final UseState[] USE_STATE_VALUES = UseState.values();
 		
@@ -124,125 +110,137 @@ public class BagView extends View
 		
 		private boolean clicked;
 		
-		private UseState(String displayName, int buttonIndex, UseButton useButton)
-		{
+		UseState(String displayName, int buttonIndex, UseButton useButton) {
 			this.displayName = displayName;
 			this.buttonIndex = buttonIndex;
 			this.useButton = useButton;
 		}
 		
-		private void deactivate(BagView bagView) 
-		{
+		private void deactivate(BagView bagView) {
 			this.clicked = false;
 			bagView.selectedButton = this.buttonIndex;
 			bagView.state = BagState.ITEM_SELECT;
 			
-			if (bagView.player.getBag().getQuantity(bagView.selectedItem) == 0) 
-			{
+			if (bagView.player.getBag().getQuantity(bagView.selectedItem) == 0) {
 				bagView.changeCategory(bagView.selectedTab);
 			}
 			
 			bagView.updateActiveButtons();
 		}
 		
-		private static void addUseMessages(BagView bagView, boolean success, ActivePokemon p)
-		{	
+		private static void addUseMessages(BagView bagView, boolean success, ActivePokemon p) {
 			Item selected = bagView.selectedItem;
 			
-			if (success)
-			{
+			if (success) {
 				bagView.addMessage(bagView.player.getName() + " used the " + selected.getName() + "! " + ((UseItem)selected).getSuccessMessage(p));
 			}
-			else
-			{
+			else {
 				bagView.addMessage("It won't have any effect.");	
 			}
 			
 			UseState.USE.deactivate(bagView);
 		}
 		
-		private static interface UseButton
-		{
-			public void useButton(UseState state, BagView bagView, ActivePokemon p);
+		private interface UseButton {
+			void useButton(UseState state, BagView bagView, ActivePokemon p);
 		}
 	}
 
-	public BagView(CharacterData data)
-	{
+	public BagView(CharacterData data) {
 		player = data;
 		selectedTab = 0;
 		selectedButton = 0;
 		
 		buttons = new Button[NUM_BUTTONS];
 		tabButtons = new Button[CATEGORIES.length];
-		for (int i = 0; i < CATEGORIES.length; i++)
-		{
-			buttons[i] = tabButtons[i] = new Button(42 + 102*i, 42, 104, 52, Button.HoverAction.BOX,
-					new int[] {i == CATEGORIES.length - 1 ? 0 : i + 1, // Right
+		for (int i = 0; i < CATEGORIES.length; i++) {
+			buttons[i] = tabButtons[i] = new Button(
+					42 + 102*i,
+					42,
+					104,
+					52,
+					Button.HoverAction.BOX,
+					new int[] {
+							i == CATEGORIES.length - 1 ? 0 : i + 1, // Right
 						 	RETURN, // Up
 						 	i == 0 ? CATEGORIES.length - 1 : i - 1, // Left
-						 	USE}); // Down
+						 	USE // Down
+					});
 		}
 		
 		partyButtons = new Button[Trainer.MAX_POKEMON];
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
-		{
-			buttons[PARTY + i] = partyButtons[i] = new Button(72, 122 + 69*i, 308, 61, Button.HoverAction.BOX,
-					new int[] {i < Trainer.MAX_POKEMON/3 ? GIVE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Right
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+			buttons[PARTY + i] = partyButtons[i] = new Button(
+					72,
+					122 + 69*i,
+					308,
+					61,
+					Button.HoverAction.BOX,
+					new int[] {
+							i < Trainer.MAX_POKEMON/3 ? GIVE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Right
 							i == 0 ? 0 : PARTY + i - 1, // Up
 							i < Move.MAX_MOVES ? MOVES + i : (i < Trainer.MAX_POKEMON/3 ? TAKE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN)), // Left
-							i == Trainer.MAX_POKEMON -1 ? selectedTab : PARTY + i + 1}); // Down
+							i == Trainer.MAX_POKEMON -1 ? selectedTab : PARTY + i + 1 // Down
+					});
 		}
 		
 		moveButtons = new Button[Move.MAX_MOVES];
-		for (int i = 0; i < Move.MAX_MOVES; i++)
-		{
-			buttons[MOVES + i] = moveButtons[i] = new Button(72, 122 + 69*i, 308, 61, Button.HoverAction.BOX, 
-					new int[] {PARTY + i, // Right
+		for (int i = 0; i < Move.MAX_MOVES; i++) {
+			buttons[MOVES + i] = moveButtons[i] = new Button(
+					72,
+					122 + 69*i,
+					308,
+					61,
+					Button.HoverAction.BOX,
+					new int[] {
+							PARTY + i, // Right
 							i == 0 ? 0 : MOVES + i - 1, // Up
 							i < Trainer.MAX_POKEMON/3 ? TAKE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Left, needs to behave like party buttons
-							i == 3 ? selectedTab : MOVES + i + 1}); // Down
+							i == 3 ? selectedTab : MOVES + i + 1 // Down
+					});
 		}
 		
 		itemButtons = new Button[ITEMS_PER_PAGE];
-		for (int i = 0, k = 0; i < ITEMS_PER_PAGE/2; i++)
-		{
-			for (int j = 0; j < 2; j++, k++)
-			{
-				buttons[ITEMS + k] = itemButtons[k] = new Button(421 + 160*j, 261 + 38*i, 148, 28, Button.HoverAction.BOX,
-						new int[] {j == 0 ? ITEMS + k + 1 : PARTY, // Right
+		for (int i = 0, k = 0; i < ITEMS_PER_PAGE/2; i++) {
+			for (int j = 0; j < 2; j++, k++) {
+				// TODO: uggy assignments
+				buttons[ITEMS + k] = itemButtons[k] = new Button(
+						421 + 160*j,
+						261 + 38*i,
+						148,
+						28,
+						Button.HoverAction.BOX,
+						new int[] {
+								j == 0 ? ITEMS + k + 1 : PARTY, // Right
 								i == 0 ? USE : ITEMS + k - 2, // Up
 								j == 1 ? ITEMS + k - 1 : PARTY, // Left
-								i == ITEMS_PER_PAGE/2 - 1 ? (j == 0 ? LEFT_ARROW : RIGHT_ARROW) : ITEMS + k + 2}); // Down 
+								i == ITEMS_PER_PAGE/2 - 1 ? (j == 0 ? LEFT_ARROW : RIGHT_ARROW) : ITEMS + k + 2 // Down
+						});
 			}
 		}
 		
-		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] {RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN});
-		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] {PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN});
+		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN});
+		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] { PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN});
 		
-		buttons[GIVE] = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] {USE, selectedTab, PARTY, ITEMS});
-		buttons[USE] = new Button(518, 193, 110, 38, Button.HoverAction.BOX, new int[] {TAKE, selectedTab, GIVE, ITEMS});
-		buttons[TAKE] = new Button(628, 193, 110, 38, Button.HoverAction.BOX, new int[] {PARTY, selectedTab, USE, ITEMS + 1});
+		buttons[GIVE] = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] { USE, selectedTab, PARTY, ITEMS });
+		buttons[USE] = new Button(518, 193, 110, 38, Button.HoverAction.BOX, new int[] { TAKE, selectedTab, GIVE, ITEMS });
+		buttons[TAKE] = new Button(628, 193, 110, 38, Button.HoverAction.BOX, new int[] { PARTY, selectedTab, USE, ITEMS + 1 });
 		
-		buttons[RETURN] = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] {PARTY, LEFT_ARROW, PARTY, selectedTab});
+		buttons[RETURN] = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] { PARTY, LEFT_ARROW, PARTY, selectedTab });
 		
 		movedToFront(null);
 	}
 	
 	
 
-	public void update(int dt, InputControl input, Game game)
-	{
-		if (message != null)
-		{
-			if (input.mouseDown)
-			{
+	public void update(int dt, InputControl input, Game game) {
+		if (message != null) {
+			if (input.mouseDown) {
 				input.consumeMousePress();
 				message = null;
 			}
 			
-			if (input.isDown(Control.SPACE))
-			{
+			if (input.isDown(Control.SPACE)) {
 				input.consumeKey(Control.SPACE);
 				message = null;
 			}
@@ -252,48 +250,41 @@ public class BagView extends View
 		
 		selectedButton = Button.update(buttons, selectedButton, input);
 		
-		for (int i = 0; i < CATEGORIES.length; i++)
-		{
-			if (tabButtons[i].checkConsumePress())
-			{
+		for (int i = 0; i < CATEGORIES.length; i++) {
+			if (tabButtons[i].checkConsumePress()) {
 				changeCategory(i);
 			}
 		}
 		
-		for (int i = 0; i < Move.MAX_MOVES; ++i)
-		{
-			if (moveButtons[i].checkConsumePress())
-			{
+		for (int i = 0; i < Move.MAX_MOVES; ++i) {
+			if (moveButtons[i].checkConsumePress()) {
 				Move m = selectedPokemon.getActualMoves().get(i);
-				
 				UseState.addUseMessages(this, player.getBag().useMoveItem(selectedItem, selectedPokemon, m), selectedPokemon);
 			}
 		}
 		
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
-		{
-			if (partyButtons[i].checkConsumePress())
-			{
-				for (UseState useState : UseState.USE_STATE_VALUES)
-				{
-					if (useState.clicked)
-					{
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+			if (partyButtons[i].checkConsumePress()) {
+				for (UseState useState : UseState.USE_STATE_VALUES) {
+					if (useState.clicked) {
 						useState.useButton.useButton(useState, this, player.getTeam().get(i));
 					}
 				}
 			}
 		}
-		
+
+		// TODO: Maybe there should be a method that returns the iterator set to the appropriate page
 		Set<Item> list = player.getBag().getCategory(CATEGORIES[selectedTab]);
 		Iterator<Item> iter = list.iterator();
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) iter.next();
-		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++)
-		{
-			for (int y = 0; y < 2 && iter.hasNext(); y++, k++)
-			{
+		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
+			iter.next();
+		}
+
+		// TODO: Why does this loop need to be like this?
+		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
+			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				Item item = iter.next();
-				if (itemButtons[k].checkConsumePress())
-				{
+				if (itemButtons[k].checkConsumePress()) {
 					selectedItem = item;
 					updateActiveButtons();
 				}
@@ -301,58 +292,67 @@ public class BagView extends View
 		}
 		
 		// Check the use buttons
-		for (UseState useState : UseState.USE_STATE_VALUES)
-		{
-			if (buttons[useState.buttonIndex].checkConsumePress())
-			{
-				if (!useState.clicked) state = BagState.POKEMON_SELECT;
-				else state = BagState.ITEM_SELECT;
+		for (UseState useState : UseState.USE_STATE_VALUES) {
+			if (buttons[useState.buttonIndex].checkConsumePress()) {
+				if (!useState.clicked) {
+					state = BagState.POKEMON_SELECT;
+				}
+				else {
+					state = BagState.ITEM_SELECT;
+				}
 				
 				useState.clicked = !useState.clicked;
 				
-				for (UseState otherState : UseState.USE_STATE_VALUES)
-				{
-					if (useState == otherState) continue;
+				for (UseState otherState : UseState.USE_STATE_VALUES) {
+					if (useState == otherState) {
+						continue;
+					}
+
 					otherState.clicked = false;
 				}
 				
 				updateActiveButtons();
 				
-				if (useState == UseState.USE && selectedItem instanceof TrainerUseItem)
-				{
+				if (useState == UseState.USE && selectedItem instanceof TrainerUseItem) {
 					UseState.addUseMessages(this, player.getBag().useItem(selectedItem, player), null);
 				}
 			}
 		}
-		
-		if (buttons[LEFT_ARROW].checkConsumePress())
-		{
-			if (pageNum == 0) pageNum = totalPages(list.size()) - 1; 
-			else pageNum--;
+
+		// TODO: These should be methods
+		if (buttons[LEFT_ARROW].checkConsumePress()) {
+			if (pageNum == 0) {
+				pageNum = totalPages(list.size()) - 1;
+			}
+			else {
+				pageNum--;
+			}
+
 			updateActiveButtons();
 		}
 		
-		if (buttons[RIGHT_ARROW].checkConsumePress())
-		{
-			if (pageNum == totalPages(list.size()) - 1) pageNum = 0;
-			else pageNum++;
+		if (buttons[RIGHT_ARROW].checkConsumePress()) {
+			if (pageNum == totalPages(list.size()) - 1) {
+				pageNum = 0;
+			}
+			else {
+				pageNum++;
+			}
+
 			updateActiveButtons();
 		}
 		
-		if (buttons[RETURN].checkConsumePress())
-		{
+		if (buttons[RETURN].checkConsumePress()) {
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
 
-		if (input.isDown(Control.ESC))
-		{
+		if (input.isDown(Control.ESC)) {
 			input.consumeKey(Control.ESC);
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
-	public void draw(Graphics g, GameData data)
-	{
+	public void draw(Graphics g, GameData data) {
 		TileSet tiles = data.getMenuTiles();
 		TileSet itemTiles = data.getItemTiles();
 		TileSet partyTiles = data.getPartyTiles();
@@ -373,19 +373,16 @@ public class BagView extends View
 		g.drawImage(tiles.getTile(0x22), 62, 112, null);
 		
 		// Item Display
-		if (selectedItem != null)
-		{
-			for (UseState useState : UseState.USE_STATE_VALUES)
-			{
+		if (selectedItem != null) {
+			for (UseState useState : UseState.USE_STATE_VALUES) {
+
 				// Grey out selected buttons
-				if (useState.clicked)
-				{
+				if (useState.clicked) {
 					buttons[useState.buttonIndex].greyOut(g, false);
 				}
 				
 				// Grey out inactive buttons
-				if (!buttons[useState.buttonIndex].isActive())
-				{
+				if (!buttons[useState.buttonIndex].isActive()) {
 					buttons[useState.buttonIndex].greyOut(g, true);
 				}
 			}
@@ -398,8 +395,7 @@ public class BagView extends View
 			DrawMetrics.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
-			if (selectedItem.hasQuantity())
-			{
+			if (selectedItem.hasQuantity()) {
 				DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(selectedItem), 726, 138);
 			}
 			
@@ -408,8 +404,7 @@ public class BagView extends View
 			
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
 			DrawMetrics.setFont(g, 20);
-			for (UseState useState : UseState.USE_STATE_VALUES)
-			{
+			for (UseState useState : UseState.USE_STATE_VALUES) {
 				DrawMetrics.drawCenteredString(g, useState.displayName, buttons[useState.buttonIndex]);
 			}
 		}
@@ -421,13 +416,12 @@ public class BagView extends View
 		Set<Item> list = bag.getCategory(CATEGORIES[selectedTab]);
 		Iterator<Item> iter = list.iterator();
 		
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) 
+		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
 			iter.next();
+		}
 		
-		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++)
-		{
-			for (int y = 0; y < 2 && iter.hasNext(); y++, k++)
-			{
+		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
+			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				g.translate(itemButtons[k].x, itemButtons[k].y);
 				Item item = iter.next();
 				
@@ -436,8 +430,7 @@ public class BagView extends View
 				
 				g.drawString(item.getName(), 29, 18);
 				
-				if (item.hasQuantity())
-				{
+				if (item.hasQuantity()) {
 					DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
 				}
 				
@@ -453,12 +446,10 @@ public class BagView extends View
 		View.drawArrows(g, buttons[LEFT_ARROW], buttons[RIGHT_ARROW]);
 		
 		// Draw moves
-		if (state == BagState.MOVE_SELECT)
-		{ 
+		if (state == BagState.MOVE_SELECT) {
 			List<Move> moveList = selectedPokemon.getActualMoves();
 			
-			for (int i = 0; i < moveList.size(); i++)
-			{
+			for (int i = 0; i < moveList.size(); i++) {
 				g.translate(moveButtons[i].x, moveButtons[i].y);
 				
 				Move m = moveList.get(i);
@@ -483,10 +474,8 @@ public class BagView extends View
 			}
 		}
 		// Draw Pokemon Info
-		else
-		{
-			for (int i = 0; i < team.size(); i++)
-			{
+		else {
+			for (int i = 0; i < team.size(); i++) {
 				g.translate(partyButtons[i].x, partyButtons[i].y);
 				
 				ActivePokemon p = team.get(i);
@@ -505,12 +494,10 @@ public class BagView extends View
 				g.setColor(Color.BLACK);
 				DrawMetrics.setFont(g, 14);
 				
-				if (p.isEgg())
-				{
+				if (p.isEgg()) {
 					g.drawString(p.getActualName(), 50, 22);	
 				}
-				else
-				{
+				else {
 					// Name, Gender, and Level
 					g.drawString(p.getActualName() + " " + p.getGender().getCharacter(), 50, 22);
 					g.drawString("Lv" + p.getLevel(), 153, 22);
@@ -531,8 +518,7 @@ public class BagView extends View
 					g.drawString(p.getActualHeldItem().getName(), 50, 47);
 					DrawMetrics.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
 					
-					if (p.hasStatus(StatusCondition.FAINTED))
-					{
+					if (p.hasStatus(StatusCondition.FAINTED)) {
 						g.setColor(new Color(0, 0, 0, 128)); // TODO: Look if this color appears in multiple place and see if it should be a constant
 						g.fillRect(0, 0, partyButtons[i].width, partyButtons[i].height);
 					}	
@@ -548,8 +534,7 @@ public class BagView extends View
 		g.drawImage(tiles.getTile(0x27), 410, 500, null);
 		DrawMetrics.drawCenteredWidthString(g, "Return", 573, 525);
 		
-		for (int i = 0; i < CATEGORIES.length; i++)
-		{
+		for (int i = 0; i < CATEGORIES.length; i++) {
 			g.translate(tabButtons[i].x, tabButtons[i].y);
 			
 			DrawMetrics.setFont(g, 14);
@@ -568,28 +553,25 @@ public class BagView extends View
 			g.translate(-tabButtons[i].x, -tabButtons[i].y);
 		}
 		
-		if (message != null)
-		{
+		if (message != null) {
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
 			g.setColor(Color.WHITE);
 			
 			DrawMetrics.setFont(g, 30);
 			DrawMetrics.drawWrappedText(g, message, 30, 490, 750);
 		}
-		else
-		{
-			for (Button b : buttons)
+		else {
+			for (Button b : buttons) {
 				b.draw(g);
+			}
 		}
 	}
 
-	public ViewMode getViewModel()
-	{
+	public ViewMode getViewModel() {
 		return ViewMode.BAG_VIEW;
 	}
 
-	private void changeCategory(int index)
-	{
+	private void changeCategory(int index) {
 		if (selectedTab != index) 
 			pageNum = 0;
 		
@@ -602,37 +584,31 @@ public class BagView extends View
 		updateActiveButtons();
 	}
 
-	public void movedToFront(Game game)
-	{
+	public void movedToFront(Game game) {
 		changeCategory(0);
 	}
 	
-	private int totalPages(int size)
-	{ 
+	private int totalPages(int size) {
+		// TODO: isn't 0%n always 0?
 		return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
 	}
 	
-	private void addMessage(String message)
-	{
+	private void addMessage(String message) {
 		this.message = message;
 	}
 	
-	private void updateActiveButtons()
-	{
+	private void updateActiveButtons() {
 		List<ActivePokemon> team = player.getTeam();
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++)			
-		{
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
 			partyButtons[i].setActive(state == BagState.POKEMON_SELECT && i < team.size());
 		}
 		
 		int displayed = player.getBag().getCategory(CATEGORIES[selectedTab]).size();
-		for (int i = 0; i < ITEMS_PER_PAGE; i++)
-		{
+		for (int i = 0; i < ITEMS_PER_PAGE; i++) {
 			itemButtons[i].setActive(state == BagState.ITEM_SELECT && i < displayed - pageNum*ITEMS_PER_PAGE);
 		}
 		
-		for (int i = 0; i < Move.MAX_MOVES; i++)
-		{
+		for (int i = 0; i < Move.MAX_MOVES; i++) {
 			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
 		}
 		

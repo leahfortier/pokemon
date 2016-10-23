@@ -20,7 +20,7 @@ Constructor:
 *
 Fields:
 	Price Int price
-	BattleCat Multiple Enum BattleBagCategory bcat List
+	BattleCat Multiple Enum BattleBagCategory battleBagCategories List
 *
 
 ***
@@ -128,19 +128,16 @@ Black Sludge:
 	Price: 200
 	Fling: 30
 	ApplyEndTurn:
-		if (victim.isType(b, Type.POISON))
-		{
+		if (victim.isType(b, Type.POISON)) {
 			// Don't heal if at full health
-			if (victim.fullHealth()) 
-			{
+			if (victim.fullHealth()) {
 				return;
 			}
 			
 			victim.healHealthFraction(1/16.0);
 			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 		}
-		else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-		{
+		else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 			b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
 		}
@@ -229,10 +226,14 @@ Eject Button:
 	OnTakeDamage:
 		// TODO: Try to generalize with self-switching moves
 		Team t = b.getTrainer(victim.user());
-		if (t instanceof WildPokemon) return;
+		if (t instanceof WildPokemon) {
+			return;
+		}
 
 		Trainer trainer = (Trainer)t;
-		if (!trainer.hasRemainingPokemon()) return;
+		if (!trainer.hasRemainingPokemon()) {
+			return;
+		}
 
 		b.addMessage(victim.getName() + "'s " + this.name + " sent it back to " + trainer.getName() + "!");
 		victim.consumeItem(b);
@@ -278,8 +279,7 @@ Toxic Orb:
 	Fling: 30
 	ApplyEndTurn:
 		// Badly poisons the holder at the end of the turn
-		if (Status.applies(StatusCondition.POISONED, b, victim, victim))
-		{
+		if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
 			victim.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
 			Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 		}
@@ -313,8 +313,7 @@ Focus Sash:
 	Price: 200
 	Fling: 10
 	Bracing:
-		if (fullHealth)
-		{
+		if (fullHealth) {
 			bracer.consumeItem(b);
 			return true;
 		}
@@ -372,8 +371,7 @@ Life Orb:
 		return 5324.0/4096.0;
 		###
 	OnApplyDamage:
-		if (user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-		{
+		if (user.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 			return;
 		}
 		
@@ -412,8 +410,7 @@ Lucky Punch:
 	Price: 10
 	Fling: 40
 	IncreaseCritStage:
-		if (p.isPokemon(Namesies.CHANSEY_POKEMON)) 
-		{
+		if (p.isPokemon(Namesies.CHANSEY_POKEMON)) {
 			return stage + 2;
 		}
 		
@@ -434,8 +431,7 @@ Macho Brace:
 	Price: 3000
 	Fling: 60
 	GetEVs:
-	for (int i = 0; i < vals.length; i++) 
-	{
+	for (int i = 0; i < vals.length; i++) {
 		vals[i] *= 2;
 	}
 	
@@ -451,30 +447,27 @@ Mental Herb:
 	Price: 100
 	Fling: 10
 	Field:
+		// TODO: This should be an object array
 		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT, Namesies.HEAL_BLOCK_EFFECT};
 		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
 		###
 	ApplyEndTurn:
 		boolean used = false;
-		for (int i = 0; i < effects.length; i++)
-		{
+		for (int i = 0; i < effects.length; i++) {
 			Namesies s = effects[i];
-			if (victim.hasEffect(s))
-			{
+			if (victim.hasEffect(s)) {
 				used = true;
 				victim.getAttributes().removeEffect(s);
 				b.addMessage(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
 			}
 		}
 		
-		if (used)
-		{
+		if (used) {
 			victim.consumeItem(b);
 		}
 		###
 	FlingEffect:
-		if (pelted.hasEffect(Namesies.INFATUATED_EFFECT))
-		{
+		if (pelted.hasEffect(Namesies.INFATUATED_EFFECT)) {
 			pelted.getAttributes().removeEffect(Namesies.INFATUATED_EFFECT);
 			b.addMessage(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
 		}
@@ -564,10 +557,14 @@ Red Card:
 	OnTakeDamage:
 		// TODO: Generalize this code with that of moves like U-Turn
 		Team t = b.getTrainer(user.user());
-		if (t instanceof WildPokemon) return;
+		if (t instanceof WildPokemon) {
+			return;
+		}
 
 		Trainer trainer = (Trainer)t;
-		if (!trainer.hasRemainingPokemon()) return;
+		if (!trainer.hasRemainingPokemon()) {
+			return;
+		}
 
 		b.addMessage(victim.getName() + "'s " + this.name + " sent " + user.getName() + " back to " + trainer.getName() + "!");
 		victim.consumeItem(b);
@@ -628,8 +625,7 @@ Shell Bell:
 	Price: 200
 	Fling: 30
 	OnApplyDamage:
-		if (user.fullHealth()) 
-		{
+		if (user.fullHealth()) {
 			return;
 		}
 		
@@ -668,8 +664,7 @@ Stick:
 	Price: 200
 	Fling: 60
 	IncreaseCritStage:
-		if (p.isPokemon(Namesies.FARFETCHD_POKEMON))
-		{
+		if (p.isPokemon(Namesies.FARFETCHD_POKEMON)) {
 			return stage + 2;
 		}
 		
@@ -683,8 +678,7 @@ Sticky Barb:
 	Price: 200
 	Fling: 80
 	ApplyEndTurn:
-		if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-		{
+		if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 			return;
 		}
 		
@@ -692,21 +686,18 @@ Sticky Barb:
 		victim.reduceHealthFraction(b, 1/8.0);
 		###
 	Contact:
-		if (!user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-		{
+		if (!user.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 		}
 	            
-		if (user.isHoldingItem(b) || user.isFainted(b)) 
-		{
+		if (user.isHoldingItem(b) || user.isFainted(b)) {
 			return;
 		}
 		
 		b.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
 
-		if (b.isWildBattle())
-		{
+		if (b.isWildBattle()) {
 			victim.removeItem();
 			user.giveItem(this);
 			return;
@@ -740,8 +731,7 @@ Weakness Policy:
 	Price: 200
 	Fling: 30
 	OnTakeDamage:
-		if (Type.getAdvantage(user, victim, b) > 1)
-		{
+		if (Type.getAdvantage(user, victim, b) > 1) {
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
 		}
@@ -759,10 +749,8 @@ White Herb:
 		###
 	FlingEffect:
 	// Restores negative stat changes to the pelted
-	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
-	{
-		if (pelted.getStage(i) < 0)
-		{
+	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
+		if (pelted.getStage(i) < 0) {
 			pelted.getAttributes().setStage(i, 0);
 		}
 	}
@@ -1076,8 +1064,7 @@ Leftovers:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.
 	ApplyEndTurn:
-		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
-		{
+		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
 			return;
 		}
 		
@@ -1466,14 +1453,12 @@ Full Restore:
 	Fling: 30
 	PokemonUse:
 		// Does not apply to the dead
-		if (p.hasStatus(StatusCondition.FAINTED)) 
-		{
+		if (p.hasStatus(StatusCondition.FAINTED)) {
 			return false;
 		}
 		
 		// Does not apply to the fully healed -- status condition or otherwise
-		if (!p.hasStatus() && p.fullHealth()) 
-		{
+		if (!p.hasStatus() && p.fullHealth()) {
 			return false;
 		}
 		
@@ -1600,10 +1585,8 @@ Sacred Ash:
 	Fling: 30
 	TrainerUse:
 		boolean changed = false;
-		for (ActivePokemon p : t.getTeam())
-		{
-			if (p.hasStatus(StatusCondition.FAINTED))
-			{
+		for (ActivePokemon p : t.getTeam()) {
+			if (p.hasStatus(StatusCondition.FAINTED)) {
 				changed = true;
 				p.removeStatus();
 				p.healHealthFraction(1);
@@ -1623,8 +1606,7 @@ Dire Hit:
 	Fling: 30
 	BattleUse:
 		PokemonEffect crits = PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT);
-		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) 
-		{
+		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
 			return false;
 		}
 
@@ -1642,8 +1624,7 @@ Guard Spec.:
 	Fling: 30
 	BattleUse:
 		PokemonEffect gSpesh = PokemonEffect.getEffect(Namesies.GUARD_SPECIAL_EFFECT);
-		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) 
-		{
+		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
 			return false;
 		}
 
@@ -1766,8 +1747,7 @@ Dive Ball:
 	Price: 1000
 	CatchRate:
 		// TODO: Not sure yet if this will cover fishing
-		if (b.getTerrainType() == TerrainType.WATER)
-		{
+		if (b.getTerrainType() == TerrainType.WATER) {
 			return new double[] {3.5, 0};
 		}
 		
@@ -1779,8 +1759,7 @@ Dusk Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.
 	Price: 1000
 	CatchRate:
-		if (b.getTerrainType() == TerrainType.CAVE) 
-		{
+		if (b.getTerrainType() == TerrainType.CAVE) {
 			return new double[] {3.5, 0};
 		}
 		
@@ -1793,8 +1772,7 @@ Fast Ball:
 	Price: 200
 	CatchRate:
 		// If the opponent has a base speed of 100 or higher, multiplier is 4
-		if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100)
-		{
+		if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100) {
 			return new double[] {4, 0};
 		}
 		
@@ -1826,6 +1804,7 @@ Heavy Ball:
 		double[] res = new double[2];
 		res[0] = 1;
 		
+		// TODO: Rewrite this with a loop
 		if (weight <= 451.5) res[1] = -20;
 		else if (weight <= 661.5) res[1] = 20;
 		else if (weight <= 903.0) res[1] = 30;
@@ -1839,6 +1818,7 @@ Level Ball:
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.
 	Price: 200
 	CatchRate:
+		// TODO: Rewrite this in a loop
 		if (me.getLevel()/4 > o.getLevel()) return new double[] {8, 0};
 		else if (me.getLevel()/2 > o.getLevel()) return new double[] {4, 0};
 		else if (me.getLevel() > o.getLevel()) return new double[] {2, 0};
@@ -1850,8 +1830,7 @@ Love Ball:
 	Desc: Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.
 	Price: 200
 	CatchRate:
-		if (me.getGender() == o.getGender()) 
-		{
+		if (me.getGender() == o.getGender()) {
 			return new double[] {8, 0};
 		}
 		
@@ -1864,8 +1843,7 @@ Lure Ball:
 	Price: 200
 	CatchRate:
 		// TODO: Fishing
-		if (false) 
-		{
+		if (false) {
 			return new double[] {3, 0};
 		}
 		
@@ -1893,8 +1871,7 @@ Moon Ball:
 	Price: 200
 	CatchRate:
 		Evolution ev = o.getPokemonInfo().getEvolution();
-		if (ev.getEvolution(EvolutionCheck.ITEM, o, Namesies.MOON_STONE_ITEM) != null) 
-		{
+		if (ev.getEvolution(EvolutionCheck.ITEM, o, Namesies.MOON_STONE_ITEM) != null) {
 			return new double[] {4, 0};
 		}
 		
@@ -1906,6 +1883,7 @@ Nest Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.
 	Price: 1000
 	CatchRate:
+		// TODO: Loopy and make it general with the others
 		if (o.getLevel() <= 19) return new double[] {3, 0};
 		else if (o.getLevel() <= 29) return new double[] {2, 0};
 		else return new double[] {1, 0};
@@ -1916,8 +1894,7 @@ Net Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.
 	Price: 1000
 	CatchRate:
-		if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) 
-		{
+		if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) {
 			return new double[] {3, 0};
 		}
 		
@@ -1941,8 +1918,8 @@ Quick Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.
 	Price: 1000
 	CatchRate:
-		if (b.getTurn() == 1) 
-		{
+		// TODO: Generalize this
+		if (b.getTurn() == 1) {
 			return new double[] {3, 0};
 		}
 		
@@ -1954,8 +1931,7 @@ Repeat Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.
 	Price: 1000
 	CatchRate:
-		if (b.getPlayer().getPokedex().caught(o.getPokemonInfo().namesies())) 
-		{
+		if (b.getPlayer().getPokedex().caught(o.getPokemonInfo().namesies())) {
 			return new double[] {3, 0};
 		}
 		
@@ -2025,10 +2001,8 @@ Leppa Berry:
 	NGType: Fighting
 	NGPow: 80
 	ApplyEndTurn:
-		for (Move m : victim.getMoves(b))
-		{
-			if (m.getPP() == 0)
-			{
+		for (Move m : victim.getMoves(b)) {
+			if (m.getPP() == 0) {
 				use(victim, m);
 				b.addMessage(getHoldSuccessMessage(b, victim));
 				victim.consumeItem(b);
@@ -2040,19 +2014,16 @@ Leppa Berry:
 		Move lowestPPMove = null;
 		double lowestPPRatio = 1;
 		
-		for (Move m : user.getMoves(b))
-		{
+		for (Move m : user.getMoves(b)) {
 			double ratio = (double)m.getPP()/m.getMaxPP();
-			if (ratio < lowestPPRatio)
-			{
+			if (ratio < lowestPPRatio) {
 				lowestPPRatio = ratio;
 				lowestPPMove = m;
 			}
 		}
 		
 		// All moves have full PP
-		if (lowestPPMove == null)
-		{
+		if (lowestPPMove == null) {
 			return false;
 		}
 		
@@ -2081,8 +2052,7 @@ Persim Berry:
 	NGType: Ground
 	NGPow: 80
 	BattleUse:
-		if (p.hasEffect(Namesies.CONFUSION_EFFECT))
-		{
+		if (p.hasEffect(Namesies.CONFUSION_EFFECT)) {
 			p.getAttributes().removeEffect(Namesies.CONFUSION_EFFECT);
 			return true;
 		}
@@ -2090,8 +2060,7 @@ Persim Berry:
 		return false;
 		###
 	GainEffect:
-		if (!use(user, b))
-		{
+		if (!use(user, b)) {
 			return false;
 		}
 		###
@@ -2105,14 +2074,12 @@ Lum Berry:
 	FullHeal: True
 	GainEffect:
 	// Does not apply to the dead
-	if (user.hasStatus(StatusCondition.FAINTED))
-	{
+	if (user.hasStatus(StatusCondition.FAINTED)) {
 		return false;
 	}
 	
 	// YOU'RE FINE
-	if (!user.hasStatus())
-	{
+	if (!user.hasStatus()) {
 		return false;
 	}
 	
@@ -2304,8 +2271,7 @@ Enigma Berry:
 	NGPow: 100
 	Int: Berry, TakeDamageEffect
 	OnTakeDamage:
-		if (!victim.fullHealth() && Type.getAdvantage(user, victim, b) > 1)
-		{
+		if (!victim.fullHealth() && Type.getAdvantage(user, victim, b) > 1) {
 			b.addMessage(victim.getName() + "'s " + this.name + " restored its health!");
 			victim.healHealthFraction(.25);
 			b.addMessage("", victim);
@@ -2339,8 +2305,7 @@ Starf Berry:
 		int rand = (int)(Math.random()*(Stat.NUM_BATTLE_STATS + 1));
 		
 		// Raise crit
-		if (rand == Stat.NUM_BATTLE_STATS)
-		{
+		if (rand == Stat.NUM_BATTLE_STATS) {
 			PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, source, false);
 			holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
 			useMessage = user.getName() + " is getting pumped!";
@@ -2349,8 +2314,7 @@ Starf Berry:
 		
 		// Raise random battle stat
 		Stat stat = Stat.getStat(rand, true);
-		if (user.getAttributes().modifyStage(user, user, 1, stat, b, source))
-		{
+		if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
 			useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 			return true;
 		}
@@ -2490,8 +2454,7 @@ Ability Capsule:
 	Int: PokemonUseItem
 	PokemonUse:
 		Ability other = Ability.getOtherAbility(p);
-		if (other.namesies() == Namesies.NONE_ABILITY)
-		{
+		if (other.namesies() == Namesies.NONE_ABILITY) {
 			return false;
 		}
 		

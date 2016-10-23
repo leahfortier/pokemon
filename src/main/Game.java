@@ -1,4 +1,6 @@
 package main;
+
+import battle.Battle;
 import gui.GameData;
 import gui.view.BagView;
 import gui.view.BattleView;
@@ -18,6 +20,7 @@ import item.hold.HoldItem;
 
 import java.awt.Graphics;
 import java.util.EnumMap;
+import java.util.Map;
 
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
@@ -25,18 +28,26 @@ import trainer.CharacterData;
 import util.InputControl;
 import util.Save;
 
-
 public class Game {
-	public static enum ViewMode {
-		MAP_VIEW, POKEDEX_VIEW, BATTLE_VIEW, BAG_VIEW, 
-		PARTY_VIEW, PC_VIEW, MAIN_MENU_VIEW, TRAINER_CARD_VIEW, 
-		MART_VIEW, OPTIONS_VIEW, START_VIEW, EVOLUTION_VIEW
+	public enum ViewMode {
+		BAG_VIEW,
+		BATTLE_VIEW,
+		EVOLUTION_VIEW,
+		MAIN_MENU_VIEW,
+		MAP_VIEW,
+		MART_VIEW,
+		OPTIONS_VIEW,
+		PARTY_VIEW,
+		PC_VIEW,
+		POKEDEX_VIEW,
+		START_VIEW,
+		TRAINER_CARD_VIEW,
 	}
 	
 	public final GameData data;
-	public final EnumMap<ViewMode, View> viewMap;
+	private final Map<ViewMode, View> viewMap;
 	
-	public CharacterData charData;
+	public CharacterData characterData;
 	private ViewMode currentViewMode;
 	private View currentView;
 	
@@ -50,84 +61,83 @@ public class Game {
 		currentView = viewMap.get(ViewMode.MAIN_MENU_VIEW);
 	}
 	
-	public void addCharStuff()
-	{
-		charData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.EEVEE_POKEMON), 1, false, true));
-		charData.front().giveItem((HoldItem)Item.getItem(Namesies.ORAN_BERRY_ITEM));
+	private void setupCharacter() {
+		characterData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.EEVEE_POKEMON), 1, false, true));
+		characterData.front().giveItem((HoldItem)Item.getItem(Namesies.ORAN_BERRY_ITEM));
 	}
 	
-	private void checkViewSwitch(InputControl input)
-	{
-		if (!currentView.getViewModel().equals(currentViewMode))
-		{
+	private void checkViewSwitch(InputControl input) {
+		if (!currentView.getViewModel().equals(currentViewMode)) {
 			input.resetKeys();
 			currentView = viewMap.get(currentViewMode);
 			currentView.movedToFront(this);
 		}
 	}
 
-	public void update(int dt, InputControl input) 
-	{
+	public void update(int dt, InputControl input) {
 		checkViewSwitch(input);
 		currentView.update(dt, input, this);
 		checkViewSwitch(input);
 	}
 
-	public void draw(Graphics g) 
-	{
+	public void setBattleViews(final Battle battle, final boolean seenWildPokemon) {
+		((BattleView)this.viewMap.get((ViewMode.BATTLE_VIEW))).setBattle(battle);
+		((MapView)this.viewMap.get(ViewMode.MAP_VIEW)).setBattle(battle, seenWildPokemon);
+	}
+
+	public void setMapViewDialogue(final String dialogueName) {
+		((MapView)this.viewMap.get(ViewMode.MAP_VIEW)).setDialogue(dialogueName);
+	}
+
+	public void draw(Graphics g) {
 		currentView.draw(g, data);
 	}
 	
-	public void setViewMode(ViewMode mode)
-	{
+	public void setViewMode(ViewMode mode) {
 		currentViewMode = mode;
 	}
 	
-	public ViewMode getCurrentViewMode() 
-	{
+	public ViewMode getCurrentViewMode() {
 		return currentViewMode;
 	}
 
-	public void loadSave(int index) 
-	{
-		charData = Save.load(index, this);
+	public void loadSave(int index) {
+		characterData = Save.load(index, this);
 		setViews();
 	}
 	
-	public void newSave(int index)
-	{
-		charData = new CharacterData(this);
+	public void newSave(int index) {
+		characterData = new CharacterData(this);
 		
 		String startingMap = "PlayersHouseUp";
 		String startingMapEntrance = "GameStartLocation";
-		charData.setMap(startingMap, startingMapEntrance);
-		data.getMap(startingMap).setCharacterToEntrance(charData, startingMapEntrance);
+		characterData.setMap(startingMap, startingMapEntrance);
+		data.getMap(startingMap).setCharacterToEntrance(characterData, startingMapEntrance);
 		
-		charData.setFileNum(index);
-		addCharStuff();
+		characterData.setFileNum(index);
+		setupCharacter();
 		setViews();
 		
 		// Testing things
 //		EnemyTrainer rival = new EnemyTrainer("Blue", 500);
 //		rival.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo("Charmander"), 5, false, false));
-//		Battle b = new Battle(charData, rival);
+//		Battle b = new Battle(characterData, rival);
 //		BattleView battleView = new BattleView();
 //		battleView.setBattle(b);
 //		viewMap.put(ViewMode.BATTLE_VIEW, battleView);
 	}
 	
-	public void setViews()
-	{
+	private void setViews() {
 		viewMap.put(ViewMode.MAP_VIEW, new MapView());
-		viewMap.put(ViewMode.BAG_VIEW, new BagView(charData));
-		viewMap.put(ViewMode.PARTY_VIEW, new PartyView(charData));
-		viewMap.put(ViewMode.PC_VIEW, new PCView(charData));
-		viewMap.put(ViewMode.POKEDEX_VIEW, new PokedexView(charData.getPokedex()));
-		viewMap.put(ViewMode.MART_VIEW, new MartView(charData));
-		viewMap.put(ViewMode.TRAINER_CARD_VIEW, new TrainerCardView(charData));
+		viewMap.put(ViewMode.BAG_VIEW, new BagView(characterData));
+		viewMap.put(ViewMode.PARTY_VIEW, new PartyView(characterData));
+		viewMap.put(ViewMode.PC_VIEW, new PCView(characterData));
+		viewMap.put(ViewMode.POKEDEX_VIEW, new PokedexView(characterData.getPokedex()));
+		viewMap.put(ViewMode.MART_VIEW, new MartView(characterData));
+		viewMap.put(ViewMode.TRAINER_CARD_VIEW, new TrainerCardView(characterData));
 		viewMap.put(ViewMode.BATTLE_VIEW, new BattleView());
 		viewMap.put(ViewMode.OPTIONS_VIEW, new OptionsView());
-		viewMap.put(ViewMode.START_VIEW, new StartView(charData));
-		viewMap.put(ViewMode.EVOLUTION_VIEW, new EvolutionView(charData));
+		viewMap.put(ViewMode.START_VIEW, new StartView(characterData));
+		viewMap.put(ViewMode.EVOLUTION_VIEW, new EvolutionView(characterData));
 	}
 }

@@ -1,9 +1,9 @@
 package mapMaker.dialogs;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashSet;
+import map.triggers.TriggerData;
+import map.triggers.WildBattleTrigger;
+import map.EncounterRate;
+import map.WildEncounter;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -16,31 +16,23 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import map.triggers.TriggerData;
-import map.triggers.WildBattleTrigger;
-import map.triggers.WildBattleTrigger.EncounterRate;
-import map.triggers.WildBattleTrigger.WildEncounter;
-
-public class WildBattleTriggerEditDialog extends JPanel 
-{	
+public class WildBattleTriggerEditDialog extends JPanel {
 	private static final long serialVersionUID = -3454589908432207758L;
 
 	private JTextField nameTextField;
-	public JComboBox<String> rateComboBox;
+	private JComboBox<String> rateComboBox;
 	
 	private JScrollPane pokemonScrollPane;
 	private JPanel pokemonCollectionPanel;
-	private JButton addPokemonButton;
 	private JButton removeSelectedButton;
 	
-	private ArrayList<WildPokemonDataPanel> wildPokemonPanels;
-	private HashSet<Integer> selected;
-	private JLabel lblSelect;
-	private JLabel lblPokemon;
-	private JLabel lblProbabilty;
-	private JLabel lblLowLevel;
-	private JLabel lblHighLevel;
+	private List<WildPokemonDataPanel> wildPokemonPanels;
+	private Set<Integer> selected;
 	
 	public WildBattleTriggerEditDialog() 
 	{
@@ -52,8 +44,8 @@ public class WildBattleTriggerEditDialog extends JPanel
 		nameTextField = new JTextField();
 		nameTextField.setColumns(10);
 		
-		rateComboBox = new JComboBox<String>();
-		rateComboBox.setModel(new DefaultComboBoxModel<String>(EncounterRate.ENCOUNTER_RATE_NAMES));
+		rateComboBox = new JComboBox<>();
+		rateComboBox.setModel(new DefaultComboBoxModel<>(EncounterRate.ENCOUNTER_RATE_NAMES));
 		
 		pokemonScrollPane = new JScrollPane();
 		pokemonScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -61,55 +53,43 @@ public class WildBattleTriggerEditDialog extends JPanel
 		pokemonCollectionPanel = new JPanel();
 		pokemonScrollPane.setViewportView(pokemonCollectionPanel);
 		pokemonCollectionPanel.setLayout(new BoxLayout(pokemonCollectionPanel, BoxLayout.Y_AXIS));
-		
-		addPokemonButton = new JButton("Add Pokemon");
-		addPokemonButton.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{	
-				addPokemonPanel();
-			}
-		});
+
+		JButton addPokemonButton = new JButton("Add Pokemon");
+		addPokemonButton.addActionListener(actionEvent -> addPokemonPanel());
 		
 		removeSelectedButton = new JButton("Remove Selected");
-		removeSelectedButton.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{	
-				Integer[] values = new Integer[selected.size()];
-				selected.toArray(values);
-				for (int currPanel = values.length - 1; currPanel >= 0; --currPanel) 
-				{
-					wildPokemonPanels.remove(values[currPanel].intValue());
-					pokemonCollectionPanel.remove(values[currPanel].intValue());
-				}
-				
-				for (int currPanel = 0; currPanel < wildPokemonPanels.size(); ++currPanel) 
-				{
-					wildPokemonPanels.get(currPanel).index = currPanel;
-				}
-				
-				selected.clear();
-				removeSelectedButton.setEnabled(false);
-				
-				pokemonCollectionPanel.validate();
-				pokemonCollectionPanel.repaint(50L);
-				pokemonScrollPane.validate();
-				
+		removeSelectedButton.addActionListener(actionEvent -> {
+            int[] values = new int[selected.size()];
+			int index = 0;
+			for (int value : selected) {
+				// TODO: lambda??
+				values[index++] = value;
 			}
-		});
+
+            for (int currPanel = values.length - 1; currPanel >= 0; --currPanel) {
+                wildPokemonPanels.remove(values[currPanel]);
+                pokemonCollectionPanel.remove(values[currPanel]);
+            }
+
+            for (int currPanel = 0; currPanel < wildPokemonPanels.size(); ++currPanel) {
+                wildPokemonPanels.get(currPanel).index = currPanel;
+            }
+
+            selected.clear();
+            removeSelectedButton.setEnabled(false);
+
+            pokemonCollectionPanel.validate();
+            pokemonCollectionPanel.repaint(50L);
+            pokemonScrollPane.validate();
+        });
 		
 		removeSelectedButton.setEnabled(false);
-		
-		lblSelect = new JLabel("Select");
-		
-		lblPokemon = new JLabel("Pokemon");
-		
-		lblProbabilty = new JLabel("Probabilty");
-		
-		lblLowLevel = new JLabel("Low Level");
-		
-		lblHighLevel = new JLabel("High Level");
+
+		JLabel selectLabel = new JLabel("Select");
+		JLabel pokemonLabel = new JLabel("Pokemon");
+		JLabel probabilityLabel = new JLabel("Probability");
+		JLabel minLevelLabel = new JLabel("Min Level");
+		JLabel maxLevelLabel = new JLabel("Max Level");
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -123,15 +103,15 @@ public class WildBattleTriggerEditDialog extends JPanel
 					.addComponent(rateComboBox, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(7)
-					.addComponent(lblSelect, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+					.addComponent(selectLabel, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
 					.addGap(7)
-					.addComponent(lblPokemon, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+					.addComponent(pokemonLabel, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
 					.addGap(58)
-					.addComponent(lblProbabilty, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addComponent(probabilityLabel, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 					.addGap(13)
-					.addComponent(lblLowLevel)
+					.addComponent(minLevelLabel)
 					.addGap(24)
-					.addComponent(lblHighLevel, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
+					.addComponent(maxLevelLabel, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(6)
 					.addComponent(pokemonScrollPane, GroupLayout.PREFERRED_SIZE, 448, GroupLayout.PREFERRED_SIZE))
@@ -155,11 +135,11 @@ public class WildBattleTriggerEditDialog extends JPanel
 							.addComponent(rateComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addGap(5)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblSelect)
-						.addComponent(lblPokemon)
-						.addComponent(lblProbabilty)
-						.addComponent(lblLowLevel)
-						.addComponent(lblHighLevel))
+						.addComponent(selectLabel)
+						.addComponent(pokemonLabel)
+						.addComponent(probabilityLabel)
+						.addComponent(minLevelLabel)
+						.addComponent(maxLevelLabel))
 					.addGap(5)
 					.addComponent(pokemonScrollPane, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 					.addGap(4)
@@ -167,11 +147,11 @@ public class WildBattleTriggerEditDialog extends JPanel
 						.addComponent(addPokemonButton)
 						.addComponent(removeSelectedButton)))
 		);
+
 		setLayout(groupLayout);
 	}
 
-	private WildPokemonDataPanel addPokemonPanel() 
-	{
+	private WildPokemonDataPanel addPokemonPanel() {
 		WildPokemonDataPanel panel = new WildPokemonDataPanel(this, wildPokemonPanels.size());
 		wildPokemonPanels.add(panel);
 		pokemonCollectionPanel.add(panel);
@@ -181,57 +161,46 @@ public class WildBattleTriggerEditDialog extends JPanel
 		return panel;
 	}
 	
-	public void setSelected(int index) 
-	{
-		if (selected.contains(index)) 
-		{
+	public void setSelected(int index) {
+		if (selected.contains(index)) {
 			selected.remove(index);
-			if (selected.size() == 0) 
-			{
+			if (selected.size() == 0) {
 				removeSelectedButton.setEnabled(false);
 			}
 		}
-		else 
-		{
+		else {
 			selected.add(index);
-			if (selected.size() == 1) 
-			{
+			if (selected.size() == 1) {
 				removeSelectedButton.setEnabled(true);
 			}
 		}
 	}
 	
-	public void initialize(WildBattleTrigger trigger) 
-	{	
+	public void initialize(WildBattleTrigger trigger) {
 		nameTextField.setText(trigger.getName());
 		
-		rateComboBox.setSelectedIndex(trigger.encounterRate.ordinal());
+		rateComboBox.setSelectedIndex(trigger.getEncounterRate().ordinal());
 		
-		for (WildEncounter wildEncounter : trigger.wildEncounters)
-		{
+		for (WildEncounter wildEncounter : trigger.getWildEncounters()) {
 			WildPokemonDataPanel panel = addPokemonPanel();
 			
-			panel.pokemonTextField.setText(wildEncounter.pokemon.getName());
-			panel.probabilityFormattedTextField.setValue(wildEncounter.probability);
-			panel.lowLevelFormattedTextField.setValue(wildEncounter.minLevel);
-			panel.highLevelFormattedTextField.setValue(wildEncounter.maxLevel);
+			panel.pokemonTextField.setText(wildEncounter.getPokemonName());
+			panel.probabilityFormattedTextField.setValue(wildEncounter.getProbability());
+			panel.lowLevelFormattedTextField.setValue(wildEncounter.getMinLevel());
+			panel.highLevelFormattedTextField.setValue(wildEncounter.getMaxLevel());
 		}
 	}
 	
-	public WildBattleTrigger getTrigger() 
-	{
+	public WildBattleTrigger getTrigger() {
 		String name = nameTextField.getText();
 		EncounterRate encounterRate = EncounterRate.valueOf((String)rateComboBox.getSelectedItem());
-		
-		int size = wildPokemonPanels.size();
-		
-		if (name.length() == 0 || size == 0)
+
+		if (name.isEmpty() || wildPokemonPanels.isEmpty()) {
 			return null;
+		}
 		
-		WildEncounter[] wildEncounters = new WildEncounter[size];
-		
-		for (int currRow = 0; currRow < size; ++currRow) 
-		{
+		WildEncounter[] wildEncounters = new WildEncounter[wildPokemonPanels.size()];
+		for (int currRow = 0; currRow < wildEncounters.length; ++currRow) {
 			WildPokemonDataPanel panel = wildPokemonPanels.get(currRow);
 			
 			String pokemon = panel.pokemonTextField.getText();
@@ -240,19 +209,18 @@ public class WildBattleTriggerEditDialog extends JPanel
 			String probability = panel.probabilityFormattedTextField.getText();
 			
 			wildEncounters[currRow] = new WildEncounter(pokemon, minLevel, maxLevel, probability);
-			System.out.println(wildEncounters[currRow].pokemon.getName());
+			System.out.println(wildEncounters[currRow].getPokemonName());
 		}
 		
 		return new WildBattleTrigger(name, wildEncounters, encounterRate);
 	}
 	
 	public TriggerData getTriggerData() {
-		
-		WildBattleTrigger wbt = getTrigger();
-		
-		if (wbt == null)
+		WildBattleTrigger wildBattleTrigger = getTrigger();
+		if (wildBattleTrigger == null) {
 			return null;
+		}
 		
-		return new TriggerData(wbt.getName(), "WildBattle\n" + wbt.triggerDataAsString());
+		return new TriggerData(wildBattleTrigger.getName(), "WildBattle\n" + wildBattleTrigger.triggerDataAsString());
 	}
 }

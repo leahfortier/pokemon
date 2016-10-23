@@ -72,42 +72,35 @@ import battle.effect.holder.TypeHolder;
 import battle.effect.generic.Weather;
 import battle.effect.WeatherBlockerEffect;
 
-public abstract class Ability implements Serializable
-{
+public abstract class Ability implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static HashMap<String, Ability> map; // Mappity map
 	
 	protected Namesies namesies;
 	private String description;
 	
-	public Ability(Namesies s, String desc)
-	{
+	public Ability(Namesies s, String desc) {
 		namesies = s;
 		description = desc;
 	}
 	
-	protected Ability activate() 
-	{
+	protected Ability activate() {
 		return this;
 	}
 	
-	public Namesies namesies()
-	{
+	public Namesies namesies() {
 		return this.namesies;
 	}
 	
-	public String getName()
-	{
+	public String getName() {
 		return namesies.getName();
 	}
 	
-	public String getDescription()
-	{
+	public String getDescription() {
 		return description;
 	}
 	
-	public boolean isActive()
-	{
+	public boolean isActive() {
 		return true;
 	}
 	
@@ -115,19 +108,15 @@ public abstract class Ability implements Serializable
 	public void deactivate(Battle b, ActivePokemon victim) {}
 	
 	// Abilities that block damage
-	public static boolean blockAttack(Battle b, ActivePokemon user, ActivePokemon victim)
-	{
-		if (user.breaksTheMold())
-		{
+	public static boolean blockAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+		if (user.breaksTheMold()) {
 			return false;
 		}
 		
 		Ability a = victim.getAbility();
-		if (a instanceof DamageBlocker)
-		{
+		if (a instanceof DamageBlocker) {
 			DamageBlocker blockityBlock = (DamageBlocker)a;
-			if (blockityBlock.block(user.getAttackType(), victim))
-			{
+			if (blockityBlock.block(user.getAttackType(), victim)) {
 				blockityBlock.alternateEffect(b, victim);
 				return true;
 			}
@@ -136,18 +125,15 @@ public abstract class Ability implements Serializable
 		return false;
 	}
 	
-	public static Ability assign(PokemonInfo p)
-	{
+	public static Ability assign(PokemonInfo p) {
 		Namesies[] abilities = p.getAbilities();
 		
-		if (abilities[0] == Namesies.NONE_ABILITY)
-		{
+		if (abilities[0] == Namesies.NONE_ABILITY) {
 			Global.error("First ability should not be none (Pokemon " + p.getName() + ")");
 		}
 		
 		// Only has one ability -- return the first one
-		if (abilities[1] == Namesies.NONE_ABILITY) 
-		{
+		if (abilities[1] == Namesies.NONE_ABILITY) {
 			return getAbility(abilities[0]).newInstance();
 		}
 		
@@ -155,38 +141,31 @@ public abstract class Ability implements Serializable
 		return getAbility(Math.random() < .5 ? abilities[0] : abilities[1]).newInstance();
 	}
 	
-	public static Ability evolutionAssign(ActivePokemon p, PokemonInfo ev)
-	{
+	public static Ability evolutionAssign(ActivePokemon p, PokemonInfo ev) {
 		Namesies prev = p.getAbility().namesies();
-		if (ev.hasAbility(prev)) 
-		{
+		if (ev.hasAbility(prev)) {
 			return p.getAbility().newInstance();
 		}
 		
 		Namesies other = getOtherAbility(p.getPokemonInfo(), prev).namesies();
-		if (ev.hasAbility(other)) 
-		{
+		if (ev.hasAbility(other)) {
 			return getOtherAbility(ev, other);
 		}
 		
 		Namesies[] abilities = ev.getAbilities();
-		if (abilities[1] == Namesies.NONE_ABILITY)
-		{
+		if (abilities[1] == Namesies.NONE_ABILITY) {
 			return getAbility(abilities[0]);
 		}
 		
 		return getAbility(abilities[(int)(Math.random()*2)]);
 	}
 	
-	public static Ability getOtherAbility(ActivePokemon p)
-	{
+	public static Ability getOtherAbility(ActivePokemon p) {
 		return getOtherAbility(p.getPokemonInfo(), p.getAbility().namesies());
 	}
 	
-	private static Ability getOtherAbility(PokemonInfo p, Namesies ability)
-	{
-		if (!p.hasAbility(ability)) 
-		{
+	private static Ability getOtherAbility(PokemonInfo p, Namesies ability) {
+		if (!p.hasAbility(ability)) {
 			Global.error("Incorrect ability " + ability + " for " + p.getName() + ".");
 		}
 		
@@ -196,17 +175,14 @@ public abstract class Ability implements Serializable
 	
 	public abstract Ability newInstance();
 	
-	public static Ability getAbility(Namesies name)
-	{	
+	public static Ability getAbility(Namesies name) {
 		String m = name.getName();
 		
-		if (map == null)
-		{
+		if (map == null) {
 			loadAbilities();
 		}
 		
-		if (map.containsKey(m))
-		{
+		if (map.containsKey(m)) {
 			return map.get(m);
 		}
 
@@ -215,10 +191,10 @@ public abstract class Ability implements Serializable
 	}
 	
 	// Create and load the Ability map if it doesn't already exist
-	public static void loadAbilities() 
-	{
-		if (map != null) 
+	public static void loadAbilities() {
+		if (map != null) {
 			return;
+		}
 		
 		map = new HashMap<>();
 

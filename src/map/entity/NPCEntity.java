@@ -6,8 +6,7 @@ import gui.view.MapView;
 import main.Global;
 import map.MapData;
 
-public class NPCEntity extends MovableEntity
-{
+public class NPCEntity extends MovableEntity {
 	public static final int NPC_SIGHT_DISTANCE = 5;
 
 	private String trigger;
@@ -35,8 +34,21 @@ public class NPCEntity extends MovableEntity
 
 	private boolean dataCreated;
 
-	public NPCEntity(String name, int x, int y, String trigger, String path, Direction direction, int index, String[] firstDialogue, String[] secondDialogue, String trainerInfo, String itemInfo, String firstTriggers, String secondTriggers, boolean walkToPlayer)
-	{
+	NPCEntity(
+			String name,
+			int x,
+			int y,
+			String trigger,
+			String path,
+			Direction direction,
+			int index,
+			String[] firstDialogue,
+			String[] secondDialogue,
+			String trainerInfo,
+			String itemInfo,
+			String firstTriggers,
+			String secondTriggers,
+			boolean walkToPlayer) {
 		super(x, y, index, direction);
 		
 		this.name = name;
@@ -49,8 +61,8 @@ public class NPCEntity extends MovableEntity
 		spriteIndex = index;
 
 		this.walkToPlayer = walkToPlayer;
-		walkingToPlayer = false;
-		trainer = trainerInfo != null;
+		this.walkingToPlayer = false;
+		this.trainer = trainerInfo != null;
 		this.firstDialogue = firstDialogue;
 		this.secondDialogue = secondDialogue;
 		this.trainerInfo = trainerInfo;
@@ -65,39 +77,34 @@ public class NPCEntity extends MovableEntity
 		dataCreated = firstDialogue.length == 0;
 	}
 
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view)
-	{
+	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		super.update(dt, entity, map, input, view);
 
-		if (waitTime != 0)
+		if (waitTime != 0) {
 			waitTime -= dt;
+		}
 
-		if (waitTime < 0)
+		if (waitTime < 0) {
 			waitTime = 0;
+		}
 
-		if (transitionTime == 0 && waitTime == 0 && !hasAttention)
-		{
+		if (transitionTime == 0 && waitTime == 0 && !hasAttention) {
 			String path = this.path;
-			if (tempPath != null)
-			{
+			if (tempPath != null) {
 				path = tempPath;
 				// System.out.println(path);
 			}
 			
 			char pathChar = path.charAt(pathIndex);
 			
-			if (pathChar == Direction.WAIT_CHARACTER)
-			{
+			if (pathChar == Direction.WAIT_CHARACTER) {
 				waitTime = getTransitionTime();
 				pathIndex++;	
 			}
-			else
-			{
+			else {
 				// Find the direction that corresponds to the character
-				for (Direction direction: Direction.values())
-				{
-					if (pathChar != direction.character)
-					{
+				for (Direction direction: Direction.values()) {
+					if (pathChar != direction.character) {
 						continue;
 					}
 					
@@ -105,8 +112,7 @@ public class NPCEntity extends MovableEntity
 					int y = charY + direction.dy;
 					
 					// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well? 
-					if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null)
-					{
+					if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
 						entity[charX][charY] = null;
 						
 						charX = x;
@@ -124,18 +130,15 @@ public class NPCEntity extends MovableEntity
 			}
 
 			pathIndex %= path.length();
-			if (pathIndex == 0 && tempPath != null)
-			{
+			if (pathIndex == 0 && tempPath != null) {
 				tempPath = null;
 			}
 		}
 	}
 
-	public void walkTowards(int steps, Direction direction)
-	{
+	public void walkTowards(int steps, Direction direction) {
 		tempPath = Direction.WAIT_CHARACTER + "";
-		for (int i = 0; i < steps; ++i)
-		{
+		for (int i = 0; i < steps; ++i) {
 			tempPath += direction.character;
 		}
 
@@ -143,55 +146,45 @@ public class NPCEntity extends MovableEntity
 		walkingToPlayer = true;
 	}
 
-	public String getTrigger()
-	{
+	public String getTrigger() {
 		return trigger;
 	}
 
-	public int getTransitionTime()
-	{
+	public int getTransitionTime() {
 		return Global.TIME_BETWEEN_TILES * 2;
 	}
 
-	public void getAttention(Direction direction)
-	{
+	public void getAttention(Direction direction) {
 		transitionDirection = direction;
 		hasAttention = true;
 	}
 
-	public boolean getWalkToPlayer()
-	{
+	public boolean getWalkToPlayer() {
 		return walkToPlayer;
 	}
 
-	public boolean getWalkingToPlayer()
-	{
+	public boolean getWalkingToPlayer() {
 		return walkingToPlayer;
 	}
 
 	// TODO: create NPCTrainerEntity
-	public String getWalkTrigger()
-	{
+	public String getWalkTrigger() {
 		return walkToPlayer ? name + "_T1" : "";
 	}
 
-	public String getFirstTrigger()
-	{
+	public String getFirstTrigger() {
 		return name + "_T1";
 	}
 
-	public String getSecondTrigger()
-	{
+	public String getSecondTrigger() {
 		return secondDialogue.length > 0 ? name + "_T2" : null;
 	}
 
-	public boolean isTrainer()
-	{
+	public boolean isTrainer() {
 		return trainer;
 	}
 
-	public void reset()
-	{
+	public void reset() {
 		charX = defaultX;
 		charY = defaultY;
 		waitTime = 0;
@@ -202,35 +195,34 @@ public class NPCEntity extends MovableEntity
 		tempPath = null;
 	}
 	
-	public void addData(GameData data)
-	{
-		if (dataCreated)
+	public void addData(GameData data) {
+		if (dataCreated) {
 			return;
+		}
 		
 		// If NPC is a trainer, add trainer battle trigger.
-		if (trainer)
-		{
+		if (trainer) {
 			data.addTrigger("TrainerBattle", name + "_Battle", "winGlobal: triggered_" + name +"\n" + trainerInfo);
 		}
 		
 		// If NPC gives items, add give item trigger
-		if (itemInfo != null)
-		{
+		if (itemInfo != null) {
 			data.addTrigger("Give", name + "_items", itemInfo);
 		}
-		
+
+		// TODO: this is insane fix this syntax later because it is too overwhelmingly intense right now
 		// Create group trigger for initial encounter.
-		data.addTrigger("Group", name + "_GT1", 
-			
+		data.addTrigger("Group", name + "_GT1",
+
 			// Add all additional triggers
 			firstTriggers + "\n" +
-			
+
 			// If trainer, battle at the end of first dialogue.
-			(trainer? 
+			(trainer?
 				"trigger: " + name + "_Battle":
 				""
 			) +
-					
+
 			// If not a trainer and is giving items, add to end of dialogue.
 			(!trainer && itemInfo != null?
 				"trigger: " + name + "_items":
@@ -260,8 +252,7 @@ public class NPCEntity extends MovableEntity
 		);
 		
 		// Add all first dialogue sequences. Call group trigger on last dialogue.
-		for (int i = 0; i < firstDialogue.length; ++i)
-		{
+		for (int i = 0; i < firstDialogue.length; ++i) {
 			data.addDialogue(name + "_T1_D" + (i + 1), 
 				"text: \""+ firstDialogue[i] + "\" \n" +
 
@@ -279,8 +270,7 @@ public class NPCEntity extends MovableEntity
 		}
 		
 		// If different dialogue for first and second encounter, create group trigger and second dialogue trigger
-		if (secondDialogue.length > 0)
-		{
+		if (secondDialogue.length > 0) {
 			// Create and set group trigger to initiate multiple encounters.
 			trigger = name + "_GT";
 			data.addTrigger("Group", name + "_GT", 
@@ -295,8 +285,7 @@ public class NPCEntity extends MovableEntity
 			);
 			
 			// Add all second dialogue sequences. Call group trigger on last dialogue.
-			for (int i = 0; i < secondDialogue.length; ++i)
-			{
+			for (int i = 0; i < secondDialogue.length; ++i) {
 				data.addDialogue(name + "_T2_D" + (i + 1), 
 					"text: \""+ secondDialogue[i] + "\" \n" +
 					

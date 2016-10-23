@@ -20,8 +20,7 @@ import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 
-public class EvolutionView extends View
-{	
+public class EvolutionView extends View {
 	private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
 	
 	private static final float[] prevEvolutionScales = { 1f, 1f, 1f, 1f };
@@ -40,70 +39,59 @@ public class EvolutionView extends View
 	private State state;
 	private String message;
 		
-	private enum State
-	{
-		START, EVOLVE, END
+	private enum State {
+		START,
+		EVOLVE,
+		END,
 	}
 
-	public EvolutionView(CharacterData data)
-	{
+	public EvolutionView(CharacterData data) {
 		player = data;
 	}
 	
-	public void update(int dt, InputControl input, Game game)
-	{
-		switch (state)
-		{
+	public void update(int dt, InputControl input, Game game) {
+		switch (state) {
 			case START:
-				if(message != null)
-				{
-					if (input.mouseDown)
-					{
+				if (message != null) {
+					if (input.mouseDown) {
 						input.consumeMousePress();
 						message = null;
 					}
-					if (input.isDown(Control.SPACE))
-					{
+
+					if (input.isDown(Control.SPACE)) {
 						input.consumeKey(Control.SPACE);
 						message = null;
 					}
 				}
-				else
-				{
+				else {
 					state = State.EVOLVE;
 				}
 				break;
 			case EVOLVE:
-				if(animationEvolve < 0)
-				{
+				if (animationEvolve < 0) {
 					state = State.END;
 					setFinalMessage();
 					addToPokedex();
 				}
 				break;
 			case END:
-				if(message != null)
-				{
-					if (input.mouseDown)
-					{
+				if (message != null) {
+					if (input.mouseDown) {
 						input.consumeMousePress();
 						message = null;
 					}
-					if (input.isDown(Control.SPACE))
-					{
+
+					if (input.isDown(Control.SPACE)) {
 						input.consumeKey(Control.SPACE);
 						message = null;
 					}
 				}
-				else
-				{
-					if (!isEgg)
-					{
+				else {
+					if (!isEgg) {
 						evolvingPokemon.evolve(null, player.evolution);
 						game.setViewMode(ViewMode.BAG_VIEW);
 					}
-					else
-					{
+					else {
 						game.setViewMode(ViewMode.MAP_VIEW);	
 					}
 				}
@@ -112,8 +100,7 @@ public class EvolutionView extends View
 		
 	}
 
-	public void draw(Graphics g, GameData data)
-	{
+	public void draw(Graphics g, GameData data) {
 		TileSet tiles = data.getMenuTiles();
 		TileSet battleTiles = data.getBattleTiles();
 		TileSet pokemonTiles = data.getPokemonTilesMedium();
@@ -132,8 +119,7 @@ public class EvolutionView extends View
 		int drawWidth = Global.GAME_SIZE.width/2;
 		int drawHeight = Global.GAME_SIZE.height/2;
 		
-		switch (state)
-		{
+		switch (state) {
 			case START:
 				DrawMetrics.drawCenteredImage(g, currEvolution, drawWidth, drawHeight);
 				break;
@@ -145,35 +131,31 @@ public class EvolutionView extends View
 				break;
 		}
 		
-		if (message != null)
-		{
+		if (message != null) {
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
 			DrawMetrics.setFont(g, 30);
 			DrawMetrics.drawWrappedText(g, message, 30, 490, 750);
 		}
 	}
 	
-	private void evolveAnimation(Graphics g, BufferedImage currEvolution, BufferedImage nextEvolution, int px, int py)
-	{
+	private void evolveAnimation(Graphics g, BufferedImage currEvolution, BufferedImage nextEvolution, int px, int py) {
 		Graphics2D g2d = (Graphics2D)g;
-		
+
+		// TODO: Is this the same as the one in battle view?
 		// Turn white
-		if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7)
-		{
+		if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7) {
 			prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255*(1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.7f)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f)));
 			evolutionScales[3] = 0;
 		}
 		// Change form
-		else if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.3)
-		{
+		else if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.3) {
 			prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255;
 			prevEvolutionScales[3] = ((animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
 			evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255;
 			evolutionScales[3] = (1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
 		}
 		// Restore color
-		else
-		{
+		else {
 			prevEvolutionScales[3] = 0;
 			evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f));
 		}
@@ -185,58 +167,46 @@ public class EvolutionView extends View
 		g2d.drawImage(DrawMetrics.colorImage(currEvolution, prevEvolutionScales, prevEvolutionOffsets), px-currEvolution.getWidth()/2, py-currEvolution.getHeight()/2, null);
 	}
 
-	public ViewMode getViewModel()
-	{
+	public ViewMode getViewModel() {
 		return ViewMode.EVOLUTION_VIEW;
 	}
 
-	private void setPokemon(ActivePokemon pokemon, BaseEvolution evolve)
-	{
+	private void setPokemon(ActivePokemon pokemon, BaseEvolution evolve) {
 		evolvingPokemon = pokemon;
 		preEvolution = pokemon.getPokemonInfo();
 		
-		if (evolve == null)
-		{
+		if (evolve == null) {
 			isEgg = true;
 		}
-		else
-		{
+		else {
 			isEgg = false;
 			postEvolution = evolve.getEvolution();
 		}
 	}
 	
-	private void setInitialMessage()
-	{
-		if (isEgg)
-		{
-			message = "Your egg is hatching!";
+	private void setInitialMessage() {
+		if (isEgg) {
+			message = "Your egg is hatching!"; // TODO: this is lame
 		}
-		else
-		{
+		else {
 			message = "Your " + preEvolution.getName() + " is evolving!";
 		}
 	}
 	
-	private void addToPokedex()
-	{	
+	private void addToPokedex() {
 		player.getPokedex().setStatus(isEgg ? preEvolution : postEvolution, PokedexStatus.CAUGHT);
 	}
 	
-	private void setFinalMessage()
-	{
-		if (isEgg)
-		{
+	private void setFinalMessage() {
+		if (isEgg) {
 			message = "Your egg hatched into a " + preEvolution.getName()  +"!";
 		}
-		else
-		{
+		else {
 			message = "Your " + preEvolution.getName() + " evolved into a " + postEvolution.getName()+"!";
 		}
 	}
 	
-	public void movedToFront(Game game) 
-	{
+	public void movedToFront(Game game) {
 		state = State.START;
 		
 		setPokemon(player.evolvingPokemon, player.evolution);

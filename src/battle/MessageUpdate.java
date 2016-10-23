@@ -13,8 +13,7 @@ import pokemon.Stat;
 import sound.SoundTitle;
 import battle.effect.generic.Status.StatusCondition;
 
-public class MessageUpdate 
-{
+public class MessageUpdate {
 	private String message;
 	private int hp;
 	private int maxHP;
@@ -36,8 +35,7 @@ public class MessageUpdate
 	private Move move;
 	private int duration;
 	
-	public static enum Update 
-	{
+	public enum Update {
 		NONE,
 		ENTER_NAME,
 		APPEND_TO_NAME, 
@@ -45,51 +43,39 @@ public class MessageUpdate
 		PROMPT_SWITCH(VisualState.POKEMON),
 		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION), 
 		STAT_GAIN(VisualState.STAT_GAIN),
-		EXIT_BATTLE(new PerformUpdate() {
-			public void performUpdate(BattleView battleView, Game game) {
-				game.setViewMode(ViewMode.MAP_VIEW);
-				battleView.clearUpdate();
-			}
-		}),  
-		FORCE_SWITCH(new PerformUpdate() {
-			public void performUpdate(BattleView battleView, Game game) {
-				battleView.setVisualState(VisualState.POKEMON);
-				battleView.setSwitchForced();
-				battleView.clearUpdate();
-			}
-		}),
-		WIN_BATTLE(new PerformUpdate() {
-			public void performUpdate(BattleView battleView, Game game) {
-				if (battleView.getCurrentBattle().isWildBattle())
-				{
-					Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
-				}
-				else
-				{
-					// TODO: Get trainer win music
-					Global.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
-				}
-			}
-		});
+		EXIT_BATTLE((battleView, game) -> {
+            game.setViewMode(ViewMode.MAP_VIEW);
+            battleView.clearUpdate();
+        }),
+		FORCE_SWITCH((battleView, game) -> {
+            battleView.setVisualState(VisualState.POKEMON);
+            battleView.setSwitchForced();
+            battleView.clearUpdate();
+        }),
+		WIN_BATTLE((battleView, game) -> {
+            if (battleView.getCurrentBattle().isWildBattle()) {
+                Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
+            }
+            else {
+                // TODO: Get trainer win music
+                Global.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
+            }
+        });
 		
 		private final PerformUpdate performUpdate;
 		
-		private Update() {
-			this(new PerformUpdate() {
-				public void performUpdate(BattleView battleView, Game game) {}
-			});
+		Update() {
+			this((battleView, game) -> {});
 		}
 		
-		private Update(final BattleView.VisualState visualState) {
-			this(new PerformUpdate() {
-				public void performUpdate(BattleView battleView, Game game) {
-					battleView.setVisualState(visualState);
-					battleView.clearUpdate();
-				}
-			});
+		Update(final BattleView.VisualState visualState) {
+			this((battleView, game) -> {
+                battleView.setVisualState(visualState);
+                battleView.clearUpdate();
+            });
 		}
 		
-		private Update(PerformUpdate performUpdate) {
+		Update(PerformUpdate performUpdate) {
 			this.performUpdate = performUpdate;
 		}
 		
@@ -97,13 +83,12 @@ public class MessageUpdate
 			this.performUpdate.performUpdate(battleView, game);
 		}
 		
-		private static interface PerformUpdate {
-			public void performUpdate(BattleView battleView, Game game);
+		private interface PerformUpdate {
+			void performUpdate(BattleView battleView, Game game);
 		}
 	}
 	
-	public MessageUpdate(String m)
-	{
+	public MessageUpdate(String m) {
 		message = m;
 		status = null;
 		hp = -1;
@@ -122,18 +107,17 @@ public class MessageUpdate
 		newStats = null;
 		duration = -2; // BECAUSE NEG ONE IS TOTES VALID
 	}
-	
+
+	// TODO: Change all the god awful parameter names in this file
 	// YEAH THAT'S RIGHT HEALTH UPDATE
-	public MessageUpdate(int h, boolean t)
-	{
+	public MessageUpdate(int h, boolean t) {
 		this("");
 		hp = h;
 		playerTarget = t;
 	}
 	
 	// Update to maximum HP
-	public MessageUpdate(int h, int max, boolean t)
-	{
+	public MessageUpdate(int h, int max, boolean t) {
 		this("");
 		hp = h;
 		maxHP = max;
@@ -141,8 +125,7 @@ public class MessageUpdate
 	}
 	
 	// Show stat gains
-	public MessageUpdate(int[] gains, int[] stats)
-	{
+	public MessageUpdate(int[] gains, int[] stats) {
 		this("");
 		maxHP = stats[Stat.HP.index()];
 		statGains = gains;
@@ -152,16 +135,14 @@ public class MessageUpdate
 	}
 	
 	// OOOOHH SOMEONE'S GOT DAT STATUS CONDITION
-	public MessageUpdate(StatusCondition s, boolean t)
-	{
+	public MessageUpdate(StatusCondition s, boolean t) {
 		this("");
 		status = s;
 		playerTarget = t;
 	}
 	
 	// Pokemon Update!
-	public MessageUpdate(String m, PokemonInfo p, boolean s, boolean a, boolean t)
-	{
+	public MessageUpdate(String m, PokemonInfo p, boolean s, boolean a, boolean t) {
 		this(m);
 		pokemon = p;
 		playerTarget = t;
@@ -170,16 +151,14 @@ public class MessageUpdate
 	}
 	
 	// Type Update!
-	public MessageUpdate(Type[] typesies, boolean t)
-	{
+	public MessageUpdate(Type[] typesies, boolean t) {
 		this("");
 		type = typesies;
 		playerTarget = t;
 	}
 	
 	// Switch update!
-	public MessageUpdate(String m, ActivePokemon p, Battle b)
-	{
+	public MessageUpdate(String m, ActivePokemon p, Battle b) {
 		this(m);
 		playerTarget = p.user();
 		switchPokemon = true;
@@ -197,45 +176,39 @@ public class MessageUpdate
 	}
 	
 	// Special type of update
-	public MessageUpdate(String m, Update update)
-	{
+	public MessageUpdate(String m, Update update) {
 		this(m);
 		updateType = update;	
 	}
 	
 	// EXP Gain update
-	public MessageUpdate(int lvl, float ratio, boolean levelUp)
-	{
+	public MessageUpdate(int lvl, float ratio, boolean levelUp) {
 		this("");
 		
 		playerTarget = true;
 		expRatio = ratio;
 		
-		if (levelUp)
-		{
+		if (levelUp) {
 			level = lvl;
 		}
 	}
 	
 	// Name change update
-	public MessageUpdate(String n, boolean t)
-	{
+	public MessageUpdate(String n, boolean t) {
 		this("");
 		name = n;
 		playerTarget = t;
 	}
 	
 	// Gender change update
-	public MessageUpdate(Gender g, boolean t)
-	{
+	public MessageUpdate(Gender g, boolean t) {
 		this("");
 		gender = g;
 		playerTarget = t;
 	}
 	
 	// Learn new move update
-	public MessageUpdate(String m, ActivePokemon p, Move newMove)
-	{
+	public MessageUpdate(String m, ActivePokemon p, Move newMove) {
 		this(m);
 		active = p;
 		move = newMove;
@@ -243,189 +216,152 @@ public class MessageUpdate
 	}
 	
 	// Catching a Pokemon
-	public MessageUpdate(String m, int d)
-	{
+	public MessageUpdate(String m, int d) {
 		this(m);
 		duration = d;
 	}	
 	
-	public String getMessage()
-	{
+	public String getMessage() {
 		return message;
 	}
 	
-	public boolean target()
-	{
+	public boolean target() {
 		return playerTarget;
 	}
 	
-	public boolean healthUpdate()
-	{
-		return hp != -1;
+	public boolean healthUpdate() {
+		return hp != -1; // TODO: Use constants for -1
 	}
 	
-	public int getHP()
-	{
+	public int getHP() {
 		return hp;
 	}
 	
-	public boolean maxHealthUpdate()
-	{
+	public boolean maxHealthUpdate() {
 		return maxHP != -1;
 	}
 	
-	public int getMaxHP()
-	{
+	public int getMaxHP() {
 		return maxHP;
 	}
 	
-	public boolean gainUpdate()
-	{
+	public boolean gainUpdate() {
 		return statGains != null;
 	}
 	
-	public int[] getGain()
-	{
+	public int[] getGain() {
 		return statGains;
 	}
 	
-	public int[] getNewStats()
-	{
+	public int[] getNewStats() {
 		return newStats;
 	}
 	
-	public boolean statusUpdate()
-	{
+	public boolean statusUpdate() {
 		return status != null;
 	}
 	
-	public StatusCondition getStatus()
-	{
+	public StatusCondition getStatus() {
 		return status;
 	}
 	
-	public boolean pokemonUpdate()
-	{
+	public boolean pokemonUpdate() {
 		return pokemon != null;
 	}
 	
-	public PokemonInfo getPokemon()
-	{
+	public PokemonInfo getPokemon() {
 		return pokemon;
 	}
 	
-	public boolean getShiny()
-	{
+	public boolean getShiny() {
 		return shiny;
 	}
 	
-	public boolean isAnimate()
-	{
+	public boolean isAnimate() {
 		return animation;
 	}
 	
-	public boolean typeUpdate()
-	{
+	public boolean typeUpdate() {
 		return type != null;
 	}
 	
-	public Type[] getType()
-	{
+	public Type[] getType() {
 		return type;
 	}
 	
-	public boolean switchUpdate()
-	{
+	public boolean switchUpdate() {
 		return switchPokemon;
 	}
 	
-	public boolean expUpdate()
-	{
+	public boolean expUpdate() {
 		return expRatio >= 0;
 	}
 	
-	public float getEXPRatio()
-	{
+	public float getEXPRatio() {
 		return expRatio;
 	}
 	
-	public boolean levelUpdate()
-	{
+	public boolean levelUpdate() {
 		return level != -1;
 	}
 	
-	public int getLevel()
-	{
+	public int getLevel() {
 		return level;
 	}
 	
-	public boolean nameUpdate()
-	{
+	public boolean nameUpdate() {
 		return name.length() > 0;
 	}
 	
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 	
-	public boolean genderUpdate()
-	{
+	public boolean genderUpdate() {
 		return gender != null;
 	}
 	
-	public Gender getGender()
-	{
+	public Gender getGender() {
 		return gender;
 	}
 	
-	public boolean catchUpdate()
-	{
+	public boolean catchUpdate() {
 		return duration != -2;
 	}
 	
-	public int getDuration()
-	{
+	public int getDuration() {
 		return duration;
 	}
 	
-	public ActivePokemon getActivePokemon()
-	{
+	public ActivePokemon getActivePokemon() {
 		return active;
 	}
 	
-	public Move getMove()
-	{
+	public Move getMove() {
 		return move;
 	}
 	
-	public boolean hasUpdateType()
-	{
+	public boolean hasUpdateType() {
 		return updateType != Update.NONE;
 	}
 	
-	public Update getUpdateType()
-	{
+	public Update getUpdateType() {
 		return updateType;
 	}
 	
-	public boolean endBattle()
-	{
+	public boolean endBattle() {
 		return updateType == Update.EXIT_BATTLE;
 	}
 	
-	public boolean promptSwitch()
-	{
+	public boolean promptSwitch() {
 		return updateType == Update.PROMPT_SWITCH;
 	}
 	
-	public boolean forceSwitch()
-	{
+	public boolean forceSwitch() {
 		return updateType == Update.FORCE_SWITCH;
 	}
 	
-	public boolean learnMove()
-	{
+	public boolean learnMove() {
 		return updateType == Update.LEARN_MOVE;
 	}
 }

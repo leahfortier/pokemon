@@ -11,7 +11,9 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,17 +52,16 @@ import battle.effect.generic.TeamEffect;
 import battle.effect.TrappingEffect;
 import battle.effect.holder.TypeHolder;
 
-public class ActivePokemon implements Serializable
-{
+public class ActivePokemon implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static final Pattern pokemonPattern = Pattern.compile("(?:(\\w+)\\s*(\\d+)([A-Za-z \\t0-9,:.\\-'*]*)|(RandomEgg))");
+	private static final Pattern pokemonPattern = Pattern.compile("(?:(\\w+)\\s*(\\d+)([A-Za-z \\t0-9,:.\\-'*]*)|(RandomEgg))");
 	public static final Pattern pokemonParameterPattern = Pattern.compile("(?:(Shiny)|(Moves:)\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+)\\s*[*]|(Egg)|(Item:)\\s*([\\w \\-'.]+)[*])", Pattern.UNICODE_CHARACTER_CLASS);
 	
 	public static final int MAX_LEVEL = 100;
 	public static final int MAX_IV = 31;
 	
-	private static final String[][] characteristics = 
+	private static final String[][] characteristics =
 		{{"Loves to eat",            "Proud of its power",      "Sturdy body",            "Highly curious",        "Strong willed",     "Likes to run"},
 		 {"Takes plenty of siestas", "Likes to thrash about",   "Capable of taking hits", "Mischievous",           "Somewhat vain",     "Alert to sounds"},
 		 {"Nods off a lot",          "A little quick tempered", "Highly persistent",      "Thoroughly cunning",    "Strongly defiant",  "Impetuous and silly"},
@@ -90,8 +91,7 @@ public class ActivePokemon implements Serializable
 	private int eggSteps;
 
 	// General constructor for an active Pokemon (user is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
-	public ActivePokemon(PokemonInfo pokemonSpecies, int level, boolean isWild, boolean user)
-	{
+	public ActivePokemon(PokemonInfo pokemonSpecies, int level, boolean isWild, boolean user) {
 		this.pokemon = pokemonSpecies;
 		this.nickname = pokemonSpecies.getName();
 		this.level = level;
@@ -128,16 +128,14 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Constructor for Eggs
-	public ActivePokemon(PokemonInfo p)
-	{
+	public ActivePokemon(PokemonInfo p) {
 		this(p, 1, false, true);
 		isEgg = true;
 		eggSteps = p.getEggSteps();
 		nickname = "Egg";
 	}
 	
-	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo)
-	{
+	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo) {
 		this(babyInfo, 1, false, true);
 		
 		moves = Breeding.getBabyMoves(daddy, mommy, babyInfo);
@@ -157,18 +155,16 @@ public class ActivePokemon implements Serializable
 	 * 		Item: item name*
 	 */
 	// Constructor for triggers
-	public static ActivePokemon createActivePokemon(String pokemonDescription, boolean user)
-	{
+	public static ActivePokemon createActivePokemon(String pokemonDescription, boolean user) {
 		Matcher m = pokemonPattern.matcher(pokemonDescription);
 		m.find();
 		
-		//Random Egg
-		if (m.group(4) != null) 
-		{
-			if(!user)
-			{
+		// Random Egg
+		if (m.group(4) != null) {
+			if (!user) {
 				Global.error("Trainers cannot have eggs.");
 			}
+
 			return new ActivePokemon(PokemonInfo.getRandomBaseEvolution());
 		}
 		
@@ -181,28 +177,24 @@ public class ActivePokemon implements Serializable
 
 		boolean shiny = false;
 		boolean setMoves = false;
-		ArrayList<Move> moves = null;
+		List<Move> moves = null;
 		HoldItem holdItem = null;
 		
 		boolean isEgg = false;
 		
-		while (params.find())
-		{
-			if (params.group(1) != null) 
+		while (params.find()) {
+			if (params.group(1) != null) {
 				shiny = true;
+			}
 			
-			if (params.group(2) != null)
-			{
+			if (params.group(2) != null) {
 				setMoves = true;
 				moves = new ArrayList<>();
-				for (int i = 0; i < 4; ++i)
-				{
+				for (int i = 0; i < 4; ++i) {
 					String attackName = params.group(3 + i);
-					if (!attackName.equals("None"))
-					{	
-						if(!Attack.isAttack(attackName))
-						{
-							Global.error(attackName +" is not an attack. Pokemon: "+pinfo.getName());
+					if (!attackName.equals("None")) {
+						if(!Attack.isAttack(attackName)) {
+							Global.error(attackName + " is not an attack. Pokemon: " + pinfo.getName());
 						}
 						
 						moves.add(new Move(Attack.getAttackFromName(attackName)));
@@ -210,97 +202,80 @@ public class ActivePokemon implements Serializable
 				}
 			}
 			
-			if (params.group(7) != null) 
+			if (params.group(7) != null) {
 				isEgg = true;
+			}
 			
-			if (params.group(8) != null)
-			{
+			if (params.group(8) != null) {
 				String itemName = params.group(9);
-				if (Item.isItem(itemName))
-				{
+				if (Item.isItem(itemName)) {
 					Item i = Item.getItemFromName(itemName);
-					if (i.isHoldable())
-					{
+					if (i.isHoldable()) {
 						holdItem = (HoldItem)i;
 					}
-					else
-					{
-						Global.error(itemName +" is not a hold item. Pokemon: "+pinfo.getName());
+					else {
+						Global.error(itemName +" is not a hold item. Pokemon: " + pinfo.getName());
 					}
 				}
-				else
-				{
-					Global.error(itemName +" is not an item. Pokemon: "+pinfo.getName());
+				else {
+					Global.error(itemName +" is not an item. Pokemon: " + pinfo.getName());
 				}
 			}
 		}
 		
 		ActivePokemon p;
-		if (isEgg) 
-		{	
-			if(!user)
-			{
+		if (isEgg) {
+			if(!user) {
 				Global.error("Trainers cannot have eggs.");
 			}
 			
 			p = new ActivePokemon(pinfo);
 		}
-		else 
-		{
+		else {
 			p = new ActivePokemon(pinfo, level, false, user);
 		}
 		
-		if (shiny) 
-		{
+		if (shiny) {
 			p.setShiny();
 		}
 		
-		if (setMoves) 
-		{
+		if (setMoves) {
 			p.setMoves(moves);
 		}
 		
-		if (holdItem != null)
-		{
+		if (holdItem != null) {
 			p.giveItem(holdItem);
 		}
 
 		return p;
 	}
 	
-	public void setGender(Gender gender)
-	{
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 	
 	// Does not include shiny -- this is for the small party tiles
-	public int getTinyImageIndex()
-	{
+	public int getTinyImageIndex() {
 		return this.isEgg ? PokemonInfo.EGG_IMAGE : pokemon.getNumber();
 	}
 	
 	// Larger image index
-	public int getImageIndex()
-	{
+	public int getImageIndex() {
 		return this.isEgg() ? PokemonInfo.EGG_IMAGE : PokemonInfo.getImageNumber(this.getPokemonInfo().getNumber(), this.isShiny());
 	}
 	
-	public boolean isEgg()
-	{
+	public boolean isEgg() {
 		return isEgg;
 	}
 	
-	public boolean hatch()
-	{	
-		if (!isEgg())
-		{
+	public boolean hatch() {
+		if (!isEgg()) {
 			Global.error("Only eggs can hatch!");
 		}
 		
 		eggSteps--;
 		
-		if (eggSteps > 0)
-		{
+		if (eggSteps > 0) {
 			return false;
 		}
 		
@@ -310,96 +285,96 @@ public class ActivePokemon implements Serializable
 		return true;
 	}
 	
-	public String getEggMessage()
-	{
-		if (!isEgg()) 
-		{
+	public String getEggMessage() {
+		if (!isEgg()) {
 			Global.error("Only Eggs can have egg messages.");
 		}
 		
-		if (eggSteps > 10*255) return "Wonder what's inside? It needs more time though.";
-		else if (eggSteps > 5*255) return "It moves around inside sometimes. It must be close to hatching.";
-		return "It's making sounds inside! It's going to hatch soon!";
+		if (eggSteps > 10*255) {
+			return "Wonder what's inside? It needs more time though.";
+		}
+		else if (eggSteps > 5*255) {
+			return "It moves around inside sometimes. It must be close to hatching.";
+		}
+		else {
+			return "It's making sounds inside! It's going to hatch soon!";
+		}
 	}
 	
-	private void setMoves()
-	{
-		moves = new ArrayList<Move>();
-		TreeMap<Integer, List<Namesies>> map = pokemon.getLevelUpMoves();
-		for (Integer i : map.keySet())
-		{
-			if (i > level) 
-			{
+	private void setMoves() {
+		moves = new ArrayList<>();
+		Map<Integer, List<Namesies>> map = pokemon.getLevelUpMoves();
+		for (Integer i : map.keySet()) {
+			if (i > level) {
 				continue;
 			}
 			
-			for (Namesies s : map.get(i))
-			{
-				if (hasActualMove(s)) 
+			for (Namesies s : map.get(i)) {
+				if (hasActualMove(s)) {
 					continue;
+				}
 				
 				moves.add(new Move(Attack.getAttack(s)));
 				
 				// This can be an 'if' statement, but just to be safe...
-				while (moves.size() > Move.MAX_MOVES) 
+				while (moves.size() > Move.MAX_MOVES) {
 					moves.remove(0);
+				}
 			}
 		}
 	}
 	
-	public void setMoves(List<Move> list)
-	{
+	public void setMoves(List<Move> list) {
 		moves = list;
 	}
 	
-	public void setShiny()
-	{
+	public void setShiny() {
 		shiny = true;
 	}
 	
 	// Random value between 0 and 31
-	private void setIVs()
-	{
+	private void setIVs() {
 		IVs = new int[Stat.NUM_STATS];
-		for (int i = 0; i < IVs.length; i++) 
-			IVs[i] = (int)(Math.random() * (MAX_IV + 1));
+		for (int i = 0; i < IVs.length; i++) {
+			IVs[i] = (int)(Math.random()*(MAX_IV + 1));
+		}
 	}
 	
-	private void setIVs(ActivePokemon daddy, ActivePokemon mommy)
-	{
+	private void setIVs(ActivePokemon daddy, ActivePokemon mommy) {
 		Item daddysItem = daddy.getActualHeldItem();
 		Item mommysItem = mommy.getActualHeldItem();
 		
-		ArrayList<PowerItem> powerItems = new ArrayList<>();
-		if (daddysItem instanceof PowerItem)
+		List<PowerItem> powerItems = new ArrayList<>();
+		if (daddysItem instanceof PowerItem) {
 			powerItems.add((PowerItem)daddysItem);
-		if (mommysItem instanceof PowerItem)
+		}
+
+		if (mommysItem instanceof PowerItem) {
 			powerItems.add((PowerItem)mommysItem);
-		
-		ArrayList<Stat> remainingStats = new ArrayList<>();
-		for (Stat s : Stat.STATS)
-		{
-			remainingStats.add(s);
 		}
 		
-		int remainingIVsToInherit = daddysItem.namesies() == Namesies.DESTINY_KNOT_ITEM || mommysItem.namesies() == Namesies.DESTINY_KNOT_ITEM ? 5 : 3;
+		List<Stat> remainingStats = new ArrayList<>();
+		Collections.addAll(remainingStats, Stat.STATS);
+		
+		int remainingIVsToInherit =
+				daddysItem.namesies() == Namesies.DESTINY_KNOT_ITEM ||
+						mommysItem.namesies() == Namesies.DESTINY_KNOT_ITEM
+						? 5 : 3;
 		IVs = new int[Stat.NUM_STATS];
 		Arrays.fill(IVs, -1);
 		
-		if (powerItems.size() > 0)
-		{
-			PowerItem randomItem = powerItems.get((int)(Math.random() * powerItems.size()));
+		if (powerItems.size() > 0) {
+			PowerItem randomItem = powerItems.get((int)(Math.random()*powerItems.size()));
 			Stat stat = randomItem.powerStat();
 			remainingStats.remove(stat);
 			
-			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
+			ActivePokemon parentToInheritFrom = (int)(Math.random()*2) == 0 ? daddy : mommy;
 			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
 			
 			remainingIVsToInherit--;
 		}
 		
-		while (remainingIVsToInherit --> 0)
-		{
+		while (remainingIVsToInherit --> 0) {
 			Stat stat = remainingStats.get((int)(Math.random() * remainingStats.size()));
 			remainingStats.remove(stat);
 			
@@ -407,18 +382,17 @@ public class ActivePokemon implements Serializable
 			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
 		}
 		
-		for (int i = 0; i < IVs.length; i++)
-			if (IVs[i] == -1)
-				IVs[i] = (int)(Math.random() * (MAX_IV + 1));
+		for (int i = 0; i < IVs.length; i++) {
+			if (IVs[i] == -1) {
+				IVs[i] = (int)(Math.random()*(MAX_IV + 1));
+			}
+		}
 	}
 	
-	private void setCharacteristic()
-	{
+	private void setCharacteristic() {
 		int maxIndex = 0;
-		for (int i = 1; i < IVs.length; i++)
-		{
-			if (IVs[i] > IVs[maxIndex])
-			{
+		for (int i = 1; i < IVs.length; i++) {
+			if (IVs[i] > IVs[maxIndex]) {
 				maxIndex = i;
 			}
 		}
@@ -426,73 +400,65 @@ public class ActivePokemon implements Serializable
 		characteristic = characteristics[IVs[maxIndex]%5][maxIndex];
 	}
 	
-	private void setStats()
-	{
+	private void setStats() {
 		int prevHP = stats[Stat.HP.index()];
 		
 		stats = new int[Stat.NUM_STATS];
-		for (int i = 0; i < stats.length; i++)
-		{
+		for (int i = 0; i < stats.length; i++) {
 			stats[i] = Stat.getStat(i, level, pokemon.getStat(i), IVs[i], EVs[i], nature.getNatureVal(i));
 		}
 		
 		hp += stats[Stat.HP.index()] - prevHP;
 	}
 	
-	private Type computeHiddenPowerType()
-	{
-		return Type.getHiddenType(((IVs[Stat.HP.index()]%2 + 2*(IVs[Stat.ATTACK.index()]%2) 
-				+ 4*(IVs[Stat.DEFENSE.index()]%2) + 8*(IVs[Stat.SPEED.index()]%2) 
-				+ 16*(IVs[Stat.SP_ATTACK.index()]%2) + 32*(IVs[Stat.SP_DEFENSE.index()]%2))*15)/63);
+	private Type computeHiddenPowerType() {
+		return Type.getHiddenType(((
+				IVs[Stat.HP.index()]%2 +
+				2*(IVs[Stat.ATTACK.index()]%2) +
+				4*(IVs[Stat.DEFENSE.index()]%2) +
+				8*(IVs[Stat.SPEED.index()]%2) +
+				16*(IVs[Stat.SP_ATTACK.index()]%2) +
+				32*(IVs[Stat.SP_DEFENSE.index()]%2)
+			)*15)/63);
 	}
 	
-	public Type getHiddenPowerType()
-	{
+	public Type getHiddenPowerType() {
 		return hiddenPowerType;
 	}
 	
-	public String getCharacteristic()
-	{
+	public String getCharacteristic() {
 		return characteristic;
 	}
 	
-	public int[] getStats()
-	{
+	public int[] getStats() {
 		return stats;
 	}
 	
-	public int[] getIVs()
-	{
+	public int[] getIVs() {
 		return IVs;
 	}
 	
-	public int[] getEVs()
-	{
+	public int[] getEVs() {
 		return EVs;
 	}
 	
-	public int getIV(int index)
-	{
+	public int getIV(int index) {
 		return IVs[index];
 	}
 	
-	public int getEV(int index)
-	{
+	public int getEV(int index) {
 		return EVs[index];
 	}
 	
-	public Nature getNature()
-	{
+	public Nature getNature() {
 		return nature;
 	}
 	
-	public void assignAbility(Ability newAbility)
-	{
+	public void assignAbility(Ability newAbility) {
 		ability = newAbility;
 	}
 	
-	public Ability getActualAbility()
-	{
+	public Ability getActualAbility() {
 		return ability;
 	}
 	
@@ -507,53 +473,43 @@ public class ActivePokemon implements Serializable
 		return this.ability;
 	}
 	
-	public int getStage(int index)
-	{
+	public int getStage(int index) {
 		return attributes.getStage(index);
 	}
 	
-	public Move getMove(Battle b, int index)
-	{
+	public Move getMove(Battle b, int index) {
 		return getMoves(b).get(index);
 	}
 	
-	public int getMaxHP()
-	{
+	public int getMaxHP() {
 		return stats[Stat.HP.index()];
 	}
 	
-	public int getStat(Battle b, Stat s)
-	{
+	public int getStat(Battle b, Stat s) {
 		Object stat = Battle.getInvoke(b.getEffectsList(this), StatsHolder.class, "getStat", this, s);
-		if (stat != null)
-		{
+		if (stat != null) {
 			return (int)stat;
 		}
 		
 		return stats[s.index()];
 	}
 	
-	public List<Move> getMoves(Battle b)
-	{
+	public List<Move> getMoves(Battle b) {
 		Move[] moveArray = this.moves.toArray(new Move[0]);		
 		moveArray = (Move[])Battle.updateInvoke(1, b.getEffectsList(this), MoveListHolder.class, "getMoveList", this, moveArray);
-		List<Move> moveList = Arrays.asList(moveArray); 
-		
-		return moveList;
+
+		return Arrays.asList(moveArray);
 	}
 	
-	public List<Move> getActualMoves()
-	{
+	public List<Move> getActualMoves() {
 		return moves;
 	}
 	
-	public int getTotalEXP()
-	{
+	public int getTotalEXP() {
 		return totalEXP;
 	}
 	
-	public int expToNextLevel()
-	{
+	public int expToNextLevel() {
 		if (level == MAX_LEVEL) {
 			return 0;	
 		}
@@ -562,8 +518,7 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// TODO: Test this to make sure it still works (espesh level 100)
-	public float expRatio()
-	{
+	public float expRatio() {
 		if (level == MAX_LEVEL) {
 			return 0;
 		}
@@ -577,36 +532,33 @@ public class ActivePokemon implements Serializable
 		return 1.0f - (float)currentToNextLevel/totalToNextLevel;
 	}
 	
-	public void gainEXP(Battle b, int gain, ActivePokemon dead)
-	{
+	public void gainEXP(Battle b, int gain, ActivePokemon dead) {
 		boolean front = b.getPlayer().front() == this;
 		
 		// Add EXP
 		totalEXP += gain;
 		b.addMessage(getActualName() + " gained " + gain + " EXP points!");
-		if (front) b.addMessage("", this, Math.min(1, expRatio()), false);
+		if (front) {
+			b.addMessage("", this, Math.min(1, expRatio()), false);
+		}
 		
 		// Add EVs
 		Item i = getHeldItem(b);
 		int[] vals = dead.getPokemonInfo().getGivenEVs();
-		if (i instanceof EVItem) 
-		{
+		if (i instanceof EVItem) {
 			vals = ((EVItem)i).getEVs(vals);
 		}
 		
 		addEVs(vals);
 		
 		// Level up if applicable
-		while (totalEXP >= pokemon.getGrowthRate().getEXP(level + 1))
-		{
+		while (totalEXP >= pokemon.getGrowthRate().getEXP(level + 1)) {
 			levelUp(b);
 		}
 	}
 
-	public boolean levelUp(Battle b)
-	{
-		if (level == MAX_LEVEL) 
-		{
+	public boolean levelUp(Battle b) {
+		if (level == MAX_LEVEL) {
 			return false;
 		}
 		
@@ -615,88 +567,106 @@ public class ActivePokemon implements Serializable
 		
 		// Grow to the next level
 		level++;
-		if (print) b.addMessage(getActualName() + " grew to level " + level + "!");
-		if (print && front) b.addMessage("", this, Math.min(1, expRatio()), true);
+		if (print) {
+			b.addMessage(getActualName() + " grew to level " + level + "!");
+		}
+
+		if (print && front) {
+			b.addMessage("", this, Math.min(1, expRatio()), true);
+		}
 		
 		// Change stats -- keep track of the gains
 		int[] prevStats = stats.clone();
 		int[] gain = new int[Stat.NUM_STATS];
 		setStats();
-		for (int i = 0; i < Stat.NUM_STATS; i++) 
-		{
+		for (int i = 0; i < Stat.NUM_STATS; i++) {
 			gain[i] = stats[i] - prevStats[i];
 		}
 		
 		// TODO: Show gain update for other Pokemon in the party
-		if (print && front) b.addMessage("", this, gain, stats);
+		if (print && front) {
+			b.addMessage("", this, gain, stats);
+		}
 		
 		// Learn new moves
-		for (Namesies s : pokemon.getMoves(level)) 
-		{
+		for (Namesies s : pokemon.getMoves(level)) {
 			learnMove(b, s);
 		}
 		
 		// Maybe you'll evolve?!
 		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionCheck.LEVEL, this, null);
-		if (ev != null) evolve(b, ev);
+		if (ev != null) {
+			evolve(b, ev);
+		}
 		
 		return true;
 	}
 	
-	public void evolve(Battle b, BaseEvolution ev)
-	{
-		if (getActualHeldItem() == Item.getItem(Namesies.EVERSTONE_ITEM)) 
-		{
+	public void evolve(Battle b, BaseEvolution ev) {
+		if (getActualHeldItem() == Item.getItem(Namesies.EVERSTONE_ITEM)) {
 			return;
 		}
 		
-		boolean print = b != null, front = print && b.getPlayer().front() == this;
+		boolean print = b != null;
+		boolean front = print && b.getPlayer().front() == this;
 		boolean sameName = nickname.equals(pokemon.getName());
 		
 		ability = Ability.evolutionAssign(this, ev.getEvolution());
 		
 		String name = nickname;
-		if (print) b.addMessage(getActualName() + " is evolving!");
+		if (print) {
+			b.addMessage(getActualName() + " is evolving!");
+		}
 		
 		pokemon = ev.getEvolution();
-		if (print) b.getPlayer().getPokedex().setStatus(this.getPokemonInfo(), PokedexStatus.CAUGHT);
+		if (print) {
+			b.getPlayer().getPokedex().setStatus(this.getPokemonInfo(), PokedexStatus.CAUGHT);
+		}
 		
 		// Set name if it was not given a nickname
-		if (sameName) nickname = pokemon.getName();
+		if (sameName) {
+			nickname = pokemon.getName();
+		}
 		
 		// Change stats
-		int[] prevStats = stats.clone(), gain = new int[Stat.NUM_STATS];
+		int[] prevStats = stats.clone();
 		setStats();
-		for (int i = 0; i < Stat.NUM_STATS; i++) gain[i] = stats[i] - prevStats[i];
+
+		int[] gain = new int[Stat.NUM_STATS];
+		for (int i = 0; i < Stat.NUM_STATS; i++) {
+			gain[i] = stats[i] - prevStats[i];
+		}
 		
-		if (print && front) b.addMessage("", pokemon, shiny, true, playerPokemon);
+		if (print && front) {
+			b.addMessage("", pokemon, shiny, true, playerPokemon);
+		}
 		
 		String message = name + " evolved into " + pokemon.getName() + "!";
 		
-		if (print) b.addMessage(message);
-		if (print && front) b.addMessage("", this, gain, stats);
+		if (print) {
+			b.addMessage(message);
+		}
+
+		if (print && front) {
+			b.addMessage("", this, gain, stats);
+		}
 		
 		// Learn new moves
 		List<Namesies> levelMoves = pokemon.getMoves(level);
-		for (Namesies s : levelMoves) 
-		{
+		for (Namesies s : levelMoves) {
 			learnMove(b, s);
 		}
 	}
 	
-	private void learnMove(Battle b, Namesies attackName)
-	{
+	private void learnMove(Battle b, Namesies attackName) {
 		// Don't want to learn a move you already know!
-		if (hasActualMove(attackName)) 
-		{
+		if (hasActualMove(attackName)) {
 			return;
 		}
 		
 		Move m = new Move(Attack.getAttack(attackName));
-		if (moves.size() < Move.MAX_MOVES)
-		{
-			if (b != null) 
-			{
+		if (moves.size() < Move.MAX_MOVES) {
+			if (b != null) {
 				b.addMessage(getActualName() + " learned " + m.getAttack().getName() + "!");
 			}
 			
@@ -705,8 +675,7 @@ public class ActivePokemon implements Serializable
 		}
 		
 		// Only add messagy things whilst in battle TODO: But really we need to be able to do messagy things outside of battle too...
-		if (b == null) 
-		{
+		if (b == null) {
 			return;
 		}
 		
@@ -714,30 +683,32 @@ public class ActivePokemon implements Serializable
 		b.addMessage(getActualName() + " did not learn " + m.getAttack().getName() + ".");
 		
 		// Wait I think this is in a motherfucking for loop because this is really poorly and hackily implemented...
-		for (int i = 0; i < moves.size(); i++)
-		{
-			b.addMessage(getActualName() + " forgot how to use " + moves.get(i).getAttack().getName() + "...");	
+		for (Move move : moves) {
+			b.addMessage(getActualName() + " forgot how to use " + move.getAttack().getName() + "...");
 		}
 		
 		b.addMessage("...and " + getActualName() + " learned " + m.getAttack().getName() + "!");
 	}
 	
-	public void addMove(Battle b, Move m, int index)
-	{
-		if (moves.size() < Move.MAX_MOVES) moves.add(m);
-		else moves.set(index, m);
+	public void addMove(Battle b, Move m, int index) {
+		if (moves.size() < Move.MAX_MOVES) {
+			moves.add(m);
+		}
+		else {
+			moves.set(index, m);
+		}
 		
 		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionCheck.MOVE, this, null);
-		if (ev != null) evolve(b, ev);
+		if (ev != null) {
+			evolve(b, ev);
+		}
 	}
 	
-	public int getLevel()
-	{
+	public int getLevel() {
 		return level;
 	}
 	
-	public void callNewMove(Battle b, ActivePokemon opp, Move m)
-	{
+	public void callNewMove(Battle b, ActivePokemon opp, Move m) {
 		Move temp = getMove();
 		m.setAttributes(b, this, opp);
 		setMove(m);
@@ -747,10 +718,8 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Pangoro breaks the mold!
-	public boolean breaksTheMold()
-	{
-		switch (getAbility().namesies())
-		{
+	public boolean breaksTheMold() {
+		switch (getAbility().namesies()) {
 			case MOLD_BREAKER_ABILITY:
 			case TURBOBLAZE_ABILITY:
 			case TERAVOLT_ABILITY:
@@ -760,148 +729,129 @@ public class ActivePokemon implements Serializable
 		}
 	}
 	
-	public boolean canFight()
-	{
+	public boolean canFight() {
 		return !hasStatus(StatusCondition.FAINTED) && !isEgg();
 	}
 	
 	// Returns if the Pokemon is stalling -- that is that it will move last within its priority bracket
-	public boolean isStalling(Battle b)
-	{
+	public boolean isStalling(Battle b) {
+		// TODO: Why is this only checking ability and item?
 		return getAbility() instanceof StallingEffect || getHeldItem(b) instanceof StallingEffect;
 	}
 	
-	public boolean hasAbility(Namesies a)
-	{
+	public boolean hasAbility(Namesies a) {
 		return getAbility().namesies() == a;
 	}
 	
-	public void setStatus(Status s)
-	{
+	public void setStatus(Status s) {
 		status = s;
 	}
 	
-	public void addEffect(PokemonEffect e)
-	{
+	public void addEffect(PokemonEffect e) {
 		attributes.addEffect(e);
 	}
 	
-	public void setMove(Move m)
-	{
+	public void setMove(Move m) {
 		attributes.setMove(m);
 	}
 	
-	public Move getMove()
-	{
+	public Move getMove() {
 		return attributes.getMove();
 	}
 	
-	public Attack getAttack()
-	{
+	public Attack getAttack() {
 		Move m = attributes.getMove();
-		if (m == null)
-		{
+		if (m == null) {
 			return null;
 		}
 		
 		return m.getAttack();
 	}
 	
-	public boolean isAttackType(Type t)
-	{
+	public boolean isAttackType(Type t) {
 		return getAttackType() == t;
 	}
 	
-	public Type getAttackType()
-	{
+	public Type getAttackType() {
 		return getMove().getType();
 	}
 	
-	public int getAttackPower()
-	{
+	public int getAttackPower() {
 		return getMove().getPower();
 	}
 	
 	// Returns whether or not this Pokemon knows this move already
-	public boolean hasActualMove(Namesies name)
-	{
+	public boolean hasActualMove(Namesies name) {
 		return hasMove(getActualMoves(), name);
 	}
 	
-	public boolean hasMove(Battle b, Namesies name)
-	{
+	public boolean hasMove(Battle b, Namesies name) {
 		return hasMove(getMoves(b), name);
 	}
 	
-	private boolean hasMove(List<Move> moveList, Namesies name)
-	{
-		for (Move m : moveList)
-			if (m.getAttack().namesies() == name) 
+	private boolean hasMove(List<Move> moveList, Namesies name) {
+		for (Move m : moveList) {
+			if (m.getAttack().namesies() == name) {
 				return true;
+			}
+		}
 
 		return false;
 	}
 	
-	public Gender getGender()
-	{
+	public Gender getGender() {
 		return gender;
 	}
 	
-	public boolean isSemiInvulnerable()
-	{
-		if (getMove() == null) 
-		{
+	public boolean isSemiInvulnerable() {
+		final Move move = this.getMove();
+		if (move == null) {
 			return false;
 		}
 		
-		return !getMove().isReady() && ((MultiTurnMove)getAttack()).semiInvulnerability();
+		return !move.isReady() && ((MultiTurnMove)getAttack()).semiInvulnerability();
 	}
 	
-	public boolean isSemiInvulnerableFlying()
-	{
+	public boolean isSemiInvulnerableFlying() {
 		return isSemiInvulnerable() && (getAttack().namesies() == Namesies.FLY_ATTACK || getAttack().namesies() == Namesies.BOUNCE_ATTACK); 
 	}
 	
-	public boolean isSemiInvulnerableDigging()
-	{
+	public boolean isSemiInvulnerableDigging() {
 		return isSemiInvulnerable() && getAttack().namesies() == Namesies.DIG_ATTACK;
 	}
 	
-	public boolean isSemiInvulnerableDiving()
-	{
+	public boolean isSemiInvulnerableDiving() {
 		return isSemiInvulnerable() && getAttack().namesies() == Namesies.DIVE_ATTACK;
 	}
 	
-	private int totalEVs()
-	{
+	private int totalEVs() {
 		int sum = 0;
-		for (int i = 0; i < EVs.length; i++) sum += EVs[i];
+		for (int EV : EVs) {
+			sum += EV;
+		}
+
 		return sum;
 	}
 	
 	// Adds Effort Values to a Pokemon, returns true if they were successfully added
-	public boolean addEVs(int[] vals)
-	{
-		if (totalEVs() == Stat.MAX_EVS) 
+	public boolean addEVs(int[] vals) {
+		if (totalEVs() == Stat.MAX_EVS) {
 			return false;
+		}
 		
 		boolean added = false;
-		for (int i = 0; i < EVs.length; i++)
-		{
-			if (vals[i] > 0 && EVs[i] < Stat.MAX_STAT_EVS)
-			{
+		for (int i = 0; i < EVs.length; i++) {
+			if (vals[i] > 0 && EVs[i] < Stat.MAX_STAT_EVS) {
 				added = true;
 				EVs[i] = Math.min(Stat.MAX_STAT_EVS, EVs[i] + vals[i]); // Don't exceed stat EV amount
 				
 				// Don't exceed total EV amount
-				if (totalEVs() > Stat.MAX_EVS) 
-				{
+				if (totalEVs() > Stat.MAX_EVS) {
 					EVs[i] -= (Stat.MAX_EVS - totalEVs());
 					break;
 				}
 			}
-			else if (vals[i] < 0 && EVs[i] > 0)
-			{
+			else if (vals[i] < 0 && EVs[i] > 0) {
 				added = true;
 				EVs[i] = Math.max(0, EVs[i] + vals[i]); // Don't drop below zero
 			}
@@ -911,120 +861,101 @@ public class ActivePokemon implements Serializable
 		return added;
 	}
 	
-	public Type[] getActualType()
-	{
+	public Type[] getActualType() {
 		return pokemon.getType();
 	}
 	
-	public Type[] getDisplayType(Battle b)
-	{
+	public Type[] getDisplayType(Battle b) {
 		return getType(b, true);
 	}
 	
-	public Type[] getType(Battle b) 
-	{	
+	public Type[] getType(Battle b) {
 		return getType(b, false);
 	}
 	
-	private Type[] getType(Battle b, boolean displayOnly)
-	{
+	private Type[] getType(Battle b, boolean displayOnly) {
 		// Guarantee the change-type effect to be first
 		Object[] invokees = b.getEffectsList(this, this.getEffect(Namesies.CHANGE_TYPE_EFFECT));
 		
 		Object changeType = Battle.getInvoke(invokees, TypeHolder.class, "getType", b, this, displayOnly);
-		if (changeType != null)
-		{
+		if (changeType != null) {
 			return (Type[])changeType;
 		}
 		
 		return getActualType();
 	}
 	
-	public boolean isType(Battle b, Type type)
-	{
+	public boolean isType(Battle b, Type type) {
 		Type[] types = getType(b);
 		return types[0] == type || types[1] == type; 
 	}
 	
-	public int getHP()
-	{
+	public int getHP() {
 		return hp;
 	}
 	
-	public void setHP(int amount)
-	{
+	public void setHP(int amount) {
 		hp = Math.min(getMaxHP(), Math.max(0, amount));
 	}
 	
-	public boolean fullHealth()
-	{
+	public boolean fullHealth() {
 		return hp == getMaxHP();
 	}
 	
-	public double getHPRatio()
-	{
+	public double getHPRatio() {
 		return (double)hp/getMaxHP();
 	}
 	
-	public Color getHPColor()
-	{
+	public Color getHPColor() {
 		return DrawMetrics.getHPColor(getHPRatio());
 	}
 	
-	public String getActualName()
-	{
+	public String getActualName() {
 		return nickname;
 	}
 	
-	public String getName()
-	{
+	public String getName() {
 		Object[] invokees = { this.getAbility() };
 		Object changedName = Battle.getInvoke(invokees, NameChanger.class, "getNameChange");
-		if (changedName != null)
-		{
+		if (changedName != null) {
 			return (String)changedName;
 		}
 		
 		return getActualName();
 	}
 	
-	public BattleAttributes getAttributes()
-	{
+	public BattleAttributes getAttributes() {
 		return attributes;
 	}
 	
-	public boolean user()
-	{
+	public boolean user() {
 		return playerPokemon;
 	}
 	
-	public void resetAttributes()
-	{
+	public void resetAttributes() {
 		attributes = new BattleAttributes();
-		
-		for (Move m : moves)
-		{
+		for (Move m : moves) {
 			m.resetReady();
 		}
 	}
 	
-	public void setCaught()
-	{
+	public void setCaught() {
 		playerPokemon = true;
 	}
 	
 	public boolean isFainted(Battle b)
 	{
 		// We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
-		if (hasStatus(StatusCondition.FAINTED))
-		{
-			if (hp == 0) return true;
+		if (hasStatus(StatusCondition.FAINTED)) {
+			if (hp == 0) {
+				return true;
+			}
+
 			Global.error("Pokemon should only have the Fainted Status Condition when HP is zero.");
 		}
 		
 		// Deady
-		if (hp == 0)
-		{
+		if (hp == 0) {
 			b.addMessage("", this);
 			
 			Status.die(this);
@@ -1036,8 +967,7 @@ public class ActivePokemon implements Serializable
 			Battle.invoke(getEffects().toArray(), FaintEffect.class, "deathwish", b, this, murderer);
 			
 			// If the pokemon fainted by direct result of an attack -- apply ability and attack deathwishes 
-			if (murderer.getAttributes().isAttacking())
-			{
+			if (murderer.getAttributes().isAttacking()) {
 				Object[] invokees = new Object[] {murderer.getAttack(), murderer.getAbility()};
 				Battle.invoke(invokees, FaintEffect.class, "deathwish", b, this, murderer);
 			}
@@ -1052,19 +982,16 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Returns the empty string if the Pokemon can switch, and the appropriate fail message if they cannot
-	public boolean canEscape(Battle b)
-	{
+	public boolean canEscape(Battle b) {
 		// Shed Shell always allows escape
-		if (isHoldingItem(b, Namesies.SHED_SHELL_ITEM)) 
-		{
+		if (isHoldingItem(b, Namesies.SHED_SHELL_ITEM)) {
 			return true;
 		}
 		
 		// Check if the user is under an effect that prevents escape
 		Object[] invokees = b.getEffectsList(this);
 		Object trapped = Battle.checkInvoke(true, invokees, TrappingEffect.class, "isTrapped", b, this);
-		if (trapped != null)
-		{
+		if (trapped != null) {
 			b.addMessage(((TrappingEffect)trapped).trappingMessage(this));
 			return false;
 		}
@@ -1073,8 +1000,7 @@ public class ActivePokemon implements Serializable
 		ActivePokemon other = b.getOtherPokemon(user());
 		invokees = b.getEffectsList(other);
 		trapped = Battle.checkInvoke(true, invokees, OpponentTrappingEffect.class, "trapOpponent", b, this);
-		if (trapped != null)
-		{
+		if (trapped != null) {
 			b.addMessage(((OpponentTrappingEffect)trapped).opponentTrappingMessage(this, other));
 			return false;
 		}
@@ -1083,61 +1009,53 @@ public class ActivePokemon implements Serializable
 		return true;
 	}
 	
-	public boolean hasEffect(Namesies effect)
-	{
+	public boolean hasEffect(Namesies effect) {
 		return attributes.hasEffect(effect);
 	}
 	
 	// Returns null if the Pokemon is not under the effects of the input effect, otherwise returns the Condition
-	public PokemonEffect getEffect(Namesies effect)
-	{
+	public PokemonEffect getEffect(Namesies effect) {
 		return attributes.getEffect(effect);
 	}
 	
-	public List<PokemonEffect> getEffects()
-	{
+	public List<PokemonEffect> getEffects() {
 		return attributes.getEffects();
 	}
 	
-	public void modifyStages(Battle b, ActivePokemon modifier, int[] mod, CastSource source)
-	{
-		for (int i = 0; i < mod.length; i++)
-		{
-			if (mod[i] == 0) continue;
+	public void modifyStages(Battle b, ActivePokemon modifier, int[] mod, CastSource source) {
+		for (int i = 0; i < mod.length; i++) {
+			if (mod[i] == 0) {
+				continue;
+			}
+
 			attributes.modifyStage(modifier, this, mod[i], Stat.getStat(i, true), b, source);
 		}
 	}
 	
-	public Status getStatus()
-	{
+	public Status getStatus() {
 		return status;
 	}
 	
 	// Returns whether or not the Pokemon is afflicted with a status condition
-	public boolean hasStatus()
-	{
+	public boolean hasStatus() {
 		return status.getType() != StatusCondition.NONE;
 	}
 	
-	public boolean hasStatus(StatusCondition type)
-	{
+	public boolean hasStatus(StatusCondition type) {
 		return status.getType() == type;
 	}
 	
 	// Sets the Pokemon's status condition to be None
-	public void removeStatus()
-	{
+	public void removeStatus() {
 		Status.removeStatus(this);
-		attributes.removeEffect(Namesies.NIGHTMARE_EFFECT);
+		attributes.removeEffect(Namesies.NIGHTMARE_EFFECT); // TODO: There should be a way for effects to be tied to status conditions so that they don't have to be hardcoded here
 		attributes.removeEffect(Namesies.BAD_POISON_EFFECT);
 	}
 	
 	// Returns null if the Pokemon is not bracing, and the associated effect if it is
-	private BracingEffect bracing(Battle b, boolean fullHealth)
-	{
+	private BracingEffect bracing(Battle b, boolean fullHealth) {
 		BracingEffect bracingEffect = (BracingEffect)getEffect(Namesies.BRACING_EFFECT);
-		if (bracingEffect != null) 
-		{
+		if (bracingEffect != null) {
 			return bracingEffect;
 		}
 		
@@ -1148,26 +1066,22 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Reduces hp by amount, returns the actual amount of hp that was reduced
-	public int reduceHealth(Battle b, int amount)
-	{
+	public int reduceHealth(Battle b, int amount) {
+
 		// Not actually reducing health...
-		if (amount == 0) 
-		{
+		if (amount == 0) {
 			return 0;
 		}
 		
 		// Substitute absorbs the damage instead of the Pokemon
 		IntegerHolder e = (IntegerHolder)getEffect(Namesies.SUBSTITUTE_EFFECT);
-		if (e != null)
-		{
+		if (e != null) {
 			e.decrease(amount);
-			if (e.getAmount() <= 0)
-			{
+			if (e.getAmount() <= 0) {
 				b.addMessage("The substitute broke!");
 				attributes.removeEffect(Namesies.SUBSTITUTE_EFFECT);
 			}
-			else
-			{
+			else {
 				b.addMessage("The substitute absorbed the hit!");
 			}
 			
@@ -1181,11 +1095,9 @@ public class ActivePokemon implements Serializable
 		attributes.takeDamage(taken);
 		
 		// Enduring the hit
-		if (hp == 0)
-		{
+		if (hp == 0) {
 			BracingEffect brace = bracing(b, fullHealth);
-			if (brace != null)
-			{
+			if (brace != null) {
 				taken -= heal(1);
 				
 				b.addMessage("", this);
@@ -1193,16 +1105,14 @@ public class ActivePokemon implements Serializable
 			}
 		}
 		
-		if (isFainted(b)) 
-		{
+		if (isFainted(b)) {
 			return taken;
 		}
 		
 		b.addMessage("", this);
 		
 		// Check if the Pokemon fainted and also handle Focus Punch
-		if (hasEffect(Namesies.FOCUSING_EFFECT))
-		{
+		if (hasEffect(Namesies.FOCUSING_EFFECT)) {
 			b.addMessage(getName() + " lost its focus and couldn't move!");
 			attributes.removeEffect(Namesies.FOCUSING_EFFECT);
 			addEffect(PokemonEffect.getEffect(Namesies.FLINCH_EFFECT));
@@ -1210,14 +1120,11 @@ public class ActivePokemon implements Serializable
 		
 		// Health Triggered Berries
 		Item item = getHeldItem(b);
-		if (item instanceof HealthTriggeredBerry)
-		{
+		if (item instanceof HealthTriggeredBerry) {
 			HealthTriggeredBerry berry  = (HealthTriggeredBerry)item;
 			double healthRatio = getHPRatio();
-			if ((healthRatio <= berry.healthTriggerRatio() || (healthRatio <= .5 && hasAbility(Namesies.GLUTTONY_ABILITY))))
-			{
-				if (berry.gainBerryEffect(b, this, CastSource.HELD_ITEM))
-				{
+			if ((healthRatio <= berry.healthTriggerRatio() || (healthRatio <= .5 && hasAbility(Namesies.GLUTTONY_ABILITY)))) {
+				if (berry.gainBerryEffect(b, this, CastSource.HELD_ITEM)) {
 					consumeItem(b);
 				}
 			}
@@ -1227,16 +1134,17 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Reduces the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
-	public int reduceHealthFraction(Battle b, double fraction)
-	{
+	public int reduceHealthFraction(Battle b, double fraction) {
 		return reduceHealth(b, (int)Math.max(stats[Stat.HP.index()]*fraction, 1));
 	}
 	
 	// Restores hp by amount, returns the actual amount of hp that was restored
-	public int heal(int amount)
-	{
+	public int heal(int amount) {
+
 		// Dead Pokemon can't heal
-		if (hasStatus(StatusCondition.FAINTED)) return 0;
+		if (hasStatus(StatusCondition.FAINTED)) {
+			return 0;
+		}
 		
 		int prev = hp;
 		hp = Math.min(getMaxHP(), hp + amount);
@@ -1244,50 +1152,38 @@ public class ActivePokemon implements Serializable
 	}
 	
 	// Restores the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
-	public int healHealthFraction(double fraction)
-	{
+	public int healHealthFraction(double fraction) {
 		return heal((int)Math.max(getMaxHP()*fraction, 1));
 	}
 	
 	// Removes status, restores PP for all moves, restores to full health
-	public void fullyHeal()
-	{
+	public void fullyHeal() {
 		removeStatus();
-		
-		for (Move m : this.getActualMoves())
-		{
-			m.resetPP();
-		}
-		
+		this.getActualMoves().forEach(Move::resetPP);
 		healHealthFraction(1);
 	}
 	
 	// Heals the Pokemon by damage amount. It is assume damage has already been dealt to the victim
-	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print, boolean dreamEater)
-	{
-		if (victim.hasAbility(Namesies.LIQUID_OOZE_ABILITY))
-		{
+	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print, boolean dreamEater) {
+		if (victim.hasAbility(Namesies.LIQUID_OOZE_ABILITY)) {
 			b.addMessage(victim.getName() + "'s " + Namesies.LIQUID_OOZE_ABILITY.getName() + " caused " + getName() + " to lose health instead!");
 			reduceHealth(b, amount);
 			return;
 		}
 		
 		// Big Root heals an additional 30%
-		if (isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) 
-		{
+		if (isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) {
 			amount *= 1.3;
 		}
 		
 		// Sap message (different for Dream Eater)
-		if (print) 
-		{
+		if (print) {
 			String message = dreamEater ? victim.getName() + "'s dream was eaten!" : victim.getName() + "'s health was sapped!"; 
 			b.addMessage(message);
 		}
 		
 		// Healers gon' heal
-		if (!hasEffect(Namesies.HEAL_BLOCK_EFFECT)) 
-		{
+		if (!hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
 			heal(amount);
 		}
 		
@@ -1295,24 +1191,21 @@ public class ActivePokemon implements Serializable
 		b.addMessage("", this);
 	}
 	
-	public boolean isGrounded(Battle b)
-	{
+	public boolean isGrounded(Battle b) {
 		return Battle.hasInvoke(b.getEffectsList(this), GroundedEffect.class);
 	}
 	
 	// Returns true if the Pokemon is currently levitating for any reason
-	public boolean isLevitating(Battle b)
-	{
+	public boolean isLevitating(Battle b) {
+
 		// Grounded effect take precedence over levitation effects
-		if (isGrounded(b))
-		{
+		if (isGrounded(b)) {
 			return false;
 		}
 		
 		// Obvs levitating if you have a levitation effect
 		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
-		if (Battle.hasInvoke(b.getEffectsList(this), LevitationEffect.class))
-		{
+		if (Battle.hasInvoke(b.getEffectsList(this), LevitationEffect.class)) {
 			return true;
 		}
 		
@@ -1320,43 +1213,35 @@ public class ActivePokemon implements Serializable
 		return isType(b, Type.FLYING);
 	}
 
-	public void giveItem(HoldItem i)
-	{
+	public void giveItem(HoldItem i) {
 		heldItem = i;
 	}
 	
-	public void removeItem()
-	{
+	public void removeItem() {
 		heldItem = (HoldItem)Item.noneItem();
 	}
 	
-	public void consumeItem(Battle b)
-	{
+	public void consumeItem(Battle b) {
 		Item consumed = getHeldItem(b);
 		PokemonEffect.getEffect(Namesies.CONSUMED_ITEM_EFFECT).cast(b, this, this, CastSource.HELD_ITEM, false);
 		
 		ActivePokemon other = b.getOtherPokemon(playerPokemon); 
-		if (other.hasAbility(Namesies.PICKUP_ABILITY) && !other.isHoldingItem(b))
-		{
+		if (other.hasAbility(Namesies.PICKUP_ABILITY) && !other.isHoldingItem(b)) {
 			other.giveItem((HoldItem)consumed);
 			b.addMessage(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
 		}
 	}
 	
-	public Item getActualHeldItem()
-	{
+	public Item getActualHeldItem() {
 		return (Item)heldItem;
 	}
 	
-	public Item getHeldItem(Battle b)
-	{
-		if (b == null)
-		{
+	public Item getHeldItem(Battle b) {
+		if (b == null) {
 			return getActualHeldItem();
 		}
 		
-		if (hasAbility(Namesies.KLUTZ_ABILITY) || b.hasEffect(Namesies.MAGIC_ROOM_EFFECT) || hasEffect(Namesies.EMBARGO_EFFECT)) 
-		{
+		if (hasAbility(Namesies.KLUTZ_ABILITY) || b.hasEffect(Namesies.MAGIC_ROOM_EFFECT) || hasEffect(Namesies.EMBARGO_EFFECT)) {
 			return Item.noneItem();
 		}
 		
@@ -1364,41 +1249,34 @@ public class ActivePokemon implements Serializable
 		PokemonEffect changeItem = getEffect(Namesies.CHANGE_ITEM_EFFECT);
 		Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 		
-		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility(Namesies.UNNERVE_ABILITY))
-		{
+		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility(Namesies.UNNERVE_ABILITY)) {
 			return Item.noneItem();
 		}
 		
 		return item;
 	}
 	
-	public boolean isHoldingItem(Battle b, Namesies itemName)
-	{
+	public boolean isHoldingItem(Battle b, Namesies itemName) {
 		return getHeldItem(b) == Item.getItem(itemName);
 	}
 	
-	public boolean isHoldingItem(Battle b)
-	{
+	public boolean isHoldingItem(Battle b) {
 		return getHeldItem(b) != Item.noneItem();
 	}
 	
-	public boolean isShiny()
-	{
+	public boolean isShiny() {
 		return shiny;
 	}
 	
-	public PokemonInfo getPokemonInfo()
-	{
+	public PokemonInfo getPokemonInfo() {
 		return pokemon;
 	}
 	
-	public boolean isPokemon(Namesies name)
-	{
+	public boolean isPokemon(Namesies name) {
 		return pokemon.namesies() == name;
 	}
 	
-	public double getWeight(Battle b)
-	{
+	public double getWeight(Battle b) {
 		Object[] invokees = b.getEffectsList(this);
 		ActivePokemon moldBreaker = b.getOtherPokemon(user());
 		
@@ -1407,33 +1285,28 @@ public class ActivePokemon implements Serializable
 		return pokemon.getWeight()/Math.pow(2, halfAmount);
 	}
 	
-	public void startAttack(Battle b, ActivePokemon opp)
-	{
+	public void startAttack(Battle b, ActivePokemon opp) {
 		this.getAttributes().setAttacking(true);
 		this.getMove().switchReady(b, this); // TODO: I don't think this works right because this is happening before you check if they're able to attack and honestly they shouldn't really switch until the end of the turn
 		this.getMove().setAttributes(b, this, opp);
 	}
 	
-	public void endAttack(Battle b, ActivePokemon opp, boolean success, boolean reduce)
-	{
-		if (!success)
-		{
+	public void endAttack(Battle b, ActivePokemon opp, boolean success, boolean reduce) {
+		if (!success) {
 			this.getAttributes().removeEffect(Namesies.SELF_CONFUSION_EFFECT);
 			this.getAttributes().resetCount();
 		}
 		
 		this.getAttributes().setLastMoveUsed();
 		
-		if (reduce) 
-		{
+		if (reduce) {
 			this.getMove().reducePP(opp.hasAbility(Namesies.PRESSURE_ABILITY) ? 2 : 1);
 		}
 		
 		this.getAttributes().setAttacking(false);
 	}
 	
-	public boolean canBreed()
-	{
+	public boolean canBreed() {
 		return !isEgg && pokemon.canBreed();
 	}
 }

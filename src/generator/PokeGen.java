@@ -19,20 +19,21 @@ import main.Namesies.NamesiesType;
 import main.Type;
 import util.FileIO;
 import util.PokeString;
+import util.StringUtils;
 
 class PokeGen {
-	private static int TM_BASE_INDEX = 2000;
+	private static final int TM_BASE_INDEX = 2000;
 	
-	private static final String EFFECTS_FOLDER = FileIO.makePath("src", "battle", "effect", "generic");
+	private static final String EFFECTS_FOLDER = FileIO.makeFolderPath("src", "battle", "effect", "generic");
 	private static final String POKEMON_EFFECT_PATH = EFFECTS_FOLDER + "PokemonEffect.java";
 	private static final String TEAM_EFFECT_PATH = EFFECTS_FOLDER + "TeamEffect.java";
 	private static final String BATTLE_EFFECT_PATH = EFFECTS_FOLDER + "BattleEffect.java";
 	private static final String WEATHER_PATH = EFFECTS_FOLDER + "Weather.java";
 	
-	private static final String MOVE_PATH = FileIO.makePath("src", "battle") + "Attack.java";
-	private static final String ABILITY_PATH = FileIO.makePath("src", "pokemon") + "Ability.java";
-	private static final String ITEM_PATH = FileIO.makePath("src", "item") + "Item.java";
-	private static final String ITEM_TILES_PATH = FileIO.makePath("rec", "tiles", "itemTiles");
+	private static final String MOVE_PATH = FileIO.makeFolderPath("src", "battle") + "Attack.java";
+	private static final String ABILITY_PATH = FileIO.makeFolderPath("src", "pokemon") + "Ability.java";
+	private static final String ITEM_PATH = FileIO.makeFolderPath("src", "item") + "Item.java";
+	private static final String ITEM_TILES_PATH = FileIO.makeFolderPath("rec", "tiles", "itemTiles");
 	
 	private enum Generator {
 		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", NamesiesType.ATTACK, false, true),
@@ -187,8 +188,8 @@ class PokeGen {
 		while (in.hasNext()) {
 			String line = in.nextLine().trim();
 			
-			// Ignore comments and white space at beginning of file
-			if (line.length() == 0 || line.charAt(0) == '#') {
+			// Ignore comments and white space
+			if (line.isEmpty() || line.startsWith("#")) {
 				continue;
 			}
 			
@@ -229,15 +230,15 @@ class PokeGen {
 				.append("}");
 
 		if (FileIO.overwriteFile(this.currentGen.getOutputPath(), out)) {
-			System.out.println(this.currentGen.getInputPath() + " generated.");
+			System.out.println(this.currentGen.getOutputPath() + " generated.");
 		}
 	}
 	
 	private String getActivationMethod(String className, Map<String, String> fields) {
 		if (!this.currentGen.isActivate()) {
-			return "";
+			return StringUtils.empty();
 		}
-		
+
 		String activation = "(" + className + ")(new " + className + "().activate())";
 		String activateHeader = className + " newInstance()";
 		
@@ -265,8 +266,8 @@ class PokeGen {
 		while (in.hasNext()) {
 			String line = in.nextLine().trim();
 			
-			// Ignore comments and white space at beginning of file
-			if (line.length() == 0 || line.charAt(0) == '#') {
+			// Ignore comments and white space
+			if (line.isEmpty() || line.startsWith("#")) {
 				continue;
 			}
 			
@@ -275,9 +276,8 @@ class PokeGen {
 			}
 			
 			String formatType = line.replace(":", "");
-			
-			if (formatType.equals("Failure")) {
-				failureInfo = new Failure(in);
+			if (formatType.equals("FailureInfo")) {
+				failureInfo = new FailureInfo(in);
 				continue;
 			}
 			
@@ -309,119 +309,7 @@ class PokeGen {
 	
 	private static List<Entry<String, String>> constructorKeys;
 	private static List<Entry<String, String>> fieldKeys;
-	private static Failure failureInfo;
-
-	private static class Failure {
-		private String header; 
-		List<Entry<String, String>> failureInfo;
-		
-		public Failure(Scanner in) {
-			failureInfo = new ArrayList<>();
-			
-			while (in.hasNext()) {
-				String line = in.nextLine().trim();
-				if (line.equals("*")) {
-					break;
-				}
-				
-				String[] split = line.split(" ", 2);
-				
-				String fieldName = split[0];
-				String fieldInfo = split[1];
-				
-				if (fieldName.equals("Header")) {
-					this.header = fieldInfo;
-				}
-				else {
-					failureInfo.add(new SimpleEntry<>(fieldName, fieldInfo));
-				}
-			}
-		}
-		
-		private String writeFailure(Map<String, String> fields, String superClass) {
-			String failure = "";
-			
-			String className = fields.get("ClassName");
-			boolean first = true;
-			
-			for (Entry<String, String> entry : failureInfo) {
-				String fieldName = entry.getKey();
-				String fieldInfo = entry.getValue();
-				
-				int index = 0;
-				String[] split = fieldInfo.split(" ");
-			
-				boolean not = false, list = false;
-				
-				String fieldType = split[index++];
-				if (fieldType.equals("List")) {
-					list = true;
-					fieldType = split[index++]; 
-				}
-				
-				if (fieldType.equals("Not")) {
-					not = true;
-					fieldType = split[index++];
-				}
-				
-				String defaultValue = "";
-				if (fieldType.equals("Default")) {
-					defaultValue = split[index++];
-					fieldType = split[index++];
-				}
-				
-				String fieldValue = fields.get(fieldName);
-				if (fieldValue == null) {
-					if (!not) {
-						continue;
-					}
-					
-					fieldValue = defaultValue;
-				}
-				else if (not) {
-					fields.remove(fieldName);
-					continue;
-				}
-				
-				String[] fieldValues = new String[] {fieldValue};
-				if (list) {
-					fieldValues = fieldValue.split(",");
-				}
-
-				int previousIndex = index;
-				
-				for (String value : fieldValues) {
-					index = previousIndex;
-					
-					Entry<Integer, String> pair = getValue(split, value, index);
-					index = pair.getKey();
-					String pairValue = pair.getValue();
-
-					String body = "";
-					boolean space = false;
-					
-					for (; index < split.length; index++) {
-						body += (space ? " " : "") + split[index];
-						space = true;
-					}
-					
-					body = StuffGen.replaceBody(body, pairValue, className, superClass);
-					
-					failure += (first ? "" : " || ")  + body;
-					first = false;	
-				}
-				
-				fields.remove(fieldName);
-			}
-			
-			if (failure.length() == 0) {
-				return failure;
-			}
-			
-			failure = "return !(" + failure + ");";
-			return new MethodInfo(this.header, failure).writeFunction();
-		}
-	}
+	private static FailureInfo failureInfo;
 	
 	private static String getConstructorValue(Entry<String, String> pair, Map<String, String> fields) {
 		int index = 0;
@@ -574,7 +462,7 @@ class PokeGen {
 			
 			if (fields.containsKey(fieldKey)) {
 				String assignment = getAssignment(pair.getValue(), fields.get(fieldKey));
-				constructor.append(assignment + "\n");
+				StringUtils.appendLine(constructor, assignment);
 				fields.remove(fieldKey);
 			}
 		}
@@ -700,7 +588,7 @@ class PokeGen {
 			String line = in.nextLine().trim();
 			
 			// Ignore comments and white space at beginning of file
-			if (line.length() == 0 || line.charAt(0) == '#') {
+			if (line.isEmpty() || line.startsWith("#")) {
 				continue;
 			}
 			
@@ -738,7 +626,7 @@ class PokeGen {
 		}
 	}
 	
-	private static Entry<Integer, String> getValue(String[] splitInfo, String fieldValue, int index) {
+	static Entry<Integer, String> getValue(String[] splitInfo, String fieldValue, int index) {
 		String type = splitInfo[index - 1];
 		String value;
 		

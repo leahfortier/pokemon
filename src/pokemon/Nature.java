@@ -18,61 +18,52 @@ public class Nature implements Serializable
 	private int hindering;
 	private String name;
 	
-	private static int getRandomNatureStatIndex()
-	{
+	private static int getRandomNatureStatIndex() {
 		return (int)(Math.random()*(Stat.NUM_STATS - 1) + 1);
 	}
 	
-	public Nature()
-	{
+	public Nature() {
 		this(getRandomNatureStatIndex(), getRandomNatureStatIndex());
 	}
 	
-	public Nature(int beneficialStat, int hinderingStat)
-	{
+	public Nature(int beneficialStat, int hinderingStat) {
 		this.beneficial = beneficialStat;
 		this.hindering = hinderingStat;
 		
 		this.name = natures[beneficial][hindering];
 	}
 	
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 	
-	public double getNatureVal(int stat)
-	{
-		if (beneficial == hindering)
-		{
+	public double getNatureVal(int stat) {
+		if (beneficial == hindering) {
 			return 1;
 		}
-		else if (beneficial == stat)
-		{
+		else if (beneficial == stat) {
 			return 1.1;
 		}
-		else if (hindering == stat)
-		{
+		else if (hindering == stat) {
 			return .9;
 		}
-		return 1;
+		else {
+			return 1;
+		}
 	}
 	
-	public Color getColor(int statIndex)
-	{
-		if (beneficial == hindering)
-		{
+	public Color getColor(int statIndex) {
+		if (beneficial == hindering) {
 			return Color.BLACK;
 		}
-		else if (beneficial == statIndex)
-		{
+		else if (beneficial == statIndex) {
 			return new Color(0, 190, 0);
 		}
-		else if (hindering == statIndex)
-		{
+		else if (hindering == statIndex) {
 			return new Color(200, 0, 0);
 		}
-		
-		return Color.BLACK;
+		else {
+			return Color.BLACK;
+		}
 	}
 }

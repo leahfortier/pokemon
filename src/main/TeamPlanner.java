@@ -11,26 +11,23 @@ import pokemon.PokemonInfo;
 import pokemon.Stat;
 import util.FileIO;
 import battle.Attack;
+import util.StringUtils;
 
-public class TeamPlanner
-{
-	static Type[] types = Type.values();
-	static double[] coverageValues = { 4, 2, .5, 0 };
+public class TeamPlanner {
+	private static Type[] types = Type.values();
+	private static double[] coverageValues = { 4, 2, .5, 0 };
 	
-	public TeamPlanner()
-	{
+	public TeamPlanner() {
 		List<TeamMember> team = readTeam();
 		
 		OffensiveCoverage offensiveCoverage = new OffensiveCoverage();
 		
 		AttackTypeCoverage[] coverage = new AttackTypeCoverage[types.length - 1];
-		for (int i = 0; i < types.length - 1; i++)
-		{
+		for (int i = 0; i < types.length - 1; i++) {
 			coverage[i] = new AttackTypeCoverage(types[i]);
 		}
 		
-		for (TeamMember member : team)
-		{
+		for (TeamMember member : team) {
 			member.printAllCoverage();
 			
 			AttackTypeCoverage.addCoverage(coverage, member);
@@ -47,15 +44,13 @@ public class TeamPlanner
 		TeamMember.printTeam(team);
 	}
 	
-	private static List<TeamMember> readTeam()
-	{
+	private static List<TeamMember> readTeam() {
 		Scanner in = FileIO.openFile("teamPlanner.in");
 		List<TeamMember> team = new ArrayList<>();
 		
 		System.out.println("Read Team");
 		
-		while (in.hasNextLine())
-		{
+		while (in.hasNextLine()) {
 			String pokemonName = in.nextLine().trim();
 			PokemonInfo pokemon = PokemonInfo.getPokemonInfo(Namesies.getValueOf(pokemonName, NamesiesType.POKEMON));
 			
@@ -65,11 +60,9 @@ public class TeamPlanner
 			
 			List<String> moves = new ArrayList<>();
 			
-			while (true)
-			{
+			while (true) {
 				String line = in.nextLine().trim();
-				if (line.equals("***"))
-				{
+				if (line.equals("***")) {
 					break;
 				}
 				
@@ -77,8 +70,7 @@ public class TeamPlanner
 				String key = split[0].trim();
 				String value = split.length == 1 ? null : split[1].trim();
 				
-				switch (key)
-				{
+				switch (key) {
 					case "Ability":
 						if (ability != null) Global.error("Ability already defined for " + pokemonName);
 						
@@ -95,12 +87,10 @@ public class TeamPlanner
 						item = value;
 						break;	
 					case "Moves":
-						while (true)
-						{
+						while (true) {
 							String move = in.nextLine().trim();
 							
-							if (move.equals("*"))
-							{
+							if (move.equals("*")) {
 								break;
 							}
 							
@@ -113,19 +103,15 @@ public class TeamPlanner
 				}
 			}
 			
-			if (ability == null)
-			{
+			if (ability == null) {
 				Namesies[] abilities = pokemon.getAbilities();
 				ability = abilities[0].getName() + (abilities[1] == Namesies.NONE_ABILITY ? "" : "/" + abilities[1].getName());
 			}
 			
-			if (nature == null)
-			{
+			if (nature == null) {
 				Stat decrease = pokemon.getStat(Stat.ATTACK.index()) < pokemon.getStat(Stat.SP_ATTACK.index()) ? Stat.ATTACK : Stat.SP_ATTACK;
-				for (int i = 0; i < Stat.NUM_STATS; i++)
-				{
-					if (i == Stat.HP.index() || i == decrease.index())
-					{
+				for (int i = 0; i < Stat.NUM_STATS; i++) {
+					if (i == Stat.HP.index() || i == decrease.index()) {
 						continue;
 					}
 					
@@ -141,64 +127,52 @@ public class TeamPlanner
 		return team;
 	}
 	
-	private static void moveMatching(String firstMoveName, Type type)
-	{
+	private static void moveMatching(String firstMoveName, Type type) {
 		System.out.println("\nThe following Pokemon can learn " + firstMoveName + " and is type " + type);
 		
 		Namesies firstMove = Namesies.getValueOf(firstMoveName, NamesiesType.ATTACK);
 		
-		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
-		{
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			PokemonInfo p = PokemonInfo.getPokemonInfo(i);
 			Type[] types = p.getType();
 			
-			if (p.canLearnMove(firstMove) && (types[0] == type || types[1] == type))
-			{
+			if (p.canLearnMove(firstMove) && (types[0] == type || types[1] == type)) {
 				System.out.println("\t" + p.getName());
 			}
 		}
 	}
 	
-	private static void moveMatching(String firstMoveName, String secondMoveName)
-	{
+	private static void moveMatching(String firstMoveName, String secondMoveName) {
 		System.out.println("\nThe following Pokemon can learn " + firstMoveName + " and " + secondMoveName);
 		
 		Namesies firstMove = Namesies.getValueOf(firstMoveName, NamesiesType.ATTACK);
 		Namesies secondMove = Namesies.getValueOf(secondMoveName, NamesiesType.ATTACK);
 		
-		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++)
-		{
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			PokemonInfo p = PokemonInfo.getPokemonInfo(i);
-			if (p.canLearnMove(firstMove) && p.canLearnMove(secondMove))
-			{
+			if (p.canLearnMove(firstMove) && p.canLearnMove(secondMove)) {
 				System.out.println("\t" + p.getName());
 			}
 		}
 	}
 	
-	private static void printCoverage(double coverageVal, double[][] coverage)
-	{
+	private static void printCoverage(double coverageVal, double[][] coverage) {
 		System.out.printf("%n%12s%3.2fx -- ", "", coverageVal);
 		boolean comma = false;
-		for (Type firstType : types)
-		{
-			if (firstType == Type.NONE)
-			{
+		for (Type firstType : types) {
+			if (firstType == Type.NONE) {
 				continue;
 			}
 			
-			for (Type secondType : types)
-			{
+			for (Type secondType : types) {
 				int first = firstType.getIndex();
 				int second = secondType.getIndex();
 				
-				if (second <= first)
-				{
+				if (second <= first) {
 					continue;
 				}
 				
-				if (coverage[first][second] == coverageVal)
-				{
+				if (coverage[first][second] == coverageVal) {
 					System.out.print((comma ? ", " : "") + firstType.getName() + (secondType == Type.NONE ? "" : "/" + secondType.getName()));
 					comma = true;
 				}
@@ -206,24 +180,20 @@ public class TeamPlanner
 		}
 	}
 	
-	private class OffensiveCoverage
-	{
+	private class OffensiveCoverage {
 		int maxCoverage;
 		String[] coverageFrequencyList;
 		int[][] coverageCount;
 		
-		public OffensiveCoverage()
-		{
+		OffensiveCoverage() {
 			coverageCount = new int[types.length][types.length];
 			maxCoverage = 0;
 		}
 		
-		public void printTableAndList()
-		{
+		void printTableAndList() {
 			System.out.printf("%10s ", "");
-			for (int i = 0; i < types.length; i++)
-			{
-				System.out.printf("%-10s ", types[i].getName());
+			for (Type type : types) {
+				System.out.printf("%-10s ", type.getName());
 			}
 			System.out.println();
 			
@@ -238,42 +208,33 @@ public class TeamPlanner
 				System.out.println();
 			}
 			
-			for (int i = 0; i < coverageFrequencyList.length; i++)
-			{
+			for (int i = 0; i < coverageFrequencyList.length; i++) {
 				System.out.println(i + ": " + coverageFrequencyList[i]);
 			}
 		}
 		
-		public void countCoverage(TeamMember member)
-		{
-			for (int i = 0; i < coverageCount.length; i++)
-			{
-				for (int j = 0; j < coverageCount[i].length; j++)
-				{
+		void countCoverage(TeamMember member) {
+			for (int i = 0; i < coverageCount.length; i++) {
+				for (int j = 0; j < coverageCount[i].length; j++) {
 					coverageCount[i][j] += member.coverageCount[i][j];
 					maxCoverage = Math.max(maxCoverage, coverageCount[i][j]);
 				}
 			}
 		}
 		
-		public void addFrequency(int frequency, Type firstType, Type secondType)
-		{
-			if (firstType == Type.NONE || secondType.getIndex() <= firstType.getIndex())
-			{
+		void addFrequency(int frequency, Type firstType, Type secondType) {
+			if (firstType == Type.NONE || secondType.getIndex() <= firstType.getIndex()) {
 				return;
 			}
 			
-			if (coverageFrequencyList == null)
-			{
+			if (coverageFrequencyList == null) {
 				coverageFrequencyList = new String[maxCoverage + 1];
-				for (int i = 0; i < coverageFrequencyList.length; i++)
-				{
-					coverageFrequencyList[i] = "";
+				for (int i = 0; i < coverageFrequencyList.length; i++) {
+					coverageFrequencyList[i] = StringUtils.empty();
 				}
 			}
 			
-			if (coverageFrequencyList[frequency].length() > 0)
-			{
+			if (coverageFrequencyList[frequency].length() > 0) {
 				coverageFrequencyList[frequency] += ", ";
 			}
 			
@@ -281,25 +242,20 @@ public class TeamPlanner
 		}
 	}
 	
-	private static class AttackTypeCoverage
-	{
+	private static class AttackTypeCoverage {
 		Type attackType;
 		List<String> moves;
 		
-		public AttackTypeCoverage(Type type)
-		{
+		AttackTypeCoverage(Type type) {
 			this.attackType = type;
 			this.moves = new ArrayList<>();
 		}
 		
-		public static void printCoverage(AttackTypeCoverage[] coverage)
-		{
-			for (AttackTypeCoverage type : coverage)
-			{
+		static void printCoverage(AttackTypeCoverage[] coverage) {
+			for (AttackTypeCoverage type : coverage) {
 				System.out.printf("%8s: %d ", type.attackType.getName(), type.moves.size());
 				boolean first = true;
-				for (String move : type.moves)
-				{
+				for (String move : type.moves) {
 					System.out.print((first ? "" : "\n            ") + move);
 					first = false;
 				}
@@ -307,12 +263,9 @@ public class TeamPlanner
 			}
 		}
 		
-		public static void addCoverage(AttackTypeCoverage[] coverage, TeamMember member)
-		{
-			for (Attack attack : member.moveList)
-			{
-				if (attack.getCategory() != MoveCategory.STATUS)
-				{
+		static void addCoverage(AttackTypeCoverage[] coverage, TeamMember member) {
+			for (Attack attack : member.moveList) {
+				if (attack.getCategory() != MoveCategory.STATUS) {
 					Type attackType = attack.getActualType();
 					coverage[attackType.getIndex()].moves.add(member.pokemonSpecies.getName() + " - " + attack.getName());
 				}
@@ -320,18 +273,16 @@ public class TeamPlanner
 		}
 	}
 	
-	private static class TeamMember
-	{
-		PokemonInfo pokemonSpecies;
-		List<Attack> moveList;
-		String nature;
-		String ability;
-		String item;
-		double[][] coverage;
-		int[][] coverageCount;
+	private static class TeamMember {
+		private final PokemonInfo pokemonSpecies;
+		private final List<Attack> moveList;
+		private final String nature;
+		private final String ability;
+		private final String item;
+		private final double[][] coverage;
+		private final int[][] coverageCount;
 		
-		public TeamMember(String pokemonName, String nature, String ability, String item, List<String> moves)
-		{
+		TeamMember(String pokemonName, String nature, String ability, String item, List<String> moves) {
 			this.pokemonSpecies = PokemonInfo.getPokemonInfo(Namesies.getValueOf(pokemonName, NamesiesType.POKEMON));
 			this.nature = nature;
 			this.ability = ability;
@@ -341,16 +292,13 @@ public class TeamPlanner
 			this.coverage = new double[types.length][types.length];
 			this.coverageCount = new int[types.length][types.length];
 			
-			for (String moveName : moves)
-			{
+			for (String moveName : moves) {
 				Attack attack = Attack.getAttack(Namesies.getValueOf(moveName, NamesiesType.ATTACK));
 				this.moveList.add(attack);
 				
 				Type attackType = attack.getActualType();
-				for (Type firstType : types)
-				{
-					for (Type secondType : types)
-					{
+				for (Type firstType : types) {
+					for (Type secondType : types) {
 						int first = firstType.getIndex();
 						int second = secondType.getIndex();
 						
@@ -359,8 +307,7 @@ public class TeamPlanner
 						
 						double advantage = firstAdvantage*secondAdvantage;
 						
-						if (advantage > 1)
-						{
+						if (advantage > 1) {
 							coverageCount[first][second]++;
 						}
 						
@@ -370,29 +317,24 @@ public class TeamPlanner
 			}
 		}
 		
-		public void printAllCoverage()
-		{
+		void printAllCoverage() {
 			System.out.printf("%10s: ", this.pokemonSpecies.getName());
-			for (double coverageVal : coverageValues)
-			{
+			for (double coverageVal : coverageValues) {
 				printCoverage(coverageVal, this.coverage);
 			}
 			System.out.println();
 		}
 		
-		public static void printTeam(List<TeamMember> team)
-		{
+		static void printTeam(List<TeamMember> team) {
 			StringBuilder out = new StringBuilder();
-			for (TeamMember member : team)
-			{
+			for (TeamMember member : team) {
 				out.append(member.toString());
 			}
 			
 			FileIO.writeToFile("teamPlanner.out", out);
 		}
 		
-		public String toString()
-		{
+		public String toString() {
 			StringBuilder out = new StringBuilder();
 			
 			out.append(pokemonSpecies.getName() + ":");
@@ -402,60 +344,50 @@ public class TeamPlanner
 			
 			
 			out.append("\n\tStats:");
-			for (int i = 0; i < Stat.NUM_STATS; i++)
-			{
+			for (int i = 0; i < Stat.NUM_STATS; i++) {
 				out.append(" " + pokemonSpecies.getStat(i));
 			}
 			
 			out.append("\n\tNature: " + nature);
 			out.append("\n\tAbility: " + ability);
 			
-			if (item != null)
-			{
+			if (item != null) {
 				out.append("\n\tItem: " + item);
 			}
 			
 			out.append("\n\tMoves:");
-			for (Attack attack : moveList)
-			{
+			for (Attack attack : moveList) {
 				out.append("\n\t\t" + attack.getName() + " -- ");
 				List<String> learnMethods = new ArrayList<String>();
 				
 				Namesies namesies = attack.namesies();
 				
 				int levelLearned = pokemonSpecies.levelLearned(namesies);
-				if (levelLearned == 0)
-				{
+				if (levelLearned == 0) {
 					learnMethods.add("Heart Scale");
 				}
-				else if (levelLearned != -1)
-				{
+				else if (levelLearned != -1) {
 					learnMethods.add("Level " + levelLearned);
 				}
 				
-				if (pokemonSpecies.canLearnByTM(namesies))
-				{
+				if (pokemonSpecies.canLearnByTM(namesies)) {
 					learnMethods.add("TM");
 				}
 				
-				if (pokemonSpecies.canLearnByTutor(namesies))
-				{
+				if (pokemonSpecies.canLearnByTutor(namesies)) {
 					learnMethods.add("Move Tutor");
 				}
 				
-				if (pokemonSpecies.canLearnByBreeding(namesies))
-				{
+				if (pokemonSpecies.canLearnByBreeding(namesies)) {
 					learnMethods.add("Egg Move");
 				}
 				
-				if (learnMethods.size() == 0)
-				{
+				if (learnMethods.size() == 0) {
 					learnMethods.add("???");
 				}
 				
 				boolean first = true;
-				for (String method : learnMethods)
-				{
+				for (String method : learnMethods) {
 					out.append((first ? "" : " or ") + method);
 					first = false;
 				}

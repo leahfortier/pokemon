@@ -34,8 +34,7 @@ Tailwind:
 StickyWeb:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter:
-	if (victim.isLevitating(b)) 
-	{
+	if (victim.isLevitating(b)) {
 		return;
 	}
 	
@@ -48,8 +47,7 @@ StickyWeb:
 StealthRock:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter: 
-	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
-	{
+	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 		return;
 	}
 	
@@ -69,27 +67,22 @@ ToxicSpikes:
 	x.layers = 1;
 	###
 	Enter: 
-	if (victim.isLevitating(b)) 
-	{
+	if (victim.isLevitating(b)) {
 		return;
 	}
 	
-	if (victim.isType(b, Type.POISON))
-	{
+	if (victim.isType(b, Type.POISON)) {
 		b.addMessage(victim.getName() + " absorbed the Toxic Spikes!");
 		super.active = false;
 		return;
 	}
 	
 	ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user());
-	if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim))
-	{
-		if (layers >= 2) 
-		{
+	if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim)) {
+		if (layers >= 2) {
 			PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
 		}
-		else 
-		{
+		else {
 			Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
 		}
 	}
@@ -98,8 +91,7 @@ ToxicSpikes:
 	CanHave: True
 	Cast: 
 	Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
-	if (spikesies == null)
-	{
+	if (spikesies == null) {
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
@@ -119,12 +111,13 @@ Spikes:
 	x.layers = 1;
 	###
 	Enter: 
-	if (victim.isLevitating(b) || victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-	{
+	if (victim.isLevitating(b) || victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 		return;
 	}
 	
 	b.addMessage(victim.getName() + " was hurt by spikes!");
+	
+	// TODO: Generalize this type of statement
 	if (layers == 1) victim.reduceHealthFraction(b, 1/8.0);
 	else if (layers == 2) victim.reduceHealthFraction(b, 1/6.0);
 	else victim.reduceHealthFraction(b, 1/4.0);
@@ -133,8 +126,7 @@ Spikes:
 	CanHave: True
 	Cast: 
 	Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
-	if (spikesies == null)
-	{
+	if (spikesies == null) {
 		super.cast(b, caster, victim, source, printCast);
 		return;
 	}
@@ -155,8 +147,7 @@ Wish:
 	x.casterName = casterName;
 	###
 	Subside: 
-	if (p.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
-	{
+	if (p.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
 		return;
 	}
 	
@@ -212,8 +203,12 @@ PayDay:
 	PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
 	b.addMessage(getCastMessage(b, caster, victim));
 	coins = 5*caster.getLevel();
-	if (payday == null) b.getPlayer().addEffect(this);
-	else payday.coins += coins;
+	if (payday == null) {
+		b.getPlayer().addEffect(this);
+	}
+	else {
+		payday.coins += coins;
+	}
 	###
 	CastMessage: "Coins scattered everywhere!"
 	Activate: 

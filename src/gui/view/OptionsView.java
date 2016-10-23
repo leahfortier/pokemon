@@ -13,52 +13,59 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 
-public class OptionsView extends View
-{
-	boolean musicOn;
+public class OptionsView extends View {
+	private boolean musicOn;
+	private Color color;
 	
-	int cr, cb, cg;
-	
-	public OptionsView()
-	{
+	public OptionsView() {
 		musicOn = Global.soundPlayer.isMuted();
-		cr = cb = cg = 0;
+		color = new Color(0, 0, 0);
 	}
 
-	public void update(int dt, InputControl input, Game game)
-	{
-		if (input.mouseDown)
-		{
+	public void update(int dt, InputControl input, Game game) {
+		if (input.mouseDown) {
 			input.consumeMousePress();
 			
 			musicOn = !musicOn;
 			Global.soundPlayer.toggleMusic();
 		}
 		
-		if (input.isDown(Control.ESC))
-		{
+		if (input.isDown(Control.ESC)) {
 			input.consumeKey(Control.ESC);
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
-	public void draw(Graphics g, GameData data)
-	{
+	private void setNextColor() {
+		int r = color.getRed();
+		int g = color.getGreen();
+		int b = color.getBlue();
+
+		r += 13;
+		g += 34;
+		b += 21;
+
+		r %= 255;
+		g %= 255;
+		b %= 255;
+
+		this.color = new Color(r, g, b);
+	}
+
+	public void draw(Graphics g, GameData data) {
 		Dimension d = Global.GAME_SIZE;
 		
 //		g.setColor(Color.BLACK);
-		g.setColor(new Color(cr, cb, cg));
-		cr += 13; cr %= 255;
-		cb += 21; cb %= 255;
-		cg += 34; cg %= 255;
+		g.setColor(color);
+		setNextColor();
+
 		g.fillRect(0, 0, d.width, d.height);
 		
 		g.setColor(Color.WHITE);
 		DrawMetrics.setFont(g, 150);
 		DrawMetrics.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
 		
-		if (musicOn)
-		{
+		if (musicOn) {
 			g.setColor(Color.GREEN);
 			g.fillRect(d.width/2, d.height/2 - 50, 200, 100);
 			
@@ -69,8 +76,7 @@ public class OptionsView extends View
 			DrawMetrics.setFont(g, 100);
 			g.drawString("OFF", d.width/2 - 180, d.height/2 + 32);
 		}
-		else
-		{
+		else {
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(d.width/2, d.height/2 - 50, 200, 100);
 			
@@ -85,11 +91,10 @@ public class OptionsView extends View
 
 	}
 
-	public ViewMode getViewModel()
-	{
+	public ViewMode getViewModel() {
 		return ViewMode.OPTIONS_VIEW;
 	}
 
-	public void movedToFront(Game game){}
+	public void movedToFront(Game game) {}
 
 }

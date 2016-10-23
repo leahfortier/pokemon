@@ -12,10 +12,10 @@ import util.FileIO;
 import map.triggers.Trigger;
 import mapMaker.MapMaker;
 
-public class MapTriggerData {
+class MapTriggerData {
 	
-	public static final String mapTriggersFilePath = MapMaker.recFolderNme +MapMaker.FILE_SLASH +"triggers" + MapMaker.FILE_SLASH;
-	public static final String mapFileNameExtension = "_Triggers";
+	private static final String mapTriggersFilePath = FileIO.makeFolderPath(MapMaker.recFolderName, "triggers");
+	private static final String mapFileNameExtension = "_Triggers";
 	
 	private boolean saved;
 	
@@ -26,7 +26,7 @@ public class MapTriggerData {
 	private File triggerFile;
 	
 	
-	public MapTriggerData(MapMaker mapMaker, String currentMap) {
+	MapTriggerData(MapMaker mapMaker, String currentMap) {
 		this.mapMaker = mapMaker;
 		this.currentMap = currentMap;
 		
@@ -39,30 +39,31 @@ public class MapTriggerData {
 	
 	private void readTriggers() {
 
-		triggerFile = new File(mapMaker.root.getPath() + MapMaker.FILE_SLASH + mapTriggersFilePath + currentMap + mapFileNameExtension);
-		if (!triggerFile.exists())
+		triggerFile = new File(mapMaker.getPathWithRoot(mapTriggersFilePath + currentMap + mapFileNameExtension));
+		if (!triggerFile.exists()) {
 			return;
+		}
 		
 		String fileText = FileIO.readEntireFileWithReplacements(triggerFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
-		while (m.find())
-		{
+		while (m.find()) {
 			String type = m.group(1);
 			String name = m.group(2);
 			
 			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
-			
 			triggers.put(name, trigger);
 		}
 	}
 	
 	public void save() {
-		if (saved)
+		if (saved) {
 			return;
+		}
+
 		saved = true;
 		
 		try {
-				
+			// TODO: FileIO
 			if (!triggerFile.exists()) {
 				triggerFile.getParentFile().mkdirs();
 				triggerFile.createNewFile();
@@ -79,7 +80,7 @@ public class MapTriggerData {
 			writer.close();
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace(); // TODO
 		}
 	}
 	
@@ -97,12 +98,11 @@ public class MapTriggerData {
 		triggers.put(name, trigger);
 	}
 	
-	public boolean isTriggerNameTaken(String triggerName) {
+	boolean isTriggerNameTaken(String triggerName) {
 		return triggers.containsKey(triggerName);
 	}
 	
 	public String[] getTriggerNames() {
-		
 		String[] names = new String[triggers.size()];
 		triggers.keySet().toArray(names);
 		

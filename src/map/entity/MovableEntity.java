@@ -13,10 +13,9 @@ import util.InputControl.Control;
 import main.Global;
 import map.MapData;
 
-public abstract class MovableEntity extends Entity
-{
-	public enum Direction
-	{
+public abstract class MovableEntity extends Entity {
+	// TODO: This should definitely be in its own class fo sho fo sho
+	public enum Direction {
 		RIGHT('r', 1, 0, Control.RIGHT),
 		UP('u', 0, -1, Control.UP),
 		LEFT('l', -1, 0, Control.LEFT),
@@ -28,8 +27,7 @@ public abstract class MovableEntity extends Entity
 		public final Control key;
 		public Direction opposite; // Really this should be final but it won't let me include this in the constructor
 		
-		private Direction(char character, int dx, int dy, Control key)
-		{
+		Direction(char character, int dx, int dy, Control key) {
 			this.character = character;
 			
 			this.dx = dx;
@@ -38,10 +36,10 @@ public abstract class MovableEntity extends Entity
 			this.key = key;
 		}
 		
-		public static char WAIT_CHARACTER = 'w';
-		
-		static
-		{
+		public static final char WAIT_CHARACTER = 'w';
+
+		// This is dumb fuck Java
+		static {
 			RIGHT.opposite = LEFT;
 			UP.opposite = DOWN;
 			LEFT.opposite = RIGHT;
@@ -55,8 +53,7 @@ public abstract class MovableEntity extends Entity
 	
 	protected int spriteIndex;
 	
-	public MovableEntity(int x, int y, int spriteIndex, Direction startDirection)
-	{
+	public MovableEntity(int x, int y, int spriteIndex, Direction startDirection) {
 		super(x, y);
 		
 		this.transitionDirection = startDirection;
@@ -67,16 +64,15 @@ public abstract class MovableEntity extends Entity
 		this.spriteIndex = spriteIndex;
 	}
 	
-	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition)
-	{
-		if (drawOnlyInTransition && transitionTime == 0)
+	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition) {
+		if (drawOnlyInTransition && transitionTime == 0) {
 			return;
+		}
 		
 		Point canvasCoordinates = getCanvasCoordinates(drawX, drawY);
 		
-		if (transitionTime != 0)
-		{
-			int len = Global.TILESIZE * (getTransitionTime() - transitionTime) / getTransitionTime();
+		if (transitionTime != 0) {
+			int len = Global.TILE_SIZE*(getTransitionTime() - transitionTime)/getTransitionTime();
 			
 			canvasCoordinates.x -= transitionDirection.dx * len;
 			canvasCoordinates.y -= transitionDirection.dy * len;
@@ -87,34 +83,29 @@ public abstract class MovableEntity extends Entity
 		super.draw(g, data, canvasCoordinates);
 	}
 	
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view)
-	{
-		if (transitionTime != 0) 
-		{
+	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
+		if (transitionTime != 0) {
 			transitionTime += dt;	
 		}
 		
-		if (transitionTime > getTransitionTime())
-		{
+		if (transitionTime > getTransitionTime()) {
 			transitionTime = 0;
 			runFrame = (runFrame + 1)%2;
 		}
 	}
 	
-	public Direction getDirection()
-	{
+	public Direction getDirection() {
 		return transitionDirection;
 	}
 
-	public void setDirection(Direction direction)
-	{
+	public void setDirection(Direction direction) {
 		transitionDirection = direction;
 	}
 
-	public boolean isFacing(int x, int y)
-	{
-		if (x != charX && y != charY)
+	public boolean isFacing(int x, int y) {
+		if (x != charX && y != charY) {
 			return false;
+		}
 		
 		int dx = (int) Math.signum(x - charX);
 		int dy = (int) Math.signum(y - charY);
@@ -122,14 +113,13 @@ public abstract class MovableEntity extends Entity
 		return transitionDirection.dx == dx && transitionDirection.dy == dy;
 	}
 	
-	protected BufferedImage getFrame(GameData data)
-	{
+	protected BufferedImage getFrame(GameData data) {
 		TileSet trainerTiles = data.getTrainerTiles();
-		if (transitionTime > 0)
-		{
+		if (transitionTime > 0) {
 			return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection.ordinal() + 4 * (1 + runFrame));
 		}
 
+		// TODO: These two should be combined
 		return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection.ordinal());
 	}
 	

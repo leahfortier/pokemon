@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import main.Game;
 import main.Game.ViewMode;
@@ -22,27 +24,26 @@ import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
 import battle.effect.EndBattleEffect;
 
-
-public class CharacterData extends Trainer implements Serializable
-{
+public class CharacterData extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
-	
+
 	private static final int NUM_BADGES = 12;
 	public static final int CATCH_SHAKES = 3;
 	public static final int MAX_NAME_LENGTH = 10;
 	public static final String DEFAULT_NAME = "Red";
-	public static final int START_MONEY = 3000;
-	
+	private static final int START_MONEY = 3000;
+
+	// TODO: Look into most of these to check if they really do need to be public
 	public int locationX, locationY;
 	public Direction direction;
 	
 	public boolean mapReset;
 	public String mapName;
 	public String areaName;
-	HashSet<String> definedGlobals;
+	private Set<String> definedGlobals;
 	
 	// Used for map globals.
-	public String previousMapName;
+	private String previousMapName;
 	public String mapEntranceName;
 	
 	private int fileNum;
@@ -66,10 +67,9 @@ public class CharacterData extends Trainer implements Serializable
 	public ActivePokemon evolvingPokemon;
 	public BaseEvolution evolution;
 	
-	private ArrayList<String> logMessages;
+	private List<String> logMessages;
 
-	public CharacterData(Game game)
-	{
+	public CharacterData(Game game) {
 		super(DEFAULT_NAME, START_MONEY);
 		this.initialize(game);
 		
@@ -90,66 +90,55 @@ public class CharacterData extends Trainer implements Serializable
 	}
 	
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
-	public void initialize(Game game)
-	{
+	public void initialize(Game game) {
 		this.game = game;
 		this.logMessages = new ArrayList<>();
 		this.timeSinceUpdate = System.currentTimeMillis();
 	}
 	
-	public void setName(String s)
-	{
-		name = s;
+	public void setName(String playerName) {
+		this.name = playerName;
 	}
-	
-	public void giveBadge(int n)
-	{
-		if (!badges[n])
-		{
+
+	// TODO: n??? srsly??? did I fucking write this??????
+	public void giveBadge(int n) {
+		if (!badges[n]) {
 			numBadges++;
 			badges[n] = true;
 		}
 	}
 	
-	public int getNumBadges()
-	{
+	public int getNumBadges() {
 		return numBadges;
 	}
 	
-	public void updateTimePlayed()
-	{
+	public void updateTimePlayed() {
 		seconds += (System.currentTimeMillis() - timeSinceUpdate)/1000;
 		timeSinceUpdate = System.currentTimeMillis();
 	}
 	
-	public long getTimePlayed()
-	{
+	public long getTimePlayed() {
 		return seconds + (System.currentTimeMillis() - timeSinceUpdate)/1000;
 	}
 	
-	public long getSeconds()
-	{
+	public long getSeconds() {
 		return this.seconds;
 	}
 	
-	public int getFileNum()
-	{
+	public int getFileNum() {
 		return fileNum;
 	}
 	
-	public void setFileNum(int n)
-	{
+	public void setFileNum(int n) {
 		fileNum = n;
 	}
 	
-	public void setLocation(int x, int y) 
-	{
+	public void setLocation(int x, int y) {
 		locationX = x;
 		locationY = y;
 	}
 	
-	public void setMap(String name, String mapEntrance)
-	{
+	public void setMap(String name, String mapEntrance) {
 		updateMapGlobals(mapName, name, mapEntranceName, mapEntrance);
 		previousMapName = mapName;
 		mapName = name;
@@ -168,14 +157,11 @@ public class CharacterData extends Trainer implements Serializable
 	}
 	
 	// Called when a character steps once in any given direction
-	public void step()
-	{
+	public void step() {
 		// Decrease repel steps
-		if (repelSteps > 0)
-		{
+		if (repelSteps > 0) {
 			repelSteps--;
-			if (repelSteps == 0)
-			{
+			if (repelSteps == 0) {
 				// TODO: Give choice if you want to use another. 
 				// Game variable needed
 				messages = new DialogueSequence("The effects of repel have worn off.", null, null, null);
@@ -183,16 +169,13 @@ public class CharacterData extends Trainer implements Serializable
 			
 			System.out.println("Repel Steps: " + repelSteps);
 		}
-		else
-		{
+		else {
 			repelSteps = 0;
 		}
 		
 		// Hatch eggs
-		for (ActivePokemon p : team)
-		{
-			if (p.isEgg() && p.hatch())
-			{
+		for (ActivePokemon p : team) {
+			if (p.isEgg() && p.hatch()) {
 				evolvingPokemon = p;
 				messages = new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"});
 				
@@ -202,98 +185,96 @@ public class CharacterData extends Trainer implements Serializable
 		}
 	}
 	
-	public boolean isUsingRepel()
-	{
+	public boolean isUsingRepel() {
 		return repelSteps > 0;
 	}
 	
-	public void addRepelSteps(int steps)
-	{
+	public void addRepelSteps(int steps) {
 		repelSteps += steps;
 	}
 	
-	public String getAreaName()
-	{
+	public String getAreaName() {
 		return areaName;
 	}
 
-	public void setDirection(Direction direction)
-	{
+	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 	
-	public void setPokeCenter()
-	{
+	public void setPokeCenter() {
 		lastPCMap = mapName;
 		lastPCMapEntrance = mapEntranceName;
 	}
 	
-	public void teleportToPokeCenter()
-	{
+	public void teleportToPokeCenter() {
 		setMap(lastPCMap, lastPCMapEntrance);
 
 		direction = Direction.DOWN;
 		mapReset = true;
 	}
 	
-	public boolean globalsContain(String s)
-	{
+	public boolean globalsContain(String s) {
 		return definedGlobals.contains(s);
 	}
 	
-	public void addGlobal(String s)
-	{
-		if (s == null) return;
+	public void addGlobal(String s) {
+		if (s == null) {
+			return;
+		}
+
 		definedGlobals.add(s);
 	}
 	
-	public void removeGlobal(String s) 
-	{
-		if (definedGlobals.contains(s)) definedGlobals.remove(s);
+	public void removeGlobal(String s) {
+		if (definedGlobals.contains(s)) {
+			definedGlobals.remove(s);
+		}
 	}
 	
-	public PC getPC()
-	{
+	public PC getPC() {
 		return pc;
 	}
 	
 	// Gives EXP to all Pokemon who participated in battle
-	public void gainEXP(ActivePokemon dead, Battle b)
-	{
+	public void gainEXP(ActivePokemon dead, Battle b) {
 		int numUsed = 0;
-		for (ActivePokemon p : team)
-		{
-			if (!p.canFight()) continue;
-			if (p.getLevel() == ActivePokemon.MAX_LEVEL) continue;
-			if (p.getAttributes().isUsed()) numUsed++;
+		for (ActivePokemon p : team) {
+			if (!p.canFight()) {
+				continue;
+			}
+
+			if (p.getLevel() == ActivePokemon.MAX_LEVEL) {
+				continue;
+			}
+
+			if (p.getAttributes().isUsed()) {
+				numUsed++;
+			}
 		}
 		
 		// Everyone died at the same time! Or only Level 100 Pokemon were used!
-		if (numUsed == 0) return;
+		if (numUsed == 0) {
+			return;
+		}
 		
 		double wild = b.isWildBattle() ? 1 : 1.5;
 		int lev = dead.getLevel(), base = dead.getPokemonInfo().getBaseEXP();
-		for (int i = 0; i < team.size(); i++)
-		{
-			ActivePokemon p = team.get(i); 
-			if (p.canFight() && p.getAttributes().isUsed())
-			{
-				double gain = wild*base*lev*Math.pow(2*lev + 10, 2.5);
-				gain /= 5*Math.pow(lev + p.getLevel() + 10, 2.5);
+		for (ActivePokemon p : team) {
+			if (p.canFight() && p.getAttributes().isUsed()) {
+				double gain = wild * base * lev * Math.pow(2 * lev + 10, 2.5);
+				gain /= 5 * Math.pow(lev + p.getLevel() + 10, 2.5);
 				gain++;
 				gain *= p.isHoldingItem(b, Namesies.LUCKY_EGG_ITEM) ? 1.5 : 1;
-				
-				p.gainEXP(b, (int)Math.max(1, gain/numUsed), dead);				
+
+				p.gainEXP(b, (int) Math.max(1, gain / numUsed), dead);
 			}
 		}
 	}
 	
-	public void winBattle(Battle b, Opponent opponent)
-	{
+	public void winBattle(Battle b, Opponent opponent) {
 		
 		// Trainers pay up!
-		if (opponent instanceof Trainer)
-		{
+		if (opponent instanceof Trainer) {
 			Trainer opp = (Trainer)opponent;
 			b.addMessage(getName() + " defeated " + opp.getName() + "!", Update.WIN_BATTLE);
 			addGlobal(b.getWinGlobal());
@@ -303,77 +284,76 @@ public class CharacterData extends Trainer implements Serializable
 			b.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
 		}
-		else 
-		{
+		else {
 			b.addMessage("", Update.WIN_BATTLE);
 		}
 		
 		Battle.invoke(getEffects().toArray(), EndBattleEffect.class, "afterBattle", this, b, front());
-		
-		for (ActivePokemon p : team)
-		{
+		for (ActivePokemon p : team) {
 			Battle.invoke(new Object[] {p.getAbility()}, EndBattleEffect.class, "afterBattle", this, b, p);
 		}
 		
 		setFront();
 	}
 	
-	public Pokedex getPokedex()
-	{
+	public Pokedex getPokedex() {
 		return pokedex;
 	}
 	
-	public void addPokemon(Battle b, ActivePokemon p)
-	{
+	public void addPokemon(Battle b, ActivePokemon p) {
 		p.setCaught();
-		if (!pokedex.caught(p.getPokemonInfo().namesies()))
-		{
-			if (b != null) b.addMessage(p.getPokemonInfo().getName() + " was registered in the Pok\u00e9dex!");
-			if (!p.isEgg()) pokedex.setStatus(p.getPokemonInfo(), PokedexStatus.CAUGHT);			
+		if (!pokedex.caught(p.getPokemonInfo().namesies())) {
+			if (b != null) {
+				b.addMessage(p.getPokemonInfo().getName() + " was registered in the Pok\u00e9dex!");
+			}
+
+			if (!p.isEgg()) {
+				pokedex.setStatus(p.getPokemonInfo(), PokedexStatus.CAUGHT);
+			}
 		}
 		
-		if (team.size() < MAX_POKEMON)
-		{
+		if (team.size() < MAX_POKEMON) {
 			team.add(p);
 		}
-		else
-		{
-			if (b != null) b.addMessage(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!");
+		else {
+			if (b != null) {
+				b.addMessage(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!");
+			}
+
 			pc.depositPokemon(p);
 		}
 	}
 	
 	// Determines whether or not a Pokemon can be deposited
-	public boolean canDeposit(ActivePokemon p)
-	{
+	public boolean canDeposit(ActivePokemon p) {
 		// You can't deposit a Pokemon that you don't have
-		if (!team.contains(p)) 
+		if (!team.contains(p)) {
 			return false;
+		}
 		
 		// Eggs can always be deposited
-		if (p.isEgg()) 
+		if (p.isEgg()) {
 			return true;
+		}
 		
 		// Otherwise you can if you have at least one other Pokemon that is not an egg
 		return team.size() - totalEggs() > 1;
 	}
 	
-	public int totalEggs()
-	{
+	public int totalEggs() {
 		int count = 0;
-		for (ActivePokemon p : team)
-		{
-			if (p.isEgg()) count++;
+		for (ActivePokemon p : team) {
+			if (p.isEgg()) {
+				count++;
+			}
 		}
 		
 		return count;
 	}
 	
 	// OH MY GOD CATCH A POKEMON OH MY GOD
-	public boolean catchPokemon(Battle b, BallItem ball)
-	{
-		if (!b.isWildBattle())
-		{
+	public boolean catchPokemon(Battle b, BallItem ball) {
+		if (!b.isWildBattle()) {
 			b.addMessage("You can't try and catch a trainer's Pokemon! That's just rude!!!");
 			return false;
 		}
@@ -388,10 +368,8 @@ public class CharacterData extends Trainer implements Serializable
 		double catchVal = (3*maxHP - 2*hp)*catchRate*ballMod*statusMod/(3*maxHP) + ballAdd;
 		double shakeVal = 65536/Math.pow(255/catchVal, .25);
 				
-		for (int i = 0; i < CATCH_SHAKES + 1; i++)
-		{
-			if (Math.random()*65536 > shakeVal)
-			{
+		for (int i = 0; i < CATCH_SHAKES + 1; i++) {
+			if (Math.random()*65536 > shakeVal) { // TODO: Random
 				b.addMessage("", i);
 				b.addMessage("Oh no! " + c.getName() + " broke free!");
 				return true;
@@ -415,79 +393,66 @@ public class CharacterData extends Trainer implements Serializable
 		game.setViewMode(ViewMode.EVOLUTION_VIEW);
 	}
 	
-	public void addLogMessage(MessageUpdate messageUpdate)
-	{
+	public void addLogMessage(MessageUpdate messageUpdate) {
 		String messageString = messageUpdate.getMessage().trim();
-		if (messageString.equals(""))
+		if (messageString.isEmpty()) {
 			return;
+		}
 		
 		logMessages.add("-" + messageString);
 	}
 	
-	public void clearLogMessages()
-	{
+	public void clearLogMessages() {
 		logMessages.clear();
 	}
 	
-	public ArrayList<String> getLogMessages() 
-	{
+	public List<String> getLogMessages() {
 		return logMessages;
 	}
-	
-	private void printGlobals() 
-	{
+
+	private void printGlobals() {
 		//List all the globals for this saved character
-		for (String s: definedGlobals) 
-		{
+		for (String s: definedGlobals) {
 			System.out.println(s);
 		}
 		System.out.println();
 	}
-	
-	private void updateGlobals(boolean printGlobals) 
-	{
-		if (printGlobals) 
-		{
+
+	private void updateGlobals(boolean printGlobals) {
+		if (printGlobals) {
 			System.out.println("Old Globals:");
 			printGlobals();
 		}
-		
-		
+
+
 		updateGlobals_from_2013_11_24_to_2014_01_30();
 		updateGlobals_from_2014_01_30_to_2014_08_14();
-		
-		
-		if (printGlobals) 
-		{
+
+
+		if (printGlobals) {
 			System.out.println("New Globals:");
 			printGlobals();
 		}
 	}
-	
-	private void replaceGlobals(String[][][] globalsToChange)
-	{
-		for (int currGlobal = 0; currGlobal < globalsToChange.length; ++currGlobal) 
-		{
+
+	private void replaceGlobals(String[][][] globalsToChange) {
+		for (String[][] aGlobalsToChange : globalsToChange) {
 			boolean containsGlobal = false;
-			for (int prevGlobal = 0; prevGlobal < globalsToChange[currGlobal][0].length; ++prevGlobal) 
-			{
-				containsGlobal |= definedGlobals.remove(globalsToChange[currGlobal][0][prevGlobal]);
+			for (int prevGlobal = 0; prevGlobal < aGlobalsToChange[0].length; prevGlobal++) {
+				containsGlobal |= definedGlobals.remove(aGlobalsToChange[0][prevGlobal]);
 			}
-			
-			if (containsGlobal) 
-			{
-				for (int newGlobal = 0; newGlobal < globalsToChange[currGlobal][1].length; ++newGlobal) 
-				{
-					addGlobal(globalsToChange[currGlobal][1][newGlobal]);
+
+			if (containsGlobal) {
+				for (int newGlobal = 0; newGlobal < aGlobalsToChange[1].length; newGlobal++) {
+					addGlobal(aGlobalsToChange[1][newGlobal]);
 				}
 			}
 		}
 	}
-	
+
 	// TODO: What is this? And is it still necessary?
 	//Convert globals from final class demo to latest commit before map maker trigger update
-	private void updateGlobals_from_2013_11_24_to_2014_01_30 () 
-	{
+	private void updateGlobals_from_2013_11_24_to_2014_01_30 () {
 		String[][][] globalsToChange = {
 				//Trainers/NPCs
 				{{"BallGiven"}, 					{"triggered_Ball_Giver"}},
@@ -503,57 +468,54 @@ public class CharacterData extends Trainer implements Serializable
 				{{"battled_Tom_Trainer_2"}, 		{"triggered_Tom_Trainer_2"}},
 				{{"battled_Leader_Moore"}, 			{"triggered_Leader_Moore"}}
 		};
+
 		replaceGlobals(globalsToChange);
 	}
-	
+
 	//Convert globals from the last commit to the new globals within the map maker trigger update
-	private void updateGlobals_from_2014_01_30_to_2014_08_14 () 
-	{
+	private void updateGlobals_from_2014_01_30_to_2014_08_14 () {
 		//If someone was in the Tom Town pokecenter before update.
-		if (definedGlobals.contains("PC_TomTown")) 
-		{
+		if (definedGlobals.contains("PC_TomTown")) {
 			previousMapName = "Tom_Town";
 		}
-		
+
 		//If someone was in the RSA Town pokecenter before update.
-		if (definedGlobals.contains("PC_RSA")) 
-		{
+		if (definedGlobals.contains("PC_RSA")) {
 			previousMapName = "RSATown";
 		}
-		
+
 		//If someone was in the Horizontal Transition Building before update.
-		if (definedGlobals.contains("TBH_DFS") || definedGlobals.contains("TBH_RSA_L")) 
-		{
+		if (definedGlobals.contains("TBH_DFS") || definedGlobals.contains("TBH_RSA_L")) {
 			previousMapName = "RSATown";
 			mapEntranceName = "WestDoor";
 		}
-		else if (definedGlobals.contains("TBH_RSA_R") || definedGlobals.contains("TBH_BFM_L")) 
+		else if (definedGlobals.contains("TBH_RSA_R") || definedGlobals.contains("TBH_BFM_L"))
 		{
 			previousMapName = "Bloom_Filter_Meadow";
 			mapEntranceName = "WestDoor";
 		}
-		else if (definedGlobals.contains("TBH_BFM_R") || definedGlobals.contains("TBH_TomTown_L")) 
+		else if (definedGlobals.contains("TBH_BFM_R") || definedGlobals.contains("TBH_TomTown_L"))
 		{
 			previousMapName = "Tom_Town";
 			mapEntranceName = "WestDoor";
 		}
-		
+
 		//Remove old globals and replace with new globals
 		String[][][] globalsToChange = {
 				//Pokemon center
 				{{"PC_TomTown"}, 	{"MapGlobal_PreviousMap_Tom_Town", 	"MapGlobal_toPokeCenterFromEntrance_PokeCenter01"}},
 				{{"PC_RSA"}, 		{"MapGlobal_PreviousMap_RSATown",	"MapGlobal_toPokeCenterFromEntrance_PokeCenter01"}},
-				
+
 				//Horizontal Transition Building
 				{{"TBH_DFS", "TBH_RSA_L"}, 			{"MapGlobal_TransitionPair01", "MapGlobal_MapEntrance_WestDoor", "MapGlobal_PreviousMap_RSATown"}},
 				{{"TBH_RSA_R", "TBH_BFM_L"}, 		{"MapGlobal_TransitionPair01", "MapGlobal_MapEntrance_WestDoor", "MapGlobal_PreviousMap_Bloom_Filter_Meadow"}},
 				{{"TBH_BFM_R", "TBH_TomTown_L"}, 	{"MapGlobal_TransitionPair01", "MapGlobal_MapEntrance_WestDoor", "MapGlobal_PreviousMap_Tom_Town"}},
-				
+
 				//Items
 				{{"hasDFSParalyzeHeal"}, 	{"hasDFS_Town_Item_Paralyze_Heal_01"}},
 				{{"hasBFMMeadowPlate"}, 	{"hasBloom_Filter_Meadow_Item_Meadow_Plate_01"}},
 				{{"hasBFMPechaBerry"}, 		{"hasBloom_Filter_Meadow_Item_Pecha_Berry_01"}},
-				
+
 				//NPCs and Trainers
 				{{"triggered_Ball_Giver"}, 			{"triggered_DFS_Town_NPC_Ball_Giver_01"}},
 				{{"triggered_Potion_Giver"}, 		{"triggered_DFS_Town_NPC_Potion_Giver_01"}},
@@ -568,7 +530,7 @@ public class CharacterData extends Trainer implements Serializable
 				{{"triggered_Tom_Trainer_2"}, 		{"triggered_Tom_Gym_NPC_Tom_Trainer_02"}},
 				{{"triggered_Leader_Moore"}, 		{"triggered_Tom_Gym_NPC_Leader_Moore_01"}}
 		};
-		
+
 		replaceGlobals(globalsToChange);
 	}
 }

@@ -10,12 +10,10 @@ import util.InputControl;
 import map.MapData;
 import map.entity.MovableEntity.Direction;
 
-public class TriggerEntity extends Entity
-{
+public class TriggerEntity extends Entity {
 	private final String trigger;
 
-	public TriggerEntity(int x, int y, String trigger) 
-	{
+	public TriggerEntity(int x, int y, String trigger) {
 		super(x, y);
 		this.trigger = trigger;
 
@@ -23,13 +21,11 @@ public class TriggerEntity extends Entity
 
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {}
 
-	protected BufferedImage getFrame(GameData data) 
-	{
+	protected BufferedImage getFrame(GameData data) {
 		return data.getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
 	}
 
-	public String getTrigger() 
-	{
+	public String getTrigger() {
 		return trigger;
 	}
 

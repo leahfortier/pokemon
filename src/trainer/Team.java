@@ -6,14 +6,14 @@ import main.Namesies;
 import pokemon.ActivePokemon;
 import battle.effect.generic.TeamEffect;
 
-public interface Team // THIS IS A DUMB NAME SOMEONE HELP ME RENAME IT 
-{
-	public ActivePokemon front();
-	public List<TeamEffect> getEffects();
-	public boolean hasEffect(Namesies effect);
-	public void addEffect(TeamEffect e);
-	public List<ActivePokemon> getTeam();
-	public boolean blackout();
-	public void resetEffects();
-	public void resetUsed();
+// THIS IS A DUMB NAME SOMEONE HELP ME RENAME IT
+public interface Team {
+	ActivePokemon front();
+	List<TeamEffect> getEffects();
+	boolean hasEffect(Namesies effect);
+	void addEffect(TeamEffect e);
+	List<ActivePokemon> getTeam();
+	boolean blackout();
+	void resetEffects();
+	void resetUsed();
 }

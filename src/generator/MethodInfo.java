@@ -166,7 +166,7 @@ class MethodInfo {
             return "";
         }
 
-        if (this.body.length() == 0) {
+        if (this.body.isEmpty()) {
             this.fullBody = fieldValue;
         }
         else {
@@ -176,8 +176,7 @@ class MethodInfo {
         if (this.tryParse) {
             try {
                 Double.parseDouble(fieldValue);
-            } catch (NumberFormatException exception)
-            {
+            } catch (NumberFormatException exception) {
                 this.fullBody = fieldValue;
             }
         }
@@ -196,10 +195,13 @@ class MethodInfo {
         final String body = StringUtils.isNullOrEmpty(this.fullBody) ? this.body : this.fullBody;
 
         StringBuilder method = new StringBuilder();
-        method.append("\n\t\t")
-                .append(StringUtils.addSpace(this.accessModifier.modifierName))
-                .append(this.header.trim())
-                .append(" {\n");
+        StringUtils.appendLine(
+                method,
+                "\n\t\t" +
+                    StringUtils.addSpace(this.accessModifier.modifierName) +
+                    this.header.trim() +
+                    "{"
+        );
 
         MethodFormatter formatter = new MethodFormatter(3);
 

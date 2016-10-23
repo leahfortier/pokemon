@@ -46,6 +46,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import main.Global;
 import main.Namesies;
@@ -60,19 +61,19 @@ import battle.Move;
 import battle.effect.generic.Status.StatusCondition;
 
 // Class to handle effects that are on a single Pokemon
-public abstract class PokemonEffect extends Effect implements Serializable
-{
+public abstract class PokemonEffect extends Effect implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static HashMap<String, PokemonEffect> map;
+	private static Map<String, PokemonEffect> map;
 	
-	public PokemonEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside)
-	{
+	public PokemonEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
 	
-	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
-	{
-		if (printCast) b.addMessage(getCastMessage(b, caster, victim));
+	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+		if (printCast) {
+			b.addMessage(getCastMessage(b, caster, victim));
+		}
+
 		victim.addEffect(this.newInstance());
 		
 		b.addMessage("", caster);
@@ -81,17 +82,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	
 	public abstract PokemonEffect newInstance();
 
-	public static PokemonEffect getEffect(Namesies name)
-	{
+	public static PokemonEffect getEffect(Namesies name) {
 		String e = name.getName();
-		
-		if (map == null) 
-		{
+		if (map == null) {
 			loadEffects();
 		}
 		
-		if (map.containsKey(e)) 
-		{
+		if (map.containsKey(e)) {
 			return map.get(e);
 		}
 
@@ -100,9 +97,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 	}
 
 	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects()
-	{
-		if (map != null) return;
+	public static void loadEffects() {
+		if (map != null) {
+			return;
+		}
+
 		map = new HashMap<>();
 		
 		// EVERYTHING BELOW IS GENERATED ###
@@ -204,15 +203,18 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.isType(b, Type.GRASS)) return "It doesn't affect " + victim.getName() + "!";
-			if (victim.hasEffect(this.namesies)) return victim.getName() + " is already seeded!";
+			if (victim.isType(b, Type.GRASS)) {
+				return "It doesn't affect " + victim.getName() + "!";
+			}
+			else if (victim.hasEffect(this.namesies)) {
+				return victim.getName() + " is already seeded!";
+			}
 			
 			return super.getFailMessage(b, user, victim);
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				return;
 			}
 			
@@ -225,7 +227,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			user.getEffects().remove(this);
-			b.getEffects(user.user()).remove(this);
+			b.getEffects(user.user()).remove(this); // TODO: ?
 		}
 	}
 
@@ -276,8 +278,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (victim.hasAbility(Namesies.STEADFAST_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.STEADFAST_ABILITY)) {
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 			}
 		}
@@ -768,8 +769,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
 			// Pokemon that make contact with the king's shield have their attack reduced
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT))
-			{
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
 				p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
 			}
 		}
@@ -826,8 +826,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
 			// Pokemon that make contact with the spiky shield have their health reduced
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT))
-			{
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
 				b.addMessage(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
 				p.reduceHealthFraction(b, 1/8.0);
 			}
@@ -1133,8 +1132,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (victim.isHoldingItem(b, Namesies.PERSIM_BERRY_ITEM))
-			{
+			if (victim.isHoldingItem(b, Namesies.PERSIM_BERRY_ITEM)) {
 				b.addMessage(victim.getName() + "'s " + Namesies.PERSIM_BERRY_ITEM.getName() + " snapped it out of confusion!");
 				victim.getAttributes().removeEffect(this.namesies);
 				victim.consumeItem(b);
@@ -1146,12 +1144,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasEffect(this.namesies))
-			{
+			if (victim.hasEffect(this.namesies)) {
 				return victim.getName() + " is already confused!";
 			}
-			if (victim.hasAbility(Namesies.OWN_TEMPO_ABILITY))
-			{
+			else if (victim.hasAbility(Namesies.OWN_TEMPO_ABILITY)) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
 			}
 			
@@ -1160,8 +1156,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			// Snap it out!
-			if (turns == 0)
-			{
+			if (turns == 0) {
 				b.addMessage(p.getName() + " snapped out of its confusion!");
 				super.active = false;
 				return true;
@@ -1171,14 +1166,13 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			b.addMessage(p.getName() + " is confused!");
 			
 			// 50% chance to hurt yourself in confusion while confused
-			if (Math.random() < .5)
-			{
+			if (Math.random() < .5) {
 				b.addMessage("It hurt itself in confusion!");
 				
 				// Perform confusion damage
 				Move temp = p.getMove();
 				p.setMove(new Move(Attack.getAttack(Namesies.CONFUSION_DAMAGE_ATTACK)));
-				p.reduceHealth(b, b.damageCalc(p, p));
+				p.reduceHealth(b, b.calculateDamage(p, p));
 				p.setMove(temp);
 				
 				return false;
@@ -1213,8 +1207,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void subside(Battle b, ActivePokemon p) {
 			Confusion c = new Confusion();
-			if (c.applies(b, p, p, CastSource.EFFECT))
-			{
+			if (c.applies(b, p, p, CastSource.EFFECT)) {
 				b.addMessage(p.getName() + " became confused due to fatigue!");
 				p.addEffect(c);
 			}
@@ -1329,8 +1322,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
 			}
 			
@@ -1350,8 +1342,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().namesies() != move.getAttack().namesies())
-			{
+			if (p.getAttack().namesies() != move.getAttack().namesies()) {
 				b.printAttacking(p);
 				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
@@ -1402,12 +1393,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasEffect(this.namesies))
-			{
+			if (victim.hasEffect(this.namesies)) {
 				return victim.getName() + " is already disabled!";
 			}
-			if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
-			{
+			else if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
 			}
 			
@@ -1428,8 +1417,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			turns--;
-			if (p.getAttack().namesies() == disabled.getAttack().namesies())
-			{
+			if (p.getAttack().namesies() == disabled.getAttack().namesies()) {
 				b.printAttacking(p);
 				b.addMessage(p.getAttack().getName() + " is disabled!");
 				return false;
@@ -1461,12 +1449,16 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (!victim.hasEffect(this.namesies)) super.cast(b, caster, victim, source, printCast);
-			else if (printCast) b.addMessage(getCastMessage(b, caster, victim));
+			if (!victim.hasEffect(this.namesies)) {
+				super.cast(b, caster, victim, source, printCast);
+			}
+			// Doesn't 'fail' if they already have the effect -- just display the message again
+			else if (printCast) {
+				b.addMessage(getCastMessage(b, caster, victim));
+			}
 			
 			RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
-			switch (source)
-			{
+			switch (source) {
 				case ATTACK:
 					critsies.focusEnergy = true;
 					break;
@@ -1488,23 +1480,20 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public int increaseCritStage(Integer stage, ActivePokemon p) {
 			int critStage = 0;
 			
-			if (focusEnergy)
-			{
+			// TODO: Should probably make an enum or something because this is stupid
+			if (focusEnergy) {
 				critStage++;
 			}
 			
-			if (direHit)
-			{
+			if (direHit) {
 				critStage++;
 			}
 			
-			if (berrylicious)
-			{
+			if (berrylicious) {
 				critStage++;
 			}
 			
-			if (critStage == 0)
-			{
+			if (critStage == 0) {
 				Global.error("RaiseCrits effect is not actually raising crits.");
 			}
 			
@@ -1543,12 +1532,10 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		private ChangeTypeMove typeSource;
 		private CastSource castSource;
 		
-		private String castMessage(ActivePokemon victim)
-		{
+		private String castMessage(ActivePokemon victim) {
 			String changeType = type[0].getName() + (type[1] == Type.NONE ? "" : "/" + type[1].getName());
 			
-			switch (castSource)
-			{
+			switch (castSource) {
 				case ATTACK:
 					return victim.getName() + " was changed to " + changeType + " type!!";
 				case ABILITY:
@@ -1622,6 +1609,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			ability = changey.getAbility(b, caster, victim);
 			message = changey.getMessage(b, caster, victim);
 			
+			// Remove any other ChangeAbility effects that the victim may have
 			while (victim.getAttributes().removeEffect(this.namesies));
 			super.cast(b, caster, victim, source, printCast);
 		}
@@ -1650,14 +1638,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (!victim.hasEffect(this.namesies))
-			{
+			if (!victim.hasEffect(this.namesies)) {
 				super.cast(b, caster, victim, source, printCast);
 			}
 			
 			Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
-			if (stockpile.turns < 3)
-			{
+			if (stockpile.turns < 3) {
 				b.addMessage(victim.getName() + " Defense and Special Defense were raised!");
 				stockpile.turns++;
 				return;
@@ -1742,15 +1728,15 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			ActivePokemon other = b.getOtherPokemon(victim.user());
-			Attack m = other.getAttributes().getLastMoveUsed() == null ? null : other.getAttributes().getLastMoveUsed().getAttack();
+			final Move lastMoveUsed = other.getAttributes().getLastMoveUsed();
+			Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 			
-			if (m == null || victim.hasMove(b, m.namesies()) || m.isMoveType(MoveType.MIMICLESS))
-			{
+			if (lastAttack == null || victim.hasMove(b, lastAttack.namesies()) || lastAttack.isMoveType(MoveType.MIMICLESS)) {
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
 			
-			mimicMove = new Move(m);
+			mimicMove = new Move(lastAttack);
 			super.cast(b, caster, victim, source, printCast);
 		}
 
@@ -1760,14 +1746,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public Move[] getMoveList(ActivePokemon p, Move[] moves) {
 			Move[] list = new Move[moves.length];
-			for (int i = 0; i < list.length; i++)
-			{
-				if (moves[i].getAttack().namesies() == Namesies.MIMIC_ATTACK)
-				{
+			for (int i = 0; i < list.length; i++) {
+				if (moves[i].getAttack().namesies() == Namesies.MIMIC_ATTACK) {
 					list[i] = mimicMove;
 				}
-				else
-				{
+				else {
 					list[i] = moves[i];
 				}
 			}
@@ -1796,8 +1779,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			unableMoves = new ArrayList<>();
-			for (Move m : caster.getMoves(b))
-			{
+			for (Move m : caster.getMoves(b)) {
 				unableMoves.add(m.getAttack().namesies());
 			}
 			
@@ -1817,8 +1799,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (unableMoves.contains(p.getAttack().namesies()))
-			{
+			if (unableMoves.contains(p.getAttack().namesies())) {
 				b.printAttacking(p);
 				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
@@ -1947,8 +1928,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
 			}
 			
@@ -1964,8 +1944,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (!usable(p, p.getMove()))
-			{
+			if (!usable(p, p.getMove())) {
 				b.printAttacking(p);
 				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
@@ -1998,8 +1977,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY) || victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY) || victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
 			}
 			
@@ -2015,8 +1993,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (!usable(p, p.getMove()))
-			{
+			if (!usable(p, p.getMove())) {
 				b.printAttacking(p);
 				b.addMessage(this.getFailMessage(b, p, opp));
 				return false;
@@ -2116,14 +2093,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
-			{
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
 				return;
 			}
 			
 			int healAmount = victim.healHealthFraction(1/16.0);
-			if (victim.isHoldingItem(b, Namesies.BIG_ROOT_ITEM))
-			{
+			if (victim.isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) {
 				victim.heal((int)(healAmount*.3));
 			}
 			
@@ -2215,8 +2190,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				return;
 			}
 			
@@ -2282,10 +2256,8 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		private static final long serialVersionUID = 1L;
 		private Move uproar;
 		
-		private static void wakeUp(Battle b, ActivePokemon wakey)
-		{
-			if (wakey.hasStatus(StatusCondition.ASLEEP))
-			{
+		private static void wakeUp(Battle b, ActivePokemon wakey) {
+			if (wakey.hasStatus(StatusCondition.ASLEEP)) {
 				wakey.removeStatus();
 				b.addMessage("The uproar woke up " + wakey.getName() + "!", wakey);
 			}
@@ -2335,8 +2307,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			// If uproar runs out of PP, the effect immediately ends
-			if (uproar.getPP() == 0)
-			{
+			if (uproar.getPP() == 0) {
 				active = false;
 			}
 		}
@@ -2364,8 +2335,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) return;
 			int healAmount = victim.healHealthFraction(1/16.0);
-			if (victim.isHoldingItem(b, Namesies.BIG_ROOT_ITEM))
-			{
+			if (victim.isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) {
 				victim.heal((int)(healAmount*.3));
 			}
 			
@@ -2397,8 +2367,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				return;
 			}
 			
@@ -2495,8 +2464,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			
 			// Set the new stats
 			stats = new int[Stat.NUM_STATS];
-			for (int i = 0; i < stats.length; i++)
-			{
+			for (int i = 0; i < stats.length; i++) {
 				stats[i] = Stat.getStat(i, victim.getLevel(), transformee.getPokemonInfo().getStat(i), victim.getIV(i), victim.getEV(i), victim.getNature().getNatureVal(i));
 			}
 			stats[Stat.HP.index()] = victim.getMaxHP();
@@ -2504,14 +2472,12 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			// Copy the move list
 			List<Move> transformeeMoves = transformee.getMoves(b);
 			moveList = new Move[transformeeMoves.size()];
-			for (int i = 0; i < transformeeMoves.size(); i++)
-			{
+			for (int i = 0; i < transformeeMoves.size(); i++) {
 				moveList[i] = new Move(transformeeMoves.get(i).getAttack(), 5);
 			}
 			
 			// Copy all stages
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
-			{
+			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 				victim.getAttributes().setStage(i, transformee.getStage(i));
 			}
 			
@@ -2583,20 +2549,17 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Self-target and field moves are always successful
-			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD))
-			{
+			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD)) {
 				return true;
 			}
 			
 			// Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
-			if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(Namesies.INFILTRATOR_ABILITY))
-			{
+			if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(Namesies.INFILTRATOR_ABILITY)) {
 				return true;
 			}
 			
 			// Print the failure for status moves
-			if (user.getAttack().getCategory() == MoveCategory.STATUS)
-			{
+			if (user.getAttack().getCategory() == MoveCategory.STATUS) {
 				b.addMessage(this.getFailMessage(b, user, victim));
 			}
 			
@@ -2696,16 +2659,14 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			Bide bidesies = (Bide)victim.getEffect(this.namesies);
 			
 			// If the victim is not already under the effects of Bide, cast it upon them
-			if (bidesies == null)
-			{
+			if (bidesies == null) {
 				move = caster.getMove();
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
 			
 			// Already has the effect, but not ready for it to end yet -- store dat energy
-			if (bidesies.turns > 0)
-			{
+			if (bidesies.turns > 0) {
 				bidesies.turns--;
 				b.addMessage(getCastMessage(b, caster, victim));
 				return;
@@ -2713,13 +2674,11 @@ public abstract class PokemonEffect extends Effect implements Serializable
 			
 			// TIME'S UP -- RELEASE DAT STORED ENERGY
 			b.addMessage(victim.getName() + " released energy!");
-			if (bidesies.damage == 0)
-			{
+			if (bidesies.damage == 0) {
 				// Sucks to suck
 				b.addMessage(this.getFailMessage(b, caster, victim));
 			}
-			else
-			{
+			else {
 				// RETALIATION STATION
 				b.getOtherPokemon(victim.user()).reduceHealth(b, 2*bidesies.damage);
 			}
@@ -2795,8 +2754,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			PokemonEffect thaPowah = victim.getEffect(this.namesies);
-			if (thaPowah == null)
-			{
+			if (thaPowah == null) {
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
@@ -2902,8 +2860,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents heal block!";
 			}
 			
@@ -2911,8 +2868,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.SAP_HEALTH))
-			{
+			if (p.getAttack().isMoveType(MoveType.SAP_HEALTH)) {
 				b.printAttacking(p);
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return false;
@@ -2939,8 +2895,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (victim.isHoldingItem(b, Namesies.DESTINY_KNOT_ITEM) && this.applies(b, victim, caster, CastSource.HELD_ITEM))
-			{
+			if (victim.isHoldingItem(b, Namesies.DESTINY_KNOT_ITEM) && this.applies(b, victim, caster, CastSource.HELD_ITEM)) {
 				super.cast(b, victim, caster, CastSource.HELD_ITEM, false);
 				b.addMessage(victim.getName() + "'s " + Namesies.DESTINY_KNOT_ITEM.getName() + " caused " + caster.getName() + " to fall in love!");
 			}
@@ -2951,8 +2906,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (Gender.oppositeGenders(user, victim) && (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY) || victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)))
-			{
+			if (Gender.oppositeGenders(user, victim) && (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY) || victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents infatuation!";
 			}
 			
@@ -2961,8 +2915,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			b.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
-			if (Math.random() < .5)
-			{
+			if (Math.random() < .5) {
 				return true;
 			}
 			
@@ -2988,8 +2941,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
 			Attack attack = user.getAttack();
-			if (attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE))
-			{
+			if (attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
 				b.addMessage(opponent.getName() + " snatched " + user.getName() + "'s move!");
 				return true;
 			}
@@ -3018,8 +2970,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public void deathwish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			if (murderer.getAttributes().isAttacking())
-			{
+			if (murderer.getAttributes().isAttacking()) {
 				b.addMessage(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to its grudge!");
 				murderer.getMove().reducePP(murderer.getMove().getPP());
 			}
@@ -3046,8 +2997,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public void deathwish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			if (murderer.getAttributes().isAttacking())
-			{
+			if (murderer.getAttributes().isAttacking()) {
 				b.addMessage(dead.getName() + " took " + murderer.getName() + " down with it!");
 				murderer.reduceHealthFraction(b, 1);
 			}
@@ -3075,8 +3025,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasAbility(Namesies.SOUNDPROOF_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.SOUNDPROOF_ABILITY)) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
 			}
 			
@@ -3184,8 +3133,7 @@ public abstract class PokemonEffect extends Effect implements Serializable
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			// Fire-type moves makes the user explode
-			if (p.getAttackType() == Type.FIRE)
-			{
+			if (p.getAttackType() == Type.FIRE) {
 				b.addMessage("The powder exploded!");
 				p.reduceHealthFraction(b, 1/4.0);
 				return false;

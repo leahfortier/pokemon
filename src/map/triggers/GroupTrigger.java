@@ -1,29 +1,33 @@
 package map.triggers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import main.Game;
+import util.StringUtils;
 
-public class GroupTrigger extends Trigger{
+public class GroupTrigger extends Trigger {
 	
-	public ArrayList<String> triggers;
+	public final List<String> triggers;
 	
 	public GroupTrigger(String name, String contents) {
 		super(name, contents);
 		triggers = new ArrayList<>();
 		Matcher m = variablePattern.matcher(contents);
-		while (m.find()){
-			if (m.group(1).equals("trigger"))
+		while (m.find()) {
+			if (m.group(1).equals("trigger")) {
 				triggers.add(m.group(2));
+			}
 		}
 	}
+
 	@Override
-	public void execute(Game game){
+	public void execute(Game game) {
 		super.execute(game);
-		for (String s: triggers){
+		for (String s: triggers) {
 			Trigger trigger = game.data.getTrigger(s);
-			if (trigger != null && trigger.isTriggered(game.charData)){
+			if (trigger != null && trigger.isTriggered(game.characterData)) {
 				trigger.execute(game);
 			}
 		}
@@ -39,7 +43,7 @@ public class GroupTrigger extends Trigger{
 		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
 		
 		for (String trigger: triggers) {
-			ret.append("\ttrigger: " +trigger +"\n");
+			StringUtils.appendLine(ret, "\ttrigger: " + trigger);
 		}
 		
 		return ret.toString();

@@ -6,9 +6,9 @@ import java.util.regex.Pattern;
 
 import main.Global;
 import map.entity.MovableEntity.Direction;
+import util.StringUtils;
 
-public class NPCEntityData extends EntityData
-{
+public class NPCEntityData extends EntityData {
 	private static final Pattern multiVariablePattern = Pattern.compile("(\\w+)(?:\\[(\\d+)\\])?:\\s*(?:(\\w+)|\"([^\"]*)\")");
 
 	private NPCEntity entity;
@@ -24,10 +24,9 @@ public class NPCEntityData extends EntityData
 	public String firstTriggers;
 	public String secondTriggers;
 
-	public int walkToPlayer;
+	public int walkToPlayer; // TODO: What does this represent/why is it an int? Should it be a boolean?
 
-	public NPCEntityData(String name, String contents)
-	{
+	public NPCEntityData(String name, String contents) {
 		super(name, contents);
 
 		entity = null;
@@ -47,10 +46,8 @@ public class NPCEntityData extends EntityData
 		int val = -1;
 
 		Matcher m = multiVariablePattern.matcher(contents);
-		while (m.find())
-		{
-			switch (m.group(1))
-			{
+		while (m.find()) {
+			switch (m.group(1)) {
 				case "startX":
 					x = Integer.parseInt(m.group(3));
 					break;
@@ -68,12 +65,10 @@ public class NPCEntityData extends EntityData
 					break;
 				case "direction":
 					String direction = m.group(3);
-					try
-					{
+					try {
 						defaultDirection = Direction.values()[Integer.parseInt(direction)];
 					}
-					catch (NumberFormatException e)
-					{
+					catch (NumberFormatException exception) {
 						defaultDirection = Direction.valueOf(direction);
 					}
 					break;
@@ -105,16 +100,19 @@ public class NPCEntityData extends EntityData
 			}
 		}
 
-		if (walkToPlayer == -1 && trainerInfo != null)
+		if (walkToPlayer == -1 && trainerInfo != null) {
 			walkToPlayer = 1;
+		}
 
 		firstDialogue = Arrays.copyOf(firstDialogue, FDSize + 1);
-		if (firstDialogue.length == 0 || (firstDialogue.length > 0 && firstDialogue[0] == null && FDSize > -1))
+		if (firstDialogue.length == 0 || (firstDialogue.length > 0 && firstDialogue[0] == null && FDSize > -1)) {
 			Global.error("firstDialogue missing for NPC " + name + ".");
+		}
 
 		secondDialogue = Arrays.copyOf(secondDialogue, SDSize + 1);
-		if (secondDialogue.length > 0 && secondDialogue[0] == null && FDSize > -1)
+		if (secondDialogue.length > 0 && secondDialogue[0] == null && FDSize > -1) {
 			Global.error("secondDialogue missing for NPC " + name + ".");
+		}
 
 		// if (firstDialogue.length > 0)
 		// System.out.println(Arrays.toString(firstDialogue));
@@ -122,14 +120,13 @@ public class NPCEntityData extends EntityData
 		// System.out.println(Arrays.toString(secondDialogue));
 	}
 
-	public NPCEntityData(String name, String condition, int x, int y, String trigger, String path, int direction, int index, String[] firstDialogue, String[] secondDialogue, String trainerInfo, String itemInfo, String firstTriggers, String secondTriggers, boolean walkToPlayer)
-	{
+	public NPCEntityData(String name, String condition, int x, int y, String trigger, String path, int direction, int index, String[] firstDialogue, String[] secondDialogue, String trainerInfo, String itemInfo, String firstTriggers, String secondTriggers, boolean walkToPlayer) {
 		super(name, condition);
 
 		this.name = name;
 		this.trigger = trigger;
 		this.path = path;
-		spriteIndex = index;
+		this.spriteIndex = index;
 
 		this.walkToPlayer = walkToPlayer ? 1 : 0;
 
@@ -143,13 +140,11 @@ public class NPCEntityData extends EntityData
 		this.x = x;
 		this.y = y;
 
-		defaultDirection = Direction.values()[direction];
+		this.defaultDirection = Direction.values()[direction];
 	}
 
-	public Entity getEntity()
-	{
-		if (entity == null)
-		{
+	public Entity getEntity() {
+		if (entity == null) {
 			// entity = new NPCEntity(x, y, trigger, path, defaultDirection,
 			// spriteIndex);
 			entity = new NPCEntity(name, x, y, trigger, path, defaultDirection, spriteIndex, firstDialogue, secondDialogue, trainerInfo, itemInfo, firstTriggers, secondTriggers, walkToPlayer == 1);
@@ -157,45 +152,48 @@ public class NPCEntityData extends EntityData
 		return entity;
 	}
 
-	public String entityDataAsString()
-	{
+	public String entityDataAsString() {
 		StringBuilder ret = new StringBuilder();
-		ret.append("NPC " + name + "{\n");
+		StringUtils.appendLine(ret, "NPC " + name + "{");
 
-		if (!condition.getOriginalConditionString().equals(""))
-			ret.append("\tcondition: " + condition.getOriginalConditionString() + "\n");
-
-		ret.append("\tstartX: " + x + "\n");
-		ret.append("\tstartY: " + y + "\n");
-		ret.append("\tpath: " + path + "\n");
-		ret.append("\tspriteIndex: " + spriteIndex + "\n");
-		ret.append("\tdirection: " + defaultDirection + "\n");
-		ret.append("\twalkToPlayer: " + (walkToPlayer == 1) + "\n");
-
-		for (int currDialogue = 0; currDialogue < firstDialogue.length; ++currDialogue)
-		{
-			ret.append("\tfirstDialogue[" + currDialogue + "]: \"" + firstDialogue[currDialogue] + "\"\n");
+		if (!condition.getOriginalConditionString().isEmpty()) {
+			StringUtils.appendLine(ret, "\tcondition: " + condition.getOriginalConditionString());
 		}
 
-		if (secondDialogue != null)
-		{
-			for (int currDialogue = 0; currDialogue < secondDialogue.length; ++currDialogue)
-			{
-				ret.append("\tsecondDialogue[" + currDialogue + "]: \"" + secondDialogue[currDialogue] + "\"\n");
+		StringUtils.appendLine(ret, "\tstartX: " + x);
+		StringUtils.appendLine(ret, "\tstartY: " + y);
+		StringUtils.appendLine(ret, "\tpath: " + path);
+		StringUtils.appendLine(ret, "\tspriteIndex: " + spriteIndex);
+		StringUtils.appendLine(ret, "\tdirection: " + defaultDirection);
+		StringUtils.appendLine(ret, "\twalkToPlayer: " + (walkToPlayer == 1));
+
+		for (int currDialogue = 0; currDialogue < firstDialogue.length; ++currDialogue) {
+			StringUtils.appendLine(ret, "\tfirstDialogue[" + currDialogue + "]: \"" + firstDialogue[currDialogue] + "\"");
+		}
+
+		if (secondDialogue != null) {
+			for (int currDialogue = 0; currDialogue < secondDialogue.length; ++currDialogue) {
+				StringUtils.appendLine(ret, "\tsecondDialogue[" + currDialogue + "]: \"" + secondDialogue[currDialogue] + "\"");
 			}
 		}
 
-		if (itemInfo != null)
-			ret.append("\tgive: \"" + itemInfo.trim() + "\"\n");
+		if (itemInfo != null) {
+			StringUtils.appendLine(ret, "\tgive: \"" + itemInfo.trim() + "\"");
+		}
 
-		if (trainerInfo != null)
-			ret.append("\ttrainer: \"" + trainerInfo.trim() + "\"\n");
+		if (trainerInfo != null) {
+			StringUtils.appendLine(ret, "\ttrainer: \"" + trainerInfo.trim() + "\"");
+		}
 
-		if (firstTriggers != null)
-			ret.append("\tfirstTriggers: \"" + firstTriggers.trim() + "\"\n");
+		if (firstTriggers != null) {
+			StringUtils.appendLine(ret, "\tfirstTriggers: \"" + firstTriggers.trim() + "\"");
 
-		if (secondTriggers != null)
-			ret.append("\tsecondTriggers: \"" + secondTriggers.trim() + "\"\n");
+		}
+
+		if (secondTriggers != null) {
+			StringUtils.appendLine(ret, "\tsecondTriggers: \"" + secondTriggers.trim() + "\"");
+
+		}
 
 		ret.append("}\n");
 

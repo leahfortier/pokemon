@@ -2,6 +2,7 @@ package battle.effect.generic;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 import battle.effect.BarrierEffect;
 import battle.effect.CritBlockerEffect;
@@ -22,20 +23,17 @@ import battle.Move;
 import battle.effect.generic.Status.StatusCondition;
 
 // Class to handle effects that are specific to one side of the battle
-public abstract class TeamEffect extends Effect implements Serializable
-{
+public abstract class TeamEffect extends Effect implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static HashMap<String, TeamEffect> map;
+	private static Map<String, TeamEffect> map;
 	
-	public TeamEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside) 
-	{
+	public TeamEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
 
 	public abstract TeamEffect newInstance();
 	
-	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
-	{
+	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) b.addMessage(getCastMessage(b, caster, victim));
 		b.getTrainer(victim.user()).addEffect(this);
 		
@@ -43,17 +41,13 @@ public abstract class TeamEffect extends Effect implements Serializable
 		b.addMessage("", victim);
 	}
 
-	public static TeamEffect getEffect(Namesies name)
-	{
+	public static TeamEffect getEffect(Namesies name) {
 		String e = name.getName();
-		
-		if (map == null) 
-		{
+		if (map == null) {
 			loadEffects();
 		}
 		
-		if (map.containsKey(e))
-		{
+		if (map.containsKey(e)) {
 			return map.get(e);
 		}
 
@@ -62,8 +56,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 	}
 
 	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects()
-	{
+	public static void loadEffects() {
 		if (map != null) return;
 		map = new HashMap<>();
 		
@@ -260,8 +253,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		}
 
 		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.isLevitating(b))
-			{
+			if (victim.isLevitating(b)) {
 				return;
 			}
 			
@@ -305,8 +297,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		}
 
 		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				return;
 			}
 			
@@ -347,8 +338,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
-			if (spikesies == null)
-			{
+			if (spikesies == null) {
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
@@ -362,27 +352,22 @@ public abstract class TeamEffect extends Effect implements Serializable
 		}
 
 		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.isLevitating(b))
-			{
+			if (victim.isLevitating(b)) {
 				return;
 			}
 			
-			if (victim.isType(b, Type.POISON))
-			{
+			if (victim.isType(b, Type.POISON)) {
 				b.addMessage(victim.getName() + " absorbed the Toxic Spikes!");
 				super.active = false;
 				return;
 			}
 			
 			ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user());
-			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim))
-			{
-				if (layers >= 2)
-				{
+			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim)) {
+				if (layers >= 2) {
 					PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
 				}
-				else
-				{
+				else {
 					Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
 				}
 			}
@@ -421,8 +406,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
-			if (spikesies == null)
-			{
+			if (spikesies == null) {
 				super.cast(b, caster, victim, source, printCast);
 				return;
 			}
@@ -436,12 +420,13 @@ public abstract class TeamEffect extends Effect implements Serializable
 		}
 
 		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.isLevitating(b) || victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			if (victim.isLevitating(b) || victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				return;
 			}
 			
 			b.addMessage(victim.getName() + " was hurt by spikes!");
+			
+			// TODO: Generalize this type of statement
 			if (layers == 1) victim.reduceHealthFraction(b, 1/8.0);
 			else if (layers == 2) victim.reduceHealthFraction(b, 1/6.0);
 			else victim.reduceHealthFraction(b, 1/4.0);
@@ -488,8 +473,7 @@ public abstract class TeamEffect extends Effect implements Serializable
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
-			if (p.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
-			{
+			if (p.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
 				return;
 			}
 			
@@ -676,8 +660,12 @@ public abstract class TeamEffect extends Effect implements Serializable
 			PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
 			b.addMessage(getCastMessage(b, caster, victim));
 			coins = 5*caster.getLevel();
-			if (payday == null) b.getPlayer().addEffect(this);
-			else payday.coins += coins;
+			if (payday == null) {
+				b.getPlayer().addEffect(this);
+			}
+			else {
+				payday.coins += coins;
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {

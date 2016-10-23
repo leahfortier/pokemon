@@ -2,8 +2,7 @@ package item.hold;
 
 import main.Namesies;
 
-public interface IncenseItem
-{
+public interface IncenseItem {
 	// Huggies and kissies for mommy and daddy
-	public Namesies getBaby();
+	Namesies getBaby();
 }

@@ -1,7 +1,5 @@
 package pokemon;
 
-
-public interface BaseEvolution
-{
-	public PokemonInfo getEvolution();
+public interface BaseEvolution {
+	PokemonInfo getEvolution();
 }

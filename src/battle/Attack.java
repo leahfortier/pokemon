@@ -81,8 +81,7 @@ public abstract class Attack implements Serializable {
 	private int[] statChanges;
 	private boolean printCast;
 
-	public Attack(Namesies namesies, String description, int pp, Type type, MoveCategory category)
-	{
+	public Attack(Namesies namesies, String description, int pp, Type type, MoveCategory category) {
 		this.namesies = namesies;
 		this.name = namesies.getName();
 		this.description = description;

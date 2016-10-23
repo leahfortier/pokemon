@@ -10,9 +10,8 @@ import util.InputControl;
 import util.InputControl.Control;
 import map.entity.MovableEntity.Direction;
 
-public class Button
-{
-	public static final int NO_TRANSITON = -1;
+public class Button {
+	public static final int NO_TRANSITION = -1;
 	
 	public final int x;
 	public final int y;
@@ -27,13 +26,11 @@ public class Button
 	private boolean forceHover;
 	private boolean active;
 
-	public Button(int x, int y, int w, int h, HoverAction hoverAction)
-	{
-		this(x, y, w, h, hoverAction, new int[] { NO_TRANSITON, NO_TRANSITON, NO_TRANSITON, NO_TRANSITON });
+	public Button(int x, int y, int w, int h, HoverAction hoverAction) {
+		this(x, y, w, h, hoverAction, new int[] { NO_TRANSITION, NO_TRANSITION, NO_TRANSITION, NO_TRANSITION });
 	}
 
-	public Button(int x, int y, int width, int height, HoverAction hoverAction, int[] transition)
-	{
+	public Button(int x, int y, int width, int height, HoverAction hoverAction, int[] transition) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -49,41 +46,35 @@ public class Button
 		this.active = true;
 	}
 	
-	public void draw(Graphics g)
-	{
-		if ((hover || forceHover) && active && hoverAction != null)
+	public void draw(Graphics g) {
+		if ((hover || forceHover) && active && hoverAction != null) {
 			hoverAction.draw(g, this);
+		}
 	}
 	
-	public static int basicLeft(int currentIndex, int numCols)
-	{
+	public static int basicLeft(int currentIndex, int numCols) {
 		return currentIndex == 0 ? numCols - 1 : currentIndex - 1;
 	}
 	
-	public static int basicRight(int currentIndex, int numCols)
-	{
+	public static int basicRight(int currentIndex, int numCols) {
 		return currentIndex == numCols - 1 ? 0 : currentIndex + 1;
 	}
 	
-	public static int basicUp(int currentIndex, int numRows)
-	{
+	public static int basicUp(int currentIndex, int numRows) {
 		return currentIndex == 0 ? numRows - 1 : currentIndex - 1;
 	}
 	
-	public static int basicDown(int currentIndex, int numRows)
-	{
+	public static int basicDown(int currentIndex, int numRows) {
 		return currentIndex == numRows - 1 ? 0 : currentIndex + 1;
 	}
 
-	public enum HoverAction
-	{
-		BOX(new ButtonHoverAction()
-		{
+	// TODO: Move this to its own file
+	public enum HoverAction {
+		BOX(new ButtonHoverAction() {
 			private int time = 0;
 			private Stroke lineStroke = new BasicStroke(5f);
 
-			public void draw(Graphics g, Button button)
-			{
+			public void draw(Graphics g, Button button) {
 				time = (time + 1) % 80;
 
 				g.setColor(new Color(0, 0, 0, 55 + 150 * (Math.abs(time - 40)) / 40));
@@ -94,10 +85,9 @@ public class Button
 				g2d.setStroke(oldStroke);
 			}
 		}), 
-		ARROW(new ButtonHoverAction()
-		{
-			private final int[] tx = {0, 11, 0};
-			private final int[] ty = {0, 12, 23};
+		ARROW(new ButtonHoverAction() {
+			private final int[] tx = { 0, 11, 0 };
+			private final int[] ty = { 0, 12, 23 };
 			private int time = 0;
 
 			public void draw(Graphics g, Button button)
@@ -118,32 +108,27 @@ public class Button
 
 		private ButtonHoverAction hoverAction;
 
-		private HoverAction(ButtonHoverAction hoverAction)
-		{
+		HoverAction(ButtonHoverAction hoverAction) {
 			this.hoverAction = hoverAction;
 		}
 	}
 
-	public static int update(Button[] buttons, int selected, InputControl input)
-	{
-		if (!buttons[selected].forceHover)
+	public static int update(Button[] buttons, int selected, InputControl input) {
+		if (!buttons[selected].forceHover) {
 			buttons[selected].setForceHover(true);
+		}
 		
-		for (Direction direction : Direction.values())
-		{
-			if (input.isDown(direction.key))
-			{
+		for (Direction direction : Direction.values()) {
+			if (input.isDown(direction.key)) {
 				input.consumeKey(direction.key);
 				selected = Button.transition(buttons, selected, direction);
 			}
 		}
 
-		for (int i = 0; i < buttons.length; i++)
-		{
+		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].update(input, i == selected);
 			
-			if (buttons[i].isHover())
-			{
+			if (buttons[i].isHover()) {
 				buttons[selected].setForceHover(false);
 				
 				selected = i;
@@ -154,15 +139,16 @@ public class Button
 		return selected;
 	}
 
-	public static int transition(Button[] buttons, int index, Direction direction)
-	{
+	public static int transition(Button[] buttons, int index, Direction direction) {
 		int next = buttons[index].transition[direction.ordinal()];
 		
-		while (next != NO_TRANSITON && !buttons[next].isActive())
+		while (next != NO_TRANSITION && !buttons[next].isActive()) {
 			next = buttons[next].transition[direction.ordinal()];
+		}
 		
-		if (next == NO_TRANSITON)
+		if (next == NO_TRANSITION) {
 			return index;
+		}
 		
 		buttons[index].setForceHover(false);
 		buttons[next].setForceHover(true);
@@ -170,65 +156,54 @@ public class Button
 		return next;
 	}
 
-	public void update(InputControl input, boolean isSelected, Control... optionalKeys)
-	{
-		if (!active)
+	public void update(InputControl input, boolean isSelected, Control... optionalKeys) {
+		if (!active) {
 			return;
+		}
 		
 		hover = false;
 		press = false;
 
-		if (input.isMouseInput())
-		{
+		if (input.isMouseInput()) {
 			int mx = input.mouseX;
 			int my = input.mouseY;
 			
-			if (mx >= x && my >= y && mx <= x + width && my <= y + height)
-			{
+			if (mx >= x && my >= y && mx <= x + width && my <= y + height) {
 				hover = true;
-				if (input.mouseDown)
-				{
+				if (input.mouseDown) {
 					input.consumeMousePress();
 					press = true;
 				}
 			}
 		}
 
-		if (isSelected && input.isDown(Control.SPACE))
-		{
+		if (isSelected && input.isDown(Control.SPACE)) {
 			input.consumeKey(Control.SPACE);
 			press = true;
 		}
 
-		for (Control c : optionalKeys)
-		{
-			if (input.isDown(c))
-			{
+		for (Control c : optionalKeys) {
+			if (input.isDown(c)) {
 				input.consumeKey(c);
 				press = true;
 			}
 		}
 	}
 
-	public void update(InputControl input)
-	{
+	public void update(InputControl input) {
 		update(input, false);
 	}
 
-	public boolean isHover()
-	{
+	public boolean isHover() {
 		return hover;
 	}
 
-	public boolean isPress()
-	{
+	public boolean isPress() {
 		return press;
 	}
 
-	public boolean checkConsumePress()
-	{
-		if (isPress())
-		{
+	public boolean checkConsumePress() {
+		if (isPress()) {
 			press = false;
 			return true;
 		}
@@ -236,23 +211,19 @@ public class Button
 		return false;
 	}
 
-	public boolean isActive()
-	{
+	public boolean isActive() {
 		return active;
 	}
 
-	public void setForceHover(boolean set)
-	{
+	public void setForceHover(boolean set) {
 		forceHover = set;
 	}
 
-	public void setActive(boolean set)
-	{
+	public void setActive(boolean set) {
 		active = set;
 	}
 	
-	public void greyOut(Graphics g, boolean totesBlacks)
-	{
+	public void greyOut(Graphics g, boolean totesBlacks) {
 		Color temp = g.getColor();
 		g.setColor(totesBlacks ? Color.BLACK : temp.darker());
 		g.fillRect(x, y, width, height);

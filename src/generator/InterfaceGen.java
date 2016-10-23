@@ -14,7 +14,7 @@ import util.FileIO;
 class InterfaceGen {
 	
 	private static final String INTERFACE_INPUT = "interfaces.txt";
-	private static final String INTERFACE_PATH = FileIO.makePath("src", "battle", "effect") + "EffectInterfaces.java";
+	private static final String INTERFACE_PATH = FileIO.makeFolderPath("src", "battle", "effect") + "EffectInterfaces.java";
 	
 	InterfaceGen() {
 		gen();
@@ -31,7 +31,7 @@ class InterfaceGen {
 			String line = in.nextLine().trim();
 			
 			// Ignore comments and white space at beginning of file
-			if (line.length() == 0 || line.charAt(0) == '#') {
+			if (line.isEmpty() || line.startsWith("#")) {
 				continue;
 			}
 			
@@ -82,7 +82,7 @@ class InterfaceGen {
 						}
 				
 						final String fieldValue = split[1].trim();
-						if (fieldValue.length() == 0) {
+						if (fieldValue.isEmpty()) {
 							Global.error("Comments for " + this.interfaceName + " is empty.");
 						}
 						
@@ -100,8 +100,8 @@ class InterfaceGen {
 		}
 		
 		// This is used when the user applies direct damage to an opponent, and has special effects associated
-		interface ApplyDamageEffect
-		{
+		interface ApplyDamageEffect {
+
 			// b: The current battle
 			// user: The user of that attack, the one who is probably implementing this effect
 			// victim: The Pokemon that received the attack
@@ -124,7 +124,6 @@ class InterfaceGen {
 		}
 		
 		String writeInterface() {
-			
 			final String className = this.interfaceName;
 			final String superClass = null;
 			final String interfaces = null; // TODO: Will eventually not be null since some may extend other interfaces (unless that's superclass but whatever)

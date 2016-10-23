@@ -5,5 +5,5 @@ import pokemon.ActivePokemon;
 import battle.Battle;
 
 public interface TypeHolder {
-	public Type[] getType(Battle b, ActivePokemon p, Boolean display);
+	Type[] getType(Battle b, ActivePokemon p, Boolean display);
 }

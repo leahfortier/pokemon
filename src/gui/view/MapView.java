@@ -10,7 +10,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Random;
 
 import main.Game;
 import main.Game.ViewMode;
@@ -33,22 +32,23 @@ import util.InputControl;
 import util.Save;
 import util.InputControl.Control;
 import battle.Battle;
+import util.StringUtils;
 
-public class MapView extends View
-{
+public class MapView extends View {
+	// TODO: these should reference the constants
 	private static final String[] MENU_TEXT = {"Pok\u00E9dex", "Pok\u00E9mon", "Bag", "Player___", "Options", "Save", "Exit", "Return"};
 	
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
 	
-	private static final int[] ddx = {0, -1, 0};
-	private static final int[] ddy = {0, 0, -1};
+	private static final int[] ddx = { 0, -1, 0 };
+	private static final int[] ddy = { 0, 0, -1 };
 	
-	public String currentMapName;
-	public AreaData currentArea;
-	public MapData currentMap;
-	public Trigger currentMusicTrigger;
-	public String queuedDialogueName;
+	private String currentMapName;
+	private AreaData currentArea;
+	private MapData currentMap;
+	private Trigger currentMusicTrigger;
+	private String queuedDialogueName;
 	
 	private Entity[][] entities;
 	private ArrayList<Entity> entityList;
@@ -69,10 +69,12 @@ public class MapView extends View
 	private BufferedImage battleImageSlideRight;
 	private BufferedImage battleImageSlideLeft;
 	
-	private enum VisualState
-	{
-		MESSAGE, MENU, MAP, BATTLE_ANIMATION
-	};
+	private enum VisualState {
+		BATTLE_ANIMATION,
+		MAP,
+		MENU,
+		MESSAGE
+	}
 	
 	private VisualState state;
 	private WeatherState weatherState;
@@ -81,12 +83,10 @@ public class MapView extends View
 	private final Button[] menuButtons;
 	
 	private int[] rainHeight;
-	private Random rand = new Random();
 	private int lightningFrame;
 	
-	public MapView()
-	{
-		currentMapName = "";
+	public MapView() {
+		currentMapName = StringUtils.empty();
 		currentArea = null;
 		currentDialogue = null;
 		rainHeight = new int[Global.GAME_SIZE.width/2];
@@ -99,76 +99,66 @@ public class MapView extends View
 		
 		menuButtons = new Button[MENU_TEXT.length];
 		
-		for (int i = 0; i < menuButtons.length; i++)
-		{
+		for (int i = 0; i < menuButtons.length; i++) {
 			menuButtons[i] = new Button(558, 72*i + 10, 240, 70, Button.HoverAction.ARROW, 
-					new int[] {	Button.NO_TRANSITON, // Right 
+					new int[] {	Button.NO_TRANSITION, // Right
 								Button.basicUp(i, menuButtons.length), // Up
-								Button.NO_TRANSITON, // Left
+								Button.NO_TRANSITION, // Left
 								Button.basicDown(i, menuButtons.length) // Down
 							});
 		}
 	}
-	
-	public void draw(Graphics g, GameData data) 
-	{
+
+	// TODO: This method should be split up further
+	public void draw(Graphics g, GameData data) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
 		TileSet mapTiles = data.getMapTiles();
 		
-		for (int y = startY; y < endY; y++)
-		{
-			for (int x = startX; x < endX; x++)
-			{
+		for (int y = startY; y < endY; y++) {
+			for (int x = startX; x < endX; x++) {
 				int bgTile = currentMap.getBgTile(x,y);
-				int dx = (int)drawX + x*Global.TILESIZE;
-				int dy = (int)drawY + y*Global.TILESIZE;
+				int dx = (int)drawX + x*Global.TILE_SIZE;
+				int dy = (int)drawY + y*Global.TILE_SIZE;
 				
-				if ((bgTile>>24) != 0)
-				{
+				if ((bgTile>>24) != 0) {
 					BufferedImage img = mapTiles.getTile(bgTile);
-					g.drawImage(img, dx + (Global.TILESIZE - img.getWidth()), dy + (Global.TILESIZE - img.getHeight()), null);
+					g.drawImage(img, dx + (Global.TILE_SIZE - img.getWidth()), dy + (Global.TILE_SIZE - img.getHeight()), null);
 				}
 			}
 		}
 		
-		for (int y = startY; y < endY; y++)
-		{
-			for (int x = startX; x < endX; x++)
-			{
-				int dx = (int) (drawX) + x*Global.TILESIZE;
-				int dy = (int) (drawY) + y*Global.TILESIZE;
+		for (int y = startY; y < endY; y++) {
+			for (int x = startX; x < endX; x++) {
+				int dx = (int) (drawX) + x*Global.TILE_SIZE;
+				int dy = (int) (drawY) + y*Global.TILE_SIZE;
 				int fgTile = currentMap.getFgTile(x, y);
 				
-				if ((fgTile>>24) != 0)
-				{
+				if ((fgTile>>24) != 0) {
 					BufferedImage img = mapTiles.getTile(fgTile);
-					g.drawImage(img, dx + (Global.TILESIZE - img.getWidth()), dy + (Global.TILESIZE - img.getHeight()), null);
+					g.drawImage(img, dx + (Global.TILE_SIZE - img.getWidth()), dy + (Global.TILE_SIZE - img.getHeight()), null);
 				}
 				
 				//draw entities, and check for entities above and to the left of this location to see if they just moved out and draw them again.
-				for (int d = 0; d < ddx.length; d++)
-				{
+				for (int d = 0; d < ddx.length; d++) {
 					int nx, ny;
 					nx = ddx[d] + x;
 					ny = ddy[d] + y;
 					
-					if (nx < 0 || ny < 0 || nx >= entities.length || ny >= entities[0].length)
+					if (nx < 0 || ny < 0 || nx >= entities.length || ny >= entities[0].length) {
 						continue;
-					
-					if (entities[nx][ny] != null)
-					{
-						//If entity is a movable entity and they are moving right or down, do not draw them again.
-						if(entities[nx][ny] instanceof MovableEntity)
-						{
+					}
+
+					if (entities[nx][ny] != null) {
+						// If entity is a movable entity and they are moving right or down, do not draw them again.
+						if (entities[nx][ny] instanceof MovableEntity) {
 							Direction td = ((MovableEntity)entities[nx][ny]).getDirection();
 							if (d != 0 && ((td == Direction.RIGHT) || (td == Direction.DOWN)))
 								continue;
 						}
-						//Not a movable entity, only draw once.
-						else if(d != 0)
-						{
+						// Not a movable entity, only draw once.
+						else if (d != 0) {
 							continue;
 						}
 						
@@ -181,13 +171,11 @@ public class MapView extends View
 		drawWeatherEffects(g);
 		
 		//Area Transition
-		if (areaDisplayTime > 0)
-		{
+		if (areaDisplayTime > 0) {
 			drawAreaTransitionAnimation(g);
 		}
 		
-		switch (state)
-		{
+		switch (state) {
 			case MESSAGE:
 				BufferedImage bg = data.getBattleTiles().getTile(3);
 				g.drawImage(bg, 0, 439, null);
@@ -200,13 +188,14 @@ public class MapView extends View
 				// TODO: wtf is this variable name
 				int i1 = 0;
 				
-				for (String choice: currentDialogue.choices)
-				{
-					if (choice == null)
+				for (String choice: currentDialogue.choices) {
+					if (choice == null) {
 						break;
+					}
 				
-					if (i1 == dialogueSelection)
+					if (i1 == dialogueSelection) {
 						g.fillOval(50, height + i1*36, 10, 10);
+					}
 					
 					g.drawString(choice, 80, height + (i1++)*36);
 				}
@@ -216,17 +205,20 @@ public class MapView extends View
 				
 				g.drawImage(menuTiles.getTile(1), 527, 0, null);
 				DrawMetrics.setFont(g, 40);
-				g.setColor(Color.black);
+				g.setColor(Color.BLACK);
 				
-				for (int i = 0; i < MENU_TEXT.length; i++)
+				for (int i = 0; i < MENU_TEXT.length; i++) {
 					g.drawString(MENU_TEXT[i], 558, 59 + 72*i);
+				}
 				
-				for (Button b: menuButtons)
+				for (Button b: menuButtons) {
 					b.draw(g);
+				}
 				break;
 			case BATTLE_ANIMATION:
-				if(battleImageSlideRight != null && battleImageSlideLeft != null)
+				if (battleImageSlideRight != null && battleImageSlideLeft != null) {
 					drawBattleIntroAnimation(g);
+				}
 				break;
 			case MAP:
 				break;
@@ -235,10 +227,8 @@ public class MapView extends View
 		}
 	}
 	
-	private void drawWeatherEffects(Graphics g)
-	{
-		switch(weatherState)
-		{
+	private void drawWeatherEffects(Graphics g) {
+		switch(weatherState) {
 			case SUN:
 				drawSun(g);
 				break;
@@ -251,42 +241,49 @@ public class MapView extends View
 		}
 	}
 	
-	private void drawSun(Graphics g)
-	{
+	private void drawSun(Graphics g) {
 		g.setColor(new Color(255, 255, 255, 64));
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 	}
-	
-	private void drawRain(Graphics g)
-	{
+
+	// TODO: Make a fuckton of constants and whatever this is awful
+	private void drawRain(Graphics g) {
 		g.setColor(new Color(0,0,0, 64));
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		g.setColor(new Color(50,50,255, 128));
-		for (int i = 0; i < rainHeight.length; i++)
-			if (rainHeight[i] != 0){
+
+		for (int i = 0; i < rainHeight.length; i++) {
+			if (rainHeight[i] != 0) {
 				g.drawRect(i*2, rainHeight[i] - 40, 1, 40);
 				rainHeight[i] += 50;
-				if (rainHeight[i] > Global.GAME_SIZE.height + 40)
+
+				if (rainHeight[i] > Global.GAME_SIZE.height + 40) {
 					rainHeight[i] = 0;
+				}
 			}
-		for (int i = 0; i < 50; i++){
-				int x = rand.nextInt(rainHeight.length);
-				if (rainHeight[x] == 0)
-					rainHeight[x] = 1 + rand.nextInt(40);
+		}
+
+		for (int i = 0; i < 50; i++) {
+			int x = Global.RANDOM.nextInt(rainHeight.length);
+			if (rainHeight[x] == 0){
+				rainHeight[x] = 1 + Global.RANDOM.nextInt(40);
 			}
+		}
 		
-		if (rand.nextInt(80) == 0 || (lightningFrame > 80 && rand.nextInt(4) == 0)){
+		if (Global.RANDOM.nextInt(80) == 0 || (lightningFrame > 80 && Global.RANDOM.nextInt(4) == 0)) {
 			lightningFrame = 128;
 		}
-		if (lightningFrame > 0){
+
+		if (lightningFrame > 0) {
 			g.setColor(new Color(255,255,255, lightningFrame));
 			g.fillRect(0,0,Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 			lightningFrame = 7*lightningFrame/8 - 1;
-		}else lightningFrame = 0;
+		} else {
+			lightningFrame = 0;
+		}
 	}
 	
-	private void drawAreaTransitionAnimation(Graphics g)
-	{
+	private void drawAreaTransitionAnimation(Graphics g) {
 		int fontSize = 30;
 		
 		int insideWidth = DrawMetrics.getSuggestedWidth(currentArea.getAreaName(), fontSize);
@@ -301,13 +298,11 @@ public class MapView extends View
 		int yValue = 0;
 		
 		// Calculate exit location
-		if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN < .2)
-		{
+		if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN < .2) {
 			yValue = -1*(int)(((AREA_NAME_ANIMATION_LIFESPAN - areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (insideHeight + (2*graySize)));
 		}
 		// Calculate entrance location
-		else if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN > .8)
-		{
+		else if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN > .8) {
 			yValue = -1*(int)(((areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (insideHeight + 2*graySize));
 		}
 		
@@ -330,24 +325,21 @@ public class MapView extends View
 	}
 	
 	// Display battle intro animation.
-	private void drawBattleIntroAnimation(Graphics g)
-	{
+	private void drawBattleIntroAnimation(Graphics g) {
 		int drawWidth = Global.GAME_SIZE.width/2;
 		int drawHeightLeft;
 		int drawHeighRight;
 		float moveInAnimationPercentage;
 		float fadeOutPercentage = 0.2f;
 		
-		if (battle.isWildBattle())
-		{
+		if (battle.isWildBattle()) {
 			drawHeighRight = drawHeightLeft = Global.GAME_SIZE.height * 5 / 8;
 			drawHeightLeft -= battleImageSlideLeft.getHeight()/2;
 			drawHeighRight -= battleImageSlideRight.getHeight();
 			
 			moveInAnimationPercentage = 0.5f;
 		}
-		else
-		{
+		else {
 			drawHeighRight = drawHeightLeft = Global.GAME_SIZE.height/2;
 			drawHeightLeft -= battleImageSlideLeft.getHeight();
 			//drawHeighRight -= battleImageSlideRight.getHeight();
@@ -357,8 +349,7 @@ public class MapView extends View
 		
 		
 		// Images slide in from sides
-		if(battleAnimationTime > BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage))
-		{
+		if (battleAnimationTime > BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage)) {
 			float normalizedTime = (battleAnimationTime - BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage))/ (BATTLE_INTRO_ANIMATION_LIFESPAN*moveInAnimationPercentage);
 
 			int dist = -battleImageSlideRight.getWidth()/2 -drawWidth;
@@ -371,10 +362,8 @@ public class MapView extends View
 			
 			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2 + dist, drawHeighRight, null);
 		}
-		
 		// Hold images
-		else 
-		{
+		else {
 			g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2, drawHeightLeft, null);
 			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2, drawHeighRight, null);
 			
@@ -390,18 +379,15 @@ public class MapView extends View
 	}
 	
 
-	public void update(int dt, InputControl input, Game game) 
-	{
-		CharacterData character = game.charData;
+	public void update(int dt, InputControl input, Game game) {
+		CharacterData character = game.characterData;
 		MENU_TEXT[3] = character.getName();
 
-		if (!currentMapName.equals(character.mapName) || character.mapReset)
-		{
+		if (!currentMapName.equals(character.mapName) || character.mapReset) {
 			currentMapName = character.mapName;
 			currentMap = game.data.getMap(currentMapName);
 			
-			if (character.mapReset) 
-			{
+			if (character.mapReset) {
 				character.mapReset = false;
 				currentMap.setCharacterToEntrance(character, character.mapEntranceName);
 			}
@@ -417,24 +403,25 @@ public class MapView extends View
 			entities[character.locationX][character.locationY] = playerEntity;
 			
 			entityList = new ArrayList<>();
-			for (Entity[] er: entities)
-				for (Entity e: er)
-					if (e != null)
+			for (Entity[] er: entities) {
+				for (Entity e: er) {
+					if (e != null) {
 						entityList.add(e);
+					}
+				}
+			}
 			
 			removeQueue = new LinkedList<>();
 			state = VisualState.MAP;
 		}
 		
-		if (areaDisplayTime > 0)
-		{
+		if (areaDisplayTime > 0) {
 			areaDisplayTime -= dt;
 		}
 		
-		//New area
+		// New area
 		AreaData area = game.data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
-		if (currentArea == null || !area.getAreaName().equals(currentArea.getAreaName()))
-		{
+		if (currentArea == null || !area.getAreaName().equals(currentArea.getAreaName())) {
 			character.areaName = area.getAreaName();
 			currentArea = area;
 
@@ -448,14 +435,13 @@ public class MapView extends View
 			playAreaMusic(game);
 		}
 		
-		switch (state)
-		{
+		switch (state) {
 			case BATTLE_ANIMATION:
-				if(battleImageSlideLeft == null || battleImageSlideRight == null)
+				if (battleImageSlideLeft == null || battleImageSlideRight == null) {
 					loadBattleImages(game);
-				
-				if(battleAnimationTime < 0)
-				{
+				}
+
+				if (battleAnimationTime < 0) {
 					battle = null;
 					game.setViewMode(ViewMode.BATTLE_VIEW);
 					state = VisualState.MAP;
@@ -464,10 +450,11 @@ public class MapView extends View
 				battleAnimationTime -= dt;
 				break;		
 			case MAP:
-				if (input.isDown(Control.ESC)){
+				if (input.isDown(Control.ESC)) {
 					input.consumeKey(Control.ESC);
 					state = VisualState.MENU;
 				}
+
 //				if (input.isDown(Control.SPACE)){
 //					input.consumeKey(Control.SPACE);
 //					//game.setViewMode(Game.ViewMode.BATTLE_VIEW);
@@ -475,45 +462,49 @@ public class MapView extends View
 //				}
 				break;
 			case MESSAGE:
-				if (input.isDown(Control.DOWN)){
+				if (input.isDown(Control.DOWN)) {
 					input.consumeKey(Control.DOWN);
 					dialogueSelection++;
-				}else if (input.isDown(Control.UP)){
+				} else if (input.isDown(Control.UP)) {
 					input.consumeKey(Control.UP);
 					dialogueSelection--;
 				}
-				if (currentDialogue.next.length != 0){
-					if (dialogueSelection < 0)
+
+				if (currentDialogue.next.length != 0) {
+					if (dialogueSelection < 0) {
 						dialogueSelection += currentDialogue.next.length;
+					}
+
 					dialogueSelection %= currentDialogue.next.length;
 				}
-				if (input.isDown(Control.SPACE) && !Global.soundPlayer.soundEffectIsPlaying()){
+
+				if (input.isDown(Control.SPACE) && !Global.soundPlayer.soundEffectIsPlaying()) {
 					input.consumeKey(Control.SPACE);
 					currentDialogue.choose(dialogueSelection, this, game);
 					
-					if (queuedDialogueName != null){
+					if (queuedDialogueName != null) {
 						currentDialogue = game.data.getDialogue(queuedDialogueName);
 						queuedDialogueName = null;
 						dialogueSelection = 0;
 					}
 					else {
 						currentDialogue = null;
-						if(battle == null)
+						if (battle == null) {
 							state = VisualState.MAP;
+						}
 					}
 				}
 				break;
 			case MENU:
 				selectedButton = Button.update(menuButtons, selectedButton, input);
 				int clicked = -1;
-				for (int i = 0; i < menuButtons.length; i++){
-					if (menuButtons[i].checkConsumePress()){
+				for (int i = 0; i < menuButtons.length; i++) {
+					if (menuButtons[i].checkConsumePress()) {
 						clicked = i;
 					}
 				}
 				
-				switch (clicked)
-				{
+				switch (clicked) {
 					case -1: break; //no click
 					case 0: //pokedex
 						game.setViewMode(ViewMode.POKEDEX_VIEW);
@@ -532,7 +523,7 @@ public class MapView extends View
 						break;
 					case 5: //save
 						// TODO: Question user if they would like to save first.
-						Save.save(game.charData);
+						Save.save(game.characterData);
 						currentDialogue = game.data.getDialogue("savedGame");
 						state = VisualState.MESSAGE;
 						break;
@@ -545,12 +536,10 @@ public class MapView extends View
 						break;
 				}
 				
-				if (input.isDown(Control.ESC))
-				{
+				if (input.isDown(Control.ESC)) {
 					input.consumeKey(Control.ESC);
 					state = VisualState.MAP;
 				}
-				
 				break;
 		}
 		
@@ -560,40 +549,39 @@ public class MapView extends View
 		drawX = drawLoc[0];
 		drawY = drawLoc[1];
 		
-		int tilesX = d.width/Global.TILESIZE;
-		int tilesY = d.height/Global.TILESIZE;
+		int tilesX = d.width/Global.TILE_SIZE;
+		int tilesY = d.height/Global.TILE_SIZE;
 		
-		startX = (int) (-drawX/Global.TILESIZE);
-		startY = (int) (-drawY/Global.TILESIZE);
+		startX = (int) (-drawX/Global.TILE_SIZE);
+		startY = (int) (-drawY/Global.TILE_SIZE);
 		
 		endX = startX + tilesX + 6;
 		endY = startY + tilesY + 6;
 		
 		// Check for any NPCs facing the player
-		if (!playerEntity.isStalled() && state == VisualState.MAP)
-		{
-			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; ++dist)
-			{
+		if (!playerEntity.isStalled() && state == VisualState.MAP) {
+			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; ++dist) {
 				// TODO: Move to movable entity
-				for (Direction direction : Direction.values())
-				{
+				for (Direction direction : Direction.values()) {
 					int x = playerEntity.getX() - direction.dx*dist;
 					int y = playerEntity.getY() - direction.dy*dist;
 				
-					if (!currentMap.inBounds(x, y))
+					if (!currentMap.inBounds(x, y)) {
 						continue;
+					}
 					
-					if (entities[x][y] != null && entities[x][y] instanceof NPCEntity && ((NPCEntity)entities[x][y]).isFacing(playerEntity.getX(), playerEntity.getY()) && ((NPCEntity)entities[x][y]).getWalkToPlayer())
-					{
+					if (entities[x][y] != null
+							&& entities[x][y] instanceof NPCEntity
+							&& ((NPCEntity)entities[x][y]).isFacing(playerEntity.getX(), playerEntity.getY())
+							&& ((NPCEntity)entities[x][y]).getWalkToPlayer()) {
+
 						NPCEntity npc = (NPCEntity)entities[x][y];
-						if (!npc.getWalkingToPlayer() && game.data.getTrigger(npc.getWalkTrigger()).isTriggered(game.charData))
-						{
+						if (!npc.getWalkingToPlayer() && game.data.getTrigger(npc.getWalkTrigger()).isTriggered(game.characterData)) {
 							playerEntity.stall();
 							npc.setDirection(direction);
 							npc.walkTowards(dist - 1, direction);
 							
-							if (npc.isTrainer())
-							{
+							if (npc.isTrainer()) {
 								// TODO: Get trainer spotted music
 								Global.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
 							}
@@ -603,23 +591,24 @@ public class MapView extends View
 			}
 		}
 
-		for (Entity e: entityList)
-			if (e != null && (state == VisualState.MAP || e != playerEntity))
+		for (Entity e: entityList) {
+			if (e != null && (state == VisualState.MAP || e != playerEntity)) {
 				e.update(dt, entities, currentMap, input, this);
+			}
+		}
 		
-		if (state == VisualState.MAP) 
+		if (state == VisualState.MAP) {
 			playerEntity.triggerCheck(game, currentMap);
+		}
 		
-		while (!removeQueue.isEmpty())
-		{
+		while (!removeQueue.isEmpty()) {
 			Entity e = removeQueue.removeFirst();
 			entityList.remove(e);
 			entities[e.getX()][e.getY()] = null;
 		}
 		
-		//CharacterData has a message to display and no current message is being displayed.
-		if(character.messages != null && queuedDialogueName == null && currentDialogue == null)
-		{
+		// CharacterData has a message to display and no current message is being displayed.
+		if (character.messages != null && queuedDialogueName == null && currentDialogue == null) {
 			currentDialogue = character.messages;
 			character.messages = null;
 			queuedDialogueName = null;
@@ -628,8 +617,7 @@ public class MapView extends View
 			state = VisualState.MESSAGE;
 		}
 
-		if (queuedDialogueName != null && (currentDialogue == null || !queuedDialogueName.equals(currentDialogue.name)))
-		{
+		if (queuedDialogueName != null && (currentDialogue == null || !queuedDialogueName.equals(currentDialogue.name))) {
 			currentDialogue = game.data.getDialogue(queuedDialogueName);
 			queuedDialogueName = null;
 			dialogueSelection = 0;
@@ -637,31 +625,25 @@ public class MapView extends View
 		}
 	}
 	
-	public void playAreaMusic(Game game)
-	{
-		if (currentMusicTrigger != null)
-		{
+	private void playAreaMusic(Game game) {
+		if (currentMusicTrigger != null) {
 			currentMusicTrigger.execute(game);
 		}
-		else if(currentArea != null)
-		{
+		else if(currentArea != null) {
 			System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
 			Global.soundPlayer.playMusic(SoundTitle.DEFAULT_TUNE);
 		}
 	}
 
-	public Game.ViewMode getViewModel() 
-	{
+	public Game.ViewMode getViewModel() {
 		return Game.ViewMode.MAP_VIEW;
 	}
 
-	public void setDialogue(String dialogueName) 
-	{
+	public void setDialogue(String dialogueName) {
 		queuedDialogueName = dialogueName;
 	}
 	
-	public void setBattle(Battle battle, boolean seenWild)
-	{
+	public void setBattle(Battle battle, boolean seenWild) {
 		this.battle = battle;
 		battleAnimationTime = BATTLE_INTRO_ANIMATION_LIFESPAN;
 		state = VisualState.BATTLE_ANIMATION;
@@ -671,51 +653,42 @@ public class MapView extends View
 		
 		this.battle.setTerrainType(currentArea.getTerrain(), true);
 		
-		if (battle.isWildBattle())
-		{
+		if (battle.isWildBattle()) {
 			Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
 		}
-		else
-		{
+		else {
 			// TODO: Get trainer battle music
 			Global.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
 		}
 	}
-	
-	private void loadBattleImages(Game game)
-	{
-		if (battle.isWildBattle())
-		{
+
+	private void loadBattleImages(Game game) {
+		if (battle.isWildBattle()) {
 			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x300 + currentArea.getTerrain().ordinal());
 			
 			ActivePokemon p = battle.getOpponent().front();
 			battleImageSlideRight = game.data.getPokemonTilesLarge().getTile(p.getImageIndex());
 			
-			if(seenWild)
-			{
+			if (seenWild) {
 				battleImageSlideRight = DrawMetrics.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0});
 			}
 		}
-		else
-		{
+		else {
 			battleImageSlideRight = game.data.getBattleTiles().getTile(0x00100001);
 			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x00100000);
 		}
 	}
 	
-	public void addEntity(Entity e)
-	{
+	public void addEntity(Entity e) {
 		entities[e.getX()][e.getY()] = e;
 		entityList.add(e);
 	}
 	
-	public void removeEntity(Entity e)
-	{
+	public void removeEntity(Entity e) {
 		removeQueue.add(e);
 	}
 
-	public void movedToFront(Game game) 
-	{
+	public void movedToFront(Game game) {
 		playAreaMusic(game);
 	}
 }

@@ -1,6 +1,5 @@
 package battle.effect;
 
-public interface HalfWeightEffect
-{
-	public int getHalfAmount(Integer halfAmount);
+public interface HalfWeightEffect {
+	int getHalfAmount(Integer halfAmount);
 }

@@ -1,7 +1,7 @@
 package sound;
 
-public enum SoundTitle
-{
+// TODO: Should separate these into two separate enums -- one for music and one for effects
+public enum SoundTitle {
 	DEFAULT_TUNE("lalala", true),
 	
 	// Menu Tunes
@@ -46,8 +46,7 @@ public enum SoundTitle
 	private String soundTitle;
 	private boolean isMusic;
 	
-	private SoundTitle(String soundTitle, boolean isMusic)
-	{
+	SoundTitle(String soundTitle, boolean isMusic) {
 		this.soundTitle = soundTitle;
 		this.isMusic = isMusic;
 	}

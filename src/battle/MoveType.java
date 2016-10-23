@@ -27,5 +27,5 @@ public enum MoveType {
     SOUND_BASED,
     SUCCESSIVE_DECAY,
     SUBSTITUTE_PIERCING,
-    USER_FAINTS
+    USER_FAINTS,
 }

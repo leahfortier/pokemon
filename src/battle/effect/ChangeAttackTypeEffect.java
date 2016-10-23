@@ -2,7 +2,6 @@ package battle.effect;
 
 import main.Type;
 
-public interface ChangeAttackTypeEffect
-{
-	public Type changeAttackType(Type original);
+public interface ChangeAttackTypeEffect {
+	Type changeAttackType(Type original);
 }

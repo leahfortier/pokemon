@@ -15,29 +15,32 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
 
+import battle.Move;
+import main.Global;
 import pokemon.PokemonInfo;
 import battle.Attack;
+import util.StringUtils;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
-public class PokemonDataPanel extends JPanel {
+class PokemonDataPanel extends JPanel {
 	
 	private static final long serialVersionUID = 2679616277402077123L;
 	
-	public JTextField nameTextField;
-	public JTextField moveTextField;
-	public JCheckBox shinyCheckBox;
-	public JComboBox<String> moveComboBox;
-	public JCheckBox moveCheckBox;
-	public JFormattedTextField levelFormattedTextField;
-	
-	public String[] customMoves = new String[4];
-	private JCheckBox selectedCheckBox;
-	
+	private JTextField nameTextField;
+	private JTextField moveTextField;
+	private JCheckBox shinyCheckBox;
+	private JComboBox<String> moveComboBox;
+	private JCheckBox moveCheckBox;
+	private JFormattedTextField levelFormattedTextField;
+
+	private String[] customMoves = new String[Move.MAX_MOVES]; // TODO: I think this should just be a list
+
 	private TrainerDataDialog trainerDialog;
 	public int index;
 	
-	public PokemonDataPanel(TrainerDataDialog givenTrainerDialog, int givenIndex) {
+	PokemonDataPanel(TrainerDataDialog givenTrainerDialog, int givenIndex) {
 		
 		trainerDialog = givenTrainerDialog;
 		index = givenIndex;
@@ -47,29 +50,31 @@ public class PokemonDataPanel extends JPanel {
 		}
 		
 		nameTextField = new JTextField();
-		nameTextField.getDocument().addDocumentListener(new DocumentListener() 
-		{
-			public void removeUpdate(DocumentEvent e) {valueChanged();}
-			public void insertUpdate(DocumentEvent e) {valueChanged();}
-			public void changedUpdate(DocumentEvent e) {}
+		nameTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void removeUpdate(DocumentEvent event) {
+				valueChanged();
+			}
+
+			public void insertUpdate(DocumentEvent event) {
+				valueChanged();
+			}
+
+			public void changedUpdate(DocumentEvent event) {}
 			
-			public void valueChanged() 
-			{
+			private void valueChanged() {
 				String pokemonName = nameTextField.getText().trim();
-				if (pokemonName.length() < 2) 
-				{
-					nameTextField.setBackground(new Color(0xFF9494));
+				if (pokemonName.length() < 2) {
+					nameTextField.setBackground(new Color(0xFF9494)); // TODO: What is this color -- it should be a constant if it's being used in multiple locations
 					return;
 				}
-				
+
+				// TODO: use util method
 				pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
 				
-				if (!PokemonInfo.isPokemonName(pokemonName)) 
-				{
+				if (!PokemonInfo.isPokemonName(pokemonName)) {
 					nameTextField.setBackground(new Color(0xFF9494));
 				}
-				else 
-				{
+				else {
 					nameTextField.setBackground(new Color(0x90EE90));
 				}
 			}
@@ -79,23 +84,18 @@ public class PokemonDataPanel extends JPanel {
 		
 		shinyCheckBox = new JCheckBox("");
 		
-		moveComboBox = new JComboBox<String>();
-		moveComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Move 1", "Move 2", "Move 3", "Move 4"}));
-		moveComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				moveTextField.setText(customMoves[moveComboBox.getSelectedIndex()]);
-			}
-		});
+		moveComboBox = new JComboBox<>();
+		moveComboBox.setModel(new DefaultComboBoxModel<>(new String[] {"Move 1", "Move 2", "Move 3", "Move 4"}));
+		moveComboBox.addActionListener(event -> moveTextField.setText(customMoves[moveComboBox.getSelectedIndex()]));
 		moveComboBox.setEnabled(false);
 		
-		moveCheckBox = new JCheckBox("");
-		moveCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				moveComboBox.setEnabled(moveCheckBox.isSelected());
-				moveTextField.setEnabled(moveCheckBox.isSelected());
-			}
-		});
-		
+		moveCheckBox = new JCheckBox(StringUtils.empty());
+		moveCheckBox.addActionListener(event -> {
+            moveComboBox.setEnabled(moveCheckBox.isSelected());
+            moveTextField.setEnabled(moveCheckBox.isSelected());
+        });
+
+		// TODO: try to combine this inner shit with that similar one above and if that doesn't work at least fix its ugly ass formatting that I don't feel like handling right now
 		moveTextField = new JTextField();
 		moveTextField.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {valueChanged();}
@@ -111,6 +111,7 @@ public class PokemonDataPanel extends JPanel {
 				}
 			}
 		});
+
 		moveTextField.setColumns(10);
 		moveTextField.setEnabled(false);
 		
@@ -119,16 +120,12 @@ public class PokemonDataPanel extends JPanel {
 	    formatter.setValueClass(Integer.class);
 	    formatter.setMinimum(1);
 	    formatter.setMaximum(100);
+
 		levelFormattedTextField = new JFormattedTextField(formatter);
 		levelFormattedTextField.setText("1");
-		
-		selectedCheckBox = new JCheckBox("");
-		
-		selectedCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				trainerDialog.setSelected(index);
-			}
-		});
+
+		JCheckBox selectedCheckBox = new JCheckBox(StringUtils.empty());
+		selectedCheckBox.addActionListener(event -> trainerDialog.setSelected(index));
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -149,6 +146,7 @@ public class PokemonDataPanel extends JPanel {
 					.addComponent(moveComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addComponent(moveTextField, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
 		);
+
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -178,46 +176,70 @@ public class PokemonDataPanel extends JPanel {
 		setLayout(groupLayout);
 	}
 	
-	public void setPokemon() 
-	{
+	public void setPokemon() {
 		// TODO: What is this?
 	}
-	
-	public String getPokemonData () 
-	{
+
+	String getPokemonData() {
 		String pokemonName = nameTextField.getText().trim();
-		
-		if (pokemonName.length() < 2)
-			return null;
-		
-		// TODO: I don't think this will work always -- try with something like Mr. Mime
-		pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
-		
-		if (!PokemonInfo.isPokemonName(pokemonName)) 
-		{
+		if (pokemonName.length() < 2) { // TODO: ??????? what
 			return null;
 		}
 		
-		String data = "pokemon: " + pokemonName + " " + (String)levelFormattedTextField.getText() + " " + (shinyCheckBox.isSelected() ? "Shiny" : "");
+		// TODO: I don't think this will work always -- try with something like Mr. Mime
+		pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
+		if (!PokemonInfo.isPokemonName(pokemonName)) {
+			return null;
+		}
 		
-		if (moveCheckBox.isSelected()) 
-		{
+		String data = "pokemon: " + pokemonName + " " +
+				levelFormattedTextField.getText() + " " +
+				(shinyCheckBox.isSelected() ? "Shiny" : StringUtils.empty());
+		
+		if (moveCheckBox.isSelected()) {
+			// TODO: Figure out what this is supposed to be doing because right now this variable does absolutely nothing
 			boolean allValidMoves = true;
 			String moves = "";
 			
-			for (int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) 
-			{
-				String move = customMoves[currMove].length() == 0? "None": customMoves[currMove];
+			for (int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) {
+				String move = customMoves[currMove].isEmpty() ? "None" : customMoves[currMove];
 				allValidMoves |= Attack.isAttack(move);
 				moves+= move +(currMove + 1 == customMoves.length?"*":", ");
 			}
 			
-			if (allValidMoves) 
-			{
+			if (allValidMoves) {
 				data += " Moves: " + moves;
 			}
 		}
 		
 		return data;
+	}
+
+	public void setName(final String name) {
+		this.nameTextField.setText(name);
+	}
+
+	public void setLevel(String levelString) {
+		final int level = Integer.parseInt(levelString);
+		this.levelFormattedTextField.setValue(level);
+	}
+
+	public void setShiny() {
+		this.shinyCheckBox.setSelected(true);
+	}
+
+	public void setMoves(final String... moves) {
+		if (moves.length > Move.MAX_MOVES) {
+			Global.error("Cannot set more than " + Move.MAX_MOVES + " moves.");
+		}
+
+		this.moveCheckBox.setSelected(true);
+		this.moveComboBox.setEnabled(true);
+		this.moveTextField.setEnabled(true);
+		for (int i = 0; i < moves.length; i++) {
+			if (!moves[i].equals("None")) { // TODO: Use constant maybe the none item one
+				this.customMoves[i] = moves[i];
+			}
+		}
 	}
 }

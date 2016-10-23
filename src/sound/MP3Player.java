@@ -9,14 +9,12 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import main.Global;
 
-public class MP3Player extends Thread 
-{
+class MP3Player extends Thread {
 	private String mp3FileName;
 	private Player player;
 	private boolean loop;
 	
-	public MP3Player(String mp3FileName)
-	{
+	MP3Player(String mp3FileName) {
 		this.mp3FileName = mp3FileName;
 		loop = false;
 		
@@ -24,54 +22,46 @@ public class MP3Player extends Thread
 		{
 			player = new Player(loadMP3File(mp3FileName));
 		}
-		catch (JavaLayerException e) {}
+		catch (JavaLayerException e) {
+			// TODO: error
+		}
 	}
 		
-	public void setLoop(boolean loop)
-	{
+	public void setLoop(boolean loop) {
 		this.loop = loop;
 	}
 	
-	public void run() 
-	{	
-		do 
-		{
-			try 
-			{
+	public void run() {
+		do {
+			try {
 				player.play();
 
-				if (this.loop)
-				{
+				if (this.loop) {
 					player = new Player(loadMP3File(mp3FileName));
 				}
 			}
-			catch (JavaLayerException e) 
-			{
+			catch (JavaLayerException e) {
 				break;
 			}
-		} while (this.loop);
+		} while(this.loop);
 	}
 	
-	private BufferedInputStream loadMP3File(String fileName) 
-	{
+	private BufferedInputStream loadMP3File(String fileName) {
 		fileName += ".mp3";
 		
 		BufferedInputStream mp3 = null;
-		try 
-		{
-			FileInputStream fis = new FileInputStream(FileIO.makePath("rec", "snd") + fileName);
+		try {
+			FileInputStream fis = new FileInputStream(FileIO.makeFolderPath("rec", "snd") + fileName);
 			mp3 = new BufferedInputStream(fis);
 		}
-		catch (FileNotFoundException e) 
-		{
+		catch (FileNotFoundException e) {
 			Global.error("Failed to load " + fileName + ":\n" + e);
 		}
 		
 		return mp3;
 	}
 	
-	public void close() 
-	{
+	public void close() {
 		loop = false;
 		player.close();
 		this.interrupt();

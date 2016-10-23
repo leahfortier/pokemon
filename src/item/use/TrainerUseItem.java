@@ -2,7 +2,6 @@ package item.use;
 
 import trainer.Trainer;
 
-public interface TrainerUseItem extends UseItem
-{
-	public boolean use(Trainer t);
+public interface TrainerUseItem extends UseItem {
+	boolean use(Trainer t);
 }

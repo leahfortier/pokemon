@@ -11,8 +11,7 @@ import battle.Battle;
 import battle.effect.AdvantageChanger;
 import battle.effect.AdvantageMultiplier;
 
-public enum Type implements Serializable 
-{
+public enum Type implements Serializable {
 	NORMAL(0, "Normal", new Color(230, 230, 250), -1, 0x4b), 
 	FIRE(1, "Fire", new Color(220, 20, 20), 8, 0x45), 
 	WATER(2, "Water", new Color(65, 105, 225), 9, 0x50), // new Color(35, 120, 220)
@@ -32,7 +31,8 @@ public enum Type implements Serializable
 	STEEL(16, "Steel", new Color(200, 200, 210), 7, 0x4f),
 	FAIRY(17, "Fairy", new Color(221, 160, 221), -1, 0x52),
 	NONE(18, "None", Color.WHITE, -1, 0x51);
-	
+
+	// TODO: This is ass do that other thingy
 	private static final double typeAdvantage[][] = {
 		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5,  1, 1}, // Normal
 		{1, .5, .5,  1,  2,  2,  1,  1,  1,  1,  1,  2, .5,  1, .5,  1,  2,  1, 1}, // Fire

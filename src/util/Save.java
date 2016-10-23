@@ -16,11 +16,10 @@ import main.Game;
 import main.Global;
 import trainer.CharacterData;
 
-public final class Save
-{
+public final class Save {
 	public static final int NUM_SAVES = 3;
 	
-	private static final String SAVE_FOLDER_PATH = FileIO.makePath("saves");
+	private static final String SAVE_FOLDER_PATH = FileIO.makeFolderPath("saves");
 	private static final String SETTINGS_PATH = SAVE_FOLDER_PATH + "settings.txt";
 	
 	// Utility class -- should not be instantiated
@@ -28,31 +27,27 @@ public final class Save
 		Global.error("Save class cannot be instantiated.");
 	}
 	
-	public static String formatTime(long l)
-	{
+	public static String formatTime(long l) {
 		return (l/(3600) + ":" + String.format("%02d", ((l%3600)/60)));
 	}
 	
-	private static String getSavePath(int fileNum)
-	{
+	private static String getSavePath(int fileNum) {
 		return SAVE_FOLDER_PATH + "File " + (fileNum + 1) + ".ser";
 	}
 	
-	private static String getPreviewPath(int fileNum) 
-	{
+	private static String getPreviewPath(int fileNum) {
 		return SAVE_FOLDER_PATH + "Preview " + (fileNum + 1) + ".out";
 	}
 	
-	public static void save(CharacterData player)
-	{
+	public static void save(CharacterData player) {
 		player.updateTimePlayed();
 		
 		File saveDir = new File(SAVE_FOLDER_PATH);
-		if (!saveDir.exists())
-			saveDir.mkdirs();
+		if (!saveDir.exists()) {
+			saveDir.mkdirs(); // TODO: file io
+		}
 		
-		try
-		{
+		try {
 			FileOutputStream fout = new FileOutputStream(getSavePath(player.getFileNum()));
 			ObjectOutputStream out = new ObjectOutputStream(fout);
 			
@@ -65,20 +60,17 @@ public final class Save
 			prevOut.print(player.getName() + " " + player.getSeconds() + " " + player.getNumBadges() + " " + player.getPokedex().numSeen());
 			prevOut.close();
 		}
-		catch (IOException z)
-		{
+		catch (IOException z) {
 			Global.error("Oh no! That didn't save quite right!");
 		}
 	}
 	
-	public static CharacterData load(int fileNum, Game game)
-	{
+	public static CharacterData load(int fileNum, Game game) {
 		CharacterData loadChar = null;
 		
 		//updateSerVariables();
 		
-		try 
-		{
+		try {
 			FileInputStream fin = new FileInputStream(getSavePath(fileNum));
 			ObjectInputStream in = new ObjectInputStream(fin);
 			
@@ -88,12 +80,10 @@ public final class Save
 			in.close();
 			fin.close();
 		}
-		catch(IOException | ClassNotFoundException y)
-		{
+		catch(IOException | ClassNotFoundException y) {
 			Global.error("Oh no! That didn't load quite right!");
 		}
-		catch (NullPointerException n)
-		{
+		catch (NullPointerException n) {
 			Global.error("Someone's been trying to cheat and edit this save file! Commence deletion!");
 		}
 		
@@ -101,174 +91,48 @@ public final class Save
 		
 		return loadChar;
 	}
-	
-	private static void updateSerVariables(int fileNum) 
-	{
-		try 
-		{
-			//Replace bytes of renamed variable name
-			FileInputStream fin = new FileInputStream(SAVE_FOLDER_PATH + "File" + (fileNum + 1) + ".ser");
-			byte[] bytes = new byte[fin.available()];
-			fin.read(bytes);
-			fin.close();
-			
-			boolean edited = false;
-			
-			// TODO: Can this be deleted? It looks fucking crazy
-			byte[][][] variablesToUpdate = new byte[][][] {
-					
-					//Move.move to Move.attack
-					{
-						//Move.move: 00 04 6D 6F 76 65
-						//extra: 00 04 75 73 65 64 4C 00 04 6D 6F 76 65 74
-						{0x00, 0x04, 0x75, 0x73, 0x65, 0x64, 0x4C, 0x00, 0x04, 0x6D, 0x6F, 0x76, 0x65, 0x74},
-						//Move.attack: 00 06 61 74 74 61 63 6B
-						//extra: 00 04 75 73 65 64 4C 00 06 61 74 74 61 63 6B 74
-						{0x00, 0x04, 0x75, 0x73, 0x65, 0x64, 0x4C, 0x00, 0x06, 0x61, 0x74, 0x74, 0x61, 0x63, 0x6B, 0x74}
-					}
-					//next
-			};
-			
-			for (int currVariable = 0; currVariable < variablesToUpdate.length; ++currVariable)
-			{
-				byte[] newBytes = updateSerVariables(bytes, variablesToUpdate[currVariable][0], variablesToUpdate[currVariable][1]);
-				if (newBytes != null) 
-				{
-					bytes = newBytes;
-					edited = true;
-				}
-			}
 
-			// Replacement was found, resave the file.
-			if (edited) 
-			{
-				FileOutputStream out = new FileOutputStream(getSavePath(fileNum));
-				out.write(bytes);
-				out.close();
-			}
-		} 
-		catch (IOException ex)
-		{
-			Global.error("Couldn't update Move variable name.");
-		}
-	}
-	
-	private static byte[] updateSerVariables(byte[] bytes, byte[] find, byte[] replace)
-	{
-		boolean edited = false;
-		
-		StringBuilder findString = new StringBuilder();
-		for(byte b: find) 
-		{
-			findString.append((char)b);
-		}
-		
-		StringBuilder replaceString = new StringBuilder();
-		for(byte b: replace) 
-		{
-			replaceString.append((char)b);
-		}
-		
-		//Loop through the entire array of bytes.
-		for (int curr = 0; curr< bytes.length; ++curr) 
-		{
-			//Search the bytes for the search array.
-			int currLoc;
-			for (currLoc = 0; currLoc < find.length && currLoc < bytes.length && bytes[curr+currLoc] == find[currLoc]; ++currLoc);
-			
-			//If searched the entire search array, location was found.
-			if(currLoc == find.length)
-			{
-				System.out.println("Updating Serializable variable: " +findString.toString() +" with: "+replaceString.toString());
-				edited = true;
-				
-				//Make a copy of the bytes with the new length.
-				int dif = replace.length - find.length;
-				
-				//Move the end of the array over by the difference in the find and replace arrays.
-				//If difference is smaller, move bytes before copying the array.
-				if (dif < 0)
-				{
-					for(int newPos = bytes.length-1; newPos > curr; --newPos)
-					{
-						bytes[newPos+dif] = bytes[newPos];
-					}
-				}
-				
-				//Update the size of the bytes array.
-				bytes = Arrays.copyOf(bytes, bytes.length + dif);
-				
-				//Move the end of the array over by the difference in the find and replace arrays.
-				//If difference is larger, move bytes after copying the array. 
-				if(dif > 0)
-				{
-					for(int newPos = bytes.length-1; newPos > curr; --newPos)
-					{
-						bytes[newPos] = bytes[newPos-dif];
-					}
-				}
-				
-				//Add the replace array.
-				for(int newPos = 0; newPos < replace.length; ++newPos)
-				{
-					bytes[newPos+curr] = replace[newPos];
-				}
-			}
-		}
-		
-		return edited? bytes: null;
-	}
-
-	public static void deleteSave(int index) 
-	{
+	public static void deleteSave(int index) {
 		FileIO.deleteFile(getSavePath(index));
 		FileIO.deleteFile(getPreviewPath(index));
 	}
-	
-	public static class SavePreviewInfo
-	{
+
+	// TODO: separate file
+	public static class SavePreviewInfo {
 		private final String name;
 		private final long time;
 		private final int badges;
 		private final int pokemonSeen;
 
-		public SavePreviewInfo(Scanner in)
-		{
+		SavePreviewInfo(Scanner in) {
 			this.name = in.next();
 			this.time = in.nextLong();
 			this.badges = in.nextInt();
 			this.pokemonSeen = in.nextInt();
 		}
 		
-		public String getName()
-		{
+		public String getName() {
 			return this.name;
 		}
 		
-		public long getTime()
-		{
+		public long getTime() {
 			return this.time;
 		}
 		
-		public int getBadges()
-		{
+		public int getBadges() {
 			return this.badges;
 		}
 		
-		public int getPokemonSeen()
-		{
+		public int getPokemonSeen() {
 			return this.pokemonSeen;
 		}
 	}
 	
-	public static SavePreviewInfo[] updateSaveData()
-	{
+	public static SavePreviewInfo[] updateSaveData() {
 		SavePreviewInfo[] saveInfo = new SavePreviewInfo[NUM_SAVES];
-		for (int i = 0; i < NUM_SAVES; i++)
-		{
+		for (int i = 0; i < NUM_SAVES; i++) {
 			File file = new File(getPreviewPath(i));
-			if (file.exists())
-			{
+			if (file.exists()) {
 				Scanner in = FileIO.openFile(file);
 				saveInfo[i] = new SavePreviewInfo(in);
 				in.close();
@@ -278,40 +142,36 @@ public final class Save
 		return saveInfo;
 	}
 
-	public static void saveSettings(Theme theme)
-	{
-		try
-		{
+	public static void saveSettings(Theme theme) {
+		try {
 			PrintStream settingsOut = new PrintStream(SETTINGS_PATH);
 			settingsOut.print(theme.ordinal() + " " + (Global.soundPlayer.isMuted() ? 1 : 0));
 			settingsOut.close();
 		}
-		catch (IOException e)
-		{
+		catch (IOException e) {
 			Global.error("Could not create options file. Wut");
 		}
 	}
 	
-	public static Theme loadSettings()
-	{
-		Theme theme = null;
+	public static Theme loadSettings() {
+		Theme theme;
 		
 		File saveDir = new File(SAVE_FOLDER_PATH);
-		if (!saveDir.exists()) 
+		if (!saveDir.exists()) {
 			saveDir.mkdirs();
+		}
 		
 		File file = new File(SETTINGS_PATH);
-		if (file.exists())
-		{
+		if (file.exists()) {
 			Scanner in = FileIO.openFile(file);
 			theme = Theme.values()[in.nextInt()];
 			
 			// Is muted
-			if (in.nextInt() == 1)
+			if (in.nextInt() == 1) {
 				Global.soundPlayer.toggleMusic();
+			}
 		}
-		else
-		{
+		else {
 			// Set to basic if no settings are currently saved
 			theme = Theme.BASIC;
 			Save.saveSettings(theme);

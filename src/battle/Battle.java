@@ -2,6 +2,7 @@ package battle;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import main.Global;
@@ -40,9 +41,9 @@ import battle.effect.PowerChangeEffect;
 import battle.effect.PriorityChangeEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
+import util.StringUtils;
 
-public class Battle 
-{
+public class Battle {
 	private CharacterData player;
 	private Opponent opponent; // SO OBJECT-ORIENTED
 	private Weather weather;
@@ -56,8 +57,7 @@ public class Battle
 	private TerrainType baseTerrain;
 	private TerrainType currentTerrain;
 	
-	public Battle(CharacterData p, Opponent o)
-	{
+	public Battle(CharacterData p, Opponent o) {
 		player = p;
 		opponent = o;
 		effects = new ArrayList<>();
@@ -70,74 +70,61 @@ public class Battle
 		weather = Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT);
 		player.enterBattle();
 		
-		if (opponent instanceof Trainer)
-		{
+		if (opponent instanceof Trainer) {
 			((Trainer) opponent).enterBattle();
 			addMessage(((Trainer)opponent).getName() + " wants to fight!");
 			((Trainer)opponent).setAction(Action.FIGHT);
 			enterBattle(opponent.front());
 		}
-		else
-		{
+		else {
 			enterBattle(opponent.front(), "Wild " + opponent.front().getName() + " appeared!");
 		}
 		
 		enterBattle(player.front());
 	}
 	
-	public Battle(CharacterData p, Opponent o, String win)
-	{
+	public Battle(CharacterData p, Opponent o, String win) {
 		this(p, o);
 		winGlobal = win;
 	}
 	
-	public CharacterData getPlayer()
-	{
+	public CharacterData getPlayer() {
 		return player;
 	}
 	
-	public Opponent getOpponent()
-	{
+	public Opponent getOpponent() {
 		return opponent;
 	}
 	
-	public String getWinGlobal()
-	{
+	public String getWinGlobal() {
 		return winGlobal;
 	}
 	
-	public ArrayDeque<MessageUpdate> getMessages()
-	{
+	public ArrayDeque<MessageUpdate> getMessages() {
 		return messages;
 	}
 	
-	public Weather getWeather()
-	{
+	public Weather getWeather() {
 		return weather;
 	}
 	
-	public int getTurn()
-	{
+	public int getTurn() {
 		return turn;
 	}
 	
-	public TerrainType getTerrainType()
-	{
+	public TerrainType getTerrainType() {
 		return currentTerrain;
 	}
 	
-	public void setTerrainType(TerrainType terrainType, boolean base)
-	{
-		if (base)
-		{
+	public void setTerrainType(TerrainType terrainType, boolean base) {
+		if (base) {
 			this.baseTerrain = terrainType;
 		}
 		
 		this.currentTerrain = terrainType;
 	}
 	
-	public void resetTerrain()
-	{
+	public void resetTerrain() {
 		this.currentTerrain = baseTerrain;
 	}
 	
@@ -163,7 +150,7 @@ public class Battle
 	}
 	
 	public void addMessage(String message, ActivePokemon gainer, int[] statGains, int[] stats) {
-		this.addMessage("", gainer);
+		this.addMessage(StringUtils.empty(), gainer);
 		messages.add(new MessageUpdate(statGains, stats));
 	}
 	
@@ -222,26 +209,52 @@ public class Battle
 		
 		deadUser();
 		deadOpponent();
-		
-		for (PokemonEffect e : player.front().getEffects()) System.out.println("P " + e);
-		for (PokemonEffect e : opponent.front().getEffects()) System.out.println("O " + e);
-		
-		for (TeamEffect e : player.getEffects()) System.out.println("P " + e);
-		for (TeamEffect e : opponent.getEffects()) System.out.println("O " + e);
-		
-		for (BattleEffect e : getEffects()) System.out.println("B " + e);
-		if (weather.namesies() != Namesies.CLEAR_SKIES_EFFECT) System.out.println("W " + weather);
-		
-		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? player.front().getActualName() + " " : "") + player.front().getStage(i) + (i == 6 ? "\n" : " "));
-		for (int i = 0; i < 7; i++) System.out.print((i == 0 ? opponent.front().getActualName() + " " : "") + opponent.front().getStage(i) + (i == 6 ? "\n" : " "));
-		
+
+		printShit();
+	}
+
+	private void printShit() {
+		for (PokemonEffect e : player.front().getEffects()) {
+			System.out.println("P " + e);
+		}
+
+		for (PokemonEffect e : opponent.front().getEffects()) {
+			System.out.println("O " + e);
+		}
+
+		for (TeamEffect e : player.getEffects()) {
+			System.out.println("P " + e);
+		}
+
+		for (TeamEffect e : opponent.getEffects()) {
+			System.out.println("O " + e);
+		}
+
+		for (BattleEffect e : getEffects()) {
+			System.out.println("B " + e);
+		}
+
+		if (weather.namesies() != Namesies.CLEAR_SKIES_EFFECT) {
+			System.out.println("W " + weather);
+		}
+
+		for (int i = 0; i < 7; i++) {
+			System.out.print((i == 0 ? player.front().getActualName() + " " : "") + player.front().getStage(i) + (i == 6 ? "\n" : " "));
+		}
+
+		for (int i = 0; i < 7; i++) {
+			System.out.print((i == 0 ? opponent.front().getActualName() + " " : "") + opponent.front().getStage(i) + (i == 6 ? "\n" : " "));
+		}
+
 		System.out.println(player.front().getActualName() + " " + player.front().getAbility().getName() + " " + player.front().getHeldItem(this).getName());
 		System.out.println(opponent.front().getActualName() + " " + opponent.front().getAbility().getName() + " " + opponent.front().getHeldItem(this).getName());
 	}
 	
 	// Handles events that occur at the beginning of each turn. Returns the two Pokemon currently in battle
 	private void startTurn() {
-		ActivePokemon plyr = player.front(), opp = opponent.front(); 
+		ActivePokemon plyr = player.front();
+		ActivePokemon opp = opponent.front();
+
 		opp.setMove(Move.selectOpponentMove(this, opp));
 
 		turn++;
@@ -252,6 +265,7 @@ public class Battle
 		if (isFighting(true)) {
 			plyr.getAttack().startTurn(this, plyr);
 		}
+
 		if (isFighting(false)) {
 			opp.getAttack().startTurn(this, opp);
 		}
@@ -366,6 +380,7 @@ public class Battle
 		
 		// Document sighting in the Pokedex
 		if (!enterer.user()) {
+			// TODO: This should be a method
 			player.getPokedex().setStatus(enterer.getPokemonInfo(), PokedexStatus.SEEN, isWildBattle() ? player.getAreaName() : "");
 		}
 		
@@ -389,7 +404,8 @@ public class Battle
 			return false;
 		}
 		
-		ActivePokemon plyr = player.front(), opp = opponent.front();
+		ActivePokemon plyr = player.front();
+		ActivePokemon opp = opponent.front();
 		
 		if (!plyr.canEscape(this)) {
 			return false;
@@ -399,9 +415,9 @@ public class Battle
 		int oSpeed = Stat.getStat(Stat.SPEED, opp, plyr, this);
 		
 		int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
-		if (Math.random()*256 < val 
-				|| plyr.getAbility() instanceof DefiniteEscape 
-				|| plyr.getHeldItem(this) instanceof DefiniteEscape) {
+		if (Math.random()*256 < val ||
+				plyr.getAbility() instanceof DefiniteEscape ||
+				plyr.getHeldItem(this) instanceof DefiniteEscape) {
 			addMessage("Got away safely!");
 			addMessage(" ", Update.EXIT_BATTLE);
 			return true;
@@ -414,17 +430,17 @@ public class Battle
 
 	private void decrementEffects(List<? extends Effect> effects, ActivePokemon p) {
 		for (int i = 0; i < effects.size(); i++) {
-			Effect e = effects.get(i);
+			Effect effect = effects.get(i);
 			
-			boolean inactive = !e.isActive();
+			boolean inactive = !effect.isActive();
 			if (!inactive) {
-				e.decrement(this, p);
-				inactive = !e.isActive() && !e.nextTurnSubside();  
+				effect.decrement(this, p);
+				inactive = !effect.isActive() && !effect.nextTurnSubside();
 			}
 			
 			if (inactive) {
 				effects.remove(i--);
-				e.subside(this, p);
+				effect.subside(this, p);
 				
 				// I think this is pretty much just for Future Sight...
 				if (p != null && p.isFainted(this)) {
@@ -524,10 +540,7 @@ public class Battle
 	
 	public Object[] getEffectsList(ActivePokemon p, Object... additionalItems) {
 		List<Object> list = new ArrayList<>();
-		
-		for (Object additionalItem : additionalItems) {
-			list.add(additionalItem);
-		}
+		Collections.addAll(list, additionalItems);
 		
 		list.addAll(p.getEffects());
 		list.addAll(getEffects(p.user()));
@@ -577,7 +590,17 @@ public class Battle
 		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 		
-		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n", me.getActualName(), me.getAttack().getName(), level, power, random, attackStat, defenseStat, stab, adv, damage);
+		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
+				me.getActualName(),
+				me.getAttack().getName(),
+				level,
+				power,
+				random,
+				attackStat,
+				defenseStat,
+				stab,
+				adv,
+				damage);
 		
 		damage *= getDamageModifier(me, o); 
 		damage *= criticalHit(me, o);
@@ -713,12 +736,19 @@ public class Battle
 	
 	// Returns true if the player will be attacking first, and false if the opponent will be 
 	private boolean speedPriority(ActivePokemon plyr, ActivePokemon opp) {
+
 		// Higher priority always goes first -- Prankster increases the priority of status moves by one
-		int pPriority = getPriority(plyr), oPriority = getPriority(opp);
-		if (pPriority != oPriority) return pPriority > oPriority;
-		
+		int pPriority = getPriority(plyr);
+		int oPriority = getPriority(opp);
+
+		if (pPriority != oPriority) {
+			return pPriority > oPriority;
+		}
+
+		// TODO: Rewrite this shit it looks like ass
 		// Quick Claw gives holder a 20% chance of striking first within its priority bracket
-		boolean pQuick = plyr.isHoldingItem(this, Namesies.QUICK_CLAW_ITEM), oQuick = opp.isHoldingItem(this, Namesies.QUICK_CLAW_ITEM);
+		boolean pQuick = plyr.isHoldingItem(this, Namesies.QUICK_CLAW_ITEM);
+		boolean oQuick = opp.isHoldingItem(this, Namesies.QUICK_CLAW_ITEM);
 		if (pQuick && !oQuick && Math.random() < .2) {
 			addMessage(plyr.getName() + "'s " + Namesies.QUICK_CLAW_ITEM.getName() + " allowed it to strike first!");
 			return true;
@@ -732,24 +762,48 @@ public class Battle
 		boolean reverse = hasEffect(Namesies.TRICK_ROOM_EFFECT);
 		
 		// Pokemon that are stalling go last, if both are stalling, the slower one goes first
-		boolean pStall = plyr.isStalling(this), oStall = opp.isStalling(this);
-		if (pStall && oStall) reverse = true;
-		else if (pStall) return false;
-		else if (oStall) return true;
+		boolean pStall = plyr.isStalling(this);
+		boolean oStall = opp.isStalling(this);
+
+		if (pStall && oStall) {
+			reverse = true;
+		}
+		else if (pStall) {
+			return false;
+		}
+		else if (oStall) {
+			return true;
+		}
 		
 		// Get the speeds of the Pokemon
 		int pSpeed = Stat.getStat(Stat.SPEED, plyr, opp, this);
 		int oSpeed = Stat.getStat(Stat.SPEED, opp, plyr, this);
 		
 		// Speeds are equal -- alternate
-		if (pSpeed == oSpeed) return turn%2 == 0;
+		if (pSpeed == oSpeed) {
+			return turn%2 == 0;
+		}
 		
 		// Return the faster Pokemon (or slower if reversed)
 		return reverse ? oSpeed > pSpeed : oSpeed < pSpeed;
 	}
 	
-	private static <T> Object invoke(double multiplyBase, int updateIndex, boolean isCheck, boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object[] parameterValues) {
-		// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
+	private static <T> Object invoke(
+			double multiplyBase,
+			int updateIndex,
+			boolean isCheck,
+			boolean check,
+			Battle b,
+			ActivePokemon p,
+			ActivePokemon opp,
+			ActivePokemon moldBreaker,
+			Object[] invokees,
+			Class<T> className,
+			String methodName,
+			Object[] parameterValues
+	) {
+		// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we
+		// shouldn't keep checking things because they're like dead and such
 		if (p != null && p.isFainted(b)) {
 			return null;
 		}
@@ -767,8 +821,10 @@ public class Battle
 		}
 		
 		for (Object invokee : invokees) {
+
 			// If the invokee is an instance of the class we are checking, do the things and stuff
 			if (className.isInstance(invokee)) {
+
 				// If this is an inactive effect, we don't want to do anything with it
 				if (Effect.isInactiveEffect(invokee)) {
 					continue;
@@ -779,8 +835,9 @@ public class Battle
 					continue;
 				}
 				
-				// This is for the hasInvoke overload, where you're just checking if it is an instance of the interface but have no methods to call
-				if (methodName.length() == 0) {
+				// This is for the hasInvoke overload, where you're just checking if it is an instance of the
+				// interface but have no methods to call
+				if (methodName.isEmpty()) {
 					return invokee;
 				}
 				
@@ -792,7 +849,8 @@ public class Battle
 					return invokee;
 				}
 				
-				// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we shouldn't keep checking things because they're like dead and such
+				// If these guys aren't null it's because we need to check if they're dead... And then, you know,
+				// like we shouldn't keep checking things because they're like dead and such
 				if (p != null && p.isFainted(b)) {
 					return invokee;
 				}

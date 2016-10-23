@@ -1,6 +1,5 @@
 package battle.effect;
 
-public interface RepellingEffect
-{
-	public double chance();
+public interface RepellingEffect {
+	double chance();
 }

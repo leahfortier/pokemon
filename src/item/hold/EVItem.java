@@ -1,6 +1,5 @@
 package item.hold;
 
-public interface EVItem extends HoldItem
-{
-	public int[] getEVs(int[] vals);
+public interface EVItem extends HoldItem {
+	int[] getEVs(int[] vals);
 }

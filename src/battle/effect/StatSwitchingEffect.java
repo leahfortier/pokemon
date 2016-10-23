@@ -2,7 +2,6 @@ package battle.effect;
 
 import pokemon.Stat;
 
-public interface StatSwitchingEffect 
-{
-	public Stat switchStat(Stat s);
+public interface StatSwitchingEffect {
+	Stat switchStat(Stat s);
 }

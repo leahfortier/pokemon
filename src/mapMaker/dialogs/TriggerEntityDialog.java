@@ -77,7 +77,7 @@ public class TriggerEntityDialog extends JPanel {
 	}
 	
 	public TriggerEntityData getTriggerEntity() {
-		if (triggerTextField.getText().equals(""))
+		if (triggerTextField.getText().isEmpty())
 			return null;
 		return new TriggerEntityData(
 				nameTextField.getText(),

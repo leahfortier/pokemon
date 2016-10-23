@@ -95,7 +95,7 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 				;
 	}
 	
-	public String getInfoDialog(MapMaker mapMaker) {
+	public String getInfoDialogue(MapMaker mapMaker) {
 		
 		return "Dialogue " + getInfoDialogName() +" {\n"+
 				"\ttext: \"" +getInfoDialogString(mapMaker) +"\"\n"+

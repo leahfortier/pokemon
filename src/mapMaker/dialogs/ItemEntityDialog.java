@@ -22,18 +22,15 @@ import util.PokeString;
 import map.entity.ItemEntityData;
 import mapMaker.MapMaker;
 
-public class ItemEntityDialog extends JPanel 
-{
+public class ItemEntityDialog extends JPanel {
 	private static final long serialVersionUID = 7469923865936465388L;
 
 	private JTextField itemTextField;
 	private JLabel itemImageLabel;
 	private MapMaker mapMaker;
-	private JScrollPane scrollPane;
 	private JTextArea conditionTextArea;
 	
-	public ItemEntityDialog (MapMaker givenMapMaker) 
-	{		
+	public ItemEntityDialog (MapMaker givenMapMaker) {
 		mapMaker = givenMapMaker;
 		
 		JLabel itemLabel = new JLabel("Item");
@@ -41,16 +38,22 @@ public class ItemEntityDialog extends JPanel
 		itemTextField = new JTextField();
 		itemTextField.setColumns(10);
 		
-		itemTextField.getDocument().addDocumentListener(new DocumentListener() 
-		{
-			  public void changedUpdate(DocumentEvent e) { checkItem(); }
-			  public void removeUpdate(DocumentEvent e) { checkItem(); }
-			  public void insertUpdate(DocumentEvent e) { checkItem(); }
-			  public void checkItem() 
-			  {
+		itemTextField.getDocument().addDocumentListener(new DocumentListener() {
+			  public void changedUpdate(DocumentEvent e) {
+				  checkItem();
+			  }
+
+			  public void removeUpdate(DocumentEvent e) {
+				  checkItem();
+			  }
+
+			  public void insertUpdate(DocumentEvent e) {
+				  checkItem();
+			  }
+
+			  private void checkItem() {
 				  String itemName = getItemName();
-				  if (!Item.isItem(itemName)) 
-				  {
+				  if (!Item.isItem(itemName)) {
 					  itemImageLabel.setIcon(null);
 					  itemTextField.setBackground(new Color(0xFF9494));
 					  return;
@@ -63,18 +66,19 @@ public class ItemEntityDialog extends JPanel
 		});
 		
 		itemImageLabel = new JLabel();
-		Border border = BorderFactory.createLineBorder(Color.darkGray, 1);
+		Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 1);
 		itemImageLabel.setBorder(border);
 		itemImageLabel.setHorizontalAlignment(JLabel.CENTER);
 		itemImageLabel.setVerticalAlignment(JLabel.CENTER);
         
 		JLabel conditionLabel = new JLabel("Condition");
-		
-		scrollPane = new JScrollPane();
+
+		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		conditionTextArea = new JTextArea();
 		scrollPane.setViewportView(conditionTextArea);
+
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -113,9 +117,9 @@ public class ItemEntityDialog extends JPanel
 		
 		setLayout(groupLayout);
 	}
-	
-	public void setItem(ItemEntityData item) 
-	{
+
+	// TODO: This looks like this should be in another class or at least the item stuff
+	public void setItem(ItemEntityData item) {
 		itemTextField.setText(item.getItem().replace('_', ' '));
 		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
@@ -123,20 +127,17 @@ public class ItemEntityDialog extends JPanel
 		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
 	}
 	
-	public String getItemName() 
-	{
+	public String getItemName() {
 		String itemName = PokeString.restoreSpecialFromUnicode(itemTextField.getText());
 		itemName = convertToProperCase(itemName);
 		return itemName;
 	}
 	
-	public ItemEntityData getItem(String name)
-	{		
+	public ItemEntityData getItem(String name) {
 		String item = getItemName();
 		
 		// TODO: Ask Josh about this -- I have no idea what this is doing, but should this throw an error or should it return null? I don't really feel like looking into this right now
-		if (!Item.isItem(item))
-		{
+		if (!Item.isItem(item)) {
 			return null;
 		}
 		
@@ -145,39 +146,36 @@ public class ItemEntityDialog extends JPanel
 				"condition: " + conditionTextArea.getText().trim().replace(" ", ""), 
 				item.replace(' ', '_'), 
 				-1, 
-				-1);
+				-1
+		);
 	}
 	
 	// TODO: Look at this later when I have more time -- should this go into PokeString?
-	public String convertToProperCase(String string) 
-	{
+	private String convertToProperCase(String string) {
 		StringBuilder s = new StringBuilder();
 		string = string.trim();
 		
-		while (string.length() != 0) 
-		{
+		while (!string.isEmpty()) {
 			s.append(string.substring(0, 1).toUpperCase());
 			string = string.substring(1, string.length());
 			
-			if (string.length() == 0)
+			if (string.isEmpty()) {
 				break;
+			}
 			
 			char c = ' ';
 			int index = string.indexOf(c);
 			int indexOther = string.indexOf('-');
-			if(indexOther != -1 && (indexOther < index || index == -1))
-			{
+			if (indexOther != -1 && (indexOther < index || index == -1)) {
 				c = '-';
 				index = indexOther;
 			}
 			
-			if (index == -1) 
-			{
+			if (index == -1) {
 				s.append(string.substring(0,string.length()));
 				string = "";
 			}
-			else 
-			{
+			else {
 				s.append(string.substring(0,index) + c);
 				string = string.substring(index + 1, string.length());
 			}

@@ -10,14 +10,13 @@ import java.util.Scanner;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.FileIO;
+import util.StringUtils;
 
-public class StuffGen 
-{
-	private static final String POKEMON_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "pokemonTiles") + "index.txt";
-	private static final String POKEMON_SMALL_TILES_INDEX_PATH = FileIO.makePath("rec", "tiles", "partyTiles") + "index.txt";
+public class StuffGen {
+	private static final String POKEMON_TILES_INDEX_PATH = FileIO.makeFolderPath("rec", "tiles", "pokemonTiles") + "index.txt";
+	private static final String POKEMON_SMALL_TILES_INDEX_PATH = FileIO.makeFolderPath("rec", "tiles", "partyTiles") + "index.txt";
 	
-	public StuffGen()
-	{
+	public StuffGen() {
 		NamesiesGen namesiesGen = new NamesiesGen();
 		new PokeGen(namesiesGen);
 		namesiesGen.writeNamesies();
@@ -36,8 +35,7 @@ public class StuffGen
 		
 		while (original.hasNext()) {
 			String line = original.nextLine();
-			out.append(line)
-					.append("\n");
+			StringUtils.appendLine(out, line);
 			
 			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) {
 				break;
@@ -117,15 +115,22 @@ public class StuffGen
 		String key = split[0].trim();
 		String value = split[1].trim();
 		
-		if (value.length() == 0) {
+		if (value.isEmpty()) {
 			value = readFunction(in);
 		}
 		
 		return new SimpleEntry<>(key, value);
 	}
 	
-	static String createClass(String className, String superClass, String interfaces, String extraFields, String constructor, String additional, boolean isInterface) {
-		
+	static String createClass(
+			String className,
+			String superClass,
+			String interfaces,
+			String extraFields,
+			String constructor,
+			String additional,
+			boolean isInterface
+	) {
 		StringBuilder classBuilder = new StringBuilder();
 		
 		classBuilder.append("\n\t").

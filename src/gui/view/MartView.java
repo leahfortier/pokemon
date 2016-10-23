@@ -21,10 +21,11 @@ import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 
-public class MartView extends View
-{
+public class MartView extends View {
+
+	// TODO: Need to eventually make this dynamic
 	private static final Namesies[] FOR_SALE_NAMES = new Namesies[] {Namesies.POTION_ITEM, Namesies.POKE_BALL_ITEM, Namesies.ANTIDOTE_ITEM, Namesies.PARALYZE_HEAL_ITEM, Namesies.BURN_HEAL_ITEM};
-	private static ArrayList<Item> forSaleItems = null;
+	private static ArrayList<Item> forSaleItems;
 	
 	private static final Color BACKGROUND_COLOR = new Color (68, 123, 184);
 	
@@ -38,20 +39,20 @@ public class MartView extends View
 	private static final int SHOP_RIGHT_ARROW = NUM_BUTTONS - 5;
 	private static final int SHOP_LEFT_ARROW = NUM_BUTTONS - 6;
 	
-	private static Color SIDE_BOX_COLOR = Type.NORMAL.getColor();
-	private static int SIDE_BOX_X = 72;
-	private static int SIDE_BOX_GAP = 69;
-	private static int BOX_TEXT_X = 50;
-	private static int BOX_TEXT_Y = 35;
+	private static final Color SIDE_BOX_COLOR = Type.NORMAL.getColor();
+	private static final int SIDE_BOX_X = 72;
+	private static final int SIDE_BOX_GAP = 69;
+	private static final int BOX_TEXT_X = 50;
+	private static final int BOX_TEXT_Y = 35;
 	
-	private static int MONEY_BOX_Y = 122;
-	private static int IN_BAG_BOX_Y = MONEY_BOX_Y + SIDE_BOX_GAP;
-	private static int TOTAL_BOX_Y = MONEY_BOX_Y + SIDE_BOX_GAP*4;
+	private static final int MONEY_BOX_Y = 122;
+	private static final int IN_BAG_BOX_Y = MONEY_BOX_Y + SIDE_BOX_GAP;
+	private static final int TOTAL_BOX_Y = MONEY_BOX_Y + SIDE_BOX_GAP*4;
 	
-	private final int[] primaryColorx = {0, 184, 124, 0};
-	private final int[] primaryColory = {0, 0, 61, 61};
-	private final int[] secondaryColorx = {184, 308, 308, 124};
-	private final int[] secondaryColory = {0, 0, 61, 61};
+	private static final int[] primaryColorx = { 0, 184, 124, 0 };
+	private static final int[] primaryColory = { 0, 0, 61, 61 };
+	private static final int[] secondaryColorx = { 184, 308, 308, 124 };
+	private static final int[] secondaryColory = { 0, 0, 61, 61 };
 		
 	private int pageNum;
 	private int selectedButton;
@@ -69,42 +70,45 @@ public class MartView extends View
 	private Button shopRightButton;
 	private Button returnButton;
 	
-	public MartView(CharacterData data)
-	{
+	public MartView(CharacterData data) {
 		player = data;
 		selectedButton = 0;
 		itemAmount = 1;
-		
+
+		// TODO: uggy
 		buttons = new Button[NUM_BUTTONS];
 		
 		itemButtons = new Button[ITEMS_PER_PAGE];
-		for (int i = 0, k = 0; i < ITEMS_PER_PAGE/2; i++)
-		{
-			for (int j = 0; j < 2; j++, k++)
-			{
-				buttons[k] = itemButtons[k] = new Button(421 + 160*j, 261 + 38*i, 148, 28, Button.HoverAction.BOX,
-						new int[] {j == 0 ? k + 1 : k - 1, // Right
+		for (int i = 0, k = 0; i < ITEMS_PER_PAGE/2; i++) {
+			for (int j = 0; j < 2; j++, k++) {
+				buttons[k] = itemButtons[k] = new Button(
+						421 + 160*j,
+						261 + 38*i,
+						148,
+						28,
+						Button.HoverAction.BOX,
+						new int[] {
+								j == 0 ? k + 1 : k - 1, // Right
 								i == 0 ? (j == 0 ? AMOUNT_LEFT_ARROW : AMOUNT_RIGHT_ARROW) : k - 2, // Up
 								j == 1 ? k - 1 : k + 1, // Left
-								i == ITEMS_PER_PAGE/2 - 1 ? (j == 0 ? SHOP_LEFT_ARROW : SHOP_RIGHT_ARROW) : k + 2}); // Down 
+								i == ITEMS_PER_PAGE/2 - 1 ? (j == 0 ? SHOP_LEFT_ARROW : SHOP_RIGHT_ARROW) : k + 2 // Down
+						});
 			}
 		}
 		
-		buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] {SHOP_RIGHT_ARROW, ITEMS_PER_PAGE - 2, SHOP_RIGHT_ARROW, RETURN});
-		buttons[SHOP_RIGHT_ARROW] = shopRightButton = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] {SHOP_LEFT_ARROW, ITEMS_PER_PAGE - 1, SHOP_LEFT_ARROW, RETURN});
+		buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] { SHOP_RIGHT_ARROW, ITEMS_PER_PAGE - 2, SHOP_RIGHT_ARROW, RETURN });
+		buttons[SHOP_RIGHT_ARROW] = shopRightButton = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] { SHOP_LEFT_ARROW, ITEMS_PER_PAGE - 1, SHOP_LEFT_ARROW, RETURN });
 		
-		buttons[AMOUNT_LEFT_ARROW] = amountLeftButton = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] {AMOUNT_RIGHT_ARROW, RETURN, BUY, 0});
-		buttons[AMOUNT_RIGHT_ARROW] = amountRightButton = new Button(628, 193, 110, 38, Button.HoverAction.BOX, new int[] {AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1});
+		buttons[AMOUNT_LEFT_ARROW] = amountLeftButton = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 });
+		buttons[AMOUNT_RIGHT_ARROW] = amountRightButton = new Button(628, 193, 110, 38, Button.HoverAction.BOX, new int[] { AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1 });
 
-		buttons[BUY] = buyButton = new Button(SIDE_BOX_X, MONEY_BOX_Y + SIDE_BOX_GAP*5, 308, 61, Button.HoverAction.BOX, new int[] {RETURN, BUY, RETURN, BUY});
+		buttons[BUY] = buyButton = new Button(SIDE_BOX_X, MONEY_BOX_Y + SIDE_BOX_GAP*5, 308, 61, Button.HoverAction.BOX, new int[] { RETURN, BUY, RETURN, BUY });
 		
-		buttons[RETURN] = returnButton = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] {BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW});
+		buttons[RETURN] = returnButton = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW });
 		
-		if (forSaleItems == null)
-		{
+		if (forSaleItems == null) {
 			forSaleItems = new ArrayList<>();
-			for (Namesies itemName : FOR_SALE_NAMES)
-			{
+			for (Namesies itemName : FOR_SALE_NAMES) {
 				forSaleItems.add(Item.getItem(itemName));
 			}
 		}
@@ -113,46 +117,50 @@ public class MartView extends View
 		updateActiveButtons();
 	}
 
-	public void update(int dt, InputControl input, Game game)
-	{
+	public void update(int dt, InputControl input, Game game) {
 		selectedButton = Button.update(buttons, selectedButton, input);
 			
 		Iterator<Item> iter = forSaleItems.iterator();
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) iter.next();
-		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++)
-		{
-			for (int y = 0; y < 2 && iter.hasNext(); y++, k++)
-			{
+		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
+			iter.next();
+		}
+
+		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
+			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				Item item = iter.next();
-				if (itemButtons[k].checkConsumePress())
-				{
+				if (itemButtons[k].checkConsumePress()) {
 					setSelectedItem(item);
 					updateActiveButtons();
 				}
 			}
 		}
-		
-		if (amountLeftButton.checkConsumePress())
-		{
-			if (itemAmount == 1) itemAmount = player.getDatCashMoney()/selectedItem.getPrice();
-			else itemAmount--;
+
+		// TODO: Need to have a method to get the max purchase amount
+		if (amountLeftButton.checkConsumePress()) {
+			if (itemAmount == 1) {
+				itemAmount = player.getDatCashMoney()/selectedItem.getPrice();
+			}
+			else {
+				itemAmount--;
+			}
 			
 			updateActiveButtons();
 		}
 		
-		if (amountRightButton.checkConsumePress())
-		{
-			if (itemAmount ==  player.getDatCashMoney()/selectedItem.getPrice()) itemAmount = 1;
-			else itemAmount++;
+		if (amountRightButton.checkConsumePress()) {
+			if (itemAmount ==  player.getDatCashMoney()/selectedItem.getPrice()) {
+				itemAmount = 1;
+			}
+			else {
+				itemAmount++;
+			}
 			
 			updateActiveButtons();
 		}		
 		
-		if (buyButton.checkConsumePress())
-		{
+		if (buyButton.checkConsumePress()) {
 			player.sucksToSuck(itemAmount*selectedItem.getPrice());
-			for (int i = 0; i < itemAmount; i++) 
-			{
+			for (int i = 0; i < itemAmount; i++) {
 				player.getBag().addItem(selectedItem);
 			}
 			
@@ -160,36 +168,39 @@ public class MartView extends View
 			updateActiveButtons();
 		}
 		
-		if (shopLeftButton.checkConsumePress())
-		{
-			if (pageNum == 0) pageNum = totalPages() - 1; 
-			else pageNum--;
+		if (shopLeftButton.checkConsumePress()) {
+			if (pageNum == 0) {
+				pageNum = totalPages() - 1;
+			}
+			else {
+				pageNum--;
+			}
 			
 			updateActiveButtons();
 		}
 		
-		if (shopRightButton.checkConsumePress())
-		{
-			if (pageNum == totalPages() - 1) pageNum = 0;
-			else pageNum++;
+		if (shopRightButton.checkConsumePress()) {
+			if (pageNum == totalPages() - 1) {
+				pageNum = 0;
+			}
+			else {
+				pageNum++;
+			}
 			
 			updateActiveButtons();
 		}
 		
-		if (returnButton.checkConsumePress())
-		{
+		if (returnButton.checkConsumePress()) {
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
 
-		if (input.isDown(Control.ESC))
-		{
+		if (input.isDown(Control.ESC)) {
 			input.consumeKey(Control.ESC);
 			game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
-	public void draw(Graphics g, GameData data)
-	{
+	public void draw(Graphics g, GameData data) {
 		TileSet tiles = data.getMenuTiles();
 		TileSet itemTiles = data.getItemTiles();
 		
@@ -203,15 +214,13 @@ public class MartView extends View
 		g.drawImage(tiles.getTile(0x21), 42, 92, null);
 		g.drawImage(tiles.getTile(0x22), 62, 112, null);
 		
-		if (!amountLeftButton.isActive())
-		{
+		if (!amountLeftButton.isActive()) {
 			amountLeftButton.greyOut(g, false);
 			amountRightButton.greyOut(g, false);
 		}
 		
 		// Item Display
-		if (selectedItem != null)
-		{
+		if (selectedItem != null) {
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItem.getImageIndex());
 			DrawMetrics.drawCenteredImage(g, img, 430, 132);
@@ -235,11 +244,12 @@ public class MartView extends View
 		
 		// Draw each items in category
 		Iterator<Item> iter = forSaleItems.iterator();
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) iter.next();
-		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++)
-		{
-			for (int y = 0; y < 2 && iter.hasNext(); y++, k++)
-			{
+		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
+			iter.next();
+		}
+
+		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
+			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				g.translate(itemButtons[k].x, itemButtons[k].y);
 				Item item = iter.next();
 				
@@ -260,7 +270,8 @@ public class MartView extends View
 		
 		// Left and Right arrows
 		View.drawArrows(g, shopLeftButton, shopRightButton);
-		
+
+		// TODO: Honeslty I want to completely destroy the practice of doing the translate shit everywhere -- maybe can have an interface or something that takes in what to translate and requires a draw method and then takes care of the translation
 		// Player Money
 		g.translate(SIDE_BOX_X, MONEY_BOX_Y);
 		
@@ -320,8 +331,7 @@ public class MartView extends View
 
 		buyButton.greyOut(g, true);
 		
-		if (!buyButton.isActive())
-		{
+		if (!buyButton.isActive()) {
 			g.setColor(new Color(0, 0, 0, 128));
 			g.fillRect(0, 0, buyButton.width, buyButton.height);
 		}
@@ -349,28 +359,25 @@ public class MartView extends View
 		
 		g.translate(-tabX, -tabY);
 		
-		for (Button b : buttons)
+		for (Button b : buttons) {
 			b.draw(g);
+		}
 	}
 
-	public ViewMode getViewModel()
-	{
+	public ViewMode getViewModel() {
 		return ViewMode.MART_VIEW;
 	}
 
 	public void movedToFront(Game game) { }
 	
-	private int totalPages()
-	{ 
+	private int totalPages() {
 		int size = forSaleItems.size();
 		return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
 	}
 	
-	private void updateActiveButtons()
-	{
+	private void updateActiveButtons() {
 		int displayed = forSaleItems.size();
-		for (int i = 0; i < ITEMS_PER_PAGE; i++)
-		{
+		for (int i = 0; i < ITEMS_PER_PAGE; i++) {
 			itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);
 		}
 		
@@ -380,8 +387,7 @@ public class MartView extends View
 		buyButton.setActive(amountSet);
 	}	
 
-	private void setSelectedItem(Item item)
-	{
+	private void setSelectedItem(Item item) {
 		selectedItem = item;
 		itemAmount = selectedItem.getPrice() <= player.getDatCashMoney() ? 1 : 0;
 	}

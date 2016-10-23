@@ -19,6 +19,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.Battle;
 import battle.effect.generic.Effect.CastSource;
+import util.StringUtils;
 
 public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -86,17 +87,14 @@ public abstract class Status implements Serializable {
 		}
 	}
 	
-	public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status)
-	{
+	public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status) {
 		return getStatus(status, victim).getFailMessage(b, user, victim);
 	}
 	
-	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-	{
+	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 		Object[] list = b.getEffectsList(victim);
 		Object statusPrevent = Battle.checkInvoke(true, user, list, StatusPreventionEffect.class, "preventStatus", b, user, victim, type);
-		if (statusPrevent != null)
-		{
+		if (statusPrevent != null) {
 			return ((StatusPreventionEffect)statusPrevent).statusPreventionMessage(victim); 
 		}
 		
@@ -104,16 +102,14 @@ public abstract class Status implements Serializable {
 	}
 	
 	// Creates a new status like a motherfucking champ
-	private static Status getStatus(StatusCondition s, ActivePokemon victim)
-	{
+	private static Status getStatus(StatusCondition s, ActivePokemon victim) {
 		Status status = (Status)Global.dynamicInstantiaton(s.statusClass);
 		status.postCreateEffect(victim);
 		
 		return status;
 	}
 	
-	public static boolean applies(StatusCondition status, Battle b, ActivePokemon caster, ActivePokemon victim)
-	{
+	public static boolean applies(StatusCondition status, Battle b, ActivePokemon caster, ActivePokemon victim) {
 		return getStatus(status, victim).applies(b, caster, victim);
 	}
 	
@@ -131,30 +127,25 @@ public abstract class Status implements Serializable {
 		return true;
 	}
 	
-	public StatusCondition getType()
-	{
+	public StatusCondition getType() {
 		return type;
 	}
 	
 	public void setTurns(int turns) {}
 	
 	// Returns true if a status was successfully given, and false if it failed for any reason
-	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) 
-	{
+	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
 		return giveStatus(b, caster, victim, status, false);
 	}
 	
-	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, boolean abilityCast)
-	{
+	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, boolean abilityCast) {
 		Status s = getStatus(status, victim);
 		return giveStatus(b, caster, victim, status, abilityCast ? s.getAbilityCastMessage(caster, victim) : s.getCastMessage(victim));
 	}
 	
-	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, String castMessage)
-	{
+	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, String castMessage) {
 		Status s = getStatus(status, victim);
-		if (s.applies(b, caster, victim))
-		{
+		if (s.applies(b, caster, victim)) {
 			victim.setStatus(s);
 			b.addMessage(castMessage, victim);
 			
@@ -163,9 +154,11 @@ public abstract class Status implements Serializable {
 			
 			return true;
 		}
+
 		return false;
 	}
-	
+
+	// TODO: Check parameter
 	private static void berryCheck(Battle b, ActivePokemon victim, StatusCondition status) {
 		Item item = victim.getHeldItem(b);
 		if (item instanceof StatusBerry) {
@@ -200,7 +193,8 @@ public abstract class Status implements Serializable {
 		if (p.getHP() > 0) Global.error("Only dead Pokemon can die.");
 		p.setStatus(new Fainted());
 	}
-	
+
+	// TODO: Move these all to separate files
 	public static class None extends Status {
 		private static final long serialVersionUID = 1L;
 
@@ -209,19 +203,19 @@ public abstract class Status implements Serializable {
 		}
 		
 		public String getCastMessage(ActivePokemon p) {
-			return "";
+			return StringUtils.empty();
 		}
 
 		public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
-			return "";
+			return StringUtils.empty();
 		}
 
 		public String getRemoveMessage(ActivePokemon victim) {
-			return "";
+			return StringUtils.empty();
 		}
 		
 		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
-			return "";
+			return StringUtils.empty();
 		}
 	}
 
@@ -241,11 +235,11 @@ public abstract class Status implements Serializable {
 		}
 
 		public String getRemoveMessage(ActivePokemon victim) {
-			return "";
+			return StringUtils.empty();
 		}
 		
 		public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
-			return "";
+			return StringUtils.empty();
 		}
 	}
 
@@ -266,6 +260,7 @@ public abstract class Status implements Serializable {
 				b.addMessage(p.getName() + " is fully paralyzed!");
 				return false;
 			}
+
 			return true;
 		}
 		
@@ -442,8 +437,7 @@ public abstract class Status implements Serializable {
 		}
 	}
 
-	private static class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect
-	{
+	private static class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		public Frozen() {

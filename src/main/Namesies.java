@@ -2,8 +2,7 @@ package main;
 
 import util.PokeString;
 
-public enum Namesies
-{
+public enum Namesies {
 	// EVERYTHING BELOW IS GENERATED ###
 	TACKLE_ATTACK("Tackle"),
 	LEECH_SEED_ATTACK("Leech Seed"),
@@ -2009,29 +2008,29 @@ public enum Namesies
 	
 	private String name;
 
-	private Namesies(String name)
-	{
+	Namesies(String name) {
 		this.name = name;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return this.name;
 	}
 	
 	public static Namesies getValueOf(String name, NamesiesType superClass) {
-		Namesies value = Namesies.valueOf(PokeString.getNamesiesString(name, superClass));
-		
-		if (value == null) {
+		try {
+			return Namesies.valueOf(PokeString.getNamesiesString(name, superClass));
+		} catch (IllegalArgumentException exception) {
 			Global.error(name + " does not have a valid Namesies value with super class " + superClass);
+			return null;
 		}
-		
-		return value;
 	}
 	
-	public enum NamesiesType
-	{
-		ATTACK, EFFECT, ABILITY, ITEM, POKEMON;
+	public enum NamesiesType {
+		ATTACK,
+		EFFECT,
+		ABILITY,
+		ITEM,
+		POKEMON,
 	}
 }
 

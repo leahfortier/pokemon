@@ -73,8 +73,7 @@ GrassyTerrain:
 	Terrain: Grass
 	Int: EndTurnEffect, PowerChangeEffect, TerrainEffect
 	ApplyEndTurn:
-	if (!victim.fullHealth() && !victim.isLevitating(b))
-	{
+	if (!victim.fullHealth() && !victim.isLevitating(b)) {
 		victim.healHealthFraction(1/16.0);
 		b.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", victim);
 	}

@@ -14,16 +14,29 @@ import javax.imageio.ImageIO;
 import main.Global;
 
 public class FileIO {
-	
 	private static final String FILE_SLASH = File.separator;
 	
-	static void deleteFile(String fileName) {
+	public static void deleteFile(String fileName) {
 		File file = new File(fileName);
-		if (file.exists()) {
-			file.delete();	
+		if (!file.exists()) {
+			Global.error("Could not find file " + file.getName() + " -- unable to delete");
+		}
+
+		if (!file.delete()) {
+			Global.error("Could not delete file " + file.getName());
 		}
 	}
-	
+
+	// Creates a folder with the specified path if it does not already exist
+	public static void createFolder(final String folderPath) {
+		final File folder = new File(folderPath);
+		if (!folder.exists()) {
+			if (!folder.mkdir()) {
+				Global.error("Unable to create folder with path " + folderPath);
+			}
+		}
+	}
+
 	public static void writeImage(BufferedImage image, File file) {
 		try {
 			ImageIO.write(image, "png", file);
@@ -32,48 +45,49 @@ public class FileIO {
 			Global.error("Could not write image to file " + file.getName());
 		}
 	}
-	
-	public static BufferedImage readImage(File file) {	
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(file);
-		}
-		catch (IOException e) {
-			Global.error("Could not open image from following path: " + file.getName());
-		}
-		
-		return img;
-	}
-	
+
 	public static BufferedImage readImage(String fileName) {
 		File file = new File(fileName);
 		return readImage(file);
 	}
 	
-	public static String makePath(String... path) {
-		StringBuilder sb = new StringBuilder();
-		
-		for (String folder : path) {
-			sb.append(folder + FileIO.FILE_SLASH);
+	public static BufferedImage readImage(File file) {	
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(file);
+		}
+		catch (IOException exception) {
+			Global.error("Could not open image from following path: " + file.getName());
 		}
 		
-		return sb.toString();
+		return image;
+	}
+	
+	public static String makeFolderPath(String... path) {
+		StringBuilder folderPath = new StringBuilder();
+		
+		for (String folder : path) {
+			folderPath.append(folder);
+
+			if (!folder.endsWith(FileIO.FILE_SLASH)) {
+				folderPath.append(FileIO.FILE_SLASH);
+			}
+		}
+		
+		return folderPath.toString();
 	}
 
-	/**
-	 * Reads the whole file ignoring commented lines starting with #
-	 * 
-	 * @param file
-	 * @param ignoreComments
-	 * @return
-	 */
+	// Reads the whole file ignoring commented lines starting with # when ignoreComments is true
 	public static String readEntireFileWithReplacements(File file, boolean ignoreComments) {
 		String fileText = readEntireFileWithoutReplacements(file, ignoreComments);
-		String restoreSpecial = PokeString.restoreSpecialFromUnicode(fileText);
-		
-		return restoreSpecial;
+		return PokeString.restoreSpecialFromUnicode(fileText);
 	}
 
+	public static String readEntireFileWithoutReplacements(final String fileName, final boolean ignoreComments) {
+		return readEntireFileWithoutReplacements(new File(fileName), ignoreComments);
+	}
+
+	// TODO: I think there might be a bug in this that is eliminating white space or new lines or something
 	public static String readEntireFileWithoutReplacements(File file, boolean ignoreComments) {
 		BufferedReader in = openFileBuffered(file);
 		if (in == null) {
@@ -86,14 +100,13 @@ public class FileIO {
 		
 		try {
 			while ((line = in.readLine()) != null) {
-				if (line.length() > 0 && (line.charAt(0) != '#' || ignoreComments))
-				{
-					build.append(line);
-					build.append("\n");
+				if (line.length() > 0 && (line.charAt(0) != '#' || ignoreComments)) {
+					build.append(line)
+							.append("\n");
 				}
 			}
 		}
-		catch (IOException e) {
+		catch (IOException exception) {
 			Global.error("IO EXCEPTION WHILE READING " + file.getName() + "!!!!");
 		}
 		
@@ -105,7 +118,8 @@ public class FileIO {
 		final StringBuilder out = new StringBuilder();
 
 		while (in.hasNextLine()) {
-			out.append(in.nextLine()).append("\n");
+			out.append(in.nextLine())
+					.append("\n");
 		}
 
 		return out.toString();

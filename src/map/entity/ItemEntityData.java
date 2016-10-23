@@ -1,16 +1,16 @@
 package map.entity;
 
+import util.StringUtils;
+
 import java.util.regex.Matcher;
 
-public class ItemEntityData extends EntityData
-{
+public class ItemEntityData extends EntityData {
 	private ItemEntity entity;
 	private String item;
 	
 	public String placedCondition;
 	
-	public ItemEntityData(String name, String contents)
-	{
+	public ItemEntityData(String name, String contents) {
 		super (name,contents);
 		
 		entity = null;
@@ -18,10 +18,8 @@ public class ItemEntityData extends EntityData
 		condition.add("!has" + name, '&');
 		
 		Matcher m = variablePattern.matcher(contents);
-		while (m.find())
-		{
-			switch (m.group(1))
-			{
+		while (m.find()) {
+			switch (m.group(1)) {
 				case "x":
 					x = Integer.parseInt(m.group(2));
 					break;
@@ -39,8 +37,7 @@ public class ItemEntityData extends EntityData
 		}
 	}
 	
-	public ItemEntityData(String name, String conditionString, String item, int x, int y) 
-	{
+	public ItemEntityData(String name, String conditionString, String item, int x, int y) {
 		super (name, conditionString);
 		
 		entity = null;
@@ -52,33 +49,30 @@ public class ItemEntityData extends EntityData
 		this.item = item;
 	}
 	
-	public Entity getEntity()
-	{
-		if (entity == null)
-		{
+	public Entity getEntity() {
+		if (entity == null) {
 			entity = new ItemEntity(name, x, y, item);
 		}
 		
 		return entity;
 	}
 	
-	public String getItem() 
-	{
+	public String getItem() {
 		return item;
 	}
-	
-	public String entityDataAsString() 
-	{
+
+	public String entityDataAsString() {
 		StringBuilder ret = new StringBuilder();
-		ret.append("Item " +name +"{\n");
+		StringUtils.appendLine(ret, "Item " +name +"{");
 		
-		if (!placedCondition.equals(""))
-			ret.append("\tcondition: " +placedCondition +"\n");
-		
-		ret.append("\tx: " +x +"\n");
-		ret.append("\ty: " +y +"\n");
-		ret.append("\titem: "+ item + "\n");
-		ret.append("}\n");
+		if (!placedCondition.isEmpty()) {
+			StringUtils.appendLine(ret, "\tcondition: " + placedCondition);
+		}
+
+		StringUtils.appendLine(ret, "\tx: " + x);
+		StringUtils.appendLine(ret, "\ty: " + y);
+		StringUtils.appendLine(ret, "\titem: "+ item);
+		StringUtils.appendLine(ret, "}");
 		
 		return ret.toString();
 	}

@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import main.Global;
@@ -81,11 +82,10 @@ import battle.effect.generic.TeamEffect;
 import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 
-public abstract class Item implements Comparable<Item>, Serializable
-{
+public abstract class Item implements Comparable<Item>, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private static HashMap<String, Item> map;
+	private static Map<String, Item> map;
 
 	protected Namesies namesies;
 	protected String name;
@@ -97,7 +97,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
 		ois.defaultReadObject();
-		synchronized (Item.class) {
+		synchronized(Item.class) {
 			if (map == null) {
 				loadItems();
 			}
@@ -831,19 +831,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.isType(b, Type.POISON))
-			{
+			if (victim.isType(b, Type.POISON)) {
 				// Don't heal if at full health
-				if (victim.fullHealth())
-				{
+				if (victim.fullHealth()) {
 					return;
 				}
 				
 				victim.healHealthFraction(1/16.0);
 				b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 			}
-			else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
@@ -1145,10 +1142,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Try to generalize with self-switching moves
 			Team t = b.getTrainer(victim.user());
-			if (t instanceof WildPokemon) return;
+			if (t instanceof WildPokemon) {
+				return;
+			}
 			
 			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon()) return;
+			if (!trainer.hasRemainingPokemon()) {
+				return;
+			}
 			
 			b.addMessage(victim.getName() + "'s " + this.name + " sent it back to " + trainer.getName() + "!");
 			victim.consumeItem(b);
@@ -1235,8 +1236,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			// Badly poisons the holder at the end of the turn
-			if (Status.applies(StatusCondition.POISONED, b, victim, victim))
-			{
+			if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
 				victim.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
 				Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 			}
@@ -1303,8 +1303,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth) {
-			if (fullHealth)
-			{
+			if (fullHealth) {
 				bracer.consumeItem(b);
 				return true;
 			}
@@ -1521,8 +1520,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
-			if (user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			if (user.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				return;
 			}
 			
@@ -1609,8 +1607,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public int increaseCritStage(Integer stage, ActivePokemon p) {
-			if (p.isPokemon(Namesies.CHANSEY_POKEMON))
-			{
+			if (p.isPokemon(Namesies.CHANSEY_POKEMON)) {
 				return stage + 2;
 			}
 			
@@ -1653,8 +1650,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public int[] getEVs(int[] vals) {
-			for (int i = 0; i < vals.length; i++)
-			{
+			for (int i = 0; i < vals.length; i++) {
 				vals[i] *= 2;
 			}
 			
@@ -1680,6 +1676,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 	private static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		// TODO: This should be an object array
 		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT, Namesies.HEAL_BLOCK_EFFECT};
 		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
 
@@ -1693,8 +1690,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			if (pelted.hasEffect(Namesies.INFATUATED_EFFECT))
-			{
+			if (pelted.hasEffect(Namesies.INFATUATED_EFFECT)) {
 				pelted.getAttributes().removeEffect(Namesies.INFATUATED_EFFECT);
 				b.addMessage(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
 			}
@@ -1702,19 +1698,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			boolean used = false;
-			for (int i = 0; i < effects.length; i++)
-			{
+			for (int i = 0; i < effects.length; i++) {
 				Namesies s = effects[i];
-				if (victim.hasEffect(s))
-				{
+				if (victim.hasEffect(s)) {
 					used = true;
 					victim.getAttributes().removeEffect(s);
 					b.addMessage(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
 				}
 			}
 			
-			if (used)
-			{
+			if (used) {
 				victim.consumeItem(b);
 			}
 		}
@@ -2080,10 +2073,14 @@ public abstract class Item implements Comparable<Item>, Serializable
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Generalize this code with that of moves like U-Turn
 			Team t = b.getTrainer(user.user());
-			if (t instanceof WildPokemon) return;
+			if (t instanceof WildPokemon) {
+				return;
+			}
 			
 			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon()) return;
+			if (!trainer.hasRemainingPokemon()) {
+				return;
+			}
 			
 			b.addMessage(victim.getName() + "'s " + this.name + " sent " + user.getName() + " back to " + trainer.getName() + "!");
 			victim.consumeItem(b);
@@ -2229,8 +2226,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
-			if (user.fullHealth())
-			{
+			if (user.fullHealth()) {
 				return;
 			}
 			
@@ -2323,8 +2319,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public int increaseCritStage(Integer stage, ActivePokemon p) {
-			if (p.isPokemon(Namesies.FARFETCHD_POKEMON))
-			{
+			if (p.isPokemon(Namesies.FARFETCHD_POKEMON)) {
 				return stage + 2;
 			}
 			
@@ -2349,8 +2344,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				return;
 			}
 			
@@ -2359,21 +2353,18 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!user.hasAbility(Namesies.MAGIC_GUARD_ABILITY))
-			{
+			if (!user.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
 				b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 				user.reduceHealthFraction(b, 1/8.0);
 			}
 			
-			if (user.isHoldingItem(b) || user.isFainted(b))
-			{
+			if (user.isHoldingItem(b) || user.isFainted(b)) {
 				return;
 			}
 			
 			b.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
 			
-			if (b.isWildBattle())
-			{
+			if (b.isWildBattle()) {
 				victim.removeItem();
 				user.giveItem(this);
 				return;
@@ -2437,8 +2428,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (Type.getAdvantage(user, victim, b) > 1)
-			{
+			if (Type.getAdvantage(user, victim, b) > 1) {
 				victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
 				victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
 			}
@@ -2459,10 +2449,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 			// Restores negative stat changes to the pelted
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
-			{
-				if (pelted.getStage(i) < 0)
-				{
+			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
+				if (pelted.getStage(i) < 0) {
 					pelted.getAttributes().setStage(i, 0);
 				}
 			}
@@ -3991,8 +3979,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
-			{
+			if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
 				return;
 			}
 			
@@ -5283,7 +5270,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		Antidote() {
 			super(Namesies.ANTIDOTE_ITEM, "A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.", BagCategory.MEDICINE, 164);
 			super.price = 100;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -5322,7 +5309,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		Awakening() {
 			super(Namesies.AWAKENING_ITEM, "A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE, 165);
 			super.price = 250;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -5361,7 +5348,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		BurnHeal() {
 			super(Namesies.BURN_HEAL_ITEM, "A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.", BagCategory.MEDICINE, 166);
 			super.price = 250;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -5400,7 +5387,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		IceHeal() {
 			super(Namesies.ICE_HEAL_ITEM, "A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE, 167);
 			super.price = 250;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -5439,7 +5426,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		ParalyzeHeal() {
 			super(Namesies.PARALYZE_HEAL_ITEM, "A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.", BagCategory.MEDICINE, 168);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -5477,7 +5464,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		FullHeal() {
 			super(Namesies.FULL_HEAL_ITEM, "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 169);
 			super.price = 250;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -5517,8 +5504,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 		FullRestore() {
 			super(Namesies.FULL_RESTORE_ITEM, "A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 170);
 			super.price = 3000;
-			super.bcat.add(BattleBagCategory.HP_PP);
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -5527,14 +5514,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p) {
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED))
-			{
+			if (p.hasStatus(StatusCondition.FAINTED)) {
 				return false;
 			}
 			
 			// Does not apply to the fully healed -- status condition or otherwise
-			if (!p.hasStatus() && p.fullHealth())
-			{
+			if (!p.hasStatus() && p.fullHealth()) {
 				return false;
 			}
 			
@@ -5571,7 +5556,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		Elixir() {
 			super(Namesies.ELIXIR_ITEM, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 171);
 			super.price = 3000;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int increaseAmount(Move m) {
@@ -5614,7 +5599,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		MaxElixir() {
 			super(Namesies.MAX_ELIXIR_ITEM, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 172);
 			super.price = 4500;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int increaseAmount(Move m) {
@@ -5648,7 +5633,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		Ether() {
 			super(Namesies.ETHER_ITEM, "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.", BagCategory.MEDICINE, 173);
 			super.price = 1200;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -5676,7 +5661,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		MaxEther() {
 			super(Namesies.MAX_ETHER_ITEM, "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.", BagCategory.MEDICINE, 174);
 			super.price = 2000;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -5703,7 +5688,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		BerryJuice() {
 			super(Namesies.BERRY_JUICE_ITEM, "A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 175);
 			super.price = 100;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -5736,7 +5721,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		SweetHeart() {
 			super(Namesies.SWEET_HEART_ITEM, "Very sweet chocolate. It restores the HP of one Pok\u00e9mon by only 20 points.", BagCategory.MEDICINE, 176);
 			super.price = 100;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -5769,7 +5754,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		Potion() {
 			super(Namesies.POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE, 177);
 			super.price = 100;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -5802,7 +5787,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		EnergyPowder() {
 			super(Namesies.ENERGY_POWDER_ITEM, "A very bitter medicine powder. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 178);
 			super.price = 500;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -5835,7 +5820,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		FreshWater() {
 			super(Namesies.FRESH_WATER_ITEM, "Water with a high mineral content. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 179);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -5868,7 +5853,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		SuperPotion() {
 			super(Namesies.SUPER_POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 50 points.", BagCategory.MEDICINE, 180);
 			super.price = 700;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -5901,7 +5886,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		SodaPop() {
 			super(Namesies.SODA_POP_ITEM, "A fizzy soda drink. It restores the HP of one Pok\u00e9mon by 60 points.", BagCategory.MEDICINE, 181);
 			super.price = 300;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -5934,7 +5919,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		Lemonade() {
 			super(Namesies.LEMONADE_ITEM, "A very sweet drink. It restores the HP of one Pok\u00e9mon by 80 points.", BagCategory.MEDICINE, 182);
 			super.price = 350;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -5967,7 +5952,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		MoomooMilk() {
 			super(Namesies.MOOMOO_MILK_ITEM, "Milk with a very high nutrition content. It restores the HP of one Pok\u00e9mon by 100 points.", BagCategory.MEDICINE, 183);
 			super.price = 500;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -6000,7 +5985,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		EnergyRoot() {
 			super(Namesies.ENERGY_ROOT_ITEM, "A very bitter root. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 184);
 			super.price = 800;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -6033,7 +6018,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		HyperPotion() {
 			super(Namesies.HYPER_POTION_ITEM, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by 200 points.", BagCategory.MEDICINE, 185);
 			super.price = 1200;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public int healAmount() {
@@ -6066,7 +6051,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		MaxPotion() {
 			super(Namesies.MAX_POTION_ITEM, "A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.", BagCategory.MEDICINE, 186);
 			super.price = 2500;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6095,7 +6080,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		Revive() {
 			super(Namesies.REVIVE_ITEM, "A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE, 187);
 			super.price = 1500;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6132,7 +6117,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		MaxRevive() {
 			super(Namesies.MAX_REVIVE_ITEM, "A medicine that revives a fainted Pok\u00e9mon. It fully restores the Pok\u00e9mon's HP.", BagCategory.MEDICINE, 188);
 			super.price = 4000;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6169,7 +6154,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		RevivalHerb() {
 			super(Namesies.REVIVAL_HERB_ITEM, "A very bitter medicinal herb. It revives a fainted Pok\u00e9mon, fully restoring its HP.", BagCategory.MEDICINE, 189);
 			super.price = 2800;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6206,7 +6191,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		SacredAsh() {
 			super(Namesies.SACRED_ASH_ITEM, "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE, 190);
 			super.price = 4000;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6215,10 +6200,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(Trainer t) {
 			boolean changed = false;
-			for (ActivePokemon p : t.getTeam())
-			{
-				if (p.hasStatus(StatusCondition.FAINTED))
-				{
+			for (ActivePokemon p : t.getTeam()) {
+				if (p.hasStatus(StatusCondition.FAINTED)) {
 					changed = true;
 					p.removeStatus();
 					p.healHealthFraction(1);
@@ -6245,7 +6228,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		DireHit() {
 			super(Namesies.DIRE_HIT_ITEM, "It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 191);
 			super.price = 650;
-			super.bcat.add(BattleBagCategory.BATTLE);
+			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6254,8 +6237,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b) {
 			PokemonEffect crits = PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT);
-			if (!crits.applies(b, p, p, CastSource.USE_ITEM))
-			{
+			if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
 				return false;
 			}
 			
@@ -6277,7 +6259,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		GuardSpec() {
 			super(Namesies.GUARD_SPEC_ITEM, "An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.", BagCategory.STAT, 192);
 			super.price = 700;
-			super.bcat.add(BattleBagCategory.BATTLE);
+			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6286,8 +6268,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(ActivePokemon p, Battle b) {
 			PokemonEffect gSpesh = PokemonEffect.getEffect(Namesies.GUARD_SPECIAL_EFFECT);
-			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM))
-			{
+			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
 				return false;
 			}
 			
@@ -6309,7 +6290,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		XAccuracy() {
 			super(Namesies.XACCURACY_ITEM, "An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 193);
 			super.price = 950;
-			super.bcat.add(BattleBagCategory.BATTLE);
+			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
 		public Stat toIncrease() {
@@ -6338,7 +6319,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		XAttack() {
 			super(Namesies.XATTACK_ITEM, "An item that raises the Attack stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 194);
 			super.price = 500;
-			super.bcat.add(BattleBagCategory.BATTLE);
+			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
 		public Stat toIncrease() {
@@ -6367,7 +6348,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		XDefend() {
 			super(Namesies.XDEFEND_ITEM, "An item that raises the Defense stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 195);
 			super.price = 550;
-			super.bcat.add(BattleBagCategory.BATTLE);
+			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
 		public Stat toIncrease() {
@@ -6396,7 +6377,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		XSpecial() {
 			super(Namesies.XSPECIAL_ITEM, "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 196);
 			super.price = 350;
-			super.bcat.add(BattleBagCategory.BATTLE);
+			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
 		public Stat toIncrease() {
@@ -6425,7 +6406,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		XSpDef() {
 			super(Namesies.XSP_DEF_ITEM, "An item that raises the Sp. Def stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 197);
 			super.price = 350;
-			super.bcat.add(BattleBagCategory.BATTLE);
+			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
 		public Stat toIncrease() {
@@ -6454,7 +6435,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		XSpeed() {
 			super(Namesies.XSPEED_ITEM, "An item that raises the Speed stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT, 198);
 			super.price = 350;
-			super.bcat.add(BattleBagCategory.BATTLE);
+			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
 		public Stat toIncrease() {
@@ -6980,7 +6961,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		CherishBall() {
 			super(Namesies.CHERISH_BALL_ITEM, "A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.", BagCategory.BALL, 214);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -6997,13 +6978,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 		DiveBall() {
 			super(Namesies.DIVE_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.", BagCategory.BALL, 215);
 			super.price = 1000;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			// TODO: Not sure yet if this will cover fishing
-			if (b.getTerrainType() == TerrainType.WATER)
-			{
+			if (b.getTerrainType() == TerrainType.WATER) {
 				return new double[] {3.5, 0};
 			}
 			
@@ -7020,12 +7000,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		DuskBall() {
 			super(Namesies.DUSK_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.", BagCategory.BALL, 216);
 			super.price = 1000;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getTerrainType() == TerrainType.CAVE)
-			{
+			if (b.getTerrainType() == TerrainType.CAVE) {
 				return new double[] {3.5, 0};
 			}
 			
@@ -7042,13 +7021,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 		FastBall() {
 			super(Namesies.FAST_BALL_ITEM, "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.", BagCategory.BALL, 217);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			// If the opponent has a base speed of 100 or higher, multiplier is 4
-			if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100)
-			{
+			if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100) {
 				return new double[] {4, 0};
 			}
 			
@@ -7065,7 +7043,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		GreatBall() {
 			super(Namesies.GREAT_BALL_ITEM, "A good, high-performance Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.", BagCategory.BALL, 218);
 			super.price = 600;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7082,7 +7060,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		HealBall() {
 			super(Namesies.HEAL_BALL_ITEM, "A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.", BagCategory.BALL, 219);
 			super.price = 300;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7100,7 +7078,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		HeavyBall() {
 			super(Namesies.HEAVY_BALL_ITEM, "A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.", BagCategory.BALL, 220);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7109,6 +7087,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			double[] res = new double[2];
 			res[0] = 1;
 			
+			// TODO: Rewrite this with a loop
 			if (weight <= 451.5) res[1] = -20;
 			else if (weight <= 661.5) res[1] = 20;
 			else if (weight <= 903.0) res[1] = 30;
@@ -7127,10 +7106,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		LevelBall() {
 			super(Namesies.LEVEL_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.", BagCategory.BALL, 221);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			// TODO: Rewrite this in a loop
 			if (me.getLevel()/4 > o.getLevel()) return new double[] {8, 0};
 			else if (me.getLevel()/2 > o.getLevel()) return new double[] {4, 0};
 			else if (me.getLevel() > o.getLevel()) return new double[] {2, 0};
@@ -7147,12 +7127,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		LoveBall() {
 			super(Namesies.LOVE_BALL_ITEM, "Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.", BagCategory.BALL, 222);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.getGender() == o.getGender())
-			{
+			if (me.getGender() == o.getGender()) {
 				return new double[] {8, 0};
 			}
 			
@@ -7169,13 +7148,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 		LureBall() {
 			super(Namesies.LURE_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.", BagCategory.BALL, 223);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			// TODO: Fishing
-			if (false)
-			{
+			if (false) {
 				return new double[] {3, 0};
 			}
 			
@@ -7192,7 +7170,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		LuxuryBall() {
 			super(Namesies.LUXURY_BALL_ITEM, "A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.", BagCategory.BALL, 224);
 			super.price = 1000;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7210,7 +7188,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		MasterBall() {
 			super(Namesies.MASTER_BALL_ITEM, "The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.", BagCategory.BALL, 225);
 			super.price = 0;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7227,13 +7205,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 		MoonBall() {
 			super(Namesies.MOON_BALL_ITEM, "A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.", BagCategory.BALL, 226);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			Evolution ev = o.getPokemonInfo().getEvolution();
-			if (ev.getEvolution(EvolutionCheck.ITEM, o, Namesies.MOON_STONE_ITEM) != null)
-			{
+			if (ev.getEvolution(EvolutionCheck.ITEM, o, Namesies.MOON_STONE_ITEM) != null) {
 				return new double[] {4, 0};
 			}
 			
@@ -7250,10 +7227,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		NestBall() {
 			super(Namesies.NEST_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.", BagCategory.BALL, 227);
 			super.price = 1000;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+			// TODO: Loopy and make it general with the others
 			if (o.getLevel() <= 19) return new double[] {3, 0};
 			else if (o.getLevel() <= 29) return new double[] {2, 0};
 			else return new double[] {1, 0};
@@ -7269,12 +7247,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		NetBall() {
 			super(Namesies.NET_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.", BagCategory.BALL, 228);
 			super.price = 1000;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG))
-			{
+			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) {
 				return new double[] {3, 0};
 			}
 			
@@ -7291,7 +7268,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		PokeBall() {
 			super(Namesies.POKE_BALL_ITEM, "A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.", BagCategory.BALL, 229);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7308,7 +7285,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		PremierBall() {
 			super(Namesies.PREMIER_BALL_ITEM, "A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.", BagCategory.BALL, 230);
 			super.price = 200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7325,12 +7302,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 		QuickBall() {
 			super(Namesies.QUICK_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.", BagCategory.BALL, 231);
 			super.price = 1000;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getTurn() == 1)
-			{
+			// TODO: Generalize this
+			if (b.getTurn() == 1) {
 				return new double[] {3, 0};
 			}
 			
@@ -7347,12 +7324,11 @@ public abstract class Item implements Comparable<Item>, Serializable
 		RepeatBall() {
 			super(Namesies.REPEAT_BALL_ITEM, "A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.", BagCategory.BALL, 232);
 			super.price = 1000;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getPlayer().getPokedex().caught(o.getPokemonInfo().namesies()))
-			{
+			if (b.getPlayer().getPokedex().caught(o.getPokemonInfo().namesies())) {
 				return new double[] {3, 0};
 			}
 			
@@ -7368,7 +7344,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		SafariBall() {
 			super(Namesies.SAFARI_BALL_ITEM, "A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.", BagCategory.BALL, 233);
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7385,7 +7361,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		TimerBall() {
 			super(Namesies.TIMER_BALL_ITEM, "A somewhat different Ball that becomes progressively better the more turns there are in a battle.", BagCategory.BALL, 234);
 			super.price = 1000;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7405,7 +7381,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		UltraBall() {
 			super(Namesies.ULTRA_BALL_ITEM, "An ultra-performance Ball that provides a higher Pok\u00e9mon catch rate than a Great Ball.", BagCategory.BALL, 235);
 			super.price = 1200;
-			super.bcat.add(BattleBagCategory.BALL);
+			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7424,7 +7400,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		CheriBerry() {
 			super(Namesies.CHERI_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from paralysis.", BagCategory.BERRY, 236);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -7510,7 +7486,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		ChestoBerry() {
 			super(Namesies.CHESTO_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from sleep.", BagCategory.BERRY, 237);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -7596,7 +7572,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		PechaBerry() {
 			super(Namesies.PECHA_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from poison.", BagCategory.BERRY, 238);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -7682,7 +7658,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		RawstBerry() {
 			super(Namesies.RAWST_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from a burn.", BagCategory.BERRY, 239);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -7768,7 +7744,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		AspearBerry() {
 			super(Namesies.ASPEAR_BERRY_ITEM, "If held by a Pok\u00e9mon, it defrosts it.", BagCategory.BERRY, 240);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public StatusCondition toRemove() {
@@ -7853,7 +7829,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		LeppaBerry() {
 			super(Namesies.LEPPA_BERRY_ITEM, "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 241);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -7865,10 +7841,8 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			for (Move m : victim.getMoves(b))
-			{
-				if (m.getPP() == 0)
-				{
+			for (Move m : victim.getMoves(b)) {
+				if (m.getPP() == 0) {
 					use(victim, m);
 					b.addMessage(getHoldSuccessMessage(b, victim));
 					victim.consumeItem(b);
@@ -7881,19 +7855,16 @@ public abstract class Item implements Comparable<Item>, Serializable
 			Move lowestPPMove = null;
 			double lowestPPRatio = 1;
 			
-			for (Move m : user.getMoves(b))
-			{
+			for (Move m : user.getMoves(b)) {
 				double ratio = (double)m.getPP()/m.getMaxPP();
-				if (ratio < lowestPPRatio)
-				{
+				if (ratio < lowestPPRatio) {
 					lowestPPRatio = ratio;
 					lowestPPMove = m;
 				}
 			}
 			
 			// All moves have full PP
-			if (lowestPPMove == null)
-			{
+			if (lowestPPMove == null) {
 				return false;
 			}
 			
@@ -7954,7 +7925,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		OranBerry() {
 			super(Namesies.ORAN_BERRY_ITEM, "If held by a Pok\u00e9mon, it heals the user by just 10 HP.", BagCategory.BERRY, 242);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -8035,7 +8006,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		PersimBerry() {
 			super(Namesies.PERSIM_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 243);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -8047,8 +8018,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			if (p.hasEffect(Namesies.CONFUSION_EFFECT))
-			{
+			if (p.hasEffect(Namesies.CONFUSION_EFFECT)) {
 				p.getAttributes().removeEffect(Namesies.CONFUSION_EFFECT);
 				return true;
 			}
@@ -8057,8 +8027,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!use(user, b))
-			{
+			if (!use(user, b)) {
 				return false;
 			}
 			
@@ -8112,7 +8081,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		LumBerry() {
 			super(Namesies.LUM_BERRY_ITEM, "If held by a Pok\u00e9mon, it recovers from any status problem.", BagCategory.BERRY, 244);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.STATUS);
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -8144,14 +8113,12 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			// Does not apply to the dead
-			if (user.hasStatus(StatusCondition.FAINTED))
-			{
+			if (user.hasStatus(StatusCondition.FAINTED)) {
 				return false;
 			}
 			
 			// YOU'RE FINE
-			if (!user.hasStatus())
-			{
+			if (!user.hasStatus()) {
 				return false;
 			}
 			
@@ -8206,7 +8173,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		SitrusBerry() {
 			super(Namesies.SITRUS_BERRY_ITEM, "If held by a Pok\u00e9mon, it heals the user by a little.", BagCategory.BERRY, 245);
 			super.price = 20;
-			super.bcat.add(BattleBagCategory.HP_PP);
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -9830,8 +9797,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!victim.fullHealth() && Type.getAdvantage(user, victim, b) > 1)
-			{
+			if (!victim.fullHealth() && Type.getAdvantage(user, victim, b) > 1) {
 				b.addMessage(victim.getName() + "'s " + this.name + " restored its health!");
 				victim.healHealthFraction(.25);
 				b.addMessage("", victim);
@@ -9945,8 +9911,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			int rand = (int)(Math.random()*(Stat.NUM_BATTLE_STATS + 1));
 			
 			// Raise crit
-			if (rand == Stat.NUM_BATTLE_STATS)
-			{
+			if (rand == Stat.NUM_BATTLE_STATS) {
 				PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, source, false);
 				holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
 				useMessage = user.getName() + " is getting pumped!";
@@ -9955,8 +9920,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 			
 			// Raise random battle stat
 			Stat stat = Stat.getStat(rand, true);
-			if (user.getAttributes().modifyStage(user, user, 1, stat, b, source))
-			{
+			if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
 				useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 				return true;
 			}
@@ -10382,8 +10346,7 @@ public abstract class Item implements Comparable<Item>, Serializable
 
 		public boolean use(CharacterData player, ActivePokemon p) {
 			Ability other = Ability.getOtherAbility(p);
-			if (other.namesies() == Namesies.NONE_ABILITY)
-			{
+			if (other.namesies() == Namesies.NONE_ABILITY) {
 				return false;
 			}
 			

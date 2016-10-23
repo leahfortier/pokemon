@@ -1,20 +1,21 @@
 package map.entity;
 
+import util.StringUtils;
+
 import java.util.regex.Matcher;
 
-
-public class TriggerEntityData extends EntityData{
+public class TriggerEntityData extends EntityData {
 	private TriggerEntity entity;
 	public String trigger;
 	
-	public TriggerEntityData(String name, String contents){
+	public TriggerEntityData(String name, String contents) {
 		super (name,contents);
 		
 		entity = null;
 		
 		Matcher m = variablePattern.matcher(contents);
 		while (m.find()){
-			switch (m.group(1)){
+			switch (m.group(1)) {
 			case "x":
 				x = Integer.parseInt(m.group(2));
 				break;
@@ -36,25 +37,28 @@ public class TriggerEntityData extends EntityData{
 		this.y = y;
 	}
 	
-	public Entity getEntity(){
-		if (entity == null){
+	public Entity getEntity() {
+		if (entity == null) {
 			entity = new TriggerEntity(x, y, trigger);
 		}
+
 		return entity;
 	}
 	
 	@Override
 	public String entityDataAsString() {
 		StringBuilder ret = new StringBuilder();
-		ret.append("Trigger " +name +"{\n");
+		StringUtils.appendLine(ret, "Trigger " + name +"{");
 		
-		if (!condition.getOriginalConditionString().equals(""))
-			ret.append("\tcondition: " +condition.getOriginalConditionString() + "\n");
-		
-		ret.append("\tx: " +x +"\n");
-		ret.append("\ty: " +y +"\n");
-		ret.append("\ttrigger: "+ trigger + "\n");
-		ret.append("}\n");
+		if (!condition.getOriginalConditionString().isEmpty()) {
+			StringUtils.appendLine(ret, "\tcondition: " + condition.getOriginalConditionString());
+		}
+
+		StringUtils.appendLine(ret, "\tx: " + x);
+		StringUtils.appendLine(ret, "\ty: " + y);
+		StringUtils.appendLine(ret, "\ttrigger: "+ trigger);
+		StringUtils.appendLine(ret, "}");
+
 		return ret.toString();
 	}
 }

@@ -4,8 +4,7 @@ import pokemon.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.Status.StatusCondition;
 
-public interface StatusPreventionEffect 
-{
-	public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status);
-	public String statusPreventionMessage(ActivePokemon victim);
+public interface StatusPreventionEffect {
+	boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status);
+	String statusPreventionMessage(ActivePokemon victim);
 }

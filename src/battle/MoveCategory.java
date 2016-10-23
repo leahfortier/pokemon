@@ -10,19 +10,17 @@ public enum MoveCategory implements Serializable {
     private String name;
     private int imageNumber;
 
-    MoveCategory(int imgNum)
-    {
+    MoveCategory(int imgNum) {
         imageNumber = imgNum;
+        // TODO: I think there's a method that does this already and if there isn't then there should be
         name = name().charAt(0) + name().substring(1).toLowerCase();
     }
 
-    public String toString()
-    {
+    public String toString() {
         return name;
     }
 
-    public int getImageNumber()
-    {
+    public int getImageNumber() {
         return imageNumber;
     }
 }

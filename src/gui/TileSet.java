@@ -4,37 +4,35 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import util.FileIO;
 
-public class TileSet
-{
+public class TileSet {
 	public static final int EMPTY_IMAGE = -1;
-	private static final String IMAGE_NOT_FOUND_LOCATION = FileIO.makePath("rec") + "imageNotFound.png";
+	private static final String IMAGE_NOT_FOUND_LOCATION = FileIO.makeFolderPath("rec") + "imageNotFound.png";
 	private static BufferedImage IMAGE_NOT_FOUND = null;
 	
 	public String name;
-	private HashMap<Integer, BufferedImage> map;
-	private HashMap<Integer, String> indexMap;
+	private Map<Integer, BufferedImage> map;
+	private Map<Integer, String> indexMap;
 	private float scale;
 	private String folderPath;
 
-	public TileSet(String name, float scale)
-	{
+	public TileSet(String name, float scale) {
 		this.name = name;
 		this.scale = scale;
 		
 		this.map = new HashMap<>();
 		this.indexMap = new HashMap<>();
 		
-		this.folderPath = FileIO.makePath("rec", "tiles", this.name);
+		this.folderPath = FileIO.makeFolderPath("rec", "tiles", this.name);
 		
 		File indexFile = new File(this.folderPath + "index.txt");
 		Scanner in = FileIO.openFile(indexFile);
 		
-		while (in.hasNext())
-		{
+		while (in.hasNext()) {
 			String fileName = in.next();
 			int mapping = (int) Long.parseLong(in.next(), 16);
 			indexMap.put(mapping, fileName);
@@ -43,10 +41,8 @@ public class TileSet
 		in.close();
 	}
 
-	private BufferedImage scaleImage(BufferedImage img, float s)
-	{
-		if (s == 1.0f) 
-		{
+	private BufferedImage scaleImage(BufferedImage img, float s) {
+		if (s == 1.0f) {
 			return img;	
 		}
 		
@@ -58,8 +54,7 @@ public class TileSet
 		return buffer;
 	}
 
-	private void loadImage(int val)
-	{
+	private void loadImage(int val) {
 		String fileName = indexMap.get(val);
 		// System.out.println(fileName + " -> " + val);
 		
@@ -69,24 +64,22 @@ public class TileSet
 		map.put(val, image);
 	}
 
-	public BufferedImage getTile(int val)
-	{
-		if (indexMap.containsKey(val))
-		{
+	public BufferedImage getTile(int val) {
+		if (indexMap.containsKey(val)) {
 			loadImage(val);
 			indexMap.remove(val); // so it doesn't try to reload it
 		}
 		
-		if (map.containsKey(val)) 
+		if (map.containsKey(val)) {
 			return map.get(val);
+		}
 		
 		return imageNotFound();
 	}
 
-	private static BufferedImage imageNotFound()
-	{
-		if (IMAGE_NOT_FOUND == null) 
-		{
+	// TODO: Can we just set this in line?
+	private static BufferedImage imageNotFound() {
+		if (IMAGE_NOT_FOUND == null) {
 			IMAGE_NOT_FOUND = FileIO.readImage(IMAGE_NOT_FOUND_LOCATION);
 		}
 		

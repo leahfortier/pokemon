@@ -1,14 +1,5 @@
 package gui;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferStrategy;
-
-import javax.swing.*;
-
 import battle.Attack;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.PokemonEffect;
@@ -24,26 +15,34 @@ import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 
-public class GameFrame
-{
-//	public static boolean GENERATE_STUFF = true;
-	public static boolean GENERATE_STUFF = false;
-	private static boolean DEV_MODE = true;
+import javax.swing.JFrame;
+import javax.swing.Timer;
+import javax.swing.WindowConstants;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferStrategy;
+
+public class GameFrame {
+//	public static final boolean GENERATE_STUFF = true;
+	public static final boolean GENERATE_STUFF = false;
+	private static final boolean DEV_MODE = true;
 
 	private static JFrame frame;
 
-	public static void main(String[] args)
-	{		
+	public static void main(String[] args) {
 		if (GENERATE_STUFF) {
 			new StuffGen();
-			
+
 			// Make sure these don't throw any errors
 			loadAllTheThings();
-			
+
 			// Load all maps and test if all triggers and NPC data is correct
 			Game g = new Game();
 			g.data.testMaps(new CharacterData(g));
-			
+
 			System.out.println("GEN GEN GEN");
 			
 			return;
@@ -71,8 +70,7 @@ public class GameFrame
 		gui.requestFocusInWindow();
 	}
 	
-	private static void loadAllTheThings()
-	{
+	private static void loadAllTheThings() {
 		PokemonInfo.loadPokemonInfo();
 		Attack.loadMoves();
 		PokemonEffect.loadEffects();
@@ -83,8 +81,7 @@ public class GameFrame
 		DrawMetrics.loadFontMetricsMap();
 	}
 
-	private static class GameLoop implements Runnable
-	{
+	private static class GameLoop implements Runnable {
 		private final Canvas gui;
 		private final InputControl control;
 		private final DevConsole console;
@@ -92,8 +89,7 @@ public class GameFrame
 		private Game game;
 		private BufferStrategy strategy;
 
-		private GameLoop(Canvas canvas)
-		{
+		private GameLoop(Canvas canvas) {
 			gui = canvas;
 			control = new InputControl();
 			
@@ -104,8 +100,7 @@ public class GameFrame
 			console = DEV_MODE ? new DevConsole() : null;
 		}
 
-		public void run()
-		{
+		public void run() {
 			gui.createBufferStrategy(2);
 			strategy = gui.getBufferStrategy();
 
@@ -123,28 +118,24 @@ public class GameFrame
 			game = new Game();
 			loadAllTheThings();
 
-			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener()
-			{
+			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener() {
 				int frameCount = 0;
 				long fpsTime = 0;
 				long prevTime = System.currentTimeMillis();
 
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent event) {
 					long time = System.currentTimeMillis();
 					long dt = time - prevTime;
 					
 					fpsTime += dt;
 					prevTime = time;
 					
-					if (fpsTime > 1000)
-					{
+					if (fpsTime > 1000) {
 						fpsTime %= 1000;
 						frame.setTitle("Pokemon++          FPS:" + frameCount);
 						frameCount = 1;
 					}
-					else 
-					{
+					else {
 						frameCount++;
 					}
 					
@@ -156,22 +147,19 @@ public class GameFrame
 			fpsTimer.start();
 		}
 
-		private void drawFrame(int dt)
-		{
+		private void drawFrame(int dt) {
 			game.update(dt, control);
 
 			Graphics g = strategy.getDrawGraphics();
 			game.draw(g);
 
 			// This will fail if it can't acquire the lock on control (just won't display or anything)
-			if (control.isDown(Control.CONSOLE))
-			{
+			if (control.isDown(Control.CONSOLE)) {
 				control.consumeKey(Control.CONSOLE);
 				console.init(control);
 			}
 
-			if (DEV_MODE && console.isShown())
-			{
+			if (DEV_MODE && console.isShown()) {
 				console.update(dt, control, game);
 				console.draw(g, game.data);
 			}

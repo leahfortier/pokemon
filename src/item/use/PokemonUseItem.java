@@ -3,7 +3,6 @@ package item.use;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 
-public interface PokemonUseItem extends UseItem
-{
-	public boolean use(CharacterData player, ActivePokemon p);
+public interface PokemonUseItem extends UseItem {
+	boolean use(CharacterData player, ActivePokemon p);
 }

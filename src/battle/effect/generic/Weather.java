@@ -7,6 +7,7 @@ import battle.effect.WeatherExtendingEffect;
 import item.Item;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import main.Global;
 import main.Namesies;
@@ -15,26 +16,22 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.Battle;
 
-public abstract class Weather extends BattleEffect implements EndTurnEffect
-{
+public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;
-	private static HashMap<String, Weather> map;
+	private static Map<String, Weather> map;
 	
 	protected Type weatherElement;
 	
-	public Weather(Namesies namesies, Type weatherElement)
-	{
+	public Weather(Namesies namesies, Type weatherElement) {
 		super(namesies, -1, -1, true);
 		this.weatherElement = weatherElement;
 	}
 	
-	public Type getElement()
-	{
+	public Type getElement() {
 		return weatherElement;
 	}
 	
-	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
-	{
+	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		super.cast(b, caster, victim, source, printCast);
 		b.getWeather().setTurns(getTurns(b, caster));
 		
@@ -42,11 +39,9 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 		b.addMessage("", victim);
 	}
 	
-	private int getTurns(Battle b, ActivePokemon caster)
-	{
+	private int getTurns(Battle b, ActivePokemon caster) {
 		Item i = caster.getHeldItem(b);
-		if (i instanceof WeatherExtendingEffect && this.namesies == ((WeatherExtendingEffect)i).getWeatherType())
-		{
+		if (i instanceof WeatherExtendingEffect && this.namesies == ((WeatherExtendingEffect)i).getWeatherType()) {
 			return 8;
 		}
 		
@@ -55,29 +50,24 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect
 	
 	public abstract Weather newInstance();
 	
-	public static Weather getEffect(Namesies name)
-	{
-		String e = name.getName();
+	public static Weather getEffect(Namesies name) {
+		String effectName = name.getName();
 		
-		if (map == null) 
-		{
+		if (map == null) {
 			loadEffects();
 		}
 		
-		if (map.containsKey(e))
-		{
-			return map.get(e);
+		if (map.containsKey(effectName)) {
+			return map.get(effectName);
 		}
 	
-		Global.error("No such Effect " + e);
+		Global.error("No such Effect " + effectName);
 		return null;
 	}
 
 	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects()
-	{
-		if (map != null) 
-		{
+	public static void loadEffects() {
+		if (map != null) {
 			return;
 		}
 		

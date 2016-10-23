@@ -5,6 +5,7 @@ import item.Item;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import main.Game;
@@ -19,73 +20,65 @@ import util.InputControl.Control;
 import battle.Attack;
 import battle.Move;
 
-public class DevConsole
-{
-	boolean show;
+class DevConsole {
+	private int key;
+	private String currText;
+	private boolean show;
 
-	int key;
-	String currText;
-
-	public DevConsole()
-	{
+	DevConsole() {
 		key = InputControl.INVALID_LOCK;
 		currText = "";
 		show = false;
 	}
 
 	// Try to initialize the console, but if you can't just don't do anything
-	public boolean init(InputControl input)
-	{
+	boolean init(InputControl input) {
 		key = input.getLock();
-		if (key == InputControl.INVALID_LOCK) return false;
+		if (key == InputControl.INVALID_LOCK) {
+			return false;
+		}
 
 		currText = "";
 		show = true;
 		return true;
 	}
 
-	public void update(int dt, InputControl input, Game game)
-	{
-		if (key == InputControl.INVALID_LOCK) return; // Shouldn't even ever be here!
+	public void update(int dt, InputControl input, Game game) {
+		if (key == InputControl.INVALID_LOCK) {
+			return; // Shouldn't even ever be here!
+		}
 
-		if (!input.isCapturingText())
-		{
+		if (!input.isCapturingText()) {
 			input.startTextCapture();
 		}
 
-		if (input.isCapturingText())
-		{
+		if (input.isCapturingText()) {
 			currText = input.getCapturedText();
 		}
 
-		if (input.isDown(Control.ENTER, key))
-		{
+		if (input.isDown(Control.ENTER, key)) {
 			input.consumeKey(Control.ENTER, key);
 			execute(game, input.stopTextCapture());
 		}
 
-		if (input.isDown(Control.ESC, key))
-		{
+		if (input.isDown(Control.ESC, key)) {
 			input.consumeKey(Control.ESC, key);
 			tearDown(input);
 		}
 	}
 
-	private void execute(Game game, String command)
-	{
+	private void execute(Game game, String command) {
 		Scanner in = new Scanner(command);
 		in.useDelimiter("\\s+");
 
-		if (!in.hasNext())
-		{
+		if (!in.hasNext()) {
 			in.close();
 			return;
 		}
 
 		String curr = in.next();
 
-		switch (curr.toLowerCase())
-		{
+		switch (curr.toLowerCase()) {
 			case "give":
 				give(game, in);
 				break;
@@ -103,87 +96,69 @@ public class DevConsole
 		in.close();
 	}
 	
-	private void transition(Game game, Scanner in)
-	{
-		if (game.charData == null) 
-		{
-			System.err.println("Can't teleport before loading a player!");
-			return;
+	private void transition(Game game, Scanner in) {
+		if (game.characterData == null) {
+			Global.error("Can't teleport before loading a player!");
 		}
-		if (!in.hasNext())
-		{
-			System.err.println("Teleport to which map?");
-			return;
+
+		if (!in.hasNext()) {
+			Global.error("Teleport to which map???");
 		}
 		
 		String mapName = in.next();
 		String mapEntrance = null;
 		
-		if (in.hasNext())
-		{
+		if (in.hasNext()) {
 			mapEntrance = in.next();
 		}
 		
 		System.out.println("Teleporting Player to map " + mapName +" and to " +(mapEntrance == null? "location (0,0)": "map entrance "+mapEntrance) +".");
-		game.charData.setMap(mapName, mapEntrance);
+		game.characterData.setMap(mapName, mapEntrance);
 		
-		if (mapEntrance != null) 
-		{
-			game.data.getMap(mapName).setCharacterToEntrance(game.charData, mapEntrance);
+		if (mapEntrance != null) {
+			game.data.getMap(mapName).setCharacterToEntrance(game.characterData, mapEntrance);
 		}
 	}
 	
-	private void global(Game game, Scanner in) 
-	{
-		if (game.charData == null) 
-		{
-			System.err.println("Can't give before loading a player!");
-			return;
+	private void global(Game game, Scanner in) {
+		if (game.characterData == null) {
+			Global.error("Can't give before loading a player!");
 		}
-		if (!in.hasNext())
-		{
-			System.err.println("Add what global?");
-			return;
+
+		if (!in.hasNext()) {
+			Global.error("Add what global????");
 		}
 
 		String global = in.next();
-		System.out.println("Adding global \""+global+"\".");
-		game.charData.addGlobal(global);
+		System.out.println("Adding global \"" + global + "\".");
+		game.characterData.addGlobal(global);
 	}
 
-	private void give(Game game, Scanner in)
-	{
-		if (!in.hasNext())
-		{
-			System.err.println("Give what?");
-			return;
+	private void give(Game game, Scanner in) {
+		if (!in.hasNext()) {
+			Global.error("Give what???");
 		}
-		if (game.charData == null) 
-		{
-			System.err.println("Can't give before loading a player!.");
-			return;
+
+		if (game.characterData == null) {
+			Global.error("Can't give before loading a player!");
 		}
 
 		String curr = in.next();
-
-		switch (curr.toLowerCase())
-		{
+		switch (curr.toLowerCase()) {
 			case "pokemon":
 				String pokemonName = "";
-				int level = 100;
-				ArrayList<Move> moves = null;
+				int level = ActivePokemon.MAX_LEVEL;
+				List<Move> moves = null;
 				boolean shiny = false;
 				
 				pokemonName = in.next();
 				Namesies namesies = Namesies.getValueOf(pokemonName, NamesiesType.POKEMON);
 
 				boolean valid = true;
-				while (in.hasNext() && valid)
-				{
-					String tok = in.next();
+				while (in.hasNext() && valid) {
+					String token = in.next();
 
-					switch (tok.toLowerCase())
-					{
+					switch (token.toLowerCase()) {
 						case "level:":
 							level = Integer.parseInt(in.next());
 							break;
@@ -193,18 +168,14 @@ public class DevConsole
 						case "moves:":
 							moves = new ArrayList<>();
 							in.useDelimiter(",");
-							for (int i = 0; i < 4; ++i)
-							{
+							for (int i = 0; i < Move.MAX_MOVES; ++i) {
 								String s = in.next().trim();
-								if (!Attack.isAttack(s))
-								{
-									System.err.println("Invalid move: " + s);
-									return;
+								if (!Attack.isAttack(s)) {
+									Global.error("Invalid move: " + s);
 								}
 								
 								// TODO: 'None' isn't a valid attack so can this if statement be deleted?
-								if (!"none".equals(s.toLowerCase())) 
-								{
+								if (!"none".equals(s.toLowerCase())) {
 									moves.add(new Move(Attack.getAttackFromName(s)));
 								}
 							}
@@ -212,8 +183,8 @@ public class DevConsole
 							in.useDelimiter("\\s+");
 							break;
 						default:
-							System.err.println("error on token " + tok);
 							valid = false;
+							Global.error("error on token " + token);
 							break;
 					}
 				}
@@ -221,31 +192,36 @@ public class DevConsole
 				System.out.println("adding " + pokemonName + " " + (shiny ? " shiny " : "") + (moves == null ? " " : moves.toString()));
 
 				ActivePokemon pokemon = new ActivePokemon(PokemonInfo.getPokemonInfo(namesies), level, false, true);
-				if (moves != null) pokemon.setMoves(moves);
-				if (shiny) pokemon.setShiny();
+				if (moves != null) {
+					pokemon.setMoves(moves);
+				}
 
-				game.charData.addPokemon(null, pokemon);
+				if (shiny) {
+					pokemon.setShiny();
+				}
+
+				game.characterData.addPokemon(null, pokemon);
 				break;
 			case "item":
 				String itemName = in.next().replaceAll("_", " ");
-				int amt = 1;
-				if (in.hasNext()) amt = Integer.parseInt(in.next());
-				if (!Item.isItem(itemName))
-				{
-					System.out.println("Invalid item: " + itemName);
-					return;
+				int amount = 1;
+				if (in.hasNext()) {
+					amount = Integer.parseInt(in.next());
+				}
+
+				if (!Item.isItem(itemName)) {
+					Global.error("Invalid item: " + itemName);
 				}
 				
-				game.charData.addItem(Item.getItemFromName(itemName), amt);
+				game.characterData.addItem(Item.getItemFromName(itemName), amount);
 				break;
-			default:
-				;
 		}
 	}
 
-	public void draw(Graphics g, GameData data)
-	{
-		if (!show) return; // Fixes a minor graphical stutter when tearing down
+	public void draw(Graphics g, GameData data) {
+		if (!show) {
+			return; // Fixes a minor graphical stutter when tearing down
+		}
 
 		g.translate(0, Global.GAME_SIZE.height - 20);
 
@@ -262,23 +238,20 @@ public class DevConsole
 		g.translate(0, -Global.GAME_SIZE.height + 20);
 	}
 
-	public void show()
-	{
+	public void show() {
 		show = true;
 	}
 
 	// Tear down, release locks, etc... This needs to be the only way to get out
 	// of here, or bad things can happen!
-	private void tearDown(InputControl input)
-	{
+	private void tearDown(InputControl input) {
 		show = false;
 		input.stopTextCapture();
 		input.releaseLock(key);
 		currText = "";
 	}
 
-	public boolean isShown()
-	{
+	boolean isShown() {
 		return show;
 	}
 

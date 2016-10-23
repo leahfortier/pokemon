@@ -20,8 +20,7 @@ import trainer.CharacterData;
 import util.FileIO;
 
 
-public class MapData 
-{
+public class MapData {
 	public static final Pattern blockPattern = Pattern.compile("((NPC|Item|Trigger|MapEntrance|TriggerData)\\s+)?(\\w+)\\s*\\{([^}]*)\\}");
 	
 	public final String name;
@@ -39,11 +38,10 @@ public class MapData
 	
 	private final ArrayList<EntityData> entities;
 	
-	public MapData(File file, GameData gameData)
-	{
+	public MapData(File file, GameData gameData) {
 		name = file.getName();
 		
-		String beginFilePath = FileIO.makePath(file.getPath()) + name;
+		String beginFilePath = FileIO.makeFolderPath(file.getPath()) + name;
 		
 		BufferedImage bgMap = FileIO.readImage(beginFilePath + "_bg.png");
 		width = bgMap.getWidth();
@@ -58,12 +56,10 @@ public class MapData
 		
 		BufferedImage areaM = null;
 		File areaMapFile = new File(beginFilePath + "_area.png");
-		if (areaMapFile.exists())
-		{
+		if (areaMapFile.exists()) {
 			areaM = FileIO.readImage(areaMapFile);			
 		}
-		else
-		{
+		else {
 			// If map doesn't have an image for areas, create and save an empty image for areas.
 			areaM = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			FileIO.writeImage(areaM, areaMapFile);
@@ -78,16 +74,13 @@ public class MapData
 		String fileText = FileIO.readEntireFileWithReplacements(f, false);
 
 		Matcher m = blockPattern.matcher(fileText);
-		while (m.find())
-		{
+		while (m.find()) {
 			String name = m.group(3);
 			
 			// Trigger
-			if (m.group(1) == null)
-			{
+			if (m.group(1) == null) {
 				Scanner in = new Scanner(m.group(4));
-				while (in.hasNext())
-				{
+				while (in.hasNext()) {
 					String[] xr = in.next().split("-");
 					String[] yr = in.next().split("-");
 				
@@ -103,10 +96,8 @@ public class MapData
 				
 				in.close();
 			}
-			else
-			{
-				switch (m.group(2)) 
-				{
+			else {
+				switch (m.group(2)) {
 					case "NPC":
 						entities.add(new NPCEntityData(name, m.group(4)));
 						break;
@@ -122,8 +113,7 @@ public class MapData
 					case "TriggerData":
 						TriggerData triggerData = new TriggerData(name, m.group(4));
 						
-						for (Integer loc: triggerData.getPoints(width)) 
-						{
+						for (Integer loc: triggerData.getPoints(width)) {
 							triggers.put(loc, name);
 						}
 						
@@ -133,9 +123,9 @@ public class MapData
 			}
 		}
 	}
-	
-	public static enum WalkType
-	{
+
+	// TODO: move this to its own file
+	public enum WalkType {
 		WATER(0x0000FF), 
 		WALKABLE(0xFFFFFF), 
 		NOT_WALKABLE(0x000000), 
@@ -148,22 +138,18 @@ public class MapData
 		
 		private final int value;
 		
-		private WalkType(int v)
-		{
+		WalkType(int v) {
 			value = v;
 		}
 	};
 	
-	public static Integer getMapEntranceLocation(String contents, int width) 
-	{	
+	public static Integer getMapEntranceLocation(String contents, int width) {
 		int x = 0;
 		int y = 0;
 		
 		Matcher m = EntityData.variablePattern.matcher(contents);
-		while (m.find())
-		{
-			switch (m.group(1))
-			{
+		while (m.find()) {
+			switch (m.group(1)) {
 				case "x":
 					x = Integer.parseInt(m.group(2));
 					break;
@@ -176,61 +162,60 @@ public class MapData
 		return y*width + x;
 	}
 	
-	public boolean inBounds(int x, int y)
-	{
+	public boolean inBounds(int x, int y) {
 		return x >= 0 && x < width && y >= 0 && y < height;
 	}
 	
-	public int getBgTile(int x, int y)
-	{
-		if (!inBounds(x, y))
+	public int getBgTile(int x, int y) {
+		if (!inBounds(x, y)) {
 			return 0;
+		}
 		
 		return bgTile[y*width + x];
 	}
 	
-	public int getFgTile(int x, int y)
-	{
-		if (!inBounds(x, y))
+	public int getFgTile(int x, int y) {
+		if (!inBounds(x, y)) {
 			return 0;
+		}
 		
 		return fgTile[y*width + x];
 	}
 	
-	public WalkType getPassValue(int x, int y)
-	{
-		if (!inBounds(x, y))
+	public WalkType getPassValue(int x, int y) {
+		if (!inBounds(x, y)) {
 			return WalkType.NOT_WALKABLE;
+		}
 		
 		int val = walkMap[y*width + x]&((1<<24) - 1);
-		for (WalkType t: WalkType.values())
-			if (t.value == val)
+		for (WalkType t: WalkType.values()) {
+			if (t.value == val) {
 				return t;
+			}
+		}
 		
 		return WalkType.NOT_WALKABLE;
 	}
 	
-	public int getAreaName(int x, int y) 
-	{
-		if (!inBounds(x, y) || areaMap == null)
+	public int getAreaName(int x, int y) {
+		if (!inBounds(x, y) || areaMap == null) {
 			return 0;
+		}
 		
 		return areaMap[y*width + x];
 	}
 	
-	public String trigger(CharacterData character) 
-	{
+	public String trigger(CharacterData character) {
 		int val = character.locationY*width + character.locationX;
-		if (triggers.containsKey(val))
+		if (triggers.containsKey(val)) {
 			return triggers.get(val);
+		}
 	
 		return null;
 	}
 	
-	public boolean setCharacterToEntrance(CharacterData character, String entranceName) 
-	{
-		if (mapEntrances.containsKey(entranceName)) 
-		{
+	public boolean setCharacterToEntrance(CharacterData character, String entranceName) {
+		if (mapEntrances.containsKey(entranceName)) {
 			int entrance = mapEntrances.get(entranceName);
 			int newY = entrance / width;
 			int newX = entrance - newY * width;
@@ -242,13 +227,10 @@ public class MapData
 		return false;
 	}
 
-	public Entity[][] populateEntities(CharacterData character, GameData gameData) 
-	{
+	public Entity[][] populateEntities(CharacterData character, GameData gameData) {
 		Entity[][] res = new Entity[width][height];
-		for (EntityData data: entities)
-		{
-			if (data.isEntityPresent(character) || GameFrame.GENERATE_STUFF)
-			{
+		for (EntityData data: entities) {
+			if (data.isEntityPresent(character) || GameFrame.GENERATE_STUFF) {
 				Entity e = data.getEntity();
 				e.reset();
 				e.addData(gameData);

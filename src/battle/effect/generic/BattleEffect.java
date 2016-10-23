@@ -1,6 +1,7 @@
 package battle.effect.generic;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import battle.MoveType;
 import battle.effect.BeforeTurnEffect;
@@ -22,7 +23,7 @@ import battle.effect.generic.Status.StatusCondition;
 
 public abstract class BattleEffect extends Effect {
 	private static final long serialVersionUID = 1L;
-	private static HashMap<String, BattleEffect> map;
+	private static Map<String, BattleEffect> map;
 
 	public BattleEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
@@ -31,7 +32,9 @@ public abstract class BattleEffect extends Effect {
 	public abstract BattleEffect newInstance();
 
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-		if (printCast) b.addMessage(getCastMessage(b, caster, victim));
+		if (printCast) {
+			b.addMessage(getCastMessage(b, caster, victim));
+		}
 		b.addEffect(this.newInstance());
 
 		b.addMessage("", caster);
@@ -40,7 +43,6 @@ public abstract class BattleEffect extends Effect {
 
 	public static BattleEffect getEffect(Namesies name) {
 		String e = name.getName();
-
 		if (map == null) {
 			loadEffects();
 		}
@@ -55,7 +57,10 @@ public abstract class BattleEffect extends Effect {
 
 	// Create and load the effects map if it doesn't already exist
 	public static void loadEffects() {
-		if (map != null) return;
+		if (map != null) {
+			return;
+		}
+
 		map = new HashMap<>();
 
 		// EVERYTHING BELOW IS GENERATED ###
@@ -367,8 +372,7 @@ public abstract class BattleEffect extends Effect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (!victim.fullHealth() && !victim.isLevitating(b))
-			{
+			if (!victim.fullHealth() && !victim.isLevitating(b)) {
 				victim.healHealthFraction(1/16.0);
 				b.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", victim);
 			}

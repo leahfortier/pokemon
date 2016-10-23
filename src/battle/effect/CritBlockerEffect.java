@@ -1,6 +1,5 @@
 package battle.effect;
 
-public interface CritBlockerEffect 
-{
-	public boolean blockCrits();
+public interface CritBlockerEffect {
+	boolean blockCrits();
 }

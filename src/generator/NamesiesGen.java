@@ -8,9 +8,8 @@ import pokemon.PokemonInfo;
 import util.FileIO;
 import util.PokeString;
 
-class NamesiesGen
-{
-	private static final String NAMESIES_PATH = FileIO.makePath("src", "main") + "Namesies.java";
+class NamesiesGen {
+	private static final String NAMESIES_PATH = FileIO.makeFolderPath("src", "main") + "Namesies.java";
 	
 	private final StringBuilder namesies;
 	private boolean firstNamesies;
@@ -39,8 +38,7 @@ class NamesiesGen
 			}
 			
 			if (canPrint) {
-				out.append(line)
-						.append("\n");
+				out.append(line).append("\n");
 			}
 			
 			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) {

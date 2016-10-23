@@ -4,6 +4,7 @@ import gui.view.BattleView;
 import gui.view.MapView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,47 +25,38 @@ import battle.Battle;
  * 		Egg
  * 		Item: item name*
  */
-public class TrainerBattleTrigger extends Trigger
-{
+public class TrainerBattleTrigger extends Trigger {
 	public static final Pattern trainerBattleTriggerPattern = Pattern.compile("(pokemon:)\\s*([A-Za-z \\t0-9,:.\\-'*]*)|(name:)\\s*([A-Za-z0-9 ]+)|(winGlobal:)\\s*([A-Za-z0-9_]+)|(cash:)\\s*(\\d+)");
 	
-	Trainer t;
-	String winGlobal;
+	private final Trainer trainer;
+	private String winGlobal;
 
-	public TrainerBattleTrigger(String name, String function)
-	{
+	public TrainerBattleTrigger(String name, String function) {
 		super(name, function);
 
 		Matcher m = trainerBattleTriggerPattern.matcher(function);
-		String trainerName = "???";
-		ArrayList<ActivePokemon> pokemon = new ArrayList<>();
+		String trainerName = "???"; // TODO: Why is this the default and why isn't it a constant?
+		List<ActivePokemon> pokemon = new ArrayList<>();
 		int cash = 0;
-		while (m.find())
-		{
-			if (m.group(1) != null)
-			{
+		while (m.find()) {
+			if (m.group(1) != null) {
 				pokemon.add(ActivePokemon.createActivePokemon(m.group(2), false));
 			}
 	
-			if (m.group(3) != null)
-			{
+			if (m.group(3) != null) {
 				trainerName = m.group(4);
 			}
 			
-			if (m.group(5) != null)
-			{
+			if (m.group(5) != null) {
 				winGlobal = m.group(6);
 			}
 			
-			if (m.group(7) != null)
-			{
-				try
-				{
+			if (m.group(7) != null) {
+				try {
 					cash = Integer.parseInt(m.group(8));
 				}
-				catch (NumberFormatException ex)
-				{
-					Global.error(m.group(8) + " isn't a number! Only numbers can be cash, I mean, what is " + m.group(8) + " pokedollars\" supposed to mean, anyway?");
+				catch (NumberFormatException ex) {
+					Global.error(m.group(8) + " isn'trainer a number! Only numbers can be cash, I mean, what is " + m.group(8) + " pokedollars\" supposed to mean, anyway?");
 				}
 			}
 		}
@@ -78,18 +70,18 @@ public class TrainerBattleTrigger extends Trigger
 //		}
 //		System.out.println();
 		
-		t = new EnemyTrainer(trainerName, cash);
-		for (ActivePokemon p : pokemon) t.addPokemon(null, p);
+		trainer = new EnemyTrainer(trainerName, cash);
+		for (ActivePokemon p : pokemon) {
+			trainer.addPokemon(null, p);
+		}
 	}
 
-	public void execute(Game game)
-	{
+	public void execute(Game game) {
 		super.execute(game);
-		t.healAll();
+		trainer.healAll();
 		
-		Battle b = new Battle(game.charData, (Opponent) t, winGlobal);
+		Battle b = new Battle(game.characterData, (Opponent) trainer, winGlobal);
 
-		((BattleView) game.viewMap.get(ViewMode.BATTLE_VIEW)).setBattle(b);
-		((MapView)game.viewMap.get(ViewMode.MAP_VIEW)).setBattle(b, true);
+		game.setBattleViews(b, true);
 	}
 }

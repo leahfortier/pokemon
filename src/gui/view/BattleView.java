@@ -1,5 +1,10 @@
 package gui.view;
 
+import battle.Battle;
+import battle.MessageUpdate;
+import battle.MessageUpdate.Update;
+import battle.Move;
+import battle.effect.generic.Status.StatusCondition;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
@@ -7,19 +12,6 @@ import item.Bag;
 import item.BattleBagCategory;
 import item.Item;
 import item.use.PokemonUseItem;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
@@ -37,14 +29,20 @@ import trainer.Trainer.Action;
 import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
-import battle.Battle;
-import battle.MessageUpdate;
-import battle.MessageUpdate.Update;
-import battle.Move;
-import battle.effect.generic.Status.StatusCondition;
 
-public class BattleView extends View 
-{
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+
+public class BattleView extends View {
+
 	// Menu Button Indexes
 	private static final int FIGHT_BUTTON = 0;
 	private static final int BAG_BUTTON = 1;
@@ -81,16 +79,16 @@ public class BattleView extends View
 	private static final int CATCH_ANIMATION_LIFESPAN = CATCH_SHAKE_ANIMATION_LIFESPAN*CharacterData.CATCH_SHAKES + CATCH_TRANSFORM_ANIMATION_LIFESPAN;
 	
 	// Polygons for Type Colors in Status Box -- First array is for player, Second array is for the opponent
-	private static final int[][] primaryColorx = {{0, 199, 94, 0}, {0, 191, 104, 0}};
-	private static final int[][] primaryColory = {{0, 0, 105, 105}, {0, 0, 88, 88}};
-	private static final int[][] secondaryColorx = {{294, 199, 94, 294}, {191, 294, 294, 104}};
-	private static final int[][] secondaryColory = {{0, 0, 105, 105}, {0, 0, 88, 88}};
+	private static final int[][] primaryColorx = { { 0, 199, 94, 0 }, { 0, 191, 104, 0 } };
+	private static final int[][] primaryColory = { { 0, 0, 105, 105 }, { 0, 0, 88, 88 } };
+	private static final int[][] secondaryColorx = { { 294, 199, 94, 294 }, { 191, 294, 294, 104 } };
+	private static final int[][] secondaryColory = { { 0, 0, 105, 105 }, { 0, 0, 88, 88 } };
 	
 	// Polygons for Type Colors in the Pokemon View
-	private static final int[] pkmnPrimaryColorx = {0, 349, 5, 0};
-	private static final int[] pkmnPrimaryColory = {0, 0, 344, 344};
-	private static final int[] pkmnSecondaryColorx = {344, 349, 349, 0};
-	private static final int[] pkmnSecondaryColory = {0, 0, 344, 344};
+	private static final int[] pkmnPrimaryColorx = { 0, 349, 5, 0 };
+	private static final int[] pkmnPrimaryColory = { 0, 0, 344, 344 };
+	private static final int[] pkmnSecondaryColorx = { 344, 349, 349, 0 };
+	private static final int[] pkmnSecondaryColory = { 0, 0, 344, 344 };
 	
 	// The current battle in view, the current message being displayed, and the current selected button
 	private Battle currentBattle;
@@ -122,7 +120,7 @@ public class BattleView extends View
 	private boolean switchForced;
 	
 	private int logPage;
-	private ArrayList<String> logMessages;
+	private List<String> logMessages;
 	
 	private List<Move> selectedMoveList;
 	
@@ -137,14 +135,12 @@ public class BattleView extends View
 	private int[] statGains;
 	private int[] newStats;
 	
-	public BattleView()
-	{
+	public BattleView() {
 		playerAnimation = new PokemonAnimationState();
 		enemyAnimation = new PokemonAnimationState();
 	}
 	
-	public void setBattle(Battle b)
-	{		
+	public void setBattle(Battle b) {
 		currentBattle = b;
 		selectedBagTab = 0;
 		bagPage = 0;
@@ -169,19 +165,50 @@ public class BattleView extends View
 		backButton = new Button(750, 560, 35, 20, null);
 		
 		// Menu Buttons
-		menuButtons = new Button[4];
-		menuButtons[FIGHT_BUTTON] = fightBtn = new Button(452, 473, 609 - 452, 515 - 473, Button.HoverAction.ARROW, new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON});
-		menuButtons[BAG_BUTTON] = bagBtn = new Button(628, 473, 724 - 628, 513 - 473, Button.HoverAction.ARROW, new int[] {SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON});
-		menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(452, 525, 609 - 452, 571 - 525, Button.HoverAction.ARROW, new int[] {RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON});
-		menuButtons[RUN_BUTTON] = runBtn = new Button(628, 525, 724 - 628, 571 - 525, Button.HoverAction.ARROW, new int[] {FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON});
+		menuButtons = new Button[4]; // TODO: ugly equals
+		menuButtons[FIGHT_BUTTON] = fightBtn = new Button(
+				452,
+				473,
+				609 - 452,
+				515 - 473,
+				Button.HoverAction.ARROW,
+				new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON}
+		);
+		menuButtons[BAG_BUTTON] = bagBtn = new Button(
+				628,
+				473,
+				724 - 628,
+				513 - 473,
+				Button.HoverAction.ARROW,
+				new int[] {SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON}
+		);
+		menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(
+				452,
+				525,
+				609 - 452,
+				571 - 525,
+				Button.HoverAction.ARROW,
+				new int[] {RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON}
+		);
+		menuButtons[RUN_BUTTON] = runBtn = new Button(
+				628,
+				525,
+				724 - 628,
+				571 - 525,
+				Button.HoverAction.ARROW,
+				new int[] {FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON}
+		);
 		
 		// Move Buttons
 		moveButtons = new Button[Move.MAX_MOVES];
-		for (int y = 0, i = 0; y < 2; y++)
-		{
-			for (int x = 0; x < Move.MAX_MOVES/2; x++, i++)
-			{
-				moveButtons[i] = new Button(22 + x*190, 440 + 21 + y*62, 183, 55, Button.HoverAction.BOX, 
+		for (int y = 0, i = 0; y < 2; y++) {
+			for (int x = 0; x < Move.MAX_MOVES/2; x++, i++) {
+				moveButtons[i] = new Button(
+						22 + x*190,
+						440 + 21 + y*62,
+						183,
+						55,
+						Button.HoverAction.BOX,
 						new int[] { (i + 1)%Move.MAX_MOVES, // Right
 									((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up
 									((i - 1) + Move.MAX_MOVES)%Move.MAX_MOVES, // Left
@@ -198,28 +225,37 @@ public class BattleView extends View
 		bagButtons = new Button[NUM_BAG_BUTTONS];
 		
 		bagTabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
-		for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++)
-		{
-			bagButtons[i] = bagTabButtons[i] = new Button(i*89 + 30, 190, 89, 28, Button.HoverAction.BOX, 
+		for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
+			bagButtons[i] = bagTabButtons[i] = new Button(
+					i*89 + 30,
+					190,
+					89,
+					28,
+					Button.HoverAction.BOX,
 					new int[] { (i + 1)% BATTLE_BAG_CATEGORIES.length, // Right
 								LAST_ITEM_BUTTON, // Up
 								(i - 1 + BATTLE_BAG_CATEGORIES.length)% BATTLE_BAG_CATEGORIES.length, // Left
-								ITEMS }); // Down
+								ITEMS }  // Down
+			);
 		}
 		
 		bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, Button.HoverAction.BOX, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});
 		bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(250,435,35,20, Button.HoverAction.BOX, new int[] {-1, ITEMS + ITEMS_PER_PAGE - 1, BAG_LEFT_BUTTON, LAST_ITEM_BUTTON});
 		bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, Button.HoverAction.BOX, new int[] {-1, BAG_LEFT_BUTTON, -1, selectedBagTab});
 		
-		for (int y = 0, i = ITEMS; y < ITEMS_PER_PAGE/2; y++)
-		{
-			for (int x = 0; x < 2; x++, i++)
-			{
-				bagButtons[i] = new Button(55 + x*162, 243 + y*38, 148, 28, Button.HoverAction.BOX, 
+		for (int y = 0, i = ITEMS; y < ITEMS_PER_PAGE/2; y++) {
+			for (int x = 0; x < 2; x++, i++) {
+				bagButtons[i] = new Button(
+						55 + x*162,
+						243 + y*38,
+						148,
+						28,
+						Button.HoverAction.BOX,
 						new int[] { (i + 1 - ITEMS)%ITEMS_PER_PAGE + ITEMS, // Right
 									y == 0 ? selectedBagTab : i - 2, // Up
 									(i - 1 - ITEMS + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS, // Left
-									y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + 2 }); // Down
+									y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + 2 }
+				); // Down
 			}
 		}
 		
@@ -227,8 +263,7 @@ public class BattleView extends View
 		pokemonButtons = new Button[Trainer.MAX_POKEMON + 1];
 		
 		pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
-		{
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
 			pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, Button.HoverAction.BOX, 
 					new int[] { (i + 1)%Trainer.MAX_POKEMON, // Right
 								POKEMON_SWITCH_BUTTON, // Up
@@ -236,19 +271,17 @@ public class BattleView extends View
 								POKEMON_SWITCH_BUTTON }); // Down
 		}
 		
-		pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, Button.HoverAction.BOX, new int[]{-1, 0, -1, -1});
+		pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, Button.HoverAction.BOX, new int[] { -1, 0, -1, -1 });
 	
-		logLeftButton = new Button(150, 550, 35, 20, Button.HoverAction.BOX, new int[] {LOG_RIGHT_BUTTON, -1, -1, -1});
-		logRightButton = new Button(200, 550, 35, 20, Button.HoverAction.BOX, new int[] {-1, -1, LOG_LEFT_BUTTON, -1});
-		logButtons = new Button[] {logLeftButton, logRightButton};
-		
-		
+		logLeftButton = new Button(150, 550, 35, 20, Button.HoverAction.BOX, new int[] { LOG_RIGHT_BUTTON, -1, -1, -1 });
+		logRightButton = new Button(200, 550, 35, 20, Button.HoverAction.BOX, new int[] { -1, -1, LOG_LEFT_BUTTON, -1 });
+		logButtons = new Button[] { logLeftButton, logRightButton };
+
 		currentBattle.getPlayer().clearLogMessages();
 	}
 	
 	// Contains the different types of states a battle can be in
-	public enum VisualState
-	{
+	public enum VisualState {
 		MESSAGE(updateMessage),
 		BAG(updateBag), 
 		INVALID_BAG(updateBag), 
@@ -265,39 +298,56 @@ public class BattleView extends View
 		
 		private final UpdateVisualState updateVisualState;
 		
-		private VisualState(UpdateVisualState updateVisualState) {
+		VisualState(UpdateVisualState updateVisualState) {
 			this.updateVisualState = updateVisualState;
 		}
 		
-		public static interface UpdateVisualState {
-			public void update(BattleView view, InputControl input);
-			public void set(BattleView view);
-			public void draw(BattleView view, Graphics g, GameData data, TileSet tiles);
+		public interface UpdateVisualState {
+			void update(BattleView view, InputControl input);
+			void set(BattleView view);
+			void draw(BattleView view, Graphics g, GameData data, TileSet tiles);
 		}
 	};
 	
 	// Handles animation and keeps track of the current state
-	private class PokemonAnimationState
-	{
+	private class PokemonAnimationState {
 		private PokemonState oldState, state;
 		private int animationHP, animationEvolve, animationExp, animationCatch;
 		private int animationCatchDuration;
 		
-		public PokemonAnimationState()
-		{
+		PokemonAnimationState() {
 			oldState = new PokemonState();
 			state = new PokemonState();
 		}
 		
-		private void resetVals(ActivePokemon p)
-		{
-			resetVals(p.getHP(), p.getStatus().getType(), p.getDisplayType(currentBattle), p.isShiny(), p.getPokemonInfo(), 
-					p.getName(), p.getMaxHP(), p.getLevel(), p.getGender(), p.expRatio());
+		private void resetVals(ActivePokemon p) {
+			resetVals(
+					p.getHP(),
+					p.getStatus().getType(),
+					p.getDisplayType(currentBattle),
+					p.isShiny(),
+					p.getPokemonInfo(),
+					p.getName(),
+					p.getMaxHP(),
+					p.getLevel(),
+					p.getGender(),
+					p.expRatio()
+			);
 		}
 		
 		// Resets all the values in a state
-		private void resetVals(int hp, StatusCondition status, Type[] type, boolean shiny, PokemonInfo pokemon, String name, int maxHP, int level, Gender gender, float expRatio)
-		{
+		private void resetVals(
+				int hp,
+				StatusCondition status,
+				Type[] type,
+				boolean shiny,
+				PokemonInfo pokemon,
+				String name,
+				int maxHP,
+				int level,
+				Gender gender,
+				float expRatio
+		) {
 			animationHP = 0;
 			animationExp = 0;
 			animationCatchDuration = 0;
@@ -315,22 +365,21 @@ public class BattleView extends View
 			state.expRatio = oldState.expRatio = expRatio;
 		}
 		
-		private void startHpAnimation(int newHp) 
-		{
-			if (newHp == state.hp) return;
+		private void startHpAnimation(int newHp) {
+			if (newHp == state.hp) {
+				return;
+			}
 			
 			oldState.hp = state.hp;
 			state.hp = newHp;
-			animationHP = (int)(Math.abs(oldState.hp - state.hp)*FRAMES_PER_HP_LOSS);
+			animationHP = Math.abs(oldState.hp - state.hp)*FRAMES_PER_HP_LOSS;
 		}
 		
-		private void setMaxHP(int newMax)
-		{
+		private void setMaxHP(int newMax) {
 			state.maxHp = newMax;
 		}
 		
-		private void setStatus(StatusCondition newStatus) 
-		{
+		private void setStatus(StatusCondition newStatus) {
 			oldState.status = state.status;
 			state.status = newStatus;
 		}
@@ -340,67 +389,58 @@ public class BattleView extends View
 			state.type = newType;
 		}
 		
-		private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) 
-		{
+		private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
 			state.shiny = newShiny;
-			if (state.imageNumber != 0)
-			{
+			if (state.imageNumber != 0) {
 				oldState.imageNumber = state.imageNumber;
-				if (animate) animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
+				if (animate) {
+					animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
+				}
 			}
 			
 			state.imageNumber = newPokemon.getImageNumber(state.shiny);
 			animationCatchDuration = 0;
 		}
 		
-		private void startCatchAnimation(int duration)
-		{
-			if (duration == -1)
-			{
+		private void startCatchAnimation(int duration) {
+			if (duration == -1) { // TODO: There should be a constant for this
 				animationCatch = CATCH_ANIMATION_LIFESPAN;
 				animationCatchDuration = -1;
 			}
-			else
-			{
+			else {
+				// TODO: uggy
 				animationCatch = animationCatchDuration = duration*CATCH_SHAKE_ANIMATION_LIFESPAN + 2*CATCH_TRANSFORM_ANIMATION_LIFESPAN;
 			}
 		}
 		
-		private void startExpAnimation(float newExpRatio, boolean levelUp) 
-		{
+		private void startExpAnimation(float newExpRatio, boolean levelUp) {
 			oldState.expRatio = levelUp ? 0 : state.expRatio;
 			state.expRatio = newExpRatio;
 			animationExp = (int)(100*Math.abs(oldState.expRatio - state.expRatio)*FRAMES_PER_HP_LOSS);
 		}
 		
-		private void setLevel(int newLevel) 
-		{
+		private void setLevel(int newLevel) {
 			state.level = newLevel;
 		}
 		
-		private void setName(String newName) 
-		{
+		private void setName(String newName) {
 			state.name = newName;
 		}
 		
-		private void setGender(Gender newGender) 
-		{
+		private void setGender(Gender newGender) {
 			state.gender = newGender;
 		}
 		
-		private boolean isEmpty() 
-		{
+		private boolean isEmpty() {
 			return state.imageNumber == 0;
 		}
 		
-		private boolean isAnimationPlaying()
-		{
+		private boolean isAnimationPlaying() {
 			return animationHP != 0 || animationEvolve != 0 || animationCatch != 0 || animationExp != 0;
 		}
 		
 		// Draws all of the text inside the status box
-		private void drawStatusBoxText(Graphics g, int isEnemy, TileSet tiles, ActivePokemon pokemon)
-		{
+		private void drawStatusBoxText(Graphics g, int isEnemy, TileSet tiles, ActivePokemon pokemon) {
 			// Name, Gender, Level, Status Condition
 			DrawMetrics.setFont(g, 27);
 			DrawMetrics.drawShadowText(g, state.name + " " + state.gender.getCharacter(), 20, 40, false);
@@ -410,13 +450,11 @@ public class BattleView extends View
 			DrawMetrics.drawShadowText(g, state.status.getName(), 20, 71, false);
 			
 			// Only the player shows the HP Text
-			if (isEnemy == 0)
-			{
+			if (isEnemy == 0) {
 				// HP Text Animation
 				int originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
 				String hpStr = state.hp + "/" + state.maxHp;
-				if (animationHP > 0)
-				{
+				if (animationHP > 0) {
 					hpStr = (int)(state.hp + (oldState.hp - state.hp)*(animationHP/(float)originalTime)) + "/" + state.maxHp;
 				}
 				
@@ -424,16 +462,14 @@ public class BattleView extends View
 				DrawMetrics.drawShadowText(g, hpStr, 273, 95, true);
 			}
 			// Show whether or not the wild Pokemon has already been caught
-			else if (state.caught)
-			{
+			else if (state.caught) {
 				g.drawImage(tiles.getTile(0x4), 296, 40, null);
 			}
 		}
 		
 		// TODO: Is this code duplicated in other places? Like the evolution view by any chance
 		// Might want to include a helper class that contains a generic method for different types of animations
-		private void catchAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
-		{
+		private void catchAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py) {
 			Graphics2D g2d = (Graphics2D)g;
 			float[] pokeyScales = { 1f, 1f, 1f, 1f };
 			float[] pokeyOffsets = { 255f, 255f, 255f, 0f };
@@ -445,49 +481,42 @@ public class BattleView extends View
 			int lifespan = animationCatchDuration == -1 ? CATCH_ANIMATION_LIFESPAN : animationCatchDuration;
 			
 			// Turn white
-			if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3)
-			{
+			if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
 				pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
 				ballScales[3] = 0;
 			}
 			// Transform into Pokeball
-			else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7)
-		    {
+			else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
 		       pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
 		       pokeyScales[3] = ((animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
 		       ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
 		       ballScales[3] = (1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
 		    }
 			// Restore color
-			else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN)
-			{
+			else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
 				pokeyScales[3] = 0;
 				ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
 			}
 			// Shake
-			else if (animationCatchDuration == -1 || animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN)
-			{
+			else if (animationCatchDuration == -1 || animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
 				pokeyScales[3] = 0;
 				ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 0;
 				xOffset = (int)(10*Math.sin(animationCatch/200.0));
 			}
 			// Turn white -- didn't catch
-			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7)
-			{
+			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
 				ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - 0.7f)));
 				pokeyScales[3] = 0;
 			}
 			// Transform into Pokemon
-			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3)
-			{
+			else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
 				pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
 				pokeyScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
 				ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
 				ballScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
 			}
 			// Restore color
-			else
-			{
+			else {
 				ballScales[3] = 0;
 				pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f - .7f));
 			}
@@ -501,8 +530,8 @@ public class BattleView extends View
 		}
 		
 		// hi :)
-		private void evolveAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py)
-		{
+		// TODO: is there any way to combine these?
+		private void evolveAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py) {
 			Graphics2D g2d = (Graphics2D)g;
 			
 			float[] prevEvolutionScales = { 1f, 1f, 1f, 1f };
@@ -511,22 +540,19 @@ public class BattleView extends View
 			float[] evolutionOffsets = { 255f, 255f, 255f, 0f };
 			
 			// Turn white
-			if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7)
-			{
+			if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7) {
 				prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255*(1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.7f)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f)));
 				evolutionScales[3] = 0;
 			}
 			// Change form
-			else if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.3)
-			{
+			else if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.3) {
 				prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255;
 				prevEvolutionScales[3] = ((animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
 				evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255;
 				evolutionScales[3] = (1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
 			}
 			// Restore color
-			else
-			{
+			else {
 				prevEvolutionScales[3] = 0;
 				evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1-0.7f));
 			}
@@ -539,39 +565,42 @@ public class BattleView extends View
 			g2d.drawImage(DrawMetrics.colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
 		}
 		
-		private void drawHealthBar(Graphics g)
-		{
+		private void drawHealthBar(Graphics g) {
 			// Draw the white background of the health bar
 			g.setColor(Color.WHITE);
 			g.fillRect(108, 53, 315 - 150, 124 - 105);
 			
 			// Get the ratio based off of the possible animation
 			float ratio = state.hp/(float)state.maxHp;
-			if (animationHP > 0)
-			{
+			if (animationHP > 0) {
 				animationHP -= HP_LOSS_RATIO*state.maxHp + 1;
-				int originalTime = (int)(Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS);
+				int originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
 				ratio = (state.hp + (oldState.hp - state.hp)*(animationHP/(float)originalTime))/(float)state.maxHp;
 			}
-			else animationHP = 0;
+			else {
+				animationHP = 0;
+			}
 			
 			// Set the proper color for the ratio and fill in the health bar as appropriate
 			g.setColor(DrawMetrics.getHPColor(ratio));
-			if (animationHP > 0 && (animationHP/10)%2 == 0) g.setColor(g.getColor().darker());
+			if (animationHP > 0 && (animationHP/10)%2 == 0) {
+				g.setColor(g.getColor().darker());
+			}
+
 			g.fillRoundRect(113, 57, (int)((312 - 155)*ratio), 119 - 109, 5, 5);
 		}
 		
-		private void drawExpBar(Graphics g)
-		{
+		private void drawExpBar(Graphics g) {
 			// Show the animation
 			float expRatio = state.expRatio;
-			if (animationExp > 0)
-			{
+			if (animationExp > 0) {
 				animationExp -= EXP_LOSS_RATIO;
 				int originalTime = (int)(100*Math.abs(state.expRatio - oldState.expRatio)*FRAMES_PER_HP_LOSS);
 				expRatio = (state.expRatio + (oldState.expRatio - state.expRatio)*(animationExp/(float)originalTime));
 			}
-			else animationExp = 0;
+			else {
+				animationExp = 0;
+			}
 			
 			// Experience bar background
 			g.setColor(new Color(153, 153, 153));
@@ -583,8 +612,7 @@ public class BattleView extends View
 		}
 		
 		// Draws the status box, not including the text
-		private void drawStatusBox(Graphics g, int isEnemy, ActivePokemon pokemon, TileSet pkmTiles, int px, int py) //-42 -52 
-		{ 
+		private void drawStatusBox(Graphics g, int isEnemy, ActivePokemon pokemon, TileSet pkmTiles, int px, int py) { //-42 -52
 			// Draw the colored type polygons
 			Color[] typeColors = Type.getColors(state.type);
 			g.setColor(typeColors[0]);
@@ -594,25 +622,24 @@ public class BattleView extends View
 			
 			// Draw health bar and player's EXP Bar
 			drawHealthBar(g);
-			if (isEnemy == 0) drawExpBar(g);
+			if (isEnemy == 0) {
+				drawExpBar(g);
+			}
 			
 			// Draw the Pokemon image if applicable
-			if (!isEmpty() && !pokemon.isSemiInvulnerable())
-			{
+			if (!isEmpty() && !pokemon.isSemiInvulnerable()) {
 				BufferedImage plyrImg = pkmTiles.getTile(state.imageNumber + (isEnemy^1));
-				if (plyrImg != null)
-				{
-					if (animationEvolve > 0)
-					{
+				if (plyrImg != null) {
+					if (animationEvolve > 0) {
 						evolveAnimation(g, plyrImg, isEnemy, pkmTiles, px, py);	
 					}
-					else if (animationCatch > 0)
-					{
+					else if (animationCatch > 0) {
 						catchAnimation(g, plyrImg, isEnemy, pkmTiles, px, py);	
 					}
-					else
-					{
-						if (animationCatchDuration == -1) plyrImg = pkmTiles.getTile(0x11111);
+					else {
+						if (animationCatchDuration == -1) {
+							plyrImg = pkmTiles.getTile(0x11111);
+						}
 						
 						g.drawImage(plyrImg, px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null); // TODO: Why is height not /2 -- can this use the centered image function?
 						
@@ -623,10 +650,10 @@ public class BattleView extends View
 			}
 		}
 	}
-	
+
+	// TODO: Should those set methods up there be inside this class and should it be moved to its own file?
 	// A class to hold the state of a Pokemon
-	private class PokemonState
-	{
+	private class PokemonState {
 		private int maxHp, hp, imageNumber, level;
 		private String name;
 		private StatusCondition status;
@@ -636,8 +663,7 @@ public class BattleView extends View
 		private boolean caught;
 		private Gender gender;
 		
-		public PokemonState()
-		{
+		PokemonState() {
 			type = new Type[2];
 		}
 	}
@@ -646,8 +672,9 @@ public class BattleView extends View
 	private static VisualState.UpdateVisualState updateMenu = new VisualState.UpdateVisualState() {
 
 		public void set(BattleView view) {
-			for (Button b: view.menuButtons)
+			for (Button b: view.menuButtons) {
 				b.setForceHover(false);
+			}
 		}
 		
 		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
@@ -661,59 +688,51 @@ public class BattleView extends View
 			DrawMetrics.setFont(g, 30);
 			DrawMetrics.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
 			
-			for (Button b: view.menuButtons)
+			for (Button b: view.menuButtons) {
 				b.draw(g);
+			}
 		}
 		
-		public void update(BattleView view, InputControl input)
-		{
+		public void update(BattleView view, InputControl input) {
 			// Update menu buttons
 			view.selectedButton = Button.update(view.menuButtons, view.selectedButton, input);
 			
 			// Show Bag View
-			if (view.bagBtn.checkConsumePress())
-			{
+			if (view.bagBtn.checkConsumePress()) {
 				view.setVisualState(VisualState.BAG);
 			}
 			// Show Pokemon View
-			else if (view.pokemonBtn.checkConsumePress())
-			{
+			else if (view.pokemonBtn.checkConsumePress()) {
 				view.setVisualState(VisualState.POKEMON);
 			}
 			// Attempt escape
-			else if (view.runBtn.checkConsumePress())
-			{
+			else if (view.runBtn.checkConsumePress()) {
 				view.setVisualState(VisualState.MESSAGE);
 				view.currentBattle.runAway();
 				view.cycleMessage(false);
 			}
 			// Show Fight View TODO: Semi-invulnerable moves look awful and weird
-			else if (view.fightBtn.checkConsumePress() || view.currentBattle.getPlayer().front().isSemiInvulnerable())
-			{
+			else if (view.fightBtn.checkConsumePress() || view.currentBattle.getPlayer().front().isSemiInvulnerable()) {
 				view.setVisualState(VisualState.FIGHT);
 				
 				// Move is forced -- don't show menu, but execute the move
-				if (Move.forceMove(view.currentBattle, view.currentBattle.getPlayer().front()))
-				{
+				if (Move.forceMove(view.currentBattle, view.currentBattle.getPlayer().front())) {
 					view.currentBattle.getPlayer().performAction(view.currentBattle, Action.FIGHT);
 					view.setVisualState(VisualState.MESSAGE);
 					view.cycleMessage(false);
 				}
 			}
-			else if (input.isDown(Control.L))
-			{
+			else if (input.isDown(Control.L)) {
 				input.consumeKey(Control.L);
 				view.logPage = 0;
 				view.logMessages = view.currentBattle.getPlayer().getLogMessages();
 				
-				if (view.logMessages.size() / LOGS_PER_PAGE > 0)
-				{
+				if (view.logMessages.size() / LOGS_PER_PAGE > 0) {
 					view.selectedButton = LOG_RIGHT_BUTTON;
 					view.logRightButton.setActive(true);
 					view.selectedButton = Button.update(view.logButtons, view.selectedButton, input);
 				}
-				else
-				{
+				else {
 					view.logRightButton.setActive(false);
 				}
 				
@@ -729,11 +748,13 @@ public class BattleView extends View
 		public void set(BattleView view) {
 			view.selectedButton = view.lastMoveUsed;
 			view.selectedMoveList = view.currentBattle.getPlayer().front().getMoves(view.currentBattle);
-			for (int i = 0; i < Move.MAX_MOVES; i++) 
+			for (int i = 0; i < Move.MAX_MOVES; i++) {
 				view.moveButtons[i].setActive(i < view.selectedMoveList.size());
+			}
 			
-			for (Button b: view.moveButtons)
+			for (Button b: view.moveButtons) {
 				b.setForceHover(false);
+			}
 		}
 		
 		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
@@ -743,10 +764,8 @@ public class BattleView extends View
 			ActivePokemon playerPokemon = view.currentBattle.getPlayer().front();
 			
 			List<Move> moves = playerPokemon.getMoves(view.currentBattle);
-			for (int y = 0, i = 0; y < 2; y++)
-			{
-				for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
-				{
+			for (int y = 0, i = 0; y < 2; y++) {
+				for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++) {
 					int dx = 22 + x*190, dy = 440 + 21 + y*62;
 					g.translate(dx, dy);
 					
@@ -768,7 +787,8 @@ public class BattleView extends View
 					g.translate(-dx, -dy);
 				}
 			}
-			
+
+			// TODO: See if I can use isNullOrEmpty
 			String msgLine = view.state == VisualState.INVALID_FIGHT && view.message != null ? view.message : "Select a move!";
 			
 			g.setColor(Color.BLACK);
@@ -777,14 +797,14 @@ public class BattleView extends View
 			
 			View.drawArrows(g, null, view.backButton);
 			
-			for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) 
+			for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) {
 				view.moveButtons[i].draw(g);
+			}
 			
 			view.backButton.draw(g);
 		}
 		
-		public void update(BattleView view, InputControl input)
-		{
+		public void update(BattleView view, InputControl input) {
 			// Update move buttons and the back button
 			view.selectedButton = Button.update(view.moveButtons, view.selectedButton, input);
 			view.backButton.update(input, false, Control.BACK);
@@ -792,22 +812,18 @@ public class BattleView extends View
 			// Get the Pokemon that is attacking and their corresponsing move list
 			ActivePokemon front = view.currentBattle.getPlayer().front();
 			
-			for (int i = 0; i < view.selectedMoveList.size(); i++)
-			{
-				if (view.moveButtons[i].checkConsumePress())
-				{
+			for (int i = 0; i < view.selectedMoveList.size(); i++) {
+				if (view.moveButtons[i].checkConsumePress()) {
 					view.lastMoveUsed = i;
 					
 					// Execute the move if valid
-					if (Move.validMove(view.currentBattle, front, view.selectedMoveList.get(i), true))
-					{
+					if (Move.validMove(view.currentBattle, front, view.selectedMoveList.get(i), true)) {
 						view.currentBattle.getPlayer().performAction(view.currentBattle, Action.FIGHT);
 						view.setVisualState(VisualState.MESSAGE);
 						view.cycleMessage(false);
 					}
 					// An invalid move -- Don't let them select it
-					else
-					{
+					else {
 						view.cycleMessage(false);
 						view.setVisualState(VisualState.INVALID_FIGHT);
 					}
@@ -815,8 +831,7 @@ public class BattleView extends View
 			}
 			
 			// Return to main battle menu
-			if (view.backButton.checkConsumePress())
-			{
+			if (view.backButton.checkConsumePress()) {
 				view.setVisualState(VisualState.MENU);
 			}
 		}
@@ -848,25 +863,22 @@ public class BattleView extends View
 			}
 		}
 		
-		public void update(BattleView view, InputControl input)
-		{
+		public void update(BattleView view, InputControl input) {
 			boolean pressed = false;
 			
 			// Consume input for mouse clicks and spacebars
-			if (input.mouseDown)
-			{
+			if (input.mouseDown) {
 				pressed = true;
 				input.consumeMousePress();
 			}
-			if (input.isDown(Control.SPACE))
-			{
+
+			if (input.isDown(Control.SPACE)) {
 				pressed = true;
 				input.consumeKey(Control.SPACE);
 			}
 			
 			// Don't go to the next message if an animation is playing 
-			if (pressed && view.message != null && !view.playerAnimation.isAnimationPlaying() && !view.enemyAnimation.isAnimationPlaying())
-			{
+			if (pressed && view.message != null && !view.playerAnimation.isAnimationPlaying() && !view.enemyAnimation.isAnimationPlaying()) {
 				if (view.state == VisualState.STAT_GAIN) view.setVisualState(VisualState.MESSAGE);
 				view.cycleMessage(false);
 			}			
@@ -879,13 +891,16 @@ public class BattleView extends View
 		public void set(BattleView view) {
 			int pageSize = view.currentBattle.getPlayer().getBag().getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]).size();
 			
-			for (int i = 0; i < ITEMS_PER_PAGE; i++)
+			for (int i = 0; i < ITEMS_PER_PAGE; i++) {
 				view.bagButtons[ITEMS + i].setActive(i < pageSize - view.bagPage*ITEMS_PER_PAGE);
-			
+			}
+
+			// TODO: Make a method for this
 			view.bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != Item.getItem(Namesies.NONE_ITEM));
 			
-			for (Button b: view.bagButtons)
+			for (Button b: view.bagButtons) {
 				b.setForceHover(false);
+			}
 			
 		}
 
@@ -902,11 +917,12 @@ public class BattleView extends View
 
 			DrawMetrics.setFont(g, 12);
 			Iterator<Item> iter = toDraw.iterator();
-			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) iter.next();
-			for (int y = 0; y < ITEMS_PER_PAGE/2; y++)
-			{
-				for (int x = 0; x < 2 && iter.hasNext(); x++)
-				{
+			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) {
+				iter.next();
+			}
+
+			for (int y = 0; y < ITEMS_PER_PAGE/2; y++) {
+				for (int x = 0; x < 2 && iter.hasNext(); x++) {
 					int dx = 55 + x*162, dy = 243 + y*38;
 					
 					g.translate(dx, dy);
@@ -938,8 +954,8 @@ public class BattleView extends View
 			
 			// Last Item Used
 			Item lastUsedItem = bag.getLastUsedItem();
-			if (lastUsedItem != Item.getItem(Namesies.NONE_ITEM))
-			{
+			// TODO: Should have a method to check if it is the empty item
+			if (lastUsedItem != Item.getItem(Namesies.NONE_ITEM)) {
 				g.translate(214, 517);
 				DrawMetrics.setFont(g, 12);
 				g.drawImage(tiles.getTile(0x11), 0, 0, null);
@@ -962,23 +978,21 @@ public class BattleView extends View
 			// Back Arrow
 			View.drawArrows(g, null, view.backButton);
 			
-			for (Button b: view.bagButtons) 
+			for (Button b: view.bagButtons) {
 				b.draw(g);
+			}
 			
 			view.backButton.draw(g);
 		}
 		
-		public void update(BattleView view, InputControl input)
-		{
+		public void update(BattleView view, InputControl input) {
 			// Update all bag buttons and the back button
 			view.selectedButton = Button.update(view.bagButtons, view.selectedButton, input);
 			view.backButton.update(input, false, Control.BACK);
 			
 			// Check tabs
-			for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++)
-			{
-				if (view.bagTabButtons[i].checkConsumePress())
-				{
+			for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
+				if (view.bagTabButtons[i].checkConsumePress()) {
 					view.bagPage = 0;
 					view.selectedBagTab = i;
 					view.setVisualState(view.state); // To update active buttons
@@ -991,32 +1005,29 @@ public class BattleView extends View
 			Iterator<Item> iter = toDraw.iterator();
 			
 			// Skip ahead to the current page
-			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) iter.next();
+			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) {
+				iter.next();
+			}
 			
 			// Go through each item on the page
-			for (int i = ITEMS; i < ITEMS + ITEMS_PER_PAGE && iter.hasNext(); i++)
-			{
+			for (int i = ITEMS; i < ITEMS + ITEMS_PER_PAGE && iter.hasNext(); i++) {
 				Item item = iter.next();
-				if (view.bagButtons[i].checkConsumePress())
-				{				
+				if (view.bagButtons[i].checkConsumePress()) {
 					// Pokemon Use Item -- Set item to be selected an change to Pokemon View
-					if (item instanceof PokemonUseItem)
-					{
+					if (item instanceof PokemonUseItem) {
 						view.selectedItem = item;
 						view.setVisualState(VisualState.USE_ITEM);
 						break;
 					}
 					// Otherwise, just use it on the battle if successful
-					else if (bag.battleUseItem(item, view.currentBattle.getPlayer().front(), view.currentBattle))
-					{
+					else if (bag.battleUseItem(item, view.currentBattle.getPlayer().front(), view.currentBattle)) {
 						view.currentBattle.getPlayer().performAction(view.currentBattle, Action.ITEM);
 						view.setVisualState(VisualState.MENU);
 						view.cycleMessage(false);
 						break;
 					}
 					// If the item cannot be used, do not consume
-					else
-					{
+					else {
 						view.cycleMessage(false);
 						view.setVisualState(VisualState.INVALID_BAG);
 					}
@@ -1024,43 +1035,46 @@ public class BattleView extends View
 			}
 			
 			// Selecting the Last Item Used Button
-			if (view.bagLastUsedBtn.checkConsumePress())
-			{
+			if (view.bagLastUsedBtn.checkConsumePress()) {
 				Item lastItemUsed = bag.getLastUsedItem();
-				if (lastItemUsed != Item.getItem(Namesies.NONE_ITEM) && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle))
-				{
+				if (lastItemUsed != Item.getItem(Namesies.NONE_ITEM) && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle)) {
 					player.performAction(view.currentBattle, Action.ITEM);
 					view.setVisualState(VisualState.MENU);
 					view.cycleMessage(false);
 				}
-				else
-				{
+				else {
 					view.cycleMessage(false);
 					view.setVisualState(VisualState.INVALID_BAG);
 				}
 			}
 			
 			// Next page
-			if (view.bagRightButton.checkConsumePress())
-			{
-				if (view.bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1)) view.bagPage = 0;
-				else view.bagPage++;
+			if (view.bagRightButton.checkConsumePress()) {
+				// TODO: Should have a method to get the max pages also this should just use mod right?
+				if (view.bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1)) {
+					view.bagPage = 0;
+				}
+				else {
+					view.bagPage++;
+				}
 				
 				view.setVisualState(view.state); // To update active buttons
 			}
 			
 			// Previous Page
-			if (view.bagLeftButton.checkConsumePress())
-			{
-				if (view.bagPage == 0) view.bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1);
-				else view.bagPage--;
+			if (view.bagLeftButton.checkConsumePress()) {
+				if (view.bagPage == 0) {
+					view.bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1);
+				}
+				else {
+					view.bagPage--;
+				}
 				
 				view.setVisualState(view.state); // To update active buttons
 			}
 			
 			// Return to main battle menu
-			if (view.backButton.checkConsumePress())
-			{
+			if (view.backButton.checkConsumePress()) {
 				view.setVisualState(VisualState.MENU);
 			}
 		}
@@ -1070,14 +1084,17 @@ public class BattleView extends View
 
 		public void set(BattleView view) {
 			List<ActivePokemon> list = view.currentBattle.getPlayer().getTeam();
-			for (int i = 0; i < view.pokemonTabButtons.length; i++) 
+			for (int i = 0; i < view.pokemonTabButtons.length; i++) {
 				view.pokemonTabButtons[i].setActive(i < list.size());
+			}
 			
-			if (view.state != VisualState.USE_ITEM) 
+			if (view.state != VisualState.USE_ITEM) {
 				view.pokemonSwitchButton.setActive(list.get(view.selectedPokemonTab).canFight());
+			}
 			
-			for (Button b: view.pokemonButtons) 
+			for (Button b: view.pokemonButtons) {
 				b.setForceHover(false);
+			}
 		}
 
 		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
@@ -1106,19 +1123,16 @@ public class BattleView extends View
 			g.drawImage(tiles.getTile(0x20), 415, 440, null);
 			
 			// Draw Box Outlines for Pokemon Info
-			if (!selectedPkm.canFight()) // Fainted Pokemon and Eggs
-			{
+			if (!selectedPkm.canFight()) { // Fainted Pokemon and Eggs
 				g.drawImage(tiles.getTile(0x35), 30, 224, null);
 				g.drawImage(tiles.getTile(0x31), 55, 249, null);
 			}
-			else
-			{
+			else {
 				g.drawImage(tiles.getTile(0x34), 30, 224, null);
 				g.drawImage(tiles.getTile(0x30), 55, 249, null);
 			}
 			
-			if (selectedPkm.isEgg())
-			{
+			if (selectedPkm.isEgg()) {
 				// Name
 				DrawMetrics.setFont(g, 16);
 				g.setColor(Color.BLACK);
@@ -1129,8 +1143,7 @@ public class BattleView extends View
 				DrawMetrics.setFont(g, 14);
 				DrawMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
 			}
-			else
-			{
+			else {
 				// Name and Gender
 				DrawMetrics.setFont(g, 16);
 				g.setColor(Color.BLACK);
@@ -1146,12 +1159,10 @@ public class BattleView extends View
 				g.drawString(levelStr, 220, 269);
 				
 				// Draw type tiles
-				if (type[1] == Type.NONE)
-				{
+				if (type[1] == Type.NONE) {
 					g.drawImage(tiles.getTile(type[0].getImageIndex()), 322, 255, null);
 				}
-				else
-				{
+				else {
 					g.drawImage(tiles.getTile(type[0].getImageIndex()), 285, 255, null);
 					g.drawImage(tiles.getTile(type[1].getImageIndex()), 322, 255, null);
 				}
@@ -1180,8 +1191,7 @@ public class BattleView extends View
 				
 				// Write stat names
 				DrawMetrics.setFont(g, 16);
-				for (int i = 0; i < Stat.NUM_STATS; i++)
-				{
+				for (int i = 0; i < Stat.NUM_STATS; i++) {
 					g.setColor(selectedPkm.getNature().getColor(i));
 					g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
 				}
@@ -1190,16 +1200,14 @@ public class BattleView extends View
 				g.setColor(Color.BLACK);
 				
 				int[] statsVal = selectedPkm.getStats();
-				for (int i = 0; i < Stat.NUM_STATS; i++)
-				{
+				for (int i = 0; i < Stat.NUM_STATS; i++) {
 					String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statsVal[i] : "" + statsVal[i];
 					DrawMetrics.drawRightAlignedString(g, valStr, 188, 21*i + 372);
 				}
 				
 				// Draw Move List
 				List<Move> movesList = selectedPkm.getActualMoves();
-				for (int i = 0; i < movesList.size(); i++)
-				{
+				for (int i = 0; i < movesList.size(); i++) {
 					int dx = 228, dy = 359 + i*46;
 					g.translate(dx, dy);
 					
@@ -1225,36 +1233,40 @@ public class BattleView extends View
 
 			// Draw Switch/Use text
 			DrawMetrics.setFont(g, 20);
-			if (view.state == VisualState.USE_ITEM) g.drawString("Use!", 103, 533);
-			else g.drawString("Switch!", 93, 533);
+			if (view.state == VisualState.USE_ITEM) {
+				g.drawString("Use!", 103, 533);
+			}
+			else {
+				g.drawString("Switch!", 93, 533);
+			}
 			
 			// Draw tabs
 			TileSet partyTiles = data.getPartyTiles();
-			for (int i = 0; i < list.size(); i++)
-			{
+			for (int i = 0; i < list.size(); i++) {
 				ActivePokemon pkm = list.get(i);
 				
 				// Draw tab
-				if(pkm.isEgg())
-				{
+				if(pkm.isEgg()) {
 					g.setColor(Type.getColors(selectedPkm)[0]);				
 				}
-				else 
-				{
+				else {
 					g.setColor(pkm.getActualType()[0].getColor());
 				}
 				
 				g.fillRect(32 + i*59, 192, 59, 34);
-				if (i == view.selectedPokemonTab) g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
-				else g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);
+				if (i == view.selectedPokemonTab) {
+					g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
+				}
+				else {
+					g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);
+				}
 				
 				// Draw Pokemon Image
 				BufferedImage img = partyTiles.getTile(pkm.getTinyImageIndex());
 				DrawMetrics.drawCenteredImage(g, img, 60 + i*59, 205);
 
 				// Fade out fainted Pokemon
-				if (!pkm.canFight())
-				{
+				if (!pkm.canFight()) {
 					g.setColor(new Color(0, 0, 0, 128));
 					g.fillRect(32 + i*59, 192, 59, 34);
 				}
@@ -1267,75 +1279,68 @@ public class BattleView extends View
 			DrawMetrics.drawWrappedText(g, msgLine, 440, 485, 350);
 			
 			// Draw back arrow when applicable
-			if (!view.switchForced)
-			{
+			if (!view.switchForced) {
 				View.drawArrows(g, null, view.backButton);
 			}
 
-			for (int i = 0; i < list.size(); i++)
+			for (int i = 0; i < list.size(); i++) {
 				view.pokemonTabButtons[i].draw(g);
+			}
 			
-			if (view.state == VisualState.USE_ITEM || selectedPkm.canFight())
+			if (view.state == VisualState.USE_ITEM || selectedPkm.canFight()) {
 				view.pokemonSwitchButton.draw(g);
+			}
 			
 			view.backButton.draw(g);
 		}
 		
-		public void update(BattleView view, InputControl input)
-		{
+		public void update(BattleView view, InputControl input) {
 			// Update the buttons
 			view.selectedButton = Button.update(view.pokemonButtons, view.selectedButton, input);
 			view.backButton.update(input, false, Control.BACK);
 			
 			CharacterData player = view.currentBattle.getPlayer();
 			List<ActivePokemon> list = player.getTeam();
-			for (int i = 0; i < list.size(); i++)
-			{
-				if (view.pokemonTabButtons[i].checkConsumePress())
-				{
+			for (int i = 0; i < list.size(); i++) {
+				if (view.pokemonTabButtons[i].checkConsumePress()) {
 					view.selectedPokemonTab = i;
 					view.setVisualState(view.state); //to update active buttons
 				}
 			}
 			
 			// Switch Switch Switcheroo
-			if (view.pokemonSwitchButton.checkConsumePress())
-			{
+			if (view.pokemonSwitchButton.checkConsumePress()) {
 				ActivePokemon selectedPkm = list.get(view.selectedPokemonTab);
 				
 				// Use an item on this Pokemon instead of switching
-				if (view.state == VisualState.USE_ITEM)
-				{
+				if (view.state == VisualState.USE_ITEM) {
 					// Valid item
-					if (player.getBag().battleUseItem(view.selectedItem, selectedPkm, view.currentBattle))
-					{
+					if (player.getBag().battleUseItem(view.selectedItem, selectedPkm, view.currentBattle)) {
 						player.performAction(view.currentBattle, Action.ITEM);
 						view.setVisualState(VisualState.MENU);
 						view.cycleMessage(false);
 					}
 					// Invalid item
-					else
-					{
+					else {
 						view.cycleMessage(false);
 						view.setVisualState(VisualState.INVALID_BAG);
 					}
 				}
 				// Actual switcheroo
-				else
-				{
-					if (player.canSwitch(view.currentBattle, view.selectedPokemonTab))
-					{
+				else {
+					if (player.canSwitch(view.currentBattle, view.selectedPokemonTab)) {
 						player.setFront(view.selectedPokemonTab);
 						view.currentBattle.enterBattle(player.front());
 						
-						if (!view.switchForced) player.performAction(view.currentBattle, Action.SWITCH);
+						if (!view.switchForced) {
+							player.performAction(view.currentBattle, Action.SWITCH);
+						}
 						
 						view.cycleMessage(false);
 						view.switchForced = false;
 						view.lastMoveUsed = 0;
 					}
-					else
-					{
+					else {
 						view.cycleMessage(false);
 						view.setVisualState(VisualState.INVALID_POKEMON);
 					}
@@ -1343,9 +1348,10 @@ public class BattleView extends View
 			}
 	
 			// Return to main menu if applicable
-			if (view.backButton.checkConsumePress())
-			{
-				if (!view.switchForced) view.setVisualState(VisualState.MENU);
+			if (view.backButton.checkConsumePress()) {
+				if (!view.switchForced) {
+					view.setVisualState(VisualState.MENU);
+				}
 			}
 		}
 	};
@@ -1388,13 +1394,11 @@ public class BattleView extends View
 			view.noButton.draw(g);
 		}
 		
-		public void update(BattleView view, InputControl input)
-		{
+		public void update(BattleView view, InputControl input) {
 			view.yesButton.update(input);
 			view.noButton.update(input);
 			
-			if (view.noButton.checkConsumePress())
-			{
+			if (view.noButton.checkConsumePress()) {
 				// This is all done really silly, so we need to do this
 				ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
 				MessageUpdate message = messages.poll();
@@ -1405,8 +1409,7 @@ public class BattleView extends View
 				view.cycleMessage(false);
 			}
 			
-			if (view.yesButton.checkConsumePress())
-			{
+			if (view.yesButton.checkConsumePress()) {
 				view.setVisualState(VisualState.LEARN_MOVE_DELETE);
 			}
 		}
@@ -1420,10 +1423,8 @@ public class BattleView extends View
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			
 			List<Move> moves = view.learnedPokemon.getActualMoves();
-			for (int y = 0, i = 0; y < 2; y++)
-			{
-				for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++)
-				{
+			for (int y = 0, i = 0; y < 2; y++) {
+				for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++) {
 					int dx = 22 + x*190, dy = 440 + 21 + y*62;
 					g.translate(dx, dy);
 					
@@ -1471,31 +1472,33 @@ public class BattleView extends View
 			DrawMetrics.setFont(g, 25);
 			g.drawString(msgLine, view.newMoveButton.x, 485);
 			
-			for (int i = 0; i < moves.size(); i++) 
+			for (int i = 0; i < moves.size(); i++) {
 				view.moveButtons[i].draw(g);
+			}
 			
 			view.newMoveButton.draw(g);
 		}
 		
-		public void update(BattleView view, InputControl input)
-		{
+		public void update(BattleView view, InputControl input) {
 			view.selectedButton = Button.update(view.moveButtons, view.selectedButton, input);
 			view.newMoveButton.update(input);
 			
-			for (int i = 0; i < view.moveButtons.length; i++)
-			{
-				if (view.moveButtons[i].checkConsumePress())
-				{
+			for (int i = 0; i < view.moveButtons.length; i++) {
+				if (view.moveButtons[i].checkConsumePress()) {
 					view.learnedPokemon.addMove(view.currentBattle, view.learnedMove, i);
 					
 					// This is all done really silly, so we need to do this
 					ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
 					MessageUpdate message = messages.poll();
-					for (int j = 0; j < Move.MAX_MOVES; j++)
-					{
-						if (j == i) message = messages.poll();
-						else messages.poll();
+					for (int j = 0; j < Move.MAX_MOVES; j++) {
+						if (j == i) {
+							message = messages.poll();
+						}
+						else {
+							messages.poll();
+						}
 					}
+
 					messages.push(message);
 					
 					view.setVisualState(VisualState.MESSAGE);
@@ -1503,12 +1506,14 @@ public class BattleView extends View
 				}
 			}
 			
-			if (view.newMoveButton.checkConsumePress())
-			{
+			if (view.newMoveButton.checkConsumePress()) {
 				// This is all done really silly, so we need to do this
 				ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
 				MessageUpdate message = messages.poll();
-				for (int i = 0; i < Move.MAX_MOVES + 1; i++) messages.poll();
+				for (int i = 0; i < Move.MAX_MOVES + 1; i++) {
+					messages.poll();
+				}
+
 				messages.push(message);
 				
 				view.setVisualState(VisualState.MESSAGE);
@@ -1530,8 +1535,9 @@ public class BattleView extends View
 			int y = 200;
 			g.setColor(Color.WHITE);
 			DrawMetrics.setFont(g, 12);
-			for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15)
+			for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15) {
 				g.drawString(view.logMessages.get(i), 25, y);
+			}
 			
 			View.drawArrows(g, view.logLeftButton, view.logRightButton);
 			view.logLeftButton.draw(g);
@@ -1550,22 +1556,19 @@ public class BattleView extends View
 			view.backButton.draw(g);
 		}
 		
-		public void update(BattleView view, InputControl input)
-		{
+		public void update(BattleView view, InputControl input) {
 			view.selectedButton = Button.update(view.logButtons, view.selectedButton, input);
 			view.backButton.update(input, false, Control.BACK);
 			
 			int maxLogPage = view.logMessages.size()/LOGS_PER_PAGE;
 			
-			if (view.logLeftButton.checkConsumePress())
-			{
+			if (view.logLeftButton.checkConsumePress()) {
 				view.selectedButton = LOG_LEFT_BUTTON;
 				view.logRightButton.setForceHover(false);
 				view.logPage = Math.max(0, view.logPage - 1);
 			}
 			
-			if (view.logRightButton.checkConsumePress())
-			{
+			if (view.logRightButton.checkConsumePress()) {
 				view.selectedButton = LOG_RIGHT_BUTTON;
 				view.logLeftButton.setForceHover(false);
 				view.logPage = Math.min(maxLogPage, view.logPage + 1);
@@ -1574,20 +1577,20 @@ public class BattleView extends View
 			view.logLeftButton.setActive(view.logPage > 0);
 			view.logRightButton.setActive(view.logPage < maxLogPage);
 			
-			if (view.logPage == 0 && maxLogPage > 0)
+			if (view.logPage == 0 && maxLogPage > 0) {
 				view.selectedButton = LOG_RIGHT_BUTTON;
-			else if (view.logPage == maxLogPage)
+			}
+			else if (view.logPage == maxLogPage) {
 				view.selectedButton = LOG_LEFT_BUTTON;
+			}
 			
-			if (view.backButton.checkConsumePress())
-			{
+			if (view.backButton.checkConsumePress()) {
 				view.setVisualState(VisualState.MENU);
 			}
 		}
 	};
 	
-	public void update(int dt, InputControl input, Game game) 
-	{
+	public void update(int dt, InputControl input, Game game) {
 		state.updateVisualState.update(this, input);
 		update.performUpdate(this, game);
 	}
@@ -1604,117 +1607,110 @@ public class BattleView extends View
 		this.update = Update.NONE;
 	}
 	
-	public void setVisualState(VisualState newState)
-	{
-		if (state != newState) selectedButton = 0;
+	public void setVisualState(VisualState newState) {
+		if (state != newState) {
+			selectedButton = 0;
+		}
+
 		state = newState;
 		
 		// Update the buttons that should be active
 		state.updateVisualState.set(this);
 	}
 	
-	private void cycleMessage(boolean updated)
-	{
-		if (!updated) 
-		{
+	private void cycleMessage(boolean updated) {
+		if (!updated) {
 			setVisualState(VisualState.MENU);
 		}
 		
 		Queue<MessageUpdate> messages = currentBattle.getMessages();
-		
-		if (!messages.isEmpty())
-		{
-			if (updated && messages.peek().getMessage().length() != 0) return;
+		if (!messages.isEmpty()) {
+			if (updated && !messages.peek().getMessage().isEmpty()) {
+				return;
+			}
 			
 			MessageUpdate newMessage = messages.remove();
 			currentBattle.getPlayer().addLogMessage(newMessage);
 			
 			PokemonAnimationState state = newMessage.target() ? playerAnimation : enemyAnimation;
-			if (newMessage.switchUpdate())
-			{
+			if (newMessage.switchUpdate()) {
 				state.resetVals(newMessage.getHP(), newMessage.getStatus(), newMessage.getType(), newMessage.getShiny(), 
 						newMessage.getPokemon(), newMessage.getName(), newMessage.getMaxHP(), newMessage.getLevel(), 
 						newMessage.getGender(), newMessage.getEXPRatio());
 			}
-			else
-			{
+			else {
 				// TODO: Fuck this I hate this
-				if (newMessage.healthUpdate())
-				{
+				if (newMessage.healthUpdate()) {
 					state.startHpAnimation(newMessage.getHP());
 				}
-				if (newMessage.maxHealthUpdate())
-				{
+
+				if (newMessage.maxHealthUpdate()) {
 					state.setMaxHP(newMessage.getMaxHP());
 				}
-				if (newMessage.statusUpdate())
-				{
+
+				if (newMessage.statusUpdate()) {
 					state.setStatus(newMessage.getStatus());
 				}
-				if (newMessage.typeUpdate())
-				{
+
+				if (newMessage.typeUpdate()) {
 					state.setType(newMessage.getType());
 				}
-				if (newMessage.catchUpdate())
-				{
+
+				if (newMessage.catchUpdate()) {
 					state.startCatchAnimation(newMessage.getDuration() == -1? -1 : newMessage.getDuration());
 				}
-				if (newMessage.pokemonUpdate())
-				{
+
+				if (newMessage.pokemonUpdate()) {
 					state.startPokemonUpdateAnimation(newMessage.getPokemon(), newMessage.getShiny(), newMessage.isAnimate());
 				}
-				if (newMessage.hasUpdateType())
-				{
+
+				if (newMessage.hasUpdateType()) {
 					update = newMessage.getUpdateType();
 				}
-				if (newMessage.expUpdate())
-				{
+
+				if (newMessage.expUpdate()) {
 					state.startExpAnimation(newMessage.getEXPRatio(), newMessage.levelUpdate());
 				}
-				if (newMessage.levelUpdate())
-				{
+
+				if (newMessage.levelUpdate()) {
 					Global.soundPlayer.playSoundEffect(SoundTitle.LEVEL_UP);
 					state.setLevel(newMessage.getLevel());
 				}
-				if (newMessage.nameUpdate())
-				{
+
+				if (newMessage.nameUpdate()) {
 					state.setName(newMessage.getName());
 				}
-				if (newMessage.genderUpdate())
-				{
+
+				if (newMessage.genderUpdate()) {
 					state.setGender(newMessage.getGender());
 				}
-				if (newMessage.learnMove())
-				{
+
+				if (newMessage.learnMove()) {
 					learnedMove = newMessage.getMove();
 					learnedPokemon = newMessage.getActivePokemon();
 				}
-				if (newMessage.gainUpdate())
-				{
+
+				if (newMessage.gainUpdate()) {
 					newStats = newMessage.getNewStats();
 					statGains = newMessage.getGain();
 				}	
 			}
 			
-			if (newMessage.getMessage().length() == 0)
-			{
+			if (newMessage.getMessage().isEmpty()) {
 				cycleMessage(updated);
 			}
-			else
-			{
+			else {
 				message = newMessage.getMessage();
 				setVisualState(VisualState.MESSAGE);
 				cycleMessage(true);
 			}
 		}
-		else if (!updated)
-		{
+		else if (!updated) {
 			message = null;
 		}
 	}
 	
-	public void draw(Graphics g, GameData data) 
-	{
+	public void draw(Graphics g, GameData data) {
 		Dimension d = Global.GAME_SIZE;
 		
 		g.setColor(Color.BLACK);
@@ -1734,19 +1730,15 @@ public class BattleView extends View
 		// Opponent battle circle
 		g.drawImage(tiles.getTile(terrainType.getOpponentCircleIndex()), 450, 192, null);
 		
-		if (playerAnimation.isEmpty())
-		{
-			if (enemyAnimation.isEmpty())
-			{
+		if (playerAnimation.isEmpty()) {
+			if (enemyAnimation.isEmpty()) {
 				g.setClip(0, 440, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 			}
-			else
-			{
+			else {
 				g.setClip(0, 0, Global.GAME_SIZE.width, 250);
 			}
 		}
-		else if (enemyAnimation.isEmpty())
-		{
+		else if (enemyAnimation.isEmpty()) {
 			g.setClip(0, 250, Global.GAME_SIZE.width, 440);
 		}
 		
@@ -1776,13 +1768,11 @@ public class BattleView extends View
 		state.updateVisualState.draw(this, g, data, tiles);
 	}
 
-	public ViewMode getViewModel() 
-	{
+	public ViewMode getViewModel() {
 		return ViewMode.BATTLE_VIEW;
 	}
 
-	public void movedToFront(Game game) 
-	{
+	public void movedToFront(Game game) {
 		System.out.println("moved to front cycle started");
 		cycleMessage(false);
 	}

@@ -1,7 +1,6 @@
 package item.berry;
 
 
-public interface HealthTriggeredBerry extends GainableEffectBerry
-{
-	public double healthTriggerRatio();
+public interface HealthTriggeredBerry extends GainableEffectBerry {
+	double healthTriggerRatio();
 }
