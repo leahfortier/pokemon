@@ -15,7 +15,6 @@ import item.use.PokemonUseItem;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.Namesies;
 import main.Type;
 import map.AreaData.TerrainType;
 import pokemon.ActivePokemon;
@@ -159,7 +158,7 @@ public class BattleView extends View {
 		learnedPokemon = null;
 		
 		setVisualState(VisualState.MESSAGE);
-		update = Update.NONE;
+		update = Update.NO_UPDATE;
 		
 		// Back Button
 		backButton = new Button(750, 560, 35, 20, null);
@@ -1604,7 +1603,7 @@ public class BattleView extends View {
 	}
 	
 	public void clearUpdate() {
-		this.update = Update.NONE;
+		this.update = Update.NO_UPDATE;
 	}
 	
 	public void setVisualState(VisualState newState) {

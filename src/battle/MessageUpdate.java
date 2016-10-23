@@ -12,31 +12,32 @@ import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundTitle;
+import util.StringUtils;
 
 public class MessageUpdate {
 	private String message;
-	private int hp;
-	private int maxHP;
+	private Integer hp;
+	private Integer maxHP;
 	private int[] statGains;
 	private int[] newStats;
 	private StatusCondition status;
 	private PokemonInfo pokemon;
-	private boolean shiny;
-	private boolean animation;
+	private Boolean shiny;
+	private Boolean animation;
 	private Type[] type;
-	private boolean playerTarget; // SO YOU KNOW WHO TO GIVE THE HP/STATUS UPDATE TO
-	private boolean switchPokemon;
-	private float expRatio;
+	private Boolean playerTarget; // SO YOU KNOW WHO TO GIVE THE HP/STATUS UPDATE TO
+	private Boolean switchPokemon;
+	private Float expRatio;
 	private Update updateType;
-	private int level;
+	private Integer level;
 	private String name;
 	private Gender gender;
 	private ActivePokemon active;
 	private Move move;
-	private int duration;
+	private Integer duration;
 	
 	public enum Update {
-		NONE,
+		NO_UPDATE,
 		ENTER_NAME,
 		APPEND_TO_NAME, 
 		SHOW_POKEMON,
@@ -87,46 +88,33 @@ public class MessageUpdate {
 			void performUpdate(BattleView battleView, Game game);
 		}
 	}
-	
-	public MessageUpdate(String m) {
-		message = m;
-		status = null;
-		hp = -1;
-		maxHP = -1;
-		pokemon = null;
-		type = null;
-		switchPokemon = false;
-		updateType = Update.NONE;
-		expRatio = -1;
-		level = -1;
-		name = "";
-		gender = null;
-		shiny = false;
-		animation = true;
-		statGains = null;
-		newStats = null;
-		duration = -2; // BECAUSE NEG ONE IS TOTES VALID
+
+	// TODO: Yeah pretty much all of these constructors should be rewritten to be more obvious what's going on and not just guessing based off on parameters
+	public MessageUpdate(String message) {
+		this.message = message;
+		this.updateType = Update.NO_UPDATE;
 	}
 
-	// TODO: Change all the god awful parameter names in this file
-	// YEAH THAT'S RIGHT HEALTH UPDATE
-	public MessageUpdate(int h, boolean t) {
-		this("");
-		hp = h;
-		playerTarget = t;
+	public MessageUpdate() {
+		this(StringUtils.empty());
 	}
-	
+
+	// YEAH THAT'S RIGHT HEALTH UPDATE
+	public MessageUpdate(int hp, boolean target) {
+		this();
+		this.hp = hp;
+		this.playerTarget = target; // TODO: This shouldn't be stored as a boolean but as an enum
+	}
+
 	// Update to maximum HP
-	public MessageUpdate(int h, int max, boolean t) {
-		this("");
-		hp = h;
-		maxHP = max;
-		playerTarget = t;
+	public MessageUpdate(int hp, int maxHp, boolean target) {
+		this(hp, target);
+		this.maxHP = maxHp;
 	}
 	
 	// Show stat gains
 	public MessageUpdate(int[] gains, int[] stats) {
-		this("");
+		this();
 		maxHP = stats[Stat.HP.index()];
 		statGains = gains;
 		newStats = stats;
@@ -135,58 +123,58 @@ public class MessageUpdate {
 	}
 	
 	// OOOOHH SOMEONE'S GOT DAT STATUS CONDITION
-	public MessageUpdate(StatusCondition s, boolean t) {
-		this("");
-		status = s;
-		playerTarget = t;
+	public MessageUpdate(StatusCondition status, boolean target) {
+		this();
+		this.status = status;
+		this.playerTarget = target;
 	}
 	
 	// Pokemon Update!
-	public MessageUpdate(String m, PokemonInfo p, boolean s, boolean a, boolean t) {
-		this(m);
-		pokemon = p;
-		playerTarget = t;
-		shiny = s;
-		animation = a;
+	public MessageUpdate(String message, PokemonInfo pokemon, boolean shiny, boolean animation, boolean target) {
+		this(message);
+		this.pokemon = pokemon;
+		this.playerTarget = target;
+		this.shiny = shiny;
+		this.animation = animation;
 	}
 	
 	// Type Update!
-	public MessageUpdate(Type[] typesies, boolean t) {
-		this("");
-		type = typesies;
-		playerTarget = t;
+	public MessageUpdate(Type[] typesies, boolean target) {
+		this();
+		this.type = typesies;
+		this.playerTarget = target;
 	}
 	
 	// Switch update!
-	public MessageUpdate(String m, ActivePokemon p, Battle b) {
-		this(m);
-		playerTarget = p.user();
-		switchPokemon = true;
-		hp = p.getHP();
-		status = p.getStatus().getType();
-		type = p.getDisplayType(b);
-		shiny = p.isShiny();
-		pokemon = p.getPokemonInfo();
-		name = p.getName();
-		maxHP = p.getMaxHP();
-		level = p.getLevel();
-		gender = p.getGender();
-		expRatio = p.expRatio();
-		animation = false;
+	public MessageUpdate(String message, ActivePokemon active, Battle battle) {
+		this(message);
+		this.playerTarget = active.user();
+		this.switchPokemon = true;
+		this.hp = active.getHP();
+		this.status = active.getStatus().getType();
+		this.type = active.getDisplayType(battle);
+		this.shiny = active.isShiny();
+		this.pokemon = active.getPokemonInfo();
+		this.name = active.getName();
+		this.maxHP = active.getMaxHP();
+		this.level = active.getLevel();
+		this.gender = active.getGender();
+		this.expRatio = active.expRatio();
+		this.animation = false;
 	}
 	
 	// Special type of update
 	public MessageUpdate(String m, Update update) {
 		this(m);
-		updateType = update;	
+		this.updateType = update;
 	}
 	
 	// EXP Gain update
 	public MessageUpdate(int lvl, float ratio, boolean levelUp) {
-		this("");
+		this();
 		
-		playerTarget = true;
-		expRatio = ratio;
+		this.playerTarget = true;
+		this.expRatio = ratio;
 		
 		if (levelUp) {
 			level = lvl;
@@ -194,31 +182,31 @@ public class MessageUpdate {
 	}
 	
 	// Name change update
-	public MessageUpdate(String n, boolean t) {
-		this("");
-		name = n;
-		playerTarget = t;
+	public MessageUpdate(String name, boolean target) {
+		this();
+		this.name = name;
+		this.playerTarget = target;
 	}
 	
 	// Gender change update
-	public MessageUpdate(Gender g, boolean t) {
-		this("");
-		gender = g;
-		playerTarget = t;
+	public MessageUpdate(Gender gender, boolean target) {
+		this();
+		this.gender = gender;
+		this.playerTarget = target;
 	}
 	
 	// Learn new move update
-	public MessageUpdate(String m, ActivePokemon p, Move newMove) {
-		this(m);
-		active = p;
-		move = newMove;
-		updateType = Update.LEARN_MOVE;
+	public MessageUpdate(String message, ActivePokemon active, Move newMove) {
+		this(message);
+		this.active = active;
+		this.move = newMove;
+		this.updateType = Update.LEARN_MOVE;
 	}
 	
 	// Catching a Pokemon
-	public MessageUpdate(String m, int d) {
-		this(m);
-		duration = d;
+	public MessageUpdate(String message, int duration) {
+		this(message);
+		this.duration = duration;
 	}	
 	
 	public String getMessage() {
@@ -230,7 +218,7 @@ public class MessageUpdate {
 	}
 	
 	public boolean healthUpdate() {
-		return hp != -1; // TODO: Use constants for -1
+		return hp != null;
 	}
 	
 	public int getHP() {
@@ -238,7 +226,7 @@ public class MessageUpdate {
 	}
 	
 	public boolean maxHealthUpdate() {
-		return maxHP != -1;
+		return maxHP != null;
 	}
 	
 	public int getMaxHP() {
@@ -294,7 +282,7 @@ public class MessageUpdate {
 	}
 	
 	public boolean expUpdate() {
-		return expRatio >= 0;
+		return expRatio != null;
 	}
 	
 	public float getEXPRatio() {
@@ -302,7 +290,7 @@ public class MessageUpdate {
 	}
 	
 	public boolean levelUpdate() {
-		return level != -1;
+		return level != null;
 	}
 	
 	public int getLevel() {
@@ -310,7 +298,7 @@ public class MessageUpdate {
 	}
 	
 	public boolean nameUpdate() {
-		return name.length() > 0;
+		return name != null;
 	}
 	
 	public String getName() {
@@ -326,7 +314,7 @@ public class MessageUpdate {
 	}
 	
 	public boolean catchUpdate() {
-		return duration != -2;
+		return duration != null;
 	}
 	
 	public int getDuration() {
@@ -342,7 +330,7 @@ public class MessageUpdate {
 	}
 	
 	public boolean hasUpdateType() {
-		return updateType != Update.NONE;
+		return updateType != Update.NO_UPDATE;
 	}
 	
 	public Update getUpdateType() {

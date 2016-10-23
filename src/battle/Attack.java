@@ -2934,8 +2934,7 @@ public abstract class Attack implements Serializable {
 			
 			// TODO: Look at this again
 			// I really don't like this, because there's no way this value should actually be getting used -- but it's getting set now always even if the attack isn't going to work and we don't want a NullPointerException
-			if (stockpile == null)
-			{
+			if (stockpile == null) {
 				return super.setPower(b, me, o);
 			}
 			
