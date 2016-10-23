@@ -1,4 +1,4 @@
-none.png 00000000
+noitem.png 00000000
 syrup.png 00000001
 bicycle.png 00000002
 surfboard.png 00000003

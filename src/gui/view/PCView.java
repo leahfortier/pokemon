@@ -302,7 +302,7 @@ public class PCView extends View
 			g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
 			
 			int index = 0;
-			if (type[1] != Type.NONE)
+			if (type[1] != Type.NO_TYPE)
 			{
 				g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 669, 97, null);
 				index = 1;

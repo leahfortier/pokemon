@@ -105,7 +105,7 @@ public class TeamPlanner {
 			
 			if (ability == null) {
 				Namesies[] abilities = pokemon.getAbilities();
-				ability = abilities[0].getName() + (abilities[1] == Namesies.NONE_ABILITY ? "" : "/" + abilities[1].getName());
+				ability = abilities[0].getName() + (abilities[1] == Namesies.NO_ABILITY_ABILITY ? "" : "/" + abilities[1].getName());
 			}
 			
 			if (nature == null) {
@@ -160,7 +160,7 @@ public class TeamPlanner {
 		System.out.printf("%n%12s%3.2fx -- ", "", coverageVal);
 		boolean comma = false;
 		for (Type firstType : types) {
-			if (firstType == Type.NONE) {
+			if (firstType == Type.NO_TYPE) {
 				continue;
 			}
 			
@@ -173,7 +173,7 @@ public class TeamPlanner {
 				}
 				
 				if (coverage[first][second] == coverageVal) {
-					System.out.print((comma ? ", " : "") + firstType.getName() + (secondType == Type.NONE ? "" : "/" + secondType.getName()));
+					System.out.print((comma ? ", " : "") + firstType.getName() + (secondType == Type.NO_TYPE ? "" : "/" + secondType.getName()));
 					comma = true;
 				}
 			}
@@ -223,7 +223,7 @@ public class TeamPlanner {
 		}
 		
 		void addFrequency(int frequency, Type firstType, Type secondType) {
-			if (firstType == Type.NONE || secondType.getIndex() <= firstType.getIndex()) {
+			if (firstType == Type.NO_TYPE || secondType.getIndex() <= firstType.getIndex()) {
 				return;
 			}
 			
@@ -238,7 +238,7 @@ public class TeamPlanner {
 				coverageFrequencyList[frequency] += ", ";
 			}
 			
-			coverageFrequencyList[frequency] += firstType.getName() + (secondType == Type.NONE ? "" : "/" + secondType.getName());
+			coverageFrequencyList[frequency] += firstType.getName() + (secondType == Type.NO_TYPE ? "" : "/" + secondType.getName());
 		}
 	}
 	
@@ -340,7 +340,7 @@ public class TeamPlanner {
 			out.append(pokemonSpecies.getName() + ":");
 			
 			Type[] type = pokemonSpecies.getType();
-			out.append("\n\tType: " + type[0].getName() + (type[1] == Type.NONE ? "" : "/" + type[1].getName()));
+			out.append("\n\tType: " + type[0].getName() + (type[1] == Type.NO_TYPE ? "" : "/" + type[1].getName()));
 			
 			
 			out.append("\n\tStats:");

@@ -1,5 +1,6 @@
 package map;
 
+import battle.effect.status.StatusCondition;
 import gui.GameData;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import pokemon.Stat;
 import battle.Attack;
 import battle.effect.generic.Effect;
 import battle.effect.generic.PokemonEffect;
-import battle.effect.generic.Status.StatusCondition;
 import util.StringUtils;
 
 public class AreaData {
@@ -62,7 +62,7 @@ public class AreaData {
 				this.status = (StatusCondition)effect;
 			}
 			else {
-				this.status = StatusCondition.NONE;
+				this.status = StatusCondition.NO_STATUS;
 				
 				if (effect instanceof Stat) {
 					this.statChanges[((Stat)effect).index()] = -1;
@@ -124,7 +124,7 @@ public class AreaData {
 		public int getOpponentCircleIndex() {
 			return opponentCircleIndex;
 		}
-	};
+	}
 
 	private String name;
 	private int color;

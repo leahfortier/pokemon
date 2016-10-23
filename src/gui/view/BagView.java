@@ -1,5 +1,6 @@
 package gui.view;
 
+import battle.effect.status.StatusCondition;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
@@ -29,7 +30,6 @@ import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 import battle.Move;
-import battle.effect.generic.Status.StatusCondition;
 
 public class BagView extends View {
 	private static final BagCategory[] CATEGORIES = BagCategory.values();

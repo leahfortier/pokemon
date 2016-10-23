@@ -25,7 +25,7 @@ Fields:
 
 ***
 
-None:
+No Item:
 	Int: HoldItem
 	Cat: Misc
 	Desc: YOU SHUOLDN'T SEE THIS
@@ -2454,7 +2454,7 @@ Ability Capsule:
 	Int: PokemonUseItem
 	PokemonUse:
 		Ability other = Ability.getOtherAbility(p);
-		if (other.namesies() == Namesies.NONE_ABILITY) {
+		if (other.namesies() == Namesies.NO_ABILITY_ABILITY) {
 			return false;
 		}
 		

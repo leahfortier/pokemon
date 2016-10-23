@@ -8,7 +8,7 @@ Constructor:
 
 ***
 
-None:
+No Ability:
 	Desc: None
 *
 Overgrow:
@@ -728,7 +728,7 @@ Wonder Guard:
 	}
 	
 	// None-type moves always hit
-	if (p.isAttackType(Type.NONE)) {
+	if (p.isAttackType(Type.NO_TYPE)) {
 		return true;
 	}
 	
@@ -816,7 +816,7 @@ Color Change:
 	private Type type;
 	###
 	ChangeType: 
-	return new Type[] {type, Type.NONE};
+	return new Type[] { type, Type.NO_TYPE };
 	###
 	Desc: Changes the Pok\u00e9mon's type to the foe's move.
 *
@@ -1236,7 +1236,7 @@ Multitype:
 	GetTypeHolder:
 	Item item = p.getHeldItem(b);
 	if (item instanceof PlateItem) {
-		return new Type[] { ((PlateItem)item).getType(), Type.NONE };
+		return new Type[] { ((PlateItem)item).getType(), Type.NO_TYPE };
 	}
 	
 	return p.getActualType();
@@ -1246,7 +1246,7 @@ Forecast:
 	Desc: Changes with the weather.
 	Int: TypeHolder
 	GetTypeHolder:
-	return new Type[] { b.getWeather().getElement(), Type.NONE };
+	return new Type[] { b.getWeather().getElement(), Type.NO_TYPE };
 	###
 *
 Bulletproof:
@@ -1395,6 +1395,6 @@ Protean:
 	private Type type;
 	###
 	ChangeType: 
-	return new Type[] {type, Type.NONE};
+	return new Type[] { type, Type.NO_TYPE };
 	###
 *

@@ -4,7 +4,7 @@ import battle.Battle;
 import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
 import battle.Move;
-import battle.effect.generic.Status.StatusCondition;
+import battle.effect.status.StatusCondition;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
@@ -896,7 +896,7 @@ public class BattleView extends View {
 			}
 
 			// TODO: Make a method for this
-			view.bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != Item.getItem(Namesies.NONE_ITEM));
+			view.bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != Item.noneItem());
 			
 			for (Button b: view.bagButtons) {
 				b.setForceHover(false);
@@ -955,7 +955,7 @@ public class BattleView extends View {
 			// Last Item Used
 			Item lastUsedItem = bag.getLastUsedItem();
 			// TODO: Should have a method to check if it is the empty item
-			if (lastUsedItem != Item.getItem(Namesies.NONE_ITEM)) {
+			if (lastUsedItem != Item.noneItem()) {
 				g.translate(214, 517);
 				DrawMetrics.setFont(g, 12);
 				g.drawImage(tiles.getTile(0x11), 0, 0, null);
@@ -1037,7 +1037,7 @@ public class BattleView extends View {
 			// Selecting the Last Item Used Button
 			if (view.bagLastUsedBtn.checkConsumePress()) {
 				Item lastItemUsed = bag.getLastUsedItem();
-				if (lastItemUsed != Item.getItem(Namesies.NONE_ITEM) && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle)) {
+				if (lastItemUsed != Item.noneItem() && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle)) {
 					player.performAction(view.currentBattle, Action.ITEM);
 					view.setVisualState(VisualState.MENU);
 					view.cycleMessage(false);
@@ -1159,7 +1159,7 @@ public class BattleView extends View {
 				g.drawString(levelStr, 220, 269);
 				
 				// Draw type tiles
-				if (type[1] == Type.NONE) {
+				if (type[1] == Type.NO_TYPE) {
 					g.drawImage(tiles.getTile(type[0].getImageIndex()), 322, 255, null);
 				}
 				else {

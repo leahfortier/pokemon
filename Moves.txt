@@ -139,7 +139,7 @@ Take Down:
 	Int: RecoilMove
 *
 Struggle:
-	Type: None
+	Type: No_Type
 	PP: 1
 	Pow: 50
 	Desc: An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.
@@ -525,7 +525,7 @@ Water Pulse:
 *
 ConfusionDamage:
 	Pow: 40
-	Type: None
+	Type: No_Type
 	Desc: None
 	Int: CritBlockerEffect
 	Cat: Physical
@@ -1005,11 +1005,11 @@ Roost:
 			
 	// TODO: Rewrite this because it looks stupid
 	if (type[0] == Type.FLYING) {
-		return new Type[] {type[1], Type.NONE};
+		return new Type[] { type[1], Type.NO_TYPE };
 	}
 	
 	if (type[1] == Type.FLYING) {
-		return new Type[] {type[0], Type.NONE};
+		return new Type[] { type[0], Type.NO_TYPE };
 	}
 	
 	return null;
@@ -2158,7 +2158,7 @@ Soak:
 	Cat: Status
 	Effect: Pokemon ChangeType
 	ChangeType: 
-	return new Type[] {Type.WATER, Type.NONE};
+	return new Type[] { Type.WATER, Type.NO_TYPE };
 	###
 	Int: ChangeTypeMove
 *
@@ -3192,7 +3192,7 @@ Synchronoise:
 	Type[] type = me.getType(b);
 	
 	// Like this is literally the stupidest move ever like srsly what is wrong with the creators
-	if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) {
+	if (o.isType(b, type[0]) || (type[1] != Type.NO_TYPE && o.isType(b, type[1]))) {
 		super.apply(me, o, b);
 	}
 	else {
@@ -3956,7 +3956,7 @@ Conversion:
 		}
 	}
 	
-	return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
+	return new Type[] { types.get((int)(Math.random()*types.size())), Type.NO_TYPE };
 	###
 	Effect: Pokemon ChangeType
 *
@@ -3981,7 +3981,7 @@ Conversion 2:
 	ChangeType: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
-	return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
+	return new Type[] { types.get((int)(Math.random()*types.size())), Type.NO_TYPE };
 	###
 	Field: 
 	private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
@@ -5316,7 +5316,7 @@ Secret Power:
 	
 	super.applyEffects(b, user, victim);
 	
-	super.status = StatusCondition.NONE;
+	super.status = StatusCondition.NO_STATUS;
 	super.statChanges = new int[Stat.NUM_BATTLE_STATS];
 	super.effects = new ArrayList<>();
 	###
@@ -5337,7 +5337,7 @@ Gastro Acid:
 	Int: ChangeAbilityMove
 	Effect: Pokemon ChangeAbility
 	AbilityChange: 
-	return Ability.getAbility(Namesies.NONE_ABILITY).newInstance();
+	return Ability.getAbility(Namesies.NO_ABILITY_ABILITY).newInstance();
 	###
 	PP: 10
 	Type: Poison
@@ -5545,7 +5545,7 @@ Camouflage:
 	Effect: Pokemon ChangeType
 	Int: ChangeTypeMove
 	ChangeType: 
-	return new Type[] {b.getTerrainType().getType(), Type.NONE};
+	return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
 	###
 *
 Recycle:

@@ -701,7 +701,7 @@ public enum Namesies {
 	SUNNY_EFFECT("Sunny"),
 	SANDSTORM_EFFECT("Sandstorm"),
 	HAILING_EFFECT("Hailing"),
-	NONE_ABILITY("None"),
+	NO_ABILITY_ABILITY("No Ability"),
 	OVERGROW_ABILITY("Overgrow"),
 	CHLOROPHYLL_ABILITY("Chlorophyll"),
 	BLAZE_ABILITY("Blaze"),
@@ -877,7 +877,7 @@ public enum Namesies {
 	FLOWER_VEIL_ABILITY("Flower Veil"),
 	GALE_WINGS_ABILITY("Gale Wings"),
 	PROTEAN_ABILITY("Protean"),
-	NONE_ITEM("None"),
+	NO_ITEM_ITEM("No Item"),
 	SYRUP_ITEM("Syrup"),
 	BICYCLE_ITEM("Bicycle"),
 	SURFBOARD_ITEM("Surfboard"),
@@ -2024,7 +2024,8 @@ public enum Namesies {
 			return null;
 		}
 	}
-	
+
+	// TODO: Instead of having this there should just be a separate namesies class for each one
 	public enum NamesiesType {
 		ATTACK,
 		EFFECT,

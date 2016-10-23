@@ -34,7 +34,8 @@ class PokeGen {
 	private static final String ABILITY_PATH = FileIO.makeFolderPath("src", "pokemon") + "Ability.java";
 	private static final String ITEM_PATH = FileIO.makeFolderPath("src", "item") + "Item.java";
 	private static final String ITEM_TILES_PATH = FileIO.makeFolderPath("rec", "tiles", "itemTiles");
-	
+
+	// TODO: Honestly these should all be in the subfolder of rec instead of just chillin all over the main folder
 	private enum Generator {
 		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", NamesiesType.ATTACK, false, true),
 		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", NamesiesType.EFFECT, true, true),
@@ -276,7 +277,7 @@ class PokeGen {
 			}
 			
 			String formatType = line.replace(":", "");
-			if (formatType.equals("FailureInfo")) {
+			if (formatType.equals("Failure")) {
 				failureInfo = new FailureInfo(in);
 				continue;
 			}
@@ -395,7 +396,7 @@ class PokeGen {
 
 		// Add the image index for each type (except for None)
 		for (Type t : Type.values()) {
-			if (t == Type.NONE) {
+			if (t == Type.NO_TYPE) {
 				continue;
 			}
 

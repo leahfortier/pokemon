@@ -1,8 +1,8 @@
 package battle.effect;
 
+import battle.effect.status.StatusCondition;
 import pokemon.ActivePokemon;
 import battle.Battle;
-import battle.effect.generic.Status.StatusCondition;
 
 public interface StatusPreventionEffect {
 	boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status);

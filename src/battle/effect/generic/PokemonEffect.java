@@ -40,6 +40,8 @@ import battle.effect.holder.TypeHolder;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.attack.CrashDamageMove;
+import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import item.Item;
 
 import java.io.Serializable;
@@ -58,7 +60,6 @@ import pokemon.Stat;
 import battle.Attack;
 import battle.Battle;
 import battle.Move;
-import battle.effect.generic.Status.StatusCondition;
 
 // Class to handle effects that are on a single Pokemon
 public abstract class PokemonEffect extends Effect implements Serializable {
@@ -227,7 +228,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			user.getEffects().remove(this);
-			b.getEffects(user.user()).remove(this); // TODO: ?
+			b.getEffects(user.user()).remove(this);
 		}
 	}
 
@@ -1533,7 +1534,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		private CastSource castSource;
 		
 		private String castMessage(ActivePokemon victim) {
-			String changeType = type[0].getName() + (type[1] == Type.NONE ? "" : "/" + type[1].getName());
+			String changeType = type[0].getName() + (type[1] == Type.NO_TYPE ? "" : "/" + type[1].getName());
 			
 			switch (castSource) {
 				case ATTACK:
@@ -1852,7 +1853,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
 			for (int i = 0; i < 2; i++) {
 				if ((attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST) {
-					defending[i] = Type.NONE;
+					defending[i] = Type.NO_TYPE;
 				}
 			}
 			
@@ -1887,7 +1888,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
 			for (int i = 0; i < 2; i++) {
 				if ((attacking == Type.PSYCHIC || attacking == Type.PSYCHIC) && defending[i] == Type.DARK) {
-					defending[i] = Type.NONE;
+					defending[i] = Type.NO_TYPE;
 				}
 			}
 			
@@ -3034,7 +3035,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			b.addMessage(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
-			if (super.numTurns == 1) victim.reduceHealthFraction(b, 1);
+			if (super.numTurns == 1) {
+				victim.reduceHealthFraction(b, 1);
+			}
 		}
 	}
 

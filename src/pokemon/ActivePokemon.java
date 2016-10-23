@@ -1,23 +1,36 @@
 package pokemon;
 
+import battle.Attack;
+import battle.Battle;
+import battle.BattleAttributes;
+import battle.Move;
+import battle.effect.BracingEffect;
+import battle.effect.FaintEffect;
+import battle.effect.GroundedEffect;
+import battle.effect.HalfWeightEffect;
+import battle.effect.LevitationEffect;
+import battle.effect.NameChanger;
+import battle.effect.OpponentTrappingEffect;
+import battle.effect.StallingEffect;
+import battle.effect.TrappingEffect;
+import battle.effect.attack.MultiTurnMove;
+import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.PokemonEffect;
+import battle.effect.generic.TeamEffect;
+import battle.effect.holder.AbilityHolder;
+import battle.effect.holder.IntegerHolder;
+import battle.effect.holder.ItemHolder;
+import battle.effect.holder.MoveListHolder;
+import battle.effect.holder.StatsHolder;
+import battle.effect.holder.TypeHolder;
+import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import item.Item;
 import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import item.hold.PowerItem;
-
-import java.awt.Color;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;
@@ -26,31 +39,16 @@ import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
 import trainer.Pokedex.PokedexStatus;
 import util.DrawMetrics;
-import battle.Attack;
-import battle.Battle;
-import battle.BattleAttributes;
-import battle.Move;
-import battle.effect.holder.AbilityHolder;
-import battle.effect.BracingEffect;
-import battle.effect.generic.Effect.CastSource;
-import battle.effect.FaintEffect;
-import battle.effect.GroundedEffect;
-import battle.effect.HalfWeightEffect;
-import battle.effect.holder.IntegerHolder;
-import battle.effect.holder.ItemHolder;
-import battle.effect.LevitationEffect;
-import battle.effect.holder.MoveListHolder;
-import battle.effect.attack.MultiTurnMove;
-import battle.effect.NameChanger;
-import battle.effect.OpponentTrappingEffect;
-import battle.effect.generic.PokemonEffect;
-import battle.effect.StallingEffect;
-import battle.effect.holder.StatsHolder;
-import battle.effect.generic.Status;
-import battle.effect.generic.Status.StatusCondition;
-import battle.effect.generic.TeamEffect;
-import battle.effect.TrappingEffect;
-import battle.effect.holder.TypeHolder;
+
+import java.awt.Color;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ActivePokemon implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -1038,7 +1036,7 @@ public class ActivePokemon implements Serializable {
 	
 	// Returns whether or not the Pokemon is afflicted with a status condition
 	public boolean hasStatus() {
-		return status.getType() != StatusCondition.NONE;
+		return status.getType() != StatusCondition.NO_STATUS;
 	}
 	
 	public boolean hasStatus(StatusCondition type) {

@@ -1984,7 +1984,7 @@ Override:
 		AddMapField: ChangeType:
 		Type primary = victim.getType(b)[0];
 				
-		return new Type[] {primary, primary == Type.{00} ? Type.NONE : Type.{00}};
+		return new Type[] { primary, primary == Type.{00} ? Type.NO_TYPE : Type.{00} };
 		###
 	*
 ***
@@ -2220,7 +2220,7 @@ AdvantageChanger:
 		Body:
 		for (int i = 0; i < 2; i++) {
 			if ({0}) {
-				defending[i] = Type.NONE;	
+				defending[i] = Type.NO_TYPE;	
 			}
 		}
 		

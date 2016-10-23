@@ -2,6 +2,7 @@ package item;
 
 import battle.MoveCategory;
 import battle.MoveType;
+import battle.effect.status.StatusCondition;
 import item.berry.Berry;
 import item.berry.GainableEffectBerry;
 import item.berry.HealthTriggeredBerry;
@@ -75,8 +76,7 @@ import battle.effect.RepellingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.StatChangingEffect;
 import battle.effect.StatProtectingEffect;
-import battle.effect.generic.Status;
-import battle.effect.generic.Status.StatusCondition;
+import battle.effect.status.Status;
 import battle.effect.TakeDamageEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.WeatherBlockerEffect;
@@ -162,7 +162,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 	}
 
 	public static Item noneItem() {
-		return getItem(Namesies.NONE_ITEM);
+		return getItem(Namesies.NO_ITEM_ITEM);
 	}
 
 	// SRSLY DON'T CALL THIS UNLESS YOU'RE READING IT FROM A FILE OR THE DEV
@@ -213,7 +213,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		// EVERYTHING BELOW IS GENERATED ###
 
 		// List all of the classes we are loading
-		map.put("None", new None());
+		map.put("No Item", new NoItem());
 		map.put("Syrup", new Syrup());
 		map.put("Bicycle", new Bicycle());
 		map.put("Surfboard", new Surfboard());
@@ -626,11 +626,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class None extends Item implements HoldItem {
+	private static class NoItem extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
-		None() {
-			super(Namesies.NONE_ITEM, "YOU SHUOLDN'T SEE THIS", BagCategory.MISC, 0);
+		NoItem() {
+			super(Namesies.NO_ITEM_ITEM, "YOU SHUOLDN'T SEE THIS", BagCategory.MISC, 0);
 			super.price = -1;
 		}
 
@@ -2109,7 +2109,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
 			for (int i = 0; i < 2; i++) {
 				if (Type.getBasicAdvantage(attacking, defending[i]) == 0) {
-					defending[i] = Type.NONE;
+					defending[i] = Type.NO_TYPE;
 				}
 			}
 			
@@ -10346,7 +10346,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(CharacterData player, ActivePokemon p) {
 			Ability other = Ability.getOtherAbility(p);
-			if (other.namesies() == Namesies.NONE_ABILITY) {
+			if (other.namesies() == Namesies.NO_ABILITY_ABILITY) {
 				return false;
 			}
 			

@@ -1,5 +1,6 @@
 package battle;
 
+import battle.effect.status.StatusCondition;
 import gui.view.BattleView;
 import gui.view.BattleView.VisualState;
 import main.Game;
@@ -11,7 +12,6 @@ import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundTitle;
-import battle.effect.generic.Status.StatusCondition;
 
 public class MessageUpdate {
 	private String message;

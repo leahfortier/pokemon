@@ -408,7 +408,7 @@ ChangeType:
 	private CastSource castSource;
 	
 	private String castMessage(ActivePokemon victim) {
-		String changeType = type[0].getName() + (type[1] == Type.NONE ? "" : "/" + type[1].getName());
+		String changeType = type[0].getName() + (type[1] == Type.NO_TYPE ? "" : "/" + type[1].getName());
 		
 		switch (castSource) {
 			case ATTACK:

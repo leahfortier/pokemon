@@ -36,7 +36,7 @@ public class StuffGen {
 		while (original.hasNext()) {
 			String line = original.nextLine();
 			StringUtils.appendLine(out, line);
-			
+
 			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) {
 				break;
 			}
@@ -193,10 +193,7 @@ public class StuffGen {
 	// Used for editing pokemoninfo.txt
 	private static void pokemonInfoStuff() {
 		Scanner in = FileIO.openFile("pokemoninfo.txt");
-		Scanner attacks = FileIO.openFile("newMoves.txt");
-		
 		PrintStream out = FileIO.openOutputFile("out.txt");
-//		PrintStream temp = openOutputFile("oldMoves.txt");
 
 		while (in.hasNext()) {
 			out.println(in.nextLine()); // Num
@@ -204,11 +201,11 @@ public class StuffGen {
 			out.println(in.nextLine()); // Base Stats
 			out.println(in.nextLine()); // Base Exp
 			out.println(in.nextLine()); // Growth Rate
-			out.println(in.nextLine()); // Type1 Type2			
+			out.println(in.nextLine()); // Type1 Type2
 			readMoves(in, out); // Level Up Moves
 			readMoves(in, out); // TM Moves
 			readMoves(in, out); // Egg Moves
-			readMoves(attacks, out); // Move Tutor Moves
+			readMoves(in, out); // Move Tutor Moves
 			out.println(in.nextLine()); // Catch Rate
 			out.println(in.nextLine()); // EVs
 			readEvolution(in, out); // Evolution
@@ -223,7 +220,6 @@ public class StuffGen {
 			out.println(in.nextLine()); // Egg Group 2
 			
 			out.println(in.nextLine()); // New Line
-			attacks.nextLine();
 		}
 	}
 	

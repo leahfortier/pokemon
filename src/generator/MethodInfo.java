@@ -200,7 +200,7 @@ class MethodInfo {
                 "\n\t\t" +
                     StringUtils.addSpace(this.accessModifier.modifierName) +
                     this.header.trim() +
-                    "{"
+                    " {"
         );
 
         MethodFormatter formatter = new MethodFormatter(3);

@@ -11,6 +11,8 @@ import battle.effect.EndBattleEffect;
 import battle.effect.EntryEffect;
 import battle.effect.RapidSpinRelease;
 import battle.effect.StatChangingEffect;
+import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Namesies;
 import main.Type;
@@ -20,7 +22,6 @@ import trainer.Trainer;
 import battle.Attack;
 import battle.Battle;
 import battle.Move;
-import battle.effect.generic.Status.StatusCondition;
 
 // Class to handle effects that are specific to one side of the battle
 public abstract class TeamEffect extends Effect implements Serializable {

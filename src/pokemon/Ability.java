@@ -2,6 +2,8 @@ package pokemon;
 
 import battle.MoveCategory;
 import battle.MoveType;
+import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import item.Item;
 import item.berry.Berry;
 import item.hold.ConsumableItem;
@@ -62,8 +64,6 @@ import battle.effect.StatChangingEffect;
 import battle.effect.StatLoweredEffect;
 import battle.effect.StatProtectingEffect;
 import battle.effect.holder.StatsHolder;
-import battle.effect.generic.Status;
-import battle.effect.generic.Status.StatusCondition;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.SwitchOutEffect;
 import battle.effect.TakeDamageEffect;
@@ -128,12 +128,12 @@ public abstract class Ability implements Serializable {
 	public static Ability assign(PokemonInfo p) {
 		Namesies[] abilities = p.getAbilities();
 		
-		if (abilities[0] == Namesies.NONE_ABILITY) {
+		if (abilities[0] == Namesies.NO_ABILITY_ABILITY) {
 			Global.error("First ability should not be none (Pokemon " + p.getName() + ")");
 		}
 		
 		// Only has one ability -- return the first one
-		if (abilities[1] == Namesies.NONE_ABILITY) {
+		if (abilities[1] == Namesies.NO_ABILITY_ABILITY) {
 			return getAbility(abilities[0]).newInstance();
 		}
 		
@@ -153,7 +153,7 @@ public abstract class Ability implements Serializable {
 		}
 		
 		Namesies[] abilities = ev.getAbilities();
-		if (abilities[1] == Namesies.NONE_ABILITY) {
+		if (abilities[1] == Namesies.NO_ABILITY_ABILITY) {
 			return getAbility(abilities[0]);
 		}
 		
@@ -187,7 +187,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		Global.error("No such Ability " + m);
-		return new None();
+		return new NoAbility();
 	}
 	
 	// Create and load the Ability map if it doesn't already exist
@@ -201,7 +201,7 @@ public abstract class Ability implements Serializable {
 		// EVERYTHING BELOW IS GENERATED ###
 
 		// List all of the classes we are loading
-		map.put("None", new None());
+		map.put("No Ability", new NoAbility());
 		map.put("Overgrow", new Overgrow());
 		map.put("Chlorophyll", new Chlorophyll());
 		map.put("Blaze", new Blaze());
@@ -381,15 +381,15 @@ public abstract class Ability implements Serializable {
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class None extends Ability {
+	private static class NoAbility extends Ability {
 		private static final long serialVersionUID = 1L;
 
-		None() {
-			super(Namesies.NONE_ABILITY, "None");
+		NoAbility() {
+			super(Namesies.NO_ABILITY_ABILITY, "None");
 		}
 
-		public None newInstance() {
-			return (None)(new None().activate());
+		public NoAbility newInstance() {
+			return (NoAbility)(new NoAbility().activate());
 		}
 	}
 
@@ -1657,7 +1657,7 @@ public abstract class Ability implements Serializable {
 		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
 			for (int i = 0; i < 2; i++) {
 				if ((attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST) {
-					defending[i] = Type.NONE;
+					defending[i] = Type.NO_TYPE;
 				}
 			}
 			
@@ -2349,7 +2349,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// None-type moves always hit
-			if (p.isAttackType(Type.NONE)) {
+			if (p.isAttackType(Type.NO_TYPE)) {
 				return true;
 			}
 			
@@ -2562,7 +2562,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return new Type[] {type, Type.NONE};
+			return new Type[] { type, Type.NO_TYPE };
 		}
 	}
 
@@ -3512,7 +3512,7 @@ public abstract class Ability implements Serializable {
 		public Type[] getType(Battle b, ActivePokemon p, Boolean display) {
 			Item item = p.getHeldItem(b);
 			if (item instanceof PlateItem) {
-				return new Type[] { ((PlateItem)item).getType(), Type.NONE };
+				return new Type[] { ((PlateItem)item).getType(), Type.NO_TYPE };
 			}
 			
 			return p.getActualType();
@@ -3531,7 +3531,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public Type[] getType(Battle b, ActivePokemon p, Boolean display) {
-			return new Type[] { b.getWeather().getElement(), Type.NONE };
+			return new Type[] { b.getWeather().getElement(), Type.NO_TYPE };
 		}
 	}
 
@@ -4015,7 +4015,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return new Type[] {type, Type.NONE};
+			return new Type[] { type, Type.NO_TYPE };
 		}
 	}
 }

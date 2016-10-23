@@ -282,7 +282,7 @@ Charmander
 39 52 43 60 50 65 
 62
 Medium Slow
-Fire None
+Fire No_Type
 12
 0 Scratch
 0 Growl
@@ -374,7 +374,7 @@ Charmeleon
 58 64 58 80 65 80 
 142
 Medium Slow
-Fire None
+Fire No_Type
 13
 0 Scratch
 0 Growl
@@ -583,7 +583,7 @@ Squirtle
 44 48 65 50 64 43 
 63
 Medium Slow
-Water None
+Water No_Type
 14
 0 Tackle
 4 Tail Whip
@@ -677,7 +677,7 @@ Wartortle
 59 63 80 65 80 58 
 142
 Medium Slow
-Water None
+Water No_Type
 16
 0 Tackle
 0 Tail Whip
@@ -772,7 +772,7 @@ Blastoise
 79 83 100 85 105 78 
 239
 Medium Slow
-Water None
+Water No_Type
 18
 0 Flash Cannon
 0 Tackle
@@ -882,7 +882,7 @@ Caterpie
 45 30 35 20 20 45 
 39
 Medium Fast
-Bug None
+Bug No_Type
 3
 0 Tackle
 0 String Shot
@@ -911,7 +911,7 @@ Metapod
 50 20 55 25 25 30 
 72
 Medium Fast
-Bug None
+Bug No_Type
 2
 0 Harden
 7 Harden
@@ -927,7 +927,7 @@ Level 12 10
 0
 50
 Shed Skin
-None
+No Ability
 Cocoon 
 28 21.8 A steel-hard shell protects its tender body. It quietly endures hardships while awaiting evolution.
 3840
@@ -1063,7 +1063,7 @@ Level 15 10
 0
 50
 Shed Skin
-None
+No Ability
 Cocoon 
 24 22.0 While awaiting evolution, it hides from predators under leaves and in nooks of branches.
 3840
@@ -1379,7 +1379,7 @@ Rattata
 30 56 35 25 35 72 
 51
 Medium Fast
-Normal None
+Normal No_Type
 13
 0 Tackle
 0 Tail Whip
@@ -1468,7 +1468,7 @@ Raticate
 55 81 60 50 70 97 
 145
 Medium Fast
-Normal None
+Normal No_Type
 17
 0 Swords Dance
 0 Tackle
@@ -1724,7 +1724,7 @@ Ekans
 35 60 44 40 54 55 
 58
 Medium Fast
-Poison None
+Poison No_Type
 17
 0 Wrap
 0 Leer
@@ -1817,7 +1817,7 @@ Arbok
 60 85 69 65 79 80 
 153
 Medium Fast
-Poison None
+Poison No_Type
 23
 0 Ice Fang
 0 Thunder Fang
@@ -1920,7 +1920,7 @@ Pikachu
 35 55 40 50 50 90 
 105
 Medium Fast
-Electric None
+Electric No_Type
 18
 0 Tail Whip
 0 Thunder Shock
@@ -2018,7 +2018,7 @@ Raichu
 60 90 55 90 80 110 
 214
 Medium Fast
-Electric None
+Electric No_Type
 4
 0 Thunder Shock
 0 Tail Whip
@@ -2105,7 +2105,7 @@ Sandshrew
 50 75 85 20 30 40 
 60
 Medium Fast
-Ground None
+Ground No_Type
 17
 0 Scratch
 0 Defense Curl
@@ -2200,7 +2200,7 @@ Sandslash
 75 100 110 45 55 65 
 158
 Medium Fast
-Ground None
+Ground No_Type
 20
 0 Scratch
 0 Defense Curl
@@ -2303,7 +2303,7 @@ Nidoran F
 55 47 52 40 40 41 
 55
 Medium Slow
-Poison None
+Poison No_Type
 13
 0 Growl
 0 Scratch
@@ -2389,7 +2389,7 @@ Nidorina
 70 62 67 55 55 56 
 128
 Medium Slow
-Poison None
+Poison No_Type
 13
 0 Growl
 0 Scratch
@@ -2593,7 +2593,7 @@ Nidoran M
 46 57 40 40 40 50 
 55
 Medium Slow
-Poison None
+Poison No_Type
 13
 0 Leer
 0 Peck
@@ -2681,7 +2681,7 @@ Nidorino
 61 72 57 55 55 65 
 128
 Medium Slow
-Poison None
+Poison No_Type
 13
 0 Leer
 0 Peck
@@ -2884,7 +2884,7 @@ Clefairy
 70 45 48 60 65 35 
 113
 Fast
-Fairy None
+Fairy No_Type
 24
 0 Mimic
 0 Healing Wish
@@ -3020,7 +3020,7 @@ Clefable
 95 70 73 95 90 60 
 213
 Fast
-Fairy None
+Fairy No_Type
 5
 0 Disarming Voice
 0 Sing
@@ -3140,7 +3140,7 @@ Vulpix
 38 41 40 50 65 65 
 60
 Medium Fast
-Fire None
+Fire No_Type
 20
 0 Ember
 4 Tail Whip
@@ -3235,7 +3235,7 @@ Ninetales
 73 76 75 81 100 100 
 177
 Medium Fast
-Fire None
+Fire No_Type
 6
 0 Imprison
 0 Nasty Plot
@@ -4337,7 +4337,7 @@ Diglett
 10 55 25 35 45 95 
 53
 Medium Fast
-Ground None
+Ground No_Type
 14
 0 Scratch
 0 Sand Attack
@@ -4419,7 +4419,7 @@ Dugtrio
 35 80 50 50 70 120 
 142
 Medium Fast
-Ground None
+Ground No_Type
 19
 0 Rototiller
 0 Night Slash
@@ -4510,7 +4510,7 @@ Meowth
 40 45 35 40 40 90 
 58
 Medium Fast
-Normal None
+Normal No_Type
 15
 0 Scratch
 0 Growl
@@ -4613,7 +4613,7 @@ Persian
 65 70 60 65 65 115 
 154
 Medium Fast
-Normal None
+Normal No_Type
 20
 0 Play Rough
 0 Switcheroo
@@ -4724,7 +4724,7 @@ Psyduck
 50 52 48 65 50 55 
 64
 Medium Fast
-Water None
+Water No_Type
 16
 0 Water Sport
 0 Scratch
@@ -4826,7 +4826,7 @@ Golduck
 80 82 78 95 80 85 
 175
 Medium Fast
-Water None
+Water No_Type
 19
 0 Aqua Jet
 0 Water Sport
@@ -4936,7 +4936,7 @@ Mankey
 40 80 35 35 45 70 
 61
 Medium Fast
-Fighting None
+Fighting No_Type
 16
 0 Covet
 0 Scratch
@@ -5045,7 +5045,7 @@ Primeape
 65 105 60 60 70 95 
 159
 Medium Fast
-Fighting None
+Fighting No_Type
 18
 0 Final Gambit
 0 Fling
@@ -5159,7 +5159,7 @@ Growlithe
 55 70 45 70 50 60 
 70
 Slow
-Fire None
+Fire No_Type
 18
 0 Bite
 0 Roar
@@ -5249,7 +5249,7 @@ Arcanine
 90 110 80 100 80 95 
 194
 Slow
-Fire None
+Fire No_Type
 6
 0 Thunder Fang
 0 Bite
@@ -5333,7 +5333,7 @@ Poliwag
 40 50 40 40 40 90 
 60
 Medium Slow
-Water None
+Water No_Type
 13
 0 Water Sport
 5 Water Gun
@@ -5410,7 +5410,7 @@ Poliwhirl
 65 65 65 50 50 90 
 135
 Medium Slow
-Water None
+Water No_Type
 15
 0 Water Sport
 0 Water Gun
@@ -5592,7 +5592,7 @@ Abra
 25 20 15 105 55 90 
 62
 Medium Slow
-Psychic None
+Psychic No_Type
 1
 0 Teleport
 36
@@ -5685,7 +5685,7 @@ Kadabra
 40 35 30 120 70 105 
 140
 Medium Slow
-Psychic None
+Psychic No_Type
 16
 0 Teleport
 0 Kinesis
@@ -5793,7 +5793,7 @@ Alakazam
 55 50 45 135 95 120 
 221
 Medium Slow
-Psychic None
+Psychic No_Type
 16
 0 Teleport
 0 Kinesis
@@ -5904,7 +5904,7 @@ Machop
 70 80 50 35 35 35 
 61
 Medium Slow
-Fighting None
+Fighting No_Type
 17
 0 Low Kick
 0 Leer
@@ -6007,7 +6007,7 @@ Machoke
 80 100 70 50 60 45 
 142
 Medium Slow
-Fighting None
+Fighting No_Type
 19
 0 Low Kick
 0 Leer
@@ -6112,7 +6112,7 @@ Machamp
 90 130 80 65 85 55 
 227
 Medium Slow
-Fighting None
+Fighting No_Type
 20
 0 Superpower
 0 Low Kick
@@ -6958,7 +6958,7 @@ Ponyta
 50 85 55 65 65 90 
 82
 Medium Fast
-Fire None
+Fire No_Type
 14
 0 Growl
 0 Tackle
@@ -7035,7 +7035,7 @@ Rapidash
 65 100 70 80 80 105 
 175
 Medium Fast
-Fire None
+Fire No_Type
 20
 0 Blaze Kick
 0 Poison Jab
@@ -7761,7 +7761,7 @@ Seel
 65 45 55 45 70 45 
 65
 Medium Fast
-Water None
+Water No_Type
 17
 0 Headbutt
 3 Growl
@@ -7947,7 +7947,7 @@ Grimer
 80 80 50 40 50 25 
 65
 Medium Fast
-Poison None
+Poison No_Type
 16
 0 Pound
 0 Poison Gas
@@ -8045,7 +8045,7 @@ Muk
 105 105 75 65 100 50 
 175
 Medium Fast
-Poison None
+Poison No_Type
 19
 0 Pound
 0 Poison Gas
@@ -8155,7 +8155,7 @@ Shellder
 30 65 100 45 25 40 
 61
 Slow
-Water None
+Water No_Type
 16
 0 Tackle
 4 Withdraw
@@ -8400,7 +8400,7 @@ Level 93 25
 5 Spell Tag
 50
 Levitate
-None
+No Ability
 Gas 
 51 0.2 Born from gases, anyone would faint if engulfed by its gaseous body, which contains poison.
 5120
@@ -8506,7 +8506,7 @@ Item 94  Spell Tag
 5 Spell Tag
 50
 Levitate
-None
+No Ability
 Gas 
 63 0.2 It likes to lurk in the dark and tap shoulders with a gaseous hand. Its touch causes endless shuddering.
 5120
@@ -8623,7 +8623,7 @@ None
 5 Spell Tag
 50
 Levitate
-None
+No Ability
 Shadow 
 59 89.3 The leer that floats in darkness belongs to a Gengar delighting in casting curses on people.
 5120
@@ -8733,7 +8733,7 @@ Drowzee
 60 48 45 43 90 42 
 66
 Medium Fast
-Psychic None
+Psychic No_Type
 17
 0 Pound
 0 Hypnosis
@@ -8838,7 +8838,7 @@ Hypno
 85 73 70 73 115 67 
 169
 Medium Fast
-Psychic None
+Psychic No_Type
 23
 0 Future Sight
 0 Nasty Plot
@@ -8952,7 +8952,7 @@ Krabby
 30 105 90 25 25 50 
 65
 Medium Fast
-Water None
+Water No_Type
 15
 0 Mud Sport
 0 Bubble
@@ -9040,7 +9040,7 @@ Kingler
 55 130 115 50 50 75 
 166
 Medium Fast
-Water None
+Water No_Type
 18
 0 Fury Cutter
 0 Mud Sport
@@ -9133,7 +9133,7 @@ Voltorb
 40 30 50 55 55 100 
 66
 Medium Fast
-Electric None
+Electric No_Type
 17
 0 Charge
 0 Tackle
@@ -9205,7 +9205,7 @@ Electrode
 60 50 70 80 80 140 
 168
 Medium Fast
-Electric None
+Electric No_Type
 20
 0 Magnetic Flux
 0 Charge
@@ -9464,7 +9464,7 @@ Cubone
 50 50 95 40 50 35 
 64
 Medium Fast
-Ground None
+Ground No_Type
 15
 0 Growl
 3 Tail Whip
@@ -9564,7 +9564,7 @@ Marowak
 60 80 110 50 80 45 
 149
 Medium Fast
-Ground None
+Ground No_Type
 18
 0 Growl
 0 Tail Whip
@@ -9672,7 +9672,7 @@ Hitmonlee
 50 120 53 35 110 87 
 159
 Medium Fast
-Fighting None
+Fighting No_Type
 20
 0 Reversal
 0 Close Combat
@@ -9764,7 +9764,7 @@ Hitmonchan
 50 105 79 35 110 76 
 159
 Medium Fast
-Fighting None
+Fighting No_Type
 21
 0 Close Combat
 0 Counter
@@ -9857,7 +9857,7 @@ Lickitung
 90 55 75 60 75 30 
 77
 Medium Fast
-Normal None
+Normal No_Type
 15
 0 Lick
 5 Supersonic
@@ -9966,7 +9966,7 @@ Koffing
 40 65 95 60 45 35 
 68
 Medium Fast
-Poison None
+Poison No_Type
 15
 0 Poison Gas
 0 Tackle
@@ -10043,7 +10043,7 @@ Level 110 35
 5 Smoke Ball
 50
 Levitate
-None
+No Ability
 Poison Gas 
 24 2.2 Lighter-than-air gases in its body keep it aloft. The gases not only smell, they are also explosive.
 5120
@@ -10055,7 +10055,7 @@ Weezing
 65 90 120 85 70 60 
 172
 Medium Fast
-Poison None
+Poison No_Type
 17
 0 Poison Gas
 0 Tackle
@@ -10136,7 +10136,7 @@ None
 5 Smoke Ball
 50
 Levitate
-None
+No Ability
 Poison Gas 
 47 20.9 It grows by feeding on gases released by garbage. Though very rare, triplets have been found.
 5120
@@ -10380,7 +10380,7 @@ Chansey
 250 5 5 35 105 50 
 395
 Fast
-Normal None
+Normal No_Type
 18
 0 Double-Edge
 0 Defense Curl
@@ -10505,7 +10505,7 @@ Tangela
 65 55 115 100 40 60 
 87
 Medium Fast
-Grass None
+Grass No_Type
 19
 0 Ingrain
 0 Constrict
@@ -10596,7 +10596,7 @@ Kangaskhan
 105 95 80 40 80 90 
 172
 Medium Fast
-Normal None
+Normal No_Type
 15
 0 Comet Punch
 0 Leer
@@ -10711,7 +10711,7 @@ Horsea
 30 40 70 70 25 60 
 59
 Medium Fast
-Water None
+Water No_Type
 12
 0 Bubble
 5 Smokescreen
@@ -10789,7 +10789,7 @@ Seadra
 55 65 95 95 45 85 
 154
 Medium Fast
-Water None
+Water No_Type
 16
 0 Hydro Pump
 0 Bubble
@@ -10873,7 +10873,7 @@ Goldeen
 45 67 60 35 50 63 
 64
 Medium Fast
-Water None
+Water No_Type
 14
 0 Peck
 0 Tail Whip
@@ -10952,7 +10952,7 @@ Seaking
 80 92 65 65 80 68 
 158
 Medium Fast
-Water None
+Water No_Type
 17
 0 Megahorn
 0 Poison Jab
@@ -11036,7 +11036,7 @@ Staryu
 30 45 55 70 55 85 
 68
 Slow
-Water None
+Water No_Type
 19
 0 Tackle
 0 Harden
@@ -11523,7 +11523,7 @@ Electabuzz
 65 83 57 95 85 105 
 172
 Medium Fast
-Electric None
+Electric No_Type
 15
 0 Quick Attack
 0 Leer
@@ -11620,7 +11620,7 @@ Magmar
 65 95 57 100 85 93 
 173
 Medium Fast
-Fire None
+Fire No_Type
 15
 0 Smog
 0 Leer
@@ -11714,7 +11714,7 @@ Pinsir
 65 125 100 55 70 85 
 175
 Slow
-Bug None
+Bug No_Type
 16
 0 Vice Grip
 0 Focus Energy
@@ -11806,7 +11806,7 @@ Tauros
 75 100 95 40 70 110 
 211
 Slow
-Normal None
+Normal No_Type
 14
 0 Tackle
 3 Tail Whip
@@ -11892,7 +11892,7 @@ Magikarp
 20 10 55 15 20 80 
 40
 Slow
-Water None
+Water No_Type
 3
 0 Splash
 15 Tackle
@@ -12106,7 +12106,7 @@ Ditto
 48 48 48 48 48 48 
 101
 Medium Fast
-Normal None
+Normal No_Type
 1
 0 Transform
 0
@@ -12132,7 +12132,7 @@ Eevee
 55 55 50 45 65 55 
 65
 Medium Fast
-Normal None
+Normal No_Type
 16
 0 Growl
 0 Tackle
@@ -12219,7 +12219,7 @@ Vaporeon
 130 65 60 110 95 65 
 184
 Medium Fast
-Water None
+Water No_Type
 13
 0 Tackle
 0 Tail Whip
@@ -12310,7 +12310,7 @@ Jolteon
 65 65 60 110 95 130 
 184
 Medium Fast
-Electric None
+Electric No_Type
 13
 0 Tackle
 0 Tail Whip
@@ -12401,7 +12401,7 @@ Flareon
 65 130 60 95 110 65 
 184
 Medium Fast
-Fire None
+Fire No_Type
 13
 0 Tackle
 0 Tail Whip
@@ -12489,7 +12489,7 @@ Porygon
 65 60 70 85 75 40 
 79
 Medium Fast
-Normal None
+Normal No_Type
 15
 0 Conversion 2
 0 Tackle
@@ -13047,7 +13047,7 @@ Snorlax
 160 110 65 65 110 30 
 189
 Slow
-Normal None
+Normal No_Type
 16
 0 Tackle
 4 Defense Curl
@@ -13396,7 +13396,7 @@ Dratini
 41 64 45 50 50 50 
 60
 Slow
-Dragon None
+Dragon No_Type
 14
 0 Wrap
 0 Leer
@@ -13484,7 +13484,7 @@ Dragonair
 61 84 65 70 70 70 
 147
 Slow
-Dragon None
+Dragon No_Type
 16
 0 Wrap
 0 Leer
@@ -13704,7 +13704,7 @@ Mewtwo
 106 110 90 154 90 130 
 306
 Slow
-Psychic None
+Psychic No_Type
 18
 0 Confusion
 0 Disable
@@ -13829,7 +13829,7 @@ Mew
 100 100 100 100 100 100 
 270
 Medium Slow
-Psychic None
+Psychic No_Type
 13
 0 Pound
 0 Reflect Type
@@ -14016,7 +14016,7 @@ None
 100 Lum Berry
 -1
 Synchronize
-None
+No Ability
 New Species
 16 8.8 Because it can use all kinds of moves, many scientists believe Mew to be the ancestor of Pok\u00e9mon.
 30720
@@ -14028,7 +14028,7 @@ Chikorita
 45 49 65 49 65 45 
 64
 Medium Slow
-Grass None
+Grass No_Type
 14
 0 Tackle
 0 Growl
@@ -14113,7 +14113,7 @@ Bayleef
 60 62 80 63 80 60 
 142
 Medium Slow
-Grass None
+Grass No_Type
 16
 0 Tackle
 0 Growl
@@ -14202,7 +14202,7 @@ Meganium
 80 82 100 83 100 80 
 236
 Medium Slow
-Grass None
+Grass No_Type
 19
 0 Petal Blizzard
 0 Tackle
@@ -14300,7 +14300,7 @@ Cyndaquil
 39 52 43 60 50 65 
 62
 Medium Slow
-Fire None
+Fire No_Type
 15
 0 Tackle
 0 Leer
@@ -14381,7 +14381,7 @@ Quilava
 58 64 58 80 65 80 
 142
 Medium Slow
-Fire None
+Fire No_Type
 16
 0 Tackle
 0 Leer
@@ -14468,7 +14468,7 @@ Typhlosion
 78 84 78 109 85 100 
 240
 Medium Slow
-Fire None
+Fire No_Type
 20
 0 Eruption
 0 Double-Edge
@@ -14574,7 +14574,7 @@ Totodile
 50 65 64 44 48 43 
 63
 Medium Slow
-Water None
+Water No_Type
 16
 0 Scratch
 0 Leer
@@ -14673,7 +14673,7 @@ Croconaw
 65 80 80 59 63 58 
 142
 Medium Slow
-Water None
+Water No_Type
 17
 0 Scratch
 0 Leer
@@ -14776,7 +14776,7 @@ Feraligatr
 85 105 100 79 83 78 
 239
 Medium Slow
-Water None
+Water No_Type
 19
 0 Scratch
 0 Leer
@@ -14889,7 +14889,7 @@ Sentret
 35 46 34 35 45 20 
 43
 Medium Fast
-Normal None
+Normal No_Type
 14
 0 Scratch
 0 Foresight
@@ -14990,7 +14990,7 @@ Furret
 85 76 64 45 55 90 
 145
 Medium Fast
-Normal None
+Normal No_Type
 16
 0 Scratch
 0 Foresight
@@ -15917,7 +15917,7 @@ Pichu
 20 40 15 35 35 60 
 41
 Medium Fast
-Electric None
+Electric No_Type
 6
 0 Thunder Shock
 0 Charm
@@ -15997,7 +15997,7 @@ Cleffa
 50 25 28 45 55 15 
 44
 Fast
-Fairy None
+Fairy No_Type
 7
 0 Pound
 0 Charm
@@ -16187,7 +16187,7 @@ Togepi
 35 20 65 40 65 20 
 49
 Fast
-Fairy None
+Fairy No_Type
 15
 0 Growl
 0 Charm
@@ -16600,7 +16600,7 @@ Mareep
 55 40 40 65 45 35 
 56
 Medium Slow
-Electric None
+Electric No_Type
 15
 0 Tackle
 0 Growl
@@ -16667,7 +16667,7 @@ Level 180 15
 0
 50
 Static
-None
+No Ability
 Wool 
 24 17.2 Its fluffy coat swells to double when static electricity builds up. Touching it can be shocking.
 5120
@@ -16679,7 +16679,7 @@ Flaaffy
 70 55 55 80 60 45 
 128
 Medium Slow
-Electric None
+Electric No_Type
 17
 0 Tackle
 0 Growl
@@ -16757,7 +16757,7 @@ Level 181 30
 0
 50
 Static
-None
+No Ability
 Wool 
 31 29.3 If its coat becomes fully charged with electricity, its tail lights up. It fires hair that zaps on impact.
 5120
@@ -16769,7 +16769,7 @@ Ampharos
 90 75 85 115 90 55 
 225
 Medium Slow
-Electric None
+Electric No_Type
 24
 0 Zap Cannon
 0 Magnetic Flux
@@ -16860,7 +16860,7 @@ None
 0
 50
 Static
-None
+No Ability
 Light 
 55 135.6 The tip of its tail shines brightly. In the olden days, people sent signals using the tail's light.
 5120
@@ -16872,7 +16872,7 @@ Bellossom
 75 80 95 90 100 50 
 216
 Medium Slow
-Grass None
+Grass No_Type
 9
 0 Leaf Storm
 0 Leaf Blade
@@ -17143,7 +17143,7 @@ Sudowoodo
 70 100 115 30 65 30 
 144
 Medium Fast
-Rock None
+Rock No_Type
 19
 0 Wood Hammer
 0 Copycat
@@ -17241,7 +17241,7 @@ Politoed
 90 75 75 90 100 70 
 225
 Medium Slow
-Water None
+Water No_Type
 7
 0 Bubble Beam
 0 Hypnosis
@@ -17589,7 +17589,7 @@ Aipom
 55 70 55 40 55 85 
 72
 Fast
-Normal None
+Normal No_Type
 14
 0 Scratch
 0 Tail Whip
@@ -17699,7 +17699,7 @@ Sunkern
 30 30 30 30 30 30 
 36
 Medium Slow
-Grass None
+Grass No_Type
 16
 0 Absorb
 0 Growth
@@ -17783,7 +17783,7 @@ Sunflora
 75 75 55 105 85 30 
 149
 Medium Slow
-Grass None
+Grass No_Type
 19
 0 Flower Shield
 0 Absorb
@@ -18142,7 +18142,7 @@ Espeon
 65 65 60 130 95 110 
 184
 Medium Fast
-Psychic None
+Psychic No_Type
 13
 0 Tackle
 0 Tail Whip
@@ -18237,7 +18237,7 @@ Umbreon
 95 65 110 60 130 65 
 184
 Medium Fast
-Dark None
+Dark No_Type
 13
 0 Tackle
 0 Tail Whip
@@ -18544,7 +18544,7 @@ Misdreavus
 60 60 60 85 85 85 
 87
 Fast
-Ghost None
+Ghost No_Type
 14
 0 Growl
 0 Psywave
@@ -18633,7 +18633,7 @@ Item 429  Dusk Stone
 0
 50
 Levitate
-None
+No Ability
 Screech 
 28 2.2 A Pok\u00e9mon that startles people in the middle of the night. It gathers fear as its energy.
 6400
@@ -18645,7 +18645,7 @@ Unown
 48 72 48 72 48 48 
 118
 Medium Fast
-Psychic None
+Psychic No_Type
 1
 0 Hidden Power
 0
@@ -18657,7 +18657,7 @@ None
 0
 -1
 Levitate
-None
+No Ability
 Symbol 
 20 11.0 When alone, nothing happens. However, if there are two or more, an odd power is said to emerge.
 10240
@@ -18669,7 +18669,7 @@ Wobbuffet
 190 33 58 33 58 33 
 142
 Medium Fast
-Psychic None
+Psychic No_Type
 4
 0 Counter
 0 Mirror Coat
@@ -18685,7 +18685,7 @@ None
 0
 50
 Shadow Tag
-None
+No Ability
 Patient 
 51 62.8 It desperately tries to keep its black tail hidden. It is said to be proof the tail hides a secret.
 5120
@@ -18803,7 +18803,7 @@ Pineco
 50 65 90 35 35 15 
 58
 Medium Fast
-Bug None
+Bug No_Type
 14
 0 Tackle
 0 Protect
@@ -18992,7 +18992,7 @@ Dunsparce
 100 70 70 65 65 45 
 145
 Medium Fast
-Normal None
+Normal No_Type
 18
 0 Rage
 0 Defense Curl
@@ -19317,7 +19317,7 @@ Snubbull
 60 80 50 40 40 30 
 60
 Fast
-Fairy None
+Fairy No_Type
 15
 0 Ice Fang
 0 Fire Fang
@@ -19428,7 +19428,7 @@ Granbull
 90 120 75 60 60 45 
 158
 Fast
-Fairy None
+Fairy No_Type
 17
 0 Outrage
 0 Ice Fang
@@ -20044,7 +20044,7 @@ Teddiursa
 60 80 50 50 50 40 
 66
 Medium Fast
-Normal None
+Normal No_Type
 16
 0 Fling
 0 Covet
@@ -20149,7 +20149,7 @@ Ursaring
 90 130 75 75 75 55 
 175
 Medium Fast
-Normal None
+Normal No_Type
 16
 0 Hammer Arm
 0 Covet
@@ -20259,7 +20259,7 @@ Slugma
 40 40 40 70 40 20 
 50
 Medium Fast
-Fire None
+Fire No_Type
 16
 0 Yawn
 0 Smog
@@ -20727,7 +20727,7 @@ Remoraid
 35 65 35 65 35 65 
 60
 Medium Fast
-Water None
+Water No_Type
 13
 0 Water Gun
 6 Lock-On
@@ -20814,7 +20814,7 @@ Octillery
 75 105 75 105 75 45 
 168
 Medium Fast
-Water None
+Water No_Type
 19
 0 Gunk Shot
 0 Rock Blast
@@ -21458,7 +21458,7 @@ Phanpy
 90 60 60 40 40 40 
 66
 Medium Fast
-Ground None
+Ground No_Type
 13
 0 Odor Sleuth
 0 Tackle
@@ -21541,7 +21541,7 @@ Donphan
 90 120 120 60 60 50 
 175
 Medium Fast
-Ground None
+Ground No_Type
 16
 0 Fire Fang
 0 Thunder Fang
@@ -21636,7 +21636,7 @@ Porygon2
 85 80 90 105 95 60 
 180
 Medium Fast
-Normal None
+Normal No_Type
 18
 0 Zap Cannon
 0 Magic Coat
@@ -21726,7 +21726,7 @@ Stantler
 73 95 62 85 65 85 
 163
 Slow
-Normal None
+Normal No_Type
 16
 0 Me First
 0 Tackle
@@ -21827,7 +21827,7 @@ Smeargle
 55 20 35 20 45 75 
 88
 Fast
-Normal None
+Normal No_Type
 10
 0 Sketch
 11 Sketch
@@ -21860,7 +21860,7 @@ Tyrogue
 35 35 35 35 35 35 
 42
 Medium Fast
-Fighting None
+Fighting No_Type
 4
 0 Tackle
 0 Covet
@@ -21930,7 +21930,7 @@ Hitmontop
 50 95 95 35 110 70 
 159
 Medium Fast
-Fighting None
+Fighting No_Type
 18
 0 Endeavor
 0 Close Combat
@@ -22111,7 +22111,7 @@ Elekid
 45 63 37 65 55 95 
 72
 Medium Fast
-Electric None
+Electric No_Type
 14
 0 Quick Attack
 0 Leer
@@ -22202,7 +22202,7 @@ Magby
 45 75 37 70 55 83 
 73
 Medium Fast
-Fire None
+Fire No_Type
 14
 0 Smog
 0 Leer
@@ -22290,7 +22290,7 @@ Miltank
 95 80 105 40 70 100 
 172
 Slow
-Normal None
+Normal No_Type
 13
 0 Tackle
 3 Growl
@@ -22394,7 +22394,7 @@ Blissey
 255 10 10 75 135 55 
 608
 Fast
-Normal None
+Normal No_Type
 18
 0 Double-Edge
 0 Defense Curl
@@ -22521,7 +22521,7 @@ Raikou
 90 85 75 115 100 115 
 261
 Slow
-Electric None
+Electric No_Type
 16
 0 Extrasensory
 0 Discharge
@@ -22602,7 +22602,7 @@ Entei
 115 115 85 90 75 100 
 261
 Slow
-Fire None
+Fire No_Type
 18
 0 Sacred Fire
 0 Eruption
@@ -22684,7 +22684,7 @@ Suicune
 100 75 115 90 115 85 
 261
 Slow
-Water None
+Water No_Type
 17
 0 Hydro Pump
 0 Extrasensory
@@ -22943,7 +22943,7 @@ Level 248 55
 5 Hard Stone
 50
 Shed Skin
-None
+No Ability
 Hard Shell 
 47 335.1 Its body is as hard as bedrock. By venting pressurized gas, it can launch itself like a rocket.
 10240
@@ -23376,7 +23376,7 @@ None
 100 Lum Berry
 -1
 Natural Cure
-None
+No Ability
 Time Travel 
 24 11.0 It has the power to travel across time, but it is said to appear only in peaceful times.
 30720
@@ -23388,7 +23388,7 @@ Treecko
 40 45 35 65 55 70 
 62
 Medium Slow
-Grass None
+Grass No_Type
 14
 0 Pound
 0 Leer
@@ -23485,7 +23485,7 @@ Grovyle
 50 65 45 85 65 95 
 142
 Medium Slow
-Grass None
+Grass No_Type
 18
 0 Pound
 0 Leer
@@ -23589,7 +23589,7 @@ Sceptile
 70 85 65 105 85 120 
 239
 Medium Slow
-Grass None
+Grass No_Type
 21
 0 Leaf Storm
 0 Night Slash
@@ -23707,7 +23707,7 @@ Torchic
 45 60 40 70 50 45 
 62
 Medium Slow
-Fire None
+Fire No_Type
 12
 0 Scratch
 0 Growl
@@ -24010,7 +24010,7 @@ Mudkip
 50 70 50 50 50 40 
 62
 Medium Slow
-Water None
+Water No_Type
 13
 0 Tackle
 0 Growl
@@ -24312,7 +24312,7 @@ Poochyena
 35 55 35 30 30 35 
 44
 Medium Fast
-Dark None
+Dark No_Type
 14
 0 Tackle
 4 Howl
@@ -24400,7 +24400,7 @@ Mightyena
 70 90 70 60 60 70 
 147
 Medium Fast
-Dark None
+Dark No_Type
 20
 0 Crunch
 0 Thief
@@ -24497,7 +24497,7 @@ Zigzagoon
 38 30 41 30 41 60 
 48
 Medium Fast
-Normal None
+Normal No_Type
 16
 0 Tackle
 0 Growl
@@ -24591,7 +24591,7 @@ Linoone
 78 70 61 50 61 100 
 147
 Medium Fast
-Normal None
+Normal No_Type
 20
 0 Play Rough
 0 Rototiller
@@ -24695,7 +24695,7 @@ Wurmple
 45 45 35 20 30 20 
 39
 Medium Fast
-Bug None
+Bug No_Type
 4
 0 Tackle
 0 String Shot
@@ -24729,7 +24729,7 @@ Silcoon
 50 35 55 25 25 15 
 72
 Medium Fast
-Bug None
+Bug No_Type
 2
 0 Harden
 7 Harden
@@ -24745,7 +24745,7 @@ Level 267 10
 0
 50
 Shed Skin
-None
+No Ability
 Cocoon 
 24 22.0 It wraps silk around the branches of a tree. It drinks rainwater on its silk while awaiting evolution.
 3840
@@ -24832,7 +24832,7 @@ Cascoon
 50 35 55 25 25 15 
 41
 Medium Fast
-Bug None
+Bug No_Type
 2
 0 Harden
 7 Harden
@@ -24848,7 +24848,7 @@ Level 269 10
 0
 50
 Shed Skin
-None
+No Ability
 Cocoon 
 28 25.4 It never forgets any attack it endured while in the cocoon. After evolution, it seeks payback.
 3840
@@ -25209,7 +25209,7 @@ Seedot
 40 40 50 30 30 30 
 44
 Medium Slow
-Grass None
+Grass No_Type
 7
 0 Bide
 3 Harden
@@ -26337,7 +26337,7 @@ Shroomish
 60 40 60 40 60 35 
 59
 Fluctuating
-Grass None
+Grass No_Type
 13
 0 Absorb
 0 Tackle
@@ -26516,7 +26516,7 @@ Slakoth
 60 60 60 35 35 30 
 56
 Slow
-Normal None
+Normal No_Type
 11
 0 Scratch
 0 Yawn
@@ -26595,7 +26595,7 @@ Level 288 18
 0
 50
 Truant
-None
+No Ability
 Slacker 
 31 52.9 It spends nearly all its time in a day sprawled out. Just seeing it makes one drowsy.
 3840
@@ -26607,7 +26607,7 @@ Vigoroth
 80 80 80 55 55 90 
 154
 Slow
-Normal None
+Normal No_Type
 14
 0 Reversal
 0 Scratch
@@ -26697,7 +26697,7 @@ Level 289 36
 0
 50
 Vital Spirit
-None
+No Ability
 Wild Monkey 
 55 102.5 Its heart beats at a tenfold tempo, so it cannot sit still for even a moment.
 3840
@@ -26709,7 +26709,7 @@ Slaking
 150 160 100 95 65 100 
 252
 Slow
-Normal None
+Normal No_Type
 19
 0 Hammer Arm
 0 Punishment
@@ -26807,7 +26807,7 @@ None
 0
 50
 Truant
-None
+No Ability
 Lazy 
 79 287.7 The world's laziest Pok\u00e9mon. When it is lounging, it is actually saving energy for striking back.
 3840
@@ -27041,7 +27041,7 @@ None
 0
 -1
 Wonder Guard
-None
+No Ability
 Shed 
 31 2.6 A discarded bug shell that came to life. Peering into the crack on its back is said to steal one's spirit.
 3840
@@ -27053,7 +27053,7 @@ Whismur
 64 51 23 51 23 28 
 48
 Medium Slow
-Normal None
+Normal No_Type
 13
 0 Pound
 4 Echoed Voice
@@ -27137,7 +27137,7 @@ Loudred
 84 71 43 71 43 48 
 126
 Medium Slow
-Normal None
+Normal No_Type
 17
 0 Pound
 0 Echoed Voice
@@ -27238,7 +27238,7 @@ Exploud
 104 91 63 91 73 68 
 216
 Medium Slow
-Normal None
+Normal No_Type
 24
 0 Boomburst
 0 Ice Fang
@@ -27351,7 +27351,7 @@ Makuhita
 72 60 30 20 30 25 
 47
 Fluctuating
-Fighting None
+Fighting No_Type
 17
 0 Tackle
 0 Focus Energy
@@ -27445,7 +27445,7 @@ Hariyama
 144 120 60 40 60 50 
 166
 Fluctuating
-Fighting None
+Fighting No_Type
 20
 0 Brine
 0 Tackle
@@ -27623,7 +27623,7 @@ Nosepass
 30 45 135 45 90 30 
 75
 Medium Fast
-Rock None
+Rock No_Type
 16
 0 Tackle
 4 Harden
@@ -27714,7 +27714,7 @@ Skitty
 50 45 45 35 35 50 
 52
 Fast
-Normal None
+Normal No_Type
 19
 0 Fake Out
 0 Growl
@@ -27816,7 +27816,7 @@ Delcatty
 70 65 65 55 55 70 
 133
 Fast
-Normal None
+Normal No_Type
 4
 0 Fake Out
 0 Sing
@@ -28567,7 +28567,7 @@ Level 308 37
 0
 50
 Pure Power
-None
+No Ability
 Meditate 
 24 24.7 It always trains deep in mountains. It levitates when it heightens its spiritual power through meditation.
 5120
@@ -28683,7 +28683,7 @@ None
 0
 50
 Pure Power
-None
+No Ability
 Meditate 
 51 69.4 It gains the ability to see the aura of its opponents by honing its mind through starvation.
 5120
@@ -28695,7 +28695,7 @@ Electrike
 40 45 40 65 40 65 
 59
 Slow
-Electric None
+Electric No_Type
 14
 0 Tackle
 0 Thunder Wave
@@ -28779,7 +28779,7 @@ Manectric
 70 75 60 105 60 105 
 166
 Slow
-Electric None
+Electric No_Type
 19
 0 Electric Terrain
 0 Fire Fang
@@ -28871,7 +28871,7 @@ Plusle
 60 50 40 85 75 95 
 142
 Medium Fast
-Electric None
+Electric No_Type
 21
 0 Nuzzle
 0 Play Nice
@@ -28957,7 +28957,7 @@ Minun
 60 40 50 75 85 95 
 142
 Medium Fast
-Electric None
+Electric No_Type
 21
 0 Nuzzle
 0 Play Nice
@@ -29043,7 +29043,7 @@ Volbeat
 65 73 55 47 75 85 
 140
 Erratic
-Bug None
+Bug No_Type
 15
 0 Flash
 0 Tackle
@@ -29135,7 +29135,7 @@ Illumise
 65 47 55 73 75 85 
 140
 Fluctuating
-Bug None
+Bug No_Type
 15
 0 Play Nice
 0 Tackle
@@ -29316,7 +29316,7 @@ Gulpin
 70 43 53 43 53 40 
 60
 Fluctuating
-Poison None
+Poison No_Type
 16
 0 Pound
 5 Yawn
@@ -29403,7 +29403,7 @@ Swalot
 100 73 83 73 83 55 
 163
 Fluctuating
-Poison None
+Poison No_Type
 22
 0 Gunk Shot
 0 Wring Out
@@ -29679,7 +29679,7 @@ Wailmer
 130 70 35 70 35 60 
 80
 Fluctuating
-Water None
+Water No_Type
 16
 0 Splash
 4 Growl
@@ -29765,7 +29765,7 @@ Wailord
 170 90 45 90 45 60 
 175
 Fluctuating
-Water None
+Water No_Type
 20
 0 Heavy Slam
 0 Splash
@@ -30052,7 +30052,7 @@ Torkoal
 70 85 140 85 70 20 
 165
 Medium Fast
-Fire None
+Fire No_Type
 18
 0 Ember
 4 Smog
@@ -30144,7 +30144,7 @@ Spoink
 60 25 35 70 80 60 
 66
 Fast
-Psychic None
+Psychic No_Type
 15
 0 Splash
 7 Psywave
@@ -30242,7 +30242,7 @@ Grumpig
 80 45 65 90 110 80 
 165
 Fast
-Psychic None
+Psychic No_Type
 19
 0 Splash
 0 Psywave
@@ -30357,7 +30357,7 @@ Spinda
 60 60 60 60 60 60 
 126
 Fast
-Normal None
+Normal No_Type
 13
 0 Tackle
 5 Copycat
@@ -30464,7 +30464,7 @@ Trapinch
 45 100 45 45 45 10 
 58
 Medium Slow
-Ground None
+Ground No_Type
 17
 0 Sand Attack
 0 Bite
@@ -30625,7 +30625,7 @@ Level 330 45
 0
 50
 Levitate
-None
+No Ability
 Vibration 
 43 33.7 It violently shudders its wings, generating ultrasonic waves to induce headaches in people.
 5120
@@ -30730,7 +30730,7 @@ None
 0
 50
 Levitate
-None
+No Ability
 Mystic 
 79 180.8 It whips up sandstorms with powerful flaps of its wings. It is known as “The Desert Spirit."
 5120
@@ -30742,7 +30742,7 @@ Cacnea
 50 85 40 85 40 35 
 67
 Medium Slow
-Grass None
+Grass No_Type
 17
 0 Poison Sting
 0 Leer
@@ -31146,7 +31146,7 @@ Zangoose
 73 115 60 60 60 90 
 160
 Erratic
-Normal None
+Normal No_Type
 16
 0 Scratch
 0 Leer
@@ -31260,7 +31260,7 @@ Seviper
 73 100 60 100 60 65 
 160
 Fluctuating
-Poison None
+Poison No_Type
 18
 0 Wrap
 0 Swagger
@@ -31442,7 +31442,7 @@ None
 5 Stardust
 -1
 Levitate
-None
+No Ability
 Meteorite 
 39 370.4 Because it turns active on nights of the full moon, it is said to have some link to the lunar phases.
 6400
@@ -31544,7 +31544,7 @@ None
 5 Stardust
 -1
 Levitate
-None
+No Ability
 Meteorite 
 47 339.5 A new Pok\u00e9mon species, rumored to be from the sun. It gives off light while spinning.
 6400
@@ -31726,7 +31726,7 @@ Corphish
 43 80 65 50 35 35 
 62
 Fluctuating
-Water None
+Water No_Type
 15
 0 Bubble
 5 Harden
@@ -32010,7 +32010,7 @@ Level 344 36
 5 Light Clay
 -1
 Levitate
-None
+No Ability
 Clay Doll 
 20 47.4 It moves by spinning on its foot. It is a rare Pok\u00e9mon that was discovered in ancient ruins.
 5120
@@ -32112,7 +32112,7 @@ None
 5 Light Clay
 -1
 Levitate
-None
+No Ability
 Clay Doll 
 59 238.1 An ancient clay figurine that came to life as a Pok\u00e9mon from exposure to a mysterious ray of light.
 5120
@@ -32484,7 +32484,7 @@ Feebas
 20 15 20 10 55 80 
 40
 Erratic
-Water None
+Water No_Type
 3
 0 Splash
 15 Tackle
@@ -32549,7 +32549,7 @@ Milotic
 95 60 79 100 125 81 
 189
 Erratic
-Water None
+Water No_Type
 17
 0 Wrap
 0 Water Gun
@@ -32638,7 +32638,7 @@ Castform
 70 70 70 70 70 70 
 147
 Medium Fast
-Normal None
+Normal No_Type
 13
 0 Tackle
 10 Water Gun
@@ -32712,7 +32712,7 @@ None
 100 Mystic Water
 50
 Forecast
-None
+No Ability
 Weather 
 12 1.8 Its appearance changes with the weather. Recently, its molecules were found to be just like water.
 6400
@@ -32724,7 +32724,7 @@ Kecleon
 60 90 70 60 120 40 
 154
 Medium Slow
-Normal None
+Normal No_Type
 19
 0 Thief
 0 Tail Whip
@@ -32846,7 +32846,7 @@ Shuppet
 44 75 35 63 33 45 
 59
 Fast
-Ghost None
+Ghost No_Type
 16
 0 Knock Off
 4 Screech
@@ -32944,7 +32944,7 @@ Banette
 64 115 65 83 63 65 
 159
 Fast
-Ghost None
+Ghost No_Type
 20
 0 Phantom Force
 0 Knock Off
@@ -33051,7 +33051,7 @@ Duskull
 20 40 90 30 90 25 
 59
 Fast
-Ghost None
+Ghost No_Type
 15
 0 Leer
 0 Night Shade
@@ -33145,7 +33145,7 @@ Dusclops
 40 70 130 60 130 25 
 159
 Fast
-Ghost None
+Ghost No_Type
 25
 0 Phantom Force
 0 Future Sight
@@ -33357,7 +33357,7 @@ Chimecho
 65 50 70 95 80 65 
 149
 Fast
-Psychic None
+Psychic No_Type
 20
 0 Healing Wish
 0 Synchronoise
@@ -33450,7 +33450,7 @@ None
 5 Cleanse Tag
 50
 Levitate
-None
+No Ability
 Wind Chime 
 24 2.2 Its cries echo inside its hollow body to emerge as beautiful notes for startling and repelling foes.
 6400
@@ -33462,7 +33462,7 @@ Absol
 65 130 60 75 60 75 
 163
 Medium Slow
-Dark None
+Dark No_Type
 22
 0 Perish Song
 0 Future Sight
@@ -33591,7 +33591,7 @@ Wynaut
 95 23 48 23 48 23 
 52
 Medium Fast
-Psychic None
+Psychic No_Type
 7
 0 Splash
 0 Charm
@@ -33610,7 +33610,7 @@ Level 202 15
 0
 50
 Shadow Tag
-None
+No Ability
 Bright 
 24 30.9 It grows strong by pushing up against others en masse. It loves eating sweet fruit.
 5120
@@ -33622,7 +33622,7 @@ Snorunt
 50 50 50 50 50 50 
 60
 Medium Fast
-Ice None
+Ice No_Type
 13
 0 Powder Snow
 0 Leer
@@ -33699,7 +33699,7 @@ Glalie
 80 80 80 80 80 80 
 168
 Medium Fast
-Ice None
+Ice No_Type
 18
 0 Sheer Cold
 0 Powder Snow
@@ -34061,7 +34061,7 @@ Clamperl
 35 64 85 74 55 32 
 69
 Erratic
-Water None
+Water No_Type
 5
 0 Clamp
 0 Water Gun
@@ -34129,7 +34129,7 @@ Huntail
 55 104 105 94 75 52 
 170
 Erratic
-Water None
+Water No_Type
 15
 0 Whirlpool
 0 Bite
@@ -34212,7 +34212,7 @@ Gorebyss
 55 84 105 114 75 52 
 170
 Erratic
-Water None
+Water No_Type
 15
 0 Whirlpool
 0 Confusion
@@ -34392,7 +34392,7 @@ Luvdisc
 43 30 55 40 65 97 
 116
 Fast
-Water None
+Water No_Type
 15
 0 Tackle
 0 Charm
@@ -34468,7 +34468,7 @@ Bagon
 45 75 60 40 30 50 
 60
 Slow
-Dragon None
+Dragon No_Type
 13
 0 Rage
 4 Ember
@@ -34550,7 +34550,7 @@ Shelgon
 65 95 100 60 50 50 
 147
 Slow
-Dragon None
+Dragon No_Type
 17
 0 Rage
 0 Ember
@@ -34955,7 +34955,7 @@ Regirock
 80 100 200 50 100 50 
 261
 Slow
-Rock None
+Rock No_Type
 17
 0 Explosion
 0 Stomp
@@ -35046,7 +35046,7 @@ Regice
 80 50 100 100 200 50 
 261
 Slow
-Ice None
+Ice No_Type
 17
 0 Explosion
 0 Stomp
@@ -35135,7 +35135,7 @@ Registeel
 80 75 150 75 150 50 
 261
 Slow
-Steel None
+Steel No_Type
 19
 0 Explosion
 0 Stomp
@@ -35324,7 +35324,7 @@ None
 0
 0
 Levitate
-None
+No Ability
 Eon 
 55 88.2 Its body is covered with a down that can refract light in such a way that it becomes invisible.
 30720
@@ -35430,7 +35430,7 @@ None
 0
 100
 Levitate
-None
+No Ability
 Eon 
 79 132.3 A highly intelligent Pok\u00e9mon. By folding back its wings in flight, it can overtake jet planes.
 30720
@@ -35442,7 +35442,7 @@ Kyogre
 100 100 90 150 140 90 
 302
 Slow
-Water None
+Water No_Type
 14
 0 Ancient Power
 0 Water Pulse
@@ -35512,7 +35512,7 @@ None
 0
 -1
 Drizzle
-None
+No Ability
 Sea Basin 
 177 776.0 It is said to have widened the seas by causing downpours. It had been asleep in a marine trench.
 30720
@@ -35524,7 +35524,7 @@ Groudon
 100 150 140 100 90 90 
 302
 Slow
-Ground None
+Ground No_Type
 14
 0 Ancient Power
 0 Mud Shot
@@ -35609,7 +35609,7 @@ None
 0
 -1
 Drought
-None
+No Ability
 Continent 
 138 2094.4 It had been asleep in underground magma ever since it fiercely fought Kyogre long ago.
 30720
@@ -35714,7 +35714,7 @@ None
 0
 -1
 Air Lock
-None
+No Ability
 Sky High 
 276 455.2 It lives in the ozone layer far above the clouds and cannot be seen from the ground.
 30720
@@ -35815,7 +35815,7 @@ None
 100 Star Piece
 -1
 Serene Grace
-None
+No Ability
 Wish 
 12 2.4 It is said to have the ability to grant any wish for just one week every thousand years.
 30720
@@ -35827,7 +35827,7 @@ Deoxys
 50 150 50 150 50 150
 270
 Slow
-Psychic None
+Psychic No_Type
 14
 0 Leer
 0 Wrap
@@ -35928,7 +35928,7 @@ None
 0
 -1
 Pressure
-None
+No Ability
 DNA 
 67 134.0 An alien virus that fell to earth on a meteor underwent a DNA mutation to become this Pok\u00e9mon.
 30720
@@ -35940,7 +35940,7 @@ Turtwig
 55 68 64 45 55 31 
 64
 Medium Slow
-Grass None
+Grass No_Type
 12
 0 Tackle
 5 Withdraw
@@ -36026,7 +36026,7 @@ Grotle
 75 89 85 55 65 36 
 142
 Medium Slow
-Grass None
+Grass No_Type
 13
 0 Tackle
 0 Withdraw
@@ -36217,7 +36217,7 @@ Chimchar
 44 58 44 58 44 61 
 62
 Medium Slow
-Fire None
+Fire No_Type
 13
 0 Scratch
 0 Leer
@@ -36544,7 +36544,7 @@ Piplup
 53 51 53 61 56 40 
 63
 Medium Slow
-Water None
+Water No_Type
 13
 0 Pound
 4 Growl
@@ -36629,7 +36629,7 @@ Prinplup
 64 66 68 81 76 50 
 142
 Medium Slow
-Water None
+Water No_Type
 15
 0 Tackle
 0 Growl
@@ -37061,7 +37061,7 @@ Bidoof
 59 45 40 35 40 31 
 50
 Medium Fast
-Normal None
+Normal No_Type
 12
 0 Tackle
 5 Growl
@@ -37251,7 +37251,7 @@ Kricketot
 37 25 41 25 41 25 
 39
 Medium Slow
-Bug None
+Bug No_Type
 4
 0 Growl
 0 Bide
@@ -37284,7 +37284,7 @@ Kricketune
 77 85 51 55 51 65 
 134
 Medium Slow
-Bug None
+Bug No_Type
 15
 0 Growl
 0 Bide
@@ -37362,7 +37362,7 @@ Shinx
 45 65 34 40 34 45 
 53
 Medium Slow
-Electric None
+Electric No_Type
 13
 0 Tackle
 5 Leer
@@ -37442,7 +37442,7 @@ Luxio
 60 85 49 60 49 60 
 127
 Medium Slow
-Electric None
+Electric No_Type
 13
 0 Tackle
 0 Leer
@@ -37522,7 +37522,7 @@ Luxray
 80 120 79 95 79 70 
 235
 Medium Slow
-Electric None
+Electric No_Type
 16
 0 Electric Terrain
 0 Tackle
@@ -37766,7 +37766,7 @@ Cranidos
 67 125 40 30 30 58 
 70
 Erratic
-Rock None
+Rock No_Type
 12
 0 Headbutt
 0 Leer
@@ -37865,7 +37865,7 @@ Rampardos
 97 165 60 65 50 58 
 173
 Erratic
-Rock None
+Rock No_Type
 13
 0 Headbutt
 0 Leer
@@ -38167,7 +38167,7 @@ Burmy
 40 29 45 29 45 36 
 45
 Medium Fast
-Bug None
+Bug No_Type
 4
 0 Protect
 10 Tackle
@@ -38482,7 +38482,7 @@ Pachirisu
 60 45 70 45 90 95 
 142
 Medium Fast
-Electric None
+Electric No_Type
 15
 0 Growl
 0 Bide
@@ -38571,7 +38571,7 @@ Buizel
 55 65 35 60 30 85 
 66
 Medium Fast
-Water None
+Water No_Type
 14
 0 Sonic Boom
 4 Growl
@@ -38659,7 +38659,7 @@ Floatzel
 85 105 55 85 50 115 
 173
 Medium Fast
-Water None
+Water No_Type
 19
 0 Ice Fang
 0 Crunch
@@ -38760,7 +38760,7 @@ Cherubi
 45 35 45 62 53 35 
 55
 Medium Fast
-Grass None
+Grass No_Type
 12
 0 Morning Sun
 0 Tackle
@@ -38825,7 +38825,7 @@ Level 421 25
 5 Miracle Seed
 50
 Chlorophyll
-None
+No Ability
 Cherry 
 16 7.3 The small ball is not only filled with nutrients, it is also tasty. Starly try to peck it off.
 5120
@@ -38837,7 +38837,7 @@ Cherrim
 70 60 70 87 78 85 
 158
 Medium Fast
-Grass None
+Grass No_Type
 14
 0 Morning Sun
 0 Tackle
@@ -38906,7 +38906,7 @@ None
 5 Miracle Seed
 50
 Flower Gift
-None
+No Ability
 Blossom 
 20 20.5 If it senses strong sunlight, it opens its folded petals to absorb the sun's rays with its whole body.
 5120
@@ -38918,7 +38918,7 @@ Shellos
 76 48 48 57 62 34 
 65
 Medium Fast
-Water None
+Water No_Type
 10
 0 Mud-Slap
 2 Mud Sport
@@ -39087,7 +39087,7 @@ Ambipom
 75 100 66 60 66 115 
 169
 Fast
-Normal None
+Normal No_Type
 16
 0 Scratch
 0 Tail Whip
@@ -39396,7 +39396,7 @@ Buneary
 55 66 44 44 56 85 
 70
 Medium Fast
-Normal None
+Normal No_Type
 17
 0 Defense Curl
 0 Splash
@@ -39502,7 +39502,7 @@ Lopunny
 65 76 84 54 96 105 
 168
 Medium Fast
-Normal None
+Normal No_Type
 22
 0 Healing Wish
 0 Bounce
@@ -39620,7 +39620,7 @@ Mismagius
 60 60 60 105 105 105 
 173
 Fast
-Ghost None
+Ghost No_Type
 9
 0 Mystical Fire
 0 Power Gem
@@ -39707,7 +39707,7 @@ None
 0
 50
 Levitate
-None
+No Ability
 Magical 
 35 9.7 Its cry sounds like an incantation. It is said the cry may rarely be imbued with happiness-giving power.
 6400
@@ -39815,7 +39815,7 @@ Glameow
 49 55 42 42 37 85 
 62
 Fast
-Normal None
+Normal No_Type
 14
 0 Fake Out
 5 Scratch
@@ -39907,7 +39907,7 @@ Purugly
 71 82 64 64 59 112 
 158
 Fast
-Normal None
+Normal No_Type
 16
 0 Fake Out
 0 Scratch
@@ -40005,7 +40005,7 @@ Chingling
 45 30 50 65 50 45 
 57
 Fast
-Psychic None
+Psychic No_Type
 8
 0 Wrap
 4 Growl
@@ -40084,7 +40084,7 @@ Item 358  Moon Stone
 5 Colbur Berry
 50
 Levitate
-None
+No Ability
 Bell 
 8 1.3 There is an orb inside its mouth. When it hops, the orb bounces all over and makes a ringing sound.
 6400
@@ -40465,7 +40465,7 @@ Bonsly
 50 80 95 10 45 10 
 58
 Medium Fast
-Rock None
+Rock No_Type
 13
 0 Fake Tears
 0 Copycat
@@ -40655,7 +40655,7 @@ Happiny
 100 5 5 15 65 30 
 110
 Fast
-Normal None
+Normal No_Type
 5
 0 Pound
 0 Charm
@@ -41195,7 +41195,7 @@ Munchlax
 135 85 40 40 85 5 
 78
 Slow
-Normal None
+Normal No_Type
 20
 0 Last Resort
 0 Recycle
@@ -41305,7 +41305,7 @@ Riolu
 40 70 40 35 40 60 
 57
 Medium Slow
-Fighting None
+Fighting No_Type
 11
 0 Foresight
 0 Quick Attack
@@ -41515,7 +41515,7 @@ Hippopotas
 68 72 78 38 42 32 
 66
 Slow
-Ground None
+Ground No_Type
 11
 0 Tackle
 0 Sand Attack
@@ -41588,7 +41588,7 @@ Hippowdon
 108 112 118 68 72 47 
 184
 Slow
-Ground None
+Ground No_Type
 16
 0 Ice Fang
 0 Fire Fang
@@ -42107,7 +42107,7 @@ Carnivine
 74 100 72 90 72 46 
 159
 Slow
-Grass None
+Grass No_Type
 14
 0 Bind
 0 Growth
@@ -42179,7 +42179,7 @@ None
 0
 50
 Levitate
-None
+No Ability
 Bug Catcher 
 55 59.5 It binds itself to trees in marshes. It attracts prey with its sweet- smelling drool and gulps them down.
 6400
@@ -42191,7 +42191,7 @@ Finneon
 49 49 56 49 61 66 
 66
 Erratic
-Water None
+Water No_Type
 14
 0 Pound
 6 Water Gun
@@ -42274,7 +42274,7 @@ Lumineon
 69 69 76 69 86 91 
 161
 Erratic
-Water None
+Water No_Type
 18
 0 Soak
 0 Gust
@@ -42835,7 +42835,7 @@ Lickilicky
 110 85 95 80 95 50 
 180
 Medium Fast
-Normal None
+Normal No_Type
 18
 0 Wring Out
 0 Power Whip
@@ -43082,7 +43082,7 @@ Tangrowth
 100 100 125 110 50 50 
 187
 Medium Fast
-Grass None
+Grass No_Type
 21
 0 Block
 0 Ingrain
@@ -43188,7 +43188,7 @@ Electivire
 75 123 67 95 85 95 
 243
 Medium Fast
-Electric None
+Electric No_Type
 21
 0 Electric Terrain
 0 Electrify
@@ -43299,7 +43299,7 @@ Magmortar
 75 95 67 125 95 83 
 243
 Medium Fast
-Fire None
+Fire No_Type
 18
 0 Thunder Punch
 0 Smog
@@ -43593,7 +43593,7 @@ Leafeon
 65 110 130 60 65 95 
 196
 Medium Fast
-Grass None
+Grass No_Type
 13
 0 Tail Whip
 0 Tackle
@@ -43686,7 +43686,7 @@ Glaceon
 65 60 110 130 95 65 
 196
 Medium Fast
-Ice None
+Ice No_Type
 13
 0 Tackle
 0 Tail Whip
@@ -43988,7 +43988,7 @@ Porygon-Z
 85 80 70 135 75 90 
 241
 Medium Fast
-Normal None
+Normal No_Type
 19
 0 Trick Room
 0 Zap Cannon
@@ -44318,7 +44318,7 @@ Dusknoir
 45 100 135 65 135 45 
 236
 Fast
-Ghost None
+Ghost No_Type
 25
 0 Phantom Force
 0 Future Sight
@@ -44602,7 +44602,7 @@ None
 0
 -1
 Levitate
-None
+No Ability
 Plasma 
 12 0.7 Its electric-like body can enter some kinds of machines and take control in order to make mischief.
 5120
@@ -44614,7 +44614,7 @@ Uxie
 75 75 130 75 130 95 
 261
 Slow
-Psychic None
+Psychic No_Type
 15
 0 Memento
 0 Natural Gift
@@ -44701,7 +44701,7 @@ None
 0
 -1
 Levitate
-None
+No Ability
 Knowledge 
 12 0.7 When Uxie flew, people gained the ability to solve problems. It was the birth of knowledge.
 20480
@@ -44713,7 +44713,7 @@ Mesprit
 80 105 105 105 105 80 
 261
 Slow
-Psychic None
+Psychic No_Type
 15
 0 Healing Wish
 0 Natural Gift
@@ -44798,7 +44798,7 @@ None
 0
 -1
 Levitate
-None
+No Ability
 Emotion 
 12 0.7 When Mesprit flew, people learned the joy and sadness of living. It was the birth of emotions.
 20480
@@ -44810,7 +44810,7 @@ Azelf
 75 125 70 125 70 115 
 261
 Slow
-Psychic None
+Psychic No_Type
 14
 0 Natural Gift
 0 Last Resort
@@ -44901,7 +44901,7 @@ None
 0
 -1
 Levitate
-None
+No Ability
 Willpower 
 12 0.7 When Azelf flew, people gained the determination to do things. It was the birth of willpower.
 20480
@@ -44997,7 +44997,7 @@ None
 0
 -1
 Pressure
-None
+No Ability
 Temporal 
 213 1505.7 A legendary Pok\u00e9mon of Sinnoh. It is said that time flows when Dialga's heart beats.
 30720
@@ -45093,7 +45093,7 @@ None
 0
 -1
 Pressure
-None
+No Ability
 Spatial 
 165 740.7 A legendary Pok\u00e9mon of Sinnoh. It is said that space becomes more stable with Palkia's every breath.
 30720
@@ -45194,7 +45194,7 @@ Regigigas
 110 160 110 80 110 100 
 302
 Slow
-Normal None
+Normal No_Type
 16
 0 Heavy Slam
 0 Crush Grip
@@ -45272,7 +45272,7 @@ None
 0
 -1
 Slow Start
-None
+No Ability
 Colossal 
 146 925.9 It is said to have made Pok\u00e9mon that look like itself from a special ice mountain, rocks, and magma.
 30720
@@ -45368,7 +45368,7 @@ None
 0
 -1
 Pressure
-None
+No Ability
 Renegade 
 177 1653.4 It was banished for its violence. It silently gazed upon the old world from the Distortion World.
 30720
@@ -45380,7 +45380,7 @@ Cresselia
 120 70 120 75 130 85 
 270
 Slow
-Psychic None
+Psychic No_Type
 17
 0 Lunar Dance
 0 Psycho Shift
@@ -45452,7 +45452,7 @@ None
 0
 0
 Levitate
-None
+No Ability
 Lunar 
 59 188.7 On nights around the quarter moon, the aurora from its tail extends and undulates beautifully.
 30720
@@ -45464,7 +45464,7 @@ Phione
 80 80 80 80 80 80 
 216
 Slow
-Water None
+Water No_Type
 11
 0 Bubble
 0 Water Sport
@@ -45522,7 +45522,7 @@ None
 0
 -1
 Hydration
-None
+No Ability
 Sea Drifter 
 16 6.8 It drifts in warm seas. It always returns to where it was born, no matter how far it may have drifted.
 10240
@@ -45534,7 +45534,7 @@ Manaphy
 100 100 100 100 100 100 
 270
 Slow
-Water None
+Water No_Type
 13
 0 Tail Glow
 0 Bubble
@@ -45604,7 +45604,7 @@ None
 0
 -1
 Hydration
-None
+No Ability
 Seafaring 
 12 3.1 It is born with a wondrous power that lets it bond with any kind of Pok\u00e9mon.
 2560
@@ -45616,7 +45616,7 @@ Darkrai
 70 90 90 135 90 125 
 270
 Slow
-Dark None
+Dark No_Type
 12
 0 Ominous Wind
 0 Disable
@@ -45704,7 +45704,7 @@ None
 0
 -1
 Bad Dreams
-None
+No Ability
 Pitch-Black 
 59 111.3 To protect itself, it afflicts those around it with nightmares. However, it means no harm.
 30720
@@ -45716,7 +45716,7 @@ Shaymin
 100 100 100 100 100 100
 270
 Medium Slow
-Grass None
+Grass No_Type
 12
 0 Growth
 10 Magical Leaf
@@ -45788,7 +45788,7 @@ Arceus
 120 120 120 120 120 120 
 324
 Slow
-Normal None
+Normal No_Type
 14
 0 Seismic Toss
 0 Cosmic Power
@@ -45908,7 +45908,7 @@ None
 0
 -1
 Multitype
-None
+No Ability
 Alpha 
 126 705.5 It is said to have emerged from an egg in a place where there was nothing, then shaped the world.
 30720
@@ -46008,7 +46008,7 @@ None
 0
 -1
 Victory Star
-None
+No Ability
 Victory 
 16 8.8 This Pok\u00e9mon brings victory. It is said that Trainers with Victini always win, regardless of the type of encounter.
 30720
@@ -46020,7 +46020,7 @@ Snivy
 45 45 55 45 55 63 
 28
 Medium Slow
-Grass None
+Grass No_Type
 15
 0 Tackle
 4 Leer
@@ -46109,7 +46109,7 @@ Servine
 60 60 75 60 75 83 
 145
 Medium Slow
-Grass None
+Grass No_Type
 18
 0 Tackle
 0 Leer
@@ -46201,7 +46201,7 @@ Serperior
 75 75 95 75 95 113 
 238
 Medium Slow
-Grass None
+Grass No_Type
 18
 0 Tackle
 0 Leer
@@ -46300,7 +46300,7 @@ Tepig
 65 63 45 45 45 45 
 28
 Medium Slow
-Fire None
+Fire No_Type
 15
 0 Tackle
 3 Tail Whip
@@ -46604,7 +46604,7 @@ Oshawott
 55 55 45 63 45 45 
 28
 Medium Slow
-Water None
+Water No_Type
 15
 0 Tackle
 5 Tail Whip
@@ -46689,7 +46689,7 @@ Dewott
 75 75 60 83 60 60 
 145
 Medium Slow
-Water None
+Water No_Type
 18
 0 Tackle
 0 Tail Whip
@@ -46777,7 +46777,7 @@ Samurott
 95 100 85 108 70 70 
 238
 Medium Slow
-Water None
+Water No_Type
 20
 0 Megahorn
 0 Tackle
@@ -46874,7 +46874,7 @@ Patrat
 45 55 39 35 39 42 
 51
 Medium Fast
-Normal None
+Normal No_Type
 15
 0 Tackle
 3 Leer
@@ -46954,7 +46954,7 @@ Watchog
 60 85 69 60 69 77 
 147
 Medium Fast
-Normal None
+Normal No_Type
 20
 0 Rototiller
 0 Tackle
@@ -47058,7 +47058,7 @@ Lillipup
 45 60 45 25 45 55 
 55
 Medium Slow
-Normal None
+Normal No_Type
 15
 0 Leer
 0 Tackle
@@ -47140,7 +47140,7 @@ Herdier
 65 80 65 35 65 60 
 130
 Medium Slow
-Normal None
+Normal No_Type
 16
 0 Leer
 0 Tackle
@@ -47226,7 +47226,7 @@ Stoutland
 85 110 90 45 90 80 
 221
 Medium Slow
-Normal None
+Normal No_Type
 19
 0 Ice Fang
 0 Fire Fang
@@ -47319,7 +47319,7 @@ Purrloin
 41 50 37 50 37 66 
 56
 Medium Fast
-Dark None
+Dark No_Type
 17
 0 Scratch
 3 Growl
@@ -47413,7 +47413,7 @@ Liepard
 64 88 50 88 50 106 
 156
 Medium Fast
-Dark None
+Dark No_Type
 20
 0 Scratch
 0 Growl
@@ -47513,7 +47513,7 @@ Pansage
 50 53 48 53 48 64 
 63
 Medium Fast
-Grass None
+Grass No_Type
 16
 0 Scratch
 0 Play Nice
@@ -47613,7 +47613,7 @@ Simisage
 75 98 63 98 63 101 
 174
 Medium Fast
-Grass None
+Grass No_Type
 4
 0 Leer
 0 Lick
@@ -47708,7 +47708,7 @@ Pansear
 50 53 48 53 48 64 
 63
 Medium Fast
-Fire None
+Fire No_Type
 16
 0 Scratch
 0 Play Nice
@@ -47809,7 +47809,7 @@ Simisear
 75 98 63 98 63 101 
 174
 Medium Fast
-Fire None
+Fire No_Type
 4
 0 Leer
 0 Lick
@@ -47905,7 +47905,7 @@ Panpour
 50 53 48 53 48 64 
 63
 Medium Fast
-Water None
+Water No_Type
 16
 0 Scratch
 0 Play Nice
@@ -48008,7 +48008,7 @@ Simipour
 75 98 63 98 63 101 
 174
 Medium Fast
-Water None
+Water No_Type
 4
 0 Leer
 0 Lick
@@ -48106,7 +48106,7 @@ Munna
 76 25 45 67 55 24 
 58
 Fast
-Psychic None
+Psychic No_Type
 17
 0 Psywave
 0 Defense Curl
@@ -48200,7 +48200,7 @@ Musharna
 116 55 85 107 95 29 
 170
 Fast
-Psychic None
+Psychic No_Type
 4
 0 Defense Curl
 0 Lucky Chant
@@ -48511,7 +48511,7 @@ Blitzle
 45 60 32 50 32 76 
 59
 Medium Fast
-Electric None
+Electric No_Type
 13
 0 Quick Attack
 4 Tail Whip
@@ -48587,7 +48587,7 @@ Zebstrika
 75 100 63 80 63 116 
 174
 Medium Fast
-Electric None
+Electric No_Type
 18
 0 Electrify
 0 Quick Attack
@@ -48672,7 +48672,7 @@ Roggenrola
 55 75 85 25 25 15 
 56
 Medium Slow
-Rock None
+Rock No_Type
 13
 0 Tackle
 4 Harden
@@ -48750,7 +48750,7 @@ Boldore
 70 105 105 50 40 20 
 137
 Medium Slow
-Rock None
+Rock No_Type
 17
 0 Tackle
 0 Harden
@@ -48832,7 +48832,7 @@ Gigalith
 85 135 130 60 80 25 
 227
 Medium Slow
-Rock None
+Rock No_Type
 17
 0 Tackle
 0 Harden
@@ -49127,7 +49127,7 @@ Drilbur
 60 85 40 30 45 68 
 66
 Medium Fast
-Ground None
+Ground No_Type
 15
 0 Scratch
 0 Mud Sport
@@ -49300,7 +49300,7 @@ Audino
 103 60 86 60 86 50 
 390
 Fast
-Normal None
+Normal No_Type
 19
 0 Last Resort
 0 Misty Terrain
@@ -49424,7 +49424,7 @@ Timburr
 75 80 55 25 35 35 
 61
 Medium Slow
-Fighting None
+Fighting No_Type
 16
 0 Pound
 0 Leer
@@ -49516,7 +49516,7 @@ Gurdurr
 85 105 85 40 50 40 
 142
 Medium Slow
-Fighting None
+Fighting No_Type
 18
 0 Pound
 0 Leer
@@ -49610,7 +49610,7 @@ Conkeldurr
 105 140 95 55 65 45 
 227
 Medium Slow
-Fighting None
+Fighting No_Type
 18
 0 Pound
 0 Leer
@@ -49708,7 +49708,7 @@ Tympole
 50 50 40 50 40 64 
 59
 Medium Slow
-Water None
+Water No_Type
 14
 0 Bubble
 0 Growl
@@ -49971,7 +49971,7 @@ Throh
 120 100 85 30 85 45 
 163
 Medium Fast
-Fighting None
+Fighting No_Type
 15
 0 Bind
 0 Leer
@@ -50058,7 +50058,7 @@ Sawk
 75 125 75 30 75 85 
 163
 Medium Fast
-Fighting None
+Fighting No_Type
 15
 0 Rock Smash
 0 Leer
@@ -50804,7 +50804,7 @@ Petilil
 45 35 50 70 50 30 
 56
 Medium Fast
-Grass None
+Grass No_Type
 16
 0 Absorb
 4 Growth
@@ -50881,7 +50881,7 @@ Lilligant
 70 60 75 110 75 90 
 168
 Medium Fast
-Grass None
+Grass No_Type
 8
 0 Growth
 0 Leech Seed
@@ -50955,7 +50955,7 @@ Basculin
 70 92 65 80 55 98 
 161
 Medium Fast
-Water None
+Water No_Type
 19
 0 Thrash
 0 Flail
@@ -51356,7 +51356,7 @@ Darumaka
 70 90 45 15 45 50 
 63
 Medium Slow
-Fire None
+Fire No_Type
 16
 0 Tackle
 3 Rollout
@@ -51450,7 +51450,7 @@ Darmanitan
 105 140 55 30 55 95
 168
 Medium Slow
-Fire None
+Fire No_Type
 20
 0 Tackle
 0 Rollout
@@ -51547,7 +51547,7 @@ None
 50 Rawst Berry
 50
 Sheer Force
-None
+No Ability
 Blazing 
 51 204.8 Its internal fire burns at 2,500° F, making enough power that it can destroy a dump truck with one punch.
 5120
@@ -51559,7 +51559,7 @@ Maractus
 75 86 67 106 67 60 
 161
 Medium Fast
-Grass None
+Grass No_Type
 22
 0 Spiky Shield
 0 Cotton Guard
@@ -52157,7 +52157,7 @@ Yamask
 38 30 85 55 65 30 
 61
 Medium Fast
-Ghost None
+Ghost No_Type
 15
 0 Astonish
 0 Protect
@@ -52236,7 +52236,7 @@ Level 563 34
 5 Spell Tag
 50
 Mummy
-None
+No Ability
 Spirit 
 20 3.3 Each of them carries a mask that used to be its face when it was human. Sometimes they look at it and cry.
 6400
@@ -52248,7 +52248,7 @@ Cofagrigus
 58 50 145 95 105 30 
 169
 Medium Fast
-Ghost None
+Ghost No_Type
 18
 0 Astonish
 0 Protect
@@ -52333,7 +52333,7 @@ None
 5 Spell Tag
 50
 Mummy
-None
+No Ability
 Coffin 
 67 168.7 It has been said that they swallow those who get too close and turn them into mummies. They like to eat gold nuggets.
 6400
@@ -52624,7 +52624,7 @@ Level 567 37
 0
 87
 Defeatist
-None
+No Ability
 First Bird 
 20 20.9 Said to be an ancestor of bird Pok\u00e9mon, they were unable to fly and moved about by hopping from one branch to another.
 7680
@@ -52730,7 +52730,7 @@ None
 0
 87
 Defeatist
-None
+No Ability
 First Bird 
 55 70.5 They are intelligent and will cooperate to catch prey. From the ground, they use a running start to take flight.
 7680
@@ -52742,7 +52742,7 @@ Trubbish
 50 50 62 40 62 65 
 66
 Medium Fast
-Poison None
+Poison No_Type
 17
 0 Pound
 0 Poison Gas
@@ -52823,7 +52823,7 @@ Garbodor
 80 95 82 60 82 75 
 166
 Medium Fast
-Poison None
+Poison No_Type
 19
 0 Pound
 0 Poison Gas
@@ -52916,7 +52916,7 @@ Zorua
 40 65 40 80 40 65 
 66
 Medium Slow
-Dark None
+Dark No_Type
 16
 0 Scratch
 0 Leer
@@ -52998,7 +52998,7 @@ Level 571 30
 0
 87
 Illusion
-None
+No Ability
 Tricky Fox 
 28 27.6 It changes into the forms of others to surprise them. Apparently, it often transforms into a silent child.
 6400
@@ -53010,7 +53010,7 @@ Zoroark
 60 105 60 120 60 105 
 179
 Medium Slow
-Dark None
+Dark No_Type
 22
 0 Night Daze
 0 Imprison
@@ -53106,7 +53106,7 @@ None
 0
 87
 Illusion
-None
+No Ability
 Illusion Fox 
 63 178.8 Bonds between these Pok\u00e9mon are very strong. It protects the safety of its pack by tricking its opponents.
 5120
@@ -53118,7 +53118,7 @@ Minccino
 55 50 40 40 40 75 
 60
 Fast
-Normal None
+Normal No_Type
 17
 0 Pound
 3 Baby-Doll Eyes
@@ -53206,7 +53206,7 @@ Cinccino
 75 95 60 65 60 115 
 165
 Fast
-Normal None
+Normal No_Type
 6
 0 Bullet Seed
 0 Rock Blast
@@ -53288,7 +53288,7 @@ Gothita
 45 30 50 55 65 45 
 58
 Medium Slow
-Psychic None
+Psychic No_Type
 17
 0 Pound
 3 Confusion
@@ -53391,7 +53391,7 @@ Gothorita
 60 45 70 75 85 55 
 137
 Medium Slow
-Psychic None
+Psychic No_Type
 19
 0 Pound
 0 Confusion
@@ -53496,7 +53496,7 @@ Gothitelle
 70 55 95 95 110 65 
 221
 Medium Slow
-Psychic None
+Psychic No_Type
 19
 0 Pound
 0 Confusion
@@ -53606,7 +53606,7 @@ Solosis
 45 30 40 105 50 20 
 58
 Medium Slow
-Psychic None
+Psychic No_Type
 16
 0 Psywave
 3 Reflect
@@ -53702,7 +53702,7 @@ Duosion
 65 40 50 125 60 30 
 130
 Medium Slow
-Psychic None
+Psychic No_Type
 19
 0 Psywave
 0 Reflect
@@ -53801,7 +53801,7 @@ Reuniclus
 110 65 75 125 85 30 
 221
 Medium Slow
-Psychic None
+Psychic No_Type
 20
 0 Psywave
 0 Reflect
@@ -54072,7 +54072,7 @@ Vanillite
 36 50 50 65 60 44 
 61
 Slow
-Ice None
+Ice No_Type
 15
 0 Icicle Spear
 4 Harden
@@ -54148,7 +54148,7 @@ Vanillish
 51 65 65 80 75 59 
 138
 Slow
-Ice None
+Ice No_Type
 18
 0 Icicle Spear
 0 Harden
@@ -54227,7 +54227,7 @@ Vanilluxe
 71 95 85 110 95 79 
 241
 Slow
-Ice None
+Ice No_Type
 21
 0 Sheer Cold
 0 Freeze-Dry
@@ -54570,7 +54570,7 @@ Karrablast
 50 75 45 40 45 60 
 63
 Medium Fast
-Bug None
+Bug No_Type
 15
 0 Peck
 4 Leer
@@ -55080,7 +55080,7 @@ Alomomola
 165 75 80 40 45 65 
 165
 Fast
-Water None
+Water No_Type
 20
 0 Hydro Pump
 0 Refresh
@@ -55411,7 +55411,7 @@ Level 598 40
 5 Sticky Barb
 50
 Iron Barbs
-None
+No Ability
 Thorn Seed 
 24 41.4 When threatened, it attacks by shooting a barrage of spikes, which gives it a chance to escape by rolling away.
 5120
@@ -55513,7 +55513,7 @@ None
 5 Sticky Barb
 50
 Iron Barbs
-None
+No Ability
 Thorn Pod 
 39 242.5 It fights by swinging around its three spiky feelers. A hit from these steel spikes can reduce a boulder to rubble.
 5120
@@ -55525,7 +55525,7 @@ Klink
 40 55 70 45 60 30 
 60
 Medium Slow
-Steel None
+Steel No_Type
 15
 0 Vice Grip
 6 Charge
@@ -55583,7 +55583,7 @@ Level 600 38
 0
 -1
 Clear Body
-None
+No Ability
 Gear 
 12 46.3 The two minigears that mesh together are predetermined. Each will rebound from other minigears without meshing.
 5120
@@ -55595,7 +55595,7 @@ Klang
 60 80 95 70 85 50 
 154
 Medium Slow
-Steel None
+Steel No_Type
 18
 0 Vice Grip
 0 Charge
@@ -55656,7 +55656,7 @@ Level 601 49
 0
 -1
 Clear Body
-None
+No Ability
 Gear 
 24 112.4 By changing the direction in which it rotates, it communicates its feelings to others. When angry, it rotates faster.
 5120
@@ -55668,7 +55668,7 @@ Klinklang
 60 100 115 70 85 90 
 234
 Medium Slow
-Steel None
+Steel No_Type
 21
 0 Magnetic Flux
 0 Zap Cannon
@@ -55735,7 +55735,7 @@ None
 0
 -1
 Clear Body
-None
+No Ability
 Gear 
 24 178.6 Its red core functions as an energy tank. It fires the charged energy through its spikes into an area.
 5120
@@ -55747,7 +55747,7 @@ Tynamo
 35 55 40 45 40 60 
 55
 Slow
-Electric None
+Electric No_Type
 4
 0 Tackle
 0 Thunder Wave
@@ -55765,7 +55765,7 @@ Level 603 39
 0
 50
 Levitate
-None
+No Ability
 EleFish 
 8 0.7 While one alone doesn't have much power, a chain of many Tynamo can be as powerful as lightning.
 5120
@@ -55777,7 +55777,7 @@ Eelektrik
 65 85 70 75 70 40 
 142
 Slow
-Electric None
+Electric No_Type
 15
 0 Headbutt
 0 Thunder Wave
@@ -55840,7 +55840,7 @@ Item 604  Thunder Stone
 0
 50
 Levitate
-None
+No Ability
 EleFish 
 47 48.5 They coil around foes and shock them with electricity-generating organs that seem simply to be circular patterns.
 5120
@@ -55852,7 +55852,7 @@ Eelektross
 85 115 80 105 80 50 
 232
 Slow
-Electric None
+Electric No_Type
 10
 0 Thrash
 0 Zap Cannon
@@ -55932,7 +55932,7 @@ None
 0
 50
 Levitate
-None
+No Ability
 EleFish 
 83 177.5 They crawl out of the ocean using their arms. They will attack prey on shore and immediately drag it into the ocean.
 5120
@@ -55944,7 +55944,7 @@ Elgyem
 55 55 55 85 55 30 
 67
 Medium Fast
-Psychic None
+Psychic No_Type
 18
 0 Confusion
 4 Growl
@@ -56044,7 +56044,7 @@ Beheeyem
 75 75 75 125 95 40 
 170
 Medium Fast
-Psychic None
+Psychic No_Type
 23
 0 Wonder Room
 0 Synchronoise
@@ -56410,7 +56410,7 @@ Axew
 46 87 60 30 40 57 
 64
 Slow
-Dragon None
+Dragon No_Type
 16
 0 Scratch
 4 Leer
@@ -56501,7 +56501,7 @@ Fraxure
 66 117 70 40 50 67 
 144
 Slow
-Dragon None
+Dragon No_Type
 19
 0 Scratch
 0 Leer
@@ -56598,7 +56598,7 @@ Haxorus
 76 147 90 60 70 97 
 243
 Slow
-Dragon None
+Dragon No_Type
 20
 0 Outrage
 0 Scratch
@@ -56704,7 +56704,7 @@ Cubchoo
 55 70 40 60 40 40 
 61
 Medium Fast
-Ice None
+Ice No_Type
 16
 0 Growl
 5 Powder Snow
@@ -56792,7 +56792,7 @@ Beartic
 95 110 80 70 80 50 
 170
 Medium Fast
-Ice None
+Ice No_Type
 22
 0 Sheer Cold
 0 Thrash
@@ -56898,7 +56898,7 @@ Cryogonal
 70 50 30 95 135 105 
 170
 Medium Fast
-Ice None
+Ice No_Type
 24
 0 Sheer Cold
 0 Night Slash
@@ -56968,7 +56968,7 @@ None
 5 NeverMeltIce
 -1
 Levitate
-None
+No Ability
 Crystallizing 
 43 326.3 When its body temperature goes up, it turns into steam and vanishes. When its temperature lowers, it returns to ice.
 6400
@@ -56980,7 +56980,7 @@ Shelmet
 50 40 85 40 65 25 
 61
 Medium Fast
-Bug None
+Bug No_Type
 15
 0 Leech Life
 4 Acid
@@ -57052,7 +57052,7 @@ Accelgor
 80 70 40 100 60 145 
 173
 Medium Fast
-Bug None
+Bug No_Type
 21
 0 Water Shuriken
 0 Final Gambit
@@ -57236,7 +57236,7 @@ Mienfoo
 45 85 50 55 50 65 
 70
 Medium Slow
-Fighting None
+Fighting No_Type
 16
 0 Pound
 5 Meditate
@@ -57330,7 +57330,7 @@ Mienshao
 65 125 60 95 60 105 
 179
 Medium Slow
-Fighting None
+Fighting No_Type
 21
 0 Aura Sphere
 0 Reversal
@@ -57431,7 +57431,7 @@ Druddigon
 77 120 90 60 90 48 
 173
 Medium Fast
-Dragon None
+Dragon No_Type
 16
 0 Leer
 0 Scratch
@@ -57945,7 +57945,7 @@ Bouffalant
 95 110 95 40 95 55 
 172
 Medium Fast
-Normal None
+Normal No_Type
 14
 0 Pursuit
 0 Leer
@@ -58371,7 +58371,7 @@ Heatmor
 85 97 66 105 66 65 
 169
 Medium Fast
-Fire None
+Fire No_Type
 19
 0 Inferno
 0 Hone Claws
@@ -58631,7 +58631,7 @@ Level 634 50
 0
 50
 Hustle
-None
+No Ability
 Irate 
 31 38.1 It tends to bite everything, and it is not a picky eater. Approaching it carelessly is dangerous.
 10240
@@ -58719,7 +58719,7 @@ Level 635 64
 0
 50
 Hustle
-None
+No Ability
 Hostile 
 55 110.2 After it has eaten up all the food in its territory, it moves to another area. Its two heads do not get along.
 10240
@@ -58834,7 +58834,7 @@ None
 0
 50
 Levitate
-None
+No Ability
 Brutal 
 71 352.7 This brutal Pok\u00e9mon travels the skies on its six wings. Anything that moves seems like a foe to it, triggering its attack.
 10240
@@ -59096,7 +59096,7 @@ None
 0
 -1
 Justified
-None
+No Ability
 Iron Will 
 83 551.1 This legendary Pok\u00e9mon battled against humans to protect Pok\u00e9mon. Its personality is calm and composed.
 20480
@@ -59181,7 +59181,7 @@ None
 0
 -1
 Justified
-None
+No Ability
 Cavern 
 75 573.2 This Pok\u00e9mon came to the defense of Pok\u00e9mon that had lost their homes in a war among humans.
 20480
@@ -59268,7 +59268,7 @@ None
 0
 -1
 Justified
-None
+No Ability
 Grassland 
 79 440.9 This Pok\u00e9mon fought humans in order to protect its friends. Legends about it continue to be passed down.
 20480
@@ -59280,7 +59280,7 @@ Tornadus
 79 115 70 125 80 111 
 261
 Slow
-Flying None
+Flying No_Type
 21
 0 Thrash
 0 Hammer Arm
@@ -59550,7 +59550,7 @@ None
 0
 -1
 Turboblaze
-None
+No Ability
 Vast White 
 126 727.5 This Pok\u00e9mon appears in legends. It sends flames into the air from its tail, burning up everything around it.
 30720
@@ -59645,7 +59645,7 @@ None
 0
 -1
 Teravolt
-None
+No Ability
 Deep Black 
 114 760.6 Concealing itself in lightning clouds, it flies throughout the Unova region. It creates electricity in its tail.
 30720
@@ -59909,7 +59909,7 @@ None
 0
 -1
 Justified
-None
+No Ability
 Colt 
 55 106.9 By blasting water from its hooves, it can glide across water. It excels at using leg moves while battling.
 20480
@@ -60023,7 +60023,7 @@ None
 100 Star Piece
 -1
 Serene Grace
-None
+No Ability
 Melody 
 24 14.3 Its melodies are sung with a special vocalization method that can control the feelings of those who hear it.
 30720
@@ -60121,7 +60121,7 @@ None
 0
 -1
 Download
-None
+No Ability
 Paleozoic 
 59 181.9 Over 300 million years ago, it was feared as the strongest of hunters. It has been modified by Team Plasma.
 30720
@@ -60133,7 +60133,7 @@ Chespin
 56 61 65 48 45 38 
 63
 Medium Slow
-Grass None
+Grass No_Type
 14
 0 Tackle
 0 Growl
@@ -60239,7 +60239,7 @@ Quilladin
 61 78 95 56 58 57 
 142
 Medium Slow
-Grass None
+Grass No_Type
 15
 0 Tackle
 0 Growl
@@ -60468,7 +60468,7 @@ Fennekin
 40 45 40 62 60 60 
 61
 Medium Slow
-Fire None
+Fire No_Type
 16
 0 Scratch
 0 Tail Whip
@@ -60552,7 +60552,7 @@ Braixen
 59 59 58 90 70 73 
 143
 Medium Slow
-Fire None
+Fire No_Type
 16
 0 Scratch
 0 Tail Whip
@@ -60755,7 +60755,7 @@ Froakie
 41 56 40 62 44 71 
 63
 Medium Slow
-Water None
+Water No_Type
 14
 0 Pound
 0 Growl
@@ -60841,7 +60841,7 @@ Frogadier
 54 63 52 83 56 97 
 142
 Medium Slow
-Water None
+Water No_Type
 14
 0 Pound
 0 Growl
@@ -61030,7 +61030,7 @@ Bunnelby
 38 36 38 32 36 57 
 47
 Medium Fast
-Normal None
+Normal No_Type
 16
 0 Tackle
 0 Agility
@@ -61449,7 +61449,7 @@ Scatterbug
 38 35 40 27 25 35 
 40
 Medium Fast
-Bug None
+Bug No_Type
 4
 0 Tackle
 0 String Shot
@@ -61479,7 +61479,7 @@ Spewpa
 45 22 60 27 30 29 
 75
 Medium Fast
-Bug None
+Bug No_Type
 2
 0 Harden
 9 Protect
@@ -61498,7 +61498,7 @@ Level 666 12
 0
 50
 Shed Skin
-None
+No Ability
 Scatterdust
 12 18.5 The beaks of bird Pok\u00e9mon can't begin to scratch its stalwart body. To defend itself, it spews powder.
 3840
@@ -61984,7 +61984,7 @@ Skiddo
 66 65 48 62 57 52 
 70
 Medium Fast
-Grass None
+Grass No_Type
 16
 0 Tackle
 0 Growth
@@ -62064,7 +62064,7 @@ Gogoat
 123 100 62 97 81 68 
 186
 Medium Fast
-Grass None
+Grass No_Type
 19
 0 Aerial Ace
 0 Tackle
@@ -62153,7 +62153,7 @@ Pancham
 67 82 62 46 48 43 
 70
 Medium Fast
-Fighting None
+Fighting No_Type
 14
 0 Tackle
 0 Leer
@@ -62378,7 +62378,7 @@ Furfrou
 75 80 60 65 90 102 
 165
 Medium Fast
-Normal None
+Normal No_Type
 13
 0 Tackle
 0 Growl
@@ -62445,7 +62445,7 @@ None
 0
 50
 Fur Coat
-None
+No Ability
 Poodle
 47 61.7 Historically, in the Kalos region, these Pok\u00e9mon were the designated guardians of the king.
 5120
@@ -62457,7 +62457,7 @@ Espurr
 62 48 54 63 60 68 
 71
 Medium Fast
-Psychic None
+Psychic No_Type
 9
 0 Scratch
 0 Leer
@@ -62542,7 +62542,7 @@ Meowstic
 74 48 76 83 81 104 
 163
 Medium Fast
-Psychic None
+Psychic No_Type
 21
 0 Quick Guard
 0 Mean Look
@@ -62704,7 +62704,7 @@ Level 680 35
 0
 50
 No Guard
-None
+No Ability
 Sword
 31 4.4 If anyone dares to grab its hilt, it wraps a blue cloth around that person's arm and drains that person's life energy completely.
 5120
@@ -62776,7 +62776,7 @@ Item 681 Dusk Stone
 0
 50
 No Guard
-None
+No Ability
 Sword
 31 9.9 The complex attack patterns of its two swords are unstoppable, even for an opponent greatly accomplished at swordplay.
 5120
@@ -62853,7 +62853,7 @@ None
 0
 50
 Stance Change
-None
+No Ability
 Royal Sword
 67 116.8 Apparently, it can detect innate qualities of leadership. According to legend, whoever it recognizes is destined to become king.
 5120
@@ -62865,7 +62865,7 @@ Spritzee
 78 52 60 63 65 23 
 68
 Medium Fast
-Fairy None
+Fairy No_Type
 16
 0 Sweet Scent
 0 Fairy Wind
@@ -62946,7 +62946,7 @@ Aromatisse
 101 72 72 99 89 29 
 162
 Medium Fast
-Fairy None
+Fairy No_Type
 20
 0 Aromatic Mist
 0 Heal Pulse
@@ -63036,7 +63036,7 @@ Swirlix
 62 48 66 59 57 49 
 68
 Medium Fast
-Fairy None
+Fairy No_Type
 16
 0 Sweet Scent
 0 Tackle
@@ -63113,7 +63113,7 @@ Slurpuff
 82 80 86 85 75 72 
 168
 Medium Fast
-Fairy None
+Fairy No_Type
 16
 0 Sweet Scent
 0 Tackle
@@ -63755,7 +63755,7 @@ Clauncher
 50 53 62 58 63 44 
 66
 Slow
-Water None
+Water No_Type
 13
 0 Splash
 0 Water Gun
@@ -63818,7 +63818,7 @@ Level 693 37
 0
 50
 Mega Launcher
-None
+No Ability
 Water Gun
 20 18.3 Through controlled explosions of internal gas, it can expel water like a pistol shot. At close distances, it can shatter rock.
 3840
@@ -63830,7 +63830,7 @@ Clawitzer
 71 73 88 120 89 59 
 100
 Slow
-Water None
+Water No_Type
 20
 0 Heal Pulse
 0 Dark Pulse
@@ -63905,7 +63905,7 @@ None
 0
 50
 Mega Launcher
-None
+No Ability
 Howitzer
 51 77.8 By expelling water from the nozzle in the back of its claw, it can move at a speed of 60 knots.
 3840
@@ -64471,7 +64471,7 @@ Sylveon
 95 65 65 110 130 60 
 184
 Medium Fast
-Fairy None
+Fairy No_Type
 14
 0 Disarming Voice
 0 Tail Whip
@@ -65536,7 +65536,7 @@ Bergmite
 55 69 85 32 35 28 
 61
 Medium Fast
-Ice None
+Ice No_Type
 15
 0 Tackle
 0 Bite
@@ -65613,7 +65613,7 @@ Avalugg
 95 117 184 44 46 28 
 180
 Medium Fast
-Ice None
+Ice No_Type
 20
 0 Iron Defense
 0 Crunch
@@ -65893,7 +65893,7 @@ Xerneas
 126 131 95 131 98 99 
 306
 Slow
-Fairy None
+Fairy No_Type
 18
 0 Heal Pulse
 0 Aromatherapy
@@ -65966,7 +65966,7 @@ None
 0
 -1
 Fairy Aura
-None
+No Ability
 Life
 118 474.0 When the horns on its head shine in seven colors, it is said to be sharing everlasting life.
 30720
@@ -66054,7 +66054,7 @@ None
 0
 -1
 Dark Aura
-None
+No Ability
 Destruction
 228 447.5 When its life comes to an end, it absorbs the life energy of every living thing and turns into a cocoon once more.
 30720
@@ -66137,7 +66137,7 @@ None
 0
 -1
 Aura Break
-None
+No Ability
 Order
 197 627.4 It's hypothesized that it's monitoring those who destroy the ecosystem from deep in the cave where it lives.
 30720
@@ -66224,7 +66224,7 @@ None
 0
 -1
 Clear Body
-None
+No Ability
 Jewel
 28 19.4 It can instantly create many diamonds by compressing the carbon in the air between its hands.
 30720

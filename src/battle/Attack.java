@@ -1,6 +1,7 @@
 package battle;
 
 import battle.effect.attack.MultiStrikeMove;
+import battle.effect.status.StatusCondition;
 import item.Item;
 import item.berry.Berry;
 import item.berry.GainableEffectBerry;
@@ -53,8 +54,7 @@ import battle.effect.RapidSpinRelease;
 import battle.effect.attack.RecoilMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.StatSwitchingEffect;
-import battle.effect.generic.Status;
-import battle.effect.generic.Status.StatusCondition;
+import battle.effect.status.Status;
 import battle.effect.TakeDamageEffect;
 import battle.effect.TargetSwapperEffect;
 
@@ -94,7 +94,7 @@ public abstract class Attack implements Serializable {
 		this.accuracy = 10000;
 		this.selfTarget = false;
 		this.priority = 0;
-		this.status = StatusCondition.NONE;
+		this.status = StatusCondition.NO_STATUS;
 		this.statChanges = new int[Stat.NUM_BATTLE_STATS];
 		this.effectChance = 100;
 		this.printCast = true;
@@ -123,7 +123,7 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Giving the target a status condition is a secondary effect
-		if (status != StatusCondition.NONE) {
+		if (status != StatusCondition.NO_STATUS) {
 			return true;
 		}
 		
@@ -368,7 +368,7 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Give Status Condition
-		if (status != StatusCondition.NONE) {
+		if (status != StatusCondition.NO_STATUS) {
 			boolean success = Status.giveStatus(b, user, victim, status);
 			if (!success && canPrintFail()) {
 				b.addMessage(Status.getFailMessage(b, user, victim, status));
@@ -1207,7 +1207,7 @@ public abstract class Attack implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		Struggle() {
-			super(Namesies.STRUGGLE_ATTACK, "An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.", 1, Type.NONE, MoveCategory.PHYSICAL);
+			super(Namesies.STRUGGLE_ATTACK, "An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.", 1, Type.NO_TYPE, MoveCategory.PHYSICAL);
 			super.power = 50;
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.MIMICLESS);
@@ -1826,7 +1826,7 @@ public abstract class Attack implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		ConfusionDamage() {
-			super(Namesies.CONFUSION_DAMAGE_ATTACK, "None", 1, Type.NONE, MoveCategory.PHYSICAL);
+			super(Namesies.CONFUSION_DAMAGE_ATTACK, "None", 1, Type.NO_TYPE, MoveCategory.PHYSICAL);
 			super.power = 40;
 		}
 
@@ -2634,11 +2634,11 @@ public abstract class Attack implements Serializable {
 			
 			// TODO: Rewrite this because it looks stupid
 			if (type[0] == Type.FLYING) {
-				return new Type[] {type[1], Type.NONE};
+				return new Type[] { type[1], Type.NO_TYPE };
 			}
 			
 			if (type[1] == Type.FLYING) {
-				return new Type[] {type[0], Type.NONE};
+				return new Type[] { type[0], Type.NO_TYPE };
 			}
 			
 			return null;
@@ -4500,7 +4500,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return new Type[] {Type.WATER, Type.NONE};
+			return new Type[] { Type.WATER, Type.NO_TYPE };
 		}
 	}
 
@@ -4516,7 +4516,7 @@ public abstract class Attack implements Serializable {
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			Type primary = victim.getType(b)[0];
 			
-			return new Type[] {primary, primary == Type.GHOST ? Type.NONE : Type.GHOST};
+			return new Type[] { primary, primary == Type.GHOST ? Type.NO_TYPE : Type.GHOST };
 		}
 	}
 
@@ -4532,7 +4532,7 @@ public abstract class Attack implements Serializable {
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			Type primary = victim.getType(b)[0];
 			
-			return new Type[] {primary, primary == Type.GRASS ? Type.NONE : Type.GRASS};
+			return new Type[] { primary, primary == Type.GRASS ? Type.NO_TYPE : Type.GRASS };
 		}
 	}
 
@@ -6137,7 +6137,7 @@ public abstract class Attack implements Serializable {
 			Type[] type = me.getType(b);
 			
 			// Like this is literally the stupidest move ever like srsly what is wrong with the creators
-			if (o.isType(b, type[0]) || (type[1] != Type.NONE && o.isType(b, type[1]))) {
+			if (o.isType(b, type[0]) || (type[1] != Type.NO_TYPE && o.isType(b, type[1]))) {
 				super.apply(me, o, b);
 			}
 			else {
@@ -7414,7 +7414,7 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
-			return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
+			return new Type[] { types.get((int)(Math.random()*types.size())), Type.NO_TYPE };
 		}
 	}
 
@@ -7451,7 +7451,7 @@ public abstract class Attack implements Serializable {
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
-			return new Type[] {types.get((int)(Math.random()*types.size())), Type.NONE};
+			return new Type[] { types.get((int)(Math.random()*types.size())), Type.NO_TYPE };
 		}
 	}
 
@@ -9460,7 +9460,7 @@ public abstract class Attack implements Serializable {
 			
 			super.applyEffects(b, user, victim);
 			
-			super.status = StatusCondition.NONE;
+			super.status = StatusCondition.NO_STATUS;
 			super.statChanges = new int[Stat.NUM_BATTLE_STATS];
 			super.effects = new ArrayList<>();
 		}
@@ -9503,7 +9503,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return Ability.getAbility(Namesies.NONE_ABILITY).newInstance();
+			return Ability.getAbility(Namesies.NO_ABILITY_ABILITY).newInstance();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -10002,7 +10002,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return new Type[] {b.getTerrainType().getType(), Type.NONE};
+			return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
 		}
 	}
 

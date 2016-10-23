@@ -209,7 +209,7 @@ public class PokedexView extends View {
 			g.drawString("Type:", 541, 110);
 			
 			g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 596, 98, null);
-			if (type[1] != Type.NONE) {
+			if (type[1] != Type.NO_TYPE) {
 				g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 596 + 707 - 669, 98, null);
 			}
 			

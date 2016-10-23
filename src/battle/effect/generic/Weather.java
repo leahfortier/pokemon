@@ -1,20 +1,19 @@
 package battle.effect.generic;
 
+import battle.Battle;
 import battle.effect.EndTurnEffect;
 import battle.effect.StatChangingEffect;
 import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 import item.Item;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import main.Global;
 import main.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import battle.Battle;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;

@@ -30,7 +30,7 @@ public enum Type implements Serializable {
 	DARK(15, "Dark", new Color(49, 79, 79), 15, 0x41), 
 	STEEL(16, "Steel", new Color(200, 200, 210), 7, 0x4f),
 	FAIRY(17, "Fairy", new Color(221, 160, 221), -1, 0x52),
-	NONE(18, "None", Color.WHITE, -1, 0x51);
+	NO_TYPE(18, "NoType", Color.WHITE, -1, 0x51);
 
 	// TODO: This is ass do that other thingy
 	private static final double typeAdvantage[][] = {
@@ -85,7 +85,7 @@ public enum Type implements Serializable {
 			// If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
 			for (int i = 0; i < 2; i++) {
 				if (defendingType[i] == FLYING) {
-					defendingType[i] = NONE;
+					defendingType[i] = NO_TYPE;
 				}
 			}
 		}
@@ -161,11 +161,11 @@ public enum Type implements Serializable {
 	}
 	
 	public static Color[] getColors(Type[] t) {
-		return new Color[] {t[0].getColor(), t[t[1] == Type.NONE ? 0 : 1].getColor()};
+		return new Color[] {t[0].getColor(), t[t[1] == Type.NO_TYPE ? 0 : 1].getColor()};
 	}
 	
 	public static Color[] getColors(ActivePokemon p) {
-		return getColors(p.isEgg() ? new Type[] { Type.NORMAL, Type.NONE} : p.getActualType());
+		return getColors(p.isEgg() ? new Type[] { Type.NORMAL, Type.NO_TYPE} : p.getActualType());
 	}
 	
 	public static Type getHiddenType(int hiddenIndex) {

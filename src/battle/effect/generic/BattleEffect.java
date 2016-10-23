@@ -13,13 +13,13 @@ import battle.effect.StageChangingEffect;
 import battle.effect.StatSwitchingEffect;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.TerrainEffect;
+import battle.effect.status.StatusCondition;
 import main.Namesies;
 import main.Type;
 import map.AreaData.TerrainType;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.Battle;
-import battle.effect.generic.Status.StatusCondition;
 
 public abstract class BattleEffect extends Effect {
 	private static final long serialVersionUID = 1L;
