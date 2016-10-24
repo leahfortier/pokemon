@@ -127,7 +127,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		}
 
 		while (lock == INVALID_LOCK) {
-			lock = Global.RANDOM.nextInt(Integer.MAX_VALUE);
+			lock = Global.getRandomInt(Integer.MAX_VALUE);
 		}
 
 		return lock;

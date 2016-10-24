@@ -2432,7 +2432,7 @@ Override:
 		}
 
 		// Cannot learn if the TM is not compatible with the Pokemon
-		if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+		if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 			return false;
 		}
 

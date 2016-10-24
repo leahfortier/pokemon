@@ -64,6 +64,7 @@ public enum Stat {
 	public static final int MAX_STAT_CHANGES = 6;
 	public static final int MAX_EVS = 510;
 	public static final int MAX_STAT_EVS = 255;
+	public static final int MAX_IV = 31;
 	
 	public static final Stat[] STATS;
 	static {
@@ -168,5 +169,9 @@ public enum Stat {
 		
 		Global.error("Incorrect stat index " + index);
 		return null;
+	}
+
+	public static int getRandomIv() {
+		return Global.getRandomInt(MAX_IV + 1);
 	}
 }

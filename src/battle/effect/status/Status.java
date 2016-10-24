@@ -1,26 +1,18 @@
 package battle.effect.status;
 
-import battle.MoveType;
-import battle.effect.BeforeTurnEffect;
-import battle.effect.EndTurnEffect;
-import battle.effect.StatChangingEffect;
+import battle.Battle;
 import battle.effect.StatusPreventionEffect;
-import battle.effect.TakeDamageEffect;
 import battle.effect.generic.Effect;
+import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.PokemonEffect;
 import item.Item;
 import item.berry.GainableEffectBerry;
 import item.berry.StatusBerry;
-
-import java.io.Serializable;
-
 import main.Global;
 import main.Namesies;
-import main.Type;
 import pokemon.ActivePokemon;
-import pokemon.Stat;
-import battle.Battle;
-import battle.effect.generic.Effect.CastSource;
+
+import java.io.Serializable;
 
 public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -118,7 +110,8 @@ public abstract class Status implements Serializable {
 		if (s.applies(b, caster, victim)) {
 			victim.setStatus(s);
 			b.addMessage(castMessage, victim);
-			
+
+			// TODO: There should be a StatusReceivedEffect interface or something
 			synchronizeCheck(b, caster, victim, status);
 			berryCheck(b, victim, status);
 			

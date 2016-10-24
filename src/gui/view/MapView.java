@@ -264,13 +264,13 @@ public class MapView extends View {
 		}
 
 		for (int i = 0; i < 50; i++) {
-			int x = Global.RANDOM.nextInt(rainHeight.length);
+			int x = Global.getRandomInt(rainHeight.length);
 			if (rainHeight[x] == 0){
-				rainHeight[x] = 1 + Global.RANDOM.nextInt(40);
+				rainHeight[x] = 1 + Global.getRandomInt(40);
 			}
 		}
 		
-		if (Global.RANDOM.nextInt(80) == 0 || (lightningFrame > 80 && Global.RANDOM.nextInt(4) == 0)) {
+		if (Global.getRandomInt(80) == 0 || (lightningFrame > 80 && Global.getRandomInt(4) == 0)) {
 			lightningFrame = 128;
 		}
 

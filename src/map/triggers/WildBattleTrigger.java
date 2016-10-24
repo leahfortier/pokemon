@@ -118,16 +118,16 @@ public class WildBattleTrigger extends Trigger {
 	// Returns a legendary encounter if applicable and null otherwise
 	private WildPokemon getLegendaryEncounter(CharacterData player) {
 		// TODO: There should be a method that produces the boolean value of the random chance since that happens everywhere
-		if (Global.RANDOM.nextInt(1024) < 1 && !player.getPokedex().caught(Namesies.MEW_POKEMON)) {
+		if (Global.chanceTest(1, 1024) && !player.getPokedex().caught(Namesies.MEW_POKEMON)) {
 			return new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.MEW_POKEMON), 5, true, false));
 		}
 		
 		return null;
 	}
 
-	// TODO: I think there might be a method in Global that does something like this already
+	// TODO: I think there might be a method in Global that does something like this already if not try and make one and include the wild hold items also
 	private int getRandomEncounterIndex() {
-		int sum = 0, random = Global.RANDOM.nextInt(100);
+		int sum = 0, random = Global.getRandomInt(100);
 		for (int i = 0; i < wildEncounters.length; i++) {
 			sum += wildEncounters[i].getProbability();
 

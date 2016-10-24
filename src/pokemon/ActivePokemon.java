@@ -30,7 +30,6 @@ import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
-import item.hold.PowerItem;
 import main.Global;
 import main.Namesies;
 import main.Namesies.NamesiesType;
@@ -44,9 +43,9 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,7 +56,6 @@ public class ActivePokemon implements Serializable {
 	public static final Pattern pokemonParameterPattern = Pattern.compile("(?:(Shiny)|(Moves:)\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+)\\s*[*]|(Egg)|(Item:)\\s*([\\w \\-'.]+)[*])", Pattern.UNICODE_CHARACTER_CLASS);
 	
 	public static final int MAX_LEVEL = 100;
-	public static final int MAX_IV = 31;
 	
 	private static final String[][] characteristics =
 		{{"Loves to eat",            "Proud of its power",      "Sturdy body",            "Highly curious",        "Strong willed",     "Likes to run"},
@@ -88,6 +86,7 @@ public class ActivePokemon implements Serializable {
 	private boolean isEgg;
 	private int eggSteps;
 
+	// TODO: This should take in the namesies for the species instead of the species itself
 	// General constructor for an active Pokemon (user is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
 	public ActivePokemon(PokemonInfo pokemonSpecies, int level, boolean isWild, boolean user) {
 		this.pokemon = pokemonSpecies;
@@ -112,7 +111,7 @@ public class ActivePokemon implements Serializable {
 		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
 		this.totalEXP += (int)(Math.random()*expToNextLevel());
 		this.gender = Gender.getGender(pokemon.getMaleRatio());
-		this.shiny = user || isWild ? (int)(Math.random()*8192) == 13 : false;
+		this.shiny = (user || isWild) && Global.chanceTest(1, 8192);
 		
 		setMoves();
 		
@@ -301,13 +300,13 @@ public class ActivePokemon implements Serializable {
 	
 	private void setMoves() {
 		moves = new ArrayList<>();
-		Map<Integer, List<Namesies>> map = pokemon.getLevelUpMoves();
-		for (Integer i : map.keySet()) {
-			if (i > level) {
+		Map<Integer, Set<Namesies>> map = pokemon.getLevelUpMoves();
+		for (Integer levelLearned : map.keySet()) {
+			if (levelLearned > level) {
 				continue;
 			}
 			
-			for (Namesies s : map.get(i)) {
+			for (Namesies s : map.get(levelLearned)) {
 				if (hasActualMove(s)) {
 					continue;
 				}
@@ -334,56 +333,7 @@ public class ActivePokemon implements Serializable {
 	private void setIVs() {
 		IVs = new int[Stat.NUM_STATS];
 		for (int i = 0; i < IVs.length; i++) {
-			IVs[i] = (int)(Math.random()*(MAX_IV + 1));
-		}
-	}
-	
-	private void setIVs(ActivePokemon daddy, ActivePokemon mommy) {
-		Item daddysItem = daddy.getActualHeldItem();
-		Item mommysItem = mommy.getActualHeldItem();
-		
-		List<PowerItem> powerItems = new ArrayList<>();
-		if (daddysItem instanceof PowerItem) {
-			powerItems.add((PowerItem)daddysItem);
-		}
-
-		if (mommysItem instanceof PowerItem) {
-			powerItems.add((PowerItem)mommysItem);
-		}
-		
-		List<Stat> remainingStats = new ArrayList<>();
-		Collections.addAll(remainingStats, Stat.STATS);
-		
-		int remainingIVsToInherit =
-				daddysItem.namesies() == Namesies.DESTINY_KNOT_ITEM ||
-						mommysItem.namesies() == Namesies.DESTINY_KNOT_ITEM
-						? 5 : 3;
-		IVs = new int[Stat.NUM_STATS];
-		Arrays.fill(IVs, -1);
-		
-		if (powerItems.size() > 0) {
-			PowerItem randomItem = powerItems.get((int)(Math.random()*powerItems.size()));
-			Stat stat = randomItem.powerStat();
-			remainingStats.remove(stat);
-			
-			ActivePokemon parentToInheritFrom = (int)(Math.random()*2) == 0 ? daddy : mommy;
-			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
-			
-			remainingIVsToInherit--;
-		}
-		
-		while (remainingIVsToInherit --> 0) {
-			Stat stat = remainingStats.get((int)(Math.random() * remainingStats.size()));
-			remainingStats.remove(stat);
-			
-			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
-			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
-		}
-		
-		for (int i = 0; i < IVs.length; i++) {
-			if (IVs[i] == -1) {
-				IVs[i] = (int)(Math.random()*(MAX_IV + 1));
-			}
+			IVs[i] = Stat.getRandomIv();
 		}
 	}
 	
@@ -650,7 +600,7 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// Learn new moves
-		List<Namesies> levelMoves = pokemon.getMoves(level);
+		Set<Namesies> levelMoves = pokemon.getMoves(level);
 		for (Namesies s : levelMoves) {
 			learnMove(b, s);
 		}
@@ -1209,6 +1159,13 @@ public class ActivePokemon implements Serializable {
 		
 		// Flyahs gon' Fly
 		return isType(b, Type.FLYING);
+	}
+
+	public void giveItem(Namesies itemName) {
+		Item item = Item.getItem(itemName);
+		if (item.isHoldable()) {
+			this.giveItem((HoldItem)item);
+		}
 	}
 
 	public void giveItem(HoldItem i) {
