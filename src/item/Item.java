@@ -10428,7 +10428,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10479,7 +10479,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10530,7 +10530,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10581,7 +10581,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10632,7 +10632,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10683,7 +10683,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10734,7 +10734,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10785,7 +10785,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10836,7 +10836,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10887,7 +10887,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10938,7 +10938,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -10989,7 +10989,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11040,7 +11040,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11091,7 +11091,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11142,7 +11142,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11193,7 +11193,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11244,7 +11244,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11295,7 +11295,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11346,7 +11346,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11397,7 +11397,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11448,7 +11448,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11499,7 +11499,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11550,7 +11550,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11601,7 +11601,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11652,7 +11652,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11703,7 +11703,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11754,7 +11754,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11805,7 +11805,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11856,7 +11856,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11907,7 +11907,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -11958,7 +11958,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12009,7 +12009,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12060,7 +12060,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12111,7 +12111,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12162,7 +12162,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12213,7 +12213,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12264,7 +12264,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12315,7 +12315,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12366,7 +12366,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12417,7 +12417,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12468,7 +12468,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12519,7 +12519,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12570,7 +12570,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12621,7 +12621,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12672,7 +12672,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12723,7 +12723,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12774,7 +12774,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12825,7 +12825,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12876,7 +12876,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12927,7 +12927,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -12978,7 +12978,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13029,7 +13029,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13080,7 +13080,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13131,7 +13131,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13182,7 +13182,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13233,7 +13233,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13284,7 +13284,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13335,7 +13335,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13386,7 +13386,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13437,7 +13437,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13488,7 +13488,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13539,7 +13539,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13590,7 +13590,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13641,7 +13641,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13692,7 +13692,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13743,7 +13743,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13794,7 +13794,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13845,7 +13845,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13896,7 +13896,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13947,7 +13947,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -13998,7 +13998,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14049,7 +14049,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14100,7 +14100,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14151,7 +14151,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14202,7 +14202,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14253,7 +14253,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14304,7 +14304,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14355,7 +14355,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14406,7 +14406,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14457,7 +14457,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14508,7 +14508,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14559,7 +14559,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14610,7 +14610,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14661,7 +14661,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14712,7 +14712,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14763,7 +14763,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14814,7 +14814,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14865,7 +14865,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14916,7 +14916,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -14967,7 +14967,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15018,7 +15018,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15069,7 +15069,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15120,7 +15120,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15171,7 +15171,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15222,7 +15222,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15273,7 +15273,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15324,7 +15324,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15375,7 +15375,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15426,7 +15426,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15477,7 +15477,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15528,7 +15528,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			
@@ -15579,7 +15579,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().isTmMove(attack.namesies())) {
+			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
 				return false;
 			}
 			

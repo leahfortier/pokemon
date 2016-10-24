@@ -370,16 +370,8 @@ public class TeamPlanner {
 					learnMethods.add("Level " + levelLearned);
 				}
 				
-				if (pokemonSpecies.canLearnByTM(namesies)) {
-					learnMethods.add("TM");
-				}
-				
-				if (pokemonSpecies.canLearnByTutor(namesies)) {
-					learnMethods.add("Move Tutor");
-				}
-				
 				if (pokemonSpecies.canLearnByBreeding(namesies)) {
-					learnMethods.add("Egg Move");
+					learnMethods.add("Egg Move/TM move/Move Tutor");
 				}
 				
 				if (learnMethods.size() == 0) {

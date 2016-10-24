@@ -26,4 +26,12 @@ public class StringUtils {
     public static String empty() {
         return "";
     }
+
+    public static String firstCaps(final String word) {
+        if (isNullOrEmpty(word)) {
+            return empty();
+        }
+
+        return Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase();
+    }
 }

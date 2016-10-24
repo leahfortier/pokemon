@@ -1,21 +1,19 @@
 package pokemon;
 
+import battle.Attack;
+import battle.Move;
 import item.Item;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
+import main.Global;
+import main.Namesies;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
-import main.Namesies;
-import battle.Attack;
-import battle.Move;
-
-class Breeding {
+public class Breeding {
 	public static ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
 		if (!canBreed(aPokes, bPokes)) {
 			return null;
@@ -35,7 +33,7 @@ class Breeding {
 			return aPokes;
 		}
 		else {
-			return aPokes.getGender().equals(Gender.FEMALE) ? aPokes : bPokes;
+			return aPokes.getGender() == Gender.FEMALE ? aPokes : bPokes;
 		}
 	}
 	
@@ -55,77 +53,67 @@ class Breeding {
 			
 			if (!incenseItemHeld) {
 				Namesies[] evolutions = babyInfo.getEvolution().getEvolutions();
-				babyInfo = PokemonInfo.getPokemonInfo(evolutions[(int)(Math.random() * evolutions.length)]);
+				babyInfo = PokemonInfo.getPokemonInfo(Global.getRandomValue(evolutions));
 			}
 		}
 		
 		return babyInfo;
 	}
-	
-	public static int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
-		Item daddysItem = daddy.getActualHeldItem();
-		Item mommysItem = mommy.getActualHeldItem();
-		
-		ArrayList<PowerItem> powerItems = new ArrayList<>();
-		if (daddysItem instanceof PowerItem && daddysItem.namesies() != Namesies.MACHO_BRACE_ITEM) {
-			powerItems.add((PowerItem)daddysItem);
-		}
-		if (mommysItem instanceof PowerItem && mommysItem.namesies() != Namesies.MACHO_BRACE_ITEM) {
-			powerItems.add((PowerItem)mommysItem);
-		}
 
-		// TODO: your face
+	static int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
 		List<Stat> remainingStats = new ArrayList<>();
-		remainingStats.add(Stat.HP);
-		remainingStats.add(Stat.ATTACK);
-		remainingStats.add(Stat.DEFENSE);
-		remainingStats.add(Stat.SP_ATTACK);
-		remainingStats.add(Stat.SP_DEFENSE);
-		remainingStats.add(Stat.SPEED);
-		
+		Collections.addAll(remainingStats, Stat.STATS);
+
+		List<Item> parentItems = new ArrayList<>();
+		parentItems.add(daddy.getActualHeldItem());
+		parentItems.add(mommy.getActualHeldItem());
+
+		// Inherit 5 stats instead of 3 when a parent holds Destiny Knot
 		int remainingIVsToInherit =
-				daddysItem.namesies() == Namesies.DESTINY_KNOT_ITEM ||
-				mommysItem.namesies() == Namesies.DESTINY_KNOT_ITEM
+				parentItems.stream()
+						.filter(item -> item.namesies() == Namesies.DESTINY_KNOT_ITEM)
+						.count() > 0
 						? 5
 						: 3;
 
 		int[] IVs = new int[Stat.NUM_STATS];
 		Arrays.fill(IVs, -1);
-		
-		if (powerItems.size() > 0) {
-			PowerItem randomItem = powerItems.get((int)(Math.random() * powerItems.size()));
-			Stat stat = randomItem.powerStat();
-			remainingStats.remove(stat);
-			
-			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
-			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
-			
-			remainingIVsToInherit--;
+
+		for (Item item : parentItems) {
+			if (item instanceof PowerItem) {
+				Stat stat = ((PowerItem)item).powerStat();
+				IVs[stat.index()] = getRandomParent(daddy, mommy).getIV(stat.index());
+
+				remainingStats.remove(stat);
+				remainingIVsToInherit--;
+			}
 		}
 		
 		while (remainingIVsToInherit --> 0) {
-			Stat stat = remainingStats.get((int)(Math.random() * remainingStats.size()));
+			Stat stat = Global.getRandomValue(remainingStats);
 			remainingStats.remove(stat);
-			
-			ActivePokemon parentToInheritFrom = (int)(Math.random() * 2) == 0 ? daddy : mommy;
-			IVs[stat.index()] = parentToInheritFrom.getIV(stat.index());
+
+			IVs[stat.index()] = getRandomParent(daddy, mommy).getIV(stat.index());
 		}
 		
 		for (int i = 0; i < IVs.length; i++) {
 			if (IVs[i] == -1) {
-				IVs[i] = (int)(Math.random()* (ActivePokemon.MAX_IV + 1));
+				IVs[i] = Stat.getRandomIv();
 			}
 		}
 		
 		return IVs;
 	}
-	
-	public static boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
+
+	protected static boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
 		if (isDitto(aPokes) && isDitto(bPokes)) {
 			return false;
 		}
 
-		// TODO: remove above line, make canBreed check if the pokes is ditto also take in another pokes
+		if (isDittoAndManaphy(aPokes, bPokes)) {
+			return true;
+		}
+
 		if (!aPokes.canBreed() || !bPokes.canBreed()) {
 			return false;
 		}
@@ -150,13 +138,29 @@ class Breeding {
 	private static boolean isDitto(ActivePokemon pokes) {
 		return pokes.isPokemon(Namesies.DITTO_POKEMON);
 	}
-	
-	public static Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
+
+	private static boolean isDittoAndManaphy(ActivePokemon aPokes, ActivePokemon bPokes) {
+		if (isDitto(aPokes)) {
+			return bPokes.isPokemon(Namesies.MANAPHY_POKEMON);
+		}
+
+		if (isDitto(bPokes)) {
+			return aPokes.isPokemon(Namesies.MANAPHY_POKEMON);
+		}
+
+		return false;
+	}
+
+	private static ActivePokemon getRandomParent(final ActivePokemon daddy, final ActivePokemon mommy) {
+		return Global.getRandomValue(new ActivePokemon[] { daddy, mommy });
+	}
+
+	static Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
 		Item daddysItem = daddy.getActualHeldItem();
 		Item mommysItem = mommy.getActualHeldItem();
 		
 		if (daddysItem.namesies() == Namesies.EVERSTONE_ITEM && mommysItem.namesies() == Namesies.EVERSTONE_ITEM) {
-			return (int)(Math.random() * 2) == 0 ? daddy.getNature() : mommy.getNature();
+			return getRandomParent(daddy, mommy).getNature();
 		}
 		else if (daddysItem.namesies() == Namesies.EVERSTONE_ITEM) {
 			return daddy.getNature();
@@ -169,72 +173,34 @@ class Breeding {
 		}
 	}
 	
-	public static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo) {
-		List<Move> daddysMoves = daddy.getActualMoves();
-		List<Move> mommysMoves = mommy.getActualMoves();
-		
-		List<Namesies> daddysMovesNamesies = new ArrayList<>();
-		List<Namesies> mommysMovesNamesies = new ArrayList<>();
-		
-		for (Move move : daddysMoves) {
-			daddysMovesNamesies.add(move.getAttack().namesies());
-		}
-		for (Move move : mommysMoves) {
-			mommysMovesNamesies.add(move.getAttack().namesies());
-		}
-		
+	static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo) {
+
 		List<Namesies> babyMovesNamesies = new ArrayList<>();
-		int curMoveIndex = 0;
 
 		// Get moves that the pokemon learns at level 1
-		// If both parents know a move the baby learns at a later level, the baby inherits that move
-		Map<Integer, List<Namesies>> levelUpMoves = babyInfo.getLevelUpMoves();
-		Set<Integer> levels = levelUpMoves.keySet();
-		
-		for (int level : levels) {
-			if (level < 2) {
-				babyMovesNamesies.addAll(levelUpMoves.get(level));
-			}
-			else {
-				List<Namesies> currentLevelMoves = levelUpMoves.get(level);
-				for (Namesies moveNamesies : currentLevelMoves) {
-					if (daddysMovesNamesies.contains(moveNamesies) && mommysMovesNamesies.contains(moveNamesies)) {
-						babyMovesNamesies.add(moveNamesies);
-					}
-				}
-			}
-		}
-		
+		babyMovesNamesies.addAll(babyInfo.getMoves(0));
+		babyMovesNamesies.addAll(babyInfo.getMoves(1));
+
+		List<Move> parentMoves = new ArrayList<>();
+		parentMoves.addAll(daddy.getActualMoves());
+		parentMoves.addAll(mommy.getActualMoves());
+
 		// Egg moves
-		for (Namesies moveNamesies : daddysMovesNamesies) {
-			if (babyInfo.hasEggMove(moveNamesies)) {
-				babyMovesNamesies.add(moveNamesies);
+		for (final Move parentMove : parentMoves) {
+			final Namesies attackNamesies = parentMove.getAttack().namesies();
+			if (babyInfo.canLearnByBreeding(attackNamesies) &&
+					!babyMovesNamesies.contains(attackNamesies)) {
+				babyMovesNamesies.add(attackNamesies);
 			}
 		}
-		for (Namesies moveNamesies : mommysMovesNamesies) {
-			if (babyInfo.hasEggMove(moveNamesies)) {
-				babyMovesNamesies.add(moveNamesies);
-			}
-		}
-		
-		// Remove duplicates
-		for (int i = 0; i < babyMovesNamesies.size(); i++) {
-			Namesies currentMove = babyMovesNamesies.get(i);
-			while (babyMovesNamesies.lastIndexOf(currentMove) != i) {
-				babyMovesNamesies.remove(babyMovesNamesies.lastIndexOf(currentMove));
-			}
-		}
-		
-		// Cycle through so baby only knows MAX_MOVES amount of moves
-		while (babyMovesNamesies.size() > Move.MAX_MOVES) {
-			babyMovesNamesies.remove(curMoveIndex);
-			babyMovesNamesies.add(curMoveIndex, babyMovesNamesies.get(Move.MAX_MOVES - 1));
-			babyMovesNamesies.remove(Move.MAX_MOVES);
-			curMoveIndex = (curMoveIndex + 1) % Move.MAX_MOVES;
-		}
-		
+
+		// Add the last four moves on the list
 		List<Move> babyMoves = new ArrayList<>();
-		for (Namesies namesies : babyMovesNamesies) {
+		final int numMoves = Math.min(babyMovesNamesies.size(), Move.MAX_MOVES);
+		final int startingIndex = babyMovesNamesies.size() - numMoves;
+
+		for (int i = 0; i < numMoves; i++) {
+			final Namesies namesies = babyMovesNamesies.get(startingIndex + i);
 			babyMoves.add(new Move(Attack.getAttack(namesies)));
 		}
 		

@@ -2,6 +2,12 @@ package pokemon;
 
 import item.Item;
 import item.hold.HoldItem;
+import main.Global;
+import main.Namesies;
+import main.Namesies.NamesiesType;
+import main.Type;
+import util.FileIO;
+import util.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
@@ -14,13 +20,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-
-import util.FileIO;
-import main.Global;
-import main.Namesies;
-import main.Namesies.NamesiesType;
-import main.Type;
-import util.StringUtils;
+import java.util.TreeSet;
 
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static final long serialVersionUID = 1L;
@@ -40,10 +40,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private int baseExp;
 	private GrowthRate growthRate;
 	private Type[] type;
-	private Map<Integer, List<Namesies>> levelUpMoves;
-	private Set<Namesies> tmMoves; // TODO: These three can probably be just put into one list -- I don't think there is a need to separate them (but investigate first before changing)
-	private Set<Namesies> eggMoves;
-	private Set<Namesies> tutorMoves;
+	private Map<Integer, Set<Namesies>> levelUpMoves;
+	private Set<Namesies> learnableMoves;
 	private int catchRate;
 	private int[] givenEVs;
 	private Evolution evolution;
@@ -58,7 +56,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private String[] eggGroups;
 	
 	public PokemonInfo(int number, String name, int[] baseStats, int baseExp, String growthRate, 
-			String type1, String type2, Map<Integer, List<Namesies>> levelUpMoves, Set<Namesies> tmMoves,
+			String type1, String type2, Map<Integer, Set<Namesies>> levelUpMoves, Set<Namesies> tmMoves,
 			Set<Namesies> eggMoves, Set<Namesies> tutorMoves, int catchRate, int[] givenEVs, Evolution evolution,
 			List<WildHoldItem> wildHoldItems, int genderRatio, String ability1, String ability2, String classification, 
 			int height, double weight, String flavorText, int eggSteps, String eggGroup1, String eggGroup2) {
@@ -70,14 +68,15 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.growthRate = GrowthRate.getRate(growthRate);
 		this.type = new Type[] { Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase()) };
 		this.levelUpMoves = levelUpMoves;
-		this.tmMoves = tmMoves;
-		this.eggMoves = eggMoves;
-		this.tutorMoves = tutorMoves;
+		this.learnableMoves = new HashSet<>();
+		this.learnableMoves.addAll(tmMoves);
+		this.learnableMoves.addAll(eggMoves);
+		this.learnableMoves.addAll(tutorMoves);
 		this.catchRate = catchRate;
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
 		this.wildHoldItems = wildHoldItems;
-		this.abilities = setAbilities(ability1, ability2);
+		this.abilities = new Namesies[] { Namesies.getValueOf(ability1, NamesiesType.ABILITY), Namesies.getValueOf(ability2, NamesiesType.ABILITY) };
 		this.maleRatio = genderRatio;
 		this.classification = classification;
 		this.height = height;
@@ -87,22 +86,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.eggGroups = new String[] { eggGroup1, eggGroup2 };
 	}
 	
-	public Namesies[] setAbilities(String ability1, String ability2) {
-		Namesies first = Namesies.getValueOf(ability1, NamesiesType.ABILITY);
-		Namesies second = Namesies.getValueOf(ability2, NamesiesType.ABILITY);
-
-		return new Namesies[] { first, second };
-	}
-	
 	public Type[] getType() {
 		return type;
 	}
 	
-	public boolean isTmMove(Namesies move) {
-		return tmMoves.contains(move);
-	}
-	
-	public Map<Integer, List<Namesies>> getLevelUpMoves() {
+	public Map<Integer, Set<Namesies>> getLevelUpMoves() {
 		return levelUpMoves;
 	}
 	
@@ -275,8 +263,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			
 			in.close();
 		}
-		
-		return baseEvolution.get((int)(Math.random()*baseEvolution.size()));
+
+		return Global.getRandomValue(baseEvolution);
 	}
 	
 	public int compareTo(PokemonInfo p) {
@@ -320,19 +308,23 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return arr;
 	}
 	
-	private static Map<Integer, List<Namesies>> createLevelUpMoves(Scanner in) {
-		Map<Integer, List<Namesies>> levelUpMoves = new TreeMap<>();
+	private static Map<Integer, Set<Namesies>> createLevelUpMoves(Scanner in) {
+		Map<Integer, Set<Namesies>> levelUpMoves = new TreeMap<>();
 		int numMoves = in.nextInt();
 		
 		for (int i = 0; i < numMoves; i++) {
 			int level = in.nextInt();
 			if (!levelUpMoves.containsKey(level)) {
-				levelUpMoves.put(level, new ArrayList<Namesies>());
+				levelUpMoves.put(level, new TreeSet<>());
 			}
 			
 			String attackName = in.nextLine().trim();
 			Namesies namesies = Namesies.getValueOf(attackName, NamesiesType.ATTACK);
-			
+
+			if (level < 0 || level > ActivePokemon.MAX_LEVEL) {
+				Global.error("Cannot learn moves at level " + level + " (Move: " + attackName + ")");
+			}
+
 			levelUpMoves.get(level).add(namesies);
 		}
 		
@@ -354,12 +346,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return tmMoves;
 	}
 	
-	public List<Namesies> getMoves(int level) {
+	public Set<Namesies> getMoves(int level) {
 		if (levelUpMoves.containsKey(level)) {
 			return levelUpMoves.get(level);
 		}
 		
-		return new ArrayList<>();
+		return new TreeSet<>();
 	}
 	
 	public boolean canBreed() {
@@ -390,7 +382,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		}
 		
 		public static HoldItem getWildHoldItem(List<WildHoldItem> list) {
-			int random = (int)(Math.random()*100);
+			int random = Global.getRandomInt(100);
 			int sum = 0;
 
 			for (WildHoldItem i : list) {
@@ -407,8 +399,13 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	public PokemonInfo getBaseEvolution() {
 		return getBaseEvolution(this);
 	}
-	
+
+	// TODO: Instead of generating this on the fly should just be added to the text file and stored
 	public static PokemonInfo getBaseEvolution(PokemonInfo targetPokes) {
+		if (targetPokes.namesies() == Namesies.MANAPHY_POKEMON) {
+			return PokemonInfo.getPokemonInfo(Namesies.PHIONE_POKEMON);
+		}
+
 		Set<String> allPokes = map.keySet();
 		while (true) {
 			boolean changed = false;
@@ -438,10 +435,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return eggGroups;
 	}
 	
-	public boolean hasEggMove(Namesies move) {
-		return eggMoves.contains(move);
-	}
-	
 	public boolean isIncenseBaby() {
 		return incenseBabies.contains(namesies);
 	}
@@ -463,19 +456,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return -1;
 	}
 	
-	public boolean canLearnByTM(Namesies tmName) {
-		return tmMoves.contains(tmName);
-	}
-	
-	public boolean canLearnByTutor(Namesies tutorMove) {
-		return tutorMoves.contains(tutorMove);
-	}
-	
-	public boolean canLearnByBreeding(Namesies eggMove) {
-		return eggMoves.contains(eggMove);
-	}
-	
 	public boolean canLearnMove(Namesies attack) {
-		return levelLearned(attack) != -1 || canLearnByTM(attack) || canLearnByTutor(attack) || canLearnByBreeding(attack);
+		return levelLearned(attack) != -1 || canLearnByBreeding(attack);
+	}
+
+	public boolean canLearnByBreeding(Namesies attack) {
+		return this.learnableMoves.contains(attack);
 	}
 }

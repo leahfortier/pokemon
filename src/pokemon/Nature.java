@@ -3,8 +3,7 @@ package pokemon;
 import java.awt.Color;
 import java.io.Serializable;
 
-public class Nature implements Serializable
-{
+public class Nature implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private static final String[][] natures = {{"", "", "", "", "", ""},
@@ -65,5 +64,15 @@ public class Nature implements Serializable
 		else {
 			return Color.BLACK;
 		}
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof Nature)) {
+			return false;
+		}
+
+		Nature that = (Nature)other;
+		return this.getName().equals(that.getName());
 	}
 }

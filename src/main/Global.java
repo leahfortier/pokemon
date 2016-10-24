@@ -1,13 +1,14 @@
 package main;
 
+import sound.SoundPlayer;
+
+import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
-
-import javax.swing.JOptionPane;
-
-import sound.SoundPlayer;
 
 // Loads and maintains game data.
 public class Global {
@@ -31,9 +32,36 @@ public class Global {
 
 	public static final String MONEY_SYMBOL = "\u00A5";
 
-	public static final Random RANDOM = new Random();
-
 	public static final SoundPlayer soundPlayer = new SoundPlayer();
+
+	private static final Random RANDOM = new Random();
+
+	public static boolean chanceTest(final int numerator, final int denominator) {
+		return getRandomInt(denominator) < numerator;
+	}
+
+	// Returns a random int with exclusive upper bound from range [0, upperBound)
+	public static int getRandomInt(final int upperBound) {
+		return RANDOM.nextInt(upperBound);
+	}
+
+	// Returns a random int from the inclusive range [lowerBound, upperBound]
+	public static int getRandomInt(final int lowerBound, final int upperBound) {
+		if (upperBound < lowerBound) {
+			Global.error("Upper bound should never be lower than the lower bound. " +
+					"(Lower: " + lowerBound + ", Upper: " + upperBound + ")");
+		}
+
+		return getRandomInt((upperBound - lowerBound + 1) + lowerBound);
+	}
+
+	public static <T> T getRandomValue(T[] array) {
+		return getRandomValue(Arrays.asList(array));
+	}
+
+	public static <T> T getRandomValue(List<T> list) {
+		return list.get(Global.RANDOM.nextInt(list.size()));
+	}
 
 	public static <T> void swap(T[] arr) {
 		T temp = arr[0];
@@ -96,8 +124,7 @@ public class Global {
 	}
 	
 	// Returns a new object of type className where the constructor was called with parameterValues as parameters :) :) :)
-	public static Object dynamicInstantiaton(Class<?> className, Object... parameterValues) 
-	{
+	public static Object dynamicInstantiaton(Class<?> className, Object... parameterValues) {
 		// Get the parameter types
 		Class<?>[] parameterTypes = getParameterTypes(parameterValues);
 		
