@@ -32,8 +32,8 @@ import java.util.Map;
 import java.util.Set;
 
 import main.Global;
-import main.Namesies;
-import main.Namesies.NamesiesType;
+import namesies.Namesies;
+import namesies.Namesies.NamesiesType;
 import main.Type;
 import map.AreaData.TerrainType;
 import pokemon.Ability;

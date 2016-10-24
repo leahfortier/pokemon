@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import battle.MoveCategory;
-import main.Namesies.NamesiesType;
+import namesies.Namesies;
+import namesies.Namesies.NamesiesType;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
 import pokemon.Stat;

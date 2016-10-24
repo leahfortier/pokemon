@@ -6,7 +6,7 @@ import item.Item;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 
 import java.util.ArrayList;
 import java.util.Arrays;

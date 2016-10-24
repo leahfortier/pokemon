@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import trainer.Trainer;
 import trainer.WildPokemon;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import battle.MoveType;
+import namesies.Namesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
 import battle.effect.AdvantageChanger;

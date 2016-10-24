@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 import main.Game;
 import main.Global;
-import main.Namesies.NamesiesType;
-import main.Namesies;
+import namesies.Namesies.NamesiesType;
+import namesies.Namesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import util.DrawMetrics;

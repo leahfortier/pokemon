@@ -3,7 +3,7 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.StatChangingEffect;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;

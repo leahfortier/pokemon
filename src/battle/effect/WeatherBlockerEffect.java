@@ -1,6 +1,6 @@
 package battle.effect;
 
-import main.Namesies;
+import namesies.Namesies;
 
 public interface WeatherBlockerEffect {
 	boolean block(Namesies weather);

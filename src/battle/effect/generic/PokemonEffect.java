@@ -47,7 +47,7 @@ import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import pokemon.Ability;
 import pokemon.ActivePokemon;

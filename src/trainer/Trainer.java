@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.Effect;

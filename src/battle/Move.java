@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import battle.effect.AttackSelectionEffect;

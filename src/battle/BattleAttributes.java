@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
