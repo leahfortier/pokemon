@@ -1,8 +1,10 @@
 package battle.effect.generic;
 
+import battle.Attack;
+import battle.Battle;
+import battle.Move;
 import battle.MoveCategory;
 import battle.MoveType;
-import battle.effect.holder.AbilityHolder;
 import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageChanger;
 import battle.effect.AttackSelectionEffect;
@@ -17,11 +19,7 @@ import battle.effect.FaintEffect;
 import battle.effect.ForceMoveEffect;
 import battle.effect.GroundedEffect;
 import battle.effect.HalfWeightEffect;
-import battle.effect.holder.IntegerHolder;
-import battle.effect.holder.ItemHolder;
 import battle.effect.LevitationEffect;
-import battle.effect.holder.MoveHolder;
-import battle.effect.holder.MoveListHolder;
 import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentTrappingEffect;
@@ -32,24 +30,22 @@ import battle.effect.StageChangingEffect;
 import battle.effect.StatChangingEffect;
 import battle.effect.StatProtectingEffect;
 import battle.effect.StatSwitchingEffect;
-import battle.effect.holder.StatsHolder;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.TargetSwapperEffect;
 import battle.effect.TrappingEffect;
-import battle.effect.holder.TypeHolder;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.attack.CrashDamageMove;
+import battle.effect.holder.AbilityHolder;
+import battle.effect.holder.IntegerHolder;
+import battle.effect.holder.ItemHolder;
+import battle.effect.holder.MoveHolder;
+import battle.effect.holder.MoveListHolder;
+import battle.effect.holder.StatsHolder;
+import battle.effect.holder.TypeHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import main.Global;
 import main.Namesies;
 import main.Type;
@@ -57,9 +53,12 @@ import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Stat;
-import battle.Attack;
-import battle.Battle;
-import battle.Move;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 // Class to handle effects that are on a single Pokemon
 public abstract class PokemonEffect extends Effect implements Serializable {
