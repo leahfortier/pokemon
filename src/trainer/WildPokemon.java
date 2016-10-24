@@ -3,7 +3,7 @@ package trainer;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Namesies;
+import namesies.Namesies;
 import pokemon.ActivePokemon;
 import battle.effect.generic.Effect;
 import battle.effect.generic.TeamEffect;

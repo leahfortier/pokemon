@@ -7,7 +7,7 @@ import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 import item.Item;
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;

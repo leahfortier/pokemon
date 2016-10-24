@@ -2,7 +2,7 @@ package test;
 
 import battle.Attack;
 import battle.Move;
-import main.Namesies;
+import namesies.Namesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ActivePokemon;

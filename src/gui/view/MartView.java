@@ -14,7 +14,7 @@ import java.util.Iterator;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import trainer.CharacterData;
 import util.DrawMetrics;

@@ -14,7 +14,7 @@ import battle.effect.StatSwitchingEffect;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.TerrainEffect;
 import battle.effect.status.StatusCondition;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import map.AreaData.TerrainType;
 import pokemon.ActivePokemon;

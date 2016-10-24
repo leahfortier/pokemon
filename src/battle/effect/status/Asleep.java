@@ -4,7 +4,7 @@ import battle.Battle;
 import battle.MoveType;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.generic.Effect;
-import main.Namesies;
+import namesies.Namesies;
 import pokemon.ActivePokemon;
 
 class Asleep extends Status implements BeforeTurnEffect {

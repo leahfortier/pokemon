@@ -17,9 +17,7 @@ public class StuffGen {
 	private static final String POKEMON_SMALL_TILES_INDEX_PATH = FileIO.makeFolderPath("rec", "tiles", "partyTiles") + "index.txt";
 	
 	public StuffGen() {
-		NamesiesGen namesiesGen = new NamesiesGen();
-		new PokeGen(namesiesGen);
-		namesiesGen.writeNamesies();
+		new PokeGen();
 		
 //		new InterfaceGen();
 		

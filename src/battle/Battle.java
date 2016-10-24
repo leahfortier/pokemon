@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import map.AreaData.TerrainType;
 import pokemon.Ability;

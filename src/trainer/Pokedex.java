@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import main.Namesies;
+import namesies.Namesies;
 import pokemon.PokemonInfo;
 import util.StringUtils;
 

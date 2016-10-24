@@ -1,6 +1,6 @@
 package battle.effect.attack;
 
-import main.Namesies;
+import namesies.Namesies;
 import pokemon.ActivePokemon;
 
 public interface MultiStrikeMove {

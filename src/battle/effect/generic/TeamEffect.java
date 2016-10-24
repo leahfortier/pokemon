@@ -14,7 +14,7 @@ import battle.effect.StatChangingEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;

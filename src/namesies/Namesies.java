@@ -1,5 +1,6 @@
-package main;
+package namesies;
 
+import main.Global;
 import util.PokeString;
 
 public enum Namesies {

@@ -1,6 +1,6 @@
 package util;
 
-import main.Namesies.NamesiesType;
+import namesies.Namesies.NamesiesType;
 
 public class PokeString {
 

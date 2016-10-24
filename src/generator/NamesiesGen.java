@@ -3,24 +3,29 @@ package generator;
 import java.util.Scanner;
 
 import main.Global;
-import main.Namesies.NamesiesType;
+import namesies.Namesies.NamesiesType;
 import pokemon.PokemonInfo;
 import util.FileIO;
 import util.PokeString;
 
 class NamesiesGen {
-	private static final String NAMESIES_PATH = FileIO.makeFolderPath("src", "main") + "Namesies.java";
-	
+	private static final String NAMESIES_FOLDER = FileIO.makeFolderPath("src", "namesies");
+
+	private final String namesiesClassName;
 	private final StringBuilder namesies;
+
 	private boolean firstNamesies;
 	
-	NamesiesGen() {
-		namesies = new StringBuilder();
-		firstNamesies = true;
+	NamesiesGen(final String namesiesClassName) {
+		this.namesiesClassName = namesiesClassName;
+		this.namesies = new StringBuilder();
+		this.firstNamesies = true;
 	}
 	
 	void writeNamesies() {
-		Scanner original = FileIO.openFile(NAMESIES_PATH);
+		final String fileName = NAMESIES_FOLDER + namesiesClassName + ".java";
+
+		Scanner original = FileIO.openFile(fileName);
 		StringBuilder out = new StringBuilder();
 		
 		boolean canPrint = true;
@@ -60,7 +65,7 @@ class NamesiesGen {
 			}
 		}
 
-		if (FileIO.overwriteFile(NAMESIES_PATH, out)) {
+		if (FileIO.overwriteFile(fileName, out)) {
 			System.out.println("Namesies generated.");
 		}
 	}

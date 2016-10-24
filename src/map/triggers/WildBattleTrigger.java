@@ -5,7 +5,7 @@ import battle.effect.RepellingEffect;
 import item.Item;
 import main.Game;
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import map.EncounterRate;
 import map.WildEncounter;
 import pokemon.ActivePokemon;

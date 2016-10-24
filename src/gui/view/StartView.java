@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;
 import trainer.CharacterData;

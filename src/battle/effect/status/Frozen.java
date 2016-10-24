@@ -5,7 +5,7 @@ import battle.MoveType;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.TakeDamageEffect;
 import battle.effect.generic.Effect;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import pokemon.ActivePokemon;
 

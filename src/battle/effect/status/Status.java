@@ -9,7 +9,7 @@ import item.Item;
 import item.berry.GainableEffectBerry;
 import item.berry.StatusBerry;
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;

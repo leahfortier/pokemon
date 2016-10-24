@@ -12,7 +12,7 @@ import java.util.Set;
 
 import main.Game;
 import main.Game.ViewMode;
-import main.Namesies;
+import namesies.Namesies;
 import map.DialogueSequence;
 import map.entity.MovableEntity.Direction;
 import pokemon.ActivePokemon;

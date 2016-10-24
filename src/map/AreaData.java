@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import main.Type;
 import pokemon.Stat;
 import battle.Attack;

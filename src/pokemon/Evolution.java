@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import main.Global;
-import main.Namesies;
+import namesies.Namesies;
 import battle.Attack;
 import battle.Move;
 

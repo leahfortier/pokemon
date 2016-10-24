@@ -14,8 +14,8 @@ import java.util.Set;
 
 import battle.Attack;
 import main.Global;
-import main.Namesies;
-import main.Namesies.NamesiesType;
+import namesies.Namesies;
+import namesies.Namesies.NamesiesType;
 import main.Type;
 import util.FileIO;
 import util.PokeString;
@@ -33,7 +33,7 @@ class PokeGen {
 	private static final String MOVE_PATH = FileIO.makeFolderPath("src", "battle") + "Attack.java";
 	private static final String ABILITY_PATH = FileIO.makeFolderPath("src", "pokemon") + "Ability.java";
 	private static final String ITEM_PATH = FileIO.makeFolderPath("src", "item") + "Item.java";
-	private static final String ITEM_TILES_PATH = FileIO.makeFolderPath("rec", "tiles", "itemTiles");
+	private static final String ITEM_TILES_FOLDER = FileIO.makeFolderPath("rec", "tiles", "itemTiles");
 
 	// TODO: Honestly these should all be in the subfolder of rec instead of just chillin all over the main folder
 	private enum Generator {
@@ -83,22 +83,27 @@ class PokeGen {
 		
 		public boolean isMappity() {
 			return this.mappity;
-		}	
+		}
+
+		public String getNamesiesClassName() {
+			return this.getSuperClass() + "Namesies";
+		}
 	}
 	
-	private final NamesiesGen namesiesGen;
+	private NamesiesGen namesiesGen;
 	private Generator currentGen;
 	
-	PokeGen(final NamesiesGen namesiesGen) {
-
+	PokeGen() {
 		readFormat();
-		
-		this.namesiesGen = namesiesGen;
-		
+
 		// Go through each PokeGen and generate
 		for (Generator generator : Generator.values()) {
 			this.currentGen = generator;
+
+			this.namesiesGen = new NamesiesGen(generator.getNamesiesClassName());
 			this.superGen();
+
+			this.namesiesGen.writeNamesies();
 		}	
 	}
 	
@@ -217,7 +222,7 @@ class PokeGen {
 			case ITEM_GEN:
 				addTMs(out, classes, indexOut);
 				out.append("\n\t\tprocessIncenseItems();\n");
-				FileIO.writeToFile(ITEM_TILES_PATH + "index.txt", indexOut);
+				FileIO.writeToFile(ITEM_TILES_FOLDER + "index.txt", indexOut);
 			default:
 				break;
 		}
@@ -426,7 +431,7 @@ class PokeGen {
 	}
 	
 	private static void addImageIndex(StringBuilder indexOut, int index, String name, String imageName) {
-		File imageFile = new File(ITEM_TILES_PATH + imageName + ".png");
+		File imageFile = new File(ITEM_TILES_FOLDER + imageName + ".png");
 		if (!imageFile.exists()) {
 			Global.error("Image for " + name + " does not exist." + imageFile.getAbsolutePath());
 		}
