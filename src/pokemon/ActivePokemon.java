@@ -55,6 +55,7 @@ import java.util.regex.Pattern;
 public class ActivePokemon implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	// TODO: Learn more about regex and clean all this shit the fuck up
 	private static final Pattern pokemonPattern = Pattern.compile("(?:(\\w+)\\s*(\\d+)([A-Za-z \\t0-9,:.\\-'*]*)|(RandomEgg))");
 	public static final Pattern pokemonParameterPattern = Pattern.compile("(?:(Shiny)|(Moves:)\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+)\\s*[*]|(Egg)|(Item:)\\s*([\\w \\-'.]+)[*])", Pattern.UNICODE_CHARACTER_CLASS);
 	
@@ -89,11 +90,10 @@ public class ActivePokemon implements Serializable {
 	private boolean isEgg;
 	private int eggSteps;
 
-	// TODO: This should take in the namesies for the species instead of the species itself
 	// General constructor for an active Pokemon (user is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
-	public ActivePokemon(PokemonInfo pokemonSpecies, int level, boolean isWild, boolean user) {
-		this.pokemon = pokemonSpecies;
-		this.nickname = pokemonSpecies.getName();
+	public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean user) {
+		this.pokemon = PokemonInfo.getPokemonInfo(pokemonNamesies);
+		this.nickname = this.pokemon.getName();
 		this.level = level;
 		
 		setIVs();
@@ -128,17 +128,18 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	// Constructor for Eggs
-	public ActivePokemon(PokemonInfo p) {
-		this(p, 1, false, true);
-		isEgg = true;
-		eggSteps = p.getEggSteps();
-		nickname = "Egg";
+	public ActivePokemon(PokemonNamesies pokemonNamesies) {
+		this(pokemonNamesies, 1, false, true);
+
+		this.isEgg = true;
+		this.eggSteps = this.pokemon.getEggSteps();
+		this.nickname = "Egg";
 	}
 	
-	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo) {
-		this(babyInfo, 1, false, true);
+	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies pokemonNamesies) {
+		this(pokemonNamesies, 1, false, true);
 		
-		moves = Breeding.getBabyMoves(daddy, mommy, babyInfo);
+		moves = Breeding.getBabyMoves(daddy, mommy, pokemonNamesies);
 		IVs = Breeding.getBabyIVs(daddy, mommy);
 		nature = Breeding.getBabyNature(daddy, mommy);
 		hiddenPowerType = computeHiddenPowerType();
@@ -169,7 +170,7 @@ public class ActivePokemon implements Serializable {
 		}
 
 		PokemonNamesies namesies = PokemonNamesies.getValueOf(m.group(1));
-		PokemonInfo pinfo = PokemonInfo.getPokemonInfo(namesies);
+		PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(namesies);
 		
 		int level = Integer.parseInt(m.group(2));
 		
@@ -193,10 +194,6 @@ public class ActivePokemon implements Serializable {
 				for (int i = 0; i < 4; ++i) {
 					String attackName = params.group(3 + i);
 					if (!attackName.equals("None")) {
-						if(!Attack.isAttack(attackName)) {
-							Global.error(attackName + " is not an attack. Pokemon: " + pinfo.getName());
-						}
-						
 						moves.add(new Move(Attack.getAttackFromName(attackName)));
 					}
 				}
@@ -213,36 +210,36 @@ public class ActivePokemon implements Serializable {
 					holdItem = (HoldItem)item;
 				}
 				else {
-					Global.error(itemName +" is not a hold item. Pokemon: " + pinfo.getName());
+					Global.error(itemName +" is not a hold item. Pokemon: " + pokemonInfo.getName());
 				}
 			}
 		}
 		
-		ActivePokemon p;
+		ActivePokemon pokemon;
 		if (isEgg) {
 			if(!user) {
 				Global.error("Trainers cannot have eggs.");
 			}
 			
-			p = new ActivePokemon(pinfo);
+			pokemon = new ActivePokemon(namesies);
 		}
 		else {
-			p = new ActivePokemon(pinfo, level, false, user);
+			pokemon = new ActivePokemon(namesies, level, false, user);
 		}
 		
 		if (shiny) {
-			p.setShiny();
+			pokemon.setShiny();
 		}
 		
 		if (setMoves) {
-			p.setMoves(moves);
+			pokemon.setMoves(moves);
 		}
 		
 		if (holdItem != null) {
-			p.giveItem(holdItem);
+			pokemon.giveItem(holdItem);
 		}
 
-		return p;
+		return pokemon;
 	}
 	
 	public void setGender(Gender gender) {
@@ -256,7 +253,7 @@ public class ActivePokemon implements Serializable {
 	
 	// Larger image index
 	public int getImageIndex() {
-		return this.isEgg() ? PokemonInfo.EGG_IMAGE : PokemonInfo.getImageNumber(this.getPokemonInfo().getNumber(), this.isShiny());
+		return this.isEgg() ? PokemonInfo.EGG_IMAGE : this.pokemon.getImageNumber(this.isShiny());
 	}
 	
 	public boolean isEgg() {

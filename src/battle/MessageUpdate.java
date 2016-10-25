@@ -22,11 +22,11 @@ public class MessageUpdate {
 	private int[] newStats;
 	private StatusCondition status;
 	private PokemonInfo pokemon;
-	private Boolean shiny;
-	private Boolean animation;
+	private boolean shiny;
+	private boolean animation;
 	private Type[] type;
-	private Boolean playerTarget; // SO YOU KNOW WHO TO GIVE THE HP/STATUS UPDATE TO
-	private Boolean switchPokemon;
+	private boolean playerTarget; // SO YOU KNOW WHO TO GIVE THE HP/STATUS UPDATE TO
+	private boolean switchPokemon;
 	private Float expRatio;
 	private Update updateType;
 	private Integer level;

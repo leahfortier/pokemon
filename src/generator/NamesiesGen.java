@@ -65,9 +65,7 @@ class NamesiesGen {
 			}
 		}
 
-		if (FileIO.overwriteFile(fileName, out)) {
-			System.out.println(fileName + " generated.");
-		}
+		FileIO.overwriteFile(fileName, out);
 	}
 	
 	void createNamesies(String name) {

@@ -173,12 +173,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 	public static Item getItem(ItemNamesies itemNamesies) {
 		String itemName = itemNamesies.getName();
-		if (isItem(itemName)) {
-			return map.get(itemName);
+		if (!isItem(itemName)) {
+			Global.error("No such Item " + itemName);
 		}
 
-		Global.error("No such Item " + itemName);
-		return null;
+		return map.get(itemName);
 	}
 
 	public static boolean isItem(String m) {

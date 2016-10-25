@@ -78,6 +78,11 @@ public class FileIO {
 	}
 
 	// Reads the whole file ignoring commented lines starting with # when ignoreComments is true
+	public static String readEntireFileWithReplacements(String fileName, boolean ignoreComments) {
+		return readEntireFileWithReplacements(new File(fileName), ignoreComments);
+	}
+
+	// Reads the whole file ignoring commented lines starting with # when ignoreComments is true
 	public static String readEntireFileWithReplacements(File file, boolean ignoreComments) {
 		String fileText = readEntireFileWithoutReplacements(file, ignoreComments);
 		return PokeString.restoreSpecialFromUnicode(fileText);
@@ -156,6 +161,7 @@ public class FileIO {
 
 		if (!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {
 			writeToFile(fileName, out);
+			System.out.println(fileName + " overwritten.");
 			return true;
 		}
 

@@ -8,12 +8,10 @@ import namesies.AbilityNamesies;
 import namesies.AttackNamesies;
 import namesies.PokemonNamesies;
 import util.FileIO;
-import util.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,12 +26,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
 	public static final int NUM_POKEMON = 719;
 	public static final int EGG_IMAGE = 0x10000;
-	
+
 	private static Map<String, PokemonInfo> map;
 	private static PokemonInfo[] info;
-	private static List<PokemonInfo> baseEvolution;
+	private static List<PokemonNamesies> baseEvolution;
 	private static Set<PokemonNamesies> incenseBabies = new HashSet<>(); // TODO: lalala
-	
+
 	private int number;
 	private String name;
 	private PokemonNamesies namesies;
@@ -55,11 +53,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private String flavorText;
 	private int eggSteps;
 	private String[] eggGroups;
-	
-	public PokemonInfo(int number, String name, int[] baseStats, int baseExp, String growthRate, 
+
+	public PokemonInfo(int number, String name, int[] baseStats, int baseExp, String growthRate,
 			String type1, String type2, Map<Integer, Set<AttackNamesies>> levelUpMoves, Set<AttackNamesies> tmMoves,
 			Set<AttackNamesies> eggMoves, Set<AttackNamesies> tutorMoves, int catchRate, int[] givenEVs, Evolution evolution,
-			List<WildHoldItem> wildHoldItems, int genderRatio, String ability1, String ability2, String classification, 
+			List<WildHoldItem> wildHoldItems, int genderRatio, String ability1, String ability2, String classification,
 			int height, double weight, String flavorText, int eggSteps, String eggGroup1, String eggGroup2) {
 		this.number = number;
 		this.name = name;
@@ -86,188 +84,148 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.eggSteps = eggSteps;
 		this.eggGroups = new String[] { eggGroup1, eggGroup2 };
 	}
-	
+
 	public Type[] getType() {
 		return type;
 	}
-	
+
 	public Map<Integer, Set<AttackNamesies>> getLevelUpMoves() {
 		return levelUpMoves;
 	}
-	
+
 	public int getStat(int index) {
 		return baseStats[index];
 	}
-	
+
 	public GrowthRate getGrowthRate() {
 		return growthRate;
 	}
-	
+
 	public int getEggSteps() {
 		return eggSteps;
 	}
-	
+
 	public AbilityNamesies[] getAbilities() {
 		return abilities;
 	}
-	
+
 	public boolean hasAbility(AbilityNamesies s) {
 		return abilities[0] == s || abilities[1] == s;
 	}
-	
+
 	public int getCatchRate() {
 		return catchRate;
 	}
-	
+
 	public int getBaseEXP() {
 		return baseExp;
 	}
-	
+
 	public int[] getGivenEVs() {
 		return givenEVs;
 	}
-	
+
 	public int getMaleRatio() {
 		return maleRatio;
 	}
-	
+
 	public int getHeight() {
 		return height;
 	}
-	
+
 	public double getWeight() {
 		return weight;
 	}
-	
+
 	public String getClassification() {
 		return classification;
 	}
-	
+
 	public String getFlavorText() {
 		return flavorText;
 	}
-	
+
 	public PokemonNamesies namesies() {
 		return namesies;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public int getNumber() {
 		return number;
 	}
-	
+
 	public Evolution getEvolution() {
 		return evolution;
 	}
-	
+
 	public List<WildHoldItem> getWildItems() {
 		return wildHoldItems;
 	}
-	
+
 	public int getImageNumber(boolean shiny) {
-		return getImageNumber(number, shiny);
+		return getImageNumber(this, shiny);
 	}
-	
-	public static int getImageNumber(int number, boolean shiny) {
+
+	public static int getImageNumber(PokemonInfo pokemonInfo, boolean shiny) {
+		int imageNumber = 4*pokemonInfo.getNumber();
 		if (shiny) {
-			return 4*number + 2;
-		}
-		else {
-			return 4*number;
-		}
-	}
-	
-	public static PokemonInfo getPokemonInfo(PokemonNamesies pokemon) {
-		if (isPokemon(pokemon)) {
-			return map.get(pokemon.getName());
+			imageNumber += 2;
 		}
 
-		Global.error("No such Pokemon " + pokemon.getName());
-		return null;
+		return imageNumber;
 	}
-	
+
+	public static PokemonInfo getPokemonInfo(PokemonNamesies pokemon) {
+		if (!isPokemon(pokemon)) {
+			Global.error("No such Pokemon " + pokemon.getName());
+		}
+
+		return map.get(pokemon.getName());
+	}
+
 	public static PokemonInfo getPokemonInfo(int index) {
 		if (info == null) {
 			loadPokemonInfo();
 		}
-		
+
 		if (index <= 0 || index > NUM_POKEMON) {
-			Global.error("No such Pokemon Number " + index); 
+			Global.error("No such Pokemon Number " + index);
 		}
 
 		return info[index];
 	}
-	
+
 	// Pretend this comment has as much hate and passion as the similar methods in Attack.java and Item.java
 	public static boolean isPokemonName(String name) {
 		if (map == null) {
 			loadPokemonInfo();
 		}
-		
+
 		return map.containsKey(name);
 	}
-	
+
 	public static boolean isPokemon(PokemonNamesies pokemon) {
 		return isPokemonName(pokemon.getName());
 	}
 
-	// TODO: Move this into StuffGen
-	public static void baseEvolutionGenerator() {
-		if (info == null) {
-			loadPokemonInfo();
-		}
-		
-		Set<PokemonNamesies> set = new HashSet<>();
-		for (int i = 1; i < info.length; i++) {
-			set.add(info[i].namesies());
-		}
-		
-		for (int i = 1; i < info.length; i++) {
-			PokemonInfo p = info[i];
-			
-			if (!p.canBreed() && !p.getEvolution().canEvolve()) {
-				set.remove(p.namesies());
-			}
-			
-			for (PokemonNamesies evolutions : p.getEvolution().getEvolutions()) {
-				set.remove(evolutions);
-			}
-		}
-		
-		PokemonInfo[] p = new PokemonInfo[set.size()];
-		int i = 0;
-		for (PokemonNamesies namesies : set) {
-			p[i++] = getPokemonInfo(namesies);
-		}
-		
-		Arrays.sort(p);
-		
-		StringBuilder out = new StringBuilder();
-		for (PokemonInfo info : p) {
-			StringUtils.appendLine(out, info.getName());
-		}
-		
-		FileIO.writeToFile("BaseEvolutions.txt", out);
-	}
-	
-	public static PokemonInfo getRandomBaseEvolution() {
+	public static PokemonNamesies getRandomBaseEvolution() {
 		if (baseEvolution == null) {
 			baseEvolution = new ArrayList<>();
-			Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(new File("BaseEvolutions.txt"), false));
+			Scanner in = new Scanner(FileIO.readEntireFileWithReplacements("BaseEvolutions.txt", false));
 			while (in.hasNext()) {
 				PokemonNamesies namesies = PokemonNamesies.getValueOf(in.nextLine().trim());
-				baseEvolution.add(PokemonInfo.getPokemonInfo(namesies));
+				baseEvolution.add(namesies);
 			}
-			
+
 			in.close();
 		}
 
 		return Global.getRandomValue(baseEvolution);
 	}
-	
+
 	public int compareTo(PokemonInfo p) {
 		return number - p.number;
 	}
@@ -277,7 +235,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		if (map != null) {
 			return;
 		}
-		
+
 		map = new HashMap<>();
 		info = new PokemonInfo[NUM_POKEMON + 1];
 
@@ -285,40 +243,40 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		while (in.hasNext()) {
 			int num = in.nextInt();
 			in.nextLine();
-			
+
 			info[num] = new PokemonInfo(num, in.nextLine().trim(), sixIntArray(in),
 					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.next(), in.next(),
 					createLevelUpMoves(in), createMovesSet(in), createMovesSet(in), createMovesSet(in),
 					in.nextInt(), sixIntArray(in), Evolution.readEvolution(in), WildHoldItem.createList(in),
-					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim(), 
-					in.nextLine().trim(), in.nextInt(), in.nextDouble(), in.nextLine().trim(), in.nextInt(), 
+					in.nextInt(), in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim(),
+					in.nextLine().trim(), in.nextInt(), in.nextDouble(), in.nextLine().trim(), in.nextInt(),
 					in.nextLine().trim() + in.nextLine().trim(), in.nextLine().trim());
-			
+
 			map.put(info[num].getName(), info[num]);
 		}
-		
+
 		in.close();
 	}
-	
+
 	private static int[] sixIntArray(Scanner in) {
 		int[] arr = new int[6];
 		for (int i = 0; i < 6; i++) {
 			arr[i] = in.nextInt();
 		}
-		
+
 		return arr;
 	}
-	
+
 	private static Map<Integer, Set<AttackNamesies>> createLevelUpMoves(Scanner in) {
 		Map<Integer, Set<AttackNamesies>> levelUpMoves = new TreeMap<>();
 		int numMoves = in.nextInt();
-		
+
 		for (int i = 0; i < numMoves; i++) {
 			int level = in.nextInt();
 			if (!levelUpMoves.containsKey(level)) {
 				levelUpMoves.put(level, new TreeSet<>());
 			}
-			
+
 			String attackName = in.nextLine().trim();
 			AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
 
@@ -328,33 +286,33 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
 			levelUpMoves.get(level).add(namesies);
 		}
-		
+
 		return levelUpMoves;
 	}
-	
+
 	private static Set<AttackNamesies> createMovesSet(Scanner in) {
 		Set<AttackNamesies> tmMoves = new HashSet<>();
 		int numMoves = in.nextInt();
 		in.nextLine();
-		
+
 		for (int i = 0; i < numMoves; i++) {
 			String attackName = in.nextLine().trim();
 
 			AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
 			tmMoves.add(namesies);
 		}
-		
+
 		return tmMoves;
 	}
-	
+
 	public Set<AttackNamesies> getMoves(int level) {
 		if (levelUpMoves.containsKey(level)) {
 			return levelUpMoves.get(level);
 		}
-		
+
 		return new TreeSet<>();
 	}
-	
+
 	public boolean canBreed() {
 		return !eggGroups[0].equals("None") || !eggGroups[1].equals("None");
 	}

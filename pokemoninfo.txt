@@ -9949,7 +9949,7 @@ Water Pulse
 Zen Headbutt
 45
 2 0 0 0 0 0 
-None
+Move 463 Rollout
 1
 5 Lagging Tail
 50

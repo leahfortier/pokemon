@@ -52,7 +52,7 @@ public class Global {
 					"(Lower: " + lowerBound + ", Upper: " + upperBound + ")");
 		}
 
-		return getRandomInt((upperBound - lowerBound + 1) + lowerBound);
+		return getRandomInt((upperBound - lowerBound + 1)) + lowerBound;
 	}
 
 	public static <T> T getRandomValue(T[] array) {

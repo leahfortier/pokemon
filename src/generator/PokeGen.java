@@ -240,9 +240,7 @@ class PokeGen {
 				.append(classes)
 				.append("}");
 
-		if (FileIO.overwriteFile(this.currentGen.getOutputPath(), out)) {
-			System.out.println(this.currentGen.getOutputPath() + " generated.");
-		}
+		FileIO.overwriteFile(this.currentGen.getOutputPath(), out);
 	}
 	
 	private String getActivationMethod(String className, Map<String, String> fields) {

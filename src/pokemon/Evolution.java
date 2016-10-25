@@ -23,8 +23,7 @@ public abstract class Evolution implements Serializable {
 	public abstract Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use);
 	public abstract PokemonNamesies[] getEvolutions();
 	
-	public boolean canEvolve()
-	{
+	public boolean canEvolve() {
 		return true;
 	}
 
@@ -119,29 +118,29 @@ public abstract class Evolution implements Serializable {
 		private Evolution evolution;
 		private Gender gender;
 		
-		public GenderEvolution(String g, Evolution e) {
-			if (!(e instanceof BaseEvolution)) {
+		public GenderEvolution(String gender, Evolution evolution) {
+			if (!(evolution instanceof BaseEvolution)) {
 				Global.error("Gender evolution does not make any sense!");
 			}
 			
-			evolution = e;
-			if (!g.equals("Male") && !g.equals("Female")) {
+			this.evolution = evolution;
+			if (!gender.equals("Male") && !gender.equals("Female")) {
 				Global.error("Incorrect Gender Name for Evolution");
 			}
 
-			gender = g.equals("Male") ? Gender.MALE : Gender.FEMALE;
+			this.gender = gender.equals("Male") ? Gender.MALE : Gender.FEMALE;
 		}
 		
-		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
-			if (p.getGender() == gender) {
-				return evolution.getEvolution(type, p, use);
+		public Evolution getEvolution(EvolutionCheck type, ActivePokemon pokemon, ItemNamesies use) {
+			if (pokemon.getGender() == this.gender) {
+				return this.evolution.getEvolution(type, pokemon, use);
 			}
 			
 			return null;
 		}
 
 		public PokemonNamesies[] getEvolutions() {
-			return evolution.getEvolutions();
+			return this.evolution.getEvolutions();
 		}
 	}
 
@@ -153,16 +152,17 @@ public abstract class Evolution implements Serializable {
 		private Stat higher;
 		private Stat lower;
 		
-		public StatEvolution(String eq, String h, String l, Evolution e) {
-			if (!(e instanceof LevelUpEvolution)) {
+		public StatEvolution(String equals, String higher, String lower, Evolution evolution) {
+			if (!(evolution instanceof LevelUpEvolution)) {
 				Global.error("Stat evolutions must be level up");
+				return;
 			}
 			
-			evolution = (LevelUpEvolution)e;
-			equals = eq.equals("Equal");
+			this.evolution = (LevelUpEvolution)evolution;
+			this.equals = equals.equals("Equal"); // Equality ftw
 			
-			higher = Stat.valueOf(h.toUpperCase());
-			lower = Stat.valueOf(l.toUpperCase());
+			this.higher = Stat.valueOf(higher.toUpperCase());
+			this.lower = Stat.valueOf(lower.toUpperCase());
 		}
 
 		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {

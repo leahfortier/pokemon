@@ -56,12 +56,11 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			loadEffects();
 		}
 		
-		if (map.containsKey(effectName)) {
-			return map.get(effectName);
+		if (!map.containsKey(effectName)) {
+			Global.error("No such Effect " + effectName);
 		}
-	
-		Global.error("No such Effect " + effectName);
-		return null;
+
+		return map.get(effectName);
 	}
 
 	// Create and load the effects map if it doesn't already exist

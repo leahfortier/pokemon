@@ -46,17 +46,16 @@ public abstract class TeamEffect extends Effect implements Serializable {
 	}
 
 	public static TeamEffect getEffect(EffectNamesies name) {
-		String e = name.getName();
+		String effectName = name.getName();
 		if (map == null) {
 			loadEffects();
 		}
 		
-		if (map.containsKey(e)) {
-			return map.get(e);
+		if (!map.containsKey(effectName)) {
+			Global.error("No such Effect " + effectName);
 		}
 
-		Global.error("No such Effect " + e);
-		return null;
+		return map.get(effectName);
 	}
 
 	// Create and load the effects map if it doesn't already exist

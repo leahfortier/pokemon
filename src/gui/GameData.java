@@ -141,6 +141,10 @@ public class GameData {
 	}
 
 	public MapData getMap(String name) {
+		if (!maps.containsKey(name)) {
+			Global.error("Cannot find map with name " + name);
+		}
+
 		return maps.get(name);
 	}
 

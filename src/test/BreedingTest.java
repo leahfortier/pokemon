@@ -45,7 +45,7 @@ public class BreedingTest extends Breeding {
         ActivePokemon togepi = getParent(PokemonNamesies.TOGEPI, Gender.MALE);
         ActivePokemon togetic = getParent(PokemonNamesies.TOGETIC, Gender.FEMALE);
         ActivePokemon exeggcute = getParent(PokemonNamesies.EXEGGCUTE, Gender.MALE);
-        ActivePokemon eggy = new ActivePokemon(PokemonInfo.getPokemonInfo(PokemonNamesies.EXEGGCUTE));
+        ActivePokemon eggy = new ActivePokemon(PokemonNamesies.EXEGGCUTE);
 
         Assert.assertFalse(Breeding.canBreed(maleRapidash, maleRapidash)); // Same species, same gender
         Assert.assertFalse(Breeding.canBreed(magnemite, magnemite)); // Same species, both genderless
@@ -275,7 +275,7 @@ public class BreedingTest extends Breeding {
     }
 
     private static ActivePokemon getParent(final PokemonNamesies pokemon, final Gender gender) {
-        ActivePokemon parent = new ActivePokemon(PokemonInfo.getPokemonInfo(pokemon), 100, false, false);
+        ActivePokemon parent = new ActivePokemon(pokemon, 100, false, false);
         parent.setGender(gender);
 
         return parent;

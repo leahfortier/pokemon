@@ -23,7 +23,7 @@ public class Breeding {
 		
 		ActivePokemon mommy = getMommy(aPokes, bPokes);
 		ActivePokemon daddy = aPokes == mommy ? bPokes : aPokes;
-		ActivePokemon baby = new ActivePokemon(daddy, mommy, getBabyInfo(daddy, mommy));
+		ActivePokemon baby = new ActivePokemon(daddy, mommy, getBabyInfo(daddy, mommy).namesies());
 		return baby;
 	}
 	
@@ -175,8 +175,9 @@ public class Breeding {
 		}
 	}
 	
-	static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo) {
+	static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies babyNamesies) {
 
+		PokemonInfo babyInfo = PokemonInfo.getPokemonInfo(babyNamesies);
 		List<AttackNamesies> babyMovesNamesies = new ArrayList<>();
 
 		// Get moves that the pokemon learns at level 1

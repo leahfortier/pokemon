@@ -189,7 +189,7 @@ class DevConsole {
 
 				System.out.println("adding " + pokemonName + " " + (shiny ? " shiny " : "") + (moves == null ? " " : moves.toString()));
 
-				ActivePokemon pokemon = new ActivePokemon(PokemonInfo.getPokemonInfo(namesies), level, false, true);
+				ActivePokemon pokemon = new ActivePokemon(namesies, level, false, true);
 				if (moves != null) {
 					pokemon.setMoves(moves);
 				}

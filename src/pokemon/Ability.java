@@ -177,18 +177,18 @@ public abstract class Ability implements Serializable {
 	
 	public abstract Ability newInstance();
 	
-	public static Ability getAbility(AbilityNamesies name) {
-		String m = name.getName();
+	public static Ability getAbility(AbilityNamesies namesies) {
+		String abilityName = namesies.getName();
 		
 		if (map == null) {
 			loadAbilities();
 		}
 		
-		if (map.containsKey(m)) {
-			return map.get(m);
+		if (map.containsKey(abilityName)) {
+			return map.get(abilityName);
 		}
 
-		Global.error("No such Ability " + m);
+		Global.error("No such Ability " + abilityName);
 		return new NoAbility();
 	}
 	

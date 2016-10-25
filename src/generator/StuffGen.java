@@ -1,17 +1,21 @@
 package generator;
 
-import java.io.PrintStream;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
-
 import main.Global;
 import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import util.FileIO;
 import util.StringUtils;
+
+import java.io.PrintStream;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class StuffGen {
 	private static final String POKEMON_TILES_INDEX_PATH = FileIO.makeFolderPath("rec", "tiles", "pokemonTiles") + "index.txt";
@@ -20,6 +24,7 @@ public class StuffGen {
 	public StuffGen() {
 		new PokeGen();
 		new NamesiesGen(PokemonNamesies.class);
+		baseEvolutionGenerator();
 		
 //		new InterfaceGen();
 		
@@ -189,7 +194,41 @@ public class StuffGen {
 		
 		return method.toString();
 	}
-	
+
+	private static void baseEvolutionGenerator() {
+		Set<PokemonNamesies> set = new HashSet<>();
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+			set.add(PokemonInfo.getPokemonInfo(i).namesies());
+		}
+
+		set.remove(PokemonNamesies.MANAPHY);
+		set.remove(PokemonNamesies.SHEDINJA); // TODO
+
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+			PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+
+			if (!pokemonInfo.canBreed() && !pokemonInfo.getEvolution().canEvolve()) {
+				set.remove(pokemonInfo.namesies());
+			}
+
+			for (PokemonNamesies evolution : pokemonInfo.getEvolution().getEvolutions()) {
+				set.remove(evolution);
+			}
+		}
+
+		List<PokemonInfo> baseEvolutions = set.stream()
+				.map(PokemonInfo::getPokemonInfo)
+				.sorted()
+				.collect(Collectors.toList());
+
+		StringBuilder out = new StringBuilder();
+		for (PokemonInfo info : baseEvolutions) {
+			StringUtils.appendLine(out, info.getName());
+		}
+
+		FileIO.overwriteFile("BaseEvolutions.txt", out);
+	}
+
 	// Used for editing pokemoninfo.txt
 	private static void pokemonInfoStuff() {
 		Scanner in = FileIO.openFile("pokemoninfo.txt");

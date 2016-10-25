@@ -42,13 +42,13 @@ public abstract class BattleEffect extends Effect {
 	}
 
 	public static BattleEffect getEffect(EffectNamesies name) {
-		String e = name.getName();
+		String effectName = name.getName();
 		if (map == null) {
 			loadEffects();
 		}
 
-		if (map.containsKey(e)) {
-			return map.get(e);
+		if (map.containsKey(effectName)) {
+			return map.get(effectName);
 		}
 
 		// Otherwise, check if it's a weather effect which will handle the error checking and such if it isn't there either

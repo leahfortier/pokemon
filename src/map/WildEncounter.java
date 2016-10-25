@@ -42,7 +42,7 @@ public class WildEncounter {
 
     public WildPokemon getWildPokemon() {
         int level = Global.getRandomInt(this.minLevel, this.maxLevel);
-        return new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(this.pokemon), level, true, false));
+        return new WildPokemon(new ActivePokemon(this.pokemon, level, true, false));
     }
 
     public String toString() {

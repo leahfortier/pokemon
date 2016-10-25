@@ -17,18 +17,16 @@ import gui.view.TrainerCardView;
 import gui.view.View;
 import item.Item;
 import item.hold.HoldItem;
+import namesies.ItemNamesies;
+import namesies.PokemonNamesies;
+import pokemon.ActivePokemon;
+import trainer.CharacterData;
+import util.InputControl;
+import util.Save;
 
 import java.awt.Graphics;
 import java.util.EnumMap;
 import java.util.Map;
-
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
-import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
-import trainer.CharacterData;
-import util.InputControl;
-import util.Save;
 
 public class Game {
 	public enum ViewMode {
@@ -64,7 +62,7 @@ public class Game {
 	}
 	
 	private void setupCharacter() {
-		characterData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo(PokemonNamesies.EEVEE), 1, false, true));
+		characterData.addPokemon(null, new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
 		characterData.front().giveItem((HoldItem)Item.getItem(ItemNamesies.ORAN_BERRY));
 	}
 	

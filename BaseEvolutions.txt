@@ -8,8 +8,8 @@ Rattata
 Spearow
 Ekans
 Sandshrew
-Nidoran\u2640
-Nidoran\u2642
+Nidoran F
+Nidoran M
 Vulpix
 Zubat
 Oddish
@@ -279,4 +279,35 @@ Heatmor
 Durant
 Deino
 Larvesta
+Chespin
+Fennekin
+Froakie
+Bunnelby
+Fletchling
+Scatterbug
+Litleo
+Flabebe
+Skiddo
+Pancham
+Furfrou
+Espurr
+Honedge
+Spritzee
+Swirlix
+Inkay
+Binacle
+Skrelp
+Clauncher
+Helioptile
+Tyrunt
+Amaura
+Hawlucha
+Dedenne
+Carbink
+Goomy
+Klefki
+Phantump
+Pumpkaboo
+Bergmite
+Noibat
 

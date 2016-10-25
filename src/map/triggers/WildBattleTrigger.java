@@ -117,9 +117,8 @@ public class WildBattleTrigger extends Trigger {
 	
 	// Returns a legendary encounter if applicable and null otherwise
 	private WildPokemon getLegendaryEncounter(CharacterData player) {
-		// TODO: There should be a method that produces the boolean value of the random chance since that happens everywhere
 		if (Global.chanceTest(1, 1024) && !player.getPokedex().caught(PokemonNamesies.MEW)) {
-			return new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(PokemonNamesies.MEW), 5, true, false));
+			return new WildPokemon(new ActivePokemon(PokemonNamesies.MEW, 5, true, false));
 		}
 		
 		return null;
