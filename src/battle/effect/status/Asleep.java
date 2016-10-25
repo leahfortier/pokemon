@@ -4,7 +4,8 @@ import battle.Battle;
 import battle.MoveType;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.generic.Effect;
-import namesies.Namesies;
+import namesies.AbilityNamesies;
+import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 
 class Asleep extends Status implements BeforeTurnEffect {
@@ -17,18 +18,18 @@ class Asleep extends Status implements BeforeTurnEffect {
     }
 
     protected void postCreateEffect(ActivePokemon victim) {
-        if (victim.hasAbility(Namesies.EARLY_BIRD_ABILITY)) {
+        if (victim.hasAbility(AbilityNamesies.EARLY_BIRD)) {
             this.numTurns /= 2;
         }
     }
 
     // No one can be asleep while Uproar is in effect by either Pokemon
     public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !caster.hasEffect(Namesies.UPROAR_EFFECT) && !victim.hasEffect(Namesies.UPROAR_EFFECT);
+        return super.applies(b, caster, victim) && !caster.hasEffect(EffectNamesies.UPROAR) && !victim.hasEffect(EffectNamesies.UPROAR);
     }
 
     public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-        if (user.hasEffect(Namesies.UPROAR_EFFECT) || victim.hasEffect(Namesies.UPROAR_EFFECT)) {
+        if (user.hasEffect(EffectNamesies.UPROAR) || victim.hasEffect(EffectNamesies.UPROAR)) {
             return "The uproar prevents sleep!";
         }
 

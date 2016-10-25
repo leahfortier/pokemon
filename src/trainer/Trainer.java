@@ -1,20 +1,19 @@
 package trainer;
 
+import battle.Battle;
+import battle.effect.SwitchOutEffect;
+import battle.effect.generic.Effect;
+import battle.effect.generic.TeamEffect;
 import battle.effect.status.StatusCondition;
 import item.Bag;
 import item.Item;
+import main.Global;
+import namesies.EffectNamesies;
+import pokemon.ActivePokemon;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import main.Global;
-import namesies.Namesies;
-import pokemon.ActivePokemon;
-import battle.Battle;
-import battle.effect.generic.Effect;
-import battle.effect.SwitchOutEffect;
-import battle.effect.generic.TeamEffect;
 
 public abstract class Trainer implements Team, Serializable {
 	private static final long serialVersionUID = -7797121866082399148L;
@@ -154,7 +153,7 @@ public abstract class Trainer implements Team, Serializable {
 		return prev - cashMoney;
 	}
 
-	public boolean hasEffect(Namesies effect) {
+	public boolean hasEffect(EffectNamesies effect) {
 		return Effect.hasEffect(effects, effect);
 	}
 	

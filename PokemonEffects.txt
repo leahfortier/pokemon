@@ -4,7 +4,7 @@
 # Fields can be specified in any order
 
 Constructor:
-	Namesies Enum Namesies Effect
+	Namesies Enum EffectNamesies
 	MinTurns Default -1 Int
 	MaxTurns Default -1 Int
 	NextTurnSubside Default False Boolean
@@ -12,7 +12,7 @@ Constructor:
 Failure:
 	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 	FailType List Enum Type victim.isType(b, {0})
-	FailAbility List Enum Namesies Ability (victim.hasAbility({0}) && !caster.breaksTheMold())
+	FailAbility List Enum AbilityNamesies (victim.hasAbility({0}) && !caster.breaksTheMold())
 	FailCondition Int {0}
 	CanHave Not Default True Boolean victim.hasEffect(this.namesies)
 *
@@ -32,7 +32,7 @@ LeechSeed:
 	###
 	CastMessage: victim.getName() + " was seeded!"
 	ApplyEndTurn: 
-	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 		return;
 	}
 	
@@ -70,7 +70,7 @@ Flinch:
 	NumTurns: 1
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (victim.hasAbility(Namesies.STEADFAST_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.STEADFAST)) {
 		victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 	}
 	###
@@ -154,7 +154,7 @@ Confusion:
 	if (victim.hasEffect(this.namesies)) {
 		return victim.getName() + " is already confused!";
 	}
-	else if (victim.hasAbility(Namesies.OWN_TEMPO_ABILITY)) {
+	else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
 	}
 	###
@@ -178,7 +178,7 @@ Confusion:
 		
 		// Perform confusion damage
 		Move temp = p.getMove();
-		p.setMove(new Move(Attack.getAttack(Namesies.CONFUSION_DAMAGE_ATTACK)));
+		p.setMove(new Move(Attack.getAttack(AttackNamesies.CONFUSION_DAMAGE)));
 		p.reduceHealth(b, b.calculateDamage(p, p));
 		p.setMove(temp);
 		
@@ -193,8 +193,8 @@ Confusion:
 	CastMessage: victim.getName() + " became confused!"
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (victim.isHoldingItem(b, Namesies.PERSIM_BERRY_ITEM)) {
-		b.addMessage(victim.getName() + "'s " + Namesies.PERSIM_BERRY_ITEM.getName() + " snapped it out of confusion!");
+	if (victim.isHoldingItem(b, ItemNamesies.PERSIM_BERRY)) {
+		b.addMessage(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!");
 		victim.getAttributes().removeEffect(this.namesies);
 		victim.consumeItem(b);
 	}
@@ -236,7 +236,7 @@ GuardSpecial:
 Encore:
 	FailAbility: Aroma Veil
 	FailMessage: 
-	if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
 	}
 	###
@@ -315,7 +315,7 @@ Disable:
 	if (victim.hasEffect(this.namesies)) {
 		return victim.getName() + " is already disabled!";
 	}
-	else if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
+	else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
 	}
 	###
@@ -524,7 +524,7 @@ Mimic:
 	GetMoveList: 
 	Move[] list = new Move[moves.length];
 	for (int i = 0; i < list.length; i++) {
-		if (moves[i].getAttack().namesies() == Namesies.MIMIC_ATTACK) {
+		if (moves[i].getAttack().namesies() == AttackNamesies.MIMIC) {
 			list[i] = mimicMove;
 		}
 		else {
@@ -555,7 +555,7 @@ Mimic:
 Imprison:
 	Int: AttackSelectionEffect, BeforeTurnEffect
 	Field: 
-	private List<Namesies> unableMoves;
+	private List<AttackNamesies> unableMoves;
 	###
 	Activate: 
 	x.unableMoves = unableMoves;
@@ -597,7 +597,7 @@ MiracleEye:
 Torment:
 	FailAbility: Aroma Veil
 	FailMessage: 
-	if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
 	}
 	###
@@ -621,7 +621,7 @@ Taunt:
 	FailAbility: Aroma Veil, Oblivious
 	Int: AttackSelectionEffect, BeforeTurnEffect
 	FailMessage: 
-	if (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY) || victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
 	}
 	###
@@ -667,12 +667,12 @@ Ingrain:
 	###
 	TrappingMessage: trapped.getName() + " cannot be recalled due to ingrain!"
 	ApplyEndTurn: 
-	if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
+	if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 		return;
 	}
 	
 	int healAmount = victim.healHealthFraction(1/16.0);
-	if (victim.isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) {
+	if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
 		victim.heal((int)(healAmount*.3));
 	}
 	
@@ -694,7 +694,7 @@ Grounded:
 Curse:
 	Int: EndTurnEffect, PassableEffect
 	ApplyEndTurn: 
-	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 		return;
 	}
 	
@@ -752,7 +752,7 @@ Uproar:
 	###
 	CastMessage: user.getName() + " started an uproar!"
 	Usable: 
-	return m.getAttack().namesies() == Namesies.UPROAR_ATTACK;
+	return m.getAttack().namesies() == AttackNamesies.UPROAR;
 	###
 	UnusableMessage: "Only Uproar can be used right now!"
 	ApplyEndTurn: 
@@ -765,9 +765,9 @@ Uproar:
 AquaRing:
 	Int: PassableEffect, EndTurnEffect
 	ApplyEndTurn: 
-	if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) return;
+	if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) return;
 	int healAmount = victim.healHealthFraction(1/16.0);
-	if (victim.isHoldingItem(b, Namesies.BIG_ROOT_ITEM)) {
+	if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
 		victim.heal((int)(healAmount*.3));
 	}
 	
@@ -779,7 +779,7 @@ Nightmare:
 	FailCondition: !victim.hasStatus(StatusCondition.ASLEEP)
 	Int: EndTurnEffect
 	ApplyEndTurn: 
-	if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 		return;
 	}
 	
@@ -852,7 +852,7 @@ Transformed:
 	b.addMessage("", transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user());
 	b.addMessage("", victim);
 	###
-	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(Namesies.ILLUSION_ABILITY) && caster.getAbility().isActive()))
+	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
 	Int: MoveListHolder, StatsHolder, TypeHolder
 	GetMoveList:
 	return moveList;
@@ -887,7 +887,7 @@ Substitute:
 	}
 	
 	// Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
-	if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(Namesies.INFILTRATOR_ABILITY)) {
+	if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(AbilityNamesies.INFILTRATOR)) {
 		return true;
 	}
 	
@@ -906,7 +906,7 @@ Mist:
 	Defog: "The mist faded."
 	Int: StatProtectingEffect, DefogRelease
 	StatProtect: 
-	return !caster.hasAbility(Namesies.INFILTRATOR_ABILITY);
+	return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
 	###
 	StatProtectMessage: 
 	return "The mist prevents stat reductions!";
@@ -1020,7 +1020,7 @@ GuardSplit:
 HealBlock:
 	FailAbility: Aroma Veil
 	FailMessage: 
-	if (victim.hasAbility(Namesies.AROMA_VEIL_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents heal block!";
 	}
 	###
@@ -1043,7 +1043,7 @@ Infatuated:
 	FailCondition: !Gender.oppositeGenders(caster, victim)
 	Int: BeforeTurnEffect
 	FailMessage: 
-	if (Gender.oppositeGenders(user, victim) && (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY) || victim.hasAbility(Namesies.AROMA_VEIL_ABILITY))) {
+	if (Gender.oppositeGenders(user, victim) && (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL))) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents infatuation!";
 	}
 	###
@@ -1059,9 +1059,9 @@ Infatuated:
 	CastMessage: victim.getName() + " fell in love!"
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
-	if (victim.isHoldingItem(b, Namesies.DESTINY_KNOT_ITEM) && this.applies(b, victim, caster, CastSource.HELD_ITEM)) {
+	if (victim.isHoldingItem(b, ItemNamesies.DESTINY_KNOT) && this.applies(b, victim, caster, CastSource.HELD_ITEM)) {
 		super.cast(b, victim, caster, CastSource.HELD_ITEM, false);
-		b.addMessage(victim.getName() + "'s " + Namesies.DESTINY_KNOT_ITEM.getName() + " caused " + caster.getName() + " to fall in love!");
+		b.addMessage(victim.getName() + "'s " + ItemNamesies.DESTINY_KNOT.getName() + " caused " + caster.getName() + " to fall in love!");
 	}	
 	###
 *
@@ -1107,7 +1107,7 @@ PerishSong:
 	FailAbility: Soundproof
 	Int: PassableEffect, EndTurnEffect
 	FailMessage: 
-	if (victim.hasAbility(Namesies.SOUNDPROOF_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.SOUNDPROOF)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
 	}
 	###

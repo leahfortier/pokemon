@@ -5,8 +5,8 @@ import battle.MoveType;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.TakeDamageEffect;
 import battle.effect.generic.Effect;
-import namesies.Namesies;
 import main.Type;
+import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 
 class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
@@ -18,7 +18,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
 
     // Ice-type Pokemon cannot be frozen and no one can frozen while sunny
     public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE) && b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
+        return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE) && b.getWeather().namesies() != EffectNamesies.SUNNY;
     }
 
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {

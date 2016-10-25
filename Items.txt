@@ -13,7 +13,7 @@
 # // Not implemented: Casteliacone, Heal Powder, Lava Cookie
 
 Constructor:
-	Namesies Enum Namesies Item
+	Namesies Enum ItemNamesies
 	Desc String
 	Cat Enum BagCategory
 	Index Int
@@ -104,7 +104,7 @@ Amulet Coin:
 	Price: 100
 	Fling: 30
 	Enter:
-		TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 *
 Big Root:
@@ -137,7 +137,7 @@ Black Sludge:
 			victim.healHealthFraction(1/16.0);
 			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
 		}
-		else if (!victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+		else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
 		}
@@ -280,7 +280,7 @@ Toxic Orb:
 	ApplyEndTurn:
 		// Badly poisons the holder at the end of the turn
 		if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
-			victim.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
+			victim.addEffect(PokemonEffect.getEffect(EffectNamesies.BAD_POISON).newInstance());
 			Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 		}
 		###
@@ -371,7 +371,7 @@ Life Orb:
 		return 5324.0/4096.0;
 		###
 	OnApplyDamage:
-		if (user.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+		if (user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			return;
 		}
 		
@@ -386,7 +386,7 @@ Light Ball:
 	Price: 100
 	Fling: 30
 	TwoModify: Attack Sp_Attack
-	ModifyMultiplier: 2 p.isPokemon(Namesies.PIKACHU_POKEMON)
+	ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.PIKACHU)
 	StatusFling: paralyzed
 *
 Light Clay:
@@ -410,7 +410,7 @@ Lucky Punch:
 	Price: 10
 	Fling: 40
 	IncreaseCritStage:
-		if (p.isPokemon(Namesies.CHANSEY_POKEMON)) {
+		if (p.isPokemon(PokemonNamesies.CHANSEY)) {
 			return stage + 2;
 		}
 		
@@ -448,13 +448,21 @@ Mental Herb:
 	Fling: 10
 	Field:
 		// TODO: This should be an object array
-		Namesies[] effects = {Namesies.INFATUATED_EFFECT, Namesies.DISABLE_EFFECT, Namesies.TAUNT_EFFECT, Namesies.ENCORE_EFFECT, Namesies.TORMENT_EFFECT, Namesies.CONFUSION_EFFECT, Namesies.HEAL_BLOCK_EFFECT};
+		EffectNamesies[] effects = {
+				EffectNamesies.INFATUATED, 
+				EffectNamesies.DISABLE, 
+				EffectNamesies.TAUNT, 
+				EffectNamesies.ENCORE, 
+				EffectNamesies.TORMENT, 
+				EffectNamesies.CONFUSION, 
+				EffectNamesies.HEAL_BLOCK
+		};
 		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
 		###
 	ApplyEndTurn:
 		boolean used = false;
 		for (int i = 0; i < effects.length; i++) {
-			Namesies s = effects[i];
+			EffectNamesies s = effects[i];
 			if (victim.hasEffect(s)) {
 				used = true;
 				victim.getAttributes().removeEffect(s);
@@ -467,8 +475,8 @@ Mental Herb:
 		}
 		###
 	FlingEffect:
-		if (pelted.hasEffect(Namesies.INFATUATED_EFFECT)) {
-			pelted.getAttributes().removeEffect(Namesies.INFATUATED_EFFECT);
+		if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
+			pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
 			b.addMessage(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
 		}
 		###
@@ -480,7 +488,7 @@ Metal Powder:
 	Price: 10
 	Fling: 10
 	TwoModify: Defense Sp_Defense
-	ModifyMultiplier: 1.5 p.isPokemon(Namesies.DITTO_POKEMON)
+	ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.DITTO)
 *
 Metronome:
 	Int: HoldItem, PowerChangeEffect
@@ -546,7 +554,7 @@ Quick Powder:
 	Price: 10
 	Fling: 10
 	ToModify: Speed
-	ModifyMultiplier: 1.5 p.isPokemon(Namesies.DITTO_POKEMON)
+	ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.DITTO)
 *
 Red Card:
 	Int: HoldItem, TakeDamageEffect
@@ -655,7 +663,7 @@ Soul Dew:
 	Price: 10
 	Fling: 30
 	TwoModify: Sp_Attack Sp_Defense
-	ModifyMultiplier: 1.5 p.isPokemon(Namesies.LATIOS_POKEMON) || p.isPokemon(Namesies.LATIAS_POKEMON)
+	ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS)
 *
 Stick:
 	Int: HoldItem, CritStageEffect
@@ -664,7 +672,7 @@ Stick:
 	Price: 200
 	Fling: 60
 	IncreaseCritStage:
-		if (p.isPokemon(Namesies.FARFETCHD_POKEMON)) {
+		if (p.isPokemon(PokemonNamesies.FARFETCHD)) {
 			return stage + 2;
 		}
 		
@@ -678,7 +686,7 @@ Sticky Barb:
 	Price: 200
 	Fling: 80
 	ApplyEndTurn:
-		if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+		if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			return;
 		}
 		
@@ -686,7 +694,7 @@ Sticky Barb:
 		victim.reduceHealthFraction(b, 1/8.0);
 		###
 	Contact:
-		if (!user.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+		if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 		}
@@ -705,10 +713,10 @@ Sticky Barb:
 	         
 		// TODO: Generalize this with other item stealing effects
 		item = this;
-		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, user, CastSource.HELD_ITEM, false);
+		PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, victim, user, CastSource.HELD_ITEM, false);
 
 		item = Item.noneItem();
-		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 	GetItem: return item;
 	Field: 
@@ -722,7 +730,7 @@ Thick Club:
 	Price: 500
 	Fling: 90
 	ToModify: Attack
-	ModifyMultiplier: 2 p.isPokemon(Namesies.CUBONE_POKEMON) || p.isPokemon(Namesies.MAROWAK_POKEMON)
+	ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK)
 *
 Weakness Policy:
 	Int: HoldItem, TakeDamageEffect
@@ -810,7 +818,7 @@ Luck Incense:
 	Price: 9600
 	Fling: 10
 	Enter:
-		TeamEffect.getEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 	Baby: Happiny
 *
@@ -1064,7 +1072,7 @@ Leftovers:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. The holder's HP is gradually restored during battle.
 	ApplyEndTurn:
-		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
+		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 			return;
 		}
 		
@@ -1194,7 +1202,7 @@ Deep Sea Scale:
 	Price: 200
 	Fling: 30
 	ToModify: Sp_Defense
-	ModifyMultiplier: 2 p.isPokemon(Namesies.CLAMPERL_POKEMON) || p.isPokemon(Namesies.CHINCHOU_POKEMON) || p.isPokemon(Namesies.LANTURN_POKEMON)
+	ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN)
 *
 Deep Sea Tooth:
 	Int: HoldItem
@@ -1204,7 +1212,7 @@ Deep Sea Tooth:
 	Price: 200
 	Fling: 90
 	ToModify: Sp_Attack
-	ModifyMultiplier: 2 p.isPokemon(Namesies.CLAMPERL_POKEMON)
+	ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CLAMPERL)
 *
 Dragon Scale:
 	Int: HoldItem
@@ -1605,7 +1613,7 @@ Dire Hit:
 	Price: 650
 	Fling: 30
 	BattleUse:
-		PokemonEffect crits = PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT);
+		PokemonEffect crits = PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS);
 		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
 			return false;
 		}
@@ -1623,7 +1631,7 @@ Guard Spec.:
 	Price: 700
 	Fling: 30
 	BattleUse:
-		PokemonEffect gSpesh = PokemonEffect.getEffect(Namesies.GUARD_SPECIAL_EFFECT);
+		PokemonEffect gSpesh = PokemonEffect.getEffect(EffectNamesies.GUARD_SPECIAL);
 		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
 			return false;
 		}
@@ -1871,7 +1879,7 @@ Moon Ball:
 	Price: 200
 	CatchRate:
 		Evolution ev = o.getPokemonInfo().getEvolution();
-		if (ev.getEvolution(EvolutionCheck.ITEM, o, Namesies.MOON_STONE_ITEM) != null) {
+		if (ev.getEvolution(EvolutionCheck.ITEM, o, ItemNamesies.MOON_STONE) != null) {
 			return new double[] {4, 0};
 		}
 		
@@ -2052,8 +2060,8 @@ Persim Berry:
 	NGType: Ground
 	NGPow: 80
 	BattleUse:
-		if (p.hasEffect(Namesies.CONFUSION_EFFECT)) {
-			p.getAttributes().removeEffect(Namesies.CONFUSION_EFFECT);
+		if (p.hasEffect(EffectNamesies.CONFUSION)) {
+			p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
 			return true;
 		}
 		
@@ -2286,7 +2294,7 @@ Lansat Berry:
 	NGPow: 100
 	HealthTriggerRatio: 4
 	HealthTrigger:
-		PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, source, false);
+		PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS).cast(b, user, user, source, false);
 		return true;
 		###
 	HoldSuccessMessage: p.getName() + " is getting pumped due to its " + this.name + "!"
@@ -2306,7 +2314,7 @@ Starf Berry:
 		
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS) {
-			PokemonEffect.getEffect(Namesies.RAISE_CRITS_EFFECT).cast(b, user, user, source, false);
+			PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS).cast(b, user, user, source, false);
 			holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
 			useMessage = user.getName() + " is getting pumped!";
 			return true;
@@ -2454,7 +2462,7 @@ Ability Capsule:
 	Int: PokemonUseItem
 	PokemonUse:
 		Ability other = Ability.getOtherAbility(p);
-		if (other.namesies() == Namesies.NO_ABILITY_ABILITY) {
+		if (other.namesies() == AbilityNamesies.NO_ABILITY) {
 			return false;
 		}
 		

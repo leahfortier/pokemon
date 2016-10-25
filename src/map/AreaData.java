@@ -9,8 +9,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.Global;
-import namesies.Namesies;
 import main.Type;
+import namesies.AttackNamesies;
+import namesies.EffectNamesies;
 import pokemon.Stat;
 import battle.Attack;
 import battle.effect.generic.Effect;
@@ -30,15 +31,15 @@ public class AreaData {
 
 	// TODO: Move this to its own file
 	public enum TerrainType {
-		GRASS(Type.GRASS, Namesies.ENERGY_BALL_ATTACK, StatusCondition.ASLEEP),
-		BUILDING(Type.NORMAL, Namesies.TRI_ATTACK_ATTACK, StatusCondition.PARALYZED),
-		CAVE(Type.ROCK, Namesies.POWER_GEM_ATTACK, Namesies.FLINCH_EFFECT),
-		SAND(Type.GROUND, Namesies.EARTH_POWER_ATTACK, Stat.ACCURACY), 
-		WATER(Type.WATER, Namesies.HYDRO_PUMP_ATTACK, Stat.ATTACK),
-		SNOW(Type.ICE, Namesies.FROST_BREATH_ATTACK, StatusCondition.FROZEN), 
-		ICE(Type.ICE, Namesies.ICE_BEAM_ATTACK, StatusCondition.FROZEN),
-		MISTY(Type.FAIRY, Namesies.MOONBLAST_ATTACK, Stat.SP_ATTACK),
-		ELECTRIC(Type.ELECTRIC, Namesies.THUNDERBOLT_ATTACK, StatusCondition.PARALYZED);
+		GRASS(Type.GRASS, AttackNamesies.ENERGY_BALL, StatusCondition.ASLEEP),
+		BUILDING(Type.NORMAL, AttackNamesies.TRI_ATTACK, StatusCondition.PARALYZED),
+		CAVE(Type.ROCK, AttackNamesies.POWER_GEM, EffectNamesies.FLINCH),
+		SAND(Type.GROUND, AttackNamesies.EARTH_POWER, Stat.ACCURACY),
+		WATER(Type.WATER, AttackNamesies.HYDRO_PUMP, Stat.ATTACK),
+		SNOW(Type.ICE, AttackNamesies.FROST_BREATH, StatusCondition.FROZEN),
+		ICE(Type.ICE, AttackNamesies.ICE_BEAM, StatusCondition.FROZEN),
+		MISTY(Type.FAIRY, AttackNamesies.MOONBLAST, Stat.SP_ATTACK),
+		ELECTRIC(Type.ELECTRIC, AttackNamesies.THUNDERBOLT, StatusCondition.PARALYZED);
 		
 		private final Type type;
 		private final Attack attack;
@@ -51,7 +52,7 @@ public class AreaData {
 		private int playerCircleIndex;
 		private int opponentCircleIndex;
 		
-		TerrainType(Type type, Namesies attack, Object effect) {
+		TerrainType(Type type, AttackNamesies attack, Object effect) {
 			this.type = type;
 			this.attack = Attack.getAttack(attack);
 		
@@ -67,8 +68,8 @@ public class AreaData {
 				if (effect instanceof Stat) {
 					this.statChanges[((Stat)effect).index()] = -1;
 				}
-				else if (effect instanceof Namesies) {
-					this.effects.add(PokemonEffect.getEffect((Namesies)effect));
+				else if (effect instanceof EffectNamesies) {
+					this.effects.add(PokemonEffect.getEffect((EffectNamesies)effect));
 				}
 				else {
 					Global.error("Invalid effect for terrain type " + this.name());

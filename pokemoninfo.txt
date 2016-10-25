@@ -9454,7 +9454,7 @@ None
 Chlorophyll
 Harvest
 Coconut 
-79 264.6 It is called “The Walking Jungle." If a head grows too big, it falls off and becomes an Exeggcute.
+79 264.6 It is called "The Walking Jungle." If a head grows too big, it falls off and becomes an Exeggcute.
 5120
 Grass
 None
@@ -13474,7 +13474,7 @@ Level 148 30
 Shed Skin
 Marvel Scale
 Dragon 
-71 7.3 It is called the “Mirage Pok\u00e9mon" because so few have seen it. Its shed skin has been found.
+71 7.3 It is called the "Mirage Pok\u00e9mon" because so few have seen it. Its shed skin has been found.
 10240
 Water 1
 Dragon
@@ -15907,7 +15907,7 @@ None
 Volt Absorb
 Water Absorb
 Light 
-47 49.6 Lanturn's light can shine up from great depths. It is nicknamed “The Deep-Sea Star."
+47 49.6 Lanturn's light can shine up from great depths. It is nicknamed "The Deep-Sea Star."
 5120
 Water 2
 None
@@ -29669,7 +29669,7 @@ None
 Rough Skin
 Speed Boost
 Brutal 
-71 195.8 Its fangs rip through sheet iron. It swims at 75 mph and is known as “The Bully of the Sea."
+71 195.8 Its fangs rip through sheet iron. It swims at 75 mph and is known as "The Bully of the Sea."
 5120
 Water 2
 None
@@ -30732,7 +30732,7 @@ None
 Levitate
 No Ability
 Mystic 
-79 180.8 It whips up sandstorms with powerful flaps of its wings. It is known as “The Desert Spirit."
+79 180.8 It whips up sandstorms with powerful flaps of its wings. It is known as "The Desert Spirit."
 5120
 Bug
 None
@@ -39285,7 +39285,7 @@ Level 426 28
 Aftermath
 Unburden
 Balloon 
-16 2.6 Because of the way it floats aimlessly, an old folktale calls it a “Signpost for Wandering Spirits."
+16 2.6 Because of the way it floats aimlessly, an old folktale calls it a "Signpost for Wandering Spirits."
 7680
 Amorphous
 None
@@ -39805,7 +39805,7 @@ None
 Insomnia
 Super Luck
 Big Boss 
-35 60.2 If one utters a deep cry, many Murkrow gather quickly. For this, it is called “Summoner of Night."
+35 60.2 If one utters a deep cry, many Murkrow gather quickly. For this, it is called "Summoner of Night."
 5120
 Flying
 None
@@ -59740,7 +59740,7 @@ None
 Sand Force
 Sheer Force
 Abundance 
-59 149.9 Lands visited by Landorus grant such bountiful crops that it has been hailed as “The Guardian of the Fields."
+59 149.9 Lands visited by Landorus grant such bountiful crops that it has been hailed as "The Guardian of the Fields."
 30720
 None
 None

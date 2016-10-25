@@ -1,14 +1,14 @@
 package map;
 
 import main.Global;
-import namesies.Namesies;
+import namesies.PokemonNamesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.WildPokemon;
 
 // TODO: Not exactly sure if this is the best location for this class
 public class WildEncounter {
-    private Namesies pokemon;
+    private PokemonNamesies pokemon;
 
     private int minLevel;
     private int maxLevel;
@@ -16,7 +16,7 @@ public class WildEncounter {
     private int probability;
 
     public WildEncounter(String pokemon, String minLevel, String maxLevel, String probability) {
-        this.pokemon = Namesies.getValueOf(pokemon, Namesies.NamesiesType.POKEMON);
+        this.pokemon = PokemonNamesies.getValueOf(pokemon);
 
         this.minLevel = Integer.parseInt(minLevel);
         this.maxLevel = Integer.parseInt(maxLevel);

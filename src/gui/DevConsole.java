@@ -1,24 +1,22 @@
 package gui;
 
+import battle.Attack;
+import battle.Move;
 import item.Item;
+import main.Game;
+import main.Global;
+import namesies.PokemonNamesies;
+import pokemon.ActivePokemon;
+import pokemon.PokemonInfo;
+import util.DrawMetrics;
+import util.InputControl;
+import util.InputControl.Control;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import main.Game;
-import main.Global;
-import namesies.Namesies.NamesiesType;
-import namesies.Namesies;
-import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
-import util.DrawMetrics;
-import util.InputControl;
-import util.InputControl.Control;
-import battle.Attack;
-import battle.Move;
 
 class DevConsole {
 	private int key;
@@ -152,7 +150,7 @@ class DevConsole {
 				boolean shiny = false;
 				
 				pokemonName = in.next();
-				Namesies namesies = Namesies.getValueOf(pokemonName, NamesiesType.POKEMON);
+				PokemonNamesies namesies = PokemonNamesies.getValueOf(pokemonName);
 
 				boolean valid = true;
 				while (in.hasNext() && valid) {
@@ -207,10 +205,6 @@ class DevConsole {
 				int amount = 1;
 				if (in.hasNext()) {
 					amount = Integer.parseInt(in.next());
-				}
-
-				if (!Item.isItem(itemName)) {
-					Global.error("Invalid item: " + itemName);
 				}
 				
 				game.characterData.addItem(Item.getItemFromName(itemName), amount);

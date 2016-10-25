@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.Global;
-import namesies.Namesies;
+import namesies.EffectNamesies;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
@@ -142,16 +142,16 @@ public class BattleAttributes implements Serializable {
 		effects.add(e.newInstance());
 	}
 	
-	public boolean removeEffect(Namesies effect) {
+	public boolean removeEffect(EffectNamesies effect) {
 		return Effect.removeEffect(effects, effect);
 	}
 	
 	// Returns null if the Pokemon is not under the effects of the input effect, otherwise returns the Effect
-	public PokemonEffect getEffect(Namesies effect) {
+	public PokemonEffect getEffect(EffectNamesies effect) {
 		return (PokemonEffect)(Effect.getEffect(effects, effect));
 	}
 	
-	public boolean hasEffect(Namesies effect) {
+	public boolean hasEffect(EffectNamesies effect) {
 		return Effect.hasEffect(effects, effect);
 	}
 	

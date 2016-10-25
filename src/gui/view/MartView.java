@@ -14,8 +14,8 @@ import java.util.Iterator;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import namesies.Namesies;
 import main.Type;
+import namesies.ItemNamesies;
 import trainer.CharacterData;
 import util.DrawMetrics;
 import util.InputControl;
@@ -24,7 +24,13 @@ import util.InputControl.Control;
 public class MartView extends View {
 
 	// TODO: Need to eventually make this dynamic
-	private static final Namesies[] FOR_SALE_NAMES = new Namesies[] {Namesies.POTION_ITEM, Namesies.POKE_BALL_ITEM, Namesies.ANTIDOTE_ITEM, Namesies.PARALYZE_HEAL_ITEM, Namesies.BURN_HEAL_ITEM};
+	private static final ItemNamesies[] FOR_SALE_NAMES = new ItemNamesies[] {
+			ItemNamesies.POTION,
+			ItemNamesies.POKE_BALL,
+			ItemNamesies.ANTIDOTE,
+			ItemNamesies.PARALYZE_HEAL,
+			ItemNamesies.BURN_HEAL
+	};
 	private static ArrayList<Item> forSaleItems;
 	
 	private static final Color BACKGROUND_COLOR = new Color (68, 123, 184);
@@ -108,7 +114,7 @@ public class MartView extends View {
 		
 		if (forSaleItems == null) {
 			forSaleItems = new ArrayList<>();
-			for (Namesies itemName : FOR_SALE_NAMES) {
+			for (ItemNamesies itemName : FOR_SALE_NAMES) {
 				forSaleItems.add(Item.getItem(itemName));
 			}
 		}

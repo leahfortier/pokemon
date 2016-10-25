@@ -2,7 +2,7 @@
 # Blocks are separated by '*'
 
 Constructor:
-	Namesies Enum Namesies Attack
+	Namesies Enum AttackNamesies
 	Desc String
 	PP Int
 	Type Enum Type
@@ -11,7 +11,7 @@ Constructor:
 Fields:
 	Pow Int power
 	Acc Int accuracy
-	Effect Function Effect.getEffect 2 1 Enum Namesies Effect 0 Enum EffectType effects List
+	Effect Function Effect.getEffect 2 1 Enum EffectNamesies 0 Enum EffectType effects List
 	EffChance Int effectChance
 	Status Enum StatusCondition status
 	MoveType Multiple Enum MoveType moveTypes List
@@ -177,7 +177,7 @@ Growth:
 	Type: Normal
 	ApplyEffects:
 	// Doubles stat changes in the sunlight
-	if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT) {
+	if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 		int[] statChanges = super.statChanges.clone();
 		for (int i = 0; i < super.statChanges.length; i++) {
 			super.statChanges[i] *= 2;
@@ -301,16 +301,16 @@ Solar Beam:
 	ChargeFirst: true 
 	GetPow: 
 	switch (b.getWeather().namesies()) {
-		case HAILING_EFFECT:
-		case RAINING_EFFECT:
-		case SANDSTORM_EFFECT:
+		case HAILING:
+		case RAINING:
+		case SANDSTORM:
 			return super.power/2;
 		default:
 			return super.power;
 	}
 	###
 	IsMultiTurn: 
-	return super.isMultiTurn(b, user) && b.getWeather().namesies() != Namesies.SUNNY_EFFECT;
+	return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 	###
 *
 Flamethrower:
@@ -755,7 +755,7 @@ Captivate:
 	StatChange: 1 Sp_attack -2
 	ApplyEffects:
 	// Captivate does not work on members of the same sex or on victims with the Oblivious ability
-	if (victim.hasAbility(Namesies.OBLIVIOUS_ABILITY)) {
+	if (victim.hasAbility(AbilityNamesies.OBLIVIOUS)) {
 		b.addMessage(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!");
 	}
 	else if (!Gender.oppositeGenders(user, victim)) {
@@ -822,9 +822,9 @@ False Swipe:
 	Acc: 100
 	Type: Normal
 	ApplyDamage: 
-	o.addEffect(PokemonEffect.getEffect(Namesies.BRACING_EFFECT));
+	o.addEffect(PokemonEffect.getEffect(EffectNamesies.BRACING));
 	super.applyDamage(me, o, b);
-	o.getAttributes().removeEffect(Namesies.BRACING_EFFECT);
+	o.getAttributes().removeEffect(EffectNamesies.BRACING);
 	###
 *
 Disable:
@@ -996,8 +996,8 @@ Roost:
 	healFail = true;
 	super.applyEffects(b, user, victim);
 	if (!healFail && getType(b, user, victim) != null) {
-		PokemonEffect.getEffect(Namesies.CHANGE_TYPE_EFFECT).cast(b, user, victim, CastSource.ATTACK, super.printCast);
-		user.getEffect(Namesies.CHANGE_TYPE_EFFECT).setTurns(1);
+		PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, user, victim, CastSource.ATTACK, super.printCast);
+		user.getEffect(EffectNamesies.CHANGE_TYPE).setTurns(1);
 	}
 	###
 	ChangeType: 
@@ -1195,7 +1195,7 @@ Spit Up:
 	Cat: Special
 	Acc: 100
 	Apply: 
-	PokemonEffect stockpile = me.getEffect(Namesies.STOCKPILE_EFFECT);
+	PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
 	if (stockpile == null) {
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -1207,7 +1207,7 @@ Spit Up:
 	stockpile.deactivate();
 	###
 	GetPow: 
-	PokemonEffect stockpile = me.getEffect(Namesies.STOCKPILE_EFFECT);
+	PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
 			
 	// TODO: Look at this again
 	// I really don't like this, because there's no way this value should actually be getting used -- but it's getting set now always even if the attack isn't going to work and we don't want a NullPointerException
@@ -1230,7 +1230,7 @@ Swallow:
 	Cat: Status
 	Int: SelfHealingMove
 	SelfHealing: 
-	PokemonEffect stockpile = user.getEffect(Namesies.STOCKPILE_EFFECT);
+	PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
 	if (stockpile == null) {
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -1435,7 +1435,7 @@ Rollout:
 	Type: Rock
 	GetPow: 
 	// TODO: Combine these types of moves
-	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(Namesies.USED_DEFENSE_CURL_EFFECT) ? 2 : 1);
+	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 	###
 *
 Fury Cutter:
@@ -2036,7 +2036,7 @@ Bulldoze:
 	PhysicalContact: False
 	GetPow:
 	// Power is halved during Grassy Terrain
-	return (int)(super.power*(b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT) ? .5 : 1));
+	return (int)(super.power*(b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? .5 : 1));
 	###
 *
 Dig:
@@ -2223,7 +2223,7 @@ Covet:
 	Type: Normal
 	Cat: Physical
 	Desc: The user endearingly approaches the target, then steals the target's held item.
-	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
+	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
 	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 Low Kick:
@@ -2747,13 +2747,13 @@ Heal Pulse:
 	Cat: Status
 	MoveType: Aura_Pulse
 	ApplyEffects: 
-	if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
+	if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
 	// Heal by 50% unless the user has Mega Launcher -- then heal by 75%
-	double fraction = user.hasAbility(Namesies.MEGA_LAUNCHER_ABILITY) ? .75 : .5;
+	double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
 	
 	victim.healHealthFraction(fraction);
 	b.addMessage(victim.getName() + "'s health was restored!", victim);
@@ -3531,7 +3531,7 @@ Focus Punch:
 	super.applyEffects(b, me, me);
 	###
 	ApplyDamage:
-	if (me.hasEffect(Namesies.FOCUSING_EFFECT)) {
+	if (me.hasEffect(EffectNamesies.FOCUSING)) {
 		super.applyDamage(me, o, b);
 	}
 	###
@@ -3549,9 +3549,9 @@ Me First:
 		return;
 	}
 	
-	me.addEffect(PokemonEffect.getEffect(Namesies.FIDDY_PERCENT_STRONGER_EFFECT));
+	me.addEffect(PokemonEffect.getEffect(EffectNamesies.FIDDY_PERCENT_STRONGER));
 	me.callNewMove(b, o, new Move(o.getAttack()));
-	me.getAttributes().removeEffect(Namesies.FIDDY_PERCENT_STRONGER_EFFECT);
+	me.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
 	###
 *
 Refresh:
@@ -3815,7 +3815,7 @@ Blizzard:
 	Int: AccuracyBypassEffect
 	BypassAccuracy:
 	// Always hits when it's hailing unless the opponent is hiding (I think -- the hiding part is not specified on Bulbapedia)
-	return b.getWeather().namesies() == Namesies.HAILING_EFFECT && !defending.isSemiInvulnerable();
+	return b.getWeather().namesies() == EffectNamesies.HAILING && !defending.isSemiInvulnerable();
 	###
 *
 Shock Wave:
@@ -4413,7 +4413,7 @@ Present:
 		return;
 	}
 	
-	if (o.fullHealth() || o.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
+	if (o.fullHealth() || o.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
@@ -4441,7 +4441,7 @@ Sketch:
 	Cat: Status
 	ApplyEffects: 
 	Move copy = victim.getAttributes().getLastMoveUsed();
-	if (copy == null || copy.getAttack().namesies() == Namesies.STRUGGLE_ATTACK || user.hasEffect(Namesies.TRANSFORMED_EFFECT)) {
+	if (copy == null || copy.getAttack().namesies() == AttackNamesies.STRUGGLE || user.hasEffect(EffectNamesies.TRANSFORMED)) {
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
@@ -4486,7 +4486,7 @@ Weather Ball:
 	GetType: 
 	return b.getWeather().getElement();
 	###
-	DoublePowerCondition: b.getWeather().namesies() != Namesies.CLEAR_SKIES_EFFECT
+	DoublePowerCondition: b.getWeather().namesies() != EffectNamesies.CLEAR_SKIES
 	Pow: 50
 	Acc: 100
 	Cat: Special
@@ -4551,7 +4551,7 @@ Thief:
 	Pow: 60
 	Cat: Physical
 	Acc: 100
-	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
+	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
 	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 Attract:
@@ -4717,7 +4717,7 @@ Ice Ball:
 	Acc: 90
 	MoveType: Bomb_Ball
 	GetPow: 
-	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(Namesies.USED_DEFENSE_CURL_EFFECT) ? 2 : 1);
+	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 	###
 *
 Head Smash:
@@ -5173,7 +5173,7 @@ Fusion Flare:
 	Acc: 100
 	Cat: Special
 	Type: Fire
-	DoublePowerCondition: !b.isFirstAttack() && o.getAttack().namesies() == Namesies.FUSION_BOLT_ATTACK
+	DoublePowerCondition: !b.isFirstAttack() && o.getAttack().namesies() == AttackNamesies.FUSION_BOLT
 	StartTurn: // TODO: Can combine power condition with Fusion Bolt
 	MoveType: Defrost
 *
@@ -5185,7 +5185,7 @@ Fusion Bolt:
 	PhysicalContact: False
 	Cat: Physical
 	Acc: 100
-	DoublePowerCondition: !b.isFirstAttack() && o.getAttack().namesies() == Namesies.FUSION_FLARE_ATTACK
+	DoublePowerCondition: !b.isFirstAttack() && o.getAttack().namesies() == AttackNamesies.FUSION_FLARE
 *
 Blue Flare:
 	Desc: The user attacks by engulfing the target in an intense, yet beautiful, blue flame. It may leave the target with a burn.
@@ -5336,7 +5336,7 @@ Gastro Acid:
 	Int: ChangeAbilityMove
 	Effect: Pokemon ChangeAbility
 	AbilityChange: 
-	return Ability.getAbility(Namesies.NO_ABILITY_ABILITY).newInstance();
+	return Ability.getAbility(AbilityNamesies.NO_ABILITY).newInstance();
 	###
 	PP: 10
 	Type: Poison
@@ -5348,8 +5348,8 @@ Gastro Acid:
 	Apply: 
 	switch (o.getAbility().namesies())
 	{
-		case MULTITYPE_ABILITY:
-		case STANCE_CHANGE_ABILITY:
+		case MULTITYPE:
+		case STANCE_CHANGE:
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		default:
@@ -5399,7 +5399,7 @@ Retaliate:
 	Acc: 100
 	Cat: Physical
 	Pow: 70
-	DoublePowerCondition: Effect.hasEffect(b.getEffects(me.user()), Namesies.DEAD_ALLY_EFFECT)
+	DoublePowerCondition: Effect.hasEffect(b.getEffects(me.user()), EffectNamesies.DEAD_ALLY)
 *
 Circle Throw:
 	Desc: The user throws the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.
@@ -5445,11 +5445,11 @@ Role Play:
 	###
 	Apply: 
 	switch (o.getAbility().namesies()) {
-		case WONDER_GUARD_ABILITY:
-		case MULTITYPE_ABILITY:
-		case STANCE_CHANGE_ABILITY:
-		case IMPOSTER_ABILITY:
-		case ILLUSION_ABILITY:
+		case WONDER_GUARD:
+		case MULTITYPE:
+		case STANCE_CHANGE:
+		case IMPOSTER:
+		case ILLUSION:
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		default:
@@ -5468,7 +5468,7 @@ Knock Off:
 	return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
 	###
 	ApplyEffects: 
-	if (!victim.isHoldingItem(b) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)) {
+	if (!victim.isHoldingItem(b) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 		return;
 	}
 	
@@ -5503,7 +5503,7 @@ Switcheroo:
 	Type: Dark
 	Cat: Status
 	Acc: 100
-	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
+	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(AbilityNamesies.STICKY_HOLD) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
 	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
 	MoveType: Assistless
 *	
@@ -5513,7 +5513,7 @@ Trick:
 	Type: Psychic
 	Acc: 100
 	Cat: Status
-	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(Namesies.STICKY_HOLD_ABILITY) || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)
+	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(AbilityNamesies.STICKY_HOLD) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
 	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
 	MoveType: Assistless
 *
@@ -5554,7 +5554,7 @@ Recycle:
 	Cat: Status
 	SelfTarget: True
 	ApplyEffects: 
-	PokemonEffect consumed = victim.getEffect(Namesies.CONSUMED_ITEM_EFFECT);
+	PokemonEffect consumed = victim.getEffect(EffectNamesies.CONSUMED_ITEM);
 	if (consumed == null || victim.isHoldingItem(b)) {
 		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
@@ -5615,8 +5615,11 @@ Baton Pass:
 	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 		next.getAttributes().setStage(i, user.getStage(i));
 	}
+	
 	for (PokemonEffect e : user.getEffects()) {
-		if (e instanceof PassableEffect) next.addEffect(e);
+		if (e instanceof PassableEffect) {
+			next.addEffect(e);
+		}
 	}
 	
 	user = next;
@@ -5635,11 +5638,11 @@ Perish Song:
 	ApplyEffects: 
 	b.addMessage("All Pokemon hearing this song will faint in three turns!");
 	
-	if (!victim.hasEffect(Namesies.PERISH_SONG_EFFECT)) {
+	if (!victim.hasEffect(EffectNamesies.PERISH_SONG)) {
 		super.applyEffects(b, user, victim);
 	}
 	
-	if (!user.hasEffect(Namesies.PERISH_SONG_EFFECT)) {
+	if (!user.hasEffect(EffectNamesies.PERISH_SONG)) {
 		super.applyEffects(b, user, user);
 	}
 	###
@@ -5699,12 +5702,12 @@ Entrainment:
 	Apply: 
 	switch (me.getAbility().namesies())
 	{
-		case TRUANT_ABILITY:
-		case MULTITYPE_ABILITY:
-		case STANCE_CHANGE_ABILITY:
-		case ILLUSION_ABILITY:
-		case TRACE_ABILITY:
-		case IMPOSTER_ABILITY:
+		case TRUANT:
+		case MULTITYPE:
+		case STANCE_CHANGE:
+		case ILLUSION:
+		case TRACE:
+		case IMPOSTER:
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		default:
@@ -5754,10 +5757,10 @@ Skill Swap:
 	
 	private static boolean canSkillSwap(ActivePokemon p) {
 		switch (p.getAbility().namesies()) {
-			case WONDER_GUARD_ABILITY:
-			case MULTITYPE_ABILITY:
-			case ILLUSION_ABILITY:
-			case STANCE_CHANGE_ABILITY:
+			case WONDER_GUARD:
+			case MULTITYPE:
+			case ILLUSION:
+			case STANCE_CHANGE:
 				return false;
 			default:
 				return true;
@@ -6227,7 +6230,7 @@ Belch:
 	Pow: 120
 	Cat: Special
 	Acc: 90
-	ApplyError: !me.hasEffect(Namesies.EATEN_BERRY_EFFECT)
+	ApplyError: !me.hasEffect(EffectNamesies.EATEN_BERRY)
 *
 Venom Drench:
 	Desc: Opposing Pok\u00e9mon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.

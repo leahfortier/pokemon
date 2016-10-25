@@ -3,8 +3,9 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.EndTurnEffect;
 import battle.effect.generic.PokemonEffect;
-import namesies.Namesies;
 import main.Type;
+import namesies.AbilityNamesies;
+import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 
 class Poisoned extends Status implements EndTurnEffect {
@@ -15,21 +16,21 @@ class Poisoned extends Status implements EndTurnEffect {
     }
 
     public void applyEndTurn(ActivePokemon victim, Battle b) {
-        if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
             return;
         }
 
-        if (victim.hasAbility(Namesies.POISON_HEAL_ABILITY)) {
-            if  (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
+        if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
+            if  (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 
             victim.healHealthFraction(1/8.0);
-            b.addMessage(victim.getName() + "'s " + Namesies.POISON_HEAL_ABILITY + " restored its health!", victim);
+            b.addMessage(victim.getName() + "'s " + AbilityNamesies.POISON_HEAL + " restored its health!", victim);
             return;
         }
 
-        PokemonEffect badPoison = victim.getEffect(Namesies.BAD_POISON_EFFECT);
+        PokemonEffect badPoison = victim.getEffect(EffectNamesies.BAD_POISON);
         b.addMessage(victim.getName() + " was hurt by its poison!");
         victim.reduceHealthFraction(b, badPoison == null ? 1/8.0 : badPoison.getTurns()/16.0);
     }
@@ -40,11 +41,11 @@ class Poisoned extends Status implements EndTurnEffect {
     }
 
     public String getCastMessage(ActivePokemon p) {
-        return p.getName() + " was " + (p.hasEffect(Namesies.BAD_POISON_EFFECT) ? "badly " : "") + "poisoned!";
+        return p.getName() + " was " + (p.hasEffect(EffectNamesies.BAD_POISON) ? "badly " : "") + "poisoned!";
     }
 
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
-        return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect(Namesies.BAD_POISON_EFFECT) ? " badly " : " ") + "poisoned " + victim.getName() + "!";
+        return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect(EffectNamesies.BAD_POISON) ? " badly " : " ") + "poisoned " + victim.getName() + "!";
     }
 
     public String getRemoveMessage(ActivePokemon victim) {

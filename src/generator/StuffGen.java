@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import main.Global;
+import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import util.FileIO;
 import util.StringUtils;
@@ -18,6 +19,7 @@ public class StuffGen {
 	
 	public StuffGen() {
 		new PokeGen();
+		new NamesiesGen(PokemonNamesies.class);
 		
 //		new InterfaceGen();
 		

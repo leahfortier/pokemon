@@ -3,8 +3,8 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.StatChangingEffect;
-import namesies.Namesies;
 import main.Type;
+import namesies.AbilityNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 
@@ -38,7 +38,7 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
     }
 
     public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-        return (int)(stat*(s == Stat.SPEED && !p.hasAbility(Namesies.QUICK_FEET_ABILITY) ? .25 : 1));
+        return (int)(stat*(s == Stat.SPEED && !p.hasAbility(AbilityNamesies.QUICK_FEET) ? .25 : 1));
     }
 
     public String getRemoveMessage(ActivePokemon victim) {

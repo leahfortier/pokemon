@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import namesies.Namesies;
+import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;
 import trainer.CharacterData;
@@ -128,7 +128,7 @@ public class StartView extends View {
 			case DEFAULT:
 				g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);
 				if (ditto) {
-					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(Namesies.DITTO_POKEMON).getImageNumber(false)), 270, 255, null);
+					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(PokemonNamesies.DITTO).getImageNumber(false)), 270, 255, null);
 				}
 				break;
 			case NAME:

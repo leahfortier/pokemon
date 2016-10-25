@@ -6,7 +6,9 @@ import item.Item;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
 import main.Global;
-import namesies.Namesies;
+import namesies.AttackNamesies;
+import namesies.ItemNamesies;
+import namesies.PokemonNamesies;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +54,7 @@ public class Breeding {
 			}
 			
 			if (!incenseItemHeld) {
-				Namesies[] evolutions = babyInfo.getEvolution().getEvolutions();
+				PokemonNamesies[] evolutions = babyInfo.getEvolution().getEvolutions();
 				babyInfo = PokemonInfo.getPokemonInfo(Global.getRandomValue(evolutions));
 			}
 		}
@@ -71,7 +73,7 @@ public class Breeding {
 		// Inherit 5 stats instead of 3 when a parent holds Destiny Knot
 		int remainingIVsToInherit =
 				parentItems.stream()
-						.filter(item -> item.namesies() == Namesies.DESTINY_KNOT_ITEM)
+						.filter(item -> item.namesies() == ItemNamesies.DESTINY_KNOT)
 						.count() > 0
 						? 5
 						: 3;
@@ -136,16 +138,16 @@ public class Breeding {
 	}
 
 	private static boolean isDitto(ActivePokemon pokes) {
-		return pokes.isPokemon(Namesies.DITTO_POKEMON);
+		return pokes.isPokemon(PokemonNamesies.DITTO);
 	}
 
 	private static boolean isDittoAndManaphy(ActivePokemon aPokes, ActivePokemon bPokes) {
 		if (isDitto(aPokes)) {
-			return bPokes.isPokemon(Namesies.MANAPHY_POKEMON);
+			return bPokes.isPokemon(PokemonNamesies.MANAPHY);
 		}
 
 		if (isDitto(bPokes)) {
-			return aPokes.isPokemon(Namesies.MANAPHY_POKEMON);
+			return aPokes.isPokemon(PokemonNamesies.MANAPHY);
 		}
 
 		return false;
@@ -159,13 +161,13 @@ public class Breeding {
 		Item daddysItem = daddy.getActualHeldItem();
 		Item mommysItem = mommy.getActualHeldItem();
 		
-		if (daddysItem.namesies() == Namesies.EVERSTONE_ITEM && mommysItem.namesies() == Namesies.EVERSTONE_ITEM) {
+		if (daddysItem.namesies() == ItemNamesies.EVERSTONE && mommysItem.namesies() == ItemNamesies.EVERSTONE) {
 			return getRandomParent(daddy, mommy).getNature();
 		}
-		else if (daddysItem.namesies() == Namesies.EVERSTONE_ITEM) {
+		else if (daddysItem.namesies() == ItemNamesies.EVERSTONE) {
 			return daddy.getNature();
 		}
-		else if (mommysItem.namesies() == Namesies.EVERSTONE_ITEM) {
+		else if (mommysItem.namesies() == ItemNamesies.EVERSTONE) {
 			return mommy.getNature();
 		}
 		else {
@@ -175,7 +177,7 @@ public class Breeding {
 	
 	static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonInfo babyInfo) {
 
-		List<Namesies> babyMovesNamesies = new ArrayList<>();
+		List<AttackNamesies> babyMovesNamesies = new ArrayList<>();
 
 		// Get moves that the pokemon learns at level 1
 		babyMovesNamesies.addAll(babyInfo.getMoves(0));
@@ -187,7 +189,7 @@ public class Breeding {
 
 		// Egg moves
 		for (final Move parentMove : parentMoves) {
-			final Namesies attackNamesies = parentMove.getAttack().namesies();
+			final AttackNamesies attackNamesies = parentMove.getAttack().namesies();
 			if (babyInfo.canLearnByBreeding(attackNamesies) &&
 					!babyMovesNamesies.contains(attackNamesies)) {
 				babyMovesNamesies.add(attackNamesies);
@@ -200,7 +202,7 @@ public class Breeding {
 		final int startingIndex = babyMovesNamesies.size() - numMoves;
 
 		for (int i = 0; i < numMoves; i++) {
-			final Namesies namesies = babyMovesNamesies.get(startingIndex + i);
+			final AttackNamesies namesies = babyMovesNamesies.get(startingIndex + i);
 			babyMoves.add(new Move(Attack.getAttack(namesies)));
 		}
 		

@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import namesies.Namesies;
 import main.Type;
+import namesies.AttackNamesies;
 import pokemon.ActivePokemon;
 import battle.effect.AttackSelectionEffect;
 import battle.effect.ChangeAttackTypeEffect;
@@ -140,7 +140,7 @@ public class Move implements Serializable {
 		
 		List<Move> usable = getUsableMoves(b, p);
 		if (usable.size() == 0) {
-			return new Move(Attack.getAttack(Namesies.STRUGGLE_ATTACK));	
+			return new Move(Attack.getAttack(AttackNamesies.STRUGGLE));
 		}
 		
 		return moveAI(b, p, usable);
@@ -172,7 +172,7 @@ public class Move implements Serializable {
 		}
 		
 		if (p.user() && getUsableMoves(b, p).size() == 0) {
-			p.setMove(new Move(Attack.getAttack(Namesies.STRUGGLE_ATTACK)));
+			p.setMove(new Move(Attack.getAttack(AttackNamesies.STRUGGLE)));
 			return true;
 		}
 		

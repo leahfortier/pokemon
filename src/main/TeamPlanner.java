@@ -1,18 +1,19 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
+import battle.Attack;
 import battle.MoveCategory;
-import namesies.Namesies;
-import namesies.Namesies.NamesiesType;
+import namesies.AbilityNamesies;
+import namesies.AttackNamesies;
+import namesies.PokemonNamesies;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import util.FileIO;
-import battle.Attack;
 import util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class TeamPlanner {
 	private static Type[] types = Type.values();
@@ -53,7 +54,7 @@ public class TeamPlanner {
 		
 		while (in.hasNextLine()) {
 			String pokemonName = in.nextLine().trim();
-			PokemonInfo pokemon = PokemonInfo.getPokemonInfo(Namesies.getValueOf(pokemonName, NamesiesType.POKEMON));
+			PokemonInfo pokemon = PokemonInfo.getPokemonInfo(PokemonNamesies.getValueOf(pokemonName));
 			
 			String ability = null;
 			String nature = null;
@@ -105,8 +106,8 @@ public class TeamPlanner {
 			}
 			
 			if (ability == null) {
-				Namesies[] abilities = pokemon.getAbilities();
-				ability = abilities[0].getName() + (abilities[1] == Namesies.NO_ABILITY_ABILITY ? "" : "/" + abilities[1].getName());
+				AbilityNamesies[] abilities = pokemon.getAbilities();
+				ability = abilities[0].getName() + (abilities[1] == AbilityNamesies.NO_ABILITY ? "" : "/" + abilities[1].getName());
 			}
 			
 			if (nature == null) {
@@ -131,7 +132,7 @@ public class TeamPlanner {
 	private static void moveMatching(String firstMoveName, Type type) {
 		System.out.println("\nThe following Pokemon can learn " + firstMoveName + " and is type " + type);
 		
-		Namesies firstMove = Namesies.getValueOf(firstMoveName, NamesiesType.ATTACK);
+		AttackNamesies firstMove = AttackNamesies.getValueOf(firstMoveName);
 		
 		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			PokemonInfo p = PokemonInfo.getPokemonInfo(i);
@@ -145,9 +146,9 @@ public class TeamPlanner {
 	
 	private static void moveMatching(String firstMoveName, String secondMoveName) {
 		System.out.println("\nThe following Pokemon can learn " + firstMoveName + " and " + secondMoveName);
-		
-		Namesies firstMove = Namesies.getValueOf(firstMoveName, NamesiesType.ATTACK);
-		Namesies secondMove = Namesies.getValueOf(secondMoveName, NamesiesType.ATTACK);
+
+		AttackNamesies firstMove = AttackNamesies.getValueOf(firstMoveName);
+		AttackNamesies secondMove = AttackNamesies.getValueOf(secondMoveName);
 		
 		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			PokemonInfo p = PokemonInfo.getPokemonInfo(i);
@@ -284,7 +285,7 @@ public class TeamPlanner {
 		private final int[][] coverageCount;
 		
 		TeamMember(String pokemonName, String nature, String ability, String item, List<String> moves) {
-			this.pokemonSpecies = PokemonInfo.getPokemonInfo(Namesies.getValueOf(pokemonName, NamesiesType.POKEMON));
+			this.pokemonSpecies = PokemonInfo.getPokemonInfo(PokemonNamesies.getValueOf(pokemonName));
 			this.nature = nature;
 			this.ability = ability;
 			this.item = item;
@@ -294,7 +295,7 @@ public class TeamPlanner {
 			this.coverageCount = new int[types.length][types.length];
 			
 			for (String moveName : moves) {
-				Attack attack = Attack.getAttack(Namesies.getValueOf(moveName, NamesiesType.ATTACK));
+				Attack attack = Attack.getAttack(AttackNamesies.getValueOf(moveName));
 				this.moveList.add(attack);
 				
 				Type attackType = attack.getActualType();
@@ -360,8 +361,8 @@ public class TeamPlanner {
 			for (Attack attack : moveList) {
 				out.append("\n\t\t" + attack.getName() + " -- ");
 				List<String> learnMethods = new ArrayList<String>();
-				
-				Namesies namesies = attack.namesies();
+
+				AttackNamesies namesies = attack.namesies();
 				
 				int levelLearned = pokemonSpecies.levelLearned(namesies);
 				if (levelLearned == 0) {

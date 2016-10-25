@@ -1,8 +1,8 @@
 package item.hold;
 
-import namesies.Namesies;
+import namesies.PokemonNamesies;
 
 public interface IncenseItem {
 	// Huggies and kissies for mommy and daddy
-	Namesies getBaby();
+	PokemonNamesies getBaby();
 }

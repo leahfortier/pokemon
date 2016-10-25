@@ -14,18 +14,18 @@ import battle.effect.StatSwitchingEffect;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.TerrainEffect;
 import battle.effect.status.StatusCondition;
-import namesies.Namesies;
 import main.Type;
 import map.AreaData.TerrainType;
+import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
-import pokemon.Stat;
 import battle.Battle;
+import pokemon.Stat;
 
 public abstract class BattleEffect extends Effect {
 	private static final long serialVersionUID = 1L;
 	private static Map<String, BattleEffect> map;
 
-	public BattleEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
+	public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
 
@@ -41,7 +41,7 @@ public abstract class BattleEffect extends Effect {
 		b.addMessage("", victim);
 	}
 
-	public static BattleEffect getEffect(Namesies name) {
+	public static BattleEffect getEffect(EffectNamesies name) {
 		String e = name.getName();
 		if (map == null) {
 			loadEffects();
@@ -83,7 +83,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		Gravity() {
-			super(Namesies.GRAVITY_EFFECT, 5, 5, false);
+			super(EffectNamesies.GRAVITY, 5, 5, false);
 		}
 
 		public Gravity newInstance() {
@@ -136,7 +136,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		WaterSport() {
-			super(Namesies.WATER_SPORT_EFFECT, 5, 5, false);
+			super(EffectNamesies.WATER_SPORT, 5, 5, false);
 		}
 
 		public WaterSport newInstance() {
@@ -164,7 +164,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		MudSport() {
-			super(Namesies.MUD_SPORT_EFFECT, 5, 5, false);
+			super(EffectNamesies.MUD_SPORT, 5, 5, false);
 		}
 
 		public MudSport newInstance() {
@@ -192,7 +192,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		WonderRoom() {
-			super(Namesies.WONDER_ROOM_EFFECT, 5, 5, false);
+			super(EffectNamesies.WONDER_ROOM, 5, 5, false);
 		}
 
 		public WonderRoom newInstance() {
@@ -231,7 +231,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		TrickRoom() {
-			super(Namesies.TRICK_ROOM_EFFECT, 5, 5, false);
+			super(EffectNamesies.TRICK_ROOM, 5, 5, false);
 		}
 
 		public TrickRoom newInstance() {
@@ -263,7 +263,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		MagicRoom() {
-			super(Namesies.MAGIC_ROOM_EFFECT, 5, 5, false);
+			super(EffectNamesies.MAGIC_ROOM, 5, 5, false);
 		}
 
 		public MagicRoom newInstance() {
@@ -295,7 +295,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		MistyTerrain() {
-			super(Namesies.MISTY_TERRAIN_EFFECT, 5, 5, false);
+			super(EffectNamesies.MISTY_TERRAIN, 5, 5, false);
 		}
 
 		public MistyTerrain newInstance() {
@@ -352,7 +352,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		GrassyTerrain() {
-			super(Namesies.GRASSY_TERRAIN_EFFECT, 5, 5, false);
+			super(EffectNamesies.GRASSY_TERRAIN, 5, 5, false);
 		}
 
 		public GrassyTerrain newInstance() {
@@ -407,7 +407,7 @@ public abstract class BattleEffect extends Effect {
 		private static final long serialVersionUID = 1L;
 
 		ElectricTerrain() {
-			super(Namesies.ELECTRIC_TERRAIN_EFFECT, 5, 5, false);
+			super(EffectNamesies.ELECTRIC_TERRAIN, 5, 5, false);
 		}
 
 		public ElectricTerrain newInstance() {

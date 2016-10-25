@@ -5,9 +5,9 @@ import battle.effect.RepellingEffect;
 import item.Item;
 import main.Game;
 import main.Global;
-import namesies.Namesies;
 import map.EncounterRate;
 import map.WildEncounter;
+import namesies.PokemonNamesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
@@ -118,8 +118,8 @@ public class WildBattleTrigger extends Trigger {
 	// Returns a legendary encounter if applicable and null otherwise
 	private WildPokemon getLegendaryEncounter(CharacterData player) {
 		// TODO: There should be a method that produces the boolean value of the random chance since that happens everywhere
-		if (Global.chanceTest(1, 1024) && !player.getPokedex().caught(Namesies.MEW_POKEMON)) {
-			return new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.MEW_POKEMON), 5, true, false));
+		if (Global.chanceTest(1, 1024) && !player.getPokedex().caught(PokemonNamesies.MEW)) {
+			return new WildPokemon(new ActivePokemon(PokemonInfo.getPokemonInfo(PokemonNamesies.MEW), 5, true, false));
 		}
 		
 		return null;

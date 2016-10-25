@@ -22,6 +22,8 @@ import java.awt.Graphics;
 import java.util.EnumMap;
 import java.util.Map;
 
+import namesies.ItemNamesies;
+import namesies.PokemonNamesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
@@ -62,8 +64,8 @@ public class Game {
 	}
 	
 	private void setupCharacter() {
-		characterData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo(Namesies.EEVEE_POKEMON), 1, false, true));
-		characterData.front().giveItem((HoldItem)Item.getItem(Namesies.ORAN_BERRY_ITEM));
+		characterData.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo(PokemonNamesies.EEVEE), 1, false, true));
+		characterData.front().giveItem((HoldItem)Item.getItem(ItemNamesies.ORAN_BERRY));
 	}
 	
 	private void checkViewSwitch(InputControl input) {
@@ -117,16 +119,9 @@ public class Game {
 		characterData.setFileNum(index);
 		setupCharacter();
 		setViews();
-		
-		// Testing things
-//		EnemyTrainer rival = new EnemyTrainer("Blue", 500);
-//		rival.addPokemon(null, new ActivePokemon(PokemonInfo.getPokemonInfo("Charmander"), 5, false, false));
-//		Battle b = new Battle(characterData, rival);
-//		BattleView battleView = new BattleView();
-//		battleView.setBattle(b);
-//		viewMap.put(ViewMode.BATTLE_VIEW, battleView);
 	}
-	
+
+	// TODO: Should have an interface to handle this inside of the ViewMode enum
 	private void setViews() {
 		viewMap.put(ViewMode.MAP_VIEW, new MapView());
 		viewMap.put(ViewMode.BAG_VIEW, new BagView(characterData));

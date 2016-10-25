@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import main.Global;
-import namesies.Namesies;
+import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
 import util.StringUtils;
@@ -15,7 +15,7 @@ public abstract class Effect implements Serializable
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected Namesies namesies;
+	protected EffectNamesies namesies;
 	protected boolean active;
 
 	protected int numTurns;
@@ -52,7 +52,7 @@ public abstract class Effect implements Serializable
 		}
 	}
 	
-	public Effect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
+	public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		// TODO: Should have a constant for -1
 		if ((minTurns == -1 && maxTurns != -1) || (minTurns != -1 && maxTurns == -1)) {
 			Global.error("Incorrect min/max turns for effect " + name);
@@ -77,7 +77,7 @@ public abstract class Effect implements Serializable
 		return nextTurnSubside;
 	}
 	
-	public static Effect getEffect(Namesies effect, EffectType type) {
+	public static Effect getEffect(EffectNamesies effect, EffectType type) {
 		switch (type) {
 			case POKEMON:
 				return PokemonEffect.getEffect(effect);
@@ -93,7 +93,7 @@ public abstract class Effect implements Serializable
 	}
 	
 	// Returns the effect if it is in the list, otherwise returns null
-	public static Effect getEffect(List<? extends Effect> effects, Namesies effect) {
+	public static Effect getEffect(List<? extends Effect> effects, EffectNamesies effect) {
 		for (Effect e : effects) {
 			if (e.namesies() == effect && e.isActive()) {
 				return e;
@@ -103,11 +103,11 @@ public abstract class Effect implements Serializable
 		return null;
 	}
 	
-	public static boolean hasEffect(List<? extends Effect> effects, Namesies effect) {
+	public static boolean hasEffect(List<? extends Effect> effects, EffectNamesies effect) {
 		return getEffect(effects, effect) != null;
 	}
 	
-	public static boolean removeEffect(List<? extends Effect> effects, Namesies effect) {
+	public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effect) {
 		// TODO: Change to for each
 		for (int i = 0; i < effects.size(); i++) {
 			if (effects.get(i).namesies() == effect) {
@@ -172,7 +172,7 @@ public abstract class Effect implements Serializable
 		return StringUtils.empty();
 	}
 	
-	public Namesies namesies() {
+	public EffectNamesies namesies() {
 		return this.namesies;
 	}
 	

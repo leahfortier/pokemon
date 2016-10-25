@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import namesies.Namesies;
+import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import util.StringUtils;
 
@@ -30,7 +30,7 @@ public class Pokedex implements Serializable {
 		}
 	}
 	
-	private Map<Namesies, PokedexInfo> pokedex;
+	private Map<PokemonNamesies, PokedexInfo> pokedex;
 	private int numSeen;
 	private int numCaught;
 
@@ -44,7 +44,7 @@ public class Pokedex implements Serializable {
 		numCaught = 0;
 	}
 	
-	public PokedexStatus getStatus(Namesies name) {
+	public PokedexStatus getStatus(PokemonNamesies name) {
 		return pokedex.get(name).status;
 	}
 	
@@ -53,7 +53,7 @@ public class Pokedex implements Serializable {
 	}
 	
 	public boolean setStatus(PokemonInfo p, PokedexStatus status, String wildLocation) {
-		Namesies pokemon = p.namesies();
+		PokemonNamesies pokemon = p.namesies();
 		PokedexInfo info = pokedex.get(pokemon); 
 		info.addLocation(wildLocation);
 		
@@ -78,11 +78,11 @@ public class Pokedex implements Serializable {
 		return true;
 	}
 	
-	public boolean seen(Namesies name) {
+	public boolean seen(PokemonNamesies name) {
 		return pokedex.containsKey(name) && pokedex.get(name).status == PokedexStatus.SEEN;
 	}
 	
-	public boolean caught(Namesies name) {
+	public boolean caught(PokemonNamesies name) {
 		return pokedex.containsKey(name) && pokedex.get(name).status == PokedexStatus.CAUGHT;
 	}
 	
@@ -94,7 +94,7 @@ public class Pokedex implements Serializable {
 		return numCaught;
 	}
 	
-	public List<String> getLocations(Namesies pokemon) {
+	public List<String> getLocations(PokemonNamesies pokemon) {
 		return pokedex.get(pokemon).getLocations();
 	}
 	

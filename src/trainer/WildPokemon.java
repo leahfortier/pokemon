@@ -1,12 +1,12 @@
 package trainer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import namesies.Namesies;
-import pokemon.ActivePokemon;
 import battle.effect.generic.Effect;
 import battle.effect.generic.TeamEffect;
+import namesies.EffectNamesies;
+import pokemon.ActivePokemon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WildPokemon implements Opponent {
 	private ActivePokemon p;
@@ -33,7 +33,7 @@ public class WildPokemon implements Opponent {
 		p.getAttributes().setUsed(true);
 	}
 	
-	public boolean hasEffect(Namesies effect) {
+	public boolean hasEffect(EffectNamesies effect) {
 		return Effect.hasEffect(effects, effect);
 	}
 	

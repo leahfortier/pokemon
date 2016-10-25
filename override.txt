@@ -19,7 +19,7 @@ RecoilMove:
 	Recoil:
 		Header: void applyRecoil(Battle b, ActivePokemon user, Integer damage)
 		Try: 
-		if (user.hasAbility(Namesies.ROCK_HEAD_ABILITY) || user.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) 
+		if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) 
 		{
 			return;
 		}
@@ -52,15 +52,15 @@ Override:
 		AddMapField: SelfHealing: 
 		switch (b.getWeather().namesies())
 		{
-			case CLEAR_SKIES_EFFECT:
+			case CLEAR_SKIES:
 				victim.healHealthFraction(1/2.0);
 				break;
-			case SUNNY_EFFECT:
+			case SUNNY:
 				victim.healHealthFraction(2/3.0);
 				break;
-			case HAILING_EFFECT:
-			case RAINING_EFFECT:
-			case SANDSTORM_EFFECT:
+			case HAILING:
+			case RAINING:
+			case SANDSTORM:
 				victim.healHealthFraction(1/4.0);
 				break;
 			default:
@@ -74,7 +74,7 @@ SelfHealingMove:
 	SelfHealing:
 		Header: void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		Begin:
-		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT))
+		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK))
 		{
 			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
@@ -240,8 +240,8 @@ Override:
 		}
 		
 		// Sturdy prevents OHKO moves if the user is not a mold breaker
-		if (o.hasAbility(Namesies.STURDY_ABILITY) && !me.breaksTheMold()) {
-			b.addMessage(o.getName() + "'s " + Namesies.STURDY_ABILITY.getName() + " prevents OHKO moves!");
+		if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
+			b.addMessage(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!");
 			return;
 		}
 		
@@ -318,7 +318,7 @@ Override:
 	StormyMove:
 		AddMapField: GetAccuracy:
 		// Accuracy is only 50% when sunny
-		if (b.getWeather().namesies() == Namesies.SUNNY_EFFECT) {
+		if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 			return 50;
 		}
 		
@@ -326,7 +326,7 @@ Override:
 		###
 		AddMapField: BypassAccuracy:
 		// Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
-		return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == Namesies.RAINING_EFFECT && defending.isSemiInvulnerable());
+		return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
 		###
 		AddMapField: HitFly: True
 	*
@@ -355,7 +355,7 @@ Override:
 		int power = {0};
 		
 		// Power is halved during Grassy Terrain
-		if (b.hasEffect(Namesies.GRASSY_TERRAIN_EFFECT)) {
+		if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
 			power *= .5;
 		}
 		
@@ -394,13 +394,13 @@ BarrierEffect:
 		AddMapField: MinTurns: 5
 		AddMapField: MaxTurns: 5
 		AddMapField: ToModify: {1}
-		AddMapField: ModifyMultiplier: 2 !opp.hasAbility(Namesies.INFILTRATOR_ABILITY)
+		AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
 		AddMapField: CastMessage: user.getName() + " raised the " + Stat.{11}.getName().toLowerCase() + " of its team!"
 		AddMapField: SubsideMessage: "The effects of {2-} faded."
 		AddMapField: Defog: "The effects of {2-} faded."
 		AddMapField: Cast: 
 		super.cast(b, caster, victim, source, printCast);
-		if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM)) {
+		if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
 			Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
 		}
 		###
@@ -419,16 +419,16 @@ Override:
 		AddInterface: ChangeAbilityMove
 		AddMapField: Effect: Pokemon ChangeAbility
 		AddMapField: AbilityChange:
-		return Ability.getAbility(Namesies.{00}_ABILITY).newInstance();
+		return Ability.getAbility(AbilityNamesies.{00}).newInstance();
 		###
 		AddMapField: AbilityMessage: 
-		return victim.getName() + "'s ability was changed to " + Namesies.{00}_ABILITY.getName() + "!";
+		return victim.getName() + "'s ability was changed to " + AbilityNamesies.{00}.getName() + "!";
 		###
 		AddMapField: Apply: 
 		switch (o.getAbility().namesies()) {
-			case TRUANT_ABILITY:
-			case MULTITYPE_ABILITY:
-			case STANCE_CHANGE_ABILITY:
+			case TRUANT:
+			case MULTITYPE:
+			case STANCE_CHANGE:
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			default:
@@ -441,10 +441,10 @@ Override:
 	HitMinimize:
 		AddInterface: AccuracyBypassEffect
 		AddMapField: BypassAccuracy:
-		return !defending.isSemiInvulnerable() && defending.hasEffect(Namesies.USED_MINIMIZE_EFFECT);
+		return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		###
 		AddMapField: GetPow:
-		return super.power*(o.hasEffect(Namesies.USED_MINIMIZE_EFFECT) ? 2 : 1);
+		return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
 		###
 	*
 ***
@@ -505,13 +505,13 @@ Override:
 		AddMapField: Priority: -6
 		AddMapField: ApplyEffects:
 		// Fails against the Suction Cups ability
-		if (victim.hasAbility(Namesies.SUCTION_CUPS_ABILITY) && !user.breaksTheMold()) {
-			b.addMessage(victim.getName() + "'s " + Namesies.SUCTION_CUPS_ABILITY.getName() + " prevents it from switching!");
+		if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
+			b.addMessage(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!");
 			return;
 		}
 		
 		// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-		if (b.isFirstAttack() || victim.hasEffect(Namesies.INGRAIN_EFFECT)) {
+		if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
 			if (super.category == MoveCategory.STATUS)  {
 				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			}
@@ -681,7 +681,7 @@ Override:
 	PartialTrap:
 		AddMapField: Cast:
 		super.cast(b, caster, victim, source, printCast);
-		if (caster.isHoldingItem(b, Namesies.GRIP_CLAW_ITEM)) setTurns(5);
+		if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
 		###
 		AddInterface: EndTurnEffect
 		AddInterface: TrappingEffect
@@ -694,14 +694,14 @@ Override:
 		AddMapField: RapidSpin: user.getName() + " was released from {1_}!"
 		AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
 		AddMapField: ApplyEndTurn:
-		if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+		if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			return;
 		}
 		
 		b.addMessage(victim.getName() + " is hurt by {1_}!");
 		
 		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, Namesies.BINDING_BAND_ITEM) ? 1/6.0 : 1/8.0);
+		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		###
 	*
 ***
@@ -713,7 +713,7 @@ Override:
 		AddMapField: MaxTurns: 5
 		AddInterface: StatusPreventionEffect
 		AddMapField: StatusPrevent: 
-		return !caster.hasAbility(Namesies.INFILTRATOR_ABILITY);
+		return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
 		###
 		AddMapField: StatusPreventMessage: "{0} protects " + victim.getName() + " from status conditions!"
 	*
@@ -1101,7 +1101,9 @@ LevitationEffect:
 		Header: void fall(Battle b, ActivePokemon fallen)
 		Body:
 		b.addMessage({0});
-		Effect.removeEffect(fallen.getEffects(), this.namesies());
+		
+		// TODO: Fix this it's broken
+		// Effect.removeEffect(fallen.getEffects(), this.namesies());
 		###
 	*
 ***
@@ -1193,7 +1195,7 @@ Override:
 		b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!");
 		
 		// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-		if (victim.fullHealth() || victim.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
+		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 			return;
 		}
 		
@@ -1242,14 +1244,14 @@ Override:
 Override:
 	SpeedWeather:
 		AddMapField: ToModify: Speed
-		AddMapField: ModifyMultiplier: 2 b.getWeather().namesies() == Namesies.{00}_EFFECT
+		AddMapField: ModifyMultiplier: 2 b.getWeather().namesies() == EffectNamesies.{00}
 	*
 ***
 Override:
 	WeatherStarter:
 		AddInterface: EntryEffect
 		AddMapField: Enter: 
-		b.addEffect(Weather.getEffect(Namesies.{11}_EFFECT).newInstance());
+		b.addEffect(Weather.getEffect(EffectNamesies.{11}).newInstance());
 		b.addMessage(victim.getName() + "'s " + this.getName() + " {2-}!");
 		###
 	*
@@ -1258,7 +1260,7 @@ Override:
 	WeatherEvasion:
 		AddInterface: StageChangingEffect
 		AddMapField: StageChange: 
-		return s == Stat.EVASION && b.getWeather().namesies() == Namesies.{00}_EFFECT ? stage + 1 : stage;
+		return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.{00} ? stage + 1 : stage;
 		###
 	*
 ***
@@ -1267,7 +1269,7 @@ Override:
 		AddInterface: EntryEffect
 		AddMapField: Enter: 
 		// TODO: I think this isn't the intended effect of this ability
-		b.addEffect(Weather.getEffect(Namesies.CLEAR_SKIES_EFFECT));
+		b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
 		b.addMessage(victim.getName() + "'s " + this.getName() + " eliminated the weather!");
 		###
 	*
@@ -1282,7 +1284,7 @@ HalfWeightEffect:
 ***
 WeatherBlockerEffect:
 	WeatherBlock:
-		Header: boolean block(Namesies weather)
+		Header: boolean block(EffectNamesies weather)
 	*
 ***
 ApplyDamageEffect:
@@ -1486,9 +1488,9 @@ Override:
 ***
 WeatherExtendingEffect:
 	WeatherType:
-		Header: Namesies getWeatherType()
+		Header: EffectNamesies getWeatherType()
 		Body:
-		return Namesies.{00}_EFFECT;
+		return EffectNamesies.{00};
 		###
 	*
 ***
@@ -1642,7 +1644,7 @@ Override:
 	TimeSpaceOrb:
 		Header: boolean canUseOrb(ActivePokemon user)
 		Body:
-		if (!user.isPokemon(Namesies.{11}_POKEMON))
+		if (!user.isPokemon(PokemonNamesies.{11}))
 		{
 			return false;
 		}
@@ -2019,7 +2021,7 @@ Override:
 		AddMapField: Subside: 
 		b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
-		Attack attack = Attack.getAttack(Namesies.{00}_ATTACK);
+		Attack attack = Attack.getAttack(AttackNamesies.{00});
 		
 		// Don't do anything for moves that are uneffective
 		if (!attack.effective(b, theSeeer, p)) {
@@ -2103,14 +2105,14 @@ GainableEffectBerry:
 		
 		b.addMessage(message, user);
 		
-		if (user.hasAbility(Namesies.CHEEK_POUCH_ABILITY) && !user.fullHealth()) {
-			b.addMessage(user.getName() + "'s " + Namesies.CHEEK_POUCH_ABILITY.getName() + " restored its health!");
+		if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
+			b.addMessage(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!");
 			user.healHealthFraction(1/3.0);
 			b.addMessage("", user);
 		}
 		
 		// Eat dat berry!!
-		PokemonEffect.getEffect(Namesies.EATEN_BERRY_EFFECT).cast(b, user, user, source, false);
+		PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
 		
 		return true;
 		###
@@ -2262,7 +2264,7 @@ Override:
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
 		if (user.getAttackType() == getAuraType()) {
-			return 1 + .33*(victim.hasAbility(Namesies.AURA_BREAK_ABILITY) ? -1 : 1);
+			return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
 		}
 		
 		return 1;
@@ -2276,7 +2278,7 @@ Override:
 		// Dead Pokemon and wild Pokemon cannot steal; 
 		// Cannot steal if victim is not holding an item or thief is already holding an item;
 		// Cannot steal from a Pokemon with the Sticky Hold ability 
-		if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.user()) instanceof WildPokemon || victim.hasAbility(Namesies.STICKY_HOLD_ABILITY)) {
+		if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 			return;
 		}
 		
@@ -2291,10 +2293,10 @@ Override:
 		}
 		
 		item = stolen;
-		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, thief, thief, CastSource.ABILITY, false);
+		PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, thief, CastSource.ABILITY, false);
 		
 		item = Item.noneItem();
-		PokemonEffect.getEffect(Namesies.CHANGE_ITEM_EFFECT).cast(b, thief, victim, CastSource.ABILITY, false);
+		PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, victim, CastSource.ABILITY, false);
 		###
 		AddInterface: ItemHolder
 		AddMapField: Field:
@@ -2388,7 +2390,7 @@ StatLoweredEffect:
 Override:
 	FlinchItem:
 		AddMapField: FlingEffect:
-		PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
+		PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 		if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
 			flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
 			b.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
@@ -2396,7 +2398,7 @@ Override:
 		###
 		AddMapField: OnApplyDamage:
 		if (Math.random()*100 < 10) {
-			PokemonEffect flinch = PokemonEffect.getEffect(Namesies.FLINCH_EFFECT);
+			PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
 				b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
@@ -2418,7 +2420,7 @@ Override:
 	TM:
 		Header: Attack getAttack()
 		Body:
-		return Attack.getAttack(Namesies.getValueOf("{0}", NamesiesType.ATTACK));
+		return Attack.getAttack(AttackNamesies.getValueOf("{0}"));
 		###
 		AddMapField: Cat: TM
 		AddInterface: MoveUseItem
@@ -2477,9 +2479,9 @@ PriorityChangeEffect:
 ***
 IncenseItem:
 	Baby:
-		Header: Namesies getBaby()
+		Header: PokemonNamesies getBaby()
 		Body:
-		return Namesies.{00}_POKEMON;
+		return PokemonNamesies.{00};
 		###
 	*
 ***

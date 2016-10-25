@@ -7,8 +7,8 @@ import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 import item.Item;
 import main.Global;
-import namesies.Namesies;
 import main.Type;
+import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 
@@ -21,7 +21,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	
 	protected Type weatherElement;
 	
-	public Weather(Namesies namesies, Type weatherElement) {
+	public Weather(EffectNamesies namesies, Type weatherElement) {
 		super(namesies, -1, -1, true);
 		this.weatherElement = weatherElement;
 	}
@@ -49,7 +49,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	
 	public abstract Weather newInstance();
 	
-	public static Weather getEffect(Namesies name) {
+	public static Weather getEffect(EffectNamesies name) {
 		String effectName = name.getName();
 		
 		if (map == null) {
@@ -69,9 +69,9 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		if (map != null) {
 			return;
 		}
-		
+
 		map = new HashMap<>();
-		
+
 		// EVERYTHING BELOW IS GENERATED ###
 
 		// List all of the classes we are loading
@@ -88,7 +88,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		ClearSkies() {
-			super(Namesies.CLEAR_SKIES_EFFECT, Type.NORMAL);
+			super(EffectNamesies.CLEAR_SKIES, Type.NORMAL);
 		}
 
 		public ClearSkies newInstance() {
@@ -103,7 +103,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Raining() {
-			super(Namesies.RAINING_EFFECT, Type.WATER);
+			super(EffectNamesies.RAINING, Type.WATER);
 		}
 
 		public Raining newInstance() {
@@ -147,7 +147,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Sunny() {
-			super(Namesies.SUNNY_EFFECT, Type.FIRE);
+			super(EffectNamesies.SUNNY, Type.FIRE);
 		}
 
 		public Sunny newInstance() {
@@ -211,7 +211,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		Sandstorm() {
-			super(Namesies.SANDSTORM_EFFECT, Type.ROCK);
+			super(EffectNamesies.SANDSTORM, Type.ROCK);
 		}
 
 		public Sandstorm newInstance() {
@@ -276,7 +276,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		Hailing() {
-			super(Namesies.HAILING_EFFECT, Type.ICE);
+			super(EffectNamesies.HAILING, Type.ICE);
 		}
 
 		public Hailing newInstance() {

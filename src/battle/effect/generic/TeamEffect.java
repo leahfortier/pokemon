@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import battle.Attack;
+import battle.Move;
 import battle.effect.BarrierEffect;
 import battle.effect.CritBlockerEffect;
 import battle.effect.DefogRelease;
@@ -14,21 +16,22 @@ import battle.effect.StatChangingEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import main.Global;
-import namesies.Namesies;
 import main.Type;
+import namesies.AbilityNamesies;
+import namesies.AttackNamesies;
+import namesies.EffectNamesies;
+import namesies.ItemNamesies;
 import pokemon.ActivePokemon;
+import battle.Battle;
 import pokemon.Stat;
 import trainer.Trainer;
-import battle.Attack;
-import battle.Battle;
-import battle.Move;
 
 // Class to handle effects that are specific to one side of the battle
 public abstract class TeamEffect extends Effect implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static Map<String, TeamEffect> map;
 	
-	public TeamEffect(Namesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
+	public TeamEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
 
@@ -42,7 +45,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		b.addMessage("", victim);
 	}
 
-	public static TeamEffect getEffect(Namesies name) {
+	public static TeamEffect getEffect(EffectNamesies name) {
 		String e = name.getName();
 		if (map == null) {
 			loadEffects();
@@ -87,7 +90,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		Reflect() {
-			super(Namesies.REFLECT_EFFECT, 5, 5, false);
+			super(EffectNamesies.REFLECT, 5, 5, false);
 		}
 
 		public Reflect newInstance() {
@@ -105,7 +108,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM)) {
+			if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
 				Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
 			}
 		}
@@ -132,7 +135,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
 			int stat = statValue;
-			if (isModifyStat(s) && !opp.hasAbility(Namesies.INFILTRATOR_ABILITY)) {
+			if (isModifyStat(s) && !opp.hasAbility(AbilityNamesies.INFILTRATOR)) {
 				stat *= 2;
 			}
 			
@@ -144,7 +147,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		LightScreen() {
-			super(Namesies.LIGHT_SCREEN_EFFECT, 5, 5, false);
+			super(EffectNamesies.LIGHT_SCREEN, 5, 5, false);
 		}
 
 		public LightScreen newInstance() {
@@ -162,7 +165,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, Namesies.LIGHT_CLAY_ITEM)) {
+			if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
 				Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
 			}
 		}
@@ -189,7 +192,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
 			int stat = statValue;
-			if (isModifyStat(s) && !opp.hasAbility(Namesies.INFILTRATOR_ABILITY)) {
+			if (isModifyStat(s) && !opp.hasAbility(AbilityNamesies.INFILTRATOR)) {
 				stat *= 2;
 			}
 			
@@ -201,7 +204,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		Tailwind() {
-			super(Namesies.TAILWIND_EFFECT, 4, 4, false);
+			super(EffectNamesies.TAILWIND, 4, 4, false);
 		}
 
 		public Tailwind newInstance() {
@@ -238,7 +241,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		StickyWeb() {
-			super(Namesies.STICKY_WEB_EFFECT, -1, -1, false);
+			super(EffectNamesies.STICKY_WEB, -1, -1, false);
 		}
 
 		public StickyWeb newInstance() {
@@ -282,7 +285,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		StealthRock() {
-			super(Namesies.STEALTH_ROCK_EFFECT, -1, -1, false);
+			super(EffectNamesies.STEALTH_ROCK, -1, -1, false);
 		}
 
 		public StealthRock newInstance() {
@@ -298,7 +301,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
@@ -328,7 +331,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private int layers;
 
 		ToxicSpikes() {
-			super(Namesies.TOXIC_SPIKES_EFFECT, -1, -1, false);
+			super(EffectNamesies.TOXIC_SPIKES, -1, -1, false);
 		}
 
 		public ToxicSpikes newInstance() {
@@ -366,7 +369,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user());
 			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim)) {
 				if (layers >= 2) {
-					PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
+					PokemonEffect.getEffect(EffectNamesies.BAD_POISON).cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
 				}
 				else {
 					Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
@@ -396,7 +399,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private int layers;
 
 		Spikes() {
-			super(Namesies.SPIKES_EFFECT, -1, -1, false);
+			super(EffectNamesies.SPIKES, -1, -1, false);
 		}
 
 		public Spikes newInstance() {
@@ -421,7 +424,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.isLevitating(b) || victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+			if (victim.isLevitating(b) || victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
@@ -455,7 +458,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private String casterName;
 
 		Wish() {
-			super(Namesies.WISH_EFFECT, 1, 1, true);
+			super(EffectNamesies.WISH, 1, 1, true);
 		}
 
 		public Wish newInstance() {
@@ -474,7 +477,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
-			if (p.hasEffect(Namesies.HEAL_BLOCK_EFFECT)) {
+			if (p.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				return;
 			}
 			
@@ -487,7 +490,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		LuckyChant() {
-			super(Namesies.LUCKY_CHANT_EFFECT, 5, 5, false);
+			super(EffectNamesies.LUCKY_CHANT, 5, 5, false);
 		}
 
 		public LuckyChant newInstance() {
@@ -516,7 +519,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private ActivePokemon theSeeer;
 
 		FutureSight() {
-			super(Namesies.FUTURE_SIGHT_EFFECT, 2, 2, true);
+			super(EffectNamesies.FUTURE_SIGHT, 2, 2, true);
 		}
 
 		public FutureSight newInstance() {
@@ -541,7 +544,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		public void subside(Battle b, ActivePokemon p) {
 			b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
-			Attack attack = Attack.getAttack(Namesies.FUTURE_SIGHT_ATTACK);
+			Attack attack = Attack.getAttack(AttackNamesies.FUTURE_SIGHT);
 			
 			// Don't do anything for moves that are uneffective
 			if (!attack.effective(b, theSeeer, p)) {
@@ -558,7 +561,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private ActivePokemon theSeeer;
 
 		DoomDesire() {
-			super(Namesies.DOOM_DESIRE_EFFECT, 2, 2, true);
+			super(EffectNamesies.DOOM_DESIRE, 2, 2, true);
 		}
 
 		public DoomDesire newInstance() {
@@ -583,7 +586,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		public void subside(Battle b, ActivePokemon p) {
 			b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
-			Attack attack = Attack.getAttack(Namesies.DOOM_DESIRE_ATTACK);
+			Attack attack = Attack.getAttack(AttackNamesies.DOOM_DESIRE);
 			
 			// Don't do anything for moves that are uneffective
 			if (!attack.effective(b, theSeeer, p)) {
@@ -600,7 +603,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private String wish;
 
 		HealSwitch() {
-			super(Namesies.HEAL_SWITCH_EFFECT, -1, -1, false);
+			super(EffectNamesies.HEAL_SWITCH, -1, -1, false);
 		}
 
 		public HealSwitch newInstance() {
@@ -614,7 +617,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			wish = caster.getAttack().namesies() == Namesies.LUNAR_DANCE_ATTACK ? "lunar dance" : "healing wish";
+			// TODO: This should be passes in the generator instead of being hardcoded
+			wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
 			super.cast(b, caster, victim, source, printCast);
 		}
 
@@ -631,7 +635,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		DeadAlly() {
-			super(Namesies.DEAD_ALLY_EFFECT, 2, 2, false);
+			super(EffectNamesies.DEAD_ALLY, 2, 2, false);
 		}
 
 		public DeadAlly newInstance() {
@@ -648,7 +652,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private int coins;
 
 		PayDay() {
-			super(Namesies.PAY_DAY_EFFECT, -1, -1, false);
+			super(EffectNamesies.PAY_DAY, -1, -1, false);
 		}
 
 		public PayDay newInstance() {
@@ -683,7 +687,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		GetDatCashMoneyTwice() {
-			super(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT, -1, -1, false);
+			super(EffectNamesies.GET_DAT_CASH_MONEY_TWICE, -1, -1, false);
 		}
 
 		public GetDatCashMoneyTwice newInstance() {

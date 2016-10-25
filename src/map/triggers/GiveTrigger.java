@@ -1,15 +1,13 @@
 package map.triggers;
 
 import item.Item;
+import main.Game;
+import pokemon.ActivePokemon;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import main.Game;
-import main.Global;
-import pokemon.ActivePokemon;
 
 public class GiveTrigger extends Trigger {
 	private static final Pattern pokemonTriggerPattern = Pattern.compile("(pokemon:)\\s*([A-Za-z \\t0-9,:.\\-'*]*)");
@@ -25,12 +23,7 @@ public class GiveTrigger extends Trigger {
 		while (m.find()) {
 			String type = m.group(1);
 			if (type.equals("item")) {
-				if (Item.isItem(m.group(2))) {
-					itemList.add(Item.getItemFromName(m.group(2)));
-				}
-				else {
-					Global.error("Invalid item: " + m.group(2));
-				}
+				itemList.add(Item.getItemFromName(m.group(2)));
 			}
 		}
 		

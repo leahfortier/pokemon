@@ -4,7 +4,7 @@
 # Fields can be specified in any order
 
 Constructor:
-	Namesies Enum Namesies Effect
+	Namesies Enum EffectNamesies
 	MinTurns Default -1 Int
 	MaxTurns Default -1 Int
 	NextTurnSubside Default False Boolean

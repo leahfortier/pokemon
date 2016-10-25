@@ -1,16 +1,15 @@
 package pokemon;
 
-import item.Item;
+import battle.Move;
+import main.Global;
+import namesies.AttackNamesies;
+import namesies.ItemNamesies;
+import namesies.PokemonNamesies;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import main.Global;
-import namesies.Namesies;
-import battle.Attack;
-import battle.Move;
 
 public abstract class Evolution implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,8 +20,8 @@ public abstract class Evolution implements Serializable {
 		MOVE,
 	}
 	
-	public abstract Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use);
-	public abstract Namesies[] getEvolutions();
+	public abstract Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use);
+	public abstract PokemonNamesies[] getEvolutions();
 	
 	public boolean canEvolve()
 	{
@@ -63,7 +62,7 @@ public abstract class Evolution implements Serializable {
 	private static class NoEvolution extends Evolution {
 		private static final long serialVersionUID = 1L;
 		
-		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use)
+		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use)
 		{
 			return null;
 		}
@@ -72,8 +71,8 @@ public abstract class Evolution implements Serializable {
 			return false;
 		}
 
-		public Namesies[] getEvolutions() {
-			return new Namesies[0];
+		public PokemonNamesies[] getEvolutions() {
+			return new PokemonNamesies[0];
 		}
 	}
 	
@@ -86,7 +85,7 @@ public abstract class Evolution implements Serializable {
 			evolutions = list;
 		}
 		
-		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use) {
+		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
 			List<Evolution> list = new ArrayList<>();
 			for (Evolution ev : evolutions) {
 				Evolution lev = ev.getEvolution(type, p, use);
@@ -104,13 +103,13 @@ public abstract class Evolution implements Serializable {
 			return null;
 		}
 
-		public Namesies[] getEvolutions() {
-			Namesies[] s = new Namesies[evolutions.length];
+		public PokemonNamesies[] getEvolutions() {
+			PokemonNamesies[] namesies = new PokemonNamesies[evolutions.length];
 			for (int i = 0; i < evolutions.length; i++) {
-				s[i] = evolutions[i].getEvolutions()[0];		
+				namesies[i] = evolutions[i].getEvolutions()[0];
 			}
 			
-			return s;
+			return namesies;
 		}
 	}
 
@@ -133,7 +132,7 @@ public abstract class Evolution implements Serializable {
 			gender = g.equals("Male") ? Gender.MALE : Gender.FEMALE;
 		}
 		
-		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use) {
+		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
 			if (p.getGender() == gender) {
 				return evolution.getEvolution(type, p, use);
 			}
@@ -141,7 +140,7 @@ public abstract class Evolution implements Serializable {
 			return null;
 		}
 
-		public Namesies[] getEvolutions() {
+		public PokemonNamesies[] getEvolutions() {
 			return evolution.getEvolutions();
 		}
 	}
@@ -166,7 +165,7 @@ public abstract class Evolution implements Serializable {
 			lower = Stat.valueOf(l.toUpperCase());
 		}
 
-		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use) {
+		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
 			if (type != EvolutionCheck.LEVEL) {
 				return null;
 			}
@@ -185,7 +184,7 @@ public abstract class Evolution implements Serializable {
 			return null;
 		}
 
-		public Namesies[] getEvolutions() {
+		public PokemonNamesies[] getEvolutions() {
 			return evolution.getEvolutions();
 		}
 	}
@@ -205,7 +204,7 @@ public abstract class Evolution implements Serializable {
 			return PokemonInfo.getPokemonInfo(evolutionNumber);
 		}
 		
-		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use) {
+		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
 			if (type != EvolutionCheck.LEVEL) {
 				return null;
 			}
@@ -217,8 +216,8 @@ public abstract class Evolution implements Serializable {
 			return null;
 		}
 
-		public Namesies[] getEvolutions() {
-			return new Namesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
+		public PokemonNamesies[] getEvolutions() {
+			return new PokemonNamesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
 		}
 	}
 
@@ -226,23 +225,19 @@ public abstract class Evolution implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		private int evolutionNumber;
-		private Namesies item;
+		private ItemNamesies item;
 		 
 		public ItemEvolution(int num, String item) {
 			this.evolutionNumber = num;
 			
-			if (!Item.isItem(item)) {
-				Global.error("Invalid item name " + item);
-			}
-			
-			this.item = Item.getItemFromName(item).namesies();
+			this.item = ItemNamesies.getValueOf(item);
 		}
 		
 		public PokemonInfo getEvolution() {
 			return PokemonInfo.getPokemonInfo(evolutionNumber);
 		}
 		
-		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use) {
+		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
 			if (type != EvolutionCheck.ITEM) {
 				return null;
 			}
@@ -254,8 +249,8 @@ public abstract class Evolution implements Serializable {
 			return null;
 		}
 
-		public Namesies[] getEvolutions() {
-			return new Namesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
+		public PokemonNamesies[] getEvolutions() {
+			return new PokemonNamesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
 		}
 	}
 
@@ -263,23 +258,19 @@ public abstract class Evolution implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		private int evolutionNumber;
-		private Namesies move;
+		private AttackNamesies move;
 		
-		public MoveEvolution(int num, String m) {
+		MoveEvolution(int num, String m) {
 			evolutionNumber = num;
-			
-			if (!Attack.isAttack(m)) {
-				Global.error("Invalid attack name " + m);
-			}
-			
-			move = Attack.getAttackFromName(m).namesies();
+
+			move = AttackNamesies.getValueOf(m);
 		}
 		
 		public PokemonInfo getEvolution() {
 			return PokemonInfo.getPokemonInfo(evolutionNumber);
 		}
 		
-		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, Namesies use) {
+		public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
 			if (type != EvolutionCheck.MOVE) {
 				return null;
 			}
@@ -293,8 +284,8 @@ public abstract class Evolution implements Serializable {
 			return null;
 		}
 
-		public Namesies[] getEvolutions() {
-			return new Namesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
+		public PokemonNamesies[] getEvolutions() {
+			return new PokemonNamesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
 		}
 	}
 }

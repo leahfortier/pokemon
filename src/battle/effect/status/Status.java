@@ -9,7 +9,8 @@ import item.Item;
 import item.berry.GainableEffectBerry;
 import item.berry.StatusBerry;
 import main.Global;
-import namesies.Namesies;
+import namesies.AbilityNamesies;
+import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;
@@ -135,10 +136,10 @@ public abstract class Status implements Serializable {
 	
 	private static void synchronizeCheck(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
 		Status s = getStatus(status, caster);
-		if (victim.hasAbility(Namesies.SYNCHRONIZE_ABILITY) && s.applies(b, victim, caster)
+		if (victim.hasAbility(AbilityNamesies.SYNCHRONIZE) && s.applies(b, victim, caster)
 				&& (status == StatusCondition.BURNED || status == StatusCondition.POISONED || status == StatusCondition.PARALYZED)) {
-			if (victim.hasEffect(Namesies.BAD_POISON_EFFECT)) {
-				caster.addEffect(PokemonEffect.getEffect(Namesies.BAD_POISON_EFFECT).newInstance());
+			if (victim.hasEffect(EffectNamesies.BAD_POISON)) {
+				caster.addEffect(PokemonEffect.getEffect(EffectNamesies.BAD_POISON).newInstance());
 			}
 			
 			caster.setStatus(s);

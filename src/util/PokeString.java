@@ -64,11 +64,11 @@ public class PokeString {
 		return className;
 	}
 	
-	public static String getNamesiesString(String name, NamesiesType superClass) {
+	public static String getNamesiesString(String name) {
 		// Remove special characters and spaces
 		name = removeSpecialCharacters(name).replace(" ", "");
 		
-		char[] nameChar = (name + "_" + superClass).toCharArray();
+		char[] nameChar = name.toCharArray();
 		String enumName = nameChar[0] + "";
 		
 		for (int i = 1; i < nameChar.length; i++) {

@@ -3,8 +3,8 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.EndTurnEffect;
 import battle.effect.StatChangingEffect;
-import namesies.Namesies;
 import main.Type;
+import namesies.AbilityNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 
@@ -16,12 +16,12 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
     }
 
     public void applyEndTurn(ActivePokemon victim, Battle b) {
-        if (victim.hasAbility(Namesies.MAGIC_GUARD_ABILITY)) {
+        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
             return;
         }
 
         b.addMessage(victim.getName() + " was hurt by its burn!");
-        victim.reduceHealthFraction(b, victim.hasAbility(Namesies.HEATPROOF_ABILITY) ? 1/16.0 : 1/8.0);
+        victim.reduceHealthFraction(b, victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0);
     }
 
     // Fire-type Pokemon cannot be burned
@@ -38,7 +38,7 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
     }
 
     public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-        return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(Namesies.GUTS_ABILITY) ? .5 : 1));
+        return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(AbilityNamesies.GUTS) ? .5 : 1));
     }
 
     public String getRemoveMessage(ActivePokemon victim) {

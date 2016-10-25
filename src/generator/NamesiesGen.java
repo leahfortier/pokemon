@@ -3,27 +3,33 @@ package generator;
 import java.util.Scanner;
 
 import main.Global;
-import namesies.Namesies.NamesiesType;
+import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import util.FileIO;
 import util.PokeString;
+import util.StringUtils;
 
 class NamesiesGen {
 	private static final String NAMESIES_FOLDER = FileIO.makeFolderPath("src", "namesies");
 
-	private final String namesiesClassName;
+	private final Class namesiesClass;
 	private final StringBuilder namesies;
 
 	private boolean firstNamesies;
 	
-	NamesiesGen(final String namesiesClassName) {
-		this.namesiesClassName = namesiesClassName;
+	NamesiesGen(final Class namesiesClass) {
+		this.namesiesClass = namesiesClass;
 		this.namesies = new StringBuilder();
 		this.firstNamesies = true;
+
+		if (namesiesClass.equals(PokemonNamesies.class)) {
+			pokemonNamesies();
+			writeNamesies();
+		}
 	}
 	
 	void writeNamesies() {
-		final String fileName = NAMESIES_FOLDER + namesiesClassName + ".java";
+		final String fileName = NAMESIES_FOLDER + namesiesClass.getSimpleName() + ".java";
 
 		Scanner original = FileIO.openFile(fileName);
 		StringBuilder out = new StringBuilder();
@@ -43,18 +49,12 @@ class NamesiesGen {
 			}
 			
 			if (canPrint) {
-				out.append(line).append("\n");
+				StringUtils.appendLine(out, line);
 			}
 			
 			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) {
 				if (outputNamesies) {
 					Global.error("Everything generated line should not be repeated.");
-				}
-				
-				// Add the Pokemon to namesies
-				for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-					PokemonInfo info = PokemonInfo.getPokemonInfo(i);
-					createNamesies(info.getName(), NamesiesType.POKEMON);
 				}
 				
 				out.append(namesies);
@@ -66,12 +66,12 @@ class NamesiesGen {
 		}
 
 		if (FileIO.overwriteFile(fileName, out)) {
-			System.out.println("Namesies generated.");
+			System.out.println(fileName + " generated.");
 		}
 	}
 	
-	void createNamesies(String name, NamesiesType superClass) {
-		String enumName = PokeString.getNamesiesString(name, superClass);
+	void createNamesies(String name) {
+		String enumName = PokeString.getNamesiesString(name);
 		namesies.append(firstNamesies ? "" : ",\n")
 				.append("\t")
 				.append(enumName)
@@ -79,5 +79,13 @@ class NamesiesGen {
 				.append(name)
 				.append("\")");
 		firstNamesies = false;
+	}
+
+	void pokemonNamesies() {
+		// Add the Pokemon to namesies
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+			PokemonInfo info = PokemonInfo.getPokemonInfo(i);
+			createNamesies(info.getName());
+		}
 	}
 }

@@ -21,6 +21,7 @@ import javax.swing.event.DocumentListener;
 import util.PokeString;
 import map.entity.ItemEntityData;
 import mapMaker.MapMaker;
+import util.StringUtils;
 
 public class ItemEntityDialog extends JPanel {
 	private static final long serialVersionUID = 7469923865936465388L;
@@ -118,7 +119,6 @@ public class ItemEntityDialog extends JPanel {
 		setLayout(groupLayout);
 	}
 
-	// TODO: This looks like this should be in another class or at least the item stuff
 	public void setItem(ItemEntityData item) {
 		itemTextField.setText(item.getItem().replace('_', ' '));
 		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
@@ -129,7 +129,7 @@ public class ItemEntityDialog extends JPanel {
 	
 	public String getItemName() {
 		String itemName = PokeString.restoreSpecialFromUnicode(itemTextField.getText());
-		itemName = convertToProperCase(itemName);
+		itemName = StringUtils.properCase(itemName);
 		return itemName;
 	}
 	
@@ -148,39 +148,5 @@ public class ItemEntityDialog extends JPanel {
 				-1, 
 				-1
 		);
-	}
-	
-	// TODO: Look at this later when I have more time -- should this go into PokeString?
-	private String convertToProperCase(String string) {
-		StringBuilder s = new StringBuilder();
-		string = string.trim();
-		
-		while (!string.isEmpty()) {
-			s.append(string.substring(0, 1).toUpperCase());
-			string = string.substring(1, string.length());
-			
-			if (string.isEmpty()) {
-				break;
-			}
-			
-			char c = ' ';
-			int index = string.indexOf(c);
-			int indexOther = string.indexOf('-');
-			if (indexOther != -1 && (indexOther < index || index == -1)) {
-				c = '-';
-				index = indexOther;
-			}
-			
-			if (index == -1) {
-				s.append(string.substring(0,string.length()));
-				string = "";
-			}
-			else {
-				s.append(string.substring(0,index) + c);
-				string = string.substring(index + 1, string.length());
-			}
-		}
-		
-		return s.toString();
 	}
 }

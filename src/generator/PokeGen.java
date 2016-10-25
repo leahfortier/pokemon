@@ -1,5 +1,16 @@
 package generator;
 
+import battle.Attack;
+import main.Global;
+import main.Type;
+import namesies.AbilityNamesies;
+import namesies.AttackNamesies;
+import namesies.EffectNamesies;
+import namesies.ItemNamesies;
+import util.FileIO;
+import util.PokeString;
+import util.StringUtils;
+
 import java.io.File;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -11,15 +22,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
-
-import battle.Attack;
-import main.Global;
-import namesies.Namesies;
-import namesies.Namesies.NamesiesType;
-import main.Type;
-import util.FileIO;
-import util.PokeString;
-import util.StringUtils;
 
 class PokeGen {
 	private static final int TM_BASE_INDEX = 2000;
@@ -37,26 +39,26 @@ class PokeGen {
 
 	// TODO: Honestly these should all be in the subfolder of rec instead of just chillin all over the main folder
 	private enum Generator {
-		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", NamesiesType.ATTACK, false, true),
-		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", NamesiesType.EFFECT, true, true),
-		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", NamesiesType.EFFECT, true, true),
-		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", NamesiesType.EFFECT, true, true),
-		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", NamesiesType.EFFECT, true, true),
-		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", NamesiesType.ABILITY, true, true),
-		ITEM_GEN("Items.txt", ITEM_PATH, "Item", NamesiesType.ITEM, false, true);
+		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", AttackNamesies.class, false, true),
+		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", EffectNamesies.class, true, true),
+		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", EffectNamesies.class, true, true),
+		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", EffectNamesies.class, true, true),
+		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", EffectNamesies.class, true, true),
+		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", AbilityNamesies.class, true, true),
+		ITEM_GEN("Items.txt", ITEM_PATH, "Item", ItemNamesies.class, false, true);
 		
 		private final String inputPath;
 		private final String outputPath;
 		private final String superClass;
-		private final NamesiesType appendsies;
+		private final Class namesiesClass;
 		private final boolean activate;
 		private final boolean mappity;
 		
-		Generator(String inputPath, String outputPath, String superClass, NamesiesType appendsies, boolean activate, boolean mappity) {
+		Generator(String inputPath, String outputPath, String superClass, Class namesiesClass, boolean activate, boolean mappity) {
 			this.inputPath = inputPath;
 			this.outputPath = outputPath;
 			this.superClass = superClass;
-			this.appendsies = appendsies;
+			this.namesiesClass = namesiesClass;
 			this.activate = activate;
 			this.mappity = mappity;
 		}
@@ -72,9 +74,9 @@ class PokeGen {
 		public String getSuperClass() {
 			return this.superClass;
 		}
-		
-		public NamesiesType getNamesiesType() {
-			return this.appendsies;
+
+		public Class getNamesiesClass() {
+			return this.namesiesClass;
 		}
 		
 		public boolean isActivate() {
@@ -84,27 +86,30 @@ class PokeGen {
 		public boolean isMappity() {
 			return this.mappity;
 		}
-
-		public String getNamesiesClassName() {
-			return this.getSuperClass() + "Namesies";
-		}
 	}
-	
+
 	private NamesiesGen namesiesGen;
 	private Generator currentGen;
 	
 	PokeGen() {
 		readFormat();
 
+		final Map<Class, NamesiesGen> namesiesMap = new HashMap<>();
+
 		// Go through each PokeGen and generate
 		for (Generator generator : Generator.values()) {
 			this.currentGen = generator;
 
-			this.namesiesGen = new NamesiesGen(generator.getNamesiesClassName());
-			this.superGen();
+			final Class namesiesClass = generator.getNamesiesClass();
+			if (!namesiesMap.containsKey(namesiesClass)) {
+				namesiesMap.put(namesiesClass, new NamesiesGen(namesiesClass));
+			}
 
-			this.namesiesGen.writeNamesies();
-		}	
+			this.namesiesGen = namesiesMap.get(namesiesClass);
+			this.superGen();
+		}
+
+		namesiesMap.values().forEach(NamesiesGen::writeNamesies);
 	}
 	
 	private Map<String, String> readFields(Scanner in, String name, String className, int index) {
@@ -140,7 +145,7 @@ class PokeGen {
 	}
 	
 	private void addClass(StringBuilder out, StringBuilder classes, String name, String className, Map<String, String> fields) {
-		this.namesiesGen.createNamesies(name, this.currentGen.getNamesiesType());
+		this.namesiesGen.createNamesies(name);
 		
 		// Mappity map
 		if (this.currentGen.isMappity()) {
@@ -414,7 +419,7 @@ class PokeGen {
 			String attackName = in.nextLine().trim();
 			String className = PokeString.writeClassName(attackName);
 
-			Attack attack = Attack.getAttack(Namesies.getValueOf(attackName, NamesiesType.ATTACK));
+			Attack attack = Attack.getAttack(AttackNamesies.getValueOf(attackName));
 
 			String itemName = attackName + " TM";
 			className += "TM";
@@ -655,9 +660,8 @@ class PokeGen {
 			case "Enum":
 				String enumType = splitInfo[index++];
 				
-				if (enumType.equals("Namesies")) {
-					String appendsies = splitInfo[index++];
-					value = PokeString.getNamesiesString(fieldValue, NamesiesType.valueOf(appendsies.toUpperCase()));
+				if (enumType.endsWith("Namesies")) {
+					value = PokeString.getNamesiesString(fieldValue);
 				}
 				else {
 					value = fieldValue.toUpperCase();	

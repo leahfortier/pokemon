@@ -1,6 +1,6 @@
 package battle.effect.attack;
 
-import namesies.Namesies;
+import namesies.AbilityNamesies;
 import pokemon.ActivePokemon;
 
 public interface MultiStrikeMove {
@@ -11,7 +11,7 @@ public interface MultiStrikeMove {
         final int minHits = getMinHits();
         final int maxHits = getMaxHits();
 
-        if (attacking.hasAbility(Namesies.SKILL_LINK_ABILITY)) {
+        if (attacking.hasAbility(AbilityNamesies.SKILL_LINK)) {
             return maxHits;
         }
 

@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import battle.MoveType;
-import namesies.Namesies;
+import namesies.AbilityNamesies;
+import pokemon.Ability;
 import pokemon.ActivePokemon;
 import battle.Battle;
 import battle.effect.AdvantageChanger;
@@ -114,7 +115,7 @@ public enum Type implements Serializable {
 		// Same type -- STAB
 		if (pokemonType[0] == attackType || pokemonType[1] == attackType) {
 			// The adaptability ability increases stab
-			return p.hasAbility(Namesies.ADAPTABILITY_ABILITY) ? 2 : 1.5;
+			return p.hasAbility(AbilityNamesies.ADAPTABILITY) ? 2 : 1.5;
 		}
 		
 		return 1; 

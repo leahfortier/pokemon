@@ -2,7 +2,7 @@ package trainer;
 
 import java.util.List;
 
-import namesies.Namesies;
+import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 import battle.effect.generic.TeamEffect;
 
@@ -10,7 +10,7 @@ import battle.effect.generic.TeamEffect;
 public interface Team {
 	ActivePokemon front();
 	List<TeamEffect> getEffects();
-	boolean hasEffect(Namesies effect);
+	boolean hasEffect(EffectNamesies effect);
 	void addEffect(TeamEffect e);
 	List<ActivePokemon> getTeam();
 	boolean blackout();

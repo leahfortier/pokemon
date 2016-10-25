@@ -12,9 +12,10 @@ import java.util.Set;
 
 import main.Game;
 import main.Game.ViewMode;
-import namesies.Namesies;
 import map.DialogueSequence;
 import map.entity.MovableEntity.Direction;
+import namesies.EffectNamesies;
+import namesies.ItemNamesies;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
@@ -264,7 +265,7 @@ public class CharacterData extends Trainer implements Serializable {
 				double gain = wild * base * lev * Math.pow(2 * lev + 10, 2.5);
 				gain /= 5 * Math.pow(lev + p.getLevel() + 10, 2.5);
 				gain++;
-				gain *= p.isHoldingItem(b, Namesies.LUCKY_EGG_ITEM) ? 1.5 : 1;
+				gain *= p.isHoldingItem(b, ItemNamesies.LUCKY_EGG) ? 1.5 : 1;
 
 				p.gainEXP(b, (int) Math.max(1, gain / numUsed), dead);
 			}
@@ -280,7 +281,7 @@ public class CharacterData extends Trainer implements Serializable {
 			addGlobal(b.getWinGlobal());
 			
 			// I've decided that the next line of code is the best line in this entire codebase
-			int datCash = opp.getDatCashMoney()*(hasEffect(Namesies.GET_DAT_CASH_MONEY_TWICE_EFFECT) ? 2 : 1);
+			int datCash = opp.getDatCashMoney()*(hasEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);
 			b.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
 		}
