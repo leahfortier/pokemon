@@ -2,6 +2,7 @@ package battle.effect.generic;
 
 import battle.Battle;
 import main.Global;
+import pokemon.Ability;
 import pokemon.ActivePokemon;
 
 import java.util.List;
@@ -24,7 +25,8 @@ public final class EffectInterfaces {
 		// damage: The amount of damage that was dealt to victim by the user
 		void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage);
 
-		static void invokeApplyDamageEffect(List<Object> invokees, Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+		static void invokeApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+			List<Object> invokees = b.getEffectsList(user);
 			
 			for (Object invokee : invokees) {
 				if (invokee instanceof ApplyDamageEffect) {
@@ -34,6 +36,35 @@ public final class EffectInterfaces {
 					
 					ApplyDamageEffect effect = (ApplyDamageEffect)invokee;
 					effect.applyDamageEffect(b, user, victim, damage);
+				}
+			}
+		}
+	}
+
+	public interface EndTurnEffect {
+		void applyEndTurn(ActivePokemon victim, Battle b);
+
+		static void invokeEndTurnEffect(ActivePokemon victim, Battle b) {
+			if (victim.isFainted(b)) {
+				return;
+			}
+			
+			// Weather is handled separately
+			List<Object> invokees = b.getEffectsList(victim);
+			invokees.remove(b.getWeather());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof EndTurnEffect) {
+					if (Effect.isInactiveEffect(invokee)) {
+						continue;
+					}
+					
+					EndTurnEffect effect = (EndTurnEffect)invokee;
+					effect.applyEndTurn(victim, b);
+					
+					if (victim.isFainted(b)) {
+						return;
+					}
 				}
 			}
 		}

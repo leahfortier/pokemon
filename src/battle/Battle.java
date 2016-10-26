@@ -1,10 +1,26 @@
 package battle;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import battle.MessageUpdate.Update;
+import battle.effect.AccuracyBypassEffect;
+import battle.effect.BeforeTurnEffect;
+import battle.effect.CritBlockerEffect;
+import battle.effect.CritStageEffect;
+import battle.effect.DefiniteEscape;
+import battle.effect.EntryEffect;
+import battle.effect.NameChanger;
+import battle.effect.OpponentAccuracyBypassEffect;
+import battle.effect.OpponentBeforeTurnEffect;
+import battle.effect.OpponentPowerChangeEffect;
+import battle.effect.PowerChangeEffect;
+import battle.effect.PriorityChangeEffect;
+import battle.effect.attack.CrashDamageMove;
+import battle.effect.attack.MultiTurnMove;
+import battle.effect.generic.BattleEffect;
+import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.PokemonEffect;
+import battle.effect.generic.TeamEffect;
+import battle.effect.generic.Weather;
 import main.Global;
 import main.Type;
 import map.AreaData.TerrainType;
@@ -22,28 +38,12 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
-import battle.MessageUpdate.Update;
-import battle.effect.AccuracyBypassEffect;
-import battle.effect.generic.BattleEffect;
-import battle.effect.BeforeTurnEffect;
-import battle.effect.attack.CrashDamageMove;
-import battle.effect.CritBlockerEffect;
-import battle.effect.CritStageEffect;
-import battle.effect.DefiniteEscape;
-import battle.effect.generic.Effect;
-import battle.effect.EndTurnEffect;
-import battle.effect.EntryEffect;
-import battle.effect.attack.MultiTurnMove;
-import battle.effect.NameChanger;
-import battle.effect.OpponentAccuracyBypassEffect;
-import battle.effect.OpponentBeforeTurnEffect;
-import battle.effect.OpponentPowerChangeEffect;
-import battle.effect.generic.PokemonEffect;
-import battle.effect.PowerChangeEffect;
-import battle.effect.PriorityChangeEffect;
-import battle.effect.generic.TeamEffect;
-import battle.effect.generic.Weather;
 import util.StringUtils;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Battle {
 	private CharacterData player;
@@ -459,22 +459,13 @@ public class Battle {
 			weather = Weather.getEffect(EffectNamesies.CLEAR_SKIES);
 			return;
 		}
-		
+
 		weather.applyEndTurn(player.front(), this);
 		weather.decrement(this, player.front());
 	}
 	
 	private void endTurnPokemonEffects(ActivePokemon me) {
-		// Effects that need to be checked
-		List<Object> list = new ArrayList<>();
-		list.addAll(me.getEffects());
-		list.addAll(getEffects(me.user()));
-		list.addAll(getEffects());
-		list.add(me.getStatus());
-		list.add(me.getAbility());
-		list.add(me.getHeldItem(this));
-		
-		Battle.invoke(this, me, null, list, EndTurnEffect.class, "applyEndTurn", me, this);
+		EndTurnEffect.invokeEndTurnEffect(me, this);
 		
 		me.isFainted(this);
 		

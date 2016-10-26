@@ -1,10 +1,10 @@
 package battle.effect.generic;
 
 import battle.Battle;
-import battle.effect.EndTurnEffect;
 import battle.effect.StatChangingEffect;
 import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
+import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import item.Item;
 import main.Global;
 import main.Type;

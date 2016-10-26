@@ -1,19 +1,18 @@
 package generator;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
-
 import battle.Battle;
-import battle.effect.generic.Effect;
-import battle.effect.generic.EffectInterfaces;
 import main.Global;
 import pokemon.ActivePokemon;
 import util.FileIO;
 import util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 class InterfaceGen {
 	
@@ -108,7 +107,7 @@ class InterfaceGen {
 			final String superClass = null;
 			final String interfaces = null; // TODO: Will eventually not be null since some may extend other interfaces (unless that's superclass but whatever)
 			
-			final StringBuilder extraFields = new StringBuilder("\n");
+			final StringBuilder extraFields = new StringBuilder();
 			for (InterfaceMethod method : this.methods) {
 				extraFields.append(method.writeInterfaceMethod());
 			}
@@ -138,6 +137,10 @@ class InterfaceGen {
 		private static final String METHOD_NAME = "MethodName";
 		private static final String HEADER = "Header";
 		private static final String PARAMETERS = "Parameters";
+		private static final String INVOKE = "Invoke";
+		private static final String EFFECT_LIST = "EffectList";
+		private static final String SET_INVOKEES = "SetInvokees";
+		private static final String MOLD_BREAKER = "MoldBreaker";
 
 		private final String interfaceName;
 
@@ -147,6 +150,11 @@ class InterfaceGen {
 		private String parameters;
 		private String typelessParameters;
 		private Map<String, List<String>> parameterMap;
+
+		private String invokeeDeclaration;
+
+		private String moldBreaker;
+		private boolean deadsies;
 
 		private String comments;
 		private InvokeMethod invokeMethod;
@@ -162,10 +170,9 @@ class InterfaceGen {
 		}
 		
 		private void readFields(Map<String, String> fields) {
-			
-			// Header is required
-			if (fields.containsKey(HEADER)) {
-				final String returnTypeAndName = fields.get(HEADER);
+
+			final String returnTypeAndName = getField(fields, HEADER);
+			if (returnTypeAndName != null) {
 				String[] split = returnTypeAndName.split(" ");
 				if (split.length != 2) {
 					Global.error("Header must have exactly two words -- return type and method name. " +
@@ -176,25 +183,31 @@ class InterfaceGen {
 				this.methodName = split[1];
 			}
 
-			if (fields.containsKey(RETURN_TYPE)) {
-				final String returnType = fields.get(RETURN_TYPE);
+			final String returnType = getField(fields, RETURN_TYPE);
+			if (returnType != null) {
 				if (!StringUtils.isNullOrEmpty(this.returnType) || !StringUtils.isNullOrEmpty(this.methodName)) {
 					Global.error("Cannot set the return type manually if it has already be set via the header field. " +
 							"Header Return Type: " + this.returnType + ", Header Method Name: " + this.methodName +
 							"New Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
 				}
 
-				if (!fields.containsKey(METHOD_NAME)) {
+				final String methodName = getField(fields, METHOD_NAME);
+				if (methodName == null) {
 					Global.error("Return type and method name must be specified together. " +
 							"Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
 				}
 
 				this.returnType = returnType;
-				this.methodName = fields.get(METHOD_NAME);
+				this.methodName = methodName;
 			}
-			
-			if (fields.containsKey(PARAMETERS)) {
-				this.parameters = fields.get(PARAMETERS);
+
+			if (this.returnType == null || this.methodName == null) {
+				Global.error("Header is missing for interface " + this.interfaceName);
+			}
+
+			final String parameters = getField(fields, PARAMETERS);
+			if (parameters != null) {
+				this.parameters = parameters;
 
 				final String[] split = this.parameters.split(",");
 				for (final String typedParameter : split) {
@@ -220,30 +233,62 @@ class InterfaceGen {
 					this.parameterMap.get(parameterType).add(parameterName);
 				}
 			}
-			
-			if (fields.containsKey(COMMENTS)) {
-				this.comments = fields.get(COMMENTS).trim();
-			}
-			
-			for (InvokeType invokeType : InvokeType.values()) {
-				final String key = invokeType.name;
-				
-				if (fields.containsKey(key)) {
-					if (this.invokeMethod != null) {
-						Global.error("Cannot set multiple invoke methods for a single interface method. " +
-								"Interface: " + this.interfaceName + ", Method: " + this.getHeader());
-					}
 
-					final String value = fields.get(key);
-					this.invokeMethod = invokeType.getInvokeMethod(value);
-				}
+			final String comments = getField(fields, COMMENTS);
+			if (comments != null) {
+				this.comments = comments;
 			}
+
+			// Invoke: InvokeType boolean
+			final String invoke = getField(fields, INVOKE);
+			if (invoke != null) {
+				final Scanner in = new Scanner(invoke);
+
+				this.invokeMethod = InvokeType.valueOf(in.next().toUpperCase()).getInvokeMethod();
+				this.deadsies = in.nextBoolean();
+			}
+
+			final String effectListParameter = getField(fields, EFFECT_LIST);
+			if (effectListParameter != null) {
+				this.invokeeDeclaration = String.format("\nList<Object> invokees = %s.getEffectsList(%s);",
+						this.getBattleParameter(), effectListParameter);
+			}
+
+			final String setInvokees = getField(fields, SET_INVOKEES);
+			if (setInvokees != null) {
+				if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
+					Global.error("Can not define multiple ways to set the effects list. " +
+							"Interface: " + this.interfaceName);
+				}
+
+				this.invokeeDeclaration = setInvokees;
+			}
+
+			final String moldBreaker = getField(fields, MOLD_BREAKER);
+			if (moldBreaker != null) {
+				this.moldBreaker = moldBreaker;
+			}
+
+			for (final Entry<String, String> field : fields.entrySet()) {
+				Global.error("Unused field " + field.getKey() + ": " + field.getValue() +
+						" for interface " + this.interfaceName);
+			}
+		}
+
+		private static String getField(final Map<String, String> fields, final String key) {
+			if (fields.containsKey(key)) {
+				final String value = fields.get(key).trim();
+				fields.remove(key);
+				return value;
+			}
+
+			return null;
 		}
 
 		String writeInterfaceMethod() {
 			final StringBuilder interfaceMethod = new StringBuilder();
 			if (!StringUtils.isNullOrEmpty(this.comments)) {
-				StringUtils.appendLine(interfaceMethod, "\t\t" + this.comments);
+				StringUtils.appendLine(interfaceMethod, "\n\t\t" + this.comments);
 			}
 
 			interfaceMethod.append(String.format("\t\t%s;\n", this.getHeader()));
@@ -261,25 +306,34 @@ class InterfaceGen {
 		String writeInvokeMethod() {
 			return this.invokeMethod.writeInvokeMethod(this);
 		}
+
+		String getBattleParameter() {
+			final List<String> battleParameters = this.parameterMap.get(Battle.class.getSimpleName());
+			if (battleParameters == null || battleParameters.size() != 1) {
+				Global.error("Deadsies should only be true when there is exactly one input battle to check." +
+						"Interface Name: " + this.interfaceName);
+				return StringUtils.empty();
+			}
+
+			return battleParameters.get(0);
+		}
 	}
 
 	private enum InvokeType {
-		VOID("Void", VoidInvoke::new);
+		VOID(VoidInvoke::new);
 
-		private final String name;
 		private final GetInvokeMethod getInvokeMethod;
 
-		InvokeType(final String name, final GetInvokeMethod getInvokeMethod) {
-			this.name = name;
+		InvokeType(final GetInvokeMethod getInvokeMethod) {
 			this.getInvokeMethod = getInvokeMethod;
 		}
 
 		private interface GetInvokeMethod {
-			InvokeMethod getInvokeMethod(final String value);
+			InvokeMethod getInvokeMethod();
 		}
 
-		public InvokeMethod getInvokeMethod(String value) {
-			return this.getInvokeMethod.getInvokeMethod(value);
+		public InvokeMethod getInvokeMethod() {
+			return this.getInvokeMethod.getInvokeMethod();
 		}
 	}
 
@@ -288,81 +342,86 @@ class InterfaceGen {
 	}
 
 	private static class VoidInvoke extends InvokeMethod {
-		private final boolean moldBreaker;
-		private final boolean deadsies;
 
-		VoidInvoke(final String value) {
-			final Scanner in = new Scanner(value);
+		private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
+			if (passInvokees(interfaceMethod)) {
+				return "List<Object> invokees, " + interfaceMethod.parameters;
+			}
 
-			this.moldBreaker = in.nextBoolean();
-			this.deadsies = in.nextBoolean();
+			return interfaceMethod.parameters;
+		}
 
-			in.close();
+		private static String writeDeclaration(final InterfaceMethod interfaceMethod) {
+			if (passInvokees(interfaceMethod)) {
+				return StringUtils.empty();
+			}
+
+			return "\n" + interfaceMethod.invokeeDeclaration + "\n";
+		}
+
+		private static boolean passInvokees(final InterfaceMethod interfaceMethod) {
+			return StringUtils.isNullOrEmpty(interfaceMethod.invokeeDeclaration);
 		}
 
 		public String writeInvokeMethod(final InterfaceMethod interfaceMethod) {
 			final String methodName = "invoke" + interfaceMethod.interfaceName;
-			final String header = MethodInfo.createHeader("static void", methodName, "List<Object> invokees, " + interfaceMethod.parameters);
+			final String header = MethodInfo.createHeader("static void", methodName, this.getInvokeParameters(interfaceMethod));
 
 			StringBuilder body = new StringBuilder();
-			body.append(this.checkDeadsies(interfaceMethod));
+			body.append(checkDeadsies(interfaceMethod));
+			body.append(writeDeclaration(interfaceMethod));
 			StringUtils.appendLine(body, "\nfor (Object invokee : invokees) {");
 			StringUtils.appendLine(body, "if (invokee instanceof " + interfaceMethod.interfaceName + ") {");
 			StringUtils.appendLine(body, "if (Effect.isInactiveEffect(invokee)) {");
 			StringUtils.appendLine(body, "continue;");
 			StringUtils.appendLine(body, "}");
+			body.append(checkMoldBreaker(interfaceMethod));
 			StringUtils.appendLine(body, "");
 			StringUtils.appendLine(body, interfaceMethod.interfaceName + " effect = (" + interfaceMethod.interfaceName + ")invokee;");
 			StringUtils.appendLine(body, "effect." + interfaceMethod.getMethodCall() + ";");
-			body.append(this.checkDeadsies(interfaceMethod));
+			body.append(checkDeadsies(interfaceMethod));
 			StringUtils.appendLine(body, "}");
 			StringUtils.appendLine(body, "}");
 
-			return new MethodInfo(header, body.toString(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();
+			return new MethodInfo(header, body.toString().trim(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();
 		}
 
-		private String checkDeadsies(final InterfaceMethod interfaceMethod) {
-			if (!this.deadsies) {
+
+		private static String checkMoldBreaker(final InterfaceMethod interfaceMethod) {
+			if (StringUtils.isNullOrEmpty(interfaceMethod.moldBreaker)) {
 				return StringUtils.empty();
 			}
 
-			final List<String> battleParameters = interfaceMethod.parameterMap.get(Battle.class.getSimpleName());
-			if (battleParameters == null || battleParameters.size() != 1) {
-				Global.error("Deadsies should only be true when there is exactly one input battle to check." +
-						"Interface Name: " + interfaceMethod);
+			final StringBuilder moldBreakerCheck = new StringBuilder("\n");
+			StringUtils.appendLine(moldBreakerCheck, "// If this is an ability that is being affected by mold breaker, we don't want to do anything with it");
+			StringUtils.appendLine(moldBreakerCheck, "if (invokee instanceof Ability && " + interfaceMethod.moldBreaker + ".breaksTheMold()) {");
+			StringUtils.appendLine(moldBreakerCheck, "continue;");
+			StringUtils.appendLine(moldBreakerCheck, "}");
+
+			return moldBreakerCheck.toString();
+		}
+
+		private static String checkDeadsies(final InterfaceMethod interfaceMethod) {
+			if (!interfaceMethod.deadsies) {
 				return StringUtils.empty();
 			}
 
-			final String battleParameter = battleParameters.get(0);
+			final String battleParameter = interfaceMethod.getBattleParameter();
 
 			final List<String> activePokemonParameters = interfaceMethod.parameterMap.get(ActivePokemon.class.getSimpleName());
 			if (activePokemonParameters == null) {
 				return StringUtils.empty();
 			}
 
-			StringBuilder body = new StringBuilder();
+			StringBuilder deadsiesCheck = new StringBuilder();
 			for (final String activePokemonParameter : activePokemonParameters) {
-				StringUtils.appendLine(body, "");
-				StringUtils.appendLine(body, String.format("if (%s.isFainted(%s)) {", activePokemonParameter, battleParameter));
-				StringUtils.appendLine(body, "return;");
-				StringUtils.appendLine(body, "}");
+				StringUtils.appendLine(deadsiesCheck, "");
+				StringUtils.appendLine(deadsiesCheck, String.format("if (%s.isFainted(%s)) {", activePokemonParameter, battleParameter));
+				StringUtils.appendLine(deadsiesCheck, "return;");
+				StringUtils.appendLine(deadsiesCheck, "}");
 			}
 
-			return body.toString();
-		}
-
-		public static void performApplyDamageEffect(List<Object> invokees, Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
-
-			for (Object invokee : invokees) {
-				if (invokee instanceof EffectInterfaces.ApplyDamageEffect) {
-					if (Effect.isInactiveEffect(invokee)) {
-						continue;
-					}
-
-					EffectInterfaces.ApplyDamageEffect effect = (EffectInterfaces.ApplyDamageEffect) invokee;
-					effect.applyDamageEffect(b, user, victim, damage);
-				}
-			}
+			return deadsiesCheck.toString();
 		}
 	}
 }

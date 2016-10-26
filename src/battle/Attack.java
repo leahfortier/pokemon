@@ -329,7 +329,7 @@ public abstract class Attack implements Serializable {
 		List<Object> invokees = b.getEffectsList(me);
 		
 		// Apply a damage effect
-		ApplyDamageEffect.invokeApplyDamageEffect(invokees, b, me, o, damage);
+		ApplyDamageEffect.invokeApplyDamageEffect(b, me, o, damage);
 		
 		if (me.isFainted(b)) {
 			return;

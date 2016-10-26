@@ -1,6 +1,5 @@
-# "Void: boolean boolean" means this is a void method to be invoked, 
-# first boolean is whether or not mold breaker is a factor to check, 
-# second boolean is if early exit is necessary in a battle situation
+# The EffectList parameter should contain the ActivePokemon parameter that represents the entire invokee list
+# If this is unspecified, then the invokee list will default to being passed in as a new parameter in the invoke method
 
 ApplyDamageEffect:
 	Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated
@@ -13,6 +12,19 @@ ApplyDamageEffect:
 		// victim: The Pokemon that received the attack
 		// damage: The amount of damage that was dealt to victim by the user 
 		###
-		Void: false false
+		Invoke: Void false
+		EffectList: user
+	*
+***
+EndTurnEffect:
+	Method:
+		Header: void applyEndTurn
+		Parameters: ActivePokemon victim, Battle b
+		Invoke: Void true
+		SetInvokees:
+		// Weather is handled separately
+		List<Object> invokees = b.getEffectsList(victim);
+		invokees.remove(b.getWeather());
+		###
 	*
 ***

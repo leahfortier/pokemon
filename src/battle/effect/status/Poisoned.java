@@ -1,7 +1,7 @@
 package battle.effect.status;
 
 import battle.Battle;
-import battle.effect.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.PokemonEffect;
 import main.Type;
 import namesies.AbilityNamesies;
