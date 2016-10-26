@@ -17,7 +17,7 @@ Override:
 ***
 RecoilMove:
 	Recoil:
-		Header: void applyRecoil(Battle b, ActivePokemon user, Integer damage)
+		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
 		Try: 
 		if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) 
 		{
@@ -615,7 +615,7 @@ Override:
 		// Protect is a success!
 		b.printAttacking(p);
 		b.addMessage(opp.getName() + " is protecting itself!");
-		Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
+		CrashDamageMove.invokeCrashDamageMove(b, p);
 	
 		// Additional Effects
 		protectingEffects(p, opp, b);
@@ -691,7 +691,7 @@ Override:
 		AddMapField: NextTurnSubside: True
 		AddMapField: CastMessage: {2-}
 		AddMapField: SubsideMessage: victim.getName() + " is no longer trapped by {1_}."
-		AddMapField: RapidSpin: user.getName() + " was released from {1_}!"
+		AddMapField: RapidSpin: releaser.getName() + " was released from {1_}!"
 		AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
 		AddMapField: ApplyEndTurn:
 		if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
@@ -802,13 +802,13 @@ Override:
 ***
 RapidSpinRelease:
 	RapidSpin:
-		Header: void releaseRapidSpin(Battle b, ActivePokemon user)
+		Header: void releaseRapidSpin(Battle b, ActivePokemon releaser)
 		Body:
 		b.addMessage({0});
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-		user.getEffects().remove(this);
-		b.getEffects(user.user()).remove(this);
+		releaser.getEffects().remove(this);
+		b.getEffects(releaser.user()).remove(this);
 		###
 	*
 ***
@@ -888,7 +888,7 @@ Override:
 ***
 EntryEffect:
 	Enter:
-		Header: void enter(Battle b, ActivePokemon victim)
+		Header: void enter(Battle b, ActivePokemon enterer)
 	*
 ***
 TypeHolder:
@@ -1029,8 +1029,13 @@ Override:
 	*
 ***
 FaintEffect:
-	Deathwish:
-		Header: void deathwish(Battle b, ActivePokemon dead, ActivePokemon murderer)
+	DeathWish:
+		Header: void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
+	*
+***
+MurderEffect:
+	KillWish:
+		Header: void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
 	*
 ***
 PassableEffect:
@@ -1118,7 +1123,7 @@ GroundedEffect:
 			b.addMessage(p.getName() + " fell to the ground!");
 		}
 		
-		Battle.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+		LevitationEffect.falllllllll(b, p);
 		###
 		AddInterface: BeforeTurnEffect
 		AddMapField: CanAttack:
@@ -1252,7 +1257,7 @@ Override:
 		AddInterface: EntryEffect
 		AddMapField: Enter: 
 		b.addEffect(Weather.getEffect(EffectNamesies.{11}).newInstance());
-		b.addMessage(victim.getName() + "'s " + this.getName() + " {2-}!");
+		b.addMessage(enterer.getName() + "'s " + this.getName() + " {2-}!");
 		###
 	*
 ***
@@ -1270,7 +1275,7 @@ Override:
 		AddMapField: Enter: 
 		// TODO: I think this isn't the intended effect of this ability
 		b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
-		b.addMessage(victim.getName() + "'s " + this.getName() + " eliminated the weather!");
+		b.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		###
 	*
 ***

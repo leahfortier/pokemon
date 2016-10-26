@@ -15,38 +15,38 @@ import battle.effect.CritStageEffect;
 import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
 import battle.effect.EffectBlockerEffect;
-import battle.effect.EndBattleEffect;
-import battle.effect.EntryEffect;
-import battle.effect.FaintEffect;
 import battle.effect.HalfWeightEffect;
 import battle.effect.IgnoreStageEffect;
-import battle.effect.LevitationEffect;
 import battle.effect.ModifyStageValueEffect;
-import battle.effect.NameChanger;
 import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentPowerChangeEffect;
 import battle.effect.OpponentTrappingEffect;
-import battle.effect.PhysicalContactEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.PriorityChangeEffect;
 import battle.effect.StageChangingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.StatChangingEffect;
-import battle.effect.StatLoweredEffect;
 import battle.effect.StatProtectingEffect;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.SwitchOutEffect;
-import battle.effect.TakeDamageEffect;
 import battle.effect.TargetSwapperEffect;
 import battle.effect.WeatherBlockerEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
-import battle.effect.attack.CrashDamageMove;
-import battle.effect.attack.RecoilMove;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.CrashDamageMove;
+import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.MurderEffect;
+import battle.effect.generic.EffectInterfaces.NameChanger;
+import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
+import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.Weather;
 import battle.effect.holder.ItemHolder;
@@ -689,9 +689,9 @@ public abstract class Ability implements Serializable {
 			return (Intimidate)(new Intimidate().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
-			other.getAttributes().modifyStage(victim, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
+		public void enter(Battle b, ActivePokemon enterer) {
+			ActivePokemon other = b.getOtherPokemon(enterer.user());
+			other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 	}
 
@@ -897,9 +897,9 @@ public abstract class Ability implements Serializable {
 			return (Drought)(new Drought().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
+		public void enter(Battle b, ActivePokemon enterer) {
 			b.addEffect(Weather.getEffect(EffectNamesies.SUNNY).newInstance());
-			b.addMessage(victim.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
 		}
 	}
 
@@ -914,9 +914,9 @@ public abstract class Ability implements Serializable {
 			return (Frisk)(new Frisk().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
-			if (other.isHoldingItem(b)) b.addMessage(victim.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			ActivePokemon other = b.getOtherPokemon(enterer.user());
+			if (other.isHoldingItem(b)) b.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
 		}
 	}
 
@@ -1130,10 +1130,10 @@ public abstract class Ability implements Serializable {
 			return (CloudNine)(new CloudNine().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
+		public void enter(Battle b, ActivePokemon enterer) {
 			// TODO: I think this isn't the intended effect of this ability
 			b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
-			b.addMessage(victim.getName() + "'s " + this.getName() + " eliminated the weather!");
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		}
 	}
 
@@ -1483,8 +1483,8 @@ public abstract class Ability implements Serializable {
 			return (Forewarn)(new Forewarn().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+		public void enter(Battle b, ActivePokemon enterer) {
+			ActivePokemon other = b.getOtherPokemon(enterer.user());
 			List<AttackNamesies> besties = new ArrayList<>();
 			
 			int highestPower = -1;
@@ -1513,7 +1513,7 @@ public abstract class Ability implements Serializable {
 				warn = besties.get((int)(Math.random()*besties.size()));
 			}
 			
-			b.addMessage(victim.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
 		}
 	}
 
@@ -1590,9 +1590,9 @@ public abstract class Ability implements Serializable {
 			return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
-				b.addMessage(victim.getName() + " does not break the mold!!!!!!!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			if (enterer.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
+				b.addMessage(enterer.getName() + " does not break the mold!!!!!!!");
 			}
 		}
 	}
@@ -1767,7 +1767,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Moxie extends Ability implements FaintEffect {
+	private static class Moxie extends Ability implements MurderEffect {
 		private static final long serialVersionUID = 1L;
 
 		Moxie() {
@@ -1778,7 +1778,7 @@ public abstract class Ability implements Serializable {
 			return (Moxie)(new Moxie().activate());
 		}
 
-		public void deathwish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+		public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			murderer.getAttributes().modifyStage(murderer, murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 	}
@@ -1794,8 +1794,8 @@ public abstract class Ability implements Serializable {
 			return (Imposter)(new Imposter().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			PokemonEffect.getEffect(EffectNamesies.TRANSFORMED).cast(b, victim, victim, CastSource.ABILITY, false);
+		public void enter(Battle b, ActivePokemon enterer) {
+			PokemonEffect.getEffect(EffectNamesies.TRANSFORMED).cast(b, enterer, enterer, CastSource.ABILITY, false);
 		}
 	}
 
@@ -1903,13 +1903,13 @@ public abstract class Ability implements Serializable {
 			return (Trace)(new Trace().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+		public void enter(Battle b, ActivePokemon enterer) {
+			ActivePokemon other = b.getOtherPokemon(enterer.user());
 			if (other.hasAbility(AbilityNamesies.MULTITYPE) || other.hasAbility(AbilityNamesies.ILLUSION) || other.hasAbility(AbilityNamesies.STANCE_CHANGE) || other.hasAbility(AbilityNamesies.IMPOSTER) || other.hasAbility(this.namesies)) {
 				return;
 			}
 			
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, victim, victim, CastSource.ABILITY, true);
+			PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, enterer, enterer, CastSource.ABILITY, true);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -1933,8 +1933,8 @@ public abstract class Ability implements Serializable {
 			return (Download)(new Download().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+		public void enter(Battle b, ActivePokemon enterer) {
+			ActivePokemon other = b.getOtherPokemon(enterer.user());
 			PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 			
 			int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
@@ -1942,7 +1942,7 @@ public abstract class Ability implements Serializable {
 			
 			Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
 			
-			victim.getAttributes().modifyStage(victim, victim, 1, toRaise, b, CastSource.ABILITY);
+			enterer.getAttributes().modifyStage(enterer, enterer, 1, toRaise, b, CastSource.ABILITY);
 		}
 	}
 
@@ -1957,8 +1957,8 @@ public abstract class Ability implements Serializable {
 			return (Pressure)(new Pressure().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + " is exerting pressure!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			b.addMessage(enterer.getName() + " is exerting pressure!");
 		}
 	}
 
@@ -2265,9 +2265,9 @@ public abstract class Ability implements Serializable {
 			return (SandStream)(new SandStream().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
+		public void enter(Battle b, ActivePokemon enterer) {
 			b.addEffect(Weather.getEffect(EffectNamesies.SANDSTORM).newInstance());
-			b.addMessage(victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
 		}
 	}
 
@@ -2506,12 +2506,13 @@ public abstract class Ability implements Serializable {
 			return (Anticipation)(new Anticipation().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+		public void enter(Battle b, ActivePokemon enterer) {
+			ActivePokemon other = b.getOtherPokemon(enterer.user());
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
-				if (Type.getBasicAdvantage(attack.getActualType(), victim, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
-					b.addMessage(victim.getName() + "'s " + this.getName() + " made it shudder!");
+				if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
+					// TODO: Shouldn't this be for a random move?
+					b.addMessage(enterer.getName() + "'s " + this.getName() + " made it shudder!");
 					break;
 				}
 			}
@@ -2620,9 +2621,9 @@ public abstract class Ability implements Serializable {
 			return (Drizzle)(new Drizzle().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
+		public void enter(Battle b, ActivePokemon enterer) {
 			b.addEffect(Weather.getEffect(EffectNamesies.RAINING).newInstance());
-			b.addMessage(victim.getName() + "'s " + this.getName() + " started a downpour!");
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " started a downpour!");
 		}
 	}
 
@@ -2637,10 +2638,10 @@ public abstract class Ability implements Serializable {
 			return (AirLock)(new AirLock().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
+		public void enter(Battle b, ActivePokemon enterer) {
 			// TODO: I think this isn't the intended effect of this ability
 			b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
-			b.addMessage(victim.getName() + "'s " + this.getName() + " eliminated the weather!");
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		}
 	}
 
@@ -2769,9 +2770,9 @@ public abstract class Ability implements Serializable {
 			return (SnowWarning)(new SnowWarning().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
+		public void enter(Battle b, ActivePokemon enterer) {
 			b.addEffect(Weather.getEffect(EffectNamesies.HAILING).newInstance());
-			b.addMessage(victim.getName() + "'s " + this.getName() + " caused it to hail!");
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
 		}
 	}
 
@@ -2863,7 +2864,7 @@ public abstract class Ability implements Serializable {
 			count++;
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
+		public void enter(Battle b, ActivePokemon enterer) {
 			count = 0;
 		}
 
@@ -3128,15 +3129,15 @@ public abstract class Ability implements Serializable {
 			breakIllusion(b, victim);
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
+		public void enter(Battle b, ActivePokemon enterer) {
 			// No Illusion today...
 			if (!activated) {
 				return;
 			}
 			
 			// Display the Illusion changes
-			b.addMessage("", illusionSpecies, illusionShiny, false, victim.user());
-			b.addMessage("", victim);
+			b.addMessage("", illusionSpecies, illusionShiny, false, enterer.user());
+			b.addMessage("", enterer);
 		}
 
 		public void switchOut(ActivePokemon switchee) {
@@ -3266,8 +3267,8 @@ public abstract class Ability implements Serializable {
 			return (MoldBreaker)(new MoldBreaker().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + " breaks the mold!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			b.addMessage(enterer.getName() + " breaks the mold!");
 		}
 	}
 
@@ -3282,8 +3283,8 @@ public abstract class Ability implements Serializable {
 			return (Teravolt)(new Teravolt().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + " is radiating a bursting aura!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			b.addMessage(enterer.getName() + " is radiating a bursting aura!");
 		}
 	}
 
@@ -3298,8 +3299,8 @@ public abstract class Ability implements Serializable {
 			return (Turboblaze)(new Turboblaze().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + " is radiating a blazing aura!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			b.addMessage(enterer.getName() + " is radiating a blazing aura!");
 		}
 	}
 
@@ -3466,8 +3467,8 @@ public abstract class Ability implements Serializable {
 			return (Unnerve)(new Unnerve().activate());
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(victim.user()).getName() + " too nervous to eat berries!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.user()).getName() + " too nervous to eat berries!");
 		}
 	}
 
@@ -3880,8 +3881,8 @@ public abstract class Ability implements Serializable {
 			return true;
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + " is in Shield Forme!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			b.addMessage(enterer.getName() + " is in Shield Forme!");
 			shieldForm = true;
 		}
 

@@ -6,18 +6,18 @@ import battle.effect.BeforeTurnEffect;
 import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
-import battle.effect.EntryEffect;
-import battle.effect.NameChanger;
 import battle.effect.OpponentAccuracyBypassEffect;
 import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentPowerChangeEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.PriorityChangeEffect;
-import battle.effect.attack.CrashDamageMove;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
@@ -358,7 +358,7 @@ public class Battle {
 	}
 
 	public void enterBattle(ActivePokemon enterer) {
-		Battle.invoke(this.getEffectsList(enterer), NameChanger.class, "setNameChange", this, enterer);
+		NameChanger.setNameChanges(this, enterer);
 
 		String enterMessage = "";
 		if (enterer.user()) {
@@ -394,7 +394,7 @@ public class Battle {
 		addMessage(enterMessage, enterer, true);
 
 		enterer.getAttributes().setUsed(true);
-		Battle.invoke(getEffectsList(enterer), EntryEffect.class, "enter", this, enterer);
+		EntryEffect.invokeEntryEffect(this, enterer);
 
 		getTrainer(!enterer.user()).resetUsed();
 	}
@@ -496,7 +496,7 @@ public class Battle {
 			}
 			else {
 				addMessage(me.getName() + "'s attack missed!");
-				Battle.invoke(Collections.singletonList(me.getAttack()), CrashDamageMove.class, "crash", this, me);
+				CrashDamageMove.invokeCrashDamageMove(this, me);
 			}			
 		}
 		
@@ -536,12 +536,9 @@ public class Battle {
 		List<Object> list = new ArrayList<>();
 		Collections.addAll(list, additionalItems);
 		
-		list.addAll(p.getEffects());
+		list.addAll(p.getAllEffects(this));
 		list.addAll(getEffects(p.user()));
 		list.addAll(getEffects());
-		list.add(p.getStatus());
-		list.add(p.getAbility());
-		list.add(p.getHeldItem(this));
 		list.add(weather);
 		
 		return list;
@@ -924,21 +921,6 @@ public class Battle {
 	// Used for calling methods that continuously multiply the results by the base value where mold breaker may be a factor to check, returns this value
 	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that are void
-	public static <T> void invoke(List<?> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		Battle.invoke(-1, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that are void where mold breaker may be a factor to check
-	public static <T> void invoke(ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		Battle.invoke(-1, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that are void where you need to split early if an activePokemon is deadsies
-	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		Battle.invoke(-1, -1, false, false, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where you need to split early if an activePokemon is deadsie

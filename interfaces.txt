@@ -12,7 +12,7 @@ ApplyDamageEffect:
 		// victim: The Pokemon that received the attack
 		// damage: The amount of damage that was dealt to victim by the user 
 		###
-		Invoke: Void false
+		Invoke: Void
 		EffectList: user
 	*
 ***
@@ -20,11 +20,152 @@ EndTurnEffect:
 	Method:
 		Header: void applyEndTurn
 		Parameters: ActivePokemon victim, Battle b
-		Invoke: Void true
+		Invoke: Void
+		Deadsies: victim
 		SetInvokees:
 		// Weather is handled separately
 		List<Object> invokees = b.getEffectsList(victim);
 		invokees.remove(b.getWeather());
 		###
+	*
+***
+RecoilMove:
+	Method:
+		Header: void applyRecoil
+		Parameters: Battle b, ActivePokemon user, int damage
+		Invoke: Void
+		Move: user
+	*
+***
+PhysicalContactEffect:
+	Method:
+		Comments: 
+		// b: The current battle
+		// user: The user of the attack that caused the physical contact
+		// victim: The Pokemon that received the physical contact attack
+		###
+		Header: void contact
+		Parameters: Battle b, ActivePokemon user, ActivePokemon victim
+		Invoke: Void
+		Deadsies: user
+		EffectList: victim
+	*
+***
+TakeDamageEffect:
+	Method:
+		Comments:
+		// b: The current battle
+		// user: The user of the attack
+		// victim: The Pokemon who is taking damage, they are the one's probably implementing this
+		###
+		Header: void takeDamage
+		Parameters: Battle b, ActivePokemon user, ActivePokemon victim
+		EffectList: victim
+		Invoke: Void
+		Deadsies: victim
+	*
+***
+CrashDamageMove:
+	Method:
+		Header: void crash
+		Parameters: Battle b, ActivePokemon user
+		Move: user
+		Invoke: Void
+	*
+***
+BarrierEffect:
+	Method:
+		Header: void breakBarrier
+		Parameters: Battle b, ActivePokemon breaker
+		SetInvokees: List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker.user()));
+		Invoke: Void
+		InvokeName: breakBarriers
+	*
+***
+DefogRelease:
+	Method:
+		Header: void releaseDefog
+		Parameters: Battle b, ActivePokemon victim
+		Invoke: Void
+		EffectList: victim
+		InvokeName: release
+	*
+***
+RapidSpinRelease:
+	Method:
+		Header: void releaseRapidSpin
+		Parameters: Battle b, ActivePokemon releaser
+		Invoke: Void
+		EffectList: releaser
+		InvokeName: release
+	*
+***
+NameChanger:
+	Method:
+		Comments: // TODO: This one
+		Header: String getNameChange
+	*
+	Method:
+		Header: void setNameChange
+		Parameters: Battle b, ActivePokemon victim
+		Invoke: Void
+		EffectList: victim
+		InvokeName: setNameChanges
+	*
+***
+EntryEffect:
+	Method:
+		Header: void enter
+		Parameters: Battle b, ActivePokemon enterer
+		Invoke: void
+		EffectList: enterer
+	*
+***
+StatLoweredEffect:
+	Method:
+		Comments:
+		// b: The current battle
+		// caster: The Pokemon responsible for causing the stat to be lowered
+		// victim: The Pokemon who's stat is being lowered
+		###
+		Header: void takeItToTheNextLevel
+		Parameters: Battle b, ActivePokemon caster, ActivePokemon victim
+		Invoke: Void
+		EffectList: victim
+	*
+***
+LevitationEffect:
+	Method:
+		Header: void fall
+		Parameters: Battle b, ActivePokemon fallen
+		Invoke: Void
+		EffectList: fallen
+		InvokeName: falllllllll
+	*
+***
+FaintEffect:
+	Method: 
+		Header: void deathWish
+		Parameters: Battle b, ActivePokemon dead, ActivePokemon murderer
+		Invoke: Void
+		InvokeName: grantDeathWish
+		EffectList: dead
+	*
+***
+MurderEffect:
+	Comments: // KILL KILL KILL MURDER MURDER MURDER
+	Method: 
+		Header: void killWish
+		Parameters: Battle b, ActivePokemon dead, ActivePokemon murderer
+		Invoke: Void
+		InvokeName: killKillKillMurderMurderMurder
+		EffectList: murderer
+	*
+***
+EndBattleEffect:
+	Method:
+		Header: void afterBattle
+		Parameters: Trainer player, Battle b, ActivePokemon p
+		Invoke: Void
 	*
 ***

@@ -6,13 +6,13 @@ import java.util.Map;
 import battle.MoveType;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.GroundedEffect;
-import battle.effect.LevitationEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.StageChangingEffect;
 import battle.effect.StatSwitchingEffect;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.status.StatusCondition;
 import main.Type;
 import map.AreaData.TerrainType;
@@ -114,7 +114,7 @@ public abstract class BattleEffect extends Effect {
 				b.addMessage(p.getName() + " fell to the ground!");
 			}
 			
-			Battle.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+			LevitationEffect.falllllllll(b, p);
 		}
 
 		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {

@@ -2,7 +2,6 @@ package generator;
 
 import battle.Battle;
 import main.Global;
-import pokemon.ActivePokemon;
 import util.FileIO;
 import util.StringUtils;
 
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 class InterfaceGen {
 	
@@ -138,9 +136,12 @@ class InterfaceGen {
 		private static final String HEADER = "Header";
 		private static final String PARAMETERS = "Parameters";
 		private static final String INVOKE = "Invoke";
+		private static final String INVOKE_NAME = "InvokeName";
 		private static final String EFFECT_LIST = "EffectList";
 		private static final String SET_INVOKEES = "SetInvokees";
+		private static final String MOVE = "Move";
 		private static final String MOLD_BREAKER = "MoldBreaker";
+		private static final String DEADSIES = "Deadsies";
 
 		private final String interfaceName;
 
@@ -149,12 +150,12 @@ class InterfaceGen {
 
 		private String parameters;
 		private String typelessParameters;
-		private Map<String, List<String>> parameterMap;
+		private String battleParameter;
 
 		private String invokeeDeclaration;
 
 		private String moldBreaker;
-		private boolean deadsies;
+		private List<String> deadsies;
 
 		private String comments;
 		private InvokeMethod invokeMethod;
@@ -164,7 +165,7 @@ class InterfaceGen {
 
 			this.parameters = StringUtils.empty();
 			this.typelessParameters = StringUtils.empty();
-			this.parameterMap = new TreeMap<>();
+			this.deadsies = new ArrayList<>();
 
 			this.readFields(fields);
 		}
@@ -226,11 +227,13 @@ class InterfaceGen {
 
 					this.typelessParameters += parameterName;
 
-					if (!this.parameterMap.containsKey(parameterType)) {
-						this.parameterMap.put(parameterType, new ArrayList<>());
-					}
+					if (parameterType.equals(Battle.class.getSimpleName())) {
+						if (!StringUtils.isNullOrEmpty(this.battleParameter)) {
+							Global.error("Can only have one battle parameter.  Interface: " + this.interfaceName);
+						}
 
-					this.parameterMap.get(parameterType).add(parameterName);
+						this.battleParameter = parameterName;
+					}
 				}
 			}
 
@@ -239,19 +242,24 @@ class InterfaceGen {
 				this.comments = comments;
 			}
 
-			// Invoke: InvokeType boolean
 			final String invoke = getField(fields, INVOKE);
 			if (invoke != null) {
-				final Scanner in = new Scanner(invoke);
+				this.invokeMethod = InvokeType.valueOf(invoke.toUpperCase()).getInvokeMethod();
+			}
 
-				this.invokeMethod = InvokeType.valueOf(in.next().toUpperCase()).getInvokeMethod();
-				this.deadsies = in.nextBoolean();
+			final String invokeName = getField(fields, INVOKE_NAME);
+			if (invokeName != null) {
+				if (this.invokeMethod == null) {
+					Global.error("Must specify type of invoke method if you want to name it.  Interface: " + this.interfaceName);
+				}
+
+				this.invokeMethod.methodName = invokeName;
 			}
 
 			final String effectListParameter = getField(fields, EFFECT_LIST);
 			if (effectListParameter != null) {
-				this.invokeeDeclaration = String.format("\nList<Object> invokees = %s.getEffectsList(%s);",
-						this.getBattleParameter(), effectListParameter);
+				this.invokeeDeclaration = String.format("List<Object> invokees = %s.getEffectsList(%s);",
+						this.battleParameter, effectListParameter);
 			}
 
 			final String setInvokees = getField(fields, SET_INVOKEES);
@@ -261,12 +269,32 @@ class InterfaceGen {
 							"Interface: " + this.interfaceName);
 				}
 
-				this.invokeeDeclaration = setInvokees;
+				this.invokeeDeclaration = setInvokees + "\n";
+			}
+
+			// TODO: Eventually would just like to remove the invokee loop for this case and just operate directly on the attack
+			final String moveInvoke = getField(fields, MOVE);
+			if (moveInvoke != null) {
+				if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
+					Global.error("Can not define multiple ways to set the effects list. " +
+							"Interface: " + this.interfaceName);
+				}
+
+				this.invokeeDeclaration = String.format("List<Object> invokees = " +
+						"Collections.singletonList(%s.getAttack());", moveInvoke);
 			}
 
 			final String moldBreaker = getField(fields, MOLD_BREAKER);
 			if (moldBreaker != null) {
 				this.moldBreaker = moldBreaker;
+			}
+
+			final String allDeadsies = getField(fields, DEADSIES);
+			if (allDeadsies != null) {
+				Scanner in = new Scanner(allDeadsies);
+				while (in.hasNext()) {
+					this.deadsies.add(in.next());
+				}
 			}
 
 			for (final Entry<String, String> field : fields.entrySet()) {
@@ -304,18 +332,11 @@ class InterfaceGen {
 		}
 
 		String writeInvokeMethod() {
-			return this.invokeMethod.writeInvokeMethod(this);
-		}
-
-		String getBattleParameter() {
-			final List<String> battleParameters = this.parameterMap.get(Battle.class.getSimpleName());
-			if (battleParameters == null || battleParameters.size() != 1) {
-				Global.error("Deadsies should only be true when there is exactly one input battle to check." +
-						"Interface Name: " + this.interfaceName);
+			if (this.invokeMethod == null) {
 				return StringUtils.empty();
 			}
 
-			return battleParameters.get(0);
+			return this.invokeMethod.writeInvokeMethod(this);
 		}
 	}
 
@@ -338,14 +359,24 @@ class InterfaceGen {
 	}
 
 	private static abstract class InvokeMethod {
+		protected String methodName;
+
 		public abstract String writeInvokeMethod(final InterfaceMethod interfaceMethod);
 	}
 
 	private static class VoidInvoke extends InvokeMethod {
 
+		private String getMethodName(final InterfaceMethod interfaceMethod) {
+			if (StringUtils.isNullOrEmpty(this.methodName)) {
+				return "invoke" + interfaceMethod.interfaceName;
+			}
+
+			return this.methodName;
+		}
+
 		private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
 			if (passInvokees(interfaceMethod)) {
-				return "List<Object> invokees, " + interfaceMethod.parameters;
+				return "List<?> invokees, " + interfaceMethod.parameters;
 			}
 
 			return interfaceMethod.parameters;
@@ -356,7 +387,7 @@ class InterfaceGen {
 				return StringUtils.empty();
 			}
 
-			return "\n" + interfaceMethod.invokeeDeclaration + "\n";
+			return "\n" + interfaceMethod.invokeeDeclaration;
 		}
 
 		private static boolean passInvokees(final InterfaceMethod interfaceMethod) {
@@ -364,7 +395,7 @@ class InterfaceGen {
 		}
 
 		public String writeInvokeMethod(final InterfaceMethod interfaceMethod) {
-			final String methodName = "invoke" + interfaceMethod.interfaceName;
+			final String methodName = this.getMethodName(interfaceMethod);
 			final String header = MethodInfo.createHeader("static void", methodName, this.getInvokeParameters(interfaceMethod));
 
 			StringBuilder body = new StringBuilder();
@@ -386,7 +417,6 @@ class InterfaceGen {
 			return new MethodInfo(header, body.toString().trim(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();
 		}
 
-
 		private static String checkMoldBreaker(final InterfaceMethod interfaceMethod) {
 			if (StringUtils.isNullOrEmpty(interfaceMethod.moldBreaker)) {
 				return StringUtils.empty();
@@ -402,19 +432,9 @@ class InterfaceGen {
 		}
 
 		private static String checkDeadsies(final InterfaceMethod interfaceMethod) {
-			if (!interfaceMethod.deadsies) {
-				return StringUtils.empty();
-			}
-
-			final String battleParameter = interfaceMethod.getBattleParameter();
-
-			final List<String> activePokemonParameters = interfaceMethod.parameterMap.get(ActivePokemon.class.getSimpleName());
-			if (activePokemonParameters == null) {
-				return StringUtils.empty();
-			}
-
+			final String battleParameter = interfaceMethod.battleParameter;
 			StringBuilder deadsiesCheck = new StringBuilder();
-			for (final String activePokemonParameter : activePokemonParameters) {
+			for (final String activePokemonParameter : interfaceMethod.deadsies) {
 				StringUtils.appendLine(deadsiesCheck, "");
 				StringUtils.appendLine(deadsiesCheck, String.format("if (%s.isFainted(%s)) {", activePokemonParameter, battleParameter));
 				StringUtils.appendLine(deadsiesCheck, "return;");

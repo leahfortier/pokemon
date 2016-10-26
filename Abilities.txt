@@ -106,8 +106,8 @@ Intimidate:
 	Desc: Lowers the foe's Attack stat.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
-	other.getAttributes().modifyStage(victim, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
+	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
 	###
 *
 Static:
@@ -192,8 +192,8 @@ Frisk:
 	Desc: The Pok\u00e9mon can check the foe's held item.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
-	if (other.isHoldingItem(b)) b.addMessage(victim.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
+	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	if (other.isHoldingItem(b)) b.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
 	###
 *
 Inner Focus:
@@ -402,7 +402,7 @@ Forewarn:
 	Desc: Determines what moves the foe has.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.user());
 	List<AttackNamesies> besties = new ArrayList<>();
 
 	int highestPower = -1;
@@ -431,7 +431,7 @@ Forewarn:
 		warn = besties.get((int)(Math.random()*besties.size()));
 	}
 	
-	b.addMessage(victim.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
+	b.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
 	###
 *
 Hyper Cutter:
@@ -459,8 +459,8 @@ Iron Fist:
 	###
 	Int: PowerChangeEffect, EntryEffect
 	Enter:
-	if (victim.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
-		b.addMessage(victim.getName() + " does not break the mold!!!!!!!");
+	if (enterer.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
+		b.addMessage(enterer.getName() + " does not break the mold!!!!!!!");
 	}
 	###
 *
@@ -520,8 +520,8 @@ Rattled:
 *
 Moxie:
 	Desc: Attack rises when you knock out an opponent.
-	Int: FaintEffect
-	Deathwish: 
+	Int: MurderEffect
+	KillWish: 
 	murderer.getAttributes().modifyStage(murderer, murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
 	###
 *
@@ -529,7 +529,7 @@ Imposter:
 	Desc: It transforms itself into the Pok\u00e9mon it is facing.
 	Int: EntryEffect
 	Enter: 
-	PokemonEffect.getEffect(EffectNamesies.TRANSFORMED).cast(b, victim, victim, CastSource.ABILITY, false);
+	PokemonEffect.getEffect(EffectNamesies.TRANSFORMED).cast(b, enterer, enterer, CastSource.ABILITY, false);
 	###
 *
 Adaptability:
@@ -552,12 +552,12 @@ Trace:
 	Desc: The Pok\u00e9mon copies the foe's ability.
 	Int: EntryEffect, ChangeAbilityMove
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.user());
 	if (other.hasAbility(AbilityNamesies.MULTITYPE) || other.hasAbility(AbilityNamesies.ILLUSION) || other.hasAbility(AbilityNamesies.STANCE_CHANGE) || other.hasAbility(AbilityNamesies.IMPOSTER) || other.hasAbility(this.namesies)) {
 		return;
 	}
 	
-	PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, victim, victim, CastSource.ABILITY, true);
+	PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, enterer, enterer, CastSource.ABILITY, true);
 	###
 	AbilityChange: 
 	return b.getOtherPokemon(victim.user()).getAbility().newInstance();
@@ -571,7 +571,7 @@ Download:
 	Desc: Adjusts power according to a foe's defenses.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.user());
 	PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 	
 	int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
@@ -579,14 +579,14 @@ Download:
 	
 	Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
 	
-	victim.getAttributes().modifyStage(victim, victim, 1, toRaise, b, CastSource.ABILITY);
+	enterer.getAttributes().modifyStage(enterer, enterer, 1, toRaise, b, CastSource.ABILITY);
 	###
 *
 Pressure:
 	Desc: The Pok\u00e9mon raises the foe's PP usage.
 	Int: EntryEffect
 	Enter: 
-	b.addMessage(victim.getName() + " is exerting pressure!");
+	b.addMessage(enterer.getName() + " is exerting pressure!");
 	###
 *
 Immunity:
@@ -785,11 +785,12 @@ Anticipation:
 	Desc: Senses a foe's dangerous moves.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.user());
 	for (Move m : other.getMoves(b)) {
 		Attack attack = m.getAttack();
-		if (Type.getBasicAdvantage(attack.getActualType(), victim, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " made it shudder!");
+		if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
+			// TODO: Shouldn't this be for a random move?
+			b.addMessage(enterer.getName() + "'s " + this.getName() + " made it shudder!");
 			break;
 		}
 	}
@@ -1059,8 +1060,8 @@ Illusion:
 	}
 	
 	// Display the Illusion changes
-	b.addMessage("", illusionSpecies, illusionShiny, false, victim.user());
-	b.addMessage("", victim);
+	b.addMessage("", illusionSpecies, illusionShiny, false, enterer.user());
+	b.addMessage("", enterer);
 	###
 	GetNameChange:
 	return activated ? illusionName : null;
@@ -1143,21 +1144,21 @@ Mold Breaker:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-	b.addMessage(victim.getName() + " breaks the mold!");
+	b.addMessage(enterer.getName() + " breaks the mold!");
 	###
 *
 Teravolt:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-	b.addMessage(victim.getName() + " is radiating a bursting aura!");
+	b.addMessage(enterer.getName() + " is radiating a bursting aura!");
 	###
 *
 Turboblaze:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-	b.addMessage(victim.getName() + " is radiating a blazing aura!");
+	b.addMessage(enterer.getName() + " is radiating a blazing aura!");
 	###
 *
 Run Away:
@@ -1214,7 +1215,7 @@ Unnerve:
 	Desc: Makes the foe nervous and unable to eat Berries.
 	Int: EntryEffect
 	Enter: 
-	b.addMessage(victim.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(victim.user()).getName() + " too nervous to eat berries!");
+	b.addMessage(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.user()).getName() + " too nervous to eat berries!");
 	###
 *
 Honey Gather:
@@ -1341,7 +1342,7 @@ Stance Change:
 	return true;
 	###
 	Enter:
-	b.addMessage(victim.getName() + " is in Shield Forme!");
+	b.addMessage(enterer.getName() + " is in Shield Forme!");
 	shieldForm = true;
 	###
 	GetStat:

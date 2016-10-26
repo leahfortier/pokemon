@@ -12,25 +12,25 @@ import battle.effect.BracingEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
 import battle.effect.EffectBlockerEffect;
-import battle.effect.EntryEffect;
 import battle.effect.GroundedEffect;
 import battle.effect.HalfWeightEffect;
-import battle.effect.LevitationEffect;
 import battle.effect.OpponentPowerChangeEffect;
-import battle.effect.PhysicalContactEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.PriorityChangeEffect;
 import battle.effect.RepellingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.StatChangingEffect;
 import battle.effect.StatProtectingEffect;
-import battle.effect.TakeDamageEffect;
 import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.holder.ItemHolder;
@@ -760,8 +760,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			victim.consumeItem(b);
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + " floats with its " + this.name + "!");
+		public void enter(Battle b, ActivePokemon enterer) {
+			b.addMessage(enterer.getName() + " floats with its " + this.name + "!");
 		}
 	}
 
@@ -780,8 +780,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		public void enter(Battle b, ActivePokemon enterer) {
+			TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		}
 	}
 
@@ -1463,7 +1463,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				b.addMessage(p.getName() + " fell to the ground!");
 			}
 			
-			Battle.invoke(b.getEffectsList(p), LevitationEffect.class, "fall", b, p);
+			LevitationEffect.falllllllll(b, p);
 		}
 
 		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
@@ -2633,8 +2633,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		public void enter(Battle b, ActivePokemon enterer) {
+			TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		}
 
 		public PokemonNamesies getBaby() {

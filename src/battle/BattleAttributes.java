@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
 import main.Global;
 import namesies.EffectNamesies;
 import pokemon.Ability;
@@ -13,7 +14,6 @@ import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.ModifyStageValueEffect;
 import battle.effect.generic.PokemonEffect;
-import battle.effect.StatLoweredEffect;
 import battle.effect.StatProtectingEffect;
 import util.StringUtils;
 
@@ -277,8 +277,7 @@ public class BattleAttributes implements Serializable {
 		
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
 		if (val < 0 && caster != victim) {
-			List<Object> invokees = b.getEffectsList(victim);
-			Battle.invoke(invokees, StatLoweredEffect.class, "takeItToTheNextLevel", b, caster, victim);
+			StatLoweredEffect.invokeStatLoweredEffect(b, caster, victim);
 		}
 		
 		return true;

@@ -90,7 +90,7 @@ Air Balloon:
 	Fling: 10
 	FallMessage: fallen.getName() + " is no longer floating with its " + this.name + "!"
 	Enter:
-		b.addMessage(victim.getName() + " floats with its " + this.name + "!");
+		b.addMessage(enterer.getName() + " floats with its " + this.name + "!");
 		###
 	OnTakeDamage:
 		b.addMessage(victim.getName() + "'s " + this.name + " popped!");
@@ -104,7 +104,7 @@ Amulet Coin:
 	Price: 100
 	Fling: 30
 	Enter:
-		TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		###
 *
 Big Root:
@@ -818,7 +818,7 @@ Luck Incense:
 	Price: 9600
 	Fling: 10
 	Enter:
-		TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		###
 	Baby: Happiny
 *

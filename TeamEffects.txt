@@ -34,11 +34,11 @@ Tailwind:
 StickyWeb:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter:
-	if (victim.isLevitating(b)) {
+	if (enterer.isLevitating(b)) {
 		return;
 	}
 	
-	victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + victim.getName() + "'s {statName}!");
+	enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer.user()), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
 	###
 	CastMessage: "Sticky web covers everything!"
 	RapidSpin: "The sticky web spun away!"
@@ -47,12 +47,12 @@ StickyWeb:
 StealthRock:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter: 
-	if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+	if (enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 		return;
 	}
 	
-	b.addMessage(victim.getName() + " was hurt by stealth rock!");
-	victim.reduceHealthFraction(b, Type.getBasicAdvantage(Type.ROCK, victim, b)/8.0);
+	b.addMessage(enterer.getName() + " was hurt by stealth rock!");
+	enterer.reduceHealthFraction(b, Type.getBasicAdvantage(Type.ROCK, enterer, b)/8.0);
 	###
 	CastMessage: "Floating rocks were scattered all around!"
 	RapidSpin: "The floating rocks spun away!"
@@ -67,23 +67,23 @@ ToxicSpikes:
 	x.layers = 1;
 	###
 	Enter: 
-	if (victim.isLevitating(b)) {
+	if (enterer.isLevitating(b)) {
 		return;
 	}
 	
-	if (victim.isType(b, Type.POISON)) {
-		b.addMessage(victim.getName() + " absorbed the Toxic Spikes!");
+	if (enterer.isType(b, Type.POISON)) {
+		b.addMessage(enterer.getName() + " absorbed the Toxic Spikes!");
 		super.active = false;
 		return;
 	}
 	
-	ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user());
-	if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim)) {
+	ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.user());
+	if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
 		if (layers >= 2) {
-			PokemonEffect.getEffect(EffectNamesies.BAD_POISON).cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
+			PokemonEffect.getEffect(EffectNamesies.BAD_POISON).cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
 		}
 		else {
-			Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
+			Status.giveStatus(b, theOtherPokemon, enterer, StatusCondition.POISONED);
 		}
 	}
 	###
@@ -111,16 +111,16 @@ Spikes:
 	x.layers = 1;
 	###
 	Enter: 
-	if (victim.isLevitating(b) || victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+	if (enterer.isLevitating(b) || enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 		return;
 	}
 	
-	b.addMessage(victim.getName() + " was hurt by spikes!");
+	b.addMessage(enterer.getName() + " was hurt by spikes!");
 	
 	// TODO: Generalize this type of statement
-	if (layers == 1) victim.reduceHealthFraction(b, 1/8.0);
-	else if (layers == 2) victim.reduceHealthFraction(b, 1/6.0);
-	else victim.reduceHealthFraction(b, 1/4.0);
+	if (layers == 1) enterer.reduceHealthFraction(b, 1/8.0);
+	else if (layers == 2) enterer.reduceHealthFraction(b, 1/6.0);
+	else enterer.reduceHealthFraction(b, 1/4.0);
 	###
 	CastMessage: "Spikes were scattered all around!"
 	CanHave: True
@@ -180,10 +180,10 @@ HealSwitch:
 	###
 	Int: EntryEffect
 	Enter: 
-	victim.healHealthFraction(1);
-	victim.removeStatus();
+	enterer.healHealthFraction(1);
+	enterer.removeStatus();
 	
-	b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim);
+	b.addMessage(enterer.getName() + " health was restored due to the " + wish + "!", enterer);
 	super.active = false;
 	###
 	Cast: 

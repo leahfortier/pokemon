@@ -1,5 +1,6 @@
 package trainer;
 
+import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import item.Item;
 import item.use.BallItem;
 
@@ -24,7 +25,6 @@ import trainer.Pokedex.PokedexStatus;
 import battle.Battle;
 import battle.MessageUpdate;
 import battle.MessageUpdate.Update;
-import battle.effect.EndBattleEffect;
 
 public class CharacterData extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
@@ -289,10 +289,10 @@ public class CharacterData extends Trainer implements Serializable {
 		else {
 			b.addMessage("", Update.WIN_BATTLE);
 		}
-		
-		Battle.invoke(getEffects(), EndBattleEffect.class, "afterBattle", this, b, front());
+
+		EndBattleEffect.invokeEndBattleEffect(this.getEffects(), this, b, front());
 		for (ActivePokemon p : team) {
-			Battle.invoke(Collections.singletonList(p.getAbility()), EndBattleEffect.class, "afterBattle", this, b, p);
+			EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(b), this, b, p);
 		}
 		
 		setFront();

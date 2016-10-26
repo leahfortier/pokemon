@@ -456,7 +456,7 @@ Rapid Spin:
 	Type: Normal
 	Cat: Physical
 	ApplyEffects: 
-	Battle.invoke(b.getEffectsList(user), RapidSpinRelease.class, "releaseRapidSpin", b, user);
+	RapidSpinRelease.release(b, user);
 	###
 *
 Reflect:
@@ -3388,7 +3388,7 @@ Brick Break:
 	Acc: 100
 	Cat: Physical
 	ApplyEffects: 
-	Battle.invoke(b.getEffectsList(b.getOtherPokemon(user.user())), BarrierEffect.class, "breakBarrier", b, user);
+	BarrierEffect.breakBarriers(b, user);
 	###
 *
 High Jump Kick:
@@ -5079,8 +5079,7 @@ Defog:
 	StatChange: 1 Evasion -1
 	ApplyEffects:
 	super.applyEffects(b, user, victim);
-	
-	Battle.invoke(b.getEffectsList(victim), DefogRelease.class, "releaseDefog", b, victim);
+	DefogRelease.release(b, victim);
 	###
 *
 Horn Leech:
@@ -6201,8 +6200,8 @@ Fell Stinger:
 	Cat: Physical
 	Acc: 100
 	Pow: 30
-	Int: FaintEffect
-	Deathwish:
+	Int: MurderEffect
+	KillWish:
 	murderer.getAttributes().modifyStage(murderer, murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
 	###
 *

@@ -1,18 +1,15 @@
 package battle.effect.generic;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
 import battle.Attack;
+import battle.Battle;
 import battle.Move;
-import battle.effect.BarrierEffect;
 import battle.effect.CritBlockerEffect;
-import battle.effect.DefogRelease;
-import battle.effect.EndBattleEffect;
-import battle.effect.EntryEffect;
-import battle.effect.RapidSpinRelease;
 import battle.effect.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.BarrierEffect;
+import battle.effect.generic.EffectInterfaces.DefogRelease;
+import battle.effect.generic.EffectInterfaces.EndBattleEffect;
+import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import main.Global;
@@ -22,9 +19,12 @@ import namesies.AttackNamesies;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
 import pokemon.ActivePokemon;
-import battle.Battle;
 import pokemon.Stat;
 import trainer.Trainer;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 // Class to handle effects that are specific to one side of the battle
 public abstract class TeamEffect extends Effect implements Serializable {
@@ -255,20 +255,20 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "Sticky web covers everything!";
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.isLevitating(b)) {
+		public void enter(Battle b, ActivePokemon enterer) {
+			if (enterer.isLevitating(b)) {
 				return;
 			}
 			
-			victim.getAttributes().modifyStage(b.getOtherPokemon(victim.user()), victim, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + victim.getName() + "'s {statName}!");
+			enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer.user()), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon user) {
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
 			b.addMessage("The sticky web spun away!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			user.getEffects().remove(this);
-			b.getEffects(user.user()).remove(this);
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser.user()).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -299,21 +299,21 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "Floating rocks were scattered all around!";
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+		public void enter(Battle b, ActivePokemon enterer) {
+			if (enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
-			b.addMessage(victim.getName() + " was hurt by stealth rock!");
-			victim.reduceHealthFraction(b, Type.getBasicAdvantage(Type.ROCK, victim, b)/8.0);
+			b.addMessage(enterer.getName() + " was hurt by stealth rock!");
+			enterer.reduceHealthFraction(b, Type.getBasicAdvantage(Type.ROCK, enterer, b)/8.0);
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon user) {
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
 			b.addMessage("The floating rocks spun away!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			user.getEffects().remove(this);
-			b.getEffects(user.user()).remove(this);
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser.user()).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -354,34 +354,34 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "Toxic spikes were scattered all around!";
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.isLevitating(b)) {
+		public void enter(Battle b, ActivePokemon enterer) {
+			if (enterer.isLevitating(b)) {
 				return;
 			}
 			
-			if (victim.isType(b, Type.POISON)) {
-				b.addMessage(victim.getName() + " absorbed the Toxic Spikes!");
+			if (enterer.isType(b, Type.POISON)) {
+				b.addMessage(enterer.getName() + " absorbed the Toxic Spikes!");
 				super.active = false;
 				return;
 			}
 			
-			ActivePokemon theOtherPokemon = b.getOtherPokemon(victim.user());
-			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, victim)) {
+			ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.user());
+			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
 				if (layers >= 2) {
-					PokemonEffect.getEffect(EffectNamesies.BAD_POISON).cast(b, theOtherPokemon, victim, CastSource.EFFECT, false);
+					PokemonEffect.getEffect(EffectNamesies.BAD_POISON).cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
 				}
 				else {
-					Status.giveStatus(b, theOtherPokemon, victim, StatusCondition.POISONED);
+					Status.giveStatus(b, theOtherPokemon, enterer, StatusCondition.POISONED);
 				}
 			}
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon user) {
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
 			b.addMessage("The toxic spikes dispersed!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			user.getEffects().remove(this);
-			b.getEffects(user.user()).remove(this);
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser.user()).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -422,25 +422,25 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "Spikes were scattered all around!";
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			if (victim.isLevitating(b) || victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+		public void enter(Battle b, ActivePokemon enterer) {
+			if (enterer.isLevitating(b) || enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
-			b.addMessage(victim.getName() + " was hurt by spikes!");
+			b.addMessage(enterer.getName() + " was hurt by spikes!");
 			
 			// TODO: Generalize this type of statement
-			if (layers == 1) victim.reduceHealthFraction(b, 1/8.0);
-			else if (layers == 2) victim.reduceHealthFraction(b, 1/6.0);
-			else victim.reduceHealthFraction(b, 1/4.0);
+			if (layers == 1) enterer.reduceHealthFraction(b, 1/8.0);
+			else if (layers == 2) enterer.reduceHealthFraction(b, 1/6.0);
+			else enterer.reduceHealthFraction(b, 1/4.0);
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon user) {
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
 			b.addMessage("The spikes dispersed!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			user.getEffects().remove(this);
-			b.getEffects(user.user()).remove(this);
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser.user()).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -621,11 +621,11 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			super.cast(b, caster, victim, source, printCast);
 		}
 
-		public void enter(Battle b, ActivePokemon victim) {
-			victim.healHealthFraction(1);
-			victim.removeStatus();
+		public void enter(Battle b, ActivePokemon enterer) {
+			enterer.healHealthFraction(1);
+			enterer.removeStatus();
 			
-			b.addMessage(victim.getName() + " health was restored due to the " + wish + "!", victim);
+			b.addMessage(enterer.getName() + " health was restored due to the " + wish + "!", enterer);
 			super.active = false;
 		}
 	}

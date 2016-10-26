@@ -39,7 +39,7 @@ LeechSeed:
 	b.addMessage(victim.getName() + "'s health was sapped!");
 	b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
 	###
-	RapidSpin: user.getName() + " was released from leech seed!"
+	RapidSpin: releaser.getName() + " was released from leech seed!"
 *
 BadPoison:
 	Field: 
@@ -1081,7 +1081,7 @@ Snatch:
 Grudge:
 	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim.user()).getName() + " to bear a grudge!"
 	Int: FaintEffect
-	Deathwish: 
+	DeathWish: 
 	if (murderer.getAttributes().isAttacking()) {
 		b.addMessage(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to its grudge!");
 		murderer.getMove().reducePP(murderer.getMove().getPP());
@@ -1095,7 +1095,7 @@ DestinyBond:
 	super.active = false;
 	return true;
 	###
-	Deathwish: 
+	DeathWish: 
 	if (murderer.getAttributes().isAttacking()) {
 		b.addMessage(dead.getName() + " took " + murderer.getName() + " down with it!");
 		murderer.reduceHealthFraction(b, 1);

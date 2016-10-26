@@ -5,16 +5,17 @@ import battle.Battle;
 import battle.BattleAttributes;
 import battle.Move;
 import battle.effect.BracingEffect;
-import battle.effect.FaintEffect;
 import battle.effect.GroundedEffect;
 import battle.effect.HalfWeightEffect;
-import battle.effect.LevitationEffect;
-import battle.effect.NameChanger;
 import battle.effect.OpponentTrappingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.EffectInterfaces.FaintEffect;
+import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.MurderEffect;
+import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.holder.AbilityHolder;
@@ -908,14 +909,11 @@ public class ActivePokemon implements Serializable {
 			ActivePokemon murderer = b.getOtherPokemon(user());
 
 			// Apply effects which occur when the user faints
-			Battle.invoke(getEffects(), FaintEffect.class, "deathwish", b, this, murderer);
+			FaintEffect.grantDeathWish(b, this, murderer);
 			
-			// If the pokemon fainted by direct result of an attack -- apply ability and attack deathwishes 
+			// If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
 			if (murderer.getAttributes().isAttacking()) {
-				List<Object> invokees = new ArrayList<>();
-				invokees.add(murderer.getAttack());
-				invokees.add(murderer.getAbility());
-				Battle.invoke(invokees, FaintEffect.class, "deathwish", b, this, murderer);
+				MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
 			}
 			
 			b.getEffects(playerPokemon).add(TeamEffect.getEffect(EffectNamesies.DEAD_ALLY).newInstance());
@@ -966,6 +964,16 @@ public class ActivePokemon implements Serializable {
 	
 	public List<PokemonEffect> getEffects() {
 		return attributes.getEffects();
+	}
+
+	public List<Object> getAllEffects(final Battle b) {
+		List<Object> list = new ArrayList<>();
+		list.addAll(this.getEffects());
+		list.add(this.getStatus());
+		list.add(this.getAbility());
+		list.add(this.getHeldItem(b));
+
+		return list;
 	}
 	
 	public void modifyStages(Battle b, ActivePokemon modifier, int[] mod, CastSource source) {

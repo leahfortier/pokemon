@@ -3,30 +3,30 @@ package battle;
 import battle.MessageUpdate.Update;
 import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageMultiplier;
-import battle.effect.BarrierEffect;
 import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
-import battle.effect.DefogRelease;
 import battle.effect.EffectBlockerEffect;
-import battle.effect.FaintEffect;
 import battle.effect.IgnoreStageEffect;
 import battle.effect.PassableEffect;
-import battle.effect.PhysicalContactEffect;
-import battle.effect.RapidSpinRelease;
 import battle.effect.StatSwitchingEffect;
-import battle.effect.TakeDamageEffect;
 import battle.effect.TargetSwapperEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
-import battle.effect.attack.CrashDamageMove;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
-import battle.effect.attack.RecoilMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.Effect.EffectType;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.BarrierEffect;
+import battle.effect.generic.EffectInterfaces.CrashDamageMove;
+import battle.effect.generic.EffectInterfaces.DefogRelease;
+import battle.effect.generic.EffectInterfaces.MurderEffect;
+import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
+import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
@@ -56,7 +56,6 @@ import trainer.WildPokemon;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -282,7 +281,7 @@ public abstract class Attack implements Serializable {
 		}
 		
 		b.addMessage("It doesn't affect " + opp.getName() + "!");
-		Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
+		CrashDamageMove.invokeCrashDamageMove(b, p);
 		
 		return true;
 	}
@@ -326,8 +325,6 @@ public abstract class Attack implements Serializable {
 			return;
 		}
 		
-		List<Object> invokees = b.getEffectsList(me);
-		
 		// Apply a damage effect
 		ApplyDamageEffect.invokeApplyDamageEffect(b, me, o, damage);
 		
@@ -336,27 +333,27 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Take Recoil Damage
-		Battle.invoke(Collections.singletonList(this), RecoilMove.class, "applyRecoil", b, me, damage);
+		RecoilMove.invokeRecoilMove(b, me, damage);
 	
 		if (me.isFainted(b)) {
 			return;
 		}
-		
+
+		// TODO: Can this just be an ApplyDamageEffect or its own interface or something I don't like this
 		// Sap the Health
 		if (isMoveType(MoveType.SAP_HEALTH)) {
 			int sapAmount = (int)Math.ceil(damage*(this.isMoveType(MoveType.SAP_75) ? .75 : .5));
 			me.sapHealth(o, sapAmount, b, true, this.namesies() == AttackNamesies.DREAM_EATER);
 		}
 		
-		invokees = b.getEffectsList(o);
-		
 		// Effects that apply when a Pokemon makes physical contact with them
 		if (isMoveType(MoveType.PHYSICAL_CONTACT)) {
-			Battle.invoke(invokees, PhysicalContactEffect.class, "contact", b, me, o);
+			PhysicalContactEffect.invokePhysicalContactEffect(b, me, o);
 		}
-		
+
+		// TODO: This might need to be moved higher like before the recoil stuff so it gets activated even if the attacker dies
 		// Effects that apply to the opponent when they take damage
-		Battle.invoke(invokees, TakeDamageEffect.class, "takeDamage", b, me, o);
+		TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
 	}
 	
 	public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -1194,7 +1191,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -1218,7 +1215,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			b.addMessage(user.getName() + " was hurt by recoil!");
 			user.reduceHealth(b, user.getMaxHP()/4);
 		}
@@ -1285,7 +1282,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -1641,7 +1638,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -1707,7 +1704,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Battle.invoke(b.getEffectsList(user), RapidSpinRelease.class, "releaseRapidSpin", b, user);
+			RapidSpinRelease.release(b, user);
 		}
 	}
 
@@ -4871,7 +4868,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -5549,7 +5546,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -6421,7 +6418,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -6557,7 +6554,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Battle.invoke(b.getEffectsList(b.getOtherPokemon(user.user())), BarrierEffect.class, "breakBarrier", b, user);
+			BarrierEffect.breakBarriers(b, user);
 		}
 	}
 
@@ -8427,7 +8424,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -8548,7 +8545,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -9128,8 +9125,7 @@ public abstract class Attack implements Serializable {
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			super.applyEffects(b, user, victim);
-			
-			Battle.invoke(b.getEffectsList(victim), DefogRelease.class, "releaseDefog", b, victim);
+			DefogRelease.release(b, victim);
 		}
 	}
 
@@ -9213,7 +9209,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -10568,7 +10564,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, Integer damage) {
+		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
 			{
 				return;
@@ -11089,7 +11085,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FellStinger extends Attack implements FaintEffect {
+	private static class FellStinger extends Attack implements MurderEffect {
 		private static final long serialVersionUID = 1L;
 
 		FellStinger() {
@@ -11099,7 +11095,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void deathwish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+		public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			murderer.getAttributes().modifyStage(murderer, murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
 		}
 	}
