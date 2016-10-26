@@ -474,7 +474,7 @@ public class Battle {
 		list.add(me.getAbility());
 		list.add(me.getHeldItem(this));
 		
-		Battle.invoke(this, me, null, list.toArray(), EndTurnEffect.class, "applyEndTurn", me, this);
+		Battle.invoke(this, me, null, list, EndTurnEffect.class, "applyEndTurn", me, this);
 		
 		me.isFainted(this);
 		
@@ -505,7 +505,7 @@ public class Battle {
 			}
 			else {
 				addMessage(me.getName() + "'s attack missed!");
-				Battle.invoke(new Object[] {me.getAttack()}, CrashDamageMove.class, "crash", this, me);
+				Battle.invoke(Collections.singletonList(me.getAttack()), CrashDamageMove.class, "crash", this, me);
 			}			
 		}
 		
@@ -541,7 +541,7 @@ public class Battle {
 		return team ? player.getEffects() : opponent.getEffects();
 	}
 	
-	public Object[] getEffectsList(ActivePokemon p, Object... additionalItems) {
+	public List<Object> getEffectsList(ActivePokemon p, Object... additionalItems) {
 		List<Object> list = new ArrayList<>();
 		Collections.addAll(list, additionalItems);
 		
@@ -553,7 +553,7 @@ public class Battle {
 		list.add(p.getHeldItem(this));
 		list.add(weather);
 		
-		return list.toArray();
+		return list;
 	}
 	
 	public Team getTrainer(boolean team) {
@@ -613,7 +613,7 @@ public class Battle {
 	
 	private double getDamageModifier(ActivePokemon me, ActivePokemon o) {
 		// User effects that effect user power
-		Object[] list = getEffectsList(me);
+		List<Object> list = getEffectsList(me);
 		double modifier = Battle.multiplyInvoke(1, list, PowerChangeEffect.class, "getMultiplier", this, me, o);
 		
 		// Opponent effects that effects user power
@@ -626,7 +626,7 @@ public class Battle {
 	
 	private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
 	private int criticalHit(ActivePokemon me, ActivePokemon o) {
-		Object[] listsies = this.getEffectsList(o, me.getAttack());
+		List<Object> listsies = this.getEffectsList(o, me.getAttack());
 		Object blockCrits = Battle.checkInvoke(true, me, listsies, CritBlockerEffect.class, "blockCrits");
 		if (blockCrits != null) {
 			return 1;
@@ -661,7 +661,7 @@ public class Battle {
 		}
 		
 		// Effects that allow the user to bypass the accuracy check
-		Object[] invokees = this.getEffectsList(me, me.getAttack());
+		List<Object> invokees = this.getEffectsList(me, me.getAttack());
 		Object bypass = Battle.checkInvoke(true, invokees, AccuracyBypassEffect.class, "bypassAccuracy", this, me, o);
 		if (bypass != null) {
 			return true;
@@ -695,7 +695,7 @@ public class Battle {
 		}
 		
 		// Loop through all tha effects and do them checks
-		Object[] invokees = getEffectsList(p);
+		List<Object> invokees = getEffectsList(p);
 		
 		// False because we're checking if they 'cannot attack' from the 'canAttack' method
 		Object cannotAttack = Battle.checkInvoke(false, this, p, opp, invokees, BeforeTurnEffect.class, "canAttack", p, opp, this);
@@ -726,7 +726,7 @@ public class Battle {
 		if (isFighting(p.user())) {
 			int priority = p.getAttack().getPriority(this, p);
 			
-			Object[] invokees = this.getEffectsList(p);
+			List<Object> invokees = this.getEffectsList(p);
 			priority = (int)Battle.updateInvoke(2, invokees, PriorityChangeEffect.class, "changePriority", this, p, priority);
 			
 //			System.out.println(p.getAttack().getName() + " Priority: " + priority);
@@ -800,7 +800,7 @@ public class Battle {
 			ActivePokemon p,
 			ActivePokemon opp,
 			ActivePokemon moldBreaker,
-			Object[] invokees,
+			List<?> invokees,
 			Class<T> className,
 			String methodName,
 			Object[] parameterValues
@@ -886,72 +886,72 @@ public class Battle {
 	}
 	
 	// Used for calling methods that return booleans
-	public static <T> Object checkInvoke(boolean check, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> Object checkInvoke(boolean check, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans and also exit early if p or opp are fainted
-	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans where mold breaker may be a factor to check
-	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that return booleans and also exit early if p or opp are fainted
-	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, b, p, opp, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
-	public static <T> Object getInvoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> Object getInvoke(List<?> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, false, true, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
-	public static <T> Object getInvoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> Object getInvoke(ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, false, true, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want to continuously update the return value of -- it will return this value that you want so badly
-	public static <T> Object updateInvoke(int updateIndex, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> Object updateInvoke(int updateIndex, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, updateIndex, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want to continuously update the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
-	public static <T> Object updateInvoke(int updateIndex, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> Object updateInvoke(int updateIndex, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, updateIndex, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that continuously multiply the results by the base value, returns this value
-	public static <T> double multiplyInvoke(double baseValue, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> double multiplyInvoke(double baseValue, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that continuously multiply the results by the base value where mold breaker may be a factor to check, returns this value
-	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void
-	public static <T> void invoke(Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> void invoke(List<?> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		Battle.invoke(-1, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where mold breaker may be a factor to check
-	public static <T> void invoke(ActivePokemon moldBreaker, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> void invoke(ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		Battle.invoke(-1, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where you need to split early if an activePokemon is deadsies
-	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, Object[] invokees, Class<T> className, String methodName, Object... parameterValues) {
+	public static <T> void invoke(Battle b, ActivePokemon p, ActivePokemon opp, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		Battle.invoke(-1, -1, false, false, b, p, opp, null, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that are void where you need to split early if an activePokemon is deadsie
-	public static <T> boolean hasInvoke(Object[] invokees, Class<T> className) {
+	public static <T> boolean hasInvoke(List<Object> invokees, Class<T> className) {
 		return Battle.invoke(-1, -1, false, false, null, null, null, null, invokees, className, "", new Object[0]) != null;
 	}
 }

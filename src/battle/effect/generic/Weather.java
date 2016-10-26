@@ -13,6 +13,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
@@ -198,7 +199,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			}
 			
 			// Srsly don't buffet the immune!!
-			Object[] list = b.getEffectsList(p);
+			List<Object> list = b.getEffectsList(p);
 			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
 			if (checkeroo != null) {
 				return;
@@ -263,7 +264,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			}
 			
 			// Srsly don't buffet the immune!!
-			Object[] list = b.getEffectsList(p);
+			List<Object> list = b.getEffectsList(p);
 			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
 			if (checkeroo != null) {
 				return;

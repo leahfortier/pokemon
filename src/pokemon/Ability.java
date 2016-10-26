@@ -7,7 +7,6 @@ import battle.MoveCategory;
 import battle.MoveType;
 import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageChanger;
-import battle.effect.ApplyDamageEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.BracingEffect;
 import battle.effect.ChangeAttackTypeEffect;
@@ -47,6 +46,7 @@ import battle.effect.attack.ChangeTypeMove;
 import battle.effect.attack.CrashDamageMove;
 import battle.effect.attack.RecoilMove;
 import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.Weather;
 import battle.effect.holder.ItemHolder;
@@ -955,7 +955,7 @@ public abstract class Ability implements Serializable {
 			return (Stench)(new Stench().activate());
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Math.random()*100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 				if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
@@ -2969,7 +2969,7 @@ public abstract class Ability implements Serializable {
 			return (PoisonTouch)(new PoisonTouch().activate());
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Math.random()*100 < 30) {
 				Status.giveStatus(b, user, victim, StatusCondition.POISONED, true);
 			}
@@ -3658,7 +3658,7 @@ public abstract class Ability implements Serializable {
 			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, victim, CastSource.ABILITY, false);
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			// Steal the victim's item when damage is dealt
 			steal(b, user, victim);
 		}

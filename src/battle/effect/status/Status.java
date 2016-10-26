@@ -14,6 +14,7 @@ import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;
+import java.util.List;
 
 public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -55,7 +56,7 @@ public abstract class Status implements Serializable {
 	}
 	
 	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-		Object[] list = b.getEffectsList(victim);
+		List<Object> list = b.getEffectsList(victim);
 		Object statusPrevent = Battle.checkInvoke(true, user, list, StatusPreventionEffect.class, "preventStatus", b, user, victim, type);
 		if (statusPrevent != null) {
 			return ((StatusPreventionEffect)statusPrevent).statusPreventionMessage(victim); 
@@ -81,7 +82,7 @@ public abstract class Status implements Serializable {
 			return false;
 		}
 		
-		Object[] list = b.getEffectsList(victim);
+		List<Object> list = b.getEffectsList(victim);
 		Object preventStatus = Battle.checkInvoke(true, caster, list, StatusPreventionEffect.class, "preventStatus", b, caster, victim, type);
 		if (preventStatus != null) {
 			return false;

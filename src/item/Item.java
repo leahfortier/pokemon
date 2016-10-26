@@ -6,7 +6,6 @@ import battle.Move;
 import battle.MoveCategory;
 import battle.MoveType;
 import battle.effect.AdvantageChanger;
-import battle.effect.ApplyDamageEffect;
 import battle.effect.AttackSelectionEffect;
 import battle.effect.BeforeTurnEffect;
 import battle.effect.BracingEffect;
@@ -31,6 +30,8 @@ import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.EffectInterfaces;
+import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.holder.ItemHolder;
@@ -1521,7 +1522,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 5324.0/4096.0;
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
@@ -2235,7 +2236,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (user.fullHealth()) {
 				return;
 			}
@@ -4719,7 +4720,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return true;
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Math.random()*100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
@@ -5002,7 +5003,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return true;
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Math.random()*100 < 10) {
 				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {

@@ -1,4 +1,6 @@
-# "Void: boolean boolean" means this is a void method to be invoked, first boolean is whether or not mold breaker is a factor to check, second boolean is if early exit is necessary in a battle situation
+# "Void: boolean boolean" means this is a void method to be invoked, 
+# first boolean is whether or not mold breaker is a factor to check, 
+# second boolean is if early exit is necessary in a battle situation
 
 ApplyDamageEffect:
 	Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated
@@ -9,7 +11,7 @@ ApplyDamageEffect:
 		// b: The current battle
 		// user: The user of that attack, the one who is probably implementing this effect
 		// victim: The Pokemon that received the attack
-		// damage: The amount of damage that was dealt to victim by the user
+		// damage: The amount of damage that was dealt to victim by the user 
 		###
 		Void: false false
 	*

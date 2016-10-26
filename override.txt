@@ -615,7 +615,7 @@ Override:
 		// Protect is a success!
 		b.printAttacking(p);
 		b.addMessage(opp.getName() + " is protecting itself!");
-		Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+		Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
 	
 		// Additional Effects
 		protectingEffects(p, opp, b);
@@ -1289,7 +1289,7 @@ WeatherBlockerEffect:
 ***
 ApplyDamageEffect:
 	OnApplyDamage:
-		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, Integer damage)
+		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 	*
 ***
 ModifyStageValueEffect:
@@ -1442,7 +1442,7 @@ Override:
 			}
 			
 			// Srsly don't buffet the immune!!
-			Object[] list = b.getEffectsList(p);
+			List<Object> list = b.getEffectsList(p);
 			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
 			if (checkeroo != null) {
 				return;

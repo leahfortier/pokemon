@@ -3,7 +3,6 @@ package battle;
 import battle.MessageUpdate.Update;
 import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageMultiplier;
-import battle.effect.ApplyDamageEffect;
 import battle.effect.BarrierEffect;
 import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
@@ -27,6 +26,7 @@ import battle.effect.attack.SelfHealingMove;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.Effect.EffectType;
+import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
@@ -56,6 +56,7 @@ import trainer.WildPokemon;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -245,7 +246,7 @@ public abstract class Attack implements Serializable {
 	}
 	
 	private ActivePokemon getTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
-		Object[] invokees = b.getEffectsList(opponent);
+		List<Object> invokees = b.getEffectsList(opponent);
 		Object swapTarget = Battle.checkInvoke(true, user, invokees, TargetSwapperEffect.class, "swapTarget", b, user, opponent);
 		if (swapTarget != null) {
 			return selfTarget ? opponent : user;
@@ -261,7 +262,7 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Check the opponents effects and see if it will prevent effects from occurring
-		Object[] list = b.getEffectsList(o);
+		List<Object> list = b.getEffectsList(o);
 		Object checkeroo = Battle.checkInvoke(false, me, list, EffectBlockerEffect.class, "validMove", b, me, o);
 		if (checkeroo != null) {
 			return false;
@@ -281,7 +282,7 @@ public abstract class Attack implements Serializable {
 		}
 		
 		b.addMessage("It doesn't affect " + opp.getName() + "!");
-		Battle.invoke(new Object[] { p.getAttack() }, CrashDamageMove.class, "crash", b, p);
+		Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
 		
 		return true;
 	}
@@ -325,17 +326,17 @@ public abstract class Attack implements Serializable {
 			return;
 		}
 		
-		Object[] invokees = b.getEffectsList(me);
+		List<Object> invokees = b.getEffectsList(me);
 		
 		// Apply a damage effect
-		Battle.invoke(invokees, ApplyDamageEffect.class, "applyDamageEffect", b, me, o, damage);
+		ApplyDamageEffect.invokeApplyDamageEffect(invokees, b, me, o, damage);
 		
 		if (me.isFainted(b)) {
 			return;
 		}
 		
 		// Take Recoil Damage
-		Battle.invoke(new Object[] {this}, RecoilMove.class, "applyRecoil", b, me, damage);
+		Battle.invoke(Collections.singletonList(this), RecoilMove.class, "applyRecoil", b, me, damage);
 	
 		if (me.isFainted(b)) {
 			return;

@@ -46,6 +46,7 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -818,7 +819,7 @@ public class ActivePokemon implements Serializable {
 	
 	private Type[] getType(Battle b, boolean displayOnly) {
 		// Guarantee the change-type effect to be first
-		Object[] invokees = b.getEffectsList(this, this.getEffect(EffectNamesies.CHANGE_TYPE));
+		List<Object> invokees = b.getEffectsList(this, this.getEffect(EffectNamesies.CHANGE_TYPE));
 		
 		Object changeType = Battle.getInvoke(invokees, TypeHolder.class, "getType", b, this, displayOnly);
 		if (changeType != null) {
@@ -858,7 +859,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public String getName() {
-		Object[] invokees = { this.getAbility() };
+		List<Object> invokees = Collections.singletonList(this.getAbility());
 		Object changedName = Battle.getInvoke(invokees, NameChanger.class, "getNameChange");
 		if (changedName != null) {
 			return (String)changedName;
@@ -907,11 +908,13 @@ public class ActivePokemon implements Serializable {
 			ActivePokemon murderer = b.getOtherPokemon(user());
 
 			// Apply effects which occur when the user faints
-			Battle.invoke(getEffects().toArray(), FaintEffect.class, "deathwish", b, this, murderer);
+			Battle.invoke(getEffects(), FaintEffect.class, "deathwish", b, this, murderer);
 			
 			// If the pokemon fainted by direct result of an attack -- apply ability and attack deathwishes 
 			if (murderer.getAttributes().isAttacking()) {
-				Object[] invokees = new Object[] {murderer.getAttack(), murderer.getAbility()};
+				List<Object> invokees = new ArrayList<>();
+				invokees.add(murderer.getAttack());
+				invokees.add(murderer.getAbility());
 				Battle.invoke(invokees, FaintEffect.class, "deathwish", b, this, murderer);
 			}
 			
@@ -932,7 +935,7 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// Check if the user is under an effect that prevents escape
-		Object[] invokees = b.getEffectsList(this);
+		List<Object> invokees = b.getEffectsList(this);
 		Object trapped = Battle.checkInvoke(true, invokees, TrappingEffect.class, "isTrapped", b, this);
 		if (trapped != null) {
 			b.addMessage(((TrappingEffect)trapped).trappingMessage(this));
@@ -1002,7 +1005,7 @@ public class ActivePokemon implements Serializable {
 			return bracingEffect;
 		}
 		
-		Object[] invokees = b.getEffectsList(this);
+		List<Object> invokees = b.getEffectsList(this);
 		bracingEffect = (BracingEffect)Battle.checkInvoke(true, b.getOtherPokemon(user()), invokees, BracingEffect.class, "isBracing", b, this, fullHealth);
 		
 		return bracingEffect;
@@ -1227,7 +1230,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public double getWeight(Battle b) {
-		Object[] invokees = b.getEffectsList(this);
+		List<Object> invokees = b.getEffectsList(this);
 		ActivePokemon moldBreaker = b.getOtherPokemon(user());
 		
 		int halfAmount = (int)Battle.updateInvoke(0, moldBreaker, invokees, HalfWeightEffect.class, "getHalfAmount", 0);

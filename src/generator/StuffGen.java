@@ -26,7 +26,7 @@ public class StuffGen {
 		new NamesiesGen(PokemonNamesies.class);
 		baseEvolutionGenerator();
 		
-//		new InterfaceGen();
+		new InterfaceGen();
 		
 //		pokemonInfoStuff();
 //		compareMoves();
@@ -128,6 +128,7 @@ public class StuffGen {
 	}
 	
 	static String createClass(
+			String classComments,
 			String className,
 			String superClass,
 			String interfaces,
@@ -136,16 +137,20 @@ public class StuffGen {
 			String additional,
 			boolean isInterface
 	) {
-		StringBuilder classBuilder = new StringBuilder();
+		StringBuilder classBuilder = new StringBuilder("\n");
+
+		if (!StringUtils.isNullOrEmpty(classComments)) {
+			StringUtils.appendLine(classBuilder, "\t" + classComments);
+		}
 		
-		classBuilder.append("\n\t").
+		classBuilder.append("\t").
 				append(defineClass(className, isInterface));
 		
-		if (superClass != null && superClass.length() > 0) {
+		if (!StringUtils.isNullOrEmpty(superClass)) {
 			classBuilder.append(" extends ")
 					.append(superClass);
 		}
-		if (interfaces != null && interfaces.length() > 0) {
+		if (!StringUtils.isNullOrEmpty(interfaces)) {
 			classBuilder.append(" ")
 					.append(interfaces);
 		}
@@ -155,11 +160,20 @@ public class StuffGen {
 		if (!isInterface) {
 			classBuilder.append("\t\tprivate static final long serialVersionUID = 1L;\n");	
 		}
+
+		if (!StringUtils.isNullOrEmpty(extraFields)) {
+			classBuilder.append(extraFields);
+		}
+
+		if (!StringUtils.isNullOrEmpty(constructor)) {
+			classBuilder.append(constructor);
+		}
+
+		if (!StringUtils.isNullOrEmpty(additional)) {
+			classBuilder.append(additional);
+		}
 		
-		classBuilder.append(extraFields)
-				.append(constructor)
-				.append(additional)
-				.append("\t}\n");
+		classBuilder.append("\t}\n");
 		
 		return classBuilder.toString();
 	}
@@ -172,11 +186,11 @@ public class StuffGen {
 			accessModifier = "public";
 			classType = "interface";
 		} else {
-			accessModifier = "private";
+			accessModifier = "private static";
 			classType = "class";
 		}
 		
-		return accessModifier + " static " + classType + " " + className;
+		return accessModifier + " " + classType + " " + className;
 	}
 	
 	private static String readFunction(Scanner in) {

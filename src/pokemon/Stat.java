@@ -7,6 +7,10 @@ import battle.effect.StageChangingEffect;
 import battle.effect.StatChangingEffect;
 import battle.effect.StatSwitchingEffect;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public enum Stat {
 	HP(0, "HP", "HP", -1, InBattle.NEVER, true), 
 	ATTACK(1, "Attack", "Attack", 2, InBattle.BOTH, true),
@@ -91,11 +95,10 @@ public enum Stat {
 	
 	// Gets the stat of a Pokemon during battle
 	public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
-		// Effects that manipulate stats
-		Object[] list;
-		
 		ActivePokemon attacking = s.user ? p : opp;
-		list = b.getEffectsList(p, attacking.getAttack());
+
+		// Effects that manipulate stats
+		List<Object> list = b.getEffectsList(p, attacking.getAttack());
 		
 		s = (Stat)Battle.updateInvoke(0, list, StatSwitchingEffect.class, "switchStat", s);
 		
@@ -126,7 +129,7 @@ public enum Stat {
 		return stat;
 	}
 	
-	private static int getStage(Object[] list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+	private static int getStage(List<Object> list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
 		int stage = p.getStage(s.index);
 		
 //		int temp = stage;
@@ -140,7 +143,9 @@ public enum Stat {
 		ActivePokemon attacking = s.user ? p : opp;
 		
 		// Effects that completely ignore stage changes
-		list = new Object[] { opp.getAbility(), attacking.getAttack() };
+		list = new ArrayList<>();
+		list.add(opp.getAbility());
+		list.add(attacking.getAttack());
 		Object ignoreStage = Battle.checkInvoke(true, p, list, IgnoreStageEffect.class, "ignoreStage", s);
 		if (ignoreStage != null) {
 			stage = 0;

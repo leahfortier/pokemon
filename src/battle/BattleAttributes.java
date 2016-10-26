@@ -214,7 +214,7 @@ public class BattleAttributes implements Serializable {
 		// Effects that prevent stat reductions caused by the opponent
 		if (val < 0 && caster != victim) {
 
-			Object[] list = b.getEffectsList(victim);
+			List<Object> list = b.getEffectsList(victim);
 			Object prevent = Battle.checkInvoke(true, caster, list, StatProtectingEffect.class, "prevent", b, caster, victim, stat);
 			if (prevent != null) {
 				if (print) {
@@ -277,7 +277,7 @@ public class BattleAttributes implements Serializable {
 		
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
 		if (val < 0 && caster != victim) {
-			Object[] invokees = b.getEffectsList(victim);
+			List<Object> invokees = b.getEffectsList(victim);
 			Battle.invoke(invokees, StatLoweredEffect.class, "takeItToTheNextLevel", b, caster, victim);
 		}
 		

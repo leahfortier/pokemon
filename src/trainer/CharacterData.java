@@ -6,6 +6,7 @@ import item.use.BallItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -289,9 +290,9 @@ public class CharacterData extends Trainer implements Serializable {
 			b.addMessage("", Update.WIN_BATTLE);
 		}
 		
-		Battle.invoke(getEffects().toArray(), EndBattleEffect.class, "afterBattle", this, b, front());
+		Battle.invoke(getEffects(), EndBattleEffect.class, "afterBattle", this, b, front());
 		for (ActivePokemon p : team) {
-			Battle.invoke(new Object[] {p.getAbility()}, EndBattleEffect.class, "afterBattle", this, b, p);
+			Battle.invoke(Collections.singletonList(p.getAbility()), EndBattleEffect.class, "afterBattle", this, b, p);
 		}
 		
 		setFront();

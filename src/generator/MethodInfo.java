@@ -275,5 +275,13 @@ class MethodInfo {
 
         return added;
     }
+
+    public static String createHeader(final String returnType, final String methodName, final String parameters) {
+        return createHeader(returnType + " " + methodName, parameters);
+    }
+
+    public static String createHeader(final String returnTypeAndName, final String parameters) {
+        return String.format("%s(%s)", returnTypeAndName, parameters);
+    }
 }
 

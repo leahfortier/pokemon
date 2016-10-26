@@ -76,7 +76,7 @@ public class Move implements Serializable {
 		type = this.attack.setType(b, user);
 		
 		// Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
-		Object[] invokees = b.getEffectsList(user);
+		List<Object> invokees = b.getEffectsList(user);
 		type =  (Type)Battle.updateInvoke(0, invokees, ChangeAttackTypeEffect.class, "changeAttackType", type);
 		
 //		System.out.println(user.getName() + " " + attack.getName() + " Type: " + type.getName());
@@ -150,7 +150,7 @@ public class Move implements Serializable {
 	public static boolean forceMove(Battle b, ActivePokemon p) {
 
 		// Forced moves
-		Object forcedMove = Battle.getInvoke(p.getEffects().toArray(), ForceMoveEffect.class, "getMove");
+		Object forcedMove = Battle.getInvoke(p.getEffects(), ForceMoveEffect.class, "getMove");
 		if (forcedMove != null) {
 			p.setMove((Move)forcedMove);
 			return true;

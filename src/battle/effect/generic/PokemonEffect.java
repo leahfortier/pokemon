@@ -59,6 +59,7 @@ import pokemon.Stat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -798,7 +799,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -856,7 +857,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -910,7 +911,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -964,7 +965,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -1018,7 +1019,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);
@@ -1068,7 +1069,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			// Protect is a success!
 			b.printAttacking(p);
 			b.addMessage(opp.getName() + " is protecting itself!");
-			Battle.invoke(new Object[] {p.getAttack()}, CrashDamageMove.class, "crash", b, p);
+			Battle.invoke(Collections.singletonList(p.getAttack()), CrashDamageMove.class, "crash", b, p);
 			
 			// Additional Effects
 			protectingEffects(p, opp, b);

@@ -171,7 +171,7 @@ class PokeGen {
 		// Write activation method if applicable
 		additionalMethods = getActivationMethod(className, fields) + additionalMethods;
 		
-		String classString = StuffGen.createClass(className, this.currentGen.getSuperClass(), implementsString, extraFields, constructor, additionalMethods, false);
+		String classString = StuffGen.createClass(null, className, this.currentGen.getSuperClass(), implementsString, extraFields, constructor, additionalMethods, false);
 		
 		fields.remove("ClassName");
 		fields.remove("Index");
