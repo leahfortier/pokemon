@@ -922,9 +922,4 @@ public class Battle {
 	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
-	
-	// Used for calling methods that are void where you need to split early if an activePokemon is deadsie
-	public static <T> boolean hasInvoke(List<Object> invokees, Class<T> className) {
-		return Battle.invoke(-1, -1, false, false, null, null, null, null, invokees, className, "", new Object[0]) != null;
-	}
 }

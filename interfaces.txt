@@ -142,6 +142,12 @@ LevitationEffect:
 		EffectList: fallen
 		InvokeName: falllllllll
 	*
+	Method:
+		Comments: TODO: Shouldn't this be affected by mold breaker?
+		Parameters: Battle b, ActivePokemon p
+		Invoke: Contains
+		EffectList: p
+	*
 ***
 FaintEffect:
 	Method: 
@@ -167,5 +173,12 @@ EndBattleEffect:
 		Header: void afterBattle
 		Parameters: Trainer player, Battle b, ActivePokemon p
 		Invoke: Void
+	*
+***
+GroundedEffect:
+	Method:
+		Parameters: Battle b, ActivePokemon p
+		Invoke: Contains
+		EffectList: p
 	*
 ***

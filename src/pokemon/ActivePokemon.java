@@ -5,7 +5,6 @@ import battle.Battle;
 import battle.BattleAttributes;
 import battle.Move;
 import battle.effect.BracingEffect;
-import battle.effect.GroundedEffect;
 import battle.effect.HalfWeightEffect;
 import battle.effect.OpponentTrappingEffect;
 import battle.effect.StallingEffect;
@@ -13,6 +12,7 @@ import battle.effect.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.EffectInterfaces.FaintEffect;
+import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
@@ -1146,7 +1146,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public boolean isGrounded(Battle b) {
-		return Battle.hasInvoke(b.getEffectsList(this), GroundedEffect.class);
+		return GroundedEffect.containsGroundedEffect(b, this);
 	}
 	
 	// Returns true if the Pokemon is currently levitating for any reason
@@ -1159,7 +1159,7 @@ public class ActivePokemon implements Serializable {
 		
 		// Obvs levitating if you have a levitation effect
 		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
-		if (Battle.hasInvoke(b.getEffectsList(this), LevitationEffect.class)) {
+		if (LevitationEffect.containsLevitationEffect(b, this)) {
 			return true;
 		}
 		
@@ -1174,8 +1174,8 @@ public class ActivePokemon implements Serializable {
 		}
 	}
 
-	public void giveItem(HoldItem i) {
-		heldItem = i;
+	public void giveItem(HoldItem item) {
+		heldItem = item;
 	}
 	
 	public void removeItem() {

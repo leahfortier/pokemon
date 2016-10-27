@@ -5,13 +5,13 @@ import java.util.Map;
 
 import battle.MoveType;
 import battle.effect.BeforeTurnEffect;
-import battle.effect.GroundedEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.StageChangingEffect;
 import battle.effect.StatSwitchingEffect;
 import battle.effect.StatusPreventionEffect;
 import battle.effect.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.status.StatusCondition;
 import main.Type;

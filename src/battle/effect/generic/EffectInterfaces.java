@@ -92,7 +92,7 @@ public final class EffectInterfaces {
 
 		// b: The current battle
 		// user: The user of the attack that caused the physical contact
-		// victim: The Pokemon that received the physical contact attack, probably the one who is implementing this effect
+		// victim: The Pokemon that received the physical contact attack
 		void contact(Battle b, ActivePokemon user, ActivePokemon victim);
 
 		static void invokePhysicalContactEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -298,6 +298,21 @@ public final class EffectInterfaces {
 				}
 			}
 		}
+
+		static boolean containsLevitationEffect(Battle b, ActivePokemon p) {
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof LevitationEffect) {
+					if (Effect.isInactiveEffect(invokee)) {
+						continue;
+					}
+					
+					return true;
+				}
+			}
+			
+			return false;
+		}
 	}
 
 	public interface FaintEffect {
@@ -351,6 +366,24 @@ public final class EffectInterfaces {
 					effect.afterBattle(player, b, p);
 				}
 			}
+		}
+	}
+
+	public interface GroundedEffect {
+
+		static boolean containsGroundedEffect(Battle b, ActivePokemon p) {
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof GroundedEffect) {
+					if (Effect.isInactiveEffect(invokee)) {
+						continue;
+					}
+					
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	}
 }
