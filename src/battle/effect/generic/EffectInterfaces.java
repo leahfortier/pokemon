@@ -315,8 +315,7 @@ public final class EffectInterfaces {
 
 		static void invokeEndBattleEffect(List<?> invokees, Trainer player, Battle b, ActivePokemon p) {
 			for (Object invokee : invokees) {
-				if (invokee instanceof EndBattleEffect
-						&& !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof EndBattleEffect && !Effect.isInactiveEffect(invokee)) {
 					
 					EndBattleEffect effect = (EndBattleEffect)invokee;
 					effect.afterBattle(player, b, p);
@@ -330,8 +329,7 @@ public final class EffectInterfaces {
 		static boolean containsGroundedEffect(Battle b, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof GroundedEffect
-						&& !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof GroundedEffect && !Effect.isInactiveEffect(invokee)) {
 					
 					return true;
 				}

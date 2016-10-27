@@ -1,6 +1,10 @@
 package generator;
 
 import battle.Battle;
+import generator.InvokeMethod.CheckGetInvoke;
+import generator.InvokeMethod.CheckInvoke;
+import generator.InvokeMethod.ContainsInvoke;
+import generator.InvokeMethod.VoidInvoke;
 import main.Global;
 import util.StringUtils;
 
@@ -11,6 +15,27 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 class InterfaceMethod {
+
+    private enum InvokeType {
+        VOID(VoidInvoke::new),
+        CONTAINS(ContainsInvoke::new),
+        CHECK(CheckInvoke::new),
+        CHECKGET(CheckGetInvoke::new);
+
+        private final GetInvokeMethod getInvokeMethod;
+
+        InvokeType(final GetInvokeMethod getInvokeMethod) {
+            this.getInvokeMethod = getInvokeMethod;
+        }
+
+        private interface GetInvokeMethod {
+            InvokeMethod getInvokeMethod(Scanner invokeInput);
+        }
+
+        public InvokeMethod getInvokeMethod(final Scanner invokeInput) {
+            return this.getInvokeMethod.getInvokeMethod(invokeInput);
+        }
+    }
 
     private static final String COMMENTS = "Comments";
     private static final String RETURN_TYPE = "ReturnType";
@@ -126,7 +151,7 @@ class InterfaceMethod {
                 Global.error("Must specify type of invoke method if you want to name it.  Interface: " + this.interfaceName);
             }
 
-            this.invokeMethod.methodName = invokeName;
+            this.invokeMethod.setMethodName(invokeName);
         }
 
         final String effectListParameter = getField(fields, EFFECT_LIST);
@@ -243,14 +268,6 @@ class InterfaceMethod {
         return interfaceMethod.toString();
     }
 
-    private String getHeader() {
-        return MethodInfo.createHeader(this.returnType, this.methodName, this.parameters);
-    }
-
-    private String getMethodCall() {
-        return MethodInfo.createHeader(this.methodName, this.typelessParameters);
-    }
-
     String writeInvokeMethod() {
         if (this.invokeMethod == null) {
             return StringUtils.empty();
@@ -259,228 +276,39 @@ class InterfaceMethod {
         return this.invokeMethod.writeInvokeMethod(this);
     }
 
-    private enum InvokeType {
-        VOID(VoidInvoke::new),
-        CONTAINS(ContainsInvoke::new),
-        CHECK(CheckInvoke::new),
-        CHECKGET(CheckGetInvoke::new);
-
-        private final GetInvokeMethod getInvokeMethod;
-
-        InvokeType(final GetInvokeMethod getInvokeMethod) {
-            this.getInvokeMethod = getInvokeMethod;
-        }
-
-        private interface GetInvokeMethod {
-            InvokeMethod getInvokeMethod(Scanner invokeInput);
-        }
-
-        public InvokeMethod getInvokeMethod(final Scanner invokeInput) {
-            return this.getInvokeMethod.getInvokeMethod(invokeInput);
-        }
+    private String getHeader() {
+        return MethodInfo.createHeader(this.returnType, this.methodName, this.parameters);
     }
 
-    private static abstract class InvokeMethod {
-        private String methodName;
-
-        protected abstract String getReturnType(InterfaceMethod interfaceMethod);
-        protected abstract String getDefaultMethodName(final InterfaceMethod interfaceMethod);
-        protected abstract void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod);
-        protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
-
-        InvokeMethod(final Scanner invokeInput) {
-            if (invokeInput != null && invokeInput.hasNext()) {
-                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
-            }
-        }
-
-        private String getMethodName(final InterfaceMethod interfaceMethod) {
-            if (StringUtils.isNullOrEmpty(this.methodName)) {
-                return this.getDefaultMethodName(interfaceMethod);
-            }
-
-            return this.methodName;
-        }
-
-        String writeInvokeMethod(final InterfaceMethod interfaceMethod) {
-            final String header = MethodInfo.createHeader(
-                    "static " + this.getReturnType(interfaceMethod),
-                    this.getMethodName(interfaceMethod),
-                    this.getInvokeParameters(interfaceMethod)
-            );
-
-            StringBuilder body = new StringBuilder();
-            this.appendDeadsies(body, interfaceMethod);
-            body.append(getDeclaration(interfaceMethod));
-            StringUtils.appendLine(body, "\nfor (Object invokee : invokees) {");
-            StringUtils.appendLine(body, "if (invokee instanceof " + interfaceMethod.interfaceName + " && !Effect.isInactiveEffect(invokee)) {");
-            this.appendMoldBreaker(body, interfaceMethod);
-            StringUtils.appendLine(body, "");
-            this.appendInnerLoop(body, interfaceMethod);
-            this.appendDeadsies(body, interfaceMethod);
-            StringUtils.appendLine(body, "}");
-            StringUtils.appendLine(body, "}");
-            StringUtils.appendLine(body, "");
-            StringUtils.appendLine(body, this.getPostLoop(interfaceMethod));
-
-            return new MethodInfo(header, body.toString().trim(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();
-        }
-
-        private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
-            String invokeParameters = interfaceMethod.parameters;
-            if (!StringUtils.isNullOrEmpty(interfaceMethod.additionalInvokeParameters)) {
-                invokeParameters = interfaceMethod.additionalInvokeParameters +
-                        StringUtils.addLeadingComma(invokeParameters);
-            }
-
-            if (passInvokees(interfaceMethod)) {
-                invokeParameters = "List<?> invokees" + StringUtils.addLeadingComma(invokeParameters);
-            }
-
-            return invokeParameters;
-        }
-
-        private String getDeclaration(final InterfaceMethod interfaceMethod) {
-            if (passInvokees(interfaceMethod)) {
-                return StringUtils.empty();
-            }
-
-            return "\n" + interfaceMethod.invokeeDeclaration;
-        }
-
-        private boolean passInvokees(final InterfaceMethod interfaceMethod) {
-            return StringUtils.isNullOrEmpty(interfaceMethod.invokeeDeclaration);
-        }
-
-        private void appendMoldBreaker(final StringBuilder body, final InterfaceMethod interfaceMethod) {
-            if (StringUtils.isNullOrEmpty(interfaceMethod.moldBreaker)) {
-                return;
-            }
-
-            StringUtils.appendLine(body, "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it");
-            StringUtils.appendLine(body, "if (invokee instanceof Ability && " + interfaceMethod.moldBreaker + ".breaksTheMold()) {");
-            StringUtils.appendLine(body, "continue;");
-            StringUtils.appendLine(body, "}");
-        }
-
-        private void appendDeadsies(final StringBuilder body, final InterfaceMethod interfaceMethod) {
-            final String postLoop = this.getPostLoop(interfaceMethod);
-            final String returnStatement = StringUtils.isNullOrEmpty(postLoop) ? "return;" : postLoop;
-
-            final String battleParameter = interfaceMethod.battleParameter;
-            for (final String activePokemonParameter : interfaceMethod.deadsies) {
-                StringUtils.appendLine(body, "");
-                StringUtils.appendLine(body, String.format("if (%s.isFainted(%s)) {", activePokemonParameter, battleParameter));
-                StringUtils.appendLine(body, returnStatement);
-                StringUtils.appendLine(body, "}");
-            }
-        }
+    String getMethodCall() {
+        return MethodInfo.createHeader(this.methodName, this.typelessParameters);
     }
 
-    private static class ContainsInvoke extends InvokeMethod {
-
-        ContainsInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
-
-        protected String getReturnType(InterfaceMethod interfaceMethod) {
-            return "boolean";
-        }
-
-        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
-            return "contains" + interfaceMethod.interfaceName;
-        }
-
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, "return true;");
-        }
-
-        protected String getPostLoop(InterfaceMethod interfaceMethod) {
-            return "return false;";
-        }
+    String getInterfaceName() {
+        return this.interfaceName;
     }
 
-    private static class VoidInvoke extends InvokeMethod {
-
-        VoidInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
-
-        protected String getReturnType(InterfaceMethod interfaceMethod) {
-            return "void";
-        }
-
-        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
-            return "invoke" + interfaceMethod.interfaceName;
-        }
-
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, interfaceMethod.interfaceName + " effect = (" + interfaceMethod.interfaceName + ")invokee;");
-            StringUtils.appendLine(body, "effect." + interfaceMethod.getMethodCall() + ";");
-        }
-
-        protected String getPostLoop(InterfaceMethod interfaceMethod) {
-            return StringUtils.empty();
-        }
+    String getParameters() {
+        return this.parameters;
     }
 
-    private static class CheckInvoke extends InvokeMethod {
-
-        private final boolean check;
-
-        CheckInvoke(final Scanner invokeInput) {
-            super(null);
-
-            this.check = invokeInput.nextBoolean();
-            if (invokeInput.hasNext()) {
-                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
-            }
-        }
-
-        protected String getReturnType(InterfaceMethod interfaceMethod) {
-            return "boolean";
-        }
-
-        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
-            return "check" + interfaceMethod.interfaceName;
-        }
-
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, interfaceMethod.interfaceName + " effect = (" + interfaceMethod.interfaceName + ")invokee;");
-            StringUtils.appendLine(body, String.format("if (%seffect.%s) {", check ? "" : "!", interfaceMethod.getMethodCall()));
-            StringUtils.appendLine(body, this.successfulCheck());
-            StringUtils.appendLine(body, "}");
-        }
-
-        protected String successfulCheck() {
-            return "return true;";
-        }
-
-        protected String getPostLoop(InterfaceMethod interfaceMethod) {
-            return "return false;";
-        }
+    String getAdditionalInvokeParameters() {
+        return this.additionalInvokeParameters;
     }
 
-    private static class CheckGetInvoke extends CheckInvoke {
+    String getInvokeeDeclaration() {
+        return this.invokeeDeclaration;
+    }
 
-        CheckGetInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
+    String getMoldBreaker() {
+        return this.moldBreaker;
+    }
 
-        protected String getReturnType(InterfaceMethod interfaceMethod) {
-            return interfaceMethod.interfaceName;
-        }
+    String getBattleParameter() {
+        return this.battleParameter;
+    }
 
-        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
-            return "checkAndGet" + interfaceMethod.interfaceName;
-        }
-
-        protected String successfulCheck() {
-            return "return effect;";
-        }
-
-        protected String getPostLoop(InterfaceMethod interfaceMethod) {
-            return "return null;";
-        }
+    Iterable<String> getDeadsies() {
+       return this.deadsies;
     }
 }
