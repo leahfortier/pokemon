@@ -16,7 +16,11 @@ public class StringUtils {
 
     // Adds a space to a non-empty string
     public static String addSpace(final String s) {
-        return isNullOrEmpty(s) ? "" : s + " ";
+        return isNullOrEmpty(s) ? empty() : s + " ";
+    }
+
+    public static String addLeadingComma(final String s) {
+        return isNullOrEmpty(s) ? empty() : ", " + s;
     }
 
     public static void appendLine(final StringBuilder builder, final String message) {

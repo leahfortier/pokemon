@@ -4,8 +4,7 @@
 ApplyDamageEffect:
 	Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated
 	Method:
-		Header: void applyDamageEffect
-		Parameters: Battle b, ActivePokemon user, ActivePokemon victim, int damage
+		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 		Comments:
 		// b: The current battle
 		// user: The user of that attack, the one who is probably implementing this effect
@@ -18,8 +17,7 @@ ApplyDamageEffect:
 ***
 EndTurnEffect:
 	Method:
-		Header: void applyEndTurn
-		Parameters: ActivePokemon victim, Battle b
+		Header: void applyEndTurn(ActivePokemon victim, Battle b)
 		Invoke: Void
 		Deadsies: victim
 		SetInvokees:
@@ -31,8 +29,7 @@ EndTurnEffect:
 ***
 RecoilMove:
 	Method:
-		Header: void applyRecoil
-		Parameters: Battle b, ActivePokemon user, int damage
+		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
 		Invoke: Void
 		Move: user
 	*
@@ -44,8 +41,7 @@ PhysicalContactEffect:
 		// user: The user of the attack that caused the physical contact
 		// victim: The Pokemon that received the physical contact attack
 		###
-		Header: void contact
-		Parameters: Battle b, ActivePokemon user, ActivePokemon victim
+		Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 		Invoke: Void
 		Deadsies: user
 		EffectList: victim
@@ -58,8 +54,7 @@ TakeDamageEffect:
 		// user: The user of the attack
 		// victim: The Pokemon who is taking damage, they are the one's probably implementing this
 		###
-		Header: void takeDamage
-		Parameters: Battle b, ActivePokemon user, ActivePokemon victim
+		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		EffectList: victim
 		Invoke: Void
 		Deadsies: victim
@@ -67,16 +62,14 @@ TakeDamageEffect:
 ***
 CrashDamageMove:
 	Method:
-		Header: void crash
-		Parameters: Battle b, ActivePokemon user
+		Header: void crash(Battle b, ActivePokemon user)
 		Move: user
 		Invoke: Void
 	*
 ***
 BarrierEffect:
 	Method:
-		Header: void breakBarrier
-		Parameters: Battle b, ActivePokemon breaker
+		Header: void breakBarrier(Battle b, ActivePokemon breaker)
 		SetInvokees: List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker.user()));
 		Invoke: Void
 		InvokeName: breakBarriers
@@ -84,8 +77,7 @@ BarrierEffect:
 ***
 DefogRelease:
 	Method:
-		Header: void releaseDefog
-		Parameters: Battle b, ActivePokemon victim
+		Header: void releaseDefog(Battle b, ActivePokemon victim)
 		Invoke: Void
 		EffectList: victim
 		InvokeName: release
@@ -93,8 +85,7 @@ DefogRelease:
 ***
 RapidSpinRelease:
 	Method:
-		Header: void releaseRapidSpin
-		Parameters: Battle b, ActivePokemon releaser
+		Header: void releaseRapidSpin(Battle b, ActivePokemon releaser)
 		Invoke: Void
 		EffectList: releaser
 		InvokeName: release
@@ -103,11 +94,10 @@ RapidSpinRelease:
 NameChanger:
 	Method:
 		Comments: // TODO: This one
-		Header: String getNameChange
+		Header: String getNameChange()
 	*
 	Method:
-		Header: void setNameChange
-		Parameters: Battle b, ActivePokemon victim
+		Header: void setNameChange(Battle b, ActivePokemon victim)
 		Invoke: Void
 		EffectList: victim
 		InvokeName: setNameChanges
@@ -115,8 +105,7 @@ NameChanger:
 ***
 EntryEffect:
 	Method:
-		Header: void enter
-		Parameters: Battle b, ActivePokemon enterer
+		Header: void enter(Battle b, ActivePokemon enterer)
 		Invoke: void
 		EffectList: enterer
 	*
@@ -128,16 +117,14 @@ StatLoweredEffect:
 		// caster: The Pokemon responsible for causing the stat to be lowered
 		// victim: The Pokemon who's stat is being lowered
 		###
-		Header: void takeItToTheNextLevel
-		Parameters: Battle b, ActivePokemon caster, ActivePokemon victim
+		Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
 		Invoke: Void
 		EffectList: victim
 	*
 ***
 LevitationEffect:
 	Method:
-		Header: void fall
-		Parameters: Battle b, ActivePokemon fallen
+		Header: void fall(Battle b, ActivePokemon fallen)
 		Invoke: Void
 		EffectList: fallen
 		InvokeName: falllllllll
@@ -151,8 +138,7 @@ LevitationEffect:
 ***
 FaintEffect:
 	Method: 
-		Header: void deathWish
-		Parameters: Battle b, ActivePokemon dead, ActivePokemon murderer
+		Header: void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
 		Invoke: Void
 		InvokeName: grantDeathWish
 		EffectList: dead
@@ -161,8 +147,7 @@ FaintEffect:
 MurderEffect:
 	Comments: // KILL KILL KILL MURDER MURDER MURDER
 	Method: 
-		Header: void killWish
-		Parameters: Battle b, ActivePokemon dead, ActivePokemon murderer
+		Header: void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
 		Invoke: Void
 		InvokeName: killKillKillMurderMurderMurder
 		EffectList: murderer
@@ -170,8 +155,7 @@ MurderEffect:
 ***
 EndBattleEffect:
 	Method:
-		Header: void afterBattle
-		Parameters: Trainer player, Battle b, ActivePokemon p
+		Header: void afterBattle(Trainer player, Battle b, ActivePokemon p)
 		Invoke: Void
 	*
 ***
@@ -180,5 +164,154 @@ GroundedEffect:
 		Parameters: Battle b, ActivePokemon p
 		Invoke: Contains
 		EffectList: p
+	*
+***
+AccuracyBypassEffect
+	Method:
+		Comments: // Attacker is the Pokemon whose accuracy is being evaluated and is the Pokemon on which this effect is attached to
+		Header: boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		Invoke: Check true
+		InvokeName: bypassAccuracyCheck
+		EffectList: attacking
+		InvokeAttack: attacking
+	*
+***
+OpponentAccuracyBypassEffect:
+	Method:
+		Comments: // Attacker is the Pokemon whose accuracy is being evaluated, defender is the Pokemon on which this effect is attached to
+		Header: boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		Invoke: Check true
+		InvokeName: bypassAccuracyCheck
+		EffectList: defending
+	*
+***
+AttackSelectionEffect:
+	Method:
+		Header: boolean usable(ActivePokemon p, Move m)
+		Invoke: CheckGet false
+		InvokeName: getUnusableEffect
+		InvokeParameters: Battle b
+		EffectList: p
+	*
+	Method:
+		Header: String getUnusableMessage(ActivePokemon p)
+	*
+***
+WeatherBlockerEffect:
+	Method:
+		Header: boolean block(EffectNamesies weather)
+		Invoke: Check true
+		InvokeName: checkBlocked
+		InvokeParameters: Battle b, ActivePokemon p
+		EffectList: p
+	*
+***
+TrappingEffect:
+	Comments: // Any effect that implements this will prevent a Pokemon with said effect from escaping battle
+	Method:
+		Header: boolean isTrapped(Battle b, ActivePokemon escaper)
+		Invoke: CheckGet true
+		InvokeName: getTrapped
+		EffectList: escaper
+	*
+	Method:
+		Header: String trappingMessage(ActivePokemon trapped)
+	*
+***
+OpponentTrappingEffect:
+	Method:
+		Header: boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper)
+		Invoke: CheckGet true
+		InvokeName: getTrapped
+		EffectList: escaper
+	*
+	Method:
+		Header: String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper)
+	*
+***
+BeforeTurnEffect:
+	Method:
+		Comments: // TODO: Rename these to attacking and defending
+		Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		Invoke: Check false
+		InvokeName: checkCannotAttack
+		Deadsies: p opp
+		EffectList: p
+	*
+***
+OpponentBeforeTurnEffect:
+	Method:
+		Header: boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		Invoke: Check false
+		InvokeName: checkCannotAttack
+		Deadsies: p opp
+		MoldBreaker: p
+		EffectList: opp
+	*
+***
+EffectBlockerEffect:
+	Method:
+		Header: boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
+		Invoke: Check false
+		InvokeName: checkBlocked
+		MoldBreaker: user
+		EffectList: victim
+	*
+***
+TargetSwapperEffect:
+	Method:
+		Header: boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
+		Invoke: Check true
+		InvokeName: checkSwapTarget
+		MoldBreaker: user
+		EffectList: opponent
+	*
+***
+CritBlockerEffect:
+	Method:
+		Header: boolean blockCrits()
+		Invoke: Check true
+		InvokeName: checkBlocked
+		InvokeParameters: Battle b, ActivePokemon attacking, ActivePokemon defending
+		MoldBreaker: attacking
+		EffectList: defending
+		InvokeAttack: attacking
+	*
+***
+StatProtectingEffect:
+	Method:
+		Header: boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)
+		Invoke: CheckGet true
+		InvokeName: getPreventEffect
+		EffectList: victim
+		MoldBreaker: caster
+	*
+	Method:
+		Header: String preventionMessage(ActivePokemon p, Stat s)
+	*
+***
+StatusPreventionEffect:
+	Method:
+		Comments: // TODO: Would be nice in the future if I am able to implement multiple invoke methods for the same interface method since this could also use a basic check invoke as well
+		Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status)
+		Invoke: CheckGet true
+		InvokeName: getPreventEffect
+		EffectList: victim
+		MoldBreaker: caster
+	*
+	Method:
+		Header: String statusPreventionMessage(ActivePokemon victim)
+	*
+***
+BracingEffect:
+	Method:
+		Header: boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
+		Invoke: CheckGet true
+		InvokeName: getBracingEffect
+		EffectList: bracer
+		MoldBreaker: b.getOtherPokemon(bracer.user())
+	*
+	Method:
+		Header: String braceMessage(ActivePokemon bracer)
 	*
 ***

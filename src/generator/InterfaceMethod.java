@@ -17,9 +17,11 @@ class InterfaceMethod {
     private static final String METHOD_NAME = "MethodName";
     private static final String HEADER = "Header";
     private static final String PARAMETERS = "Parameters";
+    private static final String INVOKE_PARAMETERS = "InvokeParameters";
     private static final String INVOKE = "Invoke";
     private static final String INVOKE_NAME = "InvokeName";
     private static final String EFFECT_LIST = "EffectList";
+    private static final String INVOKE_ATTACK = "InvokeAttack";
     private static final String SET_INVOKEES = "SetInvokees";
     private static final String MOVE = "Move";
     private static final String MOLD_BREAKER = "MoldBreaker";
@@ -32,6 +34,7 @@ class InterfaceMethod {
 
     private String parameters;
     private String typelessParameters;
+    private String additionalInvokeParameters;
     private String battleParameter;
 
     private String invokeeDeclaration;
@@ -54,12 +57,22 @@ class InterfaceMethod {
 
     private void readFields(Map<String, String> fields) {
 
-        final String returnTypeAndName = getField(fields, HEADER);
-        if (returnTypeAndName != null) {
-            String[] split = returnTypeAndName.split(" ");
+        final String header = getField(fields, HEADER);
+        if (header != null) {
+            int openParenthesis = header.indexOf('(');
+            int closeParenthesis = header.indexOf(')');
+
+            if (openParenthesis == -1 || closeParenthesis == -1 || openParenthesis > closeParenthesis) {
+                Global.error("Header must contain proper parentheses around parameters. " +
+                        header + " is not valid.  Interface: " + this.interfaceName);
+            }
+
+            this.parameters = header.substring(openParenthesis + 1, closeParenthesis);
+
+            String[] split = header.substring(0, openParenthesis).split(" ");
             if (split.length != 2) {
-                Global.error("Header must have exactly two words -- return type and method name. " +
-                        returnTypeAndName + " is not valid.  Interface: " + this.interfaceName);
+                Global.error("Header must have exactly two words -- return type and method name -- before parameter parentheses. " +
+                        header + " is not valid.  Interface: " + this.interfaceName);
             }
 
             this.returnType = split[0];
@@ -87,33 +100,14 @@ class InterfaceMethod {
         final String parameters = getField(fields, PARAMETERS);
         if (parameters != null) {
             this.parameters = parameters;
-
-            final String[] split = this.parameters.split(",");
-            for (final String typedParameter : split) {
-                final String[] typeSplit = typedParameter.trim().split(" ");
-                if (typeSplit.length != 2) {
-                    Global.error("Should be exactly one space between split parameters. " +
-                            "Parameters: " + this.parameters + ", Interface Name: " + this.interfaceName);
-                }
-
-                final String parameterType = typeSplit[0];
-                final String parameterName = typeSplit[1];
-
-                if (!this.typelessParameters.isEmpty()) {
-                    this.typelessParameters += ", ";
-                }
-
-                this.typelessParameters += parameterName;
-
-                if (parameterType.equals(Battle.class.getSimpleName())) {
-                    if (!StringUtils.isNullOrEmpty(this.battleParameter)) {
-                        Global.error("Can only have one battle parameter.  Interface: " + this.interfaceName);
-                    }
-
-                    this.battleParameter = parameterName;
-                }
-            }
         }
+
+        final String invokeParameters = getField(fields, INVOKE_PARAMETERS);
+        if (invokeParameters != null){
+            this.additionalInvokeParameters = invokeParameters;
+        }
+
+        this.setParameters();
 
         final String comments = getField(fields, COMMENTS);
         if (comments != null) {
@@ -122,7 +116,8 @@ class InterfaceMethod {
 
         final String invoke = getField(fields, INVOKE);
         if (invoke != null) {
-            this.invokeMethod = InvokeType.valueOf(invoke.toUpperCase()).getInvokeMethod();
+            Scanner in = new Scanner(invoke);
+            this.invokeMethod = InvokeType.valueOf(in.next().toUpperCase()).getInvokeMethod(in);
         }
 
         final String invokeName = getField(fields, INVOKE_NAME);
@@ -138,6 +133,11 @@ class InterfaceMethod {
         if (effectListParameter != null) {
             this.invokeeDeclaration = String.format("List<Object> invokees = %s.getEffectsList(%s);",
                     this.battleParameter, effectListParameter);
+
+            final String invokeAttack = getField(fields, INVOKE_ATTACK);
+            if (invokeAttack != null) {
+                this.invokeeDeclaration += "\ninvokees.add(" + invokeAttack + ".getAttack());\n";
+            }
         }
 
         final String setInvokees = getField(fields, SET_INVOKEES);
@@ -185,6 +185,40 @@ class InterfaceMethod {
         }
     }
 
+    private void setParameters() {
+        if (!StringUtils.isNullOrEmpty(this.parameters)) {
+            final String[] split = this.parameters.split(",");
+            for (final String typedParameter : split) {
+                final String[] typeSplit = typedParameter.trim().split(" ");
+                if (typeSplit.length != 2) {
+                    Global.error("Should be exactly one space between split parameters. " +
+                            "Parameters: " + this.parameters + ", Interface Name: " + this.interfaceName);
+                }
+
+                final String parameterType = typeSplit[0];
+                final String parameterName = typeSplit[1];
+
+                if (!this.typelessParameters.isEmpty()) {
+                    this.typelessParameters += ", ";
+                }
+
+                this.typelessParameters += parameterName;
+
+                if (parameterType.equals(Battle.class.getSimpleName())) {
+                    if (!StringUtils.isNullOrEmpty(this.battleParameter)) {
+                        Global.error("Can only have one battle parameter.  Interface: " + this.interfaceName);
+                    }
+
+                    this.battleParameter = parameterName;
+                }
+            }
+        }
+
+        if (StringUtils.isNullOrEmpty(this.battleParameter)) {
+            this.battleParameter = "b";
+        }
+    }
+
     private static String getField(final Map<String, String> fields, final String key) {
         if (fields.containsKey(key)) {
             final String value = fields.get(key).trim();
@@ -227,7 +261,9 @@ class InterfaceMethod {
 
     private enum InvokeType {
         VOID(VoidInvoke::new),
-        CONTAINS(ContainsInvoke::new);
+        CONTAINS(ContainsInvoke::new),
+        CHECK(CheckInvoke::new),
+        CHECKGET(CheckGetInvoke::new);
 
         private final GetInvokeMethod getInvokeMethod;
 
@@ -236,21 +272,27 @@ class InterfaceMethod {
         }
 
         private interface GetInvokeMethod {
-            InvokeMethod getInvokeMethod();
+            InvokeMethod getInvokeMethod(Scanner invokeInput);
         }
 
-        public InvokeMethod getInvokeMethod() {
-            return this.getInvokeMethod.getInvokeMethod();
+        public InvokeMethod getInvokeMethod(final Scanner invokeInput) {
+            return this.getInvokeMethod.getInvokeMethod(invokeInput);
         }
     }
 
     private static abstract class InvokeMethod {
         private String methodName;
 
-        protected abstract String getReturnType();
+        protected abstract String getReturnType(InterfaceMethod interfaceMethod);
         protected abstract String getDefaultMethodName(final InterfaceMethod interfaceMethod);
         protected abstract void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod);
-        protected abstract void appendPostLoop(StringBuilder body, InterfaceMethod interfaceMethod);
+        protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
+
+        InvokeMethod(final Scanner invokeInput) {
+            if (invokeInput != null && invokeInput.hasNext()) {
+                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
+            }
+        }
 
         private String getMethodName(final InterfaceMethod interfaceMethod) {
             if (StringUtils.isNullOrEmpty(this.methodName)) {
@@ -262,7 +304,7 @@ class InterfaceMethod {
 
         String writeInvokeMethod(final InterfaceMethod interfaceMethod) {
             final String header = MethodInfo.createHeader(
-                    "static " + this.getReturnType(),
+                    "static " + this.getReturnType(interfaceMethod),
                     this.getMethodName(interfaceMethod),
                     this.getInvokeParameters(interfaceMethod)
             );
@@ -271,10 +313,7 @@ class InterfaceMethod {
             this.appendDeadsies(body, interfaceMethod);
             body.append(getDeclaration(interfaceMethod));
             StringUtils.appendLine(body, "\nfor (Object invokee : invokees) {");
-            StringUtils.appendLine(body, "if (invokee instanceof " + interfaceMethod.interfaceName + ") {");
-            StringUtils.appendLine(body, "if (Effect.isInactiveEffect(invokee)) {");
-            StringUtils.appendLine(body, "continue;");
-            StringUtils.appendLine(body, "}");
+            StringUtils.appendLine(body, "if (invokee instanceof " + interfaceMethod.interfaceName + " && !Effect.isInactiveEffect(invokee)) {");
             this.appendMoldBreaker(body, interfaceMethod);
             StringUtils.appendLine(body, "");
             this.appendInnerLoop(body, interfaceMethod);
@@ -282,17 +321,20 @@ class InterfaceMethod {
             StringUtils.appendLine(body, "}");
             StringUtils.appendLine(body, "}");
             StringUtils.appendLine(body, "");
-            this.appendPostLoop(body, interfaceMethod);
+            StringUtils.appendLine(body, this.getPostLoop(interfaceMethod));
 
             return new MethodInfo(header, body.toString().trim(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();
         }
 
         private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
             String invokeParameters = interfaceMethod.parameters;
+            if (!StringUtils.isNullOrEmpty(interfaceMethod.additionalInvokeParameters)) {
+                invokeParameters = interfaceMethod.additionalInvokeParameters +
+                        StringUtils.addLeadingComma(invokeParameters);
+            }
+
             if (passInvokees(interfaceMethod)) {
-                invokeParameters = "List<?> invokees" +
-                        (StringUtils.isNullOrEmpty(invokeParameters) ? "" : ", ") +
-                        invokeParameters;
+                invokeParameters = "List<?> invokees" + StringUtils.addLeadingComma(invokeParameters);
             }
 
             return invokeParameters;
@@ -322,11 +364,14 @@ class InterfaceMethod {
         }
 
         private void appendDeadsies(final StringBuilder body, final InterfaceMethod interfaceMethod) {
+            final String postLoop = this.getPostLoop(interfaceMethod);
+            final String returnStatement = StringUtils.isNullOrEmpty(postLoop) ? "return;" : postLoop;
+
             final String battleParameter = interfaceMethod.battleParameter;
             for (final String activePokemonParameter : interfaceMethod.deadsies) {
                 StringUtils.appendLine(body, "");
                 StringUtils.appendLine(body, String.format("if (%s.isFainted(%s)) {", activePokemonParameter, battleParameter));
-                StringUtils.appendLine(body, "return;");
+                StringUtils.appendLine(body, returnStatement);
                 StringUtils.appendLine(body, "}");
             }
         }
@@ -334,7 +379,11 @@ class InterfaceMethod {
 
     private static class ContainsInvoke extends InvokeMethod {
 
-        protected String getReturnType() {
+        ContainsInvoke(Scanner invokeInput) {
+            super(invokeInput);
+        }
+
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "boolean";
         }
 
@@ -346,14 +395,18 @@ class InterfaceMethod {
             StringUtils.appendLine(body, "return true;");
         }
 
-        protected void appendPostLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, "return false;");
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return "return false;";
         }
     }
 
     private static class VoidInvoke extends InvokeMethod {
 
-        protected String getReturnType() {
+        VoidInvoke(Scanner invokeInput) {
+            super(invokeInput);
+        }
+
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "void";
         }
 
@@ -366,6 +419,68 @@ class InterfaceMethod {
             StringUtils.appendLine(body, "effect." + interfaceMethod.getMethodCall() + ";");
         }
 
-        protected void appendPostLoop(StringBuilder body, InterfaceMethod interfaceMethod) {}
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return StringUtils.empty();
+        }
+    }
+
+    private static class CheckInvoke extends InvokeMethod {
+
+        private final boolean check;
+
+        CheckInvoke(final Scanner invokeInput) {
+            super(null);
+
+            this.check = invokeInput.nextBoolean();
+            if (invokeInput.hasNext()) {
+                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
+            }
+        }
+
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
+            return "boolean";
+        }
+
+        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
+            return "check" + interfaceMethod.interfaceName;
+        }
+
+        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
+            StringUtils.appendLine(body, interfaceMethod.interfaceName + " effect = (" + interfaceMethod.interfaceName + ")invokee;");
+            StringUtils.appendLine(body, String.format("if (%seffect.%s) {", check ? "" : "!", interfaceMethod.getMethodCall()));
+            StringUtils.appendLine(body, this.successfulCheck());
+            StringUtils.appendLine(body, "}");
+        }
+
+        protected String successfulCheck() {
+            return "return true;";
+        }
+
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return "return false;";
+        }
+    }
+
+    private static class CheckGetInvoke extends CheckInvoke {
+
+        CheckGetInvoke(Scanner invokeInput) {
+            super(invokeInput);
+        }
+
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.interfaceName;
+        }
+
+        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
+            return "checkAndGet" + interfaceMethod.interfaceName;
+        }
+
+        protected String successfulCheck() {
+            return "return effect;";
+        }
+
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return "return null;";
+        }
     }
 }

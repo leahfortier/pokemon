@@ -2,8 +2,8 @@ package battle.effect.status;
 
 import battle.Battle;
 import battle.MoveType;
-import battle.effect.BeforeTurnEffect;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import pokemon.ActivePokemon;

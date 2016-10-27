@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import main.Type;
 import namesies.AttackNamesies;
 import pokemon.ActivePokemon;
-import battle.effect.AttackSelectionEffect;
 import battle.effect.ChangeAttackTypeEffect;
 import battle.effect.ForceMoveEffect;
 import battle.effect.attack.MultiTurnMove;
@@ -199,10 +199,10 @@ public class Move implements Serializable {
 		}
 		
 		// BUT WHAT IF YOU HAVE A CONDITION THAT PREVENTS YOU FROM USING THAT MOVE?!!?! THEN WHAT?!!?!!
-		Object unusable = Battle.checkInvoke(false, b.getEffectsList(p), AttackSelectionEffect.class, "usable", p, m);
+		AttackSelectionEffect unusable = AttackSelectionEffect.getUnusableEffect(b, p, m);
 		if (unusable != null) {
 			if (selecting) {
-				b.addMessage(((AttackSelectionEffect)unusable).getUnusableMessage(p));
+				b.addMessage(unusable.getUnusableMessage(p));
 			}
 			
 			// THAT'S WHAT

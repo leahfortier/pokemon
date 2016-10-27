@@ -1,8 +1,8 @@
 package battle.effect.status;
 
 import battle.Battle;
-import battle.effect.BeforeTurnEffect;
 import battle.effect.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import main.Type;
 import namesies.AbilityNamesies;
 import pokemon.ActivePokemon;

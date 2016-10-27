@@ -1,23 +1,23 @@
 package battle;
 
 import battle.MessageUpdate.Update;
-import battle.effect.AccuracyBypassEffect;
-import battle.effect.BeforeTurnEffect;
-import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
-import battle.effect.OpponentAccuracyBypassEffect;
-import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentPowerChangeEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.PriorityChangeEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
+import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
+import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
@@ -614,15 +614,13 @@ public class Battle {
 	
 	private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
 	private int criticalHit(ActivePokemon me, ActivePokemon o) {
-		List<Object> listsies = this.getEffectsList(o, me.getAttack());
-		Object blockCrits = Battle.checkInvoke(true, me, listsies, CritBlockerEffect.class, "blockCrits");
-		if (blockCrits != null) {
+		if (CritBlockerEffect.checkBlocked(this, me, o)) {
 			return 1;
 		}
 		
 		// Increase crit stage and such
 		int stage = 1;
-		listsies = this.getEffectsList(me);
+		List<Object> listsies = this.getEffectsList(me);
 		stage = (int)Battle.updateInvoke(0, listsies, CritStageEffect.class, "increaseCritStage", stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
 		
@@ -647,18 +645,18 @@ public class Battle {
 		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == MoveCategory.STATUS) {
 			return true;
 		}
+
+		if (me.getAttack().isMoveType(MoveType.FIELD)) {
+			return true;
+		}
 		
 		// Effects that allow the user to bypass the accuracy check
-		List<Object> invokees = this.getEffectsList(me, me.getAttack());
-		Object bypass = Battle.checkInvoke(true, invokees, AccuracyBypassEffect.class, "bypassAccuracy", this, me, o);
-		if (bypass != null) {
+		if (AccuracyBypassEffect.bypassAccuracyCheck(this, me, o)) {
 			return true;
 		}
 		
 		// Opponent effects that always allow the user to hit them
-		invokees = this.getEffectsList(o);
-		bypass = Battle.checkInvoke(true, invokees, OpponentAccuracyBypassEffect.class, "opponentBypassAccuracy", this, me, o);
-		if (bypass != null) {
+		if (OpponentAccuracyBypassEffect.bypassAccuracyCheck(this, me, o)) {
 			return true;
 		}
 		
@@ -683,21 +681,16 @@ public class Battle {
 		}
 		
 		// Loop through all tha effects and do them checks
-		List<Object> invokees = getEffectsList(p);
-		
-		// False because we're checking if they 'cannot attack' from the 'canAttack' method
-		Object cannotAttack = Battle.checkInvoke(false, this, p, opp, invokees, BeforeTurnEffect.class, "canAttack", p, opp, this);
-		if (cannotAttack != null) {
+		if (BeforeTurnEffect.checkCannotAttack(p, opp, this)) {
 			return false;
 		}
 		
 		// Opponents effects that prevent you from attacking
-		invokees = getEffectsList(opp);
-		cannotAttack = Battle.checkInvoke(false, this, p, opp, p, invokees, OpponentBeforeTurnEffect.class, "opposingCanAttack", p, opp, this);
-		if (cannotAttack != null) {
+		if (OpponentBeforeTurnEffect.checkCannotAttack(p, opp, this)) {
 			return false;
 		}
-		
+
+		// TODO: Make static method inside MultiTurnMove
 		// Multi-turn Moves
 		if (!p.getMove().isReady()) {
 			((MultiTurnMove)p.getAttack()).charge(p, this);
@@ -872,35 +865,14 @@ public class Battle {
 		// We didn't find what we were looking for
 		return returnValue;
 	}
-	
-	// Used for calling methods that return booleans
-	public static <T> Object checkInvoke(boolean check, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return Battle.invoke(-1, -1, true, check, null, null, null, null, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that return booleans and also exit early if p or opp are fainted
-	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return Battle.invoke(-1, -1, true, check, b, p, opp, null, invokees, className, methodName, parameterValues);
-	}
-	
 	// Used for calling methods that return booleans where mold breaker may be a factor to check
 	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
-	// Used for calling methods that return booleans and also exit early if p or opp are fainted
-	public static <T> Object checkInvoke(boolean check, Battle b, ActivePokemon p, ActivePokemon opp, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return Battle.invoke(-1, -1, true, check, b, p, opp, moldBreaker, invokees, className, methodName, parameterValues);
-	}
-	
 	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
 	public static <T> Object getInvoke(List<?> invokees, Class<T> className, String methodName, Object... parameterValues) {
 		return Battle.invoke(-1, -1, false, true, null, null, null, null, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that you want the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
-	public static <T> Object getInvoke(ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return Battle.invoke(-1, -1, false, true, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 	
 	// Used for calling methods that you want to continuously update the return value of -- it will return this value that you want so badly

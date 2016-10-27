@@ -6,12 +6,8 @@ import battle.Move;
 import battle.MoveCategory;
 import battle.MoveType;
 import battle.effect.AdvantageChanger;
-import battle.effect.AttackSelectionEffect;
-import battle.effect.BeforeTurnEffect;
-import battle.effect.BracingEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
-import battle.effect.EffectBlockerEffect;
 import battle.effect.HalfWeightEffect;
 import battle.effect.OpponentPowerChangeEffect;
 import battle.effect.PowerChangeEffect;
@@ -19,18 +15,22 @@ import battle.effect.PriorityChangeEffect;
 import battle.effect.RepellingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.StatChangingEffect;
-import battle.effect.StatProtectingEffect;
-import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
+import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.BracingEffect;
+import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
+import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.holder.ItemHolder;
@@ -1280,7 +1280,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth) {
+		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
 			return Math.random()*100 < 10;
 		}
 
@@ -1304,7 +1304,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth) {
+		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
 			if (fullHealth) {
 				bracer.consumeItem(b);
 				return true;

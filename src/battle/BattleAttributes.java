@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
+import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import main.Global;
 import namesies.EffectNamesies;
 import pokemon.Ability;
@@ -14,7 +15,6 @@ import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.ModifyStageValueEffect;
 import battle.effect.generic.PokemonEffect;
-import battle.effect.StatProtectingEffect;
 import util.StringUtils;
 
 public class BattleAttributes implements Serializable {
@@ -213,14 +213,12 @@ public class BattleAttributes implements Serializable {
 		
 		// Effects that prevent stat reductions caused by the opponent
 		if (val < 0 && caster != victim) {
-
-			List<Object> list = b.getEffectsList(victim);
-			Object prevent = Battle.checkInvoke(true, caster, list, StatProtectingEffect.class, "prevent", b, caster, victim, stat);
+			StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(b, caster, victim, stat);
 			if (prevent != null) {
 				if (print) {
-					b.addMessage(((StatProtectingEffect)prevent).preventionMessage(victim, stat));
+					b.addMessage(prevent.preventionMessage(victim, stat));
 				}
-				
+
 				return false;
 			}
 		}

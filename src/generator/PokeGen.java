@@ -120,11 +120,6 @@ class PokeGen {
 		
 		fields.put("Index", index + "");
 		
-		// There will be problems if a Field move does not get the necessary methods
-		if (fields.containsKey("MoveType") && fields.get("MoveType").contains("Field")) {
-			Global.error("Field MoveType must be implemented as FieldMove: True instead of through the MoveType field. Move: " + className);
-		}
-		
 		// NumTurns matches to both MinTurns and MaxTurns
 		if (fields.containsKey("NumTurns")) {
 			String numTurns = fields.get("NumTurns");

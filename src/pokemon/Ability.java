@@ -5,48 +5,48 @@ import battle.Battle;
 import battle.Move;
 import battle.MoveCategory;
 import battle.MoveType;
-import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageChanger;
-import battle.effect.BeforeTurnEffect;
-import battle.effect.BracingEffect;
 import battle.effect.ChangeAttackTypeEffect;
-import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
 import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
-import battle.effect.EffectBlockerEffect;
 import battle.effect.HalfWeightEffect;
 import battle.effect.IgnoreStageEffect;
 import battle.effect.ModifyStageValueEffect;
-import battle.effect.OpponentAccuracyBypassEffect;
-import battle.effect.OpponentBeforeTurnEffect;
 import battle.effect.OpponentPowerChangeEffect;
-import battle.effect.OpponentTrappingEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.PriorityChangeEffect;
 import battle.effect.StageChangingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.StatChangingEffect;
-import battle.effect.StatProtectingEffect;
-import battle.effect.StatusPreventionEffect;
 import battle.effect.SwitchOutEffect;
-import battle.effect.TargetSwapperEffect;
-import battle.effect.WeatherBlockerEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
+import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
+import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
+import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
+import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
+import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
+import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
+import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.Weather;
 import battle.effect.holder.ItemHolder;
@@ -1045,8 +1045,8 @@ public abstract class Ability implements Serializable {
 			return (ArenaTrap)(new ArenaTrap().activate());
 		}
 
-		public boolean trapOpponent(Battle b, ActivePokemon p) {
-			return !p.isLevitating(b) && !p.isType(b, Type.GHOST);
+		public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
+			return !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST);
 		}
 
 		public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
@@ -1290,7 +1290,7 @@ public abstract class Ability implements Serializable {
 			return (Sturdy)(new Sturdy().activate());
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth) {
+		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
 			return fullHealth;
 		}
 
@@ -1322,8 +1322,8 @@ public abstract class Ability implements Serializable {
 			return (MagnetPull)(new MagnetPull().activate());
 		}
 
-		public boolean trapOpponent(Battle b, ActivePokemon p) {
-			return p.isType(b, Type.STEEL) && !p.isType(b, Type.GHOST);
+		public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
+			return escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST);
 		}
 
 		public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
@@ -2169,8 +2169,8 @@ public abstract class Ability implements Serializable {
 			return (ShadowTag)(new ShadowTag().activate());
 		}
 
-		public boolean trapOpponent(Battle b, ActivePokemon p) {
-			return !p.hasAbility(this.namesies) && !p.isType(b, Type.GHOST);
+		public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
+			return !escaper.hasAbility(this.namesies) && !escaper.isType(b, Type.GHOST);
 		}
 
 		public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
@@ -2316,8 +2316,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasStatus(StatusCondition.ASLEEP)) lazyface = false;
-			else lazyface = !lazyface;
+			if (victim.hasStatus(StatusCondition.ASLEEP)) {
+				lazyface = false;
+			}
+			else {
+				lazyface = !lazyface;
+			}
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {

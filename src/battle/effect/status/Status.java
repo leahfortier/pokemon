@@ -1,9 +1,9 @@
 package battle.effect.status;
 
 import battle.Battle;
-import battle.effect.StatusPreventionEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.PokemonEffect;
 import item.Item;
 import item.berry.GainableEffectBerry;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
-	protected final StatusCondition type;
+	protected final StatusCondition type; // TODO: Rename this
 	
 	protected Status(StatusCondition type) {
 		this.type = type;
@@ -56,10 +56,9 @@ public abstract class Status implements Serializable {
 	}
 	
 	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-		List<Object> list = b.getEffectsList(victim);
-		Object statusPrevent = Battle.checkInvoke(true, user, list, StatusPreventionEffect.class, "preventStatus", b, user, victim, type);
+		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.type);
 		if (statusPrevent != null) {
-			return ((StatusPreventionEffect)statusPrevent).statusPreventionMessage(victim); 
+			return statusPrevent.statusPreventionMessage(victim);
 		}
 		
 		return Effect.DEFAULT_FAIL_MESSAGE;
@@ -81,10 +80,9 @@ public abstract class Status implements Serializable {
 		if (victim.hasStatus()) {
 			return false;
 		}
-		
-		List<Object> list = b.getEffectsList(victim);
-		Object preventStatus = Battle.checkInvoke(true, caster, list, StatusPreventionEffect.class, "preventStatus", b, caster, victim, type);
-		if (preventStatus != null) {
+
+		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, caster, victim, this.type);
+		if (statusPrevent != null) {
 			return false;
 		}
 		

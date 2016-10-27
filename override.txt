@@ -218,8 +218,7 @@ Override:
 Override:
 	BattleEffect:
 		AddMapField: Effect: Battle {0}
-		AddMapField: FieldMove: True
-		AddMapField: MoveType: No_Magic_Coat
+		AddMapField: MoveType: No_Magic_Coat, Field
 	*
 ***
 Override:
@@ -291,15 +290,6 @@ StageChangingEffect:
 IgnoreStageEffect:
 	IgnoreStage: 
 		Header: boolean ignoreStage(Stat s)
-	*
-***
-Override:
-	FieldMove:
-		AddInterface: AccuracyBypassEffect
-		AddMapField: BypassAccuracy:
-		return true;
-		###
-		AddMapField: MoveType: Field
 	*
 ***
 Override:
@@ -651,11 +641,11 @@ Override:
 ***
 TrappingEffect:
 	Trapped:
-		Header: boolean isTrapped(Battle b, ActivePokemon p)
+		Header: boolean isTrapped(Battle b, ActivePokemon escaper)
 		Optional: True
 		Default:
 		// Ghost-type Pokemon can always escape
-		return !p.isType(b, Type.GHOST);
+		return !escaper.isType(b, Type.GHOST);
 		###
 	*
 	TrappingMessage:
@@ -667,7 +657,7 @@ TrappingEffect:
 ***
 OpponentTrappingEffect:
 	OppTrapped: 
-		Header: boolean trapOpponent(Battle b, ActivePokemon p)
+		Header: boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper)
 	*
 	OppTrappingMessage:
 		Header: String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper)
@@ -1073,7 +1063,7 @@ ItemHolder:
 ***
 BracingEffect:
 	Bracing:
-		Header: boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth)
+		Header: boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
 	*
 	BraceMessage:
 		Header: String braceMessage(ActivePokemon bracer)
@@ -1447,9 +1437,7 @@ Override:
 			}
 			
 			// Srsly don't buffet the immune!!
-			List<Object> list = b.getEffectsList(p);
-			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
-			if (checkeroo != null) {
+			if (WeatherBlockerEffect.checkBlocked(b, p, this.namesies)) {
 				return;
 			}
 

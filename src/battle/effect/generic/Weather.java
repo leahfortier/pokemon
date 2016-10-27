@@ -2,9 +2,9 @@ package battle.effect.generic;
 
 import battle.Battle;
 import battle.effect.StatChangingEffect;
-import battle.effect.WeatherBlockerEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import item.Item;
 import main.Global;
 import main.Type;
@@ -199,9 +199,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			}
 			
 			// Srsly don't buffet the immune!!
-			List<Object> list = b.getEffectsList(p);
-			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
-			if (checkeroo != null) {
+			if (WeatherBlockerEffect.checkBlocked(b, p, this.namesies)) {
 				return;
 			}
 			
@@ -264,9 +262,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			}
 			
 			// Srsly don't buffet the immune!!
-			List<Object> list = b.getEffectsList(p);
-			Object checkeroo = Battle.checkInvoke(true, list, WeatherBlockerEffect.class, "block", weatherElement);
-			if (checkeroo != null) {
+			if (WeatherBlockerEffect.checkBlocked(b, p, this.namesies)) {
 				return;
 			}
 			

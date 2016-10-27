@@ -5,37 +5,37 @@ import battle.Battle;
 import battle.Move;
 import battle.MoveCategory;
 import battle.MoveType;
-import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageChanger;
-import battle.effect.AttackSelectionEffect;
-import battle.effect.BeforeTurnEffect;
-import battle.effect.BracingEffect;
 import battle.effect.ChangeAttackTypeEffect;
 import battle.effect.CritStageEffect;
-import battle.effect.EffectBlockerEffect;
 import battle.effect.ForceMoveEffect;
 import battle.effect.HalfWeightEffect;
-import battle.effect.OpponentAccuracyBypassEffect;
-import battle.effect.OpponentBeforeTurnEffect;
-import battle.effect.OpponentTrappingEffect;
 import battle.effect.PassableEffect;
 import battle.effect.PowerChangeEffect;
 import battle.effect.StageChangingEffect;
 import battle.effect.StatChangingEffect;
-import battle.effect.StatProtectingEffect;
 import battle.effect.StatSwitchingEffect;
-import battle.effect.StatusPreventionEffect;
-import battle.effect.TargetSwapperEffect;
-import battle.effect.TrappingEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
+import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
+import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
+import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.FaintEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
+import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
+import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
+import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
+import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.IntegerHolder;
 import battle.effect.holder.ItemHolder;
@@ -333,9 +333,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -390,9 +390,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -447,9 +447,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -504,9 +504,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -561,9 +561,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -618,9 +618,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -675,9 +675,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -732,9 +732,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -1105,7 +1105,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " braced itself!";
 		}
 
-		public boolean isBracing(Battle b, ActivePokemon bracer, Boolean fullHealth) {
+		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
 			return true;
 		}
 
@@ -1830,9 +1830,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " can't escape!";
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
-			return !p.isType(b, Type.GHOST);
+			return !escaper.isType(b, Type.GHOST);
 		}
 
 		public String trappingMessage(ActivePokemon trapped) {
@@ -2088,7 +2088,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " planted its roots!";
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon p) {
+		public boolean isTrapped(Battle b, ActivePokemon escaper) {
 			return true;
 		}
 
@@ -3111,7 +3111,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean trapOpponent(Battle b, ActivePokemon p) {
+		public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
 			return true;
 		}
 

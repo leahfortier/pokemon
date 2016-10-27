@@ -2,8 +2,8 @@ package battle.effect.status;
 
 import battle.Battle;
 import battle.MoveType;
-import battle.effect.BeforeTurnEffect;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import main.Type;
 import namesies.EffectNamesies;

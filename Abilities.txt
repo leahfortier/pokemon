@@ -255,7 +255,7 @@ Arena Trap:
 	Desc: Prevents the foe from fleeing.
 	Int: OpponentTrappingEffect
 	OppTrapped: 
-	return !p.isLevitating(b) && !p.isType(b, Type.GHOST);	
+	return !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST);
 	###
 *
 Technician:
@@ -350,7 +350,7 @@ Oblivious:
 Magnet Pull:
 	Int: OpponentTrappingEffect
 	OppTrapped: 
-	return p.isType(b, Type.STEEL) && !p.isType(b, Type.GHOST);
+	return escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST);
 	###
 	Desc: Prevents Steel-type Pok\u00e9mon from escaping.
 *
@@ -654,7 +654,7 @@ Shadow Tag:
 	Desc: Prevents the foe from escaping.
 	Int: OpponentTrappingEffect
 	OppTrapped:  
-	return !p.hasAbility(this.namesies) && !p.isType(b, Type.GHOST);
+	return !escaper.hasAbility(this.namesies) && !escaper.isType(b, Type.GHOST);
 	###
 *
 Overcoat:
@@ -701,8 +701,12 @@ Truant:
 	###
 	Int: EndTurnEffect, BeforeTurnEffect
 	ApplyEndTurn: 
-	if (victim.hasStatus(StatusCondition.ASLEEP)) lazyface = false;
-	else lazyface = !lazyface;
+	if (victim.hasStatus(StatusCondition.ASLEEP)) {
+		lazyface = false;
+	}
+	else {
+		lazyface = !lazyface;
+	}
 	###
 	CanAttack: 
 	if (lazyface) {

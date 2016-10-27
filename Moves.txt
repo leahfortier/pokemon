@@ -895,7 +895,7 @@ Toxic Spikes:
 	PP: 20
 	Type: Poison
 	Cat: Status
-	FieldMove: True
+	MoveType: Field
 	Effect: Team ToxicSpikes
 *
 Pin Missile:
@@ -1286,8 +1286,7 @@ Haze:
 	Type: Ice
 	Cat: Status
 	EliminateStatChanges: True
-	MoveType: Substitute_Piercing, No_Magic_Coat
-	FieldMove: True
+	MoveType: Substitute_Piercing, No_Magic_Coat, Field
 *
 Coil:
 	Desc: The user coils up and concentrates. This raises its Attack and Defense stats as well as its accuracy.
@@ -2624,7 +2623,7 @@ Stealth Rock:
 	Cat: Status
 	PP: 20
 	Effect: Team StealthRock
-	FieldMove: True
+	MoveType: Field
 	Desc: The user lays a trap of levitating stones around the opponent's team. The trap hurts opponents that switch into battle.
 *
 Stone Edge:
@@ -3033,7 +3032,7 @@ Spikes:
 	PP: 20
 	Cat: Status
 	Type: Ground
-	FieldMove: True
+	MoveType: Field
 	Effect: Team Spikes
 *
 Icicle Crash:
@@ -6218,7 +6217,7 @@ Sticky Web:
 	Cat: Status
 	PP: 20
 	Effect: Team StickyWeb
-	FieldMove: True
+	MoveType: Field
 	Desc: The user weaves a sticky net around the opposing team, which lowers their Speed stat upon switching into battle.
 *
 Belch:

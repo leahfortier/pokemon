@@ -4,18 +4,18 @@ import battle.Attack;
 import battle.Battle;
 import battle.BattleAttributes;
 import battle.Move;
-import battle.effect.BracingEffect;
 import battle.effect.HalfWeightEffect;
-import battle.effect.OpponentTrappingEffect;
 import battle.effect.StallingEffect;
-import battle.effect.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.FaintEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
+import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
+import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.holder.AbilityHolder;
@@ -933,19 +933,17 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// Check if the user is under an effect that prevents escape
-		List<Object> invokees = b.getEffectsList(this);
-		Object trapped = Battle.checkInvoke(true, invokees, TrappingEffect.class, "isTrapped", b, this);
+		TrappingEffect trapped = TrappingEffect.getTrapped(b, this);
 		if (trapped != null) {
-			b.addMessage(((TrappingEffect)trapped).trappingMessage(this));
+			b.addMessage(trapped.trappingMessage(this));
 			return false;
 		}
 		
 		// The opponent has an effect that prevents escape
 		ActivePokemon other = b.getOtherPokemon(user());
-		invokees = b.getEffectsList(other);
-		trapped = Battle.checkInvoke(true, invokees, OpponentTrappingEffect.class, "trapOpponent", b, this);
-		if (trapped != null) {
-			b.addMessage(((OpponentTrappingEffect)trapped).opponentTrappingMessage(this, other));
+		OpponentTrappingEffect trappedByOpponent = OpponentTrappingEffect.getTrapped(b, this, other);
+		if (trappedByOpponent != null) {
+			b.addMessage(trappedByOpponent.opponentTrappingMessage(this, other));
 			return false;
 		}
 		
@@ -1006,19 +1004,6 @@ public class ActivePokemon implements Serializable {
 		attributes.removeEffect(EffectNamesies.BAD_POISON);
 	}
 	
-	// Returns null if the Pokemon is not bracing, and the associated effect if it is
-	private BracingEffect bracing(Battle b, boolean fullHealth) {
-		BracingEffect bracingEffect = (BracingEffect)getEffect(EffectNamesies.BRACING);
-		if (bracingEffect != null) {
-			return bracingEffect;
-		}
-		
-		List<Object> invokees = b.getEffectsList(this);
-		bracingEffect = (BracingEffect)Battle.checkInvoke(true, b.getOtherPokemon(user()), invokees, BracingEffect.class, "isBracing", b, this, fullHealth);
-		
-		return bracingEffect;
-	}
-	
 	// Reduces hp by amount, returns the actual amount of hp that was reduced
 	public int reduceHealth(Battle b, int amount) {
 
@@ -1050,7 +1035,7 @@ public class ActivePokemon implements Serializable {
 		
 		// Enduring the hit
 		if (hp == 0) {
-			BracingEffect brace = bracing(b, fullHealth);
+			BracingEffect brace = BracingEffect.getBracingEffect(b, this, fullHealth);
 			if (brace != null) {
 				taken -= heal(1);
 				

@@ -1,15 +1,11 @@
 package battle;
 
 import battle.MessageUpdate.Update;
-import battle.effect.AccuracyBypassEffect;
 import battle.effect.AdvantageMultiplier;
-import battle.effect.CritBlockerEffect;
 import battle.effect.CritStageEffect;
-import battle.effect.EffectBlockerEffect;
 import battle.effect.IgnoreStageEffect;
 import battle.effect.PassableEffect;
 import battle.effect.StatSwitchingEffect;
-import battle.effect.TargetSwapperEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.attack.MultiStrikeMove;
@@ -18,15 +14,19 @@ import battle.effect.attack.SelfHealingMove;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.Effect.EffectType;
+import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
+import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
+import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
+import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
@@ -245,9 +245,7 @@ public abstract class Attack implements Serializable {
 	}
 	
 	private ActivePokemon getTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
-		List<Object> invokees = b.getEffectsList(opponent);
-		Object swapTarget = Battle.checkInvoke(true, user, invokees, TargetSwapperEffect.class, "swapTarget", b, user, opponent);
-		if (swapTarget != null) {
+		if (TargetSwapperEffect.checkSwapTarget(b, user, opponent)) {
 			return selfTarget ? opponent : user;
 		}
 		
@@ -261,9 +259,7 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Check the opponents effects and see if it will prevent effects from occurring
-		List<Object> list = b.getEffectsList(o);
-		Object checkeroo = Battle.checkInvoke(false, me, list, EffectBlockerEffect.class, "validMove", b, me, o);
-		if (checkeroo != null) {
+		if (EffectBlockerEffect.checkBlocked(b, me, o)) {
 			return false;
 		}
 		
@@ -1904,7 +1900,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RainDance extends Attack implements AccuracyBypassEffect {
+	private static class RainDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RainDance() {
@@ -1913,13 +1909,9 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
-		}
 	}
 
-	private static class SunnyDay extends Attack implements AccuracyBypassEffect {
+	private static class SunnyDay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SunnyDay() {
@@ -1928,13 +1920,9 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
-		}
 	}
 
-	private static class Sandstorm extends Attack implements AccuracyBypassEffect {
+	private static class Sandstorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sandstorm() {
@@ -1943,13 +1931,9 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
-		}
 	}
 
-	private static class Hail extends Attack implements AccuracyBypassEffect {
+	private static class Hail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Hail() {
@@ -1957,10 +1941,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.HAILING, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -2430,17 +2410,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ToxicSpikes extends Attack implements AccuracyBypassEffect {
+	private static class ToxicSpikes extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ToxicSpikes() {
 			super(AttackNamesies.TOXIC_SPIKES, "The user lays a trap of poison spikes at the opponent's feet. They poison opponents that switch into battle.", 20, Type.POISON, MoveCategory.STATUS);
 			super.effects.add(Effect.getEffect(EffectNamesies.TOXIC_SPIKES, EffectType.TEAM));
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -3031,7 +3007,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Haze extends Attack implements AccuracyBypassEffect {
+	private static class Haze extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Haze() {
@@ -3045,10 +3021,6 @@ public abstract class Attack implements Serializable {
 			user.getAttributes().resetStages();
 			victim.getAttributes().resetStages();
 			b.addMessage("All stat changes were eliminated!");
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -3711,7 +3683,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Gravity extends Attack implements AccuracyBypassEffect {
+	private static class Gravity extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Gravity() {
@@ -3719,10 +3691,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.GRAVITY, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -4473,7 +4441,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterSport extends Attack implements AccuracyBypassEffect {
+	private static class WaterSport extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterSport() {
@@ -4481,10 +4449,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.WATER_SPORT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -4563,7 +4527,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WonderRoom extends Attack implements AccuracyBypassEffect {
+	private static class WonderRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WonderRoom() {
@@ -4571,10 +4535,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.WONDER_ROOM, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -5148,7 +5108,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudSport extends Attack implements AccuracyBypassEffect {
+	private static class MudSport extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudSport() {
@@ -5156,10 +5116,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.MUD_SPORT, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -5240,17 +5196,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StealthRock extends Attack implements AccuracyBypassEffect {
+	private static class StealthRock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StealthRock() {
 			super(AttackNamesies.STEALTH_ROCK, "The user lays a trap of levitating stones around the opponent's team. The trap hurts opponents that switch into battle.", 20, Type.ROCK, MoveCategory.STATUS);
 			super.effects.add(Effect.getEffect(EffectNamesies.STEALTH_ROCK, EffectType.TEAM));
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -5922,17 +5874,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spikes extends Attack implements AccuracyBypassEffect {
+	private static class Spikes extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spikes() {
 			super(AttackNamesies.SPIKES, "The user lays a trap of spikes at the opposing team's feet. The trap hurts Pok\u00e9mon that switch into battle.", 20, Type.GROUND, MoveCategory.STATUS);
 			super.effects.add(Effect.getEffect(EffectNamesies.SPIKES, EffectType.TEAM));
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -8735,7 +8683,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TrickRoom extends Attack implements AccuracyBypassEffect {
+	private static class TrickRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TrickRoom() {
@@ -8744,10 +8692,6 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 			super.priority = -7;
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -10313,7 +10257,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagicRoom extends Attack implements AccuracyBypassEffect {
+	private static class MagicRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagicRoom() {
@@ -10321,10 +10265,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.MAGIC_ROOM, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -10876,7 +10816,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MistyTerrain extends Attack implements AccuracyBypassEffect {
+	private static class MistyTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MistyTerrain() {
@@ -10884,10 +10824,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.MISTY_TERRAIN, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -10934,7 +10870,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GrassyTerrain extends Attack implements AccuracyBypassEffect {
+	private static class GrassyTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GrassyTerrain() {
@@ -10942,10 +10878,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.GRASSY_TERRAIN, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -11111,17 +11043,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StickyWeb extends Attack implements AccuracyBypassEffect {
+	private static class StickyWeb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StickyWeb() {
 			super(AttackNamesies.STICKY_WEB, "The user weaves a sticky net around the opposing team, which lowers their Speed stat upon switching into battle.", 20, Type.BUG, MoveCategory.STATUS);
 			super.effects.add(Effect.getEffect(EffectNamesies.STICKY_WEB, EffectType.TEAM));
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -11166,7 +11094,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ElectricTerrain extends Attack implements AccuracyBypassEffect {
+	private static class ElectricTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ElectricTerrain() {
@@ -11174,10 +11102,6 @@ public abstract class Attack implements Serializable {
 			super.effects.add(Effect.getEffect(EffectNamesies.ELECTRIC_TERRAIN, EffectType.BATTLE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
