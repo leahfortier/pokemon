@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import map.triggers.TrainerBattleTrigger;
-import pokemon.ActivePokemon;
+import pattern.PokemonMatcher;
 import util.StringUtils;
 
 import javax.swing.GroupLayout;
@@ -282,20 +282,21 @@ class TrainerDataDialog extends JPanel {
 		Matcher m = TrainerBattleTrigger.trainerBattleTriggerPattern.matcher(contents);
 		while (m.find()) {
 			if (m.group(1) != null) {
+				final String pokemonName = m.group(2);
+				final String level = m.group(3);
+				final String parameters = m.group(4);
+
 				PokemonDataPanel panel = addPokemonPanel();
-				panel.setName(m.group(2));
-				panel.setLevel(m.group(3));
-				
-				Matcher params = ActivePokemon.pokemonParameterPattern.matcher(m.group(4));
+				panel.setName(pokemonName);
+				panel.setLevel(level);
 
-				while (params.find()) {
-					if (params.group(1) != null) {
-						panel.setShiny();
-					}
+				final PokemonMatcher paramsMatcher = PokemonMatcher.matchPokemonParameters(pokemonName, level, parameters);
+				if (paramsMatcher.isShiny()) {
+					panel.setShiny();
+				}
 
-					if (params.group(2) != null) {
-						panel.setMoves(params.group(3), params.group(4), params.group(5), params.group(6));
-					}
+				if (paramsMatcher.hasMoves()) {
+					panel.setMoves(paramsMatcher.getMoveNames());
 				}
 			}
 	

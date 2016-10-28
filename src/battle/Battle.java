@@ -419,7 +419,7 @@ public class Battle {
 
 		int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
 		if (Math.random()*256 < val ||
-				plyr.getAbility() instanceof DefiniteEscape ||
+				plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
 				plyr.getHeldItem(this) instanceof DefiniteEscape) {
 			addMessage("Got away safely!");
 			addMessage(" ", Update.EXIT_BATTLE);

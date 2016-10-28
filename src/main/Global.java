@@ -111,29 +111,4 @@ public class Global {
 			return null;
 		}
 	}
-	
-	// Dynamic instantiation from the class name as a string
-	public static Object dynamicInstantiaton(String className, Object... parameterValues) {
-		try {
-			return dynamicInstantiaton(Class.forName(className), parameterValues);
-		}
-		catch (ClassNotFoundException e) {
-			Global.error("Invalid class name " + className + ". Could not instantiate.");
-			return null;
-		}
-	}
-	
-	// Returns a new object of type className where the constructor was called with parameterValues as parameters :) :) :)
-	public static Object dynamicInstantiaton(Class<?> className, Object... parameterValues) {
-		// Get the parameter types
-		Class<?>[] parameterTypes = getParameterTypes(parameterValues);
-		
-		try {
-			return className.getConstructor(parameterTypes).newInstance(parameterValues);
-		}
-		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			Global.error("Could not instantiate class " + className + ".");
-			return null;
-		}
-	}
 }

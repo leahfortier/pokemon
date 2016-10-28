@@ -38,6 +38,7 @@ import namesies.AttackNamesies;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
 import namesies.PokemonNamesies;
+import pattern.PokemonMatcher;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
 import trainer.Pokedex.PokedexStatus;
@@ -49,16 +50,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ActivePokemon implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	// TODO: Learn more about regex and clean all this shit the fuck up
-	private static final Pattern pokemonPattern = Pattern.compile("(?:(\\w+)\\s*(\\d+)([A-Za-z \\t0-9,:.\\-'*]*)|(RandomEgg))");
-	public static final Pattern pokemonParameterPattern = Pattern.compile("(?:(Shiny)|(Moves:)\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+),\\s*([A-Za-z0-9 ]+)\\s*[*]|(Egg)|(Item:)\\s*([\\w \\-'.]+)[*])", Pattern.UNICODE_CHARACTER_CLASS);
-	
 	public static final int MAX_LEVEL = 100;
 	
 	private static final String[][] characteristics =
@@ -157,11 +152,11 @@ public class ActivePokemon implements Serializable {
 	 */
 	// Constructor for triggers
 	public static ActivePokemon createActivePokemon(String pokemonDescription, boolean user) {
-		Matcher m = pokemonPattern.matcher(pokemonDescription);
-		m.find();
+
+		final PokemonMatcher pokemonMatcher = PokemonMatcher.matchPokemonDescription(pokemonDescription);
 		
 		// Random Egg
-		if (m.group(4) != null) {
+		if (pokemonMatcher.isRandomEgg()) {
 			if (!user) {
 				Global.error("Trainers cannot have eggs.");
 			}
@@ -169,74 +164,30 @@ public class ActivePokemon implements Serializable {
 			return new ActivePokemon(PokemonInfo.getRandomBaseEvolution());
 		}
 
-		PokemonNamesies namesies = PokemonNamesies.getValueOf(m.group(1));
-		PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(namesies);
-		
-		int level = Integer.parseInt(m.group(2));
-		
-		Matcher params = pokemonParameterPattern.matcher(m.group(3));
+		final PokemonNamesies namesies = pokemonMatcher.getNamesies();
 
-		boolean shiny = false;
-		boolean setMoves = false;
-		List<Move> moves = null;
-		HoldItem holdItem = null;
-		
-		boolean isEgg = false;
-		
-		while (params.find()) {
-			if (params.group(1) != null) {
-				shiny = true;
-			}
-			
-			if (params.group(2) != null) {
-				setMoves = true;
-				moves = new ArrayList<>();
-				for (int i = 0; i < 4; ++i) {
-					String attackName = params.group(3 + i);
-					if (!attackName.equals("None")) {
-						moves.add(new Move(Attack.getAttackFromName(attackName)));
-					}
-				}
-			}
-			
-			if (params.group(7) != null) {
-				isEgg = true;
-			}
-			
-			if (params.group(8) != null) {
-				String itemName = params.group(9);
-				Item item = Item.getItemFromName(itemName);
-				if (item.isHoldable()) {
-					holdItem = (HoldItem)item;
-				}
-				else {
-					Global.error(itemName +" is not a hold item. Pokemon: " + pokemonInfo.getName());
-				}
-			}
-		}
-		
 		ActivePokemon pokemon;
-		if (isEgg) {
+		if (pokemonMatcher.isEgg()) {
 			if(!user) {
 				Global.error("Trainers cannot have eggs.");
 			}
-			
+
 			pokemon = new ActivePokemon(namesies);
 		}
 		else {
-			pokemon = new ActivePokemon(namesies, level, false, user);
+			pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, user);
 		}
-		
-		if (shiny) {
+
+		if (pokemonMatcher.isShiny()) {
 			pokemon.setShiny();
 		}
-		
-		if (setMoves) {
-			pokemon.setMoves(moves);
+
+		if (pokemonMatcher.hasMoves()) {
+			pokemon.setMoves(pokemonMatcher.getMoves());
 		}
-		
-		if (holdItem != null) {
-			pokemon.giveItem(holdItem);
+
+		if (pokemonMatcher.hasHoldItem()) {
+			pokemon.giveItem(pokemonMatcher.getHoldItem());
 		}
 
 		return pokemon;

@@ -293,7 +293,8 @@ public abstract class Attack implements Serializable {
 		if ((this.category != MoveCategory.STATUS || this.namesies == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
 			return false;
 		}
-		
+
+		// TODO: Should generalize this to extend to more than just type and ability
 		// Check if type or ability will block the attack
 		if (Ability.blockAttack(b, me, o) || Type.blockAttack(b, me, o)) {
 			return false;

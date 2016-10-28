@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -44,7 +48,7 @@ class PokemonDataPanel extends JPanel {
 		
 		trainerDialog = givenTrainerDialog;
 		index = givenIndex;
-		
+
 		for (int currMove = 0; currMove < customMoves.length; ++currMove) {
 			customMoves[currMove] = "";
 		}
@@ -229,17 +233,19 @@ class PokemonDataPanel extends JPanel {
 	}
 
 	public void setMoves(final String... moves) {
-		if (moves.length > Move.MAX_MOVES) {
+		setMoves(Arrays.asList(moves));
+	}
+
+	public void setMoves(final List<String> moves) {
+		if (moves.size() > Move.MAX_MOVES) {
 			Global.error("Cannot set more than " + Move.MAX_MOVES + " moves.");
 		}
 
 		this.moveCheckBox.setSelected(true);
 		this.moveComboBox.setEnabled(true);
 		this.moveTextField.setEnabled(true);
-		for (int i = 0; i < moves.length; i++) {
-			if (!moves[i].equals("None")) { // TODO: Use constant maybe the none item one
-				this.customMoves[i] = moves[i];
-			}
+		for (int i = 0; i < moves.size(); i++) {
+			this.customMoves[i] = moves.get(i);
 		}
 	}
 }

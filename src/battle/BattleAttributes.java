@@ -204,7 +204,8 @@ public class BattleAttributes implements Serializable {
 		int index = stat.index();
 		String statName = stat.getName();
 		boolean print = source == CastSource.ATTACK && caster.getAttack().canPrintFail(); 
-		
+
+		// TODO: this shouldn't just be ability -- also should only check mold breaker when caster != victim
 		// Apply abilities that effect the value of the modifier
 		Ability ability = victim.getAbility(); 
 		if (ability instanceof ModifyStageValueEffect && !caster.breaksTheMold()) {
