@@ -1,11 +1,7 @@
 package battle;
 
 import battle.MessageUpdate.Update;
-import battle.effect.AdvantageMultiplier;
-import battle.effect.CritStageEffect;
-import battle.effect.IgnoreStageEffect;
 import battle.effect.PassableEffect;
-import battle.effect.StatSwitchingEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.attack.MultiStrikeMove;
@@ -15,13 +11,17 @@ import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.Effect.EffectType;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
+import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
+import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
+import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
@@ -1226,7 +1226,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 95;
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -1440,7 +1440,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -1581,7 +1581,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -2836,7 +2836,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -3392,7 +3392,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -3422,7 +3422,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ChipAway extends Attack implements IgnoreStageEffect {
+	private static class ChipAway extends Attack implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChipAway() {
@@ -3934,7 +3934,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 95;
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -4076,7 +4076,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -4351,7 +4351,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -4629,7 +4629,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -4669,7 +4669,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -4923,7 +4923,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -5064,7 +5064,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -5215,7 +5215,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 80;
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -6092,7 +6092,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psyshock extends Attack implements StatSwitchingEffect {
+	private static class Psyshock extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Psyshock() {
@@ -6173,7 +6173,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -6535,7 +6535,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -7100,7 +7100,7 @@ public abstract class Attack implements Serializable {
 			return user.getName() + " whipped up a whirlwind!";
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -7564,7 +7564,7 @@ public abstract class Attack implements Serializable {
 			return user.getName() + " started glowing!";
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -7601,7 +7601,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psystrike extends Attack implements StatSwitchingEffect {
+	private static class Psystrike extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Psystrike() {
@@ -8125,7 +8125,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 95;
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -8601,7 +8601,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -8731,7 +8731,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 95;
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -9177,7 +9177,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SacredSword extends Attack implements IgnoreStageEffect {
+	private static class SacredSword extends Attack implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SacredSword() {
@@ -9192,7 +9192,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SecretSword extends Attack implements StatSwitchingEffect {
+	private static class SecretSword extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SecretSword() {
@@ -10740,7 +10740,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FreezeDry extends Attack implements AdvantageMultiplier {
+	private static class FreezeDry extends Attack implements AdvantageMultiplierMove {
 		private static final long serialVersionUID = 1L;
 
 		FreezeDry() {
@@ -10763,7 +10763,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlyingPress extends Attack implements AdvantageMultiplier {
+	private static class FlyingPress extends Attack implements AdvantageMultiplierMove {
 		private static final long serialVersionUID = 1L;
 
 		FlyingPress() {

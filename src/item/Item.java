@@ -5,29 +5,29 @@ import battle.Battle;
 import battle.Move;
 import battle.MoveCategory;
 import battle.MoveType;
-import battle.effect.AdvantageChanger;
-import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
-import battle.effect.HalfWeightEffect;
-import battle.effect.OpponentPowerChangeEffect;
-import battle.effect.PowerChangeEffect;
-import battle.effect.PriorityChangeEffect;
 import battle.effect.RepellingEffect;
 import battle.effect.StallingEffect;
-import battle.effect.StatChangingEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
+import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
+import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
+import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
@@ -868,8 +868,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.1;
 			}
@@ -932,8 +931,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.5;
 			}
@@ -974,8 +972,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.5;
 			}
@@ -1016,8 +1013,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return s == Stat.SP_ATTACK;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.5;
 			}
@@ -1260,7 +1256,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int getHalfAmount(Integer halfAmount) {
+		public int getHalfAmount(int halfAmount) {
 			return halfAmount + 1;
 		}
 	}
@@ -1466,8 +1462,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			LevitationEffect.falllllllll(b, p);
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= .5;
 			}
@@ -1551,8 +1546,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.PIKACHU)) {
 				stat *= 2;
 			}
@@ -1608,7 +1602,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			if (p.isPokemon(PokemonNamesies.CHANSEY)) {
 				return stage + 2;
 			}
@@ -1659,8 +1653,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= .5;
 			}
@@ -1742,8 +1735,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.DITTO)) {
 				stat *= 1.5;
 			}
@@ -1813,8 +1805,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= .5;
 			}
@@ -1851,8 +1842,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= .5;
 			}
@@ -1889,8 +1879,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= .5;
 			}
@@ -1927,8 +1916,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= .5;
 			}
@@ -1965,8 +1953,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= .5;
 			}
@@ -2003,8 +1990,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= .5;
 			}
@@ -2055,8 +2041,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.DITTO)) {
 				stat *= 1.5;
 			}
@@ -2199,7 +2184,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -2303,8 +2288,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS)) {
 				stat *= 1.5;
 			}
@@ -2328,7 +2312,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			if (p.isPokemon(PokemonNamesies.FARFETCHD)) {
 				return stage + 2;
 			}
@@ -2412,8 +2396,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK)) {
 				stat *= 2;
 			}
@@ -2497,8 +2480,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.1;
 			}
@@ -2526,8 +2508,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.1;
 			}
@@ -2555,8 +2536,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && !b.isFirstAttack()) {
 				stat *= 1.2;
 			}
@@ -2608,8 +2588,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return PokemonNamesies.WYNAUT;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.1;
 			}
@@ -4476,8 +4455,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN)) {
 				stat *= 2;
 			}
@@ -4520,8 +4498,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.CLAMPERL)) {
 				stat *= 2;
 			}
@@ -4963,7 +4940,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 
@@ -9770,7 +9747,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.GHOST;
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Integer priority) {
+		public int changePriority(Battle b, ActivePokemon user, int priority) {
 			if (user.getHPRatio() < 1/3.0) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);
@@ -10202,8 +10179,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.getPokemonInfo().getEvolution().canEvolve()) {
 				stat *= 1.5;
 			}
@@ -10392,8 +10368,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return p.getName() + "'s " + this.name + " prevents the use of status moves!";
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.5;
 			}

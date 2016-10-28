@@ -1,8 +1,8 @@
 package battle.effect.status;
 
 import battle.Battle;
-import battle.effect.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import main.Type;
 import namesies.AbilityNamesies;
 import pokemon.ActivePokemon;
@@ -37,7 +37,7 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " burned " + victim.getName() + "!";
     }
 
-    public int modify(Integer stat, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
+    public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
         return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(AbilityNamesies.GUTS) ? .5 : 1));
     }
 

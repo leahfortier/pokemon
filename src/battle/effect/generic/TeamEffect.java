@@ -3,13 +3,13 @@ package battle.effect.generic;
 import battle.Attack;
 import battle.Battle;
 import battle.Move;
-import battle.effect.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
+import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import main.Global;
@@ -132,8 +132,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			b.getEffects(victim.user()).remove(this);
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && !opp.hasAbility(AbilityNamesies.INFILTRATOR)) {
 				stat *= 2;
 			}
@@ -189,8 +188,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			b.getEffects(victim.user()).remove(this);
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && !opp.hasAbility(AbilityNamesies.INFILTRATOR)) {
 				stat *= 2;
 			}
@@ -226,8 +224,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 2;
 			}

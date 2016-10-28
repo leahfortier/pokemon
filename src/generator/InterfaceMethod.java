@@ -4,6 +4,9 @@ import battle.Battle;
 import generator.InvokeMethod.CheckGetInvoke;
 import generator.InvokeMethod.CheckInvoke;
 import generator.InvokeMethod.ContainsInvoke;
+import generator.InvokeMethod.GetInvoke;
+import generator.InvokeMethod.MultiplyInvoke;
+import generator.InvokeMethod.UpdateInvoke;
 import generator.InvokeMethod.VoidInvoke;
 import main.Global;
 import util.StringUtils;
@@ -20,7 +23,10 @@ class InterfaceMethod {
         VOID(VoidInvoke::new),
         CONTAINS(ContainsInvoke::new),
         CHECK(CheckInvoke::new),
-        CHECKGET(CheckGetInvoke::new);
+        CHECKGET(CheckGetInvoke::new),
+        GET(GetInvoke::new),
+        UPDATE(UpdateInvoke::new),
+        MULTIPLY(MultiplyInvoke::new);
 
         private final GetInvokeMethod getInvokeMethod;
 
@@ -46,10 +52,14 @@ class InterfaceMethod {
     private static final String INVOKE = "Invoke";
     private static final String INVOKE_NAME = "InvokeName";
     private static final String EFFECT_LIST = "EffectList";
+    private static final String EFFECT_PRIORITY = "EffectPriority";
     private static final String INVOKE_ATTACK = "InvokeAttack";
+    private static final String STAT_INVOKE_ATTACK = "StatInvokeAttack";
     private static final String SET_INVOKEES = "SetInvokees";
     private static final String MOVE = "Move";
+    private static final String UPDATE = "Update";
     private static final String MOLD_BREAKER = "MoldBreaker";
+    private static final String MOLD_BREAKER_NULL_CHECK = "MoldBreakerNullCheck";
     private static final String DEADSIES = "Deadsies";
 
     private final String interfaceName;
@@ -59,12 +69,16 @@ class InterfaceMethod {
 
     private String parameters;
     private String typelessParameters;
-    private String additionalInvokeParameters;
     private String battleParameter;
 
+    private String additionalInvokeParameters;
     private String invokeeDeclaration;
 
+    private String updateField;
+
     private String moldBreaker;
+    private boolean moldBreakNullCheck;
+
     private List<String> deadsies;
 
     private String comments;
@@ -154,15 +168,38 @@ class InterfaceMethod {
             this.invokeMethod.setMethodName(invokeName);
         }
 
+        // TODO: Clean all this shit up and put all the invoke declaration nonsense in a separate method
         final String effectListParameter = getField(fields, EFFECT_LIST);
         if (effectListParameter != null) {
-            this.invokeeDeclaration = String.format("List<Object> invokees = %s.getEffectsList(%s);",
+            this.invokeeDeclaration = String.format("List<Object> invokees = %s.getEffectsList(%s",
                     this.battleParameter, effectListParameter);
+
+            final String effectPriority = getField(fields, EFFECT_PRIORITY);
+            if (effectPriority != null) {
+                this.invokeeDeclaration += ", " + effectPriority;
+            }
+
 
             final String invokeAttack = getField(fields, INVOKE_ATTACK);
             if (invokeAttack != null) {
-                this.invokeeDeclaration += "\ninvokees.add(" + invokeAttack + ".getAttack());\n";
+                this.invokeeDeclaration += ", " + invokeAttack + ".getAttack()";
             }
+
+            this.invokeeDeclaration += ");";
+        }
+
+        final String statInvokeAttack = getField(fields, STAT_INVOKE_ATTACK);
+        if (statInvokeAttack != null) {
+            if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
+                Global.error("Can not define multiple ways to set the effects list. Interface: " + this.interfaceName);
+            }
+
+            this.invokeeDeclaration =
+                    "// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking\n" +
+                    "List<Object> invokees = " + this.battleParameter + ".getEffectsList(" + statInvokeAttack + ");\n" +
+                    "if (!s.user()) {\n" +
+                    "invokees.add(" + statInvokeAttack + ".getAttack());\n" +
+                    "}\n";
         }
 
         final String setInvokees = getField(fields, SET_INVOKEES);
@@ -187,9 +224,24 @@ class InterfaceMethod {
                     "Collections.singletonList(%s.getAttack());", moveInvoke);
         }
 
+        final String updateField = getField(fields, UPDATE);
+        if (updateField != null) {
+            this.updateField = updateField;
+        }
+
         final String moldBreaker = getField(fields, MOLD_BREAKER);
         if (moldBreaker != null) {
             this.moldBreaker = moldBreaker;
+        }
+
+        final String moldBreakerNullCheck = getField(fields, MOLD_BREAKER_NULL_CHECK);
+        if (moldBreakerNullCheck != null) {
+            if (!StringUtils.isNullOrEmpty(this.moldBreaker)) {
+                Global.error("Cannot define a mold breaker and a mold breaker null check. Interface: " + this.interfaceName);
+            }
+
+            this.moldBreaker = "ActivePokemon moldBreaker = " + moldBreakerNullCheck + ";";
+            this.moldBreakNullCheck = true;
         }
 
         final String allDeadsies = getField(fields, DEADSIES);
@@ -288,6 +340,10 @@ class InterfaceMethod {
         return this.interfaceName;
     }
 
+    String getReturnType() {
+        return this.returnType;
+    }
+
     String getParameters() {
         return this.parameters;
     }
@@ -300,8 +356,16 @@ class InterfaceMethod {
         return this.invokeeDeclaration;
     }
 
+    String getUpdateField() {
+        return this.updateField;
+    }
+
     String getMoldBreaker() {
         return this.moldBreaker;
+    }
+
+    boolean isMoldBreakNullCheck() {
+        return this.moldBreakNullCheck;
     }
 
     String getBattleParameter() {

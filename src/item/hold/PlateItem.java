@@ -1,7 +1,7 @@
 package item.hold;
 
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import main.Type;
-import battle.effect.PowerChangeEffect;
 
 public interface PlateItem extends HoldItem, PowerChangeEffect {
 	Type getType();

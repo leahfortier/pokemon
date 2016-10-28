@@ -1,9 +1,9 @@
 package battle.effect.generic;
 
 import battle.Battle;
-import battle.effect.StatChangingEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import item.Item;
 import main.Global;
@@ -13,7 +13,6 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
@@ -126,8 +125,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			b.addMessage("The rain continues to pour.");
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
 				if (p.isAttackType(Type.WATER)) {
 					// Water is fiddy percent stronger in tha weathz
@@ -170,8 +168,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			b.addMessage("The sunlight is strong.");
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
 				if (p.isAttackType(Type.FIRE)) {
 					// Fire is fiddy percent stronger in tha weathz
@@ -232,8 +229,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return s == Stat.SP_DEFENSE;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.isType(b, Type.ROCK)) {
 				stat *= 1.5;
 			}

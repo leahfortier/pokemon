@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
+import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
+import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import main.Type;
 import namesies.AttackNamesies;
 import pokemon.ActivePokemon;
-import battle.effect.ChangeAttackTypeEffect;
-import battle.effect.ForceMoveEffect;
 import battle.effect.attack.MultiTurnMove;
 
 public class Move implements Serializable {
@@ -76,8 +76,7 @@ public class Move implements Serializable {
 		type = this.attack.setType(b, user);
 		
 		// Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
-		List<Object> invokees = b.getEffectsList(user);
-		type =  (Type)Battle.updateInvoke(0, invokees, ChangeAttackTypeEffect.class, "changeAttackType", type);
+		type = ChangeAttackTypeEffect.updateAttackType(b, user, type);
 		
 //		System.out.println(user.getName() + " " + attack.getName() + " Type: " + type.getName());
 		
@@ -149,13 +148,15 @@ public class Move implements Serializable {
 	// Returns true if a move should be forced (move will already be selected for the Pokemon), and false if not 
 	public static boolean forceMove(Battle b, ActivePokemon p) {
 
+		// TODO: Why are most of the forced move effects also attack selection effects? if the move if being forced, then the attack selection menu should not appear -- check if this is working
 		// Forced moves
-		Object forcedMove = Battle.getInvoke(p.getEffects(), ForceMoveEffect.class, "getMove");
+		Move forcedMove = ForceMoveEffect.getForcedMove(b, p);
 		if (forcedMove != null) {
-			p.setMove((Move)forcedMove);
+			p.setMove(forcedMove);
 			return true;
 		}
-		
+
+		// TODO: These should be static inside multi turn move
 		// Force second turn of a Multi-Turn Move
 		if (p.getMove() != null && p.getAttack() instanceof MultiTurnMove) {
 			MultiTurnMove multiTurnMove = (MultiTurnMove)p.getAttack();
@@ -170,7 +171,8 @@ public class Move implements Serializable {
 				return true;
 			}
 		}
-		
+
+		// TODO: Why is this only when user is true?
 		if (p.user() && getUsableMoves(b, p).size() == 0) {
 			p.setMove(new Move(Attack.getAttack(AttackNamesies.STRUGGLE)));
 			return true;

@@ -70,7 +70,7 @@ CrashDamageMove:
 BarrierEffect:
 	Method:
 		Header: void breakBarrier(Battle b, ActivePokemon breaker)
-		SetInvokees: List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker.user()));
+		EffectList: b.getOtherPokemon(breaker.user())
 		Invoke: Void
 		InvokeName: breakBarriers
 	*
@@ -93,8 +93,12 @@ RapidSpinRelease:
 ***
 NameChanger:
 	Method:
-		Comments: // TODO: This one
+		Comments: // TODO: Not a fan that this only operates on the ability but then again I'm not passing the battle in here and also fuck illusion srsly I might just special case it since it's so fucking unique
 		Header: String getNameChange()
+		Invoke: Get
+		InvokeParameters: ActivePokemon p
+		SetInvokees: List<Object> invokees = Collections.singletonList(p.getAbility());
+		InvokeName: getChangedName
 	*
 	Method:
 		Header: void setNameChange(Battle b, ActivePokemon victim)
@@ -313,5 +317,180 @@ BracingEffect:
 	*
 	Method:
 		Header: String braceMessage(ActivePokemon bracer)
+	*
+***
+OpponentIgnoreStageEffect:
+	Method:
+		Header: boolean ignoreStage(Stat s)
+		Invoke: Check true
+		InvokeName: checkIgnoreStage
+		InvokeParameters: Battle b, ActivePokemon stagePokemon, ActivePokemon other
+		MoldBreaker: stagePokemon
+		StatInvokeAttack: other
+	*
+***
+ChangeTypeEffect:
+	Method:
+		Comments: // Guarantee the change-type effect to be first
+		Header: Type[] getType(Battle b, ActivePokemon p, boolean display)
+		Invoke: Get
+		InvokeName: getChangedType
+		EffectList: p
+		EffectPriority: p.getEffect(EffectNamesies.CHANGE_TYPE)
+	*
+***
+ForceMoveEffect:
+	Method:
+		Header: Move getForcedMove()
+		Invoke: Get
+		InvokeName: getForcedMove
+		InvokeParameters: Battle b, ActivePokemon attacking
+		EffectList: attacking
+	*
+***
+DifferentStatEffect
+	Method:
+		Header: Integer getStat(ActivePokemon user, Stat stat)
+		Invoke: Get
+		InvokeName: getStat
+		InvokeParameters: Battle b
+		EffectList: user
+	*
+***
+CritStageEffect:
+	Method:
+		Header: int increaseCritStage(int stage, ActivePokemon p)
+		Invoke: Update
+		Update: stage
+		InvokeName: updateCritStage
+		InvokeParameters: Battle b
+		EffectList: p
+	*	
+***
+PriorityChangeEffect:
+	Method:
+		Header: int changePriority(Battle b, ActivePokemon user, int priority)
+		Invoke: Update
+		Update: priority
+		InvokeName: updatePriority
+		EffectList: user
+	*
+***
+ChangeAttackTypeEffect:
+	Method:
+		Header: Type changeAttackType(Type original)
+		Invoke: Update
+		Update: original
+		InvokeParameters: Battle b, ActivePokemon attacking
+		EffectList: attacking
+		InvokeName: updateAttackType
+	*
+***
+AdvantageChanger:
+	Method:
+		Header: Type[] getAdvantageChange(Type attackingType, Type[] defendingType)
+		Invoke: Update
+		Update: defendingType
+		InvokeParameters: Battle b, ActivePokemon attacking, ActivePokemon defending
+		SetInvokees:
+		// TODO: I really hate it when the invokee list takes from the attacker and the defender -- need to rewrite all of this
+		// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes 
+		List<Object> invokees = new ArrayList<>();
+		invokees.addAll(defending.getEffects());
+		invokees.add(defending.getHeldItem(b));
+		invokees.add(attacking.getAbility());
+		###
+		InvokeName: updateDefendingType
+	*
+***
+ChangeMoveListEffect:
+	Method:
+		Header: List<Move> getMoveList(List<Move> actualMoves)
+		Invoke: Get
+		InvokeParameters: Battle b, ActivePokemon p
+		EffectList: p
+		InvokeName: getMoveList
+	*
+***
+StatSwitchingEffect:
+	Method:
+		Header: Stat switchStat(Stat s)
+		Invoke: Update
+		Update: s
+		InvokeParameters: Battle b, ActivePokemon statPokemon, ActivePokemon other
+		EffectList: statPokemon
+		InvokeName: switchStat
+	*
+***
+OpponentStatSwitchingEffect:
+	Method:
+		Header: Stat switchStat(Stat s)
+		Invoke: Update
+		Update: s
+		InvokeParameters: Battle b, ActivePokemon other
+		InvokeName: switchStat
+		StatInvokeAttack: other
+	*
+***
+HalfWeightEffect:
+	Method:
+		Header: int getHalfAmount(int halfAmount)
+		Invoke: Update
+		Update: halfAmount
+		InvokeName: updateHalfAmount
+		InvokeParameters: Battle b, ActivePokemon anorexic
+		MoldBreaker: b.getOtherPokemon(anorexic.user())
+		EffectList: anorexic
+	*
+***
+StageChangingEffect:
+	Method:
+		Header: int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage)
+		Invoke: Update
+		MoldBreakerNullCheck: s.user() ? null : opp
+		EffectList: p
+		Update: stage
+		InvokeName: updateStage
+	*
+***
+StatChangingEffect:
+	Method:
+		Comments:
+		// b: The current battle
+		// p: The Pokemon that the stat is being altered on
+		// opp: The opposing Pokemon
+		// s: The stat that is being altered
+		// stat: The current value of stat s
+		// Return: The modified value of stat, if stat was not altered, just return stat
+		###
+		Header: int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat)
+		Invoke: Update
+		Update: stat
+		InvokeName: modifyStat
+		EffectList: p
+		MoldBreakerNullCheck: s.user() ? null : opp
+	*
+***
+PowerChangeEffect:
+	Method:
+		Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		Invoke: Multiply
+		EffectList: user
+	*
+***
+OpponentPowerChangeEffect:
+	Method:
+		Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
+		Invoke: Multiply
+		EffectList: victim
+		MoldBreaker: user
+	*
+***
+AdvantageMultiplierMove:
+	Method:
+		Header: double multiplyAdvantage(Type moveType, Type[] defendingType)
+		Invoke: Multiply
+		InvokeParameters: ActivePokemon attacking
+		Move: attacking
 	*
 ***

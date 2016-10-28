@@ -276,7 +276,7 @@ Encore:
 *
 Disable:
 	FailAbility: Aroma Veil
-	Int: AttackSelectionEffect, MoveHolder, BeforeTurnEffect
+	Int: AttackSelectionEffect, BeforeTurnEffect
 	Field: 
 	private Move disabled;
 	private int turns;
@@ -307,9 +307,6 @@ Disable:
 	Cast: 
 	disabled = victim.getAttributes().getLastMoveUsed();
 	super.cast(b, caster, victim, source, printCast);
-	###
-	GetMove: 
-	return disabled;
 	###
 	FailMessage: 
 	if (victim.hasEffect(this.namesies)) {
@@ -401,7 +398,7 @@ ChangeItem:
 	CanHave: True
 *
 ChangeType:
-	Int: TypeHolder
+	Int: ChangeTypeEffect
 	Field: 
 	private Type[] type;
 	private ChangeTypeMove typeSource;
@@ -439,7 +436,7 @@ ChangeType:
 	
 	super.cast(b, caster, victim, source, printCast);
 	###
-	GetTypeHolder:
+	GetChangeTypeEffect:
 	return type;
 	###
 	CastMessage: castMessage(victim)
@@ -520,15 +517,15 @@ Mimic:
 	Field: 
 	private Move mimicMove;
 	###
-	Int: MoveListHolder
+	Int: ChangeMoveListEffect
 	GetMoveList: 
-	Move[] list = new Move[moves.length];
-	for (int i = 0; i < list.length; i++) {
-		if (moves[i].getAttack().namesies() == AttackNamesies.MIMIC) {
-			list[i] = mimicMove;
+	List<Move> list = new ArrayList<>();
+	for (Move move : actualMoves) {
+		if (move.getAttack().namesies() == AttackNamesies.MIMIC) {
+			list.add(mimicMove);
 		}
 		else {
-			list[i] = moves[i];
+			list.add(move);
 		}
 	}
 	
@@ -811,7 +808,7 @@ FiddyPercentStronger:
 *
 Transformed:
 	Field: 
-	private Move[] moveList;
+	private Move[] moveList; // TODO: Check if I can change this to a list -- not sure about the activate method in particular
 	private int[] stats;
 	private Type[] type;
 	###
@@ -853,14 +850,14 @@ Transformed:
 	b.addMessage("", victim);
 	###
 	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
-	Int: MoveListHolder, StatsHolder, TypeHolder
+	Int: ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect
 	GetMoveList:
-	return moveList;
+	return Arrays.asList(moveList);
 	###
 	GetStat: 
 	return stats[stat.index()];
 	###
-	GetTypeHolder: 
+	GetChangeTypeEffect: 
 	return type;
 	###
 *

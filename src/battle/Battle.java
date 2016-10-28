@@ -1,11 +1,7 @@
 package battle;
 
 import battle.MessageUpdate.Update;
-import battle.effect.CritStageEffect;
 import battle.effect.DefiniteEscape;
-import battle.effect.OpponentPowerChangeEffect;
-import battle.effect.PowerChangeEffect;
-import battle.effect.PriorityChangeEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
@@ -13,11 +9,15 @@ import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
+import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
@@ -598,15 +598,11 @@ public class Battle {
 		
 		return damage;
 	}
-	
+
 	private double getDamageModifier(ActivePokemon me, ActivePokemon o) {
-		// User effects that effect user power
-		List<Object> list = getEffectsList(me);
-		double modifier = Battle.multiplyInvoke(1, list, PowerChangeEffect.class, "getMultiplier", this, me, o);
-		
-		// Opponent effects that effects user power
-		list = getEffectsList(o);
-		modifier = Battle.multiplyInvoke(modifier, me, list, OpponentPowerChangeEffect.class, "getOpponentMultiplier", this, me, o);
+		double modifier = 1;
+		modifier = PowerChangeEffect.updateModifier(modifier, this, me, o);
+		modifier = OpponentPowerChangeEffect.updateModifier(modifier, this, me, o);
 		
 //		System.out.println(me.getName() + " Modifier: " + modifier);
 		return modifier;
@@ -620,8 +616,7 @@ public class Battle {
 		
 		// Increase crit stage and such
 		int stage = 1;
-		List<Object> listsies = this.getEffectsList(me);
-		stage = (int)Battle.updateInvoke(0, listsies, CritStageEffect.class, "increaseCritStage", stage, me);
+		stage = CritStageEffect.updateCritStage(this, stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
 		
 		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || Math.random()* CRITSICLES[stage - 1] < 1;
@@ -706,9 +701,7 @@ public class Battle {
 		// They are attacking -- return the priority of the attack
 		if (isFighting(p.user())) {
 			int priority = p.getAttack().getPriority(this, p);
-			
-			List<Object> invokees = this.getEffectsList(p);
-			priority = (int)Battle.updateInvoke(2, invokees, PriorityChangeEffect.class, "changePriority", this, p, priority);
+			priority = PriorityChangeEffect.updatePriority(this, p, priority);
 			
 //			System.out.println(p.getAttack().getName() + " Priority: " + priority);
 			
@@ -770,128 +763,5 @@ public class Battle {
 		
 		// Return the faster Pokemon (or slower if reversed)
 		return reverse ? oSpeed > pSpeed : oSpeed < pSpeed;
-	}
-	
-	private static <T> Object invoke(
-			double multiplyBase,
-			int updateIndex,
-			boolean isCheck,
-			boolean check,
-			Battle b,
-			ActivePokemon p,
-			ActivePokemon opp,
-			ActivePokemon moldBreaker,
-			List<?> invokees,
-			Class<T> className,
-			String methodName,
-			Object[] parameterValues
-	) {
-		// If these guys aren't null it's because we need to check if they're dead... And then, you know, like we
-		// shouldn't keep checking things because they're like dead and such
-		if (p != null && p.isFainted(b)) {
-			return null;
-		}
-		
-		if (opp != null && opp.isFainted(b)) {
-			return null;
-		}
-		
-		Object returnValue = null;
-		if (updateIndex != -1) {
-			returnValue = parameterValues[updateIndex];
-		}
-		else if (multiplyBase != -1) {
-			returnValue = multiplyBase;
-		}
-		
-		for (Object invokee : invokees) {
-
-			// If the invokee is an instance of the class we are checking, do the things and stuff
-			if (className.isInstance(invokee)) {
-
-				// If this is an inactive effect, we don't want to do anything with it
-				if (Effect.isInactiveEffect(invokee)) {
-					continue;
-				}
-				
-				// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-				if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold()) {
-					continue;
-				}
-				
-				// This is for the hasInvoke overload, where you're just checking if it is an instance of the
-				// interface but have no methods to call
-				if (methodName.isEmpty()) {
-					return invokee;
-				}
-				
-				// Invoke the method and get what it returns
-				Object methodReturn = Global.dynamicMethodInvoke(className, methodName, invokee, parameterValues);
-				
-				// If we're just checking for a specific boolean, we can cut out early
-				if (isCheck && (boolean)methodReturn == check) {
-					return invokee;
-				}
-				
-				// If these guys aren't null it's because we need to check if they're dead... And then, you know,
-				// like we shouldn't keep checking things because they're like dead and such
-				if (p != null && p.isFainted(b)) {
-					return invokee;
-				}
-				
-				if (opp != null && opp.isFainted(b)) {
-					return invokee;
-				}
-				
-				// Not a boolean return check, but we are checking the return value -- das what we want, das what we need, das what we crave
-				if (!isCheck && check) {
-					return methodReturn;
-				}
-				
-				// If this is an update invoke, continuously update the result
-				if (updateIndex != -1) {
-					parameterValues[updateIndex] = methodReturn;
-					returnValue = methodReturn;
-				}
-				
-				// If this is a multiply invoke, continuously multiply the result by the base
-				if (multiplyBase != -1) {
-					multiplyBase *= (double)methodReturn;
-					returnValue = multiplyBase;
-				}
-			}	
-		}
-		
-		// We didn't find what we were looking for
-		return returnValue;
-	}
-	// Used for calling methods that return booleans where mold breaker may be a factor to check
-	public static <T> Object checkInvoke(boolean check, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return Battle.invoke(-1, -1, true, check, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that you want the return value of -- it will return this value that you want so badly
-	public static <T> Object getInvoke(List<?> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return Battle.invoke(-1, -1, false, true, null, null, null, null, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that you want to continuously update the return value of -- it will return this value that you want so badly
-	public static <T> Object updateInvoke(int updateIndex, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return Battle.invoke(-1, updateIndex, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that you want to continuously update the return value of and where mold breaker may be a factor to check -- it will return this value that you want so badly
-	public static <T> Object updateInvoke(int updateIndex, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return Battle.invoke(-1, updateIndex, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that continuously multiply the results by the base value, returns this value
-	public static <T> double multiplyInvoke(double baseValue, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, null, invokees, className, methodName, parameterValues);
-	}
-	
-	// Used for calling methods that continuously multiply the results by the base value where mold breaker may be a factor to check, returns this value
-	public static <T> double multiplyInvoke(double baseValue, ActivePokemon moldBreaker, List<Object> invokees, Class<T> className, String methodName, Object... parameterValues) {
-		return (double)Battle.invoke(baseValue, -1, false, false, null, null, null, moldBreaker, invokees, className, methodName, parameterValues);
 	}
 }

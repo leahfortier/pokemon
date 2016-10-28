@@ -5,42 +5,44 @@ import battle.Battle;
 import battle.Move;
 import battle.MoveCategory;
 import battle.MoveType;
-import battle.effect.AdvantageChanger;
-import battle.effect.ChangeAttackTypeEffect;
-import battle.effect.CritStageEffect;
 import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
-import battle.effect.HalfWeightEffect;
-import battle.effect.IgnoreStageEffect;
 import battle.effect.ModifyStageValueEffect;
-import battle.effect.OpponentPowerChangeEffect;
-import battle.effect.PowerChangeEffect;
-import battle.effect.PriorityChangeEffect;
-import battle.effect.StageChangingEffect;
 import battle.effect.StallingEffect;
-import battle.effect.StatChangingEffect;
 import battle.effect.SwitchOutEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
+import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
+import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
+import battle.effect.generic.EffectInterfaces.CritStageEffect;
+import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
+import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.StageChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
@@ -50,8 +52,6 @@ import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.Weather;
 import battle.effect.holder.ItemHolder;
-import battle.effect.holder.StatsHolder;
-import battle.effect.holder.TypeHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
@@ -426,8 +426,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && b.getWeather().namesies() == EffectNamesies.SUNNY) {
 				stat *= 2;
 			}
@@ -559,8 +558,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ACCURACY;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.3;
 			}
@@ -613,7 +611,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class KeenEye extends Ability implements StatProtectingEffect, IgnoreStageEffect {
+	private static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		KeenEye() {
@@ -648,7 +646,7 @@ public abstract class Ability implements Serializable {
 			return (TangledFeet)(new TangledFeet().activate());
 		}
 
-		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
 			return s == Stat.EVASION && p.hasEffect(EffectNamesies.CONFUSION) ? stage + 1 : stage;
 		}
 	}
@@ -668,8 +666,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.hasStatus()) {
 				stat *= 1.5;
 			}
@@ -749,7 +746,7 @@ public abstract class Ability implements Serializable {
 			return (SandVeil)(new SandVeil().activate());
 		}
 
-		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
 			return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.SANDSTORM ? stage + 1 : stage;
 		}
 	}
@@ -769,8 +766,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && b.getWeather().namesies() == EffectNamesies.SANDSTORM) {
 				stat *= 2;
 			}
@@ -1331,7 +1327,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Unaware extends Ability implements IgnoreStageEffect {
+	private static class Unaware extends Ability implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Unaware() {
@@ -1343,7 +1339,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public boolean ignoreStage(Stat s) {
-			return s == Stat.ATTACK || s == Stat.SP_ATTACK || s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+			return s != Stat.SPEED;
 		}
 	}
 
@@ -1684,8 +1680,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && b.getWeather().namesies() == EffectNamesies.RAINING) {
 				stat *= 2;
 			}
@@ -1882,8 +1877,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.hasStatus()) {
 				stat *= 1.5;
 			}
@@ -1993,7 +1987,7 @@ public abstract class Ability implements Serializable {
 			return (SnowCloak)(new SnowCloak().activate());
 		}
 
-		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
 			return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.HAILING ? stage + 1 : stage;
 		}
 	}
@@ -2013,8 +2007,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.DEFENSE;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.hasStatus()) {
 				stat *= 1.5;
 			}
@@ -2066,8 +2059,7 @@ public abstract class Ability implements Serializable {
 			return (Hustle)(new Hustle().activate());
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (s == Stat.ATTACK) {
 				stat *= 1.5;
 			}
@@ -2094,8 +2086,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 2;
 			}
@@ -2153,7 +2144,7 @@ public abstract class Ability implements Serializable {
 			return (SuperLuck)(new SuperLuck().activate());
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
 		}
 	}
@@ -2411,8 +2402,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 2;
 			}
@@ -2489,8 +2479,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.hasStatus(StatusCondition.POISONED)) {
 				stat *= 1.5;
 			}
@@ -2609,7 +2598,7 @@ public abstract class Ability implements Serializable {
 			return (LightMetal)(new LightMetal().activate());
 		}
 
-		public int getHalfAmount(Integer halfAmount) {
+		public int getHalfAmount(int halfAmount) {
 			return halfAmount + 1;
 		}
 	}
@@ -2696,8 +2685,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK || s == Stat.SP_DEFENSE;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && b.getWeather().namesies() == EffectNamesies.SUNNY) {
 				stat *= 1.5;
 			}
@@ -2872,8 +2860,7 @@ public abstract class Ability implements Serializable {
 			count = 0;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && count < 5) {
 				stat *= .5;
 			}
@@ -2917,8 +2904,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ACCURACY;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 1.1;
 			}
@@ -2992,7 +2978,7 @@ public abstract class Ability implements Serializable {
 			return (Prankster)(new Prankster().activate());
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Integer priority) {
+		public int changePriority(Battle b, ActivePokemon user, int priority) {
 			if (user.getAttack().getCategory() == MoveCategory.STATUS) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);
@@ -3020,8 +3006,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.EVASION;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && opp.getAttack().getCategory() == MoveCategory.STATUS) {
 				stat *= 1.5;
 			}
@@ -3094,7 +3079,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, TypeHolder, NameChanger {
+	private static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 		private String illusionName;
@@ -3152,7 +3137,7 @@ public abstract class Ability implements Serializable {
 			breakIllusion(b, victim);
 		}
 
-		public Type[] getType(Battle b, ActivePokemon p, Boolean display) {
+		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
 			if (display && activated) {
 				return illusionType;
 			}
@@ -3359,8 +3344,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && p.hasEffect(EffectNamesies.CONSUMED_ITEM)) {
 				stat *= 2;
 			}
@@ -3507,7 +3491,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Multitype extends Ability implements TypeHolder {
+	private static class Multitype extends Ability implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Multitype() {
@@ -3518,7 +3502,7 @@ public abstract class Ability implements Serializable {
 			return (Multitype)(new Multitype().activate());
 		}
 
-		public Type[] getType(Battle b, ActivePokemon p, Boolean display) {
+		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
 			Item item = p.getHeldItem(b);
 			if (item instanceof PlateItem) {
 				return new Type[] { ((PlateItem)item).getType(), Type.NO_TYPE };
@@ -3528,7 +3512,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Forecast extends Ability implements TypeHolder {
+	private static class Forecast extends Ability implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Forecast() {
@@ -3539,7 +3523,7 @@ public abstract class Ability implements Serializable {
 			return (Forecast)(new Forecast().activate());
 		}
 
-		public Type[] getType(Battle b, ActivePokemon p, Boolean display) {
+		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
 			return new Type[] { b.getWeather().getElement(), Type.NO_TYPE };
 		}
 	}
@@ -3855,7 +3839,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, StatsHolder {
+	private static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
 		private static final long serialVersionUID = 1L;
 		private static final int[] BLADE_STATS = new int[] {60, 150, 50, 150, 50, 60};
 		private static final int[] SHIELD_STATS = new int[] {60, 50, 150, 50, 150, 60};
@@ -3890,7 +3874,7 @@ public abstract class Ability implements Serializable {
 			shieldForm = true;
 		}
 
-		public int getStat(ActivePokemon user, Stat stat) {
+		public Integer getStat(ActivePokemon user, Stat stat) {
 			// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
 			int index = stat.index();
 			return Stat.getStat(index, user.getLevel(), (shieldForm ? SHIELD_STATS : BLADE_STATS)[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
@@ -3912,8 +3896,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.DEFENSE;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && true) {
 				stat *= 2;
 			}
@@ -3937,8 +3920,7 @@ public abstract class Ability implements Serializable {
 			return s == Stat.DEFENSE;
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
 				stat *= 1.5;
 			}
@@ -3986,7 +3968,7 @@ public abstract class Ability implements Serializable {
 			return (GaleWings)(new GaleWings().activate());
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Integer priority) {
+		public int changePriority(Battle b, ActivePokemon user, int priority) {
 			if (user.getAttack().getActualType() == Type.FLYING) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);

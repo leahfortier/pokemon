@@ -82,7 +82,7 @@ Sniper:
 *
 Keen Eye:
 	Desc: Prevents the Pok\u00e9mon from losing accuracy.
-	Int: StatProtectingEffect, IgnoreStageEffect
+	Int: StatProtectingEffect, OpponentIgnoreStageEffect
 	StatProtect: 
 	return stat == Stat.ACCURACY;
 	###
@@ -356,9 +356,9 @@ Magnet Pull:
 *
 Unaware:
 	Desc: Ignores any change in ability by the foe.
-	Int: IgnoreStageEffect
+	Int: OpponentIgnoreStageEffect
 	IgnoreStage:
-	return s == Stat.ATTACK || s == Stat.SP_ATTACK || s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+	return s != Stat.SPEED;
 	###
 *
 Simple:
@@ -1056,7 +1056,7 @@ Illusion:
 	Deactivate:
 	breakIllusion(b, victim);
 	###
-	Int: EntryEffect, SwitchOutEffect, TakeDamageEffect, TypeHolder, NameChanger
+	Int: EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger
 	Enter: 
 	// No Illusion today...
 	if (!activated) {
@@ -1112,7 +1112,7 @@ Illusion:
 	OnTakeDamage: 
 	breakIllusion(b, victim);
 	###
-	GetTypeHolder:
+	GetChangeTypeEffect:
 	if (display && activated) {
 		return illusionType;
 	}
@@ -1237,8 +1237,8 @@ Gluttony:
 *
 Multitype:
 	Desc: Changes type to match the held Plate.
-	Int: TypeHolder
-	GetTypeHolder:
+	Int: ChangeTypeEffect
+	GetChangeTypeEffect:
 	Item item = p.getHeldItem(b);
 	if (item instanceof PlateItem) {
 		return new Type[] { ((PlateItem)item).getType(), Type.NO_TYPE };
@@ -1249,8 +1249,8 @@ Multitype:
 *
 Forecast:
 	Desc: Changes with the weather.
-	Int: TypeHolder
-	GetTypeHolder:
+	Int: ChangeTypeEffect
+	GetChangeTypeEffect:
 	return new Type[] { b.getWeather().getElement(), Type.NO_TYPE };
 	###
 *
@@ -1332,7 +1332,7 @@ Stance Change:
 	Activate:
 	x.shieldForm = true;
 	###
-	Int: BeforeTurnEffect, EntryEffect, StatsHolder
+	Int: BeforeTurnEffect, EntryEffect, DifferentStatEffect
 	CanAttack:
 	if (shieldForm && p.getAttack().getCategory() != MoveCategory.STATUS) {
 		shieldForm = false;

@@ -5,12 +5,14 @@ import battle.Battle;
 import battle.Move;
 import battle.effect.status.StatusCondition;
 import main.Global;
+import main.Type;
 import namesies.EffectNamesies;
 import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.Trainer;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -159,7 +161,6 @@ public final class EffectInterfaces {
 
 		static void breakBarriers(Battle b, ActivePokemon breaker) {
 			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker.user()));
-			
 			for (Object invokee : invokees) {
 				if (invokee instanceof BarrierEffect && !Effect.isInactiveEffect(invokee)) {
 					
@@ -202,9 +203,23 @@ public final class EffectInterfaces {
 
 	public interface NameChanger {
 
-		// TODO: This one
+		// TODO: Not a fan that this only operates on the ability but then again I'm not passing the battle in here and also fuck illusion srsly I might just special case it since it's so fucking unique
 		String getNameChange();
 		void setNameChange(Battle b, ActivePokemon victim);
+
+		static String getChangedName(ActivePokemon p) {
+			List<Object> invokees = Collections.singletonList(p.getAbility());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof NameChanger && !Effect.isInactiveEffect(invokee)) {
+					
+					NameChanger effect = (NameChanger)invokee;
+					return effect.getNameChange();
+				}
+			}
+			
+			return null;
+		}
 
 		static void setNameChanges(Battle b, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
@@ -345,9 +360,7 @@ public final class EffectInterfaces {
 		boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending);
 
 		static boolean bypassAccuracyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			List<Object> invokees = b.getEffectsList(attacking);
-			invokees.add(attacking.getAttack());
-			
+			List<Object> invokees = b.getEffectsList(attacking, attacking.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof AccuracyBypassEffect && !Effect.isInactiveEffect(invokee)) {
 					
@@ -592,9 +605,7 @@ public final class EffectInterfaces {
 		boolean blockCrits();
 
 		static boolean checkBlocked(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			List<Object> invokees = b.getEffectsList(defending);
-			invokees.add(attacking.getAttack());
-			
+			List<Object> invokees = b.getEffectsList(defending, attacking.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof CritBlockerEffect && !Effect.isInactiveEffect(invokee)) {
 					
@@ -688,6 +699,351 @@ public final class EffectInterfaces {
 			}
 			
 			return null;
+		}
+	}
+
+	public interface OpponentIgnoreStageEffect {
+		boolean ignoreStage(Stat s);
+
+		static boolean checkIgnoreStage(Battle b, ActivePokemon stagePokemon, ActivePokemon other, Stat s) {
+			// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking
+			List<Object> invokees = b.getEffectsList(other);
+			if (!s.user()) {
+				invokees.add(other.getAttack());
+			}
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentIgnoreStageEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && stagePokemon.breaksTheMold()) {
+						continue;
+					}
+					
+					OpponentIgnoreStageEffect effect = (OpponentIgnoreStageEffect)invokee;
+					if (effect.ignoreStage(s)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
+	public interface ChangeTypeEffect {
+
+		// Guarantee the change-type effect to be first
+		Type[] getType(Battle b, ActivePokemon p, boolean display);
+
+		static Type[] getChangedType(Battle b, ActivePokemon p, boolean display) {
+			List<Object> invokees = b.getEffectsList(p, p.getEffect(EffectNamesies.CHANGE_TYPE));
+			for (Object invokee : invokees) {
+				if (invokee instanceof ChangeTypeEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					ChangeTypeEffect effect = (ChangeTypeEffect)invokee;
+					return effect.getType(b, p, display);
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface ForceMoveEffect {
+		Move getForcedMove();
+
+		static Move getForcedMove(Battle b, ActivePokemon attacking) {
+			List<Object> invokees = b.getEffectsList(attacking);
+			for (Object invokee : invokees) {
+				if (invokee instanceof ForceMoveEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					ForceMoveEffect effect = (ForceMoveEffect)invokee;
+					return effect.getForcedMove();
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface DifferentStatEffect {
+		Integer getStat(ActivePokemon user, Stat stat);
+
+		static Integer getStat(Battle b, ActivePokemon user, Stat stat) {
+			List<Object> invokees = b.getEffectsList(user);
+			for (Object invokee : invokees) {
+				if (invokee instanceof DifferentStatEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					DifferentStatEffect effect = (DifferentStatEffect)invokee;
+					return effect.getStat(user, stat);
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface CritStageEffect {
+		int increaseCritStage(int stage, ActivePokemon p);
+
+		static int updateCritStage(Battle b, int stage, ActivePokemon p) {
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof CritStageEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					CritStageEffect effect = (CritStageEffect)invokee;
+					stage = effect.increaseCritStage(stage, p);
+				}
+			}
+			
+			return stage;
+		}
+	}
+
+	public interface PriorityChangeEffect {
+		int changePriority(Battle b, ActivePokemon user, int priority);
+
+		static int updatePriority(Battle b, ActivePokemon user, int priority) {
+			List<Object> invokees = b.getEffectsList(user);
+			for (Object invokee : invokees) {
+				if (invokee instanceof PriorityChangeEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					PriorityChangeEffect effect = (PriorityChangeEffect)invokee;
+					priority = effect.changePriority(b, user, priority);
+				}
+			}
+			
+			return priority;
+		}
+	}
+
+	public interface ChangeAttackTypeEffect {
+		Type changeAttackType(Type original);
+
+		static Type updateAttackType(Battle b, ActivePokemon attacking, Type original) {
+			List<Object> invokees = b.getEffectsList(attacking);
+			for (Object invokee : invokees) {
+				if (invokee instanceof ChangeAttackTypeEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					ChangeAttackTypeEffect effect = (ChangeAttackTypeEffect)invokee;
+					original = effect.changeAttackType(original);
+				}
+			}
+			
+			return original;
+		}
+	}
+
+	public interface AdvantageChanger {
+		Type[] getAdvantageChange(Type attackingType, Type[] defendingType);
+
+		static Type[] updateDefendingType(Battle b, ActivePokemon attacking, ActivePokemon defending, Type attackingType, Type[] defendingType) {
+			// TODO: I really hate it when the invokee list takes from the attacker and the defender -- need to rewrite all of this
+			// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes
+			List<Object> invokees = new ArrayList<>();
+			invokees.addAll(defending.getEffects());
+			invokees.add(defending.getHeldItem(b));
+			invokees.add(attacking.getAbility());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof AdvantageChanger && !Effect.isInactiveEffect(invokee)) {
+					
+					AdvantageChanger effect = (AdvantageChanger)invokee;
+					defendingType = effect.getAdvantageChange(attackingType, defendingType);
+				}
+			}
+			
+			return defendingType;
+		}
+	}
+
+	public interface ChangeMoveListEffect {
+		List<Move> getMoveList(List<Move> actualMoves);
+
+		static List<Move> getMoveList(Battle b, ActivePokemon p, List<Move> actualMoves) {
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof ChangeMoveListEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					ChangeMoveListEffect effect = (ChangeMoveListEffect)invokee;
+					return effect.getMoveList(actualMoves);
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface StatSwitchingEffect {
+		Stat switchStat(Stat s);
+
+		static Stat switchStat(Battle b, ActivePokemon statPokemon, ActivePokemon other, Stat s) {
+			List<Object> invokees = b.getEffectsList(statPokemon);
+			for (Object invokee : invokees) {
+				if (invokee instanceof StatSwitchingEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					StatSwitchingEffect effect = (StatSwitchingEffect)invokee;
+					s = effect.switchStat(s);
+				}
+			}
+			
+			return s;
+		}
+	}
+
+	public interface OpponentStatSwitchingEffect {
+		Stat switchStat(Stat s);
+
+		static Stat switchStat(Battle b, ActivePokemon other, Stat s) {
+			// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking
+			List<Object> invokees = b.getEffectsList(other);
+			if (!s.user()) {
+				invokees.add(other.getAttack());
+			}
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentStatSwitchingEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					OpponentStatSwitchingEffect effect = (OpponentStatSwitchingEffect)invokee;
+					s = effect.switchStat(s);
+				}
+			}
+			
+			return s;
+		}
+	}
+
+	public interface HalfWeightEffect {
+		int getHalfAmount(int halfAmount);
+
+		static int updateHalfAmount(Battle b, ActivePokemon anorexic, int halfAmount) {
+			List<Object> invokees = b.getEffectsList(anorexic);
+			for (Object invokee : invokees) {
+				if (invokee instanceof HalfWeightEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && b.getOtherPokemon(anorexic.user()).breaksTheMold()) {
+						continue;
+					}
+					
+					HalfWeightEffect effect = (HalfWeightEffect)invokee;
+					halfAmount = effect.getHalfAmount(halfAmount);
+				}
+			}
+			
+			return halfAmount;
+		}
+	}
+
+	public interface StageChangingEffect {
+		int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage);
+
+		static int updateStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
+			ActivePokemon moldBreaker = s.user() ? null : opp;
+			
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof StageChangingEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold()) {
+						continue;
+					}
+					
+					StageChangingEffect effect = (StageChangingEffect)invokee;
+					stage = effect.adjustStage(b, p, opp, s, stage);
+				}
+			}
+			
+			return stage;
+		}
+	}
+
+	public interface StatChangingEffect {
+
+		// b: The current battle
+		// p: The Pokemon that the stat is being altered on
+		// opp: The opposing Pokemon
+		// s: The stat that is being altered
+		// stat: The current value of stat s
+		// Return: The modified value of stat, if stat was not altered, just return stat
+		int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat);
+
+		static int modifyStat(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+			ActivePokemon moldBreaker = s.user() ? null : opp;
+			
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof StatChangingEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold()) {
+						continue;
+					}
+					
+					StatChangingEffect effect = (StatChangingEffect)invokee;
+					stat = effect.modify(b, p, opp, s, stat);
+				}
+			}
+			
+			return stat;
+		}
+	}
+
+	public interface PowerChangeEffect {
+		double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim);
+
+		static double updateModifier(double modifier, Battle b, ActivePokemon user, ActivePokemon victim) {
+			List<Object> invokees = b.getEffectsList(user);
+			for (Object invokee : invokees) {
+				if (invokee instanceof PowerChangeEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					PowerChangeEffect effect = (PowerChangeEffect)invokee;
+					modifier *= effect.getMultiplier(b, user, victim);
+				}
+			}
+			
+			return modifier;
+		}
+	}
+
+	public interface OpponentPowerChangeEffect {
+		double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim);
+
+		static double updateModifier(double modifier, Battle b, ActivePokemon user, ActivePokemon victim) {
+			List<Object> invokees = b.getEffectsList(victim);
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentPowerChangeEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && user.breaksTheMold()) {
+						continue;
+					}
+					
+					OpponentPowerChangeEffect effect = (OpponentPowerChangeEffect)invokee;
+					modifier *= effect.getOpponentMultiplier(b, user, victim);
+				}
+			}
+			
+			return modifier;
+		}
+	}
+
+	public interface AdvantageMultiplierMove {
+		double multiplyAdvantage(Type moveType, Type[] defendingType);
+
+		static double updateModifier(double modifier, ActivePokemon attacking, Type moveType, Type[] defendingType) {
+			List<Object> invokees = Collections.singletonList(attacking.getAttack());
+			for (Object invokee : invokees) {
+				if (invokee instanceof AdvantageMultiplierMove && !Effect.isInactiveEffect(invokee)) {
+					
+					AdvantageMultiplierMove effect = (AdvantageMultiplierMove)invokee;
+					modifier *= effect.multiplyAdvantage(moveType, defendingType);
+				}
+			}
+			
+			return modifier;
 		}
 	}
 }

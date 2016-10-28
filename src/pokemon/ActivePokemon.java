@@ -4,13 +4,16 @@ import battle.Attack;
 import battle.Battle;
 import battle.BattleAttributes;
 import battle.Move;
-import battle.effect.HalfWeightEffect;
 import battle.effect.StallingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.Effect.CastSource;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
+import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
+import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
+import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.FaintEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
+import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
@@ -21,9 +24,6 @@ import battle.effect.generic.TeamEffect;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.IntegerHolder;
 import battle.effect.holder.ItemHolder;
-import battle.effect.holder.MoveListHolder;
-import battle.effect.holder.StatsHolder;
-import battle.effect.holder.TypeHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
@@ -46,8 +46,6 @@ import util.DrawMetrics;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -431,19 +429,21 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public int getStat(Battle b, Stat s) {
-		Object stat = Battle.getInvoke(b.getEffectsList(this), StatsHolder.class, "getStat", this, s);
+		Integer stat = DifferentStatEffect.getStat(b, this, s);
 		if (stat != null) {
-			return (int)stat;
+			return stat;
 		}
 		
 		return stats[s.index()];
 	}
 	
 	public List<Move> getMoves(Battle b) {
-		Move[] moveArray = this.moves.toArray(new Move[0]);		
-		moveArray = (Move[])Battle.updateInvoke(1, b.getEffectsList(this), MoveListHolder.class, "getMoveList", this, moveArray);
+		List<Move> changedMoveList = ChangeMoveListEffect.getMoveList(b, this, this.moves);
+		if (changedMoveList != null) {
+			return changedMoveList;
+		}
 
-		return Arrays.asList(moveArray);
+		return this.moves;
 	}
 	
 	public List<Move> getActualMoves() {
@@ -819,12 +819,9 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	private Type[] getType(Battle b, boolean displayOnly) {
-		// Guarantee the change-type effect to be first
-		List<Object> invokees = b.getEffectsList(this, this.getEffect(EffectNamesies.CHANGE_TYPE));
-		
-		Object changeType = Battle.getInvoke(invokees, TypeHolder.class, "getType", b, this, displayOnly);
+		Type[] changeType = ChangeTypeEffect.getChangedType(b, this, displayOnly);
 		if (changeType != null) {
-			return (Type[])changeType;
+			return changeType;
 		}
 		
 		return getActualType();
@@ -860,10 +857,9 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public String getName() {
-		List<Object> invokees = Collections.singletonList(this.getAbility());
-		Object changedName = Battle.getInvoke(invokees, NameChanger.class, "getNameChange");
+		String changedName = NameChanger.getChangedName(this);
 		if (changedName != null) {
-			return (String)changedName;
+			return changedName;
 		}
 		
 		return getActualName();
@@ -1223,12 +1219,10 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public double getWeight(Battle b) {
-		List<Object> invokees = b.getEffectsList(this);
-		ActivePokemon moldBreaker = b.getOtherPokemon(user());
-		
-		int halfAmount = (int)Battle.updateInvoke(0, moldBreaker, invokees, HalfWeightEffect.class, "getHalfAmount", 0);
-		
-		return pokemon.getWeight()/Math.pow(2, halfAmount);
+		int halfAmount = 0;
+		halfAmount = HalfWeightEffect.updateHalfAmount(b, this, halfAmount);
+
+		return this.pokemon.getWeight()/Math.pow(2, halfAmount);
 	}
 	
 	public void startAttack(Battle b, ActivePokemon opp) {

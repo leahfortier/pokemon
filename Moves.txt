@@ -1525,7 +1525,7 @@ Chip Away:
 	Pow: 70
 	Cat: Physical
 	Type: Normal
-	Int: IgnoreStageEffect
+	Int: OpponentIgnoreStageEffect
 	IgnoreStage:
 	return !s.user();
 	###
@@ -3205,8 +3205,8 @@ Psyshock:
 	Cat: Special
 	Acc: 100
 	Pow: 80
-	Int: StatSwitchingEffect
-	SwitchStat: 
+	Int: OpponentStatSwitchingEffect
+	OppSwitchStat: 
 	return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 	###
 *
@@ -4130,8 +4130,8 @@ Psystrike:
 	Cat: Special
 	Type: Psychic
 	Acc: 100
-	Int: StatSwitchingEffect
-	SwitchStat: 
+	Int: OpponentStatSwitchingEffect
+	OppSwitchStat: 
 	return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 	###
 *
@@ -5145,7 +5145,7 @@ Sacred Sword:
 	Acc: 100
 	Cat: Physical
 	Type: Fighting
-	Int: IgnoreStageEffect
+	Int: OpponentIgnoreStageEffect
 	IgnoreStage:
 	return !s.user();
 	###
@@ -5158,8 +5158,8 @@ Secret Sword:
 	Cat: Special
 	Acc: 100
 	Pow: 85
-	Int: StatSwitchingEffect
-	SwitchStat:
+	Int: OpponentStatSwitchingEffect
+	OppSwitchStat:
 	// TODO: Can combine this with Psystrike
 	return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 	###
@@ -6006,7 +6006,7 @@ Freeze-Dry:
 	Cat: Special
 	Acc: 100
 	Pow: 70
-	Int: AdvantageMultiplier
+	Int: AdvantageMultiplierMove
 	MultiplyAdvantage:
 	double multiplier = 1;
 	for (int i = 0; i < 2; i++) {
@@ -6027,7 +6027,7 @@ Flying Press:
 	Type: Fighting
 	PP: 10
 	Cat: Physical
-	Int: AdvantageMultiplier
+	Int: AdvantageMultiplierMove
 	MultiplyAdvantage:
 	return Type.getBasicAdvantage(Type.FLYING, defendingType[0])*Type.getBasicAdvantage(Type.FLYING, defendingType[1]);
 	###

@@ -5,44 +5,43 @@ import battle.Battle;
 import battle.Move;
 import battle.MoveCategory;
 import battle.MoveType;
-import battle.effect.AdvantageChanger;
-import battle.effect.ChangeAttackTypeEffect;
-import battle.effect.CritStageEffect;
-import battle.effect.ForceMoveEffect;
-import battle.effect.HalfWeightEffect;
 import battle.effect.PassableEffect;
-import battle.effect.PowerChangeEffect;
-import battle.effect.StageChangingEffect;
-import battle.effect.StatChangingEffect;
-import battle.effect.StatSwitchingEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
+import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
+import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
+import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
+import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
+import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.FaintEffect;
+import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
+import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
+import battle.effect.generic.EffectInterfaces.StageChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
+import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.IntegerHolder;
 import battle.effect.holder.ItemHolder;
-import battle.effect.holder.MoveHolder;
-import battle.effect.holder.MoveListHolder;
-import battle.effect.holder.StatsHolder;
-import battle.effect.holder.TypeHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
@@ -59,6 +58,7 @@ import pokemon.Stat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1215,7 +1215,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 		}
 
-		public Move getMove() {
+		public Move getForcedMove() {
 			return move;
 		}
 	}
@@ -1339,7 +1339,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return "Only " + move.getAttack().getName() + " can be used right now!";
 		}
 
-		public Move getMove() {
+		public Move getForcedMove() {
 			return move;
 		}
 
@@ -1357,7 +1357,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Disable extends PokemonEffect implements AttackSelectionEffect, MoveHolder, BeforeTurnEffect {
+	private static class Disable extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private Move disabled;
 		private int turns;
@@ -1411,10 +1411,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getUnusableMessage(ActivePokemon p) {
 			return disabled.getAttack().getName() + " is disabled!";
-		}
-
-		public Move getMove() {
-			return disabled;
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
@@ -1479,7 +1475,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is getting pumped!";
 		}
 
-		public int increaseCritStage(Integer stage, ActivePokemon p) {
+		public int increaseCritStage(int stage, ActivePokemon p) {
 			int critStage = 0;
 			
 			// TODO: Should probably make an enum or something because this is stupid
@@ -1528,7 +1524,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class ChangeType extends PokemonEffect implements TypeHolder {
+	private static class ChangeType extends PokemonEffect implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 		private Type[] type;
 		private ChangeTypeMove typeSource;
@@ -1582,7 +1578,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			b.addMessage("", p);
 		}
 
-		public Type[] getType(Battle b, ActivePokemon p, Boolean display) {
+		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
 			return type;
 		}
 	}
@@ -1663,7 +1659,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return turns;
 		}
 
-		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? stage + turns : stage;
 		}
 	}
@@ -1710,7 +1706,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Mimic extends PokemonEffect implements MoveListHolder {
+	private static class Mimic extends PokemonEffect implements ChangeMoveListEffect {
 		private static final long serialVersionUID = 1L;
 		private Move mimicMove;
 
@@ -1746,14 +1742,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " learned " + mimicMove.getAttack().getName() + "!";
 		}
 
-		public Move[] getMoveList(ActivePokemon p, Move[] moves) {
-			Move[] list = new Move[moves.length];
-			for (int i = 0; i < list.length; i++) {
-				if (moves[i].getAttack().namesies() == AttackNamesies.MIMIC) {
-					list[i] = mimicMove;
+		public List<Move> getMoveList(List<Move> actualMoves) {
+			List<Move> list = new ArrayList<>();
+			for (Move move : actualMoves) {
+				if (move.getAttack().namesies() == AttackNamesies.MIMIC) {
+					list.add(mimicMove);
 				}
 				else {
-					list[i] = moves[i];
+					list.add(move);
 				}
 			}
 			
@@ -2299,7 +2295,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return "The uproar ended.";
 		}
 
-		public Move getMove() {
+		public Move getForcedMove() {
 			return uproar;
 		}
 
@@ -2442,9 +2438,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Transformed extends PokemonEffect implements MoveListHolder, StatsHolder, TypeHolder {
+	private static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
-		private Move[] moveList;
+		private Move[] moveList; // TODO: Check if I can change this to a list -- not sure about the activate method in particular
 		private int[] stats;
 		private Type[] type;
 
@@ -2500,15 +2496,15 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!";
 		}
 
-		public Move[] getMoveList(ActivePokemon p, Move[] moves) {
-			return moveList;
+		public List<Move> getMoveList(List<Move> actualMoves) {
+			return Arrays.asList(moveList);
 		}
 
-		public int getStat(ActivePokemon user, Stat stat) {
+		public Integer getStat(ActivePokemon user, Stat stat) {
 			return stats[stat.index()];
 		}
 
-		public Type[] getType(Battle b, ActivePokemon p, Boolean display) {
+		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
 			return type;
 		}
 	}
@@ -2701,7 +2697,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return turns;
 		}
 
-		public Move getMove() {
+		public Move getForcedMove() {
 			return move;
 		}
 
@@ -2742,7 +2738,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			else halfWeight.layers++;
 		}
 
-		public int getHalfAmount(Integer halfAmount) {
+		public int getHalfAmount(int halfAmount) {
 			return halfAmount + layers;
 		}
 	}
@@ -2799,8 +2795,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " split the power!";
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			
 			// If the stat is a splitting stat, return the average between the user and the opponent
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
@@ -2830,8 +2825,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " split the defense!";
 		}
 
-		public int modify(Integer statValue, ActivePokemon p, ActivePokemon opp, Stat s, Battle b) {
-			int stat = statValue;
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			
 			// If the stat is a splitting stat, return the average between the user and the opponent
 			if (s == Stat.DEFENSE || s == Stat.SP_DEFENSE) {

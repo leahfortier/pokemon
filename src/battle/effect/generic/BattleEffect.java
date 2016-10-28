@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import battle.MoveType;
-import battle.effect.PowerChangeEffect;
-import battle.effect.StageChangingEffect;
-import battle.effect.StatSwitchingEffect;
 import battle.effect.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.StageChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.status.StatusCondition;
 import main.Type;
@@ -117,7 +117,7 @@ public abstract class BattleEffect extends Effect {
 			LevitationEffect.falllllllll(b, p);
 		}
 
-		public int adjustStage(Integer stage, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
 			return s == Stat.EVASION ? stage - 2 : stage;
 		}
 

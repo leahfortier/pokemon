@@ -41,6 +41,7 @@ abstract class InvokeMethod {
 
         StringBuilder body = new StringBuilder();
         this.appendDeadsies(body, interfaceMethod);
+        this.declareMoldBreaker(body, interfaceMethod);
         body.append(getDeclaration(interfaceMethod));
         StringUtils.appendLine(body, "\nfor (Object invokee : invokees) {");
         StringUtils.appendLine(body, "if (invokee instanceof " + interfaceMethod.getInterfaceName() + " && !Effect.isInactiveEffect(invokee)) {");
@@ -56,6 +57,10 @@ abstract class InvokeMethod {
         return new MethodInfo(header, body.toString().trim(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();
     }
 
+    protected String getAdditionalInvokeParameters() {
+        return StringUtils.empty();
+    }
+
     private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
         String invokeParameters = interfaceMethod.getParameters();
         if (!StringUtils.isNullOrEmpty(interfaceMethod.getAdditionalInvokeParameters())) {
@@ -63,8 +68,14 @@ abstract class InvokeMethod {
                     StringUtils.addLeadingComma(invokeParameters);
         }
 
+        if (!StringUtils.isNullOrEmpty(this.getAdditionalInvokeParameters())) {
+            invokeParameters = this.getAdditionalInvokeParameters() +
+                    StringUtils.addLeadingComma(invokeParameters);
+        }
+
         if (passInvokees(interfaceMethod)) {
-            invokeParameters = "List<?> invokees" + StringUtils.addLeadingComma(invokeParameters);
+            invokeParameters = "List<?> invokees" +
+                    StringUtils.addLeadingComma(invokeParameters);
         }
 
         return invokeParameters;
@@ -82,13 +93,25 @@ abstract class InvokeMethod {
         return StringUtils.isNullOrEmpty(interfaceMethod.getInvokeeDeclaration());
     }
 
+    private void declareMoldBreaker(final StringBuilder body, final InterfaceMethod interfaceMethod) {
+        if (!interfaceMethod.isMoldBreakNullCheck()) {
+            return;
+        }
+
+        StringUtils.appendLine(body, interfaceMethod.getMoldBreaker());
+    }
+
     private void appendMoldBreaker(final StringBuilder body, final InterfaceMethod interfaceMethod) {
         if (StringUtils.isNullOrEmpty(interfaceMethod.getMoldBreaker())) {
             return;
         }
 
         StringUtils.appendLine(body, "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it");
-        StringUtils.appendLine(body, "if (invokee instanceof Ability && " + interfaceMethod.getMoldBreaker() + ".breaksTheMold()) {");
+        StringUtils.appendLine(body, "if (invokee instanceof Ability && " +
+                        (interfaceMethod.isMoldBreakNullCheck()
+                                ? "moldBreaker != null && moldBreaker"
+                                : interfaceMethod.getMoldBreaker()) +
+                        ".breaksTheMold()) {");
         StringUtils.appendLine(body, "continue;");
         StringUtils.appendLine(body, "}");
     }
@@ -210,6 +233,82 @@ abstract class InvokeMethod {
 
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
             return "return null;";
+        }
+    }
+
+    static class GetInvoke extends InvokeMethod {
+
+        GetInvoke(Scanner invokeInput) {
+            super(invokeInput);
+        }
+
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getReturnType();
+        }
+
+        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
+            return "get" + interfaceMethod.getInterfaceName();
+        }
+
+        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
+            StringUtils.appendLine(body, interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;");
+            StringUtils.appendLine(body, "return effect." + interfaceMethod.getMethodCall() + ";");
+        }
+
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return "return null;";
+        }
+    }
+
+    static class UpdateInvoke extends InvokeMethod {
+
+        UpdateInvoke(Scanner invokeInput) {
+            super(invokeInput);
+        }
+
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getReturnType();
+        }
+
+        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
+            return "update" + interfaceMethod.getInterfaceName();
+        }
+
+        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
+            StringUtils.appendLine(body, interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;");
+            StringUtils.appendLine(body, interfaceMethod.getUpdateField() + " = effect." + interfaceMethod.getMethodCall() + ";");
+        }
+
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return "return " + interfaceMethod.getUpdateField() + ";";
+        }
+    }
+
+    static class MultiplyInvoke extends InvokeMethod {
+
+        MultiplyInvoke(Scanner invokeInput) {
+            super(invokeInput);
+        }
+
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
+            return "double";
+        }
+
+        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
+            return "updateModifier";
+        }
+
+        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
+            StringUtils.appendLine(body, interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;");
+            StringUtils.appendLine(body, " modifier *= effect." + interfaceMethod.getMethodCall() + ";");
+        }
+
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return "return modifier;";
+        }
+
+        protected String getAdditionalInvokeParameters() {
+            return "double modifier";
         }
     }
 }

@@ -1,14 +1,13 @@
 package pokemon;
 
-import main.Global;
 import battle.Battle;
-import battle.effect.IgnoreStageEffect;
-import battle.effect.StageChangingEffect;
-import battle.effect.StatChangingEffect;
-import battle.effect.StatSwitchingEffect;
+import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
+import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
+import battle.effect.generic.EffectInterfaces.StageChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
+import main.Global;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public enum Stat {
@@ -95,15 +94,13 @@ public enum Stat {
 	
 	// Gets the stat of a Pokemon during battle
 	public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
-		ActivePokemon attacking = s.user ? p : opp;
 
 		// Effects that manipulate stats
-		List<Object> list = b.getEffectsList(p, attacking.getAttack());
-		
-		s = (Stat)Battle.updateInvoke(0, list, StatSwitchingEffect.class, "switchStat", s);
-		
+		s = StatSwitchingEffect.switchStat(b, p, opp, s);
+		s = OpponentStatSwitchingEffect.switchStat(b, opp, s);
+
 		// Apply stage changes
-		int stage = getStage(list, s, p, opp, b);
+		int stage = getStage(s, p, opp, b);
 		int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(b, s);
 		
 //		int temp = stat;
@@ -115,11 +112,9 @@ public enum Stat {
 	    else if (stage < 0) {
 			stat *= (s.modifier/(s.modifier - stage));
 		}
-		
-		ActivePokemon moldBreaker  = s.user ? null : opp;
-		
+
 		// Applies stat changes to each for each item in list
-		stat = (int)Battle.updateInvoke(0, moldBreaker, list, StatChangingEffect.class, "modify", stat, p, opp, s, b);
+		stat = StatChangingEffect.modifyStat(b, p, opp, s, stat);
 		
 //		System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 		
@@ -128,28 +123,23 @@ public enum Stat {
 		
 		return stat;
 	}
-	
-	private static int getStage(List<Object> list, Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
-		int stage = p.getStage(s.index);
-		
-//		int temp = stage;
-		
-		// Update the stage due to effects
-		ActivePokemon moldBreaker = s.user ? null : opp;
-		stage = (int)Battle.updateInvoke(0, moldBreaker, list, StageChangingEffect.class, "adjustStage", stage, s, p, opp, b);
-		
-//		int temp2 = stage;
-		
-		ActivePokemon attacking = s.user ? p : opp;
-		
+
+	// TODO: Rename these pokemon names because they are srsly confusing the shit out of me
+	private static int getStage(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+
 		// Effects that completely ignore stage changes
-		list = new ArrayList<>();
-		list.add(opp.getAbility());
-		list.add(attacking.getAttack());
-		Object ignoreStage = Battle.checkInvoke(true, p, list, IgnoreStageEffect.class, "ignoreStage", s);
-		if (ignoreStage != null) {
-			stage = 0;
+		if (OpponentIgnoreStageEffect.checkIgnoreStage(b, p, opp, s)) {
+			return 0;
 		}
+
+		int stage = p.getStage(s.index);
+
+//		int temp = stage;
+
+		// Update the stage due to effects
+		stage = StageChangingEffect.updateStage(b, p, opp, s, stage);
+
+//		int temp2 = stage;
 		
 		// Let's keep everything in bounds, okay!
 		stage = Math.max(-1*MAX_STAT_CHANGES, Math.min(stage, MAX_STAT_CHANGES));
