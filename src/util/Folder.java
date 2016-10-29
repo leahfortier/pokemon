@@ -1,0 +1,30 @@
+package util;
+
+import java.io.File;
+
+public abstract class Folder {
+    public static final String SRC = FileIO.makeFolderPath("src");
+    public static final String REC = FileIO.makeFolderPath("rec");
+    public static final String SAVES = FileIO.makeFolderPath("saves");
+
+    public static final String BATTLE = FileIO.makeFolderPath(SRC, "battle");
+    public static final String ITEMS = FileIO.makeFolderPath(SRC, "item");
+    public static final String NAMESIES = FileIO.makeFolderPath(SRC, "namesies");
+    public static final String POKEMON = FileIO.makeFolderPath(SRC, "pokemon");
+
+    public static final String GENERIC_EFFECT = FileIO.makeFolderPath(BATTLE, "effect", "generic");
+
+    public static final String TRIGGERS = FileIO.makeFolderPath(REC, "triggers");
+    public static final String DIALOGUES = FileIO.makeFolderPath(REC, "dialogue");
+    public static final String MAPS = FileIO.makeFolderPath(REC, "maps");
+    public static final String TILES = FileIO.makeFolderPath(REC, "tiles");
+    public static final String GENERATOR = FileIO.makeFolderPath(REC, "generator");
+    public static final String SOUND = FileIO.makeFolderPath(REC, "snd");
+
+    public static final String POKEMON_TILES = FileIO.makeFolderPath(TILES, "pokemonTiles");
+    public static final String PARTY_TILES = FileIO.makeFolderPath(TILES, "partyTiles");
+    public static final String ITEM_TILES = FileIO.makeFolderPath(TILES, "itemTiles");
+    public static final String MAP_TILES = FileIO.makeFolderPath(TILES, "mapTiles");
+    public static final String TRAINER_TILES = FileIO.makeFolderPath(TILES, "trainerTiles");
+    public static final String MAP_MAKER_TILES = FileIO.makeFolderPath(TILES, "mapMakerTiles");
+}

@@ -13,17 +13,15 @@ import map.MapData;
 import map.triggers.Trigger;
 import trainer.CharacterData;
 import util.FileIO;
+import util.FileName;
+import util.Folder;
 
 public class GameData {
 	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}"); // TODO: Make private again maybe
 	private static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
 	private static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*(\\w+)\\s*(\\w+)\\s*([()&|!\\w-:,]+)?");
 
-	// TODO: Yeah all of these should be in a common location like FileIO
-	private static final String TRIGGER_FOLDER = FileIO.makeFolderPath("rec", "triggers");
-	private static final String DIALOGUE_FOLDER = FileIO.makeFolderPath("rec", "dialogue");
-	private static final String MAPS_FOLDER = FileIO.makeFolderPath("rec", "maps");
-	private static final String AREA_LOCATION =  MAPS_FOLDER + "areaIndex.txt";
+	private static final String AREA_LOCATION = FileName.MAP_AREA_INDEX;
 
 	private Map<String, MapData> maps;
 	private Map<Integer, AreaData> areas;
@@ -66,7 +64,7 @@ public class GameData {
 
 	private void loadMaps() {
 		maps = new HashMap<>();
-		File dir = new File(MAPS_FOLDER); // TODO: Check exists
+		File dir = new File(Folder.MAPS); // TODO: Check exists
 
 		for (File d : dir.listFiles()) {
 			if (d.getName().charAt(0) == '.' || d.getName().equals("areaIndex.txt")) {
@@ -106,7 +104,7 @@ public class GameData {
 
 	private void loadDialogue() {
 		dialogues = new HashMap<>();
-		File dialogueFolder = new File(DIALOGUE_FOLDER);
+		File dialogueFolder = new File(Folder.DIALOGUES);
 		for (File f : dialogueFolder.listFiles()) {
 			if (f.getName().charAt(0) == '.') {
 				continue;
@@ -124,7 +122,7 @@ public class GameData {
 
 	private void loadTriggers() {
 		triggers = new HashMap<>();
-		File triggerFolder = new File(TRIGGER_FOLDER);
+		File triggerFolder = new File(Folder.TRIGGERS);
 		for (File f : triggerFolder.listFiles()) {
 			if (f.getName().charAt(0) == '.') {
 				continue;

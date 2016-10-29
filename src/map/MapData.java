@@ -54,7 +54,7 @@ public class MapData {
 		BufferedImage moveMap = FileIO.readImage(beginFilePath + "_move.png");
 		walkMap = moveMap.getRGB(0, 0, width, height, null, 0, width);
 		
-		BufferedImage areaM = null;
+		BufferedImage areaM;
 		File areaMapFile = new File(beginFilePath + "_area.png");
 		if (areaMapFile.exists()) {
 			areaM = FileIO.readImage(areaMapFile);			
@@ -141,7 +141,7 @@ public class MapData {
 		WalkType(int v) {
 			value = v;
 		}
-	};
+	}
 	
 	public static Integer getMapEntranceLocation(String contents, int width) {
 		int x = 0;

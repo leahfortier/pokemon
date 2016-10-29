@@ -4,6 +4,7 @@ import main.Global;
 import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import util.FileIO;
+import util.FileName;
 import util.StringUtils;
 
 import java.io.PrintStream;
@@ -18,8 +19,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StuffGen {
-	private static final String POKEMON_TILES_INDEX_PATH = FileIO.makeFolderPath("rec", "tiles", "pokemonTiles") + "index.txt";
-	private static final String POKEMON_SMALL_TILES_INDEX_PATH = FileIO.makeFolderPath("rec", "tiles", "partyTiles") + "index.txt";
 	
 	public StuffGen() {
 		new PokeGen();
@@ -240,12 +239,12 @@ public class StuffGen {
 			StringUtils.appendLine(out, info.getName());
 		}
 
-		FileIO.overwriteFile("BaseEvolutions.txt", out);
+		FileIO.overwriteFile(FileName.BASE_EVOLUTIONS, out);
 	}
 
 	// Used for editing pokemoninfo.txt
 	private static void pokemonInfoStuff() {
-		Scanner in = FileIO.openFile("pokemoninfo.txt");
+		Scanner in = FileIO.openFile(FileName.POKEMON_INFO);
 		PrintStream out = FileIO.openOutputFile("out.txt");
 
 		while (in.hasNext()) {
@@ -328,7 +327,7 @@ public class StuffGen {
 		out.append("pokeball.png 00011111\n");
 		out.append("egg.png 00010000\n");
 		
-		FileIO.writeToFile(POKEMON_TILES_INDEX_PATH, out);
+		FileIO.writeToFile(FileName.POKEMON_TILES_INDEX, out);
 	}
 	
 	private static void generatePokemonPartyTileIndices() {
@@ -339,6 +338,6 @@ public class StuffGen {
 		
 		out.append("egg-small.png 00010000\n");
 		
-		FileIO.writeToFile(POKEMON_SMALL_TILES_INDEX_PATH, out);
+		FileIO.writeToFile(FileName.PARTY_TILES_INDEX, out);
 	}
 }

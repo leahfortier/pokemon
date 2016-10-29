@@ -19,9 +19,6 @@ import trainer.CharacterData;
 public final class Save {
 	public static final int NUM_SAVES = 3;
 	
-	private static final String SAVE_FOLDER_PATH = FileIO.makeFolderPath("saves");
-	private static final String SETTINGS_PATH = SAVE_FOLDER_PATH + "settings.txt";
-	
 	// Utility class -- should not be instantiated
 	private Save() {
 		Global.error("Save class cannot be instantiated.");
@@ -32,17 +29,17 @@ public final class Save {
 	}
 	
 	private static String getSavePath(int fileNum) {
-		return SAVE_FOLDER_PATH + "File " + (fileNum + 1) + ".ser";
+		return Folder.SAVES + "File " + (fileNum + 1) + ".ser";
 	}
 	
 	private static String getPreviewPath(int fileNum) {
-		return SAVE_FOLDER_PATH + "Preview " + (fileNum + 1) + ".out";
+		return Folder.SAVES + "Preview " + (fileNum + 1) + ".out";
 	}
 	
 	public static void save(CharacterData player) {
 		player.updateTimePlayed();
 		
-		File saveDir = new File(SAVE_FOLDER_PATH);
+		File saveDir = new File(Folder.SAVES);
 		if (!saveDir.exists()) {
 			saveDir.mkdirs(); // TODO: file io
 		}
@@ -144,7 +141,7 @@ public final class Save {
 
 	public static void saveSettings(Theme theme) {
 		try {
-			PrintStream settingsOut = new PrintStream(SETTINGS_PATH);
+			PrintStream settingsOut = new PrintStream(FileName.SAVE_SETTINGS);
 			settingsOut.print(theme.ordinal() + " " + (Global.soundPlayer.isMuted() ? 1 : 0));
 			settingsOut.close();
 		}
@@ -156,12 +153,12 @@ public final class Save {
 	public static Theme loadSettings() {
 		Theme theme;
 		
-		File saveDir = new File(SAVE_FOLDER_PATH);
+		File saveDir = new File(Folder.SAVES);
 		if (!saveDir.exists()) {
 			saveDir.mkdirs();
 		}
 		
-		File file = new File(SETTINGS_PATH);
+		File file = new File(FileName.SAVE_SETTINGS);
 		if (file.exists()) {
 			Scanner in = FileIO.openFile(file);
 			theme = Theme.values()[in.nextInt()];

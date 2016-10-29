@@ -11,10 +11,10 @@ import java.util.regex.Matcher;
 import util.FileIO;
 import map.triggers.Trigger;
 import mapMaker.MapMaker;
+import util.Folder;
 
 class MapTriggerData {
-	
-	private static final String mapTriggersFilePath = FileIO.makeFolderPath(MapMaker.recFolderName, "triggers");
+
 	private static final String mapFileNameExtension = "_Triggers";
 	
 	private boolean saved;
@@ -39,7 +39,7 @@ class MapTriggerData {
 	
 	private void readTriggers() {
 
-		triggerFile = new File(mapMaker.getPathWithRoot(mapTriggersFilePath + currentMap + mapFileNameExtension));
+		triggerFile = new File(mapMaker.getPathWithRoot(Folder.TRIGGERS + currentMap + mapFileNameExtension));
 		if (!triggerFile.exists()) {
 			return;
 		}

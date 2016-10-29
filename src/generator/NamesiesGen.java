@@ -6,11 +6,11 @@ import main.Global;
 import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import util.FileIO;
+import util.Folder;
 import util.PokeString;
 import util.StringUtils;
 
 class NamesiesGen {
-	private static final String NAMESIES_FOLDER = FileIO.makeFolderPath("src", "namesies");
 
 	private final Class namesiesClass;
 	private final StringBuilder namesies;
@@ -29,7 +29,7 @@ class NamesiesGen {
 	}
 	
 	void writeNamesies() {
-		final String fileName = NAMESIES_FOLDER + namesiesClass.getSimpleName() + ".java";
+		final String fileName = Folder.NAMESIES + namesiesClass.getSimpleName() + ".java";
 
 		Scanner original = FileIO.openFile(fileName);
 		StringBuilder out = new StringBuilder();

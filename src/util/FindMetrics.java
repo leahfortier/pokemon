@@ -11,8 +11,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import static util.DrawMetrics.FONT_METRICS_LOCATION;
-
 class FindMetrics extends JPanel {
     private static final long serialVersionUID = 1L;
 
@@ -46,7 +44,7 @@ class FindMetrics extends JPanel {
             StringUtils.appendLine(sb, fontMetrics.toString());
         }
 
-        FileIO.writeToFile(FONT_METRICS_LOCATION, sb);
+        FileIO.writeToFile(FileName.FONT_METRICS, sb);
     }
 
     private void reset(int fontSize) {

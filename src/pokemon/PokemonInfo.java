@@ -8,6 +8,7 @@ import namesies.AbilityNamesies;
 import namesies.AttackNamesies;
 import namesies.PokemonNamesies;
 import util.FileIO;
+import util.FileName;
 
 import java.io.File;
 import java.io.Serializable;
@@ -214,7 +215,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	public static PokemonNamesies getRandomBaseEvolution() {
 		if (baseEvolution == null) {
 			baseEvolution = new ArrayList<>();
-			Scanner in = new Scanner(FileIO.readEntireFileWithReplacements("BaseEvolutions.txt", false));
+			Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.BASE_EVOLUTIONS, false));
 			while (in.hasNext()) {
 				PokemonNamesies namesies = PokemonNamesies.getValueOf(in.nextLine().trim());
 				baseEvolution.add(namesies);
@@ -239,7 +240,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		map = new HashMap<>();
 		info = new PokemonInfo[NUM_POKEMON + 1];
 
-		Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(new File("pokemoninfo.txt"), false));
+		Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
 		while (in.hasNext()) {
 			int num = in.nextInt();
 			in.nextLine();

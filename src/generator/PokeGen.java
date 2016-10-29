@@ -1,13 +1,21 @@
 package generator;
 
 import battle.Attack;
+import battle.effect.generic.BattleEffect;
+import battle.effect.generic.PokemonEffect;
+import battle.effect.generic.TeamEffect;
+import battle.effect.generic.Weather;
+import item.Item;
 import main.Global;
 import main.Type;
 import namesies.AbilityNamesies;
 import namesies.AttackNamesies;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
+import pokemon.Ability;
 import util.FileIO;
+import util.FileName;
+import util.Folder;
 import util.PokeString;
 import util.StringUtils;
 
@@ -25,39 +33,38 @@ import java.util.Set;
 
 class PokeGen {
 	private static final int TM_BASE_INDEX = 2000;
+
+	private static final String POKEMON_EFFECT_PATH = Folder.GENERIC_EFFECT + "PokemonEffect.java";
+	private static final String TEAM_EFFECT_PATH = Folder.GENERIC_EFFECT + "TeamEffect.java";
+	private static final String BATTLE_EFFECT_PATH = Folder.GENERIC_EFFECT + "BattleEffect.java";
+	private static final String WEATHER_PATH = Folder.GENERIC_EFFECT + "Weather.java";
 	
-	private static final String EFFECTS_FOLDER = FileIO.makeFolderPath("src", "battle", "effect", "generic");
-	private static final String POKEMON_EFFECT_PATH = EFFECTS_FOLDER + "PokemonEffect.java";
-	private static final String TEAM_EFFECT_PATH = EFFECTS_FOLDER + "TeamEffect.java";
-	private static final String BATTLE_EFFECT_PATH = EFFECTS_FOLDER + "BattleEffect.java";
-	private static final String WEATHER_PATH = EFFECTS_FOLDER + "Weather.java";
-	
-	private static final String MOVE_PATH = FileIO.makeFolderPath("src", "battle") + "Attack.java";
-	private static final String ABILITY_PATH = FileIO.makeFolderPath("src", "pokemon") + "Ability.java";
-	private static final String ITEM_PATH = FileIO.makeFolderPath("src", "item") + "Item.java";
-	private static final String ITEM_TILES_FOLDER = FileIO.makeFolderPath("rec", "tiles", "itemTiles");
+	private static final String MOVE_PATH = Folder.BATTLE + "Attack.java";
+	private static final String ABILITY_PATH = Folder.POKEMON + "Ability.java";
+	private static final String ITEM_PATH = Folder.ITEMS + "Item.java";
+	private static final String ITEM_TILES_FOLDER = Folder.ITEM_TILES;
 
 	// TODO: Honestly these should all be in the subfolder of rec instead of just chillin all over the main folder
 	private enum Generator {
-		ATTACK_GEN("Moves.txt", MOVE_PATH, "Attack", AttackNamesies.class, false, true),
-		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, "PokemonEffect", EffectNamesies.class, true, true),
-		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, "TeamEffect", EffectNamesies.class, true, true),
-		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, "BattleEffect", EffectNamesies.class, true, true),
-		WEATHER_GEN("Weather.txt", WEATHER_PATH, "Weather", EffectNamesies.class, true, true),
-		ABILITY_GEN("Abilities.txt", ABILITY_PATH, "Ability", AbilityNamesies.class, true, true),
-		ITEM_GEN("Items.txt", ITEM_PATH, "Item", ItemNamesies.class, false, true);
+		ATTACK_GEN("Moves.txt", MOVE_PATH, Attack.class, AttackNamesies.class, false, true),
+		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, PokemonEffect.class, EffectNamesies.class, true, true),
+		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, TeamEffect.class, EffectNamesies.class, true, true),
+		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, BattleEffect.class, EffectNamesies.class, true, true),
+		WEATHER_GEN("Weather.txt", WEATHER_PATH, Weather.class, EffectNamesies.class, true, true),
+		ABILITY_GEN("Abilities.txt", ABILITY_PATH, Ability.class, AbilityNamesies.class, true, true),
+		ITEM_GEN("Items.txt", ITEM_PATH, Item.class, ItemNamesies.class, false, true);
 		
 		private final String inputPath;
 		private final String outputPath;
-		private final String superClass;
+		private final String superClassName;
 		private final Class namesiesClass;
 		private final boolean activate;
 		private final boolean mappity;
 		
-		Generator(String inputPath, String outputPath, String superClass, Class namesiesClass, boolean activate, boolean mappity) {
-			this.inputPath = inputPath;
+		Generator(String inputPath, String outputPath, Class superClass, Class namesiesClass, boolean activate, boolean mappity) {
+			this.inputPath = Folder.GENERATOR + inputPath;
 			this.outputPath = outputPath;
-			this.superClass = superClass;
+			this.superClassName = superClass.getSimpleName();
 			this.namesiesClass = namesiesClass;
 			this.activate = activate;
 			this.mappity = mappity;
@@ -71,8 +78,8 @@ class PokeGen {
 			return this.outputPath;
 		}
 		
-		public String getSuperClass() {
-			return this.superClass;
+		public String getSuperClassName() {
+			return this.superClassName;
 		}
 
 		public Class getNamesiesClass() {
@@ -166,7 +173,7 @@ class PokeGen {
 		// Write activation method if applicable
 		additionalMethods = getActivationMethod(className, fields) + additionalMethods;
 		
-		String classString = StuffGen.createClass(null, className, this.currentGen.getSuperClass(), implementsString, extraFields, constructor, additionalMethods, false);
+		String classString = StuffGen.createClass(null, className, this.currentGen.getSuperClassName(), implementsString, extraFields, constructor, additionalMethods, false);
 		
 		fields.remove("ClassName");
 		fields.remove("Index");
@@ -259,7 +266,7 @@ class PokeGen {
 			activateInfo = new MethodInfo(activateHeader, "", "return " + activation + ";", "");
 		}
 		
-		return activateInfo.writeFunction("", className, this.currentGen.superClass);
+		return activateInfo.writeFunction("", className, this.currentGen.superClassName);
 	}
 	
 	private static void readFileFormat(Scanner in) {
@@ -366,7 +373,7 @@ class PokeGen {
 		
 		boolean moreFields = true;
 		while (moreFields) {
-			moreFields = MethodInfo.addMethodInfo(methods, overrideMethods, fields, currentInterfaces, "", this.currentGen.superClass);
+			moreFields = MethodInfo.addMethodInfo(methods, overrideMethods, fields, currentInterfaces, "", this.currentGen.superClassName);
 
 			for (String interfaceName : currentInterfaces) {
 				interfaces.add(interfaceName);
@@ -378,7 +385,7 @@ class PokeGen {
 					Global.error("Invalid interface name " + interfaceName + " for " + className);
 				}
 
-				moreFields |= MethodInfo.addMethodInfo(methods, list, fields, nextInterfaces, interfaceName, this.currentGen.superClass);
+				moreFields |= MethodInfo.addMethodInfo(methods, list, fields, nextInterfaces, interfaceName, this.currentGen.superClassName);
 			}
 			
 			currentInterfaces = nextInterfaces;
@@ -386,7 +393,7 @@ class PokeGen {
 		}
 		
 		if (failureInfo != null) {
-			methods.insert(0, failureInfo.writeFailure(fields, this.currentGen.superClass));
+			methods.insert(0, failureInfo.writeFailure(fields, this.currentGen.superClassName));
 		}
 		
 		return methods.toString();
@@ -407,7 +414,7 @@ class PokeGen {
 			addImageIndex(indexOut, TM_BASE_INDEX + t.getIndex(), name, name.toLowerCase());
 		}
 
-		Scanner in = FileIO.openFile("tmList.txt");
+		Scanner in = FileIO.openFile(FileName.TM_LIST);
 		while (in.hasNext()) {
 			String attackName = in.nextLine().trim();
 			String className = PokeString.writeClassName(attackName);
@@ -581,7 +588,7 @@ class PokeGen {
 	private static Map<String, List<Entry<String, MethodInfo>>> interfaceMethods;
 	
 	private static void readFormat() {
-		Scanner in = FileIO.openFile("override.txt");
+		Scanner in = FileIO.openFile(FileName.OVERRIDE);
 		
 		overrideMethods = new ArrayList<>();
 		interfaceMethods = new HashMap<>();

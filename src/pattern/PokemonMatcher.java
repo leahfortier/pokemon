@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class PokemonMatcher {
     private static final Pattern pokemonPattern =
@@ -79,35 +80,28 @@ public class PokemonMatcher {
         this.namesies = PokemonNamesies.getValueOf(pokemonName);
         this.level = Integer.parseInt(level);
 
-        System.out.println(pokemonName + " " + level + " " + parameters);
-
         Matcher params = pokemonParameterPattern.matcher(parameters);
         while (params.find()) {
             if (params.group(1) != null) {
                 this.isShiny = true;
-                System.out.println("Shiny");
             }
 
             if (params.group(2) != null) {
-                System.out.println("Has attacks");
                 this.moves = new ArrayList<>();
                 for (int i = 0; i < Move.MAX_MOVES; i++) {
                     String attackName = params.group(3 + i);
                     if (!attackName.equals("None")) { // TODO: Use constant
                         moves.add(new Move(Attack.getAttackFromName(attackName)));
                     }
-                    System.out.println("Attack: " + attackName);
                 }
             }
 
             if (params.group(7) != null) {
                 this.isEgg = true;
-                System.out.println("Egg");
             }
 
             if (params.group(8) != null) {
                 String itemName = params.group(9);
-                System.out.println("Item: " + itemName);
                 Item item = Item.getItemFromName(itemName);
                 if (item.isHoldable()) {
                     this.holdItem = (HoldItem)item;
@@ -144,12 +138,9 @@ public class PokemonMatcher {
     }
 
     public List<String> getMoveNames() {
-        final List<String> moveNames = new ArrayList<>();
-        for (final Move move : moves) {
-            moveNames.add(move.getAttack().getName());
-        }
-
-        return moveNames;
+        return this.moves.stream()
+                .map(move -> move.getAttack().getName())
+                .collect(Collectors.toList());
     }
 
     public boolean isEgg() {

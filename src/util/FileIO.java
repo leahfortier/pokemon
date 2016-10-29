@@ -62,19 +62,18 @@ public class FileIO {
 		
 		return image;
 	}
-	
-	public static String makeFolderPath(String... path) {
-		StringBuilder folderPath = new StringBuilder();
-		
-		for (String folder : path) {
-			folderPath.append(folder);
 
-			if (!folder.endsWith(FileIO.FILE_SLASH)) {
-				folderPath.append(FileIO.FILE_SLASH);
+	public static String makeFolderPath(String... path) {
+		String folderPath = StringUtils.empty();
+		for (String folder : path) {
+			folderPath += folder;
+
+			if (!folderPath.endsWith(FileIO.FILE_SLASH)) {
+				folderPath += FileIO.FILE_SLASH;
 			}
 		}
 		
-		return folderPath.toString();
+		return folderPath;
 	}
 
 	// Reads the whole file ignoring commented lines starting with # when ignoreComments is true

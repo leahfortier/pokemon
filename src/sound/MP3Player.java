@@ -1,13 +1,13 @@
 package sound;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import util.FileIO;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import main.Global;
+import util.Folder;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 class MP3Player extends Thread {
 	private String mp3FileName;
@@ -51,7 +51,7 @@ class MP3Player extends Thread {
 		
 		BufferedInputStream mp3 = null;
 		try {
-			FileInputStream fis = new FileInputStream(FileIO.makeFolderPath("rec", "snd") + fileName);
+			FileInputStream fis = new FileInputStream(Folder.SOUND + fileName);
 			mp3 = new BufferedInputStream(fis);
 		}
 		catch (FileNotFoundException e) {

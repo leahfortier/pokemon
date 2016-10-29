@@ -1,17 +1,19 @@
 package gui;
 
+import util.FileIO;
+import util.FileName;
+import util.Folder;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import util.FileIO;
-
 public class TileSet {
 	public static final int EMPTY_IMAGE = -1;
-	private static final String IMAGE_NOT_FOUND_LOCATION = FileIO.makeFolderPath("rec") + "imageNotFound.png";
+	private static final String IMAGE_NOT_FOUND_LOCATION = Folder.REC + "imageNotFound.png";
+
 	private static BufferedImage IMAGE_NOT_FOUND = null;
 	
 	public String name;
@@ -27,10 +29,10 @@ public class TileSet {
 		this.map = new HashMap<>();
 		this.indexMap = new HashMap<>();
 		
-		this.folderPath = FileIO.makeFolderPath("rec", "tiles", this.name);
+		this.folderPath = FileIO.makeFolderPath(Folder.TILES, this.name);
 		
-		File indexFile = new File(this.folderPath + "index.txt");
-		Scanner in = FileIO.openFile(indexFile);
+		String indexFileName = FileName.getIndexFileName(this.folderPath);
+		Scanner in = FileIO.openFile(indexFileName);
 		
 		while (in.hasNext()) {
 			String fileName = in.next();

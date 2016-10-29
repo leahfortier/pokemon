@@ -15,8 +15,6 @@ import java.util.Scanner;
 public class DrawMetrics {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
 	
-	static final String FONT_METRICS_LOCATION = "fontMetrics.txt";
-	
 	// For wrapped text, the amount in between each letter
 	private static final float VERTICAL_WRAP_FACTOR = 2f; 
 	
@@ -31,7 +29,7 @@ public class DrawMetrics {
 		
 		fontMetricsMap = new HashMap<>();
 		
-		Scanner in = FileIO.openFile(FONT_METRICS_LOCATION);
+		Scanner in = FileIO.openFile(FileName.FONT_METRICS);
 		while (in.hasNext()) {
 			int fontSize = in.nextInt();
 			int horizontal = in.nextInt();

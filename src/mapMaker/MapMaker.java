@@ -69,6 +69,8 @@ import map.AreaData.WeatherState;
 import map.entity.NPCEntityData;
 import mapMaker.data.MapMakerTriggerData;
 import mapMaker.data.PlaceableTrigger;
+import util.FileName;
+import util.Folder;
 import util.StringUtils;
 
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
@@ -85,24 +87,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private static final Pattern mapAreaPattern = Pattern.compile("\"([^\"]*)\"\\s*(\\p{XDigit}+)");
 
 	public static final int tileSize = 32;
-	public static final String recFolderName = "rec"; // TODO: This and src should probably be moved to Global or something similar
-
-	private static final String mapFolderName = FileIO.makeFolderPath(recFolderName, "maps");
-	private static final String mapAreaIndexFileName = mapFolderName  + "areaIndex.txt";
-
-	private static final String tileFolderName = FileIO.makeFolderPath(recFolderName, "tiles");
-
-	private static final String mapTileFolderName = FileIO.makeFolderPath(tileFolderName, "mapTiles");
-	private static final String mapTileIndexFileName = mapTileFolderName + "index.txt";
-
-	private static final String trainerTileFolderName = FileIO.makeFolderPath(tileFolderName, "trainerTiles");
-	private static final String trainerTileIndexFileName = trainerTileFolderName + "index.txt";
-
-	private static final String mapMakerTileFolderName = FileIO.makeFolderPath(tileFolderName,  "mapMakerTiles");
-	private static final String mapMakerTileIndexFileName = mapMakerTileFolderName + "index.txt";
-
-	private static final String itemTileFolderName = FileIO.makeFolderPath(tileFolderName, "itemTiles");
-	private static final String itemTileIndexFileName = itemTileFolderName + "index.txt";
 
 	private JButton newTileButton;
 	private JList<ImageIcon> tileList;
@@ -383,7 +367,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 				// Adding new tile to the list of tiles
 				if (editType == EditType.BACKGROUND || editType == EditType.FOREGROUND) {
-					final File mapTilesFolder = new File(getPathWithRoot(mapTileFolderName));
+					final File mapTilesFolder = new File(getPathWithRoot(Folder.MAP_TILES));
 
 					JFileChooser fc = new JFileChooser(mapTilesFolder);
 					fc.setAcceptAllFileFilterUsed(false);
@@ -454,7 +438,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 									
 									if (weatherState != null) {
 										// Save index file with new area
-										File areaIndexFile = new File(getPathWithRoot(mapAreaIndexFileName));
+										File areaIndexFile = new File(getPathWithRoot(FileName.MAP_AREA_INDEX));
 
 										// TODO: Use FileIO for this
 										try {
@@ -557,7 +541,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 	
 	public String[] getAvailableMaps() {
-		File mapFolder = new File(getPathWithRoot(mapFolderName));
+		File mapFolder = new File(getPathWithRoot(Folder.MAPS));
 		return mapFolder.list((dir, name) -> !dir.isHidden() && !name.contains("."));
 	}
 
@@ -567,7 +551,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	private String getMapFolderName(final String mapName) {
-		return getPathWithRoot(FileIO.makeFolderPath(mapFolderName, mapName));
+		return getPathWithRoot(FileIO.makeFolderPath(Folder.MAPS, mapName));
 	}
 
 	public File getMapTextFile(final String mapName) {
@@ -582,10 +566,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		lblRoot.setText(root.getPath());
 		lblRoot.setForeground(Color.BLACK);
 
-		FileIO.createFolder(getPathWithRoot(recFolderName));
-		FileIO.createFolder(getPathWithRoot(tileFolderName));
-		FileIO.createFolder(getPathWithRoot(mapTileFolderName));
-		FileIO.createFolder(getPathWithRoot(mapFolderName));
+		FileIO.createFolder(getPathWithRoot(Folder.REC));
+		FileIO.createFolder(getPathWithRoot(Folder.TILES));
+		FileIO.createFolder(getPathWithRoot(Folder.MAP_TILES));
+		FileIO.createFolder(getPathWithRoot(Folder.MAPS));
 		
 		loadTiles();
 		loadAreas();
@@ -613,7 +597,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	private void loadTiles() {
-		File indexFile = new File(getPathWithRoot(mapTileIndexFileName));
+		File indexFile = new File(getPathWithRoot(FileName.MAP_TILES_INDEX));
 	
 		tileMap = new HashMap<>();
 		indexMap = new HashMap<>();
@@ -627,7 +611,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					String name = in.next();
 					int val = (int)Long.parseLong(in.next(), 16);
 					
-					BufferedImage img = ImageIO.read(new File(getPathWithRoot(mapTileFolderName) + name));
+					BufferedImage img = ImageIO.read(new File(getPathWithRoot(Folder.MAP_TILES) + name));
 					BufferedImage resizedImg = img.getSubimage(0, 0, Math.min(img.getWidth(), tileSize*3), Math.min(img.getHeight(), tileSize*3));
 				
 					tileListModel.addElement(new ImageIcon(resizedImg, val + ""));
@@ -644,7 +628,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	private void loadAreas() {
-		File areaIndexFile = new File(getPathWithRoot(mapAreaIndexFileName));
+		File areaIndexFile = new File(getPathWithRoot(FileName.MAP_AREA_INDEX));
 		areaIndexMap = new HashMap<>();
 		areaListModel.clear();
 		
@@ -663,7 +647,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 	
 	private void loadTrainerTiles() {
-		File trainerIndexFile = new File(getPathWithRoot(trainerTileIndexFileName));
+		File trainerIndexFile = new File(getPathWithRoot(FileName.TRAINER_TILES_INDEX));
 		trainerTileMap = new HashMap<>();
 		Map<Integer, String> trainerIndexMap = new HashMap<>();
 		
@@ -675,7 +659,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					String name = in.next();
 					int val = (int)Long.parseLong(in.next(), 16);
 
-					File imageFile = new File(getPathWithRoot(trainerTileFolderName) + name);
+					File imageFile = new File(getPathWithRoot(Folder.TRAINER_TILES) + name);
 					if (!imageFile.exists()) {
 						continue;
 					}
@@ -695,7 +679,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 	
 	private void loadMapMakerTiles() {
-		File mapMakerIndexFile = new File(getPathWithRoot(mapMakerTileIndexFileName));
+		File mapMakerIndexFile = new File(getPathWithRoot(FileName.MAP_MAKER_TILES_INDEX));
 		
 		mapMakerTileMap = new HashMap<>();
 		Map<Integer, String> mapMakerTileIndexMap = new HashMap<>();
@@ -707,7 +691,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					String name = in.next();
 					int val = (int)Long.parseLong(in.next(), 16);
 					
-					File imageFile = new File(getPathWithRoot(mapMakerTileFolderName) + name);
+					File imageFile = new File(getPathWithRoot(Folder.MAP_MAKER_TILES) + name);
 					if (!imageFile.exists()) {
 						continue;
 					}
@@ -728,7 +712,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 	// TODO: Holy shit these are all the fucking same I can't wait to combine this shit
 	private void loadItemTiles() {
-		File itemIndexFile = new File(getPathWithRoot(itemTileIndexFileName));
+		File itemIndexFile = new File(getPathWithRoot(FileName.ITEM_TILES_INDEX));
 		
 		itemTileMap = new HashMap<>();
 		Map<Integer, String> itemIndexMap = new HashMap<>();
@@ -740,7 +724,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					String name = in.next();
 					int val = (int)Long.parseLong(in.next(), 16);
 					
-					File imageFile = new File(getPathWithRoot(itemTileFolderName) + name);
+					File imageFile = new File(getPathWithRoot(Folder.ITEM_TILES) + name);
 					if (!imageFile.exists()) {
 						continue;
 					}
@@ -830,7 +814,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					.append("\n");
 		}
 
-		FileIO.writeToFile(getPathWithRoot(mapTileIndexFileName), indexFile);
+		FileIO.writeToFile(getPathWithRoot(FileName.MAP_TILES_INDEX), indexFile);
 	}
 	
 	private void saveTriggers() {

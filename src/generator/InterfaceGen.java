@@ -2,6 +2,8 @@ package generator;
 
 import main.Global;
 import util.FileIO;
+import util.FileName;
+import util.Folder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,16 +11,14 @@ import java.util.Map;
 import java.util.Scanner;
 
 class InterfaceGen {
-	
-	private static final String INTERFACE_INPUT = "interfaces.txt";
-	private static final String INTERFACE_PATH = FileIO.makeFolderPath("src", "battle", "effect", "generic") + "EffectInterfaces.java";
+	private static final String INTERFACE_PATH = Folder.GENERIC_EFFECT + "EffectInterfaces.java";
 	
 	InterfaceGen() {
 		gen();
 	}
 	
 	private static void gen() {
-		final Scanner in = FileIO.openFile(INTERFACE_INPUT);
+		final Scanner in = FileIO.openFile(FileName.INTERFACES);
 		final StringBuilder out = StuffGen.startGen(INTERFACE_PATH);
 		
 		// Go through the entire file

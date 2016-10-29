@@ -15,10 +15,10 @@ import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;
 import map.triggers.Trigger;
 import mapMaker.MapMaker;
+import util.Folder;
 
 class PokeCenterTransitionData {
-	// TODO: There really should be constants for all the major subfolders
-	private static final String pokeCenterTransitionTriggersFile = FileIO.makeFolderPath(MapMaker.recFolderName, "triggers", "PokeCenterTransitionTriggers");
+	private static final String pokeCenterTransitionTriggersFile = Folder.TRIGGERS + "PokeCenterTransitionTriggers";
 	
 	private GroupTrigger groupTrigger;
 	private Map<String, MapTransitionTrigger> transitionTriggers;
