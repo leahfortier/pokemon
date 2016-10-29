@@ -107,7 +107,7 @@ public class ActivePokemon implements Serializable {
 		removeStatus();
 		
 		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
-		this.totalEXP += (int)(Math.random()*expToNextLevel());
+		this.totalEXP += Global.getRandomInt(expToNextLevel());
 		this.gender = Gender.getGender(pokemon.getMaleRatio());
 		this.shiny = (user || isWild) && Global.chanceTest(1, 8192);
 		

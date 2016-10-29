@@ -59,7 +59,7 @@ Shield Dust:
 *
 Shed Skin:
 	Desc: The Pok\u00e9mon may heal its own status problems.
-	EndTurnStatusCure: (int)(Math.random()*3) == 0
+	EndTurnStatusCure: Global.chanceTest(1, 3)
 *
 Compoundeyes:
 	Desc: The Pok\u00e9mon's accuracy is boosted.
@@ -145,7 +145,7 @@ Cute Charm:
 	Desc: Contact with the Pok\u00e9mon may cause infatuation.
 	Int: PhysicalContactEffect
 	Contact: 
-	if (Math.random()*100 < 30) {
+	if (Global.chanceTest(30)) {
 		PokemonEffect e = PokemonEffect.getEffect(EffectNamesies.INFATUATED);
 		if (e.applies(b, victim, user, CastSource.ABILITY)) {
 			user.addEffect(e.newInstance());
@@ -206,7 +206,7 @@ Stench:
 	Desc: The stench may cause the target to flinch.
 	Int: ApplyDamageEffect
 	OnApplyDamage: 
-	if (Math.random()*100 < 10) {
+	if (Global.chanceTest(10)) {
 		PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 		if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
 			flinch.cast(b, user, victim, CastSource.ABILITY, false);
@@ -219,7 +219,11 @@ Effect Spore:
 	Desc: Contact may paralyze, poison, or cause sleep.
 	Int: PhysicalContactEffect
 	Field: 
-	private static StatusCondition[] statuses = new StatusCondition[] {StatusCondition.PARALYZED, StatusCondition.POISONED, StatusCondition.ASLEEP};
+	private static StatusCondition[] statuses = new StatusCondition[] {
+		StatusCondition.PARALYZED, 
+		StatusCondition.POISONED, 
+		StatusCondition.ASLEEP
+	};
 	###
 	Contact: 
 	// Grass-type Pokemon, Pokemon with Overcoat, and Pokemon holding the Safety Goggles are immune to Effect Spore
@@ -228,8 +232,8 @@ Effect Spore:
 	}
 	
 	// 30% chance to Paralyze, Poison, or induce Sleep
-	if (Math.random()*100 < 30) {
-		Status.giveStatus(b, victim, user, statuses[(int)(Math.random()*statuses.length)], true);
+	if (Global.chanceTest(30)) {
+		Status.giveStatus(b, victim, user, Global.getRandomValue(statuses), true);
 	}
 	###
 *
@@ -403,32 +407,33 @@ Forewarn:
 	Int: EntryEffect
 	Enter: 
 	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	List<Move> otherMoves = other.getMoves(b);
+	
 	List<AttackNamesies> besties = new ArrayList<>();
-
 	int highestPower = -1;
 	
-	for (Move m : other.getMoves(b)) {
-		if (m.getAttack().getCategory() == MoveCategory.STATUS) {
+	for (Move move : otherMoves) {
+		if (move.getAttack().getCategory() == MoveCategory.STATUS) {
 			continue;
 		}
 		
-		int power = m.getAttack().getPower();
+		int power = move.getAttack().getPower();
 		if (power > highestPower) {
 			highestPower = power;
 			besties = new ArrayList<>();
-			besties.add(m.getAttack().namesies());
+			besties.add(move.getAttack().namesies());
 		}
 		else if (power == highestPower) {
-			besties.add(m.getAttack().namesies());
+			besties.add(move.getAttack().namesies());
 		}
 	}
 	
 	AttackNamesies warn;
 	if (highestPower == -1) {
-		warn = other.getMoves(b).get((int)(Math.random()*other.getMoves(b).size())).getAttack().namesies();
+		warn = Global.getRandomValue(otherMoves).getAttack().namesies();
 	}
 	else {
-		warn = besties.get((int)(Math.random()*besties.size()));
+		warn = Global.getRandomValue(besties);
 	}
 	
 	b.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
@@ -917,7 +922,7 @@ Cursed Body:
 	Desc: May disable a move used on the Pok\u00e9mon.
 	Int: PhysicalContactEffect
 	Contact: 
-	if (Math.random()*100 < 30) {
+	if (Global.chanceTest(30)) {
 		user.getAttributes().setLastMoveUsed();
 		PokemonEffect disable = PokemonEffect.getEffect(EffectNamesies.DISABLE);
 		if (disable.applies(b, victim, user, CastSource.ABILITY)) {
@@ -979,7 +984,7 @@ Poison Touch:
 	Desc: May poison targets when a Pok\u00e9mon makes contact.
 	Int: ApplyDamageEffect
 	OnApplyDamage: 
-	if (Math.random()*100 < 30) {
+	if (Global.chanceTest(30)) {
 		Status.giveStatus(b, user, victim, StatusCondition.POISONED, true);
 	}
 	###
@@ -1199,7 +1204,7 @@ Harvest:
 	}
 	
 	Item restored = ((ItemHolder)consumed).getItem();
-	if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || Math.random() < .5)) {
+	if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || Global.chanceTest(50))) {
 		victim.giveItem((HoldItem)restored);
 		b.addMessage(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
 	}
@@ -1209,7 +1214,7 @@ Pickup:
 	Desc: The Pok\u00e9mon may pick up items.
 	Int: EndBattleEffect
 	EndBattle: 
-	if (!p.isHoldingItem(b) && Math.random() < .1) {
+	if (!p.isHoldingItem(b) && Global.chanceTest(10)) {
 		// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
 		p.giveItem((HoldItem)Item.getItem(ItemNamesies.LEFTOVERS));
 	}
@@ -1225,7 +1230,7 @@ Unnerve:
 Honey Gather:
 	Int: EndBattleEffect
 	EndBattle: 
-	if (!p.isHoldingItem(b) && Math.random()*100 < 5*Math.ceil(p.getLevel()/10.0)) {
+	if (!p.isHoldingItem(b) && Global.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
 		// TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
 		p.giveItem((HoldItem)Item.getItem(ItemNamesies.LEFTOVERS));
 	}
@@ -1311,7 +1316,7 @@ Aroma Veil:
 *
 Healer:
 	Desc: The Pok\u00e9mon may heal its own status problems.
-	EndTurnStatusCure: (int)(Math.random()*3) == 0
+	EndTurnStatusCure: Global.chanceTest(1, 3)
 *
 Pixilate:
 	Desc: Normal-type moves become Fairy-type moves.

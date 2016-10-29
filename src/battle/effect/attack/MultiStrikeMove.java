@@ -1,5 +1,6 @@
 package battle.effect.attack;
 
+import main.Global;
 import namesies.AbilityNamesies;
 import pokemon.ActivePokemon;
 
@@ -15,6 +16,6 @@ public interface MultiStrikeMove {
             return maxHits;
         }
 
-        return (int)(Math.random()*(maxHits - minHits + 1)) + minHits;
+        return Global.getRandomInt(minHits, maxHits);
     }
 }

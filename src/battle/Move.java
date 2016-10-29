@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
+import main.Global;
 import main.Type;
 import namesies.AttackNamesies;
 import pokemon.ActivePokemon;
@@ -142,7 +143,7 @@ public class Move implements Serializable {
 			return new Move(Attack.getAttack(AttackNamesies.STRUGGLE));
 		}
 		
-		return moveAI(b, p, usable);
+		return chooseMove(usable);
 	}
 	
 	// Returns true if a move should be forced (move will already be selected for the Pokemon), and false if not 
@@ -172,7 +173,6 @@ public class Move implements Serializable {
 			}
 		}
 
-		// TODO: Why is this only when user is true?
 		if (p.user() && getUsableMoves(b, p).size() == 0) {
 			p.setMove(new Move(Attack.getAttack(AttackNamesies.STRUGGLE)));
 			return true;
@@ -218,43 +218,9 @@ public class Move implements Serializable {
 		
 		return true;
 	}
-	
 
-	// TODO: All of this
-	// AI Stuffffff
-	private static Move moveAI(Battle b, ActivePokemon p, List<Move> usable) {
-		ActivePokemon opp = b.getOtherPokemon(p.user());
-		
-		// Initializes start values for the pokemons moveset
-		double[] move = new double[usable.size()];
-		Arrays.fill(move, 1);
-		
-		// Multiplies by effectiveness
-		for (int i = 0; i < usable.size(); i++) {
-			// TODO: Honestly this shouldn't be using the basic advantage it should be using actual advantage
-			move[i] *= Type.getBasicAdvantage(usable.get(i).getAttack().getActualType(), opp, b)*3;
-		}
-		
-		double[] range = new double[move.length];
-		range[0] = move[0];
-		for (int i = 1; i < move.length; i++) {
-			range[i] = move[i] + range[i - 1];
-		}
-		
-		int value = (int) (Math.random()*range[range.length - 1]);
-		for (double aRange : range) {
-			if (value < aRange) {
-				// Temporarily removing AI because it makes testing difficult when I need a random move
-//				return usable.get(i);
-			}
-		}
-		
-		// Theorectically, it should never get here, but just in case choose a random move
-		return chooseMove(p, usable);
-	}
-	
-	// Selects a random move for the opponent (eventually Jessica will write some sick AI to make this cooler)
-	private static Move chooseMove(ActivePokemon p, List<Move> usable) {
-		return usable.get((int)(Math.random()*usable.size()));
+	// TODO: AI Stuffffff
+	private static Move chooseMove(List<Move> usable) {
+		return Global.getRandomValue(usable);
 	}
 }

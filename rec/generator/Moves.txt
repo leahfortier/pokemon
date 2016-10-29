@@ -1657,10 +1657,10 @@ Lucky Chant:
 Metronome:
 	MoveType: Sleep_Talk_Fail, Mimicless, Assistless, Metronomeless, No_Magic_Coat
 	Apply: 
-	int index = (int)(Math.random()*moveNames.size());
-	while (map.get(moveNames.get(index)).isMoveType(MoveType.METRONOMELESS)) {
-		index = (int)(Math.random()*moveNames.size());
-	}
+	int index;
+	do {
+		index = Global.getRandomIndex(moveNames);
+	} while (map.get(moveNames.get(index)).isMoveType(MoveType.METRONOMELESS));
 	
 	me.callNewMove(b, o, new Move(map.get(moveNames.get(index))));
 	###
@@ -2086,14 +2086,17 @@ Tri Attack:
 	Cat: Special
 	EffChance: 20
 	ApplyEffects: 
-	// TODO: Rewrite this to use an array
-	int random = (int)(Math.random()*3);
-	if (random == 0) super.status = StatusCondition.PARALYZED;
-	else if (random == 1) super.status = StatusCondition.BURNED;
-	else if (random == 2) super.status = StatusCondition.FROZEN;
+	super.status = Global.getRandomValue(statusConditions);
 	super.applyEffects(b, user, victim);
 	###
 	Type: Normal
+	Field: 
+	private static StatusCondition[] statusConditions = {
+			StatusCondition.PARALYZED,
+			StatusCondition.BURNED,
+			StatusCondition.FROZEN
+	};
+	###
 *
 Fake Out:
 	Desc: An attack that hits first and makes the target flinch. It only works the first turn the user is in battle.
@@ -2844,7 +2847,7 @@ Acupressure:
 	ApplyEffects:
 	// TODO: Test to make sure this works when both parties use during the same turn -- will it always be the same stat?
 	super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-	super.statChanges[(int)(Math.random()*Stat.NUM_BATTLE_STATS)] = 2;
+	super.statChanges[Global.getRandomInt(super.statChanges.length)] = 2;
 	
 	super.applyEffects(b, user, victim);
 	###
@@ -3174,7 +3177,7 @@ Iron Tail:
 Meditate:
 	Desc: The user meditates to awaken the power deep within its body and raise its Attack stat.
 	PP: 40
-	StatChange: 1 Attack -1
+	StatChange: 1 Attack 1
 	SelfTarget: True
 	Cat: Status
 	Type: Psychic
@@ -3954,7 +3957,7 @@ Conversion:
 		}
 	}
 	
-	return new Type[] { types.get((int)(Math.random()*types.size())), Type.NO_TYPE };
+	return new Type[] { Global.getRandomValue(types), Type.NO_TYPE };
 	###
 	Effect: Pokemon ChangeType
 *
@@ -3979,7 +3982,7 @@ Conversion 2:
 	ChangeType: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
-	return new Type[] { types.get((int)(Math.random()*types.size())), Type.NO_TYPE };
+	return new Type[] { Global.getRandomValue(types), Type.NO_TYPE };
 	###
 	Field: 
 	private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
@@ -4079,7 +4082,7 @@ Sleep Talk:
 		return;
 	}
 	
-	me.callNewMove(b, o, moves.get((int)(Math.random()*moves.size())));
+	me.callNewMove(b, o, Global.getRandomValue(moves));
 	###
 *
 Block:
@@ -4268,7 +4271,7 @@ Psywave:
 	Type: Psychic
 	Cat: Special
 	Acc: 100
-	FixedDamage: (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0)
+	FixedDamage: (int)Math.max(1, (Global.getRandomInt(11) + 5)*me.getLevel()/10.0)
 *
 Pain Split:
 	Desc: The user adds its HP to the target's HP, then equally shares the combined HP with the target.
@@ -4397,17 +4400,23 @@ Present:
 	Acc: 90
 	PhysicalContact: False
 	GetPow: 
-	double random = Math.random()*80;
-	if (random < 40) return 40;
-	if (random < 70) return 80;
-	return 120;
+	double random = Global.getRandomInt(80);
+	if (random < 40) {
+		return 40;
+	}
+	else if (random < 70) {
+		return 80;
+	}
+	else {
+		return 120;
+	}
 	###
 	Apply: 
 	if (!effective(b, me, o)) {
 		return;
 	}
 	
-	if (Math.random()*100 < 80) {
+	if (Global.chanceTest(80)) {
 		super.applyDamage(me, o, b);
 		return;
 	}
@@ -4599,14 +4608,13 @@ Assist:
 	Apply: 
 	List<Attack> attacks = new ArrayList<>();
 	for (ActivePokemon p : b.getTrainer(me.user()).getTeam()) {
-		// TODO: Why can't this just be p == me?
-		if (p == b.getTrainer(me.user()).front()) {
+		if (p == me) {
 			continue;
 		}
 		
-		for (Move m : p.getMoves(b)) {
-			if (!m.getAttack().isMoveType(MoveType.ASSISTLESS)) {
-				attacks.add(m.getAttack());
+		for (Move move : p.getMoves(b)) {
+			if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
+				attacks.add(move.getAttack());
 			}
 		}
 	}
@@ -4616,7 +4624,7 @@ Assist:
 		return;
 	}
 	
-	me.callNewMove(b, o, new Move(attacks.get((int)(Math.random()*attacks.size()))));
+	me.callNewMove(b, o, new Move(Global.getRandomValue(attacks)));
 	###
 *
 Metal Burst:

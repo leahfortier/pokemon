@@ -254,7 +254,7 @@ public abstract class Attack implements Serializable {
 	
 	private boolean canApplyEffects(Battle b, ActivePokemon me, ActivePokemon o) {
 		int chance = effectChance*(me.hasAbility(AbilityNamesies.SERENE_GRACE) ? 2 : 1);
-		if (Math.random()*100 >= chance) {
+		if (!Global.chanceTest(chance)) {
 			return false;
 		}
 		
@@ -1397,8 +1397,7 @@ public abstract class Attack implements Serializable {
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
-			if (Math.random() < .5)
-			{
+			if (Global.chanceTest(50)) {
 				Status.giveStatus(b, user, victim, StatusCondition.BURNED);
 				return;
 			}
@@ -3064,8 +3063,7 @@ public abstract class Attack implements Serializable {
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
-			if (Math.random() < .5)
-			{
+			if (Global.chanceTest(50)) {
 				Status.giveStatus(b, user, victim, StatusCondition.FROZEN);
 				return;
 			}
@@ -3089,8 +3087,7 @@ public abstract class Attack implements Serializable {
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
-			if (Math.random() < .5)
-			{
+			if (Global.chanceTest(50)) {
 				Status.giveStatus(b, user, victim, StatusCondition.PARALYZED);
 				return;
 			}
@@ -3675,10 +3672,10 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			int index = (int)(Math.random()*moveNames.size());
-			while (map.get(moveNames.get(index)).isMoveType(MoveType.METRONOMELESS)) {
-				index = (int)(Math.random()*moveNames.size());
-			}
+			int index;
+			do {
+				index = Global.getRandomIndex(moveNames);
+			} while (map.get(moveNames.get(index)).isMoveType(MoveType.METRONOMELESS));
 			
 			me.callNewMove(b, o, new Move(map.get(moveNames.get(index))));
 		}
@@ -4359,6 +4356,11 @@ public abstract class Attack implements Serializable {
 
 	private static class TriAttack extends Attack {
 		private static final long serialVersionUID = 1L;
+		private static StatusCondition[] statusConditions = {
+			StatusCondition.PARALYZED,
+			StatusCondition.BURNED,
+			StatusCondition.FROZEN
+		};
 
 		TriAttack() {
 			super(AttackNamesies.TRI_ATTACK, "The user strikes with a simultaneous three-beam attack. May also burn, freeze, or leave the target with paralysis.", 10, Type.NORMAL, MoveCategory.SPECIAL);
@@ -4368,11 +4370,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Rewrite this to use an array
-			int random = (int)(Math.random()*3);
-			if (random == 0) super.status = StatusCondition.PARALYZED;
-			else if (random == 1) super.status = StatusCondition.BURNED;
-			else if (random == 2) super.status = StatusCondition.FROZEN;
+			super.status = Global.getRandomValue(statusConditions);
 			super.applyEffects(b, user, victim);
 		}
 	}
@@ -5535,7 +5533,7 @@ public abstract class Attack implements Serializable {
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Test to make sure this works when both parties use during the same turn -- will it always be the same stat?
 			super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-			super.statChanges[(int)(Math.random()*Stat.NUM_BATTLE_STATS)] = 2;
+			super.statChanges[Global.getRandomInt(super.statChanges.length)] = 2;
 			
 			super.applyEffects(b, user, victim);
 		}
@@ -6067,7 +6065,7 @@ public abstract class Attack implements Serializable {
 		Meditate() {
 			super(AttackNamesies.MEDITATE, "The user meditates to awaken the power deep within its body and raise its Attack stat.", 40, Type.PSYCHIC, MoveCategory.STATUS);
 			super.selfTarget = true;
-			super.statChanges[Stat.ATTACK.index()] = -1;
+			super.statChanges[Stat.ATTACK.index()] = 1;
 		}
 	}
 
@@ -7361,7 +7359,7 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
-			return new Type[] { types.get((int)(Math.random()*types.size())), Type.NO_TYPE };
+			return new Type[] { Global.getRandomValue(types), Type.NO_TYPE };
 		}
 	}
 
@@ -7398,7 +7396,7 @@ public abstract class Attack implements Serializable {
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
-			return new Type[] { types.get((int)(Math.random()*types.size())), Type.NO_TYPE };
+			return new Type[] { Global.getRandomValue(types), Type.NO_TYPE };
 		}
 	}
 
@@ -7524,7 +7522,7 @@ public abstract class Attack implements Serializable {
 				return;
 			}
 			
-			me.callNewMove(b, o, moves.get((int)(Math.random()*moves.size())));
+			me.callNewMove(b, o, Global.getRandomValue(moves));
 		}
 	}
 
@@ -7791,7 +7789,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			o.reduceHealth(b, (int)Math.max(1, ((int)(Math.random()*11) + 5)*me.getLevel()/10.0));
+			o.reduceHealth(b, (int)Math.max(1, (Global.getRandomInt(11) + 5)*me.getLevel()/10.0));
 		}
 	}
 
@@ -7947,10 +7945,16 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			double random = Math.random()*80;
-			if (random < 40) return 40;
-			if (random < 70) return 80;
-			return 120;
+			double random = Global.getRandomInt(80);
+			if (random < 40) {
+				return 40;
+			}
+			else if (random < 70) {
+				return 80;
+			}
+			else {
+				return 120;
+			}
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7958,7 +7962,7 @@ public abstract class Attack implements Serializable {
 				return;
 			}
 			
-			if (Math.random()*100 < 80) {
+			if (Global.chanceTest(80)) {
 				super.applyDamage(me, o, b);
 				return;
 			}
@@ -8323,14 +8327,13 @@ public abstract class Attack implements Serializable {
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
 			List<Attack> attacks = new ArrayList<>();
 			for (ActivePokemon p : b.getTrainer(me.user()).getTeam()) {
-				// TODO: Why can't this just be p == me?
-				if (p == b.getTrainer(me.user()).front()) {
+				if (p == me) {
 					continue;
 				}
 				
-				for (Move m : p.getMoves(b)) {
-					if (!m.getAttack().isMoveType(MoveType.ASSISTLESS)) {
-						attacks.add(m.getAttack());
+				for (Move move : p.getMoves(b)) {
+					if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
+						attacks.add(move.getAttack());
 					}
 				}
 			}
@@ -8340,7 +8343,7 @@ public abstract class Attack implements Serializable {
 				return;
 			}
 			
-			me.callNewMove(b, o, new Move(attacks.get((int)(Math.random()*attacks.size()))));
+			me.callNewMove(b, o, new Move(Global.getRandomValue(attacks)));
 		}
 	}
 

@@ -180,7 +180,10 @@ public abstract class Trainer implements Team, Serializable {
 	public void switchToRandom() {
 		List<Integer> valid = new ArrayList<>();
 		for (int i = 0; i < team.size(); i++) {
-			if (i == frontIndex || !team.get(i).canFight()) continue;
+			if (i == frontIndex || !team.get(i).canFight()) {
+				continue;
+			}
+
 			valid.add(i);
 		}
 		
@@ -188,11 +191,11 @@ public abstract class Trainer implements Team, Serializable {
 			Global.error("You shouldn't be switching when you have nothing to switch to!");
 		}
 
-		// TODO: Can have a util method for getting a random index for a list
-		setFront(valid.get((int)(Math.random()*valid.size())));
+		setFront(Global.getRandomValue(valid));
 	}
 	
 	public boolean canSwitch(Battle b, int switchIndex) {
+
 		// This Pokemon is already out!!
 		if (switchIndex == frontIndex) {
 			return false;

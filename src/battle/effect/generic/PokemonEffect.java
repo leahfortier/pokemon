@@ -777,7 +777,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (Math.random() > caster.getAttributes().getSuccessionDecayRate()) {
+			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -835,7 +835,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (Math.random() > caster.getAttributes().getSuccessionDecayRate()) {
+			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -889,7 +889,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (Math.random() > caster.getAttributes().getSuccessionDecayRate()) {
+			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -943,7 +943,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (Math.random() > caster.getAttributes().getSuccessionDecayRate()) {
+			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -997,7 +997,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (Math.random() > caster.getAttributes().getSuccessionDecayRate()) {
+			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -1093,7 +1093,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (Math.random() > caster.getAttributes().getSuccessionDecayRate()) {
+			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				b.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -1124,7 +1124,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public Confusion newInstance() {
 			Confusion x = (Confusion)(new Confusion().activate());
-			x.turns = (int)(Math.random()*4) + 1; // Between 1 and 4 turns
+			x.turns = Global.getRandomInt(1, 4); // Between 1 and 4 turns
 			return x;
 		}
 
@@ -1168,7 +1168,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			b.addMessage(p.getName() + " is confused!");
 			
 			// 50% chance to hurt yourself in confusion while confused
-			if (Math.random() < .5) {
+			if (Global.chanceTest(50)) {
 				b.addMessage("It hurt itself in confusion!");
 				
 				// Perform confusion damage
@@ -1369,7 +1369,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public Disable newInstance() {
 			Disable x = (Disable)(new Disable().activate());
 			x.disabled = disabled;
-			x.turns = (int)(Math.random()*4) + 4; // Between 4 and 7 turns
+			x.turns = Global.getRandomInt(4, 7); // Between 4 and 7 turns
 			return x;
 		}
 
@@ -2915,7 +2915,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			b.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
-			if (Math.random() < .5) {
+			if (Global.chanceTest(50)) {
 				return true;
 			}
 			

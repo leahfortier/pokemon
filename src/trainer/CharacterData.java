@@ -14,6 +14,7 @@ import java.util.Set;
 
 import main.Game;
 import main.Game.ViewMode;
+import main.Global;
 import map.DialogueSequence;
 import map.entity.MovableEntity.Direction;
 import namesies.EffectNamesies;
@@ -362,26 +363,32 @@ public class CharacterData extends Trainer implements Serializable {
 		
 		b.addMessage(name + " threw the " + ((Item)ball).getName() + "!");
 		
-		ActivePokemon c = b.getOtherPokemon(true);
-		int maxHP = c.getMaxHP(), hp = c.getHP(), catchRate = c.getPokemonInfo().getCatchRate();
-		double[] ballInfo = ball.catchRate(front(), c, b);
-		double ballMod = ballInfo[0], ballAdd = ballInfo[1], statusMod = c.getStatus().getType().getCatchModifier();
-		
+		ActivePokemon catchPokemon = b.getOtherPokemon(true);
+		int maxHP = catchPokemon.getMaxHP();
+		int hp = catchPokemon.getHP();
+
+		int catchRate = catchPokemon.getPokemonInfo().getCatchRate();
+		double statusMod = catchPokemon.getStatus().getType().getCatchModifier();
+
+		double[] ballInfo = ball.catchRate(front(), catchPokemon, b);
+		double ballMod = ballInfo[0];
+		double ballAdd = ballInfo[1];
+
 		double catchVal = (3*maxHP - 2*hp)*catchRate*ballMod*statusMod/(3*maxHP) + ballAdd;
-		double shakeVal = 65536/Math.pow(255/catchVal, .25);
+		int shakeVal = (int)Math.ceil(65536/Math.pow(255/catchVal, .25));
 				
 		for (int i = 0; i < CATCH_SHAKES + 1; i++) {
-			if (Math.random()*65536 > shakeVal) { // TODO: Random
+			if (!Global.chanceTest(shakeVal, 65536)) {
 				b.addMessage("", i);
-				b.addMessage("Oh no! " + c.getName() + " broke free!");
+				b.addMessage("Oh no! " + catchPokemon.getName() + " broke free!");
 				return true;
 			}
 		}
 		
 		b.addMessage("", -1);
-		b.addMessage("Gotcha! " + c.getName() + " was caught!");
-		gainEXP(c, b); 
-		addPokemon(b, c);
+		b.addMessage("Gotcha! " + catchPokemon.getName() + " was caught!");
+		gainEXP(catchPokemon, b);
+		addPokemon(b, catchPokemon);
 		
 		b.addMessage(" ", Update.EXIT_BATTLE);
 		return true;

@@ -173,7 +173,7 @@ Confusion:
 	b.addMessage(p.getName() + " is confused!");
 	
 	// 50% chance to hurt yourself in confusion while confused
-	if (Math.random() < .5) {
+	if (Global.chanceTest(50)) {
 		b.addMessage("It hurt itself in confusion!");
 		
 		// Perform confusion damage
@@ -188,7 +188,7 @@ Confusion:
 	return true;
 	###
 	Activate: 
-	x.turns = (int)(Math.random()*4) + 1; // Between 1 and 4 turns
+	x.turns = Global.getRandomInt(1, 4); // Between 1 and 4 turns
 	###
 	CastMessage: victim.getName() + " became confused!"
 	Cast: 
@@ -283,7 +283,7 @@ Disable:
 	###
 	Activate: 
 	x.disabled = disabled;
-	x.turns = (int)(Math.random()*4) + 4; // Between 4 and 7 turns
+	x.turns = Global.getRandomInt(4, 7); // Between 4 and 7 turns
 	###
 	Usable: 
 	return disabled.getAttack().namesies() != m.getAttack().namesies();
@@ -1046,7 +1046,7 @@ Infatuated:
 	###
 	CanAttack: 
 	b.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
-	if (Math.random() < .5) {
+	if (Global.chanceTest(50)) {
 		return true;
 	}
 	

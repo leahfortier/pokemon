@@ -3,6 +3,7 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
+import main.Global;
 import main.Type;
 import namesies.AbilityNamesies;
 import pokemon.ActivePokemon;
@@ -21,7 +22,7 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
     }
 
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-        if (Math.random()*100 < 25) {
+        if (Global.chanceTest(25)) {
             b.addMessage(p.getName() + " is fully paralyzed!");
             return false;
         }

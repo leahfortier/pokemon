@@ -1277,7 +1277,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
-			return Math.random()*100 < 10;
+			return Global.chanceTest(10);
 		}
 
 		public String braceMessage(ActivePokemon bracer) {
@@ -4697,7 +4697,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			if (Math.random()*100 < 10) {
+			if (Global.chanceTest(10)) {
 				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
@@ -4980,7 +4980,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			if (Math.random()*100 < 10) {
+			if (Global.chanceTest(10)) {
 				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
@@ -9895,7 +9895,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			holdMessage = "";
 			useMessage = "";
 			
-			int rand = (int)(Math.random()*(Stat.NUM_BATTLE_STATS + 1));
+			int rand = Global.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 			
 			// Raise crit
 			if (rand == Stat.NUM_BATTLE_STATS) {

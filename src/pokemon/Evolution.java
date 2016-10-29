@@ -92,11 +92,10 @@ public abstract class Evolution implements Serializable {
 					list.add(lev);
 				}
 			}
-			
-			int size = list.size();
-			if (size > 0) {
+
+			if (!list.isEmpty()) {
 				// This is pretty much for Wurmple even though he's not even going in the game
-				return list.get((int)(Math.random()*size));
+				return Global.getRandomValue(list);
 			}
 			
 			return null;

@@ -67,9 +67,8 @@ public abstract class Effect implements Serializable
 	public abstract Effect newInstance();
 	
 	protected Effect activate() {
-		// TODO: Random
-		numTurns = minTurns == -1 ? -1 : (int)(Math.random()*(maxTurns-minTurns + 1)) + minTurns;
-		active = true;
+		this.numTurns = this.minTurns == -1 ? -1 : Global.getRandomInt(this.minTurns, this.maxTurns);
+		this.active = true;
 		return this;
 	}
 	

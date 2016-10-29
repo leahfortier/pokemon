@@ -82,9 +82,10 @@ public class WildBattleTrigger extends Trigger {
 				if (game.characterData.isUsingRepel()) {
 					return;
 				}
-				
+
+				// TODO: Make the chance method return an int instead of a double
 				Item item = game.characterData.front().getActualHeldItem();
-				if (item instanceof RepellingEffect && Math.random() < ((RepellingEffect)item).chance()) {
+				if (item instanceof RepellingEffect && Global.chanceTest((int)(100*((RepellingEffect)item).chance()))) {
 					return;
 				}
 			}

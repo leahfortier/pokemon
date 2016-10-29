@@ -4,6 +4,7 @@ import battle.Battle;
 import battle.MoveType;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
+import main.Global;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
@@ -14,7 +15,7 @@ class Asleep extends Status implements BeforeTurnEffect {
 
     public Asleep() {
         super(StatusCondition.ASLEEP);
-        this.numTurns = (int)(Math.random()*3) + 1;
+        this.numTurns = Global.getRandomInt(1, 3);
     }
 
     protected void postCreateEffect(ActivePokemon victim) {

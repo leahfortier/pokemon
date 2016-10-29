@@ -275,7 +275,7 @@ public class PC implements Serializable {
 		
 		public Box() {
 			pokemon = new ActivePokemon[BOX_HEIGHT][BOX_WIDTH];
-			color = new Color((int)(Math.random()*255),(int)(Math.random()*255), (int)(Math.random()*255)); 
+			color = new Color(Global.getRandomInt(255), Global.getRandomInt(255), Global.getRandomInt(255));
 		}
 	}
 }

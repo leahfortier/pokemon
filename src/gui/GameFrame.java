@@ -8,6 +8,7 @@ import generator.StuffGen;
 import item.Item;
 import main.Game;
 import main.Global;
+import map.EncounterRate;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;

@@ -27,7 +27,6 @@ import map.AreaData.TerrainType;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
-import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
@@ -418,7 +417,7 @@ public class Battle {
 		int oSpeed = Stat.getStat(Stat.SPEED, opp, plyr, this);
 
 		int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
-		if (Math.random()*256 < val ||
+		if (Global.chanceTest(val, 256) ||
 				plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
 				plyr.getHeldItem(this) instanceof DefiniteEscape) {
 			addMessage("Got away safely!");
@@ -560,7 +559,7 @@ public class Battle {
 	public int calculateDamage(ActivePokemon me, ActivePokemon o) {
 		int level = me.getLevel();
 		int power = me.getAttackPower();
-		int random = (int)(Math.random()*16) + 85;
+		int random = Global.getRandomInt(16) + 85;
 		
 		final Stat attacking;
 		final Stat defending;
@@ -619,7 +618,7 @@ public class Battle {
 		stage = CritStageEffect.updateCritStage(this, stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
 		
-		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || Math.random()* CRITSICLES[stage - 1] < 1;
+		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || Global.chanceTest(1, CRITSICLES[stage - 1]);
 		
 		// Crit yo pants
 		if (crit) {
@@ -664,7 +663,7 @@ public class Battle {
 		int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this);
 		int evasion = Stat.getStat(Stat.EVASION, o, me, this);
 		
-		return Math.random()*100 < moveAccuracy*((double)accuracy/(double)evasion);
+		return Global.chanceTest((int)(moveAccuracy*((double)accuracy/(double)evasion)));
 	}
 	
 	// Returns true if the Pokemon is able to execute their turn by checking effects that have been casted upon them
@@ -726,11 +725,11 @@ public class Battle {
 		// Quick Claw gives holder a 20% chance of striking first within its priority bracket
 		boolean pQuick = plyr.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
 		boolean oQuick = opp.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
-		if (pQuick && !oQuick && Math.random() < .2) {
+		if (pQuick && !oQuick && Global.chanceTest(20)) {
 			addMessage(plyr.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
 			return true;
 		}
-		if (oQuick && !pQuick && Math.random() < .2) {
+		if (oQuick && !pQuick && Global.chanceTest(20)) {
 			addMessage(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
 			return false;
 		}		

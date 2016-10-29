@@ -36,6 +36,10 @@ public class Global {
 
 	private static final Random RANDOM = new Random();
 
+	public static boolean chanceTest(final int chance) {
+		return chanceTest(chance, 100);
+	}
+
 	public static boolean chanceTest(final int numerator, final int denominator) {
 		return getRandomInt(denominator) < numerator;
 	}
@@ -60,7 +64,15 @@ public class Global {
 	}
 
 	public static <T> T getRandomValue(List<T> list) {
-		return list.get(Global.RANDOM.nextInt(list.size()));
+		return list.get(getRandomIndex(list));
+	}
+
+	public static <T> int getRandomIndex(T[] array) {
+		return getRandomIndex(Arrays.asList(array));
+	}
+
+	public static <T> int getRandomIndex(List<T> list) {
+		return RANDOM.nextInt(list.size());
 	}
 
 	public static <T> void swap(T[] arr) {
@@ -77,10 +89,14 @@ public class Global {
 	}
 
 	public static int getPercentageIndex(int[] chances) {
-		int sum = 0, random = (int) (Math.random() * 100);
+		int sum = 0;
+		int random = getRandomInt(100);
+
 		for (int i = 0; i < chances.length; i++) {
 			sum += chances[i];
-			if (random < sum) return i;
+			if (random < sum) {
+				return i;
+			}
 		}
 		
 		Global.error("Chances array is improperly formatted.");
