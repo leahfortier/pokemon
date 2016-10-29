@@ -680,7 +680,7 @@ public class BattleView extends View {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			g.drawImage(tiles.getTile(0x2), 0, 0, null);
 			
-			g.setColor(Color.WHITE);
+			g.setColor(Color.BLACK);
 			
 			ActivePokemon playerPokemon = view.currentBattle.getPlayer().front();
 			
@@ -843,7 +843,7 @@ public class BattleView extends View {
 		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			
-			g.setColor(Color.WHITE);
+			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 30);
 			
 			DrawMetrics.drawWrappedText(g, view.message, 30, 490, 720);
@@ -1361,7 +1361,7 @@ public class BattleView extends View {
 
 		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 25);
 			g.drawString("Delete a move in order to learn " + view.learnedMove.getAttack().getName() + "?", 30, 490);
 			
@@ -1467,7 +1467,7 @@ public class BattleView extends View {
 			
 			String msgLine = "Select a move to delete!";
 			
-			g.setColor(Color.WHITE);
+			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 25);
 			g.drawString(msgLine, view.newMoveButton.x, 485);
 			
@@ -1532,7 +1532,7 @@ public class BattleView extends View {
 			start = Math.max(0, start);
 			
 			int y = 200;
-			g.setColor(Color.WHITE);
+			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 12);
 			for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15) {
 				g.drawString(view.logMessages.get(i), 25, y);

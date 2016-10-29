@@ -181,7 +181,7 @@ public class MapView extends View {
 				g.drawImage(bg, 0, 439, null);
 				
 				DrawMetrics.setFont(g, 30);
-				g.setColor(Color.WHITE);
+				g.setColor(Color.BLACK);
 				
 				int height = DrawMetrics.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
 				
@@ -310,17 +310,16 @@ public class MapView extends View {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, yValue, totalWidth, totalHeight);
 		
-		// Gray border
-		g.setColor(new Color(0x333333));
+		// Light grey border
+		g.setColor(new Color(195, 195, 195));
 		g.fillRect(borderSize, yValue + borderSize, insideWidth + 2*graySize, insideHeight + 2*graySize);
 		
-		// Lighter gray inside
-		g.setColor(new Color(0x666666));
-		g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
-		
+		// White inside
 		g.setColor(Color.WHITE);
+		g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
+
+		g.setColor(Color.BLACK);
 		DrawMetrics.setFont(g, fontSize);
-		
 		DrawMetrics.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
 	}
 	

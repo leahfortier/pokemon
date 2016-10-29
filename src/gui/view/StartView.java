@@ -122,7 +122,7 @@ public class StartView extends View {
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
 		
 		DrawMetrics.setFont(g, 30);
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		
 		switch (state) {
 			case DEFAULT:

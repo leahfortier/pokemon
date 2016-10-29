@@ -108,7 +108,7 @@ public class EvolutionView extends View {
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
 		
 		DrawMetrics.setFont(g, 30);
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		
 		int preIndex = isEgg ? PokemonInfo.EGG_IMAGE : preEvolution.getImageNumber(evolvingPokemon.isShiny());
 		int postIndex = isEgg ? preEvolution.getImageNumber(evolvingPokemon.isShiny()) : postEvolution.getImageNumber(evolvingPokemon.isShiny());
