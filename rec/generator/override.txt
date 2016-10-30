@@ -24,7 +24,7 @@ RecoilMove:
 			return;
 		}
 		
-		b.addMessage(user.getName() + " was hurt by recoil!");
+		Messages.addMessage(user.getName() + " was hurt by recoil!");
 		user.reduceHealth(b, (int)Math.ceil(damage/{0}.0));
 		###
 	*
@@ -49,8 +49,7 @@ Override:
 	WeatherHeal:
 		AddInterface: SelfHealingMove
 		AddMapField: SelfHealing: 
-		switch (b.getWeather().namesies())
-		{
+		switch (b.getWeather().namesies()) {
 			case CLEAR_SKIES:
 				victim.healHealthFraction(1/2.0);
 				break;
@@ -73,16 +72,15 @@ SelfHealingMove:
 	SelfHealing:
 		Header: void heal(ActivePokemon user, ActivePokemon victim, Battle b)
 		Begin:
-		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK))
-		{
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 		
 		###
 		End:
 		
-		b.addMessage(victim.getName() + "'s health was restored!", victim);
+		Messages.addMessage(victim.getName() + "'s health was restored!", b, victim);
 		###
 		Try:
 		victim.healHealthFraction(1/{0}.0);
@@ -107,7 +105,7 @@ MultiTurnMove:
 		Header: void charge(ActivePokemon user, Battle b)
 		Optional: True
 		Begin:
-		b.addMessage(getChargeMessage(user));
+		Messages.addMessage(getChargeMessage(user));
 		###
 	*
 	ChargeMessage:
@@ -134,7 +132,7 @@ Override:
 		
 		int hit = 1;
 		for (; hit <= hits; hit++) {
-			b.addMessage("Hit " + hit + "!");
+			Messages.addMessage("Hit " + hit + "!");
 			super.applyDamage(me, o, b);
 			
 			// Stop attacking the dead
@@ -144,7 +142,7 @@ Override:
 		}
 		
 		// Print hits and gtfo
-		b.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
+		Messages.addMessage("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		###
 	*
 ***
@@ -173,14 +171,14 @@ Override:
 		AddMapField: ApplyEffects:
 		if ({0}) {
 			if (super.category == MoveCategory.STATUS) {
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			}
 			
 			return;
 		}
 
 		Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-		b.addMessage(getSwitchMessage(user, userItem, victim, victimItem));
+		Messages.addMessage(getSwitchMessage(user, userItem, victim, victimItem));
 
 		if (b.isWildBattle()) {
 			user.giveItem((HoldItem)victimItem);
@@ -233,19 +231,19 @@ Override:
 		AddMapField: ApplyDamage:
 		// Fails when the opponent is at a higher level than the user
 		if (me.getLevel() < o.getLevel()) {
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 		
 		// Sturdy prevents OHKO moves if the user is not a mold breaker
 		if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-			b.addMessage(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!");
+			Messages.addMessage(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!");
 			return;
 		}
 		
 		// Certain death
 		o.reduceHealth(b, o.getHP());
-		b.addMessage("It's a One-Hit KO!");
+		Messages.addMessage("It's a One-Hit KO!");
 		###
 		AddMapField: MoveType: One_Hit_KO
 		AddMapField: GetAccuracy:
@@ -267,7 +265,7 @@ CrashDamageMove:
 	CrashDamage:
 		Header: void crash(Battle b, ActivePokemon user)
 		Body:
-		b.addMessage(user.getName() + " kept going and crashed!");
+		Messages.addMessage(user.getName() + " kept going and crashed!");
 		user.reduceHealth(b, user.getMaxHP()/{0});
 		###
 	*
@@ -403,7 +401,7 @@ BarrierEffect:
 	BreakBarrier:
 		Header: void breakBarrier(Battle b, ActivePokemon breaker)
 		Body:
-		b.addMessage(breaker.getName() + " broke the {0} barrier!");
+		Messages.addMessage(breaker.getName() + " broke the {0} barrier!");
 		b.getEffects(!breaker.user()).remove(this);
 		###
 	*
@@ -423,7 +421,7 @@ Override:
 			case TRUANT:
 			case MULTITYPE:
 			case STANCE_CHANGE:
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			default:
 				super.apply(me, o, b);
@@ -466,7 +464,7 @@ Override:
 		AddMapField: Apply: 
 		Move mirror = o.getAttributes().getLastMoveUsed();
 		if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS)) {
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 		
@@ -485,7 +483,7 @@ Override:
 		
 		// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
 		if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != MoveCategory.{00} || b.isFirstAttack()) {
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 		
@@ -500,14 +498,14 @@ Override:
 		AddMapField: ApplyEffects:
 		// Fails against the Suction Cups ability
 		if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-			b.addMessage(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!");
+			Messages.addMessage(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!");
 			return;
 		}
 		
 		// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
 		if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
 			if (super.category == MoveCategory.STATUS)  {
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			}
 			
 			return;
@@ -517,13 +515,13 @@ Override:
 		if (opponent instanceof WildPokemon) {
 			// Fails against wild Pokemon of higher levels
 			if (victim.getLevel() > user.getLevel()) {
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				return;
 			}
 			
 			// End the battle against a wild Pokemon
-			b.addMessage({0});
-			b.addMessage(" ", Update.EXIT_BATTLE);
+			Messages.addMessage({0});
+			Messages.addMessage(" ", Update.EXIT_BATTLE);
 			return;
 		}
 		
@@ -531,14 +529,14 @@ Override:
 		if (!trainer.hasRemainingPokemon()) {
 			// Fails against trainers on their last Pokemon
 			if (super.category == MoveCategory.STATUS) {
-				b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			}
 			
 			return;
 		}
 		
 		// Swap to a random Pokemon!
-		b.addMessage({0});
+		Messages.addMessage({0});
 		trainer.switchToRandom();
 		victim = trainer.front();
 		b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
@@ -554,8 +552,8 @@ Override:
 		Team t = b.getTrainer(me.user());
 		if (t instanceof WildPokemon) {
 			// End the battle against a wild Pokemon
-			b.addMessage(me.getName() + " left the battle!");
-			b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
+			Messages.addMessage(me.getName() + " left the battle!");
+			Messages.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 			return;
 		}
 		
@@ -567,7 +565,7 @@ Override:
 		}
 		
 		// Send this Pokemon back to the trainer and send out the next one
-		b.addMessage(me.getName() + " went back to " + trainer.getName() + "!");
+		Messages.addMessage(me.getName() + " went back to " + trainer.getName() + "!");
 		trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
 		me = trainer.front();
 		b.enterBattle(me, trainer.getName() + " sent out " + me.getName() + "!");
@@ -608,7 +606,7 @@ Override:
 		
 		// Protect is a success!
 		b.printAttacking(p);
-		b.addMessage(opp.getName() + " is protecting itself!");
+		Messages.addMessage(opp.getName() + " is protecting itself!");
 		CrashDamageMove.invokeCrashDamageMove(b, p);
 	
 		// Additional Effects
@@ -635,7 +633,7 @@ Override:
 	SuccessiveDecay:
 		AddMapField: Cast:
 		if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
-			b.addMessage(this.getFailMessage(b, caster, victim));
+			Messages.addMessage(this.getFailMessage(b, caster, victim));
 			return;
 		}
 
@@ -692,7 +690,7 @@ Override:
 			return;
 		}
 		
-		b.addMessage(victim.getName() + " is hurt by {1_}!");
+		Messages.addMessage(victim.getName() + " is hurt by {1_}!");
 		
 		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
@@ -720,7 +718,7 @@ Override:
 			super.cast(b, caster, victim, source, printCast);
 		}
 		else {
-			b.addMessage(getCastMessage(b, caster, victim));
+			Messages.addMessage(getCastMessage(b, caster, victim));
 		}
 		###
 	*
@@ -750,7 +748,7 @@ Override:
 	ApplyError:
 		AddMapField: Apply:
 		if ({0}) {
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 		
@@ -798,7 +796,7 @@ RapidSpinRelease:
 	RapidSpin:
 		Header: void releaseRapidSpin(Battle b, ActivePokemon releaser)
 		Body:
-		b.addMessage({0});
+		Messages.addMessage({0});
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 		releaser.getEffects().remove(this);
@@ -995,7 +993,7 @@ Override:
 		}
 	
 		// Remove the effect if it's already in play
-		b.addMessage(roomsies.getSubsideMessage(caster));
+		Messages.addMessage(roomsies.getSubsideMessage(caster));
 		Effect.removeEffect(b.getEffects(), this.namesies);
 		###
 	*
@@ -1006,7 +1004,7 @@ Override:
 		AddMapField: OpponentCanAttack:
 		if (p.getAttack().isMoveType(MoveType.{00})) {
 			b.printAttacking(p);
-			b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
+			Messages.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
 			return false;
 		}
 		
@@ -1039,7 +1037,7 @@ DefogRelease:
 	Defog:
 		Header: void releaseDefog(Battle b, ActivePokemon victim)
 		Body:
-		b.addMessage({0});
+		Messages.addMessage({0});
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 		victim.getEffects().remove(this);
@@ -1091,7 +1089,7 @@ LevitationEffect:
 	FallMessage:
 		Header: void fall(Battle b, ActivePokemon fallen)
 		Body:
-		b.addMessage({0});
+		Messages.addMessage({0});
 		
 		// TODO: Fix this it's broken
 		// Effect.removeEffect(fallen.getEffects(), this.namesies());
@@ -1106,7 +1104,7 @@ GroundedEffect:
 		Default:
 		if (p.isSemiInvulnerableFlying()) {
 			p.getMove().switchReady(b, p);
-			b.addMessage(p.getName() + " fell to the ground!");
+			Messages.addMessage(p.getName() + " fell to the ground!");
 		}
 		
 		LevitationEffect.falllllllll(b, p);
@@ -1115,7 +1113,7 @@ GroundedEffect:
 		AddMapField: CanAttack:
 		if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
 			b.printAttacking(p);
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return false;
 		}
 		
@@ -1171,7 +1169,7 @@ Override:
 		return attacking == Type.{00};
 		###
 		AddMapField: AlternateEffect:
-		b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " type moves!");
+		Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " type moves!");
 		victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		###
 	*
@@ -1183,7 +1181,7 @@ Override:
 		return attacking == Type.{00};
 		###
 		AddMapField: AlternateEffect:
-		b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!");
+		Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!");
 		
 		// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
@@ -1191,7 +1189,7 @@ Override:
 		}
 		
 		victim.healHealthFraction(1/4.0);
-		b.addMessage(victim.getName() + "'s HP was restored instead!", victim);
+		Messages.addMessage(victim.getName() + "'s HP was restored instead!", b, victim);
 		###
 	*
 ***
@@ -1243,7 +1241,7 @@ Override:
 		AddInterface: EntryEffect
 		AddMapField: Enter: 
 		b.addEffect(Weather.getEffect(EffectNamesies.{11}).newInstance());
-		b.addMessage(enterer.getName() + "'s " + this.getName() + " {2-}!");
+		Messages.addMessage(enterer.getName() + "'s " + this.getName() + " {2-}!");
 		###
 	*
 ***
@@ -1261,7 +1259,7 @@ Override:
 		AddMapField: Enter: 
 		// TODO: I think this isn't the intended effect of this ability
 		b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
-		b.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
+		Messages.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		###
 	*
 ***
@@ -1438,7 +1436,7 @@ Override:
 			}
 
 			// Buffety buffety buffet
-			b.addMessage({0});
+			Messages.addMessage({0});
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 		###
@@ -1448,7 +1446,7 @@ Override:
 	PreBuffetMessage:
 		AddInterface: Hidden-EndTurnEffect
 		AddMapField: ApplyEndTurn:
-		b.addMessage({0});
+		Messages.addMessage({0});
 				
 		ActivePokemon other = b.getOtherPokemon(victim.user());
 		buffet(b, victim);
@@ -1500,7 +1498,7 @@ Override:
 		AddMapField: TargetSwap:
 		Attack attack = user.getAttack();
 		if (!attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
-			b.addMessage(opponent.getName() + "'s " + {0} + " reflected " + user.getName() + "'s move!");
+			Messages.addMessage(opponent.getName() + "'s " + {0} + " reflected " + user.getName() + "'s move!");
 			return true;
 		}
 		
@@ -1536,7 +1534,7 @@ GemItem:
 		AddMapField: GetMultiplier:
 		if (user.isAttackType(getType())) {
 			// Consume the item
-			b.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
+			Messages.addMessage(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
 			user.consumeItem(b);
 
 			// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
@@ -1876,7 +1874,7 @@ Override:
 		AddInterface: OpponentPowerChangeEffect
 		AddMapField: GetOppMultiplier:
 		if (user.getAttackType() == Type.{00} && Type.getAdvantage(user, victim, b) > 1) {
-			b.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
+			Messages.addMessage(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!");
 			victim.consumeItem(b);
 			return .5;
 		}
@@ -1928,7 +1926,7 @@ Override:
 		AddInterface: TakeDamageEffect
 		AddMapField: OnTakeDamage:
 		if (user.getAttack().getCategory() == getCategory()) {
-			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+			Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 			victim.consumeItem(b);
 		}
@@ -1944,7 +1942,7 @@ Override:
 			}
 		}
 		
-		b.addMessage("All status problems were cured!");
+		Messages.addMessage("All status problems were cured!");
 		###
 		AddMapField: SelfTarget: True
 	*
@@ -2008,7 +2006,7 @@ Override:
 		x.theSeeer = theSeeer;
 		###
 		AddMapField: Subside: 
-		b.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
+		Messages.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
 		Attack attack = Attack.getAttack(AttackNamesies.{00});
 		
@@ -2032,7 +2030,7 @@ Override:
 		AddMapField: ApplyEffects: 
 		user.getAttributes().resetStages();
 		victim.getAttributes().resetStages();
-		b.addMessage("All stat changes were eliminated!");
+		Messages.addMessage("All stat changes were eliminated!");
 		###
 	*
 ***
@@ -2052,7 +2050,7 @@ Override:
 			victim.getAttributes().setStage(statIndex, userStat);
 		}
 		
-		b.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
+		Messages.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		###
 		AddMapField: MoveType: No_Magic_Coat
 	*
@@ -2092,12 +2090,12 @@ GainableEffectBerry:
 				Global.error("Use item and held item are the only valid cast sources for berries.");
 		}
 		
-		b.addMessage(message, user);
+		Messages.addMessage(message, b, user);
 		
 		if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-			b.addMessage(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!");
+			Messages.addMessage(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!");
 			user.healHealthFraction(1/3.0);
-			b.addMessage("", user);
+			Messages.addMessage("", b, user);
 		}
 		
 		// Eat dat berry!!
@@ -2198,7 +2196,7 @@ Override:
 		}
 		
 		if (user.getAttack().getCategory() == MoveCategory.STATUS) {
-			b.addMessage(getPreventMessage(victim));
+			Messages.addMessage(getPreventMessage(victim));
 		}
 		
 		return false;
@@ -2273,7 +2271,7 @@ Override:
 		
 		// Stealers gon' steal
 		Item stolen = victim.getHeldItem(b);
-		b.addMessage(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!");
+		Messages.addMessage(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!");
 		
 		if (b.isWildBattle()) {
 			victim.removeItem();
@@ -2301,7 +2299,7 @@ Override:
 		AddMapField: ApplyEffects: 
 		Item i = victim.getHeldItem(b);
 		if (i instanceof Berry) {
-			b.addMessage(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!");
+			Messages.addMessage(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!");
 			victim.consumeItem(b);
 			
 			if (i instanceof GainableEffectBerry) {
@@ -2382,7 +2380,7 @@ Override:
 		PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 		if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
 			flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
-			b.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
+			Messages.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
 		}
 		###
 		AddMapField: OnApplyDamage:
@@ -2390,7 +2388,7 @@ Override:
 			PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
-				b.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
+				Messages.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 			}
 		}
 		###

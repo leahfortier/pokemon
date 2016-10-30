@@ -1,5 +1,7 @@
-package battle;
+package message;
 
+import battle.Battle;
+import battle.Move;
 import battle.effect.status.StatusCondition;
 import gui.view.BattleView;
 import gui.view.BattleView.VisualState;

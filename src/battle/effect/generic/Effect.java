@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import main.Global;
+import message.Messages;
 import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
@@ -152,7 +153,7 @@ public abstract class Effect implements Serializable
 	}
 	
 	public void subside(Battle b, ActivePokemon p) {
-		b.addMessage(getSubsideMessage(p));
+		Messages.addMessage(getSubsideMessage(p));
 		active = false; // Unnecessary, but just to be safe
 	}
 

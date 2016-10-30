@@ -5,6 +5,7 @@ import battle.MoveType;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import main.Global;
+import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
@@ -44,7 +45,7 @@ class Asleep extends Status implements BeforeTurnEffect {
         }
 
         numTurns--;
-        b.addMessage(p.getName() + " is fast asleep...");
+        Messages.addMessage(p.getName() + " is fast asleep...");
         return p.getAttack().isMoveType(MoveType.ASLEEP_USER);
     }
 

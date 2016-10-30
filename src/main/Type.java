@@ -7,6 +7,7 @@ import java.util.Collections;
 import battle.MoveType;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
+import message.Messages;
 import namesies.AbilityNamesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
@@ -56,7 +57,7 @@ public enum Type implements Serializable {
 
 	public static boolean blockAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 		if (defending.isType(b, Type.GRASS) && attacking.getAttack().isMoveType(MoveType.POWDER)) {
-			b.addMessage(defending.getName() + " is immune to Powder moves!");
+			Messages.addMessage(defending.getName() + " is immune to Powder moves!");
 			return true;
 		}
 		

@@ -33,6 +33,7 @@ import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Global;
 import main.Type;
+import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.AttackNamesies;
 import namesies.EffectNamesies;
@@ -433,9 +434,9 @@ public class ActivePokemon implements Serializable {
 		
 		// Add EXP
 		totalEXP += gain;
-		b.addMessage(getActualName() + " gained " + gain + " EXP points!");
+		Messages.addMessage(getActualName() + " gained " + gain + " EXP points!");
 		if (front) {
-			b.addMessage("", this, Math.min(1, expRatio()), false);
+			Messages.addMessage("", b, this, Math.min(1, expRatio()), false);
 		}
 		
 		// Add EVs
@@ -464,11 +465,11 @@ public class ActivePokemon implements Serializable {
 		// Grow to the next level
 		level++;
 		if (print) {
-			b.addMessage(getActualName() + " grew to level " + level + "!");
+			Messages.addMessage(getActualName() + " grew to level " + level + "!");
 		}
 
 		if (print && front) {
-			b.addMessage("", this, Math.min(1, expRatio()), true);
+			Messages.addMessage("", b, this, Math.min(1, expRatio()), true);
 		}
 		
 		// Change stats -- keep track of the gains
@@ -481,7 +482,7 @@ public class ActivePokemon implements Serializable {
 		
 		// TODO: Show gain update for other Pokemon in the party
 		if (print && front) {
-			b.addMessage("", this, gain, stats);
+			Messages.addMessage("", b, this, gain, stats);
 		}
 		
 		// Learn new moves
@@ -511,7 +512,7 @@ public class ActivePokemon implements Serializable {
 		
 		String name = nickname;
 		if (print) {
-			b.addMessage(getActualName() + " is evolving!");
+			Messages.addMessage(getActualName() + " is evolving!");
 		}
 		
 		pokemon = ev.getEvolution();
@@ -534,17 +535,17 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		if (print && front) {
-			b.addMessage("", pokemon, shiny, true, playerPokemon);
+			Messages.addMessage("", pokemon, shiny, true, playerPokemon);
 		}
 		
 		String message = name + " evolved into " + pokemon.getName() + "!";
 		
 		if (print) {
-			b.addMessage(message);
+			Messages.addMessage(message);
 		}
 
 		if (print && front) {
-			b.addMessage("", this, gain, stats);
+			Messages.addMessage("", b, this, gain, stats);
 		}
 		
 		// Learn new moves
@@ -563,7 +564,7 @@ public class ActivePokemon implements Serializable {
 		Move m = new Move(Attack.getAttack(attackName));
 		if (moves.size() < Move.MAX_MOVES) {
 			if (b != null) {
-				b.addMessage(getActualName() + " learned " + m.getAttack().getName() + "!");
+				Messages.addMessage(getActualName() + " learned " + m.getAttack().getName() + "!");
 			}
 			
 			addMove(b, m, moves.size() - 1);
@@ -575,15 +576,15 @@ public class ActivePokemon implements Serializable {
 			return;
 		}
 		
-		b.addMessage(" ", this, m);
-		b.addMessage(getActualName() + " did not learn " + m.getAttack().getName() + ".");
+		Messages.addMessage(" ", this, m);
+		Messages.addMessage(getActualName() + " did not learn " + m.getAttack().getName() + ".");
 		
 		// Wait I think this is in a motherfucking for loop because this is really poorly and hackily implemented...
 		for (Move move : moves) {
-			b.addMessage(getActualName() + " forgot how to use " + move.getAttack().getName() + "...");
+			Messages.addMessage(getActualName() + " forgot how to use " + move.getAttack().getName() + "...");
 		}
 		
-		b.addMessage("...and " + getActualName() + " learned " + m.getAttack().getName() + "!");
+		Messages.addMessage("...and " + getActualName() + " learned " + m.getAttack().getName() + "!");
 	}
 	
 	public void addMove(Battle b, Move m, int index) {
@@ -848,10 +849,10 @@ public class ActivePokemon implements Serializable {
 		
 		// Deady
 		if (hp == 0) {
-			b.addMessage("", this);
+			Messages.addMessage("", b, this);
 			
 			Status.die(this);
-			b.addMessage(getName() + " fainted!", this);
+			Messages.addMessage(getName() + " fainted!", b, this);
 			
 			ActivePokemon murderer = b.getOtherPokemon(user());
 
@@ -882,7 +883,7 @@ public class ActivePokemon implements Serializable {
 		// Check if the user is under an effect that prevents escape
 		TrappingEffect trapped = TrappingEffect.getTrapped(b, this);
 		if (trapped != null) {
-			b.addMessage(trapped.trappingMessage(this));
+			Messages.addMessage(trapped.trappingMessage(this));
 			return false;
 		}
 		
@@ -890,7 +891,7 @@ public class ActivePokemon implements Serializable {
 		ActivePokemon other = b.getOtherPokemon(user());
 		OpponentTrappingEffect trappedByOpponent = OpponentTrappingEffect.getTrapped(b, this, other);
 		if (trappedByOpponent != null) {
-			b.addMessage(trappedByOpponent.opponentTrappingMessage(this, other));
+			Messages.addMessage(trappedByOpponent.opponentTrappingMessage(this, other));
 			return false;
 		}
 		
@@ -964,11 +965,11 @@ public class ActivePokemon implements Serializable {
 		if (e != null) {
 			e.decrease(amount);
 			if (e.getAmount() <= 0) {
-				b.addMessage("The substitute broke!");
+				Messages.addMessage("The substitute broke!");
 				attributes.removeEffect(EffectNamesies.SUBSTITUTE);
 			}
 			else {
-				b.addMessage("The substitute absorbed the hit!");
+				Messages.addMessage("The substitute absorbed the hit!");
 			}
 			
 			return 0;
@@ -986,8 +987,8 @@ public class ActivePokemon implements Serializable {
 			if (brace != null) {
 				taken -= heal(1);
 				
-				b.addMessage("", this);
-				b.addMessage(brace.braceMessage(this));				
+				Messages.addMessage("", b, this);
+				Messages.addMessage(brace.braceMessage(this));				
 			}
 		}
 		
@@ -995,11 +996,11 @@ public class ActivePokemon implements Serializable {
 			return taken;
 		}
 		
-		b.addMessage("", this);
+		Messages.addMessage("", b, this);
 		
 		// Check if the Pokemon fainted and also handle Focus Punch
 		if (hasEffect(EffectNamesies.FOCUSING)) {
-			b.addMessage(getName() + " lost its focus and couldn't move!");
+			Messages.addMessage(getName() + " lost its focus and couldn't move!");
 			attributes.removeEffect(EffectNamesies.FOCUSING);
 			addEffect(PokemonEffect.getEffect(EffectNamesies.FLINCH));
 		}
@@ -1052,7 +1053,7 @@ public class ActivePokemon implements Serializable {
 	// Heals the Pokemon by damage amount. It is assume damage has already been dealt to the victim
 	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print, boolean dreamEater) {
 		if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
-			b.addMessage(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + getName() + " to lose health instead!");
+			Messages.addMessage(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + getName() + " to lose health instead!");
 			reduceHealth(b, amount);
 			return;
 		}
@@ -1065,7 +1066,7 @@ public class ActivePokemon implements Serializable {
 		// Sap message (different for Dream Eater)
 		if (print) {
 			String message = dreamEater ? victim.getName() + "'s dream was eaten!" : victim.getName() + "'s health was sapped!"; 
-			b.addMessage(message);
+			Messages.addMessage(message);
 		}
 		
 		// Healers gon' heal
@@ -1073,8 +1074,8 @@ public class ActivePokemon implements Serializable {
 			heal(amount);
 		}
 		
-		b.addMessage("", victim);
-		b.addMessage("", this);
+		Messages.addMessage("", b, victim);
+		Messages.addMessage("", b, this);
 	}
 	
 	public boolean isGrounded(Battle b) {
@@ -1121,7 +1122,7 @@ public class ActivePokemon implements Serializable {
 		ActivePokemon other = b.getOtherPokemon(playerPokemon); 
 		if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
 			other.giveItem((HoldItem)consumed);
-			b.addMessage(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
+			Messages.addMessage(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
 		}
 	}
 	

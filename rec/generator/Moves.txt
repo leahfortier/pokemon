@@ -145,7 +145,7 @@ Struggle:
 	Desc: An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.
 	Cat: Physical
 	Recoil: 
-	b.addMessage(user.getName() + " was hurt by recoil!");
+	Messages.addMessage(user.getName() + " was hurt by recoil!");
 	user.reduceHealth(b, user.getMaxHP()/4);
 	###
 	MoveType: Encoreless, Mimicless, Assistless, Metronomeless
@@ -756,10 +756,10 @@ Captivate:
 	ApplyEffects:
 	// Captivate does not work on members of the same sex or on victims with the Oblivious ability
 	if (victim.hasAbility(AbilityNamesies.OBLIVIOUS)) {
-		b.addMessage(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!");
+		Messages.addMessage(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!");
 	}
 	else if (!Gender.oppositeGenders(user, victim)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 	} 
 	else {
 		super.applyEffects(b, user, victim);
@@ -1197,7 +1197,7 @@ Spit Up:
 	Apply: 
 	PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
 	if (stockpile == null) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 
@@ -1232,7 +1232,7 @@ Swallow:
 	SelfHealing: 
 	PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
 	if (stockpile == null) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -1787,7 +1787,7 @@ Rest:
 	Status: Asleep
 	ApplyEffects: 
 	if (victim.fullHealth() || !Status.applies(StatusCondition.ASLEEP, b, victim, victim)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -2020,7 +2020,7 @@ Magnitude:
 	PhysicalContact: False
 	HitDig: POWERS[index = Global.getPercentageIndex(CHANCES)]
 	Apply: 
-	b.addMessage("Magnitude " + (index + 4) + "!");
+	Messages.addMessage("Magnitude " + (index + 4) + "!");
 	super.apply(me, o, b);
 	###
 *
@@ -2189,7 +2189,7 @@ Psych Up:
 		user.getAttributes().setStage(i, victim.getStage(i));
 	}
 	
-	b.addMessage(user.getName() + " copied " + victim.getName() + "'s stat changes!");
+	Messages.addMessage(user.getName() + " copied " + victim.getName() + "'s stat changes!");
 	###
 	MoveType: No_Magic_Coat, Protect_Piercing, Substitute_Piercing
 *
@@ -2366,12 +2366,12 @@ Belly Drum:
 	ApplyEffects: 
 	// Fails if attack is already maxed or if you have less than half your health to give up
 	if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHPRatio() < .5) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
 	// Maximization station
-	b.addMessage(user.getName() + " cut its own HP and maximized its attack!");
+	Messages.addMessage(user.getName() + " cut its own HP and maximized its attack!");
 	user.reduceHealthFraction(b, 1/2.0);
 	user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 	###
@@ -2709,7 +2709,7 @@ Curse:
 			super.effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
 		}
 		else {
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		}
 	} else {
 		me.modifyStages(b, me, super.statChanges, CastSource.ATTACK);
@@ -2750,7 +2750,7 @@ Heal Pulse:
 	MoveType: Aura_Pulse
 	ApplyEffects: 
 	if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -2758,7 +2758,7 @@ Heal Pulse:
 	double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
 	
 	victim.healHealthFraction(fraction);
-	b.addMessage(victim.getName() + "'s health was restored!", victim);
+	Messages.addMessage(victim.getName() + "'s health was restored!", b, victim);
 	###
 *
 Metal Sound:
@@ -3071,11 +3071,11 @@ Spite:
 	
 	// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
 	if (last == null || last.getPP() == 0 || !victim.hasMove(b, last.getAttack().namesies())) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
-	b.addMessage(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
+	Messages.addMessage(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 	###
 *
 Night Shade:
@@ -3197,7 +3197,7 @@ Synchronoise:
 		super.apply(me, o, b);
 	}
 	else {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 	}
 	###
 *
@@ -3547,7 +3547,7 @@ Me First:
 	Apply:
 	// Fails if it is the second turn or the opponent is using a status move
 	if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().getCategory() == MoveCategory.STATUS) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -3864,7 +3864,7 @@ Splash:
 	Cat: Status
 	SelfTarget: True
 	ApplyEffects:
-	b.addMessage("But nothing happened...");
+	Messages.addMessage("But nothing happened...");
 	###
 	MoveType: Airborne
 *
@@ -3890,7 +3890,7 @@ Last Resort:
 		}
 		
 		if (!m.used()) {
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		}
 	}
@@ -3945,7 +3945,7 @@ Conversion:
 		}
 	}
 	
-	b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+	Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 	###
 	Int: ChangeTypeMove
 	ChangeType: 
@@ -3972,7 +3972,7 @@ Conversion 2:
 	Apply: 
 	Move m = o.getAttributes().getLastMoveUsed();
 	if (m == null || getResistances(me, m.getType(), b).size() == 0) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -4066,7 +4066,7 @@ Sleep Talk:
 	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Asleep_User, Assistless, Metronomeless
 	Apply: 
 	if (!me.hasStatus(StatusCondition.ASLEEP)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -4078,7 +4078,7 @@ Sleep Talk:
 	}
 	
 	if (moves.size() == 0) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -4175,12 +4175,12 @@ Psycho Shift:
 	ApplyEffects: 
 	String message = user.getName() + " transferred its status condition to " + victim.getName() + "!";
 	if (!user.hasStatus() || !Status.giveStatus(b, user, victim, user.getStatus().getType(), message)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
 	user.removeStatus();
-	b.addMessage("", user);
+	Messages.addMessage("", b, user);
 	###
 	MoveType: No_Magic_Coat
 *	
@@ -4283,8 +4283,8 @@ Pain Split:
 	user.setHP(share);
 	victim.setHP(share);
 	
-	b.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", user);
-	b.addMessage("", victim);
+	Messages.addMessage(user.getName() + " and " + victim.getName() + " split their pain!", b, user);
+	Messages.addMessage("", b, victim);
 	###
 	MoveType: No_Magic_Coat
 *
@@ -4373,7 +4373,7 @@ Beat Up:
 		
 		Move temp = p.getMove();
 		p.setMove(new Move(Attack.getAttack(super.namesies)));
-		b.addMessage(p.getName() + "'s attack!");
+		Messages.addMessage(p.getName() + "'s attack!");
 		super.applyDamage(p, o, b);
 		p.setMove(temp);
 	}
@@ -4422,12 +4422,12 @@ Present:
 	}
 	
 	if (o.fullHealth() || o.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
 	o.healHealthFraction(1/4.0);
-	b.addMessage(o.getName() + "'s health was restored!", o);
+	Messages.addMessage(o.getName() + "'s health was restored!", b, o);
 	###
 *
 Steel Wing:
@@ -4450,7 +4450,7 @@ Sketch:
 	ApplyEffects: 
 	Move copy = victim.getAttributes().getLastMoveUsed();
 	if (copy == null || copy.getAttack().namesies() == AttackNamesies.STRUGGLE || user.hasEffect(EffectNamesies.TRANSFORMED)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -4459,7 +4459,7 @@ Sketch:
 		if (moves.get(i).getAttack().namesies() == super.namesies) {
 			moves.add(i, new Move(copy.getAttack()));
 			moves.remove(i + 1);
-			b.addMessage(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
+			Messages.addMessage(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 			break;
 		}
 	}
@@ -4620,7 +4620,7 @@ Assist:
 	}
 	
 	if (attacks.isEmpty()) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -4637,7 +4637,7 @@ Metal Burst:
 	ApplyDamage:
 	int damageTaken = me.getAttributes().getDamageTaken();
 	if (damageTaken == 0 || b.isFirstAttack()) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -4910,7 +4910,7 @@ Heart Swap:
 		victim.getAttributes().setStage(i, temp);
 	}
 	
-	b.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
+	Messages.addMessage(user.getName() + " swapped its stats with " + victim.getName() + "!");
 	###
 *	
 Dark Void:
@@ -4969,7 +4969,7 @@ Incinerate:
 	Item heldItem = victim.getHeldItem(b);
 	
 	if (heldItem instanceof Berry || heldItem instanceof GemItem) {
-		b.addMessage(victim.getName() + "'s " + heldItem.getName() + " was burned!");
+		Messages.addMessage(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 		victim.consumeItem(b);
 	}
 	###
@@ -5276,11 +5276,11 @@ Fling:
 	###
 	Apply: 
 	if (!me.isHoldingItem(b)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
-	b.addMessage(me.getName() + " flung its " + me.getHeldItem(b).getName() + "!");
+	Messages.addMessage(me.getName() + " flung its " + me.getHeldItem(b).getName() + "!");
 	super.apply(me, o, b);
 	me.consumeItem(b);
 	###
@@ -5356,7 +5356,7 @@ Gastro Acid:
 	{
 		case MULTITYPE:
 		case STANCE_CHANGE:
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		default:
 			super.apply(me, o, b);
@@ -5425,12 +5425,12 @@ Teleport:
 	SelfTarget: True
 	ApplyEffects: 
 	if (!b.isWildBattle()) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
-	b.addMessage(user.getName() + " teleported out of battle!");
-	b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
+	Messages.addMessage(user.getName() + " teleported out of battle!");
+	Messages.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 	###
 *
 Role Play:
@@ -5456,7 +5456,7 @@ Role Play:
 		case STANCE_CHANGE:
 		case IMPOSTER:
 		case ILLUSION:
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		default:
 			super.apply(me, o, b);
@@ -5478,7 +5478,7 @@ Knock Off:
 		return;
 	}
 	
-	b.addMessage(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
+	Messages.addMessage(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 	super.applyEffects(b, user, victim);
 	###
 	GetItem: 
@@ -5562,13 +5562,13 @@ Recycle:
 	ApplyEffects: 
 	PokemonEffect consumed = victim.getEffect(EffectNamesies.CONSUMED_ITEM);
 	if (consumed == null || victim.isHoldingItem(b)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
 	Item restored = ((ItemHolder)consumed).getItem();
 	victim.giveItem((HoldItem)restored);
-	b.addMessage(victim.getName() + "'s " + restored.getName() + " was restored!");
+	Messages.addMessage(victim.getName() + "'s " + restored.getName() + " was restored!");
 	###
 *
 Parting Shot:
@@ -5581,7 +5581,7 @@ Parting Shot:
 	SelfSwitching: True
 	MoveType: Sound_Based
 	ApplyEffects:
-	b.addMessage(user.getName() + " called " + victim.getName() + " a chump!!");
+	Messages.addMessage(user.getName() + " called " + victim.getName() + " a chump!!");
 	super.applyEffects(b, user, victim);
 	###
 *
@@ -5602,18 +5602,18 @@ Baton Pass:
 	ApplyEffects: 
 	Team t = b.getTrainer(user.user());
 	if (t instanceof WildPokemon) {
-		b.addMessage(user.getName() + " left the battle!");
-		b.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
+		Messages.addMessage(user.getName() + " left the battle!");
+		Messages.addMessage(" ", MessageUpdate.Update.EXIT_BATTLE);
 		return;
 	}
 	
 	Trainer trainer = (Trainer)t;
 	if (!trainer.hasRemainingPokemon()) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
-	b.addMessage(user.getName() + " went back to " + trainer.getName() + "!");
+	Messages.addMessage(user.getName() + " went back to " + trainer.getName() + "!");
 	trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
 	
 	ActivePokemon next = trainer.front();
@@ -5642,7 +5642,7 @@ Perish Song:
 	Cat: Status
 	Effect: Pokemon PerishSong
 	ApplyEffects: 
-	b.addMessage("All Pokemon hearing this song will faint in three turns!");
+	Messages.addMessage("All Pokemon hearing this song will faint in three turns!");
 	
 	if (!victim.hasEffect(EffectNamesies.PERISH_SONG)) {
 		super.applyEffects(b, user, victim);
@@ -5714,7 +5714,7 @@ Entrainment:
 		case ILLUSION:
 		case TRACE:
 		case IMPOSTER:
-			b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 			return;
 		default:
 			super.apply(me, o, b);
@@ -5775,7 +5775,7 @@ Skill Swap:
 	###
 	ApplyEffects:
 	if (!canSkillSwap(user) || !canSkillSwap(victim)) {
-		b.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		return;
 	}
 	
@@ -6051,7 +6051,7 @@ Topsy-Turvy:
 		victim.getAttributes().setStage(i, -victim.getStage(i));
 	}
 	
-	b.addMessage(victim.getName() + "'s stat changes were all reversed!");
+	Messages.addMessage(victim.getName() + "'s stat changes were all reversed!");
 	###
 *
 Play Nice:

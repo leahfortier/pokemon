@@ -16,8 +16,8 @@ import trainer.CharacterData;
 import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
-import battle.MessageUpdate;
-import battle.MessageUpdate.Update;
+import message.MessageUpdate;
+import message.MessageUpdate.Update;
 import util.StringUtils;
 
 public class StartView extends View {

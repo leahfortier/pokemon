@@ -1,8 +1,8 @@
 package gui.view;
 
 import battle.Battle;
-import battle.MessageUpdate;
-import battle.MessageUpdate.Update;
+import message.MessageUpdate;
+import message.MessageUpdate.Update;
 import battle.Move;
 import battle.effect.status.StatusCondition;
 import gui.Button;
@@ -17,6 +17,7 @@ import main.Game.ViewMode;
 import main.Global;
 import main.Type;
 import map.AreaData.TerrainType;
+import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
@@ -968,7 +969,7 @@ public class BattleView extends View {
 				g.translate(-214, -517);
 			}
 			
-			// Message text
+			// Messages text
 			String msgLine = view.state == VisualState.INVALID_BAG && view.message != null ? view.message : "Choose an item!";
 			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 30);
@@ -1118,7 +1119,7 @@ public class BattleView extends View {
 			g.fillPolygon(pkmnSecondaryColorx, pkmnSecondaryColory, 4);
 			g.translate(-36, -224);
 			
-			// Draw Message Box
+			// Draw Messages Box
 			g.drawImage(tiles.getTile(0x20), 415, 440, null);
 			
 			// Draw Box Outlines for Pokemon Info
@@ -1271,7 +1272,7 @@ public class BattleView extends View {
 				}
 			}
 			
-			// Draw Message
+			// Draw Messages
 			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 30);
 			String msgLine = view.state == VisualState.INVALID_POKEMON && view.message != null ? view.message : "Select a Pok\u00e9mon!";
@@ -1399,9 +1400,12 @@ public class BattleView extends View {
 			
 			if (view.noButton.checkConsumePress()) {
 				// This is all done really silly, so we need to do this
-				ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
+				ArrayDeque<MessageUpdate> messages = Messages.getMessages();
 				MessageUpdate message = messages.poll();
-				for (int i = 0; i < Move.MAX_MOVES + 1; i++) messages.poll();
+				for (int i = 0; i < Move.MAX_MOVES + 1; i++) {
+					messages.poll();
+				}
+
 				messages.push(message);
 				
 				view.setVisualState(VisualState.MESSAGE);
@@ -1487,7 +1491,7 @@ public class BattleView extends View {
 					view.learnedPokemon.addMove(view.currentBattle, view.learnedMove, i);
 					
 					// This is all done really silly, so we need to do this
-					ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
+					ArrayDeque<MessageUpdate> messages = Messages.getMessages();
 					MessageUpdate message = messages.poll();
 					for (int j = 0; j < Move.MAX_MOVES; j++) {
 						if (j == i) {
@@ -1507,7 +1511,7 @@ public class BattleView extends View {
 			
 			if (view.newMoveButton.checkConsumePress()) {
 				// This is all done really silly, so we need to do this
-				ArrayDeque<MessageUpdate> messages = view.currentBattle.getMessages();
+				ArrayDeque<MessageUpdate> messages = Messages.getMessages();
 				MessageUpdate message = messages.poll();
 				for (int i = 0; i < Move.MAX_MOVES + 1; i++) {
 					messages.poll();
@@ -1542,7 +1546,7 @@ public class BattleView extends View {
 			view.logLeftButton.draw(g);
 			view.logRightButton.draw(g);
 
-			// Draw Message Box
+			// Draw Messages Box
 			g.drawImage(tiles.getTile(0x20), 415, 440, null);
 					
 			g.setColor(Color.BLACK);
@@ -1622,7 +1626,7 @@ public class BattleView extends View {
 			setVisualState(VisualState.MENU);
 		}
 		
-		Queue<MessageUpdate> messages = currentBattle.getMessages();
+		Queue<MessageUpdate> messages = Messages.getMessages();
 		if (!messages.isEmpty()) {
 			if (updated && !messages.peek().getMessage().isEmpty()) {
 				return;

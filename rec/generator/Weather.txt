@@ -25,7 +25,7 @@ Raining:
 	WeatherElement: Water
 	Int: Hidden-EndTurnEffect
 	ApplyEndTurn:
-	b.addMessage("The rain continues to pour.");
+	Messages.addMessage("The rain continues to pour.");
 	###
 	CastMessage: "It started to rain!"
 	SubsideMessage: "The rain stopped."
@@ -35,7 +35,7 @@ Sunny:
 	WeatherElement: Fire
 	Int: Hidden-EndTurnEffect
 	ApplyEndTurn:
-	b.addMessage("The sunlight is strong.");
+	Messages.addMessage("The sunlight is strong.");
 	###
 	CastMessage: "The sunlight turned harsh!"
 	SubsideMessage: "The sunlight faded."

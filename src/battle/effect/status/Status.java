@@ -9,12 +9,12 @@ import item.Item;
 import item.berry.GainableEffectBerry;
 import item.berry.StatusBerry;
 import main.Global;
+import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;
-import java.util.List;
 
 public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,7 +34,7 @@ public abstract class Status implements Serializable {
 	protected void postCreateEffect(ActivePokemon victim) {}
 	
 	public static void removeStatus(Battle b, ActivePokemon victim, CastSource source) {
-		b.addMessage(getRemoveStatus(b, victim, source), victim);
+		Messages.addMessage(getRemoveStatus(b, victim, source), b, victim);
 	}
 	
 	public static String getRemoveStatus(Battle b, ActivePokemon victim, CastSource source) {
@@ -109,7 +109,7 @@ public abstract class Status implements Serializable {
 		Status s = getStatus(status, victim);
 		if (s.applies(b, caster, victim)) {
 			victim.setStatus(s);
-			b.addMessage(castMessage, victim);
+			Messages.addMessage(castMessage, b, victim);
 
 			// TODO: There should be a StatusReceivedEffect interface or something
 			synchronizeCheck(b, caster, victim, status);
@@ -142,7 +142,7 @@ public abstract class Status implements Serializable {
 			}
 			
 			caster.setStatus(s);
-			b.addMessage(s.getAbilityCastMessage(victim, caster), caster);
+			Messages.addMessage(s.getAbilityCastMessage(victim, caster), b, caster);
 			
 			berryCheck(b, caster, status);
 		}

@@ -1,5 +1,7 @@
 package item;
 
+import battle.Battle;
+import battle.Move;
 import item.hold.HoldItem;
 import item.use.BallItem;
 import item.use.BattleUseItem;
@@ -7,6 +9,11 @@ import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
+import main.Global;
+import message.Messages;
+import pokemon.ActivePokemon;
+import trainer.CharacterData;
+import trainer.Trainer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,13 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import main.Global;
-import pokemon.ActivePokemon;
-import trainer.CharacterData;
-import trainer.Trainer;
-import battle.Battle;
-import battle.Move;
 
 public class Bag implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -201,11 +201,11 @@ public class Bag implements Serializable {
 			if (item instanceof UseItem) {
 				boolean front = battle.getPlayer().front() == activePokemon;
 				
-				battle.addMessage(((Trainer)battle.getTrainer(activePokemon.user())).getName() + " used " + item.name + "!");
-				battle.addMessage(((UseItem)item).getSuccessMessage(activePokemon));
+				Messages.addMessage(((Trainer)battle.getTrainer(activePokemon.user())).getName() + " used " + item.name + "!");
+				Messages.addMessage(((UseItem)item).getSuccessMessage(activePokemon));
 				
 				if (front) {
-					battle.addMessage("", activePokemon);
+					Messages.addMessage("", battle, activePokemon);
 				}
 			}
 			
@@ -219,7 +219,7 @@ public class Bag implements Serializable {
 			removeItem(item);
 		}
 		else if (item instanceof UseItem) {
-			battle.addMessage("It won't have any effect.");
+			Messages.addMessage("It won't have any effect.");
 		}
 
 		return res;

@@ -1,6 +1,5 @@
 package battle;
 
-import battle.MessageUpdate.Update;
 import battle.effect.DefiniteEscape;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
@@ -24,11 +23,12 @@ import battle.effect.generic.Weather;
 import main.Global;
 import main.Type;
 import map.AreaData.TerrainType;
+import message.MessageUpdate.Update;
+import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
 import pokemon.Stat;
 import trainer.CharacterData;
 import trainer.Opponent;
@@ -37,9 +37,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
-import util.StringUtils;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,12 +51,13 @@ public class Battle {
 	private boolean firstAttacking;
 	private boolean reduce;
 	private int escapeAttempts;
-	private ArrayDeque<MessageUpdate> messages;
 	private String winGlobal;
 	private TerrainType baseTerrain;
 	private TerrainType currentTerrain;
 	
 	public Battle(CharacterData p, Opponent o) {
+		Messages.clear();
+
 		player = p;
 		opponent = o;
 		effects = new ArrayList<>();
@@ -67,13 +66,12 @@ public class Battle {
 		turn = 0;
 		escapeAttempts = 0;
 		firstAttacking = false;
-		messages = new ArrayDeque<>();
 		weather = Weather.getEffect(EffectNamesies.CLEAR_SKIES);
 		player.enterBattle();
 
 		if (opponent instanceof Trainer) {
 			((Trainer) opponent).enterBattle();
-			addMessage(((Trainer)opponent).getName() + " wants to fight!");
+			Messages.addMessage(((Trainer)opponent).getName() + " wants to fight!");
 			((Trainer)opponent).setAction(Action.FIGHT);
 			enterBattle(opponent.front());
 		}
@@ -101,10 +99,6 @@ public class Battle {
 		return winGlobal;
 	}
 
-	public ArrayDeque<MessageUpdate> getMessages() {
-		return messages;
-	}
-
 	public Weather getWeather() {
 		return weather;
 	}
@@ -127,55 +121,6 @@ public class Battle {
 
 	public void resetTerrain() {
 		this.currentTerrain = baseTerrain;
-	}
-
-	// Just a plain old regular message
-	public void addMessage(String message) {
-		messages.add(new MessageUpdate(message));
-	}
-
-	public void addMessage(String message, ActivePokemon p) {
-		messages.add(new MessageUpdate(message));
-
-		messages.add(new MessageUpdate(p.getHP(), p.user()));
-		messages.add(new MessageUpdate(p.getHP(), p.getMaxHP(), p.user()));
-		messages.add(new MessageUpdate(p.getStatus().getType(), p.user()));
-		messages.add(new MessageUpdate(p.getDisplayType(this), p.user()));
-		messages.add(new MessageUpdate(p.getName(), p.user()));
-		messages.add(new MessageUpdate(p.getGender(), p.user()));
-	}
-
-	// TODO: What is the point of switching?
-	public void addMessage(String message, ActivePokemon p, boolean switching) {
-		messages.add(new MessageUpdate(message, p, this));
-	}
-
-	public void addMessage(String message, ActivePokemon gainer, int[] statGains, int[] stats) {
-		this.addMessage(StringUtils.empty(), gainer);
-		messages.add(new MessageUpdate(statGains, stats));
-	}
-
-	// Image update
-	public void addMessage(String message, PokemonInfo pokemon, boolean shiny, boolean animation, boolean target) {
-		messages.add(new MessageUpdate(message, pokemon, shiny, animation, target));
-	}
-
-	public void addMessage(String message, Update update) {
-		messages.add(new MessageUpdate(message, update));
-	}
-
-	public void addMessage(String message, int duration) {
-		messages.add(new MessageUpdate(message, duration));
-	}
-
-	public void addMessage(String message, ActivePokemon gainer, float expRatio, boolean levelUp) {
-		this.addMessage(message, gainer);
-		messages.add(new MessageUpdate(gainer.getLevel(), expRatio, levelUp));
-	}
-
-	// Learning a move
-	public void addMessage(String message, ActivePokemon p, Move move) {
-		messages.add(new MessageUpdate(message, p, move));
 	}
 
 	public boolean hasEffect(EffectNamesies effect) {
@@ -309,23 +254,23 @@ public class Battle {
 
 		// Dead Front Pokemon, but you still have others to spare -- force a switch
 		if (!player.blackout()) {
-			addMessage("What Pokemon would you like to switch to?", Update.FORCE_SWITCH);
+			Messages.addMessage("What Pokemon would you like to switch to?", Update.FORCE_SWITCH);
 			return;
 		}
 
 		// Blackout -- you're fucked
-		addMessage(player.getName() + " is out of usable Pok\u00e9mon! " + player.getName() + " blacked out!");
+		Messages.addMessage(player.getName() + " is out of usable Pok\u00e9mon! " + player.getName() + " blacked out!");
 
 		// Sucks to suck
 		if (opponent instanceof Trainer) {
 			Trainer opp = (Trainer)opponent;
 			int cashMoney = player.sucksToSuck(opp.getDatCashMoney());
-			addMessage(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!");
+			Messages.addMessage(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!");
 		}
 
 		player.healAll();
 		player.teleportToPokeCenter();
-		addMessage(" ", Update.EXIT_BATTLE);
+		Messages.addMessage(" ", Update.EXIT_BATTLE);
 	}
 
 	private void deadOpponent() {
@@ -344,7 +289,7 @@ public class Battle {
 			player.winBattle(this, opponent);
 
 			// WE'RE DONE HERE
-			addMessage(" ", Update.EXIT_BATTLE);
+			Messages.addMessage(" ", Update.EXIT_BATTLE);
 			return;
 		}
 
@@ -390,7 +335,7 @@ public class Battle {
 			enterer.resetAttributes();
 		}
 
-		addMessage(enterMessage, enterer, true);
+		Messages.addMessage(enterMessage, this, enterer, true);
 
 		enterer.getAttributes().setUsed(true);
 		EntryEffect.invokeEntryEffect(this, enterer);
@@ -402,7 +347,7 @@ public class Battle {
 		escapeAttempts++;
 
 		if (opponent instanceof Trainer) {
-			addMessage("There's no running from a trainer battle!");
+			Messages.addMessage("There's no running from a trainer battle!");
 			return false;
 		}
 
@@ -420,12 +365,12 @@ public class Battle {
 		if (Global.chanceTest(val, 256) ||
 				plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
 				plyr.getHeldItem(this) instanceof DefiniteEscape) {
-			addMessage("Got away safely!");
-			addMessage(" ", Update.EXIT_BATTLE);
+			Messages.addMessage("Got away safely!");
+			Messages.addMessage(" ", Update.EXIT_BATTLE);
 			return true;
 		}
 
-		addMessage("Can't escape!");
+		Messages.addMessage("Can't escape!");
 		player.performAction(this, Action.RUN);
 		return false;
 	}
@@ -454,7 +399,7 @@ public class Battle {
 
 	private void decrementWeather() {
 		if (!weather.isActive()) {
-			addMessage(weather.getSubsideMessage(player.front()));
+			Messages.addMessage(weather.getSubsideMessage(player.front()));
 			weather = Weather.getEffect(EffectNamesies.CLEAR_SKIES);
 			return;
 		}
@@ -494,7 +439,7 @@ public class Battle {
 				success = true;
 			}
 			else {
-				addMessage(me.getName() + "'s attack missed!");
+				Messages.addMessage(me.getName() + "'s attack missed!");
 				CrashDamageMove.invokeCrashDamageMove(this, me);
 			}			
 		}
@@ -503,7 +448,7 @@ public class Battle {
 	}
 	
 	public void printAttacking(ActivePokemon p) {
-		addMessage((p.user() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
+		Messages.addMessage((p.user() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
 		reduce = true;
 	}
 	
@@ -622,9 +567,9 @@ public class Battle {
 		
 		// Crit yo pants
 		if (crit) {
-			addMessage("It's a critical hit!!");
+			Messages.addMessage("It's a critical hit!!");
 			if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
-				addMessage(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!");
+				Messages.addMessage(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!");
 				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 			}
 			
@@ -726,11 +671,11 @@ public class Battle {
 		boolean pQuick = plyr.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
 		boolean oQuick = opp.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
 		if (pQuick && !oQuick && Global.chanceTest(20)) {
-			addMessage(plyr.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
+			Messages.addMessage(plyr.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
 			return true;
 		}
 		if (oQuick && !pQuick && Global.chanceTest(20)) {
-			addMessage(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
+			Messages.addMessage(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
 			return false;
 		}		
 		

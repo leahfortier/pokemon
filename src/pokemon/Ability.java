@@ -61,6 +61,7 @@ import item.hold.HoldItem;
 import item.hold.PlateItem;
 import main.Global;
 import main.Type;
+import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.AttackNamesies;
 import namesies.EffectNamesies;
@@ -468,7 +469,7 @@ public abstract class Ability implements Serializable {
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
-				b.addMessage(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
+				Messages.addMessage(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
 		}
@@ -504,7 +505,7 @@ public abstract class Ability implements Serializable {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (b.getWeather().namesies() == EffectNamesies.RAINING) {
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
+				Messages.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", b, victim);
 			}
 		}
 	}
@@ -730,7 +731,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!");
+			Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!");
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 	}
@@ -828,7 +829,7 @@ public abstract class Ability implements Serializable {
 				PokemonEffect e = PokemonEffect.getEffect(EffectNamesies.INFATUATED);
 				if (e.applies(b, victim, user, CastSource.ABILITY)) {
 					user.addEffect(e.newInstance());
-					b.addMessage(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
+					Messages.addMessage(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 				}
 			}
 		}
@@ -873,7 +874,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!");
+			Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!");
 			activated = true;
 		}
 
@@ -895,7 +896,7 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			b.addEffect(Weather.getEffect(EffectNamesies.SUNNY).newInstance());
-			b.addMessage(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
+			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
 		}
 	}
 
@@ -912,7 +913,7 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			ActivePokemon other = b.getOtherPokemon(enterer.user());
-			if (other.isHoldingItem(b)) b.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
+			if (other.isHoldingItem(b)) Messages.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
 		}
 	}
 
@@ -956,7 +957,7 @@ public abstract class Ability implements Serializable {
 				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
 				if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
 					flinch.cast(b, user, victim, CastSource.ABILITY, false);
-					b.addMessage(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
+					Messages.addMessage(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
 				}
 			}
 		}
@@ -1004,12 +1005,12 @@ public abstract class Ability implements Serializable {
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
-				b.addMessage(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
+				Messages.addMessage(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
 			else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
 				victim.healHealthFraction(1/8.0);
-				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
+				Messages.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", b, victim);
 			}
 		}
 
@@ -1022,7 +1023,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!");
+			Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!");
 			
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
@@ -1030,7 +1031,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored instead!", victim);
+			Messages.addMessage(victim.getName() + "'s HP was restored instead!", b, victim);
 		}
 	}
 
@@ -1095,7 +1096,7 @@ public abstract class Ability implements Serializable {
 		private boolean checkeroo(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
 			if (attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION) {
 				b.printAttacking(attacking);
-				b.addMessage(abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!");
+				Messages.addMessage(abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!");
 				return false;
 			}
 			
@@ -1133,7 +1134,7 @@ public abstract class Ability implements Serializable {
 		public void enter(Battle b, ActivePokemon enterer) {
 			// TODO: I think this isn't the intended effect of this ability
 			b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
-			b.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
+			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		}
 	}
 
@@ -1465,7 +1466,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void fall(Battle b, ActivePokemon fallen) {
-			b.addMessage(fallen.getName() + " is no longer levitating!");
+			Messages.addMessage(fallen.getName() + " is no longer levitating!");
 			
 			// TODO: Fix this it's broken
 			// Effect.removeEffect(fallen.getEffects(), this.namesies());
@@ -1514,7 +1515,7 @@ public abstract class Ability implements Serializable {
 				warn = Global.getRandomValue(besties);
 			}
 			
-			b.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
+			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
 		}
 	}
 
@@ -1552,7 +1553,7 @@ public abstract class Ability implements Serializable {
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			if (p.getAttack().isMoveType(MoveType.SOUND_BASED)) {
 				b.printAttacking(p);
-				b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
+				Messages.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
 				return false;
 			}
 			
@@ -1593,7 +1594,7 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			if (enterer.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
-				b.addMessage(enterer.getName() + " does not break the mold!!!!!!!");
+				Messages.addMessage(enterer.getName() + " does not break the mold!!!!!!!");
 			}
 		}
 	}
@@ -1827,7 +1828,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!");
+			Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!");
 			
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
@@ -1835,7 +1836,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored instead!", victim);
+			Messages.addMessage(victim.getName() + "'s HP was restored instead!", b, victim);
 		}
 	}
 
@@ -1855,7 +1856,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!");
+			Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!");
 			
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
@@ -1863,7 +1864,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			victim.healHealthFraction(1/4.0);
-			b.addMessage(victim.getName() + "'s HP was restored instead!", victim);
+			Messages.addMessage(victim.getName() + "'s HP was restored instead!", b, victim);
 		}
 	}
 
@@ -1957,7 +1958,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addMessage(enterer.getName() + " is exerting pressure!");
+			Messages.addMessage(enterer.getName() + " is exerting pressure!");
 		}
 	}
 
@@ -2130,7 +2131,7 @@ public abstract class Ability implements Serializable {
 		public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
 			Attack attack = user.getAttack();
 			if (!attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
-				b.addMessage(opponent.getName() + "'s " + this.getName() + " reflected " + user.getName() + "'s move!");
+				Messages.addMessage(opponent.getName() + "'s " + this.getName() + " reflected " + user.getName() + "'s move!");
 				return true;
 			}
 			
@@ -2199,7 +2200,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			if (user.getAttack().getCategory() == MoveCategory.STATUS) {
-				b.addMessage(getPreventMessage(victim));
+				Messages.addMessage(getPreventMessage(victim));
 			}
 			
 			return false;
@@ -2263,7 +2264,7 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			b.addEffect(Weather.getEffect(EffectNamesies.SANDSTORM).newInstance());
-			b.addMessage(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
+			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
 		}
 	}
 
@@ -2322,7 +2323,7 @@ public abstract class Ability implements Serializable {
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			if (lazyface) {
-				b.addMessage(p.getName() + " is loafing around!");
+				Messages.addMessage(p.getName() + " is loafing around!");
 				return false;
 			}
 			
@@ -2359,7 +2360,7 @@ public abstract class Ability implements Serializable {
 			
 			// Immunity Solunity
 			b.printAttacking(p);
-			b.addMessage(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!");
+			Messages.addMessage(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!");
 			return false;
 		}
 	}
@@ -2428,7 +2429,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
+			Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 		}
 	}
@@ -2510,7 +2511,7 @@ public abstract class Ability implements Serializable {
 				Attack attack = m.getAttack();
 				if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
 					// TODO: Shouldn't this be for a random move?
-					b.addMessage(enterer.getName() + "'s " + this.getName() + " made it shudder!");
+					Messages.addMessage(enterer.getName() + "'s " + this.getName() + " made it shudder!");
 					break;
 				}
 			}
@@ -2537,7 +2538,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " type moves!");
+			Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " type moves!");
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 	}
@@ -2583,7 +2584,7 @@ public abstract class Ability implements Serializable {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (b.getWeather().namesies() == EffectNamesies.HAILING) {
 				victim.healHealthFraction(1/16.0);
-				b.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", victim);
+				Messages.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", b, victim);
 			}
 		}
 
@@ -2621,7 +2622,7 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			b.addEffect(Weather.getEffect(EffectNamesies.RAINING).newInstance());
-			b.addMessage(enterer.getName() + "'s " + this.getName() + " started a downpour!");
+			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " started a downpour!");
 		}
 	}
 
@@ -2639,7 +2640,7 @@ public abstract class Ability implements Serializable {
 		public void enter(Battle b, ActivePokemon enterer) {
 			// TODO: I think this isn't the intended effect of this ability
 			b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
-			b.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
+			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		}
 	}
 
@@ -2713,7 +2714,7 @@ public abstract class Ability implements Serializable {
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Pretty sure this doesn't work anymore
 			if (victim.isFainted(b)) {
-				b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
+				Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 				user.reduceHealthFraction(b, 1/4.0);
 			}
 		}
@@ -2769,7 +2770,7 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			b.addEffect(Weather.getEffect(EffectNamesies.HAILING).newInstance());
-			b.addMessage(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
+			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
 		}
 	}
 
@@ -2793,7 +2794,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!");
+			Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!");
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 	}
@@ -2833,7 +2834,7 @@ public abstract class Ability implements Serializable {
 				PokemonEffect disable = PokemonEffect.getEffect(EffectNamesies.DISABLE);
 				if (disable.applies(b, victim, user, CastSource.ABILITY)) {
 					disable.cast(b, victim, user, CastSource.ABILITY, false);
-					b.addMessage(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
+					Messages.addMessage(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
 				}
 			}
 		}
@@ -2888,7 +2889,7 @@ public abstract class Ability implements Serializable {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			if (other.hasStatus(StatusCondition.ASLEEP)) {
-				b.addMessage(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
+				Messages.addMessage(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 				other.reduceHealthFraction(b, 1/8.0);
 			}
 		}
@@ -3099,10 +3100,10 @@ public abstract class Ability implements Serializable {
 			}
 			
 			activated = false;
-			b.addMessage(victim.getName() + "'s Illusion was broken!");
+			Messages.addMessage(victim.getName() + "'s Illusion was broken!");
 			
-			b.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
-			b.addMessage("", victim);
+			Messages.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
+			Messages.addMessage("", b, victim);
 		}
 
 		Illusion() {
@@ -3130,8 +3131,8 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// Display the Illusion changes
-			b.addMessage("", illusionSpecies, illusionShiny, false, enterer.user());
-			b.addMessage("", enterer);
+			Messages.addMessage("", illusionSpecies, illusionShiny, false, enterer.user());
+			Messages.addMessage("", b, enterer);
 		}
 
 		public void switchOut(ActivePokemon switchee) {
@@ -3228,7 +3229,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			b.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.GRASS.getName() + " type moves!");
+			Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.GRASS.getName() + " type moves!");
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 	}
@@ -3245,7 +3246,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
+			Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 		}
 	}
@@ -3262,7 +3263,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addMessage(enterer.getName() + " breaks the mold!");
+			Messages.addMessage(enterer.getName() + " breaks the mold!");
 		}
 	}
 
@@ -3278,7 +3279,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addMessage(enterer.getName() + " is radiating a bursting aura!");
+			Messages.addMessage(enterer.getName() + " is radiating a bursting aura!");
 		}
 	}
 
@@ -3294,7 +3295,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addMessage(enterer.getName() + " is radiating a blazing aura!");
+			Messages.addMessage(enterer.getName() + " is radiating a blazing aura!");
 		}
 	}
 
@@ -3380,7 +3381,7 @@ public abstract class Ability implements Serializable {
 			
 			// Stealers gon' steal
 			Item stolen = victim.getHeldItem(b);
-			b.addMessage(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!");
+			Messages.addMessage(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!");
 			
 			if (b.isWildBattle()) {
 				victim.removeItem();
@@ -3425,7 +3426,7 @@ public abstract class Ability implements Serializable {
 			Item restored = ((ItemHolder)consumed).getItem();
 			if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || Global.chanceTest(50))) {
 				victim.giveItem((HoldItem)restored);
-				b.addMessage(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
+				Messages.addMessage(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
 			}
 		}
 	}
@@ -3461,7 +3462,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addMessage(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.user()).getName() + " too nervous to eat berries!");
+			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.user()).getName() + " too nervous to eat berries!");
 		}
 	}
 
@@ -3547,7 +3548,7 @@ public abstract class Ability implements Serializable {
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			if (p.getAttack().isMoveType(MoveType.BOMB_BALL)) {
 				b.printAttacking(p);
-				b.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
+				Messages.addMessage(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!");
 				return false;
 			}
 			
@@ -3637,7 +3638,7 @@ public abstract class Ability implements Serializable {
 			
 			// Stealers gon' steal
 			Item stolen = victim.getHeldItem(b);
-			b.addMessage(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!");
+			Messages.addMessage(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!");
 			
 			if (b.isWildBattle()) {
 				victim.removeItem();
@@ -3864,18 +3865,18 @@ public abstract class Ability implements Serializable {
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			if (shieldForm && p.getAttack().getCategory() != MoveCategory.STATUS) {
 				shieldForm = false;
-				b.addMessage(p.getName() + " changed into Blade Forme!");
+				Messages.addMessage(p.getName() + " changed into Blade Forme!");
 			}
 			else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
 				shieldForm = true;
-				b.addMessage(p.getName() + " changed into Shield Forme!");
+				Messages.addMessage(p.getName() + " changed into Shield Forme!");
 			}
 			
 			return true;
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addMessage(enterer.getName() + " is in Shield Forme!");
+			Messages.addMessage(enterer.getName() + " is in Shield Forme!");
 			shieldForm = true;
 		}
 

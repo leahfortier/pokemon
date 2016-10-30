@@ -7,6 +7,7 @@ import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import main.Global;
 import main.Type;
+import message.Messages;
 import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 
@@ -30,7 +31,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
             return true;
         }
 
-        b.addMessage(p.getName() + " is frozen solid!");
+        Messages.addMessage(p.getName() + " is frozen solid!");
         return false;
     }
 

@@ -1,18 +1,18 @@
 package battle;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import main.Global;
 import main.Type;
+import message.Messages;
 import namesies.AttackNamesies;
 import pokemon.ActivePokemon;
-import battle.effect.attack.MultiTurnMove;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Move implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -194,7 +194,7 @@ public class Move implements Serializable {
 		// Invalid if PP is zero
 		if (m.getPP() == 0) {
 			if (selecting) {
-				b.addMessage(p.getName() + " is out of PP for " + m.attack.getName() + "!");
+				Messages.addMessage(p.getName() + " is out of PP for " + m.attack.getName() + "!");
 			}
 			
 			return false;
@@ -204,7 +204,7 @@ public class Move implements Serializable {
 		AttackSelectionEffect unusable = AttackSelectionEffect.getUnusableEffect(b, p, m);
 		if (unusable != null) {
 			if (selecting) {
-				b.addMessage(unusable.getUnusableMessage(p));
+				Messages.addMessage(unusable.getUnusableMessage(p));
 			}
 			
 			// THAT'S WHAT

@@ -90,10 +90,10 @@ Air Balloon:
 	Fling: 10
 	FallMessage: fallen.getName() + " is no longer floating with its " + this.name + "!"
 	Enter:
-		b.addMessage(enterer.getName() + " floats with its " + this.name + "!");
+		Messages.addMessage(enterer.getName() + " floats with its " + this.name + "!");
 		###
 	OnTakeDamage:
-		b.addMessage(victim.getName() + "'s " + this.name + " popped!");
+		Messages.addMessage(victim.getName() + "'s " + this.name + " popped!");
 		victim.consumeItem(b);
 		###
 *
@@ -135,10 +135,10 @@ Black Sludge:
 			}
 			
 			victim.healHealthFraction(1/16.0);
-			b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
+			Messages.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", b, victim);
 		}
 		else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-			b.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
+			Messages.addMessage(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
 		}
 		###
@@ -235,7 +235,7 @@ Eject Button:
 			return;
 		}
 
-		b.addMessage(victim.getName() + "'s " + this.name + " sent it back to " + trainer.getName() + "!");
+		Messages.addMessage(victim.getName() + "'s " + this.name + " sent it back to " + trainer.getName() + "!");
 		victim.consumeItem(b);
 		trainer.switchToRandom();
 		trainer.setAction(Action.SWITCH);
@@ -375,7 +375,7 @@ Life Orb:
 			return;
 		}
 		
-		b.addMessage(user.getName() + " was hurt by its " + this.name + "!");
+		Messages.addMessage(user.getName() + " was hurt by its " + this.name + "!");
 		user.reduceHealthFraction(b, .1);
 		###
 *
@@ -466,7 +466,7 @@ Mental Herb:
 			if (victim.hasEffect(s)) {
 				used = true;
 				victim.getAttributes().removeEffect(s);
-				b.addMessage(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
+				Messages.addMessage(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
 			}
 		}
 		
@@ -477,7 +477,7 @@ Mental Herb:
 	FlingEffect:
 		if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
 			pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
-			b.addMessage(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
+			Messages.addMessage(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
 		}
 		###
 *
@@ -574,7 +574,7 @@ Red Card:
 			return;
 		}
 
-		b.addMessage(victim.getName() + "'s " + this.name + " sent " + user.getName() + " back to " + trainer.getName() + "!");
+		Messages.addMessage(victim.getName() + "'s " + this.name + " sent " + user.getName() + " back to " + trainer.getName() + "!");
 		victim.consumeItem(b);
 		trainer.switchToRandom();
 		trainer.setAction(Action.SWITCH);
@@ -597,7 +597,7 @@ Rocky Helmet:
 	Price: 200
 	Fling: 60
 	Contact:
-		b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+		Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 		user.reduceHealthFraction(b, 1/8.0);
 		###
 *
@@ -639,7 +639,7 @@ Shell Bell:
 		
 		user.heal((int)Math.ceil(damage/8.0));
 		// TODO: This looks really bad when paired with Explosion
-		b.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", user);
+		Messages.addMessage(user.getName() + " restored some HP due to its " + this.name + "!", b, user);
 		###
 *
 Smoke Ball:
@@ -690,12 +690,12 @@ Sticky Barb:
 			return;
 		}
 		
-		b.addMessage(victim.getName() + " was hurt by its " + this.name + "!");
+		Messages.addMessage(victim.getName() + " was hurt by its " + this.name + "!");
 		victim.reduceHealthFraction(b, 1/8.0);
 		###
 	Contact:
 		if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-			b.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+			Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 		}
 	            
@@ -703,7 +703,7 @@ Sticky Barb:
 			return;
 		}
 		
-		b.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
+		Messages.addMessage(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!");
 
 		if (b.isWildBattle()) {
 			victim.removeItem();
@@ -763,7 +763,7 @@ White Herb:
 		}
 	}
 	
-	b.addMessage("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
+	Messages.addMessage("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
 	###
 *
 Wide Lens:
@@ -1077,7 +1077,7 @@ Leftovers:
 		}
 		
 		victim.healHealthFraction(1/16.0);
-		b.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", victim);
+		Messages.addMessage(victim.getName() + "'s HP was restored by its " + this.name + "!", b, victim);
 		###
 	Price: 200
 	Fling: 10
@@ -2012,7 +2012,7 @@ Leppa Berry:
 		for (Move m : victim.getMoves(b)) {
 			if (m.getPP() == 0) {
 				use(victim, m);
-				b.addMessage(getHoldSuccessMessage(b, victim));
+				Messages.addMessage(getHoldSuccessMessage(b, victim));
 				victim.consumeItem(b);
 				break;
 			}
@@ -2280,9 +2280,9 @@ Enigma Berry:
 	Int: Berry, TakeDamageEffect
 	OnTakeDamage:
 		if (!victim.fullHealth() && Type.getAdvantage(user, victim, b) > 1) {
-			b.addMessage(victim.getName() + "'s " + this.name + " restored its health!");
+			Messages.addMessage(victim.getName() + "'s " + this.name + " restored its health!");
 			victim.healHealthFraction(.25);
-			b.addMessage("", victim);
+			Messages.addMessage("", b, victim);
 			victim.consumeItem(b);
 		}
 		###

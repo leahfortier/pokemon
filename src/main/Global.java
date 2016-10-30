@@ -46,6 +46,10 @@ public class Global {
 
 	// Returns a random int with exclusive upper bound from range [0, upperBound)
 	public static int getRandomInt(final int upperBound) {
+		if (upperBound == 0) {
+			return 0;
+		}
+
 		return RANDOM.nextInt(upperBound);
 	}
 

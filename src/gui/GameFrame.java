@@ -27,8 +27,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 
 public class GameFrame {
-	public static final boolean GENERATE_STUFF = true;
-//	public static final boolean GENERATE_STUFF = false;
+//	public static final boolean GENERATE_STUFF = true;
+	public static final boolean GENERATE_STUFF = false;
 	private static final boolean DEV_MODE = true;
 
 	private static JFrame frame;
