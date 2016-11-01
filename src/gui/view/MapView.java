@@ -10,20 +10,24 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import map.AreaData;
 import map.AreaData.WeatherState;
-import map.DialogueSequence;
+import map.Direction;
 import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
-import map.entity.MovableEntity.Direction;
 import map.entity.NPCEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
+import message.MessageUpdate;
+import message.MessageUpdate.Update;
+import message.Messages;
 import pokemon.ActivePokemon;
 import sound.SoundTitle;
 import trainer.CharacterData;
@@ -36,7 +40,16 @@ import util.StringUtils;
 
 public class MapView extends View {
 	// TODO: these should reference the constants
-	private static final String[] MENU_TEXT = {"Pok\u00E9dex", "Pok\u00E9mon", "Bag", "Player___", "Options", "Save", "Exit", "Return"};
+	private static final String[] MENU_TEXT = {
+			"Pok\u00E9dex",
+			"Pok\u00E9mon",
+			"Bag",
+			"Player___",
+			"Options",
+			"Save",
+			"Exit",
+			"Return"
+	};
 	
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
@@ -48,15 +61,14 @@ public class MapView extends View {
 	private AreaData currentArea;
 	private MapData currentMap;
 	private Trigger currentMusicTrigger;
-	private String queuedDialogueName;
 	
 	private Entity[][] entities;
-	private ArrayList<Entity> entityList;
-	private LinkedList<Entity> removeQueue;
+	private List<Entity> entityList;
+	private Queue<Entity> removeQueue;
 	private PlayerEntity playerEntity;
-	
-	private DialogueSequence currentDialogue;
-	private int dialogueSelection;
+
+	private MessageUpdate currentMessage;
+
 	private int startX, startY, endX, endY;
 	private float drawX, drawY;
 	
@@ -86,9 +98,10 @@ public class MapView extends View {
 	private int lightningFrame;
 	
 	public MapView() {
+		Messages.clear();
+
 		currentMapName = StringUtils.empty();
 		currentArea = null;
-		currentDialogue = null;
 		rainHeight = new int[Global.GAME_SIZE.width/2];
 		state = VisualState.MAP;
 		selectedButton = 0;
@@ -183,22 +196,23 @@ public class MapView extends View {
 				DrawMetrics.setFont(g, 30);
 				g.setColor(Color.BLACK);
 				
-				int height = DrawMetrics.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
-				
-				// TODO: wtf is this variable name
-				int i1 = 0;
-				
-				for (String choice: currentDialogue.choices) {
-					if (choice == null) {
-						break;
-					}
-				
-					if (i1 == dialogueSelection) {
-						g.fillOval(50, height + i1*36, 10, 10);
-					}
-					
-					g.drawString(choice, 80, height + (i1++)*36);
-				}
+				DrawMetrics.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
+//				int height = DrawMetrics.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
+//
+//				// TODO: wtf is this variable name
+//				int i1 = 0;
+//
+//				for (String choice: currentDialogue.choices) {
+//					if (choice == null) {
+//						break;
+//					}
+//
+//					if (i1 == dialogueSelection) {
+//						g.fillOval(50, height + i1*36, 10, 10);
+//					}
+//
+//					g.drawString(choice, 80, height + (i1++)*36);
+//				}
 				break;
 			case MENU:
 				TileSet menuTiles = data.getMenuTiles();
@@ -379,6 +393,8 @@ public class MapView extends View {
 	
 
 	public void update(int dt, InputControl input, Game game) {
+		boolean showMessage = true;
+
 		CharacterData character = game.characterData;
 		MENU_TEXT[3] = character.getName();
 
@@ -447,6 +463,7 @@ public class MapView extends View {
 				}
 				
 				battleAnimationTime -= dt;
+				showMessage = false;
 				break;		
 			case MAP:
 				if (input.isDown(Control.ESC)) {
@@ -461,33 +478,36 @@ public class MapView extends View {
 //				}
 				break;
 			case MESSAGE:
-				if (input.isDown(Control.DOWN)) {
-					input.consumeKey(Control.DOWN);
-					dialogueSelection++;
-				} else if (input.isDown(Control.UP)) {
-					input.consumeKey(Control.UP);
-					dialogueSelection--;
-				}
+//				if (input.isDown(Control.DOWN)) {
+//					input.consumeKey(Control.DOWN);
+//					dialogueSelection++;
+//				} else if (input.isDown(Control.UP)) {
+//					input.consumeKey(Control.UP);
+//					dialogueSelection--;
+//				}
 
-				if (currentDialogue.next.length != 0) {
-					if (dialogueSelection < 0) {
-						dialogueSelection += currentDialogue.next.length;
-					}
-
-					dialogueSelection %= currentDialogue.next.length;
-				}
+//				if (currentDialogue.next.length != 0) {
+//					if (dialogueSelection < 0) {
+//						dialogueSelection += currentDialogue.next.length;
+//					}
+//
+//					dialogueSelection %= currentDialogue.next.length;
+//				}
 
 				if (input.isDown(Control.SPACE) && !Global.soundPlayer.soundEffectIsPlaying()) {
 					input.consumeKey(Control.SPACE);
-					currentDialogue.choose(dialogueSelection, this, game);
-					
-					if (queuedDialogueName != null) {
-						currentDialogue = game.data.getDialogue(queuedDialogueName);
-						queuedDialogueName = null;
-						dialogueSelection = 0;
+//					currentDialogue.choose(dialogueSelection, this, game);
+
+					while (Messages.hasMessages()) {
+						cycleMessage(game);
+
+						if (state != VisualState.MESSAGE || !StringUtils.isNullOrEmpty(currentMessage.getMessage())) {
+							break;
+						}
 					}
-					else {
-						currentDialogue = null;
+
+					if (!Messages.hasMessages()) {
+						currentMessage = null;
 						if (battle == null) {
 							state = VisualState.MAP;
 						}
@@ -504,33 +524,34 @@ public class MapView extends View {
 				}
 				
 				switch (clicked) {
-					case -1: break; //no click
-					case 0: //pokedex
+					case -1: // no click
+						break;
+					case 0: // pokedex
 						game.setViewMode(ViewMode.POKEDEX_VIEW);
 						break;
-					case 1: //pokemon
+					case 1: // pokemon
 						game.setViewMode(ViewMode.PARTY_VIEW);
 						break;
-					case 2: //bag
+					case 2: // bag
 						game.setViewMode(Game.ViewMode.BAG_VIEW);
 						break;
-					case 3: //player
+					case 3: // player
 						game.setViewMode(Game.ViewMode.TRAINER_CARD_VIEW);
 						break;
-					case 4: //options
+					case 4: // options
 						game.setViewMode(Game.ViewMode.OPTIONS_VIEW);
 						break;
-					case 5: //save
+					case 5: // save
 						// TODO: Question user if they would like to save first.
 						Save.save(game.characterData);
-						currentDialogue = game.data.getDialogue("savedGame");
+						Messages.addMessage(game, game.data.getDialogue("savedGame"));
 						state = VisualState.MESSAGE;
 						break;
-					case 6: //exit
+					case 6: // exit
 						// TODO: Confirmation
 						game.setViewMode(ViewMode.MAIN_MENU_VIEW);
 						break;
-					case 7: //return
+					case 7: // return
 						state = VisualState.MAP;
 						break;
 				}
@@ -601,29 +622,35 @@ public class MapView extends View {
 		}
 		
 		while (!removeQueue.isEmpty()) {
-			Entity e = removeQueue.removeFirst();
+			Entity e = removeQueue.poll();
 			entityList.remove(e);
 			entities[e.getX()][e.getY()] = null;
 		}
-		
-		// CharacterData has a message to display and no current message is being displayed.
-		if (character.messages != null && queuedDialogueName == null && currentDialogue == null) {
-			currentDialogue = character.messages;
-			character.messages = null;
-			queuedDialogueName = null;
-			dialogueSelection = 0;
 
-			state = VisualState.MESSAGE;
-		}
-
-		if (queuedDialogueName != null && (currentDialogue == null || !queuedDialogueName.equals(currentDialogue.name))) {
-			currentDialogue = game.data.getDialogue(queuedDialogueName);
-			queuedDialogueName = null;
-			dialogueSelection = 0;
-			state = VisualState.MESSAGE;
+		if (showMessage && (this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage())) && Messages.hasMessages()) {
+			cycleMessage(game);
+			if (this.currentMessage != null && this.currentMessage.getUpdateType() != Update.ENTER_BATTLE) {
+				state = VisualState.MESSAGE;
+			}
 		}
 	}
-	
+
+	private void cycleMessage(Game game) {
+		currentMessage = Messages.getNextMessage();
+
+		if (currentMessage.trigger()) {
+			Trigger trigger = game.data.getTrigger(currentMessage.getTriggerName());
+
+			if (trigger.isTriggered(game.characterData)) {
+				trigger.execute(game);
+				if (state != VisualState.MESSAGE) {
+					currentMessage = null;
+				}
+
+			}
+		}
+	}
+
 	private void playAreaMusic(Game game) {
 		if (currentMusicTrigger != null) {
 			currentMusicTrigger.execute(game);
@@ -636,10 +663,6 @@ public class MapView extends View {
 
 	public Game.ViewMode getViewModel() {
 		return Game.ViewMode.MAP_VIEW;
-	}
-
-	public void setDialogue(String dialogueName) {
-		queuedDialogueName = dialogueName;
 	}
 	
 	public void setBattle(Battle battle, boolean seenWild) {

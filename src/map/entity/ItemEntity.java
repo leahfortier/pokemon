@@ -6,8 +6,8 @@ import gui.view.MapView;
 import java.awt.image.BufferedImage;
 
 import map.DialogueSequence;
+import map.Direction;
 import map.MapData;
-import map.entity.MovableEntity.Direction;
 import map.triggers.Trigger;
 import util.InputControl;
 import util.PokeString;

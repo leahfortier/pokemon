@@ -1,14 +1,14 @@
 package gui;
 
+import map.Direction;
+import util.InputControl;
+import util.InputControl.Control;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-
-import util.InputControl;
-import util.InputControl.Control;
-import map.entity.MovableEntity.Direction;
 
 public class Button {
 	public static final int NO_TRANSITION = -1;

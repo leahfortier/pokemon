@@ -17,6 +17,7 @@ import gui.view.TrainerCardView;
 import gui.view.View;
 import item.Item;
 import item.hold.HoldItem;
+import message.Messages;
 import namesies.ItemNamesies;
 import namesies.PokemonNamesies;
 import pokemon.ActivePokemon;
@@ -86,7 +87,7 @@ public class Game {
 	}
 
 	public void setMapViewDialogue(final String dialogueName) {
-		((MapView)this.viewMap.get(ViewMode.MAP_VIEW)).setDialogue(dialogueName);
+		Messages.addMessage(this, this.data.getDialogue(dialogueName));
 	}
 
 	public void draw(Graphics g) {

@@ -1,13 +1,8 @@
 package map;
 
-import gui.view.MapView;
-
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import main.Game;
-import map.triggers.Trigger;
 
 public class DialogueSequence {
 	// TODO: This is the same pattern as the one in the NPCEntityData class -- should they be the same?
@@ -84,24 +79,6 @@ public class DialogueSequence {
 		this.next = next;
 		this.choices = choices;
 		this.triggers = triggers;
-	}
-	
-	public void choose(int choiceIndex, MapView mapView, Game game) {
-		if (choiceIndex < 0 || choiceIndex >= next.length) {
-			return;
-		}
-
-		if (next[choiceIndex] != null) {
-			mapView.setDialogue(next[choiceIndex]);
-		}
-		
-		if (triggers[choiceIndex] != null) {
-			Trigger trigger = game.data.getTrigger(triggers[choiceIndex]);
-			
-			if (trigger.isTriggered(game.characterData)) {
-				trigger.execute(game);
-			}
-		}
 	}
 	
 	public String toString() {

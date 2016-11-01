@@ -5,7 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.Global;
-import map.entity.MovableEntity.Direction;
+import map.Direction;
+import pattern.AreaDataMatcher.NPCMatcher;
 import util.StringUtils;
 
 public class NPCEntityData extends EntityData {
@@ -24,7 +25,22 @@ public class NPCEntityData extends EntityData {
 	public String firstTriggers;
 	public String secondTriggers;
 
-	public int walkToPlayer; // TODO: What does this represent/why is it an int? Should it be a boolean?
+	public int walkToPlayer; // TODO: why is this an int? Should it be a boolean?
+
+	public NPCEntityData(NPCMatcher matcher) {
+		super(matcher.name, matcher.condition);
+
+		// TODO: trainer info and interactions and actions and yeah
+		x = matcher.startX;
+		y = matcher.startY;
+		trigger = matcher.trigger;
+		path = matcher.path;
+		spriteIndex = matcher.spriteIndex;
+		defaultDirection = matcher.direction;
+		firstDialogue = new String[] { matcher.text };
+		secondDialogue = new String[] { matcher.text };
+		walkToPlayer = matcher.walkToPlayer ? 1 : 0;
+	}
 
 	public NPCEntityData(String name, String contents) {
 		super(name, contents);

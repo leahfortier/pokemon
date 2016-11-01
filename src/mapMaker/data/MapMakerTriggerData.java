@@ -1,31 +1,6 @@
 package mapMaker.data;
 
 import item.Item;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.stream.Collectors;
-
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-
-import util.FileIO;
-import util.PokeString;
 import map.MapData;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
@@ -45,9 +20,35 @@ import mapMaker.dialogs.TransitionBuildingTransitionDialog;
 import mapMaker.dialogs.TriggerEntityDialog;
 import mapMaker.dialogs.WildBattleTriggerEditDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
+import util.FileIO;
+import util.PokeString;
 import util.StringUtils;
 
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 public class MapMakerTriggerData {
+
+	private static final Pattern blockPattern = Pattern.compile("((NPC|Item|Trigger|MapEntrance|TriggerData)\\s+)?(\\w+)\\s*\\{([^}]*)\\}");
 
 	// Old trigger data
 	private Map<Integer, String> triggers;
@@ -126,7 +127,7 @@ public class MapMakerTriggerData {
 
 		String fileText = FileIO.readEntireFileWithoutReplacements(mapTriggerFile, false);
 
-		Matcher m = MapData.blockPattern.matcher(fileText);
+		Matcher m = blockPattern.matcher(fileText);
 		while (m.find()) {
 			String name = m.group(3);
 			if (m.group(1) == null) { // trigger
@@ -245,7 +246,7 @@ public class MapMakerTriggerData {
 			File mapTextFile = mapMaker.getMapTextFile(mapName);
 			String fileText = FileIO.readEntireFileWithoutReplacements(mapTextFile, false);
 
-			Matcher m = MapData.blockPattern.matcher(fileText);
+			Matcher m = blockPattern.matcher(fileText);
 			while (m.find()) {
 				if (m.group(1) != null && m.group(2).equals("MapEntrance")) {
 					String name = m.group(3);

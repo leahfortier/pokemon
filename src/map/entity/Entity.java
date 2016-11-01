@@ -7,11 +7,11 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 
+import map.Direction;
 import util.InputControl;
 import main.Global;
 import map.MapData;
 import map.MapData.WalkType;
-import map.entity.MovableEntity.Direction;
 
 public abstract class Entity {
 	protected int charX;

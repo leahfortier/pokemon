@@ -37,14 +37,17 @@ public class MessageUpdate {
 	private ActivePokemon active;
 	private Move move;
 	private Integer duration;
+	private String triggerName;
 	
 	public enum Update {
 		NO_UPDATE,
+		TRIGGER,
+		ENTER_BATTLE,
 		ENTER_NAME,
-		APPEND_TO_NAME, 
+		APPEND_TO_NAME,
 		SHOW_POKEMON,
 		PROMPT_SWITCH(VisualState.POKEMON),
-		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION), 
+		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION),
 		STAT_GAIN(VisualState.STAT_GAIN),
 		EXIT_BATTLE((battleView, game) -> {
             game.setViewMode(ViewMode.MAP_VIEW);
@@ -169,6 +172,15 @@ public class MessageUpdate {
 	public MessageUpdate(String m, Update update) {
 		this(m);
 		this.updateType = update;
+	}
+
+	public MessageUpdate(String m, String triggerName, Update update) {
+		this(m);
+		this.updateType = update;
+
+		if (update == Update.TRIGGER) {
+			this.triggerName = triggerName;
+		}
 	}
 	
 	// EXP Gain update
@@ -353,5 +365,13 @@ public class MessageUpdate {
 	
 	public boolean learnMove() {
 		return updateType == Update.LEARN_MOVE;
+	}
+
+	public boolean trigger() {
+		return updateType == Update.TRIGGER;
+	}
+
+	public String getTriggerName() {
+		return this.triggerName;
 	}
 }

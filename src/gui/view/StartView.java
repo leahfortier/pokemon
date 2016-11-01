@@ -21,7 +21,7 @@ import message.MessageUpdate.Update;
 import util.StringUtils;
 
 public class StartView extends View {
-	// TODO: Message update shouldn't be in battle since it's used for other purposes as well
+	
 	private static final MessageUpdate[] dialogue = new MessageUpdate[] {
 				new MessageUpdate("Welcome to the world of Pok\u00e9mon!"), // TODO: Constants blah blah blah
 				new MessageUpdate("It's filled with many unique creatures, such as this Ditto.", Update.SHOW_POKEMON),

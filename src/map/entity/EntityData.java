@@ -14,7 +14,8 @@ public abstract class EntityData {
 	
 	public int x;
 	public int y;
-	
+
+	// TODO: contents -> condition
 	EntityData(String name, String contents) {
 		this.name = name;
 		condition = new Condition(contents);

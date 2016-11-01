@@ -2,22 +2,58 @@ package message;
 
 import battle.Battle;
 import battle.Move;
+import main.Game;
+import map.DialogueSequence;
 import message.MessageUpdate.Update;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import util.StringUtils;
 
 import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class Messages {
-    private static ArrayDeque<MessageUpdate> messages;
+    private static Queue<MessageUpdate> messages;
 
     public static void clear() {
         messages = new ArrayDeque<>();
     }
 
-    public static ArrayDeque<MessageUpdate> getMessages() {
-        return messages;
+    public static boolean hasMessages() {
+        return !messages.isEmpty();
+    }
+
+    public static MessageUpdate getNextMessage() {
+        return messages.poll();
+    }
+
+    public static boolean nextMessageEmpty() {
+        return StringUtils.isNullOrEmpty(messages.peek().getMessage());
+    }
+
+    public static void addMessage(MessageUpdate message) {
+        messages.add(message);
+    }
+
+    public static void addMessage(Game game, DialogueSequence dialogueSequence) {
+        if (!StringUtils.isNullOrEmpty(dialogueSequence.text)) {
+            addMessage(dialogueSequence.text);
+            System.out.println("Text: " + dialogueSequence.text);
+        }
+
+        for (String dialogueName : dialogueSequence.next) {
+            if (!StringUtils.isNullOrEmpty(dialogueName)) {
+                addMessage(game, game.data.getDialogue(dialogueName));
+                System.out.println("Next: " + dialogueName);
+            }
+        }
+
+        for (String triggerName : dialogueSequence.triggers) {
+            if (!StringUtils.isNullOrEmpty(triggerName)) {
+                messages.add(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
+                System.out.println("TriggerMatcher: " + triggerName);
+            }
+        }
     }
     
     // Just a plain old regular message

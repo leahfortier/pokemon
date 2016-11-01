@@ -1,28 +1,33 @@
 package map;
+
 import gui.GameData;
 import gui.GameFrame;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import map.entity.Entity;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
 import map.entity.NPCEntityData;
 import map.entity.TriggerEntityData;
 import map.triggers.TriggerData;
+import pattern.AreaDataMatcher;
+import pattern.AreaDataMatcher.GroupTriggerMatcher;
+import pattern.AreaDataMatcher.ItemMatcher;
+import pattern.AreaDataMatcher.MapEntranceMatcher;
+import pattern.AreaDataMatcher.NPCMatcher;
+import pattern.AreaDataMatcher.TriggerDataMatcher;
+import pattern.AreaDataMatcher.TriggerMatcher;
 import trainer.CharacterData;
 import util.FileIO;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+
 
 public class MapData {
-	public static final Pattern blockPattern = Pattern.compile("((NPC|Item|Trigger|MapEntrance|TriggerData)\\s+)?(\\w+)\\s*\\{([^}]*)\\}");
-	
 	public final String name;
 	
 	private final int[] bgTile;
@@ -30,13 +35,13 @@ public class MapData {
 	private final int[] walkMap;
 	private final int[] areaMap;
 	
-	private final HashMap<Integer, String> triggers;
-	private final HashMap<String, Integer> mapEntrances;
-	
+	private final Map<Integer, String> triggers;
+	private final Map<String, Integer> mapEntrances;
+
 	private final int width;
 	private final int height;
 	
-	private final ArrayList<EntityData> entities;
+	private final List<EntityData> entities;
 	
 	public MapData(File file, GameData gameData) {
 		name = file.getName();
@@ -73,54 +78,55 @@ public class MapData {
 		File f = new File(beginFilePath + ".txt");
 		String fileText = FileIO.readEntireFileWithReplacements(f, false);
 
-		Matcher m = blockPattern.matcher(fileText);
-		while (m.find()) {
-			String name = m.group(3);
-			
-			// Trigger
-			if (m.group(1) == null) {
-				Scanner in = new Scanner(m.group(4));
-				while (in.hasNext()) {
-					String[] xr = in.next().split("-");
-					String[] yr = in.next().split("-");
-				
-					int x1 = Integer.parseInt(xr[0]);
-					int y1 = Integer.parseInt(yr[0]);
-					int x2 = xr.length == 2 ? Integer.parseInt(xr[1]) : x1;
-					int y2 = yr.length == 2 ? Integer.parseInt(yr[1]) : y1;
-					
-					for (int x = x1; x<=x2; x++)
-						for (int y = y1; y<=y2; y++)
-							triggers.put(y*width + x, name);
-				}
-				
-				in.close();
+		AreaDataMatcher areaDataMatcher = AreaDataMatcher.matchArea(beginFilePath + ".txt", fileText);
+		for (NPCMatcher matcher : areaDataMatcher.NPCs) {
+			entities.add(new NPCEntityData(matcher));
+		}
+
+		for (ItemMatcher matcher : areaDataMatcher.items) {
+			entities.add(new ItemEntityData(matcher));
+		}
+
+		for (MapEntranceMatcher matcher : areaDataMatcher.mapEntrances) {
+			mapEntrances.put(matcher.name, getMapEntranceLocation(matcher.x, matcher.y, width));
+		}
+
+		for (TriggerDataMatcher matcher : areaDataMatcher.triggerData) {
+			TriggerData triggerData = new TriggerData(matcher);
+
+			for (Integer loc: triggerData.getPoints(width)) {
+				triggers.put(loc, matcher.name);
 			}
-			else {
-				switch (m.group(2)) {
-					case "NPC":
-						entities.add(new NPCEntityData(name, m.group(4)));
-						break;
-					case "Item":
-						entities.add(new ItemEntityData(name, m.group(4)));
-						break;
-					case "Trigger":
-						entities.add(new TriggerEntityData(name, m.group(4)));
-						break;
-					case "MapEntrance":
-						mapEntrances.put(name, getMapEntranceLocation(m.group(4), width));
-						break;
-					case "TriggerData":
-						TriggerData triggerData = new TriggerData(name, m.group(4));
-						
-						for (Integer loc: triggerData.getPoints(width)) {
-							triggers.put(loc, name);
-						}
-						
-						triggerData.addData(gameData);
-						break;
-				}
+
+			triggerData.addData(gameData);
+		}
+
+		for (TriggerMatcher matcher : areaDataMatcher.triggers) {
+			entities.add(new TriggerEntityData(matcher));
+		}
+
+		for (GroupTriggerMatcher matcher : areaDataMatcher.groupTriggers) {
+			for (int i = 0; i < matcher.location.length; i += 2) {
+				final int x = matcher.location[i];
+				final int y = matcher.location[i + 1];
+
+				triggers.put(x + y*width, matcher.name);
 			}
+
+			// TODO: Does this range shit still exist?
+//			while (in.hasNext()) {
+//				String[] xr = in.next().split("-");
+//				String[] yr = in.next().split("-");
+//
+//				int x1 = Integer.parseInt(xr[0]);
+//				int y1 = Integer.parseInt(yr[0]);
+//				int x2 = xr.length == 2 ? Integer.parseInt(xr[1]) : x1;
+//				int y2 = yr.length == 2 ? Integer.parseInt(yr[1]) : y1;
+//
+//				for (int x = x1; x<=x2; x++)
+//					for (int y = y1; y<=y2; y++)
+//						triggers.put(y*width + x, name);
+//			}
 		}
 	}
 
@@ -159,7 +165,11 @@ public class MapData {
 			}
 		}
 		
-		return y*width + x;
+		return getMapEntranceLocation(x, y, width);
+	}
+
+	public static Integer getMapEntranceLocation(int x, int y, int width) {
+		return x + y*width;
 	}
 	
 	public boolean inBounds(int x, int y) {
@@ -229,14 +239,14 @@ public class MapData {
 
 	public Entity[][] populateEntities(CharacterData character, GameData gameData) {
 		Entity[][] res = new Entity[width][height];
-		for (EntityData data: entities) {
-			if (data.isEntityPresent(character) || GameFrame.GENERATE_STUFF) {
-				Entity e = data.getEntity();
-				e.reset();
-				e.addData(gameData);
-				res[e.getX()][e.getY()] = e; 
-			}
-		}
+		entities.stream()
+				.filter(data -> data.isEntityPresent(character) || GameFrame.GENERATE_STUFF)
+				.forEach(data -> {
+					Entity e = data.getEntity();
+					e.reset();
+					e.addData(gameData);
+					res[e.getX()][e.getY()] = e;
+				});
 		
 		return res;
 	}

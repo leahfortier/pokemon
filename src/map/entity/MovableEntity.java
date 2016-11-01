@@ -3,50 +3,16 @@ package map.entity;
 import gui.GameData;
 import gui.TileSet;
 import gui.view.MapView;
+import main.Global;
+import map.Direction;
+import map.MapData;
+import util.InputControl;
 
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 
-import util.InputControl;
-import util.InputControl.Control;
-import main.Global;
-import map.MapData;
-
 public abstract class MovableEntity extends Entity {
-	// TODO: This should definitely be in its own class fo sho fo sho
-	public enum Direction {
-		RIGHT('r', 1, 0, Control.RIGHT),
-		UP('u', 0, -1, Control.UP),
-		LEFT('l', -1, 0, Control.LEFT),
-		DOWN('d', 0, 1, Control.DOWN);
-		
-		public final char character;
-		public final int dx;
-		public final int dy;
-		public final Control key;
-		public Direction opposite; // Really this should be final but it won't let me include this in the constructor
-		
-		Direction(char character, int dx, int dy, Control key) {
-			this.character = character;
-			
-			this.dx = dx;
-			this.dy = dy;
-			
-			this.key = key;
-		}
-		
-		public static final char WAIT_CHARACTER = 'w';
-
-		// This is dumb fuck Java
-		static {
-			RIGHT.opposite = LEFT;
-			UP.opposite = DOWN;
-			LEFT.opposite = RIGHT;
-			DOWN.opposite = UP;
-		}
-	}
-	
 	protected Direction transitionDirection;
 	protected int transitionTime;
 	protected int runFrame;

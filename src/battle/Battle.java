@@ -23,6 +23,7 @@ import battle.effect.generic.Weather;
 import main.Global;
 import main.Type;
 import map.AreaData.TerrainType;
+import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import namesies.AbilityNamesies;
@@ -57,6 +58,7 @@ public class Battle {
 	
 	public Battle(CharacterData p, Opponent o) {
 		Messages.clear();
+		Messages.addMessage(new MessageUpdate("", Update.ENTER_BATTLE));
 
 		player = p;
 		opponent = o;

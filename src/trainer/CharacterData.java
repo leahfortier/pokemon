@@ -15,7 +15,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import map.DialogueSequence;
-import map.entity.MovableEntity.Direction;
+import map.Direction;
 import message.Messages;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
@@ -62,8 +62,6 @@ public class CharacterData extends Trainer implements Serializable {
 	private PC pc;
 	private boolean[] badges;
 	private int repelSteps;
-	
-	public DialogueSequence messages;
 	
 	public transient Game game;
 	
@@ -167,7 +165,7 @@ public class CharacterData extends Trainer implements Serializable {
 			if (repelSteps == 0) {
 				// TODO: Give choice if you want to use another. 
 				// Game variable needed
-				messages = new DialogueSequence("The effects of repel have worn off.", null, null, null);
+				Messages.addMessage("The effects of repel have worn off.");
 			}
 			
 			System.out.println("Repel Steps: " + repelSteps);
@@ -180,7 +178,7 @@ public class CharacterData extends Trainer implements Serializable {
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && p.hatch()) {
 				evolvingPokemon = p;
-				messages = new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"});
+				Messages.addMessage(game, new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"}));
 				
 				// Only one hatch per step
 				break;
@@ -224,6 +222,8 @@ public class CharacterData extends Trainer implements Serializable {
 		if (s == null) {
 			return;
 		}
+
+		System.out.println("ADD GLOBAL: " + s);
 
 		definedGlobals.add(s);
 	}

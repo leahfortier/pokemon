@@ -1,5 +1,6 @@
 package map.entity;
 
+import pattern.AreaDataMatcher.ItemMatcher;
 import util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -9,7 +10,15 @@ public class ItemEntityData extends EntityData {
 	private String item;
 	
 	public String placedCondition;
-	
+
+	public ItemEntityData(ItemMatcher matcher) {
+		super(matcher.name, ""); // TODO: Condition? maybe? do these have conditions?
+
+		x = matcher.x;
+		y = matcher.y;
+		item = matcher.item;
+	}
+
 	public ItemEntityData(String name, String contents) {
 		super (name,contents);
 		

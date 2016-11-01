@@ -1,5 +1,6 @@
 package map.entity;
 
+import pattern.AreaDataMatcher.TriggerMatcher;
 import util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -7,7 +8,15 @@ import java.util.regex.Matcher;
 public class TriggerEntityData extends EntityData {
 	private TriggerEntity entity;
 	public String trigger;
-	
+
+	public TriggerEntityData(TriggerMatcher matcher) {
+		super(matcher.name, ""); // TODO: condition
+
+		x = matcher.x;
+		y = matcher.y;
+		trigger = matcher.trigger;
+	}
+
 	public TriggerEntityData(String name, String contents) {
 		super (name,contents);
 		

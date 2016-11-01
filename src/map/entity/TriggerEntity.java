@@ -3,12 +3,11 @@ package map.entity;
 import gui.GameData;
 import gui.TileSet;
 import gui.view.MapView;
+import map.Direction;
+import map.MapData;
+import util.InputControl;
 
 import java.awt.image.BufferedImage;
-
-import util.InputControl;
-import map.MapData;
-import map.entity.MovableEntity.Direction;
 
 public class TriggerEntity extends Entity {
 	private final String trigger;

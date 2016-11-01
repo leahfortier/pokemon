@@ -1,7 +1,5 @@
 package util;
 
-import namesies.Namesies.NamesiesType;
-
 public class PokeString {
 
 	// Converts special characters to a simple version (example: poke e -> e) 

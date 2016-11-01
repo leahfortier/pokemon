@@ -2,20 +2,20 @@ package map.entity;
 
 import gui.GameData;
 import gui.view.MapView;
-
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
+import map.Direction;
 import map.MapData;
 import map.MapData.WalkType;
 import map.triggers.Trigger;
 import trainer.CharacterData;
 import util.InputControl;
 import util.InputControl.Control;
+
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 public class PlayerEntity extends MovableEntity {
 	private CharacterData charData;

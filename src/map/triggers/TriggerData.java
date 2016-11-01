@@ -1,9 +1,11 @@
 package map.triggers;
 
 import gui.GameData;
+import pattern.AreaDataMatcher.TriggerDataMatcher;
 import util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -17,7 +19,21 @@ public class TriggerData {
 	
 	public String triggerType;
 	public String triggerContents;
-	
+
+	public TriggerData(TriggerDataMatcher matcher) {
+		this.name = matcher.name;
+		this.triggerType = matcher.triggerType;
+		this.triggerContents = Arrays.toString(matcher.contents);
+
+		this.points = new ArrayList<>();
+		for (int i = 0; i < matcher.location.length; i += 2) {
+			int x = matcher.location[i];
+			int y = matcher.location[i + 1];
+
+			this.points.add(new Point(x, y));
+		}
+	}
+
 	public TriggerData(String name, String contents) {
 		this.name = name;
 		

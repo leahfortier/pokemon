@@ -3,7 +3,7 @@ package map.triggers;
 import java.util.regex.Matcher;
 
 import main.Game;
-import map.entity.MovableEntity.Direction;
+import map.Direction;
 
 public class MapTransitionTrigger extends Trigger {
 	private String mapName;
