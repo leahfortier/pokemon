@@ -7,7 +7,8 @@
       "path": "w",
       "spriteIndex": 10,
       "direction": "DOWN",
-      "walkToPlayer": false
+      "walkToPlayer": false,
+      "interactions": []
     },
     {
       "name": "BFM_Guy",
@@ -18,7 +19,16 @@
       "spriteIndex": 1,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "I don't suggest going out there. It's way too buggy!"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I don't suggest going out there. It's way too buggy!"
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

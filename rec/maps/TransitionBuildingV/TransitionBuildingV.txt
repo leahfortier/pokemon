@@ -9,7 +9,16 @@
       "spriteIndex": 3,
       "direction": "UP",
       "walkToPlayer": false,
-      "text": "What happened at the power plant? Who is this Team Deadlock?"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "What happened at the power plant? Who is this Team Deadlock?"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01",
@@ -20,7 +29,16 @@
       "spriteIndex": 3,
       "direction": "UP",
       "walkToPlayer": false,
-      "text": "I'm amazed how fast Leader Moore defeated my Pidgey!"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I'm amazed how fast Leader Moore defeated my Pidgey!"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01",
@@ -31,7 +49,16 @@
       "spriteIndex": 9,
       "direction": "RIGHT",
       "walkToPlayer": false,
-      "text": "Team Deadlock is a big bug in our society."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Team Deadlock is a big bug in our society."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
@@ -42,7 +69,16 @@
       "spriteIndex": 9,
       "direction": "LEFT",
       "walkToPlayer": false,
-      "text": "The Tom Town gym sounds really tough."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "The Tom Town gym sounds really tough."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "TransitionBuildingV_NPC_PoliceOfficer_01",
@@ -56,9 +92,13 @@
       "interactions": [
         {
           "name": "default",
-          "actions": [
-            "text: There power plant has been taken over by Team Deadlock!",
-            "text: Wind Valley is closed off until this matter has been resolved."
+          "npcActions": [
+            {
+              "text": "There power plant has been taken over by Team Deadlock!"
+            },
+            {
+              "text": "Wind Valley is closed off until this matter has been resolved."
+            }
           ]
         }
       ]
@@ -75,9 +115,13 @@
       "interactions": [
         {
           "name": "default",
-          "actions": [
-            "text: Tom Town generates most of the power for all of Hash Map.",
-            "text: It's all thanks to the Magnemite Power Plant!"
+          "npcActions": [
+            {
+              "text": "Tom Town generates most of the power for all of Hash Map."
+            },
+            {
+              "text": "It's all thanks to the Magnemite Power Plant!"
+            }
           ]
         }
       ]
@@ -89,7 +133,8 @@
       "path": "w",
       "spriteIndex": 10,
       "direction": "LEFT",
-      "walkToPlayer": false
+      "walkToPlayer": false,
+      "interactions": []
     }
   ],
   "items": [],

@@ -8,16 +8,35 @@
       "spriteIndex": 16,
       "direction": "RIGHT",
       "walkToPlayer": true,
-      "trainer": {
-        "name": "Meadow Lady",
-        "cashMoney": 100,
-        "pokemon": [
-          "Budew 6",
-          "Oddish 6"
-        ],
-        "before": "I'm a meadow lady in a meadow!!!",
-        "after": "Yayyy I'm in a meadow and I'm a lady lalalala!"
-      }
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "text": "I'm a meadow lady in a meadow!!!"
+            },
+            {
+              "battle": {
+                "name": "Meadow Lady",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Budew 6",
+                  "Oddish 6"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "text": "Yayyy I'm in a meadow and I'm a lady lalalala!"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02",
@@ -27,16 +46,35 @@
       "spriteIndex": 1,
       "direction": "DOWN",
       "walkToPlayer": true,
-      "trainer": {
-        "name": "Bug Catcher",
-        "cashMoney": 0,
-        "pokemon": [
-          "Caterpie 6",
-          "Kricketot 6"
-        ],
-        "before": "I like shorts!!!!",
-        "after": "SHORRRRTTTTTSSSSSS"
-      }
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "text": "I like shorts!!!!"
+            },
+            {
+              "battle": {
+                "name": "Bug Catcher",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Caterpie 6",
+                  "Kricketot 6"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "text": "SHORRRRTTTTTSSSSSS"
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [

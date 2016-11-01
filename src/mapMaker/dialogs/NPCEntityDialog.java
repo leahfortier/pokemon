@@ -1,8 +1,6 @@
 package mapMaker.dialogs;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import util.PokeString;
-import map.entity.NPCEntityData;
+import map.entity.npc.NPCEntityData;
 import mapMaker.MapMaker;
 import util.StringUtils;
 

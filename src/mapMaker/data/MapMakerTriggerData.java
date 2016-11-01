@@ -4,7 +4,7 @@ import item.Item;
 import map.MapData;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
-import map.entity.NPCEntityData;
+import map.entity.npc.NPCEntityData;
 import map.entity.TriggerEntityData;
 import map.triggers.EventTrigger;
 import map.triggers.MapTransitionTrigger;

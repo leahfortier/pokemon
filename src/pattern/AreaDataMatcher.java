@@ -6,11 +6,13 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import main.Global;
 import map.Direction;
+import map.entity.npc.NPCAction;
 import map.triggers.TriggerData.Point;
 import util.FileIO;
 import util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -105,9 +107,24 @@ public class AreaDataMatcher {
         public int spriteIndex;
         public Direction direction;
         public boolean walkToPlayer;
-        public String text;
-        public Interaction[] interactions;
-        public TrainerMatcher trainer;
+        public InteractionMatcher[] interactions;
+
+        private transient Map<String, List<NPCAction>> interactionMap;
+        private transient String startKey;
+
+        public Map<String, List<NPCAction>> getInteractionMap() {
+            if (interactionMap != null) {
+                return interactionMap;
+            }
+
+            interactionMap = new HashMap<>();
+            for (InteractionMatcher interaction : interactions) {
+                interactionMap.put(interaction.name, interaction.getActions());
+            }
+
+            startKey = interactions[0].name;
+            return interactionMap;
+        }
 
         public String getNPCName() {
             return this.name;
@@ -142,11 +159,30 @@ public class AreaDataMatcher {
         }
     }
 
-    public static class Interaction {
+    public static class ActionMatcher {
+        private String text;
+        private BattleMatcher battle;
+        private String giveItem;
+        private String givePokemon;
+    }
+
+    public static class InteractionMatcher {
+        private String name;
+        private ActionMatcher[] npcActions;
+        private String update;
+
+        List<NPCAction> getActions() {
+            List<NPCAction> npcActions = new ArrayList<>();
+            // TODO
+            return npcActions;
+        }
+    }
+
+    public static class BattleMatcher {
         public String name;
-        public String[] actions;
+        public int cashMoney;
+        public String[] pokemon;
         public String update;
-        public String text;
     }
 
     public static class TrainerMatcher {
@@ -179,6 +215,8 @@ public class AreaDataMatcher {
 
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
 
+        System.out.println(fileName);
+
         AreaDataMatcher areaData = gson.fromJson(areaDescription, AreaDataMatcher.class);
         Map<Object, Object> mappity = gson.fromJson(areaDescription, Map.class);
 
@@ -189,7 +227,7 @@ public class AreaDataMatcher {
         FileIO.writeToFile("out2.txt", new StringBuilder(mapJson));
 
         if (!areaDataJson.equals(mapJson)) {
-//            Global.error("No dice");
+            Global.error("No dice");
         }
 
         areaDataJson = getJson(areaData);

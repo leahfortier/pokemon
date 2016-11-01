@@ -9,7 +9,16 @@
       "spriteIndex": 11,
       "direction": "RIGHT",
       "walkToPlayer": false,
-      "text": "Thankfully the Magnemites weren't harmed. Although, I'm still angry at Team Deadlock."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Thankfully the Magnemites weren't harmed. Although, I'm still angry at Team Deadlock."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_01",
@@ -20,7 +29,16 @@
       "spriteIndex": 19,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "Thank you for your help! Things are back to normal now."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Thank you for your help! Things are back to normal now."
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

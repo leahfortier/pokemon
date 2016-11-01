@@ -8,6 +8,7 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.MapData.WalkType;
+import map.entity.npc.NPCEntity;
 import map.triggers.Trigger;
 import trainer.CharacterData;
 import util.InputControl;

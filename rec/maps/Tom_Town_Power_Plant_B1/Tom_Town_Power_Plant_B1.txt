@@ -9,7 +9,16 @@
       "spriteIndex": 19,
       "direction": "UP",
       "walkToPlayer": false,
-      "text": "I'm trying my best to stall the reactor meltdown."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I'm trying my best to stall the reactor meltdown."
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

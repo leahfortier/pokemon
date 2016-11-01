@@ -8,15 +8,34 @@
       "spriteIndex": 14,
       "direction": "LEFT",
       "walkToPlayer": true,
-      "trainer": {
-        "name": "Blue",
-        "cashMoney": 230,
-        "pokemon": [
-          "Riolu 5"
-        ],
-        "before": "My Riolu is going to punch the normal off your Eevee!",
-        "after": "..."
-      }
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "text": "My Riolu is going to punch the normal off your Eevee!"
+            },
+            {
+              "battle": {
+                "name": "Blue",
+                "cashMoney": 230,
+                "pokemon": [
+                  "Riolu 5"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "text": "..."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "RSATown_NPC_Guy_01",
@@ -26,7 +45,16 @@
       "spriteIndex": 5,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

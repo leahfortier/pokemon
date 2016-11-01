@@ -8,7 +8,16 @@
       "spriteIndex": 17,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "R U A WIZARD 'ARRY"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "R U A WIZARD 'ARRY"
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

@@ -7,15 +7,34 @@
       "spriteIndex": 13,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "trainer": {
-        "name": "Mom",
-        "cashMoney": 500,
-        "pokemon": [
-          "Charmander 5"
-        ],
-        "before": "I'm gonna be the very best like no one ever was.",
-        "after": "Just get out. You're not welcome here."
-      }
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "text": "I'm gonna be the very best like no one ever was."
+            },
+            {
+              "battle": {
+                "name": "Mom",
+                "cashMoney": 500,
+                "pokemon": [
+                  "Charmander 5"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "text": "Just get out. You're not welcome here."
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

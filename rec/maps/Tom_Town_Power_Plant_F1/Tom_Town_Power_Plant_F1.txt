@@ -9,7 +9,16 @@
       "spriteIndex": 19,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "Time to get back to my research."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Time to get back to my research."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01",
@@ -20,7 +29,16 @@
       "spriteIndex": 18,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "It's not safe here."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "It's not safe here."
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

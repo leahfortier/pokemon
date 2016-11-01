@@ -22,7 +22,7 @@ import map.Direction;
 import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
-import map.entity.NPCEntity;
+import map.entity.npc.NPCEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;

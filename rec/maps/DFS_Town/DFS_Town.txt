@@ -8,15 +8,34 @@
       "spriteIndex": 6,
       "direction": "RIGHT",
       "walkToPlayer": true,
-      "trainer": {
-        "name": "Youngster Joey",
-        "cashMoney": 100,
-        "pokemon": [
-          "Sentret 4"
-        ],
-        "before": "Rattata!",
-        "after": "Rattata..."
-      }
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "text": "Rattata!"
+            },
+            {
+              "battle": {
+                "name": "Youngster Joey",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Sentret 4"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "text": "Rattata..."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "DFS_Town_NPC_Green_01",
@@ -27,7 +46,16 @@
       "spriteIndex": 16,
       "direction": "DOWN",
       "walkToPlayer": true,
-      "text": "Hey, you should go talk to Professor Maple first before leaving town."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Hey, you should go talk to Professor Maple first before leaving town."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "DFS_Town_NPC_Potion_Giver_01",
@@ -40,16 +68,23 @@
       "interactions": [
         {
           "name": "give_item",
-          "actions": [
-            "text: Here, take this potion. You are going to need it!",
-            "giveItem: Potion",
-            null
+          "npcActions": [
+            {
+              "text": "Here, take this potion. You are going to need it!"
+            },
+            {
+              "giveItem": "Potion"
+            }
           ],
           "update": "done"
         },
         {
           "name": "done",
-          "text": "You can use potions to heal your Pokémon!"
+          "npcActions": [
+            {
+              "text": "You can use potions to heal your Pokémon!"
+            }
+          ]
         }
       ]
     },
@@ -61,15 +96,34 @@
       "spriteIndex": 6,
       "direction": "RIGHT",
       "walkToPlayer": true,
-      "trainer": {
-        "name": "Youngster Joey",
-        "cashMoney": 100,
-        "pokemon": [
-          "Bidoof 4"
-        ],
-        "before": "Someone freed the pointer to my Rattata! Was it you?",
-        "after": "I would have won with my Rattata!"
-      }
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "text": "Someone freed the pointer to my Rattata! Was it you?"
+            },
+            {
+              "battle": {
+                "name": "Youngster Joey",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Bidoof 4"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "text": "I would have won with my Rattata!"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "DFS_Town_NPC_Ball_Giver_01",
@@ -82,19 +136,35 @@
       "interactions": [
         {
           "name": "give_item",
-          "actions": [
-            "text: Here, take these Pokéballs. You'll need them to capture Poké!",
-            "giveItem: Poké Ball",
-            "giveItem: Poké Ball",
-            "giveItem: Poké Ball",
-            "giveItem: Poké Ball",
-            "giveItem: Poké Ball"
+          "npcActions": [
+            {
+              "text": "Here, take these Pokéballs. You'll need them to capture Poké!"
+            },
+            {
+              "giveItem": "Poké Ball"
+            },
+            {
+              "giveItem": "Poké Ball"
+            },
+            {
+              "giveItem": "Poké Ball"
+            },
+            {
+              "giveItem": "Poké Ball"
+            },
+            {
+              "giveItem": "Poké Ball"
+            }
           ],
           "update": "done"
         },
         {
           "name": "done",
-          "text": "You can use Pokéballs to catch new Pokémon!"
+          "npcActions": [
+            {
+              "text": "You can use Pokéballs to catch new Pokémon!"
+            }
+          ]
         }
       ]
     },
@@ -106,15 +176,34 @@
       "spriteIndex": 6,
       "direction": "UP",
       "walkToPlayer": true,
-      "trainer": {
-        "name": "Youngster Joey",
-        "cashMoney": 100,
-        "pokemon": [
-          "Pidgey 4"
-        ],
-        "before": "My Rattata is in the top percentage of Rattata!",
-        "after": "I thought Rattata was the very best..."
-      }
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "text": "My Rattata is in the top percentage of Rattata!"
+            },
+            {
+              "battle": {
+                "name": "Youngster Joey",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Pidgey 4"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "text": "I thought Rattata was the very best..."
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [

@@ -9,7 +9,16 @@
       "spriteIndex": 19,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_NPC_TomTownPoliceOfficer01_01",
@@ -20,7 +29,16 @@
       "spriteIndex": 18,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "I wish he would just calm down and try to explain what happened."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I wish he would just calm down and try to explain what happened."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_NPC_Citizen_02",
@@ -31,7 +49,16 @@
       "spriteIndex": 16,
       "direction": "RIGHT",
       "walkToPlayer": false,
-      "text": "I've never felt a shock like that before! Did it come from our powerplant?"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I've never felt a shock like that before! Did it come from our powerplant?"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_NPC_Scientist_01",
@@ -42,7 +69,16 @@
       "spriteIndex": 12,
       "direction": "RIGHT",
       "walkToPlayer": false,
-      "text": "I need to get back in there. The reactor is going to explode!"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I need to get back in there. The reactor is going to explode!"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_NPC_Scientist_03",
@@ -53,7 +89,16 @@
       "spriteIndex": 11,
       "direction": "LEFT",
       "walkToPlayer": false,
-      "text": "Team Deadlock better not harm the Magnemites!"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Team Deadlock better not harm the Magnemites!"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_NPC_Citizen_01",
@@ -64,7 +109,16 @@
       "spriteIndex": 2,
       "direction": "RIGHT",
       "walkToPlayer": false,
-      "text": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad."
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

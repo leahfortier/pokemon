@@ -9,7 +9,16 @@
       "spriteIndex": 12,
       "direction": "RIGHT",
       "walkToPlayer": false,
-      "text": "I'll be here for days trying to get the plant fully operational again."
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "I'll be here for days trying to get the plant fully operational again."
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
@@ -23,21 +32,29 @@
       "interactions": [
         {
           "name": "battle",
-          "actions": [
-            "text: I'm going to kill your process.",
-            "battle: {
-				name: \"Team Deadlock Grunt\",
-				cashMoney: 100,
-				pokemon: [
-					\"Venipede 14\"
-				],
-				update: won
-			}"
+          "npcActions": [
+            {
+              "text": "I'm going to kill your process."
+            },
+            {
+              "battle": {
+                "name": "Team Deadlock Grunt",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Venipede 14"
+                ],
+                "update": "won"
+              }
+            }
           ]
         },
         {
           "name": "won",
-          "text": "I can't beleive you managed to killed my process."
+          "npcActions": [
+            {
+              "text": "I can't beleive you managed to killed my process."
+            }
+          ]
         }
       ]
     },
@@ -50,7 +67,16 @@
       "spriteIndex": 18,
       "direction": "LEFT",
       "walkToPlayer": true,
-      "text": "Wow, you did it! You saved the power plant!"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Wow, you did it! You saved the power plant!"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
@@ -64,24 +90,30 @@
       "interactions": [
         {
           "name": "battle",
-          "actions": [
-            "text: You can't stop us. This town's main thread will be terminated!",
-            "battle: {
-				name: \"Team Deadlock Grunt\",
-				cashMoney: 100,
-				pokemon: [
-					\"Butterfree 14\",
-					\"Beedrill 15\"
-				],
-				update: deadlock_defeat
-			}"
+          "npcActions": [
+            {
+              "text": "You can't stop us. This town's main thread will be terminated!"
+            },
+            {
+              "battle": {
+                "name": "Team Deadlock Grunt",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Butterfree 14",
+                  "Beedrill 15"
+                ],
+                "update": "deadlock_defeat"
+              }
+            }
           ]
         },
         {
           "name": "deadlock_defeat",
-          "actions": [
-            "text: You may have halted us now, but our loop is infinite!",
-            "trigger: GroupTrigger_TomTownPowerPlantDefeatedTeamDeadlock"
+          "npcActions": [
+            {
+              "text": "You may have halted us now, but our loop is infinite!"
+            },
+            {}
           ]
         }
       ]
@@ -98,24 +130,34 @@
       "interactions": [
         {
           "name": "battle",
-          "actions": [
-            "text: What is a process like you doing here?",
-            "text: That doesn't matter. You can't interfere with our threads!",
-            "battle: {
-				name: \"Team Deadlock Grunt\",
-				cashMoney: 100,
-				pokemon: [
-					\"Venonat 12\"
-				],
-				update: won
-			}"
+          "npcActions": [
+            {
+              "text": "What is a process like you doing here?"
+            },
+            {
+              "text": "That doesn't matter. You can't interfere with our threads!"
+            },
+            {
+              "battle": {
+                "name": "Team Deadlock Grunt",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Venonat 12"
+                ],
+                "update": "won"
+              }
+            }
           ]
         },
         {
           "name": "won",
-          "actions": [
-            "text: How could you have won?",
-            "text: The others will stop your thread!"
+          "npcActions": [
+            {
+              "text": "How could you have won?"
+            },
+            {
+              "text": "The others will stop your thread!"
+            }
           ]
         }
       ]

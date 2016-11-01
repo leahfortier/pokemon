@@ -11,39 +11,46 @@
       "interactions": [
         {
           "name": "intro",
-          "actions": [
-            "text: I am Professor Maple, eh. Welcome to my lab.",
-            "text: While you are here, let me heal your Pokémon.",
-            "trigger: HealParty",
-            "text: I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day.",
-            "giveItem: Syrup",
-            "text: Oh, and also take this egg. No idea what Pokémon is in it, but I'm sure you'll take good care of it.",
-            "givePokemon: RandomEgg",
-            "update: heal"
+          "npcActions": [
+            {
+              "text": "I am Professor Maple, eh. Welcome to my lab."
+            },
+            {
+              "text": "While you are here, let me heal your Pokémon."
+            },
+            {},
+            {
+              "text": "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
+            },
+            {
+              "giveItem": "Syrup"
+            },
+            {
+              "text": "Oh, and also take this egg. No idea what Pokémon is in it, but I'm sure you'll take good care of it."
+            },
+            {
+              "givePokemon": "RandomEgg"
+            },
+            {}
           ]
         },
         {
           "name": "stone_choice",
-          "actions": [
-            "text: wudya wan",
-            "choice: [
-				{
-					text: wawa,
-					giveItem: \"Water Stone\",
-				},
-				{
-					text: sunsunsunherewecome,
-					giveItem: \"Sun Stone\",
-				}
-			]",
-            "update: heal"
+          "npcActions": [
+            {
+              "text": "wudya wan"
+            },
+            {},
+            {}
           ]
         },
         {
           "name": "heal",
-          "actions": [
-            "text: How's it goin'? Need to rest up your Pokémon a bit?",
-            "trigger: HealParty"
+          "npcActions": [
+            {
+              "text": "How's it goin'? Need to rest up your Pokémon a bit?"
+            },
+            {}
           ]
         }
       ]
@@ -56,7 +63,16 @@
       "spriteIndex": 19,
       "direction": "RIGHT",
       "walkToPlayer": false,
-      "text": "This syrup soda is amazing!"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "This syrup soda is amazing!"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "MaplesLab_NPC_MapleAssistant_01",
@@ -66,7 +82,16 @@
       "spriteIndex": 12,
       "direction": "LEFT",
       "walkToPlayer": false,
-      "text": "Don't disturb me! I'm doing syrup science!"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Don't disturb me! I'm doing syrup science!"
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],

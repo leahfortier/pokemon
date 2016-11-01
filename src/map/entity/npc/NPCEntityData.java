@@ -1,13 +1,15 @@
-package map.entity;
+package map.entity.npc;
+
+import main.Global;
+import map.Direction;
+import map.entity.Entity;
+import map.entity.EntityData;
+import pattern.AreaDataMatcher.NPCMatcher;
+import util.StringUtils;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import main.Global;
-import map.Direction;
-import pattern.AreaDataMatcher.NPCMatcher;
-import util.StringUtils;
 
 public class NPCEntityData extends EntityData {
 	private static final Pattern multiVariablePattern = Pattern.compile("(\\w+)(?:\\[(\\d+)\\])?:\\s*(?:(\\w+)|\"([^\"]*)\")");
@@ -37,8 +39,6 @@ public class NPCEntityData extends EntityData {
 		path = matcher.getPath();
 		spriteIndex = matcher.spriteIndex;
 		defaultDirection = matcher.direction;
-		firstDialogue = new String[] { matcher.text };
-		secondDialogue = new String[] { matcher.text };
 		walkToPlayer = matcher.walkToPlayer ? 1 : 0;
 	}
 
@@ -163,7 +163,7 @@ public class NPCEntityData extends EntityData {
 		if (entity == null) {
 			// entity = new NPCEntity(x, y, trigger, path, defaultDirection,
 			// spriteIndex);
-			entity = new NPCEntity(name, x, y, trigger, path, defaultDirection, spriteIndex, firstDialogue, secondDialogue, trainerInfo, itemInfo, firstTriggers, secondTriggers, walkToPlayer == 1);
+			entity = new NPCEntity(name, x, y, trigger, path, defaultDirection, spriteIndex, walkToPlayer == 1);
 		}
 		return entity;
 	}

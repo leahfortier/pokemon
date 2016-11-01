@@ -6,7 +6,8 @@
       "startY": 2,
       "spriteIndex": 8,
       "direction": "DOWN",
-      "walkToPlayer": false
+      "walkToPlayer": false,
+      "interactions": []
     },
     {
       "name": "Mart_Guy",
@@ -14,7 +15,8 @@
       "startY": 7,
       "spriteIndex": 9,
       "direction": "RIGHT",
-      "walkToPlayer": false
+      "walkToPlayer": false,
+      "interactions": []
     },
     {
       "name": "Tom",
@@ -24,7 +26,16 @@
       "spriteIndex": 5,
       "direction": "DOWN",
       "walkToPlayer": false,
-      "text": "Hi, I'm Tom!"
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "text": "Hi, I'm Tom!"
+            }
+          ]
+        }
+      ]
     }
   ],
   "items": [],
