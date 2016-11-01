@@ -1,4 +1,6 @@
 {
+  "NPCs": [],
+  "items": [],
   "mapEntrances": [
     {
       "name": "stairs",
@@ -19,8 +21,10 @@
         11
       ],
       "triggerType": "MapTransition",
-      "nextMap": "DFS_Town",
-      "mapEntrance": "RivalsHouse"
+      "contents": [
+        "nextMap: DFS_Town",
+        "mapEntrance: RivalsHouse"
+      ]
     },
     {
       "name": "from_Rival_House_to_R_House_Up_01",
@@ -29,8 +33,12 @@
         6
       ],
       "triggerType": "MapTransition",
-      "nextMap": "R_House_Up",
-      "mapEntrance": "stairs"
+      "contents": [
+        "nextMap: R_House_Up",
+        "mapEntrance: stairs"
+      ]
     }
-  ]
+  ],
+  "triggers": [],
+  "groupTriggers": []
 }

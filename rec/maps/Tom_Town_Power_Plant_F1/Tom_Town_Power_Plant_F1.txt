@@ -49,8 +49,10 @@
         9
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Tom_Town_Power_Plant_B1",
-      "mapEntrance": "FromFloor1"
+      "contents": [
+        "nextMap: Tom_Town_Power_Plant_B1",
+        "mapEntrance: FromFloor1"
+      ]
     },
     {
       "name": "from_Tom_Town_Power_Plant_to_Tom_Town_01",
@@ -59,8 +61,10 @@
         13
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Tom_Town",
-      "mapEntrance": "TomTownPowerPlant"
+      "contents": [
+        "nextMap: Tom_Town",
+        "mapEntrance: TomTownPowerPlant"
+      ]
     },
     {
       "name": "from_Tom_Town_Power_Plant_to_Tom_Town_Power_Plant_F2_01",
@@ -69,8 +73,10 @@
         11
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Tom_Town_Power_Plant_F2",
-      "mapEntrance": "FromFloor1"
+      "contents": [
+        "nextMap: Tom_Town_Power_Plant_F2",
+        "mapEntrance: FromFloor1"
+      ]
     }
   ],
   "triggers": [],

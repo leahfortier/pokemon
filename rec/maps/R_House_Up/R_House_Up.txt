@@ -1,4 +1,6 @@
 {
+  "NPCs": [],
+  "items": [],
   "mapEntrances": [
     {
       "name": "stairs",
@@ -14,8 +16,12 @@
         2
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Rival_House",
-      "mapEntrance": "stairs"
+      "contents": [
+        "nextMap: Rival_House",
+        "mapEntrance: stairs"
+      ]
     }
-  ]
+  ],
+  "triggers": [],
+  "groupTriggers": []
 }

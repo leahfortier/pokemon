@@ -6,7 +6,7 @@
       "startY": 23,
       "path": "w",
       "spriteIndex": 16,
-      "direction": RIGHT,
+      "direction": "RIGHT",
       "walkToPlayer": true,
       "trainer": {
         "name": "Meadow Lady",
@@ -25,7 +25,7 @@
       "startY": 16,
       "path": "w",
       "spriteIndex": 1,
-      "direction": DOWN,
+      "direction": "DOWN",
       "walkToPlayer": true,
       "trainer": {
         "name": "Bug Catcher",
@@ -76,8 +76,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "nextMap": "TransitionBuildingH",
-      "mapEntrance": "WestDoor"
+      "contents": [
+        "nextMap: TransitionBuildingH",
+        "mapEntrance: WestDoor"
+      ]
     },
     {
       "name": "Bloom_Filter_Meadow_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_EastDoor",
@@ -89,8 +91,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "nextMap": "TransitionBuildingH",
-      "mapEntrance": "EastDoor"
+      "contents": [
+        "nextMap: TransitionBuildingH",
+        "mapEntrance: EastDoor"
+      ]
     },
     {
       "name": "Bloom_Filter_Wild_Pokemon",
@@ -403,21 +407,25 @@
         19
       ],
       "triggerType": "WildBattle",
-      "encounterRate": "VERY_COMMON",
-      "pokemon": [
-        "Caterpie 4-6 20%",
-        "Jigglypuff 4-6 15%",
-        "Paras 4-6 7%",
-        "Yanma 4-6 6%",
-        "Budew 4-6 5%",
-        "Ralts 4-6 4%",
-        "Solosis 4-6 4%",
-        "Elgyem 4-6 4%",
-        "Ledyba 4-6 15%",
-        "Hoppip 4-6 5%",
-        "Oddish 4-6 5%",
-        "Flabebe 4-6 10%"
+      "contents": [
+        "encounterRate: VERY_COMMON",
+        "pokemon: {
+			\"Caterpie 4-6 20%\", 
+			\"Jigglypuff 4-6 15%\", 
+			\"Paras 4-6 7%\", 
+			\"Yanma 4-6 6%\", 
+			\"Budew 4-6 5%\", 
+			\"Ralts 4-6 4%\", 
+			\"Solosis 4-6 4%\", 
+			\"Elgyem 4-6 4%\", 
+			\"Ledyba 4-6 15%\", 
+			\"Hoppip 4-6 5%\", 
+			\"Oddish 4-6 5%\", 
+			\"Flabebe 4-6 10%\"
+}"
       ]
     }
-  ]
+  ],
+  "triggers": [],
+  "groupTriggers": []
 }

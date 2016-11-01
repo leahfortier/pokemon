@@ -142,8 +142,10 @@
         8
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Tom_Town_Power_Plant_F2",
-      "mapEntrance": "FromFloor3"
+      "contents": [
+        "nextMap: Tom_Town_Power_Plant_F2",
+        "mapEntrance: FromFloor3"
+      ]
     }
   ],
   "triggers": [],

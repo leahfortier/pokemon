@@ -114,8 +114,10 @@
         16
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Tom_Town",
-      "mapEntrance": "Gym"
+      "contents": [
+        "nextMap: Tom_Town",
+        "mapEntrance: Gym"
+      ]
     }
   ],
   "triggers": [],

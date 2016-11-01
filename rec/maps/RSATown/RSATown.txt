@@ -58,8 +58,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "nextMap": "TransitionBuildingH",
-      "mapEntrance": "WestDoor"
+      "contents": [
+        "nextMap: TransitionBuildingH",
+        "mapEntrance: WestDoor"
+      ]
     },
     {
       "name": "from_RSATown_to_PokeCenter_01",
@@ -69,8 +71,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_toPokeCenterFromEntrance_PokeCenter01",
-      "nextMap": "PokeCenter",
-      "mapEntrance": "FrontDoor"
+      "contents": [
+        "nextMap: PokeCenter",
+        "mapEntrance: FrontDoor"
+      ]
     },
     {
       "name": "RSATown_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_EastDoor",
@@ -82,8 +86,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "nextMap": "TransitionBuildingH",
-      "mapEntrance": "EastDoor"
+      "contents": [
+        "nextMap: TransitionBuildingH",
+        "mapEntrance: EastDoor"
+      ]
     }
   ],
   "triggers": [],

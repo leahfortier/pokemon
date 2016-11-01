@@ -11,6 +11,7 @@
       "text": "It's nice when you come to visit, but please get a job."
     }
   ],
+  "items": [],
   "mapEntrances": [
     {
       "name": "stairs",
@@ -31,8 +32,10 @@
         1
       ],
       "triggerType": "MapTransition",
-      "nextMap": "PlayersHouseUp",
-      "mapEntrance": "stairs"
+      "contents": [
+        "nextMap: PlayersHouseUp",
+        "mapEntrance: stairs"
+      ]
     }
   ],
   "triggers": [

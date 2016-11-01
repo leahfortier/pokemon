@@ -103,8 +103,10 @@
         13
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Tom_Town_Power_Plant_F1",
-      "mapEntrance": "FromTomTown"
+      "contents": [
+        "nextMap: Tom_Town_Power_Plant_F1",
+        "mapEntrance: FromTomTown"
+      ]
     },
     {
       "name": "Tom_Town_to_TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_NorthDoor",
@@ -118,8 +120,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "nextMap": "TransitionBuildingV",
-      "mapEntrance": "NorthDoor"
+      "contents": [
+        "nextMap: TransitionBuildingV",
+        "mapEntrance: NorthDoor"
+      ]
     },
     {
       "name": "Tom_Town_EventTrigger_TomTownPowerPlantExplosionTrigger_01",
@@ -134,8 +138,10 @@
       "triggerType": "Event",
       "condition": "Badge_0&!TomTownPowerPlantExplosionTriggered",
       "global": "TomTownPowerPlantExplosionTriggered",
-      "createDialogue": "TomTownPowerPlantExplosionDialogue",
-      "text": "Rumble Rumble Rumble"
+      "contents": [
+        "createDialogue: TomTownPowerPlantExplosionDialogue",
+        "text: Rumble Rumble Rumble"
+      ]
     },
     {
       "name": "Tom_Town_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_WestDoor",
@@ -147,8 +153,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "nextMap": "TransitionBuildingH",
-      "mapEntrance": "WestDoor"
+      "contents": [
+        "nextMap: TransitionBuildingH",
+        "mapEntrance: WestDoor"
+      ]
     },
     {
       "name": "from_Tom_Town_to_Tom_Gym_01",
@@ -157,8 +165,10 @@
         31
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Tom_Gym",
-      "mapEntrance": "Tom_Town"
+      "contents": [
+        "nextMap: Tom_Gym",
+        "mapEntrance: Tom_Town"
+      ]
     },
     {
       "name": "from_Tom_Town_to_PokeCenter_01",
@@ -168,8 +178,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_toPokeCenterFromEntrance_PokeCenter01",
-      "nextMap": "PokeCenter",
-      "mapEntrance": "FrontDoor"
+      "contents": [
+        "nextMap: PokeCenter",
+        "mapEntrance: FrontDoor"
+      ]
     }
   ],
   "triggers": [

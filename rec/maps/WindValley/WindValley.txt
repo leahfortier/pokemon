@@ -21,8 +21,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "nextMap": "TransitionBuildingV",
-      "mapEntrance": "SouthDoor"
+      "contents": [
+        "nextMap: TransitionBuildingV",
+        "mapEntrance: SouthDoor"
+      ]
     },
     {
       "name": "ValleyGrass",
@@ -1181,18 +1183,20 @@
         73
       ],
       "triggerType": "WildBattle",
-      "encounterRate": "VERY_COMMON",
-      "pokemon": [
-        "Mareep 6-10 10%",
-        "Cottonee 6-10 10%",
-        "Budew 6-10 10%",
-        "Hoppip 6-10 10%",
-        "Skiddo 6-10 10%",
-        "Sunkern 6-10 10%",
-        "Drifloon 6-10 10%",
-        "Sewaddle 6-10 10%",
-        "Petilil 6-10 10%",
-        "Cherubi 6-10 10%"
+      "contents": [
+        "encounterRate: VERY_COMMON",
+        "pokemon: {
+			\"Mareep 6-10 10%\", 
+			\"Cottonee 6-10 10%\", 
+			\"Budew 6-10 10%\", 
+			\"Hoppip 6-10 10%\", 
+			\"Skiddo 6-10 10%\", 
+			\"Sunkern 6-10 10%\", 
+			\"Drifloon 6-10 10%\", 
+			\"Sewaddle 6-10 10%\", 
+			\"Petilil 6-10 10%\", 
+			\"Cherubi 6-10 10%\"
+}"
       ]
     },
     {
@@ -2014,17 +2018,19 @@
         74
       ],
       "triggerType": "WildBattle",
-      "encounterRate": "COMMON",
-      "pokemon": [
-        "Sandshrew 7-11 20%",
-        "Spearow 7-11 15%",
-        "Doduo 7-11 15%",
-        "Dwebble 7-11 12%",
-        "Bonsly 7-11 12%",
-        "Drifloon 7-11 10%",
-        "Cubone 7-11 10%",
-        "Larvitar 7-11 1%",
-        "Rufflet 7-11 5%"
+      "contents": [
+        "encounterRate: COMMON",
+        "pokemon: {
+			\"Sandshrew 7-11 20%\", 
+			\"Spearow 7-11 15%\", 
+			\"Doduo 7-11 15%\", 
+			\"Dwebble 7-11 12%\", 
+			\"Bonsly 7-11 12%\", 
+			\"Drifloon 7-11 10%\", 
+			\"Cubone 7-11 10%\", 
+			\"Larvitar 7-11 1%\", 
+			\"Rufflet 7-11 5%\"
+}"
       ]
     }
   ],

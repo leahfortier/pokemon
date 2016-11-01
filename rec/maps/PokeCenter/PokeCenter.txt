@@ -27,6 +27,7 @@
       "text": "Hi, I'm Tom!"
     }
   ],
+  "items": [],
   "mapEntrances": [
     {
       "name": "FrontDoor",
@@ -34,6 +35,7 @@
       "y": 8
     }
   ],
+  "triggerData": [],
   "triggers": [
     {
       "name": "PokeCenter_Counter",

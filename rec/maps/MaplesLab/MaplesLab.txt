@@ -6,7 +6,7 @@
       "startY": 1,
       "path": "w",
       "spriteIndex": 7,
-      "direction": DOWN,
+      "direction": "DOWN",
       "walkToPlayer": false,
       "interactions": [
         {
@@ -54,7 +54,7 @@
       "startY": 7,
       "path": "w",
       "spriteIndex": 19,
-      "direction": RIGHT,
+      "direction": "RIGHT",
       "walkToPlayer": false,
       "text": "This syrup soda is amazing!"
     },
@@ -64,11 +64,12 @@
       "startY": 10,
       "path": "w",
       "spriteIndex": 12,
-      "direction": LEFT,
+      "direction": "LEFT",
       "walkToPlayer": false,
       "text": "Don't disturb me! I'm doing syrup science!"
     }
   ],
+  "items": [],
   "mapEntrances": [
     {
       "name": "DFS_Town",
@@ -79,12 +80,17 @@
   "triggerData": [
     {
       "name": "from_MaplesLab_to_DFS_Town_01",
-      "triggerType": "MapTransition",
-      "nextMap": "DFS_Town",
-      "mapEntrance": "MaplesLab",
       "location": [
-		10, 16
+        10,
+        16
+      ],
+      "triggerType": "MapTransition",
+      "contents": [
+        "nextMap: DFS_Town",
+        "mapEntrance: MaplesLab"
       ]
     }
-  ]
+  ],
+  "triggers": [],
+  "groupTriggers": []
 }

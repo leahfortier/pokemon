@@ -6,11 +6,12 @@
       "startY": 4,
       "path": "w",
       "spriteIndex": 17,
-      "direction": DOWN,
+      "direction": "DOWN",
       "walkToPlayer": false,
       "text": "R U A WIZARD 'ARRY"
     }
   ],
+  "items": [],
   "mapEntrances": [
     {
       "name": "DFS_Town",
@@ -26,8 +27,12 @@
         7
       ],
       "triggerType": "MapTransition",
-      "nextMap": "DFS_Town",
-      "mapEntrance": "NeighborsHouse"
+      "contents": [
+        "nextMap: DFS_Town",
+        "mapEntrance: NeighborsHouse"
+      ]
     }
-  ]
+  ],
+  "triggers": [],
+  "groupTriggers": []
 }

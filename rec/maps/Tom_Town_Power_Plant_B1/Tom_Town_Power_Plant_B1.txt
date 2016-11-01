@@ -28,8 +28,10 @@
         9
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Tom_Town_Power_Plant_F1",
-      "mapEntrance": "FromBasement1"
+      "contents": [
+        "nextMap: Tom_Town_Power_Plant_F1",
+        "mapEntrance: FromBasement1"
+      ]
     }
   ],
   "triggers": [],

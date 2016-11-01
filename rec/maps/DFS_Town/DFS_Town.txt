@@ -6,7 +6,7 @@
       "startY": 20,
       "path": "uuddddduuu",
       "spriteIndex": 6,
-      "direction": RIGHT,
+      "direction": "RIGHT",
       "walkToPlayer": true,
       "trainer": {
         "name": "Youngster Joey",
@@ -25,7 +25,7 @@
       "startY": 18,
       "path": "w",
       "spriteIndex": 16,
-      "direction": DOWN,
+      "direction": "DOWN",
       "walkToPlayer": true,
       "text": "Hey, you should go talk to Professor Maple first before leaving town."
     },
@@ -35,7 +35,7 @@
       "startY": 16,
       "path": "w",
       "spriteIndex": 2,
-      "direction": DOWN,
+      "direction": "DOWN",
       "walkToPlayer": false,
       "interactions": [
         {
@@ -59,7 +59,7 @@
       "startY": 28,
       "path": "w",
       "spriteIndex": 6,
-      "direction": RIGHT,
+      "direction": "RIGHT",
       "walkToPlayer": true,
       "trainer": {
         "name": "Youngster Joey",
@@ -77,7 +77,7 @@
       "startY": 24,
       "path": "w",
       "spriteIndex": 3,
-      "direction": DOWN,
+      "direction": "DOWN",
       "walkToPlayer": true,
       "interactions": [
         {
@@ -104,7 +104,7 @@
       "startY": 18,
       "path": "w",
       "spriteIndex": 6,
-      "direction": UP,
+      "direction": "UP",
       "walkToPlayer": true,
       "trainer": {
         "name": "Youngster Joey",
@@ -160,8 +160,10 @@
         26
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Neighbor_House",
-      "mapEntrance": "DFS_Town"
+      "contents": [
+        "nextMap: Neighbor_House",
+        "mapEntrance: DFS_Town"
+      ]
     },
     {
       "name": "from_DFS_Town_to_MaplesLab_01",
@@ -170,8 +172,10 @@
         16
       ],
       "triggerType": "MapTransition",
-      "nextMap": "MaplesLab",
-      "mapEntrance": "DFS_Town"
+      "contents": [
+        "nextMap: MaplesLab",
+        "mapEntrance: DFS_Town"
+      ]
     },
     {
       "name": "DFS_Town_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_EastDoor",
@@ -183,8 +187,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "nextMap": "TransitionBuildingH",
-      "mapEntrance": "EastDoor"
+      "contents": [
+        "nextMap: TransitionBuildingH",
+        "mapEntrance: EastDoor"
+      ]
     },
     {
       "name": "from_DFS_Town_to_Rival_House_01",
@@ -193,8 +199,10 @@
         14
       ],
       "triggerType": "MapTransition",
-      "nextMap": "Rival_House",
-      "mapEntrance": "DFS_Town"
+      "contents": [
+        "nextMap: Rival_House",
+        "mapEntrance: DFS_Town"
+      ]
     },
     {
       "name": "Edge_1_Wild_Pokemon",
@@ -627,13 +635,15 @@
         28
       ],
       "triggerType": "WildBattle",
-      "encounterRate": "VERY_COMMON",
-      "pokemon": [
-        "Pidgey 2-4 30%",
-        "Bidoof 2-4 25%",
-        "Sentret 2-4 20%",
-        "Fletchling 2-4 15%",
-        "Lillipup 2-4 10%"
+      "contents": [
+        "encounterRate: VERY_COMMON",
+        "pokemon: {
+			\"Pidgey 2-4 30%\", 
+			\"Bidoof 2-4 25%\", 
+			\"Sentret 2-4 20%\", 
+			\"Fletchling 2-4 15%\", 
+			\"Lillipup 2-4 10%\"
+}"
       ]
     },
     {
@@ -643,8 +653,12 @@
         26
       ],
       "triggerType": "MapTransition",
-      "nextMap": "PlayersHouseDown",
-      "mapEntrance": "DFS_Town"
+      "contents": [
+        "nextMap: PlayersHouseDown",
+        "mapEntrance: DFS_Town"
+      ]
     }
-  ]
+  ],
+  "triggers": [],
+  "groupTriggers": []
 }
