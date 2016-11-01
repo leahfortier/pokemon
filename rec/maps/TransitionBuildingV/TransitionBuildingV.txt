@@ -140,6 +140,5 @@
       "y": 4,
       "trigger": "GroupTrigger_TransitionBuilding_InformationDesk"
     }
-  ],
-  "groupTriggers": []
+  ]
 }

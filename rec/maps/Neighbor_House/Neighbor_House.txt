@@ -33,6 +33,5 @@
       }"
     }
   ],
-  "triggers": [],
-  "groupTriggers": []
+  "triggers": []
 }

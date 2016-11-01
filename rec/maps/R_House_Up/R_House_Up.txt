@@ -22,6 +22,5 @@
       }"
     }
   ],
-  "triggers": [],
-  "groupTriggers": []
+  "triggers": []
 }

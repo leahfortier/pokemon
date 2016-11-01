@@ -2034,6 +2034,5 @@
       }"
     }
   ],
-  "triggers": [],
-  "groupTriggers": []
+  "triggers": []
 }

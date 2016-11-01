@@ -91,6 +91,5 @@
       }"
     }
   ],
-  "triggers": [],
-  "groupTriggers": []
+  "triggers": []
 }

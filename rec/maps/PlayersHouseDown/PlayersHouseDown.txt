@@ -67,6 +67,5 @@
       "y": 1,
       "trigger": "PlayersFridgeTrigger"
     }
-  ],
-  "groupTriggers": []
+  ]
 }

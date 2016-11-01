@@ -191,6 +191,5 @@
       "y": 13,
       "trigger": "LockedDoorTrigger"
     }
-  ],
-  "groupTriggers": []
+  ]
 }

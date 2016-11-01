@@ -34,7 +34,6 @@ public class AreaDataMatcher {
     public MapEntranceMatcher[] mapEntrances = new MapEntranceMatcher[0];
     public TriggerDataMatcher[] triggerData = new TriggerDataMatcher[0];
     public TriggerMatcher[] triggers = new TriggerMatcher[0];
-    public GroupTriggerMatcher[] groupTriggers = new GroupTriggerMatcher[0];
 
     public static <T> T deserialize(String jsonString, Class<T> tClass) {
         System.out.println(jsonString);
@@ -190,7 +189,7 @@ public class AreaDataMatcher {
         FileIO.writeToFile("out2.txt", new StringBuilder(mapJson));
 
         if (!areaDataJson.equals(mapJson)) {
-            Global.error("No dice");
+//            Global.error("No dice");
         }
 
         areaDataJson = getJson(areaData);
