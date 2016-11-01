@@ -1,238 +1,423 @@
-Item Bloom_Filter_Meadow_Item_Pecha_Berry_01{
-	x: 21
-	y: 26
-	item: Pecha_Berry
+{
+  "NPCs": [
+    {
+      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01",
+      "startX": 48,
+      "startY": 23,
+      "path": "w",
+      "spriteIndex": 16,
+      "direction": RIGHT,
+      "walkToPlayer": true,
+      "trainer": {
+        "name": "Meadow Lady",
+        "cashMoney": 100,
+        "pokemon": [
+          "Budew 6",
+          "Oddish 6"
+        ],
+        "before": "I'm a meadow lady in a meadow!!!",
+        "after": "Yayyy I'm in a meadow and I'm a lady lalalala!"
+      }
+    },
+    {
+      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02",
+      "startX": 22,
+      "startY": 16,
+      "path": "w",
+      "spriteIndex": 1,
+      "direction": DOWN,
+      "walkToPlayer": true,
+      "trainer": {
+        "name": "Bug Catcher",
+        "cashMoney": 0,
+        "pokemon": [
+          "Caterpie 6",
+          "Kricketot 6"
+        ],
+        "before": "I like shorts!!!!",
+        "after": "SHORRRRTTTTTSSSSSS"
+      }
+    }
+  ],
+  "items": [
+    {
+      "name": "Bloom_Filter_Meadow_Item_Pecha_Berry_01",
+      "x": 21,
+      "y": 26,
+      "item": "Pecha_Berry"
+    },
+    {
+      "name": "Bloom_Filter_Meadow_Item_Meadow_Plate_01",
+      "x": 44,
+      "y": 14,
+      "item": "Meadow_Plate"
+    }
+  ],
+  "mapEntrances": [
+    {
+      "name": "TransitionBuildingHWestDoor01",
+      "x": 54,
+      "y": 21
+    },
+    {
+      "name": "TransitionBuildingHEastDoor01",
+      "x": 13,
+      "y": 21
+    }
+  ],
+  "triggerData": [
+    {
+      "name": "Bloom_Filter_Meadow_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_WestDoor",
+      "location": [
+        55,
+        21,
+        55,
+        20
+      ],
+      "triggerType": "MapTransition",
+      "global": "MapGlobal_TransitionPair01",
+      "nextMap": "TransitionBuildingH",
+      "mapEntrance": "WestDoor"
+    },
+    {
+      "name": "Bloom_Filter_Meadow_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_EastDoor",
+      "location": [
+        12,
+        21,
+        12,
+        20
+      ],
+      "triggerType": "MapTransition",
+      "global": "MapGlobal_TransitionPair01",
+      "nextMap": "TransitionBuildingH",
+      "mapEntrance": "EastDoor"
+    },
+    {
+      "name": "Bloom_Filter_Wild_Pokemon",
+      "location": [
+        20,
+        14,
+        21,
+        14,
+        19,
+        15,
+        19,
+        16,
+        20,
+        15,
+        20,
+        16,
+        18,
+        17,
+        18,
+        18,
+        19,
+        17,
+        19,
+        18,
+        17,
+        19,
+        18,
+        19,
+        19,
+        19,
+        17,
+        20,
+        17,
+        21,
+        17,
+        22,
+        17,
+        23,
+        17,
+        24,
+        17,
+        25,
+        17,
+        26,
+        18,
+        20,
+        18,
+        21,
+        18,
+        22,
+        18,
+        23,
+        18,
+        24,
+        18,
+        25,
+        18,
+        26,
+        27,
+        14,
+        28,
+        14,
+        29,
+        14,
+        30,
+        14,
+        25,
+        15,
+        26,
+        15,
+        27,
+        15,
+        28,
+        15,
+        25,
+        16,
+        25,
+        17,
+        26,
+        16,
+        26,
+        17,
+        24,
+        18,
+        25,
+        18,
+        23,
+        19,
+        24,
+        19,
+        25,
+        19,
+        23,
+        20,
+        23,
+        21,
+        23,
+        22,
+        23,
+        23,
+        23,
+        24,
+        23,
+        25,
+        23,
+        26,
+        24,
+        20,
+        24,
+        21,
+        24,
+        22,
+        24,
+        23,
+        24,
+        24,
+        24,
+        25,
+        24,
+        26,
+        37,
+        14,
+        38,
+        14,
+        39,
+        14,
+        40,
+        14,
+        41,
+        14,
+        35,
+        15,
+        36,
+        15,
+        37,
+        15,
+        38,
+        15,
+        39,
+        15,
+        35,
+        16,
+        35,
+        17,
+        36,
+        16,
+        36,
+        17,
+        37,
+        16,
+        37,
+        17,
+        34,
+        18,
+        34,
+        19,
+        34,
+        20,
+        34,
+        21,
+        34,
+        22,
+        34,
+        23,
+        34,
+        24,
+        35,
+        18,
+        35,
+        19,
+        35,
+        20,
+        35,
+        21,
+        35,
+        22,
+        35,
+        23,
+        35,
+        24,
+        36,
+        18,
+        36,
+        19,
+        36,
+        20,
+        36,
+        21,
+        36,
+        22,
+        36,
+        23,
+        36,
+        24,
+        33,
+        25,
+        33,
+        26,
+        34,
+        25,
+        34,
+        26,
+        35,
+        25,
+        35,
+        26,
+        47,
+        14,
+        48,
+        14,
+        49,
+        14,
+        45,
+        15,
+        46,
+        15,
+        47,
+        15,
+        48,
+        15,
+        45,
+        16,
+        45,
+        17,
+        46,
+        16,
+        46,
+        17,
+        47,
+        16,
+        47,
+        17,
+        44,
+        18,
+        45,
+        18,
+        46,
+        18,
+        43,
+        20,
+        43,
+        21,
+        43,
+        22,
+        43,
+        23,
+        43,
+        24,
+        43,
+        25,
+        43,
+        26,
+        44,
+        20,
+        44,
+        21,
+        44,
+        22,
+        44,
+        23,
+        44,
+        24,
+        44,
+        25,
+        44,
+        26,
+        45,
+        20,
+        45,
+        21,
+        45,
+        22,
+        45,
+        23,
+        45,
+        24,
+        45,
+        25,
+        45,
+        26,
+        51,
+        17,
+        52,
+        17,
+        51,
+        18,
+        51,
+        19,
+        50,
+        19,
+        50,
+        20,
+        50,
+        21,
+        50,
+        22,
+        50,
+        23,
+        50,
+        24,
+        50,
+        25,
+        50,
+        26,
+        44,
+        19,
+        45,
+        19,
+        46,
+        19
+      ],
+      "triggerType": "WildBattle",
+      "encounterRate": "VERY_COMMON",
+      "pokemon": [
+        "Caterpie 4-6 20%",
+        "Jigglypuff 4-6 15%",
+        "Paras 4-6 7%",
+        "Yanma 4-6 6%",
+        "Budew 4-6 5%",
+        "Ralts 4-6 4%",
+        "Solosis 4-6 4%",
+        "Elgyem 4-6 4%",
+        "Ledyba 4-6 15%",
+        "Hoppip 4-6 5%",
+        "Oddish 4-6 5%",
+        "Flabebe 4-6 10%"
+      ]
+    }
+  ]
 }
-
-NPC Bloom_Filter_Meadow_NPC_Meadow_Trainer_01{
-	startX: 48
-	startY: 23
-	path: w
-	spriteIndex: 16
-	direction: 1
-	walkToPlayer: true
-	firstDialogue[0]: ""
-	trainer: "name: Meadow Lady
-		cash: 100
-		pokemon: Budew 6
-		pokemon: Oddish 6"
-}
-
-Item Bloom_Filter_Meadow_Item_Meadow_Plate_01{
-	x: 44
-	y: 14
-	item: Meadow_Plate
-}
-
-NPC Bloom_Filter_Meadow_NPC_Meadow_Trainer_02{
-	startX: 22
-	startY: 16
-	path: w
-	spriteIndex: 1
-	direction: 3
-	walkToPlayer: true
-	firstDialogue[0]: ""
-	trainer: "name: Bug Catcher
-		cash: 100
-		pokemon: Caterpie 6
-		pokemon: Kricketot 6"
-}
-
-MapEntrance TransitionBuildingHWestDoor01 {
-	x: 54
-	y: 21
-}
-
-MapEntrance TransitionBuildingHEastDoor01 {
-	x: 13
-	y: 21
-}
-
-TriggerData Bloom_Filter_Meadow_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_WestDoor {
-	55 21
-	55 20
-	MapTransition
-	global: MapGlobal_TransitionPair01
-	nextMap: TransitionBuildingH
-	mapEntrance: WestDoor
-}
-
-TriggerData Bloom_Filter_Meadow_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_EastDoor {
-	12 21
-	12 20
-	MapTransition
-	global: MapGlobal_TransitionPair01
-	nextMap: TransitionBuildingH
-	mapEntrance: EastDoor
-}
-
-TriggerData Bloom_Filter_Wild_Pokemon {
-	20 14
-	21 14
-	19 15
-	19 16
-	20 15
-	20 16
-	18 17
-	18 18
-	19 17
-	19 18
-	17 19
-	18 19
-	19 19
-	17 20
-	17 21
-	17 22
-	17 23
-	17 24
-	17 25
-	17 26
-	18 20
-	18 21
-	18 22
-	18 23
-	18 24
-	18 25
-	18 26
-	27 14
-	28 14
-	29 14
-	30 14
-	25 15
-	26 15
-	27 15
-	28 15
-	25 16
-	25 17
-	26 16
-	26 17
-	24 18
-	25 18
-	23 19
-	24 19
-	25 19
-	23 20
-	23 21
-	23 22
-	23 23
-	23 24
-	23 25
-	23 26
-	24 20
-	24 21
-	24 22
-	24 23
-	24 24
-	24 25
-	24 26
-	37 14
-	38 14
-	39 14
-	40 14
-	41 14
-	35 15
-	36 15
-	37 15
-	38 15
-	39 15
-	35 16
-	35 17
-	36 16
-	36 17
-	37 16
-	37 17
-	34 18
-	34 19
-	34 20
-	34 21
-	34 22
-	34 23
-	34 24
-	35 18
-	35 19
-	35 20
-	35 21
-	35 22
-	35 23
-	35 24
-	36 18
-	36 19
-	36 20
-	36 21
-	36 22
-	36 23
-	36 24
-	33 25
-	33 26
-	34 25
-	34 26
-	35 25
-	35 26
-	47 14
-	48 14
-	49 14
-	45 15
-	46 15
-	47 15
-	48 15
-	45 16
-	45 17
-	46 16
-	46 17
-	47 16
-	47 17
-	44 18
-	45 18
-	46 18
-	43 20
-	43 21
-	43 22
-	43 23
-	43 24
-	43 25
-	43 26
-	44 20
-	44 21
-	44 22
-	44 23
-	44 24
-	44 25
-	44 26
-	45 20
-	45 21
-	45 22
-	45 23
-	45 24
-	45 25
-	45 26
-	51 17
-	52 17
-	51 18
-	51 19
-	50 19
-	50 20
-	50 21
-	50 22
-	50 23
-	50 24
-	50 25
-	50 26
-	44 19
-	45 19
-	46 19
-	WildBattle
-	encounterRate: VERY_COMMON
-	pokemon: Caterpie 4-6 20%
-	pokemon: Jigglypuff 4-6 15%
-	pokemon: Paras 4-6 7%
-	pokemon: Yanma 4-6 6%
-	pokemon: Budew 4-6 5%
-	pokemon: Ralts 4-6 4%
-	pokemon: Solosis 4-6 4%
-	pokemon: Elgyem 4-6 4%
-	pokemon: Ledyba 4-6 15%
-	pokemon: Hoppip 4-6 5%
-	pokemon: Oddish 4-6 5%
-	pokemon: Flabebe 4-6 10%
-}
-

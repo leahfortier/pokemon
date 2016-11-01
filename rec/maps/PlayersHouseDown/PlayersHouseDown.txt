@@ -1,37 +1,55 @@
-GT_PlayersHouseDown_to_DFS_Town {
-	6 9
+{
+  "NPCs": [
+    {
+      "name": "PlayersHouseDown_NPC_Mom_01",
+      "startX": 4,
+      "startY": 4,
+      "path": "w",
+      "spriteIndex": 13,
+      "direction": "DOWN",
+      "walkToPlayer": false,
+      "text": "It's nice when you come to visit, but please get a job."
+    }
+  ],
+  "mapEntrances": [
+    {
+      "name": "stairs",
+      "x": 10,
+      "y": 1
+    },
+    {
+      "name": "DFS_Town",
+      "x": 6,
+      "y": 8
+    }
+  ],
+  "triggerData": [
+    {
+      "name": "PlayersHouseDown_to_PlayersHouseUp",
+      "location": [
+        9,
+        1
+      ],
+      "triggerType": "MapTransition",
+      "nextMap": "PlayersHouseUp",
+      "mapEntrance": "stairs"
+    }
+  ],
+  "triggers": [
+    {
+      "name": "PlayersHouseDown_TriggerEntity_PlayersFridge_01",
+      "x": 5,
+      "y": 1,
+      "trigger": "PlayersFridgeTrigger"
+    }
+  ],
+  "groupTriggers": [
+    {
+      "name": "GT_PlayersHouseDown_to_DFS_Town",
+      "location": [
+        6,
+        9
+      ]
+    }
+  ]
 }
-
-NPC PlayersHouseDown_NPC_Mom_01{
-	startX: 4
-	startY: 4
-	path: w
-	spriteIndex: 13
-	direction: DOWN
-	walkToPlayer: false
-	firstDialogue[0]: "It's nice when you come to visit, but please get a job."
-}
-
-Trigger PlayersHouseDown_TriggerEntity_PlayersFridge_01{
-	x: 5
-	y: 1
-	trigger: PlayersFridgeTrigger
-}
-
-MapEntrance stairs {
-	x: 10
-	y: 1
-}
-
-MapEntrance DFS_Town {
-	x: 6
-	y: 8
-}
-
-TriggerData PlayersHouseDown_to_PlayersHouseUp {
-	9 1
-	MapTransition
-	nextMap: PlayersHouseUp
-	mapEntrance: stairs
-}
-

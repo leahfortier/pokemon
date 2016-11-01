@@ -1,52 +1,66 @@
-GroupTrigger_PokeCenter_Exit {
-	7 9
-}
-
-NPC Nurse_Joy {
-	startX: 7
-	startY: 2
-	spriteIndex: 8
-	direction: 3
-	
-	firstDialogue[0]: ""
-}
-Trigger PokeCenter_Counter {
-	x: 7
-	y: 3
-	trigger: Heal_Trigger
-}
-
-NPC Mart_Guy {
-	startX: 2
-	startY: 7
-	spriteIndex: 9
-	direction: 0	
-	
-	firstDialogue[0]: ""
-}
-Trigger Mart_Counter {
-	x: 3
-	y: 7
-	trigger: Mart_Trigger
-}
-
-Trigger PC {
-	x: 11
-	y: 1
-	trigger: PC_Trigger
-}
-
-NPC Tom {
-	condition: MapGlobal_PreviousMap_Tom_Town&MapGlobal_toPokeCenterFromEntrance_PokeCenter01
-	startX: 10
-	startY: 4
-	spriteIndex: 5
-	direction: 3
-	
-	firstDialogue[0]: "Hi, I'm Tom!"
-}
-
-MapEntrance FrontDoor {
-	x: 7
-	y: 8
+{
+  "NPCs": [
+    {
+      "name": "Nurse_Joy",
+      "startX": 7,
+      "startY": 2,
+      "spriteIndex": 8,
+      "direction": "DOWN",
+      "walkToPlayer": false
+    },
+    {
+      "name": "Mart_Guy",
+      "startX": 2,
+      "startY": 7,
+      "spriteIndex": 9,
+      "direction": "RIGHT",
+      "walkToPlayer": false
+    },
+    {
+      "name": "Tom",
+      "condition": "MapGlobal_PreviousMap_Tom_Town&MapGlobal_toPokeCenterFromEntrance_PokeCenter01",
+      "startX": 10,
+      "startY": 4,
+      "spriteIndex": 5,
+      "direction": "DOWN",
+      "walkToPlayer": false,
+      "text": "Hi, I'm Tom!"
+    }
+  ],
+  "mapEntrances": [
+    {
+      "name": "FrontDoor",
+      "x": 7,
+      "y": 8
+    }
+  ],
+  "triggers": [
+    {
+      "name": "PokeCenter_Counter",
+      "x": 7,
+      "y": 3,
+      "trigger": "Heal_Trigger"
+    },
+    {
+      "name": "Mart_Counter",
+      "x": 3,
+      "y": 7,
+      "trigger": "Mart_Trigger"
+    },
+    {
+      "name": "PC",
+      "x": 11,
+      "y": 1,
+      "trigger": "PC_Trigger"
+    }
+  ],
+  "groupTriggers": [
+    {
+      "name": "GroupTrigger_PokeCenter_Exit",
+      "location": [
+        7,
+        9
+      ]
+    }
+  ]
 }

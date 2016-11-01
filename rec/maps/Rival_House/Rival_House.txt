@@ -1,25 +1,36 @@
-MapEntrance stairs {
-	x: 20
-	y: 6
+{
+  "mapEntrances": [
+    {
+      "name": "stairs",
+      "x": 20,
+      "y": 6
+    },
+    {
+      "name": "DFS_Town",
+      "x": 15,
+      "y": 10
+    }
+  ],
+  "triggerData": [
+    {
+      "name": "from_Rival_House_to_DFS_Town_01",
+      "location": [
+        15,
+        11
+      ],
+      "triggerType": "MapTransition",
+      "nextMap": "DFS_Town",
+      "mapEntrance": "RivalsHouse"
+    },
+    {
+      "name": "from_Rival_House_to_R_House_Up_01",
+      "location": [
+        19,
+        6
+      ],
+      "triggerType": "MapTransition",
+      "nextMap": "R_House_Up",
+      "mapEntrance": "stairs"
+    }
+  ]
 }
-
-MapEntrance DFS_Town {
-	x: 15
-	y: 10
-}
-
-TriggerData from_Rival_House_to_DFS_Town_01{
-	15 11
-	MapTransition
-	nextMap: DFS_Town
-	mapEntrance: RivalsHouse
-}
-
-TriggerData from_Rival_House_to_R_House_Up_01{
-	19 6
-	MapTransition
-	nextMap: R_House_Up
-	mapEntrance: stairs
-}
-
-

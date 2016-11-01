@@ -1,22 +1,33 @@
-NPC Neighbor_House_NPC_Green_01{
-	startX: 4
-	startY: 4
-	path: w
-	spriteIndex: 17
-	direction: 3
-	walkToPlayer: false
-	firstDialogue[0]: ""
+{
+  "NPCs": [
+    {
+      "name": "Neighbor_House_NPC_Green_01",
+      "startX": 4,
+      "startY": 4,
+      "path": "w",
+      "spriteIndex": 17,
+      "direction": DOWN,
+      "walkToPlayer": false,
+      "text": "R U A WIZARD 'ARRY"
+    }
+  ],
+  "mapEntrances": [
+    {
+      "name": "DFS_Town",
+      "x": 3,
+      "y": 6
+    }
+  ],
+  "triggerData": [
+    {
+      "name": "from_Neighbor_House_to_DFS_Town_01",
+      "location": [
+        3,
+        7
+      ],
+      "triggerType": "MapTransition",
+      "nextMap": "DFS_Town",
+      "mapEntrance": "NeighborsHouse"
+    }
+  ]
 }
-
-MapEntrance DFS_Town {
-	x: 3
-	y: 6
-}
-
-TriggerData from_Neighbor_House_to_DFS_Town_01{
-	3 7
-	MapTransition
-	nextMap: DFS_Town
-	mapEntrance: NeighborsHouse
-}
-

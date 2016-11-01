@@ -1,89 +1,151 @@
-NPC Tom_Town_Power_Plant_F3_NPC_Scientist_01{
-	condition: VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01
-	startX: 14
-	startY: 10
-	path: w
-	spriteIndex: 12
-	direction: 1
-	walkToPlayer: false
-	firstDialogue[0]: "I'll be here for days trying to get the plant fully operational again."
+{
+  "NPCs": [
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
+      "condition": "VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+      "startX": 14,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 12,
+      "direction": "RIGHT",
+      "walkToPlayer": false,
+      "text": "I'll be here for days trying to get the plant fully operational again."
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
+      "startX": 13,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 20,
+      "direction": "LEFT",
+      "walkToPlayer": true,
+      "interactions": [
+        {
+          "name": "battle",
+          "actions": [
+            "text: I'm going to kill your process.",
+            "battle: {
+				name: \"Team Deadlock Grunt\",
+				cashMoney: 100,
+				pokemon: [
+					\"Venipede 14\"
+				],
+				update: won
+			}"
+          ]
+        },
+        {
+          "name": "won",
+          "text": "I can't beleive you managed to killed my process."
+        }
+      ]
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+      "condition": "VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+      "startX": 12,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 18,
+      "direction": "LEFT",
+      "walkToPlayer": true,
+      "text": "Wow, you did it! You saved the power plant!"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
+      "startX": 9,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 20,
+      "direction": "RIGHT",
+      "walkToPlayer": false,
+      "interactions": [
+        {
+          "name": "battle",
+          "actions": [
+            "text: You can't stop us. This town's main thread will be terminated!",
+            "battle: {
+				name: \"Team Deadlock Grunt\",
+				cashMoney: 100,
+				pokemon: [
+					\"Butterfree 14\",
+					\"Beedrill 15\"
+				],
+				update: deadlock_defeat
+			}"
+          ]
+        },
+        {
+          "name": "deadlock_defeat",
+          "actions": [
+            "text: You may have halted us now, but our loop is infinite!",
+            "trigger: GroupTrigger_TomTownPowerPlantDefeatedTeamDeadlock"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
+      "startX": 2,
+      "startY": 11,
+      "path": "w",
+      "spriteIndex": 20,
+      "direction": "RIGHT",
+      "walkToPlayer": true,
+      "interactions": [
+        {
+          "name": "battle",
+          "actions": [
+            "text: What is a process like you doing here?",
+            "text: That doesn't matter. You can't interfere with our threads!",
+            "battle: {
+				name: \"Team Deadlock Grunt\",
+				cashMoney: 100,
+				pokemon: [
+					\"Venonat 12\"
+				],
+				update: won
+			}"
+          ]
+        },
+        {
+          "name": "won",
+          "actions": [
+            "text: How could you have won?",
+            "text: The others will stop your thread!"
+          ]
+        }
+      ]
+    }
+  ],
+  "items": [],
+  "mapEntrances": [
+    {
+      "name": "FromFloor2",
+      "x": 2,
+      "y": 8
+    },
+    {
+      "name": "ReloadLocation",
+      "x": 10,
+      "y": 10
+    }
+  ],
+  "triggerData": [
+    {
+      "name": "from_Tom_Town_Power_Plant_F3_to_Tom_Town_Power_Plant_F2_01",
+      "location": [
+        3,
+        8
+      ],
+      "triggerType": "MapTransition",
+      "nextMap": "Tom_Town_Power_Plant_F2",
+      "mapEntrance": "FromFloor3"
+    }
+  ],
+  "triggers": [],
+  "groupTriggers": []
 }
-
-NPC Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02{
-	condition: !VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02
-	startX: 13
-	startY: 10
-	path: w
-	spriteIndex: 20
-	direction: 2
-	walkToPlayer: true
-	firstDialogue[0]: "I'm going to kill your process."
-	secondDialogue[0]: "I can't beleive you managed to killed my process."
-	trainer: "name: Team Deadlock Grunt
-		cash: 100
-		pokemon: Venipede 14"
-}
-
-NPC Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01{
-	condition: VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01
-	startX: 12
-	startY: 10
-	path: w
-	spriteIndex: 18
-	direction: 2
-	walkToPlayer: true
-	firstDialogue[0]: "Wow, you did it! You saved the power plant!"
-	secondDialogue[0]: "Wow, you did it! You saved the power plant!"
-}
-
-NPC Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03{
-	condition: !VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03
-	startX: 9
-	startY: 10
-	path: w
-	spriteIndex: 20
-	direction: 1
-	walkToPlayer: false
-	firstDialogue[0]: "You can't stop us. This town's main thread will be terminated!"
-	secondDialogue[0]: "You may have halted us now, but our loop is infinite!"
-	trainer: "name: Team Deadlock Grunt
-		cash: 100
-		pokemon: Butterfree 14
-		pokemon: Beedrill 15"
-	secondTriggers: "trigger: GroupTrigger_TomTownPowerPlantDefeatedTeamDeadlock"
-}
-
-NPC Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01{
-	condition: !VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01
-	startX: 2
-	startY: 11
-	path: w
-	spriteIndex: 20
-	direction: 1
-	walkToPlayer: true
-	firstDialogue[0]: "What is a process like you doing here?"
-	firstDialogue[1]: "That doesn't matter. You can't interfere with our threads!"
-	secondDialogue[0]: "How could you have won? "
-	secondDialogue[1]: "The others will stop your thread!"
-	trainer: "name: Team Deadlock Grunt
-		cash: 100
-		pokemon: Venonat 12"
-}
-
-MapEntrance FromFloor2 {
-	x: 2
-	y: 8
-}
-
-MapEntrance ReloadLocation {
-	x: 10
-	y: 10
-}
-
-TriggerData from_Tom_Town_Power_Plant_F3_to_Tom_Town_Power_Plant_F2_01 {
-	3 8
-	MapTransition
-	nextMap: Tom_Town_Power_Plant_F2
-	mapEntrance: FromFloor3
-}
-
