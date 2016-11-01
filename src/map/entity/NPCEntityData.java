@@ -34,7 +34,7 @@ public class NPCEntityData extends EntityData {
 		x = matcher.startX;
 		y = matcher.startY;
 		trigger = matcher.trigger;
-		path = matcher.path;
+		path = matcher.getPath();
 		spriteIndex = matcher.spriteIndex;
 		defaultDirection = matcher.direction;
 		firstDialogue = new String[] { matcher.text };

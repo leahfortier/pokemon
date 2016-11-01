@@ -160,10 +160,10 @@
         26
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: Neighbor_House",
-        "mapEntrance: DFS_Town"
-      ]
+      "triggerContents": "{
+        nextMap: Neighbor_House,
+        mapEntrance: DFS_Town
+      }"
     },
     {
       "name": "from_DFS_Town_to_MaplesLab_01",
@@ -172,10 +172,10 @@
         16
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: MaplesLab",
-        "mapEntrance: DFS_Town"
-      ]
+      "triggerContents": "{
+        nextMap: MaplesLab,
+        mapEntrance: DFS_Town
+      }"
     },
     {
       "name": "DFS_Town_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_EastDoor",
@@ -187,10 +187,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "contents": [
-        "nextMap: TransitionBuildingH",
-        "mapEntrance: EastDoor"
-      ]
+      "triggerContents": "{
+        nextMap: TransitionBuildingH,
+        mapEntrance: EastDoor
+      }"
     },
     {
       "name": "from_DFS_Town_to_Rival_House_01",
@@ -199,10 +199,10 @@
         14
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: Rival_House",
-        "mapEntrance: DFS_Town"
-      ]
+      "triggerContents": "{
+        nextMap: Rival_House,
+        mapEntrance: DFS_Town
+      }"
     },
     {
       "name": "Edge_1_Wild_Pokemon",
@@ -635,16 +635,16 @@
         28
       ],
       "triggerType": "WildBattle",
-      "contents": [
-        "encounterRate: VERY_COMMON",
-        "pokemon: {
+      "triggerContents": "{
+        encounterRate: VERY_COMMON,
+        pokemon: [
 			\"Pidgey 2-4 30%\", 
 			\"Bidoof 2-4 25%\", 
 			\"Sentret 2-4 20%\", 
 			\"Fletchling 2-4 15%\", 
 			\"Lillipup 2-4 10%\"
-}"
-      ]
+        ]
+      }"
     },
     {
       "name": "from_DFS_Town_to_PlayersHouseDown_01",
@@ -653,10 +653,10 @@
         26
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: PlayersHouseDown",
-        "mapEntrance: DFS_Town"
-      ]
+      "triggerContents": "{
+        nextMap: PlayersHouseDown,
+        mapEntrance: DFS_Town
+      }"
     }
   ],
   "triggers": [],

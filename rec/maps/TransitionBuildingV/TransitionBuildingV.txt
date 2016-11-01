@@ -105,7 +105,34 @@
       "y": 7
     }
   ],
-  "triggerData": [],
+  "triggerData": [
+    {
+      "name": "GroupTrigger_TransitionBuilding_NorthDoor",
+      "location": [
+        6,
+        0
+      ],
+      "triggerType": "Group",
+      "triggerContents": "{
+		triggers: [
+			TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_NorthDoor
+		]
+	}"
+    },
+    {
+      "name": "GroupTrigger_TransitionBuilding_SouthDoor",
+      "location": [
+        6,
+        8
+      ],
+      "triggerType": "Group",
+      "triggerContents": "{
+		triggers: [
+			TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_SouthDoor
+		]
+	  }"
+    }
+  ],
   "triggers": [
     {
       "name": "Info_Counter",
@@ -114,20 +141,5 @@
       "trigger": "GroupTrigger_TransitionBuilding_InformationDesk"
     }
   ],
-  "groupTriggers": [
-    {
-      "name": "GroupTrigger_TransitionBuilding_NorthDoor",
-      "location": [
-        6,
-        0
-      ]
-    },
-    {
-      "name": "GroupTrigger_TransitionBuilding_SouthDoor",
-      "location": [
-        6,
-        8
-      ]
-    }
-  ]
+  "groupTriggers": []
 }

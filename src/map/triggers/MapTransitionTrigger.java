@@ -1,9 +1,9 @@
 package map.triggers;
 
-import java.util.regex.Matcher;
-
 import main.Game;
 import map.Direction;
+import pattern.AreaDataMatcher;
+import pattern.AreaDataMatcher.MapTransitionTriggerMatcher;
 
 public class MapTransitionTrigger extends Trigger {
 	private String mapName;
@@ -14,28 +14,13 @@ public class MapTransitionTrigger extends Trigger {
 
 	public MapTransitionTrigger(String name, String contents) {
 		super(name, contents);
-		Matcher m = variablePattern.matcher(contents);
-		
-		while (m.find()) {
-			switch (m.group(1)) {
-				case "nextMap":
-					mapName = m.group(2);
-					break;
-				case "newX":
-					newX = Integer.parseInt(m.group(2));
-					break;
-				case "newY":
-					newY = Integer.parseInt(m.group(2));
-					break;
-				case "direction":
-					int directionIndex = Integer.parseInt(m.group(2));
-					direction = directionIndex == -1 ? null : Direction.values()[directionIndex];
-					break;
-				case "mapEntrance":
-					mapEntranceName = m.group(2);
-					break;
-			}
-		}
+
+		MapTransitionTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, MapTransitionTriggerMatcher.class);
+		this.mapName = matcher.nextMap;
+		this.mapEntranceName = matcher.mapEntrance;
+		this.direction = matcher.direction;
+		this.newX = matcher.newX;
+		this.newY = matcher.newY;
 	}
 	
 	public MapTransitionTrigger(String name, String conditionString, String mapName, String mapEntranceName, int directionIndex) {

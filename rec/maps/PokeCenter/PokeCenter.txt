@@ -35,7 +35,23 @@
       "y": 8
     }
   ],
-  "triggerData": [],
+  "triggerData": [
+    {
+      "name": "GroupTrigger_PokeCenter_Exit",
+      "location": [
+        7,
+        9
+      ],
+      "triggerType": "Group",
+      "triggerContents": "{
+		triggers: [
+			from_PokeCenter_to_RSATown_at_PokeCenter01,
+			from_PokeCenter_to_Tom_Town_at_PokeCenter01,
+			SetTeleportToLastPokeCenter
+		]
+	  }"
+    }
+  ],
   "triggers": [
     {
       "name": "PokeCenter_Counter",
@@ -56,13 +72,5 @@
       "trigger": "PC_Trigger"
     }
   ],
-  "groupTriggers": [
-    {
-      "name": "GroupTrigger_PokeCenter_Exit",
-      "location": [
-        7,
-        9
-      ]
-    }
-  ]
+  "groupTriggers": []
 }

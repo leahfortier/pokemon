@@ -16,10 +16,10 @@
         2
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: Rival_House",
-        "mapEntrance: stairs"
-      ]
+      "triggerContents": "{
+        nextMap: Rival_House,
+        mapEntrance: stairs
+      }"
     }
   ],
   "triggers": [],

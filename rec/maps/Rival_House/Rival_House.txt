@@ -21,10 +21,10 @@
         11
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: DFS_Town",
-        "mapEntrance: RivalsHouse"
-      ]
+      "triggerContents": "{
+        nextMap: DFS_Town,
+        mapEntrance: RivalsHouse
+      }"
     },
     {
       "name": "from_Rival_House_to_R_House_Up_01",
@@ -33,10 +33,10 @@
         6
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: R_House_Up",
-        "mapEntrance: stairs"
-      ]
+      "triggerContents": "{
+        nextMap: R_House_Up,
+        mapEntrance: stairs
+      }"
     }
   ],
   "triggers": [],

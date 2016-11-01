@@ -39,10 +39,10 @@
         1
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: PlayersHouseDown",
-        "mapEntrance: stairs"
-      ]
+      "triggerContents": "{
+		 nextMap: PlayersHouseDown,
+	 	 mapEntrance: stairs
+	  }"
     }
   ],
   "triggers": [

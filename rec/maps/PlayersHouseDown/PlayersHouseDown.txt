@@ -32,10 +32,32 @@
         1
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: PlayersHouseUp",
-        "mapEntrance: stairs"
-      ]
+      "triggerContents": "{
+		nextMap: PlayersHouseUp, 
+		mapEntrance: stairs
+	  }"
+    },
+    {
+      "name": "PlayersHouseDown_to_DFS_Town",
+      "triggerType": "MapTransition",
+      "triggerContents": "{
+         nextMap: DFS_Town,
+         mapEntrance: PlayersHouse
+	  }"
+    },
+    {
+      "name": "GT_PlayersHouseDown_to_DFS_Town",
+      "location": [
+        6,
+        9
+      ],
+      "triggerType": "Group",
+      "triggerContents": "{
+	    triggers: [
+			PlayersHouseDown_to_DFS_Town,
+			SetTeleportToLastPokeCenter
+		]
+      }"
     }
   ],
   "triggers": [
@@ -46,13 +68,5 @@
       "trigger": "PlayersFridgeTrigger"
     }
   ],
-  "groupTriggers": [
-    {
-      "name": "GT_PlayersHouseDown_to_DFS_Town",
-      "location": [
-        6,
-        9
-      ]
-    }
-  ]
+  "groupTriggers": []
 }

@@ -27,10 +27,10 @@
         7
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: DFS_Town",
-        "mapEntrance: NeighborsHouse"
-      ]
+      "triggerContents": "{
+        nextMap: DFS_Town,
+        mapEntrance: NeighborsHouse
+      }"
     }
   ],
   "triggers": [],

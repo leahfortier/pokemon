@@ -23,15 +23,8 @@ public class TriggerData {
 	public TriggerData(TriggerDataMatcher matcher) {
 		this.name = matcher.name;
 		this.triggerType = matcher.triggerType;
-		this.triggerContents = Arrays.toString(matcher.contents);
-
-		this.points = new ArrayList<>();
-		for (int i = 0; i < matcher.location.length; i += 2) {
-			int x = matcher.location[i];
-			int y = matcher.location[i + 1];
-
-			this.points.add(new Point(x, y));
-		}
+		this.triggerContents = matcher.triggerContents;
+		this.points = matcher.getLocation();
 	}
 
 	public TriggerData(String name, String contents) {
@@ -78,7 +71,8 @@ public class TriggerData {
 	public void removePoint(int x, int y) {
 		points.remove(new Point(x, y));
 	}
-	
+
+	// TODO: Use that one method
 	public int[] getPoints(int width) {
 		int[] pointsArray = new int[points.size()];
 		for (int currPoint = 0; currPoint < pointsArray.length; currPoint++) {
@@ -98,7 +92,7 @@ public class TriggerData {
 	}
 
 	// TODO: This is generic enough to be separate
-	private class Point {
+	public static class Point {
 		public int x;
 		public int y;
 		

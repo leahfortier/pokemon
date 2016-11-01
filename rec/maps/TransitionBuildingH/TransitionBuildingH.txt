@@ -34,7 +34,38 @@
       "y": 3
     }
   ],
-  "triggerData": [],
+  "triggerData": [
+    {
+      "name": "GroupTrigger_TransitionBuilding_EastDoor",
+      "location": [
+        11,
+        3
+      ],
+      "triggerType": "Group",
+      "triggerContents": "{
+		triggers: [
+			TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_EastDoor,
+			TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_EastDoor,
+			TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_EastDoor
+		]
+	  }"
+    },
+    {
+      "name": "GroupTrigger_TransitionBuilding_WestDoor",
+      "location": [
+        1,
+        3
+      ],
+      "triggerType": "Group",
+      "triggerContents": "{
+		triggers: [
+			TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_WestDoor,
+			TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_WestDoor,
+			TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_WestDoor
+		]
+	  }"
+    }
+  ],
   "triggers": [
     {
       "name": "Info_Counter",
@@ -43,20 +74,5 @@
       "trigger": "GroupTrigger_TransitionBuilding_InformationDesk"
     }
   ],
-  "groupTriggers": [
-    {
-      "name": "GroupTrigger_TransitionBuilding_EastDoor",
-      "location": [
-        11,
-        3
-      ]
-    },
-    {
-      "name": "GroupTrigger_TransitionBuilding_WestDoor",
-      "location": [
-        1,
-        3
-      ]
-    }
-  ]
+  "groupTriggers": []
 }

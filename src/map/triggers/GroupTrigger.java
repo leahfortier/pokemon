@@ -1,10 +1,14 @@
 package map.triggers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
 import main.Game;
+import pattern.AreaDataMatcher;
+import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import util.StringUtils;
 
 public class GroupTrigger extends Trigger {
@@ -13,13 +17,9 @@ public class GroupTrigger extends Trigger {
 	
 	public GroupTrigger(String name, String contents) {
 		super(name, contents);
-		triggers = new ArrayList<>();
-		Matcher m = variablePattern.matcher(contents);
-		while (m.find()) {
-			if (m.group(1).equals("trigger")) {
-				triggers.add(m.group(2));
-			}
-		}
+
+		GroupTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, GroupTriggerMatcher.class);
+		triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
 	}
 
 	@Override

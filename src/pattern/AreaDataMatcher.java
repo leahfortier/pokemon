@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
+import main.Global;
 import map.Direction;
-import map.EncounterRate;
-import map.triggers.TriggerData;
+import map.triggers.TriggerData.Point;
 import util.FileIO;
 import util.StringUtils;
 
@@ -16,6 +16,19 @@ import java.util.Map;
 
 public class AreaDataMatcher {
 
+    private static Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Double.class, (JsonSerializer<Double>) (source, sourceType, context) -> {
+                if (source == source.longValue()) {
+                    return new JsonPrimitive(source.longValue());
+                } else {
+                    return new JsonPrimitive(source);
+                }
+            })
+            .setPrettyPrinting()
+            .disableHtmlEscaping()
+            .setLenient()
+            .create();
+
     public NPCMatcher[] NPCs = new NPCMatcher[0];
     public ItemMatcher[] items = new ItemMatcher[0];
     public MapEntranceMatcher[] mapEntrances = new MapEntranceMatcher[0];
@@ -23,9 +36,21 @@ public class AreaDataMatcher {
     public TriggerMatcher[] triggers = new TriggerMatcher[0];
     public GroupTriggerMatcher[] groupTriggers = new GroupTriggerMatcher[0];
 
+    public static <T> T deserialize(String jsonString, Class<T> tClass) {
+        System.out.println(jsonString);
+        return gson.fromJson(jsonString, tClass);
+    }
+
+    public static class MapTransitionTriggerMatcher {
+        public String nextMap;
+        public String mapEntrance;
+        public Direction direction;
+        public int newX;
+        public int newY;
+    }
+
     public static class GroupTriggerMatcher {
-        public String name;
-        public int[] location;
+        public String[] triggers;
     }
 
     public static class TriggerMatcher {
@@ -50,17 +75,25 @@ public class AreaDataMatcher {
 
     public static class TriggerDataMatcher {
         public String name;
-        public int[] location;
+        private int[] location;
         public String triggerType;
         public String condition;
         public String global;
-        public String nextMap;
-        public String mapEntrance;
-        public EncounterRate encounterRate;
-        public String[] pokemon;
-        public String createDialogue;
-        public String text;
-        public String[] contents;
+        public String triggerContents;
+
+        public List<Point> getLocation() {
+            List<Point> points = new ArrayList<>();
+            if (this.location != null) {
+                for (int i = 0; i < this.location.length; i += 2) {
+                    int x = this.location[i];
+                    int y = this.location[i + 1];
+
+                    points.add(new Point(x, y));
+                }
+            }
+
+            return points;
+        }
     }
 
     public static class NPCMatcher {
@@ -69,7 +102,7 @@ public class AreaDataMatcher {
         public int startX;
         public int startY;
         public String trigger;
-        public String path;
+        private String path;
         public int spriteIndex;
         public Direction direction;
         public boolean walkToPlayer;
@@ -90,6 +123,10 @@ public class AreaDataMatcher {
         }
 
         public String getPath() {
+            if (StringUtils.isNullOrEmpty(this.path)) {
+                this.path = Direction.WAIT_CHARACTER + "";
+            }
+
             return this.path;
         }
 
@@ -142,72 +179,30 @@ public class AreaDataMatcher {
     }
 
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Double.class, (JsonSerializer<Double>) (source, sourceType, context) -> {
-                    if (source == source.longValue()) {
-                        return new JsonPrimitive(source.longValue());
-                    } else {
-                        return new JsonPrimitive(source);
-                    }
-                })
-                .setPrettyPrinting()
-                .disableHtmlEscaping()
-                .setLenient()
-                .create();
 
         AreaDataMatcher areaData = gson.fromJson(areaDescription, AreaDataMatcher.class);
         Map<Object, Object> mappity = gson.fromJson(areaDescription, Map.class);
 
-        for (TriggerDataMatcher matcher : areaData.triggerData) {
-            if (matcher.contents != null) {
-                continue;
-            }
-            final List<String> contents = new ArrayList<>();
-            if (!StringUtils.isNullOrEmpty(matcher.nextMap)) {
-                contents.add("nextMap: " + matcher.nextMap);
-                matcher.nextMap = null;
-            }
-
-            if (!StringUtils.isNullOrEmpty(matcher.mapEntrance)) {
-                contents.add("mapEntrance: " + matcher.mapEntrance);
-                matcher.mapEntrance = null;
-            }
-
-            if (matcher.encounterRate != null) {
-                contents.add("encounterRate: " + matcher.encounterRate);
-                matcher.encounterRate = null;
-            }
-
-            if (matcher.pokemon != null) {
-                String pokemonString = "";
-                for (String pokemon : matcher.pokemon) {
-                    pokemonString += (pokemonString.isEmpty() ? "" : ", ") + "\n\t\t\t\"" + pokemon + "\"";
-                }
-                contents.add("pokemon: {" + pokemonString + "\n}");
-                matcher.pokemon = null;
-            }
-
-            if (!StringUtils.isNullOrEmpty(matcher.createDialogue)) {
-                contents.add("createDialogue: " + matcher.createDialogue);
-                matcher.createDialogue = null;
-            }
-
-            if (!StringUtils.isNullOrEmpty(matcher.text)) {
-                contents.add("text: " + matcher.text);
-                matcher.text = null;
-            }
-
-            matcher.contents = contents.toArray(new String[0]);
-        }
-
-        String areaDataJson = gson.toJson(areaData).replaceAll("\\\\n", "\n").replaceAll("\\\\t", "\t");
-        String mapJson = gson.toJson(mappity).replaceAll("\\\\n", "\n").replaceAll("\\\\t", "\t");
+        String areaDataJson = getJson(areaData);
+        String mapJson = getJson(mappity);
 
         FileIO.writeToFile("out.txt", new StringBuilder(areaDataJson));
         FileIO.writeToFile("out2.txt", new StringBuilder(mapJson));
 
+        if (!areaDataJson.equals(mapJson)) {
+            Global.error("No dice");
+        }
+
+        areaDataJson = getJson(areaData);
+
         FileIO.overwriteFile(fileName, new StringBuilder(areaDataJson));
 
         return areaData;
+    }
+
+    private static String getJson(final Object jsonObject) {
+        return gson.toJson(jsonObject)
+                .replaceAll("\\\\n", "\n")
+                .replaceAll("\\\\t", "\t");
     }
 }

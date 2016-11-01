@@ -104,30 +104,6 @@ public class MapData {
 		for (TriggerMatcher matcher : areaDataMatcher.triggers) {
 			entities.add(new TriggerEntityData(matcher));
 		}
-
-		for (GroupTriggerMatcher matcher : areaDataMatcher.groupTriggers) {
-			for (int i = 0; i < matcher.location.length; i += 2) {
-				final int x = matcher.location[i];
-				final int y = matcher.location[i + 1];
-
-				triggers.put(x + y*width, matcher.name);
-			}
-
-			// TODO: Does this range shit still exist?
-//			while (in.hasNext()) {
-//				String[] xr = in.next().split("-");
-//				String[] yr = in.next().split("-");
-//
-//				int x1 = Integer.parseInt(xr[0]);
-//				int y1 = Integer.parseInt(yr[0]);
-//				int x2 = xr.length == 2 ? Integer.parseInt(xr[1]) : x1;
-//				int y2 = yr.length == 2 ? Integer.parseInt(yr[1]) : y1;
-//
-//				for (int x = x1; x<=x2; x++)
-//					for (int y = y1; y<=y2; y++)
-//						triggers.put(y*width + x, name);
-//			}
-		}
 	}
 
 	// TODO: move this to its own file

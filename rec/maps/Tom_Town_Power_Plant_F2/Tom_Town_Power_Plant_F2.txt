@@ -44,10 +44,10 @@
         11
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: Tom_Town_Power_Plant_F1",
-        "mapEntrance: FromFloor2"
-      ]
+      "triggerContents": "{
+        nextMap: Tom_Town_Power_Plant_F1,
+        mapEntrance: FromFloor2
+      }"
     },
     {
       "name": "from_Tom_Town_Power_Plant_F2_to_Tom_Town_Power_Plant_F3_01",
@@ -56,10 +56,10 @@
         9
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: Tom_Town_Power_Plant_F3",
-        "mapEntrance: FromFloor2"
-      ]
+      "triggerContents": "{
+        nextMap: Tom_Town_Power_Plant_F3,
+        mapEntrance: FromFloor2
+      }"
     }
   ],
   "triggers": [],

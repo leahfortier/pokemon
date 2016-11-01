@@ -1,9 +1,3 @@
-GroupTrigger GroupTrigger_PokeCenter_Exit {
-	trigger: from_PokeCenter_to_RSATown_at_PokeCenter01
-	trigger: from_PokeCenter_to_Tom_Town_at_PokeCenter01
-	trigger: SetTeleportToLastPokeCenter
-}
-
 MapTransitionTrigger from_PokeCenter_to_Tom_Town_at_PokeCenter01 {
 	condition: MapGlobal_PreviousMap_Tom_Town&MapGlobal_toPokeCenterFromEntrance_PokeCenter01
 	global: !MapGlobal_toPokeCenterFromEntrance_PokeCenter01

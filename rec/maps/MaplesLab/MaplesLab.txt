@@ -85,10 +85,10 @@
         16
       ],
       "triggerType": "MapTransition",
-      "contents": [
-        "nextMap: DFS_Town",
-        "mapEntrance: MaplesLab"
-      ]
+      "triggerContents": "{
+        nextMap: DFS_Town,
+        mapEntrance: MaplesLab
+      }"
     }
   ],
   "triggers": [],

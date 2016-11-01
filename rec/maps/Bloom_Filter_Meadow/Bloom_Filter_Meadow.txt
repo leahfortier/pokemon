@@ -76,10 +76,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "contents": [
-        "nextMap: TransitionBuildingH",
-        "mapEntrance: WestDoor"
-      ]
+      "triggerContents": "{
+        nextMap: TransitionBuildingH,
+        mapEntrance: WestDoor
+      }"
     },
     {
       "name": "Bloom_Filter_Meadow_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_EastDoor",
@@ -91,10 +91,10 @@
       ],
       "triggerType": "MapTransition",
       "global": "MapGlobal_TransitionPair01",
-      "contents": [
-        "nextMap: TransitionBuildingH",
-        "mapEntrance: EastDoor"
-      ]
+      "triggerContents": "{
+        nextMap: TransitionBuildingH,
+        mapEntrance: EastDoor
+      }"
     },
     {
       "name": "Bloom_Filter_Wild_Pokemon",
@@ -407,9 +407,9 @@
         19
       ],
       "triggerType": "WildBattle",
-      "contents": [
-        "encounterRate: VERY_COMMON",
-        "pokemon: {
+      "triggerContents": "{
+        encounterRate: VERY_COMMON,
+        pokemon: [
 			\"Caterpie 4-6 20%\", 
 			\"Jigglypuff 4-6 15%\", 
 			\"Paras 4-6 7%\", 
@@ -422,8 +422,8 @@
 			\"Hoppip 4-6 5%\", 
 			\"Oddish 4-6 5%\", 
 			\"Flabebe 4-6 10%\"
-}"
-      ]
+        ]
+      }"
     }
   ],
   "triggers": [],
