@@ -8,7 +8,7 @@ import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
 import map.entity.npc.NPCAction.BattleAction;
-import map.triggers.Trigger.TriggerType;
+import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import util.InputControl;

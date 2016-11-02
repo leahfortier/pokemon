@@ -9,6 +9,7 @@ import map.DialogueSequence;
 import map.Direction;
 import map.MapData;
 import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import util.InputControl;
 import util.PokeString;
 
@@ -66,7 +67,7 @@ class ItemEntity extends Entity {
 		//		Add numbers to the end of entity name and condition?		
 		Trigger eventTrigger = data.getTrigger(name);
 		if (eventTrigger == null) {
-			data.addTrigger("Event", name, "condition: !has" + name +" \n" +
+			data.addTrigger(TriggerType.EVENT, name, "condition: !has" + name +" \n" +
 					"global: has" + name + " \n" +
 					"dialogue: " + name
 			);
@@ -86,7 +87,7 @@ class ItemEntity extends Entity {
 		Trigger itemTrigger = data.getTrigger(itemTriggerName);
 		
 		if (itemTrigger == null) {
-			data.addTrigger("Give", itemTriggerName, "item: " + itemName);
+			data.addTrigger(TriggerType.GIVE, itemTriggerName, "item: " + itemName);
 		}
 
 		dataCreated = true;

@@ -9,6 +9,7 @@ import map.entity.TriggerEntityData;
 import map.triggers.EventTrigger;
 import map.triggers.MapTransitionTrigger;
 import map.triggers.TriggerData;
+import map.triggers.TriggerType;
 import map.triggers.WildBattleTrigger;
 import mapMaker.MapMaker;
 import mapMaker.dialogs.EventTriggerDialog;
@@ -182,11 +183,11 @@ public class MapMakerTriggerData {
 						}
 
 						// TODO: Add each type of trigger data to specific data structure
-						if (triggerData.triggerType.equals("WildBattle")) {
+						if (triggerData.triggerType == TriggerType.WILD_BATTLE) {
 							wildBattleTriggers.put(triggerData.name, triggerData);
 						}
 
-						if (triggerData.triggerType.equals("MapTransition")) {
+						if (triggerData.triggerType == TriggerType.MAP_TRANSITION) {
 							mapTransitionTriggers.put(triggerData.name, triggerData);
 						}
 
@@ -226,7 +227,7 @@ public class MapMakerTriggerData {
 
 		if (allMapEntrances == null) {
 			allMapEntrances = new HashMap<>();
-			allMapEntrances.put(currentMapName, new HashSet<String>());
+			allMapEntrances.put(currentMapName, new HashSet<>());
 		}
 
 		if (transitionBuildingData == null) {
@@ -496,7 +497,7 @@ public class MapMakerTriggerData {
 
 			final BufferedImage image;
 			switch (triggerData.triggerType) {
-				case "MapTransition":
+				case MAP_TRANSITION:
 					// If pokecenter transition
 					if (triggerData.triggerContents.contains("nextMap: PokeCenter")) {
 						image = mapMaker.getTileFromSet("MapMaker", 5);
@@ -508,11 +509,11 @@ public class MapMakerTriggerData {
 						image = mapMaker.getTileFromSet("MapMaker", 2);
 					}
 					break;
-				case "WildBattle": {
+				case WILD_BATTLE: {
 					image = mapMaker.getTileFromSet("MapMaker", 3);
 					break;
 				}
-				case "Event": {
+				case EVENT: {
 					g2d.setColor(Color.RED);
 					g2d.drawRect(x * MapMaker.tileSize + mapX, y * MapMaker.tileSize + mapY, MapMaker.tileSize, MapMaker.tileSize);
 
@@ -605,119 +606,116 @@ public class MapMakerTriggerData {
 			placeableTrigger.triggerData.addPoint(x, y);
 			triggerDataOnMap.put(value, placeableTrigger.triggerData);
 
-			// TODO: Switch
-			if (placeableTrigger.triggerData.triggerType.equals("WildBattle")) {
-				// TODO: What happens here?
-			}
-			else if (placeableTrigger.triggerData.triggerType.equals("MapTransition")) {
-				// If pokecenter transition
-				if (placeableTrigger.triggerData.triggerContents.contains("nextMap: PokeCenter")) {
-					String entranceName;
-					Integer entranceLocation = convert(x, y + 1);
+			switch (placeableTrigger.triggerData.triggerType) {
+				case WILD_BATTLE:
+					// TODO: What happens here?
+					break;
+				case MAP_TRANSITION:
+					// If pokecenter transition
+					if (placeableTrigger.triggerData.triggerContents.contains("nextMap: PokeCenter")) {
+						String entranceName;
+						Integer entranceLocation = convert(x, y + 1);
 
-					if (mapEntrances.containsKey(entranceLocation)) {
-						entranceName = mapEntrances.get(entranceLocation);
-					}
-					else {
-						entranceName = "PokeCenter";
-						int number = 1;
-						while (mapEntrances.containsValue(String.format("%s%02d", entranceName, number))) {
-							++number;
+						if (mapEntrances.containsKey(entranceLocation)) {
+							entranceName = mapEntrances.get(entranceLocation);
+						} else {
+							entranceName = "PokeCenter";
+							int number = 1;
+							while (mapEntrances.containsValue(String.format("%s%02d", entranceName, number))) {
+								++number;
+							}
+
+							entranceName = String.format("%s%02d", entranceName, number);
+							mapEntrances.put(entranceLocation, entranceName);
 						}
 
-						entranceName = String.format("%s%02d", entranceName, number);
-						mapEntrances.put(entranceLocation, entranceName);
+						placeableTrigger.triggerData.triggerContents = placeableTrigger.triggerData.triggerContents.replace("@entranceName", entranceName);
+						pokeCenterTransitionData.add(currentMapName, entranceName);
+					}
+					// If transition building transition
+					else if (placeableTrigger.triggerData.triggerContents.contains("nextMap: TransitionBuilding")) {
+						boolean isMap1 = true;
+
+						if (currentMapName.equals(placeableTrigger.transitionBuildingPair.map2)
+								&& placeableTrigger.transitionBuildingPair.map2Entrance == null) {
+							isMap1 = false;
+						}
+
+						int number = 1;
+						String mapEntranceName = "";
+
+						int directionIndex = 0;
+						if (!placeableTrigger.transitionBuildingPair.horizontal) {
+							directionIndex = 2;
+						}
+
+						if (!isMap1) {
+							++directionIndex;
+						}
+
+						String direction = TransitionBuildingData.directions[directionIndex];
+
+						do {
+							mapEntranceName = String.format("TransitionBuilding%s%sDoor%02d", (placeableTrigger.transitionBuildingPair.horizontal ? "H" : "V"), direction, number++);
+						} while (mapEntrances.containsValue(mapEntranceName));
+
+						// System.out.println(mapEntranceName);
+
+						TransitionBuildingPair pair;
+
+						if (placeableTrigger.transitionBuildingPair.map1Entrance == null
+								&& placeableTrigger.transitionBuildingPair.map2Entrance == null) {
+
+							// Create
+							pair = transitionBuildingData.addIncompleteTransition(
+									placeableTrigger.transitionBuildingPair.horizontal,
+									placeableTrigger.transitionBuildingPair.map1,
+									placeableTrigger.transitionBuildingPair.map2,
+									isMap1,
+									mapEntranceName);
+
+							// Get pair number and replace in map transition trigger
+							String mapTriggerName = currentMapName + "_to_" + pair.getPairName() + "_" + TransitionBuildingData.directions[directionIndex] + "Door";
+
+							placeableTrigger.triggerData.name = placeableTrigger.name = mapTriggerName;
+							placeableTrigger.triggerData.triggerContents = placeableTrigger.triggerData.triggerContents.replace("@pairNumber", String.format("%02d", pair.pairNumber));
+						} else {
+							pair = transitionBuildingData.updateIncompleteTransition(placeableTrigger.transitionBuildingPair, mapEntranceName);
+						}
+
+						// Update map area
+						int area = mapMaker.getTile(x, y, MapMaker.EditType.AREA_MAP);
+						if (isMap1) {
+							pair.area1 = area;
+						} else {
+							pair.area2 = area;
+						}
+
+						// TODO: This can probobbly be generalized
+						if (placeableTrigger.transitionBuildingPair.horizontal) {
+							placeableTrigger.triggerData.addPoint(x, y - 1);
+							triggerDataOnMap.put(convert(x, y - 1), placeableTrigger.triggerData);
+
+							Integer entranceLocation = convert(x + (isMap1 ? 1 : -1), y);
+
+							mapEntrances.put(entranceLocation, mapEntranceName);
+						} else {
+							placeableTrigger.triggerData.addPoint(x - 1, y);
+							triggerDataOnMap.put(convert(x - 1, y), placeableTrigger.triggerData);
+							placeableTrigger.triggerData.addPoint(x + 1, y);
+							triggerDataOnMap.put(convert(x + 1, y), placeableTrigger.triggerData);
+
+							Integer entranceLocation = convert(x, y + (isMap1 ? -1 : 1));
+
+							mapEntrances.put(entranceLocation, mapEntranceName);
+						}
 					}
 
-					placeableTrigger.triggerData.triggerContents = placeableTrigger.triggerData.triggerContents.replace("@entranceName", entranceName);
-					pokeCenterTransitionData.add(currentMapName, entranceName);
-				}
-				// If transition building transition
-				else if (placeableTrigger.triggerData.triggerContents.contains("nextMap: TransitionBuilding")) {
-					boolean isMap1 = true;
+					// Normal map transition Trigger
+					// else {}
 
-					if (currentMapName.equals(placeableTrigger.transitionBuildingPair.map2)
-							&& placeableTrigger.transitionBuildingPair.map2Entrance == null) {
-						isMap1 = false;
-					}
-
-					int number = 1;
-					String mapEntranceName = "";
-
-					int directionIndex = 0;
-					if (!placeableTrigger.transitionBuildingPair.horizontal) {
-						directionIndex = 2;
-					}
-
-					if (!isMap1) {
-						++directionIndex;
-					}
-
-					String direction = TransitionBuildingData.directions[directionIndex];
-
-					do {
-						mapEntranceName = String.format("TransitionBuilding%s%sDoor%02d", (placeableTrigger.transitionBuildingPair.horizontal ? "H" : "V"), direction, number++);
-					} while (mapEntrances.containsValue(mapEntranceName));
-
-					// System.out.println(mapEntranceName);
-
-					TransitionBuildingPair pair;
-
-					if (placeableTrigger.transitionBuildingPair.map1Entrance == null
-							&& placeableTrigger.transitionBuildingPair.map2Entrance == null) {
-
-						// Create
-						pair = transitionBuildingData.addIncompleteTransition(
-								placeableTrigger.transitionBuildingPair.horizontal,
-								placeableTrigger.transitionBuildingPair.map1,
-								placeableTrigger.transitionBuildingPair.map2,
-								isMap1,
-								mapEntranceName);
-						
-						// Get pair number and replace in map transition trigger
-						String mapTriggerName = currentMapName + "_to_" + pair.getPairName() + "_" + TransitionBuildingData.directions[directionIndex] + "Door";
-
-						placeableTrigger.triggerData.name = placeableTrigger.name = mapTriggerName;
-						placeableTrigger.triggerData.triggerContents = placeableTrigger.triggerData.triggerContents.replace("@pairNumber", String.format("%02d", pair.pairNumber));
-					}
-					else {
-						pair = transitionBuildingData.updateIncompleteTransition(placeableTrigger.transitionBuildingPair, mapEntranceName);
-					}
-
-					// Update map area
-					int area = mapMaker.getTile(x, y, MapMaker.EditType.AREA_MAP);
-					if (isMap1) {
-						pair.area1 = area;
-					}
-					else {
-						pair.area2 = area;
-					}
-
-					// TODO: This can probobbly be generalized
-					if (placeableTrigger.transitionBuildingPair.horizontal) {
-						placeableTrigger.triggerData.addPoint(x, y - 1);
-						triggerDataOnMap.put(convert(x, y - 1), placeableTrigger.triggerData);
-
-						Integer entranceLocation = convert(x + (isMap1 ? 1 : -1), y);
-
-						mapEntrances.put(entranceLocation, mapEntranceName);
-					}
-					else {
-						placeableTrigger.triggerData.addPoint(x - 1, y);
-						triggerDataOnMap.put(convert(x - 1, y), placeableTrigger.triggerData);
-						placeableTrigger.triggerData.addPoint(x + 1, y);
-						triggerDataOnMap.put(convert(x + 1, y), placeableTrigger.triggerData);
-
-						Integer entranceLocation = convert(x, y + (isMap1 ? -1 : 1));
-
-						mapEntrances.put(entranceLocation, mapEntranceName);
-					}
-				}
-
-				// Normal map transition Trigger
-				// else {}
-
-				mapTransitionTriggers.put(placeableTrigger.name, placeableTrigger.triggerData);
+					mapTransitionTriggers.put(placeableTrigger.name, placeableTrigger.triggerData);
+					break;
 			}
 
 			triggerNames.add(placeableTrigger.triggerData.name);
@@ -753,10 +751,10 @@ public class MapMakerTriggerData {
 			}
 		}
 		else if (trigger.triggerType == PlaceableTrigger.TriggerType.TriggerData) {
-			if (trigger.triggerData.triggerType.equals("WildBattle")) {
+			if (trigger.triggerData.triggerType == TriggerType.WILD_BATTLE) {
 				return 3;
 			}
-			else if (trigger.triggerData.triggerType.equals("MapTransition")) {
+			else if (trigger.triggerData.triggerType == TriggerType.MAP_TRANSITION) {
 				// If pokecenter transition
 				if (trigger.triggerData.triggerContents.contains("nextMap: PokeCenter")) {
 					return 6;
@@ -771,7 +769,7 @@ public class MapMakerTriggerData {
 			// else if (trigger.triggerData.triggerType.equals("Group")) {
 			// return 8;
 			// }
-			else if (trigger.triggerData.triggerType.equals("Event")) {
+			else if (trigger.triggerData.triggerType == TriggerType.EVENT) {
 				return 8;
 			}
 		}
@@ -882,7 +880,7 @@ public class MapMakerTriggerData {
 		else if (trigger.triggerType == PlaceableTrigger.TriggerType.TriggerData) {
 			triggerNames.remove(trigger.triggerData.name);
 
-			if (trigger.triggerData.triggerType.equals("MapTransition")) {
+			if (trigger.triggerData.triggerType == TriggerType.MAP_TRANSITION) {
 				// If pokecenter transition
 				if (trigger.triggerData.triggerContents.contains("nextMap: PokeCenter")) {
 					System.out.println("PokeCenter transition triggers cannot be edited.");
@@ -895,10 +893,10 @@ public class MapMakerTriggerData {
 					newTrigger = editMapTransition(new MapTransitionTrigger(trigger.name, trigger.triggerData.triggerContents));
 				}
 			}
-			else if (trigger.triggerData.triggerType.equals("WildBattle")) {
+			else if (trigger.triggerData.triggerType == TriggerType.WILD_BATTLE) {
 				newTrigger = editWildBattleTrigger(new WildBattleTrigger(trigger.name, trigger.triggerData.triggerContents));
 			}
-			else if (trigger.triggerData.triggerType.equals("Event")) {
+			else if (trigger.triggerData.triggerType == TriggerType.EVENT) {
 				newTrigger = editEventTrigger(new EventTrigger(trigger.name, trigger.triggerData.triggerContents));
 				// TODO
 			}
@@ -992,7 +990,7 @@ public class MapMakerTriggerData {
 		}
 		else if (trigger.triggerType == PlaceableTrigger.TriggerType.TriggerData) {
 			// TODO: Remove from specific data structures when no points left on map.
-			if (trigger.triggerData.triggerType.equals("MapTransition")) {
+			if (trigger.triggerData.triggerType == TriggerType.MAP_TRANSITION) {
 
 				// PokeCenter transition
 				if (trigger.triggerData.triggerContents.contains("nextMap: PokeCenter")) {
@@ -1052,10 +1050,10 @@ public class MapMakerTriggerData {
 					mapTransitionTriggers.remove(trigger.triggerData.name);
 				}
 			}
-			else if (trigger.triggerData.triggerType.equals("Event")) {
+			else if (trigger.triggerData.triggerType == TriggerType.EVENT) {
 				// TODO
 			}
-			else if (trigger.triggerData.triggerType.equals("WildBattle") && trigger.triggerData.points.size() == 0) {
+			else if (trigger.triggerData.triggerType == TriggerType.WILD_BATTLE && trigger.triggerData.points.size() == 0) {
 				// Don't remove completely. This will keep the trigger in the
 				// options select menu.
 				// wildBattleTriggers.remove(trigger.name);

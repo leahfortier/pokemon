@@ -1,7 +1,7 @@
 package map.entity.npc;
 
 import map.triggers.Trigger;
-import map.triggers.Trigger.TriggerType;
+import map.triggers.TriggerType;
 import namesies.ItemNamesies;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.BattleMatcher;

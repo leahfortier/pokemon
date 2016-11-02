@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import main.Global;
 import main.Type;
+import map.triggers.TriggerType;
 import namesies.AttackNamesies;
 import namesies.EffectNamesies;
 import pokemon.Stat;
@@ -158,11 +159,11 @@ public class AreaData {
 
 				// System.out.println(condition + " : " + musicName);
 
-				data.addTrigger("Sound", soundTriggerName, (condition != null ? "condition: " + condition : "") + "\nmusicName: " + musicName);
+				data.addTrigger(TriggerType.SOUND, soundTriggerName, (condition != null ? "condition: " + condition : "") + "\nmusicName: " + musicName);
 				StringUtils.appendLine(groupTriggers, "trigger: " + soundTriggerName);
 			}
 
-			data.addTrigger("Group", "GroupTrigger_AreaSound_for_" + areaNameDisplay, groupTriggers.toString());
+			data.addTrigger(TriggerType.GROUP, "GroupTrigger_AreaSound_for_" + areaNameDisplay, groupTriggers.toString());
 			musicTriggerName = "GroupTrigger_AreaSound_for_" + areaNameDisplay;
 		}
 	}

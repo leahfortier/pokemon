@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
+import map.triggers.TriggerType;
 import util.FileIO;
 import map.triggers.Trigger;
 import mapMaker.MapMaker;
@@ -47,7 +48,7 @@ class MapTriggerData {
 		String fileText = FileIO.readEntireFileWithReplacements(triggerFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
 		while (m.find()) {
-			String type = m.group(1);
+			TriggerType type = TriggerType.getTriggerType(m.group(1));
 			String name = m.group(2);
 			
 			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));

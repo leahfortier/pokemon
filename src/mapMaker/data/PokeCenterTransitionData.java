@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import main.Global;
+import map.triggers.TriggerType;
 import util.FileIO;
 import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;
@@ -44,7 +45,7 @@ class PokeCenterTransitionData {
 		String fileText = FileIO.readEntireFileWithReplacements(pokeCenterTransitionFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
 		while (m.find()) {
-			String type = m.group(1);
+			TriggerType type = TriggerType.getTriggerType(m.group(1));
 			String name = m.group(2);
 			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
 			

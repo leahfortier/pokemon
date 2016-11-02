@@ -5,7 +5,6 @@ import pattern.AreaDataMatcher.TriggerDataMatcher;
 import util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -17,12 +16,12 @@ public class TriggerData {
 	
 	public List<Point> points;
 	
-	public String triggerType;
+	public TriggerType triggerType;
 	public String triggerContents;
 
 	public TriggerData(TriggerDataMatcher matcher) {
 		this.name = matcher.name;
-		this.triggerType = matcher.triggerType;
+		this.triggerType = matcher.getTriggerType();
 		this.triggerContents = matcher.triggerContents;
 		this.points = matcher.getLocation();
 	}
@@ -50,7 +49,7 @@ public class TriggerData {
 			}
 		}
 		
-		triggerType = in.next();
+		triggerType = TriggerType.getTriggerType(in.next());
 		
 		StringBuilder rest = new StringBuilder();
 		while (in.hasNextLine()) {

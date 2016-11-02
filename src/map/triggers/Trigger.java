@@ -1,7 +1,6 @@
 package map.triggers;
 
 import main.Game;
-import main.Global;
 import map.Condition;
 import trainer.CharacterData;
 
@@ -32,45 +31,8 @@ public abstract class Trigger {
 		}		
 	}
 
-	public static Trigger createTrigger(String type, String name, String contents) {
-		return TriggerType.getTrigger(type, name, contents);
-	}
-
-	private enum TriggerType {
-		BADGE("Badge", BadgeTrigger::new),
-		CHANGE_VIEW("ChangeView", ChangeViewTrigger::new),
-		EVENT("Event", EventTrigger::new),
-		GIVE("Give", GiveTrigger::new),
-		GROUP("Group", GroupTrigger::new),
-		HEAL_PARTY("HealParty", HealPartyTrigger::new),
-		LAST_POKE_CENTER("LastPokeCenter", LastPokeCenterTrigger::new),
-		MAP_TRANSITION("MapTransition", MapTransitionTrigger::new),
-		SOUND("Sound", SoundTrigger::new),
-		TRAINER_BATTLE("TrainerBattle", TrainerBattleTrigger::new),
-		WILD_BATTLE("WildBattle", WildBattleTrigger::new);
-
-		final String typeName;
-		final GetTrigger getTrigger;
-
-		TriggerType(final String typeName, final GetTrigger getTrigger) {
-			this.typeName = typeName;
-			this.getTrigger = getTrigger;
-		}
-
-		private interface GetTrigger {
-			Trigger getTrigger(final String name, final String contents);
-		}
-
-		public static Trigger getTrigger(final String type, final String name, final String contents) {
-			for (final TriggerType triggerType : TriggerType.values()) {
-				if (triggerType.typeName.equals(type)) {
-					return triggerType.getTrigger.getTrigger(name, contents);
-				}
-			}
-
-			Global.error("Could not find a trigger with type " + type + ". Name: " + name + ", Contents: " + contents);
-			return null;
-		}
+	public static Trigger createTrigger(TriggerType type, String name, String contents) {
+		return type.getTrigger(name, contents);
 	}
 	
 	// Evaluate the function, Should only be triggered when a player moves

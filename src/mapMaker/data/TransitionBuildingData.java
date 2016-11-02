@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import map.triggers.TriggerType;
 import util.FileIO;
 import map.triggers.EventTrigger;
 import map.triggers.GroupTrigger;
@@ -71,11 +72,12 @@ class TransitionBuildingData {
 		String fileText = FileIO.readEntireFileWithReplacements(transitionBuildingTriggerFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
 		while (m.find()) {
-			String type = m.group(1);
+			TriggerType type = TriggerType.getTriggerType(m.group(1));
 			String name = m.group(2);
+
 			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
 			
-			if (type.equals("Group")) {
+			if (type == TriggerType.GROUP) {
 				// TODO: Is there a reason this isn't in a loop with that directions array thingy?
 				if (name.endsWith("EastDoor")) {
 					groupTriggers[0] = (GroupTrigger)trigger;
@@ -93,16 +95,16 @@ class TransitionBuildingData {
 					infoTriggerGT = (GroupTrigger)trigger;
 				}
 			}
-			else if (type.equals("Event")) {
+			else if (type == TriggerType.EVENT) {
 				infoTriggers.add((EventTrigger)trigger);
 			}
-			else if (type.equals("MapTransition") && name.matches(transitionBuildingTransitionNamePattern.pattern())) {
+			else if (type == TriggerType.MAP_TRANSITION && name.matches(transitionBuildingTransitionNamePattern.pattern())) {
 				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
 				
 				transitionTriggers.put(transitionTrigger.getTransitionTriggerName(), transitionTrigger);
 				
 				Matcher nameMatcher = transitionBuildingTransitionNamePattern.matcher(name);
-				nameMatcher.find(); // TODO: What's going on here?
+				nameMatcher.find();
 				
 				String map1 = nameMatcher.group(2);
 				String map2 = nameMatcher.group(3);
@@ -134,6 +136,7 @@ class TransitionBuildingData {
 		for (EventTrigger infoTrigger: infoTriggers) {
 			Matcher nameMatcher = transitionBuildingInformationNamePattern.matcher(infoTrigger.getName());
 			nameMatcher.find();
+
 			String map1 = nameMatcher.group(2);
 			String area1 = nameMatcher.group(3);
 			String map2 = nameMatcher.group(4);

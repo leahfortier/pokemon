@@ -1,20 +1,21 @@
 package gui;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import main.Global;
 import map.AreaData;
 import map.DialogueSequence;
 import map.MapData;
 import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import trainer.CharacterData;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GameData {
 	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}"); // TODO: Make private again maybe
@@ -131,8 +132,9 @@ public class GameData {
 			String fileText = FileIO.readEntireFileWithReplacements(f, false);
 			Matcher m = triggerBlockPattern.matcher(fileText);
 			while (m.find()) {
-				String type = m.group(1);
+				TriggerType type = TriggerType.getTriggerType(m.group(1));
 				String name = m.group(2);
+
 				addTrigger(type, name, m.group(3));
 			}
 		}
@@ -163,9 +165,12 @@ public class GameData {
 		dialogues.put(name, dialogue);
 	}
 
-	public void addTrigger(String type, String name, String contents) {
-		Trigger trigger = Trigger.createTrigger(type, name, contents);
-		triggers.put(name, trigger);
+	public void addTrigger(TriggerType type, String name, String contents) {
+		this.addTrigger(Trigger.createTrigger(type, name, contents));
+	}
+
+	public void addTrigger(Trigger trigger) {
+		triggers.put(trigger.getName(), trigger);
 	}
 
 	public TileSet getMapTiles() {

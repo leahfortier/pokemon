@@ -14,6 +14,7 @@ import map.entity.npc.NPCAction.DialogueAction;
 import map.entity.npc.NPCAction.GiveItemAction;
 import map.entity.npc.NPCAction.GivePokemonAction;
 import map.triggers.TriggerData.Point;
+import map.triggers.TriggerType;
 import pattern.MatchConstants.MatchType;
 import util.FileIO;
 import util.StringUtils;
@@ -125,7 +126,7 @@ public class AreaDataMatcher {
     public static class TriggerDataMatcher {
         public String name;
         private int[] location;
-        public String triggerType;
+        private String triggerType;
         public String condition;
         public String global;
         public String triggerContents;
@@ -142,6 +143,10 @@ public class AreaDataMatcher {
             }
 
             return points;
+        }
+
+        public TriggerType getTriggerType() {
+            return TriggerType.getTriggerType(this.triggerType);
         }
     }
 
