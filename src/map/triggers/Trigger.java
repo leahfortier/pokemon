@@ -3,6 +3,7 @@ package map.triggers;
 import main.Game;
 import map.Condition;
 import trainer.CharacterData;
+import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,11 @@ public abstract class Trigger {
 
 	public Trigger(String name, String str) {
 		this.name = name;
-		
+
+		if (StringUtils.isNullOrEmpty(str)) {
+			str = StringUtils.empty();
+		}
+
 		condition = new Condition(str);
 		
 		globals = new ArrayList<>();

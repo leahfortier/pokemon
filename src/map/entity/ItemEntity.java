@@ -2,22 +2,25 @@ package map.entity;
 
 import gui.GameData;
 import gui.view.MapView;
-
-import java.awt.image.BufferedImage;
-
-import map.DialogueSequence;
 import map.Direction;
 import map.MapData;
+import map.triggers.EventTrigger;
+import map.triggers.GiveTrigger;
+import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
+import namesies.ItemNamesies;
+import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import util.InputControl;
-import util.PokeString;
+import util.StringUtils;
+
+import java.awt.image.BufferedImage;
 
 class ItemEntity extends Entity {
 	private String trigger;
 	private boolean hasTriggered;
 	private String name;
-	private String item;
+	private ItemNamesies itemName;
+
 	private boolean dataCreated;
 	
 	public ItemEntity(int x, int y, String trigger) {
@@ -31,7 +34,7 @@ class ItemEntity extends Entity {
 		this.name = name;
 		this.trigger = name;
 		hasTriggered = false;
-		this.item = item;
+		this.itemName = ItemNamesies.getValueOf(item);
 		dataCreated = false;
 	}
 
@@ -61,39 +64,38 @@ class ItemEntity extends Entity {
 		if (dataCreated) {
 			return;
 		}
-		
-		// TODO: Add support for multiple items.
-		// TODO: Add support for multiple placements of the same item on the same map
-		//		Add numbers to the end of entity name and condition?		
-		Trigger eventTrigger = data.getTrigger(name);
-		if (eventTrigger == null) {
-			data.addTrigger(TriggerType.EVENT, name, "condition: !has" + name +" \n" +
-					"global: has" + name + " \n" +
-					"dialogue: " + name
-			);
+
+		final String itemTriggerName = "item_" + this.itemName.name().toLowerCase();
+
+		// Create a universal trigger for this item
+		if (!data.hasTrigger(itemTriggerName)) {
+			String itemDialogue = "You found " + StringUtils.articleString(itemName.getName()) + "!";
+
+			Trigger dialogue = new EventTrigger(itemTriggerName + "_event", itemDialogue);
+			Trigger giveItem = new GiveTrigger(itemTriggerName + "_item", this.itemName);
+			Trigger groupTrigger = new GroupTrigger(
+					itemTriggerName,
+					new GroupTriggerMatcher(new String[] {
+							dialogue.getName(),
+							giveItem.getName()
+					}));
+
+			data.addTrigger(dialogue);
+			data.addTrigger(giveItem);
+			data.addTrigger(groupTrigger);
 		}
-		
-		String itemTriggerName = "Item_" + PokeString.removeSpecialSymbols(item);
-		String itemName = item.replace("_", " ");
-		boolean vowelStart = ("" + item.charAt(0)).matches("[AEIOU]");
-		DialogueSequence d = data.getDialogue(name);
-		
-		if (d == null) {
-			data.addDialogue(name, "text: \"You found a" + (vowelStart ? "n" : "") + " " + itemName + "!\" \n" +
-									"trigger[0]: " + itemTriggerName
-									);
-		}
-		
-		Trigger itemTrigger = data.getTrigger(itemTriggerName);
-		
-		if (itemTrigger == null) {
-			data.addTrigger(TriggerType.GIVE, itemTriggerName, "item: " + itemName);
-		}
+
+		// This trigger will only call the item trigger when the conditions apply
+		GroupTriggerMatcher matcher = new GroupTriggerMatcher(new String[] { itemTriggerName });
+		matcher.condition = "!has" + name;
+		matcher.globals.add("has" + name);
+
+		data.addTrigger(new GroupTrigger(name, matcher));
 
 		dataCreated = true;
 	}
 	
 	public String toString() {
-		return "Name: " + name + " Item:" + item;
+		return "Name: " + name + " Item:" + itemName.getName();
 	}
 }

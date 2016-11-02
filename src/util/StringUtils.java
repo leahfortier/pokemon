@@ -31,6 +31,15 @@ public class StringUtils {
         return "";
     }
 
+    public static String articleString(final String s) {
+        if (isNullOrEmpty(s)) {
+            return empty();
+        }
+
+        boolean vowelStart = (s.charAt(0) + "").matches("[AEIOU]");
+        return "a" + (vowelStart ? "n" : "") + " " + s;
+    }
+
     // TODO: Look at this again and rewrite it
     public static String properCase(String string) {
         if (isNullOrEmpty(string)) {

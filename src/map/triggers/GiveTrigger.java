@@ -4,6 +4,7 @@ import item.Item;
 import main.Game;
 import namesies.ItemNamesies;
 import pokemon.ActivePokemon;
+import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,15 @@ public class GiveTrigger extends Trigger {
 	
 	private List<Item> itemList;
 	private List<ActivePokemon> pokemonList;
-	
+
+	public GiveTrigger(String name, ItemNamesies itemNamesies) {
+		super(name, StringUtils.empty());
+
+		itemList = new ArrayList<>();
+		itemList.add(Item.getItem(itemNamesies));
+		pokemonList = new ArrayList<>();
+	}
+
 	public GiveTrigger(String name, String contents) {
 		super(name, contents);
 		itemList = new ArrayList<>();

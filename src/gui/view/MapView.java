@@ -544,7 +544,8 @@ public class MapView extends View {
 					case 5: // save
 						// TODO: Question user if they would like to save first.
 						Save.save(game.characterData);
-						Messages.addMessage(game, game.data.getDialogue("savedGame"));
+						// TODO: find the saved game dialogue and make an event trigger for it and then add that trigger here
+//						Messages.addMessage(game, game.data.getDialogue("savedGame"));
 						state = VisualState.MESSAGE;
 						break;
 					case 6: // exit
@@ -580,6 +581,7 @@ public class MapView extends View {
 		
 		// Check for any NPCs facing the player
 		if (!playerEntity.isStalled() && state == VisualState.MAP) {
+			// TODO: Need to make sure every space is passable between the npc and player
 			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; ++dist) {
 				// TODO: Move to movable entity
 				for (Direction direction : Direction.values()) {

@@ -13,6 +13,7 @@ import map.entity.npc.NPCAction.BattleAction;
 import map.entity.npc.NPCAction.DialogueAction;
 import map.entity.npc.NPCAction.GiveItemAction;
 import map.entity.npc.NPCAction.GivePokemonAction;
+import map.triggers.EventTrigger;
 import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.MatchConstants.MatchType;
@@ -98,8 +99,12 @@ public class AreaDataMatcher {
     public static class GroupTriggerMatcher {
         public String[] triggers;
 
+        public transient String condition;
+        public transient List<String> globals;
+
         public GroupTriggerMatcher(final String[] triggers) {
             this.triggers = triggers;
+            this.globals = new ArrayList<>();
         }
     }
 

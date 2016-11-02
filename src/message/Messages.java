@@ -2,8 +2,6 @@ package message;
 
 import battle.Battle;
 import battle.Move;
-import main.Game;
-import map.DialogueSequence;
 import message.MessageUpdate.Update;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
@@ -32,27 +30,6 @@ public class Messages {
 
     public static void addMessage(MessageUpdate message) {
         messages.add(message);
-    }
-
-    public static void addMessage(Game game, DialogueSequence dialogueSequence) {
-        if (!StringUtils.isNullOrEmpty(dialogueSequence.text)) {
-            addMessage(dialogueSequence.text);
-            System.out.println("Text: " + dialogueSequence.text);
-        }
-
-        for (String dialogueName : dialogueSequence.next) {
-            if (!StringUtils.isNullOrEmpty(dialogueName)) {
-                addMessage(game, game.data.getDialogue(dialogueName));
-                System.out.println("Next: " + dialogueName);
-            }
-        }
-
-        for (String triggerName : dialogueSequence.triggers) {
-            if (!StringUtils.isNullOrEmpty(triggerName)) {
-                messages.add(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
-                System.out.println("TriggerMatcher: " + triggerName);
-            }
-        }
     }
 
     public static void addMessageToFront(String message) {

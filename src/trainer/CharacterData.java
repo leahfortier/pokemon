@@ -14,7 +14,6 @@ import java.util.Set;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import map.DialogueSequence;
 import map.Direction;
 import message.Messages;
 import namesies.EffectNamesies;
@@ -178,7 +177,8 @@ public class CharacterData extends Trainer implements Serializable {
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && p.hatch()) {
 				evolvingPokemon = p;
-				Messages.addMessage(game, new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"}));
+				// TODO: Create a group trigger that displays the huh message and then goes to the evolution view
+//				Messages.addMessage(game, new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"}));
 				
 				// Only one hatch per step
 				break;

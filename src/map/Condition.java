@@ -20,6 +20,10 @@ public class Condition {
 	private String originalConditionString;
 	
 	public Condition(String str) {
+		if (StringUtils.isNullOrEmpty(str)) {
+			str = StringUtils.empty();
+		}
+
 		originalConditionString = StringUtils.empty();
 		condition = new ArrayList<>();
 		Matcher conditionMatcher = conditionPattern.matcher(str);

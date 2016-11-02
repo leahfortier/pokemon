@@ -17,12 +17,19 @@ import util.StringUtils;
 public class GroupTrigger extends Trigger {
 	
 	public final List<String> triggers;
-	
+
+	public GroupTrigger(String name, GroupTriggerMatcher matcher) {
+		super(name, matcher.condition);
+		super.globals.addAll(matcher.globals);
+
+		this.triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
+	}
+
 	public GroupTrigger(String name, String contents) {
 		super(name, contents);
 
 		GroupTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, GroupTriggerMatcher.class);
-		triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
+		this.triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
 	}
 
 	@Override

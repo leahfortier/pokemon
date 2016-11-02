@@ -86,10 +86,6 @@ public class Game {
 		((MapView)this.viewMap.get(ViewMode.MAP_VIEW)).setBattle(battle, seenWildPokemon);
 	}
 
-	public void setMapViewDialogue(final String dialogueName) {
-		Messages.addMessage(this, this.data.getDialogue(dialogueName));
-	}
-
 	public void draw(Graphics g) {
 		currentView.draw(g, data);
 	}

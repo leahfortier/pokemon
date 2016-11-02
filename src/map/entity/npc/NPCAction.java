@@ -25,7 +25,6 @@ public abstract class NPCAction {
             this.text = dialogueText;
         }
 
-
         @Override
         protected TriggerType getTriggerType() {
             return TriggerType.EVENT;
