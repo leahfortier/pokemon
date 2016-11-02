@@ -113,7 +113,9 @@
             {
               "text": "You may have halted us now, but our loop is infinite!"
             },
-            {}
+            {
+              "trigger": "GroupTrigger_TomTownPowerPlantDefeatedTeamDeadlock"
+            }
           ]
         }
       ]

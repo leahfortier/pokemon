@@ -35,7 +35,9 @@
             {
               "text": "My data BUS just wasn't large enough! Take this, the Round Badge!"
             },
-            {}
+            {
+              "trigger": "Badge_0"
+            }
           ],
           "update": "won"
         },

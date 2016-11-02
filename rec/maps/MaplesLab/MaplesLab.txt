@@ -18,7 +18,9 @@
             {
               "text": "While you are here, let me heal your Pokémon."
             },
-            {},
+            {
+              "trigger": "HealParty"
+            },
             {
               "text": "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
             },
@@ -31,7 +33,9 @@
             {
               "givePokemon": "RandomEgg"
             },
-            {}
+            {
+              "update": "heal"
+            }
           ]
         },
         {
@@ -40,8 +44,21 @@
             {
               "text": "wudya wan"
             },
-            {},
-            {}
+            {
+              "choices": [
+                {
+                  "text": "wawa",
+                  "giveItem": "Water Stone"
+                },
+                {
+                  "text": "sunsunsunherewecome",
+                  "giveItem": "Sun Stone"
+                }
+              ]
+            },
+            {
+              "update": "heal"
+            }
           ]
         },
         {
@@ -50,7 +67,9 @@
             {
               "text": "How's it goin'? Need to rest up your Pokémon a bit?"
             },
-            {}
+            {
+              "trigger": "HealParty"
+            }
           ]
         }
       ]
