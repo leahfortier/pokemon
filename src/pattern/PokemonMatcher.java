@@ -6,6 +6,7 @@ import item.Item;
 import item.hold.HoldItem;
 import main.Global;
 import namesies.PokemonNamesies;
+import pattern.MatchConstants.MatchType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,27 +18,19 @@ public class PokemonMatcher {
     private static final Pattern pokemonPattern =
             Pattern.compile(
                     "(?:" +
-                        "([\\w ]+ )" +  // Group 1: Pokemon name
-                        "(\\d+)" +      // Group 2: Pokemon level
+                        MatchConstants.group(MatchType.POKEMON_NAME) + " " + // Group 1: Pokemon name
+                        MatchConstants.group(MatchType.INTEGER) +  // Group 2: Pokemon level
                         "(.*)" +        // Group 3: Additional parameters
                     ")|" +
-                    "(RandomEgg)"       // Group 4: Jk it's just a random egg
+                    "(RandomEgg)"           // Group 4: Jk it's just a random egg
             );
 
     private static final Pattern pokemonParameterPattern =
             Pattern.compile(
                     "(Shiny)|" +                // Group 1: Pokemon is shiny
-                    "(?:(Moves:) " +            // Group 2: Pokemon has specific moves
-                            "([\\w ]+), " +     // Group 3: First specified move
-                            "([\\w ]+), " +     // Group 4: Second specified move
-                            "([\\w ]+), " +     // Group 5: Third specified move
-                            "([\\w ]+)" +       // Group 6: Fourth specified move
-                    ")|" +
+                    MatchConstants.getSimpleParameterRegexList("Moves", MatchType.ATTACK_NAME, Move.MAX_MOVES) + "|" + // Groups 2-6
                     "(Egg)|" +                  // Group 7: Pokemon is an egg
-                    "(?:(Item:)" +              // Group 8: Pokemon is holding an item
-                            " " +
-                            "([\\w \\-'.]+)" +  // Group 9: Item name
-                    ")",
+                    MatchConstants.getSimpleParameterRegex("ItemMatcher", MatchType.ITEM_NAME), // Group 8: Pokemon is holding an item, Group 9: ItemMatcher name
                     Pattern.UNICODE_CHARACTER_CLASS
             );
 
