@@ -7,15 +7,20 @@ import map.Direction;
 import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
+import map.entity.npc.NPCAction.BattleAction;
+import map.triggers.Trigger.TriggerType;
+import pattern.AreaDataMatcher;
+import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import util.InputControl;
+import util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class NPCEntity extends MovableEntity {
 	public static final int NPC_SIGHT_DISTANCE = 5;
 
-	private String trigger;
 	private String name;
 	private String path;
 	private String tempPath;
@@ -23,11 +28,12 @@ public class NPCEntity extends MovableEntity {
 	private int waitTime;
 	private boolean hasAttention;
 
-	private boolean trainer;
 	private boolean walkToPlayer;
 	private boolean walkingToPlayer;
 
 	private Map<String, List<NPCAction>> interactions;
+	private String currentInteractionKey;
+	private int currentInteractionIndex;
 
 	private int defaultX;
 	private int defaultY;
@@ -39,15 +45,15 @@ public class NPCEntity extends MovableEntity {
 			String name,
 			int x,
 			int y,
-			String trigger,
 			String path,
 			Direction direction,
 			int index,
-			boolean walkToPlayer) {
+			boolean walkToPlayer,
+			Map<String, List<NPCAction>> interactions,
+			String startKey) {
 		super(x, y, index, direction);
 		
 		this.name = name;
-		this.trigger = trigger;
 		this.path = path;
 		
 		tempPath = null;
@@ -61,6 +67,10 @@ public class NPCEntity extends MovableEntity {
 		defaultX = x;
 		defaultY = y;
 		defaultDirection = direction;
+
+		this.interactions = interactions;
+		this.currentInteractionKey = startKey;
+		this.currentInteractionIndex = 0;
 
 //		dataCreated = firstDialogue.length == 0;
 	}
@@ -135,7 +145,11 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	public String getTrigger() {
-		return trigger;
+		return this.getTriggerName(this.currentInteractionKey);
+	}
+
+	private String getTriggerName(final String interactionName) {
+		return this.name + "_" + interactionName;
 	}
 
 	public int getTransitionTime() {
@@ -155,13 +169,21 @@ public class NPCEntity extends MovableEntity {
 		return walkingToPlayer;
 	}
 
+	// TODO: Yeah I still don't know what this wants
 	// TODO: create NPCTrainerEntity
 	public String getWalkTrigger() {
-		return walkToPlayer ? name + "_T1" : "";
+		return walkToPlayer ? this.getTrigger() : StringUtils.empty();
 	}
 
 	public boolean isTrainer() {
-		return trainer;
+		List<NPCAction> actions = interactions.get(currentInteractionKey);
+		for (NPCAction action : actions) {
+			if (action instanceof BattleAction) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void reset() {
@@ -176,21 +198,29 @@ public class NPCEntity extends MovableEntity {
 	}
 	
 	public void addData(GameData data) {
-		if (dataCreated || true) {
+		if (dataCreated) {
 			return;
 		}
-		
-//		// If NPC is a trainer, add trainer battle trigger.
-//		if (trainer) {
-//			data.addTrigger("TrainerBattle", name + "_Battle", "winGlobal: triggered_" + name +"\n" + trainerInfo);
-//		}
-//
-//		// If NPC gives items, add give item trigger
-//		if (itemInfo != null) {
-//			data.addTrigger("Give", name + "_items", itemInfo);
-//		}
-//
-//		// TODO: this is insane fix this syntax later because it is too overwhelmingly intense right now
+
+		for (Entry<String, List<NPCAction>> interaction : this.interactions.entrySet()) {
+			final String interactionName = interaction.getKey();
+			final List<NPCAction> actions = interaction.getValue();
+
+			final String triggerName = this.getTriggerName(interactionName);
+			final String[] actionTriggerNames = new String[actions.size()];
+			for (int i = 0; i < actions.size(); i++) {
+				final String actionTriggerNameSuffix = "_action" + i;
+				actionTriggerNames[i] = triggerName + actionTriggerNameSuffix;
+
+				data.addTrigger(actions.get(i).getTrigger(triggerName, actionTriggerNameSuffix));
+			}
+
+			GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
+			final String groupContents = AreaDataMatcher.getJson(matcher);
+
+			data.addTrigger(TriggerType.GROUP, triggerName, groupContents);
+		}
+
 //		// Create group trigger for initial encounter.
 //		data.addTrigger("Group", name + "_GT1",
 //
@@ -225,10 +255,10 @@ public class NPCEntity extends MovableEntity {
 //
 //		// Create event trigger to bring up first dialogue.
 //		trigger = name + "_T1";
-//		data.addTrigger("Event", name + "_T1",
+//		data.addTrigger("Event", trigger,
 //			"condition: !triggered_" + name +" \n" +
 //			(trainer || secondDialogue.length == 0?"":("global: triggered_" + name + " \n")) +
-//			"dialogue: " + name +"_T1_D1"
+//			"dialogue: " + trigger + "_D1"
 //		);
 //
 //		// Add all first dialogue sequences. Call group trigger on last dialogue.

@@ -168,6 +168,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return getItem(ItemNamesies.NO_ITEM);
 	}
 
+	// TODO: Delete this
 	public static Item getItemFromName(String itemName) {
 		return getItem(ItemNamesies.getValueOf(itemName));
 	}

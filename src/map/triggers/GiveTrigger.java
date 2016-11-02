@@ -2,6 +2,7 @@ package map.triggers;
 
 import item.Item;
 import main.Game;
+import namesies.ItemNamesies;
 import pokemon.ActivePokemon;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// TODO: This needs to be two separate trigger classes -- should not store a list, but item trigger can store a quantity of a single item
 public class GiveTrigger extends Trigger {
 	private static final Pattern pokemonTriggerPattern = Pattern.compile("(pokemon:)\\s*([A-Za-z \\t0-9,:.\\-'*]*)");
 	
@@ -18,7 +20,11 @@ public class GiveTrigger extends Trigger {
 	public GiveTrigger(String name, String contents) {
 		super(name, contents);
 		itemList = new ArrayList<>();
-		
+
+		if (Item.isItem(contents)) {
+			itemList.add(Item.getItem(ItemNamesies.getValueOf(contents)));
+		}
+
 		Matcher m = variablePattern.matcher(contents);		
 		while (m.find()) {
 			String type = m.group(1);

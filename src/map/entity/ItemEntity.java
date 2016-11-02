@@ -88,13 +88,7 @@ class ItemEntity extends Entity {
 		if (itemTrigger == null) {
 			data.addTrigger("Give", itemTriggerName, "item: " + itemName);
 		}
-		
-//		System.out.println(name);
-//		System.out.println(itemTriggerName);
-//		System.out.println(data.getDialogue(name).text);
-//		System.out.println(data.getDialogue(name).choices[0]);
-//		System.out.println(data.getTrigger(name));
-//		System.out.println(data.getTrigger(itemTriggerName));
+
 		dataCreated = true;
 	}
 	

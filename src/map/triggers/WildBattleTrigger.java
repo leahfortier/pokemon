@@ -8,12 +8,15 @@ import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
 import namesies.PokemonNamesies;
+import pattern.AreaDataMatcher;
+import pattern.AreaDataMatcher.WildBattleTriggerMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
 import trainer.WildPokemon;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,33 +29,14 @@ public class WildBattleTrigger extends Trigger {
 
 	public WildBattleTrigger(String name, String function) {
 		super(name, function);
-		
-		int count = 0;
-		Matcher m = eventTriggerPattern.matcher(function);
-		while (m.find()) {
-			if (m.group(2) != null) {
-				++count;
-			}
-		}
-		
-		wildEncounters = new WildEncounter[count];
-		
+
+		WildBattleTriggerMatcher matcher = AreaDataMatcher.deserialize(function, WildBattleTriggerMatcher.class);
+		this.wildEncounters = matcher.getWildEncounters();
+		this.encounterRate = matcher.encounterRate;
+
 		int totalProbability = 0;
-		int index = 0;
-		m = eventTriggerPattern.matcher(function);
-		
-		// System.out.println(function);
-		
-		while (m.find()) {
-			if (m.group(1) != null) {
-				encounterRate = EncounterRate.valueOf(m.group(1));
-			}
-			else {
-				wildEncounters[index] = new WildEncounter(m.group(2), m.group(3), m.group(4), m.group(5));
-				totalProbability += wildEncounters[index].getProbability();
-				
-				index++;
-			}
+		for (WildEncounter wildEncounter : this.wildEncounters) {
+			totalProbability = totalProbability + wildEncounter.getProbability();
 		}
 		
 		if (totalProbability != 100) {

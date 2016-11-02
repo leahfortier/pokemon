@@ -217,10 +217,10 @@ public class MapData {
 		entities.stream()
 				.filter(data -> data.isEntityPresent(character) || GameFrame.GENERATE_STUFF)
 				.forEach(data -> {
-					Entity e = data.getEntity();
-					e.reset();
-					e.addData(gameData);
-					res[e.getX()][e.getY()] = e;
+					Entity entity = data.getEntity();
+					entity.reset();
+					entity.addData(gameData);
+					res[entity.getX()][entity.getY()] = entity;
 				});
 		
 		return res;

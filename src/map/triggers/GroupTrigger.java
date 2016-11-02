@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import main.Game;
+import message.MessageUpdate;
+import message.MessageUpdate.Update;
+import message.Messages;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import util.StringUtils;
@@ -25,10 +28,10 @@ public class GroupTrigger extends Trigger {
 	@Override
 	public void execute(Game game) {
 		super.execute(game);
-		for (String s: triggers) {
-			Trigger trigger = game.data.getTrigger(s);
+		for (String triggerName: triggers) {
+			Trigger trigger = game.data.getTrigger(triggerName);
 			if (trigger != null && trigger.isTriggered(game.characterData)) {
-				trigger.execute(game);
+				Messages.addMessage(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
 			}
 		}
 	}

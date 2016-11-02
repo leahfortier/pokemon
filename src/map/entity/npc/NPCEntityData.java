@@ -1,13 +1,13 @@
 package map.entity.npc;
 
-import main.Global;
 import map.Direction;
 import map.entity.Entity;
 import map.entity.EntityData;
 import pattern.AreaDataMatcher.NPCMatcher;
 import util.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,13 +19,8 @@ public class NPCEntityData extends EntityData {
 	public int spriteIndex;
 	public Direction defaultDirection;
 
-	public String[] firstDialogue;
-	public String[] secondDialogue;
-	public String trainerInfo;
-	public String itemInfo;
-
-	public String firstTriggers;
-	public String secondTriggers;
+	private Map<String, List<NPCAction>> interactions;
+	private String startKey;
 
 	public int walkToPlayer; // TODO: why is this an int? Should it be a boolean?
 
@@ -40,6 +35,9 @@ public class NPCEntityData extends EntityData {
 		spriteIndex = matcher.spriteIndex;
 		defaultDirection = matcher.direction;
 		walkToPlayer = matcher.walkToPlayer ? 1 : 0;
+
+		interactions = matcher.getInteractionMap();
+		startKey = matcher.getStartKey();
 	}
 
 	public NPCEntityData(String name, String contents) {
@@ -52,14 +50,6 @@ public class NPCEntityData extends EntityData {
 		path = Direction.WAIT_CHARACTER + "";
 
 		walkToPlayer = -1;
-
-		// TODO: Why are these arrays with a seemingly arbitrary size?
-		firstDialogue = new String[100];
-		secondDialogue = new String[100];
-		
-		int FDSize = -1;
-		int SDSize = -1;
-		int val = -1;
 
 		Matcher m = multiVariablePattern.matcher(contents);
 		while (m.find()) {
@@ -88,55 +78,22 @@ public class NPCEntityData extends EntityData {
 						defaultDirection = Direction.valueOf(direction);
 					}
 					break;
-				case "firstDialogue":
-					val = Integer.parseInt(m.group(2));
-					firstDialogue[val] = m.group(4);
-					FDSize = Math.max(FDSize, val);
-					break;
-				case "secondDialogue":
-					val = Integer.parseInt(m.group(2));
-					secondDialogue[val] = m.group(4);
-					SDSize = Math.max(SDSize, val);
-					break;
-				case "trainer":
-					trainerInfo = m.group(4);
-					break;
-				case "give":
-					itemInfo = m.group(4);
-					break;
-				case "firstTriggers":
-					firstTriggers = m.group(4);
-					break;
-				case "secondTriggers":
-					secondTriggers = m.group(4);
-					break;
 				case "walkToPlayer":
 					walkToPlayer = m.group(3).equals("true") ? 1 : 0;
 					break;
 			}
 		}
-
-		if (walkToPlayer == -1 && trainerInfo != null) {
-			walkToPlayer = 1;
-		}
-
-		firstDialogue = Arrays.copyOf(firstDialogue, FDSize + 1);
-		if (firstDialogue.length == 0 || (firstDialogue.length > 0 && firstDialogue[0] == null && FDSize > -1)) {
-			Global.error("firstDialogue missing for NPC " + name + ".");
-		}
-
-		secondDialogue = Arrays.copyOf(secondDialogue, SDSize + 1);
-		if (secondDialogue.length > 0 && secondDialogue[0] == null && FDSize > -1) {
-			Global.error("secondDialogue missing for NPC " + name + ".");
-		}
-
-		// if (firstDialogue.length > 0)
-		// System.out.println(Arrays.toString(firstDialogue));
-		// if (secondDialogue.length > 0)
-		// System.out.println(Arrays.toString(secondDialogue));
 	}
 
-	public NPCEntityData(String name, String condition, int x, int y, String trigger, String path, int direction, int index, String[] firstDialogue, String[] secondDialogue, String trainerInfo, String itemInfo, String firstTriggers, String secondTriggers, boolean walkToPlayer) {
+	public NPCEntityData(String name,
+						 String condition,
+						 int x,
+						 int y,
+						 String trigger,
+						 String path,
+						 int direction,
+						 int index,
+						 boolean walkToPlayer) {
 		super(name, condition);
 
 		this.name = name;
@@ -146,13 +103,6 @@ public class NPCEntityData extends EntityData {
 
 		this.walkToPlayer = walkToPlayer ? 1 : 0;
 
-		this.firstDialogue = firstDialogue;
-		this.secondDialogue = secondDialogue;
-		this.trainerInfo = trainerInfo;
-		this.itemInfo = itemInfo;
-		this.firstTriggers = firstTriggers;
-		this.secondTriggers = secondTriggers;
-
 		this.x = x;
 		this.y = y;
 
@@ -161,10 +111,9 @@ public class NPCEntityData extends EntityData {
 
 	public Entity getEntity() {
 		if (entity == null) {
-			// entity = new NPCEntity(x, y, trigger, path, defaultDirection,
-			// spriteIndex);
-			entity = new NPCEntity(name, x, y, trigger, path, defaultDirection, spriteIndex, walkToPlayer == 1);
+			entity = new NPCEntity(name, x, y, path, defaultDirection, spriteIndex, walkToPlayer == 1, interactions, startKey);
 		}
+
 		return entity;
 	}
 
@@ -182,34 +131,6 @@ public class NPCEntityData extends EntityData {
 		StringUtils.appendLine(ret, "\tspriteIndex: " + spriteIndex);
 		StringUtils.appendLine(ret, "\tdirection: " + defaultDirection);
 		StringUtils.appendLine(ret, "\twalkToPlayer: " + (walkToPlayer == 1));
-
-		for (int currDialogue = 0; currDialogue < firstDialogue.length; ++currDialogue) {
-			StringUtils.appendLine(ret, "\tfirstDialogue[" + currDialogue + "]: \"" + firstDialogue[currDialogue] + "\"");
-		}
-
-		if (secondDialogue != null) {
-			for (int currDialogue = 0; currDialogue < secondDialogue.length; ++currDialogue) {
-				StringUtils.appendLine(ret, "\tsecondDialogue[" + currDialogue + "]: \"" + secondDialogue[currDialogue] + "\"");
-			}
-		}
-
-		if (itemInfo != null) {
-			StringUtils.appendLine(ret, "\tgive: \"" + itemInfo.trim() + "\"");
-		}
-
-		if (trainerInfo != null) {
-			StringUtils.appendLine(ret, "\ttrainer: \"" + trainerInfo.trim() + "\"");
-		}
-
-		if (firstTriggers != null) {
-			StringUtils.appendLine(ret, "\tfirstTriggers: \"" + firstTriggers.trim() + "\"");
-
-		}
-
-		if (secondTriggers != null) {
-			StringUtils.appendLine(ret, "\tsecondTriggers: \"" + secondTriggers.trim() + "\"");
-
-		}
 
 		ret.append("}\n");
 
