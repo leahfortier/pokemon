@@ -13,6 +13,7 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
+import pattern.AreaDataMatcher.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
@@ -216,6 +217,10 @@ public class CharacterData extends Trainer implements Serializable {
 		mapReset = true;
 	}
 
+	public void setNpcInteraction(final UpdateMatcher npcUpdateInteraction) {
+		this.setNpcInteraction(npcUpdateInteraction.npcEntityName, npcUpdateInteraction.interactionName);
+	}
+
 	public void setNpcInteraction(final String npcEntityName, final String interactionName) {
 		this.npcInteractions.put(npcEntityName, interactionName);
 		System.out.println(npcEntityName + " -> " + npcInteractions.get(npcEntityName));
@@ -295,7 +300,7 @@ public class CharacterData extends Trainer implements Serializable {
 		if (opponent instanceof Trainer) {
 			Trainer opp = (Trainer)opponent;
 			Messages.addMessage(getName() + " defeated " + opp.getName() + "!", Update.WIN_BATTLE);
-			addGlobal(b.getWinGlobal());
+			this.setNpcInteraction(b.getNpcUpdateInteraction());
 			
 			// I've decided that the next line of code is the best line in this entire codebase
 			int datCash = opp.getDatCashMoney()*(hasEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);

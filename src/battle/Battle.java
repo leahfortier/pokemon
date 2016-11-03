@@ -30,9 +30,11 @@ import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
+import pattern.AreaDataMatcher.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.CharacterData;
+import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Pokedex.PokedexStatus;
 import trainer.Team;
@@ -47,13 +49,17 @@ import java.util.List;
 public class Battle {
 	private CharacterData player;
 	private Opponent opponent; // SO OBJECT-ORIENTED
+
 	private Weather weather;
 	private List<BattleEffect> effects;
+
 	private int turn;
 	private boolean firstAttacking;
 	private boolean reduce;
 	private int escapeAttempts;
-	private String winGlobal;
+
+	private UpdateMatcher npcUpdateInteraction;
+
 	private TerrainType baseTerrain;
 	private TerrainType currentTerrain;
 	
@@ -85,9 +91,9 @@ public class Battle {
 		enterBattle(player.front());
 	}
 
-	public Battle(Opponent o, String win) {
-		this(o);
-		winGlobal = win;
+	public Battle(EnemyTrainer npcTrainer, UpdateMatcher npcUpdateInteraction) {
+		this(npcTrainer);
+		this.npcUpdateInteraction = npcUpdateInteraction;
 	}
 
 	public CharacterData getPlayer() {
@@ -98,16 +104,16 @@ public class Battle {
 		return opponent;
 	}
 
-	public String getWinGlobal() {
-		return winGlobal;
-	}
-
 	public Weather getWeather() {
 		return weather;
 	}
 
 	public int getTurn() {
 		return turn;
+	}
+
+	public UpdateMatcher getNpcUpdateInteraction() {
+		return this.npcUpdateInteraction;
 	}
 
 	public TerrainType getTerrainType() {

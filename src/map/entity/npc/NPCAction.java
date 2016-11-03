@@ -104,15 +104,14 @@ public abstract class NPCAction {
         public String name;
         public int cashMoney;
         public String[] pokemon;
-        public String update;
-
-        public String winGlobal;
+        public String updateInteraction;
+        public String npcEntityName;
 
         public BattleAction(BattleMatcher matcher) {
             this.name = matcher.name;
             this.cashMoney = matcher.cashMoney;
             this.pokemon = matcher.pokemon;
-            this.update = matcher.update;
+            this.updateInteraction = matcher.update;
         }
 
         @Override
@@ -122,7 +121,7 @@ public abstract class NPCAction {
 
         @Override
         protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
-            this.winGlobal = "triggered_" + interactionTriggerName;
+            this.npcEntityName = npcEntityName;
 
             return AreaDataMatcher.getJson(this);
         }
