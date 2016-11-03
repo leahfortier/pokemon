@@ -36,7 +36,8 @@ public final class Save {
 		return Folder.SAVES + "Preview " + (fileNum + 1) + ".out";
 	}
 	
-	public static void save(CharacterData player) {
+	public static void save() {
+		CharacterData player = Game.getPlayer();
 		player.updateTimePlayed();
 		
 		File saveDir = new File(Folder.SAVES);
@@ -62,7 +63,7 @@ public final class Save {
 		}
 	}
 	
-	public static CharacterData load(int fileNum, Game game) {
+	public static CharacterData load(int fileNum) {
 		CharacterData loadChar = null;
 		
 		//updateSerVariables();
@@ -72,7 +73,7 @@ public final class Save {
 			ObjectInputStream in = new ObjectInputStream(fin);
 			
 			loadChar = (CharacterData) in.readObject();
-			loadChar.initialize(game);
+			loadChar.initialize();
 			
 			in.close();
 			fin.close();

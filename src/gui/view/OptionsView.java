@@ -1,17 +1,15 @@
 package gui.view;
 
-import gui.GameData;
+import main.Game;
+import main.Game.ViewMode;
+import main.Global;
+import util.DrawMetrics;
+import util.InputControl;
+import util.InputControl.Control;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-
-import util.DrawMetrics;
-import util.InputControl;
-import util.InputControl.Control;
-import main.Game;
-import main.Game.ViewMode;
-import main.Global;
 
 public class OptionsView extends View {
 	private boolean musicOn;
@@ -22,7 +20,7 @@ public class OptionsView extends View {
 		color = new Color(0, 0, 0);
 	}
 
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
 		if (input.mouseDown) {
 			input.consumeMousePress();
 			
@@ -32,7 +30,7 @@ public class OptionsView extends View {
 		
 		if (input.isDown(Control.ESC)) {
 			input.consumeKey(Control.ESC);
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
@@ -52,7 +50,7 @@ public class OptionsView extends View {
 		this.color = new Color(r, g, b);
 	}
 
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
 		Dimension d = Global.GAME_SIZE;
 		
 //		g.setColor(Color.BLACK);
@@ -95,6 +93,5 @@ public class OptionsView extends View {
 		return ViewMode.OPTIONS_VIEW;
 	}
 
-	public void movedToFront(Game game) {}
-
+	public void movedToFront() {}
 }

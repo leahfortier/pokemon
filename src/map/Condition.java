@@ -1,6 +1,6 @@
 package map;
 
-import trainer.CharacterData;
+import main.Game;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class Condition {
 		}
 	}
 	
-	public boolean isTrue(CharacterData data) {
+	public boolean isTrue() {
 		Stack<Boolean> stack = new Stack<>();
 		for (String s: condition) {
 			switch (s) {
@@ -105,7 +105,7 @@ public class Condition {
 					stack.push(false);
 					break;
 				default:
-					stack.push(data.globalsContain(s));
+					stack.push(Game.getPlayer().globalsContain(s));
 					break;
 			}
 		}

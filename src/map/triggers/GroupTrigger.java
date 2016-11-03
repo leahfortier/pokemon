@@ -1,11 +1,5 @@
 package map.triggers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-
 import main.Game;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -13,6 +7,10 @@ import message.Messages;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GroupTrigger extends Trigger {
 	
@@ -33,11 +31,11 @@ public class GroupTrigger extends Trigger {
 	}
 
 	@Override
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
 		for (String triggerName: triggers) {
-			Trigger trigger = game.data.getTrigger(triggerName);
-			if (trigger != null && trigger.isTriggered(game.characterData)) {
+			Trigger trigger = Game.getData().getTrigger(triggerName);
+			if (trigger != null && trigger.isTriggered()) {
 				Messages.addMessage(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
 			}
 		}

@@ -11,7 +11,6 @@ import namesies.PokemonNamesies;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.WildBattleTriggerMatcher;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
 import trainer.WildPokemon;
@@ -51,35 +50,36 @@ public class WildBattleTrigger extends Trigger {
 		this.encounterRate = encounterRate;
 	}
 	
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
 
 		// TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class
 		double rand = Math.random()*187.5/encounterRate.getRate();
 				
 		if (rand < 1) {
-			WildPokemon wildPokemon = getWildPokemon(game.characterData);
+			CharacterData player = Game.getPlayer();
+			WildPokemon wildPokemon = getWildPokemon();
 
 			// TODO: This should be in a separate method
 			// Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
-			if (game.characterData.front().getLevel() >= wildPokemon.front().getLevel()) {
-				if (game.characterData.isUsingRepel()) {
+			if (player.front().getLevel() >= wildPokemon.front().getLevel()) {
+				if (player.isUsingRepel()) {
 					return;
 				}
 
 				// TODO: Make the chance method return an int instead of a double
-				Item item = game.characterData.front().getActualHeldItem();
+				Item item = player.front().getActualHeldItem();
 				if (item instanceof RepellingEffect && Global.chanceTest((int)(100*((RepellingEffect)item).chance()))) {
 					return;
 				}
 			}
 
 			// TODO: Should probably make a method for this
-			boolean seenWildPokemon = game.characterData.getPokedex().getStatus(wildPokemon.front().getPokemonInfo().namesies()) == PokedexStatus.NOT_SEEN;
+			boolean seenWildPokemon = player.getPokedex().getStatus(wildPokemon.front().getPokemonInfo().namesies()) == PokedexStatus.NOT_SEEN;
 			
 			// Let the battle begin!!
-			Battle battle = new Battle(game.characterData, wildPokemon);
-			game.setBattleViews(battle, seenWildPokemon);
+			Battle battle = new Battle(wildPokemon);
+			Game.setBattleViews(battle, seenWildPokemon);
 		}
 	}
 
@@ -91,8 +91,8 @@ public class WildBattleTrigger extends Trigger {
 		return this.encounterRate;
 	}
 
-	private WildPokemon getWildPokemon(final CharacterData player) {
-		final WildPokemon legendaryEncounter = this.getLegendaryEncounter(player);
+	private WildPokemon getWildPokemon() {
+		final WildPokemon legendaryEncounter = this.getLegendaryEncounter();
 		if (legendaryEncounter != null) {
 			return legendaryEncounter;
 		}
@@ -101,8 +101,8 @@ public class WildBattleTrigger extends Trigger {
 	}
 	
 	// Returns a legendary encounter if applicable and null otherwise
-	private WildPokemon getLegendaryEncounter(CharacterData player) {
-		if (Global.chanceTest(1, 1024) && !player.getPokedex().caught(PokemonNamesies.MEW)) {
+	private WildPokemon getLegendaryEncounter() {
+		if (Global.chanceTest(1, 1024) && !Game.getPlayer().getPokedex().caught(PokemonNamesies.MEW)) {
 			return new WildPokemon(new ActivePokemon(PokemonNamesies.MEW, 5, true, false));
 		}
 		

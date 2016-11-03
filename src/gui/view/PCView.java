@@ -22,8 +22,7 @@ import util.InputControl;
 import util.InputControl.Control;
 import battle.Move;
 
-public class PCView extends View
-{
+public class PCView extends View {
 	private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + 6;
 	private static final int RETURN = NUM_BUTTONS - 1;
 	private static final int RELEASE = NUM_BUTTONS - 2;
@@ -33,7 +32,8 @@ public class PCView extends View
 	private static final int LEFT_ARROW = NUM_BUTTONS - 6;
 	private static final int PARTY = PC.BOX_HEIGHT*PC.BOX_WIDTH;
 
-	private CharacterData player;
+	private PC pc;
+	
 	private ActivePokemon selected;
 	private boolean party;
 	private int selectedButton;
@@ -50,17 +50,15 @@ public class PCView extends View
 	private Button releaseButton;
 	private Button returnButton;
 	
-	public PCView(CharacterData c)
-	{
-		player = c;
+	public PCView() {
+		pc = Game.getPlayer().getPC();
+		
 		selectedButton = PARTY;
 		
 		buttons = new Button[NUM_BUTTONS];
 		boxButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
-		for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++)
-		{
-			for (int j = 0; j < PC.BOX_WIDTH; j++, k++)
-			{
+		for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++) {
+			for (int j = 0; j < PC.BOX_WIDTH; j++, k++) {
 				buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, Button.HoverAction.BOX, 
 						new int[] {j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1, // Right 
 								i == 0 ? PARTY + j : k - PC.BOX_WIDTH, // Up
@@ -70,8 +68,7 @@ public class PCView extends View
 		}
 		
 		partyButtons = new Button[Trainer.MAX_POKEMON];
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
-		{
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
 			buttons[PARTY + i] = partyButtons[i] = new Button(60 + 54*i, 499, 40, 40, Button.HoverAction.BOX,
 					new int[] {i == Trainer.MAX_POKEMON - 1 ? RETURN : PARTY + i + 1, // Right
 							i < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW, // Up
@@ -89,32 +86,25 @@ public class PCView extends View
 		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, Button.HoverAction.BOX, new int[] {0, SWITCH, PARTY + Trainer.MAX_POKEMON - 1, -1});
 		
 		party = true;
-		selected = player.front();
+		selected = Game.getPlayer().front();
 	}
 	
-	public void update(int dt, InputControl input, Game game)
-	{
+	public void update(int dt, InputControl input) {
 		selectedButton = Button.update(buttons, selectedButton, input);
 
-		for (int i = 0; i < PC.BOX_HEIGHT; i++)
-		{
-			for (int j = 0; j < PC.BOX_WIDTH; j++)
-			{
-				if (boxButtons[i][j].checkConsumePress())
-				{
-					if (party && depositClicked)
-					{
-						player.getPC().depositPokemon(player, selected, i, j);
+		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
+			for (int j = 0; j < PC.BOX_WIDTH; j++) {
+				if (boxButtons[i][j].checkConsumePress()) {
+					if (party && depositClicked) {
+						pc.depositPokemonFromPlayer(selected, i, j);
 						depositClicked = false;
 					}
-					else if (switchClicked)
-					{
-						player.getPC().switchPokemon(player, selected, i, j);
+					else if (switchClicked) {
+						pc.switchPokemon(selected, i, j);
 						switchClicked = false;
 					}
-					else
-					{
-						selected = player.getPC().getBoxPokemon()[i][j];
+					else {
+						selected = pc.getBoxPokemon()[i][j];
 						party = false;
 					}
 					updateActiveButtons();
@@ -122,22 +112,17 @@ public class PCView extends View
 			}
 		}
 		
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++)
-		{
-			if (partyButtons[i].checkConsumePress())
-			{
-				if (party && depositClicked)
-				{
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+			if (partyButtons[i].checkConsumePress()) {
+				if (party && depositClicked) {
 					depositClicked = false;
 				}
-				else if (switchClicked)
-				{
-					player.getPC().switchPokemon(player, selected, i);
+				else if (switchClicked) {
+					pc.switchPokemon(selected, i);
 					switchClicked = false;
 				}
-				else
-				{
-					selected = player.getTeam().get(i);
+				else {
+					selected = Game.getPlayer().getTeam().get(i);
 					party = true;					
 				}
 				updateActiveButtons();
@@ -146,14 +131,14 @@ public class PCView extends View
 		
 		if (leftButton.checkConsumePress())
 		{
-			player.getPC().prevBox();
-			movedToFront(game);
+			pc.prevBox();
+			movedToFront();
 		}
 		
 		if (rightButton.checkConsumePress())
 		{
-			player.getPC().nextBox();
-			movedToFront(game);
+			pc.nextBox();
+			movedToFront();
 		}
 		
 		if (switchButton.checkConsumePress())
@@ -162,47 +147,47 @@ public class PCView extends View
 			updateActiveButtons();
 		}
 		
-		if (depositWithdrawButton.checkConsumePress())
-		{
-			if (party) // Deposit
-			{
-				if (depositClicked) player.getPC().depositPokemon(player, selected);
+		if (depositWithdrawButton.checkConsumePress()) {
+			if (party) { // Deposit
+				if (depositClicked) {
+					pc.depositPokemon(selected);
+				}
+
 				depositClicked = !depositClicked;
-				updateActiveButtons();
 			}
-			else // Withdraw
-			{
-				player.getPC().withdrawPokemon(player, selected);
-				updateActiveButtons();
+			else { // Withdraw
+				pc.withdrawPokemon(selected);
 			}
+
+			updateActiveButtons();
 		}
 		
 		if (releaseButton.checkConsumePress())
 		{
-			player.getPC().releasePokemon(player, selected);
-			movedToFront(game);
+			pc.releasePokemon(selected);
+			movedToFront();
 		}
 		
 		if (returnButton.checkConsumePress())
 		{
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
 		if (input.isDown(Control.ESC))
 		{
 			input.consumeKey(Control.ESC);
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
-	public void draw(Graphics g, GameData data)
-	{
+	public void draw(Graphics g) {
+		GameData data = Game.getData();
+
 		TileSet tiles = data.getMenuTiles();
 		TileSet typeTiles = data.getBattleTiles();
 		TileSet partyTiles = data.getPartyTiles();
 		TileSet pokemonTiles = data.getPokemonTilesSmall();
-		
-		PC pc = player.getPC();
+
 		ActivePokemon[][] box = pc.getBoxPokemon();
 		
 		// Box
@@ -246,8 +231,8 @@ public class PCView extends View
 		g.setColor(Color.RED);
 		g.fillRect(40, 478, 350, 82);
 		g.drawImage(tiles.getTile(0x33), 40, 478, null);
-		
-		List<ActivePokemon> team = player.getTeam();
+
+		List<ActivePokemon> team = Game.getPlayer().getTeam();
 		for (int i = 0; i < team.size(); i++)
 		{
 			g.translate(partyButtons[i].x, partyButtons[i].y);
@@ -273,17 +258,26 @@ public class PCView extends View
 		g.setColor(typeColors[1]);
 		g.fillPolygon(new int[] {410, 759, 759, 410}, new int[] {445, 96, 501, 501}, 4);
 		
-		if (switchClicked) switchButton.greyOut(g, false);
-		if (!releaseButton.isActive()) releaseButton.greyOut(g, true);
-		if (!depositWithdrawButton.isActive()) depositWithdrawButton.greyOut(g, true); 
-		else if (party && depositClicked) depositWithdrawButton.greyOut(g, false);
+		if (switchClicked) {
+			switchButton.greyOut(g, false);
+		}
+
+		if (!releaseButton.isActive()) {
+			releaseButton.greyOut(g, true);
+		}
+
+		if (!depositWithdrawButton.isActive()) {
+			depositWithdrawButton.greyOut(g, true);
+		}
+		else if (party && depositClicked) {
+			depositWithdrawButton.greyOut(g, false);
+		}
 		
 		g.drawImage(tiles.getTile(0x34), 410, 40, null);
 		BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageIndex());
 		DrawMetrics.drawCenteredImage(g, pkmImg, 479, 109);
 		
-		if (selected.isEgg())
-		{
+		if (selected.isEgg()) {
 			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 20);
 			
@@ -292,8 +286,7 @@ public class PCView extends View
 			DrawMetrics.setFont(g, 16);
 			DrawMetrics.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
 		}
-		else
-		{
+		else {
 			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 20);
 			
@@ -302,8 +295,7 @@ public class PCView extends View
 			g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
 			
 			int index = 0;
-			if (type[1] != Type.NO_TYPE)
-			{
+			if (type[1] != Type.NO_TYPE) {
 				g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 669, 97, null);
 				index = 1;
 			}
@@ -333,8 +325,7 @@ public class PCView extends View
 			g.drawString(selected.getCharacteristic(), 427, 217);
 			
 			List<Move> moves = selected.getActualMoves();
-			for (int i = 0; i < moves.size(); i++)
-			{
+			for (int i = 0; i < moves.size(); i++) {
 				int x = i%2 == 0 ? 421 : 590;
 				int y = i/2 == 0 ? 238 : 277;
 				
@@ -354,8 +345,7 @@ public class PCView extends View
 			int[] ivs = selected.getIVs();
 			int[] evs = selected.getEVs();
 			
-			for (int i = 0; i < Stat.NUM_STATS; i++)
-			{
+			for (int i = 0; i < Stat.NUM_STATS; i++) {
 				DrawMetrics.setFont(g, 16);
 				g.setColor(selected.getNature().getColor(i));
 				g.drawString(Stat.getStat(i, false).getName(), 427, 360 + i*18 + i/2); // TODO: srsly what's with the i/2
@@ -380,27 +370,23 @@ public class PCView extends View
 		DrawMetrics.drawCenteredWidthString(g, "Release", 699, 489);
 		DrawMetrics.drawCenteredWidthString(g, "Return", 584, 546);
 		
-		for (Button b : buttons) 
-		{
+		for (Button b : buttons) {
 			b.draw(g);
 		}
 	}
 
-	public ViewMode getViewModel()
-	{
+	public ViewMode getViewModel() {
 		return Game.ViewMode.PC_VIEW;
 	}
 
-	public void movedToFront(Game game) 
-	{
+	public void movedToFront() {
 		party = true;
-		selected = player.front();
+		selected = Game.getPlayer().front();
 		updateActiveButtons();
 	}
 
-	private void updateActiveButtons()
-	{
-		ActivePokemon[][] box = player.getPC().getBoxPokemon();
+	private void updateActiveButtons() {
+		ActivePokemon[][] box = pc.getBoxPokemon();
 		for (int i = 0; i < PC.BOX_HEIGHT; i++)
 		{
 			for (int j = 0; j < PC.BOX_WIDTH; j++)
@@ -408,17 +394,24 @@ public class PCView extends View
 				boxButtons[i][j].setActive((party && depositClicked) || switchClicked || box[i][j] != null);
 			}
 		}
-		
-		party = false;
+
+		CharacterData player = Game.getPlayer();
 		List<ActivePokemon> team = player.getTeam();
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++)			
-		{
+
+		party = false;
+		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
 			partyButtons[i].setActive(i < team.size());
-			if (i < team.size() && team.get(i) == selected) party = true;
+			if (i < team.size() && team.get(i) == selected) {
+				party = true;
+			}
 		}
 		
-		if (party) depositWithdrawButton.setActive(player.canDeposit(selected));
-		else depositWithdrawButton.setActive(team.size() < Trainer.MAX_POKEMON);
+		if (party) {
+			depositWithdrawButton.setActive(player.canDeposit(selected));
+		}
+		else {
+			depositWithdrawButton.setActive(team.size() < Trainer.MAX_POKEMON);
+		}
 		
 		releaseButton.setActive(!party || team.size() > 1);
 	}

@@ -2,6 +2,7 @@ package map.entity;
 
 import gui.GameData;
 import gui.view.MapView;
+import main.Game;
 import map.Direction;
 import map.MapData;
 import map.triggers.EventTrigger;
@@ -22,12 +23,6 @@ class ItemEntity extends Entity {
 	private ItemNamesies itemName;
 
 	private boolean dataCreated;
-	
-	public ItemEntity(int x, int y, String trigger) {
-		super(x, y);
-		this.trigger = trigger;
-		hasTriggered = false;
-	}
 
 	public ItemEntity(String name, int x, int y, String item) {
 		super(x,y);
@@ -44,8 +39,8 @@ class ItemEntity extends Entity {
 		}
 	}
 
-	protected BufferedImage getFrame(GameData data) {
-		return data.getTrainerTiles().getTile(0);
+	protected BufferedImage getFrame() {
+		return Game.getData().getTrainerTiles().getTile(0);
 	}
 
 	public String getTrigger() {
@@ -60,11 +55,12 @@ class ItemEntity extends Entity {
 		hasTriggered = false;
 	}
 	
-	public void addData(GameData data) {
+	public void addData() {
 		if (dataCreated) {
 			return;
 		}
 
+		GameData data = Game.getData();
 		final String itemTriggerName = "item_" + this.itemName.name().toLowerCase();
 
 		// Create a universal trigger for this item

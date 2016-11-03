@@ -1,11 +1,10 @@
 package map.triggers;
 
-import java.util.regex.Matcher;
-
-import sound.SoundTitle;
-import main.Game;
 import main.Global;
+import sound.SoundTitle;
 import util.StringUtils;
+
+import java.util.regex.Matcher;
 
 public class SoundTrigger extends Trigger {
 	private SoundTitle music;
@@ -36,8 +35,8 @@ public class SoundTrigger extends Trigger {
 		this.effect = effect;
 	}
 	
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
 			
 		if (music != null) {
 			Global.soundPlayer.playMusic(music);

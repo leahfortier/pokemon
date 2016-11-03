@@ -1,18 +1,17 @@
 package gui.view;
+
 import gui.Button;
-import gui.GameData;
+import main.Game.ViewMode;
+import util.InputControl;
 
 import java.awt.Graphics;
 
-import util.InputControl;
-import main.Game;
+public abstract class View {
 
-public abstract class View 
-{
-	public abstract void update(int dt, InputControl input, Game game);
-	public abstract void draw(Graphics g, GameData data);
-	public abstract Game.ViewMode getViewModel();
-	public abstract void movedToFront(Game game);
+	public abstract void update(int dt, InputControl input);
+	public abstract void draw(Graphics g);
+	public abstract ViewMode getViewModel();
+	public abstract void movedToFront();
 	
 	private static final int[] rightArrowx = { 0, 16, 16, 32, 16, 16, 0 };
 	private static final int[] rightArrowy = { 5, 5, 0, 10, 20, 15, 15 };

@@ -1,6 +1,5 @@
 package map.triggers;
 
-import main.Game;
 import message.Messages;
 
 public class EventTrigger extends Trigger {
@@ -12,8 +11,8 @@ public class EventTrigger extends Trigger {
 		this.dialogue = contents;
 	}
 
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
 		Messages.addMessageToFront(dialogue);
 	}
 	

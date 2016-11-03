@@ -1,20 +1,15 @@
 package trainer;
 
+import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import item.Item;
 import item.use.BallItem;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import map.Direction;
+import message.MessageUpdate;
+import message.MessageUpdate.Update;
 import message.Messages;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
@@ -22,9 +17,13 @@ import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
 import trainer.Pokedex.PokedexStatus;
-import battle.Battle;
-import message.MessageUpdate;
-import message.MessageUpdate.Update;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CharacterData extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
@@ -42,8 +41,9 @@ public class CharacterData extends Trainer implements Serializable {
 	public boolean mapReset;
 	public String mapName;
 	public String areaName;
+
 	private Set<String> definedGlobals;
-	
+
 	// Used for map globals.
 	private String previousMapName;
 	public String mapEntranceName;
@@ -61,18 +61,17 @@ public class CharacterData extends Trainer implements Serializable {
 	private PC pc;
 	private boolean[] badges;
 	private int repelSteps;
-	
-	public transient Game game;
-	
+
+	// TODO: Make private
 	public ActivePokemon evolvingPokemon;
 	public BaseEvolution evolution;
 	
 	private List<String> logMessages;
 
-	public CharacterData(Game game) {
+	public CharacterData() {
 		super(DEFAULT_NAME, START_MONEY);
-		this.initialize(game);
-		
+		this.initialize();
+
 		definedGlobals = new HashSet<>();
 		
 		pokedex = new Pokedex();
@@ -90,8 +89,7 @@ public class CharacterData extends Trainer implements Serializable {
 	}
 	
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
-	public void initialize(Game game) {
-		this.game = game;
+	public void initialize() {
 		this.logMessages = new ArrayList<>();
 		this.timeSinceUpdate = System.currentTimeMillis();
 	}
@@ -390,12 +388,11 @@ public class CharacterData extends Trainer implements Serializable {
 		return true;
 	}
 	
-	public void setEvolution(ActivePokemon pokemon, BaseEvolution evolution)
-	{
+	public void setEvolution(ActivePokemon pokemon, BaseEvolution evolution) {
 		this.evolvingPokemon = pokemon;
 		this.evolution = evolution;
 		
-		game.setViewMode(ViewMode.EVOLUTION_VIEW);
+		Game.setViewMode(ViewMode.EVOLUTION_VIEW);
 	}
 	
 	public void addLogMessage(MessageUpdate messageUpdate) {

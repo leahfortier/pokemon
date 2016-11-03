@@ -4,6 +4,7 @@ import item.Item;
 import main.Game;
 import namesies.ItemNamesies;
 import pokemon.ActivePokemon;
+import trainer.CharacterData;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -51,14 +52,16 @@ public class GiveTrigger extends Trigger {
 		}
 	}
 
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
+
+		CharacterData player = Game.getPlayer();
 		for (Item i: itemList) {
-			game.characterData.addItem(i);
+			player.addItem(i);
 		}
 		
 		for (ActivePokemon p: pokemonList) {
-			game.characterData.addPokemon(null, p);
+			player.addPokemon(null, p);
 		}
 	}
 

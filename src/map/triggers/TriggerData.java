@@ -1,6 +1,7 @@
 package map.triggers;
 
 import gui.GameData;
+import main.Game;
 import pattern.AreaDataMatcher.TriggerDataMatcher;
 import util.StringUtils;
 
@@ -111,7 +112,9 @@ public class TriggerData {
 		}
 	}
 
-	public void addData(GameData gameData) {
+	public void addData() {
+		GameData gameData = Game.getData();
+
 		if (gameData.getTrigger(name) == null) {
 			gameData.addTrigger(triggerType, name, triggerContents);
 		}

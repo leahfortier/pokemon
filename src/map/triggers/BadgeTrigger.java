@@ -20,9 +20,9 @@ public class BadgeTrigger extends Trigger {
 		}
 	}
 
-	public void execute(Game game) {
-		super.execute(game);
-		game.characterData.giveBadge(badgeIndex);
+	public void execute() {
+		super.execute();
+		Game.getPlayer().giveBadge(badgeIndex);
 	}
 
 	public String toString() {

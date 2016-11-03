@@ -3,7 +3,6 @@ package map.entity;
 import java.util.regex.Pattern;
 
 import map.Condition;
-import trainer.CharacterData;
 
 public abstract class EntityData {
 	public static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*(-?[\\w'.-]+)", Pattern.UNICODE_CHARACTER_CLASS);
@@ -24,8 +23,8 @@ public abstract class EntityData {
 	public abstract Entity getEntity();
 	public abstract String entityDataAsString();
 
-	public boolean isEntityPresent(CharacterData data) {
-		return condition.isTrue(data);
+	public boolean isEntityPresent() {
+		return condition.isTrue();
 	}
 
 	public int getX() {

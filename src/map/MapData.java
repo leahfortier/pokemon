@@ -1,12 +1,12 @@
 package map;
 
-import gui.GameData;
 import gui.GameFrame;
+import main.Game;
 import map.entity.Entity;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
-import map.entity.npc.NPCEntityData;
 import map.entity.TriggerEntityData;
+import map.entity.npc.NPCEntityData;
 import map.triggers.TriggerData;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.ItemMatcher;
@@ -42,7 +42,7 @@ public class MapData {
 	
 	private final List<EntityData> entities;
 	
-	public MapData(File file, GameData gameData) {
+	public MapData(File file) {
 		name = file.getName();
 		
 		String beginFilePath = FileIO.makeFolderPath(file.getPath()) + name;
@@ -87,7 +87,7 @@ public class MapData {
 		}
 
 		for (MapEntranceMatcher matcher : areaDataMatcher.mapEntrances) {
-			mapEntrances.put(matcher.name, getMapEntranceLocation(matcher.x, matcher.y, width));
+			mapEntrances.put(matcher.name, getMapIndex(matcher.x, matcher.y));
 		}
 
 		for (TriggerDataMatcher matcher : areaDataMatcher.triggerData) {
@@ -97,7 +97,7 @@ public class MapData {
 				triggers.put(loc, matcher.name);
 			}
 
-			triggerData.addData(gameData);
+			triggerData.addData();
 		}
 
 		for (TriggerMatcher matcher : areaDataMatcher.triggers) {
@@ -124,7 +124,7 @@ public class MapData {
 		}
 	}
 	
-	public static Integer getMapEntranceLocation(String contents, int width) {
+	public static int getMapEntranceLocation(String contents, int width) {
 		int x = 0;
 		int y = 0;
 		
@@ -140,10 +140,19 @@ public class MapData {
 			}
 		}
 		
-		return getMapEntranceLocation(x, y, width);
+		return getMapIndex(x, y, width);
 	}
 
-	public static Integer getMapEntranceLocation(int x, int y, int width) {
+	public int getPlayerMapIndex() {
+		CharacterData player = Game.getPlayer();
+		return getMapIndex(player.locationX, player.locationY);
+	}
+
+	public int getMapIndex(int x, int y) {
+		return getMapIndex(x, y, width);
+	}
+
+	public static Integer getMapIndex(int x, int y, int width) {
 		return x + y*width;
 	}
 	
@@ -156,7 +165,7 @@ public class MapData {
 			return 0;
 		}
 		
-		return bgTile[y*width + x];
+		return bgTile[getMapIndex(x, y)];
 	}
 	
 	public int getFgTile(int x, int y) {
@@ -164,7 +173,7 @@ public class MapData {
 			return 0;
 		}
 		
-		return fgTile[y*width + x];
+		return fgTile[getMapIndex(x, y)];
 	}
 	
 	public WalkType getPassValue(int x, int y) {
@@ -172,7 +181,7 @@ public class MapData {
 			return WalkType.NOT_WALKABLE;
 		}
 		
-		int val = walkMap[y*width + x]&((1<<24) - 1);
+		int val = walkMap[getMapIndex(x, y)]&((1<<24) - 1);
 		for (WalkType t: WalkType.values()) {
 			if (t.value == val) {
 				return t;
@@ -187,11 +196,11 @@ public class MapData {
 			return 0;
 		}
 		
-		return areaMap[y*width + x];
+		return areaMap[getMapIndex(x, y)];
 	}
 	
-	public String trigger(CharacterData character) {
-		int val = character.locationY*width + character.locationX;
+	public String trigger() {
+		int val = getPlayerMapIndex();
 		if (triggers.containsKey(val)) {
 			return triggers.get(val);
 		}
@@ -212,14 +221,14 @@ public class MapData {
 		return false;
 	}
 
-	public Entity[][] populateEntities(CharacterData character, GameData gameData) {
+	public Entity[][] populateEntities() {
 		Entity[][] res = new Entity[width][height];
 		entities.stream()
-				.filter(data -> data.isEntityPresent(character) || GameFrame.GENERATE_STUFF)
+				.filter(data -> data.isEntityPresent() || GameFrame.GENERATE_STUFF)
 				.forEach(data -> {
 					Entity entity = data.getEntity();
 					entity.reset();
-					entity.addData(gameData);
+					entity.addData();
 					res[entity.getX()][entity.getY()] = entity;
 				});
 		

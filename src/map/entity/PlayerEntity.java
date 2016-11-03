@@ -1,6 +1,5 @@
 package map.entity;
 
-import gui.GameData;
 import gui.view.MapView;
 import main.Game;
 import main.Game.ViewMode;
@@ -19,7 +18,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class PlayerEntity extends MovableEntity {
-	private CharacterData charData;
+
 	private boolean justMoved;
 	private String npcTrigger;
 	private String trainerTrigger;
@@ -29,21 +28,20 @@ public class PlayerEntity extends MovableEntity {
 
 	public PlayerEntity(CharacterData data) {
 		super(data.locationX, data.locationY, 0, data.direction);
-		
-		charData = data;
+
 		justMoved = true;
 		stalled = false;
 		justCreated = true;
 	}
 
-	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition) {
+	public void draw(Graphics g, float drawX, float drawY, boolean drawOnlyInTransition) {
 		if (drawOnlyInTransition && transitionTime == 0) {
 			return;
 		}
 
 		Dimension d = Global.GAME_SIZE;
 
-		BufferedImage img = getFrame(data);
+		BufferedImage img = getFrame();
 		g.drawImage(img,
 				d.width / 2 - img.getWidth() / 2 + Global.TILE_SIZE / 2,
 				(d.height / 2) + (Global.TILE_SIZE - img.getHeight()) - (Global.TILE_SIZE / 2),
@@ -53,15 +51,17 @@ public class PlayerEntity extends MovableEntity {
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		super.update(dt, entity, map, input, view);
 
+		CharacterData player = Game.getPlayer();
+
 		// TODO: have a method to check if locations are equal
-		if (charX != charData.locationX || charY != charData.locationY) {
+		if (charX != player.locationX || charY != player.locationY) {
 			entity[charX][charY] = null;
-			entity[charData.locationX][charData.locationY] = this;
+			entity[player.locationX][player.locationY] = this;
 			transitionTime = 0;
 		}
 
-		if (charData.direction != transitionDirection) {
-			transitionDirection = charData.direction;
+		if (player.direction != transitionDirection) {
+			transitionDirection = player.direction;
 		}
 		
 		npcTrigger = null;
@@ -79,10 +79,10 @@ public class PlayerEntity extends MovableEntity {
 							continue;
 						}
 
-						int dx = charData.locationX + direction.dx;
-						int dy = charData.locationY + direction.dy;
+						int dx = player.locationX + direction.dx;
+						int dy = player.locationY + direction.dy;
 						
-						WalkType curPassValue = map.getPassValue(charData.locationX, charData.locationY);
+						WalkType curPassValue = map.getPassValue(player.locationX, player.locationY);
 						WalkType passValue = map.getPassValue(dx, dy);
 						
 						if (isPassable(passValue, direction) && entity[dx][dy] == null) {
@@ -90,10 +90,10 @@ public class PlayerEntity extends MovableEntity {
 							dy += getWalkTypeAdditionalMove(curPassValue, passValue, direction);
 
 							entity[dx][dy] = this;
-							entity[charData.locationX][charData.locationY] = null;
+							entity[player.locationX][player.locationY] = null;
 
-							charData.setLocation(dx, dy);
-							charData.step();
+							player.setLocation(dx, dy);
+							player.step();
 
 							transitionTime = 1;
 							break;
@@ -105,9 +105,9 @@ public class PlayerEntity extends MovableEntity {
 				}
 			}
 
-			charX = charData.locationX;
-			charY = charData.locationY;
-			charData.direction = transitionDirection;
+			charX = player.locationX;
+			charY = player.locationY;
+			player.direction = transitionDirection;
 
 			if (spacePressed) {
 				int x = transitionDirection.dx + charX;
@@ -136,7 +136,7 @@ public class PlayerEntity extends MovableEntity {
 						}
 						
 						entity[x][y].getAttention(direction);
-						charData.direction = transitionDirection = direction.opposite;
+						player.direction = transitionDirection = direction.opposite;
 						stalled = false;
 					}
 				}
@@ -169,7 +169,7 @@ public class PlayerEntity extends MovableEntity {
 		return 0;
 	}
 
-	public void triggerCheck(Game game, MapData map) {
+	public void triggerCheck(MapData map) {
 		String triggerName = null;
 
 		if (npcTrigger != null) {
@@ -177,34 +177,39 @@ public class PlayerEntity extends MovableEntity {
 			npcTrigger = null;
 		}
 		else if (justMoved) {
-			triggerName = map.trigger(charData);
+			triggerName = map.trigger();
 			justMoved = false;
 		}
-		else if (!stalled && trainerTrigger != null && game.getCurrentViewMode() == ViewMode.MAP_VIEW)
+		else if (!stalled && trainerTrigger != null && Game.isCurrentViewMode(ViewMode.MAP_VIEW))
 		{
 			triggerName = trainerTrigger;
 			trainerTrigger = null;
 		}
 
 		if (triggerName != null) {
-			Trigger trigger = game.data.getTrigger(triggerName);
-			if (trigger != null && trigger.isTriggered(game.characterData)) {
-				trigger.execute(game);
+			Trigger trigger = Game.getData().getTrigger(triggerName);
+			if (trigger != null && trigger.isTriggered()) {
+				trigger.execute();
 			}
 		}
 	}
 
 	// TODO: should hold return value in an object instead of an arbitrary array
-	public float[] getDrawLocation(Dimension d) {
+	public float[] getDrawLocation(Dimension dimension) {
+
+		CharacterData player = Game.getPlayer();
+		int playerX = player.locationX;
+		int playerY = player.locationY;
+
 		float[] res = new float[2];
 		if (transitionTime > 0) {
 			float len = Math.max(0f, (Global.TIME_BETWEEN_TILES - (float) transitionTime/*-dt*/) / Global.TIME_BETWEEN_TILES);
-			res[0] = d.width / 2 - (charData.locationX - transitionDirection.dx * len) * Global.TILE_SIZE;
-			res[1] = d.height / 2 - (charData.locationY - transitionDirection.dy * len) * Global.TILE_SIZE;
+			res[0] = dimension.width/2 - (playerX - transitionDirection.dx*len)*Global.TILE_SIZE;
+			res[1] = dimension.height/2 - (playerY - transitionDirection.dy*len)*Global.TILE_SIZE;
 		}
 		else {
-			res[0] = d.width / 2 - charData.locationX * Global.TILE_SIZE;
-			res[1] = d.height / 2 - charData.locationY * Global.TILE_SIZE;
+			res[0] = dimension.width/2 - playerX*Global.TILE_SIZE;
+			res[1] = dimension.height/2 - playerY*Global.TILE_SIZE;
 		}
 
 		return res;
@@ -231,7 +236,7 @@ public class PlayerEntity extends MovableEntity {
 		return stalled;
 	}
 
-	public void addData(GameData gameData) {}
+	public void addData() {}
 
 	public void reset() {}
 }
