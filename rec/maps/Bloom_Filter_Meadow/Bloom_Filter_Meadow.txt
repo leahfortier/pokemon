@@ -13,7 +13,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "I'm a meadow lady in a meadow!!!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I'm a meadow lady in a meadow!!!"
+              }
             },
             {
               "battle": {
@@ -32,7 +35,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "Yayyy I'm in a meadow and I'm a lady lalalala!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!"
+              }
             }
           ]
         }
@@ -51,7 +57,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "I like shorts!!!!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I like shorts!!!!"
+              }
             },
             {
               "battle": {
@@ -70,7 +79,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "SHORRRRTTTTTSSSSSS"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "SHORRRRTTTTTSSSSSS"
+              }
             }
           ]
         }

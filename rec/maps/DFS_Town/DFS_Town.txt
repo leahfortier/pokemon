@@ -13,7 +13,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "Rattata!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Rattata!"
+              }
             },
             {
               "battle": {
@@ -31,7 +34,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "Rattata..."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Rattata..."
+              }
             }
           ]
         }
@@ -51,7 +57,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "Hey, you should go talk to Professor Maple first before leaving town."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Hey, you should go talk to Professor Maple first before leaving town."
+              }
             }
           ]
         }
@@ -70,10 +79,16 @@
           "name": "give_item",
           "npcActions": [
             {
-              "text": "Here, take this potion. You are going to need it!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Here, take this potion. You are going to need it!"
+              }
             },
             {
-              "giveItem": "Potion"
+              "trigger": {
+                "triggerType": "Give",
+                "triggerContents": "Potion"
+              }
             },
             {
               "update": "done"
@@ -84,7 +99,10 @@
           "name": "done",
           "npcActions": [
             {
-              "text": "You can use potions to heal your Pokémon!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "You can use potions to heal your Pokémon!"
+              }
             }
           ]
         }
@@ -103,7 +121,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "Someone freed the pointer to my Rattata! Was it you?"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Someone freed the pointer to my Rattata! Was it you?"
+              }
             },
             {
               "battle": {
@@ -121,7 +142,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "I would have won with my Rattata!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I would have won with my Rattata!"
+              }
             }
           ]
         }
@@ -140,22 +164,40 @@
           "name": "give_item",
           "npcActions": [
             {
-              "text": "Here, take these Pokéballs. You'll need them to capture Poké!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Here, take these Pokéballs. You'll need them to capture Poké!"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "Give",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "Give",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "Give",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "Give",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "Give",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
               "update": "done"
@@ -166,7 +208,10 @@
           "name": "done",
           "npcActions": [
             {
-              "text": "You can use Pokéballs to catch new Pokémon!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "You can use Pokéballs to catch new Pokémon!"
+              }
             }
           ]
         }
@@ -185,7 +230,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "My Rattata is in the top percentage of Rattata!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "My Rattata is in the top percentage of Rattata!"
+              }
             },
             {
               "battle": {
@@ -203,7 +251,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "I thought Rattata was the very best..."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I thought Rattata was the very best..."
+              }
             }
           ]
         }

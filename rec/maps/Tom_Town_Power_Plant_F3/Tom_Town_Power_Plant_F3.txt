@@ -14,7 +14,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "I'll be here for days trying to get the plant fully operational again."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I'll be here for days trying to get the plant fully operational again."
+              }
             }
           ]
         }
@@ -34,7 +37,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "I'm going to kill your process."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I'm going to kill your process."
+              }
             },
             {
               "battle": {
@@ -52,7 +58,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "I can't beleive you managed to killed my process."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I can't beleive you managed to killed my process."
+              }
             }
           ]
         }
@@ -72,7 +81,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "Wow, you did it! You saved the power plant!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Wow, you did it! You saved the power plant!"
+              }
             }
           ]
         }
@@ -92,7 +104,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "You can't stop us. This town's main thread will be terminated!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "You can't stop us. This town's main thread will be terminated!"
+              }
             },
             {
               "battle": {
@@ -111,10 +126,13 @@
           "name": "deadlock_defeat",
           "npcActions": [
             {
-              "text": "You may have halted us now, but our loop is infinite!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "You may have halted us now, but our loop is infinite!"
+              }
             },
             {
-              "trigger": "GroupTrigger_TomTownPowerPlantDefeatedTeamDeadlock"
+              "groupTrigger": "GroupTrigger_TomTownPowerPlantDefeatedTeamDeadlock"
             }
           ]
         }
@@ -134,10 +152,16 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "What is a process like you doing here?"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "What is a process like you doing here?"
+              }
             },
             {
-              "text": "That doesn't matter. You can't interfere with our threads!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "That doesn't matter. You can't interfere with our threads!"
+              }
             },
             {
               "battle": {
@@ -155,10 +179,16 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "How could you have won?"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "How could you have won?"
+              }
             },
             {
-              "text": "The others will stop your thread!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "The others will stop your thread!"
+              }
             }
           ]
         }

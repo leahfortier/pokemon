@@ -1,11 +1,13 @@
 package map.entity.npc;
 
+import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import namesies.ItemNamesies;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.BattleMatcher;
+import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import pattern.AreaDataMatcher.UpdateMatcher;
+import util.StringUtils;
 
 public abstract class NPCAction {
     public Trigger getTrigger(String npcEntityName, String interactionTriggerName, String actionTriggerName) {
@@ -19,56 +21,13 @@ public abstract class NPCAction {
     protected abstract TriggerType getTriggerType();
     protected abstract String getTriggerContents(String npcEntityName, String interactionTriggerName);
 
-    public static class DialogueAction extends NPCAction {
-        private final String text;
-
-        public DialogueAction(final String dialogueText) {
-            this.text = dialogueText;
-        }
-
-        @Override
-        protected TriggerType getTriggerType() {
-            return TriggerType.EVENT;
-        }
-
-        @Override
-        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
-            return this.text;
-        }
-    }
-
-    public static class GiveItemAction extends NPCAction {
-        private final ItemNamesies item;
-
-        public GiveItemAction(final String itemName) {
-            this.item = ItemNamesies.getValueOf(itemName);
-        }
-
-        @Override
-        protected TriggerType getTriggerType() {
-            return TriggerType.GIVE;
-        }
-
-        @Override
-        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
-            return this.item.getName();
-        }
-    }
-
     public static class TriggerAction extends NPCAction {
         private final TriggerType type;
-        private final String name;
         private final String contents;
 
-        public TriggerAction(final TriggerType type, final String name, final String contents) {
+        public TriggerAction(final TriggerType type, final String contents) {
             this.type = type;
-            this.name = name;
-            this.contents = contents;
-        }
-
-        @Override
-        public Trigger getTrigger(String npcEntityName, String interactionTriggerName, String triggerNameSuffix) {
-            return Trigger.createTrigger(type, name, contents);
+            this.contents = StringUtils.isNullOrEmpty(contents) ? StringUtils.empty() : contents;
         }
 
         @Override
@@ -79,24 +38,6 @@ public abstract class NPCAction {
         @Override
         protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
             return this.contents;
-        }
-    }
-
-    public static class GivePokemonAction extends NPCAction {
-        private final String pokemonDescription;
-
-        public GivePokemonAction(final String pokemonDescription) {
-            this.pokemonDescription = pokemonDescription;
-        }
-
-        @Override
-        protected TriggerType getTriggerType() {
-            return TriggerType.GIVE;
-        }
-
-        @Override
-        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
-            return this.pokemonDescription;
         }
     }
 
@@ -122,7 +63,6 @@ public abstract class NPCAction {
         @Override
         protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
             this.npcEntityName = npcEntityName;
-
             return AreaDataMatcher.getJson(this);
         }
     }
@@ -143,6 +83,38 @@ public abstract class NPCAction {
         protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
             UpdateMatcher matcher = new UpdateMatcher(npcEntityName, interactionName);
             return AreaDataMatcher.getJson(matcher);
+        }
+    }
+
+    public static class GroupTriggerAction extends NPCAction {
+        private final String triggerName;
+
+        public GroupTriggerAction(final String triggerName) {
+            this.triggerName = triggerName;
+        }
+
+        @Override
+        protected TriggerType getTriggerType() {
+            return TriggerType.GROUP;
+        }
+
+        @Override
+        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+            GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerName);
+            return AreaDataMatcher.getJson(matcher);
+        }
+    }
+
+    // TODO: This
+    public static class ChoiceAction extends NPCAction {
+        @Override
+        protected TriggerType getTriggerType() {
+            return TriggerType.EVENT;
+        }
+
+        @Override
+        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+            return StringUtils.empty();
         }
     }
 }

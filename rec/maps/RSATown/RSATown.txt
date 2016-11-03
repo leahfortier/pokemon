@@ -13,7 +13,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "My Riolu is going to punch the normal off your Eevee!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "My Riolu is going to punch the normal off your Eevee!"
+              }
             },
             {
               "battle": {
@@ -31,7 +34,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "..."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "..."
+              }
             }
           ]
         }
@@ -50,7 +56,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+              }
             }
           ]
         }

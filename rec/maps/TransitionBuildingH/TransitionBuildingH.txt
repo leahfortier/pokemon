@@ -24,7 +24,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "I don't suggest going out there. It's way too buggy!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I don't suggest going out there. It's way too buggy!"
+              }
             }
           ]
         }

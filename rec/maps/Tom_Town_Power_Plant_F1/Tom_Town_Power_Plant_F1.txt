@@ -14,7 +14,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "Time to get back to my research."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Time to get back to my research."
+              }
             }
           ]
         }
@@ -34,7 +37,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "It's not safe here."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "It's not safe here."
+              }
             }
           ]
         }

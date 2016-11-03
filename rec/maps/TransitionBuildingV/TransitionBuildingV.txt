@@ -14,7 +14,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "What happened at the power plant? Who is this Team Deadlock?"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "What happened at the power plant? Who is this Team Deadlock?"
+              }
             }
           ]
         }
@@ -34,7 +37,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "I'm amazed how fast Leader Moore defeated my Pidgey!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I'm amazed how fast Leader Moore defeated my Pidgey!"
+              }
             }
           ]
         }
@@ -54,7 +60,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "Team Deadlock is a big bug in our society."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Team Deadlock is a big bug in our society."
+              }
             }
           ]
         }
@@ -74,7 +83,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "The Tom Town gym sounds really tough."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "The Tom Town gym sounds really tough."
+              }
             }
           ]
         }
@@ -94,10 +106,16 @@
           "name": "default",
           "npcActions": [
             {
-              "text": "There power plant has been taken over by Team Deadlock!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "There power plant has been taken over by Team Deadlock!"
+              }
             },
             {
-              "text": "Wind Valley is closed off until this matter has been resolved."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Wind Valley is closed off until this matter has been resolved."
+              }
             }
           ]
         }
@@ -117,10 +135,16 @@
           "name": "default",
           "npcActions": [
             {
-              "text": "Tom Town generates most of the power for all of Hash Map."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Tom Town generates most of the power for all of Hash Map."
+              }
             },
             {
-              "text": "It's all thanks to the Magnemite Power Plant!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "It's all thanks to the Magnemite Power Plant!"
+              }
             }
           ]
         }

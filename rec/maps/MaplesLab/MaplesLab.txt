@@ -13,25 +13,45 @@
           "name": "intro",
           "npcActions": [
             {
-              "text": "I am Professor Maple, eh. Welcome to my lab."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I am Professor Maple, eh. Welcome to my lab."
+              }
             },
             {
-              "text": "While you are here, let me heal your Pokémon."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "While you are here, let me heal your Pokémon."
+              }
             },
             {
-              "trigger": "HealParty"
+              "trigger": {
+                "triggerType": "HealParty"
+              }
             },
             {
-              "text": "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
+              }
             },
             {
-              "giveItem": "Syrup"
+              "trigger": {
+                "triggerType": "Give",
+                "triggerContents": "Syrup"
+              }
             },
             {
-              "text": "Oh, and also take this egg. No idea what Pokémon is in it, but I'm sure you'll take good care of it."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Oh, and also take this egg. No idea what Pokémon is in it, but I'm sure you'll take good care of it."
+              }
             },
             {
-              "givePokemon": "RandomEgg"
+              "trigger": {
+                "triggerType": "Give",
+                "triggerContents": "RandomEgg"
+              }
             },
             {
               "update": "heal"
@@ -42,17 +62,26 @@
           "name": "stone_choice",
           "npcActions": [
             {
-              "text": "wudya wan"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "wudya wan"
+              }
             },
             {
               "choices": [
                 {
                   "text": "wawa",
-                  "giveItem": "Water Stone"
+                  "trigger": {
+                    "triggerType": "Give",
+                    "triggerContents": "Water Stone"
+                  }
                 },
                 {
                   "text": "sunsunsunherewecome",
-                  "giveItem": "Sun Stone"
+                  "trigger": {
+                    "triggerType": "Give",
+                    "triggerContents": "Sun Stone"
+                  }
                 }
               ]
             },
@@ -65,10 +94,15 @@
           "name": "heal",
           "npcActions": [
             {
-              "text": "How's it goin'? Need to rest up your Pokémon a bit?"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "How's it goin'? Need to rest up your Pokémon a bit?"
+              }
             },
             {
-              "trigger": "HealParty"
+              "trigger": {
+                "triggerType": "HealParty"
+              }
             }
           ]
         }
@@ -87,7 +121,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "This syrup soda is amazing!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "This syrup soda is amazing!"
+              }
             }
           ]
         }
@@ -106,7 +143,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "Don't disturb me! I'm doing syrup science!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Don't disturb me! I'm doing syrup science!"
+              }
             }
           ]
         }

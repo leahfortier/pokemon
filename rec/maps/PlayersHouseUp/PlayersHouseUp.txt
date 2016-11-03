@@ -12,7 +12,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "I'm gonna be the very best like no one ever was."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I'm gonna be the very best like no one ever was."
+              }
             },
             {
               "battle": {
@@ -30,7 +33,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "Just get out. You're not welcome here."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Just get out. You're not welcome here."
+              }
             }
           ]
         }

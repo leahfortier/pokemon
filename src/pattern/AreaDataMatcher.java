@@ -10,11 +10,10 @@ import map.EncounterRate;
 import map.WildEncounter;
 import map.entity.npc.NPCAction;
 import map.entity.npc.NPCAction.BattleAction;
-import map.entity.npc.NPCAction.DialogueAction;
-import map.entity.npc.NPCAction.GiveItemAction;
-import map.entity.npc.NPCAction.GivePokemonAction;
+import map.entity.npc.NPCAction.ChoiceAction;
+import map.entity.npc.NPCAction.GroupTriggerAction;
+import map.entity.npc.NPCAction.TriggerAction;
 import map.entity.npc.NPCAction.UpdateAction;
-import map.triggers.EventTrigger;
 import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.MatchConstants.MatchType;
@@ -103,7 +102,7 @@ public class AreaDataMatcher {
         public transient String condition;
         public transient List<String> globals;
 
-        public GroupTriggerMatcher(final String[] triggers) {
+        public GroupTriggerMatcher(final String... triggers) {
             this.triggers = triggers;
             this.globals = new ArrayList<>();
         }
@@ -241,8 +240,8 @@ public class AreaDataMatcher {
     }
 
     public static class ChoiceMatcher {
-        String text;
-        String giveItem; // TODO: yeah yeah yeah I know I'll fix it
+        public String text;
+        public TriggerActionMatcher trigger;
     }
 
     public static class UpdateMatcher {
@@ -255,34 +254,41 @@ public class AreaDataMatcher {
         }
     }
 
+    public static class TriggerActionMatcher {
+        private String triggerType;
+        public String triggerContents;
+
+        public TriggerType getTriggerType() {
+            return TriggerType.getTriggerType(this.triggerType);
+        }
+    }
+
     public static class ActionMatcher {
-        private String text;
+        private TriggerActionMatcher trigger;
         private BattleMatcher battle;
-        private String giveItem;
-        private String givePokemon;
-        private String trigger;
         private ChoiceMatcher[] choices;
         private String update;
+        private String groupTrigger;
 
         public NPCAction getNPCAction() {
-            if (!hasOnlyOneNonEmpty(text, battle, giveItem, givePokemon, trigger, choices, update)) {
+            if (!hasOnlyOneNonEmpty(trigger, battle, choices, update, groupTrigger)) {
                 Global.error("Can only have one nonempty field for ActionMatcher");
             }
 
-            if (!StringUtils.isNullOrEmpty(text)) {
-                return new DialogueAction(text);
+            if (trigger != null) {
+                return new TriggerAction(trigger.getTriggerType(), trigger.triggerContents);
             } else if (battle != null) {
                 return new BattleAction(battle);
-            } else if (!StringUtils.isNullOrEmpty(giveItem)) {
-                return new GiveItemAction(giveItem);
-            } else if (!StringUtils.isNullOrEmpty(givePokemon)){
-                return new GivePokemonAction(givePokemon);
             } else if (!StringUtils.isNullOrEmpty(update)) {
                 return new UpdateAction(update);
-            } else {
-                System.err.println("action not implemented yet");
-                return null;
+            } else if (!StringUtils.isNullOrEmpty(groupTrigger)) {
+                return new GroupTriggerAction(groupTrigger);
+            } else if (choices != null) {
+                return new ChoiceAction();
             }
+
+            Global.error("No npc action found.");
+            return null;
         }
     }
 

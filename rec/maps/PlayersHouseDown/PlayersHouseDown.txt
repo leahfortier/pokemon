@@ -13,7 +13,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "It's nice when you come to visit, but please get a job."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "It's nice when you come to visit, but please get a job."
+              }
             }
           ]
         }

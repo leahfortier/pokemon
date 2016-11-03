@@ -31,7 +31,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "Hi, I'm Tom!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Hi, I'm Tom!"
+              }
             }
           ]
         }

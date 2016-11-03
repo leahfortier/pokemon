@@ -13,7 +13,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "My Pokemon pack enough electricity to power the Cray Titan!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "My Pokemon pack enough electricity to power the Cray Titan!"
+              }
             },
             {
               "battle": {
@@ -33,10 +36,16 @@
           "name": "badge",
           "npcActions": [
             {
-              "text": "My data BUS just wasn't large enough! Take this, the Round Badge!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "My data BUS just wasn't large enough! Take this, the Round Badge!"
+              }
             },
             {
-              "trigger": "Badge_0"
+              "trigger": {
+                "triggerType": "Badge",
+                "triggerContents": "0"
+              }
             }
           ]
         },
@@ -44,7 +53,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo"
+              }
             }
           ]
         }
@@ -63,7 +75,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "Watch out, I'm gonna fry your motherboard!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Watch out, I'm gonna fry your motherboard!"
+              }
             },
             {
               "battle": {
@@ -81,7 +96,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "Hey! You fried my motherboard!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Hey! You fried my motherboard!"
+              }
             }
           ]
         }
@@ -100,7 +118,10 @@
           "name": "battle",
           "npcActions": [
             {
-              "text": "My Pokemon and I communicate over PCI express!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "My Pokemon and I communicate over PCI express!"
+              }
             },
             {
               "battle": {
@@ -118,7 +139,10 @@
           "name": "won",
           "npcActions": [
             {
-              "text": "I need more bandwidth!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I need more bandwidth!"
+              }
             }
           ]
         }

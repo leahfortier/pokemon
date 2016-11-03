@@ -14,7 +14,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock."
+              }
             }
           ]
         }
@@ -34,7 +37,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "I wish he would just calm down and try to explain what happened."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I wish he would just calm down and try to explain what happened."
+              }
             }
           ]
         }
@@ -54,7 +60,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "I've never felt a shock like that before! Did it come from our powerplant?"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I've never felt a shock like that before! Did it come from our powerplant?"
+              }
             }
           ]
         }
@@ -74,7 +83,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "I need to get back in there. The reactor is going to explode!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "I need to get back in there. The reactor is going to explode!"
+              }
             }
           ]
         }
@@ -94,7 +106,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "Team Deadlock better not harm the Magnemites!"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Team Deadlock better not harm the Magnemites!"
+              }
             }
           ]
         }
@@ -114,7 +129,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad."
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad."
+              }
             }
           ]
         }

@@ -13,7 +13,10 @@
           "name": "dialogue",
           "npcActions": [
             {
-              "text": "R U A WIZARD 'ARRY"
+              "trigger": {
+                "triggerType": "Event",
+                "triggerContents": "R U A WIZARD 'ARRY"
+              }
             }
           ]
         }
