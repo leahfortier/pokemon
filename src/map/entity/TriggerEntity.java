@@ -1,8 +1,8 @@
 package map.entity;
 
-import gui.GameData;
 import gui.TileSet;
 import gui.view.MapView;
+import main.Game;
 import map.Direction;
 import map.MapData;
 import util.InputControl;
@@ -20,8 +20,8 @@ public class TriggerEntity extends Entity {
 
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {}
 
-	protected BufferedImage getFrame(GameData data) {
-		return data.getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
+	protected BufferedImage getFrame() {
+		return Game.getData().getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
 	}
 
 	public String getTrigger() {
@@ -30,6 +30,6 @@ public class TriggerEntity extends Entity {
 
 	public void getAttention(Direction direction) {}
 	
-	public void addData(GameData data) {}
+	public void addData() {}
 	public void reset() {}
 }

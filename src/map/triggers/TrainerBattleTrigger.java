@@ -1,21 +1,17 @@
 package map.triggers;
 
-import gui.view.BattleView;
-import gui.view.MapView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import battle.Battle;
 import main.Game;
-import main.Game.ViewMode;
 import main.Global;
 import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Trainer;
-import battle.Battle;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
  * Format: Name Level Parameters
@@ -76,12 +72,11 @@ public class TrainerBattleTrigger extends Trigger {
 		}
 	}
 
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
 		trainer.healAll();
 		
-		Battle b = new Battle(game.characterData, (Opponent) trainer, winGlobal);
-
-		game.setBattleViews(b, true);
+		Battle b = new Battle((Opponent)trainer, winGlobal);
+		Game.setBattleViews(b, true);
 	}
 }

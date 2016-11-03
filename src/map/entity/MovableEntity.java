@@ -1,8 +1,8 @@
 package map.entity;
 
-import gui.GameData;
 import gui.TileSet;
 import gui.view.MapView;
+import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
@@ -30,7 +30,7 @@ public abstract class MovableEntity extends Entity {
 		this.spriteIndex = spriteIndex;
 	}
 	
-	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition) {
+	public void draw(Graphics g, float drawX, float drawY, boolean drawOnlyInTransition) {
 		if (drawOnlyInTransition && transitionTime == 0) {
 			return;
 		}
@@ -46,7 +46,7 @@ public abstract class MovableEntity extends Entity {
 			// System.out.println(transitionTime + " " +len + " " +cx + " " + cy);
 		}
 		
-		super.draw(g, data, canvasCoordinates);
+		super.draw(g, canvasCoordinates);
 	}
 	
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
@@ -79,8 +79,8 @@ public abstract class MovableEntity extends Entity {
 		return transitionDirection.dx == dx && transitionDirection.dy == dy;
 	}
 	
-	protected BufferedImage getFrame(GameData data) {
-		TileSet trainerTiles = data.getTrainerTiles();
+	protected BufferedImage getFrame() {
+		TileSet trainerTiles = Game.getData().getTrainerTiles();
 		if (transitionTime > 0) {
 			return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection.ordinal() + 4 * (1 + runFrame));
 		}

@@ -8,11 +8,10 @@ import generator.StuffGen;
 import item.Item;
 import main.Game;
 import main.Global;
-import map.EncounterRate;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
-import trainer.CharacterData;
 import util.DrawMetrics;
+import util.FileIO;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -25,6 +24,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
+import java.util.Scanner;
 
 public class GameFrame {
 //	public static final boolean GENERATE_STUFF = true;
@@ -41,8 +41,8 @@ public class GameFrame {
 			loadAllTheThings();
 
 			// Load all maps and test if all triggers and NPC data is correct
-			Game g = new Game();
-			g.data.testMaps(new CharacterData(g));
+			Game.create();
+			Game.getData().testMaps();
 
 			System.out.println("GEN GEN GEN");
 			
@@ -51,7 +51,6 @@ public class GameFrame {
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		// frame.setSize(800, 622);
 
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
@@ -60,10 +59,6 @@ public class GameFrame {
 		frame.getContentPane().add(gui);
 		frame.pack();
 		frame.setVisible(true);
-
-		// frame.setResizable(false);
-		// frame.setSize(Global.GAME_SIZE);
-		// frame.pack();
 
 		Thread gameThread = new Thread(new GameLoop(gui));
 		gameThread.start();
@@ -86,8 +81,7 @@ public class GameFrame {
 		private final Canvas gui;
 		private final InputControl control;
 		private final DevConsole console;
-		
-		private Game game;
+
 		private BufferStrategy strategy;
 
 		private GameLoop(Canvas canvas) {
@@ -116,7 +110,7 @@ public class GameFrame {
 			g.dispose();
 			strategy.show();
 
-			game = new Game();
+			Game.create();
 			loadAllTheThings();
 
 			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener() {
@@ -149,10 +143,10 @@ public class GameFrame {
 		}
 
 		private void drawFrame(int dt) {
-			game.update(dt, control);
+			Game.update(dt, control);
 
 			Graphics g = strategy.getDrawGraphics();
-			game.draw(g);
+			Game.draw(g);
 
 			// This will fail if it can't acquire the lock on control (just won't display or anything)
 			if (control.isDown(Control.CONSOLE)) {
@@ -161,8 +155,8 @@ public class GameFrame {
 			}
 
 			if (DEV_MODE && console.isShown()) {
-				console.update(dt, control, game);
-				console.draw(g, game.data);
+				console.update(dt, control);
+				console.draw(g);
 			}
 
 			g.dispose();

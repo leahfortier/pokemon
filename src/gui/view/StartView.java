@@ -2,13 +2,11 @@ package gui.view;
 
 import gui.GameData;
 import gui.TileSet;
-
-import java.awt.Color;
-import java.awt.Graphics;
-
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
+import message.MessageUpdate;
+import message.MessageUpdate.Update;
 import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;
@@ -16,9 +14,10 @@ import trainer.CharacterData;
 import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
-import message.MessageUpdate;
-import message.MessageUpdate.Update;
 import util.StringUtils;
+
+import java.awt.Color;
+import java.awt.Graphics;
 
 public class StartView extends View {
 	
@@ -31,7 +30,6 @@ public class StartView extends View {
 				new MessageUpdate(", are you ready to start your epic adventure? Well, off you go! I'll be seeing you soon!", Update.APPEND_TO_NAME)
 			};
 
-	private CharacterData player;
 	private State state;
 	
 	private int dialogueIndex;
@@ -44,12 +42,10 @@ public class StartView extends View {
 		DEFAULT,
 		NAME
 	}
-
-	public StartView(CharacterData data) {
-		player = data;
-	}
 	
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
+		CharacterData player = Game.getPlayer();
+
 		switch (state) {
 			case DEFAULT:
 				if (message != null) {
@@ -66,7 +62,7 @@ public class StartView extends View {
 				
 				if (message == null) {
 					if (dialogueIndex == dialogue.length - 1) {
-						game.setViewMode(ViewMode.MAP_VIEW);
+						Game.setViewMode(ViewMode.MAP_VIEW);
 					}
 					else {
 						dialogueIndex++;
@@ -113,7 +109,9 @@ public class StartView extends View {
 		
 	}
 
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
+		GameData data = Game.getData();
+
 		TileSet tiles = data.getMenuTiles();
 		TileSet battleTiles = data.getBattleTiles();
 		TileSet trainerTiles = data.getTrainerTiles();
@@ -161,7 +159,7 @@ public class StartView extends View {
 		return ViewMode.START_VIEW;
 	}
 
-	public void movedToFront(Game game) {
+	public void movedToFront() {
 		state = State.DEFAULT;
 		
 		dialogueIndex = 0;

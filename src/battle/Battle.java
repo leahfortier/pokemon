@@ -20,6 +20,7 @@ import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
+import main.Game;
 import main.Global;
 import main.Type;
 import map.AreaData.TerrainType;
@@ -56,11 +57,11 @@ public class Battle {
 	private TerrainType baseTerrain;
 	private TerrainType currentTerrain;
 	
-	public Battle(CharacterData p, Opponent o) {
+	public Battle(Opponent o) {
 		Messages.clear();
 		Messages.addMessage(new MessageUpdate("", Update.ENTER_BATTLE));
 
-		player = p;
+		player = Game.getPlayer();
 		opponent = o;
 		effects = new ArrayList<>();
 		player.resetEffects();
@@ -84,8 +85,8 @@ public class Battle {
 		enterBattle(player.front());
 	}
 
-	public Battle(CharacterData p, Opponent o, String win) {
-		this(p, o);
+	public Battle(Opponent o, String win) {
+		this(o);
 		winGlobal = win;
 	}
 

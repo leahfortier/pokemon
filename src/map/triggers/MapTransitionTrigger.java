@@ -4,6 +4,7 @@ import main.Game;
 import map.Direction;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.MapTransitionTriggerMatcher;
+import trainer.CharacterData;
 
 public class MapTransitionTrigger extends Trigger {
 	private String mapName;
@@ -28,29 +29,31 @@ public class MapTransitionTrigger extends Trigger {
 		
 		this.mapName = mapName;
 		this.mapEntranceName = mapEntranceName;
-		this.direction = directionIndex == -1 ? null : Direction.values()[directionIndex];;
+		this.direction = directionIndex == -1 ? null : Direction.values()[directionIndex];
 	}
 	
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
+
+		CharacterData player = Game.getPlayer();
+		player.setMap(mapName, mapEntranceName);
 		
-		game.characterData.setMap(mapName, mapEntranceName);
-		
-		if (mapEntranceName == null || !game.data.getMap(mapName).setCharacterToEntrance(game.characterData, mapEntranceName)) {
-			game.characterData.setLocation(newX, newY);
+		if (mapEntranceName == null || !Game.getData().getMap(mapName).setCharacterToEntrance(player, mapEntranceName)) {
+			player.setLocation(newX, newY);
 		}
 		
 		if (direction != null) {
-			game.characterData.setDirection(direction);
+			player.setDirection(direction);
 		}
 		
-		game.characterData.mapReset = true;
+		player.mapReset = true;
 	}
 
 	public String getTransitionTriggerName() {
 		return this.mapName + "_" + this.mapEntranceName;
 	}
 
+	// TODO: Lalala rename these
 	public String getMapNamee() {
 		return this.mapName;
 	}

@@ -20,7 +20,7 @@ public class ItemEntityData extends EntityData {
 	}
 
 	public ItemEntityData(String name, String contents) {
-		super (name,contents);
+		super (name, contents);
 		
 		entity = null;
 		placedCondition = condition.getOriginalConditionString();

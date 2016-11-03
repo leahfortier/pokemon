@@ -35,7 +35,7 @@ public class Messages {
         messages.add(message);
     }
 
-    public static void addMessage(Game game, DialogueSequence dialogueSequence) {
+    public static void addMessage(DialogueSequence dialogueSequence) {
         if (!StringUtils.isNullOrEmpty(dialogueSequence.text)) {
             addMessage(dialogueSequence.text);
             System.out.println("Text: " + dialogueSequence.text);
@@ -43,7 +43,7 @@ public class Messages {
 
         for (String dialogueName : dialogueSequence.next) {
             if (!StringUtils.isNullOrEmpty(dialogueName)) {
-                addMessage(game, game.data.getDialogue(dialogueName));
+                addMessage(Game.getData().getDialogue(dialogueName));
                 System.out.println("Next: " + dialogueName);
             }
         }

@@ -303,7 +303,7 @@ public class BattleView extends View {
 		public interface UpdateVisualState {
 			void update(BattleView view, InputControl input);
 			void set(BattleView view);
-			void draw(BattleView view, Graphics g, GameData data, TileSet tiles);
+			void draw(BattleView view, Graphics g, TileSet tiles);
 		}
 	};
 	
@@ -675,7 +675,7 @@ public class BattleView extends View {
 			}
 		}
 		
-		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			g.drawImage(tiles.getTile(0x2), 0, 0, null);
 			
@@ -755,7 +755,7 @@ public class BattleView extends View {
 			}
 		}
 		
-		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x20), 415, 440, null);
 			g.drawImage(tiles.getTile(0x21), 0, 440, null);
 			
@@ -839,7 +839,7 @@ public class BattleView extends View {
 
 		public void set(BattleView view) {}
 
-		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			
 			g.setColor(Color.BLACK);
@@ -902,7 +902,7 @@ public class BattleView extends View {
 			
 		}
 
-		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x10), 0, 160, null);
 			g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[view.selectedBagTab].getImageNumber()), 30, 190, null);
 			g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[view.selectedBagTab].getImageNumber() - 4), 30, 492, null);
@@ -911,7 +911,7 @@ public class BattleView extends View {
 			Bag bag = view.currentBattle.getPlayer().getBag();
 			
 			Set<Item> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
-			TileSet itemTiles = data.getItemTiles();
+			TileSet itemTiles = Game.getData().getItemTiles();
 
 			DrawMetrics.setFont(g, 12);
 			Iterator<Item> iter = toDraw.iterator();
@@ -1095,7 +1095,7 @@ public class BattleView extends View {
 			}
 		}
 
-		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			// Draw Background
 			g.drawImage(tiles.getTile(0x10), 0, 160, null);
 			
@@ -1239,7 +1239,7 @@ public class BattleView extends View {
 			}
 			
 			// Draw tabs
-			TileSet partyTiles = data.getPartyTiles();
+			TileSet partyTiles = Game.getData().getPartyTiles();
 			for (int i = 0; i < list.size(); i++) {
 				ActivePokemon pkm = list.get(i);
 				
@@ -1358,7 +1358,7 @@ public class BattleView extends View {
 
 		public void set(BattleView view) {}
 
-		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			g.setColor(Color.BLACK);
 			DrawMetrics.setFont(g, 25);
@@ -1419,7 +1419,7 @@ public class BattleView extends View {
 
 		public void set(BattleView view) {}
 
-		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			
 			List<Move> moves = view.learnedPokemon.getActualMoves();
@@ -1524,7 +1524,7 @@ public class BattleView extends View {
 
 		public void set(BattleView view) {}
 
-		public void draw(BattleView view, Graphics g, GameData data, TileSet tiles) {
+		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x10), 0, 160, null);
 
 			int start = view.logMessages.size() - 1 - view.logPage * LOGS_PER_PAGE;
@@ -1588,9 +1588,9 @@ public class BattleView extends View {
 		}
 	};
 	
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
 		state.updateVisualState.update(this, input);
-		update.performUpdate(this, game);
+		update.performUpdate(this);
 	}
 	
 	public Battle getCurrentBattle() {
@@ -1707,7 +1707,7 @@ public class BattleView extends View {
 		}
 	}
 	
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
 		Dimension d = Global.GAME_SIZE;
 		
 		g.setColor(Color.BLACK);
@@ -1715,6 +1715,8 @@ public class BattleView extends View {
 		
 		ActivePokemon plyr = currentBattle.getPlayer().front();
 		ActivePokemon enmy = currentBattle.getOpponent().front();
+
+		GameData data = Game.getData();
 		TileSet tiles = data.getBattleTiles();
 		 
 		// Get background based on terrain type
@@ -1762,14 +1764,14 @@ public class BattleView extends View {
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
-		state.updateVisualState.draw(this, g, data, tiles);
+		state.updateVisualState.draw(this, g, tiles);
 	}
 
 	public ViewMode getViewModel() {
 		return ViewMode.BATTLE_VIEW;
 	}
 
-	public void movedToFront(Game game) {
+	public void movedToFront() {
 		System.out.println("moved to front cycle started");
 		cycleMessage(false);
 	}

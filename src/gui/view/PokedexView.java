@@ -40,8 +40,8 @@ public class PokedexView extends View {
 	private Button rightButton;
 	private Button returnButton;
 	
-	public PokedexView(Pokedex pokedex) {
-		this.pokedex = pokedex;
+	public PokedexView() {
+		this.pokedex = Game.getPlayer().getPokedex();
 		selectedButton = 0;
 		pageNum = 0;
 		
@@ -72,7 +72,7 @@ public class PokedexView extends View {
 		selected = PokemonInfo.getPokemonInfo(1);
 	}
 	
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
 		selectedButton = Button.update(buttons, selectedButton, input);
 
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
@@ -102,16 +102,18 @@ public class PokedexView extends View {
 		}
 				
 		if (returnButton.checkConsumePress()) {
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
 		if (input.isDown(Control.ESC)) {
 			input.consumeKey(Control.ESC);
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
+		GameData data = Game.getData();
+
 		TileSet tiles = data.getMenuTiles();
 		TileSet typeTiles = data.getBattleTiles();
 		TileSet partyTiles = data.getPartyTiles();
@@ -254,7 +256,7 @@ public class PokedexView extends View {
 		return Game.ViewMode.POKEDEX_VIEW;
 	}
 
-	public void movedToFront(Game game) {
+	public void movedToFront() {
 		selected = PokemonInfo.getPokemonInfo(1);
 	}
 }

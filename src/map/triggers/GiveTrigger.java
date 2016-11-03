@@ -3,6 +3,7 @@ package map.triggers;
 import item.Item;
 import main.Game;
 import pokemon.ActivePokemon;
+import trainer.CharacterData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +37,16 @@ public class GiveTrigger extends Trigger {
 		}
 	}
 
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
+
+		CharacterData player = Game.getPlayer();
 		for (Item i: itemList) {
-			game.characterData.addItem(i);
+			player.addItem(i);
 		}
 		
 		for (ActivePokemon p: pokemonList) {
-			game.characterData.addPokemon(null, p);
+			player.addPokemon(null, p);
 		}
 	}
 

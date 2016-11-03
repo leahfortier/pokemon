@@ -7,7 +7,6 @@ import main.Game;
 import main.Global;
 import namesies.PokemonNamesies;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
 import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
@@ -41,7 +40,7 @@ class DevConsole {
 		return true;
 	}
 
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
 		if (key == InputControl.INVALID_LOCK) {
 			return; // Shouldn't even ever be here!
 		}
@@ -56,7 +55,7 @@ class DevConsole {
 
 		if (input.isDown(Control.ENTER, key)) {
 			input.consumeKey(Control.ENTER, key);
-			execute(game, input.stopTextCapture());
+			execute(input.stopTextCapture());
 		}
 
 		if (input.isDown(Control.ESC, key)) {
@@ -65,7 +64,7 @@ class DevConsole {
 		}
 	}
 
-	private void execute(Game game, String command) {
+	private void execute(String command) {
 		Scanner in = new Scanner(command);
 		in.useDelimiter("\\s+");
 
@@ -78,24 +77,24 @@ class DevConsole {
 
 		switch (curr.toLowerCase()) {
 			case "give":
-				give(game, in);
+				give(in);
 				break;
 			case "global":
-				global(game, in);
+				global(in);
 				break;
 			case "tele":
 			case "teleport":
-				transition(game, in);
+				transition(in);
 				break;
 			default:
-				;
+				break;
 		}
 		
 		in.close();
 	}
 	
-	private void transition(Game game, Scanner in) {
-		if (game.characterData == null) {
+	private void transition(Scanner in) {
+		if (Game.getPlayer() == null) {
 			Global.error("Can't teleport before loading a player!");
 		}
 
@@ -111,15 +110,15 @@ class DevConsole {
 		}
 		
 		System.out.println("Teleporting Player to map " + mapName +" and to " +(mapEntrance == null? "location (0,0)": "map entrance "+mapEntrance) +".");
-		game.characterData.setMap(mapName, mapEntrance);
+		Game.getPlayer().setMap(mapName, mapEntrance);
 		
 		if (mapEntrance != null) {
-			game.data.getMap(mapName).setCharacterToEntrance(game.characterData, mapEntrance);
+			Game.getData().getMap(mapName).setCharacterToEntrance(Game.getPlayer(), mapEntrance);
 		}
 	}
 	
-	private void global(Game game, Scanner in) {
-		if (game.characterData == null) {
+	private void global(Scanner in) {
+		if (Game.getPlayer() == null) {
 			Global.error("Can't give before loading a player!");
 		}
 
@@ -129,15 +128,15 @@ class DevConsole {
 
 		String global = in.next();
 		System.out.println("Adding global \"" + global + "\".");
-		game.characterData.addGlobal(global);
+		Game.getPlayer().addGlobal(global);
 	}
 
-	private void give(Game game, Scanner in) {
+	private void give(Scanner in) {
 		if (!in.hasNext()) {
 			Global.error("Give what???");
 		}
 
-		if (game.characterData == null) {
+		if (Game.getPlayer() == null) {
 			Global.error("Can't give before loading a player!");
 		}
 
@@ -198,7 +197,7 @@ class DevConsole {
 					pokemon.setShiny();
 				}
 
-				game.characterData.addPokemon(null, pokemon);
+				Game.getPlayer().addPokemon(null, pokemon);
 				break;
 			case "item":
 				String itemName = in.next().replaceAll("_", " ");
@@ -207,12 +206,12 @@ class DevConsole {
 					amount = Integer.parseInt(in.next());
 				}
 				
-				game.characterData.addItem(Item.getItemFromName(itemName), amount);
+				Game.getPlayer().addItem(Item.getItemFromName(itemName), amount);
 				break;
 		}
 	}
 
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
 		if (!show) {
 			return; // Fixes a minor graphical stutter when tearing down
 		}

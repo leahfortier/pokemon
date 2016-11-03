@@ -9,6 +9,7 @@ import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
+import main.Game;
 import main.Global;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -48,7 +49,7 @@ public class Bag implements Serializable {
 		lastUsedItem = Item.noneItem();
 	}
 	
-	public String giveItem(CharacterData player, ActivePokemon p, Item hold) {
+	public String giveItem(ActivePokemon p, Item hold) {
 		if (p.isEgg()) {
 			return "You can't give an item to an egg!";
 		}
@@ -57,7 +58,7 @@ public class Bag implements Serializable {
 		
 		Item item = p.getActualHeldItem();
 		if (item != Item.noneItem()) {
-			player.getBag().addItem(item);
+			Game.getPlayer().getBag().addItem(item);
 			p.removeItem();
 			s += "Took the " + item.getName() + " from " + p.getActualName() + ". ";
 		}
@@ -69,14 +70,14 @@ public class Bag implements Serializable {
 		return s;
 	}
 	
-	public String takeItem(CharacterData player, ActivePokemon p) {
+	public String takeItem(ActivePokemon p) {
 		if (p.isEgg()) {
 			return "Eggs can't hold anything. They're eggs.";
 		}
 		
 		Item item = p.getActualHeldItem();
 		if (item != Item.noneItem()) {
-			player.getBag().addItem(item);
+			Game.getPlayer().getBag().addItem(item);
 			p.removeItem();
 			return "Took the " + item.getName() + " from " + p.getActualName() + ".";
 		}

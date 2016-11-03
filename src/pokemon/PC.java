@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.Game;
 import main.Global;
 import trainer.CharacterData;
 import trainer.Trainer;
@@ -109,7 +110,7 @@ public class PC implements Serializable {
 		return new int[] { -1, -1, -1 };
 	}
 	
-	public void withdrawPokemon(CharacterData player, ActivePokemon p) {
+	public void withdrawPokemon(ActivePokemon p) {
 		int[] loc = findPokemon(p);
 		int x = loc[1], y = loc[2];
 		
@@ -118,15 +119,18 @@ public class PC implements Serializable {
 		}
 		
 		// Make sure they have space
+		CharacterData player = Game.getPlayer();
 		if (player.getTeam().size() < Trainer.MAX_POKEMON) {
 			ActivePokemon[][] box = getBoxPokemon();
 			player.getTeam().add(box[x][y]);
 			box[x][y] = null;
 		}
 	}
-	
+
+	// TODO: FIX RENAME
 	// Removes the Pokemon from the trainer and adds it to the box
-	public void depositPokemon(CharacterData player, ActivePokemon p) {
+	public void depositPokemonFromPlayer(ActivePokemon p) {
+		CharacterData player = Game.getPlayer();
 		if (!player.canDeposit(p)) {
 			return;
 		}
@@ -137,7 +141,8 @@ public class PC implements Serializable {
 
 	// TODO: when is boxNum not the current box?
 	// Removes the Pokemon from the trainer and adds it to the box at a specific location, fails if another Pokemon is already in this location
-	private void depositPokemon(CharacterData player, ActivePokemon p, int boxNum, int x, int y) {
+	private void depositPokemonFromPlayer(ActivePokemon p, int boxNum, int x, int y) {
+		CharacterData player = Game.getPlayer();
 		if (!player.canDeposit(p) || !inBounds(x, y) || getBoxPokemon()[x][y] != null) {
 			return;
 		}
@@ -146,12 +151,13 @@ public class PC implements Serializable {
 		player.getTeam().remove(p);
 	}
 	
-	public void depositPokemon(CharacterData player, ActivePokemon p, int x, int y) {
-		depositPokemon(player, p, currBox, x, y);
+	public void depositPokemonFromPlayer(ActivePokemon p, int x, int y) {
+		depositPokemonFromPlayer(p, currBox, x, y);
 	}
 	
 	// Switching two Pokemon, where the second Pokemon is inside the box
-	public void switchPokemon(CharacterData player, ActivePokemon p, int i, int j) {
+	public void switchPokemon(ActivePokemon p, int i, int j) {
+		CharacterData player = Game.getPlayer();
 		int index = player.getTeam().indexOf(p);
 		
 		// The first Pokemon to be switched is in the user's party
@@ -176,7 +182,8 @@ public class PC implements Serializable {
 	}
 	
 	// Switching two Pokemon, where the second Pokemon is in the player's party
-	public void switchPokemon(CharacterData player, ActivePokemon p, int i) {
+	public void switchPokemon(ActivePokemon p, int i) {
+		CharacterData player = Game.getPlayer();
 		int index = player.getTeam().indexOf(p);
 		
 		// The first Pokemon to be switched is also in the user's party
@@ -200,7 +207,7 @@ public class PC implements Serializable {
 		
 		// Swapping with an empty space -- same as depositing
 		if (boxPokemon == null) {
-			depositPokemon(player, partyPokemon, boxNum, i, j);
+			depositPokemonFromPlayer(partyPokemon, boxNum, i, j);
 		}
 		else {
 			int eggs = player.totalEggs();
@@ -242,7 +249,8 @@ public class PC implements Serializable {
 	}
 	
 	// Release a Pokemon forevers
-	public void releasePokemon(CharacterData player, ActivePokemon p) {
+	public void releasePokemon(ActivePokemon p) {
+		CharacterData player = Game.getPlayer();
 		if (player.getTeam().contains(p)) {
 			player.getTeam().remove(p);
 			return;

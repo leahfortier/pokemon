@@ -1,6 +1,5 @@
 package map.entity.npc;
 
-import gui.GameData;
 import gui.view.MapView;
 import main.Global;
 import map.Direction;
@@ -8,9 +7,6 @@ import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
 import util.InputControl;
-
-import java.util.List;
-import java.util.Map;
 
 public class NPCEntity extends MovableEntity {
 	public static final int NPC_SIGHT_DISTANCE = 5;
@@ -26,8 +22,6 @@ public class NPCEntity extends MovableEntity {
 	private boolean trainer;
 	private boolean walkToPlayer;
 	private boolean walkingToPlayer;
-
-	private Map<String, List<NPCAction>> interactions;
 
 	private int defaultX;
 	private int defaultY;
@@ -175,8 +169,8 @@ public class NPCEntity extends MovableEntity {
 		tempPath = null;
 	}
 	
-	public void addData(GameData data) {
-		if (dataCreated || true) {
+	public void addData() {
+		if (dataCreated) {
 			return;
 		}
 		

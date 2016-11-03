@@ -30,7 +30,6 @@ public class EvolutionView extends View {
 	
 	private int animationEvolve;
 
-	private final CharacterData player;
 	private ActivePokemon evolvingPokemon;
 	private PokemonInfo preEvolution;
 	private PokemonInfo postEvolution;
@@ -44,12 +43,8 @@ public class EvolutionView extends View {
 		EVOLVE,
 		END,
 	}
-
-	public EvolutionView(CharacterData data) {
-		player = data;
-	}
 	
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
 		switch (state) {
 			case START:
 				if (message != null) {
@@ -88,11 +83,11 @@ public class EvolutionView extends View {
 				}
 				else {
 					if (!isEgg) {
-						evolvingPokemon.evolve(null, player.evolution);
-						game.setViewMode(ViewMode.BAG_VIEW);
+						evolvingPokemon.evolve(null, Game.getPlayer().evolution);
+						Game.setViewMode(ViewMode.BAG_VIEW);
 					}
 					else {
-						game.setViewMode(ViewMode.MAP_VIEW);	
+						Game.setViewMode(ViewMode.MAP_VIEW);
 					}
 				}
 				break;
@@ -100,7 +95,9 @@ public class EvolutionView extends View {
 		
 	}
 
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
+		final GameData data = Game.getData();
+
 		TileSet tiles = data.getMenuTiles();
 		TileSet battleTiles = data.getBattleTiles();
 		TileSet pokemonTiles = data.getPokemonTilesMedium();
@@ -194,7 +191,7 @@ public class EvolutionView extends View {
 	}
 	
 	private void addToPokedex() {
-		player.getPokedex().setStatus(isEgg ? preEvolution : postEvolution, PokedexStatus.CAUGHT);
+		Game.getPlayer().getPokedex().setStatus(isEgg ? preEvolution : postEvolution, PokedexStatus.CAUGHT);
 	}
 	
 	private void setFinalMessage() {
@@ -206,9 +203,11 @@ public class EvolutionView extends View {
 		}
 	}
 	
-	public void movedToFront(Game game) {
+	public void movedToFront() {
 		state = State.START;
-		
+
+		CharacterData player = Game.getPlayer();
+
 		setPokemon(player.evolvingPokemon, player.evolution);
 		setInitialMessage();
 		

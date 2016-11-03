@@ -1,25 +1,23 @@
 package gui.view;
 
+import battle.Move;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.List;
-
 import main.Game;
 import main.Game.ViewMode;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import trainer.CharacterData;
 import trainer.Trainer;
 import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
-import battle.Move;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class PartyView extends View {
 	private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + Move.MAX_MOVES + 2;
@@ -32,8 +30,6 @@ public class PartyView extends View {
 	private static final int[] secondaryColorx = { 633, 759, 759, 167 };
 	private static final int[] secondaryColory = { 93,  93, 559, 559 };
 
-	private final CharacterData charData;
-
 	private final Button[] buttons, tabButtons, moveButtons;
 	private final Button switchButton, returnButton;
 	
@@ -41,8 +37,7 @@ public class PartyView extends View {
 	private int selectedButton;
 	private int switchTabIndex;
 	
-	public PartyView(CharacterData data) {
-		charData = data;
+	public PartyView() {
 		selectedTab = 0;
 		selectedButton = 0;
 		switchTabIndex = -1;
@@ -88,13 +83,13 @@ public class PartyView extends View {
 	}
 
 	@Override
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
 		selectedButton = Button.update(buttons, selectedButton, input);
 		
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
 			if (tabButtons[i].checkConsumePress()) {
 				if (switchTabIndex != -1) {
-					charData.swapPokemon(i, switchTabIndex);
+					Game.getPlayer().swapPokemon(i, switchTabIndex);
 					selectedTab = i;
 					switchTabIndex = -1;
 				}
@@ -107,7 +102,7 @@ public class PartyView extends View {
 		}
 		
 		if (returnButton.checkConsumePress()) {
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
 		if (switchButton.checkConsumePress()) {
@@ -117,18 +112,20 @@ public class PartyView extends View {
 		
 		if (input.isDown(Control.ESC)){
 			input.consumeKey(Control.ESC);
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
+		GameData data = Game.getData();
+
 		TileSet tiles = data.getMenuTiles();
 		TileSet typeTiles = data.getBattleTiles();
 		
 		// Background
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
 		
-		List<ActivePokemon> list = charData.getTeam();
+		List<ActivePokemon> list = Game.getPlayer().getTeam();
 		ActivePokemon selectedPkm = list.get(selectedTab);
 		
 		Type[] type = selectedPkm.getActualType();
@@ -374,7 +371,7 @@ public class PartyView extends View {
 	}
 	
 	private void updateActiveButtons() {
-		List<ActivePokemon> team = charData.getTeam();
+		List<ActivePokemon> team = Game.getPlayer().getTeam();
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
 			tabButtons[i].setActive(i < team.size());
 		}
@@ -392,7 +389,7 @@ public class PartyView extends View {
 		return ViewMode.PARTY_VIEW;
 	}
 
-	public void movedToFront(Game game) {
+	public void movedToFront() {
 		selectedTab = 0;
 		selectedButton = 0;
 		switchTabIndex = -1;
