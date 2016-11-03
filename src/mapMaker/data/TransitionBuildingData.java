@@ -14,9 +14,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import map.triggers.DialogueTrigger;
 import map.triggers.TriggerType;
 import util.FileIO;
-import map.triggers.EventTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;
 import map.triggers.Trigger;
@@ -37,7 +37,7 @@ class TransitionBuildingData {
 	private Map<String, MapTransitionTrigger> transitionTriggers;
 
 	private GroupTrigger infoTriggerGT;
-	private List<EventTrigger> infoTriggers;
+	private List<DialogueTrigger> infoTriggers;
 
 	private Map<String, HashMap<String, ArrayList<TransitionBuildingPair>>> transitionPairsMapping;
 	private Set<String> transitionPairNames;
@@ -95,8 +95,8 @@ class TransitionBuildingData {
 					infoTriggerGT = (GroupTrigger)trigger;
 				}
 			}
-			else if (type == TriggerType.EVENT) {
-				infoTriggers.add((EventTrigger)trigger);
+			else if (type == TriggerType.DIALOGUE) {
+				infoTriggers.add((DialogueTrigger)trigger);
 			}
 			else if (type == TriggerType.MAP_TRANSITION && name.matches(transitionBuildingTransitionNamePattern.pattern())) {
 				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
@@ -133,7 +133,7 @@ class TransitionBuildingData {
 		}
 		
 		// Loop through all info triggers and update areas for the maps
-		for (EventTrigger infoTrigger: infoTriggers) {
+		for (DialogueTrigger infoTrigger: infoTriggers) {
 			Matcher nameMatcher = transitionBuildingInformationNamePattern.matcher(infoTrigger.getName());
 			nameMatcher.find();
 
@@ -267,9 +267,9 @@ class TransitionBuildingData {
 			GroupTrigger groupTrigger = new GroupTrigger(infoTriggerGT.getName(), "");
 			
 			for (TransitionBuildingPair pair: allTransitionPairs) {
-				EventTrigger trigger = pair.getInfoTrigger();
+				DialogueTrigger trigger = pair.getInfoTrigger();
 				groupTrigger.triggers.add(trigger.getName());
-				writer.write("EventTrigger "
+				writer.write("DialogueTrigger "
 						+ trigger.getName()
 						+ " {\n"
 						+ trigger.triggerDataAsString()

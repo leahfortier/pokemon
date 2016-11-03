@@ -15,7 +15,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock."
               }
             }
@@ -38,7 +38,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I wish he would just calm down and try to explain what happened."
               }
             }
@@ -61,7 +61,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I've never felt a shock like that before! Did it come from our powerplant?"
               }
             }
@@ -84,7 +84,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I need to get back in there. The reactor is going to explode!"
               }
             }
@@ -107,7 +107,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Team Deadlock better not harm the Magnemites!"
               }
             }
@@ -130,7 +130,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad."
               }
             }
@@ -198,7 +198,7 @@
       }"
     },
     {
-      "name": "Tom_Town_EventTrigger_TomTownPowerPlantExplosionTrigger_01",
+      "name": "Tom_Town_DialogueTrigger_TomTownPowerPlantExplosionTrigger_01",
       "location": [
         20,
         33,
@@ -207,7 +207,7 @@
         20,
         34
       ],
-      "triggerType": "Event",
+      "triggerType": "Dialogue",
       "condition": "Badge_0&!TomTownPowerPlantExplosionTriggered",
       "global": "TomTownPowerPlantExplosionTriggered",
       "triggerContents": "{

@@ -14,7 +14,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "R U A WIZARD 'ARRY"
               }
             }

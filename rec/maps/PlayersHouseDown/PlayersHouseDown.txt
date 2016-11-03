@@ -14,7 +14,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "It's nice when you come to visit, but please get a job."
               }
             }

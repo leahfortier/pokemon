@@ -1,7 +1,7 @@
 #This is a trigger file
 #you can make one line comments like this
 
-EventTrigger example_event_trigger{
+DialogueTrigger example_event_trigger{
 	condition: something&somethingelse|(!this|derp)&herp
 	dialogue: theNameOfADialogueToShow
 	global: test_trigger_was_triggered
@@ -13,7 +13,7 @@ MapTransitionTrigger example_map_transition_trigger{
 	newX: 56
 	newY: 78
 }
-EventTrigger test_event{
+DialogueTrigger test_event{
 	dialogue: testMapDialogue
 }
 MapTransitionTrigger test_mapLoop_0{
@@ -36,7 +36,7 @@ MapTransitionTrigger test_map_no_waterLoop_1{
 	newX: 18
 	newY: 10
 }
-EventTrigger test_pretty_water{
+DialogueTrigger test_pretty_water{
 	condition: !test_seen_water
 	dialogue: test_pretty_water
 	global: test_seen_water
@@ -46,7 +46,7 @@ MapTransitionTrigger test_to_no_water_map{
 	newX: 14
 	newY: 9
 }
-EventTrigger test_forget_water{
+DialogueTrigger test_forget_water{
 	global: !test_seen_water
 }
 

@@ -15,7 +15,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "What happened at the power plant? Who is this Team Deadlock?"
               }
             }
@@ -38,7 +38,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I'm amazed how fast Leader Moore defeated my Pidgey!"
               }
             }
@@ -61,7 +61,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Team Deadlock is a big bug in our society."
               }
             }
@@ -84,7 +84,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "The Tom Town gym sounds really tough."
               }
             }
@@ -107,13 +107,13 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "There power plant has been taken over by Team Deadlock!"
               }
             },
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Wind Valley is closed off until this matter has been resolved."
               }
             }
@@ -136,13 +136,13 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Tom Town generates most of the power for all of Hash Map."
               }
             },
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "It's all thanks to the Magnemite Power Plant!"
               }
             }

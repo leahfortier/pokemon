@@ -5,7 +5,7 @@ GroupTrigger GroupTrigger_TomTownPowerPlantDefeatedTeamDeadlock {
 	trigger: ReloadTomTownPowerPlantF3
 }
 
-EventTrigger TomTownPowerPlantDefeatedTeamDeadlock {
+DialogueTrigger TomTownPowerPlantDefeatedTeamDeadlock {
 	global: VisitedTomTownPowerPlant
 }
 

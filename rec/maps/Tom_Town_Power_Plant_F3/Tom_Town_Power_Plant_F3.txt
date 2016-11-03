@@ -15,7 +15,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I'll be here for days trying to get the plant fully operational again."
               }
             }
@@ -38,7 +38,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I'm going to kill your process."
               }
             },
@@ -59,7 +59,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I can't beleive you managed to killed my process."
               }
             }
@@ -82,7 +82,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Wow, you did it! You saved the power plant!"
               }
             }
@@ -105,7 +105,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "You can't stop us. This town's main thread will be terminated!"
               }
             },
@@ -127,7 +127,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "You may have halted us now, but our loop is infinite!"
               }
             },
@@ -153,13 +153,13 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "What is a process like you doing here?"
               }
             },
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "That doesn't matter. You can't interfere with our threads!"
               }
             },
@@ -180,13 +180,13 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "How could you have won?"
               }
             },
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "The others will stop your thread!"
               }
             }

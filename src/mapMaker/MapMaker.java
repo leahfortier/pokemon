@@ -757,7 +757,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x1), "Map Entrance"), "5")); 		//transition enter trigger
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x5), "PokeCenter"), "6")); 		//PokeCenter transition trigger
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x6), "Transition Building"), "7")); 	//Transition Building transition trigger
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0xc), "Event"), "8")); 				//Event trigger
+		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0xc), "Dialogue"), "8")); 				//Dialogue trigger
 		//triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0xd), "Group"), "9")); 				//Group trigger
 		
 	}

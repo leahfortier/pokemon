@@ -15,13 +15,7 @@ import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
 import trainer.WildPokemon;
 
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class WildBattleTrigger extends Trigger {
-	private static final Pattern eventTriggerPattern = Pattern.compile("(?:encounterRate:\\s*(\\w+)|pokemon:\\s*(\\w+)\\s+(\\d+)-(\\d+)\\s+(\\d+)%)");
-
 	// TODO: Ideally would like to make a separate class for holding these
 	private WildEncounter[] wildEncounters;
 	private EncounterRate encounterRate;

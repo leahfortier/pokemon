@@ -1,7 +1,7 @@
-EventTrigger PlayersFridgeTrigger {
+DialogueTrigger PlayersFridgeTrigger {
 	dialogue: PlayersFridgeDialogue
 }
 
-EventTrigger LockedDoorTrigger {
+DialogueTrigger LockedDoorTrigger {
 	dialogue: LockedDoorDialogue
 }

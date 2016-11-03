@@ -5,8 +5,8 @@ import gui.view.MapView;
 import main.Game;
 import map.Direction;
 import map.MapData;
-import map.triggers.EventTrigger;
-import map.triggers.GiveTrigger;
+import map.triggers.DialogueTrigger;
+import map.triggers.GiveItemTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import namesies.ItemNamesies;
@@ -67,8 +67,8 @@ class ItemEntity extends Entity {
 		if (!data.hasTrigger(itemTriggerName)) {
 			String itemDialogue = "You found " + StringUtils.articleString(itemName.getName()) + "!";
 
-			Trigger dialogue = new EventTrigger(itemTriggerName + "_event", itemDialogue);
-			Trigger giveItem = new GiveTrigger(itemTriggerName + "_item", this.itemName);
+			Trigger dialogue = new DialogueTrigger(itemTriggerName + "_dialogue", itemDialogue);
+			Trigger giveItem = new GiveItemTrigger(itemTriggerName + "_item", this.itemName);
 			Trigger groupTrigger = new GroupTrigger(
 					itemTriggerName,
 					new GroupTriggerMatcher(new String[] {

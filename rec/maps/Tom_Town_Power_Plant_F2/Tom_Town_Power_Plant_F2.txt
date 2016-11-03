@@ -15,7 +15,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Thankfully the Magnemites weren't harmed. Although, I'm still angry at Team Deadlock."
               }
             }
@@ -38,7 +38,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Thank you for your help! Things are back to normal now."
               }
             }

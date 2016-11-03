@@ -546,7 +546,7 @@ public class MapView extends View {
 					case 5: // save
 						// TODO: Question user if they would like to save first.
 						Save.save();
-						// TODO: find the saved game dialogue and make an event trigger for it and then add that trigger here
+						// TODO: find the saved game dialogue and make a dialogue trigger for it and then add that trigger here
 //						Messages.addMessage(game, Game.getData().getDialogue("savedGame"));
 						state = VisualState.MESSAGE;
 						break;

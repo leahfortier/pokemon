@@ -14,7 +14,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I'm a meadow lady in a meadow!!!"
               }
             },
@@ -36,7 +36,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!"
               }
             }
@@ -58,7 +58,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I like shorts!!!!"
               }
             },
@@ -80,7 +80,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "SHORRRRTTTTTSSSSSS"
               }
             }

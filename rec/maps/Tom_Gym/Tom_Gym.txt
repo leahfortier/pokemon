@@ -14,7 +14,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "My Pokemon pack enough electricity to power the Cray Titan!"
               }
             },
@@ -37,7 +37,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "My data BUS just wasn't large enough! Take this, the Round Badge!"
               }
             },
@@ -54,7 +54,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo"
               }
             }
@@ -76,7 +76,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Watch out, I'm gonna fry your motherboard!"
               }
             },
@@ -97,7 +97,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Hey! You fried my motherboard!"
               }
             }
@@ -119,7 +119,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "My Pokemon and I communicate over PCI express!"
               }
             },
@@ -140,7 +140,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I need more bandwidth!"
               }
             }

@@ -58,7 +58,7 @@ public class Bag implements Serializable {
 		
 		Item item = p.getActualHeldItem();
 		if (item != Item.noneItem()) {
-			Game.getPlayer().getBag().addItem(item);
+			addItem(item);
 			p.removeItem();
 			s += "Took the " + item.getName() + " from " + p.getActualName() + ". ";
 		}
@@ -77,7 +77,7 @@ public class Bag implements Serializable {
 		
 		Item item = p.getActualHeldItem();
 		if (item != Item.noneItem()) {
-			Game.getPlayer().getBag().addItem(item);
+			addItem(item);
 			p.removeItem();
 			return "Took the " + item.getName() + " from " + p.getActualName() + ".";
 		}

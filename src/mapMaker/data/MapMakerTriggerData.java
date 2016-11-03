@@ -4,15 +4,15 @@ import item.Item;
 import map.MapData;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
-import map.entity.npc.NPCEntityData;
 import map.entity.TriggerEntityData;
-import map.triggers.EventTrigger;
+import map.entity.npc.NPCEntityData;
+import map.triggers.DialogueTrigger;
 import map.triggers.MapTransitionTrigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
 import map.triggers.WildBattleTrigger;
 import mapMaker.MapMaker;
-import mapMaker.dialogs.EventTriggerDialog;
+import mapMaker.dialogs.DialogueTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
 import mapMaker.dialogs.NPCEntityDialog;
@@ -513,7 +513,7 @@ public class MapMakerTriggerData {
 					image = mapMaker.getTileFromSet("MapMaker", 3);
 					break;
 				}
-				case EVENT: {
+				case DIALOGUE: {
 					g2d.setColor(Color.RED);
 					g2d.drawRect(x * MapMaker.tileSize + mapX, y * MapMaker.tileSize + mapY, MapMaker.tileSize, MapMaker.tileSize);
 
@@ -769,7 +769,7 @@ public class MapMakerTriggerData {
 			// else if (trigger.triggerData.triggerType.equals("Group")) {
 			// return 8;
 			// }
-			else if (trigger.triggerData.triggerType == TriggerType.EVENT) {
+			else if (trigger.triggerData.triggerType == TriggerType.DIALOGUE) {
 				return 8;
 			}
 		}
@@ -834,8 +834,8 @@ public class MapMakerTriggerData {
 				trigger = transitionBuildingTransitionsOptions();
 				break;
 			case "8":
-				System.out.println("Event");
-				trigger = editEventTrigger(null);
+				System.out.println("Dialogue");
+				trigger = editDialogueTrigger(null);
 				break;
 		}
 
@@ -896,8 +896,8 @@ public class MapMakerTriggerData {
 			else if (trigger.triggerData.triggerType == TriggerType.WILD_BATTLE) {
 				newTrigger = editWildBattleTrigger(new WildBattleTrigger(trigger.name, trigger.triggerData.triggerContents));
 			}
-			else if (trigger.triggerData.triggerType == TriggerType.EVENT) {
-				newTrigger = editEventTrigger(new EventTrigger(trigger.name, trigger.triggerData.triggerContents));
+			else if (trigger.triggerData.triggerType == TriggerType.DIALOGUE) {
+				newTrigger = editDialogueTrigger(new DialogueTrigger(trigger.name, trigger.triggerData.triggerContents));
 				// TODO
 			}
 			// else if (trigger.triggerData.triggerType.isEmpty()) { }
@@ -1050,7 +1050,7 @@ public class MapMakerTriggerData {
 					mapTransitionTriggers.remove(trigger.triggerData.name);
 				}
 			}
-			else if (trigger.triggerData.triggerType == TriggerType.EVENT) {
+			else if (trigger.triggerData.triggerType == TriggerType.DIALOGUE) {
 				// TODO
 			}
 			else if (trigger.triggerData.triggerType == TriggerType.WILD_BATTLE && trigger.triggerData.points.size() == 0) {
@@ -1494,26 +1494,26 @@ public class MapMakerTriggerData {
 		}
 	}
 
-	private PlaceableTrigger editEventTrigger(EventTrigger eventTrigger) {
-		EventTriggerDialog eventTriggerDialog = new EventTriggerDialog();
+	private PlaceableTrigger editDialogueTrigger(DialogueTrigger dialogueTrigger) {
+		DialogueTriggerDialog dialogueTriggerDialog = new DialogueTriggerDialog();
 
-		if (eventTrigger != null) {
-			String name = eventTrigger.getName();
-			String prefix = currentMapName + "_EventTrigger_";
+		if (dialogueTrigger != null) {
+			String name = dialogueTrigger.getName();
+			String prefix = currentMapName + "_DialogueTrigger_";
 
 			String actualName = name.substring(prefix.length(), name.length() - 3);
 			System.out.println(actualName);
 
-			eventTriggerDialog.setEventTrigger(eventTrigger, actualName);
+			dialogueTriggerDialog.setDialogueTrigger(dialogueTrigger, actualName);
 		}
 
-		JComponent[] inputs = new JComponent[] {eventTriggerDialog};
+		JComponent[] inputs = new JComponent[] {dialogueTriggerDialog};
 
 		Object[] options = {"Done", "Cancel"};
 
-		int results = JOptionPane.showOptionDialog(mapMaker, inputs, "Event Trigger Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		int results = JOptionPane.showOptionDialog(mapMaker, inputs, "Dialogue Trigger Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
-		String getName = eventTriggerDialog.getEventTriggerName();
+		String getName = dialogueTriggerDialog.getDialogueTriggerName();
 
 		if (results == JOptionPane.CLOSED_OPTION || results == 1 || getName.isEmpty()) {
 			return null;
@@ -1523,12 +1523,12 @@ public class MapMakerTriggerData {
 		int number = 1;
 		String triggerName;
 		do {
-			triggerName = String.format("%s_EventTrigger_%s_%02d", currentMapName, getName, number++);
+			triggerName = String.format("%s_DialogueTrigger_%s_%02d", currentMapName, getName, number++);
 		} while (triggerNames.contains(triggerName) || mapTriggers.isTriggerNameTaken(triggerName));
 
 		System.out.println(triggerName);
 
-		TriggerData td = eventTriggerDialog.getTriggerData(triggerName);
+		TriggerData td = dialogueTriggerDialog.getTriggerData(triggerName);
 
 		return new PlaceableTrigger(td);
 	}

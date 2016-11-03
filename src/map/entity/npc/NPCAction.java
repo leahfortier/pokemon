@@ -1,6 +1,5 @@
 package map.entity.npc;
 
-import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
@@ -109,7 +108,7 @@ public abstract class NPCAction {
     public static class ChoiceAction extends NPCAction {
         @Override
         protected TriggerType getTriggerType() {
-            return TriggerType.EVENT;
+            return TriggerType.DIALOGUE;
         }
 
         @Override

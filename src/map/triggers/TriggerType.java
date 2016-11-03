@@ -1,26 +1,25 @@
 package map.triggers;
 
-import main.Global;
+import util.PokeString;
 
 public enum TriggerType {
-    BADGE("Badge", BadgeTrigger::new),
-    CHANGE_VIEW("ChangeView", ChangeViewTrigger::new),
-    EVENT("Event", EventTrigger::new),
-    GIVE("Give", GiveTrigger::new),
-    GROUP("Group", GroupTrigger::new),
-    HEAL_PARTY("HealParty", HealPartyTrigger::new),
-    LAST_POKE_CENTER("LastPokeCenter", LastPokeCenterTrigger::new),
-    MAP_TRANSITION("MapTransition", MapTransitionTrigger::new),
-    SOUND("Sound", SoundTrigger::new),
-    TRAINER_BATTLE("TrainerBattle", TrainerBattleTrigger::new),
-    UPDATE("Update", UpdateTrigger::new),
-    WILD_BATTLE("WildBattle", WildBattleTrigger::new);
+    BADGE(BadgeTrigger::new),
+    CHANGE_VIEW(ChangeViewTrigger::new),
+    DIALOGUE(DialogueTrigger::new),
+    GIVE_ITEM(GiveItemTrigger::new),
+    GIVE_POKEMON(GivePokemonTrigger::new),
+    GROUP(GroupTrigger::new),
+    HEAL_PARTY(HealPartyTrigger::new),
+    LAST_POKE_CENTER(LastPokeCenterTrigger::new),
+    MAP_TRANSITION(MapTransitionTrigger::new),
+    SOUND(SoundTrigger::new),
+    TRAINER_BATTLE(TrainerBattleTrigger::new),
+    UPDATE(UpdateTrigger::new),
+    WILD_BATTLE(WildBattleTrigger::new);
 
-    final String typeName;
-    final GetTrigger getTrigger;
+    private final GetTrigger getTrigger;
 
-    TriggerType(final String typeName, final GetTrigger getTrigger) {
-        this.typeName = typeName;
+    TriggerType(final GetTrigger getTrigger) {
         this.getTrigger = getTrigger;
     }
 
@@ -33,13 +32,6 @@ public enum TriggerType {
     }
 
     public static TriggerType getTriggerType(final String type) {
-        for (final TriggerType triggerType : TriggerType.values()) {
-            if (triggerType.typeName.equals(type)) {
-                return triggerType;
-            }
-        }
-
-        Global.error("Could not find a trigger with type " + type);
-        return null;
+        return TriggerType.valueOf(PokeString.getNamesiesString(type));
     }
 }

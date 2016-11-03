@@ -13,7 +13,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I'm gonna be the very best like no one ever was."
               }
             },
@@ -34,7 +34,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Just get out. You're not welcome here."
               }
             }

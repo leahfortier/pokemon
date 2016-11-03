@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import map.triggers.EventTrigger;
+import map.triggers.DialogueTrigger;
 import map.triggers.TriggerData;
 
 import javax.swing.GroupLayout;
@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-public class EventTriggerDialog extends JPanel {
+public class DialogueTriggerDialog extends JPanel {
 	private static final long serialVersionUID = -1493772382824925408L;
 	
 	private JTextField nameTextField;
@@ -23,7 +23,7 @@ public class EventTriggerDialog extends JPanel {
 	private JTextArea globalTextArea;
 	private JTextArea conditionTextArea;
 
-	public EventTriggerDialog() {
+	public DialogueTriggerDialog() {
 		JLabel nameLabel = new JLabel("Name");
 		JLabel dialogueLabel = new JLabel("Dialogue Name");
 		JLabel createDialogueLabel = new JLabel("Create Dialogue");
@@ -135,7 +135,7 @@ public class EventTriggerDialog extends JPanel {
 		setLayout(groupLayout);
 	}
 	
-	public void setEventTrigger(EventTrigger trigger, String name) {
+	public void setDialogueTrigger(DialogueTrigger trigger, String name) {
 		nameTextField.setText(name);
 		conditionTextArea.setText(trigger.getCondition().getOriginalConditionString().replace("&"," & ").replace("|"," | "));
 		
@@ -143,24 +143,24 @@ public class EventTriggerDialog extends JPanel {
 			globalTextArea.append(g + "\n");
 		}
 
-		// TODO: Once I figure out what is actually happening here figure out if this makes sense to be a method
-		dialogueNameTextField.setText(trigger.createDialogue ? trigger.dialogue : trigger.dialogueName);
-		
-		if (trigger.createDialogue) {
-			createCheckBox.setSelected(true);
-			for (String d: trigger.dialogueLines) {
-				dialogueTextArea.append(d + "\n");
-			}
-		}
-		
-		dialogueTextArea.setEnabled(trigger.createDialogue);
+//		// TODO: Once I figure out what is actually happening here figure out if this makes sense to be a method
+//		dialogueNameTextField.setText(trigger.createDialogue ? trigger.dialogue : trigger.dialogueName);
+//
+//		if (trigger.createDialogue) {
+//			createCheckBox.setSelected(true);
+//			for (String d: trigger.dialogueLines) {
+//				dialogueTextArea.append(d + "\n");
+//			}
+//		}
+//
+//		dialogueTextArea.setEnabled(trigger.createDialogue);
 	}
 	
-	public String getEventTriggerName() {
+	public String getDialogueTriggerName() {
 		return nameTextField.getText().trim().replace(' ', '_');
 	}
 	
-	private EventTrigger getEventTrigger(String name) {
+	private DialogueTrigger getDialogueTrigger(String name) {
 		String dialogueName = dialogueNameTextField.getText().trim().replace(' ', '_');
 		String dialogueString = dialogueName.length() > 0 ? "dialogue: " + dialogueName:"";
 		
@@ -186,11 +186,11 @@ public class EventTriggerDialog extends JPanel {
 		}
 
 		String contents = conditionString + "\n" + globalsString + "\n" + dialogueString;
-		return new EventTrigger(name, contents);
+		return new DialogueTrigger(name, contents);
 	}
 	
 	public TriggerData getTriggerData(String name) {
-		EventTrigger eventTrigger = getEventTrigger(name);
-		return new TriggerData(name, "Event\n" + eventTrigger.triggerDataAsString());
+		DialogueTrigger dialogueTrigger = getDialogueTrigger(name);
+		return new TriggerData(name, "Dialogue\n" + dialogueTrigger.triggerDataAsString());
 	}
 }

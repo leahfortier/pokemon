@@ -14,7 +14,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "My Riolu is going to punch the normal off your Eevee!"
               }
             },
@@ -35,7 +35,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "..."
               }
             }
@@ -57,7 +57,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
               }
             }

@@ -1,5 +1,5 @@
 
-EventTrigger Heal_Trigger {
+DialogueTrigger Heal_Trigger {
 	dialogue: NurseJoyDialogue_1
 }
 
@@ -10,10 +10,10 @@ SoundTrigger PokeCenterSound {
 HealPartyTrigger HealParty {}
 LastPokeCenterTrigger SetTeleportToLastPokeCenter {}
 
-EventTrigger Mart_Trigger {
+DialogueTrigger Mart_Trigger {
 	dialogue: MartDialogue
 }
 
-EventTrigger PC_Trigger {
+DialogueTrigger PC_Trigger {
 	dialogue: PCDialogue
 }

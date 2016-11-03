@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GameData {
-	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}"); // TODO: Make private again maybe
+	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Dialogue|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}"); // TODO: Make private again maybe
 	private static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*(\\w+)\\s*(\\w+)\\s*([()&|!\\w-:,]+)?");
 
 	private Map<String, MapData> maps;

@@ -14,13 +14,13 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I am Professor Maple, eh. Welcome to my lab."
               }
             },
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "While you are here, let me heal your Pokémon."
               }
             },
@@ -31,25 +31,25 @@
             },
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
               }
             },
             {
               "trigger": {
-                "triggerType": "Give",
+                "triggerType": "GiveItem",
                 "triggerContents": "Syrup"
               }
             },
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Oh, and also take this egg. No idea what Pokémon is in it, but I'm sure you'll take good care of it."
               }
             },
             {
               "trigger": {
-                "triggerType": "Give",
+                "triggerType": "GivePokemon",
                 "triggerContents": "RandomEgg"
               }
             },
@@ -63,7 +63,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "wudya wan"
               }
             },
@@ -72,14 +72,14 @@
                 {
                   "text": "wawa",
                   "trigger": {
-                    "triggerType": "Give",
+                    "triggerType": "GiveItem",
                     "triggerContents": "Water Stone"
                   }
                 },
                 {
                   "text": "sunsunsunherewecome",
                   "trigger": {
-                    "triggerType": "Give",
+                    "triggerType": "GiveItem",
                     "triggerContents": "Sun Stone"
                   }
                 }
@@ -95,7 +95,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "How's it goin'? Need to rest up your Pokémon a bit?"
               }
             },
@@ -122,7 +122,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "This syrup soda is amazing!"
               }
             }
@@ -144,7 +144,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Event",
+                "triggerType": "Dialogue",
                 "triggerContents": "Don't disturb me! I'm doing syrup science!"
               }
             }

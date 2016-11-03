@@ -1,6 +1,6 @@
 package mapMaker.data;
 
-import map.triggers.EventTrigger;
+import map.triggers.DialogueTrigger;
 import mapMaker.MapMaker;
 
 public class TransitionBuildingPair implements Comparable<TransitionBuildingPair>{
@@ -72,8 +72,8 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 				;
 	}
 	
-	public EventTrigger getInfoTrigger() {
-		return new EventTrigger(getInfoTriggerName(),
+	public DialogueTrigger getInfoTrigger() {
+		return new DialogueTrigger(getInfoTriggerName(),
 				"condition: " +getConditionString() +"\n" +
 				"dialogue: " +getInfoDialogName()
 				);
