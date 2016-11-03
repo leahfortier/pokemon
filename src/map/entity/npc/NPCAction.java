@@ -5,18 +5,19 @@ import map.triggers.TriggerType;
 import namesies.ItemNamesies;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.BattleMatcher;
+import pattern.AreaDataMatcher.UpdateMatcher;
 
 public abstract class NPCAction {
-    public Trigger getTrigger(String baseTriggerName, String triggerNameSuffix) {
+    public Trigger getTrigger(String npcEntityName, String interactionTriggerName, String actionTriggerName) {
         return Trigger.createTrigger(
                 this.getTriggerType(),
-                baseTriggerName + triggerNameSuffix,
-                this.getTriggerContents(baseTriggerName)
+                actionTriggerName,
+                this.getTriggerContents(npcEntityName, interactionTriggerName)
         );
     }
 
     protected abstract TriggerType getTriggerType();
-    protected abstract String getTriggerContents(String baseTriggerName);
+    protected abstract String getTriggerContents(String npcEntityName, String interactionTriggerName);
 
     public static class DialogueAction extends NPCAction {
         private final String text;
@@ -31,7 +32,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String baseTriggerName) {
+        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
             return this.text;
         }
     }
@@ -49,7 +50,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String baseTriggerName) {
+        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
             return this.item.getName();
         }
     }
@@ -66,7 +67,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        public Trigger getTrigger(String baseTriggerName, String triggerNameSuffix) {
+        public Trigger getTrigger(String npcEntityName, String interactionTriggerName, String triggerNameSuffix) {
             return Trigger.createTrigger(type, name, contents);
         }
 
@@ -76,7 +77,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String baseTriggerName) {
+        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
             return this.contents;
         }
     }
@@ -94,7 +95,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String baseTriggerName) {
+        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
             return this.pokemonDescription;
         }
     }
@@ -120,10 +121,29 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String baseTriggerName) {
-            this.winGlobal = "triggered_" + baseTriggerName;
+        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+            this.winGlobal = "triggered_" + interactionTriggerName;
 
             return AreaDataMatcher.getJson(this);
+        }
+    }
+
+    public static class UpdateAction extends NPCAction {
+        private final String interactionName;
+
+        public UpdateAction(final String interactionName) {
+            this.interactionName = interactionName;
+        }
+
+        @Override
+        protected TriggerType getTriggerType() {
+            return TriggerType.UPDATE;
+        }
+
+        @Override
+        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+            UpdateMatcher matcher = new UpdateMatcher(npcEntityName, interactionName);
+            return AreaDataMatcher.getJson(matcher);
         }
     }
 }

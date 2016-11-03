@@ -32,6 +32,8 @@ public class Game {
 	private static Game game;
 	public static void create() {
 		game = new Game();
+		game.data = new GameData();
+		game.data.loadData();
 	}
 
 	public static GameData getData() {
@@ -57,7 +59,7 @@ public class Game {
 		TRAINER_CARD_VIEW,
 	}
 	
-	private final GameData data;
+	private GameData data;
 	private final Map<ViewMode, View> viewMap;
 	
 	private CharacterData characterData;
@@ -65,8 +67,6 @@ public class Game {
 	private View currentView;
 	
 	private Game() {
-		data = new GameData();
-		
 		viewMap = new EnumMap<>(ViewMode.class);
 		viewMap.put(ViewMode.MAIN_MENU_VIEW, new MainMenuView());
 		

@@ -13,6 +13,7 @@ public enum TriggerType {
     MAP_TRANSITION("MapTransition", MapTransitionTrigger::new),
     SOUND("Sound", SoundTrigger::new),
     TRAINER_BATTLE("TrainerBattle", TrainerBattleTrigger::new),
+    UPDATE("Update", UpdateTrigger::new),
     WILD_BATTLE("WildBattle", WildBattleTrigger::new);
 
     final String typeName;

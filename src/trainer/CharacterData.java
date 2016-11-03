@@ -21,8 +21,10 @@ import trainer.Pokedex.PokedexStatus;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class CharacterData extends Trainer implements Serializable {
@@ -43,6 +45,7 @@ public class CharacterData extends Trainer implements Serializable {
 	public String areaName;
 
 	private Set<String> definedGlobals;
+	private Map<String, String> npcInteractions;
 
 	// Used for map globals.
 	private String previousMapName;
@@ -73,6 +76,7 @@ public class CharacterData extends Trainer implements Serializable {
 		this.initialize();
 
 		definedGlobals = new HashSet<>();
+		npcInteractions = new HashMap<>();
 		
 		pokedex = new Pokedex();
 		pc = new PC();
@@ -211,7 +215,20 @@ public class CharacterData extends Trainer implements Serializable {
 		direction = Direction.DOWN;
 		mapReset = true;
 	}
-	
+
+	public void setNpcInteraction(final String npcEntityName, final String interactionName) {
+		this.npcInteractions.put(npcEntityName, interactionName);
+		System.out.println(npcEntityName + " -> " + npcInteractions.get(npcEntityName));
+	}
+
+	public boolean hasNpcInteraction(final String npcEntityName) {
+		return this.npcInteractions.containsKey(npcEntityName);
+	}
+
+	public String getNpcInteractionName(final String npcEntityName) {
+		return this.npcInteractions.get(npcEntityName);
+	}
+
 	public boolean globalsContain(String s) {
 		return definedGlobals.contains(s);
 	}

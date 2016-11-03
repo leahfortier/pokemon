@@ -38,8 +38,7 @@
             {
               "trigger": "Badge_0"
             }
-          ],
-          "update": "won"
+          ]
         },
         {
           "name": "won",

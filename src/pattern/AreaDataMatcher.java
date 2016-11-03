@@ -13,6 +13,7 @@ import map.entity.npc.NPCAction.BattleAction;
 import map.entity.npc.NPCAction.DialogueAction;
 import map.entity.npc.NPCAction.GiveItemAction;
 import map.entity.npc.NPCAction.GivePokemonAction;
+import map.entity.npc.NPCAction.UpdateAction;
 import map.triggers.EventTrigger;
 import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
@@ -244,6 +245,16 @@ public class AreaDataMatcher {
         String giveItem; // TODO: yeah yeah yeah I know I'll fix it
     }
 
+    public static class UpdateMatcher {
+        public String npcEntityName;
+        public String interactionName;
+
+        public UpdateMatcher(final String npcEntityName, final String interactionName) {
+            this.npcEntityName = npcEntityName;
+            this.interactionName = interactionName;
+        }
+    }
+
     public static class ActionMatcher {
         private String text;
         private BattleMatcher battle;
@@ -266,6 +277,8 @@ public class AreaDataMatcher {
                 return new GiveItemAction(giveItem);
             } else if (!StringUtils.isNullOrEmpty(givePokemon)){
                 return new GivePokemonAction(givePokemon);
+            } else if (!StringUtils.isNullOrEmpty(update)) {
+                return new UpdateAction(update);
             } else {
                 System.err.println("action not implemented yet");
                 return null;
@@ -276,7 +289,6 @@ public class AreaDataMatcher {
     public static class InteractionMatcher {
         private String name;
         private ActionMatcher[] npcActions;
-        private String update;
 
         List<NPCAction> getActions() {
             List<NPCAction> npcActions = new ArrayList<>();

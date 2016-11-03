@@ -36,7 +36,7 @@ public class GameData {
 	private TileSet mainMenuTiles;
 	private TileSet bagTiles;
 
-	public GameData() {
+	public void loadData() {
 		loadTiles();
 		loadTriggers();
 		loadAreas();

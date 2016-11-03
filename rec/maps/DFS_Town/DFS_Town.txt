@@ -74,9 +74,11 @@
             },
             {
               "giveItem": "Potion"
+            },
+            {
+              "update": "done"
             }
-          ],
-          "update": "done"
+          ]
         },
         {
           "name": "done",
@@ -154,9 +156,11 @@
             },
             {
               "giveItem": "Poké Ball"
+            },
+            {
+              "update": "done"
             }
-          ],
-          "update": "done"
+          ]
         },
         {
           "name": "done",

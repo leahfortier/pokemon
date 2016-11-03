@@ -12,6 +12,7 @@ import map.entity.npc.NPCAction.BattleAction;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.GroupTriggerMatcher;
+import trainer.CharacterData;
 import util.InputControl;
 import util.StringUtils;
 
@@ -33,7 +34,7 @@ public class NPCEntity extends MovableEntity {
 	private boolean walkingToPlayer;
 
 	private Map<String, List<NPCAction>> interactions;
-	private String currentInteractionKey;
+	private String startKey;
 
 	private int defaultX;
 	private int defaultY;
@@ -69,7 +70,7 @@ public class NPCEntity extends MovableEntity {
 		defaultDirection = direction;
 
 		this.interactions = interactions;
-		this.currentInteractionKey = startKey;
+		this.startKey = startKey;
 
 //		dataCreated = firstDialogue.length == 0;
 	}
@@ -143,8 +144,17 @@ public class NPCEntity extends MovableEntity {
 		walkingToPlayer = true;
 	}
 
+	private String getCurrentInteractionKey() {
+		CharacterData player = Game.getPlayer();
+		if (player.hasNpcInteraction(this.name)) {
+			return player.getNpcInteractionName(this.name);
+		}
+
+		return this.startKey;
+	}
+
 	public String getTrigger() {
-		return this.getTriggerName(this.currentInteractionKey);
+		return this.getTriggerName(this.getCurrentInteractionKey());
 	}
 
 	private String getTriggerName(final String interactionName) {
@@ -175,7 +185,7 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	public boolean isTrainer() {
-		List<NPCAction> actions = interactions.get(currentInteractionKey);
+		List<NPCAction> actions = interactions.get(this.getCurrentInteractionKey());
 		for (NPCAction action : actions) {
 			if (action instanceof BattleAction) {
 				return true;
@@ -207,19 +217,17 @@ public class NPCEntity extends MovableEntity {
 			final String interactionName = interaction.getKey();
 			final List<NPCAction> actions = interaction.getValue();
 
-			final String triggerName = this.getTriggerName(interactionName);
+			final String interactionTriggerName = this.getTriggerName(interactionName);
 			final String[] actionTriggerNames = new String[actions.size()];
 			for (int i = 0; i < actions.size(); i++) {
-				final String actionTriggerNameSuffix = "_action" + i;
-				actionTriggerNames[i] = triggerName + actionTriggerNameSuffix;
-
-				data.addTrigger(actions.get(i).getTrigger(triggerName, actionTriggerNameSuffix));
+				actionTriggerNames[i] = interactionTriggerName + "_action" + i;
+				data.addTrigger(actions.get(i).getTrigger(this.name, interactionTriggerName, actionTriggerNames[i]));
 			}
 
 			GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
 			final String groupContents = AreaDataMatcher.getJson(matcher);
 
-			data.addTrigger(TriggerType.GROUP, triggerName, groupContents);
+			data.addTrigger(TriggerType.GROUP, interactionTriggerName, groupContents);
 		}
 		
 		dataCreated = true;
