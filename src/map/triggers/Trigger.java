@@ -75,17 +75,17 @@ public abstract class Trigger {
 	
 	// Evaluate the function, Should only be triggered when a player moves
 	// into a map square that is defined to trigger this event
-	public boolean isTriggered(CharacterData data) {
-		return condition.isTrue(data);
+	public boolean isTriggered() {
+		return condition.isTrue();
 	}
 	
-	public void execute(Game game) {
+	public void execute() {
 		for (String s: globals) {
 			if (s.charAt(0) == '!') {
-				game.characterData.removeGlobal(s.substring(1));
+				Game.getPlayer().removeGlobal(s.substring(1));
 			}
 			else {
-				game.characterData.addGlobal(s);
+				Game.getPlayer().addGlobal(s);
 			}
 		}
 	}

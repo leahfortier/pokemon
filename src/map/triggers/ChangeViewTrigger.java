@@ -1,9 +1,9 @@
 package map.triggers;
 
-import java.util.regex.Matcher;
-
 import main.Game;
 import main.Game.ViewMode;
+
+import java.util.regex.Matcher;
 
 public class ChangeViewTrigger extends Trigger {
 	private String view;
@@ -16,8 +16,8 @@ public class ChangeViewTrigger extends Trigger {
 		}
 	}
 
-	public void execute(Game game) {
-		super.execute(game);
-		game.setViewMode(ViewMode.valueOf(view));
+	public void execute() {
+		super.execute();
+		Game.setViewMode(ViewMode.valueOf(view));
 	}
 }

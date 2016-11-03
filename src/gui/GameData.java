@@ -71,13 +71,13 @@ public class GameData {
 				continue;
 			}
 
-			maps.put(d.getName(), new MapData(d, this));
+			maps.put(d.getName(), new MapData(d));
 		}
 	}
 
-	public void testMaps(CharacterData charData) {
+	public void testMaps() {
 		for (String map : maps.keySet()) {
-			maps.get(map).populateEntities(charData, this);
+			maps.get(map).populateEntities();
 		}
 	}
 

@@ -9,10 +9,10 @@ public class HealPartyTrigger extends Trigger {
 	}
 
 	@Override
-	public void execute(Game game) {
-		super.execute(game);
+	public void execute() {
+		super.execute();
 		
-		game.characterData.healAll();
+		Game.getPlayer().healAll();
 	}
 
 	@Override

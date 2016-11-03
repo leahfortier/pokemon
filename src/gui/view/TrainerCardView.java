@@ -1,11 +1,5 @@
 package gui.view;
 
-import gui.GameData;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
@@ -14,25 +8,25 @@ import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
 
-public class TrainerCardView extends View {
-	private CharacterData player;
-	
-	public TrainerCardView(CharacterData data) {
-		player = data;
-	}
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
-	public void update(int dt, InputControl input, Game game) {
+public class TrainerCardView extends View {
+
+	public void update(int dt, InputControl input) {
 		if (input.isDown(Control.ESC)) {
 			input.consumeKey(Control.ESC);
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
-	public void draw(Graphics g, GameData data) {
-		Dimension d = Global.GAME_SIZE;
+	public void draw(Graphics g) {
+		CharacterData player = Game.getPlayer();
+		Dimension dimension = Global.GAME_SIZE;
 
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, d.width, d.height);
+		g.fillRect(0, 0, dimension.width, dimension.height);
 
 		g.setColor(Color.WHITE);
 		
@@ -57,6 +51,5 @@ public class TrainerCardView extends View {
 		return ViewMode.TRAINER_CARD_VIEW;
 	}
 
-	public void movedToFront(Game game) {}
-	
+	public void movedToFront() {}
 }

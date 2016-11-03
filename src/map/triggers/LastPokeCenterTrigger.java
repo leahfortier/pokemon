@@ -7,9 +7,9 @@ public class LastPokeCenterTrigger extends Trigger {
 		super(name, contents);
 	}
 
-	public void execute(Game game) {
-		super.execute(game);
-		game.characterData.setPokeCenter();
+	public void execute() {
+		super.execute();
+		Game.getPlayer().setPokeCenter();
 	}
 
 	public String toString() {

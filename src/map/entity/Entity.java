@@ -1,17 +1,15 @@
 package map.entity;
 
-import gui.GameData;
 import gui.view.MapView;
+import main.Global;
+import map.Direction;
+import map.MapData;
+import map.MapData.WalkType;
+import util.InputControl;
 
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-
-import map.Direction;
-import util.InputControl;
-import main.Global;
-import map.MapData;
-import map.MapData.WalkType;
 
 public abstract class Entity {
 	protected int charX;
@@ -38,15 +36,15 @@ public abstract class Entity {
 		return new Point(cx, cy);
 	}
 
-	public void draw(Graphics g, GameData data, float drawX, float drawY, boolean drawOnlyInTransition) {
-		draw(g, data, getCanvasCoordinates(drawX, drawY));
+	public void draw(Graphics g, float drawX, float drawY, boolean drawOnlyInTransition) {
+		draw(g, getCanvasCoordinates(drawX, drawY));
 	}
 	
-	public void draw(Graphics g, GameData data, Point canvasCoordinates) {
+	public void draw(Graphics g, Point canvasCoordinates) {
 		int cx = canvasCoordinates.x;
 		int cy = canvasCoordinates.y;
 		
-		BufferedImage img = getFrame(data);
+		BufferedImage img = getFrame();
 		//TODO: metrics class?
 		g.drawImage(img, cx - img.getWidth() / 2 + Global.TILE_SIZE / 2, cy + (Global.TILE_SIZE - img.getHeight()) - (Global.TILE_SIZE / 2), null);
 	}
@@ -81,13 +79,13 @@ public abstract class Entity {
 		return false;
 	}
 
-	protected abstract BufferedImage getFrame(GameData data);
+	protected abstract BufferedImage getFrame();
 
 	public abstract String getTrigger();
 
 	public abstract void getAttention(Direction direction);
 
-	public abstract void addData(GameData gameData);
+	public abstract void addData();
 
 	public abstract void reset();
 }

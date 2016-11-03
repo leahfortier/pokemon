@@ -1,7 +1,6 @@
 package gui.view;
 
 import gui.Button;
-import gui.GameData;
 import gui.TileSet;
 
 import java.awt.Color;
@@ -206,7 +205,7 @@ public class MainMenuView extends View {
 		Global.soundPlayer.playMusic(state.tunes);
 	}
 
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
 		if (!musicStarted) {
 			musicStarted = true;
 			Global.soundPlayer.playMusic(state.tunes);
@@ -251,8 +250,8 @@ public class MainMenuView extends View {
 							saveInfo = Save.updateSaveData();
 						}
 						else if (saveInfo[pressed] != null) {
-							game.loadSave(pressed);
-							game.setViewMode(ViewMode.MAP_VIEW);
+							Game.loadSave(pressed);
+							Game.setViewMode(ViewMode.MAP_VIEW);
 						}
 						break;
 					case 3: // return
@@ -271,8 +270,8 @@ public class MainMenuView extends View {
 					case 1:
 					case 2: 
 						// TODO: Ask to delete
-						game.newSave(pressed);
-						game.setViewMode(ViewMode.START_VIEW);
+						Game.newSave(pressed);
+						Game.setViewMode(ViewMode.START_VIEW);
 						break;
 					case 3: // return
 						setVisualState(VisualState.MAIN);
@@ -343,8 +342,8 @@ public class MainMenuView extends View {
 		b.draw(g);
 	}
 	
-	public void draw(Graphics g, GameData data) {
-		TileSet tiles = data.getMainMenuTiles();
+	public void draw(Graphics g) {
+		TileSet tiles = Game.getData().getMainMenuTiles();
 
 		theme.draw.draw(g, tiles, bgTime, bgIndex);
 		
@@ -451,7 +450,7 @@ public class MainMenuView extends View {
 		return ViewMode.MAIN_MENU_VIEW;
 	}
 
-	public void movedToFront(Game game) {
+	public void movedToFront() {
 		setVisualState(VisualState.MAIN);
 		saveInfo = Save.updateSaveData();
 	}

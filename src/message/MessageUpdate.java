@@ -49,16 +49,16 @@ public class MessageUpdate {
 		PROMPT_SWITCH(VisualState.POKEMON),
 		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION),
 		STAT_GAIN(VisualState.STAT_GAIN),
-		EXIT_BATTLE((battleView, game) -> {
-            game.setViewMode(ViewMode.MAP_VIEW);
+		EXIT_BATTLE(battleView -> {
+            Game.setViewMode(ViewMode.MAP_VIEW);
             battleView.clearUpdate();
         }),
-		FORCE_SWITCH((battleView, game) -> {
+		FORCE_SWITCH(battleView -> {
             battleView.setVisualState(VisualState.POKEMON);
             battleView.setSwitchForced();
             battleView.clearUpdate();
         }),
-		WIN_BATTLE((battleView, game) -> {
+		WIN_BATTLE(battleView -> {
             if (battleView.getCurrentBattle().isWildBattle()) {
                 Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
             }
@@ -71,11 +71,11 @@ public class MessageUpdate {
 		private final PerformUpdate performUpdate;
 		
 		Update() {
-			this((battleView, game) -> {});
+			this(battleView -> {});
 		}
 		
 		Update(final BattleView.VisualState visualState) {
-			this((battleView, game) -> {
+			this(battleView -> {
                 battleView.setVisualState(visualState);
                 battleView.clearUpdate();
             });
@@ -85,12 +85,12 @@ public class MessageUpdate {
 			this.performUpdate = performUpdate;
 		}
 		
-		public void performUpdate(BattleView battleView, Game game) {
-			this.performUpdate.performUpdate(battleView, game);
+		public void performUpdate(BattleView battleView) {
+			this.performUpdate.performUpdate(battleView);
 		}
 		
 		private interface PerformUpdate {
-			void performUpdate(BattleView battleView, Game game);
+			void performUpdate(BattleView battleView);
 		}
 	}
 

@@ -2,9 +2,7 @@ package map.entity;
 
 import gui.GameData;
 import gui.view.MapView;
-
-import java.awt.image.BufferedImage;
-
+import main.Game;
 import map.DialogueSequence;
 import map.Direction;
 import map.MapData;
@@ -12,18 +10,14 @@ import map.triggers.Trigger;
 import util.InputControl;
 import util.PokeString;
 
+import java.awt.image.BufferedImage;
+
 class ItemEntity extends Entity {
 	private String trigger;
 	private boolean hasTriggered;
 	private String name;
 	private String item;
 	private boolean dataCreated;
-	
-	public ItemEntity(int x, int y, String trigger) {
-		super(x, y);
-		this.trigger = trigger;
-		hasTriggered = false;
-	}
 
 	public ItemEntity(String name, int x, int y, String item) {
 		super(x,y);
@@ -40,8 +34,8 @@ class ItemEntity extends Entity {
 		}
 	}
 
-	protected BufferedImage getFrame(GameData data) {
-		return data.getTrainerTiles().getTile(0);
+	protected BufferedImage getFrame() {
+		return Game.getData().getTrainerTiles().getTile(0);
 	}
 
 	public String getTrigger() {
@@ -56,17 +50,19 @@ class ItemEntity extends Entity {
 		hasTriggered = false;
 	}
 	
-	public void addData(GameData data) {
+	public void addData() {
 		if (dataCreated) {
 			return;
 		}
+
+		GameData data = Game.getData();
 		
 		// TODO: Add support for multiple items.
 		// TODO: Add support for multiple placements of the same item on the same map
 		//		Add numbers to the end of entity name and condition?		
 		Trigger eventTrigger = data.getTrigger(name);
 		if (eventTrigger == null) {
-			data.addTrigger("Event", name, "condition: !has" + name +" \n" +
+			data.addTrigger("Event", name, "condition: !has" + name + " \n" +
 					"global: has" + name + " \n" +
 					"dialogue: " + name
 			);
@@ -82,19 +78,13 @@ class ItemEntity extends Entity {
 									"trigger[0]: " + itemTriggerName
 									);
 		}
-		
+
 		Trigger itemTrigger = data.getTrigger(itemTriggerName);
 		
 		if (itemTrigger == null) {
 			data.addTrigger("Give", itemTriggerName, "item: " + itemName);
 		}
-		
-//		System.out.println(name);
-//		System.out.println(itemTriggerName);
-//		System.out.println(data.getDialogue(name).text);
-//		System.out.println(data.getDialogue(name).choices[0]);
-//		System.out.println(data.getTrigger(name));
-//		System.out.println(data.getTrigger(itemTriggerName));
+
 		dataCreated = true;
 	}
 	

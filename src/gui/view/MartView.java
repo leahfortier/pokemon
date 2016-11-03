@@ -65,7 +65,6 @@ public class MartView extends View {
 	private int itemAmount;
 	
 	private Item selectedItem;
-	private CharacterData player;
 	
 	private Button[] buttons;
 	private Button[] itemButtons;
@@ -76,8 +75,7 @@ public class MartView extends View {
 	private Button shopRightButton;
 	private Button returnButton;
 	
-	public MartView(CharacterData data) {
-		player = data;
+	public MartView() {
 		selectedButton = 0;
 		itemAmount = 1;
 
@@ -123,7 +121,8 @@ public class MartView extends View {
 		updateActiveButtons();
 	}
 
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
+		CharacterData player = Game.getPlayer();
 		selectedButton = Button.update(buttons, selectedButton, input);
 			
 		Iterator<Item> iter = forSaleItems.iterator();
@@ -197,16 +196,19 @@ public class MartView extends View {
 		}
 		
 		if (returnButton.checkConsumePress()) {
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 
 		if (input.isDown(Control.ESC)) {
 			input.consumeKey(Control.ESC);
-			game.setViewMode(ViewMode.MAP_VIEW);
+			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
+		GameData data = Game.getData();
+		CharacterData player = Game.getPlayer();
+
 		TileSet tiles = data.getMenuTiles();
 		TileSet itemTiles = data.getItemTiles();
 		
@@ -374,7 +376,7 @@ public class MartView extends View {
 		return ViewMode.MART_VIEW;
 	}
 
-	public void movedToFront(Game game) { }
+	public void movedToFront() {}
 	
 	private int totalPages() {
 		int size = forSaleItems.size();
@@ -395,6 +397,6 @@ public class MartView extends View {
 
 	private void setSelectedItem(Item item) {
 		selectedItem = item;
-		itemAmount = selectedItem.getPrice() <= player.getDatCashMoney() ? 1 : 0;
+		itemAmount = selectedItem.getPrice() <= Game.getPlayer().getDatCashMoney() ? 1 : 0;
 	}
 }

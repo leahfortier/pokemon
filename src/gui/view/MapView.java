@@ -123,10 +123,11 @@ public class MapView extends View {
 	}
 
 	// TODO: This method should be split up further
-	public void draw(Graphics g, GameData data) {
+	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-		
+
+		GameData data = Game.getData();
 		TileSet mapTiles = data.getMapTiles();
 		
 		for (int y = startY; y < endY; y++) {
@@ -175,7 +176,7 @@ public class MapView extends View {
 							continue;
 						}
 						
-						entities[nx][ny].draw(g, data, drawX, drawY, d > 0);
+						entities[nx][ny].draw(g, drawX, drawY, d > 0);
 					}
 				}
 			}
@@ -341,21 +342,21 @@ public class MapView extends View {
 	private void drawBattleIntroAnimation(Graphics g) {
 		int drawWidth = Global.GAME_SIZE.width/2;
 		int drawHeightLeft;
-		int drawHeighRight;
+		int drawHeightRight;
 		float moveInAnimationPercentage;
 		float fadeOutPercentage = 0.2f;
 		
 		if (battle.isWildBattle()) {
-			drawHeighRight = drawHeightLeft = Global.GAME_SIZE.height * 5 / 8;
+			drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height * 5 / 8;
 			drawHeightLeft -= battleImageSlideLeft.getHeight()/2;
-			drawHeighRight -= battleImageSlideRight.getHeight();
+			drawHeightRight -= battleImageSlideRight.getHeight();
 			
 			moveInAnimationPercentage = 0.5f;
 		}
 		else {
-			drawHeighRight = drawHeightLeft = Global.GAME_SIZE.height/2;
+			drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height/2;
 			drawHeightLeft -= battleImageSlideLeft.getHeight();
-			//drawHeighRight -= battleImageSlideRight.getHeight();
+			//drawHeightRight -= battleImageSlideRight.getHeight();
 			
 			moveInAnimationPercentage = 0.4f;
 		}
@@ -373,12 +374,12 @@ public class MapView extends View {
 			dist = Global.GAME_SIZE.width;
 			dist = (int)(dist * normalizedTime);
 			
-			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2 + dist, drawHeighRight, null);
+			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2 + dist, drawHeightRight, null);
 		}
 		// Hold images
 		else {
 			g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2, drawHeightLeft, null);
-			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2, drawHeighRight, null);
+			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2, drawHeightRight, null);
 			
 			//Fade to black before battle appears.
 			if (battleAnimationTime < BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage)
@@ -392,15 +393,16 @@ public class MapView extends View {
 	}
 	
 
-	public void update(int dt, InputControl input, Game game) {
+	public void update(int dt, InputControl input) {
 		boolean showMessage = true;
 
-		CharacterData character = game.characterData;
+		GameData data = Game.getData();
+		CharacterData character = Game.getPlayer();
 		MENU_TEXT[3] = character.getName();
 
 		if (!currentMapName.equals(character.mapName) || character.mapReset) {
 			currentMapName = character.mapName;
-			currentMap = game.data.getMap(currentMapName);
+			currentMap = data.getMap(currentMapName);
 			
 			if (character.mapReset) {
 				character.mapReset = false;
@@ -408,11 +410,11 @@ public class MapView extends View {
 			}
 			
 			currentArea = null;
-			
-			entities = currentMap.populateEntities(character, game.data);
-			
+
+			entities = currentMap.populateEntities();
+
 			Direction prevDir = character.direction;
-			
+
 			playerEntity = new PlayerEntity(character);
 			playerEntity.setDirection(prevDir);
 			entities[character.locationX][character.locationY] = playerEntity;
@@ -435,7 +437,7 @@ public class MapView extends View {
 		}
 		
 		// New area
-		AreaData area = game.data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
+		AreaData area = data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
 		if (currentArea == null || !area.getAreaName().equals(currentArea.getAreaName())) {
 			character.areaName = area.getAreaName();
 			currentArea = area;
@@ -444,21 +446,21 @@ public class MapView extends View {
 			weatherState = area.getWeather();
 			
 			//Queue to play new area's music.
-			currentMusicTrigger = game.data.getTrigger(area.getMusicTriggerName());
+			currentMusicTrigger = data.getTrigger(area.getMusicTriggerName());
 			//System.out.println(currentMusicTrigger);
 			
-			playAreaMusic(game);
+			playAreaMusic();
 		}
 		
 		switch (state) {
 			case BATTLE_ANIMATION:
 				if (battleImageSlideLeft == null || battleImageSlideRight == null) {
-					loadBattleImages(game);
+					loadBattleImages();
 				}
 
 				if (battleAnimationTime < 0) {
 					battle = null;
-					game.setViewMode(ViewMode.BATTLE_VIEW);
+					Game.setViewMode(ViewMode.BATTLE_VIEW);
 					state = VisualState.MAP;
 				}
 				
@@ -499,7 +501,7 @@ public class MapView extends View {
 //					currentDialogue.choose(dialogueSelection, this, game);
 
 					while (Messages.hasMessages()) {
-						cycleMessage(game);
+						cycleMessage();
 
 						if (state != VisualState.MESSAGE || !StringUtils.isNullOrEmpty(currentMessage.getMessage())) {
 							break;
@@ -527,29 +529,29 @@ public class MapView extends View {
 					case -1: // no click
 						break;
 					case 0: // pokedex
-						game.setViewMode(ViewMode.POKEDEX_VIEW);
+						Game.setViewMode(ViewMode.POKEDEX_VIEW);
 						break;
 					case 1: // pokemon
-						game.setViewMode(ViewMode.PARTY_VIEW);
+						Game.setViewMode(ViewMode.PARTY_VIEW);
 						break;
 					case 2: // bag
-						game.setViewMode(Game.ViewMode.BAG_VIEW);
+						Game.setViewMode(Game.ViewMode.BAG_VIEW);
 						break;
 					case 3: // player
-						game.setViewMode(Game.ViewMode.TRAINER_CARD_VIEW);
+						Game.setViewMode(Game.ViewMode.TRAINER_CARD_VIEW);
 						break;
 					case 4: // options
-						game.setViewMode(Game.ViewMode.OPTIONS_VIEW);
+						Game.setViewMode(Game.ViewMode.OPTIONS_VIEW);
 						break;
 					case 5: // save
 						// TODO: Question user if they would like to save first.
-						Save.save(game.characterData);
-						Messages.addMessage(game, game.data.getDialogue("savedGame"));
+						Save.save();
+						Messages.addMessage(Game.getData().getDialogue("savedGame"));
 						state = VisualState.MESSAGE;
 						break;
 					case 6: // exit
 						// TODO: Confirmation
-						game.setViewMode(ViewMode.MAIN_MENU_VIEW);
+						Game.setViewMode(ViewMode.MAIN_MENU_VIEW);
 						break;
 					case 7: // return
 						state = VisualState.MAP;
@@ -596,7 +598,7 @@ public class MapView extends View {
 							&& ((NPCEntity)entities[x][y]).getWalkToPlayer()) {
 
 						NPCEntity npc = (NPCEntity)entities[x][y];
-						if (!npc.getWalkingToPlayer() && game.data.getTrigger(npc.getWalkTrigger()).isTriggered(game.characterData)) {
+						if (!npc.getWalkingToPlayer() && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
 							playerEntity.stall();
 							npc.setDirection(direction);
 							npc.walkTowards(dist - 1, direction);
@@ -618,7 +620,7 @@ public class MapView extends View {
 		}
 		
 		if (state == VisualState.MAP) {
-			playerEntity.triggerCheck(game, currentMap);
+			playerEntity.triggerCheck(currentMap);
 		}
 		
 		while (!removeQueue.isEmpty()) {
@@ -628,21 +630,21 @@ public class MapView extends View {
 		}
 
 		if (showMessage && (this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage())) && Messages.hasMessages()) {
-			cycleMessage(game);
+			cycleMessage();
 			if (this.currentMessage != null && this.currentMessage.getUpdateType() != Update.ENTER_BATTLE) {
 				state = VisualState.MESSAGE;
 			}
 		}
 	}
 
-	private void cycleMessage(Game game) {
+	private void cycleMessage() {
 		currentMessage = Messages.getNextMessage();
 
 		if (currentMessage.trigger()) {
-			Trigger trigger = game.data.getTrigger(currentMessage.getTriggerName());
+			Trigger trigger = Game.getData().getTrigger(currentMessage.getTriggerName());
 
-			if (trigger.isTriggered(game.characterData)) {
-				trigger.execute(game);
+			if (trigger.isTriggered()) {
+				trigger.execute();
 				if (state != VisualState.MESSAGE) {
 					currentMessage = null;
 				}
@@ -651,9 +653,9 @@ public class MapView extends View {
 		}
 	}
 
-	private void playAreaMusic(Game game) {
+	private void playAreaMusic() {
 		if (currentMusicTrigger != null) {
-			currentMusicTrigger.execute(game);
+			currentMusicTrigger.execute();
 		}
 		else if(currentArea != null) {
 			System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
@@ -684,20 +686,22 @@ public class MapView extends View {
 		}
 	}
 
-	private void loadBattleImages(Game game) {
+	private void loadBattleImages() {
+		GameData data = Game.getData();
+
 		if (battle.isWildBattle()) {
-			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x300 + currentArea.getTerrain().ordinal());
+			battleImageSlideLeft = data.getBattleTiles().getTile(0x300 + currentArea.getTerrain().ordinal());
 			
 			ActivePokemon p = battle.getOpponent().front();
-			battleImageSlideRight = game.data.getPokemonTilesLarge().getTile(p.getImageIndex());
+			battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageIndex());
 			
 			if (seenWild) {
 				battleImageSlideRight = DrawMetrics.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0});
 			}
 		}
 		else {
-			battleImageSlideRight = game.data.getBattleTiles().getTile(0x00100001);
-			battleImageSlideLeft = game.data.getBattleTiles().getTile(0x00100000);
+			battleImageSlideRight = data.getBattleTiles().getTile(0x00100001);
+			battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
 		}
 	}
 	
@@ -710,7 +714,7 @@ public class MapView extends View {
 		removeQueue.add(e);
 	}
 
-	public void movedToFront(Game game) {
-		playAreaMusic(game);
+	public void movedToFront() {
+		playAreaMusic();
 	}
 }

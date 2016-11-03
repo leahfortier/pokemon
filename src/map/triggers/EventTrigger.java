@@ -58,19 +58,19 @@ public class EventTrigger extends Trigger {
 		}
 	}
 
-	public void execute(Game game) {
+	public void execute() {
 		if (needToCreateDialogue) {
 			for (int i = 0; i < dialogueLines.length; ++i) {
-				String next = i + 1 == dialogueLines.length? "": "next[0]: " +name + "_Dialogue_" +dialogue + String.format("_%02d",i + 2);
-				game.data.addDialogue(name + "_Dialogue_" +dialogue + String.format("_%02d",i + 1), "text: \"" + dialogueLines[i] + "\"\n" +next);
+				String next = i + 1 == dialogueLines.length ? "" : "next[0]: " + name + "_Dialogue_" + dialogue + String.format("_%02d", i + 2);
+				Game.getData().addDialogue(name + "_Dialogue_" + dialogue + String.format("_%02d", i + 1), "text: \"" + dialogueLines[i] + "\"\n" + next);
 			}
-			
+
 			needToCreateDialogue = false;
 		}
-		
-		super.execute(game);
+
+		super.execute();
 		if (dialogueName != null) {
-			game.setMapViewDialogue(this.dialogueName);
+			Game.setMapViewDialogue(this.dialogueName);
 		}
 	}
 	
