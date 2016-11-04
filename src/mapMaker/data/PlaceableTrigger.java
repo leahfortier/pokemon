@@ -50,14 +50,12 @@ public class PlaceableTrigger {
 		name = entity.name;
 	}
 	
-	
-	
 	//MapExit, WildBattle, TriggerData
 	public PlaceableTrigger(TriggerData triggerData, Integer location) {
 		this.triggerType = TriggerType.TriggerData;
 		this.triggerData = triggerData;
 		
-		name = triggerData.name;
+//		name = triggerData.name;
 		this.location = location;
 	}
 	
@@ -66,6 +64,6 @@ public class PlaceableTrigger {
 		this.triggerType = TriggerType.TriggerData;
 		this.triggerData = triggerData;
 		
-		name = triggerData.name;
+//		name = triggerData.name;
 	}
 }

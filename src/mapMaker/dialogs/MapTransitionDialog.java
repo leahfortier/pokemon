@@ -115,8 +115,8 @@ public class MapTransitionDialog extends JPanel {
 	}
 	
 	public void setMapTransition(MapTransitionTrigger mapTransition) {
-		destinationComboBox.setSelectedItem(mapTransition.getMapNamee());
-		entranceComboBox.setSelectedItem(mapTransition.getMapEntranceNamee());
+		destinationComboBox.setSelectedItem(mapTransition.getNextMap());
+		entranceComboBox.setSelectedItem(mapTransition.getMapEntranceName());
 		directionComboBox.setSelectedIndex(mapTransition.getDirection().ordinal() + 1); // TODO: Not sure what's going on here but it should probably be in a direction method instead of using the ordinal
 	}
 	
@@ -128,7 +128,8 @@ public class MapTransitionDialog extends JPanel {
 			return null;
 		}
 		
-		return new MapTransitionTrigger(name, "", destination, entrance, directionComboBox.getSelectedIndex() - 1);
+//		return new MapTransitionTrigger(name, "", destination, entrance, directionComboBox.getSelectedIndex() - 1);
+		return null;
 	}
 	
 	public TriggerData getTriggerData(String name) {

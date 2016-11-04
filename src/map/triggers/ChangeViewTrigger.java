@@ -2,22 +2,18 @@ package map.triggers;
 
 import main.Game;
 import main.Game.ViewMode;
-
-import java.util.regex.Matcher;
+import util.PokeString;
 
 public class ChangeViewTrigger extends Trigger {
-	private String view;
-	
-	public ChangeViewTrigger(String name, String contents) {
-		super(name, contents);
-		Matcher m = variablePattern.matcher(contents);		
-		if (m.find() && m.group(1).equals("view")) {
-			view = m.group(2);
-		}
+	private ViewMode view;
+
+	ChangeViewTrigger(String viewMode) {
+		super(TriggerType.CHANGE_VIEW, viewMode);
+
+		this.view = ViewMode.valueOf(PokeString.getNamesiesString(viewMode));
 	}
 
-	public void execute() {
-		super.execute();
-		Game.setViewMode(ViewMode.valueOf(view));
+	protected void executeTrigger() {
+		Game.setViewMode(this.view);
 	}
 }

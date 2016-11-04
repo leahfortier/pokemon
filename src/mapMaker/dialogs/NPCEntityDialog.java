@@ -340,35 +340,35 @@ public class NPCEntityDialog extends JPanel {
 		
 		conditionTextField.setText(npc.condition.getOriginalConditionString().replace("&"," & ").replace("|"," | "));
 		
-		StringBuilder dialogue = new StringBuilder();
-		for (String currentDialogue: npc.firstDialogue) {
-			StringUtils.appendLine(dialogue, currentDialogue);
-		}
+//		StringBuilder dialogue = new StringBuilder();
+//		for (String currentDialogue: npc.firstDialogue) {
+//			StringUtils.appendLine(dialogue, currentDialogue);
+//		}
 
-		firstDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
-		if (firstDialogueTextArea.getText().trim().isEmpty()) {
-			firstDialogueTextArea.setText("I have no dialogue yet."); // TODO: There should be a constant for the default expression and it should be more interesting than this
-		}
+//		firstDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
+//		if (firstDialogueTextArea.getText().trim().isEmpty()) {
+//			firstDialogueTextArea.setText("I have no dialogue yet."); // TODO: There should be a constant for the default expression and it should be more interesting than this
+//		}
+//
+//		dialogue.delete(0, dialogue.length());
 		
-		dialogue.delete(0, dialogue.length());
-		
-		if (npc.secondDialogue != null){
-			for (String currentDialogue: npc.secondDialogue) {
-				StringUtils.appendLine(dialogue, currentDialogue);
-			}
-
-			secondDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
-		}
-		
-		pathTextField.setText(npc.path);
-		walkToPlayerCheckBox.setSelected(npc.walkToPlayer == 1);
-
-		// TODO: make a method for this and fix the uggyness too fucking tired for that shit right now
-		giveItemsTextArea.setText(npc.itemInfo != null?npc.itemInfo.replace("\t", ""):null);
-		trainerDataTextArea.setText(npc.trainerInfo != null?npc.trainerInfo.replace("\t", ""):null);
-		
-		firstTriggersTextArea.setText(npc.firstTriggers != null?npc.firstTriggers.replace("\t", ""):null);
-		secondTriggersTextArea.setText(npc.secondTriggers != null?npc.secondTriggers.replace("\t", ""):null);
+//		if (npc.secondDialogue != null){
+//			for (String currentDialogue: npc.secondDialogue) {
+//				StringUtils.appendLine(dialogue, currentDialogue);
+//			}
+//
+//			secondDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
+//		}
+//
+//		pathTextField.setText(npc.path);
+//		walkToPlayerCheckBox.setSelected(npc.walkToPlayer == 1);
+//
+//		// TODO: make a method for this and fix the uggyness too fucking tired for that shit right now
+//		giveItemsTextArea.setText(npc.itemInfo != null?npc.itemInfo.replace("\t", ""):null);
+//		trainerDataTextArea.setText(npc.trainerInfo != null?npc.trainerInfo.replace("\t", ""):null);
+//
+//		firstTriggersTextArea.setText(npc.firstTriggers != null?npc.firstTriggers.replace("\t", ""):null);
+//		secondTriggersTextArea.setText(npc.secondTriggers != null?npc.secondTriggers.replace("\t", ""):null);
 	}
 	
 	private static String getTrimmedAreaText(JTextArea textArea) {
@@ -390,14 +390,14 @@ public class NPCEntityDialog extends JPanel {
 				pathTextField.getText().trim().isEmpty() ? "w" : pathTextField.getText().trim(), // TODO: What is w -- should it be a constant?
 				directionComboBox.getSelectedIndex(), 
 				spriteComboBox.getSelectedIndex(), 
-				PokeString.convertSpecialToUnicode(firstDialogueTextArea.getText()).trim().split("\n"), 
-				secondDialogueTextArea.getText().trim().isEmpty()
-						? (walkToPlayerCheckBox.isSelected() ? new String[]{""} : null) // TODO: ??
-						: PokeString.convertSpecialToUnicode(secondDialogueTextArea.getText()).trim().split("\n"),
-				getTrimmedAreaText(trainerDataTextArea),
-				getTrimmedAreaText(giveItemsTextArea),
-				getTrimmedAreaText(firstTriggersTextArea),
-				getTrimmedAreaText(secondTriggersTextArea),
+//				PokeString.convertSpecialToUnicode(firstDialogueTextArea.getText()).trim().split("\n"),
+//				secondDialogueTextArea.getText().trim().isEmpty()
+//						? (walkToPlayerCheckBox.isSelected() ? new String[]{""} : null) // TODO: ??
+//						: PokeString.convertSpecialToUnicode(secondDialogueTextArea.getText()).trim().split("\n"),
+//				getTrimmedAreaText(trainerDataTextArea),
+//				getTrimmedAreaText(giveItemsTextArea),
+//				getTrimmedAreaText(firstTriggersTextArea),
+//				getTrimmedAreaText(secondTriggersTextArea),
 				walkToPlayerCheckBox.isSelected());
 	}
 }

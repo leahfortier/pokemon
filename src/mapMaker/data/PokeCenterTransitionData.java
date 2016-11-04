@@ -47,7 +47,7 @@ class PokeCenterTransitionData {
 		while (m.find()) {
 			TriggerType type = TriggerType.getTriggerType(m.group(1));
 			String name = m.group(2);
-			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
+			Trigger trigger = type.createTrigger(m.group(3));
 			
 			if (type.equals("Group")) {
 				groupTrigger = (GroupTrigger)trigger;
@@ -60,7 +60,7 @@ class PokeCenterTransitionData {
 		
 		if (groupTrigger == null) {
 			// TODO: These should likely be a constant or something
-			groupTrigger = new GroupTrigger("GroupTrigger_PokeCenter_Exit","trigger: SetTeleportToLastPokeCenter");
+//			groupTrigger = new GroupTrigger("GroupTrigger_PokeCenter_Exit","trigger: SetTeleportToLastPokeCenter");
 		}
 	}
 	
@@ -76,10 +76,10 @@ class PokeCenterTransitionData {
 				"mapEntrance: " + entrance;
 
 		// TODO: Need to have a method for creating that transition name thingy
-		MapTransitionTrigger transitionTrigger = new MapTransitionTrigger(name, contents); 
-		transitionTriggers.put(transitionTrigger.getTransitionTriggerName(), transitionTrigger);
+//		MapTransitionTrigger transitionTrigger = new MapTransitionTrigger(name, contents);
+//		transitionTriggers.put(transitionTrigger.getTransitionTriggerName(), transitionTrigger);
 		
-		groupTrigger.triggers.add(groupTrigger.triggers.size() - 1, transitionTrigger.getName());
+//		groupTrigger.triggers.add(groupTrigger.triggers.size() - 1, transitionTrigger.getName());
 	}
 	
 	public void remove(String mapName, String entrance) {
@@ -101,11 +101,11 @@ class PokeCenterTransitionData {
 		FileWriter writer;
 		try {
 			writer = new FileWriter(pokeCenterTransitionFile);
-			writer.write("GroupTrigger " + groupTrigger.getName() +" {\n" + groupTrigger.triggerDataAsString() + "}\n\n");
+//			writer.write("GroupTrigger " + groupTrigger.getName() +" {\n" + groupTrigger.triggerDataAsString() + "}\n\n");
 			
 			for (String mapTransition: transitionTriggers.keySet()) {
 				MapTransitionTrigger trigger = transitionTriggers.get(mapTransition);
-				writer.write("MapTransitionTrigger " + trigger.getName() + " {\n" + trigger.triggerDataAsString() + "}\n\n");
+//				writer.write("MapTransitionTrigger " + trigger.getName() + " {\n" + trigger.triggerDataAsString() + "}\n\n");
 			}
 			
 			writer.close();

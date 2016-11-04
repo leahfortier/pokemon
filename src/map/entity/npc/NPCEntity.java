@@ -9,6 +9,7 @@ import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
 import map.entity.npc.NPCAction.BattleAction;
+import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.GroupTriggerMatcher;
@@ -153,11 +154,11 @@ public class NPCEntity extends MovableEntity {
 		return this.startKey;
 	}
 
-	public String getTrigger() {
-		return this.getTriggerName(this.getCurrentInteractionKey());
+	public String getTriggerSuffix() {
+		return this.getTriggerSuffix(this.getCurrentInteractionKey());
 	}
 
-	private String getTriggerName(final String interactionName) {
+	private String getTriggerSuffix(final String interactionName) {
 		return this.name + "_" + interactionName;
 	}
 
@@ -178,10 +179,9 @@ public class NPCEntity extends MovableEntity {
 		return walkingToPlayer;
 	}
 
-	// TODO: Yeah I still don't know what this wants
 	// TODO: create NPCTrainerEntity
 	public String getWalkTrigger() {
-		return walkToPlayer ? this.getTrigger() : StringUtils.empty();
+		return walkToPlayer ? this.getTriggerName() : StringUtils.empty();
 	}
 
 	public boolean isTrainer() {
@@ -217,17 +217,18 @@ public class NPCEntity extends MovableEntity {
 			final String interactionName = interaction.getKey();
 			final List<NPCAction> actions = interaction.getValue();
 
-			final String interactionTriggerName = this.getTriggerName(interactionName);
 			final String[] actionTriggerNames = new String[actions.size()];
 			for (int i = 0; i < actions.size(); i++) {
-				actionTriggerNames[i] = interactionTriggerName + "_action" + i;
-				data.addTrigger(actions.get(i).getTrigger(this.name, interactionTriggerName, actionTriggerNames[i]));
+				Trigger actionTrigger = actions.get(i).getTrigger(this.name);
+				data.addTrigger(actionTrigger);
+				actionTriggerNames[i] = actionTrigger.getName();
 			}
 
 			GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
+			matcher.suffix = this.getTriggerSuffix(interactionName);
 			final String groupContents = AreaDataMatcher.getJson(matcher);
 
-			data.addTrigger(TriggerType.GROUP, interactionTriggerName, groupContents);
+			data.addTrigger(TriggerType.GROUP, groupContents);
 		}
 		
 		dataCreated = true;

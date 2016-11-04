@@ -159,11 +159,12 @@ public class AreaData {
 
 				// System.out.println(condition + " : " + musicName);
 
-				data.addTrigger(TriggerType.SOUND, soundTriggerName, (condition != null ? "condition: " + condition : "") + "\nmusicName: " + musicName);
+				data.addTrigger(TriggerType.SOUND, (condition != null ? "condition: " + condition : "") + "\nmusicName: " + musicName);
 				StringUtils.appendLine(groupTriggers, "trigger: " + soundTriggerName);
 			}
 
-			data.addTrigger(TriggerType.GROUP, "GroupTrigger_AreaSound_for_" + areaNameDisplay, groupTriggers.toString());
+//			data.addTrigger(TriggerType.GROUP, "GroupTrigger_AreaSound_for_" + areaNameDisplay, groupTriggers.toString());
+			data.addTrigger(TriggerType.GROUP, groupTriggers.toString());
 			musicTriggerName = "GroupTrigger_AreaSound_for_" + areaNameDisplay;
 		}
 	}

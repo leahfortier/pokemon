@@ -5,6 +5,7 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.MapData.WalkType;
+import map.triggers.TriggerType;
 import util.InputControl;
 
 import java.awt.Graphics;
@@ -81,11 +82,13 @@ public abstract class Entity {
 
 	protected abstract BufferedImage getFrame();
 
-	public abstract String getTrigger();
-
 	public abstract void getAttention(Direction direction);
-
 	public abstract void addData();
-
 	public abstract void reset();
+
+	public abstract String getTriggerSuffix();
+
+	public String getTriggerName() {
+		return TriggerType.GROUP.getTriggerNameFromSuffix(this.getTriggerSuffix());
+	}
 }

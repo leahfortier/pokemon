@@ -2,6 +2,7 @@ package pattern;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import main.Global;
@@ -54,6 +55,7 @@ public class AreaDataMatcher {
     }
 
     public static class MapTransitionTriggerMatcher {
+        public String previousMap;
         public String nextMap;
         public String mapEntrance;
         public Direction direction;
@@ -96,15 +98,20 @@ public class AreaDataMatcher {
         }
     }
 
+    public static class SoundTriggerMatcher {
+        public String effectName;
+        public String musicName;
+    }
+
     public static class GroupTriggerMatcher {
         public String[] triggers;
 
-        public transient String condition;
-        public transient List<String> globals;
+        public String suffix;
+        public String condition;
+        public String[] globals;
 
         public GroupTriggerMatcher(final String... triggers) {
             this.triggers = triggers;
-            this.globals = new ArrayList<>();
         }
     }
 
@@ -128,13 +135,27 @@ public class AreaDataMatcher {
         public int y;
     }
 
+    public static String addJsonField(final String previousJson, final String key, final String value) {
+        JsonObject jsonObject = deserialize(previousJson, JsonObject.class);
+        jsonObject.add(key, new JsonPrimitive(value));
+        return getJson(jsonObject);
+    }
+
     public static class TriggerDataMatcher {
-        public String name;
+        private String name;
         private int[] location;
         private String triggerType;
         public String condition;
         public String global;
         public String triggerContents;
+
+        public void setMapName(final String mapName) {
+            if (getTriggerType() == TriggerType.MAP_TRANSITION) {
+                MapTransitionTriggerMatcher matcher = deserialize(this.triggerContents, MapTransitionTriggerMatcher.class);
+                matcher.previousMap = mapName;
+                this.triggerContents = getJson(matcher);
+            }
+        }
 
         public List<Point> getLocation() {
             List<Point> points = new ArrayList<>();
@@ -344,7 +365,7 @@ public class AreaDataMatcher {
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
 
         AreaDataMatcher areaData = gson.fromJson(areaDescription, AreaDataMatcher.class);
-        Map<Object, Object> mappity = gson.fromJson(areaDescription, Map.class);
+        JsonObject mappity = gson.fromJson(areaDescription, JsonObject.class);
 
         String areaDataJson = getJson(areaData);
         String mapJson = getJson(mappity);

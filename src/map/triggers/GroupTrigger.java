@@ -13,47 +13,33 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GroupTrigger extends Trigger {
-	
 	public final List<String> triggers;
 
-	public GroupTrigger(String name, GroupTriggerMatcher matcher) {
-		super(name, matcher.condition);
-		super.globals.addAll(matcher.globals);
+	static String getTriggerSuffix(String contents) {
+		GroupTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, GroupTriggerMatcher.class);
+		if (!StringUtils.isNullOrEmpty(matcher.suffix)) {
+			return matcher.suffix;
+		}
 
-		this.triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
+		return contents;
 	}
 
-	public GroupTrigger(String name, String contents) {
-		super(name, contents);
+	GroupTrigger(String contents) {
+		this(contents, AreaDataMatcher.deserialize(contents, GroupTriggerMatcher.class));
+	}
 
-		GroupTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, GroupTriggerMatcher.class);
+	private GroupTrigger(String contents, GroupTriggerMatcher matcher) {
+		super(TriggerType.GROUP, contents, matcher.condition, matcher.globals);
 		this.triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
 	}
 
 	@Override
-	public void execute() {
-		super.execute();
+	protected void executeTrigger() {
 		for (String triggerName: triggers) {
 			Trigger trigger = Game.getData().getTrigger(triggerName);
 			if (trigger != null && trigger.isTriggered()) {
 				Messages.addMessage(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
 			}
 		}
-	}
-	
-	@Override
-	public String toString() {
-		return "GroupTrigger: " + name + " triggers: " + triggers.toString();
-	}
-	
-	@Override
-	public String triggerDataAsString() {
-		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
-		
-		for (String trigger: triggers) {
-			StringUtils.appendLine(ret, "\ttrigger: " + trigger);
-		}
-		
-		return ret.toString();
 	}
 }

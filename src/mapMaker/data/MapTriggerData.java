@@ -51,8 +51,8 @@ class MapTriggerData {
 			TriggerType type = TriggerType.getTriggerType(m.group(1));
 			String name = m.group(2);
 			
-			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
-			triggers.put(name, trigger);
+//			Trigger trigger = type.createTrigger(name, m.group(3));
+//			triggers.put(name, trigger);
 		}
 	}
 	
@@ -73,9 +73,9 @@ class MapTriggerData {
 			FileWriter writer = new FileWriter(triggerFile);
 			
 			for (Trigger trigger: triggers.values()){
-				writer.write(trigger.getClass().getName() +" " +trigger.getName() +"{\n"+
-						trigger.triggerDataAsString() + "\n"+
-						"}\n");
+//				writer.write(trigger.getClass().getName() +" " +trigger.getName() +"{\n"+
+//						trigger.triggerDataAsString() + "\n"+
+//						"}\n");
 			}
 			
 			writer.close();

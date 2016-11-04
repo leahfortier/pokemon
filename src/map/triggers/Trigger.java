@@ -1,43 +1,32 @@
 package map.triggers;
 
+import gui.GameData;
 import main.Game;
 import map.Condition;
-import trainer.CharacterData;
-import util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class Trigger {
-	private static final Pattern globalPattern = Pattern.compile("global:\\s*([!]?\\w+)");
-	protected static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*([\\w -.']+)", Pattern.UNICODE_CHARACTER_CLASS);
-	
+
 	protected final String name;
 	protected final Condition condition;
-
 	protected final List<String> globals;
 
-	public Trigger(String name, String str) {
-		this.name = name;
-
-		if (StringUtils.isNullOrEmpty(str)) {
-			str = StringUtils.empty();
-		}
-
-		condition = new Condition(str);
-		
-		globals = new ArrayList<>();
-		Matcher m = globalPattern.matcher(str);
-	
-		while (m.find()) {
-			globals.add(m.group(1));
-		}		
+	protected Trigger(TriggerType type, String contents) {
+		this(type, contents, null);
 	}
 
-	public static Trigger createTrigger(TriggerType type, String name, String contents) {
-		return type.getTrigger(name, contents);
+	protected Trigger(TriggerType type, String contents, String condition, String... globals) {
+		this.name = type.getTriggerName(contents);
+
+		this.condition = new Condition(condition);
+		this.globals = new ArrayList<>();
+
+		if (globals != null) {
+			this.globals.addAll(Arrays.asList(globals));
+		}
 	}
 	
 	// Evaluate the function, Should only be triggered when a player moves
@@ -45,40 +34,11 @@ public abstract class Trigger {
 	public boolean isTriggered() {
 		return condition.isTrue();
 	}
-	
-	public void execute() {
-		for (String s: globals) {
-			if (s.charAt(0) == '!') {
-				Game.getPlayer().removeGlobal(s.substring(1));
-			}
-			else {
-				Game.getPlayer().addGlobal(s);
-			}
-		}
-	}
-	
+
 	public String getName() {
-		return name;
+		return this.name;
 	}
-	
-	public String triggerDataAsString() {
-		StringBuilder ret = new StringBuilder();
-		
-		if (!condition.getOriginalConditionString().isEmpty()) {
-			ret.append("\tcondition: ")
-					.append(condition.getOriginalConditionString())
-					.append("\n");
-		}
-		
-		for (String global: globals) {
-			ret.append("\tglobal: ")
-					.append(global)
-					.append("\n");
-		}
-		
-		return ret.toString();
-	}
-	
+
 	public Condition getCondition() {
 		return condition;
 	}
@@ -86,4 +46,19 @@ public abstract class Trigger {
 	public List<String> getGlobals() {
 		return globals;
 	}
+
+	public final void execute() {
+		for (String global: globals) {
+			if (global.startsWith("!")) {
+				Game.getPlayer().removeGlobal(global.substring(1));
+			}
+			else {
+				Game.getPlayer().addGlobal(global);
+			}
+		}
+
+		this.executeTrigger();
+	}
+
+	protected abstract void executeTrigger();
 }

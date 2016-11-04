@@ -32,8 +32,8 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 				return;
 			}
 
-            wildBattleTriggers.put(td.name, td);
-            comboBox.addItem(td.name);
+//            wildBattleTriggers.put(td.name, td);
+//            comboBox.addItem(td.name);
 
             if (wildBattleTriggers.size() == 1) {
                 btnEdit.setEnabled(true);
@@ -88,7 +88,7 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 	private TriggerData editWildBattleTrigger(TriggerData trigger, JButton button) {
 		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
 		if (trigger != null) {
-			dialog.initialize(new WildBattleTrigger(trigger.name, trigger.triggerContents));
+//			dialog.initialize(new WildBattleTrigger(trigger.name, trigger.triggerContents));
 		}
 		
 		Object[] options = {"Done", "Cancel"};

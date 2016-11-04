@@ -3,8 +3,10 @@ package map.triggers;
 import battle.Battle;
 import main.Game;
 import map.entity.npc.NPCAction.BattleAction;
+import namesies.ItemNamesies;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.UpdateMatcher;
+import pattern.PokemonMatcher;
 import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
 
@@ -20,26 +22,29 @@ import java.util.regex.Pattern;
  */
 public class TrainerBattleTrigger extends Trigger {
 	public static final Pattern trainerBattleTriggerPattern = Pattern.compile("(pokemon:)\\s*([A-Za-z \\t0-9,:.\\-'*]*)|(name:)\\s*([A-Za-z0-9 ]+)|(winGlobal:)\\s*([A-Za-z0-9_]+)|(cash:)\\s*(\\d+)");
-	
+
 	private final EnemyTrainer trainer;
 	private final UpdateMatcher npcUpdateInteraction;
 
-	public TrainerBattleTrigger(String name, String function) {
-		super(name, function);
+	TrainerBattleTrigger(String contents) {
+		super(TriggerType.TRAINER_BATTLE, contents);
 
-		BattleAction battleAction = AreaDataMatcher.deserialize(function, BattleAction.class);
+		BattleAction battleAction = AreaDataMatcher.deserialize(contents, BattleAction.class);
+
 		String trainerName = battleAction.name;
 		int cash = battleAction.cashMoney;
+
 		this.trainer = new EnemyTrainer(trainerName, cash);
+
 		for (String pokemonString : battleAction.pokemon) {
-			trainer.addPokemon(null, ActivePokemon.createActivePokemon(pokemonString, false));
+			PokemonMatcher matcher = PokemonMatcher.matchPokemonDescription(pokemonString);
+			trainer.addPokemon(null, ActivePokemon.createActivePokemon(matcher, false));
 		}
 
 		this.npcUpdateInteraction = new UpdateMatcher(battleAction.npcEntityName, battleAction.updateInteraction);
 	}
 
-	public void execute() {
-		super.execute();
+	protected void executeTrigger() {
 		trainer.healAll();
 
 		Battle b = new Battle(trainer, this.npcUpdateInteraction);

@@ -1,6 +1,5 @@
 package map.triggers;
 
-import gui.GameData;
 import main.Game;
 import pattern.AreaDataMatcher.TriggerDataMatcher;
 import util.StringUtils;
@@ -12,8 +11,6 @@ import java.util.regex.Pattern;
 
 public class TriggerData {
 	private static final Pattern integerRangePattern = Pattern.compile("\\d+(?:-\\d+)?");
-
-	public String name;
 	
 	public List<Point> points;
 	
@@ -21,15 +18,12 @@ public class TriggerData {
 	public String triggerContents;
 
 	public TriggerData(TriggerDataMatcher matcher) {
-		this.name = matcher.name;
 		this.triggerType = matcher.getTriggerType();
 		this.triggerContents = matcher.triggerContents;
 		this.points = matcher.getLocation();
 	}
 
 	public TriggerData(String name, String contents) {
-		this.name = name;
-		
 		points = new ArrayList<>();
 		
 		Scanner in = new Scanner(contents);
@@ -113,26 +107,7 @@ public class TriggerData {
 	}
 
 	public void addData() {
-		GameData gameData = Game.getData();
-
-		if (gameData.getTrigger(name) == null) {
-			gameData.addTrigger(triggerType, name, triggerContents);
-		}
-	}
-	
-	public String triggerDataAsString() {
-		StringBuilder ret = new StringBuilder();
-		StringUtils.appendLine(ret, "TriggerData " + name + "{");
-		
-		for (Point p: points) {
-			StringUtils.appendLine(ret, "\t" + p.x + " " + p.y);
-		}
-
-		StringUtils.appendLine(ret, "\t" + triggerType);
-		StringUtils.appendLine(ret, "\t" + triggerContents.trim());
-		StringUtils.appendLine(ret, "}");
-		
-		return ret.toString();
+		Game.getData().addTrigger(triggerType, triggerContents);
 	}
 }
 

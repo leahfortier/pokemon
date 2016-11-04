@@ -1,21 +1,26 @@
 package map.triggers;
 
 import main.Game;
+import main.Global;
+import trainer.CharacterData;
 
 public class BadgeTrigger extends Trigger {
-	private int badgeIndex;
+	private final int badgeIndex;
 
-	public BadgeTrigger(String name, String contents) {
-		super(name, contents);
-		this.badgeIndex = Integer.parseInt(contents);
+	BadgeTrigger(String badgeIndex) {
+		this(badgeIndex, TriggerType.BADGE.getTriggerName(badgeIndex));
 	}
 
-	public void execute() {
-		super.execute();
-		Game.getPlayer().giveBadge(badgeIndex);
+	private BadgeTrigger(String badgeIndex, String triggerName) {
+		super(TriggerType.BADGE, badgeIndex, "!" + triggerName, triggerName);
+
+		this.badgeIndex = Integer.parseInt(badgeIndex);
+		if (this.badgeIndex < 0 || this.badgeIndex >= CharacterData.NUM_BADGES) {
+			Global.error("Invalid badge index " + this.badgeIndex);
+		}
 	}
 
-	public String toString() {
-		return "BadgeTrigger: " + badgeIndex;
+	protected void executeTrigger() {
+		Game.getPlayer().giveBadge(this.badgeIndex);
 	}
 }

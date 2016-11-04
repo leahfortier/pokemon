@@ -9,16 +9,13 @@ import pattern.AreaDataMatcher.UpdateMatcher;
 import util.StringUtils;
 
 public abstract class NPCAction {
-    public Trigger getTrigger(String npcEntityName, String interactionTriggerName, String actionTriggerName) {
-        return Trigger.createTrigger(
-                this.getTriggerType(),
-                actionTriggerName,
-                this.getTriggerContents(npcEntityName, interactionTriggerName)
-        );
+    public Trigger getTrigger(String npcEntityName) {
+        return this.getTriggerType()
+                .createTrigger(this.getTriggerContents(npcEntityName));
     }
 
     protected abstract TriggerType getTriggerType();
-    protected abstract String getTriggerContents(String npcEntityName, String interactionTriggerName);
+    protected abstract String getTriggerContents(String npcEntityName);
 
     public static class TriggerAction extends NPCAction {
         private final TriggerType type;
@@ -35,7 +32,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+        protected String getTriggerContents(String npcEntityName) {
             return this.contents;
         }
     }
@@ -60,7 +57,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+        protected String getTriggerContents(String npcEntityName) {
             this.npcEntityName = npcEntityName;
             return AreaDataMatcher.getJson(this);
         }
@@ -79,7 +76,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+        protected String getTriggerContents(String npcEntityName) {
             UpdateMatcher matcher = new UpdateMatcher(npcEntityName, interactionName);
             return AreaDataMatcher.getJson(matcher);
         }
@@ -98,7 +95,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+        protected String getTriggerContents(String npcEntityName) {
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerName);
             return AreaDataMatcher.getJson(matcher);
         }
@@ -112,7 +109,7 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName, String interactionTriggerName) {
+        protected String getTriggerContents(String npcEntityName) {
             return StringUtils.empty();
         }
     }

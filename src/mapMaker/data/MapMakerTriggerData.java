@@ -182,14 +182,14 @@ public class MapMakerTriggerData {
 							triggerDataOnMap.put(loc, triggerData);
 						}
 
-						// TODO: Add each type of trigger data to specific data structure
-						if (triggerData.triggerType == TriggerType.WILD_BATTLE) {
-							wildBattleTriggers.put(triggerData.name, triggerData);
-						}
-
-						if (triggerData.triggerType == TriggerType.MAP_TRANSITION) {
-							mapTransitionTriggers.put(triggerData.name, triggerData);
-						}
+//						// TODO: Add each type of trigger data to specific data structure
+//						if (triggerData.triggerType == TriggerType.WILD_BATTLE) {
+//							wildBattleTriggers.put(triggerData.name, triggerData);
+//						}
+//
+//						if (triggerData.triggerType == TriggerType.MAP_TRANSITION) {
+//							mapTransitionTriggers.put(triggerData.name, triggerData);
+//						}
 
 						break;
 				}
@@ -400,7 +400,7 @@ public class MapMakerTriggerData {
 
 			// Save all trigger data items
 			for (TriggerData td : triggerDataSet) {
-				writer.write(td.triggerDataAsString() + "\n");
+//				writer.write(td.triggerDataAsString() + "\n");
 			}
 
 			writer.close();
@@ -454,16 +454,16 @@ public class MapMakerTriggerData {
 		Set<String> updatedTriggerData = new HashSet<>();
 		Map<Integer, TriggerData> tempTriggerData = new HashMap<>();
 
-		triggerDataOnMap.values().stream()
-				.filter(triggerData -> !updatedTriggerData.contains(triggerData.name))
-				.forEach(triggerData -> {
-			updatedTriggerData.add(triggerData.name);
-			triggerData.updatePoints(dx, dy);
+//		triggerDataOnMap.values().stream()
+//				.filter(triggerData -> !updatedTriggerData.contains(triggerData.name))
+//				.forEach(triggerData -> {
+//			updatedTriggerData.add(triggerData.name);
+//			triggerData.updatePoints(dx, dy);
 
-			for (Integer loc : triggerData.getPoints((int)newMapSize.getWidth())) {
-				tempTriggerData.put(loc, triggerData);
-			}
-		});
+//			for (Integer loc : triggerData.getPoints((int)newMapSize.getWidth())) {
+//				tempTriggerData.put(loc, triggerData);
+//			}
+//		});
 
 		triggerDataOnMap = tempTriggerData;
 		currentMapSize = newMapSize;
@@ -677,7 +677,7 @@ public class MapMakerTriggerData {
 							// Get pair number and replace in map transition trigger
 							String mapTriggerName = currentMapName + "_to_" + pair.getPairName() + "_" + TransitionBuildingData.directions[directionIndex] + "Door";
 
-							placeableTrigger.triggerData.name = placeableTrigger.name = mapTriggerName;
+//							placeableTrigger.triggerData.name = placeableTrigger.name = mapTriggerName;
 							placeableTrigger.triggerData.triggerContents = placeableTrigger.triggerData.triggerContents.replace("@pairNumber", String.format("%02d", pair.pairNumber));
 						} else {
 							pair = transitionBuildingData.updateIncompleteTransition(placeableTrigger.transitionBuildingPair, mapEntranceName);
@@ -718,7 +718,7 @@ public class MapMakerTriggerData {
 					break;
 			}
 
-			triggerNames.add(placeableTrigger.triggerData.name);
+//			triggerNames.add(placeableTrigger.triggerData.name);
 		}
 	}
 
@@ -878,7 +878,7 @@ public class MapMakerTriggerData {
 			}
 		}
 		else if (trigger.triggerType == PlaceableTrigger.TriggerType.TriggerData) {
-			triggerNames.remove(trigger.triggerData.name);
+//			triggerNames.remove(trigger.triggerData.name);
 
 			if (trigger.triggerData.triggerType == TriggerType.MAP_TRANSITION) {
 				// If pokecenter transition
@@ -890,20 +890,20 @@ public class MapMakerTriggerData {
 					System.out.println("Transition building transition triggers cannot be edited... yet");
 				}
 				else {
-					newTrigger = editMapTransition(new MapTransitionTrigger(trigger.name, trigger.triggerData.triggerContents));
+//					newTrigger = editMapTransition(new MapTransitionTrigger(trigger.name, trigger.triggerData.triggerContents));
 				}
 			}
 			else if (trigger.triggerData.triggerType == TriggerType.WILD_BATTLE) {
-				newTrigger = editWildBattleTrigger(new WildBattleTrigger(trigger.name, trigger.triggerData.triggerContents));
+//				newTrigger = editWildBattleTrigger(new WildBattleTrigger(trigger.name, trigger.triggerData.triggerContents));
 			}
 			else if (trigger.triggerData.triggerType == TriggerType.DIALOGUE) {
-				newTrigger = editDialogueTrigger(new DialogueTrigger(trigger.name, trigger.triggerData.triggerContents));
+//				newTrigger = editDialogueTrigger(new DialogueTrigger(trigger.name, trigger.triggerData.triggerContents));
 				// TODO
 			}
 			// else if (trigger.triggerData.triggerType.isEmpty()) { }
 
 			if (newTrigger != null) {
-				triggerNames.add(newTrigger.triggerData.name);
+//				triggerNames.add(newTrigger.triggerData.name);
 
 				triggersSaved = false;
 
@@ -911,7 +911,7 @@ public class MapMakerTriggerData {
 				renameTriggerData(trigger.triggerData, newTrigger.triggerData);
 			}
 			else {
-				triggerNames.add(trigger.triggerData.name);
+//				triggerNames.add(trigger.triggerData.name);
 			}
 		}
 		else if (trigger.triggerType == PlaceableTrigger.TriggerType.OldTrigger)
@@ -943,8 +943,8 @@ public class MapMakerTriggerData {
 			triggerDataOnMap.put(loc, updated);
 		}
 
-		wildBattleTriggers.remove(prev.name);
-		wildBattleTriggers.put(updated.name, updated);
+//		wildBattleTriggers.remove(prev.name);
+//		wildBattleTriggers.put(updated.name, updated);
 	}
 
 	public PlaceableTrigger[] getTrigger(int x, int y) {
@@ -1047,7 +1047,7 @@ public class MapMakerTriggerData {
 				trigger.triggerData.removePoint(x, y);
 
 				if (trigger.triggerData.points.size() == 0) {
-					mapTransitionTriggers.remove(trigger.triggerData.name);
+//					mapTransitionTriggers.remove(trigger.triggerData.name);
 				}
 			}
 			else if (trigger.triggerData.triggerType == TriggerType.DIALOGUE) {
@@ -1066,7 +1066,7 @@ public class MapMakerTriggerData {
 			trigger.triggerData.removePoint(x, y);
 
 			if (trigger.triggerData.points.size() == 0) {
-				triggerNames.remove(trigger.triggerData.name);
+//				triggerNames.remove(trigger.triggerData.name);
 			}
 		}
 		else if (trigger.triggerType == PlaceableTrigger.TriggerType.OldTrigger) {
@@ -1498,13 +1498,13 @@ public class MapMakerTriggerData {
 		DialogueTriggerDialog dialogueTriggerDialog = new DialogueTriggerDialog();
 
 		if (dialogueTrigger != null) {
-			String name = dialogueTrigger.getName();
+//			String name = dialogueTrigger.getName();
 			String prefix = currentMapName + "_DialogueTrigger_";
 
-			String actualName = name.substring(prefix.length(), name.length() - 3);
-			System.out.println(actualName);
+//			String actualName = name.substring(prefix.length(), name.length() - 3);
+//			System.out.println(actualName);
 
-			dialogueTriggerDialog.setDialogueTrigger(dialogueTrigger, actualName);
+//			dialogueTriggerDialog.setDialogueTrigger(dialogueTrigger, actualName);
 		}
 
 		JComponent[] inputs = new JComponent[] {dialogueTriggerDialog};

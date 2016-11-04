@@ -212,7 +212,8 @@ public class WildBattleTriggerEditDialog extends JPanel {
 			System.out.println(wildEncounters[currRow].getPokemonName());
 		}
 		
-		return new WildBattleTrigger(name, wildEncounters, encounterRate);
+//		return new WildBattleTrigger(name, wildEncounters, encounterRate);
+		return null;
 	}
 	
 	public TriggerData getTriggerData() {
@@ -221,6 +222,7 @@ public class WildBattleTriggerEditDialog extends JPanel {
 			return null;
 		}
 		
-		return new TriggerData(wildBattleTrigger.getName(), "WildBattle\n" + wildBattleTrigger.triggerDataAsString());
+//		return new TriggerData(wildBattleTrigger.getName(), "WildBattle\n" + wildBattleTrigger.triggerDataAsString());
+		return null;
 	}
 }

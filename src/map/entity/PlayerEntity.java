@@ -9,6 +9,7 @@ import map.MapData;
 import map.MapData.WalkType;
 import map.entity.npc.NPCEntity;
 import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import trainer.CharacterData;
 import util.InputControl;
 import util.InputControl.Control;
@@ -20,8 +21,8 @@ import java.awt.image.BufferedImage;
 public class PlayerEntity extends MovableEntity {
 
 	private boolean justMoved;
-	private String npcTrigger;
-	private String trainerTrigger;
+	private String npcTriggerSuffix;
+	private String trainerTriggerSuffix;
 	private boolean stalled;
 
 	private boolean justCreated;
@@ -64,7 +65,7 @@ public class PlayerEntity extends MovableEntity {
 			transitionDirection = player.direction;
 		}
 		
-		npcTrigger = null;
+		npcTriggerSuffix = null;
 		boolean spacePressed = false;
 		if (transitionTime == 0 && !justMoved) {
 			if (input.isDown(Control.SPACE)) {
@@ -73,7 +74,7 @@ public class PlayerEntity extends MovableEntity {
 			}
 			else {
 				for (Direction direction : Direction.values()) {
-					if (input.isDown(direction.key) && transitionTime == 0 && !stalled && trainerTrigger == null) {
+					if (input.isDown(direction.key) && transitionTime == 0 && !stalled && trainerTriggerSuffix == null) {
 						if (transitionDirection != direction) {
 							transitionDirection = direction;
 							continue;
@@ -114,11 +115,11 @@ public class PlayerEntity extends MovableEntity {
 				int y = transitionDirection.dy + charY;
 				
 				if (!(x < 0 || y < 0 || x >= entity.length || y >= entity[0].length) && (entity[x][y] != null)) {
-					npcTrigger = entity[x][y].getTrigger();
+					npcTriggerSuffix = entity[x][y].getTriggerSuffix();
 					entity[x][y].getAttention(transitionDirection.opposite);
 					
 					if (entity[x][y] instanceof NPCEntity && ((NPCEntity) entity[x][y]).isTrainer()) {
-						trainerTrigger = entity[x][y].getTrigger();
+						trainerTriggerSuffix = entity[x][y].getTriggerSuffix();
 					}
 				}
 			}
@@ -130,9 +131,9 @@ public class PlayerEntity extends MovableEntity {
 
 					// TODO: Should have a method for this
 					if (!(x < 0 || y < 0 || x >= entity.length || y >= entity[0].length) && (entity[x][y] != null)) {
-						npcTrigger = entity[x][y].getTrigger();
+						npcTriggerSuffix = entity[x][y].getTriggerSuffix();
 						if (entity[x][y] instanceof NPCEntity && ((NPCEntity) entity[x][y]).isTrainer()) {
-							trainerTrigger = entity[x][y].getTrigger();
+							trainerTriggerSuffix = entity[x][y].getTriggerSuffix();
 						}
 						
 						entity[x][y].getAttention(direction);
@@ -172,19 +173,19 @@ public class PlayerEntity extends MovableEntity {
 	public void triggerCheck(MapData map) {
 		String triggerName = null;
 
-		if (npcTrigger != null) {
-			triggerName = npcTrigger;
-			npcTrigger = null;
+		if (npcTriggerSuffix != null) {
+			triggerName = TriggerType.GROUP.getTriggerNameFromSuffix(npcTriggerSuffix);
+			npcTriggerSuffix = null;
 		}
 		else if (justMoved) {
 			triggerName = map.trigger();
 			justMoved = false;
 		}
-		else if (!stalled && trainerTrigger != null && Game.isCurrentViewMode(ViewMode.MAP_VIEW))
-		{
-			triggerName = trainerTrigger;
-			trainerTrigger = null;
+		else if (!stalled && trainerTriggerSuffix != null && Game.isCurrentViewMode(ViewMode.MAP_VIEW)) {
+			triggerName = TriggerType.GROUP.getTriggerNameFromSuffix(trainerTriggerSuffix);
+			trainerTriggerSuffix = null;
 		}
+
 
 		if (triggerName != null) {
 			Trigger trigger = Game.getData().getTrigger(triggerName);
@@ -215,7 +216,7 @@ public class PlayerEntity extends MovableEntity {
 		return res;
 	}
 
-	public String getTrigger() {
+	public String getTriggerSuffix() {
 		return null;
 	}
 

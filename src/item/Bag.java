@@ -190,18 +190,19 @@ public class Bag implements Serializable {
 		}
 		else if (item instanceof PokemonUseItem) {
 			System.err.println("PokemonUseItem called from Bag.battleUseItem() instead of BattleUseItem.");
-			res = ((PokemonUseItem) item).use(battle.getPlayer(), activePokemon);
+			res = ((PokemonUseItem) item).use(Game.getPlayer(), activePokemon);
 		}
 		else if (item instanceof BallItem) {
-			res = battle.getPlayer().catchPokemon(battle, (BallItem) item);
+			res = Game.getPlayer().catchPokemon(battle, (BallItem) item);
 		} else {
 			res = false;
 		}
 
 		if (res) {
 			if (item instanceof UseItem) {
-				boolean front = battle.getPlayer().front() == activePokemon;
-				
+				boolean front = Game.getPlayer().front() == activePokemon;
+
+				// TODO: This is made to look generalized for an enemy trainer using an item, but this method is inside Bag, which is only valid for the player
 				Messages.addMessage(((Trainer)battle.getTrainer(activePokemon.user())).getName() + " used " + item.name + "!");
 				Messages.addMessage(((UseItem)item).getSuccessMessage(activePokemon));
 				

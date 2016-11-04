@@ -31,7 +31,7 @@ import java.util.Set;
 public class CharacterData extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
 
-	private static final int NUM_BADGES = 12;
+	public static final int NUM_BADGES = 12;
 	public static final int CATCH_SHAKES = 3;
 	public static final int MAX_NAME_LENGTH = 10;
 	public static final String DEFAULT_NAME = "Red";

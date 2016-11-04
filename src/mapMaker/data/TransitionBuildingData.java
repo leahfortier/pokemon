@@ -75,7 +75,7 @@ class TransitionBuildingData {
 			TriggerType type = TriggerType.getTriggerType(m.group(1));
 			String name = m.group(2);
 
-			Trigger trigger = Trigger.createTrigger(type, name, m.group(3));
+			Trigger trigger = type.createTrigger(m.group(3));
 			
 			if (type == TriggerType.GROUP) {
 				// TODO: Is there a reason this isn't in a loop with that directions array thingy?
@@ -111,11 +111,11 @@ class TransitionBuildingData {
 				
 				TransitionBuildingPair pair = getTransitionPair(nameMatcher.group(1).equals("H"), map1, map2, Integer.parseInt(nameMatcher.group(4)));
 				
-				if (transitionTrigger.getMapNamee().equals(map1)) {
-					pair.map1Entrance = transitionTrigger.getMapEntranceNamee();
+				if (transitionTrigger.getNextMap().equals(map1)) {
+					pair.map1Entrance = transitionTrigger.getMapEntranceName();
 				}
 				else {
-					pair.map2Entrance = transitionTrigger.getMapEntranceNamee();
+					pair.map2Entrance = transitionTrigger.getMapEntranceName();
 				}
 			}
 		}
@@ -123,13 +123,13 @@ class TransitionBuildingData {
 		// Create missing transition group triggers
 		for (int currGroupTrigger = 0; currGroupTrigger < groupTriggers.length; ++currGroupTrigger) {
 			if (groupTriggers[currGroupTrigger] == null) {
-				groupTriggers[currGroupTrigger] = new GroupTrigger("GroupTrigger_TransitionBuilding_" + directions[currGroupTrigger] + "Door", "");
+//				groupTriggers[currGroupTrigger] = new GroupTrigger("GroupTrigger_TransitionBuilding_" + directions[currGroupTrigger] + "Door", "");
 			}
 		}
 		
 		// Create missing info group trigger
 		if (infoTriggerGT == null) {
-			infoTriggerGT = new GroupTrigger("GroupTrigger_TransitionBuilding_InformationDesk","");
+//			infoTriggerGT = new GroupTrigger("GroupTrigger_TransitionBuilding_InformationDesk","");
 		}
 		
 		// Loop through all info triggers and update areas for the maps
@@ -254,32 +254,33 @@ class TransitionBuildingData {
 						+ "GroupTrigger "
 						+ groupTriggers[currGroupTrigger].getName()
 						+ " {\n"
-						+ groupTriggers[currGroupTrigger].triggerDataAsString()
+//						+ groupTriggers[currGroupTrigger].triggerDataAsString()
 						+ "}\n\n");
 			}
 			
 			// Map Transition Triggers
 			for (MapTransitionTrigger trig: transitionTriggers.values()) {
-				writer.write("MapTransitionTrigger " +trig.getName() +" {\n" + trig.triggerDataAsString() + "}\n\n");
+//				writer.write("MapTransitionTrigger " +trig.getName() +" {\n" + trig.triggerDataAsString() + "}\n\n");
 			}
 
 			// Info triggers
-			GroupTrigger groupTrigger = new GroupTrigger(infoTriggerGT.getName(), "");
-			
+//			GroupTrigger groupTrigger = new GroupTrigger(infoTriggerGT.getName(), "");
+			GroupTrigger groupTrigger = null;
+
 			for (TransitionBuildingPair pair: allTransitionPairs) {
 				DialogueTrigger trigger = pair.getInfoTrigger();
 				groupTrigger.triggers.add(trigger.getName());
 				writer.write("DialogueTrigger "
 						+ trigger.getName()
 						+ " {\n"
-						+ trigger.triggerDataAsString()
+//						+ trigger.triggerDataAsString()
 						+ "}\n\n");
 			}
 			
 			writer.write("GroupTrigger "
 					+ groupTrigger.getName()
 					+ " {\n"
-					+ groupTrigger.triggerDataAsString()
+//					+ groupTrigger.triggerDataAsString()
 					+ "}\n\n");
 
 			writer.close();
@@ -340,8 +341,8 @@ class TransitionBuildingData {
 			groupTriggers[directionStartIndex].triggers.add(triggerName);
 			
 			//Create map transition trigger
-			MapTransitionTrigger map1Trigger = new MapTransitionTrigger(triggerName, conditionString, map1, mapEntrance, -1);
-			transitionTriggers.put(pair.map1 +"_" + pair.map1Entrance, map1Trigger); // TODO: There should probably be a util method that creates trigger names by inserting underscores between parameters
+//			MapTransitionTrigger map1Trigger = new MapTransitionTrigger(triggerName, conditionString, map1, mapEntrance, -1);
+//			transitionTriggers.put(pair.map1 +"_" + pair.map1Entrance, map1Trigger); // TODO: There should probably be a util method that creates trigger names by inserting underscores between parameters
 		}
 		else {
 			final String triggerName = pairName +"_" + directions[directionStartIndex + 1] + "Door";
@@ -350,8 +351,8 @@ class TransitionBuildingData {
 			groupTriggers[directionStartIndex + 1].triggers.add(triggerName);
 			
 			//Create map transition trigger
-			MapTransitionTrigger map2Trigger = new MapTransitionTrigger(triggerName, conditionString, map2, mapEntrance, -1);
-			transitionTriggers.put(pair.map2 +"_" + pair.map2Entrance, map2Trigger);
+//			MapTransitionTrigger map2Trigger = new MapTransitionTrigger(triggerName, conditionString, map2, mapEntrance, -1);
+//			transitionTriggers.put(pair.map2 +"_" + pair.map2Entrance, map2Trigger);
 		}
 		
 		return pair;
@@ -381,8 +382,8 @@ class TransitionBuildingData {
 			groupTriggers[directionStartIndex].triggers.add(pairName +"_" + directions[directionStartIndex] +"Door");
 			
 			//Create map transition trigger
-			MapTransitionTrigger map1Trigger = new MapTransitionTrigger(pairName + "_" + directions[directionStartIndex] + "Door", conditionString, pair.map1, otherMapEntrance, -1);
-			transitionTriggers.put(pair.map1 +"_" + pair.map1Entrance, map1Trigger);
+//			MapTransitionTrigger map1Trigger = new MapTransitionTrigger(pairName + "_" + directions[directionStartIndex] + "Door", conditionString, pair.map1, otherMapEntrance, -1);
+//			transitionTriggers.put(pair.map1 +"_" + pair.map1Entrance, map1Trigger);
 		}
 		else {
 			pair.map2Entrance = otherMapEntrance;
@@ -390,8 +391,8 @@ class TransitionBuildingData {
 			groupTriggers[directionStartIndex + 1].triggers.add(pairName +"_" + directions[directionStartIndex + 1] +"Door");
 			
 			//Create map transition trigger
-			MapTransitionTrigger map2Trigger = new MapTransitionTrigger(pairName + "_" + directions[directionStartIndex + 1] + "Door", conditionString, pair.map2, otherMapEntrance, -1);
-			transitionTriggers.put(pair.map2 + "_" + pair.map2Entrance, map2Trigger);
+//			MapTransitionTrigger map2Trigger = new MapTransitionTrigger(pairName + "_" + directions[directionStartIndex + 1] + "Door", conditionString, pair.map2, otherMapEntrance, -1);
+//			transitionTriggers.put(pair.map2 + "_" + pair.map2Entrance, map2Trigger);
 		}
 		
 		return pair;

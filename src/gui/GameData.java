@@ -109,9 +109,8 @@ public class GameData {
 			Matcher m = triggerBlockPattern.matcher(fileText);
 			while (m.find()) {
 				TriggerType type = TriggerType.getTriggerType(m.group(1));
-				String name = m.group(2);
 
-				addTrigger(type, name, m.group(3));
+				addTrigger(type, m.group(3));
 			}
 		}
 	}
@@ -136,8 +135,8 @@ public class GameData {
 		return triggers.get(name);
 	}
 
-	public void addTrigger(TriggerType type, String name, String contents) {
-		this.addTrigger(Trigger.createTrigger(type, name, contents));
+	public void addTrigger(TriggerType type, String contents) {
+		this.addTrigger(type.createTrigger(contents));
 	}
 
 	public void addTrigger(Trigger trigger) {

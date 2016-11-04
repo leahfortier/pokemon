@@ -7,6 +7,7 @@ import map.entity.EntityData;
 import map.entity.ItemEntityData;
 import map.entity.TriggerEntityData;
 import map.entity.npc.NPCEntityData;
+import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.ItemMatcher;
@@ -91,10 +92,11 @@ public class MapData {
 		}
 
 		for (TriggerDataMatcher matcher : areaDataMatcher.triggerData) {
+			matcher.setMapName(this.name);
 			TriggerData triggerData = new TriggerData(matcher);
 
 			for (Integer loc: triggerData.getPoints(width)) {
-				triggers.put(loc, matcher.name);
+				triggers.put(loc, matcher.getTriggerType().getTriggerName(matcher.triggerContents));
 			}
 
 			triggerData.addData();

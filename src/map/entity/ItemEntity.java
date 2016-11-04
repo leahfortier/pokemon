@@ -5,11 +5,10 @@ import gui.view.MapView;
 import main.Game;
 import map.Direction;
 import map.MapData;
-import map.triggers.DialogueTrigger;
-import map.triggers.GiveItemTrigger;
-import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import namesies.ItemNamesies;
+import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import util.InputControl;
 import util.StringUtils;
@@ -43,7 +42,7 @@ class ItemEntity extends Entity {
 		return Game.getData().getTrainerTiles().getTile(0);
 	}
 
-	public String getTrigger() {
+	public String getTriggerSuffix() {
 		return trigger;
 	}
 
@@ -61,20 +60,17 @@ class ItemEntity extends Entity {
 		}
 
 		GameData data = Game.getData();
-		final String itemTriggerName = "item_" + this.itemName.name().toLowerCase();
+		final String itemTriggerName = "ItemEntity_" + TriggerType.GIVE_ITEM.getTriggerName(this.itemName.getName());
 
 		// Create a universal trigger for this item
 		if (!data.hasTrigger(itemTriggerName)) {
 			String itemDialogue = "You found " + StringUtils.articleString(itemName.getName()) + "!";
 
-			Trigger dialogue = new DialogueTrigger(itemTriggerName + "_dialogue", itemDialogue);
-			Trigger giveItem = new GiveItemTrigger(itemTriggerName + "_item", this.itemName);
-			Trigger groupTrigger = new GroupTrigger(
-					itemTriggerName,
-					new GroupTriggerMatcher(new String[] {
-							dialogue.getName(),
-							giveItem.getName()
-					}));
+			Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue);
+			Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName());
+
+			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(dialogue.getName(), giveItem.getName());
+			Trigger groupTrigger = TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(groupTriggerMatcher));
 
 			data.addTrigger(dialogue);
 			data.addTrigger(giveItem);
@@ -83,15 +79,12 @@ class ItemEntity extends Entity {
 
 		// This trigger will only call the item trigger when the conditions apply
 		GroupTriggerMatcher matcher = new GroupTriggerMatcher(itemTriggerName);
-		matcher.condition = "!has" + name;
-		matcher.globals.add("has" + name);
+		matcher.suffix = this.getTriggerSuffix();
+		matcher.condition = "!has" + name; // TODO: These won't work but I need to redo them all anyways so whatever
+		matcher.globals = new String[] { "has" + name };
 
-		data.addTrigger(new GroupTrigger(name, matcher));
+		data.addTrigger(TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher)));
 
 		dataCreated = true;
-	}
-	
-	public String toString() {
-		return "Name: " + name + " Item:" + itemName.getName();
 	}
 }

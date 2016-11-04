@@ -1,19 +1,19 @@
 package map.triggers;
 
 import main.Game;
+import pattern.PokemonMatcher;
 import pokemon.ActivePokemon;
 
 public class GivePokemonTrigger extends Trigger {
-    private final ActivePokemon pokemon;
+    private final PokemonMatcher pokemonMatcher;
 
-    public GivePokemonTrigger(String name, String contents) {
-        super(name, contents);
+    GivePokemonTrigger(String pokemonDescription) {
+        super(TriggerType.GIVE_POKEMON, pokemonDescription);
 
-        this.pokemon = ActivePokemon.createActivePokemon(contents, true);
+        this.pokemonMatcher = PokemonMatcher.matchPokemonDescription(pokemonDescription);
     }
 
-    public void execute() {
-        super.execute();
-        Game.getPlayer().addPokemon(null, pokemon);
+    protected void executeTrigger() {
+        Game.getPlayer().addPokemon(null, ActivePokemon.createActivePokemon(this.pokemonMatcher, true));
     }
 }

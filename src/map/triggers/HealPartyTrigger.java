@@ -1,22 +1,21 @@
 package map.triggers;
 
 import main.Game;
+import main.Global;
+import util.StringUtils;
 
 public class HealPartyTrigger extends Trigger {
-	
-	public HealPartyTrigger(String name, String contents) {
-		super(name, contents);
+
+	HealPartyTrigger(String contents)	{
+		super(TriggerType.HEAL_PARTY, contents);
+
+		if (!StringUtils.isNullOrEmpty(contents)) {
+			Global.error("Contents should be empty for HealPartyTrigger");
+		}
 	}
 
 	@Override
-	public void execute() {
-		super.execute();
-		
+	protected void executeTrigger() {
 		Game.getPlayer().healAll();
-	}
-
-	@Override
-	public String toString() {
-		return "HealPartyTrigger: " + name;
 	}
 }

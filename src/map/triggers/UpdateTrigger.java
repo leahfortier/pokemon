@@ -9,16 +9,15 @@ public class UpdateTrigger extends Trigger {
     private final String npcEntityName;
     private final String newInteractionName;
 
-    public UpdateTrigger(String name, String contents) {
-        super(name, contents);
+    UpdateTrigger(String matcherJson) {
+        super(TriggerType.UPDATE, matcherJson);
 
-        UpdateMatcher matcher = AreaDataMatcher.deserialize(contents, UpdateMatcher.class);
+        UpdateMatcher matcher = AreaDataMatcher.deserialize(matcherJson, UpdateMatcher.class);
         this.npcEntityName = matcher.npcEntityName;
         this.newInteractionName = matcher.interactionName;
     }
 
-    public void execute() {
-        super.execute();
+    protected void executeTrigger() {
         Game.getPlayer().setNpcInteraction(npcEntityName, newInteractionName);
     }
 }

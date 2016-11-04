@@ -73,10 +73,11 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 	}
 	
 	public DialogueTrigger getInfoTrigger() {
-		return new DialogueTrigger(getInfoTriggerName(),
-				"condition: " +getConditionString() +"\n" +
-				"dialogue: " +getInfoDialogName()
-				);
+//		return new DialogueTrigger(getInfoTriggerName(),
+//				"condition: " +getConditionString() +"\n" +
+//				"dialogue: " +getInfoDialogName()
+//				);
+		return null;
 	}
 	
 	public String getInfoTriggerName() {

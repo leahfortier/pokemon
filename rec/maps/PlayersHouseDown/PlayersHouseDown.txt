@@ -38,7 +38,6 @@
   ],
   "triggerData": [
     {
-      "name": "PlayersHouseDown_to_PlayersHouseUp",
       "location": [
         9,
         1
@@ -50,7 +49,6 @@
 	  }"
     },
     {
-      "name": "PlayersHouseDown_to_DFS_Town",
       "triggerType": "MapTransition",
       "triggerContents": "{
          nextMap: DFS_Town,
@@ -58,7 +56,6 @@
 	  }"
     },
     {
-      "name": "GT_PlayersHouseDown_to_DFS_Town",
       "location": [
         6,
         9
@@ -66,7 +63,7 @@
       "triggerType": "Group",
       "triggerContents": "{
 	    triggers: [
-			PlayersHouseDown_to_DFS_Town,
+			MapTransitionTrigger_PlayersHouseDown_DFS_Town_PlayersHouse,
 			SetTeleportToLastPokeCenter
 		]
       }"
@@ -74,7 +71,6 @@
   ],
   "triggers": [
     {
-      "name": "PlayersHouseDown_TriggerEntity_PlayersFridge_01",
       "x": 5,
       "y": 1,
       "trigger": "PlayersFridgeTrigger"

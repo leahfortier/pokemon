@@ -1,67 +1,32 @@
 package map.triggers;
 
 import main.Global;
+import pattern.AreaDataMatcher;
+import pattern.AreaDataMatcher.SoundTriggerMatcher;
 import sound.SoundTitle;
-import util.StringUtils;
-
-import java.util.regex.Matcher;
+import util.PokeString;
 
 public class SoundTrigger extends Trigger {
 	private SoundTitle music;
 	public SoundTitle effect; // TODO: Make private
-	
-	public SoundTrigger(String name, String contents) 
-	{
-		super(name, contents);
 
-		Matcher m = variablePattern.matcher(contents);
-		
-		while (m.find()) {
-			switch (m.group(1)) {
-				case "effectName":
-					effect = SoundTitle.valueOf(m.group(2));
-					break;
-				case "musicName":
-					music = SoundTitle.valueOf(m.group(2));
-					break;
-			}
-		}
+	SoundTrigger(String contents) {
+		super(TriggerType.SOUND, contents);
+
+		SoundTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, SoundTriggerMatcher.class);
+		this.effect = SoundTitle.valueOf(PokeString.getNamesiesString(matcher.effectName));
+		this.music = SoundTitle.valueOf(PokeString.getNamesiesString(matcher.musicName));
 	}
 	
-	public SoundTrigger(String name, String conditionString, SoundTitle music, SoundTitle effect) {
-		super(name, conditionString);
-		
-		this.music = music;
-		this.effect = effect;
-	}
-	
-	public void execute() {
+	protected void executeTrigger() {
 		super.execute();
 			
 		if (music != null) {
 			Global.soundPlayer.playMusic(music);
 		}
 		
-		if(effect != null) {
+		if (effect != null) {
 			Global.soundPlayer.playSoundEffect(effect);
 		}
-	}
-
-	public String toString() {
-		return "SoundTrigger: " + name + " music: " + music + " effect: " + effect;
-	}
-	
-	public String triggerDataAsString() {
-		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
-		
-		if (music != null) {
-			StringUtils.appendLine(ret, "\tmusicName: " + music);
-		}
-
-		if (effect != null) {
-			StringUtils.appendLine(ret, "\teffectName: " + effect);
-		}
-		
-		return ret.toString();
 	}
 }

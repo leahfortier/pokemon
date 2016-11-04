@@ -186,11 +186,13 @@ public class DialogueTriggerDialog extends JPanel {
 		}
 
 		String contents = conditionString + "\n" + globalsString + "\n" + dialogueString;
-		return new DialogueTrigger(name, contents);
+		return null;
+//		return new DialogueTrigger(name, contents);
 	}
 	
 	public TriggerData getTriggerData(String name) {
 		DialogueTrigger dialogueTrigger = getDialogueTrigger(name);
-		return new TriggerData(name, "Dialogue\n" + dialogueTrigger.triggerDataAsString());
+		return null;
+//		return new TriggerData(name, "Dialogue\n" + dialogueTrigger.triggerDataAsString());
 	}
 }

@@ -20,10 +20,10 @@ public class WildBattleTrigger extends Trigger {
 	private WildEncounter[] wildEncounters;
 	private EncounterRate encounterRate;
 
-	public WildBattleTrigger(String name, String function) {
-		super(name, function);
+	WildBattleTrigger(String matcherJson) {
+		super(TriggerType.WILD_BATTLE, matcherJson);
 
-		WildBattleTriggerMatcher matcher = AreaDataMatcher.deserialize(function, WildBattleTriggerMatcher.class);
+		WildBattleTriggerMatcher matcher = AreaDataMatcher.deserialize(matcherJson, WildBattleTriggerMatcher.class);
 		this.wildEncounters = matcher.getWildEncounters();
 		this.encounterRate = matcher.encounterRate;
 
@@ -33,20 +33,11 @@ public class WildBattleTrigger extends Trigger {
 		}
 		
 		if (totalProbability != 100) {
-			Global.error(name + " wild battle trigger probabilities add up to " + totalProbability + ", not 100.");
+			Global.error("Wild battle trigger probabilities add up to " + totalProbability + ", not 100.");
 		}
 	}
 	
-	public WildBattleTrigger(String name, WildEncounter[] wildEncounters, EncounterRate encounterRate) {
-		super(name, "");
-		
-		this.wildEncounters = wildEncounters;
-		this.encounterRate = encounterRate;
-	}
-	
-	public void execute() {
-		super.execute();
-
+	protected void executeTrigger() {
 		// TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class
 		double rand = Math.random()*187.5/encounterRate.getRate();
 				
@@ -114,20 +105,7 @@ public class WildBattleTrigger extends Trigger {
 			}
 		}
 
-		Global.error("Probabilities don't add to 100 for " + this.name + " wild battle trigger.");
+		Global.error("Probabilities don't add to 100 for wild battle trigger.");
 		return -1;
-	}
-	
-	public String triggerDataAsString() {
-		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
-		ret.append("\tencounterRate: ")
-				.append(encounterRate.name())
-				.append("\n");
-		
-		for (WildEncounter wildEncounter : wildEncounters) {
-			ret.append(wildEncounter.toString());
-		}
-		
-		return ret.toString();
 	}
 }

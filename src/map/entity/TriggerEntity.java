@@ -24,7 +24,7 @@ public class TriggerEntity extends Entity {
 		return Game.getData().getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
 	}
 
-	public String getTrigger() {
+	public String getTriggerSuffix() {
 		return trigger;
 	}
 

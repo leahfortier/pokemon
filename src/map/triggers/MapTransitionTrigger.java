@@ -7,38 +7,34 @@ import pattern.AreaDataMatcher.MapTransitionTriggerMatcher;
 import trainer.CharacterData;
 
 public class MapTransitionTrigger extends Trigger {
-	private String mapName;
+	private String nextMap;
 	private String mapEntranceName;
 	private Direction direction;
 	private int newX;
 	private int newY;
 
-	public MapTransitionTrigger(String name, String contents) {
-		super(name, contents);
+	static String getTriggerSuffix(String contents) {
+		MapTransitionTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, MapTransitionTriggerMatcher.class);
+		return matcher.previousMap + "_" + matcher.nextMap + "_" + matcher.mapEntrance;
+	}
+
+	MapTransitionTrigger(String contents) {
+		super(TriggerType.MAP_TRANSITION, contents);
 
 		MapTransitionTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, MapTransitionTriggerMatcher.class);
-		this.mapName = matcher.nextMap;
+		this.nextMap = matcher.nextMap;
 		this.mapEntranceName = matcher.mapEntrance;
 		this.direction = matcher.direction;
 		this.newX = matcher.newX;
 		this.newY = matcher.newY;
 	}
 	
-	public MapTransitionTrigger(String name, String conditionString, String mapName, String mapEntranceName, int directionIndex) {
-		super(name, conditionString);
-		
-		this.mapName = mapName;
-		this.mapEntranceName = mapEntranceName;
-		this.direction = directionIndex == -1 ? null : Direction.values()[directionIndex];
-	}
-	
-	public void execute() {
-		super.execute();
-
+	protected void executeTrigger() {
+		System.out.println("execute map trigger");
 		CharacterData player = Game.getPlayer();
-		player.setMap(mapName, mapEntranceName);
+		player.setMap(nextMap, mapEntranceName);
 		
-		if (mapEntranceName == null || !Game.getData().getMap(mapName).setCharacterToEntrance(player, mapEntranceName)) {
+		if (mapEntranceName == null || !Game.getData().getMap(nextMap).setCharacterToEntrance(player, mapEntranceName)) {
 			player.setLocation(newX, newY);
 		}
 		
@@ -50,30 +46,18 @@ public class MapTransitionTrigger extends Trigger {
 	}
 
 	public String getTransitionTriggerName() {
-		return this.mapName + "_" + this.mapEntranceName;
+		return this.nextMap + "_" + this.mapEntranceName;
 	}
 
-	// TODO: Lalala rename these
-	public String getMapNamee() {
-		return this.mapName;
+	public String getNextMap() {
+		return this.nextMap;
 	}
 
-	public String getMapEntranceNamee() {
+	public String getMapEntranceName() {
 		return this.mapEntranceName;
 	}
 
 	public Direction getDirection() {
 		return this.direction;
-	}
-
-	public String toString() {
-		return "MapTransitionTrigger: " + name + " map:" + mapName + " " + newX + " " + newY;
-	}
-	
-	public String triggerDataAsString() {
-		return super.triggerDataAsString()
-				+ "\tnextMap: " + mapName + "\n"
-				+ "\tmapEntrance: " + mapEntranceName + "\n"
-				+ (direction == null ? "" : "\tdirection: " + direction + "\n");
 	}
 }

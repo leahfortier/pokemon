@@ -6,17 +6,17 @@ public class DialogueTrigger extends Trigger {
 	// TODO: This should likely be an array of dialogue and contents should be json of an array of Strings
 	private String dialogue;
 
-	public DialogueTrigger(String name, String contents) {
-		super(name, contents);
-		this.dialogue = contents;
+	DialogueTrigger(String dialogue) {
+		super(TriggerType.DIALOGUE, dialogue);
+
+		this.dialogue = dialogue;
 	}
 
-	public void execute() {
-		super.execute();
-		Messages.addMessageToFront(dialogue);
+	protected void executeTrigger() {
+		Messages.addMessageToFront(this.dialogue);
 	}
-	
-	public String toString() {
-		return "DialogueTrigger: " + name + " dialogue:" + dialogue + " global:" + globals.toString();
+
+	public String getDialogue() {
+		return this.dialogue;
 	}
 }
