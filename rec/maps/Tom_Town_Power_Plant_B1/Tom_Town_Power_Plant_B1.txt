@@ -34,7 +34,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_Tom_Town_Power_Plant_B1_to_Tom_Town_Power_Plant_02",
       "location": [
         5,
         9

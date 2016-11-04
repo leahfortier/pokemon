@@ -177,10 +177,10 @@ public class MapMakerTriggerData {
 					case "TriggerData":
 						triggerNames.add(name);
 
-						TriggerData triggerData = new TriggerData(name, m.group(4));
-						for (Integer loc : triggerData.getPoints((int) currentMapSize.getWidth())) {
-							triggerDataOnMap.put(loc, triggerData);
-						}
+//						TriggerData triggerData = new TriggerData(name, m.group(4));
+//						for (Integer loc : triggerData.getPoints((int) currentMapSize.getWidth())) {
+//							triggerDataOnMap.put(loc, triggerData);
+//						}
 
 //						// TODO: Add each type of trigger data to specific data structure
 //						if (triggerData.triggerType == TriggerType.WILD_BATTLE) {
@@ -937,7 +937,7 @@ public class MapMakerTriggerData {
 	}
 
 	public void renameTriggerData(TriggerData prev, TriggerData updated) {
-		updated.points = prev.points;
+//		updated.points = prev.points;
 
 		for (Integer loc : updated.getPoints((int) currentMapSize.getWidth())) {
 			triggerDataOnMap.put(loc, updated);
@@ -1021,7 +1021,7 @@ public class MapMakerTriggerData {
 					}
 
 					int[] locations = trigger.triggerData.getPoints(currentMapSize.width);
-					trigger.triggerData.points.clear();
+					trigger.triggerData.location.clear();
 
 					Arrays.sort(locations);
 
@@ -1046,26 +1046,26 @@ public class MapMakerTriggerData {
 
 				trigger.triggerData.removePoint(x, y);
 
-				if (trigger.triggerData.points.size() == 0) {
+				if (trigger.triggerData.location.size() == 0) {
 //					mapTransitionTriggers.remove(trigger.triggerData.name);
 				}
 			}
 			else if (trigger.triggerData.triggerType == TriggerType.DIALOGUE) {
 				// TODO
 			}
-			else if (trigger.triggerData.triggerType == TriggerType.WILD_BATTLE && trigger.triggerData.points.size() == 0) {
+			else if (trigger.triggerData.triggerType == TriggerType.WILD_BATTLE && trigger.triggerData.location.size() == 0) {
 				// Don't remove completely. This will keep the trigger in the
 				// options select menu.
 				// wildBattleTriggers.remove(trigger.name);
 			}
 
 			// else if (trigger.triggerData.triggerType.isEmpty() &&
-			// trigger.triggerData.points.size() == 0) {}
+			// trigger.triggerData.location.size() == 0) {}
 
 			triggerDataOnMap.remove(trigger.location);
 			trigger.triggerData.removePoint(x, y);
 
-			if (trigger.triggerData.points.size() == 0) {
+			if (trigger.triggerData.location.size() == 0) {
 //				triggerNames.remove(trigger.triggerData.name);
 			}
 		}
@@ -1377,7 +1377,8 @@ public class MapMakerTriggerData {
 			mapTriggerName = String.format("from_%s_to_%s_%02d", currentMapName, "PokeCenter", number++);
 		} while (mapTransitionTriggers.containsKey(mapTriggerName));
 
-		TriggerData transition = new TriggerData(mapTriggerName, "MapTransition\n" + "\tglobal: MapGlobal_toPokeCenterFromEntrance_" + "@entranceName" + "\n" + "\tnextMap: PokeCenter\n" + "\tmapEntrance: " + "FrontDoor" + "\n");
+		TriggerData transition = null;
+//		TriggerData transition = new TriggerData(mapTriggerName, "MapTransition\n" + "\tglobal: MapGlobal_toPokeCenterFromEntrance_" + "@entranceName" + "\n" + "\tnextMap: PokeCenter\n" + "\tmapEntrance: " + "FrontDoor" + "\n");
 
 		return new PlaceableTrigger(transition);
 	}
@@ -1422,12 +1423,12 @@ public class MapMakerTriggerData {
 
 			String direction = TransitionBuildingData.directions[directionIndex];
 
-			TriggerData td = new TriggerData(mapTriggerName, "MapTransition\n" + "\tglobal: MapGlobal_TransitionPair" + String.format("%02d", pairs[index].pairNumber) + "\n" + "\tnextMap: " + "TransitionBuilding" + (pairs[index].horizontal ? "H" : "V") + "\n" + "\tmapEntrance: " + direction + "Door" + "\n");
+//			TriggerData td = new TriggerData(mapTriggerName, "MapTransition\n" + "\tglobal: MapGlobal_TransitionPair" + String.format("%02d", pairs[index].pairNumber) + "\n" + "\tnextMap: " + "TransitionBuilding" + (pairs[index].horizontal ? "H" : "V") + "\n" + "\tmapEntrance: " + direction + "Door" + "\n");
 
-			PlaceableTrigger pt = new PlaceableTrigger(td);
-			pt.transitionBuildingPair = pairs[index];
+//			PlaceableTrigger pt = new PlaceableTrigger(td);
+//			pt.transitionBuildingPair = pairs[index];
 
-			return pt;
+//			return pt;
 		}
 		// Create button
 		else if (results == 0) {
@@ -1469,13 +1470,14 @@ public class MapMakerTriggerData {
 
 		String direction = TransitionBuildingData.directions[directionIndex];
 
-		TriggerData td = new TriggerData(null, // mapTriggerName
-				"MapTransition\n" + "\tglobal: MapGlobal_TransitionPair@pairNumber\n" + "\tnextMap: " + "TransitionBuilding" + (pair.horizontal ? "H" : "V") + "\n" + "\tmapEntrance: " + direction + "Door" + "\n");
+//		TriggerData td = new TriggerData(null, // mapTriggerName
+//				"MapTransition\n" + "\tglobal: MapGlobal_TransitionPair@pairNumber\n" + "\tnextMap: " + "TransitionBuilding" + (pair.horizontal ? "H" : "V") + "\n" + "\tmapEntrance: " + direction + "Door" + "\n");
 
-		PlaceableTrigger pt = new PlaceableTrigger(td);
-		pt.transitionBuildingPair = pair;
-
-		return pt;
+//		PlaceableTrigger pt = new PlaceableTrigger(td);
+//		pt.transitionBuildingPair = pair;
+//
+//		return pt;
+		return null;
 	}
 
 	public int getPlaceableTriggerTransitionBuildingDirection() {

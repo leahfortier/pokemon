@@ -15,7 +15,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_Rival_House_to_DFS_Town_01",
       "location": [
         15,
         11
@@ -27,7 +26,6 @@
       }"
     },
     {
-      "name": "from_Rival_House_to_R_House_Up_01",
       "location": [
         19,
         6

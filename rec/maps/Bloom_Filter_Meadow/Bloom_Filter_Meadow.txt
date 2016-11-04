@@ -117,7 +117,6 @@
   ],
   "triggerData": [
     {
-      "name": "Bloom_Filter_Meadow_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_WestDoor",
       "location": [
         55,
         21,
@@ -132,7 +131,6 @@
       }"
     },
     {
-      "name": "Bloom_Filter_Meadow_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_EastDoor",
       "location": [
         12,
         21,
@@ -147,7 +145,6 @@
       }"
     },
     {
-      "name": "Bloom_Filter_Wild_Pokemon",
       "location": [
         20,
         14,

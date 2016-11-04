@@ -64,16 +64,18 @@
       "triggerContents": "{
 	    triggers: [
 			MapTransitionTrigger_PlayersHouseDown_DFS_Town_PlayersHouse,
-			SetTeleportToLastPokeCenter
+			SetLastPokeCenterTrigger
 		]
       }"
+    },
+    {
+      "location": [
+        5,
+        1
+      ],
+      "triggerType": "Dialogue",
+      "triggerContents": "Nothing good to eat. As usual."
     }
   ],
-  "triggers": [
-    {
-      "x": 5,
-      "y": 1,
-      "trigger": "PlayersFridgeTrigger"
-    }
-  ]
+  "triggers": []
 }

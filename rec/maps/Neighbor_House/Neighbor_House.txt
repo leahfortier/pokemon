@@ -33,7 +33,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_Neighbor_House_to_DFS_Town_01",
       "location": [
         3,
         7

@@ -13,7 +13,7 @@ public enum TriggerType {
     GIVE_POKEMON(GivePokemonTrigger.class, GivePokemonTrigger::new),
     GROUP(GroupTrigger.class, GroupTrigger::new, GroupTrigger::getTriggerSuffix),
     HEAL_PARTY(HealPartyTrigger.class, HealPartyTrigger::new),
-    LAST_POKE_CENTER(LastPokeCenterTrigger.class, LastPokeCenterTrigger::new),
+    SET_LAST_POKE_CENTER(SetLastPokeCenterTrigger.class, SetLastPokeCenterTrigger::new),
     MAP_TRANSITION(MapTransitionTrigger.class, MapTransitionTrigger::new, MapTransitionTrigger::getTriggerSuffix),
     SOUND(SoundTrigger.class, SoundTrigger::new),
     TRAINER_BATTLE(TrainerBattleTrigger.class, TrainerBattleTrigger::new),

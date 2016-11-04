@@ -10,7 +10,7 @@ public class TriggerEntityData extends EntityData {
 	public String trigger;
 
 	public TriggerEntityData(TriggerMatcher matcher) {
-		super(matcher.name, ""); // TODO: condition
+		super("", ""); // TODO: this
 
 		x = matcher.x;
 		y = matcher.y;

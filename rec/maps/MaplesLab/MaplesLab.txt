@@ -163,7 +163,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_MaplesLab_to_DFS_Town_01",
       "location": [
         10,
         16

@@ -159,7 +159,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_Tom_Gym_to_Tom_Town_01",
       "location": [
         9,
         16

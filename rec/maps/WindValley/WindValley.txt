@@ -10,7 +10,6 @@
   ],
   "triggerData": [
     {
-      "name": "WindValley_to_TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_SouthDoor",
       "location": [
         31,
         11,
@@ -27,7 +26,6 @@
       }"
     },
     {
-      "name": "ValleyGrass",
       "location": [
         17,
         24,
@@ -1200,7 +1198,6 @@
       }"
     },
     {
-      "name": "ValleySand",
       "location": [
         41,
         65,

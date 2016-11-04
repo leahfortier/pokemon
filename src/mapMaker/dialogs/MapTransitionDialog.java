@@ -140,11 +140,12 @@ public class MapTransitionDialog extends JPanel {
 			return null;
 		}
 
-		return new TriggerData(name,
-				"MapTransition\n"
-						+ "\tnextMap: " + destination + "\n"
-						+ "\tmapEntrance: " +entrance + "\n"
-						+ (directionComboBox.getSelectedIndex() == 0 ? "" : "\tdirection: " + (directionComboBox.getSelectedIndex() - 1)) + "\n"
-				);
+		return null;
+//		return new TriggerData(name,
+//				"MapTransition\n"
+//						+ "\tnextMap: " + destination + "\n"
+//						+ "\tmapEntrance: " +entrance + "\n"
+//						+ (directionComboBox.getSelectedIndex() == 0 ? "" : "\tdirection: " + (directionComboBox.getSelectedIndex() - 1)) + "\n"
+//				);
 	}
 }

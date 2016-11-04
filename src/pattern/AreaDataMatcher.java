@@ -116,7 +116,6 @@ public class AreaDataMatcher {
     }
 
     public static class TriggerMatcher {
-        public String name;
         public int x;
         public int y;
         public String trigger;
@@ -142,7 +141,6 @@ public class AreaDataMatcher {
     }
 
     public static class TriggerDataMatcher {
-        private String name;
         private int[] location;
         private String triggerType;
         public String condition;
@@ -334,35 +332,9 @@ public class AreaDataMatcher {
         public String update;
     }
 
-    public static class TrainerMatcher {
-        public String name;
-        public int cashMoney;
-        public String[] pokemon;
-        public String before;
-        public String after;
-
-        public String getTrainerName() {
-            return this.name;
-        }
-
-        public int getDatCashMoney() {
-            return this.cashMoney;
-        }
-
-        public String[] getPokemonDescriptionList() {
-            return this.pokemon;
-        }
-
-        public String getTrainerBeforeMessage() {
-            return this.before;
-        }
-
-        public String getTrainerAfterMessage() {
-            return this.after;
-        }
-    }
-
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
+
+        System.out.println(fileName);
 
         AreaDataMatcher areaData = gson.fromJson(areaDescription, AreaDataMatcher.class);
         JsonObject mappity = gson.fromJson(areaDescription, JsonObject.class);

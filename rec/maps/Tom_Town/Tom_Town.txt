@@ -169,7 +169,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_Tom_Town_to_Tom_Town_Power_Plant_02",
       "location": [
         29,
         13
@@ -181,7 +180,6 @@
       }"
     },
     {
-      "name": "Tom_Town_to_TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_NorthDoor",
       "location": [
         26,
         37,
@@ -198,7 +196,6 @@
       }"
     },
     {
-      "name": "Tom_Town_DialogueTrigger_TomTownPowerPlantExplosionTrigger_01",
       "location": [
         20,
         33,
@@ -216,7 +213,6 @@
       }"
     },
     {
-      "name": "Tom_Town_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_WestDoor",
       "location": [
         53,
         26,
@@ -231,7 +227,6 @@
       }"
     },
     {
-      "name": "from_Tom_Town_to_Tom_Gym_01",
       "location": [
         17,
         31
@@ -243,7 +238,6 @@
       }"
     },
     {
-      "name": "from_Tom_Town_to_PokeCenter_01",
       "location": [
         38,
         31
@@ -258,7 +252,6 @@
   ],
   "triggers": [
     {
-      "name": "Tom_Town_TriggerEntity_MagnemiteFacilityDoor_01",
       "x": 29,
       "y": 13,
       "trigger": "LockedDoorTrigger"

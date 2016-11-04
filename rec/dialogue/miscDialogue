@@ -1,7 +1,0 @@
-Dialogue PlayersFridgeDialogue {
-	text: "Nothing good to eat. As usual."
-}
-
-Dialogue LockedDoorDialogue {
-	text: "The door is locked."
-}

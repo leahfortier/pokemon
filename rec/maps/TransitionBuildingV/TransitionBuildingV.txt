@@ -94,7 +94,7 @@
     },
     {
       "name": "TransitionBuildingV_NPC_PoliceOfficer_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))",
       "startX": 6,
       "startY": 7,
       "path": "w",
@@ -176,7 +176,6 @@
   ],
   "triggerData": [
     {
-      "name": "GroupTrigger_TransitionBuilding_NorthDoor",
       "location": [
         6,
         0
@@ -189,7 +188,6 @@
 	}"
     },
     {
-      "name": "GroupTrigger_TransitionBuilding_SouthDoor",
       "location": [
         6,
         8
@@ -204,7 +202,6 @@
   ],
   "triggers": [
     {
-      "name": "Info_Counter",
       "x": 8,
       "y": 4,
       "trigger": "GroupTrigger_TransitionBuilding_InformationDesk"

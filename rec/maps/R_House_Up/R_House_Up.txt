@@ -10,7 +10,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_R_House_Up_to_Rival_House_01",
       "location": [
         5,
         2

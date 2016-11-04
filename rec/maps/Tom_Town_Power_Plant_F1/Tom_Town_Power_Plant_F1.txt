@@ -67,7 +67,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_Tom_Town_Power_Plant_to_Tom_Town_Power_Plant_B1_01",
       "location": [
         3,
         9
@@ -79,7 +78,6 @@
       }"
     },
     {
-      "name": "from_Tom_Town_Power_Plant_to_Tom_Town_01",
       "location": [
         8,
         13
@@ -91,7 +89,6 @@
       }"
     },
     {
-      "name": "from_Tom_Town_Power_Plant_to_Tom_Town_Power_Plant_F2_01",
       "location": [
         3,
         11

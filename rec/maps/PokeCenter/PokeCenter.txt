@@ -51,7 +51,6 @@
   ],
   "triggerData": [
     {
-      "name": "GroupTrigger_PokeCenter_Exit",
       "location": [
         7,
         9
@@ -68,19 +67,16 @@
   ],
   "triggers": [
     {
-      "name": "PokeCenter_Counter",
       "x": 7,
       "y": 3,
       "trigger": "Heal_Trigger"
     },
     {
-      "name": "Mart_Counter",
       "x": 3,
       "y": 7,
       "trigger": "Mart_Trigger"
     },
     {
-      "name": "PC",
       "x": 11,
       "y": 1,
       "trigger": "PC_Trigger"

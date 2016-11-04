@@ -12,65 +12,33 @@ import java.util.regex.Pattern;
 public class TriggerData {
 	private static final Pattern integerRangePattern = Pattern.compile("\\d+(?:-\\d+)?");
 	
-	public List<Point> points;
-	
 	public TriggerType triggerType;
 	public String triggerContents;
+
+	public List<Point> location;
+
+	public String condition;
+	public String[] globals;
 
 	public TriggerData(TriggerDataMatcher matcher) {
 		this.triggerType = matcher.getTriggerType();
 		this.triggerContents = matcher.triggerContents;
-		this.points = matcher.getLocation();
-	}
-
-	public TriggerData(String name, String contents) {
-		points = new ArrayList<>();
-		
-		Scanner in = new Scanner(contents);
-		while (in.hasNext(integerRangePattern)) {
-			String[] xr = in.next().split("-");
-			String[] yr = in.next().split("-");
-		
-			int x1 = Integer.parseInt(xr[0]);
-			int y1 = Integer.parseInt(yr[0]);
-
-			int x2 = xr.length == 2 ? Integer.parseInt(xr[1]) : x1;
-			int y2 = yr.length == 2 ? Integer.parseInt(yr[1]) : y1;
-			
-			for (int x = x1; x<=x2; x++) {
-				for (int y = y1; y<=y2; y++) {
-					points.add(new Point(x, y));
-				}
-			}
-		}
-		
-		triggerType = TriggerType.getTriggerType(in.next());
-		
-		StringBuilder rest = new StringBuilder();
-		while (in.hasNextLine()) {
-			StringUtils.appendLine(rest, in.nextLine());
-		}
-		
-		triggerContents = rest.toString();
-		
-		in.close();
-		
-		//System.out.println(name +"\n"+ triggerType +"\n" +triggerContents);
+		this.location = matcher.getLocation();
 	}
 	
 	public void addPoint(int x, int y) {
-		points.add(new Point(x, y));
+		this.location.add(new Point(x, y));
 	}
 	
 	public void removePoint(int x, int y) {
-		points.remove(new Point(x, y));
+		this.location.remove(new Point(x, y));
 	}
 
 	// TODO: Use that one method
 	public int[] getPoints(int width) {
-		int[] pointsArray = new int[points.size()];
+		int[] pointsArray = new int[this.location.size()];
 		for (int currPoint = 0; currPoint < pointsArray.length; currPoint++) {
-			Point curr = points.get(currPoint);
+			Point curr = this.location.get(currPoint);
 			pointsArray[currPoint] = curr.y*width + curr.x;
 		}
 		
@@ -78,8 +46,7 @@ public class TriggerData {
 	}
 	
 	public void updatePoints(int dx, int dy) {
-
-		for (Point curr : points) {
+		for (Point curr : this.location) {
 			curr.x += dx;
 			curr.y += dy;
 		}

@@ -49,7 +49,6 @@
   ],
   "triggerData": [
     {
-      "name": "GroupTrigger_TransitionBuilding_EastDoor",
       "location": [
         11,
         3
@@ -64,7 +63,6 @@
 	  }"
     },
     {
-      "name": "GroupTrigger_TransitionBuilding_WestDoor",
       "location": [
         1,
         3
@@ -81,7 +79,6 @@
   ],
   "triggers": [
     {
-      "name": "Info_Counter",
       "x": 6,
       "y": 2,
       "trigger": "GroupTrigger_TransitionBuilding_InformationDesk"

@@ -86,7 +86,6 @@
   ],
   "triggerData": [
     {
-      "name": "RSATown_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_WestDoor",
       "location": [
         44,
         20,
@@ -101,7 +100,6 @@
       }"
     },
     {
-      "name": "from_RSATown_to_PokeCenter_01",
       "location": [
         25,
         16
@@ -114,7 +112,6 @@
       }"
     },
     {
-      "name": "RSATown_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_EastDoor",
       "location": [
         15,
         20,

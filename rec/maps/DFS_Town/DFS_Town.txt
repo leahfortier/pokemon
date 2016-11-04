@@ -298,7 +298,6 @@
   ],
   "triggerData": [
     {
-      "name": "from_DFS_Town_to_Neighbor_House_01",
       "location": [
         74,
         26
@@ -310,7 +309,6 @@
       }"
     },
     {
-      "name": "from_DFS_Town_to_MaplesLab_01",
       "location": [
         74,
         16
@@ -322,7 +320,6 @@
       }"
     },
     {
-      "name": "DFS_Town_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_EastDoor",
       "location": [
         13,
         20,
@@ -337,7 +334,6 @@
       }"
     },
     {
-      "name": "from_DFS_Town_to_Rival_House_01",
       "location": [
         85,
         14
@@ -349,7 +345,17 @@
       }"
     },
     {
-      "name": "Edge_1_Wild_Pokemon",
+      "location": [
+        85,
+        26
+      ],
+      "triggerType": "MapTransition",
+      "triggerContents": "{
+        nextMap: PlayersHouseDown,
+        mapEntrance: DFS_Town
+      }"
+    },
+    {
       "location": [
         17,
         13,
@@ -788,18 +794,6 @@
 			\"Fletchling 2-4 15%\", 
 			\"Lillipup 2-4 10%\"
         ]
-      }"
-    },
-    {
-      "name": "from_DFS_Town_to_PlayersHouseDown_01",
-      "location": [
-        85,
-        26
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: PlayersHouseDown,
-        mapEntrance: DFS_Town
       }"
     }
   ],
