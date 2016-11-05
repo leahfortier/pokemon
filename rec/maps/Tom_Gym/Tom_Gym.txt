@@ -150,25 +150,18 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "Tom_Town",
-      "x": 9,
-      "y": 15
-    }
-  ],
-  "triggerData": [
-    {
+      "exitName": "Tom_Town",
       "location": [
         9,
-        16
+        15
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town,
-        mapEntrance: Gym
-      }"
+      "nextMap": "Tom_Town",
+      "nextEntrance": "Gym",
+      "direction": "DOWN"
     }
   ],
+  "triggerData": [],
   "triggers": []
 }

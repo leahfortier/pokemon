@@ -162,44 +162,25 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "NorthDoor",
-      "x": 6,
-      "y": 1
-    },
-    {
-      "name": "SouthDoor",
-      "x": 6,
-      "y": 7
-    }
-  ],
-  "triggerData": [
-    {
+      "exitName": "TransitionNorthDoor",
       "location": [
         6,
-        0
+        1
       ],
-      "triggerType": "Group",
-      "triggerContents": "{
-		triggers: [
-			TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_NorthDoor
-		]
-	}"
+      "direction": "UP"
     },
     {
+      "exitName": "TransitionSouthDoor",
       "location": [
         6,
-        8
+        7
       ],
-      "triggerType": "Group",
-      "triggerContents": "{
-		triggers: [
-			TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_SouthDoor
-		]
-	  }"
+      "direction": "DOWN"
     }
   ],
+  "triggerData": [],
   "triggers": [
     {
       "x": 8,

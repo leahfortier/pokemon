@@ -67,64 +67,42 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "PokeCenter01",
-      "x": 25,
-      "y": 17
-    },
-    {
-      "name": "TransitionBuildingHEastDoor01",
-      "x": 16,
-      "y": 20
-    },
-    {
-      "name": "TransitionBuildingHWestDoor01",
-      "x": 43,
-      "y": 20
-    }
-  ],
-  "triggerData": [
-    {
+      "exitName": "TransitionEastDoor",
       "location": [
-        44,
+        16,
         20,
-        44,
+        16,
         19
       ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: WestDoor
-      }"
+      "nextMap": "TransitionBuildingH",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT"
     },
     {
+      "exitName": "TransitionWestDoor",
+      "location": [
+        43,
+        20,
+        43,
+        19
+      ],
+      "nextMap": "TransitionBuildingH",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT"
+    },
+    {
+      "exitName": "PokeCenter01",
       "location": [
         25,
-        16
+        17
       ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_toPokeCenterFromEntrance_PokeCenter01",
-      "triggerContents": "{
-        nextMap: PokeCenter,
-        mapEntrance: FrontDoor
-      }"
-    },
-    {
-      "location": [
-        15,
-        20,
-        15,
-        19
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: EastDoor
-      }"
+      "nextMap": "PokeCenter",
+      "nextEntrance": "FrontDoor",
+      "direction": "UP"
     }
   ],
+  "triggerData": [],
   "triggers": []
 }

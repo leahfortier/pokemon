@@ -140,61 +140,65 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "PokeCenter01",
-      "x": 38,
-      "y": 32
+      "exitName": "TransitionNorthDoor",
+      "location": [
+        26,
+        36,
+        25,
+        36,
+        27,
+        36
+      ],
+      "nextMap": "TransitionBuildingV",
+      "nextEntrance": "NorthDoor",
+      "direction": "DOWN"
     },
     {
-      "name": "Gym",
-      "x": 17,
-      "y": 32
+      "exitName": "TransitionWestDoor",
+      "location": [
+        52,
+        26,
+        52,
+        25
+      ],
+      "nextMap": "TransitionBuildingH",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT"
     },
     {
-      "name": "TomTownPowerPlant",
-      "x": 29,
-      "y": 14
+      "exitName": "PokeCenter01",
+      "location": [
+        38,
+        32
+      ],
+      "nextMap": "PokeCenter",
+      "nextEntrance": "FrontDoor",
+      "direction": "UP"
     },
     {
-      "name": "TransitionBuildingHWestDoor01",
-      "x": 52,
-      "y": 26
+      "exitName": "Gym",
+      "location": [
+        17,
+        32
+      ],
+      "nextMap": "Tom_Gym",
+      "nextEntrance": "Tom_Town",
+      "direction": "UP"
     },
     {
-      "name": "TransitionBuildingVNorthDoor01",
-      "x": 26,
-      "y": 36
+      "exitName": "TomTownPowerPlant",
+      "location": [
+        29,
+        14
+      ],
+      "nextMap": "Tom_Town_Power_Plant_F1",
+      "nextEntrance": "FromTomTown",
+      "direction": "UP"
     }
   ],
   "triggerData": [
-    {
-      "location": [
-        29,
-        13
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_F1,
-        mapEntrance: FromTomTown
-      }"
-    },
-    {
-      "location": [
-        26,
-        37,
-        25,
-        37,
-        27,
-        37
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingV,
-        mapEntrance: NorthDoor
-      }"
-    },
     {
       "location": [
         20,
@@ -205,49 +209,9 @@
         34
       ],
       "triggerType": "Dialogue",
-      "condition": "Badge_0&!TomTownPowerPlantExplosionTriggered",
+      "condition": "BadgeTrigger_0&!TomTownPowerPlantExplosionTriggered",
       "global": "TomTownPowerPlantExplosionTriggered",
-      "triggerContents": "{
-        createDialogue: TomTownPowerPlantExplosionDialogue,
-        text: \"Rumble Rumble Rumble\"
-      }"
-    },
-    {
-      "location": [
-        53,
-        26,
-        53,
-        25
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: WestDoor
-      }"
-    },
-    {
-      "location": [
-        17,
-        31
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Gym,
-        mapEntrance: Tom_Town
-      }"
-    },
-    {
-      "location": [
-        38,
-        31
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_toPokeCenterFromEntrance_PokeCenter01",
-      "triggerContents": "{
-        nextMap: PokeCenter,
-        mapEntrance: FrontDoor
-      }"
+      "triggerContents": "Rumble Rumble Rumble"
     }
   ],
   "triggers": [

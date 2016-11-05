@@ -24,50 +24,30 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "stairs",
-      "x": 10,
-      "y": 1
+      "exitName": "stairs",
+      "location": [
+        10,
+        1
+      ],
+      "nextMap": "PlayersHouseUp",
+      "nextEntrance": "stairs",
+      "direction": "LEFT"
     },
     {
-      "name": "DFS_Town",
-      "x": 6,
-      "y": 8
+      "exitName": "DFS_Town",
+      "location": [
+        6,
+        8
+      ],
+      "nextMap": "DFS_Town",
+      "nextEntrance": "PlayersHouse",
+      "direction": "DOWN",
+      "deathPortal": true
     }
   ],
   "triggerData": [
-    {
-      "location": [
-        9,
-        1
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-		nextMap: PlayersHouseUp, 
-		mapEntrance: stairs
-	  }"
-    },
-    {
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-         nextMap: DFS_Town,
-         mapEntrance: PlayersHouse
-	  }"
-    },
-    {
-      "location": [
-        6,
-        9
-      ],
-      "triggerType": "Group",
-      "triggerContents": "{
-	    triggers: [
-			MapTransitionTrigger_PlayersHouseDown_DFS_Town_PlayersHouse,
-			SetLastPokeCenterTrigger
-		]
-      }"
-    },
     {
       "location": [
         5,

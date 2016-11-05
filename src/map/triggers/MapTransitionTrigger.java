@@ -3,7 +3,7 @@ package map.triggers;
 import main.Game;
 import map.Direction;
 import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.MapTransitionTriggerMatcher;
+import pattern.AreaDataMatcher.MapExitMatcher;
 import trainer.CharacterData;
 
 public class MapTransitionTrigger extends Trigger {
@@ -14,19 +14,17 @@ public class MapTransitionTrigger extends Trigger {
 	private int newY;
 
 	static String getTriggerSuffix(String contents) {
-		MapTransitionTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, MapTransitionTriggerMatcher.class);
-		return matcher.previousMap + "_" + matcher.nextMap + "_" + matcher.mapEntrance;
+		MapExitMatcher matcher = AreaDataMatcher.deserialize(contents, MapExitMatcher.class);
+		return matcher.previousMap + "_" + matcher.nextMap + "_" + matcher.nextEntrance;
 	}
 
 	MapTransitionTrigger(String contents) {
 		super(TriggerType.MAP_TRANSITION, contents);
 
-		MapTransitionTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, MapTransitionTriggerMatcher.class);
+		MapExitMatcher matcher = AreaDataMatcher.deserialize(contents, MapExitMatcher.class);
 		this.nextMap = matcher.nextMap;
-		this.mapEntranceName = matcher.mapEntrance;
+		this.mapEntranceName = matcher.nextEntrance;
 		this.direction = matcher.direction;
-		this.newX = matcher.newX;
-		this.newY = matcher.newY;
 	}
 	
 	protected void executeTrigger() {

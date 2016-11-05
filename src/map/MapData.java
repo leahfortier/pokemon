@@ -9,9 +9,11 @@ import map.entity.TriggerEntityData;
 import map.entity.npc.NPCEntityData;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
+import map.triggers.TriggerData.Point;
+import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.ItemMatcher;
-import pattern.AreaDataMatcher.MapEntranceMatcher;
+import pattern.AreaDataMatcher.MapExitMatcher;
 import pattern.AreaDataMatcher.NPCMatcher;
 import pattern.AreaDataMatcher.TriggerDataMatcher;
 import pattern.AreaDataMatcher.TriggerMatcher;
@@ -87,19 +89,35 @@ public class MapData {
 			entities.add(new ItemEntityData(matcher));
 		}
 
-		for (MapEntranceMatcher matcher : areaDataMatcher.mapEntrances) {
-			mapEntrances.put(matcher.name, getMapIndex(matcher.x, matcher.y));
-		}
+		for (MapExitMatcher matcher : areaDataMatcher.mapExits) {
+            matcher.setMapName(this.name);
 
-		for (TriggerDataMatcher matcher : areaDataMatcher.triggerData) {
-			matcher.setMapName(this.name);
+            List<Point> points = matcher.getLocation();
+            for (Point point : points) {
+                mapEntrances.put(matcher.exitName, getMapIndex(point.x, point.y)); // TODO: Doesn't work correctly
+
+                if (matcher.direction != null) {
+                    int exitX = point.x + matcher.direction.dx;
+                    int exitY = point.y + matcher.direction.dy;
+
+                    Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(AreaDataMatcher.getJson(matcher));
+                    triggers.put(getMapIndex(exitX, exitY), trigger.getName());
+
+                    // TODO: This can likely be added inside the create trigger method
+                    Game.getData().addTrigger(trigger);
+                }
+            }
+        }
+
+        for (TriggerDataMatcher matcher : areaDataMatcher.triggerData) {
 			TriggerData triggerData = new TriggerData(matcher);
 
+            Trigger trigger = matcher.getTriggerType().createTrigger(matcher.triggerContents);
 			for (Integer loc: triggerData.getPoints(width)) {
-				triggers.put(loc, matcher.getTriggerType().getTriggerName(matcher.triggerContents));
+				triggers.put(loc, trigger.getName());
 			}
 
-			triggerData.addData();
+            Game.getData().addTrigger(trigger);
 		}
 
 		for (TriggerMatcher matcher : areaDataMatcher.triggers) {
@@ -211,13 +229,13 @@ public class MapData {
 	}
 	
 	public boolean setCharacterToEntrance(CharacterData character, String entranceName) {
-		if (mapEntrances.containsKey(entranceName)) {
+        if (mapEntrances.containsKey(entranceName)) {
 			int entrance = mapEntrances.get(entranceName);
 			int newY = entrance / width;
 			int newX = entrance - newY * width;
 			character.setLocation(newX, newY);
-			
-			return true;
+
+            return true;
 		}
 		
 		return false;

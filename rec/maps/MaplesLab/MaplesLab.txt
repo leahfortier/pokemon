@@ -154,25 +154,18 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "DFS_Town",
-      "x": 10,
-      "y": 15
-    }
-  ],
-  "triggerData": [
-    {
+      "exitName": "DFS_Town",
       "location": [
         10,
-        16
+        15
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: DFS_Town,
-        mapEntrance: MaplesLab
-      }"
+      "nextMap": "DFS_Town",
+      "nextEntrance": "MaplesLab",
+      "direction": "DOWN"
     }
   ],
+  "triggerData": [],
   "triggers": []
 }

@@ -1,11 +1,16 @@
 {
   "NPCs": [],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "TransitionBuildingVSouthDoor01",
-      "x": 31,
-      "y": 12
+      "exitName": "TransitionSouthDoor",
+      "location": [
+        31,
+        32
+      ],
+      "nextMap": "TransitionBuildingV",
+      "nextEntrance": "SouthDoor",
+      "direction": "UP"
     }
   ],
   "triggerData": [

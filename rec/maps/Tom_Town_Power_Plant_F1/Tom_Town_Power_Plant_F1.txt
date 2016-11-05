@@ -48,57 +48,38 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "FromTomTown",
-      "x": 8,
-      "y": 12
-    },
-    {
-      "name": "FromFloor2",
-      "x": 2,
-      "y": 11
-    },
-    {
-      "name": "FromBasement1",
-      "x": 2,
-      "y": 9
-    }
-  ],
-  "triggerData": [
-    {
-      "location": [
-        3,
-        9
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_B1,
-        mapEntrance: FromFloor1
-      }"
-    },
-    {
+      "exitName": "FromTomTown",
       "location": [
         8,
-        13
+        12
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town,
-        mapEntrance: TomTownPowerPlant
-      }"
+      "nextMap": "Tom_Town",
+      "nextEntrance": "TomTownPowerPlant",
+      "direction": "DOWN"
     },
     {
+      "exitName": "FromFloor2",
       "location": [
-        3,
+        2,
         11
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_F2,
-        mapEntrance: FromFloor1
-      }"
+      "nextMap": "Tom_Town_Power_Plant_F2",
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT"
+    },
+    {
+      "exitName": "FromBasement1",
+      "location": [
+        2,
+        9
+      ],
+      "nextMap": "Tom_Town_Power_Plant_B1",
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT"
     }
   ],
+  "triggerData": [],
   "triggers": []
 }

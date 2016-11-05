@@ -269,92 +269,61 @@
       "item": "Paralyze_Heal"
     }
   ],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "RivalsHouse",
-      "x": 85,
-      "y": 15
+      "exitName": "RivalsHouse",
+      "location": [
+        85,
+        15
+      ],
+      "nextMap": "Rival_House",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP"
     },
     {
-      "name": "PlayersHouse",
-      "x": 85,
-      "y": 27
+      "exitName": "PlayersHouse",
+      "location": [
+        85,
+        27
+      ],
+      "nextMap": "PlayersHouseDown",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP"
     },
     {
-      "name": "TransitionBuildingHEastDoor01",
-      "x": 14,
-      "y": 20
+      "exitName": "NeighborsHouse",
+      "location": [
+        74,
+        27
+      ],
+      "nextMap": "Neighbor_House",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP"
     },
     {
-      "name": "NeighborsHouse",
-      "x": 74,
-      "y": 27
+      "exitName": "MaplesLab",
+      "location": [
+        74,
+        17
+      ],
+      "nextMap": "MaplesLab",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP"
     },
     {
-      "name": "MaplesLab",
-      "x": 74,
-      "y": 17
+      "exitName": "TransitionBuildingHEastDoor01",
+      "location": [
+        14,
+        20,
+        14,
+        19
+      ],
+      "nextMap": "TransitionBuildingH",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT"
     }
   ],
   "triggerData": [
-    {
-      "location": [
-        74,
-        26
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Neighbor_House,
-        mapEntrance: DFS_Town
-      }"
-    },
-    {
-      "location": [
-        74,
-        16
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: MaplesLab,
-        mapEntrance: DFS_Town
-      }"
-    },
-    {
-      "location": [
-        13,
-        20,
-        13,
-        19
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: EastDoor
-      }"
-    },
-    {
-      "location": [
-        85,
-        14
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Rival_House,
-        mapEntrance: DFS_Town
-      }"
-    },
-    {
-      "location": [
-        85,
-        26
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: PlayersHouseDown,
-        mapEntrance: DFS_Town
-      }"
-    },
     {
       "location": [
         17,

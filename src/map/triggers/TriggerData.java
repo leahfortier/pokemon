@@ -72,10 +72,6 @@ public class TriggerData {
 			return p.x == x && p.y == y;
 		}
 	}
-
-	public void addData() {
-		Game.getData().addTrigger(triggerType, triggerContents);
-	}
 }
 
 /*

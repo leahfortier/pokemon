@@ -24,25 +24,18 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "DFS_Town",
-      "x": 3,
-      "y": 6
-    }
-  ],
-  "triggerData": [
-    {
+      "exitName": "DFS_Town",
       "location": [
         3,
-        7
+        6
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: DFS_Town,
-        mapEntrance: NeighborsHouse
-      }"
+      "nextMap": "DFS_Town",
+      "nextEntrance": "NeighborsHouse",
+      "direction": "DOWN"
     }
   ],
+  "triggerData": [],
   "triggers": []
 }

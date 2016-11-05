@@ -103,47 +103,33 @@
       "item": "Meadow_Plate"
     }
   ],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "TransitionBuildingHWestDoor01",
-      "x": 54,
-      "y": 21
+      "exitName": "TransitionWestDoor",
+      "location": [
+        54,
+        21,
+        54,
+        20
+      ],
+      "nextMap": "TransitionBuildingH",
+      "nextEntrance": "WestDoor",
+      "direction": "LEFT"
     },
     {
-      "name": "TransitionBuildingHEastDoor01",
-      "x": 13,
-      "y": 21
+      "exitName": "TransitionEastDoor",
+      "location": [
+        13,
+        21,
+        13,
+        20
+      ],
+      "nextMap": "TransitionBuildingH",
+      "nextEntrance": "EastDoor",
+      "direction": "RIGHT"
     }
   ],
   "triggerData": [
-    {
-      "location": [
-        55,
-        21,
-        55,
-        20
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: WestDoor
-      }"
-    },
-    {
-      "location": [
-        12,
-        21,
-        12,
-        20
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: EastDoor
-      }"
-    },
     {
       "location": [
         20,

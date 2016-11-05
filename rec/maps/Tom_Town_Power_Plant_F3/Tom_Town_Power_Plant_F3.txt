@@ -196,30 +196,25 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "FromFloor2",
-      "x": 2,
-      "y": 8
+      "exitName": "ReloadLocation",
+      "location": [
+        10,
+        10
+      ]
     },
     {
-      "name": "ReloadLocation",
-      "x": 10,
-      "y": 10
-    }
-  ],
-  "triggerData": [
-    {
+      "exitName": "FromFloor2",
       "location": [
-        3,
+        2,
         8
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_F2,
-        mapEntrance: FromFloor3
-      }"
+      "nextMap": "Tom_Town_Power_Plant_F2",
+      "nextEntrance": "FromFloor3",
+      "direction": "RIGHT"
     }
   ],
+  "triggerData": [],
   "triggers": []
 }

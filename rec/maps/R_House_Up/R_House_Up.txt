@@ -1,25 +1,18 @@
 {
   "NPCs": [],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "stairs",
-      "x": 4,
-      "y": 2
-    }
-  ],
-  "triggerData": [
-    {
+      "exitName": "stairs",
       "location": [
-        5,
+        4,
         2
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Rival_House,
-        mapEntrance: stairs
-      }"
+      "nextMap": "Rival_House",
+      "nextEntrance": "stairs",
+      "direction": "RIGHT"
     }
   ],
+  "triggerData": [],
   "triggers": []
 }

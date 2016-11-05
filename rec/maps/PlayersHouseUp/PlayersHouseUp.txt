@@ -44,31 +44,26 @@
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "stairs",
-      "x": 8,
-      "y": 1
+      "exitName": "GameStartLocation",
+      "location": [
+        6,
+        5
+      ]
     },
     {
-      "name": "GameStartLocation",
-      "x": 6,
-      "y": 5
-    }
-  ],
-  "triggerData": [
-    {
+      "exitName": "stairs",
       "location": [
-        9,
+        8,
         1
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-		 nextMap: PlayersHouseDown,
-	 	 mapEntrance: stairs
-	  }"
+      "nextMap": "PlayersHouseDown",
+      "nextEntrance": "stairs",
+      "direction": "RIGHT"
     }
   ],
+  "triggerData": [],
   "triggers": [
     {
       "x": 3,
