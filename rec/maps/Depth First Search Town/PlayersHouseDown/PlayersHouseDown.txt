@@ -47,15 +47,20 @@
       "deathPortal": true
     }
   ],
-  "triggerData": [
+  "triggerData": [],
+  "triggers": [
     {
-      "location": [
-        5,
-        1
-      ],
-      "triggerType": "Dialogue",
-      "triggerContents": "Nothing good to eat. As usual."
+      "name": "fridge",
+      "x": 5,
+      "y": 1,
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Nothing good to eat. As usual."
+          }
+        }
+      ]
     }
-  ],
-  "triggers": []
+  ]
 }

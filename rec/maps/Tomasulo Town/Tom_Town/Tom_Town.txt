@@ -216,9 +216,14 @@
   ],
   "triggers": [
     {
+      "name": "LockedDoor",
       "x": 29,
       "y": 13,
-      "trigger": "LockedDoorTrigger"
+      "actions": [
+        {
+          "groupTrigger": "LockedDoorTrigger"
+        }
+      ]
     }
   ]
 }

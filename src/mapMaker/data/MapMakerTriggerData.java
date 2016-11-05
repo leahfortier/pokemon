@@ -165,7 +165,7 @@ public class MapMakerTriggerData {
 						entityNames.add(name);
 						break;
 					case "Trigger":
-						entity = new TriggerEntityData(name, m.group(4));
+//						entity = new TriggerEntityData(name, m.group(4));
 						addEntityAtLocation(convert(entity.x, entity.y), entity);
 						entityNames.add(name);
 						break;

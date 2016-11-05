@@ -66,9 +66,14 @@
   "triggerData": [],
   "triggers": [
     {
+      "name": "PC",
       "x": 3,
       "y": 1,
-      "trigger": "PC_Trigger"
+      "actions": [
+        {
+          "groupTrigger": "PC_Trigger"
+        }
+      ]
     }
   ]
 }

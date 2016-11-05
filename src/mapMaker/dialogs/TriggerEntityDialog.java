@@ -72,18 +72,18 @@ public class TriggerEntityDialog extends JPanel {
 	
 	public void setTriggerEntity (TriggerEntityData triggerEntity, String name){
 		nameTextField.setText(name);
-		triggerTextField.setText(triggerEntity.trigger);
+//		triggerTextField.setText(triggerEntity.trigger);
 		conditionTextField.setText(triggerEntity.condition.getOriginalConditionString().replace("&"," & ").replace("|"," | "));
 	}
 	
 	public TriggerEntityData getTriggerEntity() {
-		if (triggerTextField.getText().isEmpty())
+//		if (triggerTextField.getText().isEmpty())
 			return null;
-		return new TriggerEntityData(
-				nameTextField.getText(),
-				"condition: " + conditionTextField.getText().trim().replace(" ", ""),
-				triggerTextField.getText(),
-				-1,
-				-1);
+//		return new TriggerEntityData(
+//				nameTextField.getText(),
+//				"condition: " + conditionTextField.getText().trim().replace(" ", ""),
+//				triggerTextField.getText(),
+//				-1,
+//				-1);
 	}
 }

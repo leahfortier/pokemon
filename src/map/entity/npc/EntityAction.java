@@ -8,16 +8,16 @@ import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import pattern.AreaDataMatcher.UpdateMatcher;
 import util.StringUtils;
 
-public abstract class NPCAction {
-    public Trigger getTrigger(String npcEntityName) {
+public abstract class EntityAction {
+    public Trigger getTrigger(String entityName) {
         return this.getTriggerType()
-                .createTrigger(this.getTriggerContents(npcEntityName));
+                .createTrigger(this.getTriggerContents(entityName));
     }
 
     protected abstract TriggerType getTriggerType();
-    protected abstract String getTriggerContents(String npcEntityName);
+    protected abstract String getTriggerContents(String entityName);
 
-    public static class TriggerAction extends NPCAction {
+    public static class TriggerAction extends EntityAction {
         private final TriggerType type;
         private final String contents;
 
@@ -32,17 +32,17 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName) {
+        protected String getTriggerContents(String entityName) {
             return this.contents;
         }
     }
 
-    public static class BattleAction extends NPCAction {
+    public static class BattleAction extends EntityAction {
         public String name;
         public int cashMoney;
         public String[] pokemon;
         public String updateInteraction;
-        public String npcEntityName;
+        public String entityName;
 
         public BattleAction(BattleMatcher matcher) {
             this.name = matcher.name;
@@ -57,13 +57,13 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName) {
-            this.npcEntityName = npcEntityName;
+        protected String getTriggerContents(String entityName) {
+            this.entityName = entityName;
             return AreaDataMatcher.getJson(this);
         }
     }
 
-    public static class UpdateAction extends NPCAction {
+    public static class UpdateAction extends EntityAction {
         private final String interactionName;
 
         public UpdateAction(final String interactionName) {
@@ -76,13 +76,13 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName) {
-            UpdateMatcher matcher = new UpdateMatcher(npcEntityName, interactionName);
+        protected String getTriggerContents(String entityName) {
+            UpdateMatcher matcher = new UpdateMatcher(entityName, interactionName);
             return AreaDataMatcher.getJson(matcher);
         }
     }
 
-    public static class GroupTriggerAction extends NPCAction {
+    public static class GroupTriggerAction extends EntityAction {
         private final String triggerName;
 
         public GroupTriggerAction(final String triggerName) {
@@ -95,21 +95,21 @@ public abstract class NPCAction {
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName) {
+        protected String getTriggerContents(String entityName) {
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerName);
             return AreaDataMatcher.getJson(matcher);
         }
     }
 
     // TODO: This
-    public static class ChoiceAction extends NPCAction {
+    public static class ChoiceAction extends EntityAction {
         @Override
         protected TriggerType getTriggerType() {
             return TriggerType.DIALOGUE;
         }
 
         @Override
-        protected String getTriggerContents(String npcEntityName) {
+        protected String getTriggerContents(String entityName) {
             return StringUtils.empty();
         }
     }

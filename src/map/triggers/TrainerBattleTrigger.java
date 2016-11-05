@@ -2,8 +2,7 @@ package map.triggers;
 
 import battle.Battle;
 import main.Game;
-import map.entity.npc.NPCAction.BattleAction;
-import namesies.ItemNamesies;
+import map.entity.npc.EntityAction.BattleAction;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.UpdateMatcher;
 import pattern.PokemonMatcher;
@@ -41,7 +40,7 @@ public class TrainerBattleTrigger extends Trigger {
 			trainer.addPokemon(null, ActivePokemon.createActivePokemon(matcher, false));
 		}
 
-		this.npcUpdateInteraction = new UpdateMatcher(battleAction.npcEntityName, battleAction.updateInteraction);
+		this.npcUpdateInteraction = new UpdateMatcher(battleAction.entityName, battleAction.updateInteraction);
 	}
 
 	protected void executeTrigger() {

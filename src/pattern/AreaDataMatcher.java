@@ -9,12 +9,12 @@ import main.Global;
 import map.Direction;
 import map.EncounterRate;
 import map.WildEncounter;
-import map.entity.npc.NPCAction;
-import map.entity.npc.NPCAction.BattleAction;
-import map.entity.npc.NPCAction.ChoiceAction;
-import map.entity.npc.NPCAction.GroupTriggerAction;
-import map.entity.npc.NPCAction.TriggerAction;
-import map.entity.npc.NPCAction.UpdateAction;
+import map.entity.npc.EntityAction;
+import map.entity.npc.EntityAction.BattleAction;
+import map.entity.npc.EntityAction.ChoiceAction;
+import map.entity.npc.EntityAction.GroupTriggerAction;
+import map.entity.npc.EntityAction.TriggerAction;
+import map.entity.npc.EntityAction.UpdateAction;
 import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.MatchConstants.MatchType;
@@ -107,9 +107,21 @@ public class AreaDataMatcher {
     }
 
     public static class TriggerMatcher {
+        public String name;
+        public String condition;
+
         public int x;
         public int y;
-        public String trigger;
+        private ActionMatcher[] actions;
+
+        public List<EntityAction> getActions() {
+            List<EntityAction> actions = new ArrayList<>();
+            for (ActionMatcher matcher : this.actions) {
+                actions.add(matcher.getAction());
+            }
+
+            return actions;
+        }
     }
 
     public static class ItemMatcher {
@@ -191,10 +203,10 @@ public class AreaDataMatcher {
         public boolean walkToPlayer;
         public InteractionMatcher[] interactions;
 
-        private transient Map<String, List<NPCAction>> interactionMap;
+        private transient Map<String, List<EntityAction>> interactionMap;
         private transient String startKey;
 
-        public Map<String, List<NPCAction>> getInteractionMap() {
+        public Map<String, List<EntityAction>> getInteractionMap() {
             if (interactionMap != null) {
                 return interactionMap;
             }
@@ -294,7 +306,7 @@ public class AreaDataMatcher {
         private String update;
         private String groupTrigger;
 
-        public NPCAction getNPCAction() {
+        public EntityAction getAction() {
             if (!hasOnlyOneNonEmpty(trigger, battle, choices, update, groupTrigger)) {
                 Global.error("Can only have one nonempty field for ActionMatcher");
             }
@@ -320,13 +332,13 @@ public class AreaDataMatcher {
         private String name;
         private ActionMatcher[] npcActions;
 
-        List<NPCAction> getActions() {
-            List<NPCAction> npcActions = new ArrayList<>();
+        List<EntityAction> getActions() {
+            List<EntityAction> actions = new ArrayList<>();
             for (ActionMatcher action : this.npcActions) {
-                npcActions.add(action.getNPCAction());
+                actions.add(action.getAction());
             }
 
-            return npcActions;
+            return actions;
         }
     }
 
@@ -338,6 +350,8 @@ public class AreaDataMatcher {
     }
 
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
+
+        System.out.println(fileName);
 
         AreaDataMatcher areaData = gson.fromJson(areaDescription, AreaDataMatcher.class);
         JsonObject mappity = gson.fromJson(areaDescription, JsonObject.class);

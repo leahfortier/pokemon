@@ -1,54 +1,29 @@
 package map.entity;
 
+import map.entity.npc.EntityAction;
+import pattern.AreaDataMatcher.ActionMatcher;
 import pattern.AreaDataMatcher.TriggerMatcher;
 import util.StringUtils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 
 public class TriggerEntityData extends EntityData {
 	private TriggerEntity entity;
-	public String trigger;
+
+	private List<EntityAction> actions;
 
 	public TriggerEntityData(TriggerMatcher matcher) {
-		super("", ""); // TODO: this
+		super(matcher.name, matcher.condition);
 
 		x = matcher.x;
 		y = matcher.y;
-		trigger = matcher.trigger;
-	}
-
-	public TriggerEntityData(String name, String contents) {
-		super (name,contents);
-		
-		entity = null;
-		
-		Matcher m = variablePattern.matcher(contents);
-		while (m.find()){
-			switch (m.group(1)) {
-			case "x":
-				x = Integer.parseInt(m.group(2));
-				break;
-			case "y":
-				y = Integer.parseInt(m.group(2));
-				break;
-			case "trigger":
-				trigger = m.group(2);
-				break;
-			}
-		}
-	}
-	
-	public TriggerEntityData (String name, String conditionString, String trigger, int x, int y) {
-		super (name, conditionString);
-		
-		this.trigger = trigger;
-		this.x = x;
-		this.y = y;
+		actions = matcher.getActions();
 	}
 	
 	public Entity getEntity() {
 		if (entity == null) {
-			entity = new TriggerEntity(x, y, trigger);
+			entity = new TriggerEntity(name, x, y, actions);
 		}
 
 		return entity;

@@ -4,11 +4,9 @@ import map.Direction;
 import map.entity.Entity;
 import map.entity.EntityData;
 import pattern.AreaDataMatcher.NPCMatcher;
-import util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NPCEntityData extends EntityData {
@@ -19,7 +17,7 @@ public class NPCEntityData extends EntityData {
 	public int spriteIndex;
 	public Direction defaultDirection;
 
-	private Map<String, List<NPCAction>> interactions;
+	private Map<String, List<EntityAction>> interactions;
 	private String startKey;
 
 	public int walkToPlayer; // TODO: why is this an int? Should it be a boolean?

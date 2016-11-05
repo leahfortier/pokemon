@@ -8,7 +8,7 @@ import map.Direction;
 import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
-import map.entity.npc.NPCAction.BattleAction;
+import map.entity.npc.EntityAction.BattleAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
@@ -34,7 +34,7 @@ public class NPCEntity extends MovableEntity {
 	private boolean walkToPlayer;
 	private boolean walkingToPlayer;
 
-	private Map<String, List<NPCAction>> interactions;
+	private Map<String, List<EntityAction>> interactions;
 	private String startKey;
 
 	private int defaultX;
@@ -51,7 +51,7 @@ public class NPCEntity extends MovableEntity {
 			Direction direction,
 			int index,
 			boolean walkToPlayer,
-			Map<String, List<NPCAction>> interactions,
+			Map<String, List<EntityAction>> interactions,
 			String startKey) {
 		super(x, y, index, direction);
 		
@@ -185,8 +185,8 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	public boolean isTrainer() {
-		List<NPCAction> actions = interactions.get(this.getCurrentInteractionKey());
-		for (NPCAction action : actions) {
+		List<EntityAction> actions = interactions.get(this.getCurrentInteractionKey());
+		for (EntityAction action : actions) {
 			if (action instanceof BattleAction) {
 				return true;
 			}
@@ -213,9 +213,9 @@ public class NPCEntity extends MovableEntity {
 
 		GameData data = Game.getData();
 
-		for (Entry<String, List<NPCAction>> interaction : this.interactions.entrySet()) {
+		for (Entry<String, List<EntityAction>> interaction : this.interactions.entrySet()) {
 			final String interactionName = interaction.getKey();
-			final List<NPCAction> actions = interaction.getValue();
+			final List<EntityAction> actions = interaction.getValue();
 
 			final String[] actionTriggerNames = new String[actions.size()];
 			for (int i = 0; i < actions.size(); i++) {

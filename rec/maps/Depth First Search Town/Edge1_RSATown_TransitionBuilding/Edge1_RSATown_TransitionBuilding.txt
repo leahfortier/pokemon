@@ -37,9 +37,14 @@
   "triggerData": [],
   "triggers": [
     {
+      "name": "Info_Guy_Dialogue",
       "x": 6,
       "y": 2,
-      "trigger": "GroupTrigger_TransitionBuilding_InformationDesk"
+      "actions": [
+        {
+          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
+        }
+      ]
     }
   ]
 }

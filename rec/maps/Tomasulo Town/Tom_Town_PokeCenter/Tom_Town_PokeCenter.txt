@@ -57,19 +57,34 @@
   "triggerData": [],
   "triggers": [
     {
-      "x": 7,
-      "y": 3,
-      "trigger": "Heal_Trigger"
+      "name": "PC",
+      "x": 3,
+      "y": 1,
+      "actions": [
+        {
+          "groupTrigger": "PC_Trigger"
+        }
+      ]
     },
     {
+      "name": "Mart",
       "x": 3,
       "y": 7,
-      "trigger": "Mart_Trigger"
+      "actions": [
+        {
+          "groupTrigger": "Mart_Trigger"
+        }
+      ]
     },
     {
-      "x": 11,
-      "y": 1,
-      "trigger": "PC_Trigger"
+      "name": "Heal",
+      "x": 7,
+      "y": 3,
+      "actions": [
+        {
+          "groupTrigger": "Heal_Trigger"
+        }
+      ]
     }
   ]
 }

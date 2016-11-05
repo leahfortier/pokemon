@@ -2036,5 +2036,16 @@
       }"
     }
   ],
-  "triggers": []
+  "triggers": [
+    {
+      "name": "Info_Guy_Dialogue",
+      "x": 6,
+      "y": 2,
+      "actions": [
+        {
+          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
+        }
+      ]
+    }
+  ]
 }
