@@ -13,7 +13,9 @@ public abstract class EntityData {
 	public int x;
 	public int y;
 
+	protected EntityData(String name, String condition) {
 		this.name = name;
+		this.condition = new Condition(condition);
 	}
 
 	public abstract Entity getEntity();

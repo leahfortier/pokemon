@@ -2,12 +2,10 @@ package map.entity;
 
 import gui.view.MapView;
 import main.Game;
-import main.Game.ViewMode;
 import main.Global;
 import map.Direction;
 import map.MapData;
 import map.MapData.WalkType;
-import map.entity.npc.NPCEntity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import trainer.CharacterData;
@@ -22,7 +20,6 @@ public class PlayerEntity extends MovableEntity {
 
 	private boolean justMoved;
 	private String npcTriggerSuffix;
-	private String trainerTriggerSuffix;
 	private boolean stalled;
 
 	private boolean justCreated;
@@ -74,7 +71,7 @@ public class PlayerEntity extends MovableEntity {
 			}
 			else {
 				for (Direction direction : Direction.values()) {
-					if (input.isDown(direction.key) && transitionTime == 0 && !stalled && trainerTriggerSuffix == null) {
+					if (input.isDown(direction.key) && transitionTime == 0 && !stalled) {
 						if (transitionDirection != direction) {
 							transitionDirection = direction;
 							continue;
@@ -117,10 +114,6 @@ public class PlayerEntity extends MovableEntity {
 				if (!(x < 0 || y < 0 || x >= entity.length || y >= entity[0].length) && (entity[x][y] != null)) {
 					npcTriggerSuffix = entity[x][y].getTriggerSuffix();
 					entity[x][y].getAttention(transitionDirection.opposite);
-					
-					if (entity[x][y] instanceof NPCEntity && ((NPCEntity) entity[x][y]).isTrainer()) {
-						trainerTriggerSuffix = entity[x][y].getTriggerSuffix();
-					}
 				}
 			}
 			
@@ -132,9 +125,6 @@ public class PlayerEntity extends MovableEntity {
 					// TODO: Should have a method for this
 					if (!(x < 0 || y < 0 || x >= entity.length || y >= entity[0].length) && (entity[x][y] != null)) {
 						npcTriggerSuffix = entity[x][y].getTriggerSuffix();
-						if (entity[x][y] instanceof NPCEntity && ((NPCEntity) entity[x][y]).isTrainer()) {
-							trainerTriggerSuffix = entity[x][y].getTriggerSuffix();
-						}
 						
 						entity[x][y].getAttention(direction);
 						player.direction = transitionDirection = direction.opposite;
@@ -181,11 +171,6 @@ public class PlayerEntity extends MovableEntity {
 			triggerName = map.trigger();
 			justMoved = false;
 		}
-		else if (!stalled && trainerTriggerSuffix != null && Game.isCurrentViewMode(ViewMode.MAP_VIEW)) {
-			triggerName = TriggerType.GROUP.getTriggerNameFromSuffix(trainerTriggerSuffix);
-			trainerTriggerSuffix = null;
-		}
-
 
 		if (triggerName != null) {
 			Trigger trigger = Game.getData().getTrigger(triggerName);
