@@ -53,21 +53,4 @@ public class TriggerEntityData extends EntityData {
 
 		return entity;
 	}
-	
-	@Override
-	public String entityDataAsString() {
-		StringBuilder ret = new StringBuilder();
-		StringUtils.appendLine(ret, "Trigger " + name +"{");
-		
-		if (!condition.getOriginalConditionString().isEmpty()) {
-			StringUtils.appendLine(ret, "\tcondition: " + condition.getOriginalConditionString());
-		}
-
-		StringUtils.appendLine(ret, "\tx: " + x);
-		StringUtils.appendLine(ret, "\ty: " + y);
-		StringUtils.appendLine(ret, "\ttrigger: "+ trigger);
-		StringUtils.appendLine(ret, "}");
-
-		return ret.toString();
-	}
 }

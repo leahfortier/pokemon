@@ -382,14 +382,16 @@ public class NPCEntityDialog extends JPanel {
 	}
 	
 	public NPCEntityData getNPC() {
-		return new NPCEntityData(nameTextField.getText(),
-				"condition: " + conditionTextField.getText().trim().replaceAll("\\s + ", ""),
-				-1, 
-				-1, 
-				null, 
-				pathTextField.getText().trim().isEmpty() ? "w" : pathTextField.getText().trim(), // TODO: What is w -- should it be a constant?
-				directionComboBox.getSelectedIndex(), 
-				spriteComboBox.getSelectedIndex(), 
+		return null;
+
+//		return new NPCEntityData(nameTextField.getText(),
+//				"condition: " + conditionTextField.getText().trim().replaceAll("\\s + ", ""),
+//				-1,
+//				-1,
+//				null,
+//				pathTextField.getText().trim().isEmpty() ? "w" : pathTextField.getText().trim(), // TODO: What is w -- should it be a constant?
+//				directionComboBox.getSelectedIndex(),
+//				spriteComboBox.getSelectedIndex(),
 //				PokeString.convertSpecialToUnicode(firstDialogueTextArea.getText()).trim().split("\n"),
 //				secondDialogueTextArea.getText().trim().isEmpty()
 //						? (walkToPlayerCheckBox.isSelected() ? new String[]{""} : null) // TODO: ??
@@ -398,6 +400,6 @@ public class NPCEntityDialog extends JPanel {
 //				getTrimmedAreaText(giveItemsTextArea),
 //				getTrimmedAreaText(firstTriggersTextArea),
 //				getTrimmedAreaText(secondTriggersTextArea),
-				walkToPlayerCheckBox.isSelected());
+//				walkToPlayerCheckBox.isSelected());
 	}
 }

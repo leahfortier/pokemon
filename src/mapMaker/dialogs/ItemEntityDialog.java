@@ -121,7 +121,7 @@ public class ItemEntityDialog extends JPanel {
 
 	public void setItem(ItemEntityData item) {
 		itemTextField.setText(item.getItem().replace('_', ' '));
-		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
+//		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
 		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getImageIndex();
 		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));

@@ -185,7 +185,6 @@ public class AreaDataMatcher {
         public String condition;
         public int startX;
         public int startY;
-        public String trigger;
         private String path;
         public int spriteIndex;
         public Direction direction;

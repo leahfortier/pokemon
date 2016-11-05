@@ -65,7 +65,6 @@ public class GameData {
 				continue;
 			}
 
-			maps.put(d.getName(), new MapData(d));
 			for (File mapFolder : d.listFiles()) {
 				maps.put(mapFolder.getName(), new MapData(mapFolder));
 			}

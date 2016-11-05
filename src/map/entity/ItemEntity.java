@@ -83,7 +83,6 @@ class ItemEntity extends Entity {
 		// This trigger will only call the item trigger when the conditions apply
 		GroupTriggerMatcher matcher = new GroupTriggerMatcher(itemTriggerName);
 		matcher.suffix = this.getTriggerSuffix();
-		matcher.condition = "!has" + name; // TODO: These won't work but I need to redo them all anyways so whatever
 		matcher.globals = new String[] { "has" + name };
 
 		data.addTrigger(TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher)));

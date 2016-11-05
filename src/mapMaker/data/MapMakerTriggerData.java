@@ -152,15 +152,15 @@ public class MapMakerTriggerData {
 				in.close();
 			}
 			else {
-				EntityData entity;
+				EntityData entity = null;
 				switch (m.group(2)) {
 					case "NPC":
-						entity = new NPCEntityData(name, m.group(4));
+//						entity = new NPCEntityData(name, m.group(4));
 						addEntityAtLocation(convert(entity.x, entity.y), entity);
 						entityNames.add(name);
 						break;
 					case "Item":
-						entity = new ItemEntityData(name, m.group(4));
+//						entity = new ItemEntityData(name, m.group(4));
 						addEntityAtLocation(convert(entity.x, entity.y), entity);
 						entityNames.add(name);
 						break;
@@ -381,7 +381,7 @@ public class MapMakerTriggerData {
 			// Save all entities
 			for (ArrayList<EntityData> entityList : entities.values()) {
 				for (EntityData ed : entityList) {
-					writer.write(ed.entityDataAsString() + "\n");
+//					writer.write(ed.entityDataAsString() + "\n");
 				}
 			}
 
