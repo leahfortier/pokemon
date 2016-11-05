@@ -69,36 +69,36 @@
   "items": [],
   "mapExits": [
     {
-      "exitName": "TransitionEastDoor",
-      "location": [
-        16,
-        20,
-        16,
-        19
-      ],
-      "nextMap": "TransitionBuildingH",
-      "nextEntrance": "EastDoor",
-      "direction": "LEFT"
-    },
-    {
-      "exitName": "TransitionWestDoor",
+      "exitName": "EastTransitionBuilding",
       "location": [
         43,
         20,
         43,
         19
       ],
-      "nextMap": "TransitionBuildingH",
+      "nextMap": "Edge1_RSATown_TransitionBuilding",
       "nextEntrance": "WestDoor",
       "direction": "RIGHT"
     },
     {
-      "exitName": "PokeCenter01",
+      "exitName": "WestTransitionBuilding",
+      "location": [
+        16,
+        20,
+        16,
+        19
+      ],
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT"
+    },
+    {
+      "exitName": "PokeCenter",
       "location": [
         25,
         17
       ],
-      "nextMap": "PokeCenter",
+      "nextMap": "RSATown_PokeCenter",
       "nextEntrance": "FrontDoor",
       "direction": "UP"
     }

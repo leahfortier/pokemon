@@ -20,7 +20,6 @@
     },
     {
       "name": "Tom",
-      "condition": "MapGlobal_PreviousMap_Tom_Town&MapGlobal_toPokeCenterFromEntrance_PokeCenter01",
       "startX": 10,
       "startY": 4,
       "spriteIndex": 5,
@@ -49,6 +48,8 @@
         7,
         8
       ],
+      "nextMap": "Tom_Town",
+      "nextEntrance": "PokeCenter",
       "direction": "DOWN",
       "deathPortal": true
     }

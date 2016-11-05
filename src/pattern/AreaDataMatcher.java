@@ -46,21 +46,12 @@ public class AreaDataMatcher {
 
     public NPCMatcher[] NPCs = new NPCMatcher[0];
     public ItemMatcher[] items = new ItemMatcher[0];
-    public MapEntranceMatcher[] mapEntrances = new MapEntranceMatcher[0];
+    public MapExitMatcher[] mapExits = new MapExitMatcher[0];
     public TriggerDataMatcher[] triggerData = new TriggerDataMatcher[0];
     public TriggerMatcher[] triggers = new TriggerMatcher[0];
 
     public static <T> T deserialize(String jsonString, Class<T> tClass) {
         return gson.fromJson(jsonString, tClass);
-    }
-
-    public static class MapTransitionTriggerMatcher {
-        public String previousMap;
-        public String nextMap;
-        public String mapEntrance;
-        public Direction direction;
-        public int newX;
-        public int newY;
     }
 
     private static final Pattern wildEncounterPattern = Pattern.compile(
@@ -128,16 +119,39 @@ public class AreaDataMatcher {
         public String item;
     }
 
-    public static class MapEntranceMatcher {
-        public String name;
-        public int x;
-        public int y;
-    }
-
     public static String addJsonField(final String previousJson, final String key, final String value) {
         JsonObject jsonObject = deserialize(previousJson, JsonObject.class);
         jsonObject.add(key, new JsonPrimitive(value));
         return getJson(jsonObject);
+    }
+
+    public static class MapExitMatcher {
+        public String exitName;
+        private int[] location;
+        public String nextMap;
+        public String nextEntrance;
+        public Direction direction;
+        public Boolean deathPortal;
+
+        public String previousMap;
+
+        public void setMapName(final String mapName) {
+            this.previousMap = mapName;
+        }
+
+        public List<Point> getLocation() {
+            List<Point> points = new ArrayList<>();
+            if (this.location != null) {
+                for (int i = 0; i < this.location.length; i += 2) {
+                    int x = this.location[i];
+                    int y = this.location[i + 1];
+
+                    points.add(new Point(x, y));
+                }
+            }
+
+            return points;
+        }
     }
 
     public static class TriggerDataMatcher {
@@ -146,14 +160,6 @@ public class AreaDataMatcher {
         public String condition;
         public String global;
         public String triggerContents;
-
-        public void setMapName(final String mapName) {
-            if (getTriggerType() == TriggerType.MAP_TRANSITION) {
-                MapTransitionTriggerMatcher matcher = deserialize(this.triggerContents, MapTransitionTriggerMatcher.class);
-                matcher.previousMap = mapName;
-                this.triggerContents = getJson(matcher);
-            }
-        }
 
         public List<Point> getLocation() {
             List<Point> points = new ArrayList<>();
@@ -333,8 +339,6 @@ public class AreaDataMatcher {
     }
 
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
-
-        System.out.println(fileName);
 
         AreaDataMatcher areaData = gson.fromJson(areaDescription, AreaDataMatcher.class);
         JsonObject mappity = gson.fromJson(areaDescription, JsonObject.class);

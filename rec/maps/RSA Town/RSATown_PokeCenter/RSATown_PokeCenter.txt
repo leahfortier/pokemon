@@ -1,0 +1,54 @@
+{
+  "NPCs": [
+    {
+      "name": "Nurse_Joy",
+      "startX": 7,
+      "startY": 2,
+      "spriteIndex": 8,
+      "direction": "DOWN",
+      "walkToPlayer": false,
+      "interactions": []
+    },
+    {
+      "name": "Mart_Guy",
+      "startX": 2,
+      "startY": 7,
+      "spriteIndex": 9,
+      "direction": "RIGHT",
+      "walkToPlayer": false,
+      "interactions": []
+    }
+  ],
+  "items": [],
+  "mapExits": [
+    {
+      "exitName": "FrontDoor",
+      "location": [
+        7,
+        8
+      ],
+      "nextMap": "RSATown",
+      "nextEntrance": "PokeCenter",
+      "direction": "DOWN",
+      "deathPortal": true
+    }
+  ],
+  "triggerData": [],
+  "triggers": [
+    {
+      "x": 7,
+      "y": 3,
+      "trigger": "Heal_Trigger"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "trigger": "Mart_Trigger"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "trigger": "PC_Trigger"
+    }
+  ]
+}

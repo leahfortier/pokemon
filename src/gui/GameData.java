@@ -5,7 +5,6 @@ import map.AreaData;
 import map.MapData;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import trainer.CharacterData;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -62,11 +61,15 @@ public class GameData {
 		File dir = new File(Folder.MAPS); // TODO: Check exists
 
 		for (File d : dir.listFiles()) {
-			if (d.getName().charAt(0) == '.' || d.getName().equals("areaIndex.txt")) {
+			if (!d.isDirectory()) {
 				continue;
 			}
 
 			maps.put(d.getName(), new MapData(d));
+			for (File mapFolder : d.listFiles()) {
+				maps.put(mapFolder.getName(), new MapData(mapFolder));
+			}
+
 		}
 	}
 

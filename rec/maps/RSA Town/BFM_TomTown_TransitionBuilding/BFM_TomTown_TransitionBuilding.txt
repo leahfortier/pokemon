@@ -1,0 +1,45 @@
+{
+  "NPCs": [
+    {
+      "name": "Info_Guy",
+      "startX": 6,
+      "startY": 1,
+      "path": "w",
+      "spriteIndex": 10,
+      "direction": "DOWN",
+      "walkToPlayer": false,
+      "interactions": []
+    }
+  ],
+  "items": [],
+  "mapExits": [
+    {
+      "exitName": "WestDoor",
+      "location": [
+        2,
+        3
+      ],
+      "nextMap": "Tom_Town",
+      "nextEntrance": "EastTransitionBuilding",
+      "direction": "LEFT"
+    },
+    {
+      "exitName": "EastDoor",
+      "location": [
+        10,
+        3
+      ],
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "WestTransitionBuilding",
+      "direction": "RIGHT"
+    }
+  ],
+  "triggerData": [],
+  "triggers": [
+    {
+      "x": 6,
+      "y": 2,
+      "trigger": "GroupTrigger_TransitionBuilding_InformationDesk"
+    }
+  ]
+}

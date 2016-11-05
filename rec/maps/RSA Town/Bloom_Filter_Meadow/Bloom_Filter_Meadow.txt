@@ -105,28 +105,28 @@
   ],
   "mapExits": [
     {
-      "exitName": "TransitionWestDoor",
+      "exitName": "EastTransitionBuilding",
       "location": [
         54,
         21,
         54,
         20
       ],
-      "nextMap": "TransitionBuildingH",
+      "nextMap": "RSATown_BFM_TransitionBuilding",
       "nextEntrance": "WestDoor",
-      "direction": "LEFT"
+      "direction": "RIGHT"
     },
     {
-      "exitName": "TransitionEastDoor",
+      "exitName": "WestTransitionBuilding",
       "location": [
         13,
         21,
         13,
         20
       ],
-      "nextMap": "TransitionBuildingH",
+      "nextMap": "BFM_TomTown_TransitionBuilding",
       "nextEntrance": "EastDoor",
-      "direction": "RIGHT"
+      "direction": "LEFT"
     }
   ],
   "triggerData": [

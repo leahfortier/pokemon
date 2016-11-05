@@ -2,7 +2,7 @@
   "NPCs": [
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 3,
       "startY": 5,
       "path": "w",
@@ -25,7 +25,7 @@
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01",
-      "condition": "!Badge_0&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))",
+      "condition": "!BadgeTrigger_0",
       "startX": 5,
       "startY": 7,
       "path": "w",
@@ -48,7 +48,7 @@
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 4,
       "startY": 6,
       "path": "w",
@@ -71,7 +71,7 @@
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
-      "condition": "!Badge_0&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))",
+      "condition": "!BadgeTrigger_0",
       "startX": 6,
       "startY": 7,
       "path": "w",
@@ -94,7 +94,7 @@
     },
     {
       "name": "TransitionBuildingV_NPC_PoliceOfficer_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant&MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 6,
       "startY": 7,
       "path": "w",
@@ -123,7 +123,6 @@
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01",
-      "condition": "MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_WindValley&MapGlobal_MapEntrance_SouthDoor)|(MapGlobal_PreviousMap_Tom_Town&MapGlobal_MapEntrance_NorthDoor))",
       "startX": 3,
       "startY": 3,
       "path": "w",
@@ -164,19 +163,23 @@
   "items": [],
   "mapExits": [
     {
-      "exitName": "TransitionNorthDoor",
+      "exitName": "NorthDoor",
       "location": [
         6,
         1
       ],
+      "nextMap": "Tom_Town",
+      "nextEntrance": "SouthTransitionBuilding",
       "direction": "UP"
     },
     {
-      "exitName": "TransitionSouthDoor",
+      "exitName": "SouthDoor",
       "location": [
         6,
         7
       ],
+      "nextMap": "WindValley",
+      "nextEntrance": "NorthTransitionBuilding",
       "direction": "DOWN"
     }
   ],

@@ -60,16 +60,19 @@ class ItemEntity extends Entity {
 		}
 
 		GameData data = Game.getData();
-		final String itemTriggerName = "ItemEntity_" + TriggerType.GIVE_ITEM.getTriggerName(this.itemName.getName());
+		final String itemTriggerSuffix = "ItemEntity_" + TriggerType.GIVE_ITEM.getTriggerName(this.itemName.getName());
+		final String itemTriggerName = TriggerType.GROUP.getTriggerNameFromSuffix(itemTriggerSuffix);
 
 		// Create a universal trigger for this item
 		if (!data.hasTrigger(itemTriggerName)) {
-			String itemDialogue = "You found " + StringUtils.articleString(itemName.getName()) + "!";
+			String itemDialogue = "You found " + StringUtils.articleString(this.itemName.getName()) + "!";
 
 			Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue);
 			Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName());
 
 			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(dialogue.getName(), giveItem.getName());
+			groupTriggerMatcher.suffix = itemTriggerSuffix;
+
 			Trigger groupTrigger = TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(groupTriggerMatcher));
 
 			data.addTrigger(dialogue);

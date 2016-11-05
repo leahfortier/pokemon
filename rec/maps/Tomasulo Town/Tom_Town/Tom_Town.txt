@@ -142,7 +142,7 @@
   "items": [],
   "mapExits": [
     {
-      "exitName": "TransitionNorthDoor",
+      "exitName": "SouthTransitionBuilding",
       "location": [
         26,
         36,
@@ -151,29 +151,29 @@
         27,
         36
       ],
-      "nextMap": "TransitionBuildingV",
+      "nextMap": "TomTown_WindValley_TransitionBuilding",
       "nextEntrance": "NorthDoor",
       "direction": "DOWN"
     },
     {
-      "exitName": "TransitionWestDoor",
+      "exitName": "EastTransitionBuilding",
       "location": [
         52,
         26,
         52,
         25
       ],
-      "nextMap": "TransitionBuildingH",
+      "nextMap": "BFM_TomTown_TransitionBuilding",
       "nextEntrance": "WestDoor",
       "direction": "RIGHT"
     },
     {
-      "exitName": "PokeCenter01",
+      "exitName": "PokeCenter",
       "location": [
         38,
         32
       ],
-      "nextMap": "PokeCenter",
+      "nextMap": "Tom_Town_PokeCenter",
       "nextEntrance": "FrontDoor",
       "direction": "UP"
     },

@@ -311,14 +311,14 @@
       "direction": "UP"
     },
     {
-      "exitName": "TransitionBuildingHEastDoor01",
+      "exitName": "WestTransitionBuilding",
       "location": [
         14,
         20,
         14,
         19
       ],
-      "nextMap": "TransitionBuildingH",
+      "nextMap": "Edge1_RSATown_TransitionBuilding",
       "nextEntrance": "EastDoor",
       "direction": "LEFT"
     }

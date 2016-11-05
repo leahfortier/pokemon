@@ -12,7 +12,6 @@
     },
     {
       "name": "BFM_Guy",
-      "condition": "MapGlobal_TransitionPair01&((MapGlobal_PreviousMap_Bloom_Filter_Meadow&MapGlobal_MapEntrance_WestDoor)|(MapGlobal_PreviousMap_RSATown&MapGlobal_MapEntrance_EastDoor))",
       "startX": 2,
       "startY": 2,
       "path": "w",
@@ -37,19 +36,23 @@
   "items": [],
   "mapExits": [
     {
-      "exitName": "TransitionWestDoor",
-      "location": [
-        10,
-        3
-      ],
-      "direction": "LEFT"
-    },
-    {
-      "exitName": "TransitionWestDoor",
+      "exitName": "WestDoor",
       "location": [
         2,
         3
       ],
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "EastTransitionBuilding",
+      "direction": "LEFT"
+    },
+    {
+      "exitName": "EastDoor",
+      "location": [
+        10,
+        3
+      ],
+      "nextMap": "RSATown",
+      "nextEntrance": "WestTransitionBuilding",
       "direction": "RIGHT"
     }
   ],
