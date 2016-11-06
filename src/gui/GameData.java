@@ -3,15 +3,22 @@ package gui;
 import main.Global;
 import map.AreaData;
 import map.MapData;
+import map.entity.npc.EntityAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
+import pattern.AreaDataMatcher;
+import pattern.AreaDataMatcher.GroupTriggerMatcher;
+import pattern.AreaDataMatcher.InteractionMatcher;
+import pattern.AreaDataMatcher.MiscActions;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +44,6 @@ public class GameData {
 
 	public void loadData() {
 		loadTiles();
-		loadTriggers();
 		loadAreas();
 		loadMaps();
 	}
@@ -57,6 +63,7 @@ public class GameData {
 	}
 
 	private void loadMaps() {
+		triggers = new HashMap<>();
 		maps = new HashMap<>();
 		File dir = new File(Folder.MAPS); // TODO: Check exists
 
@@ -96,24 +103,6 @@ public class GameData {
 			AreaData area = new AreaData(areaName, value, m.group(3), m.group(4), m.group(5));
 			areas.put(value, area);
 			area.addMusicTriggers(this);
-		}
-	}
-
-	private void loadTriggers() {
-		triggers = new HashMap<>();
-		File triggerFolder = new File(Folder.TRIGGERS);
-		for (File f : triggerFolder.listFiles()) {
-			if (f.getName().charAt(0) == '.') {
-				continue;
-			}
-
-			String fileText = FileIO.readEntireFileWithReplacements(f, false);
-			Matcher m = triggerBlockPattern.matcher(fileText);
-			while (m.find()) {
-				TriggerType type = TriggerType.getTriggerType(m.group(1));
-
-				addTrigger(type, m.group(3));
-			}
 		}
 	}
 

@@ -500,15 +500,17 @@ public class MapView extends View {
 					input.consumeKey(Control.SPACE);
 //					currentDialogue.choose(dialogueSelection, this, game);
 
+					boolean newMessage = false;
 					while (Messages.hasMessages()) {
 						cycleMessage();
 
 						if (state != VisualState.MESSAGE || !StringUtils.isNullOrEmpty(currentMessage.getMessage())) {
+							newMessage = true;
 							break;
 						}
 					}
 
-					if (!Messages.hasMessages()) {
+					if (!newMessage && !Messages.hasMessages()) {
 						currentMessage = null;
 						if (battle == null) {
 							state = VisualState.MAP;
@@ -546,8 +548,7 @@ public class MapView extends View {
 					case 5: // save
 						// TODO: Question user if they would like to save first.
 						Save.save();
-						// TODO: find the saved game dialogue and make a dialogue trigger for it and then add that trigger here
-//						Messages.addMessage(game, Game.getData().getDialogue("savedGame"));
+						Messages.addMessage("Your game has now been saved!");
 						state = VisualState.MESSAGE;
 						break;
 					case 6: // exit

@@ -101,6 +101,24 @@ public abstract class EntityAction {
         }
     }
 
+    public static class GlobalAction extends EntityAction {
+        private final String globalName;
+
+        public GlobalAction(final String globalName) {
+            this.globalName = globalName;
+        }
+
+        @Override
+        protected TriggerType getTriggerType() {
+            return TriggerType.GLOBAL;
+        }
+
+        @Override
+        protected String getTriggerContents(String entityName) {
+            return globalName;
+        }
+    }
+
     // TODO: This
     public static class ChoiceAction extends EntityAction {
         @Override

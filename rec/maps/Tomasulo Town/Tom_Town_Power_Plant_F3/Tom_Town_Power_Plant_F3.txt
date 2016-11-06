@@ -132,7 +132,16 @@
               }
             },
             {
-              "groupTrigger": "GroupTrigger_TomTownPowerPlantDefeatedTeamDeadlock"
+              "global": "VisitedTomTownPowerPlant"
+            },
+            {
+              "trigger": {
+                "triggerType": "MapTransition",
+                "triggerContents": "{
+                        nextMap: Tom_Town_Power_Plant_F3,
+                        mapEntrance: ReloadLocation
+                    }"
+              }
             }
           ]
         }

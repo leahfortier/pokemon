@@ -1,17 +1,11 @@
 package map.triggers;
 
-import main.Game;
 import pattern.AreaDataMatcher.TriggerDataMatcher;
-import util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class TriggerData {
-	private static final Pattern integerRangePattern = Pattern.compile("\\d+(?:-\\d+)?");
-	
 	public TriggerType triggerType;
 	public String triggerContents;
 

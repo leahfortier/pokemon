@@ -14,8 +14,6 @@ public abstract class Folder {
 
     public static final String GENERIC_EFFECT = FileIO.makeFolderPath(BATTLE, "effect", "generic");
 
-    public static final String TRIGGERS = FileIO.makeFolderPath(REC, "triggers");
-    public static final String DIALOGUES = FileIO.makeFolderPath(REC, "dialogue");
     public static final String MAPS = FileIO.makeFolderPath(REC, "maps");
     public static final String TILES = FileIO.makeFolderPath(REC, "tiles");
     public static final String GENERATOR = FileIO.makeFolderPath(REC, "generator");

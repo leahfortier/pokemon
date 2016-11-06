@@ -65,7 +65,7 @@ public class PokeString {
 	public static String getNamesiesString(String name) {
 		// Remove special characters and spaces
 		name = removeSpecialCharacters(name).replace(" ", "");
-		
+
 		char[] nameChar = name.toCharArray();
 		String enumName = nameChar[0] + "";
 		

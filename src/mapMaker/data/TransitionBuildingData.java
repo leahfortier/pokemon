@@ -24,11 +24,10 @@ import mapMaker.MapMaker;
 import util.Folder;
 
 class TransitionBuildingData {
-	private static final String transitionBuildingTriggersFile = Folder.TRIGGERS + "TransitionBuildingTriggers";
+//	private static final String transitionBuildingTriggersFile = Folder.TRIGGERS + "TransitionBuildingTriggers";
 	static final Pattern transitionBuildingTransitionNamePattern = Pattern.compile("TransitionBuilding(H|V)_between_(\\w+)_and_(\\w+)_pair_(\\d+)_(North|South|East|West)Door");
 
-	// TODO: Change folder to dialog since that's what's everywhere
-	private static final String transitionBuildingDialogFile = Folder.DIALOGUES + "TransitionBuildingDialogs";
+//	private static final String transitionBuildingDialogFile = Folder.DIALOGUES + "TransitionBuildingDialogs";
 	private static final Pattern transitionBuildingInformationNamePattern = Pattern.compile("TransitionBuilding(H|V)_InformationDesk_between_map1_(\\w+)_area1_(\\w+)_and_map2_(\\w+)_area2_(\\w+)_pair_(\\d+)");
 
 	static final String[] directions = { "East", "West", "North", "South" };
@@ -67,7 +66,7 @@ class TransitionBuildingData {
 	}
 	
 	private void readTransitions() {
-		transitionBuildingTriggerFile = new File(mapMaker.getPathWithRoot(transitionBuildingTriggersFile));
+//		transitionBuildingTriggerFile = new File(mapMaker.getPathWithRoot(transitionBuildingTriggersFile));
 		
 		String fileText = FileIO.readEntireFileWithReplacements(transitionBuildingTriggerFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
@@ -286,16 +285,16 @@ class TransitionBuildingData {
 			writer.close();
 			
 			// Write to dialog file
-			File dialogFile = new File(mapMaker.getPathWithRoot(transitionBuildingDialogFile));
+//			File dialogFile = new File(mapMaker.getPathWithRoot(transitionBuildingDialogFile));
 
 			// TODO: Whatever is going on here should probably just be a method inside the FileIO util class
 			// Create file if it doesn't exist
-			if (!dialogFile.exists()) {
-				dialogFile.getParentFile().mkdirs();
-				dialogFile.createNewFile();
-			}
+//			if (!dialogFile.exists()) {
+//				dialogFile.getParentFile().mkdirs();
+//				dialogFile.createNewFile();
+//			}
 			
-			writer = new FileWriter(dialogFile);
+//			writer = new FileWriter(dialogFile);
 			
 			for (TransitionBuildingPair pair: allTransitionPairs) {
 				writer.write(pair.getInfoDialogue(mapMaker) + "\n\n");

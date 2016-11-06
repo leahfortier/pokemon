@@ -40,7 +40,7 @@ class MapTriggerData {
 	
 	private void readTriggers() {
 
-		triggerFile = new File(mapMaker.getPathWithRoot(Folder.TRIGGERS + currentMap + mapFileNameExtension));
+//		triggerFile = new File(mapMaker.getPathWithRoot(Folder.TRIGGERS + currentMap + mapFileNameExtension));
 		if (!triggerFile.exists()) {
 			return;
 		}

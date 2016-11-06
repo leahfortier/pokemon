@@ -19,7 +19,7 @@ import mapMaker.MapMaker;
 import util.Folder;
 
 class PokeCenterTransitionData {
-	private static final String pokeCenterTransitionTriggersFile = Folder.TRIGGERS + "PokeCenterTransitionTriggers";
+//	private static final String pokeCenterTransitionTriggersFile = Folder.TRIGGERS + "PokeCenterTransitionTriggers";
 	
 	private GroupTrigger groupTrigger;
 	private Map<String, MapTransitionTrigger> transitionTriggers;
@@ -40,7 +40,7 @@ class PokeCenterTransitionData {
 	}
 	
 	private void readTransitions() {
-		pokeCenterTransitionFile = new File(mapMaker.getPathWithRoot(pokeCenterTransitionTriggersFile));
+//		pokeCenterTransitionFile = new File(mapMaker.getPathWithRoot(pokeCenterTransitionTriggersFile));
 		
 		String fileText = FileIO.readEntireFileWithReplacements(pokeCenterTransitionFile, false);
 		Matcher m = GameData.triggerBlockPattern.matcher(fileText);

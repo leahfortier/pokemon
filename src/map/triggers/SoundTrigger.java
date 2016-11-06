@@ -5,6 +5,7 @@ import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.SoundTriggerMatcher;
 import sound.SoundTitle;
 import util.PokeString;
+import util.StringUtils;
 
 public class SoundTrigger extends Trigger {
 	private SoundTitle music;
@@ -14,13 +15,17 @@ public class SoundTrigger extends Trigger {
 		super(TriggerType.SOUND, contents);
 
 		SoundTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, SoundTriggerMatcher.class);
-		this.effect = SoundTitle.valueOf(PokeString.getNamesiesString(matcher.effectName));
-		this.music = SoundTitle.valueOf(PokeString.getNamesiesString(matcher.musicName));
+		if (!StringUtils.isNullOrEmpty(matcher.effectName)) {
+			this.effect = SoundTitle.valueOf(PokeString.getNamesiesString(matcher.effectName));
+		}
+
+		if (!StringUtils.isNullOrEmpty(matcher.musicName)) {
+			this.music = SoundTitle.valueOf(PokeString.getNamesiesString(matcher.musicName));
+		}
+
 	}
 	
 	protected void executeTrigger() {
-		super.execute();
-			
 		if (music != null) {
 			Global.soundPlayer.playMusic(music);
 		}

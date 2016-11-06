@@ -1,7 +1,0 @@
-{
-	triggerData: [
-		name: LockedDoorTrigger
-		triggerType: Dialogue
-		triggerContents: "The door is locked."
-	]
-}
