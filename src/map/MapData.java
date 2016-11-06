@@ -1,11 +1,13 @@
 package map;
 
+import gui.GameData;
 import gui.GameFrame;
 import main.Game;
 import map.entity.Entity;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
 import map.entity.TriggerEntityData;
+import map.entity.npc.EntityAction;
 import map.entity.npc.NPCEntityData;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
@@ -15,7 +17,6 @@ import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.ItemMatcher;
 import pattern.AreaDataMatcher.MapExitMatcher;
 import pattern.AreaDataMatcher.NPCMatcher;
-import pattern.AreaDataMatcher.TriggerDataMatcher;
 import pattern.AreaDataMatcher.TriggerMatcher;
 import trainer.CharacterData;
 import util.FileIO;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 
 
 public class MapData {
@@ -76,7 +76,9 @@ public class MapData {
 		entities = new ArrayList<>();
 		triggers = new HashMap<>();
 		mapEntrances = new HashMap<>();
-		
+
+		GameData data = Game.getData();
+
 		File f = new File(beginFilePath + ".txt");
 		String fileText = FileIO.readEntireFileWithReplacements(f, false);
 
@@ -100,28 +102,30 @@ public class MapData {
                     int exitX = point.x + matcher.direction.dx;
                     int exitY = point.y + matcher.direction.dy;
 
-                    Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(AreaDataMatcher.getJson(matcher));
+                    Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(AreaDataMatcher.getJson(matcher), null);
                     triggers.put(getMapIndex(exitX, exitY), trigger.getName());
 
                     // TODO: This can likely be added inside the create trigger method
-                    Game.getData().addTrigger(trigger);
+                    data.addTrigger(trigger);
                 }
             }
         }
 
-        for (TriggerDataMatcher matcher : areaDataMatcher.triggerData) {
+		for (TriggerMatcher matcher : areaDataMatcher.triggerData) {
 			TriggerData triggerData = new TriggerData(matcher);
+			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
 
-            Trigger trigger = matcher.getTriggerType().createTrigger(matcher.triggerContents);
-			for (Integer loc: triggerData.getPoints(width)) {
-				triggers.put(loc, trigger.getName());
+			for (Point point : matcher.getLocation()) {
+				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
 			}
 
-            Game.getData().addTrigger(trigger);
+            data.addTrigger(trigger);
 		}
 
 		for (TriggerMatcher matcher : areaDataMatcher.triggers) {
-			entities.add(new TriggerEntityData(matcher));
+			for (Point point : matcher.getLocation()) {
+				entities.add(new TriggerEntityData(point.x, point.y, matcher));
+			}
 		}
 	}
 
@@ -142,25 +146,6 @@ public class MapData {
 		WalkType(int v) {
 			value = v;
 		}
-	}
-	
-	public static int getMapEntranceLocation(String contents, int width) {
-		int x = 0;
-		int y = 0;
-		
-		Matcher m = EntityData.variablePattern.matcher(contents);
-		while (m.find()) {
-			switch (m.group(1)) {
-				case "x":
-					x = Integer.parseInt(m.group(2));
-					break;
-				case "y":
-					y = Integer.parseInt(m.group(2));
-					break;
-			}
-		}
-		
-		return getMapIndex(x, y, width);
 	}
 
 	public int getPlayerMapIndex() {
@@ -228,16 +213,19 @@ public class MapData {
 		return null;
 	}
 	
-	public boolean setCharacterToEntrance(CharacterData character, String entranceName) {
+	public boolean setCharacterToEntrance(String entranceName) {
         if (mapEntrances.containsKey(entranceName)) {
 			int entrance = mapEntrances.get(entranceName);
 			int newY = entrance / width;
 			int newX = entrance - newY * width;
-			character.setLocation(newX, newY);
+			Game.getPlayer().setLocation(newX, newY);
 
-            return true;
+			System.out.println("has map entrance at " + newX + " " + newY);
+
+			return true;
 		}
-		
+		System.out.println("NO MAP ENTRANCE NAMED " + entranceName);
+
 		return false;
 	}
 

@@ -6,8 +6,8 @@ import util.StringUtils;
 
 public class HealPartyTrigger extends Trigger {
 
-	HealPartyTrigger(String contents)	{
-		super(TriggerType.HEAL_PARTY, contents);
+	HealPartyTrigger(String contents, String condition)	{
+		super(TriggerType.HEAL_PARTY, contents, condition);
 
 		if (!StringUtils.isNullOrEmpty(contents)) {
 			Global.error("Contents should be empty for HealPartyTrigger");

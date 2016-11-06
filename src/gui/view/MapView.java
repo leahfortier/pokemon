@@ -406,7 +406,7 @@ public class MapView extends View {
 			
 			if (character.mapReset) {
 				character.mapReset = false;
-				currentMap.setCharacterToEntrance(character, character.mapEntranceName);
+				currentMap.setCharacterToEntrance(character.mapEntranceName);
 			}
 			
 			currentArea = null;

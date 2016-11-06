@@ -1,6 +1,7 @@
 package map.triggers;
 
 import main.Game;
+import map.Condition;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
@@ -24,12 +25,12 @@ public class GroupTrigger extends Trigger {
 		return contents;
 	}
 
-	GroupTrigger(String contents) {
-		this(contents, AreaDataMatcher.deserialize(contents, GroupTriggerMatcher.class));
+	GroupTrigger(String contents, String condition) {
+		this(contents, condition, AreaDataMatcher.deserialize(contents, GroupTriggerMatcher.class));
 	}
 
-	private GroupTrigger(String contents, GroupTriggerMatcher matcher) {
-		super(TriggerType.GROUP, contents, matcher.condition, matcher.globals);
+	private GroupTrigger(String contents, String condition, GroupTriggerMatcher matcher) {
+		super(TriggerType.GROUP, contents, Condition.and(condition, matcher.condition), matcher.globals);
 		this.triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
 	}
 

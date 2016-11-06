@@ -753,8 +753,11 @@
         48,
         28
       ],
-      "triggerType": "WildBattle",
-      "triggerContents": "{
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "WildBattle",
+            "triggerContents": "{
         encounterRate: VERY_COMMON,
         pokemon: [
 			\"Pidgey 2-4 30%\", 
@@ -764,6 +767,9 @@
 			\"Lillipup 2-4 10%\"
         ]
       }"
+          }
+        }
+      ]
     }
   ],
   "triggers": []

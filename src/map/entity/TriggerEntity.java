@@ -47,22 +47,7 @@ public class TriggerEntity extends Entity {
 			return;
 		}
 
-		GameData data = Game.getData();
-
-		// TODO: Create a common method for this and merge with npc entity
-		final String[] actionTriggerNames = new String[actions.size()];
-		for (int i = 0; i < actions.size(); i++) {
-			Trigger actionTrigger = actions.get(i).getTrigger(this.name);
-			data.addTrigger(actionTrigger);
-			actionTriggerNames[i] = actionTrigger.getName();
-		}
-
-		GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
-		matcher.suffix = this.getTriggerSuffix();
-		final String groupContents = AreaDataMatcher.getJson(matcher);
-
-		data.addTrigger(TriggerType.GROUP, groupContents);
-
+		EntityAction.addActionGroupTrigger(this.name, this.getTriggerSuffix(), this.actions);
 		dataCreated = true;
 	}
 

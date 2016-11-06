@@ -9,10 +9,6 @@ import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
 import map.entity.npc.EntityAction.BattleAction;
-import map.triggers.Trigger;
-import map.triggers.TriggerType;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import trainer.CharacterData;
 import util.InputControl;
 import util.StringUtils;
@@ -211,24 +207,11 @@ public class NPCEntity extends MovableEntity {
 			return;
 		}
 
-		GameData data = Game.getData();
-
 		for (Entry<String, List<EntityAction>> interaction : this.interactions.entrySet()) {
 			final String interactionName = interaction.getKey();
 			final List<EntityAction> actions = interaction.getValue();
 
-			final String[] actionTriggerNames = new String[actions.size()];
-			for (int i = 0; i < actions.size(); i++) {
-				Trigger actionTrigger = actions.get(i).getTrigger(this.name);
-				data.addTrigger(actionTrigger);
-				actionTriggerNames[i] = actionTrigger.getName();
-			}
-
-			GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
-			matcher.suffix = this.getTriggerSuffix(interactionName);
-			final String groupContents = AreaDataMatcher.getJson(matcher);
-
-			data.addTrigger(TriggerType.GROUP, groupContents);
+			EntityAction.addActionGroupTrigger(this.name, this.getTriggerSuffix(interactionName), actions);
 		}
 		
 		dataCreated = true;

@@ -20,8 +20,8 @@ public class WildBattleTrigger extends Trigger {
 	private WildEncounter[] wildEncounters;
 	private EncounterRate encounterRate;
 
-	WildBattleTrigger(String matcherJson) {
-		super(TriggerType.WILD_BATTLE, matcherJson);
+	WildBattleTrigger(String matcherJson, String condition) {
+		super(TriggerType.WILD_BATTLE, matcherJson, condition);
 
 		WildBattleTriggerMatcher matcher = AreaDataMatcher.deserialize(matcherJson, WildBattleTriggerMatcher.class);
 		this.wildEncounters = matcher.getWildEncounters();

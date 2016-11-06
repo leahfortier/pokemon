@@ -67,13 +67,13 @@ class ItemEntity extends Entity {
 		if (!data.hasTrigger(itemTriggerName)) {
 			String itemDialogue = "You found " + StringUtils.articleString(this.itemName.getName()) + "!";
 
-			Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue);
-			Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName());
+			Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue, null);
+			Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
 
 			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(dialogue.getName(), giveItem.getName());
 			groupTriggerMatcher.suffix = itemTriggerSuffix;
 
-			Trigger groupTrigger = TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(groupTriggerMatcher));
+			Trigger groupTrigger = TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(groupTriggerMatcher), null);
 
 			data.addTrigger(dialogue);
 			data.addTrigger(giveItem);
@@ -85,7 +85,7 @@ class ItemEntity extends Entity {
 		matcher.suffix = this.getTriggerSuffix();
 		matcher.globals = new String[] { "has" + name };
 
-		data.addTrigger(TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher)));
+		data.addTrigger(TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher), null));
 
 		dataCreated = true;
 	}

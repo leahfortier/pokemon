@@ -20,8 +20,8 @@ public class MapTransitionTrigger extends Trigger {
 		return matcher.previousMap + "_" + matcher.nextMap + "_" + matcher.nextEntrance;
 	}
 
-	MapTransitionTrigger(String contents) {
-		super(TriggerType.MAP_TRANSITION, contents);
+	MapTransitionTrigger(String contents, String condition) {
+		super(TriggerType.MAP_TRANSITION, contents, condition);
 
 		MapExitMatcher matcher = AreaDataMatcher.deserialize(contents, MapExitMatcher.class);
 		this.nextMap = matcher.nextMap;
@@ -36,7 +36,7 @@ public class MapTransitionTrigger extends Trigger {
 		player.setMap(nextMap, mapEntranceName);
 
 		// TODO: When is newx/newy specified? why would they not just specify an actual entrance?
-		if (mapEntranceName == null || !Game.getData().getMap(nextMap).setCharacterToEntrance(player, mapEntranceName)) {
+		if (mapEntranceName == null || !Game.getData().getMap(nextMap).setCharacterToEntrance(mapEntranceName)) {
 			player.setLocation(newX, newY);
 		}
 		

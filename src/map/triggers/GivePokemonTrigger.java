@@ -7,8 +7,8 @@ import pokemon.ActivePokemon;
 public class GivePokemonTrigger extends Trigger {
     private final PokemonMatcher pokemonMatcher;
 
-    GivePokemonTrigger(String pokemonDescription) {
-        super(TriggerType.GIVE_POKEMON, pokemonDescription);
+    GivePokemonTrigger(String pokemonDescription, String condition) {
+        super(TriggerType.GIVE_POKEMON, pokemonDescription, condition);
 
         this.pokemonMatcher = PokemonMatcher.matchPokemonDescription(pokemonDescription);
     }

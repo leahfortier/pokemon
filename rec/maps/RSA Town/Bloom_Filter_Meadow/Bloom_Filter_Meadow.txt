@@ -439,8 +439,11 @@
         46,
         19
       ],
-      "triggerType": "WildBattle",
-      "triggerContents": "{
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "WildBattle",
+            "triggerContents": "{
         encounterRate: VERY_COMMON,
         pokemon: [
 			\"Caterpie 4-6 20%\", 
@@ -457,6 +460,9 @@
 			\"Flabebe 4-6 10%\"
         ]
       }"
+          }
+        }
+      ]
     }
   ],
   "triggers": []

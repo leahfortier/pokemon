@@ -13,12 +13,12 @@ public class TriggerEntityData extends EntityData {
 
 	private List<EntityAction> actions;
 
-	public TriggerEntityData(TriggerMatcher matcher) {
+	public TriggerEntityData(int x, int y, TriggerMatcher matcher) {
 		super(matcher.name, matcher.condition);
 
-		x = matcher.x;
-		y = matcher.y;
-		actions = matcher.getActions();
+		this.x = x;
+		this.y = y;
+		this.actions = matcher.getActions();
 	}
 	
 	public Entity getEntity() {

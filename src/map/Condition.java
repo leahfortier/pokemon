@@ -105,6 +105,21 @@ public class Condition {
 		
 		return stack.pop();
 	}
+
+	public static String and(final String firstCondition, final String secondCondition) {
+		if (StringUtils.isNullOrEmpty(firstCondition)) {
+			if (StringUtils.isNullOrEmpty(secondCondition)) {
+				return StringUtils.empty();
+			}
+
+			return secondCondition;
+		} else if (StringUtils.isNullOrEmpty(secondCondition)) {
+			return firstCondition;
+		} else {
+			return String.format("(%s)&(%s)", firstCondition, secondCondition);
+		}
+
+	}
 	
 	public boolean add(String global, char op) {
 		if (op != '&' && op != '|') {

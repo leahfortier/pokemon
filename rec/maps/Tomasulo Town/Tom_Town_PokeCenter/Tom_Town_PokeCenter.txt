@@ -58,8 +58,10 @@
   "triggers": [
     {
       "name": "PC",
-      "x": 3,
-      "y": 1,
+      "location": [
+        3,
+        1
+      ],
       "actions": [
         {
           "trigger": {
@@ -77,8 +79,10 @@
     },
     {
       "name": "Mart",
-      "x": 3,
-      "y": 7,
+      "location": [
+        3,
+        7
+      ],
       "actions": [
         {
           "trigger": {
@@ -96,8 +100,10 @@
     },
     {
       "name": "Heal",
-      "x": 7,
-      "y": 3,
+      "location": [
+        7,
+        3
+      ],
       "actions": [
         {
           "trigger": {

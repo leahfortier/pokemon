@@ -3,22 +3,15 @@ package gui;
 import main.Global;
 import map.AreaData;
 import map.MapData;
-import map.entity.npc.EntityAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.GroupTriggerMatcher;
-import pattern.AreaDataMatcher.InteractionMatcher;
-import pattern.AreaDataMatcher.MiscActions;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -126,8 +119,8 @@ public class GameData {
 		return triggers.get(name);
 	}
 
-	public void addTrigger(TriggerType type, String contents) {
-		this.addTrigger(type.createTrigger(contents));
+	public void addTrigger(TriggerType type, String contents, String condition) {
+		this.addTrigger(type.createTrigger(contents, condition));
 	}
 
 	public void addTrigger(Trigger trigger) {

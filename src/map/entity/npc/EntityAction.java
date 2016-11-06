@@ -1,6 +1,9 @@
 package map.entity.npc;
 
+import gui.GameData;
+import main.Game;
 import map.triggers.Trigger;
+import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.BattleMatcher;
@@ -8,22 +11,55 @@ import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import pattern.AreaDataMatcher.UpdateMatcher;
 import util.StringUtils;
 
+import java.util.List;
+
 public abstract class EntityAction {
-    public Trigger getTrigger(String entityName) {
+
+    public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, List<EntityAction> actions) {
+        GameData data = Game.getData();
+
+        final String[] actionTriggerNames = new String[actions.size()];
+        for (int i = 0; i < actions.size(); i++) {
+            Trigger actionTrigger = actions.get(i).getTrigger(entityName);
+            data.addTrigger(actionTrigger);
+            actionTriggerNames[i] = actionTrigger.getName();
+        }
+
+        GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
+        matcher.suffix = triggerSuffix;
+        final String groupContents = AreaDataMatcher.getJson(matcher);
+
+        // Condition is really in the interaction name and the npc condition, so
+        // once these are both valid then the interaction can proceed as usual
+        // TODO: Condition is inside group trigger, but now that this exists, should it be removed?
+        Trigger groupTrigger = TriggerType.GROUP.createTrigger(groupContents, null);
+        data.addTrigger(groupTrigger);
+        return groupTrigger;
+    }
+
+    private Trigger getTrigger(String entityName) {
         return this.getTriggerType()
-                .createTrigger(this.getTriggerContents(entityName));
+                .createTrigger(
+                        this.getTriggerContents(entityName),
+                        this.getCondition()
+                );
     }
 
     protected abstract TriggerType getTriggerType();
     protected abstract String getTriggerContents(String entityName);
+    protected String getCondition() {
+        return null;
+    }
 
     public static class TriggerAction extends EntityAction {
         private final TriggerType type;
         private final String contents;
+        private final String condition;
 
-        public TriggerAction(final TriggerType type, final String contents) {
+        public TriggerAction(final TriggerType type, final String contents, final String condition) {
             this.type = type;
             this.contents = StringUtils.isNullOrEmpty(contents) ? StringUtils.empty() : contents;
+            this.condition = condition;
         }
 
         @Override
@@ -34,6 +70,11 @@ public abstract class EntityAction {
         @Override
         protected String getTriggerContents(String entityName) {
             return this.contents;
+        }
+
+        @Override
+        protected String getCondition() {
+            return this.condition;
         }
     }
 

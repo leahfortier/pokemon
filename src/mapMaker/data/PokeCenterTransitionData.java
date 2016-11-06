@@ -47,12 +47,12 @@ class PokeCenterTransitionData {
 		while (m.find()) {
 			TriggerType type = TriggerType.getTriggerType(m.group(1));
 			String name = m.group(2);
-			Trigger trigger = type.createTrigger(m.group(3));
+			Trigger trigger = type.createTrigger(m.group(3), null);
 			
-			if (type.equals("Group")) {
+			if (type == TriggerType.GROUP) {
 				groupTrigger = (GroupTrigger)trigger;
 			}
-			else if (type.equals("MapTransition")) {
+			else if (type == TriggerType.MAP_TRANSITION) {
 				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
 				transitionTriggers.put(transitionTrigger.getTransitionTriggerName(), transitionTrigger);
 			}

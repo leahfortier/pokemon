@@ -48,8 +48,8 @@ public class AreaDataMatcher {
     public NPCMatcher[] NPCs = new NPCMatcher[0];
     public ItemMatcher[] items = new ItemMatcher[0];
     public MapExitMatcher[] mapExits = new MapExitMatcher[0];
-    public TriggerDataMatcher[] triggerData = new TriggerDataMatcher[0];
-    public TriggerMatcher[] triggers = new TriggerMatcher[0];
+    public TriggerMatcher[] triggerData = new TriggerMatcher[0];
+    public TriggerMatcher[] triggers = new TriggerMatcher[0]; // TODO: Rename
 
     public static <T> T deserialize(String jsonString, Class<T> tClass) {
         return gson.fromJson(jsonString, tClass);
@@ -110,16 +110,29 @@ public class AreaDataMatcher {
 
     public static class TriggerMatcher {
         public String name;
+        private int[] location;
         public String condition;
 
-        public int x;
-        public int y;
         private ActionMatcher[] actions;
+
+        public List<Point> getLocation() {
+            List<Point> points = new ArrayList<>();
+            if (this.location != null) {
+                for (int i = 0; i < this.location.length; i += 2) {
+                    int x = this.location[i];
+                    int y = this.location[i + 1];
+
+                    points.add(new Point(x, y));
+                }
+            }
+
+            return points;
+        }
 
         public List<EntityAction> getActions() {
             List<EntityAction> actions = new ArrayList<>();
             for (ActionMatcher matcher : this.actions) {
-                actions.add(matcher.getAction());
+                actions.add(matcher.getAction(condition));
             }
 
             return actions;
@@ -298,7 +311,6 @@ public class AreaDataMatcher {
 
     public static class TriggerActionMatcher {
         private String triggerType;
-
         public String triggerContents;
 
         public TriggerType getTriggerType() {
@@ -314,13 +326,13 @@ public class AreaDataMatcher {
         private String groupTrigger;
         private String global;
 
-        public EntityAction getAction() {
+        public EntityAction getAction(final String condition) {
             if (!hasOnlyOneNonEmpty(trigger, battle, choices, update, groupTrigger, global)) {
                 Global.error("Can only have one nonempty field for ActionMatcher");
             }
 
             if (trigger != null) {
-                return new TriggerAction(trigger.getTriggerType(), trigger.triggerContents);
+                return new TriggerAction(trigger.getTriggerType(), trigger.triggerContents, condition);
             } else if (battle != null) {
                 return new BattleAction(battle);
             } else if (!StringUtils.isNullOrEmpty(update)) {
@@ -345,7 +357,7 @@ public class AreaDataMatcher {
         public List<EntityAction> getActions() {
             List<EntityAction> actions = new ArrayList<>();
             for (ActionMatcher action : this.npcActions) {
-                actions.add(action.getAction());
+                actions.add(action.getAction(null));
             }
 
             return actions;
@@ -359,31 +371,6 @@ public class AreaDataMatcher {
         public String update;
     }
 
-    public static class MiscActions {
-        public InteractionMatcher[] actions;
-    }
-
-    public static MiscActions matchActions(String fileName, String areaDescription) {
-
-        System.out.println(fileName);
-
-        MiscActions miscActions = gson.fromJson(areaDescription, MiscActions.class);
-        JsonObject mappity = gson.fromJson(areaDescription, JsonObject.class);
-
-        String areaDataJson = getJson(miscActions);
-        String mapJson = getJson(mappity);
-
-        FileIO.writeToFile("out.txt", new StringBuilder(areaDataJson));
-        FileIO.writeToFile("out2.txt", new StringBuilder(mapJson));
-
-        if (!areaDataJson.equals(mapJson)) {
-            Global.error("No dice");
-        }
-
-        FileIO.overwriteFile(fileName, new StringBuilder(areaDataJson));
-
-        return miscActions;
-    }
 
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
 

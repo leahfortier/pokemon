@@ -25,8 +25,8 @@ public class TrainerBattleTrigger extends Trigger {
 	private final EnemyTrainer trainer;
 	private final UpdateMatcher npcUpdateInteraction;
 
-	TrainerBattleTrigger(String contents) {
-		super(TriggerType.TRAINER_BATTLE, contents);
+	TrainerBattleTrigger(String contents, String condition) {
+		super(TriggerType.TRAINER_BATTLE, contents, condition);
 
 		BattleAction battleAction = AreaDataMatcher.deserialize(contents, BattleAction.class);
 

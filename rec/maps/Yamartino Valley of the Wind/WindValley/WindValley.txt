@@ -6,7 +6,7 @@
       "exitName": "TransitionSouthDoor",
       "location": [
         31,
-        32
+        12
       ],
       "nextMap": "TransitionBuildingV",
       "nextEntrance": "SouthDoor",
@@ -14,22 +14,6 @@
     }
   ],
   "triggerData": [
-    {
-      "location": [
-        31,
-        11,
-        30,
-        11,
-        32,
-        11
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingV,
-        mapEntrance: SouthDoor
-      }"
-    },
     {
       "location": [
         17,
@@ -1185,8 +1169,11 @@
         40,
         73
       ],
-      "triggerType": "WildBattle",
-      "triggerContents": "{
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "WildBattle",
+            "triggerContents": "{
         encounterRate: VERY_COMMON,
         pokemon: [
 			\"Mareep 6-10 10%\", 
@@ -1201,6 +1188,9 @@
 			\"Cherubi 6-10 10%\"
         ]
       }"
+          }
+        }
+      ]
     },
     {
       "location": [
@@ -2019,8 +2009,11 @@
         68,
         74
       ],
-      "triggerType": "WildBattle",
-      "triggerContents": "{
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "WildBattle",
+            "triggerContents": "{
         encounterRate: COMMON,
         pokemon: [
 			\"Sandshrew 7-11 20%\", 
@@ -2034,13 +2027,18 @@
 			\"Rufflet 7-11 5%\"
         ]
       }"
+          }
+        }
+      ]
     }
   ],
   "triggers": [
     {
       "name": "Info_Guy_Dialogue",
-      "x": 6,
-      "y": 2,
+      "location": [
+        6,
+        2
+      ],
       "actions": [
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"

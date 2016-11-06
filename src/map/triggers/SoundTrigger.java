@@ -11,8 +11,8 @@ public class SoundTrigger extends Trigger {
 	private SoundTitle music;
 	public SoundTitle effect; // TODO: Make private
 
-	SoundTrigger(String contents) {
-		super(TriggerType.SOUND, contents);
+	SoundTrigger(String contents, String condition) {
+		super(TriggerType.SOUND, contents, condition);
 
 		SoundTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, SoundTriggerMatcher.class);
 		if (!StringUtils.isNullOrEmpty(matcher.effectName)) {

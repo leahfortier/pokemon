@@ -74,7 +74,7 @@ class TransitionBuildingData {
 			TriggerType type = TriggerType.getTriggerType(m.group(1));
 			String name = m.group(2);
 
-			Trigger trigger = type.createTrigger(m.group(3));
+			Trigger trigger = type.createTrigger(m.group(3), null);
 			
 			if (type == TriggerType.GROUP) {
 				// TODO: Is there a reason this isn't in a loop with that directions array thingy?

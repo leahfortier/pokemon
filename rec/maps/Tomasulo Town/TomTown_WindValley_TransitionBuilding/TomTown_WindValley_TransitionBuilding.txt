@@ -187,8 +187,10 @@
   "triggers": [
     {
       "name": "Info_Guy_Dialogue",
-      "x": 8,
-      "y": 4,
+      "location": [
+        8,
+        4
+      ],
       "actions": [
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"

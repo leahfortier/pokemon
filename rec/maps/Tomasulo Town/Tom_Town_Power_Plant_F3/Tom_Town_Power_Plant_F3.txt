@@ -154,7 +154,7 @@
       "startY": 11,
       "path": "w",
       "spriteIndex": 20,
-      "direction": "RIGHT",
+      "direction": "LEFT",
       "walkToPlayer": true,
       "interactions": [
         {

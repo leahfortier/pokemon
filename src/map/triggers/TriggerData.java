@@ -1,49 +1,19 @@
 package map.triggers;
 
-import pattern.AreaDataMatcher.TriggerDataMatcher;
+import map.entity.npc.EntityAction;
+import pattern.AreaDataMatcher.TriggerMatcher;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class TriggerData {
-	public TriggerType triggerType;
-	public String triggerContents;
-
-	public List<Point> location;
-
+	public String name;
 	public String condition;
-	public String[] globals;
+	private List<EntityAction> actions;
 
-	public TriggerData(TriggerDataMatcher matcher) {
-		this.triggerType = matcher.getTriggerType();
-		this.triggerContents = matcher.triggerContents;
-		this.location = matcher.getLocation();
-	}
-	
-	public void addPoint(int x, int y) {
-		this.location.add(new Point(x, y));
-	}
-	
-	public void removePoint(int x, int y) {
-		this.location.remove(new Point(x, y));
-	}
-
-	// TODO: Use that one method
-	public int[] getPoints(int width) {
-		int[] pointsArray = new int[this.location.size()];
-		for (int currPoint = 0; currPoint < pointsArray.length; currPoint++) {
-			Point curr = this.location.get(currPoint);
-			pointsArray[currPoint] = curr.y*width + curr.x;
-		}
-		
-		return pointsArray;
-	}
-	
-	public void updatePoints(int dx, int dy) {
-		for (Point curr : this.location) {
-			curr.x += dx;
-			curr.y += dy;
-		}
+	public TriggerData(TriggerMatcher matcher) {
+		this.name = matcher.name;
+		this.condition = matcher.condition;
+		this.actions = matcher.getActions();
 	}
 
 	// TODO: This is generic enough to be separate
@@ -67,16 +37,3 @@ public class TriggerData {
 		}
 	}
 }
-
-/*
-
-
-TriggerData triggerName {
-	x1-x2 y1-y2
-	...
-	
-	TriggerType
-	trigger contents
-	
-}
-*/

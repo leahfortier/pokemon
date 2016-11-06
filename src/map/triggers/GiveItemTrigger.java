@@ -9,8 +9,8 @@ public class GiveItemTrigger extends Trigger {
     private final ItemNamesies item;
     private final int quantity; // TODO: Quantity
 
-    GiveItemTrigger(String itemName) {
-        super(TriggerType.GIVE_ITEM, itemName);
+    GiveItemTrigger(String itemName, String condition) {
+        super(TriggerType.GIVE_ITEM, itemName, condition);
 
         this.item = ItemNamesies.getValueOf(itemName);
         this.quantity = 1;

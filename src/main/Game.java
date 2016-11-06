@@ -121,7 +121,7 @@ public class Game {
 		String startingMap = "PlayersHouseUp";
 		String startingMapEntrance = "GameStartLocation";
 		game.characterData.setMap(startingMap, startingMapEntrance);
-		game.data.getMap(startingMap).setCharacterToEntrance(game.characterData, startingMapEntrance);
+		game.data.getMap(startingMap).setCharacterToEntrance(startingMapEntrance);
 
 		game.characterData.setFileNum(index);
 		game.setupCharacter();

@@ -7,8 +7,8 @@ import util.PokeString;
 public class ChangeViewTrigger extends Trigger {
 	private ViewMode view;
 
-	ChangeViewTrigger(String viewMode) {
-		super(TriggerType.CHANGE_VIEW, viewMode);
+	ChangeViewTrigger(String viewMode, String condition) {
+		super(TriggerType.CHANGE_VIEW, viewMode, condition);
 
 		this.view = ViewMode.valueOf(PokeString.getNamesiesString(viewMode));
 	}

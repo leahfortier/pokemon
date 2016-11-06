@@ -1,6 +1,5 @@
 package map.triggers;
 
-import gui.GameData;
 import main.Game;
 import map.Condition;
 
@@ -14,16 +13,12 @@ public abstract class Trigger {
 	protected final Condition condition;
 	protected final List<String> globals;
 
-	protected Trigger(TriggerType type, String contents) {
-		this(type, contents, null);
-	}
-
 	protected Trigger(TriggerType type, String contents, String condition, String... globals) {
 		this.name = type.getTriggerName(contents);
 
 		this.condition = new Condition(condition);
-		this.globals = new ArrayList<>();
 
+		this.globals = new ArrayList<>();
 		if (globals != null) {
 			this.globals.addAll(Arrays.asList(globals));
 		}

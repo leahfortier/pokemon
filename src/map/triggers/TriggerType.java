@@ -43,7 +43,7 @@ public enum TriggerType {
     }
 
     private interface TriggerCreator {
-        Trigger createTrigger(final String contents);
+        Trigger createTrigger(final String contents, final String condition);
     }
 
     public String getTriggerName(String contents) {
@@ -55,7 +55,7 @@ public enum TriggerType {
         return prefix + (StringUtils.isNullOrEmpty(suffix) ? StringUtils.empty() : "_" + suffix);
     }
 
-    public Trigger createTrigger(final String contents) {
+    public Trigger createTrigger(final String contents, final String condition) {
         GameData data = Game.getData();
         String triggerName = this.getTriggerName(contents);
 
@@ -63,7 +63,7 @@ public enum TriggerType {
             return data.getTrigger(triggerName);
         }
 
-        return this.triggerCreator.createTrigger(contents);
+        return this.triggerCreator.createTrigger(contents, condition);
     }
 
     public static TriggerType getTriggerType(final String type) {

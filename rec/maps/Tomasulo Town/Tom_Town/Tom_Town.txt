@@ -25,7 +25,7 @@
     },
     {
       "name": "Tom_Town_NPC_TomTownPoliceOfficer01_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 28,
       "startY": 15,
       "path": "w",
@@ -48,7 +48,7 @@
     },
     {
       "name": "Tom_Town_NPC_Citizen_02",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 31,
       "startY": 22,
       "path": "w",
@@ -71,7 +71,7 @@
     },
     {
       "name": "Tom_Town_NPC_Scientist_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 28,
       "startY": 16,
       "path": "w",
@@ -94,7 +94,7 @@
     },
     {
       "name": "Tom_Town_NPC_Scientist_03",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 32,
       "startY": 15,
       "path": "w",
@@ -117,7 +117,7 @@
     },
     {
       "name": "Tom_Town_NPC_Citizen_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 28,
       "startY": 23,
       "path": "w",
@@ -200,6 +200,7 @@
   ],
   "triggerData": [
     {
+      "name": "Rumbles",
       "location": [
         20,
         33,
@@ -208,17 +209,28 @@
         20,
         34
       ],
-      "triggerType": "Dialogue",
       "condition": "BadgeTrigger_0&!TomTownPowerPlantExplosionTriggered",
-      "global": "TomTownPowerPlantExplosionTriggered",
-      "triggerContents": "Rumble Rumble Rumble"
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Rumble Rumble Rumble"
+          }
+        },
+        {
+          "global": "TomTownPowerPlantExplosionTriggered"
+        }
+      ]
     }
   ],
   "triggers": [
     {
       "name": "LockedDoor",
-      "x": 29,
-      "y": 13,
+      "location": [
+        29,
+        13
+      ],
+      "condition": "!BadgeTrigger_0",
       "actions": [
         {
           "trigger": {
