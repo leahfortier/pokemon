@@ -52,7 +52,8 @@ public class MessageUpdate {
 		EXIT_BATTLE(battleView -> {
             Game.setViewMode(ViewMode.MAP_VIEW);
             battleView.clearUpdate();
-			Messages.clear();
+			Messages.clearBattleMessages();
+			Messages.mappityMap();
         }),
 		FORCE_SWITCH(battleView -> {
             battleView.setVisualState(VisualState.POKEMON);

@@ -119,12 +119,7 @@
                 ],
                 "update": "deadlock_defeat"
               }
-            }
-          ]
-        },
-        {
-          "name": "deadlock_defeat",
-          "npcActions": [
+            },
             {
               "trigger": {
                 "triggerType": "Dialogue",
@@ -139,7 +134,7 @@
                 "triggerType": "MapTransition",
                 "triggerContents": "{
                         nextMap: Tom_Town_Power_Plant_F3,
-                        mapEntrance: ReloadLocation
+                        nextEntrance: ReloadLocation
                     }"
               }
             }

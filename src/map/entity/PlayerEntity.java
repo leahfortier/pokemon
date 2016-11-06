@@ -46,6 +46,7 @@ public class PlayerEntity extends MovableEntity {
 				null); // TODO: draw metrics?
 	}
 
+	// TODO: Don't pass the entity array around goddamnit
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		super.update(dt, entity, map, input, view);
 
@@ -111,9 +112,10 @@ public class PlayerEntity extends MovableEntity {
 				int x = transitionDirection.dx + charX;
 				int y = transitionDirection.dy + charY;
 				
-				if (!(x < 0 || y < 0 || x >= entity.length || y >= entity[0].length) && (entity[x][y] != null)) {
+				if (map.inBounds(x, y) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
 					npcTriggerSuffix = entity[x][y].getTriggerSuffix();
 					entity[x][y].getAttention(transitionDirection.opposite);
+					currentInteractionEntity = entity[x][y];
 				}
 			}
 			
@@ -123,9 +125,10 @@ public class PlayerEntity extends MovableEntity {
 					int y = charY - direction.dy;
 
 					// TODO: Should have a method for this
-					if (!(x < 0 || y < 0 || x >= entity.length || y >= entity[0].length) && (entity[x][y] != null)) {
+					if (map.inBounds(x, y) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
 						npcTriggerSuffix = entity[x][y].getTriggerSuffix();
-						
+						currentInteractionEntity = entity[x][y];
+
 						entity[x][y].getAttention(direction);
 						player.direction = transitionDirection = direction.opposite;
 						stalled = false;
@@ -137,6 +140,8 @@ public class PlayerEntity extends MovableEntity {
 		justMoved = transitionTime == 1 || justCreated;
 		justCreated = false;
 	}
+
+	public static Entity currentInteractionEntity;
 
 	private int getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction) {
 		if (direction == Direction.LEFT) {

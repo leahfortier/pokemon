@@ -2,6 +2,9 @@ package message;
 
 import battle.Battle;
 import battle.Move;
+import gui.view.MapView;
+import main.Game;
+import main.Game.ViewMode;
 import message.MessageUpdate.Update;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
@@ -10,32 +13,47 @@ import util.StringUtils;
 import java.util.ArrayDeque;
 
 public class Messages {
-    private static final ArrayDeque<MessageUpdate> messages = new ArrayDeque<>();
+    private static final ArrayDeque<MessageUpdate> mapMessages = new ArrayDeque<>();
+    private static final ArrayDeque<MessageUpdate> battleMessages = new ArrayDeque<>();
+    private static boolean fightyFight = false;
 
-    public static void clear() {
-        messages.clear();
+    private static ArrayDeque<MessageUpdate> getQueue() {
+        return fightyFight ? battleMessages : mapMessages;
+    }
+
+    public static void clearAllMessages() {
+        clearBattleMessages();
+        clearMapMessages();
+    }
+
+    public static void clearBattleMessages() {
+        battleMessages.clear();
+    }
+
+    public static void clearMapMessages() {
+        mapMessages.clear();
     }
 
     public static boolean hasMessages() {
-        return !messages.isEmpty();
+        return !getQueue().isEmpty();
     }
 
     public static MessageUpdate getNextMessage() {
-        return messages.poll();
+        return getQueue().poll();
     }
 
     public static boolean nextMessageEmpty() {
-        return StringUtils.isNullOrEmpty(messages.peek().getMessage());
+        return StringUtils.isNullOrEmpty(getQueue().peek().getMessage());
     }
 
     public static void addMessage(MessageUpdate message) {
-        messages.add(message);
+        getQueue().add(message);
     }
 
     public static void addMessageToFront(String message) {
-        messages.addFirst(new MessageUpdate(message));
+        getQueue().addFirst(new MessageUpdate(message));
     }
-    
+
     // Just a plain old regular message
     public static void addMessage(String message) {
         addMessage(new MessageUpdate(message));
@@ -83,5 +101,13 @@ public class Messages {
     // Learning a move
     public static void addMessage(String message, ActivePokemon p, Move move) {
         addMessage(new MessageUpdate(message, p, move));
+    }
+
+    public static void fightyFight() {
+        fightyFight = true;
+    }
+
+    public static void mappityMap() {
+        fightyFight = false;
     }
 }

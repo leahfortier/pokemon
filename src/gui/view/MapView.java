@@ -98,8 +98,6 @@ public class MapView extends View {
 	private int lightningFrame;
 	
 	public MapView() {
-		Messages.clear();
-
 		currentMapName = StringUtils.empty();
 		currentArea = null;
 		rainHeight = new int[Global.GAME_SIZE.width/2];
@@ -466,7 +464,7 @@ public class MapView extends View {
 				
 				battleAnimationTime -= dt;
 				showMessage = false;
-				break;		
+				break;
 			case MAP:
 				if (input.isDown(Control.ESC)) {
 					input.consumeKey(Control.ESC);
@@ -511,6 +509,7 @@ public class MapView extends View {
 					}
 
 					if (!newMessage && !Messages.hasMessages()) {
+						PlayerEntity.currentInteractionEntity = null; // TODO: Make this not static
 						currentMessage = null;
 						if (battle == null) {
 							state = VisualState.MAP;

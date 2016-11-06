@@ -64,7 +64,8 @@ public class Battle {
 	private TerrainType currentTerrain;
 	
 	public Battle(Opponent o) {
-		Messages.clear();
+		Messages.clearBattleMessages();
+		Messages.fightyFight();
 		Messages.addMessage(new MessageUpdate("", Update.ENTER_BATTLE));
 
 		player = Game.getPlayer();
@@ -279,6 +280,7 @@ public class Battle {
 
 		player.healAll();
 		player.teleportToPokeCenter();
+		Messages.clearMapMessages();
 		Messages.addMessage(" ", Update.EXIT_BATTLE);
 	}
 

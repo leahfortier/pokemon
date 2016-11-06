@@ -1,6 +1,5 @@
 package map.entity.npc;
 
-import gui.GameData;
 import gui.view.MapView;
 import main.Game;
 import main.Global;
