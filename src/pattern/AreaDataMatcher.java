@@ -12,6 +12,7 @@ import map.WildEncounter;
 import map.entity.npc.EntityAction;
 import map.entity.npc.EntityAction.BattleAction;
 import map.entity.npc.EntityAction.ChoiceAction;
+import map.entity.npc.EntityAction.GlobalAction;
 import map.entity.npc.EntityAction.GroupTriggerAction;
 import map.entity.npc.EntityAction.TriggerAction;
 import map.entity.npc.EntityAction.UpdateAction;
@@ -59,6 +60,7 @@ public class AreaDataMatcher {
             MatchConstants.group(MatchType.INTEGER) + "-" + MatchConstants.group(MatchType.INTEGER) + " " +
             MatchConstants.group(MatchType.INTEGER) + "%"
     );
+
     public static class WildBattleTriggerMatcher {
         public EncounterRate encounterRate;
         private String[] pokemon;
@@ -143,7 +145,7 @@ public class AreaDataMatcher {
         public String nextMap;
         public String nextEntrance;
         public Direction direction;
-        public Boolean deathPortal;
+        private Boolean deathPortal;
 
         public String previousMap;
 
@@ -163,6 +165,10 @@ public class AreaDataMatcher {
             }
 
             return points;
+        }
+
+        public boolean isDeathPortal() {
+            return deathPortal == null ? false : deathPortal;
         }
     }
 
@@ -292,6 +298,7 @@ public class AreaDataMatcher {
 
     public static class TriggerActionMatcher {
         private String triggerType;
+
         public String triggerContents;
 
         public TriggerType getTriggerType() {
@@ -305,9 +312,10 @@ public class AreaDataMatcher {
         private ChoiceMatcher[] choices;
         private String update;
         private String groupTrigger;
+        private String global;
 
         public EntityAction getAction() {
-            if (!hasOnlyOneNonEmpty(trigger, battle, choices, update, groupTrigger)) {
+            if (!hasOnlyOneNonEmpty(trigger, battle, choices, update, groupTrigger, global)) {
                 Global.error("Can only have one nonempty field for ActionMatcher");
             }
 
@@ -321,6 +329,8 @@ public class AreaDataMatcher {
                 return new GroupTriggerAction(groupTrigger);
             } else if (choices != null) {
                 return new ChoiceAction();
+            } else if (global != null) {
+                return new GlobalAction(global);
             }
 
             Global.error("No npc action found.");
@@ -332,7 +342,7 @@ public class AreaDataMatcher {
         private String name;
         private ActionMatcher[] npcActions;
 
-        List<EntityAction> getActions() {
+        public List<EntityAction> getActions() {
             List<EntityAction> actions = new ArrayList<>();
             for (ActionMatcher action : this.npcActions) {
                 actions.add(action.getAction());
@@ -347,6 +357,32 @@ public class AreaDataMatcher {
         public int cashMoney;
         public String[] pokemon;
         public String update;
+    }
+
+    public static class MiscActions {
+        public InteractionMatcher[] actions;
+    }
+
+    public static MiscActions matchActions(String fileName, String areaDescription) {
+
+        System.out.println(fileName);
+
+        MiscActions miscActions = gson.fromJson(areaDescription, MiscActions.class);
+        JsonObject mappity = gson.fromJson(areaDescription, JsonObject.class);
+
+        String areaDataJson = getJson(miscActions);
+        String mapJson = getJson(mappity);
+
+        FileIO.writeToFile("out.txt", new StringBuilder(areaDataJson));
+        FileIO.writeToFile("out2.txt", new StringBuilder(mapJson));
+
+        if (!areaDataJson.equals(mapJson)) {
+            Global.error("No dice");
+        }
+
+        FileIO.overwriteFile(fileName, new StringBuilder(areaDataJson));
+
+        return miscActions;
     }
 
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
