@@ -7,10 +7,10 @@
       "path": "llldddrrrrrruuulll",
       "spriteIndex": 14,
       "direction": "LEFT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
@@ -50,7 +50,6 @@
       "path": "w",
       "spriteIndex": 5,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",

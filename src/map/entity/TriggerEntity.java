@@ -1,21 +1,14 @@
 package map.entity;
 
-import gui.GameData;
 import gui.TileSet;
 import gui.view.MapView;
 import main.Game;
 import map.Direction;
 import map.MapData;
-import map.entity.npc.EntityAction;
-import map.triggers.Trigger;
-import map.triggers.TriggerType;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import util.InputControl;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class TriggerEntity extends Entity {
 	private final String name;

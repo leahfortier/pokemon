@@ -1,9 +1,6 @@
-package map.entity.npc;
+package map.entity;
 
-import gui.GameData;
-import main.Game;
 import map.triggers.Trigger;
-import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.BattleMatcher;
@@ -17,12 +14,9 @@ import java.util.List;
 public abstract class EntityAction {
 
     public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, List<EntityAction> actions) {
-        GameData data = Game.getData();
-
         final String[] actionTriggerNames = new String[actions.size()];
         for (int i = 0; i < actions.size(); i++) {
             Trigger actionTrigger = actions.get(i).getTrigger(entityName);
-            data.addTrigger(actionTrigger);
             actionTriggerNames[i] = actionTrigger.getName();
         }
 
@@ -33,9 +27,7 @@ public abstract class EntityAction {
         // Condition is really in the interaction name and the npc condition, so
         // once these are both valid then the interaction can proceed as usual
         // TODO: Condition is inside group trigger, but now that this exists, should it be removed?
-        Trigger groupTrigger = TriggerType.GROUP.createTrigger(groupContents, null);
-        data.addTrigger(groupTrigger);
-        return groupTrigger;
+        return TriggerType.GROUP.createTrigger(groupContents, null);
     }
 
     private Trigger getTrigger(String entityName) {

@@ -2,7 +2,7 @@ package map.triggers;
 
 import battle.Battle;
 import main.Game;
-import map.entity.npc.EntityAction.BattleAction;
+import map.entity.EntityAction.BattleAction;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.UpdateMatcher;
 import pattern.PokemonMatcher;

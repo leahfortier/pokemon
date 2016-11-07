@@ -7,10 +7,10 @@
       "path": "uuddddduuu",
       "spriteIndex": 6,
       "direction": "UP",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
@@ -51,10 +51,10 @@
       "path": "w",
       "spriteIndex": 16,
       "direction": "DOWN",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
@@ -73,7 +73,6 @@
       "path": "w",
       "spriteIndex": 2,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "give_item",
@@ -115,10 +114,10 @@
       "path": "w",
       "spriteIndex": 6,
       "direction": "UP",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
@@ -158,10 +157,10 @@
       "path": "w",
       "spriteIndex": 3,
       "direction": "DOWN",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "give_item",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
@@ -224,10 +223,10 @@
       "path": "w",
       "spriteIndex": 6,
       "direction": "RIGHT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {

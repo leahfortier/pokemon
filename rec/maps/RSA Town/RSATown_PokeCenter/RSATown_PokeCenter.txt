@@ -6,7 +6,6 @@
       "startY": 2,
       "spriteIndex": 8,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": []
     },
     {
@@ -15,7 +14,6 @@
       "startY": 7,
       "spriteIndex": 9,
       "direction": "RIGHT",
-      "walkToPlayer": false,
       "interactions": []
     }
   ],

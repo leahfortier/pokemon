@@ -6,8 +6,9 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.entity.Entity;
+import map.entity.EntityAction;
 import map.entity.MovableEntity;
-import map.entity.npc.EntityAction.BattleAction;
+import map.entity.EntityAction.BattleAction;
 import trainer.CharacterData;
 import util.InputControl;
 import util.StringUtils;
@@ -26,10 +27,9 @@ public class NPCEntity extends MovableEntity {
 	private int waitTime;
 	private boolean hasAttention;
 
-	private boolean walkToPlayer;
 	private boolean walkingToPlayer;
 
-	private Map<String, List<EntityAction>> interactions;
+	private Map<String, NPCInteraction> interactions;
 	private String startKey;
 
 	private int defaultX;
@@ -45,8 +45,7 @@ public class NPCEntity extends MovableEntity {
 			String path,
 			Direction direction,
 			int index,
-			boolean walkToPlayer,
-			Map<String, List<EntityAction>> interactions,
+			Map<String, NPCInteraction> interactions,
 			String startKey) {
 		super(x, y, index, direction);
 		
@@ -58,7 +57,6 @@ public class NPCEntity extends MovableEntity {
 		hasAttention = false;
 		spriteIndex = index;
 
-		this.walkToPlayer = walkToPlayer;
 		this.walkingToPlayer = false;
 
 		defaultX = x;
@@ -166,21 +164,22 @@ public class NPCEntity extends MovableEntity {
 		hasAttention = true;
 	}
 
-	public boolean getWalkToPlayer() {
-		return walkToPlayer;
+	public boolean shouldWalkToPlayer() {
+		final String interaction = this.getCurrentInteractionKey();
+		return this.interactions.get(interaction).shouldWalkToPlayer();
 	}
 
 	public boolean getWalkingToPlayer() {
 		return walkingToPlayer;
 	}
 
-	// TODO: create NPCTrainerEntity
 	public String getWalkTrigger() {
-		return walkToPlayer ? this.getTriggerName() : StringUtils.empty();
+		return shouldWalkToPlayer() ? this.getTriggerName() : StringUtils.empty();
 	}
 
 	public boolean isTrainer() {
-		List<EntityAction> actions = interactions.get(this.getCurrentInteractionKey());
+		NPCInteraction interaction = interactions.get(this.getCurrentInteractionKey());
+		List<EntityAction> actions = interaction.getActions();
 		for (EntityAction action : actions) {
 			if (action instanceof BattleAction) {
 				return true;
@@ -206,9 +205,9 @@ public class NPCEntity extends MovableEntity {
 			return;
 		}
 
-		for (Entry<String, List<EntityAction>> interaction : this.interactions.entrySet()) {
+		for (Entry<String, NPCInteraction> interaction : this.interactions.entrySet()) {
 			final String interactionName = interaction.getKey();
-			final List<EntityAction> actions = interaction.getValue();
+			final List<EntityAction> actions = interaction.getValue().getActions();
 
 			EntityAction.addActionGroupTrigger(this.name, this.getTriggerSuffix(interactionName), actions);
 		}

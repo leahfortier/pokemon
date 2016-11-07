@@ -2,12 +2,6 @@ package gui.view;
 
 import gui.GameData;
 import gui.TileSet;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
@@ -19,6 +13,12 @@ import trainer.Pokedex.PokedexStatus;
 import util.DrawMetrics;
 import util.InputControl;
 import util.InputControl.Control;
+import util.StringUtils;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 public class EvolutionView extends View {
 	private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
@@ -196,10 +196,10 @@ public class EvolutionView extends View {
 	
 	private void setFinalMessage() {
 		if (isEgg) {
-			message = "Your egg hatched into a " + preEvolution.getName()  +"!";
+			message = "Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!";
 		}
 		else {
-			message = "Your " + preEvolution.getName() + " evolved into a " + postEvolution.getName()+"!";
+			message = "Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!";
 		}
 	}
 	

@@ -7,10 +7,10 @@
       "path": "w",
       "spriteIndex": 16,
       "direction": "RIGHT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
@@ -51,10 +51,10 @@
       "path": "w",
       "spriteIndex": 1,
       "direction": "DOWN",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {

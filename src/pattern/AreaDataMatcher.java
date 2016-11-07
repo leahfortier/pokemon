@@ -9,13 +9,14 @@ import main.Global;
 import map.Direction;
 import map.EncounterRate;
 import map.WildEncounter;
-import map.entity.npc.EntityAction;
-import map.entity.npc.EntityAction.BattleAction;
-import map.entity.npc.EntityAction.ChoiceAction;
-import map.entity.npc.EntityAction.GlobalAction;
-import map.entity.npc.EntityAction.GroupTriggerAction;
-import map.entity.npc.EntityAction.TriggerAction;
-import map.entity.npc.EntityAction.UpdateAction;
+import map.entity.EntityAction;
+import map.entity.EntityAction.BattleAction;
+import map.entity.EntityAction.ChoiceAction;
+import map.entity.EntityAction.GlobalAction;
+import map.entity.EntityAction.GroupTriggerAction;
+import map.entity.EntityAction.TriggerAction;
+import map.entity.EntityAction.UpdateAction;
+import map.entity.npc.NPCInteraction;
 import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.MatchConstants.MatchType;
@@ -219,25 +220,24 @@ public class AreaDataMatcher {
         private String path;
         public int spriteIndex;
         public Direction direction;
-        public boolean walkToPlayer;
-        public InteractionMatcher[] interactions;
+        public NPCInteractionMatcher[] interactions;
 
-        private transient Map<String, List<EntityAction>> interactionMap;
+        private transient Map<String, NPCInteraction> interactionMap;
         private transient String startKey;
 
-        public Map<String, List<EntityAction>> getInteractionMap() {
+        public Map<String, NPCInteraction> getInteractionMap() {
             if (interactionMap != null) {
                 return interactionMap;
             }
 
             interactionMap = new HashMap<>();
-            for (InteractionMatcher interaction : interactions) {
-                interactionMap.put(interaction.name, interaction.getActions());
+            for (NPCInteractionMatcher interaction : interactions) {
+                interactionMap.put(interaction.name, new NPCInteraction(interaction.shouldWalkToPlayer(), interaction.getActions()));
             }
 
             if (interactions.length == 0) {
                 startKey = "no_interactions";
-                interactionMap.put(startKey, new ArrayList<>());
+                interactionMap.put(startKey, new NPCInteraction(false, new ArrayList<>()));
 
             } else {
                 startKey = interactions[0].name;
@@ -280,10 +280,6 @@ public class AreaDataMatcher {
 
         public Direction getDirection() {
             return this.direction;
-        }
-
-        public boolean shouldWalkToPlayer() {
-            return this.walkToPlayer;
         }
     }
 
@@ -364,8 +360,9 @@ public class AreaDataMatcher {
         }
     }
 
-    public static class InteractionMatcher {
+    public static class NPCInteractionMatcher {
         private String name;
+        private Boolean walkToPlayer;
         private ActionMatcher[] npcActions;
 
         public List<EntityAction> getActions() {
@@ -375,6 +372,10 @@ public class AreaDataMatcher {
             }
 
             return actions;
+        }
+
+        public boolean shouldWalkToPlayer() {
+            return walkToPlayer == null ? false : walkToPlayer;
         }
     }
 
@@ -387,8 +388,6 @@ public class AreaDataMatcher {
 
 
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {
-
-        System.out.println(fileName);
 
         AreaDataMatcher areaData = gson.fromJson(areaDescription, AreaDataMatcher.class);
         JsonObject mappity = gson.fromJson(areaDescription, JsonObject.class);

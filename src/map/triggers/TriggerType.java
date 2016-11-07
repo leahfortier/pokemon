@@ -64,7 +64,9 @@ public enum TriggerType {
             return data.getTrigger(triggerName);
         }
 
-        return this.triggerCreator.createTrigger(contents, condition);
+        Trigger trigger = this.triggerCreator.createTrigger(contents, condition);
+        data.addTrigger(trigger);
+        return trigger;
     }
 
     public static TriggerType getTriggerType(final String type) {

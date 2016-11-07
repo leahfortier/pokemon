@@ -27,7 +27,8 @@ import java.util.TreeSet;
 
 public class Bag implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
+	// TODO: These should all just be holding the namesies instead of the actual item
 	private Map<Item, Integer> items; // Item -> quantity
 	private Map<BagCategory, Set<Item>> bag;
 	private Map<BattleBagCategory, Set<Item>> battleBag;

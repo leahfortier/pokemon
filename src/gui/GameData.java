@@ -119,10 +119,6 @@ public class GameData {
 		return triggers.get(name);
 	}
 
-	public void addTrigger(TriggerType type, String contents, String condition) {
-		this.addTrigger(type.createTrigger(contents, condition));
-	}
-
 	public void addTrigger(Trigger trigger) {
 		triggers.put(trigger.getName(), trigger);
 	}

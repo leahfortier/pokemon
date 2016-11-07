@@ -6,7 +6,6 @@
       "startY": 4,
       "spriteIndex": 13,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "battle",

@@ -16,7 +16,6 @@ import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;
 import map.triggers.Trigger;
 import mapMaker.MapMaker;
-import util.Folder;
 
 class PokeCenterTransitionData {
 //	private static final String pokeCenterTransitionTriggersFile = Folder.TRIGGERS + "PokeCenterTransitionTriggers";

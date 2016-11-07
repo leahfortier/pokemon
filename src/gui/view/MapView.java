@@ -14,7 +14,7 @@ import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
 import map.entity.PlayerEntity;
-import map.entity.npc.EntityAction;
+import map.entity.EntityAction;
 import map.entity.npc.NPCEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
@@ -596,7 +596,7 @@ public class MapView extends View {
 					if (entities[x][y] != null
 							&& entities[x][y] instanceof NPCEntity
 							&& ((NPCEntity)entities[x][y]).isFacing(playerEntity.getX(), playerEntity.getY())
-							&& ((NPCEntity)entities[x][y]).getWalkToPlayer()) {
+							&& ((NPCEntity)entities[x][y]).shouldWalkToPlayer()) {
 
 						NPCEntity npc = (NPCEntity)entities[x][y];
 						if (!npc.getWalkingToPlayer() && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {

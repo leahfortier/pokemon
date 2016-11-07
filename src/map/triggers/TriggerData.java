@@ -1,6 +1,6 @@
 package map.triggers;
 
-import map.entity.npc.EntityAction;
+import map.entity.EntityAction;
 import pattern.AreaDataMatcher.TriggerMatcher;
 
 import java.util.List;

@@ -2,13 +2,12 @@
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_B1_NPC_Scientist_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 12,
       "startY": 4,
       "path": "w",
       "spriteIndex": 19,
       "direction": "UP",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",

@@ -8,7 +8,6 @@
       "path": "w",
       "spriteIndex": 12,
       "direction": "RIGHT",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
@@ -31,10 +30,10 @@
       "path": "w",
       "spriteIndex": 20,
       "direction": "LEFT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
@@ -75,10 +74,10 @@
       "path": "w",
       "spriteIndex": 18,
       "direction": "LEFT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
@@ -98,7 +97,6 @@
       "path": "w",
       "spriteIndex": 20,
       "direction": "RIGHT",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "battle",
@@ -139,6 +137,10 @@
               }
             }
           ]
+        },
+        {
+          "name": "deadlock_defeat",
+          "npcActions": []
         }
       ]
     },
@@ -150,10 +152,10 @@
       "path": "w",
       "spriteIndex": 20,
       "direction": "LEFT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {

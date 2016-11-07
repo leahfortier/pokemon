@@ -1690,7 +1690,7 @@ public class BattleView extends View {
 				if (newMessage.gainUpdate()) {
 					newStats = newMessage.getNewStats();
 					statGains = newMessage.getGain();
-				}	
+				}
 			}
 			
 			if (newMessage.getMessage().isEmpty()) {
@@ -1772,7 +1772,6 @@ public class BattleView extends View {
 	}
 
 	public void movedToFront() {
-		System.out.println("moved to front cycle started");
 		cycleMessage(false);
 	}
 }

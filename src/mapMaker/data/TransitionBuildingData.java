@@ -21,7 +21,6 @@ import map.triggers.GroupTrigger;
 import map.triggers.MapTransitionTrigger;
 import map.triggers.Trigger;
 import mapMaker.MapMaker;
-import util.Folder;
 
 class TransitionBuildingData {
 //	private static final String transitionBuildingTriggersFile = Folder.TRIGGERS + "TransitionBuildingTriggers";

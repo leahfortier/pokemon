@@ -7,7 +7,6 @@
       "path": "w",
       "spriteIndex": 7,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "intro",
@@ -120,7 +119,6 @@
       "path": "w",
       "spriteIndex": 19,
       "direction": "RIGHT",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
@@ -142,7 +140,6 @@
       "path": "w",
       "spriteIndex": 12,
       "direction": "LEFT",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",

@@ -73,11 +73,7 @@ class ItemEntity extends Entity {
 			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(dialogue.getName(), giveItem.getName());
 			groupTriggerMatcher.suffix = itemTriggerSuffix;
 
-			Trigger groupTrigger = TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(groupTriggerMatcher), null);
-
-			data.addTrigger(dialogue);
-			data.addTrigger(giveItem);
-			data.addTrigger(groupTrigger);
+			TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(groupTriggerMatcher), null);
 		}
 
 		// This trigger will only call the item trigger when the conditions apply
@@ -85,7 +81,7 @@ class ItemEntity extends Entity {
 		matcher.suffix = this.getTriggerSuffix();
 		matcher.globals = new String[] { "has" + name };
 
-		data.addTrigger(TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher), null));
+		TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher), null);
 
 		dataCreated = true;
 	}

@@ -31,7 +31,6 @@ public class MapTransitionTrigger extends Trigger {
 	}
 	
 	protected void executeTrigger() {
-		System.out.println("execute map trigger");
 		CharacterData player = Game.getPlayer();
 		player.setMap(nextMap, mapEntranceName);
 

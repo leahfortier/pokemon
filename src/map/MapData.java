@@ -7,7 +7,7 @@ import map.entity.Entity;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
 import map.entity.TriggerEntityData;
-import map.entity.npc.EntityAction;
+import map.entity.EntityAction;
 import map.entity.npc.NPCEntityData;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
@@ -104,9 +104,6 @@ public class MapData {
 
                     Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(AreaDataMatcher.getJson(matcher), null);
                     triggers.put(getMapIndex(exitX, exitY), trigger.getName());
-
-                    // TODO: This can likely be added inside the create trigger method
-                    data.addTrigger(trigger);
                 }
             }
         }
@@ -220,11 +217,8 @@ public class MapData {
 			int newX = entrance - newY * width;
 			Game.getPlayer().setLocation(newX, newY);
 
-			System.out.println("has map entrance at " + newX + " " + newY);
-
 			return true;
 		}
-		System.out.println("NO MAP ENTRANCE NAMED " + entranceName);
 
 		return false;
 	}

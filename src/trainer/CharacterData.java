@@ -8,16 +8,21 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import map.Direction;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
+import pattern.AreaDataMatcher;
+import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import pattern.AreaDataMatcher.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
 import trainer.Pokedex.PokedexStatus;
+import util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,8 +53,6 @@ public class CharacterData extends Trainer implements Serializable {
 	private Set<String> definedGlobals;
 	private Map<String, String> npcInteractions;
 
-	// Used for map globals.
-	private String previousMapName;
 	public String mapEntranceName;
 	
 	private int fileNum;
@@ -142,21 +145,8 @@ public class CharacterData extends Trainer implements Serializable {
 	}
 	
 	public void setMap(String name, String mapEntrance) {
-		updateMapGlobals(mapName, name, mapEntranceName, mapEntrance);
-		previousMapName = mapName;
 		mapName = name;
 		mapEntranceName = mapEntrance;
-	}
-	
-	private void updateMapGlobals(String prevMap, String newMap, String prevMapEntrance, String newMapEntrance) {
-		
-		//Remove previous map
-		removeGlobal("MapGlobal_PreviousMap_" + previousMapName);
-		removeGlobal("MapGlobal_MapEntrance_" + prevMapEntrance);
-		
-		//Add current map
-		addGlobal("MapGlobal_PreviousMap_" + prevMap);
-		addGlobal("MapGlobal_MapEntrance_" + newMapEntrance);
 	}
 	
 	// Called when a character steps once in any given direction
@@ -169,8 +159,6 @@ public class CharacterData extends Trainer implements Serializable {
 				// Game variable needed
 				Messages.addMessage("The effects of repel have worn off.");
 			}
-			
-			System.out.println("Repel Steps: " + repelSteps);
 		}
 		else {
 			repelSteps = 0;
@@ -180,8 +168,13 @@ public class CharacterData extends Trainer implements Serializable {
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && p.hatch()) {
 				evolvingPokemon = p;
-				// TODO: Create a group trigger that displays the huh message and then goes to the evolution view
-//				Messages.addMessage(game, new DialogueSequence("Huh?", null, null, new String[] {"Evolution_View_Trigger"}));
+
+				Trigger dialogue = TriggerType.DIALOGUE.createTrigger("Huh?", null);
+				Trigger evolutionView = TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null);
+
+				GroupTriggerMatcher matcher = new GroupTriggerMatcher(dialogue.getName(), evolutionView.getName());
+				Trigger group = TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher), null);
+				Messages.addMessage(new MessageUpdate("", group.getName(), Update.TRIGGER));
 				
 				// Only one hatch per step
 				break;
@@ -218,12 +211,16 @@ public class CharacterData extends Trainer implements Serializable {
 	}
 
 	public void setNpcInteraction(final UpdateMatcher npcUpdateInteraction) {
-		this.setNpcInteraction(npcUpdateInteraction.npcEntityName, npcUpdateInteraction.interactionName);
+		if (npcUpdateInteraction != null) {
+			this.setNpcInteraction(npcUpdateInteraction.npcEntityName, npcUpdateInteraction.interactionName);
+		}
 	}
 
 	public void setNpcInteraction(final String npcEntityName, final String interactionName) {
-		this.npcInteractions.put(npcEntityName, interactionName);
-		System.out.println(npcEntityName + " -> " + npcInteractions.get(npcEntityName));
+		if (!StringUtils.isNullOrEmpty(interactionName)) {
+			this.npcInteractions.put(npcEntityName, interactionName);
+			System.out.println(npcEntityName + " -> " + npcInteractions.get(npcEntityName));
+		}
 	}
 
 	public boolean hasNpcInteraction(final String npcEntityName) {
@@ -432,129 +429,5 @@ public class CharacterData extends Trainer implements Serializable {
 	
 	public List<String> getLogMessages() {
 		return logMessages;
-	}
-
-	private void printGlobals() {
-		//List all the globals for this saved character
-		for (String s: definedGlobals) {
-			System.out.println(s);
-		}
-		System.out.println();
-	}
-
-	private void updateGlobals(boolean printGlobals) {
-		if (printGlobals) {
-			System.out.println("Old Globals:");
-			printGlobals();
-		}
-
-
-		updateGlobals_from_2013_11_24_to_2014_01_30();
-		updateGlobals_from_2014_01_30_to_2014_08_14();
-
-
-		if (printGlobals) {
-			System.out.println("New Globals:");
-			printGlobals();
-		}
-	}
-
-	private void replaceGlobals(String[][][] globalsToChange) {
-		for (String[][] aGlobalsToChange : globalsToChange) {
-			boolean containsGlobal = false;
-			for (int prevGlobal = 0; prevGlobal < aGlobalsToChange[0].length; prevGlobal++) {
-				containsGlobal |= definedGlobals.remove(aGlobalsToChange[0][prevGlobal]);
-			}
-
-			if (containsGlobal) {
-				for (int newGlobal = 0; newGlobal < aGlobalsToChange[1].length; newGlobal++) {
-					addGlobal(aGlobalsToChange[1][newGlobal]);
-				}
-			}
-		}
-	}
-
-	// TODO: What is this? And is it still necessary?
-	//Convert globals from final class demo to latest commit before map maker trigger update
-	private void updateGlobals_from_2013_11_24_to_2014_01_30 () {
-		String[][][] globalsToChange = {
-				//Trainers/NPCs
-				{{"BallGiven"}, 					{"triggered_Ball_Giver"}},
-				{{"PotionGiven"}, 					{"triggered_Potion_Giver"}},
-				{{"Prof_Maple_First", "hasSyrup"}, 	{"triggered_Prof_Maple"}},
-				{{"battled_Trainer_1"}, 			{"triggered_Edge1_Trainer_1"}},
-				{{"battled_Trainer_2"}, 			{"triggered_Edge1_Trainer_2"}},
-				{{"battled_Trainer_3"}, 			{"triggered_Edge1_Trainer_3"}},
-				{{"battled_Rival_1"}, 				{"triggered_RSA_Rival_1"}},
-				{{"battled_Meadow_Trainer_1"}, 		{"triggered_Meadow_Trainer_1"}},
-				{{"battled_Meadow_Trainer_2"}, 		{"triggered_Meadow_Trainer_2"}},
-				{{"battled_Tom_Trainer_1"}, 		{"triggered_Tom_Trainer_1"}},
-				{{"battled_Tom_Trainer_2"}, 		{"triggered_Tom_Trainer_2"}},
-				{{"battled_Leader_Moore"}, 			{"triggered_Leader_Moore"}}
-		};
-
-		replaceGlobals(globalsToChange);
-	}
-
-	//Convert globals from the last commit to the new globals within the map maker trigger update
-	private void updateGlobals_from_2014_01_30_to_2014_08_14 () {
-		//If someone was in the Tom Town pokecenter before update.
-		if (definedGlobals.contains("PC_TomTown")) {
-			previousMapName = "Tom_Town";
-		}
-
-		//If someone was in the RSA Town pokecenter before update.
-		if (definedGlobals.contains("PC_RSA")) {
-			previousMapName = "RSATown";
-		}
-
-		//If someone was in the Horizontal Transition Building before update.
-		if (definedGlobals.contains("TBH_DFS") || definedGlobals.contains("TBH_RSA_L")) {
-			previousMapName = "RSATown";
-			mapEntranceName = "WestDoor";
-		}
-		else if (definedGlobals.contains("TBH_RSA_R") || definedGlobals.contains("TBH_BFM_L"))
-		{
-			previousMapName = "Bloom_Filter_Meadow";
-			mapEntranceName = "WestDoor";
-		}
-		else if (definedGlobals.contains("TBH_BFM_R") || definedGlobals.contains("TBH_TomTown_L"))
-		{
-			previousMapName = "Tom_Town";
-			mapEntranceName = "WestDoor";
-		}
-
-		//Remove old globals and replace with new globals
-		String[][][] globalsToChange = {
-				//Pokemon center
-				{{"PC_TomTown"}, 	{"MapGlobal_PreviousMap_Tom_Town", 	"MapGlobal_toPokeCenterFromEntrance_PokeCenter01"}},
-				{{"PC_RSA"}, 		{"MapGlobal_PreviousMap_RSATown",	"MapGlobal_toPokeCenterFromEntrance_PokeCenter01"}},
-
-				//Horizontal Transition Building
-				{{"TBH_DFS", "TBH_RSA_L"}, 			{"MapGlobal_TransitionPair01", "MapGlobal_MapEntrance_WestDoor", "MapGlobal_PreviousMap_RSATown"}},
-				{{"TBH_RSA_R", "TBH_BFM_L"}, 		{"MapGlobal_TransitionPair01", "MapGlobal_MapEntrance_WestDoor", "MapGlobal_PreviousMap_Bloom_Filter_Meadow"}},
-				{{"TBH_BFM_R", "TBH_TomTown_L"}, 	{"MapGlobal_TransitionPair01", "MapGlobal_MapEntrance_WestDoor", "MapGlobal_PreviousMap_Tom_Town"}},
-
-				//Items
-				{{"hasDFSParalyzeHeal"}, 	{"hasDFS_Town_Item_Paralyze_Heal_01"}},
-				{{"hasBFMMeadowPlate"}, 	{"hasBloom_Filter_Meadow_Item_Meadow_Plate_01"}},
-				{{"hasBFMPechaBerry"}, 		{"hasBloom_Filter_Meadow_Item_Pecha_Berry_01"}},
-
-				//NPCs and Trainers
-				{{"triggered_Ball_Giver"}, 			{"triggered_DFS_Town_NPC_Ball_Giver_01"}},
-				{{"triggered_Potion_Giver"}, 		{"triggered_DFS_Town_NPC_Potion_Giver_01"}},
-				{{"triggered_Prof_Maple"}, 			{"triggered_MaplesLab_NPC_Prof_Maple_01"}},
-				{{"triggered_Edge1_Trainer_1"}, 	{"triggered_DFS_Town_NPC_Edge1_Trainer_01"}},
-				{{"triggered_Edge1_Trainer_2"}, 	{"triggered_DFS_Town_NPC_Edge1_Trainer_02"}},
-				{{"triggered_Edge1_Trainer_3"}, 	{"triggered_DFS_Town_NPC_Edge1_Trainer_03"}},
-				{{"triggered_RSA_Rival_1"}, 		{"triggered_RSATown_NPC_Rival_01"}},
-				{{"triggered_Meadow_Trainer_1"}, 	{"triggered_Bloom_Filter_Meadow_NPC_Meadow_Trainer_01"}},
-				{{"triggered_Meadow_Trainer_2"}, 	{"triggered_Bloom_Filter_Meadow_NPC_Meadow_Trainer_02"}},
-				{{"triggered_Tom_Trainer_1"}, 		{"triggered_Tom_Gym_NPC_Tom_Trainer_01"}},
-				{{"triggered_Tom_Trainer_2"}, 		{"triggered_Tom_Gym_NPC_Tom_Trainer_02"}},
-				{{"triggered_Leader_Moore"}, 		{"triggered_Tom_Gym_NPC_Leader_Moore_01"}}
-		};
-
-		replaceGlobals(globalsToChange);
 	}
 }

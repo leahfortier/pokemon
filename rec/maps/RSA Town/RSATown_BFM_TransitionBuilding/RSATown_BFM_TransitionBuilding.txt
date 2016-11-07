@@ -7,7 +7,6 @@
       "path": "w",
       "spriteIndex": 10,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": []
     },
     {
@@ -17,7 +16,6 @@
       "path": "w",
       "spriteIndex": 1,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",

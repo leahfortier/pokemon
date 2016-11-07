@@ -7,7 +7,6 @@
       "path": "w",
       "spriteIndex": 13,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
