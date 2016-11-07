@@ -36,10 +36,11 @@ public class GroupTrigger extends Trigger {
 
 	@Override
 	protected void executeTrigger() {
-		for (String triggerName: triggers) {
+		for (int i = triggers.size() - 1; i >= 0; i--) {
+			String triggerName = triggers.get(i);
 			Trigger trigger = Game.getData().getTrigger(triggerName);
 			if (trigger != null && trigger.isTriggered()) {
-				Messages.addMessage(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
+				Messages.addMessageToFront(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
 			}
 		}
 	}

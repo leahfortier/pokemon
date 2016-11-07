@@ -1,18 +1,9 @@
 package gui.view;
 
+import battle.Battle;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
@@ -22,21 +13,31 @@ import map.Direction;
 import map.MapData;
 import map.entity.Entity;
 import map.entity.MovableEntity;
-import map.entity.npc.NPCEntity;
 import map.entity.PlayerEntity;
+import map.entity.npc.EntityAction;
+import map.entity.npc.NPCEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
+import pattern.AreaDataMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawMetrics;
 import util.InputControl;
-import util.Save;
 import util.InputControl.Control;
-import battle.Battle;
+import util.Save;
 import util.StringUtils;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class MapView extends View {
 	// TODO: these should reference the constants
@@ -68,6 +69,7 @@ public class MapView extends View {
 	private PlayerEntity playerEntity;
 
 	private MessageUpdate currentMessage;
+	private int dialogueSelection;
 
 	private int startX, startY, endX, endY;
 	private float drawX, drawY;
@@ -195,23 +197,18 @@ public class MapView extends View {
 				DrawMetrics.setFont(g, 30);
 				g.setColor(Color.BLACK);
 				
-				DrawMetrics.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
-//				int height = DrawMetrics.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
-//
-//				// TODO: wtf is this variable name
-//				int i1 = 0;
-//
-//				for (String choice: currentDialogue.choices) {
-//					if (choice == null) {
-//						break;
-//					}
-//
-//					if (i1 == dialogueSelection) {
-//						g.fillOval(50, height + i1*36, 10, 10);
-//					}
-//
-//					g.drawString(choice, 80, height + (i1++)*36);
-//				}
+				int height = DrawMetrics.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
+				if (currentMessage.isChoice()) {
+					ChoiceMatcher[] choices = currentMessage.getChoices();
+					for (int i = 0; i < choices.length; i++) {
+						int y = height + i*DrawMetrics.getDistanceBetweenRows(g);
+						if (i == dialogueSelection) {
+							g.fillOval(50, y - DrawMetrics.getTextHeight(g)/2 - 5, 10, 10);
+						}
+
+						g.drawString(choices[i].text, 80, y);
+					}
+				}
 				break;
 			case MENU:
 				TileSet menuTiles = data.getMenuTiles();
@@ -322,11 +319,11 @@ public class MapView extends View {
 		// Black border
 		g.setColor(Color.BLACK);
 		g.fillRect(0, yValue, totalWidth, totalHeight);
-		
+
 		// Light grey border
 		g.setColor(new Color(195, 195, 195));
 		g.fillRect(borderSize, yValue + borderSize, insideWidth + 2*graySize, insideHeight + 2*graySize);
-		
+
 		// White inside
 		g.setColor(Color.WHITE);
 		g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
@@ -478,25 +475,27 @@ public class MapView extends View {
 //				}
 				break;
 			case MESSAGE:
-//				if (input.isDown(Control.DOWN)) {
-//					input.consumeKey(Control.DOWN);
-//					dialogueSelection++;
-//				} else if (input.isDown(Control.UP)) {
-//					input.consumeKey(Control.UP);
-//					dialogueSelection--;
-//				}
+				if (currentMessage.isChoice()) {
+					if (input.isDown(Control.DOWN)) {
+						input.consumeKey(Control.DOWN);
+						dialogueSelection++;
+					} else if (input.isDown(Control.UP)) {
+						input.consumeKey(Control.UP);
+						dialogueSelection--;
+					}
 
-//				if (currentDialogue.next.length != 0) {
-//					if (dialogueSelection < 0) {
-//						dialogueSelection += currentDialogue.next.length;
-//					}
-//
-//					dialogueSelection %= currentDialogue.next.length;
-//				}
+					dialogueSelection += currentMessage.getChoices().length;
+					dialogueSelection %= currentMessage.getChoices().length;
+				}
 
 				if (input.isDown(Control.SPACE) && !Global.soundPlayer.soundEffectIsPlaying()) {
 					input.consumeKey(Control.SPACE);
-//					currentDialogue.choose(dialogueSelection, this, game);
+
+					if (currentMessage.isChoice()) {
+						ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
+						Trigger trigger = EntityAction.addActionGroupTrigger(null, null, choice.getActions());
+						Messages.addMessageToFront(new MessageUpdate("", trigger.getName(), Update.TRIGGER));
+					}
 
 					boolean newMessage = false;
 					while (Messages.hasMessages()) {

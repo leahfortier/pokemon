@@ -8,6 +8,7 @@ import util.StringUtils;
 public enum TriggerType {
     BADGE(BadgeTrigger.class, BadgeTrigger::new),
     CHANGE_VIEW(ChangeViewTrigger.class, ChangeViewTrigger::new),
+    CHOICE(ChoiceTrigger.class, ChoiceTrigger::new),
     DIALOGUE(DialogueTrigger.class, DialogueTrigger::new),
     GIVE_ITEM(GiveItemTrigger.class, GiveItemTrigger::new),
     GIVE_POKEMON(GivePokemonTrigger.class, GivePokemonTrigger::new),

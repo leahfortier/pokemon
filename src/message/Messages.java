@@ -2,9 +2,6 @@ package message;
 
 import battle.Battle;
 import battle.Move;
-import gui.view.MapView;
-import main.Game;
-import main.Game.ViewMode;
 import message.MessageUpdate.Update;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
@@ -19,11 +16,6 @@ public class Messages {
 
     private static ArrayDeque<MessageUpdate> getQueue() {
         return fightyFight ? battleMessages : mapMessages;
-    }
-
-    public static void clearAllMessages() {
-        clearBattleMessages();
-        clearMapMessages();
     }
 
     public static void clearBattleMessages() {
@@ -51,7 +43,11 @@ public class Messages {
     }
 
     public static void addMessageToFront(String message) {
-        getQueue().addFirst(new MessageUpdate(message));
+        addMessageToFront(new MessageUpdate(message));
+    }
+
+    public static void addMessageToFront(MessageUpdate messageUpdate) {
+        getQueue().addFirst(messageUpdate);
     }
 
     // Just a plain old regular message

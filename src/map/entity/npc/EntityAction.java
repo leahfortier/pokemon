@@ -7,6 +7,7 @@ import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
 import pattern.AreaDataMatcher.BattleMatcher;
+import pattern.AreaDataMatcher.ChoiceActionMatcher;
 import pattern.AreaDataMatcher.GroupTriggerMatcher;
 import pattern.AreaDataMatcher.UpdateMatcher;
 import util.StringUtils;
@@ -162,14 +163,19 @@ public abstract class EntityAction {
 
     // TODO: This
     public static class ChoiceAction extends EntityAction {
+        final ChoiceActionMatcher matcher;
+        public ChoiceAction(final ChoiceActionMatcher matcher) {
+            this.matcher = matcher;
+        }
+
         @Override
         protected TriggerType getTriggerType() {
-            return TriggerType.DIALOGUE;
+            return TriggerType.CHOICE;
         }
 
         @Override
         protected String getTriggerContents(String entityName) {
-            return StringUtils.empty();
+            return AreaDataMatcher.getJson(matcher);
         }
     }
 }

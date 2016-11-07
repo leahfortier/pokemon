@@ -62,28 +62,33 @@
           "name": "stone_choice",
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "wudya wan"
+              "choice": {
+                "question": "wudya wan",
+                "choices": [
+                  {
+                    "text": "wawa",
+                    "actions": [
+                      {
+                        "trigger": {
+                          "triggerType": "GiveItem",
+                          "triggerContents": "Water Stone"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "text": "sunsunsunherewecome",
+                    "actions": [
+                      {
+                        "trigger": {
+                          "triggerType": "GiveItem",
+                          "triggerContents": "Sun Stone"
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
-            },
-            {
-              "choices": [
-                {
-                  "text": "wawa",
-                  "trigger": {
-                    "triggerType": "GiveItem",
-                    "triggerContents": "Water Stone"
-                  }
-                },
-                {
-                  "text": "sunsunsunherewecome",
-                  "trigger": {
-                    "triggerType": "GiveItem",
-                    "triggerContents": "Sun Stone"
-                  }
-                }
-              ]
             },
             {
               "update": "heal"

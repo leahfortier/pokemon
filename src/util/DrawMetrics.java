@@ -122,7 +122,19 @@ public class DrawMetrics {
         }
         return image;
     }
-	
+
+    public static int getTextHeight(Graphics g) {
+		int fontSize = g.getFont().getSize();
+		Metrics fontMetrics = getFontMetrics(fontSize);
+		return fontMetrics.letterHeight;
+	}
+
+    public static int getDistanceBetweenRows(Graphics g) {
+		int fontSize = g.getFont().getSize();
+		Metrics fontMetrics = getFontMetrics(fontSize);
+		return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
+	}
+
 	public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
 		int fontSize = g.getFont().getSize();
 		Metrics fontMetrics = getFontMetrics(fontSize);
@@ -131,7 +143,7 @@ public class DrawMetrics {
 		StringBuilder build = new StringBuilder();
 		
 		int height = y;
-		int distanceBetweenRows = (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
+		int distanceBetweenRows = getDistanceBetweenRows(g);
 
 		for (String word : words) {
 			if ((word.length() + build.length() + 1) * fontMetrics.horizontalSpacing > width) {

@@ -9,6 +9,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.Type;
+import pattern.AreaDataMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
@@ -38,6 +39,7 @@ public class MessageUpdate {
 	private Move move;
 	private Integer duration;
 	private String triggerName;
+	private ChoiceMatcher[] choices;
 	
 	public enum Update {
 		NO_UPDATE,
@@ -183,6 +185,11 @@ public class MessageUpdate {
 		if (update == Update.TRIGGER) {
 			this.triggerName = triggerName;
 		}
+	}
+
+	public MessageUpdate(String m, ChoiceMatcher[] choices) {
+		this(m);
+		this.choices = choices;
 	}
 	
 	// EXP Gain update
@@ -375,5 +382,13 @@ public class MessageUpdate {
 
 	public String getTriggerName() {
 		return this.triggerName;
+	}
+
+	public boolean isChoice() {
+		return this.choices != null;
+	}
+
+	public ChoiceMatcher[] getChoices() {
+		return this.choices;
 	}
 }

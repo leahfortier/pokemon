@@ -294,9 +294,23 @@ public class AreaDataMatcher {
                 .count() == 1;
     }
 
+    public static class ChoiceActionMatcher {
+        public String question;
+        public ChoiceMatcher[] choices;
+    }
+
     public static class ChoiceMatcher {
         public String text;
-        public TriggerActionMatcher trigger;
+        private ActionMatcher[] actions;
+
+        public List<EntityAction> getActions() {
+            List<EntityAction> actions = new ArrayList<>();
+            for (ActionMatcher action : this.actions) {
+                actions.add(action.getAction(null));
+            }
+
+            return actions;
+        }
     }
 
     public static class UpdateMatcher {
@@ -321,13 +335,13 @@ public class AreaDataMatcher {
     public static class ActionMatcher {
         private TriggerActionMatcher trigger;
         private BattleMatcher battle;
-        private ChoiceMatcher[] choices;
+        private ChoiceActionMatcher choice;
         private String update;
         private String groupTrigger;
         private String global;
 
         public EntityAction getAction(final String condition) {
-            if (!hasOnlyOneNonEmpty(trigger, battle, choices, update, groupTrigger, global)) {
+            if (!hasOnlyOneNonEmpty(trigger, battle, choice, update, groupTrigger, global)) {
                 Global.error("Can only have one nonempty field for ActionMatcher");
             }
 
@@ -339,8 +353,8 @@ public class AreaDataMatcher {
                 return new UpdateAction(update);
             } else if (!StringUtils.isNullOrEmpty(groupTrigger)) {
                 return new GroupTriggerAction(groupTrigger);
-            } else if (choices != null) {
-                return new ChoiceAction();
+            } else if (choice != null) {
+                return new ChoiceAction(choice);
             } else if (global != null) {
                 return new GlobalAction(global);
             }
