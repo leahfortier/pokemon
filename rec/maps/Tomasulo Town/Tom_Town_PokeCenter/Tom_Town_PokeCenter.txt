@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "POKE_CENTER"
+    }
+  ],
   "NPCs": [
     {
       "name": "Nurse_Joy",

@@ -153,7 +153,6 @@ public abstract class EntityAction {
         }
     }
 
-    // TODO: This
     public static class ChoiceAction extends EntityAction {
         final ChoiceActionMatcher matcher;
         public ChoiceAction(final ChoiceActionMatcher matcher) {

@@ -42,20 +42,20 @@ class PokeCenterTransitionData {
 //		pokeCenterTransitionFile = new File(mapMaker.getPathWithRoot(pokeCenterTransitionTriggersFile));
 		
 		String fileText = FileIO.readEntireFileWithReplacements(pokeCenterTransitionFile, false);
-		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
-		while (m.find()) {
-			TriggerType type = TriggerType.getTriggerType(m.group(1));
-			String name = m.group(2);
-			Trigger trigger = type.createTrigger(m.group(3), null);
-			
-			if (type == TriggerType.GROUP) {
-				groupTrigger = (GroupTrigger)trigger;
-			}
-			else if (type == TriggerType.MAP_TRANSITION) {
-				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
-				transitionTriggers.put(transitionTrigger.getTransitionTriggerName(), transitionTrigger);
-			}
-		}
+//		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
+//		while (m.find()) {
+//			TriggerType type = TriggerType.getTriggerType(m.group(1));
+//			String name = m.group(2);
+//			Trigger trigger = type.createTrigger(m.group(3), null);
+//
+//			if (type == TriggerType.GROUP) {
+//				groupTrigger = (GroupTrigger)trigger;
+//			}
+//			else if (type == TriggerType.MAP_TRANSITION) {
+//				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
+//				transitionTriggers.put(transitionTrigger.getTransitionTriggerName(), transitionTrigger);
+//			}
+//		}
 		
 		if (groupTrigger == null) {
 			// TODO: These should likely be a constant or something

@@ -6,6 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import main.Global;
+import map.AreaData;
+import map.AreaData.TerrainType;
+import map.AreaData.WeatherState;
 import map.Direction;
 import map.EncounterRate;
 import map.WildEncounter;
@@ -20,6 +23,7 @@ import map.entity.npc.NPCInteraction;
 import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.MatchConstants.MatchType;
+import sound.SoundTitle;
 import util.FileIO;
 import util.StringUtils;
 
@@ -46,6 +50,7 @@ public class AreaDataMatcher {
             .setLenient()
             .create();
 
+    public AreaMatcher[] areas = new AreaMatcher[0];
     public NPCMatcher[] NPCs = new NPCMatcher[0];
     public ItemMatcher[] items = new ItemMatcher[0];
     public MapExitMatcher[] mapExits = new MapExitMatcher[0];
@@ -54,6 +59,39 @@ public class AreaDataMatcher {
 
     public static <T> T deserialize(String jsonString, Class<T> tClass) {
         return gson.fromJson(jsonString, tClass);
+    }
+
+    public AreaData[] getAreas() {
+        AreaData[] areaData = new AreaData[this.areas.length];
+        for (int i = 0; i < this.areas.length; i++) {
+            if (i > 0 && StringUtils.isNullOrEmpty(this.areas[i].color)) {
+                Global.error("Color required for maps with multiple areas.");
+            }
+
+            areaData[i] = this.areas[i].getAreaData();
+        }
+
+        return areaData;
+    }
+
+    private static class AreaMatcher {
+        private String color;
+        private String displayName;
+        private TerrainType terrain;
+        private SoundTitle music;
+        private WeatherState weather;
+
+        private int getColor() {
+            return StringUtils.isNullOrEmpty(this.color) ? 0 : (int)Long.parseLong(this.color, 16);
+        }
+
+        private WeatherState getWeather() {
+            return this.weather == null ? WeatherState.NORMAL : this.weather;
+        }
+
+        public AreaData getAreaData() {
+            return new AreaData(this.displayName, this.getColor(), this.terrain, this.music, this.getWeather());
+        }
     }
 
     private static final Pattern wildEncounterPattern = Pattern.compile(
@@ -90,11 +128,6 @@ public class AreaDataMatcher {
 
             return this.wildEncounters;
         }
-    }
-
-    public static class SoundTriggerMatcher {
-        public String effectName;
-        public String musicName;
     }
 
     public static class GroupTriggerMatcher {

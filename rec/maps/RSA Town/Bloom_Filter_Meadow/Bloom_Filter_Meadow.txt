@@ -1,4 +1,12 @@
 {
+  "areas": [
+    {
+      "displayName": "Bloom Filter Meadow",
+      "terrain": "GRASS",
+      "music": "BLOOM_FILTER_MEADOW",
+      "weather": "SUN"
+    }
+  ],
   "NPCs": [
     {
       "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01",

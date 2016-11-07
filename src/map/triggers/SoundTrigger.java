@@ -1,11 +1,8 @@
 package map.triggers;
 
 import main.Global;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.SoundTriggerMatcher;
 import sound.SoundTitle;
 import util.PokeString;
-import util.StringUtils;
 
 public class SoundTrigger extends Trigger {
 	private SoundTitle music;
@@ -14,15 +11,12 @@ public class SoundTrigger extends Trigger {
 	SoundTrigger(String contents, String condition) {
 		super(TriggerType.SOUND, contents, condition);
 
-		SoundTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, SoundTriggerMatcher.class);
-		if (!StringUtils.isNullOrEmpty(matcher.effectName)) {
-			this.effect = SoundTitle.valueOf(PokeString.getNamesiesString(matcher.effectName));
+		SoundTitle soundTitle = SoundTitle.valueOf(PokeString.getNamesiesString(contents));
+		if (soundTitle.isMusic()) {
+			this.music = soundTitle;
+		} else {
+			this.effect = soundTitle;
 		}
-
-		if (!StringUtils.isNullOrEmpty(matcher.musicName)) {
-			this.music = SoundTitle.valueOf(PokeString.getNamesiesString(matcher.musicName));
-		}
-
 	}
 	
 	protected void executeTrigger() {

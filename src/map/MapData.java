@@ -1,13 +1,13 @@
 package map;
 
-import gui.GameData;
 import gui.GameFrame;
 import main.Game;
+import main.Global;
 import map.entity.Entity;
+import map.entity.EntityAction;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
 import map.entity.TriggerEntityData;
-import map.entity.EntityAction;
 import map.entity.npc.NPCEntityData;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
@@ -36,6 +36,8 @@ public class MapData {
 	private final int[] fgTile;
 	private final int[] walkMap;
 	private final int[] areaMap;
+
+	private final AreaData[] areaData;
 	
 	private final Map<Integer, String> triggers;
 	private final Map<String, Integer> mapEntrances;
@@ -64,25 +66,22 @@ public class MapData {
 		BufferedImage areaM;
 		File areaMapFile = new File(beginFilePath + "_area.png");
 		if (areaMapFile.exists()) {
-			areaM = FileIO.readImage(areaMapFile);			
+			areaM = FileIO.readImage(areaMapFile);
+			areaMap = areaM.getRGB(0, 0, width, height, null, 0, width);
+		} else {
+			areaMap = new int[0];
 		}
-		else {
-			// If map doesn't have an image for areas, create and save an empty image for areas.
-			areaM = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			FileIO.writeImage(areaM, areaMapFile);
-		}
-		areaMap = areaM.getRGB(0, 0, width, height, null, 0, width);
-		
+
 		entities = new ArrayList<>();
 		triggers = new HashMap<>();
 		mapEntrances = new HashMap<>();
-
-		GameData data = Game.getData();
 
 		File f = new File(beginFilePath + ".txt");
 		String fileText = FileIO.readEntireFileWithReplacements(f, false);
 
 		AreaDataMatcher areaDataMatcher = AreaDataMatcher.matchArea(beginFilePath + ".txt", fileText);
+		this.areaData = areaDataMatcher.getAreas();
+
 		for (NPCMatcher matcher : areaDataMatcher.NPCs) {
 			entities.add(new NPCEntityData(matcher));
 		}
@@ -115,8 +114,6 @@ public class MapData {
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
 			}
-
-            data.addTrigger(trigger);
 		}
 
 		for (TriggerMatcher matcher : areaDataMatcher.triggers) {
@@ -193,12 +190,24 @@ public class MapData {
 		return WalkType.NOT_WALKABLE;
 	}
 	
-	public int getAreaName(int x, int y) {
-		if (!inBounds(x, y) || areaMap == null) {
-			return 0;
+	public AreaData getArea(int x, int y) {
+		if (areaData.length == 1) {
+			return areaData[0];
 		}
-		
-		return areaMap[getMapIndex(x, y)];
+
+		if (!inBounds(x, y) || areaMap == null) {
+			return AreaData.VOID;
+		}
+
+		int areaColor = areaMap[getMapIndex(x, y)];
+		for (AreaData data : areaData) {
+			if (data.isColor(areaColor)) {
+				return data;
+			}
+		}
+
+		Global.error("No area found with color " + areaColor + " for map " + this.name);
+		return AreaData.VOID;
 	}
 	
 	public String trigger() {

@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Depth First Search Town",
+      "terrain": "BUILDING",
+      "music": "DFS_TOWN"
+    }
+  ],
   "NPCs": [],
   "items": [],
   "mapExits": [

@@ -1,4 +1,10 @@
 {
+  "areas": [
+    {
+      "terrain": "BUILDING",
+      "music": "TRANSITION_BUILDING"
+    }
+  ],
   "NPCs": [
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01",

@@ -1,4 +1,10 @@
 {
+  "areas": [
+    {
+      "displayName": "Yamartino Valley of the Wind",
+      "terrain": "GRASS"
+    }
+  ],
   "NPCs": [],
   "items": [],
   "mapExits": [

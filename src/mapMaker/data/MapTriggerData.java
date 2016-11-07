@@ -46,14 +46,14 @@ class MapTriggerData {
 		}
 		
 		String fileText = FileIO.readEntireFileWithReplacements(triggerFile, false);
-		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
-		while (m.find()) {
-			TriggerType type = TriggerType.getTriggerType(m.group(1));
-			String name = m.group(2);
-			
+//		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
+//		while (m.find()) {
+//			TriggerType type = TriggerType.getTriggerType(m.group(1));
+//			String name = m.group(2);
+//
 //			Trigger trigger = type.createTrigger(name, m.group(3));
 //			triggers.put(name, trigger);
-		}
+//		}
 	}
 	
 	public void save() {

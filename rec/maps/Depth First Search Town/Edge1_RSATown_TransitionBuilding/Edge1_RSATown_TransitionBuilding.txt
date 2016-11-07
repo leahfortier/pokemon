@@ -1,4 +1,10 @@
 {
+  "areas": [
+    {
+      "terrain": "BUILDING",
+      "music": "TRANSITION_BUILDING"
+    }
+  ],
   "NPCs": [
     {
       "name": "Info_Guy",

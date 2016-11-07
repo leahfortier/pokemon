@@ -1,4 +1,19 @@
 {
+  "areas": [
+    {
+      "color": "ffff220b",
+      "displayName": "Depth First Search Town",
+      "terrain": "GRASS",
+      "music": "DFS_TOWN"
+    },
+    {
+      "color": "ff1a8524",
+      "displayName": "Edge 1",
+      "terrain": "GRASS",
+      "music": "EDGE_1",
+      "weather": "RAIN"
+    }
+  ],
   "NPCs": [
     {
       "name": "DFS_Town_NPC_Edge1_Trainer_03",

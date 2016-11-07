@@ -68,55 +68,55 @@ class TransitionBuildingData {
 //		transitionBuildingTriggerFile = new File(mapMaker.getPathWithRoot(transitionBuildingTriggersFile));
 		
 		String fileText = FileIO.readEntireFileWithReplacements(transitionBuildingTriggerFile, false);
-		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
-		while (m.find()) {
-			TriggerType type = TriggerType.getTriggerType(m.group(1));
-			String name = m.group(2);
-
-			Trigger trigger = type.createTrigger(m.group(3), null);
-			
-			if (type == TriggerType.GROUP) {
-				// TODO: Is there a reason this isn't in a loop with that directions array thingy?
-				if (name.endsWith("EastDoor")) {
-					groupTriggers[0] = (GroupTrigger)trigger;
-				}
-				else if (name.endsWith("WestDoor")) {
-					groupTriggers[1] = (GroupTrigger)trigger;
-				}
-				else if (name.endsWith("NorthDoor")) {
-					groupTriggers[2] = (GroupTrigger)trigger;
-				}
-				else if (name.endsWith("SouthDoor")) {
-					groupTriggers[3] = (GroupTrigger)trigger;
-				}
-				else if (name.equals("Info_Trigger")) {
-					infoTriggerGT = (GroupTrigger)trigger;
-				}
-			}
-			else if (type == TriggerType.DIALOGUE) {
-				infoTriggers.add((DialogueTrigger)trigger);
-			}
-			else if (type == TriggerType.MAP_TRANSITION && name.matches(transitionBuildingTransitionNamePattern.pattern())) {
-				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
-				
-				transitionTriggers.put(transitionTrigger.getTransitionTriggerName(), transitionTrigger);
-				
-				Matcher nameMatcher = transitionBuildingTransitionNamePattern.matcher(name);
-				nameMatcher.find();
-				
-				String map1 = nameMatcher.group(2);
-				String map2 = nameMatcher.group(3);
-				
-				TransitionBuildingPair pair = getTransitionPair(nameMatcher.group(1).equals("H"), map1, map2, Integer.parseInt(nameMatcher.group(4)));
-				
-				if (transitionTrigger.getNextMap().equals(map1)) {
-					pair.map1Entrance = transitionTrigger.getMapEntranceName();
-				}
-				else {
-					pair.map2Entrance = transitionTrigger.getMapEntranceName();
-				}
-			}
-		}
+//		Matcher m = GameData.triggerBlockPattern.matcher(fileText);
+//		while (m.find()) {
+//			TriggerType type = TriggerType.getTriggerType(m.group(1));
+//			String name = m.group(2);
+//
+//			Trigger trigger = type.createTrigger(m.group(3), null);
+//
+//			if (type == TriggerType.GROUP) {
+//				// TODO: Is there a reason this isn't in a loop with that directions array thingy?
+//				if (name.endsWith("EastDoor")) {
+//					groupTriggers[0] = (GroupTrigger)trigger;
+//				}
+//				else if (name.endsWith("WestDoor")) {
+//					groupTriggers[1] = (GroupTrigger)trigger;
+//				}
+//				else if (name.endsWith("NorthDoor")) {
+//					groupTriggers[2] = (GroupTrigger)trigger;
+//				}
+//				else if (name.endsWith("SouthDoor")) {
+//					groupTriggers[3] = (GroupTrigger)trigger;
+//				}
+//				else if (name.equals("Info_Trigger")) {
+//					infoTriggerGT = (GroupTrigger)trigger;
+//				}
+//			}
+//			else if (type == TriggerType.DIALOGUE) {
+//				infoTriggers.add((DialogueTrigger)trigger);
+//			}
+//			else if (type == TriggerType.MAP_TRANSITION && name.matches(transitionBuildingTransitionNamePattern.pattern())) {
+//				MapTransitionTrigger transitionTrigger = (MapTransitionTrigger)trigger;
+//
+//				transitionTriggers.put(transitionTrigger.getTransitionTriggerName(), transitionTrigger);
+//
+//				Matcher nameMatcher = transitionBuildingTransitionNamePattern.matcher(name);
+//				nameMatcher.find();
+//
+//				String map1 = nameMatcher.group(2);
+//				String map2 = nameMatcher.group(3);
+//
+//				TransitionBuildingPair pair = getTransitionPair(nameMatcher.group(1).equals("H"), map1, map2, Integer.parseInt(nameMatcher.group(4)));
+//
+//				if (transitionTrigger.getNextMap().equals(map1)) {
+//					pair.map1Entrance = transitionTrigger.getMapEntranceName();
+//				}
+//				else {
+//					pair.map2Entrance = transitionTrigger.getMapEntranceName();
+//				}
+//			}
+//		}
 		
 		// Create missing transition group triggers
 		for (int currGroupTrigger = 0; currGroupTrigger < groupTriggers.length; ++currGroupTrigger) {

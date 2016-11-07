@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Main",
+      "terrain": "BUILDING",
+      "music": "PLAYER_HOUSE"
+    }
+  ],
   "NPCs": [
     {
       "name": "PlayersHouseDown_NPC_Mom_01",

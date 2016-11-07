@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "RSA Town",
+      "terrain": "GRASS",
+      "music": "RSA_TOWN"
+    }
+  ],
   "NPCs": [
     {
       "name": "RSATown_NPC_Rival_01",

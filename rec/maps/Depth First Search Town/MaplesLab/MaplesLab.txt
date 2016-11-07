@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Depth First Search Town",
+      "terrain": "BUILDING",
+      "music": "POKE_LAB"
+    }
+  ],
   "NPCs": [
     {
       "name": "MaplesLab_NPC_Prof_Maple_01",

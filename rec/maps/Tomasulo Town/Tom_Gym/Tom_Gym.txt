@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "POKE_GYM"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Gym_NPC_Leader_Moore_01",

@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "GRASS",
+      "music": "TOM_TOWN"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Town_NPC_Scientist_02",

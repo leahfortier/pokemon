@@ -12,9 +12,9 @@ import map.AreaData.WeatherState;
 import map.Direction;
 import map.MapData;
 import map.entity.Entity;
+import map.entity.EntityAction;
 import map.entity.MovableEntity;
 import map.entity.PlayerEntity;
-import map.entity.EntityAction;
 import map.entity.npc.NPCEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
@@ -61,7 +61,7 @@ public class MapView extends View {
 	private String currentMapName;
 	private AreaData currentArea;
 	private MapData currentMap;
-	private Trigger currentMusicTrigger;
+	private SoundTitle currentMusicTitle;
 	
 	private Entity[][] entities;
 	private List<Entity> entityList;
@@ -101,7 +101,6 @@ public class MapView extends View {
 	
 	public MapView() {
 		currentMapName = StringUtils.empty();
-		currentArea = null;
 		rainHeight = new int[Global.GAME_SIZE.width/2];
 		state = VisualState.MAP;
 		selectedButton = 0;
@@ -403,8 +402,6 @@ public class MapView extends View {
 				character.mapReset = false;
 				currentMap.setCharacterToEntrance(character.mapEntranceName);
 			}
-			
-			currentArea = null;
 
 			entities = currentMap.populateEntities();
 
@@ -432,18 +429,23 @@ public class MapView extends View {
 		}
 		
 		// New area
-		AreaData area = data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
-		if (currentArea == null || !area.getAreaName().equals(currentArea.getAreaName())) {
-			character.areaName = area.getAreaName();
-			currentArea = area;
+		AreaData area = currentMap.getArea(character.locationX, character.locationY);
+		String areaName = area.getAreaName();
 
+		character.areaName = areaName;
+		currentArea = area;
+
+		// If new area has a new name, display the area name animation
+		if (!StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
-			weatherState = area.getWeather();
-			
-			//Queue to play new area's music.
-			currentMusicTrigger = data.getTrigger(area.getMusicTriggerName());
-			//System.out.println(currentMusicTrigger);
-			
+		}
+
+		weatherState = area.getWeather();
+
+		// Queue to play new area's music.
+		SoundTitle areaMusic = area.getMusic();
+		if (currentMusicTitle != areaMusic) {
+			currentMusicTitle = areaMusic;
 			playAreaMusic();
 		}
 		
@@ -655,8 +657,8 @@ public class MapView extends View {
 	}
 
 	private void playAreaMusic() {
-		if (currentMusicTrigger != null) {
-			currentMusicTrigger.execute();
+		if (currentMusicTitle != null) {
+			Global.soundPlayer.playMusic(currentMusicTitle);
 		}
 		else if(currentArea != null) {
 			System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
@@ -705,7 +707,7 @@ public class MapView extends View {
 			battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
 		}
 	}
-	
+
 	public void addEntity(Entity e) {
 		entities[e.getX()][e.getY()] = e;
 		entityList.add(e);

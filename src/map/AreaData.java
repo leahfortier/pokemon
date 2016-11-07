@@ -1,25 +1,23 @@
 package map;
 
-import battle.effect.status.StatusCondition;
-import gui.GameData;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import main.Global;
-import main.Type;
-import map.triggers.TriggerType;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import pokemon.Stat;
 import battle.Attack;
 import battle.effect.generic.Effect;
 import battle.effect.generic.PokemonEffect;
-import util.StringUtils;
+import battle.effect.status.StatusCondition;
+import main.Global;
+import main.Type;
+import namesies.AttackNamesies;
+import namesies.EffectNamesies;
+import pokemon.Stat;
+import sound.SoundTitle;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class AreaData {
+	public static final AreaData VOID = new AreaData("Void", 0, TerrainType.CAVE, SoundTitle.DEFAULT_TUNE, WeatherState.NORMAL);
+
 	private static final Pattern areaSoundConditionPattern = Pattern.compile("(?:([()&|!\\w]+)\\s*:\\s*)?([\\w-]+)");
 
 	public enum WeatherState {
@@ -130,43 +128,24 @@ public class AreaData {
 
 	private String name;
 	private int color;
+
 	private TerrainType terrainType;
 	private WeatherState weather;
+	private SoundTitle music;
 
-	private String musicCondition;
-	private String musicTriggerName;
+	private String musicCondition; // TODO
 
-	public AreaData(String name, int color, String weather, String terrainType, String musicCondition) {
+	public AreaData(String name, int color, TerrainType terrainType, SoundTitle music, WeatherState weather) {
 		this.name = name;
 		this.color = color;
-		this.terrainType = TerrainType.valueOf(terrainType);
 
-		this.musicCondition = musicCondition;
-
-		this.weather = WeatherState.valueOf(weather);
+		this.terrainType = terrainType;
+		this.weather = weather;
+		this.music = music;
 	}
 
-	public void addMusicTriggers(GameData data) {
-		if (musicCondition != null) {
-			StringBuilder groupTriggers = new StringBuilder();
-			String areaNameDisplay = name.replace(' ', '_').replaceAll("\\W", "");
-
-			Matcher areaSoundMatcher = areaSoundConditionPattern.matcher(musicCondition);
-			while (areaSoundMatcher.find()) {
-				String condition = areaSoundMatcher.group(1);
-				String musicName = areaSoundMatcher.group(2);
-				String soundTriggerName = "SoundTrigger_AreaSound_for_" + areaNameDisplay + "_MusicName_" + musicName;
-
-				// System.out.println(condition + " : " + musicName);
-
-//				data.addTrigger(TriggerType.SOUND, (condition != null ? "condition: " + condition : "") + "\nmusicName: " + musicName);
-				StringUtils.appendLine(groupTriggers, "trigger: " + soundTriggerName);
-			}
-
-//			data.addTrigger(TriggerType.GROUP, "GroupTrigger_AreaSound_for_" + areaNameDisplay, groupTriggers.toString());
-//			data.addTrigger(TriggerType.GROUP, groupTriggers.toString());
-			musicTriggerName = "GroupTrigger_AreaSound_for_" + areaNameDisplay;
-		}
+	public boolean isColor(int color) {
+		return this.color == color;
 	}
 
 	public WeatherState getWeather() {
@@ -181,7 +160,8 @@ public class AreaData {
 		return name;
 	}
 
-	public String getMusicTriggerName() {
-		return musicTriggerName;
+	public SoundTitle getMusic() {
+		// TODO: Condition or something
+		return this.music;
 	}
 }

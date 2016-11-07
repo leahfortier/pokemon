@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Depth First Search Town",
+      "terrain": "BUILDING",
+      "music": "DFS_TOWN"
+    }
+  ],
   "NPCs": [
     {
       "name": "Neighbor_House_NPC_Green_01",

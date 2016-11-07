@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "RSA Town",
+      "terrain": "BUILDING",
+      "music": "POKE_CENTER"
+    }
+  ],
   "NPCs": [
     {
       "name": "Nurse_Joy",
@@ -97,9 +104,7 @@
         {
           "trigger": {
             "triggerType": "Sound",
-            "triggerContents": "{
-				effectName: POKE_CENTER_HEAL
-			}"
+            "triggerContents": "POKE_CENTER_HEAL"
           }
         },
         {
