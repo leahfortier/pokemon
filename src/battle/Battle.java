@@ -23,7 +23,7 @@ import battle.effect.generic.Weather;
 import main.Game;
 import main.Global;
 import main.Type;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;

@@ -39,7 +39,7 @@ import item.hold.HoldItem;
 import item.hold.PlateItem;
 import main.Global;
 import main.Type;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;

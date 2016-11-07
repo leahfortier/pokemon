@@ -64,7 +64,7 @@ import javax.swing.filechooser.FileFilter;
 
 import main.Global;
 import util.FileIO;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import map.AreaData.WeatherState;
 import map.entity.npc.NPCEntityData;
 import mapMaker.data.MapMakerTriggerData;

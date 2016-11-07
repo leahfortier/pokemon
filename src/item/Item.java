@@ -56,7 +56,7 @@ import item.use.TrainerUseItem;
 import item.use.UseItem;
 import main.Global;
 import main.Type;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.AttackNamesies;

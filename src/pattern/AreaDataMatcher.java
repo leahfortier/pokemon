@@ -7,7 +7,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import main.Global;
 import map.AreaData;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import map.AreaData.WeatherState;
 import map.Direction;
 import map.EncounterRate;
