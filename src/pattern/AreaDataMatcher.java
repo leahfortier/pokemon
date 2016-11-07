@@ -23,6 +23,7 @@ import map.entity.npc.NPCInteraction;
 import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.MatchConstants.MatchType;
+import sound.MusicCondition;
 import sound.SoundTitle;
 import util.FileIO;
 import util.StringUtils;
@@ -74,12 +75,20 @@ public class AreaDataMatcher {
         return areaData;
     }
 
+    private static class MusicConditionMatcher {
+        private String condition;
+        private SoundTitle music;
+    }
+
     private static class AreaMatcher {
         private String color;
         private String displayName;
         private TerrainType terrain;
-        private SoundTitle music;
         private WeatherState weather;
+        private SoundTitle music;
+        private MusicConditionMatcher[] musicConditions;
+
+        private transient AreaData areaData;
 
         private int getColor() {
             return StringUtils.isNullOrEmpty(this.color) ? 0 : (int)Long.parseLong(this.color, 16);
@@ -89,8 +98,26 @@ public class AreaDataMatcher {
             return this.weather == null ? WeatherState.NORMAL : this.weather;
         }
 
+        private MusicCondition[] getMusicConditions() {
+            if (this.musicConditions == null) {
+                return new MusicCondition[0];
+            }
+
+            MusicCondition[] musicConditions = new MusicCondition[this.musicConditions.length];
+            for (int i = 0; i < this.musicConditions.length; i++) {
+                musicConditions[i] = new MusicCondition(this.musicConditions[i].music, this.musicConditions[i].condition);
+            }
+
+            return musicConditions;
+        }
+
         public AreaData getAreaData() {
-            return new AreaData(this.displayName, this.getColor(), this.terrain, this.music, this.getWeather());
+            if (areaData != null) {
+                return areaData;
+            }
+
+            areaData = new AreaData(this.displayName, this.getColor(), this.terrain, this.getWeather(), this.music, this.getMusicConditions());
+            return areaData;
         }
     }
 

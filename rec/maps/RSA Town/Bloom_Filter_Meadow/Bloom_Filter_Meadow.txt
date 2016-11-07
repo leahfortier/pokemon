@@ -3,8 +3,8 @@
     {
       "displayName": "Bloom Filter Meadow",
       "terrain": "GRASS",
-      "music": "BLOOM_FILTER_MEADOW",
-      "weather": "SUN"
+      "weather": "SUN",
+      "music": "BLOOM_FILTER_MEADOW"
     }
   ],
   "NPCs": [

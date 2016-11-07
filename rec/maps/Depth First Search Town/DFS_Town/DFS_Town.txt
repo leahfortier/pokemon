@@ -10,8 +10,8 @@
       "color": "ff1a8524",
       "displayName": "Edge 1",
       "terrain": "GRASS",
-      "music": "EDGE_1",
-      "weather": "RAIN"
+      "weather": "RAIN",
+      "music": "EDGE_1"
     }
   ],
   "NPCs": [

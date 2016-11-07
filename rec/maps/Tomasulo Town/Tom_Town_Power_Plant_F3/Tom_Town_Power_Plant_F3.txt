@@ -3,7 +3,13 @@
     {
       "displayName": "Tomasulo Town",
       "terrain": "BUILDING",
-      "music": "TOM_TOWN"
+      "music": "TOM_TOWN",
+      "musicConditions": [
+        {
+          "condition": "!VisitedTomTownPowerPlant",
+          "music": "DEADLOCK_THEME"
+        }
+      ]
     }
   ],
   "NPCs": [

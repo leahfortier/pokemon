@@ -14,7 +14,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.Type;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;

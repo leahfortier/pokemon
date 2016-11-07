@@ -1,9 +1,17 @@
 package map;
 
+import sound.MusicCondition;
 import sound.SoundTitle;
 
 public class AreaData {
-	public static final AreaData VOID = new AreaData("Void", 0, TerrainType.CAVE, SoundTitle.DEFAULT_TUNE, WeatherState.NORMAL);
+	static final AreaData VOID = new AreaData(
+			"Void",
+			0,
+			TerrainType.CAVE,
+			WeatherState.NORMAL,
+			SoundTitle.DEFAULT_TUNE,
+			new MusicCondition[0]
+	);
 
 	public enum WeatherState {
 		NORMAL,
@@ -18,17 +26,24 @@ public class AreaData {
 
 	private TerrainType terrainType;
 	private WeatherState weather;
+
 	private SoundTitle music;
+	private MusicCondition[] musicConditions;
 
-	private String musicCondition; // TODO
-
-	public AreaData(String name, int color, TerrainType terrainType, SoundTitle music, WeatherState weather) {
+	public AreaData(String name,
+					int color,
+					TerrainType terrainType,
+					WeatherState weather,
+					SoundTitle music,
+					MusicCondition[] musicConditions) {
 		this.name = name;
 		this.color = color;
 
 		this.terrainType = terrainType;
 		this.weather = weather;
+
 		this.music = music;
+		this.musicConditions = musicConditions;
 	}
 
 	public boolean isColor(int color) {
@@ -48,7 +63,12 @@ public class AreaData {
 	}
 
 	public SoundTitle getMusic() {
-		// TODO: Condition or something
+		for (MusicCondition condition : musicConditions) {
+			if (condition.isTrue()) {
+				return condition.getMusic();
+			}
+		}
+
 		return this.music;
 	}
 }

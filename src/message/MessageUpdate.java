@@ -9,6 +9,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.Type;
+import map.entity.PlayerEntity;
 import pattern.AreaDataMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
@@ -56,6 +57,7 @@ public class MessageUpdate {
             battleView.clearUpdate();
 			Messages.clearBattleMessages();
 			Messages.mappityMap();
+			PlayerEntity.currentInteractionEntity = null;
         }),
 		FORCE_SWITCH(battleView -> {
             battleView.setVisualState(VisualState.POKEMON);
