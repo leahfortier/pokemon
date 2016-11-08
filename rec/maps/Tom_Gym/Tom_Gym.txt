@@ -1,0 +1,173 @@
+{
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "POKE_GYM"
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "Tom_Gym_NPC_Leader_Moore_01",
+      "startX": 9,
+      "startY": 5,
+      "path": "w",
+      "spriteIndex": 15,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Pokemon pack enough electricity to power the Cray Titan!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Leader Moore",
+                "cashMoney": 1000,
+                "pokemon": [
+                  "Magnemite 11",
+                  "Elekid 11",
+                  "Pikachu 14"
+                ],
+                "update": "badge"
+              }
+            }
+          ]
+        },
+        {
+          "name": "badge",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My data BUS just wasn't large enough! Take this, the Round Badge!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Badge",
+                "triggerContents": "0"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tom_Gym_NPC_Tom_Trainer_01",
+      "startX": 7,
+      "startY": 11,
+      "path": "w",
+      "spriteIndex": 5,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Watch out, I'm gonna fry your motherboard!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Gym Trainer",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Blitzle 9"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Hey! You fried my motherboard!"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tom_Gym_NPC_Tom_Trainer_02",
+      "startX": 11,
+      "startY": 9,
+      "path": "w",
+      "spriteIndex": 5,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Pokemon and I communicate over PCI express!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Gym Trainer",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Joltik 9"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I need more bandwidth!"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "items": [],
+  "mapExits": [
+    {
+      "exitName": "Tom_Town",
+      "location": [
+        9,
+        15
+      ],
+      "nextMap": "Tom_Town",
+      "nextEntrance": "Gym",
+      "direction": "DOWN"
+    }
+  ],
+  "triggerData": [],
+  "triggers": []
+}

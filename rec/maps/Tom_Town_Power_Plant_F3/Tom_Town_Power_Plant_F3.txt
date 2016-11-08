@@ -1,0 +1,239 @@
+{
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "TOM_TOWN",
+      "musicConditions": [
+        {
+          "condition": "!VisitedTomTownPowerPlant",
+          "music": "DEADLOCK_THEME"
+        }
+      ]
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
+      "condition": "VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+      "startX": 14,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 12,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'll be here for days trying to get the plant fully operational again."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
+      "startX": 13,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 20,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'm going to kill your process."
+              }
+            },
+            {
+              "battle": {
+                "name": "Team Deadlock Grunt",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Venipede 14"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I can't beleive you managed to killed my process."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+      "condition": "VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+      "startX": 12,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 18,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Wow, you did it! You saved the power plant!"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
+      "startX": 9,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 20,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "battle",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You can't stop us. This town's main thread will be terminated!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Team Deadlock Grunt",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Butterfree 14",
+                  "Beedrill 15"
+                ],
+                "update": "deadlock_defeat"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You may have halted us now, but our loop is infinite!"
+              }
+            },
+            {
+              "global": "VisitedTomTownPowerPlant"
+            },
+            {
+              "trigger": {
+                "triggerType": "MapTransition",
+                "triggerContents": "{
+                        nextMap: Tom_Town_Power_Plant_F3,
+                        nextEntrance: ReloadLocation
+                    }"
+              }
+            }
+          ]
+        },
+        {
+          "name": "deadlock_defeat",
+          "npcActions": []
+        }
+      ]
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
+      "startX": 2,
+      "startY": 11,
+      "path": "w",
+      "spriteIndex": 20,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "What is a process like you doing here?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "That doesn't matter. You can't interfere with our threads!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Team Deadlock Grunt",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Venonat 12"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "How could you have won?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "The others will stop your thread!"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "items": [],
+  "mapExits": [
+    {
+      "exitName": "ReloadLocation",
+      "location": [
+        10,
+        10
+      ]
+    },
+    {
+      "exitName": "FromFloor2",
+      "location": [
+        2,
+        8
+      ],
+      "nextMap": "Tom_Town_Power_Plant_F2",
+      "nextEntrance": "FromFloor3",
+      "direction": "RIGHT"
+    }
+  ],
+  "triggerData": [],
+  "triggers": []
+}
