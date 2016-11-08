@@ -229,6 +229,10 @@ public class DrawMetrics {
 			g.drawString(text, x - 2, y - 2);
 		}
 	}
+
+	public static int getTextWidth(final String text, final int fontSize) {
+		return text.length()*getFontMetrics(fontSize).getHorizontalSpacing();
+	}
 	
 	static class Metrics {
     	private final int fontSize;

@@ -1,7 +1,7 @@
 package mapMaker.tools;
 
 import mapMaker.MapMaker;
-import mapMaker.EditType;
+import mapMaker.MapMaker.EditType;
 
 import java.awt.Color;
 import java.awt.Graphics;

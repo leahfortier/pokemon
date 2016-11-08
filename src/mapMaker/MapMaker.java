@@ -10,6 +10,7 @@ import mapMaker.tools.SelectTool;
 import mapMaker.tools.SingleClickTool;
 import mapMaker.tools.Tool;
 import mapMaker.tools.TriggerTool;
+import util.DrawMetrics;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -61,8 +62,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -318,68 +322,65 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		
 		JScrollPane toolListScroller = new JScrollPane(toolList);
 		add(toolListScroller, BorderLayout.EAST);
-		
-		///////////////////////////////
-		
-		//setRoot(new File("..\\Pokemon"));
-		setRoot(new File("."));
 
-		/////////////////////////////////
+		setRoot(new File("."));
 	}
-	
-	//private JFrame toolFrame;
-	private BufferedImage filledImage(Color color) {
-		BufferedImage bi = new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.getGraphics();
+
+	private void fillImage(BufferedImage image, Color color) {
+		Graphics g = image.getGraphics();
 		g.setColor(color);
 		g.fillRect(0, 0, tileSize, tileSize);
 		g.dispose();
-		return bi;
 	}
 
-	BufferedImage textWithColor(String text, Color color) {
-		int fontSize = 14;
-		int extra = text.length() * (fontSize / 2 + 1);
+	private BufferedImage filledImage(Color color) {
+		BufferedImage image = new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB);
+		fillImage(image, color);
 
-		BufferedImage bi = new BufferedImage(tileSize + extra, tileSize, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.getGraphics();
-		g.setColor(color);
-		g.fillRect(0, 0, tileSize, tileSize);
+		return image;
+	}
 
-		g.setColor(Color.black);
+	private BufferedImage blankImageWithText(String text) {
+		int extra = DrawMetrics.getTextWidth(text + " ", 14);
+
+		BufferedImage image = new BufferedImage(tileSize + extra, tileSize, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+		g.setColor(Color.BLACK);
+
+		// TODO: If we're starting the string 3 pixels after the image, then shoudn't we add three to the extra?
+		// TODO: I think the y value here is a guess - can maybe use draw metrics to figure out where to start
 		g.drawString(text, tileSize + 3, tileSize*2/3);
 
 		g.dispose();
-		return bi;
+
+		return image;
+	}
+
+	private BufferedImage textWithColor(String text, Color color) {
+		BufferedImage image = blankImageWithText(text);
+		fillImage(image, color);
+		return image;
 	}
 
 	private BufferedImage imageWithText(BufferedImage image, String text) {
-		int fontSize = 14;
-		int extra = text.length() * (fontSize / 2 + 1);
-
 		if (image == null) {
 			Global.error("Image is null :(");
 		}
 
-		BufferedImage bi = new BufferedImage(image.getWidth() + extra, image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.getGraphics();
-
+		BufferedImage bufferedImage = blankImageWithText(text);
+		Graphics g = bufferedImage.getGraphics();
 		g.drawImage(image, 0, 0, null);
-
-		g.setColor(Color.black);
-		g.drawString(text, tileSize + 3, tileSize*2/3);
-
 		g.dispose();
-		return bi;
+		return bufferedImage;
 	}
 
-	private void addNewTile() {
-		final File mapTilesFolder = new File(getPathWithRoot(Folder.MAP_TILES));
+	private JFileChooser getImageFileChooser(final String folderName) {
+		final File folder = new File(getPathWithRoot(folderName));
+		JFileChooser fileChooser = new JFileChooser(folder);
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setMultiSelectionEnabled(true);
 
-		JFileChooser fc = new JFileChooser(mapTilesFolder);
-		fc.setAcceptAllFileFilterUsed(false);
-		fc.setMultiSelectionEnabled(true);
-		fc.setFileFilter(new FileFilter() {
+		fileChooser.setFileFilter(new FileFilter() {
 			public boolean accept(File f) {
 				return f.getName().toLowerCase().endsWith("png");
 			}
@@ -389,9 +390,15 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 		});
 
-		int val = fc.showOpenDialog(this);
+		return fileChooser;
+	}
+
+	private void addNewTile() {
+		JFileChooser fileChooser = getImageFileChooser(Folder.MAP_TILES);
+
+		int val = fileChooser.showOpenDialog(this);
 		if (val == JFileChooser.APPROVE_OPTION) {
-			File[] files = fc.getSelectedFiles();
+			File[] files = fileChooser.getSelectedFiles();
 			try {
 				for (File f: files) {
 					Color color = JColorChooser.showDialog(this, "Choose a preferred color for tile: " + f.getName(), Color.WHITE);
@@ -419,14 +426,13 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		String newAreaName = JOptionPane.showInputDialog(this, "Please specify a new area:");
 
 		// Keep getting a name until something unused is found.
-//					while (!StringUtils.isNullOrEmpty(newAreaName)) {// && areaIndexMap.containsValue(newAreaName)
-//						newAreaName = JOptionPane.showInputDialog(this, "The area \"" + newAreaName +"\" is already in use.\nPlease specify a new area:");
-//					}
+		while (!StringUtils.isNullOrEmpty(newAreaName)) {// && areaIndexMap.containsValue(newAreaName)
+			newAreaName = JOptionPane.showInputDialog(this, "The area \"" + newAreaName +"\" is already in use.\nPlease specify a new area:");
+		}
 
 		// Have a valid area name
 		if (!StringUtils.isNullOrEmpty(newAreaName)) {
 
-			// TODO: Not going to be using this anymore
 			// Area does not already exist.
 			if (!areaIndexMap.containsValue(newAreaName)) {
 
@@ -444,16 +450,16 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 						if (weatherState != null) {
 							// Save index file with new area
-//										File areaIndexFile = new File(getPathWithRoot(FileName.MAP_AREA_INDEX));
-//
-//										// TODO: Use FileIO for this
-//										try {
-//											PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(areaIndexFile, true)));
-//										    out.println("\"" + newAreaName + "\"\t\t" + (Long.toString(color.getRGB() & 0xFFFFFFFFL, 16) ) + "\t\t" +weatherState+"\t\t" +terrainType);
-//										}
-//										catch (IOException ex) {
-//											ex.printStackTrace();
-//										}
+							File areaIndexFile = new File(getPathWithRoot(FileName.MAP_AREA_INDEX));
+
+							// TODO: Use FileIO for this
+							try {
+								PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(areaIndexFile, true)));
+								out.println("\"" + newAreaName + "\"\t\t" + (Long.toString(color.getRGB() & 0xFFFFFFFFL, 16) ) + "\t\t" +weatherState+"\t\t" +terrainType);
+							}
+							catch (IOException ex) {
+								ex.printStackTrace();
+							}
 
 							// Add area to the list.
 							areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, color), color.getRGB() + ""));
@@ -601,7 +607,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		FileIO.createFolder(getPathWithRoot(Folder.MAP_TILES));
 		FileIO.createFolder(getPathWithRoot(Folder.MAPS));
 		
-		loadTiles();
+		loadMapTiles();
 		loadAreas();
 		loadMapMakerTiles();
 		loadTrainerTiles();
@@ -626,38 +632,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		return color;
 	}
 
-	private void loadTiles(String tileFolder, String indexFileName) {
-		File indexFile = new File(getPathWithRoot(indexFileName));
-
-		tileMap = new HashMap<>();
-		indexMap = new HashMap<>();
-		tileListModel.clear();
-		tileListModel.addElement(new ImageIcon(filledImage(Color.MAGENTA), "0"));
-
-		if (indexFile.exists()) {
-			try {
-				Scanner in = new Scanner(indexFile);
-				while (in.hasNext()) {
-					String name = in.next();
-					int val = (int)Long.parseLong(in.next(), 16);
-
-					// TODO: this may potentially be able to be combined with some of those of method thingies at the top
-					BufferedImage img = ImageIO.read(new File(tileFolder + name));
-					BufferedImage resizedImg = img.getSubimage(0, 0, Math.min(img.getWidth(), tileSize*3), Math.min(img.getHeight(), tileSize*3));
-
-					tileListModel.addElement(new ImageIcon(resizedImg, val + ""));
-					tileMap.put(val, img);
-					indexMap.put(val, name);
-				}
-
-				in.close();
-			}
-			catch (IOException exception) {
-				Global.error("IOException caught while reading map maker images or something");
-			}
-		}
-	}
-
 	private void loadAreas() {
 		File areaIndexFile = new File(getPathWithRoot(FileName.MAP_AREA_INDEX));
 		areaIndexMap = new HashMap<>();
@@ -677,105 +651,76 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		}
 	}
 
-	private void loadTiles() {
-		loadTiles(Folder.MAP_TILES, FileName.MAP_TILES_INDEX);
+	private void loadMapTiles() {
+		this.indexMap = new HashMap<>();
+		this.tileMap = loadTiles(Folder.MAP_TILES, FileName.MAP_TILES_INDEX, this.tileListModel, this.indexMap, true);
+		this.tileListModel.add(0, new ImageIcon(filledImage(Color.MAGENTA), "0"));
 	}
-	
+
 	private void loadTrainerTiles() {
-		File trainerIndexFile = new File(getPathWithRoot(FileName.TRAINER_TILES_INDEX));
-		trainerTileMap = new HashMap<>();
-		Map<Integer, String> trainerIndexMap = new HashMap<>();
-		
-		if (trainerIndexFile.exists()) {
-			try {
-				Scanner in = new Scanner(trainerIndexFile);
-				
-				while (in.hasNext()) {
-					String name = in.next();
-					int val = (int)Long.parseLong(in.next(), 16);
-
-					File imageFile = new File(getPathWithRoot(Folder.TRAINER_TILES) + name);
-					if (!imageFile.exists()) {
-						continue;
-					}
-					
-					BufferedImage img = ImageIO.read(imageFile);
-					
-					trainerTileMap.put(val, img);
-					trainerIndexMap.put(val, name);
-				}
-				
-				in.close();
-			} 
-			catch (IOException exception) {
-				Global.error("IOException caught while trying to read trainer tile images or something in the map maker or something maybe");
-			}
-		}
+		this.trainerTileMap = loadTiles(Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX, null, null, false);
 	}
-	
+
 	private void loadMapMakerTiles() {
-		File mapMakerIndexFile = new File(getPathWithRoot(FileName.MAP_MAKER_TILES_INDEX));
-		
-		mapMakerTileMap = new HashMap<>();
-		Map<Integer, String> mapMakerTileIndexMap = new HashMap<>();
-		
-		if (mapMakerIndexFile.exists()) {
-			try {
-				Scanner in = new Scanner(mapMakerIndexFile);
-				while (in.hasNext()) {
-					String name = in.next();
-					int val = (int)Long.parseLong(in.next(), 16);
-					
-					File imageFile = new File(getPathWithRoot(Folder.MAP_MAKER_TILES) + name);
-					if (!imageFile.exists()) {
-						continue;
-					}
-					
-					BufferedImage img = ImageIO.read(imageFile);
-					
-					mapMakerTileMap.put(val, img);
-					mapMakerTileIndexMap.put(val, name);
-				}
-				
-				in.close();
-			} 
-			catch (IOException e) {
-				e.printStackTrace(); // TODO: Global.error
-			}
-		}
+		this.mapMakerTileMap = loadTiles(Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX, null, null, false);
 	}
 
-	// TODO: Holy shit these are all the fucking same I can't wait to combine this shit
 	private void loadItemTiles() {
-		File itemIndexFile = new File(getPathWithRoot(FileName.ITEM_TILES_INDEX));
-		
-		itemTileMap = new HashMap<>();
-		Map<Integer, String> itemIndexMap = new HashMap<>();
-		
-		if (itemIndexFile.exists()) {
+		this.itemTileMap = loadTiles(Folder.ITEM_TILES, FileName.ITEM_TILES_INDEX, null, null, false);
+	}
+
+	private Map<Integer, BufferedImage> loadTiles(
+			String tileFolderName,
+			String indexFileName,
+			DefaultListModel<ImageIcon> listModel,
+			Map<Integer, String> indexMap,
+			boolean resize) {
+		File indexFile = new File(getPathWithRoot(indexFileName));
+
+		Map<Integer, BufferedImage> tileMap = new HashMap<>();
+
+		if (listModel != null) {
+			listModel.clear();
+		}
+
+		if (indexFile.exists()) {
 			try {
-				Scanner in = new Scanner(itemIndexFile);
+				Scanner in = new Scanner(indexFile);
 				while (in.hasNext()) {
 					String name = in.next();
 					int val = (int)Long.parseLong(in.next(), 16);
-					
-					File imageFile = new File(getPathWithRoot(Folder.ITEM_TILES) + name);
+
+					File imageFile = new File(tileFolderName + name);
 					if (!imageFile.exists()) {
+						// TODO: Should this be throwing some sort of error?
 						continue;
 					}
-					
-					BufferedImage img = ImageIO.read(imageFile);
-					
-					itemTileMap.put(val, img);
-					itemIndexMap.put(val, name);
+
+					BufferedImage image = ImageIO.read(imageFile);
+					if (resize) {
+						// TODO: this may potentially be able to be combined with some of those of method thingies at the top
+						image = image.getSubimage(0, 0, Math.min(image.getWidth(), tileSize*3), Math.min(image.getHeight(), tileSize*3));
+					}
+
+					tileMap.put(val, image);
+
+					if (indexMap != null) {
+						indexMap.put(val, name);
+					}
+
+					if (listModel != null) {
+						listModel.addElement(new ImageIcon(image, val + ""));
+					}
 				}
-				
+
 				in.close();
-			} 
-			catch (IOException e) {
-				e.printStackTrace(); // TODO: Global.error
+			}
+			catch (IOException exception) {
+				Global.error("IOException caught while reading map maker images or something");
 			}
 		}
+
+		return tileMap;
 	}
 
 	private void loadTriggerModel() {
@@ -788,7 +733,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		triggerListModel.addElement(new ImageIcon(imageWithText(trainerTileMap.get(0x00000040), "NPC"), "1"));			//Trainer
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x4), "Trigger Entity"), "2"));		//Trigger Entity
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x3), "Wild Battle"), "3"));		//Wild battle
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x2), "Map Exit"), "4")); 			//transition exit trigger
+		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x2), "Map Exit"),	 "4")); 			//transition exit trigger
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x1), "Map Entrance"), "5")); 		//transition enter trigger
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x5), "PokeCenter"), "6")); 		//PokeCenter transition trigger
 		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x6), "Transition Building"), "7")); 	//Transition Building transition trigger

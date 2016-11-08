@@ -1,7 +1,8 @@
 package mapMaker.tools;
 
+import map.entity.npc.NPCEntityData;
 import mapMaker.MapMaker;
-import mapMaker.EditType;
+import mapMaker.MapMaker.EditType;
 import pattern.AreaDataMatcher.NPCMatcher;
 
 import java.awt.Color;
@@ -57,7 +58,7 @@ public class SingleClickTool extends Tool {
             BufferedImage img = mapMaker.tileMap.get(val);
             g.drawImage(mapMaker.tileMap.get(val), mhx * MapMaker.tileSize + mapMaker.mapX - img.getWidth() + MapMaker.tileSize, mhy * MapMaker.tileSize + mapMaker.mapY - img.getHeight() + MapMaker.tileSize, null);
         }
-        //Show preview image for current trigger
+        // Show preview image for current trigger
         else if (mapMaker.editType == EditType.TRIGGERS) {
             BufferedImage img = null;
 
@@ -66,8 +67,8 @@ public class SingleClickTool extends Tool {
                     img = mapMaker.trainerTileMap.get(0);
                     break;
                 case "1":
-                    NPCMatcher npc = (NPCMatcher) mapMaker.triggerData.getPlaceableTrigger().entity;
-                    img = mapMaker.trainerTileMap.get(12 * npc.spriteIndex + 1 + npc.direction.ordinal()); // TODO: This should call a function
+                    NPCEntityData npc = (NPCEntityData) mapMaker.triggerData.getPlaceableTrigger().entity;
+                    img = mapMaker.trainerTileMap.get(12 * npc.spriteIndex + 1 + npc.defaultDirection.ordinal()); // TODO: This should call a function
                     break;
                 case "2":
                     img = mapMaker.mapMakerTileMap.get(4);
