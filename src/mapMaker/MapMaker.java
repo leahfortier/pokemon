@@ -1,5 +1,46 @@
 package mapMaker;
 
+import main.Global;
+import map.AreaData.TerrainType;
+import map.AreaData.WeatherState;
+import mapMaker.data.MapMakerTriggerData;
+import mapMaker.tools.MoveTool;
+import mapMaker.tools.RectangleTool;
+import mapMaker.tools.SelectTool;
+import mapMaker.tools.SingleClickTool;
+import mapMaker.tools.Tool;
+import mapMaker.tools.TriggerTool;
+import util.FileIO;
+import util.FileName;
+import util.Folder;
+import util.StringUtils;
+
+import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.WindowConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
@@ -20,11 +61,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -33,45 +71,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.WindowConstants;
-import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
-
-import main.Global;
-import util.FileIO;
-import map.AreaData.TerrainType;
-import map.AreaData.WeatherState;
-import map.entity.npc.NPCEntityData;
-import mapMaker.data.MapMakerTriggerData;
-import mapMaker.data.PlaceableTrigger;
-import util.FileName;
-import util.Folder;
-import util.StringUtils;
 
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
 	private static final long serialVersionUID = -1323397946555510794L;
@@ -89,15 +88,15 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	public static final int tileSize = 32;
 
 	private JButton newTileButton;
-	private JList<ImageIcon> tileList;
-	private JList<Tool> toolList;
-	private Canvas canvas;
+	public JList<ImageIcon> tileList;
+	public JList<Tool> toolList;
+	public Canvas canvas;
 	private JMenuItem mntmNew, mntmLoad, mntmSetRoot;
-	private JMenuItem mntmCut, mntmCopy, mntmPaste;
+	public JMenuItem mntmCut, mntmCopy, mntmPaste;
 	private JLabel lblMapName;
 	private JMenuItem mntmSave;
 	private JLabel lblRoot;
-	private JComboBox<EditType> editTypeComboBox;
+	public JComboBox<EditType> editTypeComboBox;
 
 	private DefaultListModel<ImageIcon> moveListModel;
 	private DefaultListModel<ImageIcon> tileListModel;
@@ -105,28 +104,39 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private DefaultListModel<ImageIcon> triggerListModel;
 
 	private Map<Integer, String> indexMap;
-	private Map<Integer, BufferedImage> tileMap;
-	
+	public Map<Integer, BufferedImage> tileMap;
+
 	private Map<Integer, String> areaIndexMap;
 	private Set<Integer> areasOnMap;
 
-	private Map<Integer, BufferedImage> trainerTileMap;
+	public Map<Integer, BufferedImage> trainerTileMap;
 
 	private Map<Integer, BufferedImage> itemTileMap;
-	
-	private MapMakerTriggerData triggerData;
 
-	private Map<Integer, BufferedImage> mapMakerTileMap;
-	
+	public MapMakerTriggerData triggerData;
+
+	public Map<Integer, BufferedImage> mapMakerTileMap;
+
 	private File root;
-	private String currentMapName;
-	private BufferedImage currentMapFg, currentMapBg, currentMapMove, currentMapArea;
-	private Dimension currentMapSize;
-	private int mapX, mapY;
-	private int mouseHoverX, mouseHoverY;
-	private boolean saved, savedIndex;
+	public String currentMapName;
+	public Dimension currentMapSize;
+
+	public BufferedImage currentMapFg;
+	public BufferedImage currentMapBg;
+	public BufferedImage currentMapMove;
+	public BufferedImage currentMapArea;
+
+	public int mapX;
+	public int mapY;
+
+	public int mouseHoverX;
+	public int mouseHoverY;
+
+	public boolean saved;
+	private boolean savedIndex;
 		
 	private SelectTool selectTool;
+	public boolean triggerToolMoveSelected = false;
 	
 	private Composite alphaComposite;
 	private Composite defaultComposite;
@@ -138,12 +148,14 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		BACKGROUND, FOREGROUND, MOVE_MAP, AREA_MAP, TRIGGERS
 	}
 	
-	private EditType editType;
-	
+	public EditType editType;
+
 	public MapMaker() {
 		root = null;
-		saved = savedIndex = true;
-		mapX = mapY = 0;
+		saved = true;
+		savedIndex = true;
+		mapX = 0;
+		mapY = 0;
 		editType = EditType.BACKGROUND;
 		
 		this.setLayout(new BorderLayout());
@@ -290,11 +302,11 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		menuBar.add(editTypeComboBox);
 
 		DefaultListModel<Tool> toolListModel = new DefaultListModel<>();
-		toolListModel.addElement(new MoveTool());
-		toolListModel.addElement(new SingleClickTool());
-		toolListModel.addElement(new RectangleTool());
-		toolListModel.addElement(new TriggerTool());
-		toolListModel.addElement(selectTool = new SelectTool());
+		toolListModel.addElement(new MoveTool(this));
+		toolListModel.addElement(new SingleClickTool(this));
+		toolListModel.addElement(new RectangleTool(this));
+		toolListModel.addElement(new TriggerTool(this));
+		toolListModel.addElement(selectTool = new SelectTool(this));
 		
 		toolList = new JList<>();
 		toolList.setModel(toolListModel);
@@ -324,23 +336,23 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		g.dispose();
 		return bi;
 	}
-	
-	private BufferedImage textWithColor(String text, Color color) {
+
+	BufferedImage textWithColor(String text, Color color) {
 		int fontSize = 14;
 		int extra = text.length() * (fontSize / 2 + 1);
-		
+
 		BufferedImage bi = new BufferedImage(tileSize + extra, tileSize, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.getGraphics();
 		g.setColor(color);
 		g.fillRect(0, 0, tileSize, tileSize);
-		
+
 		g.setColor(Color.black);
 		g.drawString(text, tileSize + 3, tileSize*2/3);
-		
+
 		g.dispose();
 		return bi;
 	}
-	
+
 	private BufferedImage imageWithText(BufferedImage image, String text) {
 		int fontSize = 14;
 		int extra = text.length() * (fontSize / 2 + 1);
@@ -351,14 +363,153 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 		BufferedImage bi = new BufferedImage(image.getWidth() + extra, image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.getGraphics();
-		
+
 		g.drawImage(image, 0, 0, null);
-		
+
 		g.setColor(Color.black);
 		g.drawString(text, tileSize + 3, tileSize*2/3);
-		
+
 		g.dispose();
-		return bi;	
+		return bi;
+	}
+
+	private void addNewTile() {
+		final File mapTilesFolder = new File(getPathWithRoot(Folder.MAP_TILES));
+
+		JFileChooser fc = new JFileChooser(mapTilesFolder);
+		fc.setAcceptAllFileFilterUsed(false);
+		fc.setMultiSelectionEnabled(true);
+		fc.setFileFilter(new FileFilter() {
+			public boolean accept(File f) {
+				return f.getName().toLowerCase().endsWith("png");
+			}
+
+			public String getDescription() {
+				return "PNG";
+			}
+		});
+
+		int val = fc.showOpenDialog(this);
+		if (val == JFileChooser.APPROVE_OPTION) {
+			File[] files = fc.getSelectedFiles();
+			try {
+				for (File f: files) {
+					Color color = JColorChooser.showDialog(this, "Choose a preferred color for tile: " + f.getName(), Color.WHITE);
+					if (color == null) {
+						continue;
+					}
+
+					color = permuteColor(color, indexMap);
+					BufferedImage img = ImageIO.read(f);
+					tileMap.put(color.getRGB(), img);
+					indexMap.put(color.getRGB(), f.getName());
+					tileListModel.addElement(new ImageIcon(img, color.getRGB() + ""));
+				}
+
+				savedIndex = false;
+			}
+			catch(IOException ex) {
+				Global.error("IOException caught potentially with the new tile button in the map maker or something maybe");
+			}
+		}
+	}
+
+	private void addNewArea() {
+		// Get a name for the new area from the user.
+		String newAreaName = JOptionPane.showInputDialog(this, "Please specify a new area:");
+
+		// Keep getting a name until something unused is found.
+//					while (!StringUtils.isNullOrEmpty(newAreaName)) {// && areaIndexMap.containsValue(newAreaName)
+//						newAreaName = JOptionPane.showInputDialog(this, "The area \"" + newAreaName +"\" is already in use.\nPlease specify a new area:");
+//					}
+
+		// Have a valid area name
+		if (!StringUtils.isNullOrEmpty(newAreaName)) {
+
+			// TODO: Not going to be using this anymore
+			// Area does not already exist.
+			if (!areaIndexMap.containsValue(newAreaName)) {
+
+				// Get a color from the user for the new area.
+				Color color = JColorChooser.showDialog(this, "Choose a preferred color for area " + newAreaName, Color.WHITE);
+				if (color != null) {
+					color = permuteColor(color, areaIndexMap);
+
+					// Get terrain type
+					TerrainType terrainType = (TerrainType)JOptionPane.showInputDialog(this, "Terrain Type", "Please specify the terrain type:", JOptionPane.PLAIN_MESSAGE, null, TerrainType.values(), TerrainType.GRASS);
+
+					if (terrainType != null) {
+						// Get weather type
+						WeatherState weatherState = (WeatherState)JOptionPane.showInputDialog(this, "Weather State", "Please specify the weather state:", JOptionPane.PLAIN_MESSAGE, null, WeatherState.values(), WeatherState.NORMAL);
+
+						if (weatherState != null) {
+							// Save index file with new area
+//										File areaIndexFile = new File(getPathWithRoot(FileName.MAP_AREA_INDEX));
+//
+//										// TODO: Use FileIO for this
+//										try {
+//											PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(areaIndexFile, true)));
+//										    out.println("\"" + newAreaName + "\"\t\t" + (Long.toString(color.getRGB() & 0xFFFFFFFFL, 16) ) + "\t\t" +weatherState+"\t\t" +terrainType);
+//										}
+//										catch (IOException ex) {
+//											ex.printStackTrace();
+//										}
+
+							// Add area to the list.
+							areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, color), color.getRGB() + ""));
+							areaIndexMap.put(color.getRGB(), newAreaName);
+						}
+					}
+				}
+			}
+			// Area exists, add to model.
+			else {
+				int color = 0;
+
+				for (Entry<Integer, String> es: areaIndexMap.entrySet()) {
+					if (es.getValue().equals(newAreaName)) {
+						color = es.getKey();
+						break;
+					}
+				}
+
+				areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, new Color(color, true)), color + ""));
+			}
+		}
+	}
+
+	// Called when trying to exit, shows a confirm dialog asking to save first if there are any unsaved changes
+	// Returns whether or not the exit will actually occur
+	private boolean checkSaveOnExit() {
+		if (!saved || (triggerData != null && !triggerData.isSaved())) {
+			int val = JOptionPane.showConfirmDialog(this, "Save current file first?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
+			if (val == JOptionPane.YES_OPTION) {
+				saveMap();
+			}
+
+			return val != JOptionPane.CANCEL_OPTION;
+		}
+
+		// Nothing to save, just exit
+		return true;
+	}
+
+	private void createNewMapDialog() {
+		String name = JOptionPane.showInputDialog(this, "Name the map");
+		if (name != null) {
+			currentMapName = name;
+			newMap();
+			saveMap();
+		}
+	}
+
+	private void loadPreviousMapDialog() {
+		String[] mapList = getAvailableMaps();
+		String val = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, mapList, mapList[0]);
+		if (val != null) {
+			currentMapName = val;
+			loadMap();
+		}
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -367,109 +518,11 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 				// Adding new tile to the list of tiles
 				if (editType == EditType.BACKGROUND || editType == EditType.FOREGROUND) {
-					final File mapTilesFolder = new File(getPathWithRoot(Folder.MAP_TILES));
-
-					JFileChooser fc = new JFileChooser(mapTilesFolder);
-					fc.setAcceptAllFileFilterUsed(false);
-					fc.setMultiSelectionEnabled(true);
-					fc.setFileFilter(new FileFilter() {
-						public boolean accept(File f) {
-							return f.getName().toLowerCase().endsWith("png");
-						}
-
-						public String getDescription() {
-							return "PNG";
-						}
-					});
-					
-					int val = fc.showOpenDialog(this);
-					if (val == JFileChooser.APPROVE_OPTION) {
-						File[] files = fc.getSelectedFiles();
-						try {
-							for (File f: files) {
-								Color color = JColorChooser.showDialog(this, "Choose a preferred Color for tile: " + f.getName(), Color.WHITE);
-								if (color == null) {
-									continue;
-								}
-							
-								color = permuteColor(color, indexMap);
-								BufferedImage img = ImageIO.read(f);
-								tileMap.put(color.getRGB(), img);
-								indexMap.put(color.getRGB(), f.getName());
-								tileListModel.addElement(new ImageIcon(img, color.getRGB() + ""));
-							}
-							
-							savedIndex = false;
-						}
-						catch(IOException ex) {
-							Global.error("IOException caught potentially with the new tile button in the map maker or something maybe");
-						}
-					}
+					addNewTile();
 				}
-				
 				// Adding new Area to list of areas
 				else if (editType == EditType.AREA_MAP) {
-
-					//Get a name for the new area from the user.
-					String newAreaName = JOptionPane.showInputDialog(this, "Please specify a new area:");
-					
-					//Keep getting a name until something unused is found.
-//					while (!StringUtils.isNullOrEmpty(newAreaName)) {// && areaIndexMap.containsValue(newAreaName)
-//						newAreaName = JOptionPane.showInputDialog(this, "The area \"" + newAreaName +"\" is already in use.\nPlease specify a new area:");
-//					} 
-					
-					// Have a valid area name
-					if (!StringUtils.isNullOrEmpty(newAreaName)) {
-
-						// Area does not already exist.
-						if (!areaIndexMap.containsValue(newAreaName)) {
-
-							// Get a color from the user for the new area.
-							Color color = JColorChooser.showDialog(this, "Choose a preferred Color for area " + newAreaName, Color.white);
-							if (color != null) {
-								color = permuteColor(color, areaIndexMap);
-								
-								// Get terrain type
-								TerrainType terrainType = (TerrainType)JOptionPane.showInputDialog(this, "Terrain Type", "Please specify the terrain type:", JOptionPane.PLAIN_MESSAGE, null, TerrainType.values(), TerrainType.GRASS);
-								
-								if (terrainType != null) {
-									// Get weather type
-									WeatherState weatherState = (WeatherState)JOptionPane.showInputDialog(this, "Weather State", "Please specify the weather state:", JOptionPane.PLAIN_MESSAGE, null, WeatherState.values(), WeatherState.NORMAL);
-									
-									if (weatherState != null) {
-										// Save index file with new area
-										File areaIndexFile = new File(getPathWithRoot(FileName.MAP_AREA_INDEX));
-
-										// TODO: Use FileIO for this
-										try {
-											PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(areaIndexFile, true)));
-										    out.println("\"" + newAreaName + "\"\t\t" + (Long.toString(color.getRGB() & 0xFFFFFFFFL, 16) ) + "\t\t" +weatherState+"\t\t" +terrainType);
-										}
-										catch (IOException ex) {
-											ex.printStackTrace();
-										}
-										
-										// Add area to the list.
-										areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, color), color.getRGB() + ""));
-										areaIndexMap.put(color.getRGB(), newAreaName);
-									}
-								}
-							}
-						}
-						// Area exists, add to model.
-						else {
-							int color = 0;
-							
-							for (Entry<Integer, String> es: areaIndexMap.entrySet()) {
-								if (es.getValue().equals(newAreaName)) {
-									color = es.getKey();
-									break;
-								}
-							}
-							
-							areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, new Color(color, true)), color + ""));
-						}
-					}
+					addNewArea();
 				}
 				
 			}
@@ -477,43 +530,20 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				saveMap();
 			}
 			else if (event.getSource() == mntmNew || event.getSource() == mntmLoad) {
-				if (!saved || (triggerData != null && !triggerData.isSaved())) {
-					int val = JOptionPane.showConfirmDialog(this, "Save current file first?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
-					if (val == JOptionPane.CANCEL_OPTION) {
-						return;
-					}
-					else if (val == JOptionPane.YES_OPTION) {
-						saveMap();
-					}
-					else if (val == JOptionPane.NO_OPTION) {
-						//Reload items
-						triggerData.reload();
-					}
+				boolean cancel = checkSaveOnExit();
+				if (!cancel) {
+					return;
 				}
 				
 				toolList.setSelectedIndex(0);
 				
 				if (event.getSource() == mntmNew) {
-					String name = JOptionPane.showInputDialog(this, "Name the map");
-					if (name == null) {
-						return;
-					}
-				
-					currentMapName = name;
-					newMap();
-					saveMap();
+					createNewMapDialog();
 				}
 				else {
-					String[] mapList = getAvailableMaps();
-					
-					String val = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, mapList, mapList[0]);
-					if (val == null) {
-						return;
-					}
-
-					currentMapName = val;
-					loadMap();
+					loadPreviousMapDialog();
 				}
+
 				lblMapName.setText(currentMapName);
 				draw();
 			}
@@ -596,31 +626,32 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		return color;
 	}
 
-	private void loadTiles() {
-		File indexFile = new File(getPathWithRoot(FileName.MAP_TILES_INDEX));
-	
+	private void loadTiles(String tileFolder, String indexFileName) {
+		File indexFile = new File(getPathWithRoot(indexFileName));
+
 		tileMap = new HashMap<>();
 		indexMap = new HashMap<>();
 		tileListModel.clear();
 		tileListModel.addElement(new ImageIcon(filledImage(Color.MAGENTA), "0"));
-		
+
 		if (indexFile.exists()) {
 			try {
 				Scanner in = new Scanner(indexFile);
 				while (in.hasNext()) {
 					String name = in.next();
 					int val = (int)Long.parseLong(in.next(), 16);
-					
-					BufferedImage img = ImageIO.read(new File(getPathWithRoot(Folder.MAP_TILES) + name));
+
+					// TODO: this may potentially be able to be combined with some of those of method thingies at the top
+					BufferedImage img = ImageIO.read(new File(tileFolder + name));
 					BufferedImage resizedImg = img.getSubimage(0, 0, Math.min(img.getWidth(), tileSize*3), Math.min(img.getHeight(), tileSize*3));
-				
+
 					tileListModel.addElement(new ImageIcon(resizedImg, val + ""));
 					tileMap.put(val, img);
 					indexMap.put(val, name);
 				}
-				
+
 				in.close();
-			} 
+			}
 			catch (IOException exception) {
 				Global.error("IOException caught while reading map maker images or something");
 			}
@@ -631,19 +662,23 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		File areaIndexFile = new File(getPathWithRoot(FileName.MAP_AREA_INDEX));
 		areaIndexMap = new HashMap<>();
 		areaListModel.clear();
-		
+
 		if (areaIndexFile.exists()) {
 			String fileText = FileIO.readEntireFileWithReplacements(areaIndexFile, false);
 
 			Matcher m = mapAreaPattern.matcher(fileText);
 			while (m.find()) {
 				String name = m.group(1);
-				int val = (int)Long.parseLong(m.group(2), 16);
-				
+				int val = (int) Long.parseLong(m.group(2), 16);
+
 				// areaListModel.addElement(new ImageIcon(textWithColor(name, new Color(val, true)), val + ""));
 				areaIndexMap.put(val, name);
 			}
 		}
+	}
+
+	private void loadTiles() {
+		loadTiles(Folder.MAP_TILES, FileName.MAP_TILES_INDEX);
 	}
 	
 	private void loadTrainerTiles() {
@@ -742,7 +777,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 		}
 	}
-	
+
 	private void loadTriggerModel() {
 		triggerListModel.clear();
 		
@@ -902,8 +937,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		areasOnMap.add(0);
 		areaListModel.addElement(new ImageIcon(textWithColor(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
 	}
-	
-	private Point setTile(int x, int y, int val) {
+
+	public Point setTile(int x, int y, int val) {
 		Point returnPoint = new Point(0,0);
 		
 		if (x < 0 || y < 0 || x >= currentMapSize.width || y >= currentMapSize.height) {
@@ -1278,553 +1313,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			setOpaque(true);
 			
 			return this;
-		}
-	}
-
-	// TODO: Maybe move all these to their own file srsly map maker is getting out of control
-	private interface Tool {
-		void click(int x, int y);
-		void released(int x, int y);
-		void pressed(int x, int y);
-		void drag(int x, int y);
-		void draw(Graphics g);
-		void reset();
-	}
-	
-	private class MoveTool implements Tool {
-		private int prevX, prevY;
-
-		public void click(int x, int y) { }
-		public void drag(int x, int y) {
-			mapX -= prevX - x;
-			mapY -= prevY - y;
-			prevX = x;
-			prevY = y;
-		}
-
-		public String toString() {
-			return "Move";
-		}
-
-		public void draw(Graphics g) { }
-		public void released(int x, int y) { }
-
-		public void pressed(int x, int y) {
-			prevX = x;
-			prevY = y;
-		}
-
-		public void reset() {
-			prevX = mouseHoverX;
-			prevY = mouseHoverY;
-		}
-	}
-	
-	private class SingleClickTool implements Tool {
-		public void click(int x, int y) {
-			if (tileList.isSelectionEmpty())
-				return;
-		
-			x = (int)Math.floor((x - mapX)*1.0/tileSize);
-			y = (int)Math.floor((y - mapY)*1.0/tileSize);
-			
-			System.out.println("click: " + x+" " + y);
-			
-			int val = Integer.parseInt(tileList.getSelectedValue().getDescription());
-			setTile(x,y,val);
-			
-			if (editType == EditType.TRIGGERS) {
-				triggerData.clearPlaceableTrigger();
-				toolList.setSelectedIndex(3);
-			}
-		}
-
-		public String toString() {
-			return "Single";
-		}
-		
-		public void draw(Graphics g) {
-			int mhx = (int)Math.floor((mouseHoverX - mapX)*1.0/tileSize);
-			int mhy = (int)Math.floor((mouseHoverY - mapY)*1.0/tileSize);
-
-			g.setColor(Color.red);
-			g.drawRect(mhx*tileSize + mapX, mhy*tileSize + mapY, tileSize, tileSize);
-			
-			if (tileList.isSelectionEmpty()) {
-				return;
-			}
-			
-			//Show preview image for normal map tiles
-			if (editType == EditType.BACKGROUND || editType == EditType.FOREGROUND) {
-				int val = Integer.parseInt(tileList.getSelectedValue().getDescription());
-				if (!tileMap.containsKey(val)) {
-					return;
-				}
-			
-				BufferedImage img = tileMap.get(val);
-				g.drawImage(tileMap.get(val), mhx*tileSize + mapX - img.getWidth() + tileSize, mhy*tileSize + mapY - img.getHeight() + tileSize, null);
-			}
-			//Show preview image for current trigger
-			else if (editType == EditType.TRIGGERS) {
-				BufferedImage img = null;
-
-				switch (tileList.getSelectedValue().getDescription()) {
-					case "0": 
-						img = trainerTileMap.get(0);
-						break; 
-					case "1": 
-						NPCEntityData npc = (NPCEntityData) triggerData.getPlaceableTrigger().entity;
-						img = trainerTileMap.get(12*npc.spriteIndex + 1 + npc.defaultDirection.ordinal()); // TODO: This should call a function
-						break;
-					case "2": 
-						img = mapMakerTileMap.get(4);
-						break;
-					case "3": 
-						img = mapMakerTileMap.get(3);
-						break;
-					case "4": 
-						img = mapMakerTileMap.get(2);
-						break;
-					case "5": 
-						img = mapMakerTileMap.get(1);
-						break;
-					case "6": 
-						img = mapMakerTileMap.get(5);
-						break;
-					case "8": 
-						img = mapMakerTileMap.get(0xc);
-						break;
-				}
-				
-				if (img != null) {
-					// TODO: I think there's a method in draw metrics that does something like this
-					g.drawImage(img,mhx*tileSize + mapX - img.getWidth()/2 + tileSize/2,
-							mhy*tileSize + mapY - img.getHeight() + tileSize,
-							null);
-				}
-				else if (tileList.getSelectedValue().getDescription().equals("7")) {
-					int direction = triggerData.getPlaceableTriggerTransitionBuildingDirection();
-					
-					img = mapMakerTileMap.get(8 + direction);
-					
-					int[] dx = {1,0,1,1};
-					int[] dy = {1,1,0,1};
-					
-					g.drawImage(img,mhx*tileSize + mapX - (dx[direction]*tileSize), mhy*tileSize + mapY - (dy[direction]*tileSize), null);
-				}
-			}
-			//Show preview color for other edit modes
-//			else if (editType == EditType.AREA_MAP || editType == EditType.MOVE_MAP) {
-//				int val = Integer.parseInt(tileList.getSelectedValue().getDescription());
-//				BufferedImage img = filledImage(new Color(val, true));
-//				g.drawImage(img, mhx*tileSize + mapX - img.getWidth() + tileSize, mhy*tileSize + mapY - img.getHeight() + tileSize, null);
-//			}
-			
-		}
-		
-		public void drag(int x, int y) { }
-		public void released(int x, int y) { }
-		public void pressed(int x, int y) { }
-		public void reset() { }
-	}
-	
-	/*class FillTool implements Tool{
-		
-	}*/
-	private class RectangleTool implements Tool {
-		private int startX, startY;
-		private boolean pressed = false;
-
-		public void click(int x, int y) { }
-
-		public void released(int x, int y) {
-			if (tileList.isSelectionEmpty() || !pressed) {
-				return;
-			}
-		
-			int mhx = (int)Math.floor((mouseHoverX - mapX)*1.0/tileSize);
-			int mhy = (int)Math.floor((mouseHoverY - mapY)*1.0/tileSize);
-
-			pressed = false;
-			
-			int tx = Math.min(startX, mhx);
-			int ty = Math.min(startY, mhy);
-			int bx = Math.max(startX, mhx);
-			int by = Math.max(startY, mhy);
-			
-			int width = bx - tx;
-			int height = by - ty;
-			
-			int val = Integer.parseInt(tileList.getSelectedValue().getDescription());
-			for (int i = 0; i <= width; i++) {
-				for (int j = 0; j <= height; j++) {
-					Point delta = setTile(tx + i, ty + j, val);
-				
-					if (delta.x != 0) {
-						tx += delta.x;
-					}
-					
-					if (delta.y != 0) {
-						ty += delta.y;
-					}
-				}
-			}
-			
-			if (editType == EditType.TRIGGERS) {
-				triggerData.clearPlaceableTrigger();
-				toolList.setSelectedIndex(3);
-			}
-		}
-
-		public void pressed(int x, int y) {
-			if (tileList.isSelectionEmpty()) {
-				return;
-			}
-			
-			startX = (int)Math.floor((x - mapX)*1.0/tileSize);
-			startY = (int)Math.floor((y - mapY)*1.0/tileSize);
-		
-			pressed = true;
-		}
-
-		public void drag(int x, int y) { }
-
-		public void draw(Graphics g) {
-			int mhx = (int)Math.floor((mouseHoverX - mapX)*1.0/tileSize);
-			int mhy = (int)Math.floor((mouseHoverY - mapY)*1.0/tileSize);
-			
-			g.setColor(Color.red);
-			if (!pressed) {
-				g.drawRect(mhx*tileSize + mapX, mhy*tileSize + mapY, tileSize, tileSize);
-			}
-			else {
-				int tx = Math.min(startX, mhx);
-				int ty = Math.min(startY, mhy);
-				int bx = Math.max(startX, mhx);
-				int by = Math.max(startY, mhy);
-				
-				g.drawRect(tx*tileSize + mapX, ty*tileSize + mapY, tileSize*(bx - tx + 1), tileSize*(by - ty + 1));
-			}
-		}
-
-		public String toString() {
-			return "Rectangle";
-		}
-		
-		public void reset() {
-			pressed = false;
-		}
-	}
-
-	private boolean triggerToolMoveSelected = false;
-	
-	private class TriggerTool implements Tool {
-		private JPopupMenu triggerListPopup;
-		private JPopupMenu triggerOptionsPopup;
-		
-		private int mouseX;
-		private int mouseY;
-		
-		private PlaceableTrigger[] triggers;
-		private PlaceableTrigger selectedTrigger;
-		
-		TriggerTool() {
-			selectedTrigger = null;
-			triggerListPopup = new JPopupMenu();
-			triggerOptionsPopup  = new JPopupMenu();
-			
-			JMenuItem editItem = new JMenuItem("Edit");
-			triggerOptionsPopup.add(editItem);
-			
-			editItem.addActionListener(event -> triggerData.editTrigger(selectedTrigger));
-			
-			JMenuItem moveItem = new JMenuItem("Move");
-			triggerOptionsPopup.add(moveItem);
-			moveItem.addActionListener(event -> {
-                toolList.setSelectedIndex(1);
-                int index = triggerData.getTriggerTypeIndex(selectedTrigger);
-                if (index != -1) {
-                    editTypeComboBox.setSelectedIndex(4);
-
-                    triggerData.moveTrigger(selectedTrigger);
-                     triggerToolMoveSelected = true;
-
-                     tileList.setSelectedIndex(index);
-                }
-            });
-			
-			JMenuItem removeItem = new JMenuItem("Remove");
-			triggerOptionsPopup.add(removeItem);
-			removeItem.addActionListener(event -> triggerData.removeTrigger(selectedTrigger));
-		}
-		
-		public String toString() {
-			return "Trigger";
-		}
-		
-		public void click(int x, int y) {
-			if (currentMapName == null) {
-				return;
-			}
-			
-			mouseX = x;
-			mouseY = y;
-			
-			x = (int)Math.floor((x - mapX)*1.0/tileSize);
-			y = (int)Math.floor((y - mapY)*1.0/tileSize);
-			System.out.println("Trigger click: " + x + " " + y);
-			
-			triggers = triggerData.getTrigger(x, y);
-			triggerListPopup.removeAll();
-			
-			for (PlaceableTrigger trigger: triggers) {
-			    JMenuItem menuItem = new JMenuItem(trigger.name + " (" + trigger.triggerType + ")");
-			    triggerListPopup.add(menuItem);
-			    menuItem.addActionListener(event -> {
-                    Component[] components = triggerListPopup.getComponents();
-                    // TODO: If someone reads this, please suggest a better way to find the index of the selected item...
-                    for (Component component: components) {
-                        if (((JMenuItem)component).getText().equals(event.getActionCommand())) {
-                            for (PlaceableTrigger trigger1 : triggers) {
-                                if (event.getActionCommand().equals(trigger1.name + " (" + trigger1.triggerType + ")")) {
-                                    //System.out.println("Clicked " + e.getActionCommand());
-                                    selectedTrigger = trigger1;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                  //triggerListPopup.removeAll();
-                  triggerOptionsPopup.show(canvas, mouseX, mouseY);
-                });
-			}
-			
-			triggerListPopup.show(canvas, mouseX, mouseY);
-		}
-		
-		public void draw(Graphics g) {
-			int mhx = (int)Math.floor((mouseHoverX - mapX)*1.0/tileSize);
-			int mhy = (int)Math.floor((mouseHoverY - mapY)*1.0/tileSize);
-			
-			g.setColor(Color.blue);
-			g.drawRect(mhx*tileSize + mapX, mhy*tileSize + mapY, tileSize, tileSize);
-		}
-		
-		public void released(int x, int y) { }
-		public void pressed(int x, int y) { }
-		public void drag(int x, int y) { }
-		public void reset() { }
-	}
-
-	// Select tool so you can copy/cut/paste
-	private class SelectTool implements Tool {
-		private boolean paste;
-		private boolean selected;
-		private boolean controlClick;
-		
-		private BufferedImage copiedTiles = null;
-		private EditType copiedEditType;
-		
-		private int startX, startY;
-		private int tx, ty, bx, by;
-		
-		private boolean pressed = false;
-
-		public void click(int x, int y) {
-			if (!paste || controlClick) {
-				return;
-			}
-			
-			saved = false;
-			
-			x = (int)Math.floor((x - mapX)*1.0/tileSize);
-			y = (int)Math.floor((y - mapY)*1.0/tileSize);
-			
-			for (int currX = 0; currX < copiedTiles.getWidth(); ++currX) {
-				for (int currY = 0; currY < copiedTiles.getHeight(); ++currY) {
-					int val = copiedTiles.getRGB(currX, currY);
-					Point delta = setTile(x + currX, y + currY, val);
-
-					if (delta.x != 0) {
-						x += delta.x;
-					}
-					
-					if (delta.y != 0) {
-						y += delta.y;
-					}
-				}
-			}
-			
-			paste = false;
-		}
-
-		public void released(int x, int y) {
-			if (editType == EditType.TRIGGERS || paste || !pressed) {
-				return;
-			}
-			
-			pressed = false;
-			select();
-
-			int mhx = (int)Math.floor((mouseHoverX - mapX)*1.0/tileSize);
-			int mhy = (int)Math.floor((mouseHoverY - mapY)*1.0/tileSize);
-			
-			tx = Math.max(Math.min(startX, mhx), 0);
-			ty = Math.max(Math.min(startY, mhy), 0);
-			bx = Math.min(Math.max(startX, mhx), currentMapSize.width - 1);
-			by = Math.min(Math.max(startY, mhy), currentMapSize.height - 1);
-			
-			if (tx > bx || ty > by) {
-				deselect();
-			}
-		}
-
-		public void pressed(int x, int y) {
-			if (editType == EditType.TRIGGERS || paste) {
-				return;
-			}
-			
-//			if (controlKeyDown && selected) {
-//				cut();
-//				controlClick = true;
-//				return;
-//			}
-			
-			startX = (int)Math.floor((x - mapX)*1.0/tileSize);
-			startY = (int)Math.floor((y - mapY)*1.0/tileSize);
-			
-			pressed = true;
-			deselect();
-		}
-		
-		public void drag(int x, int y) {
-//			if (controlClick) {
-//				controlClick = false;
-//				paste();
-//				//return;
-//			}
-//			
-//			click(x, y);
-		}
-
-		public void draw(Graphics g) {
-			if (!pressed && !selected && !paste) {
-				return;
-			}
-			
-			int mhx = (int)Math.floor((mouseHoverX - mapX)*1.0/tileSize);
-			int mhy = (int)Math.floor((mouseHoverY - mapY)*1.0/tileSize);
-			
-			//int tx, ty, bx, by;
-			if (!selected) {
-				tx = Math.max(Math.min(startX, mhx), 0);
-				ty = Math.max(Math.min(startY, mhy), 0);
-				bx = Math.min(Math.max(startX, mhx), currentMapSize.width - 1);
-				by = Math.min(Math.max(startY, mhy), currentMapSize.height - 1);
-			}
-			
-			if (!paste) {
-				g.setColor(Color.RED);
-				g.drawRect(tx*tileSize + mapX, ty*tileSize + mapY, tileSize*(bx - tx + 1), tileSize*(by - ty + 1));
-			}
-			else {
-				// Show preview image for all pasting tiles.
-				for (int currX = 0; currX < copiedTiles.getWidth(); ++currX) {
-					for (int currY = 0; currY < copiedTiles.getHeight(); ++currY) {
-						int val = copiedTiles.getRGB(currX, currY);
-						if (editType == EditType.BACKGROUND || editType == EditType.FOREGROUND) {
-							if (!tileMap.containsKey(val)) {
-								continue;
-							}
-						
-							BufferedImage img = tileMap.get(val);
-							g.drawImage(tileMap.get(val), (mhx + currX)*tileSize + mapX - img.getWidth() + tileSize, (mhy + currY)*tileSize + mapY - img.getHeight() + tileSize, null);
-						}
-						else if (editType == EditType.MOVE_MAP || editType == EditType.AREA_MAP) {
-							g.setColor(new Color(val));
-							g.fillRect((mhx + currX)*tileSize + mapX, (mhy + currY)*tileSize + mapY, tileSize, tileSize);
-						}
-					}
-				}
-				
-				g.setColor(Color.red);
-				g.drawRect(mhx*tileSize + mapX, mhy*tileSize + mapY, tileSize*copiedTiles.getWidth(), tileSize*copiedTiles.getHeight());
-			}
-		}
-		
-		public void reset() {
-			pressed = false;
-		}
-
-		public String toString() {
-			return "Select";
-		}
-		
-		boolean hasSelection() {
-			return selected;
-		}
-		
-		boolean canPaste() {
-			return copiedEditType == editType && copiedTiles != null;
-		}
-		
-		void select() {
-			selected = true;
-			mntmCopy.setEnabled(true);
-			mntmCut.setEnabled(true);
-		}
-		
-		void deselect() {
-			selected = false;
-			mntmCopy.setEnabled(false);
-			mntmCut.setEnabled(false);
-		}
-		
-		void copy() {
-			copiedEditType = editType;
-			
-			BufferedImage currentMapImage = null;
-			if (editType == EditType.FOREGROUND) {
-				currentMapImage = currentMapFg;
-			}
-			else if (editType == EditType.BACKGROUND) {
-				currentMapImage = currentMapBg;
-			}
-			else if (editType == EditType.MOVE_MAP) {
-				currentMapImage = currentMapMove;
-			}
-			else if (editType == EditType.AREA_MAP) {
-				currentMapImage = currentMapArea;
-			}
-			
-			int width = bx - tx + 1;
-			int height = by - ty + 1;
-			copiedTiles = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			
-			copiedTiles.setRGB(0, 0, width, height, 
-					currentMapImage.getRGB(tx, ty, width, height, null, 0, width), 
-					0, width);
-			
-			if (!mntmPaste.isEnabled()) {
-				mntmPaste.setEnabled(true);
-			}
-		}
-		
-		public void cut() {
-			copy();
-			
-			int val = Integer.parseInt(tileList.getModel().getElementAt(0).getDescription());
-			for (int i = tx; i <= bx; i++) {
-				for (int j = ty; j <= by; j++) {
-					setTile(i, j, val);
-				}
-			}
-		}
-		
-		void paste() {
-			paste = true;
-			deselect();
 		}
 	}
 }
