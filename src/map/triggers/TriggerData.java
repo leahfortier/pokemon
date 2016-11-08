@@ -32,8 +32,11 @@ public class TriggerData {
 			}
 		
 			Point p = (Point) o;
-			
-			return p.x == x && p.y == y;
+			return this.isAt(p.x, p.y);
+		}
+
+		public boolean isAt(int x, int y) {
+			return this.x == x && this.y == y;
 		}
 	}
 }

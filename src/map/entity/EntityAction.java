@@ -56,7 +56,7 @@ public abstract class EntityAction {
         }
 
         @Override
-        protected TriggerType getTriggerType() {
+        public TriggerType getTriggerType() {
             return this.type;
         }
 

@@ -14,6 +14,14 @@ public class StringUtils {
         return s == null || s.isEmpty();
     }
 
+    public static boolean isNullOrWhiteSpace(String s) {
+        return isNullOrEmpty(s) || s.trim().isEmpty();
+    }
+
+    public static String nullWhiteSpace(String s) {
+        return isNullOrWhiteSpace(s) ? null : s;
+    }
+
     // Adds a space to a non-empty string
     public static String addSpace(final String s) {
         return isNullOrEmpty(s) ? empty() : s + " ";

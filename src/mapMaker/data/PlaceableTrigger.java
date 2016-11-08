@@ -1,69 +1,61 @@
 package mapMaker.data;
 
-import map.entity.EntityData;
-import map.triggers.TriggerData;
+import pattern.AreaDataMatcher.EntityMatcher;
+import pattern.AreaDataMatcher.TriggerMatcher;
 
 public class PlaceableTrigger {
 
-	public static enum TriggerType{
-		Entity, OldTrigger, MapEntrance, TriggerData
-	};
+	// TODO: CAPS
+	public enum PlaceableTriggerType {
+		Entity,
+		OldTrigger,
+		MapEntrance,
+		TriggerData
+	}
 	
-	
-	public TriggerType triggerType;
+	public PlaceableTriggerType triggerType;
 	
 	public String name;
 	public Integer location;
 	
-	public EntityData entity;
-	public TriggerData triggerData;
-	
-	public TransitionBuildingPair transitionBuildingPair;
-	
+	public EntityMatcher entity;
+	public TriggerMatcher triggerData;
+
 	//OldTrigger, MapEntrance
-	public PlaceableTrigger(TriggerType triggerType, String name, Integer location){
-		this.triggerType = triggerType;
-		this.name = name;
+	public PlaceableTrigger(PlaceableTriggerType triggerType, String name, Integer location){
+		this(triggerType, name);
 		this.location = location;
 	}
 	
 	//OldTrigger, MapEntrance
-	public PlaceableTrigger(TriggerType triggerType, String name){
+	public PlaceableTrigger(PlaceableTriggerType triggerType, String name){
 		this.triggerType = triggerType;
 		this.name = name;
 	}
 	
-	
 	//NPCEntity, ItemEntity, TriggerEntity
-	public PlaceableTrigger(EntityData entity, Integer location) {
-		this.triggerType = TriggerType.Entity;
-		this.entity = entity;
-		
-		name = entity.name;
+	public PlaceableTrigger(EntityMatcher entity, Integer location) {
+		this(entity);
 		this.location = location;
 	}
+
 	//NPCEntity, ItemEntity, TriggerEntity
-	public PlaceableTrigger(EntityData entity) {
-		this.triggerType = TriggerType.Entity;
+	public PlaceableTrigger(EntityMatcher entity) {
+		this.triggerType = PlaceableTriggerType.Entity;
 		this.entity = entity;
-		
-		name = entity.name;
+		this.name = entity.getName();
 	}
 	
 	//MapExit, WildBattle, TriggerData
-	public PlaceableTrigger(TriggerData triggerData, Integer location) {
-		this.triggerType = TriggerType.TriggerData;
-		this.triggerData = triggerData;
-		
-//		name = triggerData.name;
+	public PlaceableTrigger(TriggerMatcher triggerData, Integer location) {
+		this(triggerData);
 		this.location = location;
 	}
 	
 	//MapExit, WildBattle, TriggerData
-	public PlaceableTrigger(TriggerData triggerData) {
-		this.triggerType = TriggerType.TriggerData;
+	public PlaceableTrigger(TriggerMatcher triggerData) {
+		this.triggerType = PlaceableTriggerType.TriggerData;
 		this.triggerData = triggerData;
-		
-//		name = triggerData.name;
+		this.name = triggerData.getName();
 	}
 }

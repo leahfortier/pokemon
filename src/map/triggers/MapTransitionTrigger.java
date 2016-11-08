@@ -50,10 +50,6 @@ public class MapTransitionTrigger extends Trigger {
 		player.mapReset = true;
 	}
 
-	public String getTransitionTriggerName() {
-		return this.nextMap + "_" + this.mapEntranceName;
-	}
-
 	public String getNextMap() {
 		return this.nextMap;
 	}

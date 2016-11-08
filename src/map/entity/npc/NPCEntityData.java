@@ -19,8 +19,8 @@ public class NPCEntityData extends EntityData {
 	public NPCEntityData(NPCMatcher matcher) {
 		super(matcher.name, matcher.condition);
 
-		x = matcher.startX;
-		y = matcher.startY;
+		x = matcher.getX();
+		y = matcher.getY();
 		path = matcher.getPath();
 		spriteIndex = matcher.spriteIndex;
 		defaultDirection = matcher.direction;

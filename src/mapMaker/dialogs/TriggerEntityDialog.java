@@ -1,12 +1,12 @@
 package mapMaker.dialogs;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import pattern.AreaDataMatcher.TriggerMatcher;
 
-import map.entity.TriggerEntityData;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class TriggerEntityDialog extends JPanel {
 	
@@ -70,13 +70,13 @@ public class TriggerEntityDialog extends JPanel {
 		setLayout(groupLayout);
 	}
 	
-	public void setTriggerEntity (TriggerEntityData triggerEntity, String name){
+	public void setTriggerEntity (TriggerMatcher triggerEntity, String name){
 		nameTextField.setText(name);
 //		triggerTextField.setText(triggerEntity.trigger);
-		conditionTextField.setText(triggerEntity.condition.getOriginalConditionString().replace("&"," & ").replace("|"," | "));
+		conditionTextField.setText(triggerEntity.condition.replace("&"," & ").replace("|"," | "));
 	}
 	
-	public TriggerEntityData getTriggerEntity() {
+	public TriggerMatcher getTriggerEntity() {
 //		if (triggerTextField.getText().isEmpty())
 			return null;
 //		return new TriggerEntityData(

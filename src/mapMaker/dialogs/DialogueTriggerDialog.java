@@ -2,6 +2,7 @@ package mapMaker.dialogs;
 
 import map.triggers.DialogueTrigger;
 import map.triggers.TriggerData;
+import pattern.AreaDataMatcher.TriggerMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -190,7 +191,7 @@ public class DialogueTriggerDialog extends JPanel {
 //		return new DialogueTrigger(name, contents);
 	}
 	
-	public TriggerData getTriggerData(String name) {
+	public TriggerMatcher getTriggerData(String name) {
 		DialogueTrigger dialogueTrigger = getDialogueTrigger(name);
 		return null;
 //		return new TriggerData(name, "Dialogue\n" + dialogueTrigger.triggerDataAsString());

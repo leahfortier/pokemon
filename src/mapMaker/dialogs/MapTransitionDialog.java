@@ -1,9 +1,9 @@
 package mapMaker.dialogs;
 
 import map.triggers.MapTransitionTrigger;
-import map.triggers.TriggerData;
 import mapMaker.MapMaker;
 import mapMaker.data.MapMakerTriggerData;
+import pattern.AreaDataMatcher.TriggerMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -131,8 +131,9 @@ public class MapTransitionDialog extends JPanel {
 //		return new MapTransitionTrigger(name, "", destination, entrance, directionComboBox.getSelectedIndex() - 1);
 		return null;
 	}
-	
-	public TriggerData getTriggerData(String name) {
+
+	// TODO: This needs to return MapExitMatcher thingy
+	public TriggerMatcher getTriggerData(String name) {
 		String destination = getDestination();
 		String entrance = getMapEntrance();
 		
@@ -141,6 +142,7 @@ public class MapTransitionDialog extends JPanel {
 		}
 
 		return null;
+
 //		return new TriggerData(name,
 //				"MapTransition\n"
 //						+ "\tnextMap: " + destination + "\n"

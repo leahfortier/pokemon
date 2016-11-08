@@ -1,9 +1,10 @@
 package mapMaker.dialogs;
 
-import map.triggers.TriggerData;
-import map.triggers.WildBattleTrigger;
 import map.EncounterRate;
 import map.WildEncounter;
+import map.triggers.WildBattleTrigger;
+import pattern.AreaDataMatcher.TriggerMatcher;
+import pattern.AreaDataMatcher.WildBattleTriggerMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -216,13 +217,12 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		return null;
 	}
 	
-	public TriggerData getTriggerData() {
+	public TriggerMatcher getTriggerData() {
 		WildBattleTrigger wildBattleTrigger = getTrigger();
 		if (wildBattleTrigger == null) {
 			return null;
 		}
-		
-//		return new TriggerData(wildBattleTrigger.getName(), "WildBattle\n" + wildBattleTrigger.triggerDataAsString());
-		return null;
+
+		return WildBattleTriggerMatcher.createWildBattleMatcher(wildBattleTrigger);
 	}
 }

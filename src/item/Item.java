@@ -75,6 +75,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import util.StringUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -182,12 +183,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return map.get(itemName);
 	}
 
-	public static boolean isItem(String m) {
+	public static boolean isItem(String itemName) {
 		if (map == null) {
 			loadItems();
 		}
 
-		return map.containsKey(m);
+		if (StringUtils.isNullOrEmpty(itemName)) {
+			return false;
+		}
+
+		return map.containsKey(itemName);
 	}
 
 	public int hashCode() {

@@ -3,6 +3,7 @@ package mapMaker.dialogs;
 import map.triggers.TriggerData;
 import map.triggers.WildBattleTrigger;
 import mapMaker.data.MapMakerTriggerData;
+import pattern.AreaDataMatcher.TriggerMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -18,22 +19,22 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 	public JComboBox<String> comboBox; // TODO: This should probably be private
 
 	private JButton btnEdit;
-	private Map<String, TriggerData> wildBattleTriggers;
+	private Map<String, TriggerMatcher> wildBattleTriggers;
 	private MapMakerTriggerData mapMakerTriggerData;
 	
-	public WildBattleTriggerOptionsDialog(Map<String, TriggerData> givenWildBattleTriggers, MapMakerTriggerData givenMapMakerTriggerData) {
+	public WildBattleTriggerOptionsDialog(Map<String, TriggerMatcher> givenWildBattleTriggers, MapMakerTriggerData givenMapMakerTriggerData) {
 		this.wildBattleTriggers = givenWildBattleTriggers;
 		this.mapMakerTriggerData = givenMapMakerTriggerData;
 		
 		JButton btnCreate = new JButton("Create New");
 		btnCreate.addActionListener(event -> {
-            TriggerData td = editWildBattleTrigger(null, (JButton)event.getSource());
+			TriggerMatcher td = editWildBattleTrigger(null, (JButton)event.getSource());
             if (td == null) {
 				return;
 			}
 
-//            wildBattleTriggers.put(td.name, td);
-//            comboBox.addItem(td.name);
+            wildBattleTriggers.put(td.name, td);
+            comboBox.addItem(td.name);
 
             if (wildBattleTriggers.size() == 1) {
                 btnEdit.setEnabled(true);
@@ -46,8 +47,8 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 		btnEdit = new JButton("Edit");
 		btnEdit.setEnabled(items.length != 0);
 		btnEdit.addActionListener(event -> {
-            TriggerData trigger = wildBattleTriggers.get((String)comboBox.getSelectedItem());
-            TriggerData td = editWildBattleTrigger(trigger, (JButton)event.getSource());
+            TriggerMatcher trigger = wildBattleTriggers.get((String)comboBox.getSelectedItem());
+			TriggerMatcher td = editWildBattleTrigger(trigger, (JButton)event.getSource());
             if (td == null) {
 				return;
 			}
@@ -85,7 +86,7 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 		setLayout(groupLayout);
 	}
 	
-	private TriggerData editWildBattleTrigger(TriggerData trigger, JButton button) {
+	private TriggerMatcher editWildBattleTrigger(TriggerMatcher trigger, JButton button) {
 		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
 		if (trigger != null) {
 //			dialog.initialize(new WildBattleTrigger(trigger.name, trigger.triggerContents));

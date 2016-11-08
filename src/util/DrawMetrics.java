@@ -93,7 +93,7 @@ public class DrawMetrics {
 	public static void drawCenteredImage(Graphics g, BufferedImage image, int x, int y) {
 		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2, null);
 	}
-	
+
 	public static BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
 		ColorModel colorModel = image.getColorModel();
 		boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();

@@ -1,8 +1,10 @@
 package mapMaker.dialogs;
 
 import item.Item;
-
-import java.awt.Color;
+import mapMaker.MapMaker;
+import pattern.AreaDataMatcher.ItemMatcher;
+import util.PokeString;
+import util.StringUtils;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -17,11 +19,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import util.PokeString;
-import map.entity.ItemEntityData;
-import mapMaker.MapMaker;
-import util.StringUtils;
+import java.awt.Color;
 
 public class ItemEntityDialog extends JPanel {
 	private static final long serialVersionUID = 7469923865936465388L;
@@ -61,7 +59,7 @@ public class ItemEntityDialog extends JPanel {
 				  }
 				  
 				  int index = Item.getItemFromName(itemName).getImageIndex();
-				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
+				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getItemTile(index)));
 				  itemTextField.setBackground(new Color(0x90EE90));
 			  }
 		});
@@ -119,34 +117,32 @@ public class ItemEntityDialog extends JPanel {
 		setLayout(groupLayout);
 	}
 
-	public void setItem(ItemEntityData item) {
-		itemTextField.setText(item.getItem().replace('_', ' '));
+	// TODO: This needs more namesies
+	public void setItem(ItemMatcher item) {
+		itemTextField.setText(item.getItemName().replace('_', ' '));
 //		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
 		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getImageIndex();
-		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
+		itemImageLabel.setIcon(new ImageIcon(mapMaker.getItemTile(index)));
 	}
-	
+
+	// TODO: This can likely just use the namesies method
 	public String getItemName() {
 		String itemName = PokeString.restoreSpecialFromUnicode(itemTextField.getText());
 		itemName = StringUtils.properCase(itemName);
 		return itemName;
 	}
 	
-	public ItemEntityData getItem(String name) {
+	public ItemMatcher getItem(String name) {
 		String item = getItemName();
 		
 		// TODO: Ask Josh about this -- I have no idea what this is doing, but should this throw an error or should it return null? I don't really feel like looking into this right now
 		if (!Item.isItem(item)) {
 			return null;
 		}
-		
-		return new ItemEntityData(
-				name, 
-				"condition: " + conditionTextArea.getText().trim().replace(" ", ""), 
-				item.replace(' ', '_'), 
-				-1, 
-				-1
-		);
+
+		// TODO: Condition: "condition: " + conditionTextArea.getText().trim().replace(" ", ""),
+		// TODO: Namesies namesies namesies
+		return new ItemMatcher(name, item.replace(' ', '_'));
 	}
 }

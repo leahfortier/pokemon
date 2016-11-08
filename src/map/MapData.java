@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class MapData {
@@ -80,45 +81,46 @@ public class MapData {
 		String fileText = FileIO.readEntireFileWithReplacements(f, false);
 
 		AreaDataMatcher areaDataMatcher = AreaDataMatcher.matchArea(beginFilePath + ".txt", fileText);
-		this.areaData = areaDataMatcher.getAreas();
+		this.areaData = areaDataMatcher.getAreaData();
 
-		for (NPCMatcher matcher : areaDataMatcher.NPCs) {
-			entities.add(new NPCEntityData(matcher));
+		entities.addAll(areaDataMatcher.getNPCs()
+				.stream()
+				.map(NPCEntityData::new)
+				.collect(Collectors.toList()));
+
+		entities.addAll(areaDataMatcher.getItems()
+				.stream()
+				.map(ItemEntityData::new)
+				.collect(Collectors.toList()));
+
+		for (TriggerMatcher matcher : areaDataMatcher.getMiscEntities()) {
+			entities.addAll(matcher.getLocation()
+					.stream()
+					.map(point -> new TriggerEntityData(point.x, point.y, matcher))
+					.collect(Collectors.toList()));
 		}
 
-		for (ItemMatcher matcher : areaDataMatcher.items) {
-			entities.add(new ItemEntityData(matcher));
-		}
-
-		for (MapExitMatcher matcher : areaDataMatcher.mapExits) {
+		for (MapExitMatcher matcher : areaDataMatcher.getMapExits()) {
             matcher.setMapName(this.name);
 
-            List<Point> points = matcher.getLocation();
-            for (Point point : points) {
-                mapEntrances.put(matcher.exitName, getMapIndex(point.x, point.y)); // TODO: Doesn't work correctly
-
-                if (matcher.direction != null) {
-                    int exitX = point.x + matcher.direction.dx;
-                    int exitY = point.y + matcher.direction.dy;
-
-                    Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(AreaDataMatcher.getJson(matcher), null);
-                    triggers.put(getMapIndex(exitX, exitY), trigger.getName());
-                }
+            List<Point> entrances = matcher.getEntrances();
+            for (Point point : entrances) {
+                mapEntrances.put(matcher.getName(), getMapIndex(point.x, point.y)); // TODO: Doesn't work correctly
             }
+
+            List<Point> exits = matcher.getExits();
+			for (Point point : exits) {
+				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(AreaDataMatcher.getJson(matcher), null);
+				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
+			}
         }
 
-		for (TriggerMatcher matcher : areaDataMatcher.triggerData) {
+		for (TriggerMatcher matcher : areaDataMatcher.getTriggerData()) {
 			TriggerData triggerData = new TriggerData(matcher);
 			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
 
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
-			}
-		}
-
-		for (TriggerMatcher matcher : areaDataMatcher.triggers) {
-			for (Point point : matcher.getLocation()) {
-				entities.add(new TriggerEntityData(point.x, point.y, matcher));
 			}
 		}
 	}
