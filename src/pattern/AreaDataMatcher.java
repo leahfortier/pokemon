@@ -365,6 +365,7 @@ public class AreaDataMatcher {
         return getJson(jsonObject);
     }
 
+    private static void addPoint(int x, int y, List<Point> points, int[] location) {
         points.add(new Point(x, y));
 
         location = Arrays.copyOf(location, location.length + 2);

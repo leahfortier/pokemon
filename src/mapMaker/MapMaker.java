@@ -84,8 +84,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		frame.setVisible(true);
 	}
 
-	private static final Pattern mapAreaPattern = Pattern.compile("\"([^\"]*)\"\\s*(\\p{XDigit}+)");
-
 	public static final int tileSize = 32;
 
 	private JButton newTileButton;
@@ -134,10 +132,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private int previousToolListIndex = -1;
 	private boolean controlKeyDown = false;
 	
-	public enum EditType {
-		BACKGROUND, FOREGROUND, MOVE_MAP, AREA_MAP, TRIGGERS
-	}
-	
 	private EditType editType;
 	
 	public MapMaker() {
@@ -156,17 +150,11 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		newTileButton = new JButton("New Tile");
 		newTileButton.addActionListener(this);
 		tilePanel.add(newTileButton, BorderLayout.NORTH);
-		
+
 		moveListModel = new DefaultListModel<>();
-		moveListModel.addElement(new ImageIcon(textWithColor("Immovable", Color.black), Color.black.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Movable", Color.white), Color.white.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Water", Color.blue), Color.blue.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Right Ledge", Color.cyan), Color.cyan.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Down Ledge", Color.green), Color.green.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Left Ledge", Color.yellow), Color.yellow.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Up Ledge", Color.red), Color.red.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Stairs Up Right", Color.magenta), Color.magenta.getRGB() + ""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Stairs Up Left	", Color.ORANGE), Color.orange.getRGB() + ""));
+		for (MoveListTileType moveListTileType : MoveListTileType.values()) {
+			moveListModel.addElement(moveListTileType.getImageIcon(this));
+		}
 		
 		tileListModel = new DefaultListModel<>();
 		areaListModel = new DefaultListModel<>();
