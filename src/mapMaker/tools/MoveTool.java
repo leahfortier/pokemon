@@ -8,27 +8,28 @@ public class MoveTool extends Tool {
 
     public MoveTool(MapMaker mapMaker) {
         super(mapMaker);
-        previousLocation = new Point(0, 0);
+        previousLocation = new Point();
     }
 
-    public void drag(int x, int y) {
-        Point dragLocation = new Point(x, y);
-
+    @Override
+    public void drag(Point dragLocation) {
         Point difference = Point.subtract(previousLocation, dragLocation);
         mapMaker.getMapLocation().subtract(difference);
 
-        previousLocation = dragLocation;
+        previousLocation = Point.copy(dragLocation);
+    }
+
+    @Override
+    public void pressed(Point pressedLocation) {
+        previousLocation = Point.copy(pressedLocation);
+    }
+
+    @Override
+    public void reset() {
+        previousLocation = Point.copy(mapMaker.getMouseHoverLocation());
     }
 
     public String toString() {
         return "Move";
-    }
-
-    public void pressed(int x, int y) {
-        previousLocation = new Point(x, y);
-    }
-
-    public void reset() {
-        previousLocation = mapMaker.getMouseHoverLocation();
     }
 }

@@ -18,12 +18,13 @@ public class RectangleTool extends Tool {
         this.rectangle = new Rectangle(false);
     }
 
-    public void released(final int x, final int y) {
+    @Override
+    public void released(Point releasedLocation) {
         if (mapMaker.tileList.isSelectionEmpty() || !pressed) {
             return;
         }
 
-        Point mouseHoverLocation = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        Point mouseHoverLocation = DrawMetrics.getLocation(releasedLocation, mapMaker.getMapLocation());
         this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.currentMapSize);
 
         pressed = false;
@@ -37,18 +38,17 @@ public class RectangleTool extends Tool {
         }
     }
 
-    public void pressed(int x, int y) {
+    @Override
+    public void pressed(Point pressedLocation) {
         if (mapMaker.tileList.isSelectionEmpty()) {
             return;
         }
 
         pressed = true;
-        startLocation = DrawMetrics.getLocation(new Point(x, y), mapMaker.getMapLocation());
+        startLocation = DrawMetrics.getLocation(pressedLocation, mapMaker.getMapLocation());
     }
 
-    public void drag(int x, int y) {
-    }
-
+    @Override
     public void draw(Graphics g) {
         Point mouseHoverLocation = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
 
@@ -60,11 +60,12 @@ public class RectangleTool extends Tool {
         }
     }
 
-    public String toString() {
-        return "Rectangle";
-    }
-
+    @Override
     public void reset() {
         pressed = false;
+    }
+
+    public String toString() {
+        return "Rectangle";
     }
 }

@@ -1,6 +1,7 @@
 package mapMaker.tools;
 
 import mapMaker.MapMaker;
+import util.Point;
 
 import java.awt.Graphics;
 
@@ -12,10 +13,10 @@ public abstract class Tool {
     }
 
     // Can be overridden as necessary by subclasses
-    public void click(int x, int y) {}
-    public void released(int x, int y) {}
-    public void pressed(int x, int y) {}
-    public void drag(int x, int y) {}
+    public void click(Point clickLocation) {}
+    public void released(Point releasedLocation) {}
+    public void pressed(Point pressedLocation) {}
+    public void drag(Point dragLocation) {}
     public void draw(Graphics g) {}
     public void reset() {}
 }

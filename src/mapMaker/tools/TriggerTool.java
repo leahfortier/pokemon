@@ -53,19 +53,16 @@ public class TriggerTool extends Tool {
         removeItem.addActionListener(event -> mapMaker.triggerData.removeTrigger(selectedTrigger));
     }
 
-    public String toString() {
-        return "Trigger";
-    }
-
-    public void click(int x, int y) {
+    @Override
+    public void click(Point clickLocation) {
         if (mapMaker.currentMapName == null) {
             return;
         }
 
-        this.mouseLocation = new Point(x, y);
+        this.mouseLocation = Point.copy(clickLocation);
         Point location = DrawMetrics.getLocation(this.mouseLocation, mapMaker.getMapLocation());
 
-        System.out.println("Trigger click: " + x + " " + y);
+        System.out.println("Trigger click: " + this.mouseLocation);
 
         triggers = mapMaker.triggerData.getTrigger(location);
         triggerListPopup.removeAll();
@@ -96,20 +93,13 @@ public class TriggerTool extends Tool {
         triggerListPopup.show(mapMaker.canvas, mouseLocation.x, mouseLocation.y);
     }
 
+    @Override
     public void draw(Graphics g) {
         Point mouseHoverLocation = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
         DrawMetrics.outlineTile(g, mouseHoverLocation, mapMaker.getMapLocation(), Color.BLUE);
     }
 
-    public void released(int x, int y) {
-    }
-
-    public void pressed(int x, int y) {
-    }
-
-    public void drag(int x, int y) {
-    }
-
-    public void reset() {
+    public String toString() {
+        return "Trigger";
     }
 }

@@ -153,11 +153,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		root = null;
 		saved = true;
 		savedIndex = true;
-		this.location = new Point(0, 0);
+		this.location = new Point();
 		editType = EditType.BACKGROUND;
 		
 		this.setLayout(new BorderLayout());
-		setLayout(new BorderLayout(0, 0));
 
 		JPanel tilePanel = new JPanel();
 		tilePanel.setBorder(new LineBorder(new Color(0, 0, 0), 4));
@@ -321,7 +320,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	public Point getMapLocation() {
-		return this.location;
+        return this.location;
 	}
 
 	public Point getMouseHoverLocation() {
@@ -846,7 +845,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 			
 			currentMapSize = new Dimension(currentMapBg.getWidth(), currentMapBg.getHeight());
-			this.location = new Point(0, 0);
+			this.location = new Point();
 			
 			triggerData = new MapMakerTriggerData(currentMapName, currentMapSize, this, mapTextFile);
 		}
@@ -865,7 +864,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 		// TODO: Maybe this should be a constant for the default size?
 		currentMapSize = new Dimension(10, 10);
-		this.location = new Point(0, 0);
+		this.location = new Point();
 		
 		Graphics g = currentMapMove.getGraphics();
 		g.setColor(Color.BLACK);
@@ -1076,57 +1075,56 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		}
 	}
 
-	public void mouseClicked(MouseEvent e) {
+	private static Point getMouseLocation(MouseEvent event) {
+        return new Point(event.getX(), event.getY());
+    }
+
+	public void mouseClicked(MouseEvent event) {
 		if (!toolList.isSelectionEmpty()) {
-			toolList.getSelectedValue().click(e.getX(), e.getY());
+			toolList.getSelectedValue().click(getMouseLocation(event));
 		}
 	
 		draw();
 	}
 
-	public void mouseEntered(MouseEvent event) { }
-	public void mouseExited(MouseEvent event) { }
+	public void mouseEntered(MouseEvent event) {}
+	public void mouseExited(MouseEvent event) {}
 
 	public void mousePressed(MouseEvent event) {
 		if (!toolList.isSelectionEmpty()) {
-			toolList.getSelectedValue().pressed(event.getX(), event.getY());
+			toolList.getSelectedValue().pressed(getMouseLocation(event));
 		}
 	
 		draw();
 	}
 
+	// TODO: Do we not want to be saving the mouse hover location here? as well as above?
 	public void mouseReleased(MouseEvent event) {
 		if (!toolList.isSelectionEmpty()) {
-			toolList.getSelectedValue().released(event.getX(), event.getY());
+			toolList.getSelectedValue().released(getMouseLocation(event));
 		}
 	
 		draw();
 	}
 
 	public void mouseDragged(MouseEvent event) {
-		int mouseHoverX = event.getX();
-		int mouseHoverY = event.getY();
-		this.mouseHoverLocation = new Point(mouseHoverX, mouseHoverY);
-	
 		if (!toolList.isSelectionEmpty()) {
-			toolList.getSelectedValue().drag(event.getX(), event.getY());
+			toolList.getSelectedValue().drag(getMouseLocation(event));
 		}
 	
 		draw();
 	}
 
 	public void mouseMoved(MouseEvent event) {
-		int mouseHoverX = event.getX();
-		int mouseHoverY = event.getY();
-		this.mouseHoverLocation = new Point(mouseHoverX, mouseHoverY);
+        this.mouseHoverLocation = getMouseLocation(event);
 	
 		draw();
 	}
 	
-	public void keyTyped(KeyEvent event) { }
+	public void keyTyped(KeyEvent event) {}
 
-	public void keyPressed(KeyEvent event)
-	{		
+	public void keyPressed(KeyEvent event) {
+
 		// TODO: e for eraser, s for single, r for rect, t for trigger, ? for select?
 		if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolListIndex == -1 && !toolList.isSelectionEmpty()) {
 			previousToolListIndex = toolList.getSelectedIndex();
@@ -1166,7 +1164,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 	public void valueChanged(ListSelectionEvent event) {
 		if (event.getSource() == tileList) {
-			//When a trigger item selected
+			// When a trigger item selected
 			if (tileList.getModel().equals(triggerListModel) && !tileList.isSelectionEmpty() && !event.getValueIsAdjusting()) {
 				if (currentMapBg == null) {
 					tileList.clearSelection();

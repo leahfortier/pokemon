@@ -16,13 +16,14 @@ public class SingleClickTool extends Tool {
         super(mapMaker);
     }
 
-    public void click(int x, int y) {
+    @Override
+    public void click(Point clickedLocation) {
         if (mapMaker.tileList.isSelectionEmpty()) {
             return;
         }
 
-        Point location = DrawMetrics.getLocation(new Point(x, y), mapMaker.getMapLocation());
-        System.out.println("click: " + x + " " + y);
+        Point location = DrawMetrics.getLocation(clickedLocation, mapMaker.getMapLocation());
+        System.out.println("click: " + clickedLocation);
 
         int val = Integer.parseInt(mapMaker.tileList.getSelectedValue().getDescription());
         mapMaker.setTile(location, val);
@@ -33,10 +34,7 @@ public class SingleClickTool extends Tool {
         }
     }
 
-    public String toString() {
-        return "Single";
-    }
-
+    @Override
     public void draw(Graphics g) {
         Point location = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
         DrawMetrics.outlineTileRed(g, location, mapMaker.getMapLocation());
@@ -72,5 +70,9 @@ public class SingleClickTool extends Tool {
                 DrawMetrics.drawTileImage(g, image, location, mapMaker.getMapLocation());
             }
         }
+    }
+
+    public String toString() {
+        return "Single";
     }
 }

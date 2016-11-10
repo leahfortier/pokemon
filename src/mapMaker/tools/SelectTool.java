@@ -29,14 +29,15 @@ public class SelectTool extends Tool {
         this.rectangle = new Rectangle(true);
     }
 
-    public void click(final int x, final int y) {
+    @Override
+    public void click(Point clickLocation) {
         if (!paste || controlClick) {
             return;
         }
 
         mapMaker.saved = false;
 
-        Point location = DrawMetrics.getLocation(new Point(x, y), mapMaker.getMapLocation());
+        Point location = DrawMetrics.getLocation(clickLocation, mapMaker.getMapLocation());
         for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
             for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
                 int val = copiedTiles.getRGB(currX, currY);
@@ -48,7 +49,8 @@ public class SelectTool extends Tool {
         paste = false;
     }
 
-    public void released(int x, int y) {
+    @Override
+    public void released(Point releasedLocation) {
         if (mapMaker.editType == EditType.TRIGGERS || paste || !pressed) {
             return;
         }
@@ -56,11 +58,12 @@ public class SelectTool extends Tool {
         pressed = false;
         select();
 
-        Point mouseHoverLocation = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        Point mouseHoverLocation = DrawMetrics.getLocation(releasedLocation, mapMaker.getMapLocation());
         this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.currentMapSize);
     }
 
-    public void pressed(int x, int y) {
+    @Override
+    public void pressed(Point pressedLocation) {
         if (mapMaker.editType == EditType.TRIGGERS || paste) {
             return;
         }
@@ -71,13 +74,14 @@ public class SelectTool extends Tool {
 //				return;
 //			}
 
-        this.startLocation = DrawMetrics.getLocation(new Point(x, y), mapMaker.getMapLocation());
+        this.startLocation = DrawMetrics.getLocation(pressedLocation, mapMaker.getMapLocation());
 
         pressed = true;
         deselect();
     }
 
-    public void drag(int x, int y) {
+    @Override
+    public void drag(Point dragLocation) {
 //			if (controlClick) {
 //				controlClick = false;
 //				paste();
@@ -87,6 +91,7 @@ public class SelectTool extends Tool {
 //			click(x, y);
     }
 
+    @Override
     public void draw(Graphics g) {
         if (!pressed && !selected && !paste) {
             return;
@@ -123,12 +128,9 @@ public class SelectTool extends Tool {
         }
     }
 
+    @Override
     public void reset() {
         pressed = false;
-    }
-
-    public String toString() {
-        return "Select";
     }
 
     public boolean hasSelection() {
@@ -180,7 +182,6 @@ public class SelectTool extends Tool {
     public void cut() {
         copy();
 
-        // TODO: Why is val always the same here?
         int val = Integer.parseInt(mapMaker.tileList.getModel().getElementAt(0).getDescription());
         this.rectangle.drawTiles(mapMaker, val);
     }
@@ -188,5 +189,9 @@ public class SelectTool extends Tool {
     public void paste() {
         paste = true;
         deselect();
+    }
+
+    public String toString() {
+        return "Select";
     }
 }
