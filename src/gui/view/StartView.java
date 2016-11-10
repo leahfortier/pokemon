@@ -11,7 +11,7 @@ import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;
 import trainer.CharacterData;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 import util.StringUtils;
@@ -119,7 +119,7 @@ public class StartView extends View {
 		
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
 		
-		DrawMetrics.setFont(g, 30);
+		DrawUtils.setFont(g, 30);
 		g.setColor(Color.BLACK);
 		
 		switch (state) {
@@ -150,8 +150,8 @@ public class StartView extends View {
 		
 		if (message != null) {
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			DrawMetrics.setFont(g, 30);
-			DrawMetrics.drawWrappedText(g, message, 30, 490, 750);
+			DrawUtils.setFont(g, 30);
+			DrawUtils.drawWrappedText(g, message, 30, 490, 750);
 		}
 	}
 

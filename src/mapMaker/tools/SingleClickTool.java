@@ -5,7 +5,7 @@ import mapMaker.MapMaker;
 import mapMaker.MapMaker.EditType;
 import mapMaker.TileMap.TileType;
 import mapMaker.TriggerModelType;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.Point;
 
 import java.awt.Graphics;
@@ -22,7 +22,7 @@ public class SingleClickTool extends Tool {
             return;
         }
 
-        Point location = DrawMetrics.getLocation(clickedLocation, mapMaker.getMapLocation());
+        Point location = DrawUtils.getLocation(clickedLocation, mapMaker.getMapLocation());
         System.out.println("click: " + clickedLocation);
 
         int val = Integer.parseInt(mapMaker.tileList.getSelectedValue().getDescription());
@@ -36,8 +36,8 @@ public class SingleClickTool extends Tool {
 
     @Override
     public void draw(Graphics g) {
-        Point location = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
-        DrawMetrics.outlineTileRed(g, location, mapMaker.getMapLocation());
+        Point location = DrawUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        DrawUtils.outlineTileRed(g, location, mapMaker.getMapLocation());
 
         if (mapMaker.tileList.isSelectionEmpty()) {
             return;
@@ -48,7 +48,7 @@ public class SingleClickTool extends Tool {
             int val = Integer.parseInt(mapMaker.tileList.getSelectedValue().getDescription());
             BufferedImage image = mapMaker.getTileFromSet(TileType.MAP, val);
             if (image != null) {
-                DrawMetrics.drawTileImage(g, image, location, mapMaker.getMapLocation());
+                DrawUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
             }
         }
         // Show preview image for current trigger
@@ -67,7 +67,7 @@ public class SingleClickTool extends Tool {
             }
 
             if (image != null) {
-                DrawMetrics.drawTileImage(g, image, location, mapMaker.getMapLocation());
+                DrawUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
             }
         }
     }

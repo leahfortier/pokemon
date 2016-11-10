@@ -1,8 +1,8 @@
 package mapMaker.tools;
 
+import util.DrawUtils;
 import util.Point;
 import mapMaker.MapMaker;
-import util.DrawMetrics;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -37,7 +37,7 @@ public class Rectangle {
     }
 
     public void outlineRed(Graphics g, Point mapLocation) {
-        DrawMetrics.outlineTiles(g, this.upperLeftRectangleCoordinate, mapLocation, Color.RED, this.dimension);
+        DrawUtils.outlineTiles(g, this.upperLeftRectangleCoordinate, mapLocation, Color.RED, this.dimension);
     }
 
     public BufferedImage getImage(BufferedImage currentImage) {

@@ -1,6 +1,6 @@
 package mapMaker;
 
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -34,7 +34,7 @@ public class TileMap {
         this.saved = true;
 
         this.mapTileMap = loadTiles(mapMaker, Folder.MAP_TILES, FileName.MAP_TILES_INDEX, this.tileListModel, this.indexMap, true);
-        this.tileListModel.add(0, new ImageIcon(DrawMetrics.fillImage(Color.MAGENTA), "0")); // TODO: I think magenta here is representing a blank tile, if so, this should be a constant
+        this.tileListModel.add(0, new ImageIcon(DrawUtils.fillImage(Color.MAGENTA), "0")); // TODO: I think magenta here is representing a blank tile, if so, this should be a constant
 
         this.trainerTileMap = loadTiles(mapMaker, Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX);
         this.mapMakerTileMap = loadTiles(mapMaker, Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX);
@@ -134,7 +134,7 @@ public class TileMap {
     }
 
     public void addTile(File imageFile, Color color) {
-        color = DrawMetrics.permuteColor(color, indexMap);
+        color = DrawUtils.permuteColor(color, indexMap);
         BufferedImage img = FileIO.readImage(imageFile);
         mapTileMap.put(color.getRGB(), img);
         indexMap.put(color.getRGB(), imageFile.getName());

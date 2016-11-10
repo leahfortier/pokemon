@@ -17,7 +17,7 @@ import pokemon.PC;
 import pokemon.Stat;
 import trainer.CharacterData;
 import trainer.Trainer;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 import battle.Move;
@@ -198,8 +198,8 @@ public class PCView extends View {
 		
 		// Draw Box number
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 20);
-		DrawMetrics.drawCenteredWidthString(g, "Box " + (pc.getBoxNum() + 1), 214, 65);
+		DrawUtils.setFont(g, 20);
+		DrawUtils.drawCenteredWidthString(g, "Box " + (pc.getBoxNum() + 1), 214, 65);
 		
 		for (int i = 0; i < PC.BOX_HEIGHT; i++)
 		{
@@ -216,14 +216,14 @@ public class PCView extends View {
 				}
 				
 				BufferedImage pkmImg = partyTiles.getTile(p.getTinyImageIndex());
-				DrawMetrics.drawCenteredImage(g, pkmImg, 20, 20);
+				DrawUtils.drawCenteredImage(g, pkmImg, 20, 20);
 				
 				g.translate(-boxButtons[j][i].x, -boxButtons[j][i].y);
 			}
 		}
 		
-		DrawMetrics.setFont(g, 16);
-		DrawMetrics.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
+		DrawUtils.setFont(g, 16);
+		DrawUtils.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
 		
 		View.drawArrows(g, leftButton, rightButton);
 		
@@ -244,7 +244,7 @@ public class PCView extends View {
 			}
 			
 			BufferedImage pkmImg = partyTiles.getTile(p.getTinyImageIndex());
-			DrawMetrics.drawCenteredImage(g, pkmImg, 20, 20);
+			DrawUtils.drawCenteredImage(g, pkmImg, 20, 20);
 			
 			g.translate(-partyButtons[i].x, -partyButtons[i].y);
 		}
@@ -275,23 +275,23 @@ public class PCView extends View {
 		
 		g.drawImage(tiles.getTile(0x34), 410, 40, null);
 		BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageIndex());
-		DrawMetrics.drawCenteredImage(g, pkmImg, 479, 109);
+		DrawUtils.drawCenteredImage(g, pkmImg, 479, 109);
 		
 		if (selected.isEgg()) {
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 20);
+			DrawUtils.setFont(g, 20);
 			
 			g.drawString(selected.getActualName(), 541, 82);
 			
-			DrawMetrics.setFont(g, 16);
-			DrawMetrics.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
+			DrawUtils.setFont(g, 16);
+			DrawUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
 		}
 		else {
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 20);
+			DrawUtils.setFont(g, 20);
 			
 			g.drawString(selected.getActualName() + " " + selected.getGender().getCharacter(), 541, 82);
-			DrawMetrics.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
+			DrawUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
 			g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
 			
 			int index = 0;
@@ -302,21 +302,21 @@ public class PCView extends View {
 			
 			g.drawImage(typeTiles.getTile(type[index].getImageIndex()), 707, 97, null);
 			
-			DrawMetrics.setFont(g, 16);
+			DrawUtils.setFont(g, 16);
 			
 			// Total EXP
 			g.drawString("EXP:", 540, 135);
-			DrawMetrics.drawRightAlignedString(g, selected.getTotalEXP() + "", 740, 135);
+			DrawUtils.drawRightAlignedString(g, selected.getTotalEXP() + "", 740, 135);
 			
 			// EXP to the next level
 			g.drawString("To Next Lv:", 540, 156);
-			DrawMetrics.drawRightAlignedString(g, selected.expToNextLevel() + "", 740, 156);
+			DrawUtils.drawRightAlignedString(g, selected.expToNextLevel() + "", 740, 156);
 			
 			// Ability
 			g.drawString(selected.getAbility().getName(), 427, 179);
 			
 			// Held Item
-			DrawMetrics.drawRightAlignedString(g, selected.getActualHeldItem().getName(), 740, 179);
+			DrawUtils.drawRightAlignedString(g, selected.getActualHeldItem().getName(), 740, 179);
 			
 			// Nature
 			g.drawString(selected.getNature().getName() + " Nature", 427, 198);
@@ -334,29 +334,29 @@ public class PCView extends View {
 				g.drawImage(tiles.getTile(0x35), x, y, null);
 				
 				g.setColor(Color.BLACK);
-				DrawMetrics.drawCenteredWidthString(g, moves.get(i).getAttack().getName(), x + 159/2, y + 20);
+				DrawUtils.drawCenteredWidthString(g, moves.get(i).getAttack().getName(), x + 159/2, y + 20);
 			}
 			
-			DrawMetrics.drawRightAlignedString(g, "Stat", 635, 340);
-			DrawMetrics.drawRightAlignedString(g, "IV", 681, 340);
-			DrawMetrics.drawRightAlignedString(g, "EV", 735, 340);
+			DrawUtils.drawRightAlignedString(g, "Stat", 635, 340);
+			DrawUtils.drawRightAlignedString(g, "IV", 681, 340);
+			DrawUtils.drawRightAlignedString(g, "EV", 735, 340);
 			
 			int[] stats = selected.getStats();
 			int[] ivs = selected.getIVs();
 			int[] evs = selected.getEVs();
 			
 			for (int i = 0; i < Stat.NUM_STATS; i++) {
-				DrawMetrics.setFont(g, 16);
+				DrawUtils.setFont(g, 16);
 				g.setColor(selected.getNature().getColor(i));
 				g.drawString(Stat.getStat(i, false).getName(), 427, 360 + i*18 + i/2); // TODO: srsly what's with the i/2
 				
 				g.setColor(Color.BLACK);
-				DrawMetrics.setFont(g, 14);
+				DrawUtils.setFont(g, 14);
 				
 				// TODO: What's up with the + i/2 in the y????
-				DrawMetrics.drawRightAlignedString(g, stats[i] + "", 635, 360 + i*18 + i/2);
-				DrawMetrics.drawRightAlignedString(g, ivs[i] + "", 681, 360 + i*18 + i/2);
-				DrawMetrics.drawRightAlignedString(g, evs[i] + "", 735, 360 + i*18 + i/2);
+				DrawUtils.drawRightAlignedString(g, stats[i] + "", 635, 360 + i*18 + i/2);
+				DrawUtils.drawRightAlignedString(g, ivs[i] + "", 681, 360 + i*18 + i/2);
+				DrawUtils.drawRightAlignedString(g, evs[i] + "", 735, 360 + i*18 + i/2);
 			}
 		}
 		
@@ -364,11 +364,11 @@ public class PCView extends View {
 		g.drawImage(tiles.getTile(0x36), 410, 522, null);
 		
 		// Buttons
-		DrawMetrics.setFont(g, 20);
-		DrawMetrics.drawCenteredWidthString(g, "Switch", 464, 489);
-		DrawMetrics.drawCenteredWidthString(g, party ? "Deposit" : "Withdraw", 584, 489);
-		DrawMetrics.drawCenteredWidthString(g, "Release", 699, 489);
-		DrawMetrics.drawCenteredWidthString(g, "Return", 584, 546);
+		DrawUtils.setFont(g, 20);
+		DrawUtils.drawCenteredWidthString(g, "Switch", 464, 489);
+		DrawUtils.drawCenteredWidthString(g, party ? "Deposit" : "Withdraw", 584, 489);
+		DrawUtils.drawCenteredWidthString(g, "Release", 699, 489);
+		DrawUtils.drawCenteredWidthString(g, "Return", 584, 546);
 		
 		for (Button b : buttons) {
 			b.draw(g);

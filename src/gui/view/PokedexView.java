@@ -16,7 +16,7 @@ import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.Pokedex;
 import trainer.Pokedex.PokedexStatus;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -126,8 +126,8 @@ public class PokedexView extends View {
 		g.drawImage(tiles.getTile(0x31), 40, 40, null);
 		
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 20);
-		DrawMetrics.drawCenteredWidthString(g, "Pok\u00e9dex", 214, 65); // TODO: Use constant
+		DrawUtils.setFont(g, 20);
+		DrawUtils.drawCenteredWidthString(g, "Pok\u00e9dex", 214, 65); // TODO: Use constant
 		
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
@@ -138,7 +138,7 @@ public class PokedexView extends View {
 
 				if (pokedex.getStatus(p.namesies()) == PokedexStatus.NOT_SEEN) {
 					g.setColor(new Color(0, 0, 0, 64));
-					DrawMetrics.drawCenteredWidthString(g, String.format("%03d", number), 18, 27);
+					DrawUtils.drawCenteredWidthString(g, String.format("%03d", number), 18, 27);
 				}
 				else {
 					if (p == selected) {
@@ -146,7 +146,7 @@ public class PokedexView extends View {
 					}
 					
 					BufferedImage pkmImg = partyTiles.getTile(number);
-					DrawMetrics.drawCenteredImage(g, pkmImg, 20, 20);
+					DrawUtils.drawCenteredImage(g, pkmImg, 20, 20);
 					
 					if (pokedex.getStatus(p.namesies()) == PokedexStatus.CAUGHT) {
 						g.drawImage(typeTiles.getTile(0x4), 28, 28, null);
@@ -159,8 +159,8 @@ public class PokedexView extends View {
 		
 		// Draw page numbers and arrows
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 16);
-		DrawMetrics.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, 215, 433);
+		DrawUtils.setFont(g, 16);
+		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, 215, 433);
 		View.drawArrows(g, leftButton, rightButton);
 		
 		// Seen/Caught
@@ -169,7 +169,7 @@ public class PokedexView extends View {
 		g.drawImage(tiles.getTile(0x33), 40, 478, null);
 		
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 20);
+		DrawUtils.setFont(g, 20);
 		g.drawString("Seen: " + pokedex.numSeen(), 70, 524);
 		g.drawString("Caught: " + pokedex.numCaught(), 70 + 54*3, 524);
 		
@@ -192,22 +192,22 @@ public class PokedexView extends View {
 		g.drawImage(tiles.getTile(0x34), 410, 40, null);
 		if (status == PokedexStatus.NOT_SEEN) {
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 80);
+			DrawUtils.setFont(g, 80);
 			g.drawString("?", 455, 137);
 		}
 		else {
 			BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageNumber(false));
 			pkmImg.setRGB(0, 0, 0);
-			DrawMetrics.drawCenteredImage(g, pkmImg, 479, 109);
+			DrawUtils.drawCenteredImage(g, pkmImg, 479, 109);
 		}
 		
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 20);
+		DrawUtils.setFont(g, 20);
 		g.drawString(status == PokedexStatus.NOT_SEEN ? "?????" : selected.getName(), 541, 82);
-		DrawMetrics.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
+		DrawUtils.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
 		
 		if (status != PokedexStatus.NOT_SEEN) {
-			DrawMetrics.setFont(g, 16);
+			DrawUtils.setFont(g, 16);
 			g.drawString("Type:", 541, 110);
 			
 			g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 596, 98, null);
@@ -220,7 +220,7 @@ public class PokedexView extends View {
 			g.drawString("Weight: " + (status == PokedexStatus.SEEN ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
 			if (status == PokedexStatus.CAUGHT) {
-				DrawMetrics.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
+				DrawUtils.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
 			}
 			
 			g.drawString("Locations:", 427, 340);
@@ -231,17 +231,17 @@ public class PokedexView extends View {
 		}
 		
 		// Buttons
-		DrawMetrics.setFont(g, 20);
+		DrawUtils.setFont(g, 20);
 		
 		if (status != PokedexStatus.NOT_SEEN) {
 			BufferedImage pkmImg = partyTiles.getTile(selected.getNumber());
 			for (int i = 0; i < 3; i++) {
-				DrawMetrics.drawCenteredImage(g, pkmImg, 464 + 120*i, 478);
+				DrawUtils.drawCenteredImage(g, pkmImg, 464 + 120*i, 478);
 			}
 		}
 		
 		g.drawImage(tiles.getTile(0x36), 410, 522, null);
-		DrawMetrics.drawCenteredWidthString(g, "Return", 584, 546);
+		DrawUtils.drawCenteredWidthString(g, "Return", 584, 546);
 		
 		for (Button b : buttons) {
 			b.draw(g);

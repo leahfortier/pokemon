@@ -31,7 +31,7 @@ import message.Messages;
 import pokemon.ActivePokemon;
 import sound.SoundTitle;
 import trainer.CharacterData;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.Save;
 import util.InputControl.Control;
@@ -194,11 +194,11 @@ public class MapView extends View {
 				BufferedImage bg = data.getBattleTiles().getTile(3);
 				g.drawImage(bg, 0, 439, null);
 				
-				DrawMetrics.setFont(g, 30);
+				DrawUtils.setFont(g, 30);
 				g.setColor(Color.BLACK);
 				
-				DrawMetrics.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
-//				int height = DrawMetrics.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
+				DrawUtils.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
+//				int height = DrawUtils.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
 //
 //				// TODO: wtf is this variable name
 //				int i1 = 0;
@@ -219,7 +219,7 @@ public class MapView extends View {
 				TileSet menuTiles = data.getMenuTiles();
 				
 				g.drawImage(menuTiles.getTile(1), 527, 0, null);
-				DrawMetrics.setFont(g, 40);
+				DrawUtils.setFont(g, 40);
 				g.setColor(Color.BLACK);
 				
 				for (int i = 0; i < MENU_TEXT.length; i++) {
@@ -301,8 +301,8 @@ public class MapView extends View {
 	private void drawAreaTransitionAnimation(Graphics g) {
 		int fontSize = 30;
 		
-		int insideWidth = DrawMetrics.getSuggestedWidth(currentArea.getAreaName(), fontSize);
-		int insideHeight = DrawMetrics.getSuggestedHeight(fontSize);
+		int insideWidth = DrawUtils.getSuggestedWidth(currentArea.getAreaName(), fontSize);
+		int insideHeight = DrawUtils.getSuggestedHeight(fontSize);
 		
 		int borderSize = 2;
 		int graySize = 10;
@@ -334,8 +334,8 @@ public class MapView extends View {
 		g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
 
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, fontSize);
-		DrawMetrics.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
+		DrawUtils.setFont(g, fontSize);
+		DrawUtils.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
 	}
 	
 	// Display battle intro animation.
@@ -696,7 +696,7 @@ public class MapView extends View {
 			battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageIndex());
 			
 			if (seenWild) {
-				battleImageSlideRight = DrawMetrics.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0});
+				battleImageSlideRight = DrawUtils.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0});
 			}
 		}
 		else {

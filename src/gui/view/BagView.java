@@ -26,7 +26,7 @@ import main.Type;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 import battle.Move;
@@ -393,27 +393,27 @@ public class BagView extends View {
 
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItem.getImageIndex());
-			DrawMetrics.drawCenteredImage(g, img, 430, 132);
+			DrawUtils.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 20);
+			DrawUtils.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
 			if (selectedItem.hasQuantity()) {
-				DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(selectedItem), 726, 138);
+				DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(selectedItem), 726, 138);
 			}
 			
-			DrawMetrics.setFont(g, 14);
-			DrawMetrics.drawWrappedText(g, selectedItem.getDescription(), 418, 156, 726 - buttons[GIVE].x);
+			DrawUtils.setFont(g, 14);
+			DrawUtils.drawWrappedText(g, selectedItem.getDescription(), 418, 156, 726 - buttons[GIVE].x);
 			
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
-			DrawMetrics.setFont(g, 20);
+			DrawUtils.setFont(g, 20);
 			for (UseState useState : UseState.USE_STATE_VALUES) {
-				DrawMetrics.drawCenteredString(g, useState.displayName, buttons[useState.buttonIndex]);
+				DrawUtils.drawCenteredString(g, useState.displayName, buttons[useState.buttonIndex]);
 			}
 		}
 		
-		DrawMetrics.setFont(g, 12);
+		DrawUtils.setFont(g, 12);
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
@@ -430,12 +430,12 @@ public class BagView extends View {
 				Item item = iter.next();
 				
 				g.drawImage(tiles.getTile(0x26), 0, 0, null);
-				DrawMetrics.drawCenteredImage(g, itemTiles.getTile(item.getImageIndex()), 14, 14);
+				DrawUtils.drawCenteredImage(g, itemTiles.getTile(item.getImageIndex()), 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
 				
 				if (item.hasQuantity()) {
-					DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
+					DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
 				}
 				
 				g.translate(-itemButtons[k].x, -itemButtons[k].y);
@@ -443,8 +443,8 @@ public class BagView extends View {
 		}
 		
 		// Draw page numbers
-		DrawMetrics.setFont(g, 16);
-		DrawMetrics.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(list.size()), 573, 466);
+		DrawUtils.setFont(g, 16);
+		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(list.size()), 573, 466);
 		
 		// Left and Right arrows
 		View.drawArrows(g, buttons[LEFT_ARROW], buttons[RIGHT_ARROW]);
@@ -467,11 +467,11 @@ public class BagView extends View {
 				g.drawImage(battleTiles.getTile(m.getAttack().getCategory().getImageNumber()), 254, 33, null);
 				
 				g.setColor(Color.BLACK);
-				DrawMetrics.setFont(g, 14);
+				DrawUtils.setFont(g, 14);
 				g.drawString("PP: " + m.getPP() + "/" + m.getMaxPP(), 166, moveButtons[i].height/2 + 5); // TODO: Center the height properly
 
 				g.setColor(Color.BLACK);
-				DrawMetrics.setFont(g, 20);
+				DrawUtils.setFont(g, 20);
 				g.drawString(m.getAttack().getName(), 20, 38);
 				
 				g.translate(-moveButtons[i].x, -moveButtons[i].y);
@@ -493,10 +493,10 @@ public class BagView extends View {
 				g.drawImage(tiles.getTile(0x25), 0, 0, null);
 				
 				BufferedImage img = partyTiles.getTile(p.getTinyImageIndex());
-				DrawMetrics.drawCenteredImage(g, img, 30, 30); // TODO: This looks slightly off
+				DrawUtils.drawCenteredImage(g, img, 30, 30); // TODO: This looks slightly off
 				
 				g.setColor(Color.BLACK);
-				DrawMetrics.setFont(g, 14);
+				DrawUtils.setFont(g, 14);
 				
 				if (p.isEgg()) {
 					g.drawString(p.getActualName(), 50, 22);	
@@ -507,7 +507,7 @@ public class BagView extends View {
 					g.drawString("Lv" + p.getLevel(), 153, 22);
 					
 					// Status condition
-					DrawMetrics.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
+					DrawUtils.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
 					
 					// Draw HP Box
 					g.fillRect(50, 26, 244, 11);
@@ -517,10 +517,10 @@ public class BagView extends View {
 					g.fillRect(52, 28, (int)(p.getHPRatio()*240), 7);
 					
 					g.setColor(Color.BLACK);
-					DrawMetrics.setFont(g, 12);
+					DrawUtils.setFont(g, 12);
 					
 					g.drawString(p.getActualHeldItem().getName(), 50, 47);
-					DrawMetrics.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
+					DrawUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
 					
 					if (p.hasStatus(StatusCondition.FAINTED)) {
 						g.setColor(new Color(0, 0, 0, 128)); // TODO: Look if this color appears in multiple place and see if it should be a constant
@@ -533,15 +533,15 @@ public class BagView extends View {
 		}
 		
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 20);
+		DrawUtils.setFont(g, 20);
 		
 		g.drawImage(tiles.getTile(0x27), 410, 500, null);
-		DrawMetrics.drawCenteredWidthString(g, "Return", 573, 525);
+		DrawUtils.drawCenteredWidthString(g, "Return", 573, 525);
 		
 		for (int i = 0; i < CATEGORIES.length; i++) {
 			g.translate(tabButtons[i].x, tabButtons[i].y);
 			
-			DrawMetrics.setFont(g, 14);
+			DrawUtils.setFont(g, 14);
 			g.setColor(CATEGORIES[i].getColor());
 			g.fillRect(0, 0, tabButtons[i].width, tabButtons[i].height);
 			
@@ -551,7 +551,7 @@ public class BagView extends View {
 			g.setColor(Color.BLACK);
 			
 			BufferedImage img = bagTiles.getTile(CATEGORIES[i].getImageNumber());
-			DrawMetrics.drawCenteredImage(g, img, 16, 26);
+			DrawUtils.drawCenteredImage(g, img, 16, 26);
 			g.drawString(CATEGORIES[i].getName(), 30, 30);
 			
 			g.translate(-tabButtons[i].x, -tabButtons[i].y);
@@ -561,8 +561,8 @@ public class BagView extends View {
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
 			g.setColor(Color.WHITE);
 			
-			DrawMetrics.setFont(g, 30);
-			DrawMetrics.drawWrappedText(g, message, 30, 490, 750);
+			DrawUtils.setFont(g, 30);
+			DrawUtils.drawWrappedText(g, message, 30, 490, 750);
 		}
 		else {
 			for (Button b : buttons) {

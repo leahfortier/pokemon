@@ -12,7 +12,7 @@ import mapMaker.tools.SingleClickTool;
 import mapMaker.tools.Tool;
 import mapMaker.tools.ToolRenderer;
 import mapMaker.tools.TriggerTool;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -160,15 +160,15 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		tilePanel.add(newTileButton, BorderLayout.NORTH);
 		
 		moveListModel = new DefaultListModel<>();
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Immovable", Color.black), Color.black.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Movable", Color.white), Color.white.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Water", Color.blue), Color.blue.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Right Ledge", Color.cyan), Color.cyan.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Down Ledge", Color.green), Color.green.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Left Ledge", Color.yellow), Color.yellow.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Up Ledge", Color.red), Color.red.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Stairs Up Right", Color.magenta), Color.magenta.getRGB() + ""));
-		moveListModel.addElement(new ImageIcon(DrawMetrics.colorWithText("Stairs Up Left	", Color.ORANGE), Color.orange.getRGB() + ""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Immovable", Color.black), Color.black.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Movable", Color.white), Color.white.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Water", Color.blue), Color.blue.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Right Ledge", Color.cyan), Color.cyan.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Down Ledge", Color.green), Color.green.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Left Ledge", Color.yellow), Color.yellow.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Up Ledge", Color.red), Color.red.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Stairs Up Right", Color.magenta), Color.magenta.getRGB() + ""));
+		moveListModel.addElement(new ImageIcon(DrawUtils.colorWithText("Stairs Up Left	", Color.ORANGE), Color.orange.getRGB() + ""));
 
 		areaListModel = new DefaultListModel<>();
 		triggerListModel = new DefaultListModel<>();
@@ -378,7 +378,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				// Get a color from the user for the new area.
 				Color color = JColorChooser.showDialog(this, "Choose a preferred color for area " + newAreaName, Color.WHITE);
 				if (color != null) {
-					color = DrawMetrics.permuteColor(color, areaIndexMap);
+					color = DrawUtils.permuteColor(color, areaIndexMap);
 
 					// Get terrain type
 					TerrainType terrainType = (TerrainType)JOptionPane.showInputDialog(this, "Terrain Type", "Please specify the terrain type:", JOptionPane.PLAIN_MESSAGE, null, TerrainType.values(), TerrainType.GRASS);
@@ -401,7 +401,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 							}
 
 							// Add area to the list.
-							areaListModel.addElement(new ImageIcon(DrawMetrics.colorWithText(newAreaName, color), color.getRGB() + ""));
+							areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(newAreaName, color), color.getRGB() + ""));
 							areaIndexMap.put(color.getRGB(), newAreaName);
 						}
 					}
@@ -418,7 +418,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					}
 				}
 
-				areaListModel.addElement(new ImageIcon(DrawMetrics.colorWithText(newAreaName, new Color(color, true)), color + ""));
+				areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(newAreaName, new Color(color, true)), color + ""));
 			}
 		}
 	}
@@ -564,7 +564,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				String name = m.group(1);
 				int val = (int) Long.parseLong(m.group(2), 16);
 
-				// areaListModel.addElement(new ImageIcon(DrawMetrics.colorWithText(name, new Color(val, true)), val + ""));
+				// areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(name, new Color(val, true)), val + ""));
 				areaIndexMap.put(val, name);
 			}
 		}
@@ -634,7 +634,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		areaListModel.clear();
 		areasOnMap = new HashSet<>();
 		areasOnMap.add(0);
-		areaListModel.addElement(new ImageIcon(DrawMetrics.colorWithText(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
+		areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
 		
 		try {
 			currentMapBg = ImageIO.read(mapBgImageFile);
@@ -650,7 +650,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						int rgb = currentMapArea.getRGB(x, y);
 						if (!areasOnMap.contains(rgb) && areaIndexMap.containsKey(rgb)) {
 							areasOnMap.add(rgb);
-							areaListModel.addElement(new ImageIcon(DrawMetrics.colorWithText(areaIndexMap.get(rgb), new Color(rgb, true)), rgb + ""));
+							areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(areaIndexMap.get(rgb), new Color(rgb, true)), rgb + ""));
 						}
 					}
 				}
@@ -693,7 +693,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		areaListModel.clear();
 		areasOnMap = new HashSet<>();
 		areasOnMap.add(0);
-		areaListModel.addElement(new ImageIcon(DrawMetrics.colorWithText(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
+		areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
 	}
 
 	private Point setNewDimension(Point location) {
@@ -854,7 +854,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		
 		// Draw area label on mouse hover
 		if (editType == EditType.AREA_MAP) {
-			Point location = DrawMetrics.getLocation(this.mouseHoverLocation, this.location);
+			Point location = DrawUtils.getLocation(this.mouseHoverLocation, this.location);
 			int tileColor = getTile(location, EditType.AREA_MAP);
 		
 			String areaName = areaIndexMap.get(tileColor);
@@ -881,11 +881,11 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				int val = getTile(location, type);
 				
 				if (type == EditType.MOVE_MAP || type == EditType.AREA_MAP) {
-					DrawMetrics.fillTile(g, location, this.location, new Color(val, true));
+					DrawUtils.fillTile(g, location, this.location, new Color(val, true));
 				}
 				else if (type != EditType.TRIGGERS && tileMap.containsTile(TileType.MAP, val)) {
 					BufferedImage image = tileMap.getTile(TileType.MAP, val);
-					DrawMetrics.drawTileImage(g, image, location, this.location);
+					DrawUtils.drawTileImage(g, image, location, this.location);
 				}
 			}
 		}

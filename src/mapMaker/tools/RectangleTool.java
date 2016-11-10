@@ -1,9 +1,9 @@
 package mapMaker.tools;
 
+import util.DrawUtils;
 import util.Point;
 import mapMaker.MapMaker;
 import mapMaker.MapMaker.EditType;
-import util.DrawMetrics;
 
 import java.awt.Graphics;
 
@@ -24,7 +24,7 @@ public class RectangleTool extends Tool {
             return;
         }
 
-        Point mouseHoverLocation = DrawMetrics.getLocation(releasedLocation, mapMaker.getMapLocation());
+        Point mouseHoverLocation = DrawUtils.getLocation(releasedLocation, mapMaker.getMapLocation());
         this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.currentMapSize);
 
         pressed = false;
@@ -45,15 +45,15 @@ public class RectangleTool extends Tool {
         }
 
         pressed = true;
-        startLocation = DrawMetrics.getLocation(pressedLocation, mapMaker.getMapLocation());
+        startLocation = DrawUtils.getLocation(pressedLocation, mapMaker.getMapLocation());
     }
 
     @Override
     public void draw(Graphics g) {
-        Point mouseHoverLocation = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        Point mouseHoverLocation = DrawUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
 
         if (!pressed) {
-            DrawMetrics.outlineTileRed(g, mouseHoverLocation, mapMaker.getMapLocation());
+            DrawUtils.outlineTileRed(g, mouseHoverLocation, mapMaker.getMapLocation());
         } else {
             this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.currentMapSize);
             this.rectangle.outlineRed(g, mapMaker.getMapLocation());

@@ -17,7 +17,7 @@ import main.Global;
 import main.Type;
 import namesies.ItemNamesies;
 import trainer.CharacterData;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -231,23 +231,23 @@ public class MartView extends View {
 		if (selectedItem != null) {
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItem.getImageIndex());
-			DrawMetrics.drawCenteredImage(g, img, 430, 132);
+			DrawUtils.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 20);
+			DrawUtils.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
-			DrawMetrics.setFont(g, 14);
-			DrawMetrics.drawWrappedText(g, selectedItem.getDescription(), 418, 156, 726 - amountLeftButton.x);
+			DrawUtils.setFont(g, 14);
+			DrawUtils.drawWrappedText(g, selectedItem.getDescription(), 418, 156, 726 - amountLeftButton.x);
 			
-			DrawMetrics.setFont(g, 20);
+			DrawUtils.setFont(g, 20);
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
 			
 			g.drawString(itemAmount + "", 568, 218);
 			View.drawArrows(g, amountLeftButton, amountRightButton, 35, 10);
 		}
 		
-		DrawMetrics.setFont(g, 12);
+		DrawUtils.setFont(g, 12);
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
@@ -264,7 +264,7 @@ public class MartView extends View {
 				g.drawImage(tiles.getTile(0x26), 0,0, null);
 				
 				BufferedImage img = itemTiles.getTile(item.getImageIndex());
-				DrawMetrics.drawCenteredImage(g, img, 14, 14);
+				DrawUtils.drawCenteredImage(g, img, 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
 				
@@ -273,8 +273,8 @@ public class MartView extends View {
 		}
 		
 		// Draw page numbers
-		DrawMetrics.setFont(g, 16);
-		DrawMetrics.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
+		DrawUtils.setFont(g, 16);
+		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
 		
 		// Left and Right arrows
 		View.drawArrows(g, shopLeftButton, shopRightButton);
@@ -291,7 +291,7 @@ public class MartView extends View {
 		g.drawImage(tiles.getTile(0x25), 0, 0, null);
 		
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 18);
+		DrawUtils.setFont(g, 18);
 		g.drawString("Money: " + Global.MONEY_SYMBOL + player.getDatCashMoney(), BOX_TEXT_X, BOX_TEXT_Y);
 		
 		g.translate(-SIDE_BOX_X, -MONEY_BOX_Y);
@@ -333,7 +333,7 @@ public class MartView extends View {
 		
 		g.drawImage(tiles.getTile(0x25), 0, 0, null);
 		
-		DrawMetrics.setFont(g, 24);
+		DrawUtils.setFont(g, 24);
 		g.setColor(Color.BLACK);
 		g.drawString("BUY", 120, 39);
 
@@ -348,15 +348,15 @@ public class MartView extends View {
 		
 		// Return button
 		g.setColor(Color.BLACK);
-		DrawMetrics.setFont(g, 20);
+		DrawUtils.setFont(g, 20);
 		g.drawImage(tiles.getTile(0x27), 410, 500, null);
-		DrawMetrics.drawCenteredWidthString(g, "Return", 573, 525);
+		DrawUtils.drawCenteredWidthString(g, "Return", 573, 525);
 		
 		// Tab
 		int tabX = 42 + 102, tabY = 42;
 		g.translate(tabX, tabY);
 		
-		DrawMetrics.setFont(g, 16);
+		DrawUtils.setFont(g, 16);
 		g.setColor(BACKGROUND_COLOR);
 		g.fillRect(0, 0, 104, 52);
 		

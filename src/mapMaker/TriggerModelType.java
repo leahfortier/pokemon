@@ -1,7 +1,7 @@
 package mapMaker;
 
 import mapMaker.TileMap.TileType;
-import util.DrawMetrics;
+import util.DrawUtils;
 
 import javax.swing.ImageIcon;
 import java.awt.image.BufferedImage;
@@ -28,7 +28,7 @@ public enum TriggerModelType {
     }
 
     public BufferedImage getImage(final MapMaker mapMaker) {
-        return DrawMetrics.imageWithText(mapMaker.getTileFromSet(tileType, imageIndex), name);
+        return DrawUtils.imageWithText(mapMaker.getTileFromSet(tileType, imageIndex), name);
     }
 
     public ImageIcon getImageIcon(final MapMaker mapMaker) {

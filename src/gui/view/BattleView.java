@@ -26,7 +26,7 @@ import sound.SoundTitle;
 import trainer.CharacterData;
 import trainer.Trainer;
 import trainer.Trainer.Action;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -440,12 +440,12 @@ public class BattleView extends View {
 		// Draws all of the text inside the status box
 		private void drawStatusBoxText(Graphics g, int isEnemy, TileSet tiles, ActivePokemon pokemon) {
 			// Name, Gender, Level, Status Condition
-			DrawMetrics.setFont(g, 27);
-			DrawMetrics.drawShadowText(g, state.name + " " + state.gender.getCharacter(), 20, 40, false);
-			DrawMetrics.drawShadowText(g, "Lv" + state.level, 272, 40, true);
+			DrawUtils.setFont(g, 27);
+			DrawUtils.drawShadowText(g, state.name + " " + state.gender.getCharacter(), 20, 40, false);
+			DrawUtils.drawShadowText(g, "Lv" + state.level, 272, 40, true);
 			
-			DrawMetrics.setFont(g, 24);
-			DrawMetrics.drawShadowText(g, state.status.getName(), 20, 71, false);
+			DrawUtils.setFont(g, 24);
+			DrawUtils.drawShadowText(g, state.status.getName(), 20, 71, false);
 			
 			// Only the player shows the HP Text
 			if (isEnemy == 0) {
@@ -456,8 +456,8 @@ public class BattleView extends View {
 					hpStr = (int)(state.hp + (oldState.hp - state.hp)*(animationHP/(float)originalTime)) + "/" + state.maxHp;
 				}
 				
-				DrawMetrics.setFont(g, 24);
-				DrawMetrics.drawShadowText(g, hpStr, 273, 95, true);
+				DrawUtils.setFont(g, 24);
+				DrawUtils.drawShadowText(g, hpStr, 273, 95, true);
 			}
 			// Show whether or not the wild Pokemon has already been caught
 			else if (state.caught) {
@@ -523,8 +523,8 @@ public class BattleView extends View {
 
 			BufferedImage pkBall = pkmTiles.getTile(0x11111);
 
-			g2d.drawImage(DrawMetrics.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
-			g2d.drawImage(DrawMetrics.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
+			g2d.drawImage(DrawUtils.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
+			g2d.drawImage(DrawUtils.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
 		}
 		
 		// hi :)
@@ -559,8 +559,8 @@ public class BattleView extends View {
 			
 			BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber + (isEnemy^1));
 
-			g2d.drawImage(DrawMetrics.colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
-			g2d.drawImage(DrawMetrics.colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
+			g2d.drawImage(DrawUtils.colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
+			g2d.drawImage(DrawUtils.colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
 		}
 		
 		private void drawHealthBar(Graphics g) {
@@ -580,7 +580,7 @@ public class BattleView extends View {
 			}
 			
 			// Set the proper color for the ratio and fill in the health bar as appropriate
-			g.setColor(DrawMetrics.getHPColor(ratio));
+			g.setColor(DrawUtils.getHPColor(ratio));
 			if (animationHP > 0 && (animationHP/10)%2 == 0) {
 				g.setColor(g.getColor().darker());
 			}
@@ -605,7 +605,7 @@ public class BattleView extends View {
 			g.fillRect(36, 107, 294 - 36, 115 - 107); //463,  304
 			
 			// Experience bar foreground
-			g.setColor(DrawMetrics.EXP_BAR_COLOR);
+			g.setColor(DrawUtils.EXP_BAR_COLOR);
 			g.fillRect(36, 107, (int)((294 - 36)*expRatio), 115 - 107);
 		}
 		
@@ -683,8 +683,8 @@ public class BattleView extends View {
 			
 			ActivePokemon playerPokemon = view.currentBattle.getPlayer().front();
 			
-			DrawMetrics.setFont(g, 30);
-			DrawMetrics.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
+			DrawUtils.setFont(g, 30);
+			DrawUtils.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
 			
 			for (Button b: view.menuButtons) {
 				b.draw(g);
@@ -773,11 +773,11 @@ public class BattleView extends View {
 					g.drawImage(tiles.getTile(0x22), 0, 0, null);
 					
 					g.setColor(Color.BLACK);
-					DrawMetrics.setFont(g, 22);
+					DrawUtils.setFont(g, 22);
 					g.drawString(move.getAttack().getName(), 10, 26);
 					
-					DrawMetrics.setFont(g, 18);
-					DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+					DrawUtils.setFont(g, 18);
+					DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 					
 					BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
 					g.drawImage(categoryImage, 12, 32, null);
@@ -790,8 +790,8 @@ public class BattleView extends View {
 			String msgLine = view.state == VisualState.INVALID_FIGHT && view.message != null ? view.message : "Select a move!";
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 30);
-			DrawMetrics.drawWrappedText(g, msgLine, 440, 485, 350); // TODO: Is this duplicated code?
+			DrawUtils.setFont(g, 30);
+			DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350); // TODO: Is this duplicated code?
 			
 			View.drawArrows(g, null, view.backButton);
 			
@@ -843,20 +843,20 @@ public class BattleView extends View {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 30);
+			DrawUtils.setFont(g, 30);
 			
-			DrawMetrics.drawWrappedText(g, view.message, 30, 490, 720);
+			DrawUtils.drawWrappedText(g, view.message, 30, 490, 720);
 			
 			if (view.state == VisualState.STAT_GAIN) {
 				g.drawImage(tiles.getTile(0x5), 0, 280, null);
 				g.setColor(Color.BLACK);
 				for (int i = 0; i < Stat.NUM_STATS; i++)
 				{
-					DrawMetrics.setFont(g, 16);
+					DrawUtils.setFont(g, 16);
 					g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 					
-					DrawMetrics.drawRightAlignedString(g, (view.statGains[i] < 0 ? "" : " + ") + view.statGains[i], 206, 314 + i*21);
-					DrawMetrics.drawRightAlignedString(g, view.newStats[i] + "", 247, 314 + i*21);
+					DrawUtils.drawRightAlignedString(g, (view.statGains[i] < 0 ? "" : " + ") + view.statGains[i], 206, 314 + i*21);
+					DrawUtils.drawRightAlignedString(g, view.newStats[i] + "", 247, 314 + i*21);
 				}
 			}
 		}
@@ -913,7 +913,7 @@ public class BattleView extends View {
 			Set<Item> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
 			TileSet itemTiles = Game.getData().getItemTiles();
 
-			DrawMetrics.setFont(g, 12);
+			DrawUtils.setFont(g, 12);
 			Iterator<Item> iter = toDraw.iterator();
 			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) {
 				iter.next();
@@ -931,21 +931,21 @@ public class BattleView extends View {
 					// Draw item image
 					Item i = iter.next();
 					BufferedImage img = itemTiles.getTile(i.getImageIndex());
-					DrawMetrics.drawCenteredImage(g, img, 14, 14);
+					DrawUtils.drawCenteredImage(g, img, 14, 14);
 
 					// Item name
 					g.drawString(i.getName(), 28, 19);
 					
 					// Item quantity
-					DrawMetrics.drawRightAlignedString(g, "x" + view.currentBattle.getPlayer().getBag().getQuantity(i), 140, 19);
+					DrawUtils.drawRightAlignedString(g, "x" + view.currentBattle.getPlayer().getBag().getQuantity(i), 140, 19);
 					
 					g.translate(-dx, -dy);
 				}
 			}
 			
 			// Bag page number
-			DrawMetrics.setFont(g, 20);
-			DrawMetrics.drawCenteredWidthString(g, (view.bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
+			DrawUtils.setFont(g, 20);
+			DrawUtils.drawCenteredWidthString(g, (view.bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
 			
 			// Left/Right Arrows
 			View.drawArrows(g, view.bagLeftButton, view.bagRightButton);
@@ -955,14 +955,14 @@ public class BattleView extends View {
 			// TODO: Should have a method to check if it is the empty item
 			if (lastUsedItem != Item.noneItem()) {
 				g.translate(214, 517);
-				DrawMetrics.setFont(g, 12);
+				DrawUtils.setFont(g, 12);
 				g.drawImage(tiles.getTile(0x11), 0, 0, null);
 				
 				BufferedImage img = itemTiles.getTile(lastUsedItem.getImageIndex());
-				DrawMetrics.drawCenteredImage(g, img, 14, 14);
+				DrawUtils.drawCenteredImage(g, img, 14, 14);
 
 				g.drawString(lastUsedItem.getName(), 28, 19);
-				DrawMetrics.drawRightAlignedString(g, "x" + bag.getQuantity(lastUsedItem), 140, 19);
+				DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(lastUsedItem), 140, 19);
 
 				g.translate(-214, -517);
 			}
@@ -970,8 +970,8 @@ public class BattleView extends View {
 			// Messages text
 			String msgLine = view.state == VisualState.INVALID_BAG && view.message != null ? view.message : "Choose an item!";
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 30);
-			DrawMetrics.drawWrappedText(g, msgLine, 440, 495, 350);
+			DrawUtils.setFont(g, 30);
+			DrawUtils.drawWrappedText(g, msgLine, 440, 495, 350);
 			
 			// Back Arrow
 			View.drawArrows(g, null, view.backButton);
@@ -1132,18 +1132,18 @@ public class BattleView extends View {
 			
 			if (selectedPkm.isEgg()) {
 				// Name
-				DrawMetrics.setFont(g, 16);
+				DrawUtils.setFont(g, 16);
 				g.setColor(Color.BLACK);
 				String nameStr = selectedPkm.getActualName();
 				g.drawString(nameStr, 62, 269);
 				
 				// Description
-				DrawMetrics.setFont(g, 14);
-				DrawMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
+				DrawUtils.setFont(g, 14);
+				DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
 			}
 			else {
 				// Name and Gender
-				DrawMetrics.setFont(g, 16);
+				DrawUtils.setFont(g, 16);
 				g.setColor(Color.BLACK);
 				String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter();
 				g.drawString(nameStr, 62, 269);
@@ -1166,21 +1166,21 @@ public class BattleView extends View {
 				}
 				
 				// Ability
-				DrawMetrics.setFont(g, 14);
+				DrawUtils.setFont(g, 14);
 				g.drawString(selectedPkm.getActualAbility().getName(), 62, 288);
 				
 				// Experience
 				g.drawString("EXP", 220, 288);
-				DrawMetrics.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
+				DrawUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
 
 				g.drawString(selectedPkm.getActualHeldItem().getName(), 62, 307);
 				
 				g.drawString("To Next Lv", 220, 307);
-				DrawMetrics.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
+				DrawUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
 				
 				// Experience Bar
 				float expRatio = selectedPkm.expRatio();
-				g.setColor(DrawMetrics.EXP_BAR_COLOR);
+				g.setColor(DrawUtils.EXP_BAR_COLOR);
 				g.fillRect(222, 315, (int)(137*expRatio), 10);
 				
 				// HP Bar
@@ -1188,7 +1188,7 @@ public class BattleView extends View {
 				g.fillRect(57, 341, (int)(137*selectedPkm.getHPRatio()), 10);
 				
 				// Write stat names
-				DrawMetrics.setFont(g, 16);
+				DrawUtils.setFont(g, 16);
 				for (int i = 0; i < Stat.NUM_STATS; i++) {
 					g.setColor(selectedPkm.getNature().getColor(i));
 					g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
@@ -1200,7 +1200,7 @@ public class BattleView extends View {
 				int[] statsVal = selectedPkm.getStats();
 				for (int i = 0; i < Stat.NUM_STATS; i++) {
 					String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statsVal[i] : "" + statsVal[i];
-					DrawMetrics.drawRightAlignedString(g, valStr, 188, 21*i + 372);
+					DrawUtils.drawRightAlignedString(g, valStr, 188, 21*i + 372);
 				}
 				
 				// Draw Move List
@@ -1220,7 +1220,7 @@ public class BattleView extends View {
 					g.drawString(move.getAttack().getName(), 7, 17);
 					
 					// Draw PP amount
-					DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
+					DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
 					
 					BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
 					g.drawImage(categoryImage, 7, 21, null);
@@ -1230,7 +1230,7 @@ public class BattleView extends View {
 			}
 
 			// Draw Switch/Use text
-			DrawMetrics.setFont(g, 20);
+			DrawUtils.setFont(g, 20);
 			if (view.state == VisualState.USE_ITEM) {
 				g.drawString("Use!", 103, 533);
 			}
@@ -1261,7 +1261,7 @@ public class BattleView extends View {
 				
 				// Draw Pokemon Image
 				BufferedImage img = partyTiles.getTile(pkm.getTinyImageIndex());
-				DrawMetrics.drawCenteredImage(g, img, 60 + i*59, 205);
+				DrawUtils.drawCenteredImage(g, img, 60 + i*59, 205);
 
 				// Fade out fainted Pokemon
 				if (!pkm.canFight()) {
@@ -1272,9 +1272,9 @@ public class BattleView extends View {
 			
 			// Draw Messages
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 30);
+			DrawUtils.setFont(g, 30);
 			String msgLine = view.state == VisualState.INVALID_POKEMON && view.message != null ? view.message : "Select a Pok\u00e9mon!";
-			DrawMetrics.drawWrappedText(g, msgLine, 440, 485, 350);
+			DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350);
 			
 			// Draw back arrow when applicable
 			if (!view.switchForced) {
@@ -1361,7 +1361,7 @@ public class BattleView extends View {
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 25);
+			DrawUtils.setFont(g, 25);
 			g.drawString("Delete a move in order to learn " + view.learnedMove.getAttack().getName() + "?", 30, 490);
 			
 			g.translate(view.yesButton.x, view.yesButton.y);
@@ -1371,7 +1371,7 @@ public class BattleView extends View {
 			g.drawImage(tiles.getTile(0x22), 0, 0, null);
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 22);
+			DrawUtils.setFont(g, 22);
 			g.drawString("Yes", 10, 26);
 			
 			g.translate(-view.yesButton.x, -view.yesButton.y);
@@ -1383,7 +1383,7 @@ public class BattleView extends View {
 			g.drawImage(tiles.getTile(0x22), 0, 0, null);
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 22);
+			DrawUtils.setFont(g, 22);
 			g.drawString("No", 10, 26);
 			
 			g.translate(-view.noButton.x, -view.noButton.y);
@@ -1434,11 +1434,11 @@ public class BattleView extends View {
 					g.drawImage(tiles.getTile(0x22), 0, 0, null);
 					
 					g.setColor(Color.BLACK);
-					DrawMetrics.setFont(g, 22);
+					DrawUtils.setFont(g, 22);
 					g.drawString(move.getAttack().getName(), 10, 26);
 					
-					DrawMetrics.setFont(g, 18);
-					DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+					DrawUtils.setFont(g, 18);
+					DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 					
 					BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
 					g.drawImage(categoryImage, 12, 32, null);
@@ -1455,11 +1455,11 @@ public class BattleView extends View {
 			g.drawImage(tiles.getTile(0x22), 0, 0, null);
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 22);
+			DrawUtils.setFont(g, 22);
 			g.drawString(move.getAttack().getName(), 10, 26);
 			
-			DrawMetrics.setFont(g, 18);
-			DrawMetrics.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+			DrawUtils.setFont(g, 18);
+			DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 			
 			BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
 			g.drawImage(categoryImage, 12, 32, null);
@@ -1469,7 +1469,7 @@ public class BattleView extends View {
 			String msgLine = "Select a move to delete!";
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 25);
+			DrawUtils.setFont(g, 25);
 			g.drawString(msgLine, view.newMoveButton.x, 485);
 			
 			for (int i = 0; i < moves.size(); i++) {
@@ -1532,7 +1532,7 @@ public class BattleView extends View {
 			
 			int y = 200;
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 12);
+			DrawUtils.setFont(g, 12);
 			for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15) {
 				g.drawString(view.logMessages.get(i), 25, y);
 			}
@@ -1545,7 +1545,7 @@ public class BattleView extends View {
 			g.drawImage(tiles.getTile(0x20), 415, 440, null);
 					
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 40);
+			DrawUtils.setFont(g, 40);
 			g.drawString("Bob Loblaw's", 440, 500);
 			g.drawString("Log Blog", 440, 550);
 			

@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class DrawMetrics {
+public class DrawUtils {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
 
 	// Dimension of a single tile
@@ -220,7 +220,7 @@ public class DrawMetrics {
 		g.setColor(new Color(128, 128, 128, 128));
 		
 		if (rightAligned) {
-			DrawMetrics.drawRightAlignedString(g, text, x, y);
+			DrawUtils.drawRightAlignedString(g, text, x, y);
 		}
 		else {
 			g.drawString(text, x, y);
@@ -229,7 +229,7 @@ public class DrawMetrics {
 		g.setColor(Color.DARK_GRAY);
 		
 		if (rightAligned) {
-			DrawMetrics.drawRightAlignedString(g, text, x - 2, y - 2);
+			DrawUtils.drawRightAlignedString(g, text, x - 2, y - 2);
 		}
 		else {
 			g.drawString(text, x - 2, y - 2);
@@ -321,7 +321,7 @@ public class DrawMetrics {
 	}
 
 	public static BufferedImage blankImageWithText(String text) {
-		int extra = DrawMetrics.getTextWidth(text + " ", 14);
+		int extra = DrawUtils.getTextWidth(text + " ", 14);
 
 		BufferedImage image = new BufferedImage(MapMaker.tileSize + extra, MapMaker.tileSize, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();

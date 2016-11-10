@@ -23,7 +23,7 @@ import mapMaker.dialogs.TransitionBuildingTransitionDialog;
 import mapMaker.dialogs.TriggerEntityDialog;
 import mapMaker.dialogs.WildBattleTriggerEditDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.FileIO;
 import util.Point;
 import util.PokeString;
@@ -476,14 +476,14 @@ public class MapMakerTriggerData {
 		// Draw all old trigger types
 		for (Integer locationIndex : triggers.keySet()) {
 			Point location = Point.getPointAtIndex(locationIndex, (int) currentMapSize.getWidth());
-			DrawMetrics.outlineTileRed(g2d, location, mapLocation);
+			DrawUtils.outlineTileRed(g2d, location, mapLocation);
 		}
 
 		// Draw all map entrances
 		for (Integer locationIndex : mapEntrances.keySet()) {
 			Point location = Point.getPointAtIndex(locationIndex, (int) currentMapSize.getWidth());
 			BufferedImage image = TriggerModelType.MAP_ENTRANCE.getImage(mapMaker);
-			DrawMetrics.drawTileImage(g2d, image, location, mapLocation);
+			DrawUtils.drawTileImage(g2d, image, location, mapLocation);
 		}
 
 		// Draw all trigger data
@@ -509,19 +509,19 @@ public class MapMakerTriggerData {
 					break;
 				}
 				case "Event": {
-					DrawMetrics.outlineTileRed(g2d, location, mapLocation);
+					DrawUtils.outlineTileRed(g2d, location, mapLocation);
 					triggerModelType = TriggerModelType.EVENT;
 					break;
 				}
 				default:
-					DrawMetrics.outlineTileRed(g2d, location, mapLocation);
+					DrawUtils.outlineTileRed(g2d, location, mapLocation);
 					triggerModelType = null;
 					break;
 			}
 
 			if (triggerModelType != null) {
 				BufferedImage image = triggerModelType.getImage(mapMaker);
-				DrawMetrics.drawTileImage(g2d, image, location, mapLocation);
+				DrawUtils.drawTileImage(g2d, image, location, mapLocation);
 			}
 		}
 
@@ -551,7 +551,7 @@ public class MapMakerTriggerData {
 				}
 
 				if (image != null) {
-					DrawMetrics.drawTileImage(g2d, image, location, mapLocation);
+					DrawUtils.drawTileImage(g2d, image, location, mapLocation);
 				}
 			}
 		}
