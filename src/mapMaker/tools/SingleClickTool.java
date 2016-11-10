@@ -1,12 +1,12 @@
 package mapMaker.tools;
 
 import map.entity.npc.NPCEntityData;
-import util.Point;
 import mapMaker.MapMaker;
 import mapMaker.MapMaker.EditType;
-import mapMaker.MapMaker.TileType;
+import mapMaker.TileMap.TileType;
 import mapMaker.TriggerModelType;
 import util.DrawMetrics;
+import util.Point;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

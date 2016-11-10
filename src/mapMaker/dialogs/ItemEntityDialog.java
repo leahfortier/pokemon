@@ -1,8 +1,11 @@
 package mapMaker.dialogs;
 
 import item.Item;
-
-import java.awt.Color;
+import map.entity.ItemEntityData;
+import mapMaker.MapMaker;
+import mapMaker.TileMap.TileType;
+import util.PokeString;
+import util.StringUtils;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -17,12 +20,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import mapMaker.MapMaker.TileType;
-import util.PokeString;
-import map.entity.ItemEntityData;
-import mapMaker.MapMaker;
-import util.StringUtils;
+import java.awt.Color;
 
 public class ItemEntityDialog extends JPanel {
 	private static final long serialVersionUID = 7469923865936465388L;

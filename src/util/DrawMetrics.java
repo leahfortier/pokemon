@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class DrawMetrics {
@@ -287,6 +288,70 @@ public class DrawMetrics {
 
 		g.setColor(color);
 		g.fillRect(drawLocation.x, drawLocation.y, MapMaker.tileSize, MapMaker.tileSize);
+	}
+
+	public static Color permuteColor(Color color, Map<Integer,String> indexMap) {
+		int dr = color.getRed() < 128 ? 1 : -1;
+		int dg = color.getGreen() < 128 ? 1 : -1;
+		int db = color.getBlue() < 128 ? 1 : -1;
+
+		while (indexMap.containsKey(color.getRGB())) {
+			int r = color.getRed() + dr;
+			int g = color.getGreen() + dg;
+			int b = color.getBlue() + db;
+
+			color = new Color(r, g, b);
+		}
+
+		return color;
+	}
+
+	public static void fillImage(BufferedImage image, Color color) {
+		Graphics g = image.getGraphics();
+		g.setColor(color);
+		g.fillRect(0, 0, MapMaker.tileSize, MapMaker.tileSize);
+		g.dispose();
+	}
+
+	public static BufferedImage fillImage(Color color) {
+		BufferedImage image = new BufferedImage(MapMaker.tileSize, MapMaker.tileSize, BufferedImage.TYPE_INT_ARGB);
+		fillImage(image, color);
+
+		return image;
+	}
+
+	public static BufferedImage blankImageWithText(String text) {
+		int extra = DrawMetrics.getTextWidth(text + " ", 14);
+
+		BufferedImage image = new BufferedImage(MapMaker.tileSize + extra, MapMaker.tileSize, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+		g.setColor(Color.BLACK);
+
+		// TODO: If we're starting the string 3 pixels after the image, then shouldn't we add three to the extra?
+		// TODO: I think the y value here is a guess - can maybe use draw metrics to figure out where to start
+		g.drawString(text, MapMaker.tileSize + 3, MapMaker.tileSize*2/3);
+
+		g.dispose();
+
+		return image;
+	}
+
+	public static BufferedImage colorWithText(String text, Color color) {
+		BufferedImage image = blankImageWithText(text);
+		fillImage(image, color);
+		return image;
+	}
+
+	public static BufferedImage imageWithText(BufferedImage image, String text) {
+		if (image == null) {
+			Global.error("Image is null :(");
+		}
+
+		BufferedImage bufferedImage = blankImageWithText(text);
+		Graphics g = bufferedImage.getGraphics();
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		return bufferedImage;
 	}
 	
 	static class Metrics {

@@ -1,9 +1,10 @@
 package mapMaker.dialogs;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
+import map.entity.npc.NPCEntityData;
+import mapMaker.MapMaker;
+import mapMaker.TileMap.TileType;
+import util.PokeString;
+import util.StringUtils;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -18,12 +19,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import mapMaker.MapMaker.TileType;
-import util.PokeString;
-import map.entity.npc.NPCEntityData;
-import mapMaker.MapMaker;
-import util.StringUtils;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NPCEntityDialog extends JPanel {
 	private static final long serialVersionUID = -8061888140387296525L;

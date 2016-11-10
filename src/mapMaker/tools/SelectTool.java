@@ -1,10 +1,10 @@
 package mapMaker.tools;
 
-import util.Point;
 import mapMaker.MapMaker;
 import mapMaker.MapMaker.EditType;
-import mapMaker.MapMaker.TileType;
+import mapMaker.TileMap.TileType;
 import util.DrawMetrics;
+import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
