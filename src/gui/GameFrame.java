@@ -10,6 +10,7 @@ import main.Game;
 import main.Global;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -71,6 +72,7 @@ public class GameFrame {
 		BattleEffect.loadEffects();
 		Ability.loadAbilities();
 		Item.loadItems();
+		DrawUtils.loadFontMetricsMap();
 	}
 
 	private static class GameLoop implements Runnable {
@@ -101,6 +103,7 @@ public class GameFrame {
 			g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 			
 			g.setColor(Color.WHITE);
+			DrawUtils.setFont(g, 72);
 			g.drawString("LOADING...", 30, 570);
 			g.dispose();
 			strategy.show();
