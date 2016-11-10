@@ -18,6 +18,7 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import mapMaker.MapMaker.TileType;
 import util.PokeString;
 import map.entity.ItemEntityData;
 import mapMaker.MapMaker;
@@ -61,7 +62,7 @@ public class ItemEntityDialog extends JPanel {
 				  }
 				  
 				  int index = Item.getItemFromName(itemName).getImageIndex();
-				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
+				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
 				  itemTextField.setBackground(new Color(0x90EE90));
 			  }
 		});
@@ -124,7 +125,7 @@ public class ItemEntityDialog extends JPanel {
 		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
 		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getImageIndex();
-		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
+		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
 	}
 	
 	public String getItemName() {

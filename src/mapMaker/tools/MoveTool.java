@@ -1,19 +1,23 @@
 package mapMaker.tools;
 
+import util.Point;
 import mapMaker.MapMaker;
 
 public class MoveTool extends Tool {
-    private int prevX, prevY;
+    private Point previousLocation;
 
     public MoveTool(MapMaker mapMaker) {
         super(mapMaker);
+        previousLocation = new Point(0, 0);
     }
 
     public void drag(int x, int y) {
-        mapMaker.mapX -= prevX - x;
-        mapMaker.mapY -= prevY - y;
-        prevX = x;
-        prevY = y;
+        Point dragLocation = new Point(x, y);
+
+        Point difference = Point.subtract(previousLocation, dragLocation);
+        mapMaker.getMapLocation().subtract(difference);
+
+        previousLocation = dragLocation;
     }
 
     public String toString() {
@@ -21,12 +25,10 @@ public class MoveTool extends Tool {
     }
 
     public void pressed(int x, int y) {
-        prevX = x;
-        prevY = y;
+        previousLocation = new Point(x, y);
     }
 
     public void reset() {
-        prevX = mapMaker.mouseHoverX;
-        prevY = mapMaker.mouseHoverY;
+        previousLocation = mapMaker.getMouseHoverLocation();
     }
 }

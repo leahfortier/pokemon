@@ -1,7 +1,10 @@
 package mapMaker.tools;
 
+import util.Point;
 import mapMaker.MapMaker;
+import mapMaker.TriggerModelType;
 import mapMaker.data.PlaceableTrigger;
+import util.DrawMetrics;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -13,8 +16,7 @@ public class TriggerTool extends Tool {
     private JPopupMenu triggerListPopup;
     private JPopupMenu triggerOptionsPopup;
 
-    private int mouseX;
-    private int mouseY;
+    private Point mouseLocation;
 
     private PlaceableTrigger[] triggers;
     private PlaceableTrigger selectedTrigger;
@@ -35,14 +37,14 @@ public class TriggerTool extends Tool {
         triggerOptionsPopup.add(moveItem);
         moveItem.addActionListener(event -> {
             mapMaker.toolList.setSelectedIndex(1);
-            int index = mapMaker.triggerData.getTriggerTypeIndex(selectedTrigger);
-            if (index != -1) {
+            TriggerModelType triggerModelType = mapMaker.triggerData.getTriggerModelType(selectedTrigger);
+            if (triggerModelType != null) {
                 mapMaker.editTypeComboBox.setSelectedIndex(4);
 
                 mapMaker.triggerData.moveTrigger(selectedTrigger);
                 mapMaker.triggerToolMoveSelected = true;
 
-                mapMaker.tileList.setSelectedIndex(index);
+                mapMaker.tileList.setSelectedIndex(triggerModelType.ordinal());
             }
         });
 
@@ -60,14 +62,12 @@ public class TriggerTool extends Tool {
             return;
         }
 
-        mouseX = x;
-        mouseY = y;
+        this.mouseLocation = new Point(x, y);
+        Point location = DrawMetrics.getLocation(this.mouseLocation, mapMaker.getMapLocation());
 
-        x = (int) Math.floor((x - mapMaker.mapX) * 1.0 / MapMaker.tileSize);
-        y = (int) Math.floor((y - mapMaker.mapY) * 1.0 / MapMaker.tileSize);
         System.out.println("Trigger click: " + x + " " + y);
 
-        triggers = mapMaker.triggerData.getTrigger(x, y);
+        triggers = mapMaker.triggerData.getTrigger(location);
         triggerListPopup.removeAll();
 
         for (PlaceableTrigger trigger : triggers) {
@@ -89,19 +89,16 @@ public class TriggerTool extends Tool {
                 }
 
                 //triggerListPopup.removeAll();
-                triggerOptionsPopup.show(mapMaker.canvas, mouseX, mouseY);
+                triggerOptionsPopup.show(mapMaker.canvas, mouseLocation.x, mouseLocation.y);
             });
         }
 
-        triggerListPopup.show(mapMaker.canvas, mouseX, mouseY);
+        triggerListPopup.show(mapMaker.canvas, mouseLocation.x, mouseLocation.y);
     }
 
     public void draw(Graphics g) {
-        int mhx = (int) Math.floor((mapMaker.mouseHoverX - mapMaker.mapX) * 1.0 / MapMaker.tileSize);
-        int mhy = (int) Math.floor((mapMaker.mouseHoverY - mapMaker.mapY) * 1.0 / MapMaker.tileSize);
-
-        g.setColor(Color.blue);
-        g.drawRect(mhx * MapMaker.tileSize + mapMaker.mapX, mhy * MapMaker.tileSize + mapMaker.mapY, MapMaker.tileSize, MapMaker.tileSize);
+        Point mouseHoverLocation = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        DrawMetrics.outlineTile(g, mouseHoverLocation, mapMaker.getMapLocation(), Color.BLUE);
     }
 
     public void released(int x, int y) {

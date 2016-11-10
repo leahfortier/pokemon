@@ -3,10 +3,10 @@ package map.triggers;
 import gui.GameData;
 import main.Game;
 import pattern.AreaDataMatcher.TriggerDataMatcher;
+import util.Point;
 import util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -61,8 +61,6 @@ public class TriggerData {
 		triggerContents = rest.toString();
 		
 		in.close();
-		
-		//System.out.println(name +"\n"+ triggerType +"\n" +triggerContents);
 	}
 	
 	public void addPoint(int x, int y) {
@@ -85,35 +83,13 @@ public class TriggerData {
 	}
 	
 	public void updatePoints(int dx, int dy) {
-
 		for (Point curr : points) {
 			curr.x += dx;
 			curr.y += dy;
 		}
 	}
 
-	// TODO: This is generic enough to be separate
-	public static class Point {
-		public int x;
-		public int y;
-		
-		public Point (int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		
-		public boolean equals(Object o) {
-			if (!(o instanceof Point)) {
-				return false;
-			}
-		
-			Point p = (Point) o;
-			
-			return p.x == x && p.y == y;
-		}
-	}
-
-	public void addData() {
+    public void addData() {
 		GameData gameData = Game.getData();
 
 		if (gameData.getTrigger(name) == null) {

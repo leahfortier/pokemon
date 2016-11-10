@@ -1,11 +1,13 @@
 package mapMaker.tools;
 
+import util.Point;
 import mapMaker.MapMaker;
 import mapMaker.MapMaker.EditType;
+import mapMaker.MapMaker.TileType;
+import util.DrawMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 // Select tool so you can copy/cut/paste
@@ -17,37 +19,29 @@ public class SelectTool extends Tool {
     private BufferedImage copiedTiles = null;
     private EditType copiedEditType;
 
-    private int startX, startY;
-    private int tx, ty, bx, by;
+    private Point startLocation;
+    private Rectangle rectangle;
 
     private boolean pressed = false;
 
     public SelectTool(MapMaker mapMaker) {
         super(mapMaker);
+        this.rectangle = new Rectangle(true);
     }
 
-    public void click(int x, int y) {
+    public void click(final int x, final int y) {
         if (!paste || controlClick) {
             return;
         }
 
         mapMaker.saved = false;
 
-        x = (int) Math.floor((x - mapMaker.mapX) * 1.0 / MapMaker.tileSize);
-        y = (int) Math.floor((y - mapMaker.mapY) * 1.0 / MapMaker.tileSize);
-
-        for (int currX = 0; currX < copiedTiles.getWidth(); ++currX) {
-            for (int currY = 0; currY < copiedTiles.getHeight(); ++currY) {
+        Point location = DrawMetrics.getLocation(new Point(x, y), mapMaker.getMapLocation());
+        for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
+            for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
                 int val = copiedTiles.getRGB(currX, currY);
-                Point delta = mapMaker.setTile(x + currX, y + currY, val);
-
-                if (delta.x != 0) {
-                    x += delta.x;
-                }
-
-                if (delta.y != 0) {
-                    y += delta.y;
-                }
+                Point delta = mapMaker.setTile(new Point(currX, currY).add(location), val);
+                location.add(delta);
             }
         }
 
@@ -62,17 +56,8 @@ public class SelectTool extends Tool {
         pressed = false;
         select();
 
-        int mhx = (int) Math.floor((mapMaker.mouseHoverX - mapMaker.mapX) * 1.0 / MapMaker.tileSize);
-        int mhy = (int) Math.floor((mapMaker.mouseHoverY - mapMaker.mapY) * 1.0 / MapMaker.tileSize);
-
-        tx = Math.max(Math.min(startX, mhx), 0);
-        ty = Math.max(Math.min(startY, mhy), 0);
-        bx = Math.min(Math.max(startX, mhx), mapMaker.currentMapSize.width - 1);
-        by = Math.min(Math.max(startY, mhy), mapMaker.currentMapSize.height - 1);
-
-        if (tx > bx || ty > by) {
-            deselect();
-        }
+        Point mouseHoverLocation = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.currentMapSize);
     }
 
     public void pressed(int x, int y) {
@@ -86,8 +71,7 @@ public class SelectTool extends Tool {
 //				return;
 //			}
 
-        startX = (int) Math.floor((x - mapMaker.mapX) * 1.0 / MapMaker.tileSize);
-        startY = (int) Math.floor((y - mapMaker.mapY) * 1.0 / MapMaker.tileSize);
+        this.startLocation = DrawMetrics.getLocation(new Point(x, y), mapMaker.getMapLocation());
 
         pressed = true;
         deselect();
@@ -108,41 +92,34 @@ public class SelectTool extends Tool {
             return;
         }
 
-        int mhx = (int) Math.floor((mapMaker.mouseHoverX - mapMaker.mapX) * 1.0 / MapMaker.tileSize);
-        int mhy = (int) Math.floor((mapMaker.mouseHoverY - mapMaker.mapY) * 1.0 / MapMaker.tileSize);
+        Point mouseHoverLocation = DrawMetrics.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
 
-        //int tx, ty, bx, by;
         if (!selected) {
-            tx = Math.max(Math.min(startX, mhx), 0);
-            ty = Math.max(Math.min(startY, mhy), 0);
-            bx = Math.min(Math.max(startX, mhx), mapMaker.currentMapSize.width - 1);
-            by = Math.min(Math.max(startY, mhy), mapMaker.currentMapSize.height - 1);
+            this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.currentMapSize);
         }
 
         if (!paste) {
-            g.setColor(Color.RED);
-            g.drawRect(tx * MapMaker.tileSize + mapMaker.mapX, ty * MapMaker.tileSize + mapMaker.mapY, MapMaker.tileSize * (bx - tx + 1), MapMaker.tileSize * (by - ty + 1));
+            this.rectangle.outlineRed(g, mapMaker.getMapLocation());
         } else {
             // Show preview image for all pasting tiles.
-            for (int currX = 0; currX < copiedTiles.getWidth(); ++currX) {
-                for (int currY = 0; currY < copiedTiles.getHeight(); ++currY) {
-                    int val = copiedTiles.getRGB(currX, currY);
-                    if (mapMaker.editType == EditType.BACKGROUND || mapMaker.editType == EditType.FOREGROUND) {
-                        if (!mapMaker.tileMap.containsKey(val)) {
-                            continue;
-                        }
+            for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
+                for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
 
-                        BufferedImage img = mapMaker.tileMap.get(val);
-                        g.drawImage(mapMaker.tileMap.get(val), (mhx + currX) * MapMaker.tileSize + mapMaker.mapX - img.getWidth() + MapMaker.tileSize, (mhy + currY) * MapMaker.tileSize + mapMaker.mapY - img.getHeight() + MapMaker.tileSize, null);
+                    int val = copiedTiles.getRGB(currX, currY);
+                    Point previewLocation = new Point(mouseHoverLocation.x + currX, mouseHoverLocation.y + currY);
+
+                    if (mapMaker.editType == EditType.BACKGROUND || mapMaker.editType == EditType.FOREGROUND) {
+                        BufferedImage image = mapMaker.getTileFromSet(TileType.MAP, val);
+                        if (image != null) {
+                            DrawMetrics.drawTileImage(g, image, previewLocation, mapMaker.getMapLocation());
+                        }
                     } else if (mapMaker.editType == EditType.MOVE_MAP || mapMaker.editType == EditType.AREA_MAP) {
-                        g.setColor(new Color(val));
-                        g.fillRect((mhx + currX) * MapMaker.tileSize + mapMaker.mapX, (mhy + currY) * MapMaker.tileSize + mapMaker.mapY, MapMaker.tileSize, MapMaker.tileSize);
+                        DrawMetrics.outlineTile(g, previewLocation, mapMaker.getMapLocation(), new Color(val));
                     }
                 }
             }
 
-            g.setColor(Color.red);
-            g.drawRect(mhx * MapMaker.tileSize + mapMaker.mapX, mhy * MapMaker.tileSize + mapMaker.mapY, MapMaker.tileSize * copiedTiles.getWidth(), MapMaker.tileSize * copiedTiles.getHeight());
+            DrawMetrics.outlineTileRed(g, mouseHoverLocation, mapMaker.getMapLocation());
         }
     }
 
@@ -178,23 +155,22 @@ public class SelectTool extends Tool {
         copiedEditType = mapMaker.editType;
 
         BufferedImage currentMapImage = null;
-        if (mapMaker.editType == EditType.FOREGROUND) {
-            currentMapImage = mapMaker.currentMapFg;
-        } else if (mapMaker.editType == EditType.BACKGROUND) {
-            currentMapImage = mapMaker.currentMapBg;
-        } else if (mapMaker.editType == EditType.MOVE_MAP) {
-            currentMapImage = mapMaker.currentMapMove;
-        } else if (mapMaker.editType == EditType.AREA_MAP) {
-            currentMapImage = mapMaker.currentMapArea;
+        switch (mapMaker.editType) {
+            case FOREGROUND:
+                currentMapImage = mapMaker.currentMapFg;
+                break;
+            case BACKGROUND:
+                currentMapImage = mapMaker.currentMapBg;
+                break;
+            case MOVE_MAP:
+                currentMapImage = mapMaker.currentMapMove;
+                break;
+            case AREA_MAP:
+                currentMapImage = mapMaker.currentMapArea;
+                break;
         }
 
-        int width = bx - tx + 1;
-        int height = by - ty + 1;
-        copiedTiles = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-        copiedTiles.setRGB(0, 0, width, height,
-                currentMapImage.getRGB(tx, ty, width, height, null, 0, width),
-                0, width);
+        copiedTiles = this.rectangle.getImage(currentMapImage);
 
         if (!mapMaker.mntmPaste.isEnabled()) {
             mapMaker.mntmPaste.setEnabled(true);
@@ -204,12 +180,9 @@ public class SelectTool extends Tool {
     public void cut() {
         copy();
 
+        // TODO: Why is val always the same here?
         int val = Integer.parseInt(mapMaker.tileList.getModel().getElementAt(0).getDescription());
-        for (int i = tx; i <= bx; i++) {
-            for (int j = ty; j <= by; j++) {
-                mapMaker.setTile(i, j, val);
-            }
-        }
+        this.rectangle.drawTiles(mapMaker, val);
     }
 
     public void paste() {

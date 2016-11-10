@@ -3,12 +3,14 @@ package mapMaker;
 import main.Global;
 import map.AreaData.TerrainType;
 import map.AreaData.WeatherState;
+import util.Point;
 import mapMaker.data.MapMakerTriggerData;
 import mapMaker.tools.MoveTool;
 import mapMaker.tools.RectangleTool;
 import mapMaker.tools.SelectTool;
 import mapMaker.tools.SingleClickTool;
 import mapMaker.tools.Tool;
+import mapMaker.tools.ToolRenderer;
 import mapMaker.tools.TriggerTool;
 import util.DrawMetrics;
 import util.FileIO;
@@ -35,7 +37,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
@@ -52,7 +53,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,18 +108,16 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private DefaultListModel<ImageIcon> triggerListModel;
 
 	private Map<Integer, String> indexMap;
-	public Map<Integer, BufferedImage> tileMap;
-
 	private Map<Integer, String> areaIndexMap;
+
 	private Set<Integer> areasOnMap;
 
-	public Map<Integer, BufferedImage> trainerTileMap;
-
+	private Map<Integer, BufferedImage> mapMakerTileMap;
+	private Map<Integer, BufferedImage> tileMap;
+	private Map<Integer, BufferedImage> trainerTileMap;
 	private Map<Integer, BufferedImage> itemTileMap;
 
 	public MapMakerTriggerData triggerData;
-
-	public Map<Integer, BufferedImage> mapMakerTileMap;
 
 	private File root;
 	public String currentMapName;
@@ -130,11 +128,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	public BufferedImage currentMapMove;
 	public BufferedImage currentMapArea;
 
-	public int mapX;
-	public int mapY;
-
-	public int mouseHoverX;
-	public int mouseHoverY;
+	private Point location;
+	private Point mouseHoverLocation;
 
 	public boolean saved;
 	private boolean savedIndex;
@@ -158,8 +153,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		root = null;
 		saved = true;
 		savedIndex = true;
-		mapX = 0;
-		mapY = 0;
+		this.location = new Point(0, 0);
 		editType = EditType.BACKGROUND;
 		
 		this.setLayout(new BorderLayout());
@@ -175,15 +169,15 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		tilePanel.add(newTileButton, BorderLayout.NORTH);
 		
 		moveListModel = new DefaultListModel<>();
-		moveListModel.addElement(new ImageIcon(textWithColor("Immovable", Color.black), Color.black.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Movable", Color.white), Color.white.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Water", Color.blue), Color.blue.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Right Ledge", Color.cyan), Color.cyan.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Down Ledge", Color.green), Color.green.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Left Ledge", Color.yellow), Color.yellow.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Up Ledge", Color.red), Color.red.getRGB() +""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Stairs Up Right", Color.magenta), Color.magenta.getRGB() + ""));
-		moveListModel.addElement(new ImageIcon(textWithColor("Stairs Up Left	", Color.ORANGE), Color.orange.getRGB() + ""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Immovable", Color.black), Color.black.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Movable", Color.white), Color.white.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Water", Color.blue), Color.blue.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Right Ledge", Color.cyan), Color.cyan.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Down Ledge", Color.green), Color.green.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Left Ledge", Color.yellow), Color.yellow.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Up Ledge", Color.red), Color.red.getRGB() +""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Stairs Up Right", Color.magenta), Color.magenta.getRGB() + ""));
+		moveListModel.addElement(new ImageIcon(colorWithText("Stairs Up Left	", Color.ORANGE), Color.orange.getRGB() + ""));
 		
 		tileListModel = new DefaultListModel<>();
 		areaListModel = new DefaultListModel<>();
@@ -326,6 +320,14 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		setRoot(new File("."));
 	}
 
+	public Point getMapLocation() {
+		return this.location;
+	}
+
+	public Point getMouseHoverLocation() {
+		return this.mouseHoverLocation;
+	}
+
 	private void fillImage(BufferedImage image, Color color) {
 		Graphics g = image.getGraphics();
 		g.setColor(color);
@@ -356,13 +358,13 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		return image;
 	}
 
-	private BufferedImage textWithColor(String text, Color color) {
+	private BufferedImage colorWithText(String text, Color color) {
 		BufferedImage image = blankImageWithText(text);
 		fillImage(image, color);
 		return image;
 	}
 
-	private BufferedImage imageWithText(BufferedImage image, String text) {
+	BufferedImage imageWithText(BufferedImage image, String text) {
 		if (image == null) {
 			Global.error("Image is null :(");
 		}
@@ -394,22 +396,24 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	private void addNewTile() {
-		JFileChooser fileChooser = getImageFileChooser(Folder.MAP_TILES);
+		JFileChooser fc = getImageFileChooser(Folder.MAP_TILES);
 
-		int val = fileChooser.showOpenDialog(this);
+		int val = fc.showOpenDialog(this);
 		if (val == JFileChooser.APPROVE_OPTION) {
-			File[] files = fileChooser.getSelectedFiles();
+			File[] files = fc.getSelectedFiles();
 			try {
-				for (File f: files) {
-					Color color = JColorChooser.showDialog(this, "Choose a preferred color for tile: " + f.getName(), Color.WHITE);
+				for (File imageFile: files) {
+					Color color = JColorChooser.showDialog(this, "Choose a preferred color for tile: " + imageFile.getName(), Color.WHITE);
 					if (color == null) {
 						continue;
 					}
 
 					color = permuteColor(color, indexMap);
-					BufferedImage img = ImageIO.read(f);
+					BufferedImage img = ImageIO.read(imageFile);
 					tileMap.put(color.getRGB(), img);
-					indexMap.put(color.getRGB(), f.getName());
+					indexMap.put(color.getRGB(), imageFile.getName());
+
+					// TODO: In the other branch with the new tile shit and shit yeah do this in there
 					tileListModel.addElement(new ImageIcon(img, color.getRGB() + ""));
 				}
 
@@ -462,7 +466,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 							}
 
 							// Add area to the list.
-							areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, color), color.getRGB() + ""));
+							areaListModel.addElement(new ImageIcon(colorWithText(newAreaName, color), color.getRGB() + ""));
 							areaIndexMap.put(color.getRGB(), newAreaName);
 						}
 					}
@@ -479,7 +483,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					}
 				}
 
-				areaListModel.addElement(new ImageIcon(textWithColor(newAreaName, new Color(color, true)), color + ""));
+				areaListModel.addElement(new ImageIcon(colorWithText(newAreaName, new Color(color, true)), color + ""));
 			}
 		}
 	}
@@ -645,7 +649,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				String name = m.group(1);
 				int val = (int) Long.parseLong(m.group(2), 16);
 
-				// areaListModel.addElement(new ImageIcon(textWithColor(name, new Color(val, true)), val + ""));
+				// areaListModel.addElement(new ImageIcon(colorWithText(name, new Color(val, true)), val + ""));
 				areaIndexMap.put(val, name);
 			}
 		}
@@ -654,7 +658,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private void loadMapTiles() {
 		this.indexMap = new HashMap<>();
 		this.tileMap = loadTiles(Folder.MAP_TILES, FileName.MAP_TILES_INDEX, this.tileListModel, this.indexMap, true);
-		this.tileListModel.add(0, new ImageIcon(filledImage(Color.MAGENTA), "0"));
+		this.tileListModel.add(0, new ImageIcon(filledImage(Color.MAGENTA), "0")); // TODO: Use that other thingy when this is merged
 	}
 
 	private void loadTrainerTiles() {
@@ -723,23 +727,19 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		return tileMap;
 	}
 
+	public enum TileType {
+		ITEM,
+		MAP,
+		MAP_MAKER,
+		TRAINER
+	}
+
 	private void loadTriggerModel() {
 		triggerListModel.clear();
-		
-		//NPC, map transition triggers, wild battle triggers
-		// TODO: Pokecenter transition, transition buildings
-		// TODO: I have a feeling some sort of enum will be extremely useful here
-		triggerListModel.addElement(new ImageIcon(imageWithText(trainerTileMap.get(0x0), "Item"), "0")); 				//Item
-		triggerListModel.addElement(new ImageIcon(imageWithText(trainerTileMap.get(0x00000040), "NPC"), "1"));			//Trainer
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x4), "Trigger Entity"), "2"));		//Trigger Entity
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x3), "Wild Battle"), "3"));		//Wild battle
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x2), "Map Exit"),	 "4")); 			//transition exit trigger
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x1), "Map Entrance"), "5")); 		//transition enter trigger
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x5), "PokeCenter"), "6")); 		//PokeCenter transition trigger
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0x6), "Transition Building"), "7")); 	//Transition Building transition trigger
-		triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0xc), "Event"), "8")); 				//Event trigger
-		//triggerListModel.addElement(new ImageIcon(imageWithText(mapMakerTileMap.get(0xd), "Group"), "9")); 				//Group trigger
-		
+
+		for (TriggerModelType type : TriggerModelType.values()) {
+			triggerListModel.addElement(type.getImageIcon(this));
+		}
 	}
 	
 	private void saveMap() {
@@ -819,7 +819,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		areaListModel.clear();
 		areasOnMap = new HashSet<>();
 		areasOnMap.add(0);
-		areaListModel.addElement(new ImageIcon(textWithColor(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
+		areaListModel.addElement(new ImageIcon(colorWithText(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
 		
 		try {
 			currentMapBg = ImageIO.read(mapBgImageFile);
@@ -835,7 +835,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						int rgb = currentMapArea.getRGB(x, y);
 						if (!areasOnMap.contains(rgb) && areaIndexMap.containsKey(rgb)) {
 							areasOnMap.add(rgb);
-							areaListModel.addElement(new ImageIcon(textWithColor(areaIndexMap.get(rgb), new Color(rgb, true)), rgb + ""));
+							areaListModel.addElement(new ImageIcon(colorWithText(areaIndexMap.get(rgb), new Color(rgb, true)), rgb + ""));
 						}
 					}
 				}
@@ -846,8 +846,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 			
 			currentMapSize = new Dimension(currentMapBg.getWidth(), currentMapBg.getHeight());
-			mapX = 0;
-			mapY = 0;
+			this.location = new Point(0, 0);
 			
 			triggerData = new MapMakerTriggerData(currentMapName, currentMapSize, this, mapTextFile);
 		}
@@ -866,8 +865,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 		// TODO: Maybe this should be a constant for the default size?
 		currentMapSize = new Dimension(10, 10);
-		mapX = 0;
-		mapY = 0;
+		this.location = new Point(0, 0);
 		
 		Graphics g = currentMapMove.getGraphics();
 		g.setColor(Color.BLACK);
@@ -880,56 +878,62 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		areaListModel.clear();
 		areasOnMap = new HashSet<>();
 		areasOnMap.add(0);
-		areaListModel.addElement(new ImageIcon(textWithColor(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
+		areaListModel.addElement(new ImageIcon(colorWithText(areaIndexMap.get(0), new Color(0, true)), 0 + ""));
 	}
 
-	public Point setTile(int x, int y, int val) {
-		Point returnPoint = new Point(0,0);
-		
-		if (x < 0 || y < 0 || x >= currentMapSize.width || y >= currentMapSize.height) {
-			int newWidth = Math.max(currentMapSize.width, Math.max(x + 1, currentMapSize.width - x));
-			int newHeight = Math.max(currentMapSize.height, Math.max(y + 1, currentMapSize.height - y));
+	private Point setNewDimension(Point location) {
+		Dimension newDimension = location.maximizeDimension(currentMapSize);
+		int newWidth = newDimension.width;
+		int newHeight = newDimension.height;
 
-			int startX = Math.max(0, -x);
-			int startY = Math.max(0, -y);
+		Point delta = Point.negate(location).lowerBound();
+		int startX = delta.x;
+		int startY = delta.y;
 
-			System.out.println("New " + newWidth + " " + newHeight);
-			System.out.println("Start " + startX + " " + startY);
-			
-			BufferedImage tmpBg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-			BufferedImage tmpFg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-			BufferedImage tmpMove = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-			BufferedImage tmpArea = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-			
-			Graphics g = tmpMove.getGraphics();
-			g.setColor(Color.black);
-			g.fillRect(0, 0, newWidth, newHeight);
-			g.dispose();
-			
-			tmpBg.setRGB(startX, startY, currentMapSize.width, currentMapSize.height, 
-					currentMapBg.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
-			tmpFg.setRGB(startX, startY, currentMapSize.width, currentMapSize.height, 
-					currentMapFg.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
-			tmpMove.setRGB(startX, startY, currentMapSize.width, currentMapSize.height, 
-					currentMapMove.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
-			tmpArea.setRGB(startX, startY, currentMapSize.width, currentMapSize.height, 
-					currentMapArea.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
-			
-			currentMapBg = tmpBg;
-			currentMapFg = tmpFg;
-			currentMapMove = tmpMove;
-			currentMapArea = tmpArea;
-			
-			//Update trigger data type
-			triggerData.moveTriggerData(startX, startY, new Dimension(newWidth, newHeight));
-			returnPoint = new Point(startX, startY);
-			
-			currentMapSize = new Dimension(newWidth, newHeight);
-			
-			x += startX;
-			y += startY;
+		System.out.println("New " + newWidth + " " + newHeight);
+		System.out.println("Start " + delta);
+
+		BufferedImage tmpBg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tmpFg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tmpMove = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tmpArea = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+
+		Graphics g = tmpMove.getGraphics();
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, newWidth, newHeight);
+		g.dispose();
+
+		tmpBg.setRGB(startX, startY, currentMapSize.width, currentMapSize.height,
+				currentMapBg.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
+		tmpFg.setRGB(startX, startY, currentMapSize.width, currentMapSize.height,
+				currentMapFg.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
+		tmpMove.setRGB(startX, startY, currentMapSize.width, currentMapSize.height,
+				currentMapMove.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
+		tmpArea.setRGB(startX, startY, currentMapSize.width, currentMapSize.height,
+				currentMapArea.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
+
+		currentMapBg = tmpBg;
+		currentMapFg = tmpFg;
+		currentMapMove = tmpMove;
+		currentMapArea = tmpArea;
+
+		//Update trigger data type
+		triggerData.moveTriggerData(startX, startY, newDimension);
+		currentMapSize = newDimension;
+
+		return delta;
+	}
+
+	public Point setTile(Point location, int val) {
+		Point delta = new Point(0,0);
+		if (!location.inBounds(currentMapSize)) {
+			delta = this.setNewDimension(location);
 		}
-		
+
+		Point start = Point.add(delta, location);
+		int x = start.x;
+		int y = start.y;
+
 		saved = false;
 		switch (editType) {
 			case BACKGROUND: 
@@ -949,24 +953,24 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				tileList.clearSelection();
 				break;
 		}
-		
-		return returnPoint;
+
+		return delta;
 	}
 	
-	public int getTile(int x, int y, EditType type) {
-		if (x < 0 || y < 0 || x >= currentMapSize.width || y >= currentMapSize.height) {
+	public int getTile(Point location, EditType type) {
+		if (!location.inBounds(this.currentMapSize)) {
 			return 0;
 		}
 		
 		switch (type) {
 			case BACKGROUND: 
-				return currentMapBg.getRGB(x, y);
+				return currentMapBg.getRGB(location.x, location.y);
 			case FOREGROUND: 
-				return currentMapFg.getRGB(x, y);
+				return currentMapFg.getRGB(location.x, location.y);
 			case MOVE_MAP: 
-				return currentMapMove.getRGB(x, y);
+				return currentMapMove.getRGB(location.x, location.y);
 			case AREA_MAP: 
-				return currentMapArea.getRGB(x, y);
+				return currentMapArea.getRGB(location.x, location.y);
 			case TRIGGERS:
 			default:
 				return 0; 
@@ -1025,7 +1029,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		}
 		
 		// Draw all trigger items.
-		triggerData.drawTriggers(g2d, mapX, mapY);
+		triggerData.drawTriggers(g2d, this.location);
 		
 		g2d.setComposite(defaultComposite);
 		
@@ -1035,9 +1039,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		
 		// Draw area label on mouse hover
 		if (editType == EditType.AREA_MAP) {
-			int x = (mouseHoverX - mapX)/tileSize;
-			int y = (mouseHoverY - mapY)/tileSize;
-			int tileColor = getTile(x, y, EditType.AREA_MAP);
+			Point location = DrawMetrics.getLocation(this.mouseHoverLocation, this.location);
+			int tileColor = getTile(location, EditType.AREA_MAP);
 		
 			String areaName = areaIndexMap.get(tileColor);
 			if (areaName == null) {
@@ -1046,7 +1049,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(getFont().deriveFont(16).deriveFont(Font.BOLD));
-			g2d.drawString(areaName, mouseHoverX, mouseHoverY);
+			g2d.drawString(areaName, mouseHoverLocation.x, mouseHoverLocation.y);
 		}
 		
 		g.dispose();
@@ -1057,17 +1060,17 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 	
 	private void drawImg(Graphics g, EditType type) {
-		for (int dy = mapY, y = 0; y < currentMapSize.height; y++, dy += tileSize) {
-			for (int dx = mapX, x = 0; x < currentMapSize.width; x++, dx += tileSize) {
-				int val = getTile(x, y, type);
+		for (int y = 0; y < currentMapSize.height; y++) {
+			for (int x = 0; x < currentMapSize.width; x++) {
+				Point location = new Point(x, y);
+				int val = getTile(location, type);
 				
 				if (type == EditType.MOVE_MAP || type == EditType.AREA_MAP) {
-					g.setColor(new Color(val, true));
-					g.fillRect(dx, dy, tileSize, tileSize);
+					DrawMetrics.fillTile(g, location, this.location, new Color(val, true));
 				}
 				else if (type != EditType.TRIGGERS && tileMap.containsKey(val)) {
-					BufferedImage img = tileMap.get(val);
-					g.drawImage(img, dx - img.getWidth() + tileSize,dy - img.getHeight() + tileSize, null);
+					BufferedImage image = tileMap.get(val);
+					DrawMetrics.drawTileImage(g, image, location, this.location);
 				}
 			}
 		}
@@ -1101,8 +1104,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	public void mouseDragged(MouseEvent event) {
-		mouseHoverX = event.getX();
-		mouseHoverY = event.getY();
+		int mouseHoverX = event.getX();
+		int mouseHoverY = event.getY();
+		this.mouseHoverLocation = new Point(mouseHoverX, mouseHoverY);
 	
 		if (!toolList.isSelectionEmpty()) {
 			toolList.getSelectedValue().drag(event.getX(), event.getY());
@@ -1112,8 +1116,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	public void mouseMoved(MouseEvent event) {
-		mouseHoverX = event.getX();
-		mouseHoverY = event.getY();
+		int mouseHoverX = event.getX();
+		int mouseHoverY = event.getY();
+		this.mouseHoverLocation = new Point(mouseHoverX, mouseHoverY);
 	
 		draw();
 	}
@@ -1143,7 +1148,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 		}
 		
-		if (event.getModifiers() == Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()) {
+		if (event.getModifiers() == Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
 			controlKeyDown = true;
 		}
 	}
@@ -1154,7 +1159,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			previousToolListIndex = -1; 
 		}
 		
-		if (event.getModifiers() != Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()) {
+		if (event.getModifiers() != Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
 			controlKeyDown = false;
 		}
 	}
@@ -1167,17 +1172,19 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					tileList.clearSelection();
 				}
 				else {
+					TriggerModelType type = TriggerModelType.getModelTypeFromIndex(tileList.getSelectedIndex());
+
 					// Already something placeable, ignore trying to create something new.
 					if (!triggerData.hasPlaceableTrigger()) {
+
 						// Trigger was not created, deselect item
-						if (!triggerData.createTrigger(tileList.getSelectedValue().getDescription())) {
+						if (!triggerData.createTrigger(type)) {
 							tileList.clearSelection();
 						}
 						// Trigger was created, move to single selection
 						else {
-							// TODO: Stop hard coding things
-							if(tileList.getSelectedIndex() == 3) { //If wild battle trigger, rectangle tool.
-								toolList.setSelectedIndex(2);
+							if(type == TriggerModelType.WILD_BATTLE) { //If wild battle trigger, rectangle tool.
+								toolList.setSelectedIndex(2); // TODO: ENUM
 							}
 							else {
 								toolList.setSelectedIndex(1);								
@@ -1208,20 +1215,20 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		}
 	}
 	
-	public BufferedImage getTileFromSet(String set, int index) {
+	public BufferedImage getTileFromSet(TileType tileType, int index) {
 		BufferedImage img = null;
 		
-		switch (set) {
-			case "MapMaker": 
+		switch (tileType) {
+			case MAP_MAKER:
 				img = mapMakerTileMap.get(index); 
 				break;
-			case "Trainer":
+			case TRAINER:
 				img = trainerTileMap.get(index); 
 			break;
-			case "Item": 
+			case ITEM:
 				img = itemTileMap.get(index); 
 				break;
-			case "Map": 
+			case MAP:
 				img = tileMap.get(index); 
 				break;
 		}
@@ -1232,32 +1239,5 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	public String getAreaForIndex(int index) {
 		return areaIndexMap.get(index);
 	}
-	
-	private class ToolRenderer extends JLabel implements ListCellRenderer<Tool> {
-		private static final long serialVersionUID = 6750963470094004328L;
 
-		public Component getListCellRendererComponent(JList<? extends Tool> list,
-													  Tool value,
-													  int index,
-													  boolean isSelected,
-													  boolean hasFocus) {
-			String s = value.toString();
-			setText(s);
-			//setIcon((s.length() > 10) ? longIcon : shortIcon);
-			if (isSelected) {
-				setBackground(list.getSelectionBackground());
-				setForeground(list.getSelectionForeground());
-			}
-			else {
-				setBackground(list.getBackground());
-				setForeground(list.getForeground());
-			}
-			
-			setEnabled(list.isEnabled());
-			setFont(list.getFont());
-			setOpaque(true);
-			
-			return this;
-		}
-	}
 }

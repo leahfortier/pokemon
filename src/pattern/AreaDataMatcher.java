@@ -7,7 +7,7 @@ import com.google.gson.JsonSerializer;
 import main.Global;
 import map.Direction;
 import map.entity.npc.NPCAction;
-import map.triggers.TriggerData.Point;
+import util.Point;
 import util.FileIO;
 import util.StringUtils;
 

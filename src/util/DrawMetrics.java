@@ -2,8 +2,10 @@ package util;
 
 import gui.Button;
 import main.Global;
+import mapMaker.MapMaker;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -14,9 +16,12 @@ import java.util.Scanner;
 
 public class DrawMetrics {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
+
+	// Dimension of a single tile
+	private static final Dimension SINGLE_TILE_DIMENSION = new Dimension(1, 1);
 	
 	// For wrapped text, the amount in between each letter
-	private static final float VERTICAL_WRAP_FACTOR = 2f; 
+	private static final float VERTICAL_WRAP_FACTOR = 2f;
 	
 	// The font the game interface uses
 	private static HashMap<Integer, Font> fontMap;
@@ -232,6 +237,56 @@ public class DrawMetrics {
 
 	public static int getTextWidth(final String text, final int fontSize) {
 		return text.length()*getFontMetrics(fontSize).getHorizontalSpacing();
+	}
+
+	public static Point getLocation(Point drawLocation, Point mapLocation) {
+		return new Point(
+				(drawLocation.x - mapLocation.x)/MapMaker.tileSize,
+				(drawLocation.y - mapLocation.y)/MapMaker.tileSize
+		);
+	}
+
+	public static Point getDrawLocation(Point location, Point mapLocation) {
+		return new Point(
+				location.x*MapMaker.tileSize + mapLocation.x,
+				location.y*MapMaker.tileSize + mapLocation.y
+		);
+	}
+
+	public static Point getImageDrawLocation(BufferedImage image, Point location, Point mapLocation) {
+		Point drawLocation = getDrawLocation(location, mapLocation);
+		drawLocation.x += MapMaker.tileSize/2 - image.getWidth()/2;
+		drawLocation.y += MapMaker.tileSize/2 -  image.getHeight()/2;
+
+		return drawLocation;
+	}
+
+	public static void drawTileImage(Graphics g, BufferedImage image, Point location, Point mapLocation) {
+		Point drawLocation = getImageDrawLocation(image, location, mapLocation);
+
+		g.drawImage(image, drawLocation.x, drawLocation.y, null);
+	}
+
+	public static void outlineTileRed(Graphics g, Point location, Point mapLocation) {
+		outlineTile(g, location, mapLocation, Color.RED);
+	}
+
+	public static void outlineTile(Graphics g, Point location, Point mapLocation, Color color) {
+		outlineTiles(g, location, mapLocation, color, SINGLE_TILE_DIMENSION);
+	}
+
+	public static void outlineTiles(Graphics g, Point location, Point mapLocation, Color color, Dimension rectangle) {
+		Point drawLocation = getDrawLocation(location, mapLocation);
+
+		g.setColor(color);
+		g.drawRect(drawLocation.x, drawLocation.y, MapMaker.tileSize*rectangle.width, MapMaker.tileSize*rectangle.height);
+	}
+
+	public static void fillTile(Graphics g, Point location, Point mapLocation, Color color) {
+		Point drawLocation = getDrawLocation(location, mapLocation);
+
+		g.setColor(color);
+		g.fillRect(drawLocation.x, drawLocation.y, MapMaker.tileSize, MapMaker.tileSize);
 	}
 	
 	static class Metrics {
