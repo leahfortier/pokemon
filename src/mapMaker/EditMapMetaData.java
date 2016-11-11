@@ -1,6 +1,5 @@
 package mapMaker;
 
-import main.Global;
 import map.MapMetaData.MapDataType;
 import mapMaker.data.MapMakerTriggerData;
 import mapMaker.model.AreaModel;
@@ -19,16 +18,18 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 // Metadata for the current map being edited
 public class EditMapMetaData {
+    private static final Dimension DEFAULT_MAP_SIZE = new Dimension(10, 10);
+
     private String currentMapName;
     private Dimension currentMapSize;
 
-    private BufferedImage currentMapFg;
-    private BufferedImage currentMapBg;
-    private BufferedImage currentMapMove;
-    private BufferedImage currentMapArea;
+    private Map<MapDataType, BufferedImage> currentMap;
 
     public MapMakerTriggerData triggerData;
 
@@ -37,7 +38,8 @@ public class EditMapMetaData {
 
     public boolean saved;
 
-    public EditMapMetaData(MapMaker mapMaker) {
+    public EditMapMetaData() {
+        this.currentMap = new EnumMap<>(MapDataType.class);
         this.saved = true;
     }
 
@@ -53,21 +55,30 @@ public class EditMapMetaData {
         return saved && (triggerData != null && triggerData.isSaved());
     }
 
-    public void createNewMap(MapMaker mapMaker, String mapName) {
-        currentMapName = mapName;
+    private BufferedImage createNewImage() {
+        return new BufferedImage(currentMapSize.width, currentMapSize.height, BufferedImage.TYPE_INT_ARGB);
+    }
 
-        currentMapBg = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
-        currentMapFg = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
-        currentMapMove = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
-        currentMapArea = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
+    public BufferedImage getMapImage(MapDataType dataType) {
+        return this.currentMap.get(dataType);
+    }
 
-        // TODO: Maybe this should be a constant for the default size?
-        currentMapSize = new Dimension(10, 10);
+    private void resetMaps() {
+        for (MapDataType dataType : MapDataType.values()) {
+            this.currentMap.put(dataType, createNewImage());
+        }
 
-        Graphics g = currentMapMove.getGraphics();
+        Graphics g = this.getMapImage(MapDataType.MOVE).getGraphics();
         g.setColor(Color.BLACK); // TODO: Immovable?
         g.fillRect(0, 0, currentMapSize.width, currentMapSize.height);
         g.dispose();
+    }
+
+    public void createNewMap(MapMaker mapMaker, String mapName) {
+        currentMapName = mapName;
+
+        currentMapSize = DEFAULT_MAP_SIZE;
+        this.resetMaps();
 
         // Create empty trigger data structure
         triggerData = new MapMakerTriggerData(mapMaker);
@@ -76,22 +87,17 @@ public class EditMapMetaData {
     }
 
     public void save(MapMaker mapMaker) {
-        if (currentMapBg == null) {
+        if (!this.hasMap()) {
             return;
         }
 
         final String mapFolderPath = mapMaker.getMapFolderName(currentMapName);
         FileIO.createFolder(mapFolderPath);
 
-        File mapBgFile = new File(mapFolderPath + currentMapName + "_bg.png");
-        File mapFgFile = new File(mapFolderPath + currentMapName + "_fg.png");
-        File mapMoveFile = new File(mapFolderPath + currentMapName + "_move.png");
-        File mapAreaFile = new File(mapFolderPath + currentMapName + "_area.png");
-
-        FileIO.writeImage(currentMapBg, mapBgFile);
-        FileIO.writeImage(currentMapFg, mapFgFile);
-        FileIO.writeImage(currentMapMove, mapMoveFile);
-        FileIO.writeImage(currentMapArea, mapAreaFile);
+        for (MapDataType dataType : MapDataType.values()) {
+            File mapFile = new File(mapFolderPath + dataType.getImageName(this.currentMapName));
+            FileIO.writeImage(this.getMapImage(dataType), mapFile);
+        }
 
         // Save all triggers
         triggerData.saveTriggers(mapMaker.getMapTextFile(currentMapName));
@@ -101,42 +107,20 @@ public class EditMapMetaData {
 
 
     public void loadPreviousMap(MapMaker mapMaker, String mapName, AreaModel areaModel) {
-        currentMapName = mapName;
+        this.currentMapName = mapName;
 
         final String mapFolderPath = mapMaker.getMapFolderName(currentMapName);
-
-        // TODO: Can use that other function but not doing it because this will likely all get rewritten anyways
         File mapTextFile = new File(mapFolderPath + currentMapName + ".txt");
 
-        // TODO: Will likely want an object to hold these
-        File mapBgImageFile = new File(mapFolderPath + currentMapName + "_bg.png");
-        File mapFgImageFile = new File(mapFolderPath + currentMapName + "_fg.png");
-        File mapMoveImageFile = new File(mapFolderPath + currentMapName + "_move.png");
-        File mapAreaImageFile = new File(mapFolderPath + currentMapName + "_area.png");
-
-        currentMapBg = FileIO.readImage(mapBgImageFile);
-        currentMapFg = FileIO.readImage(mapFgImageFile);
-        currentMapMove = FileIO.readImage(mapMoveImageFile);
-
-        // Check to see if area file exists
-        if (mapAreaImageFile.exists()) {
-            currentMapArea = FileIO.readImage(mapAreaImageFile);
-
-            for (int x = 0; x < currentMapBg.getWidth(); ++x) {
-                for (int y = 0; y < currentMapBg.getHeight(); ++y) {
-                    int rgb = currentMapArea.getRGB(x, y);
-                    areaModel.updateExistingAreas(rgb);
-                }
-            }
-        }
-        // If file doesn't exist, create it instead of crashing.
-        else {
-            currentMapArea = new BufferedImage(currentMapBg.getWidth(), currentMapBg.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        for (MapDataType dataType : MapDataType.values()) {
+            File mapFile = new File(mapFolderPath + dataType.getImageName(this.currentMapName));
+            this.currentMap.put(dataType, FileIO.readImage(mapFile));
         }
 
-        currentMapSize = new Dimension(currentMapBg.getWidth(), currentMapBg.getHeight());
+        BufferedImage mapBackground = this.getMapImage(MapDataType.BACKGROUND);
+        this.currentMapSize = new Dimension(mapBackground.getWidth(), mapBackground.getHeight());
 
-        triggerData = new MapMakerTriggerData(mapMaker, mapTextFile);
+        this.triggerData = new MapMakerTriggerData(mapMaker, mapTextFile);
         this.saved = true;
     }
 
@@ -149,70 +133,43 @@ public class EditMapMetaData {
             return new Point();
         }
 
-        Dimension newDimension = location.maximizeDimension(currentMapSize);
-        int newWidth = newDimension.width;
-        int newHeight = newDimension.height;
+        Dimension previousDimension = currentMapSize;
+        Map<MapDataType, BufferedImage> previousMap = new EnumMap<>(MapDataType.class);
+        for (Entry<MapDataType, BufferedImage> entry : currentMap.entrySet()) {
+            previousMap.put(entry.getKey(), entry.getValue());
+        }
+
+        currentMapSize = location.maximizeDimension(previousDimension);
 
         Point delta = Point.negate(location).lowerBound();
-        int startX = delta.x;
-        int startY = delta.y;
 
-        System.out.println("New " + newWidth + " " + newHeight);
+        System.out.println("New " + currentMapSize.width + " " + currentMapSize.height);
         System.out.println("Start " + delta);
 
-        BufferedImage tmpBg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-        BufferedImage tmpFg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-        BufferedImage tmpMove = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-        BufferedImage tmpArea = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        this.resetMaps();
 
-        Graphics g = tmpMove.getGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, newWidth, newHeight);
-        g.dispose();
+        for (Entry<MapDataType, BufferedImage> entry : currentMap.entrySet()) {
+            MapDataType dataType = entry.getKey();
+            BufferedImage newMapImage = entry.getValue();
 
-        tmpBg.setRGB(startX, startY, currentMapSize.width, currentMapSize.height,
-                currentMapBg.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
-        tmpFg.setRGB(startX, startY, currentMapSize.width, currentMapSize.height,
-                currentMapFg.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
-        tmpMove.setRGB(startX, startY, currentMapSize.width, currentMapSize.height,
-                currentMapMove.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
-        tmpArea.setRGB(startX, startY, currentMapSize.width, currentMapSize.height,
-                currentMapArea.getRGB(0, 0, currentMapSize.width, currentMapSize.height, null, 0, currentMapSize.width), 0, currentMapSize.width);
+            BufferedImage previousMapImage = previousMap.get(dataType);
+            int[] rgb = previousMapImage.getRGB(0, 0, previousDimension.width, previousDimension.height, null, 0, previousDimension.width);
 
-        currentMapBg = tmpBg;
-        currentMapFg = tmpFg;
-        currentMapMove = tmpMove;
-        currentMapArea = tmpArea;
+            newMapImage.setRGB(delta.x, delta.y, previousDimension.width, previousDimension.height, rgb, 0, previousDimension.width);
+        }
 
         // Update trigger data type
-        triggerData.moveTriggerData(startX, startY, newDimension);
-        currentMapSize = newDimension;
+        triggerData.moveTriggerData(delta, currentMapSize);
 
         return delta;
     }
 
     public boolean hasMap() {
-        return this.currentMapBg != null;
-    }
-
-    public BufferedImage getImage(MapDataType dataType) {
-        switch (dataType) {
-            case BACKGROUND:
-                return this.currentMapBg;
-            case FOREGROUND:
-                return this.currentMapFg;
-            case MOVE:
-                return this.currentMapMove;
-            case AREA:
-                return this.currentMapArea;
-        }
-
-        Global.error("Unknown data type " + dataType.name());
-        return this.currentMapBg;
+        return this.currentMap.containsKey(MapDataType.BACKGROUND);
     }
 
     public void setTile(MapDataType dataType, Point location, int val) {
-        this.getImage(dataType).setRGB(location.x, location.y, val);
+        this.getMapImage(dataType).setRGB(location.x, location.y, val);
         this.saved = false;
     }
 
@@ -222,7 +179,7 @@ public class EditMapMetaData {
             return 0;
         }
 
-        return this.getImage(dataType).getRGB(location.x, location.y);
+        return this.getMapImage(dataType).getRGB(location.x, location.y);
     }
 
     private void drawTiles(Graphics2D g2d, Point mapLocation, MapDataType type, TileModel tileModel, Composite composite) {

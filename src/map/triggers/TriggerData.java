@@ -82,10 +82,9 @@ public class TriggerData {
 		return pointsArray;
 	}
 	
-	public void updatePoints(int dx, int dy) {
+	public void updatePoints(Point delta) {
 		for (Point curr : points) {
-			curr.x += dx;
-			curr.y += dy;
+			curr.add(delta);
 		}
 	}
 

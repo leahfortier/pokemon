@@ -396,42 +396,36 @@ public class MapMakerTriggerData {
 		}
 	}
 
-	public void moveTriggerData(int dx, int dy, Dimension newMapSize) {
+	public void moveTriggerData(Point delta, Dimension newMapSize) {
 		triggersSaved = false;
 
 		Map<Integer, String> tempTriggers = new HashMap<>();
 
-		for (Integer location : triggers.keySet()) {
-			int trigy = location / (int) currentMapSize.getWidth();
-			int trigx = location - trigy * (int) currentMapSize.getWidth();
+		for (Integer locationIndex : triggers.keySet()) {
+			Point location = Point.getPointAtIndex(locationIndex, newMapSize.width);
+			location.add(delta);
 
-			trigx += dx;
-			trigy += dy;
-
-			tempTriggers.put(trigy * (int) newMapSize.getWidth() + trigx, triggers.get(location));
+			tempTriggers.put(location.getIndex(newMapSize.width), triggers.get(locationIndex));
 		}
 
 		triggers = tempTriggers;
 
 		for (List<EntityData> entityList : entities.values()) {
 			for (EntityData ed : entityList) {
-				ed.x += dx;
-				ed.y += dy;
+				ed.x += delta.x;
+				ed.y += delta.y;
 			}
 		}
 
 		Map<Integer, String> tempMapEntrances = new HashMap<>();
 
-		for (Integer location : mapEntrances.keySet()) {
-			String entrance = mapEntrances.get(location);
+		for (Integer locationIndex : mapEntrances.keySet()) {
+			String entrance = mapEntrances.get(locationIndex);
 
-			int trigy = location / (int) currentMapSize.getWidth();
-			int trigx = location - trigy * (int) currentMapSize.getWidth();
+			Point location = Point.getPointAtIndex(locationIndex, newMapSize.width);
+			location.add(delta);
 
-			trigx += dx;
-			trigy += dy;
-
-			tempMapEntrances.put(trigy * (int) newMapSize.getWidth() + trigx, entrance);
+			tempMapEntrances.put(location.getIndex(newMapSize.width), entrance);
 		}
 
 		mapEntrances = tempMapEntrances;
@@ -443,7 +437,7 @@ public class MapMakerTriggerData {
 				.filter(triggerData -> !updatedTriggerData.contains(triggerData.name))
 				.forEach(triggerData -> {
 			updatedTriggerData.add(triggerData.name);
-			triggerData.updatePoints(dx, dy);
+			triggerData.updatePoints(delta);
 
 			for (Integer loc : triggerData.getPoints((int)newMapSize.getWidth())) {
 				tempTriggerData.put(loc, triggerData);

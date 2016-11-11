@@ -101,7 +101,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	public MapMaker() {
 		this.root = null;
 		this.location = new Point();
-        this.mapData = new EditMapMetaData(this);
+        this.mapData = new EditMapMetaData();
         this.editMode = new EditMode(this);
 
 		this.setLayout(new BorderLayout());
@@ -554,7 +554,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     public BufferedImage getCurrentMapImage(MapDataType dataType) {
-        return this.mapData.getImage(dataType);
+        return this.mapData.getMapImage(dataType);
     }
 
     public MapMakerModel getModel() {
