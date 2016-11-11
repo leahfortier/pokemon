@@ -3,7 +3,7 @@ package mapMaker.tools;
 import util.DrawUtils;
 import util.Point;
 import mapMaker.MapMaker;
-import mapMaker.TriggerModelType;
+import mapMaker.model.TriggerModel.TriggerModelType;
 import mapMaker.data.PlaceableTrigger;
 
 import javax.swing.JMenuItem;
@@ -31,31 +31,31 @@ public class TriggerTool extends Tool {
         JMenuItem editItem = new JMenuItem("Edit");
         triggerOptionsPopup.add(editItem);
 
-        editItem.addActionListener(event -> mapMaker.triggerData.editTrigger(selectedTrigger));
+        editItem.addActionListener(event -> mapMaker.getTriggerData().editTrigger(selectedTrigger));
 
         JMenuItem moveItem = new JMenuItem("Move");
         triggerOptionsPopup.add(moveItem);
         moveItem.addActionListener(event -> {
             mapMaker.toolList.setSelectedIndex(1);
-            TriggerModelType triggerModelType = mapMaker.triggerData.getTriggerModelType(selectedTrigger);
+            TriggerModelType triggerModelType = mapMaker.getTriggerData().getTriggerModelType(selectedTrigger);
             if (triggerModelType != null) {
                 mapMaker.editTypeComboBox.setSelectedIndex(4);
 
-                mapMaker.triggerData.moveTrigger(selectedTrigger);
+                mapMaker.getTriggerData().moveTrigger(selectedTrigger);
                 mapMaker.triggerToolMoveSelected = true;
 
-                mapMaker.tileList.setSelectedIndex(triggerModelType.ordinal());
+                mapMaker.setSelectedTileIndex(triggerModelType.ordinal());
             }
         });
 
         JMenuItem removeItem = new JMenuItem("Remove");
         triggerOptionsPopup.add(removeItem);
-        removeItem.addActionListener(event -> mapMaker.triggerData.removeTrigger(selectedTrigger));
+        removeItem.addActionListener(event -> mapMaker.getTriggerData().removeTrigger(selectedTrigger));
     }
 
     @Override
     public void click(Point clickLocation) {
-        if (mapMaker.currentMapName == null) {
+        if (!mapMaker.hasMap()) {
             return;
         }
 
@@ -64,7 +64,7 @@ public class TriggerTool extends Tool {
 
         System.out.println("Trigger click: " + this.mouseLocation);
 
-        triggers = mapMaker.triggerData.getTrigger(location);
+        triggers = mapMaker.getTriggerData().getTrigger(location);
         triggerListPopup.removeAll();
 
         for (PlaceableTrigger trigger : triggers) {

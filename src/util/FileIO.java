@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 import main.Global;
 
@@ -186,5 +188,24 @@ public class FileIO {
 			Global.error("Could not open output file " + fileName + ".");
 			return null;
 		}
+	}
+
+	public static JFileChooser getImageFileChooser(final String folderPath) {
+		final File folder = new File(folderPath);
+		JFileChooser fileChooser = new JFileChooser(folder);
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setMultiSelectionEnabled(true);
+
+		fileChooser.setFileFilter(new FileFilter() {
+			public boolean accept(File file) {
+				return file.getName().toLowerCase().endsWith("png");
+			}
+
+			public String getDescription() {
+				return "PNG";
+			}
+		});
+
+		return fileChooser;
 	}
 }

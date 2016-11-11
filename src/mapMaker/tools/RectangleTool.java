@@ -1,9 +1,9 @@
 package mapMaker.tools;
 
+import mapMaker.MapMaker;
+import mapMaker.model.EditMode.EditType;
 import util.DrawUtils;
 import util.Point;
-import mapMaker.MapMaker;
-import mapMaker.MapMaker.EditType;
 
 import java.awt.Graphics;
 
@@ -20,27 +20,27 @@ public class RectangleTool extends Tool {
 
     @Override
     public void released(Point releasedLocation) {
-        if (mapMaker.tileList.isSelectionEmpty() || !pressed) {
+        if (mapMaker.isTileSelectionEmpty() || !pressed) {
             return;
         }
 
         Point mouseHoverLocation = DrawUtils.getLocation(releasedLocation, mapMaker.getMapLocation());
-        this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.currentMapSize);
+        this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
 
         pressed = false;
 
-        int val = Integer.parseInt(mapMaker.tileList.getSelectedValue().getDescription());
+        int val = mapMaker.getSelectedTile();
         this.rectangle.drawTiles(mapMaker, val);
 
-        if (mapMaker.editType == EditType.TRIGGERS) {
-            mapMaker.triggerData.clearPlaceableTrigger();
+        if (mapMaker.isEditType(EditType.TRIGGERS)) {
+            mapMaker.getTriggerData().clearPlaceableTrigger();
             mapMaker.toolList.setSelectedIndex(3); // TODO
         }
     }
 
     @Override
     public void pressed(Point pressedLocation) {
-        if (mapMaker.tileList.isSelectionEmpty()) {
+        if (mapMaker.isTileSelectionEmpty()) {
             return;
         }
 
@@ -55,7 +55,7 @@ public class RectangleTool extends Tool {
         if (!pressed) {
             DrawUtils.outlineTileRed(g, mouseHoverLocation, mapMaker.getMapLocation());
         } else {
-            this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.currentMapSize);
+            this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
             this.rectangle.outlineRed(g, mapMaker.getMapLocation());
         }
     }

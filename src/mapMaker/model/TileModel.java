@@ -1,12 +1,16 @@
-package mapMaker;
+package mapMaker.model;
 
+import mapMaker.MapMaker;
 import util.DrawUtils;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
+import util.StringUtils;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,7 +19,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-public class TileMap {
+public class TileModel extends MapMakerModel {
+    private static final Color BLANK_TILE_COLOR = Color.MAGENTA;
+    private static final int BLANK_TILE_INDEX = BLANK_TILE_COLOR.getRGB();
+    private static final BufferedImage BLANK_TILE_IMAGE = DrawUtils.fillImage(BLANK_TILE_COLOR);
+    private static final ImageIcon BLANK_TILE_ICON = new ImageIcon(BLANK_TILE_IMAGE, "0"); // TODO: Is 0 still necessary?
 
     private final DefaultListModel<ImageIcon> tileListModel;
 
@@ -26,20 +34,6 @@ public class TileMap {
     private final Map<Integer, BufferedImage> mapMakerTileMap;
     private final Map<Integer, BufferedImage> trainerTileMap;
     private final Map<Integer, BufferedImage> itemTileMap;
-
-    public TileMap(MapMaker mapMaker) {
-        this.tileListModel = new DefaultListModel<>();
-
-        this.indexMap = new HashMap<>();
-        this.saved = true;
-
-        this.mapTileMap = loadTiles(mapMaker, Folder.MAP_TILES, FileName.MAP_TILES_INDEX, this.tileListModel, this.indexMap, true);
-        this.tileListModel.add(0, new ImageIcon(DrawUtils.fillImage(Color.MAGENTA), "0")); // TODO: I think magenta here is representing a blank tile, if so, this should be a constant
-
-        this.trainerTileMap = loadTiles(mapMaker, Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX);
-        this.mapMakerTileMap = loadTiles(mapMaker, Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX);
-        this.itemTileMap = loadTiles(mapMaker, Folder.ITEM_TILES, FileName.ITEM_TILES_INDEX);
-    }
 
     public enum TileType {
         ITEM(tileMap -> tileMap.itemTileMap),
@@ -54,32 +48,69 @@ public class TileMap {
         }
 
         private interface TileMapGetter {
-            Map<Integer, BufferedImage> getTileMap(TileMap tileMap);
+            Map<Integer, BufferedImage> getTileMap(TileModel tileModel);
         }
 
-        private Map<Integer, BufferedImage> getTileMap(TileMap tileMap) {
-            return this.tileMapGetter.getTileMap(tileMap);
+        private Map<Integer, BufferedImage> getTileMap(TileModel tileModel) {
+            return this.tileMapGetter.getTileMap(tileModel);
         }
     }
 
-    public DefaultListModel<ImageIcon> getModel() {
+    public TileModel(MapMaker mapMaker) {
+        super(BLANK_TILE_INDEX);
+
+        this.tileListModel = new DefaultListModel<>();
+
+        this.indexMap = new HashMap<>();
+        this.saved = true;
+
+        this.mapTileMap = new HashMap<>();
+        this.trainerTileMap = new HashMap<>();
+        this.mapMakerTileMap = new HashMap<>();
+        this.itemTileMap = new HashMap<>();
+
+        this.reload(mapMaker);
+    }
+
+    @Override
+    public DefaultListModel<ImageIcon> getListModel() {
         return this.tileListModel;
     }
 
-    private Map<Integer, BufferedImage> loadTiles(MapMaker mapMaker, String tileFolderName, String indexFileName) {
-        return this.loadTiles(mapMaker, tileFolderName, indexFileName, null, null, false);
+    @Override
+    public void reload(MapMaker mapMaker) {
+        loadTiles(this.mapTileMap, Folder.MAP_TILES, FileName.MAP_TILES_INDEX, mapMaker, this.tileListModel, this.indexMap, true);
+        this.indexMap.put(BLANK_TILE_INDEX, "BlankImage");
+        this.tileListModel.add(0, BLANK_TILE_ICON);
+
+        loadTiles(this.trainerTileMap, Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX, mapMaker);
+        loadTiles(this.mapMakerTileMap, Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX, mapMaker);
+        loadTiles(this.itemTileMap, Folder.ITEM_TILES, FileName.ITEM_TILES_INDEX, mapMaker);
+    }
+
+    @Override
+    public boolean newTileButtonEnabled() {
+        return true;
+    }
+
+    private Map<Integer, BufferedImage> loadTiles(Map<Integer, BufferedImage> tileMap, String tileFolderName, String indexFileName, MapMaker mapMaker) {
+        return this.loadTiles(tileMap, tileFolderName, indexFileName, mapMaker, null, null, false);
     }
 
     private Map<Integer, BufferedImage> loadTiles(
-            MapMaker mapMaker,
+            Map<Integer, BufferedImage> tileMap,
             String tileFolderName,
             String indexFileName,
+            MapMaker mapMaker,
             DefaultListModel<ImageIcon> listModel,
             Map<Integer, String> indexMap,
             boolean resize) {
         File indexFile = new File(mapMaker.getPathWithRoot(indexFileName));
+        tileMap.clear();
 
-        Map<Integer, BufferedImage> tileMap = new HashMap<>();
+        if (indexMap != null) {
+            indexMap.clear();
+        }
 
         if (listModel != null) {
             listModel.clear();
@@ -133,14 +164,29 @@ public class TileMap {
         return tileType.getTileMap(this).get(index);
     }
 
-    public void addTile(File imageFile, Color color) {
-        color = DrawUtils.permuteColor(color, indexMap);
-        BufferedImage img = FileIO.readImage(imageFile);
-        mapTileMap.put(color.getRGB(), img);
-        indexMap.put(color.getRGB(), imageFile.getName());
+    @Override
+    public void newTileButtonPressed(MapMaker mapMaker) {
 
-        tileListModel.addElement(new ImageIcon(img, color.getRGB() + ""));
-        saved = false;
+        JFileChooser fileChooser = FileIO.getImageFileChooser(mapMaker.getPathWithRoot(Folder.MAP_TILES));
+
+        int val = fileChooser.showOpenDialog(mapMaker);
+        if (val == JFileChooser.APPROVE_OPTION) {
+            File[] files = fileChooser.getSelectedFiles();
+            for (File imageFile: files) {
+                Color color = JColorChooser.showDialog(mapMaker, "Choose a preferred color for tile: " + imageFile.getName(), Color.WHITE);
+                if (color == null) {
+                    continue;
+                }
+
+                color = DrawUtils.permuteColor(color, indexMap);
+                BufferedImage img = FileIO.readImage(imageFile);
+                mapTileMap.put(color.getRGB(), img);
+                indexMap.put(color.getRGB(), imageFile.getName());
+
+                tileListModel.addElement(new ImageIcon(img, color.getRGB() + ""));
+                saved = false;
+            }
+        }
     }
 
     public void save(MapMaker mapMaker) {
@@ -155,10 +201,7 @@ public class TileMap {
             final String imageIndex = Integer.toString(entry.getKey(), 16);
             final String imageName = entry.getValue();
 
-            indexFile.append(imageName)
-                    .append(" ")
-                    .append(imageIndex)
-                    .append("\n");
+            StringUtils.appendLine(indexFile, imageName + " " + imageIndex);
         }
 
         FileIO.writeToFile(mapMaker.getPathWithRoot(FileName.MAP_TILES_INDEX), indexFile);

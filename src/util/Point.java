@@ -28,10 +28,14 @@ public class Point {
         return x >= 0 && x < dimension.width && y >= 0 && y < dimension.height;
     }
 
-    public Point add(Point other) {
-        this.x += other.x;
-        this.y += other.y;
+    public Point add(int x, int y) {
+        this.x += x;
+        this.y += y;
         return this;
+    }
+
+    public Point add(Point other) {
+        return this.add(other.x, other.y);
     }
 
     public static Point add(Point first, Point second) {

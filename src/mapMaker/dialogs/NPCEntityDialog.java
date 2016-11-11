@@ -2,7 +2,7 @@ package mapMaker.dialogs;
 
 import map.entity.npc.NPCEntityData;
 import mapMaker.MapMaker;
-import mapMaker.TileMap.TileType;
+import mapMaker.model.TileModel.TileType;
 import util.PokeString;
 import util.StringUtils;
 

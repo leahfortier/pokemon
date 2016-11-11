@@ -2,6 +2,7 @@ package mapMaker.data;
 
 import item.Item;
 import map.MapData;
+import map.MapMetaData.MapDataType;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
 import map.entity.TriggerEntityData;
@@ -11,9 +12,6 @@ import map.triggers.MapTransitionTrigger;
 import map.triggers.TriggerData;
 import map.triggers.WildBattleTrigger;
 import mapMaker.MapMaker;
-import mapMaker.MapMaker.EditType;
-import mapMaker.TileMap.TileType;
-import mapMaker.TriggerModelType;
 import mapMaker.dialogs.EventTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
@@ -23,6 +21,8 @@ import mapMaker.dialogs.TransitionBuildingTransitionDialog;
 import mapMaker.dialogs.TriggerEntityDialog;
 import mapMaker.dialogs.WildBattleTriggerEditDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
+import mapMaker.model.TileModel.TileType;
+import mapMaker.model.TriggerModel.TriggerModelType;
 import util.DrawUtils;
 import util.FileIO;
 import util.Point;
@@ -104,31 +104,15 @@ public class MapMakerTriggerData {
 
 	private MapMaker mapMaker;
 
-	/**
-	 * Create an empty collection of Triggers for the current map.
-	 * 
-	 * @param currentMapName
-	 *            Name of the current map.
-	 */
-	public MapMakerTriggerData(String currentMapName, Dimension currentMapSize, MapMaker mapMaker) {
-		initialize(currentMapName, currentMapSize, mapMaker);
+	public MapMakerTriggerData(MapMaker mapMaker) {
+		initialize(mapMaker);
 
 		// Force creation of mapName.txt file
 		triggersSaved = false;
 	}
 
-	/**
-	 * Create and initialize triggers from file.
-	 * 
-	 * @param currentMapName
-	 *            Name of the current map.
-	 * @param mapTriggerFile
-	 *            The file containing all the triggers for the current map.
-	 * @param currentMapSize
-	 *            The size of the current map.
-	 */
-	public MapMakerTriggerData(String currentMapName, Dimension currentMapSize, MapMaker mapMaker, File mapTriggerFile) {
-		initialize(currentMapName, currentMapSize, mapMaker);
+	public MapMakerTriggerData(MapMaker mapMaker, File mapTriggerFile) {
+		initialize(mapMaker);
 
 		String fileText = FileIO.readEntireFileWithoutReplacements(mapTriggerFile, false);
 
@@ -203,9 +187,7 @@ public class MapMakerTriggerData {
 		triggersSaved = true;
 	}
 
-	private void initialize(String currentMapName, Dimension currentMapSize, MapMaker mapMaker) {
-		this.currentMapName = currentMapName;
-		this.currentMapSize = currentMapSize;
+	private void initialize(MapMaker mapMaker) {
 		this.mapMaker = mapMaker;
 
 		triggers = new HashMap<>();
@@ -567,9 +549,10 @@ public class MapMakerTriggerData {
 	}
 
 	// TODO: holy hell this method needs to be split
-	public void placeTrigger(final int x, final int y) {
-		Point location = new Point(x, y);
+	public void placeTrigger(Point location) {
 		int index = getMapIndex(location);
+		int x = location.x;
+		int y = location.y;
 
 		// TODO: Ask user if they would like to place over
 
@@ -687,7 +670,7 @@ public class MapMakerTriggerData {
 					}
 
 					// Update map area
-					int area = mapMaker.getTile(location, EditType.AREA_MAP);
+					int area = mapMaker.getTile(location, MapDataType.AREA);
 					if (isMap1) {
 						pair.area1 = area;
 					}
