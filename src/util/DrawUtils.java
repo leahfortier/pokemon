@@ -4,23 +4,28 @@ import gui.Button;
 import main.Global;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
-public class DrawMetrics {
+public class DrawUtils {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
-	
+
+	// Dimension of a single tile
+	private static final Dimension SINGLE_TILE_DIMENSION = new Dimension(1, 1);
+
 	// For wrapped text, the amount in between each letter
-	private static final float VERTICAL_WRAP_FACTOR = 2f; 
+	private static final float VERTICAL_WRAP_FACTOR = 2f;
 	
 	// The font the game interface uses
-	private static HashMap<Integer, Font> fontMap;
-	private static HashMap<Integer, Metrics> fontMetricsMap;
+	private static Map<Integer, Font> fontMap;
+	private static Map<Integer, Metrics> fontMetricsMap;
 	
 	public static void loadFontMetricsMap() {
 		if (fontMetricsMap != null) {
@@ -44,7 +49,7 @@ public class DrawMetrics {
 		g.setFont(getFont(fontSize));
 	}
 	
-	private static Font getFont(int size) {
+	public static Font getFont(int size) {
 		if (fontMap == null) {
 			fontMap = new HashMap<>();
 		}
@@ -214,7 +219,7 @@ public class DrawMetrics {
 		g.setColor(new Color(128, 128, 128, 128));
 		
 		if (rightAligned) {
-			DrawMetrics.drawRightAlignedString(g, text, x, y);
+			DrawUtils.drawRightAlignedString(g, text, x, y);
 		}
 		else {
 			g.drawString(text, x, y);
@@ -223,11 +228,157 @@ public class DrawMetrics {
 		g.setColor(Color.DARK_GRAY);
 		
 		if (rightAligned) {
-			DrawMetrics.drawRightAlignedString(g, text, x - 2, y - 2);
+			DrawUtils.drawRightAlignedString(g, text, x - 2, y - 2);
 		}
 		else {
 			g.drawString(text, x - 2, y - 2);
 		}
+	}
+
+	private static int getTextWidth(final String text, final int fontSize) {
+		return text.length()*getFontMetrics(fontSize).getHorizontalSpacing();
+	}
+
+	public static Point getLocation(Point drawLocation, Point mapLocation) {
+		return new Point(
+				(drawLocation.x - mapLocation.x)/Global.TILE_SIZE,
+				(drawLocation.y - mapLocation.y)/Global.TILE_SIZE
+		);
+	}
+
+	public static Point getDrawLocation(Point location, Point mapLocation) {
+		return new Point(
+				location.x*Global.TILE_SIZE + mapLocation.x,
+				location.y*Global.TILE_SIZE + mapLocation.y
+		);
+	}
+
+	public static Point getImageDrawLocation(BufferedImage image, Point location, Point mapLocation) {
+		Point drawLocation = getDrawLocation(location, mapLocation);
+		drawLocation.x += Global.TILE_SIZE/2 - image.getWidth()/2;
+		drawLocation.y += Global.TILE_SIZE/2 -  image.getHeight()/2;
+
+		return drawLocation;
+	}
+
+	public static void drawTileImage(Graphics g, BufferedImage image, Point location, Point mapLocation) {
+		Point drawLocation = getImageDrawLocation(image, location, mapLocation);
+
+		g.drawImage(image, drawLocation.x, drawLocation.y, null);
+	}
+
+	public static void outlineTileRed(Graphics g, Point location, Point mapLocation) {
+		outlineTile(g, location, mapLocation, Color.RED);
+	}
+
+	public static void outlineTile(Graphics g, Point location, Point mapLocation, Color color) {
+		outlineTiles(g, location, mapLocation, color, SINGLE_TILE_DIMENSION);
+	}
+
+	public static void outlineTiles(Graphics g, Point location, Point mapLocation, Color color, Dimension rectangle) {
+		Point drawLocation = getDrawLocation(location, mapLocation);
+
+		g.setColor(color);
+		g.drawRect(drawLocation.x, drawLocation.y, Global.TILE_SIZE*rectangle.width, Global.TILE_SIZE*rectangle.height);
+	}
+
+	public static void fillTile(Graphics g, Point location, Point mapLocation, Color color) {
+		Point drawLocation = getDrawLocation(location, mapLocation);
+
+		g.setColor(color);
+		g.fillRect(drawLocation.x, drawLocation.y, Global.TILE_SIZE, Global.TILE_SIZE);
+	}
+
+	public static void fillBlankTile(Graphics g, Point drawLocation) {
+		int halfTile = Global.TILE_SIZE/2;
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				g.setColor(i == j ? Color.GRAY : Color.LIGHT_GRAY);
+				g.fillRect(drawLocation.x + i*halfTile, drawLocation.y + j*halfTile, halfTile, halfTile);
+			}
+		}
+	}
+
+	public static BufferedImage createBlankTile() {
+		BufferedImage image = createNewTileImage();
+		Graphics g = image.getGraphics();
+		fillBlankTile(g, new Point());
+		g.dispose();
+
+		return image;
+	}
+
+	public static Color permuteColor(Color color, Map<Integer,String> indexMap) {
+		int dr = color.getRed() < 128 ? 1 : -1;
+		int dg = color.getGreen() < 128 ? 1 : -1;
+		int db = color.getBlue() < 128 ? 1 : -1;
+
+		while (indexMap.containsKey(color.getRGB())) {
+			int r = color.getRed() + dr;
+			int g = color.getGreen() + dg;
+			int b = color.getBlue() + db;
+
+			color = new Color(r, g, b);
+		}
+
+		return color;
+	}
+
+	public static void fillImage(BufferedImage image, Color color) {
+		Graphics g = image.getGraphics();
+		g.setColor(color);
+		g.fillRect(0, 0, Global.TILE_SIZE, Global.TILE_SIZE);
+		g.dispose();
+	}
+
+	public static BufferedImage createNewImage(Dimension dimension) {
+		return new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
+	}
+
+	public static BufferedImage createNewTileImage() {
+		return new BufferedImage(Global.TILE_SIZE, Global.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
+	}
+
+	public static BufferedImage fillImage(Color color) {
+		BufferedImage image = createNewTileImage();
+		fillImage(image, color);
+
+		return image;
+	}
+
+	public static BufferedImage blankImageWithText(String text) {
+		int extra = DrawUtils.getTextWidth(text + " ", 14);
+
+		BufferedImage image = new BufferedImage(Global.TILE_SIZE + extra, Global.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+		g.setColor(Color.BLACK);
+		setFont(g, 14);
+
+		// TODO: If we're starting the string 3 pixels after the image, then shouldn't we add three to the extra?
+		// TODO: I think the y value here is a guess - can maybe use draw metrics to figure out where to start
+		g.drawString(text, Global.TILE_SIZE + 3, Global.TILE_SIZE*2/3);
+
+		g.dispose();
+
+		return image;
+	}
+
+	public static BufferedImage colorWithText(String text, Color color) {
+		BufferedImage image = blankImageWithText(text);
+		fillImage(image, color);
+		return image;
+	}
+
+	public static BufferedImage imageWithText(BufferedImage image, String text) {
+		if (image == null) {
+			Global.error("Image is null :(");
+		}
+
+		BufferedImage bufferedImage = blankImageWithText(text);
+		Graphics g = bufferedImage.getGraphics();
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		return bufferedImage;
 	}
 	
 	static class Metrics {

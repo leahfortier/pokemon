@@ -10,8 +10,7 @@ import main.Game;
 import main.Global;
 import pokemon.Ability;
 import pokemon.PokemonInfo;
-import util.DrawMetrics;
-import util.FileIO;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -24,7 +23,6 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
-import java.util.Scanner;
 
 public class GameFrame {
 //	public static final boolean GENERATE_STUFF = true;
@@ -74,7 +72,7 @@ public class GameFrame {
 		BattleEffect.loadEffects();
 		Ability.loadAbilities();
 		Item.loadItems();
-		DrawMetrics.loadFontMetricsMap();
+		DrawUtils.loadFontMetricsMap();
 	}
 
 	private static class GameLoop implements Runnable {
@@ -105,7 +103,7 @@ public class GameFrame {
 			g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 			
 			g.setColor(Color.WHITE);
-			DrawMetrics.setFont(g, 72);
+			DrawUtils.setFont(g, 72);
 			g.drawString("LOADING...", 30, 570);
 			g.dispose();
 			strategy.show();

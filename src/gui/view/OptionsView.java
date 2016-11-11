@@ -3,7 +3,7 @@ package gui.view;
 import main.Game;
 import main.Game.ViewMode;
 import main.Global;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -60,8 +60,8 @@ public class OptionsView extends View {
 		g.fillRect(0, 0, d.width, d.height);
 		
 		g.setColor(Color.WHITE);
-		DrawMetrics.setFont(g, 150);
-		DrawMetrics.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
+		DrawUtils.setFont(g, 150);
+		DrawUtils.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
 		
 		if (musicOn) {
 			g.setColor(Color.GREEN);
@@ -71,7 +71,7 @@ public class OptionsView extends View {
 			g.fillRect(d.width/2 - 200, d.height/2 - 50, 200, 100);
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 100);
+			DrawUtils.setFont(g, 100);
 			g.drawString("OFF", d.width/2 - 180, d.height/2 + 32);
 		}
 		else {
@@ -82,7 +82,7 @@ public class OptionsView extends View {
 			g.fillRect(d.width/2 - 200, d.height/2 - 50, 200, 100);
 			
 			g.setColor(Color.BLACK);
-			DrawMetrics.setFont(g, 100);
+			DrawUtils.setFont(g, 100);
 			g.drawString("ON", d.width/2 + 40, d.height/2 + 32);
 		}
 		

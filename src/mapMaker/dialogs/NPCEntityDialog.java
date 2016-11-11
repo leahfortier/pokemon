@@ -1,9 +1,10 @@
 package mapMaker.dialogs;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
+import map.entity.npc.NPCEntityData;
+import mapMaker.MapMaker;
+import mapMaker.model.TileModel.TileType;
+import util.PokeString;
+import util.StringUtils;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -18,11 +19,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import util.PokeString;
-import map.entity.npc.NPCEntityData;
-import mapMaker.MapMaker;
-import util.StringUtils;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NPCEntityDialog extends JPanel {
 	private static final long serialVersionUID = -8061888140387296525L;
@@ -73,7 +73,7 @@ public class NPCEntityDialog extends JPanel {
 		spriteComboBox.setModel(new DefaultComboBoxModel<>(trainerSprites));
 		spriteComboBox.setSelectedIndex(1);
 		
-		label.setIcon(new ImageIcon(mapMaker.getTileFromSet("Trainer", 12 + 4)));
+		label.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12 + 4)));
 		
 		JLabel lblSprite = new JLabel("Sprite");
 		
@@ -87,7 +87,7 @@ public class NPCEntityDialog extends JPanel {
             int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
             int direction = directionComboBox.getSelectedIndex();
 
-            BufferedImage img = mapMaker.getTileFromSet("Trainer", 12*index + 1 + direction);
+            BufferedImage img = mapMaker.getTileFromSet(TileType.TRAINER, 12*index + 1 + direction);
             img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
 
 			ImageIcon icon = new ImageIcon(img);
@@ -99,7 +99,7 @@ public class NPCEntityDialog extends JPanel {
             int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
             int direction = directionComboBox.getSelectedIndex();
 
-            BufferedImage img = mapMaker.getTileFromSet("Trainer", 12*index + 1 + direction);
+            BufferedImage img = mapMaker.getTileFromSet(TileType.TRAINER, 12*index + 1 + direction);
             img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
 
 			ImageIcon icon = new ImageIcon(img);
@@ -325,8 +325,8 @@ public class NPCEntityDialog extends JPanel {
 	private ImageIcon[] getTrainerSprites() {
 		List<ImageIcon> icons = new ArrayList<>();
 		
-		for (int curr = 0; mapMaker.getTileFromSet("Trainer", 12*curr + 4) != null; curr++) {
-			icons.add(new ImageIcon(mapMaker.getTileFromSet("Trainer", 12*curr + 4), "" + curr));
+		for (int curr = 0; mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4) != null; curr++) {
+			icons.add(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4), "" + curr));
 		}
 		
 		ImageIcon[] imageIcons = new ImageIcon[icons.size()];

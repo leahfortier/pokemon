@@ -11,7 +11,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import sound.SoundTitle;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.Save;
 import util.InputControl.Control;
@@ -355,9 +355,9 @@ public class MainMenuView extends View {
 		g.setColor(Color.BLACK);
 		switch (state) {
 			case MAIN:
-				DrawMetrics.setFont(g, 40);
+				DrawUtils.setFont(g, 40);
 				for (int i = 0; i < NUM_MAIN_BUTTONS; i++) {
-					DrawMetrics.drawCenteredString(g, MAIN_HEADERS[i], state.buttons[i]);
+					DrawUtils.drawCenteredString(g, MAIN_HEADERS[i], state.buttons[i]);
 				}
 				break;
 			case LOAD:
@@ -367,22 +367,22 @@ public class MainMenuView extends View {
 				}
 				
 				// Return and Delete
-				DrawMetrics.setFont(g, 30);
-				DrawMetrics.drawCenteredString(g, "Return", state.buttons[Save.NUM_SAVES]);
-				DrawMetrics.drawCenteredString(g, "Delete", state.buttons[Save.NUM_SAVES + 1]);
+				DrawUtils.setFont(g, 30);
+				DrawUtils.drawCenteredString(g, "Return", state.buttons[Save.NUM_SAVES]);
+				DrawUtils.drawCenteredString(g, "Delete", state.buttons[Save.NUM_SAVES + 1]);
 				break;
 			case NEW:
 				for (int i = 0; i < Save.NUM_SAVES; i++) {
 					drawSaveInformation(g, state.buttons[i], i, "New Save");
 				}
 				
-				DrawMetrics.setFont(g, 40);
-				DrawMetrics.drawCenteredString(g, "Return", state.buttons[Save.NUM_SAVES]);
+				DrawUtils.setFont(g, 40);
+				DrawUtils.drawCenteredString(g, "Return", state.buttons[Save.NUM_SAVES]);
 				break;
 			case OPTIONS:
-				DrawMetrics.setFont(g, 40);
+				DrawUtils.setFont(g, 40);
 				for (int i = 0; i < NUM_MAIN_BUTTONS; i++) {
-					DrawMetrics.drawCenteredString(g, OPTIONS_HEADERS[i], state.buttons[i]);
+					DrawUtils.drawCenteredString(g, OPTIONS_HEADERS[i], state.buttons[i]);
 				}
 				break;
 			case CREDITS:
@@ -398,19 +398,19 @@ public class MainMenuView extends View {
 		g.setClip(0, 220, d.width, d.height - 240);
 
 		g.setColor(new Color(0, 0, 0, 64));
-		DrawMetrics.setFont(g, 512);
+		DrawUtils.setFont(g, 512);
 		g.drawString(creditsHoz, d.width - creditsTime2, d.height - 30);
 
 		g.setColor(Color.BLACK);
 		
 		for (int i = 1; i < creditsText.length; i++) {
 			if (creditsText[i - 1].isEmpty()) {
-				DrawMetrics.setFont(g, 40);
-				DrawMetrics.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
+				DrawUtils.setFont(g, 40);
+				DrawUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
 			}
 			else {
-				DrawMetrics.setFont(g, 30);
-				DrawMetrics.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
+				DrawUtils.setFont(g, 30);
+				DrawUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
 			}
 		}
 		
@@ -424,25 +424,25 @@ public class MainMenuView extends View {
 		if (info != null) {
 			g.translate(b.x, b.y);
 			
-			DrawMetrics.setFont(g, 20);
+			DrawUtils.setFont(g, 20);
 
 			g.drawString("Name:", 16, 28);
-			DrawMetrics.drawRightAlignedString(g, info.getName(), 189, 28);
+			DrawUtils.drawRightAlignedString(g, info.getName(), 189, 28);
 
 			g.drawString("Time:", 210, 28);
-			DrawMetrics.drawRightAlignedString(g, "" + Save.formatTime(info.getTime()), 383, 28);
+			DrawUtils.drawRightAlignedString(g, "" + Save.formatTime(info.getTime()), 383, 28);
 
 			g.drawString("Badges:", 16, 58);
-			DrawMetrics.drawRightAlignedString(g, "" + info.getBadges(), 189, 58);
+			DrawUtils.drawRightAlignedString(g, "" + info.getBadges(), 189, 58);
 
 			g.drawString("Pokedex:", 210, 58);
-			DrawMetrics.drawRightAlignedString(g, "" + info.getPokemonSeen(), 383, 58);
+			DrawUtils.drawRightAlignedString(g, "" + info.getPokemonSeen(), 383, 58);
 			
 			g.translate(-b.x, -b.y);
 		}
 		else {
-			DrawMetrics.setFont(g, 30);
-			DrawMetrics.drawCenteredString(g, emptyText, b);
+			DrawUtils.setFont(g, 30);
+			DrawUtils.drawCenteredString(g, emptyText, b);
 		}
 	}
 

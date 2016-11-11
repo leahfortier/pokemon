@@ -7,7 +7,7 @@ import main.Game;
 import main.Global;
 import namesies.PokemonNamesies;
 import pokemon.ActivePokemon;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -225,7 +225,7 @@ class DevConsole {
 		g.drawLine(0, 0, Global.GAME_SIZE.width, 0);
 
 		g.setColor(Color.WHITE);
-		DrawMetrics.setFont(g, 14);
+		DrawUtils.setFont(g, 14);
 		g.drawString(currText, 2, 16);
 
 		g.translate(0, -Global.GAME_SIZE.height + 20);

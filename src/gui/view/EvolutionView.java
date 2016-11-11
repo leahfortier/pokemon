@@ -16,7 +16,7 @@ import pokemon.BaseEvolution;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -104,7 +104,7 @@ public class EvolutionView extends View {
 		
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
 		
-		DrawMetrics.setFont(g, 30);
+		DrawUtils.setFont(g, 30);
 		g.setColor(Color.BLACK);
 		
 		int preIndex = isEgg ? PokemonInfo.EGG_IMAGE : preEvolution.getImageNumber(evolvingPokemon.isShiny());
@@ -118,20 +118,20 @@ public class EvolutionView extends View {
 		
 		switch (state) {
 			case START:
-				DrawMetrics.drawCenteredImage(g, currEvolution, drawWidth, drawHeight);
+				DrawUtils.drawCenteredImage(g, currEvolution, drawWidth, drawHeight);
 				break;
 			case EVOLVE:
 				evolveAnimation(g, currEvolution, nextEvolution, drawWidth, drawHeight);
 				break;
 			case END:
-				DrawMetrics.drawCenteredImage(g, nextEvolution, drawWidth, drawHeight);
+				DrawUtils.drawCenteredImage(g, nextEvolution, drawWidth, drawHeight);
 				break;
 		}
 		
 		if (message != null) {
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			DrawMetrics.setFont(g, 30);
-			DrawMetrics.drawWrappedText(g, message, 30, 490, 750);
+			DrawUtils.setFont(g, 30);
+			DrawUtils.drawWrappedText(g, message, 30, 490, 750);
 		}
 	}
 	
@@ -160,8 +160,8 @@ public class EvolutionView extends View {
 		animationEvolve -= Global.MS_BETWEEN_FRAMES;
 		
 		// TODO: Why does this need Graphics2D instead of just Graphics for just drawing an image? See if this can use the center function as well
-		g2d.drawImage(DrawMetrics.colorImage(nextEvolution, evolutionScales, evolutionOffsets), px-nextEvolution.getWidth()/2, py-nextEvolution.getHeight()/2, null);
-		g2d.drawImage(DrawMetrics.colorImage(currEvolution, prevEvolutionScales, prevEvolutionOffsets), px-currEvolution.getWidth()/2, py-currEvolution.getHeight()/2, null);
+		g2d.drawImage(DrawUtils.colorImage(nextEvolution, evolutionScales, evolutionOffsets), px-nextEvolution.getWidth()/2, py-nextEvolution.getHeight()/2, null);
+		g2d.drawImage(DrawUtils.colorImage(currEvolution, prevEvolutionScales, prevEvolutionOffsets), px-currEvolution.getWidth()/2, py-currEvolution.getHeight()/2, null);
 	}
 
 	public ViewMode getViewModel() {

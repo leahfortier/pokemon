@@ -1,8 +1,11 @@
 package mapMaker.dialogs;
 
 import item.Item;
-
-import java.awt.Color;
+import map.entity.ItemEntityData;
+import mapMaker.MapMaker;
+import mapMaker.model.TileModel.TileType;
+import util.PokeString;
+import util.StringUtils;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -17,11 +20,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import util.PokeString;
-import map.entity.ItemEntityData;
-import mapMaker.MapMaker;
-import util.StringUtils;
+import java.awt.Color;
 
 public class ItemEntityDialog extends JPanel {
 	private static final long serialVersionUID = 7469923865936465388L;
@@ -61,7 +60,7 @@ public class ItemEntityDialog extends JPanel {
 				  }
 				  
 				  int index = Item.getItemFromName(itemName).getImageIndex();
-				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
+				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
 				  itemTextField.setBackground(new Color(0x90EE90));
 			  }
 		});
@@ -124,7 +123,7 @@ public class ItemEntityDialog extends JPanel {
 		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
 		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getImageIndex();
-		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet("Item", index)));
+		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
 	}
 	
 	public String getItemName() {

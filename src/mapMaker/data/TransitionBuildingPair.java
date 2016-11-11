@@ -113,8 +113,9 @@ public class TransitionBuildingPair implements Comparable<TransitionBuildingPair
 		if (!horizontal) {
 			directionStartIndex = 2; //Vertical
 		}
-		
-		return "To the " +TransitionBuildingData.directions[directionStartIndex].toLowerCase() + " is "+ mapMaker.getAreaForIndex(area1) +" and to the " + TransitionBuildingData.directions[directionStartIndex + 1].toLowerCase() + " is " + mapMaker.getAreaForIndex(area2) + ".";
+
+		// yeah removed the shit because this is almost gone sue me sue me sue me I don't give a fuck
+		return "To the " +TransitionBuildingData.directions[directionStartIndex].toLowerCase() + " is and to the " + TransitionBuildingData.directions[directionStartIndex + 1].toLowerCase() + ".";
 	}
 	
 	//Sort first by map1, then by map2, then by pair number
