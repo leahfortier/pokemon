@@ -4,9 +4,9 @@ import map.MapMetaData.MapDataType;
 import mapMaker.data.MapMakerTriggerData;
 import mapMaker.model.AreaModel;
 import mapMaker.model.EditMode.EditType;
+import mapMaker.model.MoveModel.MoveModelType;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
-import mapMaker.model.TriggerModel.TriggerModelType;
 import util.DrawUtils;
 import util.FileIO;
 import util.Point;
@@ -53,7 +53,7 @@ public class EditMapMetaData {
     }
 
     public boolean isSaved() {
-        return saved && (triggerData != null && triggerData.isSaved());
+        return saved && (triggerData == null || triggerData.isSaved());
     }
 
     public BufferedImage getMapImage(MapDataType dataType) {
@@ -66,7 +66,7 @@ public class EditMapMetaData {
         }
 
         Graphics g = this.getMapImage(MapDataType.MOVE).getGraphics();
-        g.setColor(Color.BLACK); // TODO: Immovable?
+        g.setColor(MoveModelType.IMMOVABLE.getColor());
         g.fillRect(0, 0, currentMapSize.width, currentMapSize.height);
         g.dispose();
     }

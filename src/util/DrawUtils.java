@@ -24,8 +24,8 @@ public class DrawUtils {
 	private static final float VERTICAL_WRAP_FACTOR = 2f;
 	
 	// The font the game interface uses
-	private static HashMap<Integer, Font> fontMap;
-	private static HashMap<Integer, Metrics> fontMetricsMap;
+	private static Map<Integer, Font> fontMap;
+	private static Map<Integer, Metrics> fontMetricsMap;
 	
 	public static void loadFontMetricsMap() {
 		if (fontMetricsMap != null) {

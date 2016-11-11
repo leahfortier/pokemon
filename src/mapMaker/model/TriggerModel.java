@@ -33,6 +33,10 @@ public class TriggerModel extends MapMakerModel {
             this.imageIndex = imageIndex;
         }
 
+        public String getName() {
+            return this.name;
+        }
+
         public BufferedImage getImage(final MapMaker mapMaker) {
             return DrawUtils.imageWithText(mapMaker.getTileFromSet(tileType, imageIndex), name);
         }

@@ -6,7 +6,6 @@ import util.DrawUtils;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 
 public class MoveModel extends MapMakerModel {
     private final DefaultListModel<ImageIcon> moveListModel;
@@ -30,16 +29,16 @@ public class MoveModel extends MapMakerModel {
             this.color = color;
         }
 
-        public BufferedImage getImage() {
-            return DrawUtils.colorWithText(this.name, this.color);
-        }
-
         private ImageIcon getImageIcon() {
-            return new ImageIcon(this.getImage(), this.getImageIndex() + "");
+            return new ImageIcon(DrawUtils.colorWithText(this.name, this.color), this.getImageIndex() + "");
         }
 
         public int getImageIndex() {
             return this.color.getRGB();
+        }
+
+        public Color getColor() {
+            return this.color;
         }
     }
 

@@ -752,7 +752,6 @@ public class MapMakerTriggerData {
 				return TriggerModelType.POKE_CENTER;
 			}
 
-			// TODO: I swear to fucking god what is going on
 			return TriggerModelType.MAP_ENTRANCE;
 		}
 
@@ -1093,19 +1092,12 @@ public class MapMakerTriggerData {
 		System.out.println(mapMaker.getPlaceableTrigger().name);
 	}
 
-	private PlaceableTrigger editItem(ItemEntityData item) {
-		ItemEntityDialog itemDialog = new ItemEntityDialog(mapMaker);
-		if (item != null) {
-			itemDialog.setItem(item);
-		}
-
-		JComponent[] inputs = new JComponent[] {itemDialog};
-		Object[] options = {"Done", "Cancel"};
-
+	private boolean dialogOption(String name, JComponent... inputs) {
+		Object[] options = { "Done", "Cancel" };
 		int results = JOptionPane.showOptionDialog(
 				mapMaker,
 				inputs,
-				"Item Editor",
+				name,
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.PLAIN_MESSAGE,
 				null,
@@ -1113,29 +1105,53 @@ public class MapMakerTriggerData {
 				options[0]
 		);
 
-		String itemType = itemDialog.getItemName();
-		if (results == JOptionPane.CLOSED_OPTION
-				|| results == 1 // TODO: What is results and why is it being compared like this? what does 1 represent?
-				|| itemType.isEmpty()
-				|| !Item.isItem(itemType)) {
+		return results == JOptionPane.YES_OPTION;
+	}
+
+	private String getEntityNameFormat(String baseName) {
+		if (StringUtils.isNullOrEmpty(baseName)) {
+			baseName = "Nameless";
+		}
+
+		baseName = baseName.replaceAll("\\s", "");
+		baseName = PokeString.removeSpecialSymbols(baseName);
+		return baseName;
+	}
+
+	private String getUniqueEntityName(TriggerModelType type, String basicEntityName) {
+		String typeName = getEntityNameFormat(type.getName());
+		basicEntityName = getEntityNameFormat(basicEntityName);
+
+		int number = 1;
+		String uniqueEntityName;
+
+		// Loop until valid name is created
+		do {
+			uniqueEntityName = String.format("%s_%s_%s_%02d",
+					mapMaker.getCurrentMapName(), typeName, basicEntityName, number++);
+		} while (entityNames.contains(uniqueEntityName));
+
+		System.out.println(uniqueEntityName);
+
+		return uniqueEntityName;
+	}
+
+	private PlaceableTrigger editItem(ItemEntityData item) {
+		ItemEntityDialog itemDialog = new ItemEntityDialog(mapMaker);
+		if (item != null) {
+			itemDialog.setItem(item);
+		}
+
+		if (!dialogOption("Item Editor", itemDialog)) {
 			return null;
 		}
 
-		itemType = itemType.replace(' ', '_');
+		String itemType = itemDialog.getItemName();
+		if (!Item.isItem(itemType)) {
+			return null;
+		}
 
-		// Loop until valid name is created.
-		int number = 1;
-		String itemEntityName = "";
-
-		do {
-			itemEntityName = String.format("%s_Item_%s_%02d", mapMaker.getCurrentMapName(), PokeString.removeSpecialSymbols(itemType), number++);
-		} while (entityNames.contains(itemEntityName));
-
-		System.out.println(itemEntityName);
-
-		// TODO: ??
-		item = new ItemEntityData(itemEntityName, "", PokeString.convertSpecialToUnicode(itemType), -1, -1);
-
+		String itemEntityName = getUniqueEntityName(TriggerModelType.ITEM, itemType);
 		ItemEntityData newItem = itemDialog.getItem(itemEntityName);
 
 		return new PlaceableTrigger(newItem);
@@ -1144,43 +1160,16 @@ public class MapMakerTriggerData {
 	private PlaceableTrigger editNPC(NPCEntityData npcData) {
 		NPCEntityDialog npcDialog = new NPCEntityDialog(mapMaker);
 		if (npcData != null) {
+			// TODO: wtf
 			npcDialog.setNPCData(npcData, npcData.name.replaceAll("^" + mapMaker.getCurrentMapName() + "_NPC_|_\\d + $", ""));
 		}
 
-		JComponent[] inputs = new JComponent[] { npcDialog };
-		Object[] options = {"Done", "Cancel"};
-
-		int results = JOptionPane.showOptionDialog(
-				mapMaker,
-				inputs,
-				"NPC Editor",
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.PLAIN_MESSAGE,
-				null,
-				options,
-				options[0]);
-
-		if (results == JOptionPane.CLOSED_OPTION || results == 1) {
+		if (!dialogOption("NPC Editor", npcDialog)) {
 			return null;
 		}
 
 		NPCEntityData newEntity = npcDialog.getNPC();
-
-		// loop until valid name is created.
-		int number = 1;
-		
-		newEntity.name = newEntity.name.isEmpty() ? "Nameless" : PokeString.removeSpecialCharacters(newEntity.name);
-
-		// TODO: Should have a generic method to handle this naming criteria -- this loop is all over the fucking place
-		String NPCName;
-		do
-		{
-			NPCName = String.format("%s_NPC_%s_%02d", mapMaker.getCurrentMapName(), newEntity.name, number++);
-		} while (entityNames.contains(NPCName));
-
-		// System.out.println(NPCName);
-
-		newEntity.name = NPCName;
+		newEntity.name = getUniqueEntityName(TriggerModelType.NPC, newEntity.name);
 
 		return new PlaceableTrigger(newEntity);
 	}
@@ -1191,30 +1180,12 @@ public class MapMakerTriggerData {
 			triggerDialog.setTriggerEntity(triggerEntity, triggerEntity.name.replaceAll("^" + mapMaker.getCurrentMapName() + "_TriggerEntity_|_\\d + $", ""));
 		}
 
-		JComponent[] inputs = new JComponent[] {triggerDialog};
-		Object[] options = {"Done", "Cancel"};
-
-		// TODO: Make a method for this
-		int results = JOptionPane.showOptionDialog(
-				mapMaker, inputs, "Trigger Entity Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-		if (results == JOptionPane.CLOSED_OPTION || results == 1) {
+		if (!dialogOption("Trigger Entity Editor", triggerDialog)) {
 			return null;
 		}
 
 		TriggerEntityData newEntity = triggerDialog.getTriggerEntity();
-
-		// loop until valid name is created.
-		int number = 1;
-		
-		String triggerEntityName = "";
-		newEntity.name = newEntity.name.isEmpty() ? "Nameless" : PokeString.removeSpecialCharacters(newEntity.name);
-		
-		do {
-			triggerEntityName = String.format("%s_TriggerEntity_%s_%02d", mapMaker.getCurrentMapName(), newEntity.name, number++);
-		} while (entityNames.contains(triggerEntityName));
-		
-		newEntity.name = triggerEntityName;
+		newEntity.name = getUniqueEntityName(TriggerModelType.TRIGGER_ENTITY, newEntity.name);
 
 		return new PlaceableTrigger(newEntity);
 	}
@@ -1222,33 +1193,25 @@ public class MapMakerTriggerData {
 	private PlaceableTrigger wildBattleTriggerOptions() {
 		WildBattleTriggerOptionsDialog wildBattleTriggerOptions = new WildBattleTriggerOptionsDialog(wildBattleTriggers, this);
 
-		Object[] options = {"Place", "Cancel"};
+		if (!dialogOption("Wild Battle Trigger Options", wildBattleTriggerOptions)) {
+			return null;
+		}
 
-		int results = JOptionPane.showOptionDialog(mapMaker, wildBattleTriggerOptions, "Wild Battle Trigger Options", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-		// TODO: Is this the same as that other one up there??
-		if (results == JOptionPane.CLOSED_OPTION || results == 1 || (results == 0 && wildBattleTriggerOptions.comboBox.getItemCount() == 0)) {
+		if (wildBattleTriggerOptions.comboBox.getItemCount() == 0) {
 			return null;
 		}
 
 		String wildBattleTriggerName = (String) wildBattleTriggerOptions.comboBox.getSelectedItem();
 		TriggerData td = wildBattleTriggers.get(wildBattleTriggerName);
 
-		// System.out.println(wildBattleTriggerName + " " + td.name + " " +
-		// td.triggerType +" " + td.triggerContents);
 		return new PlaceableTrigger(td);
 	}
 
 	private PlaceableTrigger editWildBattleTrigger(WildBattleTrigger wildBattleTrigger) {
 		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
-
 		dialog.initialize(wildBattleTrigger);
 
-		Object[] options = {"Done", "Cancel"};
-
-		int results = JOptionPane.showOptionDialog(mapMaker, dialog, "Wild Battle Trigger Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-		if (results == JOptionPane.CLOSED_OPTION || results == 1) {
+		if (!dialogOption("Wild Battle Trigger Editor", dialog)) {
 			return null;
 		}
 
@@ -1262,32 +1225,20 @@ public class MapMakerTriggerData {
 
 	private PlaceableTrigger editMapTransition(MapTransitionTrigger mapTransitionTrigger) {
 		MapTransitionDialog mapTransitionDialog = new MapTransitionDialog(mapMaker, this);
-
 		if (mapTransitionTrigger != null) {
 			mapTransitionDialog.setMapTransition(mapTransitionTrigger);
 		}
 
-		JComponent[] inputs = new JComponent[] {mapTransitionDialog};
-
-		Object[] options = {"Done", "Cancel"};
-
-		int results = JOptionPane.showOptionDialog(mapMaker, inputs, "Map Transition Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-		String mapDestination = mapTransitionDialog.getDestination();
-
-		if (results == JOptionPane.CLOSED_OPTION || results == 1 || mapDestination.isEmpty() || mapTransitionDialog.getMapEntrance().isEmpty()) {
+		if (!dialogOption("Map Transition Editor", mapTransitionDialog)) {
 			return null;
 		}
 
-		// loop until valid name is created.
-		int number = 1;
-		String mapTriggerName = "";
-		do {
-			mapTriggerName = String.format("from_%s_to_%s_%02d", mapMaker.getCurrentMapName(), mapDestination, number++);
-		} while (mapTransitionTriggers.containsKey(mapTriggerName));
+		String mapDestination = mapTransitionDialog.getDestination();
+		if (mapDestination.isEmpty() || mapTransitionDialog.getMapEntrance().isEmpty()) {
+			return null;
+		}
 
-		System.out.println(mapTriggerName);
-
+		String mapTriggerName = getUniqueEntityName(TriggerModelType.MAP_ENTRANCE, mapDestination);
 		TriggerData td = mapTransitionDialog.getTriggerData(mapTriggerName);
 
 		return new PlaceableTrigger(td);
@@ -1441,6 +1392,7 @@ public class MapMakerTriggerData {
 	private PlaceableTrigger editEventTrigger(EventTrigger eventTrigger) {
 		EventTriggerDialog eventTriggerDialog = new EventTriggerDialog();
 
+		// TODO: this is all wrong and I don't feel like fixing it right now
 		if (eventTrigger != null) {
 			String name = eventTrigger.getName();
 			String prefix = mapMaker.getCurrentMapName() + "_EventTrigger_";
@@ -1451,27 +1403,17 @@ public class MapMakerTriggerData {
 			eventTriggerDialog.setEventTrigger(eventTrigger, actualName);
 		}
 
-		JComponent[] inputs = new JComponent[] {eventTriggerDialog};
+		if (!dialogOption("Event Trigger Editor", eventTriggerDialog)) {
+			return null;
+		}
 
-		Object[] options = {"Done", "Cancel"};
-
-		int results = JOptionPane.showOptionDialog(mapMaker, inputs, "Event Trigger Editor", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-		String getName = eventTriggerDialog.getEventTriggerName();
-
-		if (results == JOptionPane.CLOSED_OPTION || results == 1 || getName.isEmpty()) {
+		String eventTriggerName = eventTriggerDialog.getEventTriggerName();
+		if (eventTriggerName.isEmpty()) {
 			return null;
 		}
 
 		// loop until valid name is created.
-		int number = 1;
-		String triggerName;
-		do {
-			triggerName = String.format("%s_EventTrigger_%s_%02d", mapMaker.getCurrentMapName(), getName, number++);
-		} while (triggerNames.contains(triggerName) || mapTriggers.isTriggerNameTaken(triggerName));
-
-		System.out.println(triggerName);
-
+		String triggerName = getUniqueEntityName(TriggerModelType.EVENT, eventTriggerName);
 		TriggerData td = eventTriggerDialog.getTriggerData(triggerName);
 
 		return new PlaceableTrigger(td);
