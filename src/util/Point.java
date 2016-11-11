@@ -94,6 +94,10 @@ public class Point {
     }
 
     public static Point copy(Point point) {
+        if (point == null) {
+            return null;
+        }
+
         return new Point(point.x, point.y);
     }
 

@@ -50,7 +50,7 @@ public class DrawUtils {
 		g.setFont(getFont(fontSize));
 	}
 	
-	private static Font getFont(int size) {
+	public static Font getFont(int size) {
 		if (fontMap == null) {
 			fontMap = new HashMap<>();
 		}

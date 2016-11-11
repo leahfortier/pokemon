@@ -30,7 +30,7 @@ public class SingleClickTool extends Tool {
 
         if (mapMaker.isEditType(EditType.TRIGGERS)) {
             mapMaker.clearPlaceableTrigger();
-            mapMaker.toolList.setSelectedIndex(3); // TODO
+            mapMaker.setTool(ToolType.TRIGGER);
         }
     }
 

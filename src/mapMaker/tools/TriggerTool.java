@@ -2,6 +2,7 @@ package mapMaker.tools;
 
 import mapMaker.MapMaker;
 import mapMaker.data.PlaceableTrigger;
+import mapMaker.model.EditMode.EditType;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import util.DrawUtils;
 import util.Point;
@@ -12,11 +13,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 
+// TODO: This tool doesn't work and doesn't look like it did previously either
 public class TriggerTool extends Tool {
     private JPopupMenu triggerListPopup;
     private JPopupMenu triggerOptionsPopup;
-
-    private Point mouseLocation;
 
     private PlaceableTrigger[] triggers;
     private PlaceableTrigger selectedTrigger;
@@ -36,10 +36,10 @@ public class TriggerTool extends Tool {
         JMenuItem moveItem = new JMenuItem("Move");
         triggerOptionsPopup.add(moveItem);
         moveItem.addActionListener(event -> {
-            mapMaker.toolList.setSelectedIndex(1);
+            mapMaker.setTool(ToolType.SINGLE_CLICK);
             TriggerModelType triggerModelType = mapMaker.getTriggerData().getTriggerModelType(selectedTrigger);
             if (triggerModelType != null) {
-                mapMaker.editTypeComboBox.setSelectedIndex(4);
+                mapMaker.setEditType(EditType.TRIGGERS);
 
                 mapMaker.getTriggerData().moveTrigger(selectedTrigger);
                 mapMaker.triggerToolMoveSelected = true;
@@ -59,10 +59,9 @@ public class TriggerTool extends Tool {
             return;
         }
 
-        this.mouseLocation = Point.copy(clickLocation);
-        Point location = DrawUtils.getLocation(this.mouseLocation, mapMaker.getMapLocation());
+        Point location = DrawUtils.getLocation(clickLocation, mapMaker.getMapLocation());
 
-        System.out.println("Trigger click: " + this.mouseLocation);
+        System.out.println("Trigger click: " + clickLocation);
 
         triggers = mapMaker.getTriggerData().getTrigger(location);
         triggerListPopup.removeAll();
@@ -86,11 +85,11 @@ public class TriggerTool extends Tool {
                 }
 
                 //triggerListPopup.removeAll();
-                triggerOptionsPopup.show(mapMaker.canvas, mouseLocation.x, mouseLocation.y);
+                triggerOptionsPopup.show(mapMaker.canvas, clickLocation.x, clickLocation.y);
             });
         }
 
-        triggerListPopup.show(mapMaker.canvas, mouseLocation.x, mouseLocation.y);
+        triggerListPopup.show(mapMaker.canvas, clickLocation.x, clickLocation.y);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package mapMaker;
 
+import main.Global;
 import map.MapMetaData.MapDataType;
 import mapMaker.data.MapMakerTriggerData;
 import mapMaker.data.PlaceableTrigger;
@@ -8,13 +9,11 @@ import mapMaker.model.EditMode.EditType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import mapMaker.tools.MoveTool;
-import mapMaker.tools.RectangleTool;
 import mapMaker.tools.SelectTool;
-import mapMaker.tools.SingleClickTool;
 import mapMaker.tools.Tool;
+import mapMaker.tools.Tool.ToolType;
 import mapMaker.tools.ToolRenderer;
-import mapMaker.tools.TriggerTool;
+import util.DrawUtils;
 import util.FileIO;
 import util.Folder;
 import util.Point;
@@ -22,10 +21,10 @@ import util.StringUtils;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -45,9 +44,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
@@ -68,7 +65,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().add(new MapMaker());
-		frame.setSize(800, 600);
+		frame.setSize(Global.GAME_SIZE);
 		frame.setVisible(true);
 	}
 
@@ -76,14 +73,14 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 	private JButton newTileButton;
 	private JList<ImageIcon> tileList;
-	public JList<Tool> toolList;
+	private JList<Tool> toolList;
 	public Canvas canvas;
-	private JMenuItem mntmNew, mntmLoad, mntmSetRoot;
-	public JMenuItem mntmCut, mntmCopy, mntmPaste;
-	private JLabel lblMapName;
-	private JMenuItem mntmSave;
-	private JLabel lblRoot;
-	public JComboBox<EditType> editTypeComboBox;
+	private JMenuItem newMenuItem, loadMenuItem, setRootMenuItem;
+	public JMenuItem cutMenuItem, copyMenuItem, pasteMenuItem;
+	private JLabel mapNameLabel;
+	private JMenuItem saveMenuItem;
+	private JLabel rootLabel;
+	private JComboBox<EditType> editTypeComboBox;
 
     private EditMode editMode;
     private EditMapMetaData mapData;
@@ -96,148 +93,185 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private Point mouseHoverLocation;
 		
 	private SelectTool selectTool;
-	public boolean triggerToolMoveSelected = false;
+    private ToolType previousToolType;
+	public boolean triggerToolMoveSelected;
 
-	private int previousToolListIndex = -1;
-	private boolean controlKeyDown = false;
+	private boolean controlKeyDown;
 
 	public MapMaker() {
 		this.root = null;
-		this.location = new Point();
+
+        this.location = new Point();
+        this.mouseHoverLocation = new Point();
+
         this.mapData = new EditMapMetaData();
         this.editMode = new EditMode(this);
 
-		this.setLayout(new BorderLayout());
+        this.canvas = new Canvas();
+        this.canvas.addMouseListener(this);
+        this.canvas.addMouseMotionListener(this);
+        this.canvas.addKeyListener(this);
 
-		JPanel tilePanel = new JPanel();
-		tilePanel.setBorder(new LineBorder(new Color(0, 0, 0), 4));
-		add(tilePanel, BorderLayout.WEST);
-		tilePanel.setLayout(new BorderLayout(0, 0));
+        this.setLayout(new BorderLayout());
+        this.add(this.createTilePanel(), BorderLayout.WEST);
+        this.add(this.createMenuBar(), BorderLayout.NORTH);
+		this.add(this.createToolList(), BorderLayout.EAST);
+        this.add(this.canvas, BorderLayout.CENTER);
 
-		newTileButton = new JButton("New Tile");
-		newTileButton.addActionListener(this);
-		tilePanel.add(newTileButton, BorderLayout.NORTH);
-		
-		tileList = new JList<>();
-		tileList.setModel(this.getModel().getListModel());
-		tileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		tileList.addListSelectionListener(this);
-		tileList.addKeyListener(this);
-		
-		JScrollPane listScroller = new JScrollPane(tileList);
-		tilePanel.add(listScroller, BorderLayout.CENTER);
-		
-		canvas = new Canvas();
-		canvas.addMouseListener(this);
-		canvas.addMouseMotionListener(this);
-		canvas.addKeyListener(this);
-		add(canvas, BorderLayout.CENTER);
+		this.setRoot(new File("."));
+	}
 
-		JMenuBar menuBar = new JMenuBar();
-		add(menuBar, BorderLayout.NORTH);
+	private JScrollPane createToolList() {
+        toolList = new JList<>();
+        toolList.setModel(Tool.getToolListModel(this));
+        toolList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        toolList.setCellRenderer(new ToolRenderer());
+        toolList.setFont(DrawUtils.getFont(18));
+        toolList.addListSelectionListener(this);
 
-		JMenu mnFile = new JMenu("File");
-		menuBar.add(mnFile);
-		
-		//System shortcut key. Control for windows, command for mac.
-		int shortcut = Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask();
-		
-		mntmNew = new JMenuItem("New");
-		mntmNew.addActionListener(this);
-		mntmNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, shortcut));//InputEvent.CTRL_MASK
-		mnFile.add(mntmNew);
-		
-		mntmSave = new JMenuItem("Save");
-		mntmSave.addActionListener(this);
-		mntmSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, shortcut));
-		mnFile.add(mntmSave);
-		
-		mntmLoad = new JMenuItem("Load");
-		mntmLoad.addActionListener(this);
-		mntmLoad.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, shortcut));
-		mnFile.add(mntmLoad);
-		
-		mntmSetRoot = new JMenuItem("Set Root");
-		mntmSetRoot.addActionListener(this);
-		mnFile.add(mntmSetRoot);
+        this.setTool(ToolType.MOVE);
+        this.selectTool = (SelectTool)this.getTool(ToolType.SELECT);
 
-		JMenu mnEdit = new JMenu("Edit");
-		menuBar.add(mnEdit);
-		
-		mntmCut = new JMenuItem("Cut");
-		mntmCut.addActionListener(this);
-		mntmCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, shortcut));
-		mntmCut.setEnabled(false);
-		mnEdit.add(mntmCut);
-		
-		mntmCopy = new JMenuItem("Copy");
-		mntmCopy.addActionListener(this);
-		mntmCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut));
-		mntmCopy.setEnabled(false);
-		mnEdit.add(mntmCopy);
-		
-		mntmPaste = new JMenuItem("Paste");
-		mntmPaste.addActionListener(this);
-		mntmPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcut));
-		mntmPaste.setEnabled(false);
-		mnEdit.add(mntmPaste);
+        return new JScrollPane(toolList);
+    }
 
-		Component horizontalStrut = Box.createHorizontalStrut(53);
-		menuBar.add(horizontalStrut);
-		
-		lblMapName = new JLabel("MapMaker");
-		menuBar.add(lblMapName);
+    private void setStyle(JComponent component) {
+        component.setFont(DrawUtils.getFont(16));
+        component.setBackground(Color.WHITE);
+    }
 
-		Component horizontalStrut_1 = Box.createHorizontalStrut(53);
-		menuBar.add(horizontalStrut_1);
-		
-		lblRoot = new JLabel("Root Location:");
-		lblRoot.setForeground(Color.RED);
-		menuBar.add(lblRoot);
+    private JMenuItem createMenuItem(String text) {
+        JMenuItem menuItem = new JMenuItem(text);
+        menuItem.addActionListener(this);
+        this.setStyle(menuItem);
 
-		Component horizontalStrut_2 = Box.createHorizontalStrut(50);
-		menuBar.add(horizontalStrut_2);
-		
-		editTypeComboBox = new JComboBox<>();
-		editTypeComboBox.addActionListener(event -> {
+        return menuItem;
+    }
+
+    private JMenuItem createMenuItem(String text, int keyEvent) {
+        JMenuItem menuItem = createMenuItem(text);
+
+        // System shortcut key. Control for windows, command for mac.
+        int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(keyEvent, shortcut));
+
+        return menuItem;
+    }
+
+    private JMenuItem createEditMenuItem(String text, int keyEvent) {
+        JMenuItem menuItem = this.createMenuItem(text, keyEvent);
+        menuItem.setEnabled(false);
+
+        return menuItem;
+    }
+
+    private JMenu createMenu(String text, JMenuItem... menuItems) {
+        JMenu menu = new JMenu(text);
+        this.setStyle(menu);
+
+        for (JMenuItem menuItem : menuItems) {
+            menu.add(menuItem);
+        }
+
+        return menu;
+    }
+
+    private JMenu createFileMenu() {
+        this.newMenuItem = this.createMenuItem("New", KeyEvent.VK_N);
+        this.saveMenuItem = this.createMenuItem("Save", KeyEvent.VK_S);
+        this.loadMenuItem = this.createMenuItem("Load", KeyEvent.VK_L);
+        this.setRootMenuItem = this.createMenuItem("Set Root");
+
+        return this.createMenu("File", newMenuItem, saveMenuItem, loadMenuItem, setRootMenuItem);
+    }
+
+    private JMenu createEditMenu() {
+        this.cutMenuItem = this.createEditMenuItem("Cut", KeyEvent.VK_X);
+        this.copyMenuItem = this.createEditMenuItem("Copy", KeyEvent.VK_C);
+        this.pasteMenuItem = this.createEditMenuItem("Paste", KeyEvent.VK_V);
+
+        return this.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem);
+    }
+
+	private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        this.setStyle(menuBar);
+
+        mapNameLabel = new JLabel("MapMaker");
+        this.setStyle(mapNameLabel);
+
+        rootLabel = new JLabel("Root Location:");
+        rootLabel.setForeground(Color.RED);
+
+        menuBar.add(this.createFileMenu());
+        menuBar.add(this.createEditMenu());
+        menuBar.add(Box.createHorizontalStrut(53));
+        menuBar.add(mapNameLabel);
+        menuBar.add(Box.createHorizontalStrut(53));
+        menuBar.add(rootLabel);
+        menuBar.add(Box.createHorizontalStrut(50));
+        menuBar.add(this.createEditTypeComboBox());
+
+        return menuBar;
+    }
+
+    private JComboBox<EditType> createEditTypeComboBox() {
+        editTypeComboBox = new JComboBox<>();
+        editTypeComboBox.addActionListener(event -> {
             editMode.setEditType((EditType) editTypeComboBox.getSelectedItem());
 
             MapMakerModel model = this.getModel();
             tileList.setModel(model.getListModel());
             newTileButton.setEnabled(model.newTileButtonEnabled());
 
-            if (mntmPaste != null && selectTool != null) {
-				mntmPaste.setEnabled(selectTool.canPaste());
-			}
+            if (pasteMenuItem != null && selectTool != null) {
+                pasteMenuItem.setEnabled(selectTool.canPaste());
+            }
 
             draw();
         });
-		
-		editTypeComboBox.setModel(new DefaultComboBoxModel<>(EditType.values()));
-		editTypeComboBox.setSelectedIndex(0);
-		menuBar.add(editTypeComboBox);
 
-		DefaultListModel<Tool> toolListModel = new DefaultListModel<>();
-		toolListModel.addElement(new MoveTool(this));
-		toolListModel.addElement(new SingleClickTool(this));
-		toolListModel.addElement(new RectangleTool(this));
-		toolListModel.addElement(new TriggerTool(this));
-		toolListModel.addElement(selectTool = new SelectTool(this));
-		
-		toolList = new JList<>();
-		toolList.setModel(toolListModel);
-		toolList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		toolList.setCellRenderer(new ToolRenderer());
-		toolList.setFont(new Font("Arial", Font.PLAIN, 24));
-		toolList.setSelectedIndex(0);
-		toolList.addListSelectionListener(this);
-		
-		JScrollPane toolListScroller = new JScrollPane(toolList);
-		add(toolListScroller, BorderLayout.EAST);
+        editTypeComboBox.setModel(new DefaultComboBoxModel<>(EditType.values()));
+        this.setEditType(EditType.BACKGROUND);
+        this.setStyle(editTypeComboBox);
 
-		setRoot(new File("."));
-	}
+        return editTypeComboBox;
+    }
+
+	private JPanel createTilePanel() {
+        JPanel tilePanel = new JPanel();
+        tilePanel.setBorder(new LineBorder(Color.BLACK));
+        tilePanel.setLayout(new BorderLayout());
+
+        newTileButton = new JButton("New Tile");
+        newTileButton.addActionListener(this);
+        this.setStyle(newTileButton);
+        tilePanel.add(newTileButton, BorderLayout.NORTH);
+
+        tileList = new JList<>();
+        tileList.setModel(this.getModel().getListModel());
+        tileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        tileList.addListSelectionListener(this);
+        tileList.addKeyListener(this);
+
+        JScrollPane listScroller = new JScrollPane(tileList);
+        tilePanel.add(listScroller, BorderLayout.CENTER);
+
+        return tilePanel;
+    }
+
+	public void setEditType(EditType editType) {
+        this.editTypeComboBox.setSelectedIndex(editType.ordinal());
+    }
+
+	public void setTool(ToolType toolType) {
+        this.toolList.setSelectedIndex(toolType.ordinal());
+    }
+
+	public Tool getTool(ToolType toolType) {
+        return toolList.getModel().getElementAt(toolType.ordinal());
+    }
 
 	public Point getMapLocation() {
         return this.location;
@@ -295,39 +329,39 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			if (event.getSource() == newTileButton) {
                 this.getModel().newTileButtonPressed(this);
 			}
-			else if (event.getSource() == mntmSave) {
+			else if (event.getSource() == saveMenuItem) {
 				saveMap();
 			}
-			else if (event.getSource() == mntmNew || event.getSource() == mntmLoad) {
+			else if (event.getSource() == newMenuItem || event.getSource() == loadMenuItem) {
 				boolean cancel = checkSaveOnExit();
 				if (!cancel) {
 					return;
 				}
+
+				this.setTool(ToolType.MOVE);
 				
-				toolList.setSelectedIndex(0);
-				
-				if (event.getSource() == mntmNew) {
+				if (event.getSource() == newMenuItem) {
 					createNewMapDialog();
 				}
 				else {
 					loadPreviousMapDialog();
 				}
 
-				lblMapName.setText(this.getCurrentMapName());
+				mapNameLabel.setText(this.getCurrentMapName());
 				draw();
 			}
-			else if (event.getSource() == mntmCut) {
+			else if (event.getSource() == cutMenuItem) {
 				selectTool.cut();
 			}
-			else if (event.getSource() == mntmCopy) {
+			else if (event.getSource() == copyMenuItem) {
 				selectTool.copy();
 			}
-			else if (event.getSource() == mntmPaste) {
-				toolList.setSelectedIndex(4);
+			else if (event.getSource() == pasteMenuItem) {
+                this.setTool(ToolType.SELECT);
 				selectTool.paste();
 			}
 		}
-		else if (event.getSource() == mntmSetRoot) {
+		else if (event.getSource() == setRootMenuItem) {
             // TODO: Move to FileIO
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -363,8 +397,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		System.out.println("root set to: " + newRoot);
 
 		root = newRoot;
-		lblRoot.setText(root.getPath());
-		lblRoot.setForeground(Color.BLACK);
+		rootLabel.setText(root.getPath());
+		rootLabel.setForeground(Color.BLACK);
 
 		FileIO.createFolder(getPathWithRoot(Folder.REC));
 		FileIO.createFolder(getPathWithRoot(Folder.TILES));
@@ -483,18 +517,18 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	public void keyPressed(KeyEvent event) {
 
 		// TODO: e for eraser, s for single, r for rect, t for trigger, ? for select?
-		if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolListIndex == -1 && !toolList.isSelectionEmpty()) {
-			previousToolListIndex = toolList.getSelectedIndex();
-			toolList.setSelectedIndex(0);
+		if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType == null && !toolList.isSelectionEmpty()) {
+            previousToolType = ToolType.values()[toolList.getSelectedIndex()];
+            this.setTool(ToolType.MOVE);
 		}
 		else if (event.getKeyCode() == KeyEvent.VK_1) {
-			toolList.setSelectedIndex(0);
+            this.setTool(ToolType.MOVE);
 		}
 		else if (event.getKeyCode() == KeyEvent.VK_2) {
-			toolList.setSelectedIndex(1);
+            this.setTool(ToolType.SINGLE_CLICK);
 		}
 		else if (event.getKeyCode() == KeyEvent.VK_3) {
-			toolList.setSelectedIndex(2);
+			this.setTool(ToolType.RECTANGLE);
 		}
 		else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			if (this.isEditType(EditType.TRIGGERS) && this.hasPlaceableTrigger()) {
@@ -509,9 +543,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	public void keyReleased(KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolListIndex != -1) {
-			toolList.setSelectedIndex(previousToolListIndex);
-			previousToolListIndex = -1; 
+		if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType != null) {
+            this.setTool(previousToolType);
+			this.previousToolType = null;
 		}
 		
 		if (event.getModifiers() != Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
@@ -606,11 +640,11 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						}
 						// Trigger was created, move to single selection
 						else {
-							if(type == TriggerModelType.WILD_BATTLE) { //If wild battle trigger, rectangle tool.
-								toolList.setSelectedIndex(2); // TODO: ENUM
+							if (type == TriggerModelType.WILD_BATTLE) {
+								this.setTool(ToolType.RECTANGLE);
 							}
 							else {
-								toolList.setSelectedIndex(1);								
+                                this.setTool(ToolType.SINGLE_CLICK);
 							}
 						}
 					}
@@ -627,12 +661,12 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			if (!toolList.isSelectionEmpty() && !event.getValueIsAdjusting()) {
 				toolList.getSelectedValue().reset();
 				if (toolList.getSelectedValue() != selectTool) {
-					mntmCopy.setEnabled(false);
-					mntmCut.setEnabled(false);
+					copyMenuItem.setEnabled(false);
+					cutMenuItem.setEnabled(false);
 				}
 				else if (selectTool.hasSelection()) {
-					mntmCopy.setEnabled(true);
-					mntmCut.setEnabled(true);
+					copyMenuItem.setEnabled(true);
+					cutMenuItem.setEnabled(true);
 				}
 			}
 		}

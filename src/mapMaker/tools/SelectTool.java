@@ -2,8 +2,6 @@ package mapMaker.tools;
 
 import mapMaker.MapMaker;
 import mapMaker.model.EditMode.EditType;
-import mapMaker.model.EditMode;
-import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
 import util.DrawUtils;
 import util.Point;
@@ -146,14 +144,14 @@ public class SelectTool extends Tool {
 
     public void select() {
         selected = true;
-        mapMaker.mntmCopy.setEnabled(true);
-        mapMaker.mntmCut.setEnabled(true);
+        mapMaker.copyMenuItem.setEnabled(true);
+        mapMaker.cutMenuItem.setEnabled(true);
     }
 
     public void deselect() {
         selected = false;
-        mapMaker.mntmCopy.setEnabled(false);
-        mapMaker.mntmCut.setEnabled(false);
+        mapMaker.copyMenuItem.setEnabled(false);
+        mapMaker.cutMenuItem.setEnabled(false);
     }
 
     public void copy() {
@@ -161,8 +159,8 @@ public class SelectTool extends Tool {
         BufferedImage currentMapImage = mapMaker.getCurrentMapImage(copiedEditType.getDataType());
         copiedTiles = this.rectangle.getImage(currentMapImage);
 
-        if (!mapMaker.mntmPaste.isEnabled()) {
-            mapMaker.mntmPaste.setEnabled(true);
+        if (!mapMaker.pasteMenuItem.isEnabled()) {
+            mapMaker.pasteMenuItem.setEnabled(true);
         }
     }
 
