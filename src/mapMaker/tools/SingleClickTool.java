@@ -29,7 +29,7 @@ public class SingleClickTool extends Tool {
         mapMaker.setTile(location, val);
 
         if (mapMaker.isEditType(EditType.TRIGGERS)) {
-            mapMaker.getTriggerData().clearPlaceableTrigger();
+            mapMaker.clearPlaceableTrigger();
             mapMaker.toolList.setSelectedIndex(3); // TODO
         }
     }
@@ -59,7 +59,7 @@ public class SingleClickTool extends Tool {
             BufferedImage image;
             if (type == TriggerModelType.NPC) {
                 // TODO
-                NPCEntityData npc = (NPCEntityData) mapMaker.getTriggerData().getPlaceableTrigger().entity;
+                NPCEntityData npc = (NPCEntityData) mapMaker.getPlaceableTrigger().entity;
                 image = mapMaker.getTileFromSet(TileType.TRAINER, 12 * npc.spriteIndex + 1 + npc.defaultDirection.ordinal());
             }
             else {

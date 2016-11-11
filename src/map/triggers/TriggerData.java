@@ -67,8 +67,8 @@ public class TriggerData {
 		points.add(new Point(x, y));
 	}
 	
-	public void removePoint(int x, int y) {
-		points.remove(new Point(x, y));
+	public void removePoint(Point location) {
+		points.remove(location);
 	}
 
 	// TODO: Use that one method

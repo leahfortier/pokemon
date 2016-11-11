@@ -2,6 +2,7 @@ package mapMaker;
 
 import map.MapMetaData.MapDataType;
 import mapMaker.data.MapMakerTriggerData;
+import mapMaker.data.PlaceableTrigger;
 import mapMaker.model.EditMode;
 import mapMaker.model.EditMode.EditType;
 import mapMaker.model.MapMakerModel;
@@ -86,6 +87,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
     private EditMode editMode;
     private EditMapMetaData mapData;
+
+    private PlaceableTrigger placeableTrigger;
 
 	private File root;
 
@@ -310,7 +313,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					loadPreviousMapDialog();
 				}
 
-				lblMapName.setText(this.mapData.getMapName());
+				lblMapName.setText(this.getCurrentMapName());
 				draw();
 			}
 			else if (event.getSource() == mntmCut) {
@@ -494,8 +497,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			toolList.setSelectedIndex(2);
 		}
 		else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			if (this.isEditType(EditType.TRIGGERS) && mapData.triggerData.hasPlaceableTrigger()) {
-				mapData.triggerData.clearPlaceableTrigger();
+			if (this.isEditType(EditType.TRIGGERS) && this.hasPlaceableTrigger()) {
+				this.clearPlaceableTrigger();
 				toolList.clearSelection();
 			}
 		}
@@ -516,17 +519,20 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		}
 	}
 
-	// TODO: remove this I just want shit to compile goddamnit
-	public MapMakerTriggerData getTriggerData() {
-        return this.mapData.triggerData;
-    }
-
     public boolean hasMap() {
         return this.mapData.hasMap();
     }
 
+    public String getCurrentMapName() {
+        return this.mapData.getMapName();
+    }
+
 	public Dimension getCurrentMapSize() {
         return this.mapData.getDimension();
+    }
+
+    public MapMakerTriggerData getTriggerData() {
+        return this.mapData.getTriggerData();
     }
 
     public boolean isTileSelectionEmpty() {
@@ -561,6 +567,26 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.editMode.getModel();
     }
 
+    public PlaceableTrigger getPlaceableTrigger() {
+        return this.placeableTrigger;
+    }
+
+    public boolean hasPlaceableTrigger() {
+        return this.placeableTrigger != null;
+    }
+
+    public void setPlaceableTrigger(PlaceableTrigger trigger) {
+        this.placeableTrigger = trigger;
+    }
+
+    public void clearPlaceableTrigger() {
+        this.placeableTrigger = null;
+    }
+
+    public boolean isPlaceableTriggerType(PlaceableTrigger.TriggerType triggerType) {
+        return this.placeableTrigger != null && this.placeableTrigger.triggerType == triggerType;
+    }
+
 	public void valueChanged(ListSelectionEvent event) {
 		if (event.getSource() == tileList) {
 			// When a trigger item selected
@@ -572,10 +598,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					TriggerModelType type = TriggerModelType.getModelTypeFromIndex(this.getSelectedTileIndex());
 
 					// Already something placeable, ignore trying to create something new.
-					if (!mapData.triggerData.hasPlaceableTrigger()) {
+					if (!this.hasPlaceableTrigger()) {
 
 						// Trigger was not created, deselect item
-						if (!mapData.triggerData.createTrigger(type)) {
+						if (!this.getTriggerData().createTrigger(type)) {
 							tileList.clearSelection();
 						}
 						// Trigger was created, move to single selection
@@ -589,7 +615,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						}
 					}
 					else if (!triggerToolMoveSelected) {
-						mapData.triggerData.clearPlaceableTrigger();
+						this.clearPlaceableTrigger();
 						tileList.clearSelection();
 					}
 					

@@ -30,7 +30,7 @@ public class EditMode {
         }
 
         private interface ModelGetter {
-            public MapMakerModel getModel(EditMode editMode);
+            MapMakerModel getModel(EditMode editMode);
         }
 
         private MapMakerModel getModel(EditMode editMode) {
@@ -82,7 +82,7 @@ public class EditMode {
     // Returns whether or not the tile selection should be cleared afterwards
     public boolean setTile(EditMapMetaData mapData, Point location, int val) {
         if (this.editType == EditType.TRIGGERS) {
-            mapData.triggerData.placeTrigger(location);
+            mapData.getTriggerData().placeTrigger(location);
             return true;
         } else {
             mapData.setTile(this.editType.dataType, location, val);

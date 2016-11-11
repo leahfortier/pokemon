@@ -6,6 +6,7 @@ import mapMaker.model.AreaModel;
 import mapMaker.model.EditMode.EditType;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
+import mapMaker.model.TriggerModel.TriggerModelType;
 import util.DrawUtils;
 import util.FileIO;
 import util.Point;
@@ -31,7 +32,7 @@ public class EditMapMetaData {
 
     private Map<MapDataType, BufferedImage> currentMap;
 
-    public MapMakerTriggerData triggerData;
+    private MapMakerTriggerData triggerData;
 
     private Composite alphaComposite;
     private Composite defaultComposite;
@@ -159,7 +160,7 @@ public class EditMapMetaData {
         }
 
         // Update trigger data type
-        triggerData.moveTriggerData(delta, currentMapSize);
+        triggerData.moveTriggerData(delta, currentMapSize.width);
 
         return delta;
     }
@@ -240,5 +241,9 @@ public class EditMapMetaData {
         triggerData.drawTriggers(g2d, mapLocation);
 
         g2d.setComposite(defaultComposite);
+    }
+
+    public MapMakerTriggerData getTriggerData() {
+        return this.triggerData;
     }
 }

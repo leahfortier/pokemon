@@ -1,10 +1,10 @@
 package mapMaker.tools;
 
+import mapMaker.MapMaker;
+import mapMaker.data.PlaceableTrigger;
+import mapMaker.model.TriggerModel.TriggerModelType;
 import util.DrawUtils;
 import util.Point;
-import mapMaker.MapMaker;
-import mapMaker.model.TriggerModel.TriggerModelType;
-import mapMaker.data.PlaceableTrigger;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;

@@ -33,7 +33,7 @@ public class RectangleTool extends Tool {
         this.rectangle.drawTiles(mapMaker, val);
 
         if (mapMaker.isEditType(EditType.TRIGGERS)) {
-            mapMaker.getTriggerData().clearPlaceableTrigger();
+            mapMaker.clearPlaceableTrigger();
             mapMaker.toolList.setSelectedIndex(3); // TODO
         }
     }
