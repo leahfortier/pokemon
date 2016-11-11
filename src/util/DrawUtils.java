@@ -2,7 +2,6 @@ package util;
 
 import gui.Button;
 import main.Global;
-import mapMaker.MapMaker;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +19,7 @@ public class DrawUtils {
 
 	// Dimension of a single tile
 	private static final Dimension SINGLE_TILE_DIMENSION = new Dimension(1, 1);
-	
+
 	// For wrapped text, the amount in between each letter
 	private static final float VERTICAL_WRAP_FACTOR = 2f;
 	
@@ -236,28 +235,28 @@ public class DrawUtils {
 		}
 	}
 
-	public static int getTextWidth(final String text, final int fontSize) {
+	private static int getTextWidth(final String text, final int fontSize) {
 		return text.length()*getFontMetrics(fontSize).getHorizontalSpacing();
 	}
 
 	public static Point getLocation(Point drawLocation, Point mapLocation) {
 		return new Point(
-				(drawLocation.x - mapLocation.x)/MapMaker.tileSize,
-				(drawLocation.y - mapLocation.y)/MapMaker.tileSize
+				(drawLocation.x - mapLocation.x)/Global.TILE_SIZE,
+				(drawLocation.y - mapLocation.y)/Global.TILE_SIZE
 		);
 	}
 
 	public static Point getDrawLocation(Point location, Point mapLocation) {
 		return new Point(
-				location.x*MapMaker.tileSize + mapLocation.x,
-				location.y*MapMaker.tileSize + mapLocation.y
+				location.x*Global.TILE_SIZE + mapLocation.x,
+				location.y*Global.TILE_SIZE + mapLocation.y
 		);
 	}
 
 	public static Point getImageDrawLocation(BufferedImage image, Point location, Point mapLocation) {
 		Point drawLocation = getDrawLocation(location, mapLocation);
-		drawLocation.x += MapMaker.tileSize/2 - image.getWidth()/2;
-		drawLocation.y += MapMaker.tileSize/2 -  image.getHeight()/2;
+		drawLocation.x += Global.TILE_SIZE/2 - image.getWidth()/2;
+		drawLocation.y += Global.TILE_SIZE/2 -  image.getHeight()/2;
 
 		return drawLocation;
 	}
@@ -280,14 +279,33 @@ public class DrawUtils {
 		Point drawLocation = getDrawLocation(location, mapLocation);
 
 		g.setColor(color);
-		g.drawRect(drawLocation.x, drawLocation.y, MapMaker.tileSize*rectangle.width, MapMaker.tileSize*rectangle.height);
+		g.drawRect(drawLocation.x, drawLocation.y, Global.TILE_SIZE*rectangle.width, Global.TILE_SIZE*rectangle.height);
 	}
 
 	public static void fillTile(Graphics g, Point location, Point mapLocation, Color color) {
 		Point drawLocation = getDrawLocation(location, mapLocation);
 
 		g.setColor(color);
-		g.fillRect(drawLocation.x, drawLocation.y, MapMaker.tileSize, MapMaker.tileSize);
+		g.fillRect(drawLocation.x, drawLocation.y, Global.TILE_SIZE, Global.TILE_SIZE);
+	}
+
+	public static void fillBlankTile(Graphics g, Point drawLocation) {
+		int halfTile = Global.TILE_SIZE/2;
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				g.setColor(i == j ? Color.GRAY : Color.LIGHT_GRAY);
+				g.fillRect(drawLocation.x + i*halfTile, drawLocation.y + j*halfTile, halfTile, halfTile);
+			}
+		}
+	}
+
+	public static BufferedImage createBlankTile() {
+		BufferedImage image = createNewTileImage();
+		Graphics g = image.getGraphics();
+		fillBlankTile(g, new Point());
+		g.dispose();
+
+		return image;
 	}
 
 	public static Color permuteColor(Color color, Map<Integer,String> indexMap) {
@@ -309,12 +327,20 @@ public class DrawUtils {
 	public static void fillImage(BufferedImage image, Color color) {
 		Graphics g = image.getGraphics();
 		g.setColor(color);
-		g.fillRect(0, 0, MapMaker.tileSize, MapMaker.tileSize);
+		g.fillRect(0, 0, Global.TILE_SIZE, Global.TILE_SIZE);
 		g.dispose();
 	}
 
+	public static BufferedImage createNewImage(Dimension dimension) {
+		return new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
+	}
+
+	public static BufferedImage createNewTileImage() {
+		return new BufferedImage(Global.TILE_SIZE, Global.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
+	}
+
 	public static BufferedImage fillImage(Color color) {
-		BufferedImage image = new BufferedImage(MapMaker.tileSize, MapMaker.tileSize, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = createNewTileImage();
 		fillImage(image, color);
 
 		return image;
@@ -323,13 +349,14 @@ public class DrawUtils {
 	public static BufferedImage blankImageWithText(String text) {
 		int extra = DrawUtils.getTextWidth(text + " ", 14);
 
-		BufferedImage image = new BufferedImage(MapMaker.tileSize + extra, MapMaker.tileSize, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(Global.TILE_SIZE + extra, Global.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 		g.setColor(Color.BLACK);
+		setFont(g, 14);
 
 		// TODO: If we're starting the string 3 pixels after the image, then shouldn't we add three to the extra?
 		// TODO: I think the y value here is a guess - can maybe use draw metrics to figure out where to start
-		g.drawString(text, MapMaker.tileSize + 3, MapMaker.tileSize*2/3);
+		g.drawString(text, Global.TILE_SIZE + 3, Global.TILE_SIZE*2/3);
 
 		g.dispose();
 

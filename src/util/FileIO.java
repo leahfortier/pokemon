@@ -208,4 +208,11 @@ public class FileIO {
 
 		return fileChooser;
 	}
+
+	public static JFileChooser getDirectoryChooser() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		return fileChooser;
+	}
 }

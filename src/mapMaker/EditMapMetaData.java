@@ -56,17 +56,13 @@ public class EditMapMetaData {
         return saved && (triggerData != null && triggerData.isSaved());
     }
 
-    private BufferedImage createNewImage() {
-        return new BufferedImage(currentMapSize.width, currentMapSize.height, BufferedImage.TYPE_INT_ARGB);
-    }
-
     public BufferedImage getMapImage(MapDataType dataType) {
         return this.currentMap.get(dataType);
     }
 
     private void resetMaps() {
         for (MapDataType dataType : MapDataType.values()) {
-            this.currentMap.put(dataType, createNewImage());
+            this.currentMap.put(dataType, DrawUtils.createNewImage(this.currentMapSize));
         }
 
         Graphics g = this.getMapImage(MapDataType.MOVE).getGraphics();

@@ -69,8 +69,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		frame.setVisible(true);
 	}
 
-	public static final int tileSize = 32;
-
 	private JButton newTileButton;
 	private JList<ImageIcon> tileList;
 	private JList<Tool> toolList;
@@ -362,14 +360,11 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 		}
 		else if (event.getSource() == setRootMenuItem) {
-            // TODO: Move to FileIO
-			JFileChooser fc = new JFileChooser();
-			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            JFileChooser directoryChooser = FileIO.getDirectoryChooser();
 		
-			int val = fc.showOpenDialog(this);
-			if (val == JFileChooser.APPROVE_OPTION) {
-				File newRoot = fc.getSelectedFile();
-				setRoot(newRoot);
+			int response = directoryChooser.showOpenDialog(this);
+			if (response == JFileChooser.APPROVE_OPTION) {
+				this.setRoot(directoryChooser.getSelectedFile());
 			}
 		}
 	}
@@ -441,11 +436,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		BufferedImage buffer = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = (Graphics2D)buffer.getGraphics();
 
-		// TODO: What is 16 here? Should it be a constant? -- looks like this is half the tile size to draw the checker grey pattern
-		for (int x = 0; x <= canvas.getWidth()/16; x++) {
-			for (int y = 0; y <= canvas.getHeight()/16; y++) {
-				g2d.setColor(((x^y) & 1) == 0 ? Color.GRAY : Color.LIGHT_GRAY);
-				g2d.fillRect(x*16, y*16, 16, 16);
+		for (int x = 0; x < canvas.getWidth(); x += Global.TILE_SIZE) {
+			for (int y = 0; y < canvas.getHeight(); y += Global.TILE_SIZE) {
+				DrawUtils.fillBlankTile(g2d, new Point(x, y));
 			}
 		}
 
