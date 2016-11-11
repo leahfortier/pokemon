@@ -35,9 +35,6 @@ public class SelectTool extends Tool {
             return;
         }
 
-        // TODO
-//        mapMaker.saved = false;
-
         Point location = DrawUtils.getLocation(clickLocation, mapMaker.getMapLocation());
         for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
             for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {

@@ -102,7 +102,6 @@ public class EditMapMetaData {
         saved = true;
     }
 
-
     public void loadPreviousMap(MapMaker mapMaker, String mapName, AreaModel areaModel) {
         this.currentMapName = mapName;
 

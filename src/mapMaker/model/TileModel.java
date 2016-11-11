@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,33 +27,23 @@ public class TileModel extends MapMakerModel {
     private static final ImageIcon BLANK_TILE_ICON = new ImageIcon(BLANK_TILE_IMAGE, "0"); // TODO: Is 0 still necessary?
 
     private final DefaultListModel<ImageIcon> tileListModel;
-
+    private final Map<TileType, Map<Integer, BufferedImage>> tileMap;
     private final Map<Integer, String> indexMap;
+
     private boolean saved;
 
-    private final Map<Integer, BufferedImage> mapTileMap;
-    private final Map<Integer, BufferedImage> mapMakerTileMap;
-    private final Map<Integer, BufferedImage> trainerTileMap;
-    private final Map<Integer, BufferedImage> itemTileMap;
-
     public enum TileType {
-        ITEM(tileMap -> tileMap.itemTileMap),
-        MAP(tileMap -> tileMap.mapTileMap),
-        MAP_MAKER(tileMap -> tileMap.mapMakerTileMap),
-        TRAINER(tileMap -> tileMap.trainerTileMap);
+        ITEM(Folder.ITEM_TILES, FileName.ITEM_TILES_INDEX),
+        MAP(Folder.MAP_TILES, FileName.MAP_TILES_INDEX),
+        MAP_MAKER(Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX),
+        TRAINER(Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX);
 
-        private TileMapGetter tileMapGetter;
+        private final String tileFolderPath;
+        private final String indexFileName;
 
-        TileType(TileMapGetter tileMapGetter) {
-            this.tileMapGetter = tileMapGetter;
-        }
-
-        private interface TileMapGetter {
-            Map<Integer, BufferedImage> getTileMap(TileModel tileModel);
-        }
-
-        private Map<Integer, BufferedImage> getTileMap(TileModel tileModel) {
-            return this.tileMapGetter.getTileMap(tileModel);
+        TileType(String folderPath, String fileName) {
+            this.tileFolderPath = folderPath;
+            this.indexFileName = fileName;
         }
     }
 
@@ -64,10 +55,10 @@ public class TileModel extends MapMakerModel {
         this.indexMap = new HashMap<>();
         this.saved = true;
 
-        this.mapTileMap = new HashMap<>();
-        this.trainerTileMap = new HashMap<>();
-        this.mapMakerTileMap = new HashMap<>();
-        this.itemTileMap = new HashMap<>();
+        this.tileMap = new EnumMap<>(TileType.class);
+        for (TileType tileType : TileType.values()) {
+            this.tileMap.put(tileType, new HashMap<>());
+        }
 
         this.reload(mapMaker);
     }
@@ -79,13 +70,12 @@ public class TileModel extends MapMakerModel {
 
     @Override
     public void reload(MapMaker mapMaker) {
-        loadTiles(this.mapTileMap, Folder.MAP_TILES, FileName.MAP_TILES_INDEX, mapMaker, this.tileListModel, this.indexMap, true);
+        for (TileType tileType : TileType.values()) {
+            this.loadTiles(tileType, mapMaker);
+        }
+
         this.indexMap.put(BLANK_TILE_INDEX, "BlankImage");
         this.tileListModel.add(0, BLANK_TILE_ICON);
-
-        loadTiles(this.trainerTileMap, Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX, mapMaker);
-        loadTiles(this.mapMakerTileMap, Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX, mapMaker);
-        loadTiles(this.itemTileMap, Folder.ITEM_TILES, FileName.ITEM_TILES_INDEX, mapMaker);
     }
 
     @Override
@@ -93,27 +83,14 @@ public class TileModel extends MapMakerModel {
         return true;
     }
 
-    private Map<Integer, BufferedImage> loadTiles(Map<Integer, BufferedImage> tileMap, String tileFolderName, String indexFileName, MapMaker mapMaker) {
-        return this.loadTiles(tileMap, tileFolderName, indexFileName, mapMaker, null, null, false);
-    }
-
-    private Map<Integer, BufferedImage> loadTiles(
-            Map<Integer, BufferedImage> tileMap,
-            String tileFolderName,
-            String indexFileName,
-            MapMaker mapMaker,
-            DefaultListModel<ImageIcon> listModel,
-            Map<Integer, String> indexMap,
-            boolean resize) {
-        File indexFile = new File(mapMaker.getPathWithRoot(indexFileName));
+    private Map<Integer, BufferedImage> loadTiles(TileType tileType, MapMaker mapMaker) {
+        File indexFile = new File(mapMaker.getPathWithRoot(tileType.indexFileName));
+        final Map<Integer, BufferedImage> tileMap = this.tileMap.get(tileType);
         tileMap.clear();
 
-        if (indexMap != null) {
-            indexMap.clear();
-        }
-
-        if (listModel != null) {
-            listModel.clear();
+        if (tileType == TileType.MAP) {
+            this.indexMap.clear();
+            this.tileListModel.clear();
         }
 
         if (indexFile.exists()) {
@@ -122,14 +99,14 @@ public class TileModel extends MapMakerModel {
                 String name = in.next();
                 int val = (int)Long.parseLong(in.next(), 16);
 
-                File imageFile = new File(tileFolderName + name);
+                File imageFile = new File(tileType.tileFolderPath + name);
                 if (!imageFile.exists()) {
 //                    System.err.println("Could not find image " + imageFile.getName());
                     continue;
                 }
 
                 BufferedImage image = FileIO.readImage(imageFile);
-                if (resize) {
+                if (tileType == TileType.MAP) {
                     // TODO: What is this doing?
                     image = image.getSubimage(
                             0,
@@ -137,17 +114,12 @@ public class TileModel extends MapMakerModel {
                             Math.min(image.getWidth(), Global.TILE_SIZE*3),
                             Math.min(image.getHeight(), Global.TILE_SIZE*3)
                     );
+
+                    this.indexMap.put(val, name);
+                    this.tileListModel.addElement(new ImageIcon(image, val + ""));
                 }
 
                 tileMap.put(val, image);
-
-                if (indexMap != null) {
-                    indexMap.put(val, name);
-                }
-
-                if (listModel != null) {
-                    listModel.addElement(new ImageIcon(image, val + ""));
-                }
             }
 
             in.close();
@@ -157,11 +129,11 @@ public class TileModel extends MapMakerModel {
     }
 
     public boolean containsTile(TileType tileType, int imageIndex) {
-        return tileType.getTileMap(this).containsKey(imageIndex);
+        return this.tileMap.get(tileType).containsKey(imageIndex);
     }
 
     public BufferedImage getTile(TileType tileType, int index) {
-        return tileType.getTileMap(this).get(index);
+        return this.tileMap.get(tileType).get(index);
     }
 
     @Override
@@ -180,7 +152,7 @@ public class TileModel extends MapMakerModel {
 
                 color = DrawUtils.permuteColor(color, indexMap);
                 BufferedImage img = FileIO.readImage(imageFile);
-                mapTileMap.put(color.getRGB(), img);
+                this.tileMap.get(TileType.MAP).put(color.getRGB(), img);
                 indexMap.put(color.getRGB(), imageFile.getName());
 
                 tileListModel.addElement(new ImageIcon(img, color.getRGB() + ""));
