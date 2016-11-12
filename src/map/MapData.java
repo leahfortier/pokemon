@@ -11,15 +11,13 @@ import map.entity.TriggerEntityData;
 import map.entity.npc.NPCEntityData;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
-import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.ItemMatcher;
 import pattern.AreaDataMatcher.MapExitMatcher;
-import pattern.AreaDataMatcher.NPCMatcher;
 import pattern.AreaDataMatcher.TriggerMatcher;
 import trainer.CharacterData;
 import util.FileIO;
+import util.Point;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class MapData {
 	public final String name;
-	
+
 	private final int[] bgTile;
 	private final int[] fgTile;
 	private final int[] walkMap;

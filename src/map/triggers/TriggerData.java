@@ -1,5 +1,6 @@
 package map.triggers;
 
+
 import map.entity.EntityAction;
 import pattern.AreaDataMatcher.TriggerMatcher;
 
@@ -14,29 +15,5 @@ public class TriggerData {
 		this.name = matcher.name;
 		this.condition = matcher.condition;
 		this.actions = matcher.getActions();
-	}
-
-	// TODO: This is generic enough to be separate
-	public static class Point {
-		public int x;
-		public int y;
-		
-		public Point (int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		
-		public boolean equals(Object o) {
-			if (!(o instanceof Point)) {
-				return false;
-			}
-		
-			Point p = (Point) o;
-			return this.isAt(p.x, p.y);
-		}
-
-		public boolean isAt(int x, int y) {
-			return this.x == x && this.y == y;
-		}
 	}
 }

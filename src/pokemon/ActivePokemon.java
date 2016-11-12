@@ -43,7 +43,7 @@ import pattern.PokemonMatcher;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
 import trainer.Pokedex.PokedexStatus;
-import util.DrawMetrics;
+import util.DrawUtils;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -799,7 +799,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public Color getHPColor() {
-		return DrawMetrics.getHPColor(getHPRatio());
+		return DrawUtils.getHPColor(getHPRatio());
 	}
 	
 	public String getActualName() {

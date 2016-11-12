@@ -1,5 +1,10 @@
 package util;
 
+import main.Global;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,10 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Scanner;
-
-import javax.imageio.ImageIO;
-
-import main.Global;
 
 public class FileIO {
 	private static final String FILE_SLASH = File.separator;
@@ -51,7 +52,11 @@ public class FileIO {
 		return readImage(file);
 	}
 	
-	public static BufferedImage readImage(File file) {	
+	public static BufferedImage readImage(File file) {
+		if (!file.exists()) {
+			System.out.println("File does not exist");
+		}
+
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(file);
@@ -149,7 +154,7 @@ public class FileIO {
 		}
 		catch (FileNotFoundException e) {
 			Global.error(file.getName() + " not found.");
-			return null;
+			return new Scanner(StringUtils.empty());
 		}
 	}
 
@@ -186,5 +191,31 @@ public class FileIO {
 			Global.error("Could not open output file " + fileName + ".");
 			return null;
 		}
+	}
+
+	public static JFileChooser getImageFileChooser(final String folderPath) {
+		final File folder = new File(folderPath);
+		JFileChooser fileChooser = new JFileChooser(folder);
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setMultiSelectionEnabled(true);
+
+		fileChooser.setFileFilter(new FileFilter() {
+			public boolean accept(File file) {
+				return file.getName().toLowerCase().endsWith("png");
+			}
+
+			public String getDescription() {
+				return "PNG";
+			}
+		});
+
+		return fileChooser;
+	}
+
+	public static JFileChooser getDirectoryChooser() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		return fileChooser;
 	}
 }

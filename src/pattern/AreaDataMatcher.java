@@ -7,10 +7,10 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import main.Global;
 import map.AreaData;
-import map.TerrainType;
 import map.AreaData.WeatherState;
 import map.Direction;
 import map.EncounterRate;
+import map.TerrainType;
 import map.WildEncounter;
 import map.entity.EntityAction;
 import map.entity.EntityAction.BattleAction;
@@ -20,14 +20,13 @@ import map.entity.EntityAction.GroupTriggerAction;
 import map.entity.EntityAction.TriggerAction;
 import map.entity.EntityAction.UpdateAction;
 import map.entity.npc.NPCInteraction;
-import map.triggers.TriggerData.Point;
 import map.triggers.TriggerType;
 import map.triggers.WildBattleTrigger;
 import pattern.MatchConstants.MatchType;
 import sound.MusicCondition;
 import sound.SoundTitle;
-import trainer.Trainer.Action;
 import util.FileIO;
+import util.Point;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -280,8 +279,8 @@ public class AreaDataMatcher {
         }
 
         @Override
-        public void addPoint(int x, int y) {
-            AreaDataMatcher.addPoint(x, y, this.getLocation(), location);
+        public void addPoint(Point point) {
+            AreaDataMatcher.addPoint(point, this.getLocation(), location);
         }
 
         public List<EntityAction> getActions() {
@@ -341,9 +340,9 @@ public class AreaDataMatcher {
         }
 
         @Override
-        public void addPoint(int x, int y) {
-            this.x = x;
-            this.y = y;
+        public void addPoint(Point point) {
+            this.x = point.x;
+            this.y = point.y;
         }
 
         public int getX() {
@@ -365,12 +364,12 @@ public class AreaDataMatcher {
         return getJson(jsonObject);
     }
 
-    private static void addPoint(int x, int y, List<Point> points, int[] location) {
-        points.add(new Point(x, y));
+    private static void addPoint(Point point, List<Point> points, int[] location) {
+        points.add(Point.copy(point));
 
         location = Arrays.copyOf(location, location.length + 2);
-        location[location.length - 2] = x;
-        location[location.length - 1] = y;
+        location[location.length - 2] = point.x;
+        location[location.length - 1] = point.y;
     }
 
     public static class MapExitMatcher extends EntityMatcher {
@@ -414,9 +413,9 @@ public class AreaDataMatcher {
         }
 
         @Override
-        public void addPoint(int x, int y) {
-            AreaDataMatcher.addPoint(x, y, this.getEntrances(), this.location);
-            this.addExitPoint(new Point(x, y));
+        public void addPoint(Point point) {
+            AreaDataMatcher.addPoint(point, this.getEntrances(), this.location);
+            this.addExitPoint(Point.copy(point));
         }
 
         public List<Point> getEntrances() {
@@ -425,6 +424,7 @@ public class AreaDataMatcher {
 
         private void addExitPoint(Point entrance) {
             if (this.direction != null) {
+                // TODO: dx, dy -> delta
                 int exitX = entrance.x + this.direction.dx;
                 int exitY = entrance.y + this.direction.dy;
 
@@ -455,7 +455,7 @@ public class AreaDataMatcher {
     public abstract static class EntityMatcher {
         public abstract String getName();
         public abstract List<Point> getLocation();
-        public abstract void addPoint(int x, int y);
+        public abstract void addPoint(Point point);
     }
 
     public static class NPCMatcher extends EntityMatcher {
@@ -554,9 +554,9 @@ public class AreaDataMatcher {
         }
 
         @Override
-        public void addPoint(int x, int y) {
-            this.startX = x;
-            this.startY = y;
+        public void addPoint(Point location) {
+            this.startX = location.x;
+            this.startY = location.y;
         }
     }
 

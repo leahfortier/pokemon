@@ -4,7 +4,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import trainer.CharacterData;
-import util.DrawMetrics;
+import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
 
@@ -31,7 +31,7 @@ public class TrainerCardView extends View {
 		g.setColor(Color.WHITE);
 		
 		int x = 50, y = 50;
-		DrawMetrics.setFont(g, 50);
+		DrawUtils.setFont(g, 50);
 		g.drawString("TRAINER " + player.getName(), x, y);
 		
 		y += 100;
@@ -39,7 +39,7 @@ public class TrainerCardView extends View {
 		g.drawString("$$$" + player.getDatCashMoney() + " money in da bank.", x, y);
 		
 		y += 100;
-		DrawMetrics.setFont(g, 40);
+		DrawUtils.setFont(g, 40);
 		g.drawString("Played " + formatTime(player.getTimePlayed()), x, y);
 	}
 	

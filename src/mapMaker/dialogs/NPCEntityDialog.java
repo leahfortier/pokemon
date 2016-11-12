@@ -2,6 +2,7 @@ package mapMaker.dialogs;
 
 import map.Direction;
 import mapMaker.MapMaker;
+import mapMaker.model.TileModel.TileType;
 import pattern.AreaDataMatcher.NPCMatcher;
 
 import javax.swing.DefaultComboBoxModel;
@@ -72,10 +73,9 @@ public class NPCEntityDialog extends JPanel {
 		spriteComboBox.setSelectedIndex(1);
 
 		// TODO: 12 + 4?
-		label.setIcon(new ImageIcon(mapMaker.getTrainerTile(12 + 4)));
+		label.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12 + 4)));
 		
 		JLabel lblSprite = new JLabel("Sprite");
-		
 		JLabel lblDirection = new JLabel("Direction");
 		
 		directionComboBox = new JComboBox<>();
@@ -86,7 +86,7 @@ public class NPCEntityDialog extends JPanel {
             int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
             int direction = directionComboBox.getSelectedIndex();
 
-            BufferedImage img = mapMaker.getTrainerTile(12*index + 1 + direction);
+			BufferedImage img = mapMaker.getTileFromSet(TileType.TRAINER, 12*index + 1 + direction);
             img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
 
 			ImageIcon icon = new ImageIcon(img);
@@ -98,7 +98,7 @@ public class NPCEntityDialog extends JPanel {
             int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
             int direction = directionComboBox.getSelectedIndex();
 
-            BufferedImage img = mapMaker.getTrainerTile(12*index + 1 + direction);
+            BufferedImage img = mapMaker.getTileFromSet(TileType.TRAINER, 12*index + 1 + direction);
             img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
 
 			ImageIcon icon = new ImageIcon(img);
@@ -323,9 +323,9 @@ public class NPCEntityDialog extends JPanel {
 	
 	private ImageIcon[] getTrainerSprites() {
 		List<ImageIcon> icons = new ArrayList<>();
-		
-		for (int curr = 0; mapMaker.getTrainerTile(12*curr + 4) != null; curr++) {
-			icons.add(new ImageIcon(mapMaker.getTrainerTile(12*curr + 4), "" + curr));
+
+		for (int curr = 0; mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4) != null; curr++) {
+			icons.add(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4), "" + curr));
 		}
 		
 		ImageIcon[] imageIcons = new ImageIcon[icons.size()];
