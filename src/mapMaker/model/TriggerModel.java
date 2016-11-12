@@ -39,11 +39,11 @@ public class TriggerModel extends MapMakerModel {
         }
 
         public BufferedImage getImage(final MapMaker mapMaker) {
-            return DrawUtils.imageWithText(mapMaker.getTileFromSet(tileType, imageIndex), name);
+            return mapMaker.getTileFromSet(tileType, imageIndex);
         }
 
         public ImageIcon getImageIcon(final MapMaker mapMaker) {
-            return new ImageIcon(this.getImage(mapMaker), this.ordinal() + "");
+            return new ImageIcon(DrawUtils.imageWithText(this.getImage(mapMaker), name), this.ordinal() + "");
         }
 
         public static TriggerModelType getModelTypeFromIndex(int selectedIndex) {
@@ -52,7 +52,7 @@ public class TriggerModel extends MapMakerModel {
 
     }
 
-    public TriggerModel(MapMaker mapMaker) {
+    TriggerModel() {
         super(-1);
 
         this.triggerListModel = new DefaultListModel<>();

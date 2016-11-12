@@ -1,7 +1,7 @@
 package mapMaker.tools;
 
 import mapMaker.MapMaker;
-import mapMaker.model.EditMode.EditType;
+import mapMaker.EditType;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.AreaDataMatcher.NPCMatcher;

@@ -47,7 +47,7 @@ public class TileModel extends MapMakerModel {
         }
     }
 
-    public TileModel(MapMaker mapMaker) {
+    TileModel() {
         super(BLANK_TILE_INDEX);
 
         this.tileListModel = new DefaultListModel<>();
@@ -59,8 +59,6 @@ public class TileModel extends MapMakerModel {
         for (TileType tileType : TileType.values()) {
             this.tileMap.put(tileType, new HashMap<>());
         }
-
-        this.reload(mapMaker);
     }
 
     @Override

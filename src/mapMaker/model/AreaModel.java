@@ -30,14 +30,12 @@ public class AreaModel extends MapMakerModel {
     private final Map<Integer, String> areaIndexMap;
     private final Set<Integer> areasOnMap;
 
-    public AreaModel(MapMaker mapMaker) {
+    AreaModel() {
         super(VOID_INDEX);
 
         this.areaListModel = new DefaultListModel<>();
         this.areaIndexMap = new HashMap<>();
         this.areasOnMap = new HashSet<>();
-
-        this.reload(mapMaker);
     }
 
     public void resetMap() {

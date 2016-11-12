@@ -2,8 +2,7 @@ package mapMaker;
 
 import map.MapMetaData.MapDataType;
 import mapMaker.data.MapMakerTriggerData;
-import mapMaker.model.AreaModel;
-import mapMaker.model.EditMode.EditType;
+import mapMaker.model.MapMakerModel;
 import mapMaker.model.MoveModel.MoveModelType;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
@@ -102,21 +101,23 @@ public class EditMapMetaData {
         saved = true;
     }
 
-    public void loadPreviousMap(MapMaker mapMaker, String mapName, AreaModel areaModel) {
+    public void loadPreviousMap(MapMaker mapMaker, String mapName) {
         this.currentMapName = mapName;
+        this.currentMap.clear();
 
         final String mapFolderPath = mapMaker.getMapFolderPath(currentMapName);
-        String mapTextFileName = mapFolderPath + currentMapName + ".txt";
 
         for (MapDataType dataType : MapDataType.values()) {
             String mapFileName = mapFolderPath + dataType.getImageName(this.currentMapName);
-            System.out.println(mapFileName);
             this.currentMap.put(dataType, FileIO.readImage(mapFileName));
         }
+
+        MapMakerModel.getAreaModel().resetMap();
 
         BufferedImage mapBackground = this.getMapImage(MapDataType.BACKGROUND);
         this.currentMapSize = new Dimension(mapBackground.getWidth(), mapBackground.getHeight());
 
+        String mapTextFileName = mapFolderPath + currentMapName + ".txt";
         this.triggerData = new MapMakerTriggerData(mapMaker, mapTextFileName);
         this.saved = true;
     }
@@ -165,9 +166,17 @@ public class EditMapMetaData {
         return this.currentMap.containsKey(MapDataType.BACKGROUND);
     }
 
-    public void setTile(MapDataType dataType, Point location, int val) {
-        this.getMapImage(dataType).setRGB(location.x, location.y, val);
-        this.saved = false;
+    // Set the tile at the specified location for the current edit type
+    // Returns whether or not the tile selection should be cleared afterwards
+    public boolean setTile(EditType editType, Point location, int val) {
+        if (editType == EditType.TRIGGERS) {
+            this.triggerData.placeTrigger(location);
+            return true;
+        } else {
+            this.getMapImage(editType.getDataType()).setRGB(location.x, location.y, val);
+            this.saved = false;
+            return false;
+        }
     }
 
     public int getTile(Point location, MapDataType dataType) {

@@ -5,8 +5,6 @@ import map.MapMetaData.MapDataType;
 import mapMaker.data.MapMakerTriggerData;
 import mapMaker.data.PlaceableTrigger;
 import mapMaker.data.PlaceableTrigger.PlaceableTriggerType;
-import mapMaker.model.EditMode;
-import mapMaker.model.EditMode.EditType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
@@ -81,7 +79,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private JLabel rootLabel;
 	private JComboBox<EditType> editTypeComboBox;
 
-    private EditMode editMode;
+    private EditType editType;
     private EditMapMetaData mapData;
 
     private PlaceableTrigger placeableTrigger;
@@ -104,7 +102,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.mouseHoverLocation = new Point();
 
         this.mapData = new EditMapMetaData();
-        this.editMode = new EditMode(this);
+        this.editType = EditType.BACKGROUND;
 
         this.canvas = new Canvas();
         this.canvas.addMouseListener(this);
@@ -217,7 +215,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     private JComboBox<EditType> createEditTypeComboBox() {
         editTypeComboBox = new JComboBox<>();
         editTypeComboBox.addActionListener(event -> {
-            editMode.setEditType((EditType) editTypeComboBox.getSelectedItem());
+            this.editType = (EditType) editTypeComboBox.getSelectedItem();
 
             MapMakerModel model = this.getModel();
             tileList.setModel(model.getListModel());
@@ -281,7 +279,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
     public BufferedImage getTileFromSet(TileType tileType, int index) {
-        return this.editMode.getTileModel().getTile(tileType, index);
+		return MapMakerModel.getTileModel().getTile(tileType, index);
     }
 
 	// Called when trying to exit, shows a confirm dialog asking to save first if there are any unsaved changes
@@ -302,7 +300,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 	private void resetMap() {
         this.location = new Point();
-        this.editMode.getAreaModel().resetMap();
+		MapMakerModel.getAreaModel().resetMap();
     }
 
 	// TODO: Should this be checking if that name is already taken?
@@ -318,7 +316,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		String[] mapList = getAvailableMaps();
 		String name = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, mapList, mapList[0]);
         if (!StringUtils.isNullOrEmpty(name)) {
-			this.mapData.loadPreviousMap(this, name, this.editMode.getAreaModel());
+			this.mapData.loadPreviousMap(this, name);
             this.resetMap();
 		}
 	}
@@ -404,7 +402,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		FileIO.createFolder(getPathWithRoot(Folder.MAP_TILES));
 		FileIO.createFolder(getPathWithRoot(Folder.MAPS));
 
-        this.editMode.reload(this);
+        MapMakerModel.reloadModels(this);
 	}
 	
 	private void saveMap() {
@@ -413,16 +411,16 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		}
 
         this.mapData.save(this);
-        this.editMode.getTileModel().save(this);
+        MapMakerModel.getTileModel().save(this);
 	}
 
 	public Point setTile(Point location, int val) {
 		Point delta = this.mapData.checkNewDimension(location);
 
 		Point start = Point.add(delta, location);
-		boolean clearSelection = this.editMode.setTile(mapData, start, val);
+		boolean clearSelection = this.mapData.setTile(editType, start, val);
         if (clearSelection) {
-            tileList.clearSelection();;
+            tileList.clearSelection();
         }
 
 		return delta;
@@ -446,7 +444,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 		}
 
-		this.mapData.drawMap(g2d, this.location, this.getEditType(), this.editMode.getTileModel());
+		this.mapData.drawMap(g2d, this.location, this.getEditType(), MapMakerModel.getTileModel());
 		
 		if (!toolList.isSelectionEmpty()) {
 			toolList.getSelectedValue().draw(g2d);
@@ -582,7 +580,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     public EditType getEditType() {
-        return this.editMode.getEditType();
+        return this.editType;
     }
 
     public boolean isEditType(EditType editType) {
@@ -594,7 +592,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     public MapMakerModel getModel() {
-        return this.editMode.getModel();
+        return this.editType.getModel();
     }
 
     public PlaceableTrigger getPlaceableTrigger() {
