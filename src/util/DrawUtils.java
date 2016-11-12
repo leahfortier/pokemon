@@ -267,8 +267,8 @@ public class DrawUtils {
 
 	public static Point getImageDrawLocation(BufferedImage image, Point location, Point mapLocation) {
 		Point drawLocation = getDrawLocation(location, mapLocation);
-		drawLocation.x += Global.TILE_SIZE/2 - image.getWidth()/2;
-		drawLocation.y += Global.TILE_SIZE/2 -  image.getHeight()/2;
+		drawLocation.x += Global.TILE_SIZE - image.getWidth();
+		drawLocation.y += Global.TILE_SIZE -  image.getHeight();
 
 		return drawLocation;
 	}

@@ -188,9 +188,10 @@ public class EditMapMetaData {
         return this.getMapImage(dataType).getRGB(location.x, location.y);
     }
 
-    private void drawTiles(Graphics2D g2d, Point mapLocation, MapDataType type, TileModel tileModel, Composite composite) {
+    private void drawTiles(Graphics2D g2d, Point mapLocation, MapDataType type, Composite composite) {
         g2d.setComposite(composite);
 
+        TileModel tileModel = MapMakerModel.getTileModel();
         for (int y = 0; y < currentMapSize.height; y++) {
             for (int x = 0; x < currentMapSize.width; x++) {
                 Point location = new Point(x, y);
@@ -199,7 +200,7 @@ public class EditMapMetaData {
                 if (type == MapDataType.MOVE || type == MapDataType.AREA) {
                     DrawUtils.fillTile(g2d, location, mapLocation, new Color(val, true));
                 }
-                else if (tileModel.containsTile(TileType.MAP, val)) {
+                else if (type != null && tileModel.containsTile(TileType.MAP, val)) {
                     BufferedImage image = tileModel.getTile(TileType.MAP, val);
                     DrawUtils.drawTileImage(g2d, image, location, mapLocation);
                 }
@@ -207,7 +208,7 @@ public class EditMapMetaData {
         }
     }
 
-    public void drawMap(Graphics g, Point mapLocation, EditType editType, TileModel tileModel) {
+    public void drawMap(Graphics g, Point mapLocation, EditType editType) {
         Graphics2D g2d = (Graphics2D)g;
         if (alphaComposite == null) {
             defaultComposite = g2d.getComposite();
@@ -218,18 +219,18 @@ public class EditMapMetaData {
             // Drawing of area map handled in MOVE_MAP case.
             case AREA_MAP:
             case MOVE_MAP:
-                drawTiles(g2d, mapLocation, editType.getDataType(), tileModel, defaultComposite);
-                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, tileModel, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, tileModel, alphaComposite);
+                drawTiles(g2d, mapLocation, editType.getDataType(), defaultComposite);
+                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
                 break;
             case TRIGGERS:
             case BACKGROUND:
-                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, tileModel, defaultComposite);
-                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, tileModel, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, defaultComposite);
+                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
                 break;
             case FOREGROUND:
-                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, tileModel, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, tileModel, defaultComposite);
+                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, defaultComposite);
                 break;
         }
 
@@ -242,8 +243,10 @@ public class EditMapMetaData {
             g2d.setComposite(defaultComposite);
         }
 
-        // Draw all trigger items.
-        triggerData.drawTriggers(g2d, mapLocation);
+        // Draw all trigger items
+        if (triggerData != null) {
+            triggerData.drawTriggers(g2d, mapLocation);
+        }
 
         g2d.setComposite(defaultComposite);
     }

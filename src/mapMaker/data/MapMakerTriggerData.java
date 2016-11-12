@@ -156,6 +156,7 @@ public class MapMakerTriggerData {
 				triggerData
 		);
 
+		FileIO.createFile(mapFileName);
 		FileIO.overwriteFile(mapFileName, new StringBuilder(AreaDataMatcher.getJson(areaDataMatcher)));
 	}
 

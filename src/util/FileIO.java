@@ -28,6 +28,19 @@ public class FileIO {
 		}
 	}
 
+	public static void createFile(final String filePath) {
+		final File file = new File(filePath);
+		if (!file.exists()) {
+			try {
+				if (!file.createNewFile()) {
+                    throw new IOException();
+                }
+			} catch (IOException e) {
+				Global.error("Unable to create file with path " + filePath);
+			}
+		}
+	}
+
 	// Creates a folder with the specified path if it does not already exist
 	public static void createFolder(final String folderPath) {
 		final File folder = new File(folderPath);
@@ -163,7 +176,8 @@ public class FileIO {
 		final String previousFile = readEntireFile(fileName);
 		final String newFile = out.toString();
 
-		if (!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {
+		if (StringUtils.isNullOrEmpty(previousFile) ||
+				!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {
 			writeToFile(fileName, out);
 			System.out.println(fileName + " overwritten.");
 			return true;

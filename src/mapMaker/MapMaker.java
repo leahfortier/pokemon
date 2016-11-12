@@ -444,7 +444,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 		}
 
-		this.mapData.drawMap(g2d, this.location, this.getEditType(), MapMakerModel.getTileModel());
+		this.mapData.drawMap(g2d, this.location, this.getEditType());
 		
 		if (!toolList.isSelectionEmpty()) {
 			toolList.getSelectedValue().draw(g2d);
