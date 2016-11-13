@@ -1,8 +1,8 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.action;
 
-import map.triggers.TrainerBattleTrigger;
-import pattern.PokemonMatcher;
-import util.StringUtils;
+import pattern.AreaDataMatcher.ActionMatcher;
+import pattern.AreaDataMatcher.BattleMatcher;
+import trainer.Trainer;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -20,34 +20,32 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 
-class TrainerDataDialog extends JPanel {
+class BattleActionPanel extends ActionPanel {
 	private static final long serialVersionUID = 4995985841899035558L;
-	
+
 	private JTextField nameTextField;
 	private JFormattedTextField cashFormattedTextField;
+	private JTextField updateTriggerTextField;
 	private JButton addPokemonButton;
-	
+
 	private List<PokemonDataPanel> pokemonPanels;
-	//boolean[] selected = new boolean[6];
 	private Set<Integer> selected;
 	private JPanel pokemonPanel;
 	private JButton removeSelectedButton;
 	private JButton moveDownButton;
 	private JButton moveUpButton;
 	
-	TrainerDataDialog() {
+	BattleActionPanel() {
 		pokemonPanels = new ArrayList<>();
 		selected = new HashSet<>();
-		
+
 		JLabel trainerNameLabel = new JLabel("Trainer Name");
 		
 		nameTextField = new JTextField();
 		nameTextField.setColumns(10);
 
-		// TODO: Cash received on? what?
-		JLabel cashReceivedOnLabel = new JLabel("Cash");
+		JLabel cashMoney = new JLabel("Cash Money");
 		
 		NumberFormat format = NumberFormat.getNumberInstance();
 		NumberFormatter formatter = new NumberFormatter(format);
@@ -58,6 +56,10 @@ class TrainerDataDialog extends JPanel {
 		cashFormattedTextField = new JFormattedTextField(formatter);
 		cashFormattedTextField.setColumns(10);
 		cashFormattedTextField.setValue(100);
+
+		JLabel updateTriggerLabel = new JLabel("Update Trigger");
+		updateTriggerTextField = new JTextField("won");
+		updateTriggerTextField.setColumns(10);
 		
 		JLabel pokemonLabel = new JLabel("Pokemon");
 		JLabel shinyLabel = new JLabel("Shiny");
@@ -137,8 +139,7 @@ class TrainerDataDialog extends JPanel {
 
             pokemonPanel.removeAll();
 
-            Integer[] values = new Integer[selected.size()];
-            selected.toArray(values);
+            Integer[] values = selected.toArray(new Integer[0]);
             Arrays.sort(values);
 
             for (int currPanel = values.length - 1; currPanel >=0 ; currPanel--) {
@@ -173,10 +174,14 @@ class TrainerDataDialog extends JPanel {
 							.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
 							.addGap(12)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(cashReceivedOnLabel, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+								.addComponent(cashMoney, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addGap(73)
 									.addComponent(cashFormattedTextField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE))))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(updateTriggerLabel, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+							.addGap(10)
+							.addComponent(updateTriggerTextField, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
@@ -220,8 +225,14 @@ class TrainerDataDialog extends JPanel {
 						.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(6)
-							.addComponent(cashReceivedOnLabel))
+							.addComponent(cashMoney))
 						.addComponent(cashFormattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(6)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(6)
+							.addComponent(updateTriggerLabel))
+						.addComponent(updateTriggerTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(6)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(pokemonLabel)
@@ -243,7 +254,7 @@ class TrainerDataDialog extends JPanel {
 						.addComponent(moveUpButton)))
 		);
 		
-		setLayout(groupLayout);
+		this.setLayout(groupLayout);
 	}
 	
 	public void setSelected(int index) {
@@ -266,69 +277,51 @@ class TrainerDataDialog extends JPanel {
 	}
 	
 	private PokemonDataPanel addPokemonPanel() {
-		PokemonDataPanel panel = new PokemonDataPanel(TrainerDataDialog.this, pokemonPanels.size());
+		PokemonDataPanel panel = new PokemonDataPanel(BattleActionPanel.this, pokemonPanels.size());
 		pokemonPanels.add(panel);
 		pokemonPanel.add(panel);
 		pokemonPanel.validate();
 		
-		if (pokemonPanels.size() == 6) {
+		if (pokemonPanels.size() == Trainer.MAX_POKEMON) {
 			addPokemonButton.setEnabled(false);
 		}
 		
 		return panel;
 	}
-	
-	void setTrainerData(String contents) {
-		Matcher m = TrainerBattleTrigger.trainerBattleTriggerPattern.matcher(contents);
-		while (m.find()) {
-			if (m.group(1) != null) {
-				final String pokemonName = m.group(2);
-				final String level = m.group(3);
-				final String parameters = m.group(4);
 
-				PokemonDataPanel panel = addPokemonPanel();
-				panel.setName(pokemonName);
-				panel.setLevel(level);
+	@Override
+	protected void load(ActionMatcher matcher) {
+		BattleMatcher battleMatcher = matcher.battle;
 
-				final PokemonMatcher paramsMatcher = PokemonMatcher.matchPokemonParameters(pokemonName, level, parameters);
-				if (paramsMatcher.isShiny()) {
-					panel.setShiny();
-				}
+		nameTextField.setText(battleMatcher.name);
+		cashFormattedTextField.setValue(battleMatcher.cashMoney);
+		updateTriggerTextField.setText(battleMatcher.update);
 
-				if (paramsMatcher.hasMoves()) {
-					panel.setMoves(paramsMatcher.getMoveNames());
-				}
-			}
-	
-			if (m.group(5) != null) {
-				this.nameTextField.setText(m.group(6));
-			}
-			
-			if (m.group(9) != null) {
-				try {
-					cashFormattedTextField.setValue(Integer.parseInt(m.group(10)));
-				}
-				catch (NumberFormatException e) {
-					cashFormattedTextField.setValue(100);
-				}
-			}
+		pokemonPanels.clear();
+		for (String pokemonString : battleMatcher.pokemon) {
+			PokemonDataPanel panel = addPokemonPanel();
+			panel.load(pokemonString);
 		}
-		
 	}
-	
-	String getTrainerData() {
-		StringBuilder data = new StringBuilder();
 
-		StringUtils.appendLine(data, "name: " + nameTextField.getText().trim());
-		StringUtils.appendLine(data, "cash: " + ("" + cashFormattedTextField.getValue()).trim());
-
-		for (PokemonDataPanel panel: pokemonPanels) {
-			String pokemonData = panel.getPokemonData();
+	@Override
+	public ActionMatcher getActionMatcher(ActionType actionType) {
+		String name = nameTextField.getText().trim();
+		int cashMoney = Integer.parseInt(cashFormattedTextField.getValue().toString());
+		String[] pokemon = new String[pokemonPanels.size()];
+		for (int i = 0; i < pokemon.length; i++) {
+			String pokemonData = pokemonPanels.get(i).getPokemonData();
 			if (pokemonData != null) {
-				StringUtils.appendLine(data, pokemonData);
+				pokemon[i] = pokemonData;
 			}
 		}
-		
-		return data.toString().trim();
+
+		String update = updateTriggerTextField.getText().trim();
+
+		BattleMatcher battleMatcher = new BattleMatcher(name, cashMoney, pokemon, update);
+		ActionMatcher actionMatcher = new ActionMatcher();
+		actionMatcher.battle = battleMatcher;
+
+		return actionMatcher;
 	}
 }

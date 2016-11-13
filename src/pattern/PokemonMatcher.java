@@ -44,9 +44,10 @@ public class PokemonMatcher {
 
     public static PokemonMatcher matchPokemonDescription(final String pokemonDescription) {
         Matcher matcher = pokemonPattern.matcher(pokemonDescription);
-        if (!matcher.matches()) {
-            Global.error("Pokemon description " + pokemonDescription + " does not match regex.");
-        }
+//        if (!matcher.matches()) {
+//            Global.error("Pokemon description " + pokemonDescription + " does not match regex.");
+//        }
+        matcher.find();
 
         // Random egg
         if (matcher.group(4) != null) {

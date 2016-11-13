@@ -1,11 +1,15 @@
 package mapMaker.dialogs;
 
+import mapMaker.dialogs.action.ActionListPanel;
+import pattern.AreaDataMatcher.ActionMatcher;
+import pattern.AreaDataMatcher.NPCInteractionMatcher;
+
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class NPCInteractionDialog extends TriggerDialog {
+public class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
     private JTextField interactionNameTextField;
     private JCheckBox walkToPlayerCheckBox;
     private ActionListPanel actionListPanel;
@@ -18,7 +22,25 @@ public class NPCInteractionDialog extends TriggerDialog {
         render();
     }
 
-    private void render() {
+    @Override
+    public void load(NPCInteractionMatcher matcher) {
+        interactionNameTextField.setText(matcher.name);
+        walkToPlayerCheckBox.setSelected(matcher.walkToPlayer);
+        actionListPanel.load(matcher.npcActions);
+    }
+
+    @Override
+    public NPCInteractionMatcher getMatcher() {
+        String interactionName = interactionNameTextField.getText();
+        boolean walkToPlayer = walkToPlayerCheckBox.isSelected();
+        ActionMatcher[] actions = actionListPanel.getActions();
+
+        return new NPCInteractionMatcher(interactionName, walkToPlayer, actions);
+    }
+
+    @Override
+    protected void renderDialog() {
+        actionListPanel.render();
         removeAll();
 
         JPanel panel = new JPanel();
@@ -27,8 +49,5 @@ public class NPCInteractionDialog extends TriggerDialog {
         panel.add(walkToPlayerCheckBox);
         panel.add(actionListPanel);
         add(panel);
-
-        this.setPanelSize();
-        revalidate();
     }
 }

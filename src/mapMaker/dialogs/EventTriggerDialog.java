@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import map.triggers.DialogueTrigger;
+import mapMaker.dialogs.action.ActionListPanel;
 import pattern.AreaDataMatcher.TriggerMatcher;
 
 import javax.swing.GroupLayout;
@@ -11,12 +11,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-public class EventTriggerDialog extends TriggerDialog {
+public class EventTriggerDialog extends TriggerDialog<TriggerMatcher> {
 	private static final long serialVersionUID = -1493772382824925408L;
 	
 	private JTextField nameTextField;
 	private JTextArea conditionTextArea;
-	private ActionListPanel ninininini;
+	private ActionListPanel actionListPanel;
 
 	public EventTriggerDialog() {
 		JLabel nameLabel = new JLabel("Name");
@@ -29,7 +29,7 @@ public class EventTriggerDialog extends TriggerDialog {
 		conditionTextArea.setColumns(20);
 		conditionTextArea.setLineWrap(true);
 
-		this.ninininini = new ActionListPanel();
+		this.actionListPanel = new ActionListPanel();
 
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -52,7 +52,7 @@ public class EventTriggerDialog extends TriggerDialog {
 								.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE))
 							.addGap(12)
 						)
-						.addComponent(this.ninininini)
+						.addComponent(this.actionListPanel)
 					)));
 
 		groupLayout.setVerticalGroup(
@@ -70,70 +70,25 @@ public class EventTriggerDialog extends TriggerDialog {
 							.addGap(5)
 							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
 					)
-					.addComponent(this.ninininini)
+					.addComponent(this.actionListPanel)
 				));
 		setLayout(groupLayout);
 		this.setPanelSize();
 	}
 
-	public void setDialogueTrigger(DialogueTrigger trigger, String name) {
-//		nameTextField.setText(name);
-//		conditionTextArea.setText(trigger.getCondition().getOriginalConditionString().replace("&"," & ").replace("|"," | "));
-//
-//		for (String g: trigger.getGlobals()) {
-//			globalTextArea.append(g + "\n");
-//		}
-
-//		// TODO: Once I figure out what is actually happening here figure out if this makes sense to be a method
-//		dialogueNameTextField.setText(trigger.createDialogue ? trigger.dialogue : trigger.dialogueName);
-//
-//		if (trigger.createDialogue) {
-//			createCheckBox.setSelected(true);
-//			for (String d: trigger.dialogueLines) {
-//				dialogueTextArea.append(d + "\n");
-//			}
-//		}
-//
-//		dialogueTextArea.setEnabled(trigger.createDialogue);
+	@Override
+	public TriggerMatcher getMatcher() {
+		return new TriggerMatcher(
+				nameTextField.getText(),
+				conditionTextArea.getText(),
+				actionListPanel.getActions()
+		);
 	}
 
-	public String getDialogueTriggerName() {
-		return nameTextField.getText().trim().replace(' ', '_');
-	}
-	
-	private DialogueTrigger getDialogueTrigger(String name) {
-//		String dialogueName = dialogueNameTextField.getText().trim().replace(' ', '_');
-//		String dialogueString = dialogueName.length() > 0 ? "dialogue: " + dialogueName:"";
-//
-//		String condition = conditionTextArea.getText().trim().replace(" ","");
-//		String conditionString = condition.length() > 0 ? "condition: " + condition : "";
-//
-//		String[] globals = globalTextArea.getText().trim().length() > 0 ? globalTextArea.getText().trim().split("\n") : null;
-//		String globalsString = "";
-//
-//		if (globals != null) {
-//			for (String global: globals) {
-//				globalsString += "global: " + global.trim() + "\n";
-//			}
-//		}
-//
-//		if (createCheckBox.isSelected()) {
-//			dialogueString = "createDialogue: " + dialogueName +"\n";
-//
-//			String[] dialogueLines = dialogueTextArea.getText().trim().split("\n");
-//			for (int currDialogue = 0; currDialogue < dialogueLines.length; ++currDialogue) {
-//				dialogueString += "text[" + currDialogue + "]: \"" + dialogueLines[currDialogue].trim() + "\"\n";
-//			}
-//		}
-//
-//		String contents = conditionString + "\n" + globalsString + "\n" + dialogueString;
-		return null;
-//		return new DialogueTrigger(name, contents);
-	}
-	
-	public TriggerMatcher getTriggerData(String name) {
-		DialogueTrigger dialogueTrigger = getDialogueTrigger(name);
-		return null;
-//		return new TriggerData(name, "Dialogue\n" + dialogueTrigger.triggerDataAsString());
+	@Override
+	public void load(TriggerMatcher matcher) {
+		nameTextField.setText(matcher.getName());
+		conditionTextArea.setText(matcher.condition);
+		actionListPanel.load(matcher.getActionMatchers());
 	}
 }

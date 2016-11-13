@@ -7,7 +7,26 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Dimension;
 
-public class TriggerDialog extends JPanel {
+public abstract class TriggerDialog<T> extends JPanel {
+    public abstract T getMatcher();
+    protected abstract void load(T matcher);
+
+    public void loadMatcher(T matcher) {
+        if (matcher != null) {
+            this.load(matcher);
+            this.render();
+        }
+    }
+
+    protected void renderDialog() {}
+
+    protected final void render() {
+        this.renderDialog();
+
+        this.setPanelSize();
+        this.revalidate();
+    }
+
     public boolean giveOption(String name, JComponent parent) {
         Object[] options = { "Save or Whatever", "Cancel" };
         int results = JOptionPane.showOptionDialog(
@@ -25,9 +44,9 @@ public class TriggerDialog extends JPanel {
     }
 
     protected void setPanelSize() {
-        Dimension d = Global.GAME_SIZE;
-        this.setMinimumSize(d);
-        this.setPreferredSize(d);
-        this.setMaximumSize(d);
+        Dimension dimension = Global.GAME_SIZE;
+        this.setMinimumSize(dimension);
+        this.setPreferredSize(dimension);
+        this.setMaximumSize(dimension);
     }
 }

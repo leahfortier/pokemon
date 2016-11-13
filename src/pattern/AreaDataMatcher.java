@@ -21,6 +21,7 @@ import map.entity.EntityAction.TriggerAction;
 import map.entity.EntityAction.UpdateAction;
 import map.entity.npc.NPCInteraction;
 import map.triggers.TriggerType;
+import mapMaker.dialogs.action.ActionType;
 import namesies.ItemNamesies;
 import pattern.MatchConstants.MatchType;
 import sound.MusicCondition;
@@ -199,15 +200,11 @@ public class AreaDataMatcher {
         private transient WildEncounter[] wildEncounters;
 
         public static TriggerMatcher createWildBattleMatcher(String name, EncounterRate encounterRate, WildEncounter[] wildEncounters) {
-            TriggerMatcher matcher = new TriggerMatcher();
-            matcher.name = name;
-
             WildBattleTriggerMatcher wildBattleTriggerMatcher = new WildBattleTriggerMatcher(encounterRate, wildEncounters);
             ActionMatcher action = new ActionMatcher();
             action.trigger = new TriggerActionMatcher(TriggerType.WILD_BATTLE, getJson(wildBattleTriggerMatcher));
 
-            matcher.actions = new ActionMatcher[] { action };
-            return matcher;
+            return new TriggerMatcher(name, null, new ActionMatcher[] { action });
         }
 
         private WildBattleTriggerMatcher(EncounterRate encounterRate, WildEncounter[] wildEncounters) {
@@ -271,6 +268,12 @@ public class AreaDataMatcher {
         private transient List<EntityAction> entityActions;
         private transient WildBattleTriggerMatcher wildBattleContents;
 
+        public TriggerMatcher(String name, String condition, ActionMatcher[] actions) {
+            this.name = StringUtils.nullWhiteSpace(name);
+            this.condition = StringUtils.nullWhiteSpace(condition);
+            this.actions = actions;
+        }
+
         @Override
         public String getName() {
             return this.name;
@@ -297,6 +300,10 @@ public class AreaDataMatcher {
         @Override
         public void addPoint(Point point) {
             AreaDataMatcher.addPoint(point, this.getLocation(), location);
+        }
+
+        public ActionMatcher[] getActionMatchers() {
+            return this.actions;
         }
 
         public List<EntityAction> getActions() {
@@ -347,10 +354,14 @@ public class AreaDataMatcher {
 
         private transient List<Point> location;
 
-        public ItemMatcher(String name, ItemNamesies itemName) {
-            this.name = name;
+        public ItemMatcher(ItemNamesies itemName) {
             this.item = itemName.getName();
             this.itemNamesies = itemName;
+        }
+
+        public ItemMatcher(String name, ItemNamesies itemName) {
+            this(itemName);
+            this.name = name;
         }
 
         @Override
@@ -526,12 +537,18 @@ public class AreaDataMatcher {
         private transient Map<String, NPCInteraction> interactionMap;
         private transient String startKey;
 
-        public NPCMatcher(String name, String condition, String path, int spriteIndex, Direction direction) {
+        public NPCMatcher(String name,
+                          String condition,
+                          String path,
+                          int spriteIndex,
+                          Direction direction,
+                          List<NPCInteractionMatcher> interactions) {
             this.setName(name);
             this.condition = StringUtils.nullWhiteSpace(condition);
             this.path = StringUtils.nullWhiteSpace(path);
             this.spriteIndex = spriteIndex;
             this.direction = direction;
+            this.interactions = interactions.toArray(new NPCInteractionMatcher[0]);
         }
 
         public void setName(String name) {
@@ -545,7 +562,7 @@ public class AreaDataMatcher {
 
             interactionMap = new HashMap<>();
             for (NPCInteractionMatcher interaction : interactions) {
-                interactionMap.put(interaction.name, new NPCInteraction(interaction.shouldWalkToPlayer(), interaction.getActions()));
+                interactionMap.put(interaction.name, new NPCInteraction(interaction.walkToPlayer, interaction.getActions()));
             }
 
             if (interactions.length == 0) {
@@ -665,41 +682,82 @@ public class AreaDataMatcher {
     }
 
     public static class ActionMatcher {
-        private TriggerActionMatcher trigger;
-        private BattleMatcher battle;
-        private ChoiceActionMatcher choice;
-        private String update;
-        private String groupTrigger;
-        private String global;
+        public TriggerActionMatcher trigger;
+        public BattleMatcher battle;
+        public ChoiceActionMatcher choice;
+        public String update;
+        public String groupTrigger;
+        public String global;
 
-        public EntityAction getAction(final String condition) {
+        private transient EntityAction entityAction;
+
+        public ActionType getActionType() {
             if (!hasOnlyOneNonEmpty(trigger, battle, choice, update, groupTrigger, global)) {
                 Global.error("Can only have one nonempty field for ActionMatcher");
             }
 
             if (trigger != null) {
-                return new TriggerAction(trigger.getTriggerType(), trigger.triggerContents, condition);
+                return ActionType.TRIGGER;
             } else if (battle != null) {
-                return new BattleAction(battle);
-            } else if (!StringUtils.isNullOrEmpty(update)) {
-                return new UpdateAction(update);
-            } else if (!StringUtils.isNullOrEmpty(groupTrigger)) {
-                return new GroupTriggerAction(groupTrigger);
+                return ActionType.BATTLE;
+            } else if (update != null) {
+                return ActionType.UPDATE;
+            } else if (groupTrigger != null) {
+                return ActionType.GROUP_TRIGGER;
             } else if (choice != null) {
-                return new ChoiceAction(choice);
+                return ActionType.CHOICE;
             } else if (global != null) {
-                return new GlobalAction(global);
+                return ActionType.GLOBAL;
             }
 
-            Global.error("No npc action found.");
+            Global.error("No action found.");
             return null;
+        }
+
+        public EntityAction getAction(final String condition) {
+            if (entityAction != null) {
+                return entityAction;
+            }
+
+            ActionType actionType = this.getActionType();
+            switch (actionType) {
+                case TRIGGER:
+                    this.entityAction = new TriggerAction(trigger.getTriggerType(), trigger.triggerContents, condition);
+                    break;
+                case BATTLE:
+                    this.entityAction = new BattleAction(battle);
+                    break;
+                case UPDATE:
+                    this.entityAction = new UpdateAction(update);
+                    break;
+                case GROUP_TRIGGER:
+                    this.entityAction = new GroupTriggerAction(groupTrigger);
+                    break;
+                case CHOICE:
+                    this.entityAction = new ChoiceAction(choice);
+                    break;
+                case GLOBAL:
+                    this.entityAction = new GlobalAction(global);
+                    break;
+                default:
+                    Global.error("No action found.");
+                    break;
+            }
+
+            return this.entityAction;
         }
     }
 
     public static class NPCInteractionMatcher {
-        private String name;
-        private Boolean walkToPlayer;
-        private ActionMatcher[] npcActions;
+        public String name;
+        public boolean walkToPlayer;
+        public ActionMatcher[] npcActions;
+
+        public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher[] npcActions) {
+            this.name = StringUtils.nullWhiteSpace(name);
+            this.walkToPlayer = walkToPlayer;
+            this.npcActions = npcActions;
+        }
 
         public List<EntityAction> getActions() {
             List<EntityAction> actions = new ArrayList<>();
@@ -709,10 +767,6 @@ public class AreaDataMatcher {
 
             return actions;
         }
-
-        public boolean shouldWalkToPlayer() {
-            return walkToPlayer == null ? false : walkToPlayer;
-        }
     }
 
     public static class BattleMatcher {
@@ -720,6 +774,13 @@ public class AreaDataMatcher {
         public int cashMoney;
         public String[] pokemon;
         public String update;
+
+        public BattleMatcher(String name, int cashMoney, String[] pokemon, String update) {
+            this.name = name;
+            this.cashMoney = cashMoney;
+            this.pokemon = pokemon;
+            this.update = update;
+        }
     }
 
     public static AreaDataMatcher matchArea(String fileName, String areaDescription) {

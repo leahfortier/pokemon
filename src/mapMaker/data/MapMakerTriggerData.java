@@ -446,9 +446,7 @@ public class MapMakerTriggerData {
 
 	private PlaceableTrigger editItem(ItemMatcher item) {
 		ItemEntityDialog itemDialog = new ItemEntityDialog(mapMaker);
-		if (item != null) {
-			itemDialog.setItem(item);
-		}
+		itemDialog.loadMatcher(item);
 
 		if (!dialogOption("Item Editor", itemDialog)) {
 			return null;
@@ -460,21 +458,22 @@ public class MapMakerTriggerData {
 		}
 
 		String itemEntityName = getUniqueEntityName(TriggerModelType.ITEM, itemType.getName());
-		return new PlaceableTrigger(itemDialog.getItem(itemEntityName));
+		return new PlaceableTrigger(itemDialog.getMatcher());
 	}
 
 	private PlaceableTrigger editNPC(NPCMatcher npcData) {
 		NPCEntityDialog npcDialog = new NPCEntityDialog(mapMaker);
 		if (npcData != null) {
 			// TODO: wtf
-			npcDialog.setNPCData(npcData, npcData.name.replaceAll("^" + mapMaker.getCurrentMapName() + "_NPC_|_\\d + $", ""));
+//			npcDialog.setNPCData(npcData, npcData.name.replaceAll("^" + mapMaker.getCurrentMapName() + "_NPC_|_\\d + $", ""));
+			npcDialog.loadMatcher(npcData);
 		}
 
 		if (!dialogOption("NPC Editor", npcDialog)) {
 			return null;
 		}
 
-		NPCMatcher newEntity = npcDialog.getNPC();
+		NPCMatcher newEntity = npcDialog.getMatcher();
 		newEntity.name = getUniqueEntityName(TriggerModelType.NPC, newEntity.name);
 
 		return new PlaceableTrigger(newEntity);

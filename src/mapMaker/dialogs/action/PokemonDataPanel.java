@@ -1,15 +1,15 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.action;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import battle.Attack;
+import battle.Move;
+import main.Global;
+import pattern.PokemonMatcher;
+import pokemon.PokemonInfo;
+import util.StringUtils;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -18,18 +18,12 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
+import java.awt.Color;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.List;
 
-import battle.Move;
-import main.Global;
-import pokemon.PokemonInfo;
-import battle.Attack;
-import util.StringUtils;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-
-class PokemonDataPanel extends TriggerDialog {
-	
+class PokemonDataPanel extends JPanel {
 	private static final long serialVersionUID = 2679616277402077123L;
 	
 	private JTextField nameTextField;
@@ -41,10 +35,10 @@ class PokemonDataPanel extends TriggerDialog {
 
 	private String[] customMoves = new String[Move.MAX_MOVES]; // TODO: I think this should just be a list
 
-	private TrainerDataDialog trainerDialog;
+	private BattleActionPanel trainerDialog;
 	public int index;
 	
-	PokemonDataPanel(TrainerDataDialog givenTrainerDialog, int givenIndex) {
+	PokemonDataPanel(BattleActionPanel givenTrainerDialog, int givenIndex) {
 		
 		trainerDialog = givenTrainerDialog;
 		index = givenIndex;
@@ -208,7 +202,7 @@ class PokemonDataPanel extends TriggerDialog {
 			for (int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) {
 				String move = customMoves[currMove].isEmpty() ? "None" : customMoves[currMove];
 				allValidMoves |= Attack.isAttack(move);
-				moves+= move +(currMove + 1 == customMoves.length?"*":", ");
+				moves+= move +(currMove + 1 == customMoves.length?"":", ");
 			}
 			
 			if (allValidMoves) {
@@ -246,6 +240,22 @@ class PokemonDataPanel extends TriggerDialog {
 		this.moveTextField.setEnabled(true);
 		for (int i = 0; i < moves.size(); i++) {
 			this.customMoves[i] = moves.get(i);
+		}
+
+		this.moveTextField.setText(this.customMoves[0]);
+	}
+
+	public void load(String pokemonDescription) {
+		PokemonMatcher pokemonMatcher = PokemonMatcher.matchPokemonDescription(pokemonDescription);
+		this.setName(pokemonMatcher.getNamesies().getName());
+		this.setLevel(pokemonMatcher.getLevel() + "");
+
+		if (pokemonMatcher.isShiny()) {
+			this.setShiny();
+		}
+
+		if (pokemonMatcher.hasMoves()) {
+			this.setMoves(pokemonMatcher.getMoveNames());
 		}
 	}
 }

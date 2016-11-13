@@ -13,14 +13,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class NPCEntityDialog extends TriggerDialog {
+public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 	private static final long serialVersionUID = -8061888140387296525L;
 
 	private JLabel label;
@@ -31,18 +31,10 @@ public class NPCEntityDialog extends TriggerDialog {
 	private JComboBox<Direction> directionComboBox;
 
     private JTextField pathTextField;
-	private JTextArea trainerDataTextArea;
 	private JTextField conditionTextField;
 
 	private List<NPCInteractionMatcher> interactions;
 	private JButton addInteractionButton;
-
-	// TODO: Simplify adding data to NPC
-		// Item list
-		// First and second trigger parsing (remove "trigger: " when reading and add it when saving)
-	
-		// Remove give items and instead improve first and second triggers
-			// Make JList and allow to edit selected or add new triggers. New triggers can be a name or from a new dialog.
 	
 	private MapMaker mapMaker;
 	
@@ -51,43 +43,15 @@ public class NPCEntityDialog extends TriggerDialog {
 		interactions = new ArrayList<>();
 		addInteractionButton = new JButton("Add Interaction");
 		addInteractionButton.addActionListener(event -> {
-			interactions.add(new NPCInteractionMatcher());
+			interactions.add(null);
             render();
         });
 
 		render();
-
-//		JButton btnEditTrainer = new JButton("Edit Trainer");
-//		btnEditTrainer.addActionListener(event -> {
-//
-//            TrainerDataDialog dialog = new TrainerDataDialog();
-//
-//            if (!trainerDataTextArea.getText().trim().isEmpty()) {
-//				dialog.setTrainerData(trainerDataTextArea.getText().trim());
-//			}
-//
-//            Object[] options = {"Done", "Cancel"};
-//
-//            int results = JOptionPane.showOptionDialog(
-//            		mapMaker,
-//					dialog,
-//					"Trainer Data Editor",
-//					JOptionPane.YES_NO_OPTION,
-//					JOptionPane.PLAIN_MESSAGE,
-//					null,
-//					options,
-//					options[0]
-//			);
-//
-//            if (results == JOptionPane.CLOSED_OPTION || results == 1) {
-//				return;
-//			}
-//
-//            trainerDataTextArea.setText(dialog.getTrainerData());
-//        });
 	}
 
-	private void render() {
+	@Override
+	protected void renderDialog() {
 		label = new JLabel();
 		label.setBackground(Color.WHITE);
 
@@ -155,10 +119,17 @@ public class NPCEntityDialog extends TriggerDialog {
 		panel.add(nameTextField);
 		panel.add(conditionTextField);
 
-		for (NPCInteractionMatcher interaction: interactions) {
+		for (int i = 0; i < interactions.size(); i++) {
+			final int index = i;
 			JButton interactionButton = new JButton("Interaction");
 			interactionButton.addActionListener(event -> {
-				new NPCInteractionDialog().giveOption("New NPC Interaction Dialog", this);
+				NPCInteractionDialog dialog = new NPCInteractionDialog();
+				NPCInteractionMatcher interaction = interactions.get(index);
+				dialog.loadMatcher(interaction);
+
+				if (dialog.giveOption("New NPC Interaction Dialog", this)) {
+					interactions.set(index, dialog.getMatcher());
+				}
             });
 			panel.add(interactionButton);
 		}
@@ -252,56 +223,26 @@ public class NPCEntityDialog extends TriggerDialog {
 		ImageIcon[] imageIcons = new ImageIcon[icons.size()];
 		return icons.toArray(imageIcons);
 	}
-	
-	public void setNPCData(NPCMatcher npc, String name) {
-		nameTextField.setText(name);
-		directionComboBox.setSelectedIndex(npc.direction.ordinal());
-		spriteComboBox.setSelectedIndex(npc.spriteIndex);
 
-		// TODO: This is def gonna npe
-		conditionTextField.setText(npc.condition.replace("&"," & ").replace("|"," | "));
-
-		// TODO: Need to build map maker to handle interactions
-//		StringBuilder dialogue = new StringBuilder();
-//		for (String currentDialogue: npc.firstDialogue) {
-//			StringUtils.appendLine(dialogue, currentDialogue);
-//		}
-
-//		firstDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
-//		if (firstDialogueTextArea.getText().trim().isEmpty()) {
-//			firstDialogueTextArea.setText("I have no dialogue yet."); // TODO: There should be a constant for the default expression and it should be more interesting than this
-//		}
-
-//		dialogue.delete(0, dialogue.length());
-		
-//		if (npc.secondDialogue != null){
-//			for (String currentDialogue: npc.secondDialogue) {
-//				StringUtils.appendLine(dialogue, currentDialogue);
-//			}
-//
-//			secondDialogueTextArea.setText(PokeString.restoreSpecialFromUnicode(dialogue.toString()));
-//		}
-
-		pathTextField.setText(npc.getPath());
-
-		// TODO: Move checkbox inside interaction
-//		walkToPlayerCheckBox.setSelected(npc.walkToPlayer == 1);
-
-		// TODO: make a method for this and fix the uggyness too fucking tired for that shit right now
-//		giveItemsTextArea.setText(npc.itemInfo != null?npc.itemInfo.replace("\t", ""):null);
-//		trainerDataTextArea.setText(npc.trainerInfo != null?npc.trainerInfo.replace("\t", ""):null);
-
-//		firstTriggersTextArea.setText(npc.firstTriggers != null?npc.firstTriggers.replace("\t", ""):null);
-//		secondTriggersTextArea.setText(npc.secondTriggers != null?npc.secondTriggers.replace("\t", ""):null);
-	}
-
-	public NPCMatcher getNPC() {
+	@Override
+	public NPCMatcher getMatcher() {
 		return new NPCMatcher(
 				nameTextField.getText(),
-				conditionTextField.getText().trim().replaceAll("\\s + ", ""), // TODO: Make method for this
+				conditionTextField.getText(),
 				pathTextField.getText(),
 				spriteComboBox.getSelectedIndex(),
-				Direction.values()[directionComboBox.getSelectedIndex()]
+				(Direction)directionComboBox.getSelectedItem(),
+				interactions
 		);
+	}
+
+	@Override
+	public void load(NPCMatcher matcher) {
+		nameTextField.setText(matcher.getName()); // TODO: This won't work
+		conditionTextField.setText(matcher.condition);
+		pathTextField.setText(matcher.getPath());
+		spriteComboBox.setSelectedIndex(matcher.getSpriteIndex());
+		directionComboBox.setSelectedItem(matcher.getDirection());
+		interactions.addAll(Arrays.asList(matcher.interactions));
 	}
 }

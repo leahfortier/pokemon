@@ -11,7 +11,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -21,7 +20,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.Color;
 
-public class ItemEntityDialog extends TriggerDialog {
+public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 	private static final long serialVersionUID = 7469923865936465388L;
 
 	private JTextField itemTextField;
@@ -116,26 +115,21 @@ public class ItemEntityDialog extends TriggerDialog {
 		setLayout(groupLayout);
 	}
 
-	public void setItem(ItemMatcher item) {
-		ItemNamesies itemName = item.getItem();
-		itemTextField.setText(itemName.getName());
-//		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
-		
-		int index = Item.getItem(itemName).getImageIndex();
-		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
-	}
-
 	public ItemNamesies getItemName() {
 		return ItemNamesies.tryValueOf(itemTextField.getText());
 	}
-	
-	public ItemMatcher getItem(String name) {
-		ItemNamesies itemName = this.getItemName();
-		if (itemName == null) {
-			return null;
-		}
 
-		// TODO: Condition: "condition: " + conditionTextArea.getText().trim().replace(" ", ""),
-		return new ItemMatcher(name, itemName);
+	@Override
+	public ItemMatcher getMatcher() {
+		return new ItemMatcher(this.getItemName());
+	}
+
+	@Override
+	public void load(ItemMatcher matcher) {
+		ItemNamesies itemName = matcher.getItem();
+		itemTextField.setText(itemName.getName());
+
+		int index = Item.getItem(itemName).getImageIndex();
+		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
 	}
 }
