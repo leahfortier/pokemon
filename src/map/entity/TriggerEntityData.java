@@ -10,7 +10,7 @@ public class TriggerEntityData extends EntityData {
 	private List<EntityAction> actions;
 
 	public TriggerEntityData(int x, int y, TriggerMatcher matcher) {
-		super(matcher.name, matcher.condition);
+		super(matcher);
 
 		this.x = x;
 		this.y = y;

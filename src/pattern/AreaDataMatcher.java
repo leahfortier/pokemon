@@ -22,6 +22,7 @@ import map.entity.EntityAction.UpdateAction;
 import map.entity.npc.NPCInteraction;
 import map.triggers.TriggerType;
 import mapMaker.dialogs.action.ActionType;
+import mapMaker.model.TriggerModel.TriggerModelType;
 import namesies.ItemNamesies;
 import pattern.MatchConstants.MatchType;
 import sound.MusicCondition;
@@ -62,7 +63,7 @@ public class AreaDataMatcher {
     private TriggerMatcher[] triggers = new TriggerMatcher[0]; // TODO: Rename
 
     public AreaDataMatcher(Set<AreaMatcher> areaData,
-                           Set<EntityMatcher> entities,
+                           Set<MapMakerEntityMatcher> entities,
                            Set<TriggerMatcher> triggerData) {
         List<NPCMatcher> npcs = new ArrayList<>();
         List<ItemMatcher> items = new ArrayList<>();
@@ -114,8 +115,8 @@ public class AreaDataMatcher {
         return Arrays.asList(this.triggerData);
     }
 
-    public List<EntityMatcher> getEntities() {
-        List<EntityMatcher> entities = new ArrayList<>();
+    public List<MapMakerEntityMatcher> getEntities() {
+        List<MapMakerEntityMatcher> entities = new ArrayList<>();
         entities.addAll(getNPCs());
         entities.addAll(getItems());
         entities.addAll(getMapExits());
@@ -245,11 +246,10 @@ public class AreaDataMatcher {
         }
     }
 
-    public static class GroupTriggerMatcher {
+    public static class GroupTriggerMatcher extends EntityMatcher {
         public String[] triggers;
 
         public String suffix;
-        public String condition;
         public String[] globals;
 
         public GroupTriggerMatcher(final String... triggers) {
@@ -257,26 +257,22 @@ public class AreaDataMatcher {
         }
     }
 
-    public static class TriggerMatcher extends EntityMatcher {
-        public String name; // TODO: Make private
+    public static class TriggerMatcher extends MapMakerEntityMatcher {
+        private String name;
         private int[] location;
-        public String condition;
 
         private ActionMatcher[] actions;
 
+        private transient boolean isEntity;
         private transient List<Point> points;
         private transient List<EntityAction> entityActions;
         private transient WildBattleTriggerMatcher wildBattleContents;
 
         public TriggerMatcher(String name, String condition, ActionMatcher[] actions) {
-            this.name = StringUtils.nullWhiteSpace(name);
-            this.condition = StringUtils.nullWhiteSpace(condition);
+            this.name = name;
             this.actions = actions;
-        }
 
-        @Override
-        public String getName() {
-            return this.name;
+            super.setCondition(condition);
         }
 
         public List<Point> getLocation() {
@@ -302,6 +298,23 @@ public class AreaDataMatcher {
             AreaDataMatcher.addPoint(point, this.getLocation(), location);
         }
 
+        @Override
+        public TriggerModelType getTriggerModelType() {
+            if (this.isWildBattleTrigger()) {
+                return TriggerModelType.WILD_BATTLE;
+            } else if (isEntity) {
+                // TODO: isEntity is never set right now, but really this has to be a separate class this shit it way too confusing and I've been meaning to do that for a while now
+                return TriggerModelType.TRIGGER_ENTITY;
+            } else {
+                return TriggerModelType.EVENT;
+            }
+        }
+
+        @Override
+        public String getBasicName() {
+            return name;
+        }
+
         public ActionMatcher[] getActionMatchers() {
             return this.actions;
         }
@@ -313,7 +326,7 @@ public class AreaDataMatcher {
 
             this.entityActions = new ArrayList<>();
             for (ActionMatcher matcher : this.actions) {
-                this.entityActions.add(matcher.getAction(condition));
+                this.entityActions.add(matcher.getAction(this.getCondition()));
             }
 
             return this.entityActions;
@@ -343,12 +356,10 @@ public class AreaDataMatcher {
         }
     }
 
-    public static class ItemMatcher extends EntityMatcher {
-        private String name;
+    public static class ItemMatcher extends MapMakerEntityMatcher {
         private int x;
         private int y;
         private String item;
-        private String condition;
 
         private transient ItemNamesies itemNamesies;
 
@@ -357,11 +368,6 @@ public class AreaDataMatcher {
         public ItemMatcher(ItemNamesies itemName) {
             this.item = itemName.getName();
             this.itemNamesies = itemName;
-        }
-
-        @Override
-        public String getName() {
-            return this.name;
         }
 
         @Override
@@ -379,6 +385,16 @@ public class AreaDataMatcher {
         public void addPoint(Point point) {
             this.x = point.x;
             this.y = point.y;
+        }
+
+        @Override
+        public TriggerModelType getTriggerModelType() {
+            return TriggerModelType.ITEM;
+        }
+
+        @Override
+        public String getBasicName() {
+            return item;
         }
 
         public int getX() {
@@ -407,12 +423,16 @@ public class AreaDataMatcher {
     private static void addPoint(Point point, List<Point> points, int[] location) {
         points.add(Point.copy(point));
 
+        if (location == null) {
+            location = new int[0];
+        }
+
         location = Arrays.copyOf(location, location.length + 2);
         location[location.length - 2] = point.x;
         location[location.length - 1] = point.y;
     }
 
-    public static class MapTransitionMatcher extends EntityMatcher {
+    public static class MapTransitionMatcher extends MapMakerEntityMatcher {
         private String exitName;
         private int[] location;
         private String nextMap;
@@ -435,11 +455,6 @@ public class AreaDataMatcher {
 
         public void setMapName(final String mapName) {
             this.previousMap = mapName;
-        }
-
-        @Override
-        public String getName() {
-            return this.getExitName();
         }
 
         public String getExitName() {
@@ -486,6 +501,16 @@ public class AreaDataMatcher {
             this.addExitPoint(Point.copy(point));
         }
 
+        @Override
+        public TriggerModelType getTriggerModelType() {
+            return TriggerModelType.MAP_TRANSITION;
+        }
+
+        @Override
+        public String getBasicName() {
+            return this.getExitName();
+        }
+
         public List<Point> getEntrances() {
             return this.getLocation();
         }
@@ -520,15 +545,36 @@ public class AreaDataMatcher {
         }
     }
 
-    public abstract static class EntityMatcher {
-        public abstract String getName();
+    public abstract static class MapMakerEntityMatcher extends EntityMatcher {
         public abstract List<Point> getLocation();
         public abstract void addPoint(Point point);
+        public abstract TriggerModelType getTriggerModelType();
+        public abstract String getBasicName();
     }
 
-    public static class NPCMatcher extends EntityMatcher {
+    public abstract static class EntityMatcher {
+        private String triggerName;
+        private String condition;
+
+        public void setTriggerName(String triggerName) {
+            this.triggerName = triggerName;
+        }
+
+        protected void setCondition(String condition) {
+            this.condition = StringUtils.nullWhiteSpace(condition);
+        }
+
+        public String getTriggerName() {
+            return this.triggerName;
+        }
+
+        public String getCondition() {
+            return this.condition;
+        }
+    }
+
+    public static class NPCMatcher extends MapMakerEntityMatcher {
         public String name;
-        public String condition;
         private int startX;
         private int startY;
         private String path;
@@ -536,7 +582,7 @@ public class AreaDataMatcher {
         public Direction direction;
         public NPCInteractionMatcher[] interactions;
 
-        private List<Point> location;
+        private transient List<Point> location;
         private transient Map<String, NPCInteraction> interactionMap;
         private transient String startKey;
 
@@ -547,11 +593,12 @@ public class AreaDataMatcher {
                           Direction direction,
                           List<NPCInteractionMatcher> interactions) {
             this.setName(name);
-            this.condition = StringUtils.nullWhiteSpace(condition);
             this.path = StringUtils.nullWhiteSpace(path);
             this.spriteIndex = spriteIndex;
             this.direction = direction;
             this.interactions = interactions.toArray(new NPCInteractionMatcher[0]);
+
+            super.setCondition(condition);
         }
 
         public void setName(String name) {
@@ -612,11 +659,6 @@ public class AreaDataMatcher {
         }
 
         @Override
-        public String getName() {
-            return this.name;
-        }
-
-        @Override
         public List<Point> getLocation() {
             if (this.location != null) {
                 return this.location;
@@ -631,6 +673,16 @@ public class AreaDataMatcher {
         public void addPoint(Point location) {
             this.startX = location.x;
             this.startY = location.y;
+        }
+
+        @Override
+        public TriggerModelType getTriggerModelType() {
+            return TriggerModelType.NPC;
+        }
+
+        @Override
+        public String getBasicName() {
+            return this.name;
         }
     }
 

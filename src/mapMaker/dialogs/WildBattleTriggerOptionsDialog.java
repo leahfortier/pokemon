@@ -77,7 +77,7 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<TriggerMa
 	private TriggerMatcher getSelectedTriggerMatcher() {
 		String wildBattleName = (String)comboBox.getSelectedItem();
 		for (TriggerMatcher matcher : wildBattleTriggers) {
-			if (wildBattleName.equals(matcher.getName())) {
+			if (wildBattleName.equals(matcher.getBasicName())) {
 				return matcher;
 			}
 		}
@@ -102,7 +102,7 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<TriggerMa
 		comboBox.removeAllItems();
 		this.wildBattleTriggers
 				.forEach(matcher ->
-						comboBox.addItem(matcher.name));
+						comboBox.addItem(matcher.getBasicName()));
 
 		editButton.setEnabled(!wildBattleTriggers.isEmpty());
 	}

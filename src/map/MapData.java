@@ -103,7 +103,7 @@ public class MapData {
 
             List<Point> entrances = matcher.getEntrances();
             for (Point point : entrances) {
-                mapEntrances.put(matcher.getName(), getMapIndex(point.x, point.y)); // TODO: Doesn't work correctly
+                mapEntrances.put(matcher.getExitName(), getMapIndex(point.x, point.y)); // TODO: Doesn't work correctly
             }
 
             List<Point> exits = matcher.getExits();
@@ -142,7 +142,7 @@ public class MapData {
 		}
 	}
 
-	public int getPlayerMapIndex() {
+	private int getPlayerMapIndex() {
 		CharacterData player = Game.getPlayer();
 		return getMapIndex(player.locationX, player.locationY);
 	}

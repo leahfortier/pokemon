@@ -30,7 +30,7 @@ public class GroupTrigger extends Trigger {
 	}
 
 	private GroupTrigger(String contents, String condition, GroupTriggerMatcher matcher) {
-		super(TriggerType.GROUP, contents, Condition.and(condition, matcher.condition), matcher.globals);
+		super(TriggerType.GROUP, contents, Condition.and(condition, matcher.getCondition()), matcher.globals);
 		this.triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
 	}
 

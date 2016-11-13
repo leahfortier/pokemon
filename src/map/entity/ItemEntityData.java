@@ -9,7 +9,7 @@ public class ItemEntityData extends EntityData {
 	private ItemNamesies item;
 
 	public ItemEntityData(ItemMatcher matcher) {
-		super(matcher.getName(), "!has" + matcher.getName());
+		super(matcher, "!has" + matcher.getTriggerName());
 
 		this.x = matcher.getX();
 		this.y = matcher.getY();

@@ -1,6 +1,6 @@
 package mapMaker.data;
 
-import pattern.AreaDataMatcher.EntityMatcher;
+import pattern.AreaDataMatcher.MapMakerEntityMatcher;
 import pattern.AreaDataMatcher.TriggerMatcher;
 
 public class PlaceableTrigger {
@@ -11,27 +11,27 @@ public class PlaceableTrigger {
 	}
 	
 	public PlaceableTriggerType triggerType;
-	
+
 	public String name;
 	public Integer location;
 	
-	public EntityMatcher entity;
+	public MapMakerEntityMatcher entity;
 	public TriggerMatcher triggerData;
 
-	public PlaceableTrigger(EntityMatcher entity, Integer location) {
+	public PlaceableTrigger(MapMakerEntityMatcher entity, Integer location) {
 		this(entity);
 		this.location = location;
 	}
 
-	public PlaceableTrigger(EntityMatcher entity) {
+	public PlaceableTrigger(MapMakerEntityMatcher entity) {
 		this.triggerType = PlaceableTriggerType.ENTITY;
 		this.entity = entity;
-		this.name = entity.getName();
+		this.name = entity.getBasicName();
 	}
 
 	public PlaceableTrigger(TriggerMatcher triggerData) {
 		this.triggerType = PlaceableTriggerType.TRIGGER_DATA;
 		this.triggerData = triggerData;
-		this.name = triggerData.getName();
+		this.name = triggerData.getBasicName();
 	}
 }

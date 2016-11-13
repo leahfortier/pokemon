@@ -17,7 +17,7 @@ public class NPCEntityData extends EntityData {
 	private String startKey;
 
 	public NPCEntityData(NPCMatcher matcher) {
-		super(matcher.name, matcher.condition);
+		super(matcher);
 
 		x = matcher.getX();
 		y = matcher.getY();

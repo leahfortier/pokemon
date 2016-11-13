@@ -1,21 +1,22 @@
 package map.entity;
 
-import java.util.regex.Pattern;
-
 import map.Condition;
+import pattern.AreaDataMatcher.EntityMatcher;
 
 public abstract class EntityData {
-	public static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*(-?[\\w'.-]+)", Pattern.UNICODE_CHARACTER_CLASS);
-	
 	public String name;
 	public Condition condition;
 	
 	public int x;
 	public int y;
 
-	protected EntityData(String name, String condition) {
-		this.name = name;
-		this.condition = new Condition(condition);
+	protected EntityData(EntityMatcher matcher) {
+		this(matcher, null);
+	}
+
+	protected EntityData(EntityMatcher matcher, String condition) {
+		this.name = matcher.getTriggerName();
+		this.condition = new Condition(Condition.and(matcher.getCondition(), condition));
 	}
 
 	public abstract Entity getEntity();

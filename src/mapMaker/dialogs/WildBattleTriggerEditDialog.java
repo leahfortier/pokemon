@@ -211,7 +211,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<TriggerMatcher> {
 
 		WildBattleTriggerMatcher wildBattleTriggerMatcher = matcher.getWildBattleTriggerContents();
 
-		nameTextField.setText(matcher.getName());
+		nameTextField.setText(matcher.getBasicName());
 		rateComboBox.setSelectedItem(wildBattleTriggerMatcher.getEncounterRate());
 
 		for (WildEncounter wildEncounter : wildBattleTriggerMatcher.getWildEncounters()) {

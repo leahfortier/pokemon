@@ -12,8 +12,8 @@ public class TriggerData {
 	private List<EntityAction> actions;
 
 	public TriggerData(TriggerMatcher matcher) {
-		this.name = matcher.name;
-		this.condition = matcher.condition;
+		this.name = matcher.getTriggerName();
+		this.condition = matcher.getCondition();
 		this.actions = matcher.getActions();
 	}
 }

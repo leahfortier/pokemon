@@ -47,11 +47,6 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
             render();
         });
 
-		render();
-	}
-
-	@Override
-	protected void renderDialog() {
 		label = new JLabel();
 		label.setBackground(Color.WHITE);
 
@@ -63,9 +58,6 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 
 		// TODO: 12 + 4?
 		label.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12 + 4)));
-
-		JLabel lblSprite = new JLabel("Sprite");
-		JLabel lblDirection = new JLabel("Direction");
 
 		directionComboBox = new JComboBox<>();
 		directionComboBox.setModel(new DefaultComboBoxModel<>(Direction.values()));
@@ -94,30 +86,29 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 			label.setIcon(icon);
 		});
 
-		JLabel nameLabel = new JLabel("Name");
-
 		nameTextField = new JTextField();
 		nameTextField.setColumns(10);
-
-		JLabel pathLabel = new JLabel("Path");
 
 		pathTextField = new JTextField("w");
 		pathTextField.setColumns(10);
 
-		JLabel conditionLabel = new JLabel("Condition");
-
 		conditionTextField = new JTextField();
 		conditionTextField.setColumns(10);
 
+		render();
+	}
+
+	@Override
+	protected void renderDialog() {
 		removeAll();
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.add(label);
 		panel.add(spriteComboBox);
 		panel.add(directionComboBox);
-		panel.add(pathTextField);
 		panel.add(nameTextField);
 		panel.add(conditionTextField);
+		panel.add(pathTextField);
 
 		for (int i = 0; i < interactions.size(); i++) {
 			final int index = i;
@@ -238,8 +229,8 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 
 	@Override
 	public void load(NPCMatcher matcher) {
-		nameTextField.setText(matcher.getName()); // TODO: This won't work
-		conditionTextField.setText(matcher.condition);
+		nameTextField.setText(matcher.getBasicName());
+		conditionTextField.setText(matcher.getCondition());
 		pathTextField.setText(matcher.getPath());
 		spriteComboBox.setSelectedIndex(matcher.getSpriteIndex());
 		directionComboBox.setSelectedItem(matcher.getDirection());
