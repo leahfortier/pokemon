@@ -39,7 +39,7 @@
     }
   ],
   "triggerData": [],
-  "triggers": [
+  "miscEntities": [
     {
       "name": "PC_View",
       "location": [

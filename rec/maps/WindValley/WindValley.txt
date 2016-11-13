@@ -16,7 +16,8 @@
       ],
       "nextMap": "TransitionBuildingV",
       "nextEntrance": "SouthDoor",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     }
   ],
   "triggerData": [
@@ -2038,7 +2039,7 @@
       ]
     }
   ],
-  "triggers": [
+  "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",
       "location": [

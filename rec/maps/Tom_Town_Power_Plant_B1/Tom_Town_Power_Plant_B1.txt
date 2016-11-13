@@ -9,7 +9,6 @@
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_B1_NPC_Scientist_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 12,
       "startY": 4,
       "path": "w",
@@ -18,6 +17,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -27,7 +27,8 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
@@ -40,9 +41,10 @@
       ],
       "nextMap": "Tom_Town_Power_Plant_F1",
       "nextEntrance": "FromBasement1",
-      "direction": "LEFT"
+      "direction": "LEFT",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
-  "triggers": []
+  "miscEntities": []
 }

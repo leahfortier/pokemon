@@ -17,7 +17,8 @@
       ],
       "nextMap": "R_House_Up",
       "nextEntrance": "stairs",
-      "direction": "LEFT"
+      "direction": "LEFT",
+      "deathPortal": false
     },
     {
       "exitName": "DFS_Town",
@@ -27,9 +28,10 @@
       ],
       "nextMap": "DFS_Town",
       "nextEntrance": "RivalsHouse",
-      "direction": "DOWN"
+      "direction": "DOWN",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
-  "triggers": []
+  "miscEntities": []
 }

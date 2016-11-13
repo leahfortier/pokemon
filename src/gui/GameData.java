@@ -50,13 +50,16 @@ public class GameData {
 		File dir = new File(Folder.MAPS);
 
 		for (File d : dir.listFiles()) {
-			if (!d.isDirectory()) {
-				continue;
-			}
 
-			for (File mapFolder : d.listFiles()) {
-				maps.put(mapFolder.getName(), new MapData(mapFolder));
-			}
+			maps.put(d.getName(), new MapData(d));
+
+//			if (!d.isDirectory()) {
+//				continue;
+//			}
+//
+//			for (File mapFolder : d.listFiles()) {
+//				maps.put(mapFolder.getName(), new MapData(mapFolder));
+//			}
 
 		}
 	}

@@ -17,6 +17,7 @@
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -40,6 +41,7 @@
         },
         {
           "name": "badge",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -57,6 +59,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -100,6 +103,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -143,6 +147,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -165,9 +170,10 @@
       ],
       "nextMap": "Tom_Town",
       "nextEntrance": "Gym",
-      "direction": "DOWN"
+      "direction": "DOWN",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
-  "triggers": []
+  "miscEntities": []
 }

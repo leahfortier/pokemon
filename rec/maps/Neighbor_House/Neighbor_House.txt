@@ -17,6 +17,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -39,9 +40,10 @@
       ],
       "nextMap": "DFS_Town",
       "nextEntrance": "NeighborsHouse",
-      "direction": "DOWN"
+      "direction": "DOWN",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
-  "triggers": []
+  "miscEntities": []
 }

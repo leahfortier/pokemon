@@ -39,6 +39,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -60,6 +61,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -84,7 +86,8 @@
       ],
       "nextMap": "Edge1_RSATown_TransitionBuilding",
       "nextEntrance": "WestDoor",
-      "direction": "RIGHT"
+      "direction": "RIGHT",
+      "deathPortal": false
     },
     {
       "exitName": "WestTransitionBuilding",
@@ -96,7 +99,8 @@
       ],
       "nextMap": "RSATown_BFM_TransitionBuilding",
       "nextEntrance": "EastDoor",
-      "direction": "LEFT"
+      "direction": "LEFT",
+      "deathPortal": false
     },
     {
       "exitName": "PokeCenter",
@@ -106,9 +110,10 @@
       ],
       "nextMap": "RSATown_PokeCenter",
       "nextEntrance": "FrontDoor",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
-  "triggers": []
+  "miscEntities": []
 }

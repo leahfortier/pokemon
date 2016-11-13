@@ -17,9 +17,10 @@
       ],
       "nextMap": "Rival_House",
       "nextEntrance": "stairs",
-      "direction": "RIGHT"
+      "direction": "RIGHT",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
-  "triggers": []
+  "miscEntities": []
 }

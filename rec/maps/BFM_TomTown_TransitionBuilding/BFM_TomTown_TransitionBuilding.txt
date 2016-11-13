@@ -42,7 +42,7 @@
     }
   ],
   "triggerData": [],
-  "triggers": [
+  "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",
       "location": [

@@ -47,6 +47,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -60,7 +61,6 @@
     },
     {
       "name": "DFS_Town_NPC_Green_01",
-      "condition": "!triggered_MaplesLab_NPC_Prof_Maple_01",
       "startX": 62,
       "startY": 18,
       "path": "w",
@@ -79,7 +79,8 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "!triggered_MaplesLab_NPC_Prof_Maple_01"
     },
     {
       "name": "DFS_Town_NPC_Potion_Giver_01",
@@ -91,6 +92,7 @@
       "interactions": [
         {
           "name": "give_item",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -111,6 +113,7 @@
         },
         {
           "name": "done",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -154,6 +157,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -220,6 +224,7 @@
         },
         {
           "name": "done",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -263,6 +268,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -277,7 +283,6 @@
   ],
   "items": [
     {
-      "name": "DFS_Town_Item_Paralyze_Heal_01",
       "x": 31,
       "y": 16,
       "item": "Paralyze_Heal"
@@ -292,7 +297,8 @@
       ],
       "nextMap": "Rival_House",
       "nextEntrance": "DFS_Town",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     },
     {
       "exitName": "PlayersHouse",
@@ -302,7 +308,8 @@
       ],
       "nextMap": "PlayersHouseDown",
       "nextEntrance": "DFS_Town",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     },
     {
       "exitName": "NeighborsHouse",
@@ -312,7 +319,8 @@
       ],
       "nextMap": "Neighbor_House",
       "nextEntrance": "DFS_Town",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     },
     {
       "exitName": "MaplesLab",
@@ -322,7 +330,8 @@
       ],
       "nextMap": "MaplesLab",
       "nextEntrance": "DFS_Town",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     },
     {
       "exitName": "WestTransitionBuilding",
@@ -334,7 +343,8 @@
       ],
       "nextMap": "Edge1_RSATown_TransitionBuilding",
       "nextEntrance": "EastDoor",
-      "direction": "LEFT"
+      "direction": "LEFT",
+      "deathPortal": false
     }
   ],
   "triggerData": [
@@ -786,5 +796,5 @@
       ]
     }
   ],
-  "triggers": []
+  "miscEntities": []
 }

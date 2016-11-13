@@ -15,7 +15,6 @@
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
-      "condition": "VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
       "startX": 14,
       "startY": 10,
       "path": "w",
@@ -24,6 +23,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -33,11 +33,11 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
     },
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
-      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
       "startX": 13,
       "startY": 10,
       "path": "w",
@@ -68,6 +68,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -77,11 +78,11 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02"
     },
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-      "condition": "VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
       "startX": 12,
       "startY": 10,
       "path": "w",
@@ -100,11 +101,11 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
     },
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
-      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
       "startX": 9,
       "startY": 10,
       "path": "w",
@@ -113,6 +114,7 @@
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -153,13 +155,14 @@
         },
         {
           "name": "deadlock_defeat",
+          "walkToPlayer": false,
           "npcActions": []
         }
-      ]
+      ],
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03"
     },
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
-      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
       "startX": 2,
       "startY": 11,
       "path": "w",
@@ -196,6 +199,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -211,7 +215,8 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01"
     }
   ],
   "items": [],
@@ -221,7 +226,8 @@
       "location": [
         10,
         10
-      ]
+      ],
+      "deathPortal": false
     },
     {
       "exitName": "FromFloor2",
@@ -231,9 +237,10 @@
       ],
       "nextMap": "Tom_Town_Power_Plant_F2",
       "nextEntrance": "FromFloor3",
-      "direction": "RIGHT"
+      "direction": "RIGHT",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
-  "triggers": []
+  "miscEntities": []
 }

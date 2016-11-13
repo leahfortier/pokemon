@@ -18,7 +18,7 @@ public class MapDataMatcher {
     private ItemMatcher[] items = new ItemMatcher[0];
     private MapTransitionMatcher[] mapExits = new MapTransitionMatcher[0];
     private TriggerMatcher[] triggerData = new TriggerMatcher[0];
-    private TriggerMatcher[] triggers = new TriggerMatcher[0]; // TODO: Rename
+    private TriggerMatcher[] miscEntities = new TriggerMatcher[0];
 
     public MapDataMatcher(Set<AreaMatcher> areaData,
                           Set<MapMakerEntityMatcher> entities,
@@ -45,7 +45,7 @@ public class MapDataMatcher {
         this.NPCs = npcs.toArray(new NPCMatcher[0]);
         this.items = items.toArray(new ItemMatcher[0]);
         this.mapExits = mapExits.toArray(new MapTransitionMatcher[0]);
-        this.triggers = misc.toArray(new TriggerMatcher[0]);
+        this.miscEntities = misc.toArray(new TriggerMatcher[0]);
         this.triggerData = triggerData.toArray(new TriggerMatcher[0]);
     }
 
@@ -66,7 +66,7 @@ public class MapDataMatcher {
     }
 
     public List<TriggerMatcher> getMiscEntities() {
-        return Arrays.asList(this.triggers);
+        return Arrays.asList(this.miscEntities);
     }
 
     public List<TriggerMatcher> getTriggerData() {

@@ -25,6 +25,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -47,7 +48,8 @@
       ],
       "nextMap": "Bloom_Filter_Meadow",
       "nextEntrance": "EastTransitionBuilding",
-      "direction": "LEFT"
+      "direction": "LEFT",
+      "deathPortal": false
     },
     {
       "exitName": "EastDoor",
@@ -57,11 +59,12 @@
       ],
       "nextMap": "RSATown",
       "nextEntrance": "WestTransitionBuilding",
-      "direction": "RIGHT"
+      "direction": "RIGHT",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
-  "triggers": [
+  "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",
       "location": [

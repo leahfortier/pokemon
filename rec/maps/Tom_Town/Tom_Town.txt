@@ -9,7 +9,6 @@
   "NPCs": [
     {
       "name": "Tom_Town_NPC_Scientist_02",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 30,
       "startY": 14,
       "path": "w",
@@ -18,6 +17,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -27,11 +27,11 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_TomTownPoliceOfficer01_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 28,
       "startY": 15,
       "path": "w",
@@ -40,6 +40,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -49,11 +50,11 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_Citizen_02",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 31,
       "startY": 22,
       "path": "w",
@@ -62,6 +63,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -71,11 +73,11 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_Scientist_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 28,
       "startY": 16,
       "path": "w",
@@ -84,6 +86,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -93,11 +96,11 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_Scientist_03",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 32,
       "startY": 15,
       "path": "w",
@@ -106,6 +109,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -115,11 +119,11 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_Citizen_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant",
       "startX": 28,
       "startY": 23,
       "path": "w",
@@ -128,6 +132,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -137,7 +142,8 @@
             }
           ]
         }
-      ]
+      ],
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
@@ -154,7 +160,8 @@
       ],
       "nextMap": "TomTown_WindValley_TransitionBuilding",
       "nextEntrance": "NorthDoor",
-      "direction": "DOWN"
+      "direction": "DOWN",
+      "deathPortal": false
     },
     {
       "exitName": "EastTransitionBuilding",
@@ -166,7 +173,8 @@
       ],
       "nextMap": "BFM_TomTown_TransitionBuilding",
       "nextEntrance": "WestDoor",
-      "direction": "RIGHT"
+      "direction": "RIGHT",
+      "deathPortal": false
     },
     {
       "exitName": "PokeCenter",
@@ -176,7 +184,8 @@
       ],
       "nextMap": "Tom_Town_PokeCenter",
       "nextEntrance": "FrontDoor",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     },
     {
       "exitName": "Gym",
@@ -186,7 +195,8 @@
       ],
       "nextMap": "Tom_Gym",
       "nextEntrance": "Tom_Town",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     },
     {
       "exitName": "TomTownPowerPlant",
@@ -196,7 +206,8 @@
       ],
       "nextMap": "Tom_Town_Power_Plant_F1",
       "nextEntrance": "FromTomTown",
-      "direction": "UP"
+      "direction": "UP",
+      "deathPortal": false
     }
   ],
   "triggerData": [
@@ -210,7 +221,6 @@
         20,
         34
       ],
-      "condition": "BadgeTrigger_0&!TomTownPowerPlantExplosionTriggered",
       "actions": [
         {
           "trigger": {
@@ -221,17 +231,17 @@
         {
           "global": "TomTownPowerPlantExplosionTriggered"
         }
-      ]
+      ],
+      "condition": "BadgeTrigger_0&!TomTownPowerPlantExplosionTriggered"
     }
   ],
-  "triggers": [
+  "miscEntities": [
     {
       "name": "LockedDoor",
       "location": [
         29,
         13
       ],
-      "condition": "!BadgeTrigger_0",
       "actions": [
         {
           "trigger": {
@@ -239,7 +249,8 @@
             "triggerContents": "The door is locked."
           }
         }
-      ]
+      ],
+      "condition": "!BadgeTrigger_0"
     }
   ]
 }

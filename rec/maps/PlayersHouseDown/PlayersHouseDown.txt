@@ -17,6 +17,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -39,7 +40,8 @@
       ],
       "nextMap": "PlayersHouseUp",
       "nextEntrance": "stairs",
-      "direction": "LEFT"
+      "direction": "LEFT",
+      "deathPortal": false
     },
     {
       "exitName": "DFS_Town",
@@ -54,7 +56,7 @@
     }
   ],
   "triggerData": [],
-  "triggers": [
+  "miscEntities": [
     {
       "name": "fridge",
       "location": [

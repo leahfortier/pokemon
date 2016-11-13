@@ -32,6 +32,7 @@
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -59,7 +60,7 @@
     }
   ],
   "triggerData": [],
-  "triggers": [
+  "miscEntities": [
     {
       "name": "PC",
       "location": [
