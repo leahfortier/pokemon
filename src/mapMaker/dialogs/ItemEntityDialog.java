@@ -3,9 +3,8 @@ package mapMaker.dialogs;
 import item.Item;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
+import namesies.ItemNamesies;
 import pattern.AreaDataMatcher.ItemMatcher;
-import util.PokeString;
-import util.StringUtils;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -22,7 +21,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.Color;
 
-public class ItemEntityDialog extends JPanel {
+public class ItemEntityDialog extends TriggerDialog {
 	private static final long serialVersionUID = 7469923865936465388L;
 
 	private JTextField itemTextField;
@@ -52,16 +51,15 @@ public class ItemEntityDialog extends JPanel {
 			  }
 
 			  private void checkItem() {
-				  String itemName = getItemName();
-				  if (!Item.isItem(itemName)) {
+				  ItemNamesies itemName = getItemName();
+				  if (itemName == null) {
 					  itemImageLabel.setIcon(null);
 					  itemTextField.setBackground(new Color(0xFF9494));
-					  return;
+				  } else {
+					  int index = Item.getItem(itemName).getImageIndex();
+					  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
+					  itemTextField.setBackground(new Color(0x90EE90));
 				  }
-				  
-				  int index = Item.getItemFromName(itemName).getImageIndex();
-				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
-				  itemTextField.setBackground(new Color(0x90EE90));
 			  }
 		});
 		
@@ -118,32 +116,26 @@ public class ItemEntityDialog extends JPanel {
 		setLayout(groupLayout);
 	}
 
-	// TODO: This needs more namesies
 	public void setItem(ItemMatcher item) {
-		itemTextField.setText(item.getItemName().replace('_', ' '));
+		ItemNamesies itemName = item.getItem();
+		itemTextField.setText(itemName.getName());
 //		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
 		
-		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getImageIndex();
+		int index = Item.getItem(itemName).getImageIndex();
 		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
 	}
 
-	// TODO: This can likely just use the namesies method
-	public String getItemName() {
-		String itemName = PokeString.restoreSpecialFromUnicode(itemTextField.getText());
-		itemName = StringUtils.properCase(itemName);
-		return itemName;
+	public ItemNamesies getItemName() {
+		return ItemNamesies.tryValueOf(itemTextField.getText());
 	}
 	
 	public ItemMatcher getItem(String name) {
-		String item = getItemName();
-		
-		// TODO: Ask Josh about this -- I have no idea what this is doing, but should this throw an error or should it return null? I don't really feel like looking into this right now
-		if (!Item.isItem(item)) {
+		ItemNamesies itemName = this.getItemName();
+		if (itemName == null) {
 			return null;
 		}
 
 		// TODO: Condition: "condition: " + conditionTextArea.getText().trim().replace(" ", ""),
-		// TODO: Namesies namesies namesies
-		return new ItemMatcher(name, item.replace(' ', '_'));
+		return new ItemMatcher(name, itemName);
 	}
 }

@@ -157,7 +157,7 @@ public class EditMapMetaData {
         }
 
         // Update trigger data type
-        triggerData.moveTriggerData(delta, currentMapSize.width);
+        triggerData.moveTriggerData(Point.copy(delta));
 
         return delta;
     }

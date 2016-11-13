@@ -1,8 +1,8 @@
 package mapMaker.dialogs;
 
+import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
-import map.triggers.WildBattleTrigger;
 import pattern.AreaDataMatcher.TriggerMatcher;
 import pattern.AreaDataMatcher.WildBattleTriggerMatcher;
 
@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WildBattleTriggerEditDialog extends JPanel {
+public class WildBattleTriggerEditDialog extends TriggerDialog {
 	private static final long serialVersionUID = -3454589908432207758L;
 
 	private JTextField nameTextField;
@@ -177,12 +177,17 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		}
 	}
 	
-	public void initialize(WildBattleTrigger trigger) {
+	public void initialize(TriggerMatcher trigger) {
+		if (!trigger.isWildBattleTrigger()) {
+			Global.error("Invalid wild battle trigger");
+		}
+
+		WildBattleTriggerMatcher wildBattleTriggerMatcher = trigger.getWildBattleTriggerContents();
+
 		nameTextField.setText(trigger.getName());
+		rateComboBox.setSelectedIndex(wildBattleTriggerMatcher.getEncounterRate().ordinal());
 		
-		rateComboBox.setSelectedIndex(trigger.getEncounterRate().ordinal());
-		
-		for (WildEncounter wildEncounter : trigger.getWildEncounters()) {
+		for (WildEncounter wildEncounter : wildBattleTriggerMatcher.getWildEncounters()) {
 			WildPokemonDataPanel panel = addPokemonPanel();
 			
 			panel.pokemonTextField.setText(wildEncounter.getPokemonName());
@@ -192,7 +197,7 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		}
 	}
 	
-	public WildBattleTrigger getTrigger() {
+	public TriggerMatcher getTrigger() {
 		String name = nameTextField.getText();
 		EncounterRate encounterRate = EncounterRate.valueOf((String)rateComboBox.getSelectedItem());
 
@@ -213,16 +218,6 @@ public class WildBattleTriggerEditDialog extends JPanel {
 			System.out.println(wildEncounters[currRow].getPokemonName());
 		}
 		
-//		return new WildBattleTrigger(name, wildEncounters, encounterRate);
-		return null;
-	}
-	
-	public TriggerMatcher getTriggerData() {
-		WildBattleTrigger wildBattleTrigger = getTrigger();
-		if (wildBattleTrigger == null) {
-			return null;
-		}
-
-		return WildBattleTriggerMatcher.createWildBattleMatcher(wildBattleTrigger);
+		return WildBattleTriggerMatcher.createWildBattleMatcher(name, encounterRate, wildEncounters);
 	}
 }

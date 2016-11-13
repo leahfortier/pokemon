@@ -13,7 +13,7 @@ import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
 import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.MapExitMatcher;
+import pattern.AreaDataMatcher.MapTransitionMatcher;
 import pattern.AreaDataMatcher.TriggerMatcher;
 import trainer.CharacterData;
 import util.FileIO;
@@ -98,7 +98,7 @@ public class MapData {
 					.collect(Collectors.toList()));
 		}
 
-		for (MapExitMatcher matcher : areaDataMatcher.getMapExits()) {
+		for (MapTransitionMatcher matcher : areaDataMatcher.getMapExits()) {
             matcher.setMapName(this.name);
 
             List<Point> entrances = matcher.getEntrances();

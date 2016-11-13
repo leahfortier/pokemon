@@ -19,10 +19,7 @@ public class TriggerModel extends MapMakerModel {
         WILD_BATTLE("Wild Battle", TileType.MAP_MAKER, 0x3),
         MAP_EXIT("Map Exit", TileType.MAP_MAKER, 0x2),
         MAP_ENTRANCE("Map Entrance", TileType.MAP_MAKER, 0x1),
-        POKE_CENTER("Poke Center", TileType.MAP_MAKER, 0x5),
-        TRANSITION_BUILDING("Transition Building", TileType.MAP_MAKER, 0x6),
-        EVENT("Event", TileType.MAP_MAKER, 0xc),
-        GROUP("Group", TileType.MAP_MAKER, 0xc);
+        EVENT("Event", TileType.MAP_MAKER, 0xc);
 
         private final String name;
 
@@ -52,7 +49,7 @@ public class TriggerModel extends MapMakerModel {
 
     }
 
-    TriggerModel() {
+    public TriggerModel() {
         super(-1);
 
         this.triggerListModel = new DefaultListModel<>();

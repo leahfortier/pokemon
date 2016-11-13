@@ -1,7 +1,5 @@
 package mapMaker.dialogs;
 
-import map.triggers.TriggerData;
-import map.triggers.WildBattleTrigger;
 import mapMaker.data.MapMakerTriggerData;
 import pattern.AreaDataMatcher.TriggerMatcher;
 
@@ -13,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.util.Map;
 
-public class WildBattleTriggerOptionsDialog extends JPanel {
+public class WildBattleTriggerOptionsDialog extends TriggerDialog {
 	private static final long serialVersionUID = -7378035463487486331L;
 	
 	public JComboBox<String> comboBox; // TODO: This should probably be private
@@ -108,6 +106,7 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 			return null;
 		}
 
-		return dialog.getTriggerData();
+		return null;
+		//return dialog.getTriggerData();
 	}
 }

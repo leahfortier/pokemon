@@ -2,78 +2,14 @@ package mapMaker.dialogs;
 
 import pattern.AreaDataMatcher.TriggerMatcher;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-public class TriggerEntityDialog extends JPanel {
+public class TriggerEntityDialog extends EventTriggerDialog {
 	
 	private static final long serialVersionUID = -8044906676343275320L;
 	
-	private JTextField conditionTextField;
-	private JTextField nameTextField;
-	private JTextField triggerTextField;
-	
-	public TriggerEntityDialog() {
-		
-		JLabel lblName = new JLabel("Name");
-		
-		JLabel lblTrigger = new JLabel("Trigger");
-		
-		JLabel lblCondition = new JLabel("Condition");
-		
-		conditionTextField = new JTextField();
-		conditionTextField.setColumns(10);
-		
-		nameTextField = new JTextField();
-		nameTextField.setColumns(10);
-		
-		triggerTextField = new JTextField();
-		triggerTextField.setColumns(10);
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblName, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-							.addGap(17)
-							.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblTrigger, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-							.addGap(17)
-							.addComponent(triggerTextField, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblCondition, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-							.addGap(6)
-							.addComponent(conditionTextField, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE))))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblName)
-						.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
-					.addGap(6)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblTrigger)
-						.addComponent(triggerTextField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
-					.addGap(6)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblCondition)
-						.addComponent(conditionTextField, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))
-		);
-		setLayout(groupLayout);
-	}
-	
 	public void setTriggerEntity (TriggerMatcher triggerEntity, String name){
-		nameTextField.setText(name);
+//		nameTextField.setText(name);
 //		triggerTextField.setText(triggerEntity.trigger);
-		conditionTextField.setText(triggerEntity.condition.replace("&"," & ").replace("|"," | "));
+//		conditionTextField.setText(triggerEntity.condition.replace("&"," & ").replace("|"," | "));
 	}
 	
 	public TriggerMatcher getTriggerEntity() {

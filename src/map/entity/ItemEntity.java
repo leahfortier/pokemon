@@ -16,20 +16,19 @@ import util.StringUtils;
 import java.awt.image.BufferedImage;
 
 class ItemEntity extends Entity {
-	private String trigger;
-	private boolean hasTriggered;
 	private String name;
+	private boolean hasTriggered;
 	private ItemNamesies itemName;
 
 	private boolean dataCreated;
 
-	public ItemEntity(String name, int x, int y, String item) {
+	public ItemEntity(String name, int x, int y, ItemNamesies item) {
 		super(x,y);
 		this.name = name;
-		this.trigger = name;
-		hasTriggered = false;
-		this.itemName = ItemNamesies.getValueOf(item);
-		dataCreated = false;
+		this.itemName = item;
+
+		this.hasTriggered = false;
+		this.dataCreated = false;
 	}
 
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
@@ -39,11 +38,12 @@ class ItemEntity extends Entity {
 	}
 
 	protected BufferedImage getFrame() {
+		// TODO: Needs constant
 		return Game.getData().getTrainerTiles().getTile(0);
 	}
 
 	public String getTriggerSuffix() {
-		return trigger;
+		return this.name;
 	}
 
 	public void getAttention(Direction direction) {

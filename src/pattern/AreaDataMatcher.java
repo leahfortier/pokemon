@@ -21,7 +21,7 @@ import map.entity.EntityAction.TriggerAction;
 import map.entity.EntityAction.UpdateAction;
 import map.entity.npc.NPCInteraction;
 import map.triggers.TriggerType;
-import map.triggers.WildBattleTrigger;
+import namesies.ItemNamesies;
 import pattern.MatchConstants.MatchType;
 import sound.MusicCondition;
 import sound.SoundTitle;
@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,24 +56,24 @@ public class AreaDataMatcher {
     private AreaMatcher[] areas = new AreaMatcher[0];
     private NPCMatcher[] NPCs = new NPCMatcher[0];
     private ItemMatcher[] items = new ItemMatcher[0];
-    private MapExitMatcher[] mapExits = new MapExitMatcher[0];
+    private MapTransitionMatcher[] mapExits = new MapTransitionMatcher[0];
     private TriggerMatcher[] triggerData = new TriggerMatcher[0];
     private TriggerMatcher[] triggers = new TriggerMatcher[0]; // TODO: Rename
 
-    public AreaDataMatcher(List<AreaMatcher> areaData,
-                           List<EntityMatcher> entities,
-                           List<TriggerMatcher> triggerData) {
+    public AreaDataMatcher(Set<AreaMatcher> areaData,
+                           Set<EntityMatcher> entities,
+                           Set<TriggerMatcher> triggerData) {
         List<NPCMatcher> npcs = new ArrayList<>();
         List<ItemMatcher> items = new ArrayList<>();
-        List<MapExitMatcher> mapExits = new ArrayList<>();
+        List<MapTransitionMatcher> mapExits = new ArrayList<>();
         List<TriggerMatcher> misc = new ArrayList<>();
         for (EntityMatcher entity : entities) {
             if (entity instanceof NPCMatcher) {
                 npcs.add((NPCMatcher)entity);
             } else if (entity instanceof ItemMatcher) {
                 items.add((ItemMatcher)entity);
-            } else if (entity instanceof MapExitMatcher) {
-                mapExits.add((MapExitMatcher)entity);
+            } else if (entity instanceof MapTransitionMatcher) {
+                mapExits.add((MapTransitionMatcher)entity);
             } else if (entity instanceof TriggerMatcher) {
                 misc.add((TriggerMatcher)entity);
             } else {
@@ -83,7 +84,7 @@ public class AreaDataMatcher {
         this.areas = areaData.toArray(new AreaMatcher[0]);
         this.NPCs = npcs.toArray(new NPCMatcher[0]);
         this.items = items.toArray(new ItemMatcher[0]);
-        this.mapExits = mapExits.toArray(new MapExitMatcher[0]);
+        this.mapExits = mapExits.toArray(new MapTransitionMatcher[0]);
         this.triggers = misc.toArray(new TriggerMatcher[0]);
         this.triggerData = triggerData.toArray(new TriggerMatcher[0]);
     }
@@ -100,7 +101,7 @@ public class AreaDataMatcher {
         return Arrays.asList(this.items);
     }
 
-    public List<MapExitMatcher> getMapExits() {
+    public List<MapTransitionMatcher> getMapExits() {
         return Arrays.asList(this.mapExits);
     }
 
@@ -192,21 +193,35 @@ public class AreaDataMatcher {
     );
 
     public static class WildBattleTriggerMatcher {
-        public EncounterRate encounterRate;
+        private EncounterRate encounterRate;
         private String[] pokemon;
 
         private transient WildEncounter[] wildEncounters;
 
-        public static TriggerMatcher createWildBattleMatcher(WildBattleTrigger trigger) {
+        public static TriggerMatcher createWildBattleMatcher(String name, EncounterRate encounterRate, WildEncounter[] wildEncounters) {
             TriggerMatcher matcher = new TriggerMatcher();
-            matcher.name = trigger.getName();
-            matcher.condition = trigger.getCondition().getOriginalConditionString();
+            matcher.name = name;
 
+            WildBattleTriggerMatcher wildBattleTriggerMatcher = new WildBattleTriggerMatcher(encounterRate, wildEncounters);
             ActionMatcher action = new ActionMatcher();
-            action.trigger = new TriggerActionMatcher(TriggerType.WILD_BATTLE, getJson(trigger));
+            action.trigger = new TriggerActionMatcher(TriggerType.WILD_BATTLE, getJson(wildBattleTriggerMatcher));
 
             matcher.actions = new ActionMatcher[] { action };
             return matcher;
+        }
+
+        private WildBattleTriggerMatcher(EncounterRate encounterRate, WildEncounter[] wildEncounters) {
+            this.encounterRate = encounterRate;
+            this.wildEncounters = wildEncounters;
+            this.pokemon = new String[wildEncounters.length];
+            for (int i = 0; i < pokemon.length; i++) {
+                WildEncounter wildEncounter = wildEncounters[i];
+                this.pokemon[i] = wildEncounter.getPokemonName() + " " + wildEncounter.getMinLevel() + "-" + wildEncounter.getMaxLevel() + " " + wildEncounter.getProbability() + "%";
+            }
+        }
+
+        public EncounterRate getEncounterRate() {
+            return this.encounterRate;
         }
 
         public WildEncounter[] getWildEncounters() {
@@ -254,6 +269,7 @@ public class AreaDataMatcher {
 
         private transient List<Point> points;
         private transient List<EntityAction> entityActions;
+        private transient WildBattleTriggerMatcher wildBattleContents;
 
         @Override
         public String getName() {
@@ -297,16 +313,26 @@ public class AreaDataMatcher {
         }
 
         public boolean isWildBattleTrigger() {
+            return this.getWildBattleTriggerContents() != null;
+        }
+
+        public WildBattleTriggerMatcher getWildBattleTriggerContents() {
+            if (this.wildBattleContents != null) {
+                return this.wildBattleContents;
+            }
+
             for (EntityAction action : this.getActions()) {
                 if (action instanceof TriggerAction) {
                     TriggerAction triggerAction = (TriggerAction)action;
                     if (triggerAction.getTriggerType() == TriggerType.WILD_BATTLE) {
-                        return true;
+                        String contents = triggerAction.getTriggerContents(this.name);
+                        this.wildBattleContents = deserialize(contents, WildBattleTriggerMatcher.class);
+                        break;
                     }
                 }
             }
 
-            return false;
+            return this.wildBattleContents;
         }
     }
 
@@ -315,12 +341,16 @@ public class AreaDataMatcher {
         private int x;
         private int y;
         private String item;
+        private String condition;
+
+        private transient ItemNamesies itemNamesies;
 
         private transient List<Point> location;
 
-        public ItemMatcher(String name, String itemName) {
+        public ItemMatcher(String name, ItemNamesies itemName) {
             this.name = name;
-            this.item = itemName;
+            this.item = itemName.getName();
+            this.itemNamesies = itemName;
         }
 
         @Override
@@ -353,8 +383,12 @@ public class AreaDataMatcher {
             return y;
         }
 
-        public String getItemName() {
-            return this.item;
+        public ItemNamesies getItem() {
+            if (this.itemNamesies != null) {
+                return this.itemNamesies;
+            }
+
+            return this.itemNamesies = ItemNamesies.getValueOf(this.item);
         }
     }
 
@@ -372,15 +406,15 @@ public class AreaDataMatcher {
         location[location.length - 1] = point.y;
     }
 
-    public static class MapExitMatcher extends EntityMatcher {
+    public static class MapTransitionMatcher extends EntityMatcher {
         private String exitName;
         private int[] location;
-        public String nextMap;
-        public String nextEntrance;
-        public Direction direction;
+        private String nextMap;
+        private String nextEntrance;
+        private Direction direction;
         private Boolean deathPortal;
 
-        public String previousMap;
+        private String previousMap;
 
         private transient List<Point> entrances;
         private transient List<Point> exits;
@@ -391,7 +425,27 @@ public class AreaDataMatcher {
 
         @Override
         public String getName() {
+            return this.getExitName();
+        }
+
+        public String getExitName() {
             return this.exitName;
+        }
+
+        public String getNextMap() {
+            return this.nextMap;
+        }
+
+        public String getNextEntranceName() {
+            return this.nextEntrance;
+        }
+
+        public Direction getDirection() {
+            return this.direction;
+        }
+
+        public String getPreviousMap() {
+           return this.previousMap;
         }
 
         public List<Point> getLocation() {

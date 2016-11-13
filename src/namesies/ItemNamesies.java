@@ -425,13 +425,21 @@ public enum ItemNamesies {
 		return this.name;
 	}
 
-	public static ItemNamesies getValueOf(String name) {
+	public static ItemNamesies tryValueOf(String name) {
 		try {
 			return ItemNamesies.valueOf(PokeString.getNamesiesString(name));
 		} catch (IllegalArgumentException exception) {
-			Global.error(name + " does not have a valid ItemNamesies value");
 			return null;
 		}
+	}
+
+	public static ItemNamesies getValueOf(String name) {
+		ItemNamesies itemNamesies = tryValueOf(name);
+		if (itemNamesies == null) {
+			Global.error(name + " does not have a valid ItemNamesies value");
+		}
+
+		return itemNamesies;
 	}
 }
 

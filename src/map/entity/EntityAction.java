@@ -61,7 +61,7 @@ public abstract class EntityAction {
         }
 
         @Override
-        protected String getTriggerContents(String entityName) {
+        public String getTriggerContents(String entityName) {
             return this.contents;
         }
 

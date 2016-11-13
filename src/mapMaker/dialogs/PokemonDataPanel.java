@@ -28,7 +28,7 @@ import util.StringUtils;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
-class PokemonDataPanel extends JPanel {
+class PokemonDataPanel extends TriggerDialog {
 	
 	private static final long serialVersionUID = 2679616277402077123L;
 	

@@ -36,6 +36,7 @@ public class GroupTrigger extends Trigger {
 
 	@Override
 	protected void executeTrigger() {
+		// Add all triggers in the group to the beginning of the message queue
 		for (int i = triggers.size() - 1; i >= 0; i--) {
 			String triggerName = triggers.get(i);
 			Trigger trigger = Game.getData().getTrigger(triggerName);

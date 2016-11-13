@@ -25,7 +25,7 @@ public class WildBattleTrigger extends Trigger {
 
 		WildBattleTriggerMatcher matcher = AreaDataMatcher.deserialize(matcherJson, WildBattleTriggerMatcher.class);
 		this.wildEncounters = matcher.getWildEncounters();
-		this.encounterRate = matcher.encounterRate;
+		this.encounterRate = matcher.getEncounterRate();
 
 		int totalProbability = 0;
 		for (WildEncounter wildEncounter : this.wildEncounters) {

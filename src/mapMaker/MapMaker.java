@@ -102,7 +102,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.mouseHoverLocation = new Point();
 
         this.mapData = new EditMapMetaData();
-        this.editType = EditType.BACKGROUND;
+		this.editType = EditType.BACKGROUND;
 
         this.canvas = new Canvas();
         this.canvas.addMouseListener(this);

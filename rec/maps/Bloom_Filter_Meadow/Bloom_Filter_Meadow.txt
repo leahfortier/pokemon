@@ -14,7 +14,7 @@
       "startY": 23,
       "path": "w",
       "spriteIndex": 16,
-      "direction": "RIGHT",
+      "direction": "UP",
       "interactions": [
         {
           "name": "battle",

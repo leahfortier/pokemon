@@ -1,17 +1,18 @@
 package mapMaker.dialogs;
 
-import map.triggers.MapTransitionTrigger;
 import mapMaker.MapMaker;
 import mapMaker.data.MapMakerTriggerData;
+import pattern.AreaDataMatcher.MapTransitionMatcher;
 import pattern.AreaDataMatcher.TriggerMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-public class MapTransitionDialog extends JPanel {
+public class MapTransitionDialog extends TriggerDialog {
 	private static final long serialVersionUID = 6937677302812347311L;
 
 	private MapMakerTriggerData triggerData;
@@ -19,6 +20,9 @@ public class MapTransitionDialog extends JPanel {
 	private JComboBox<String> destinationComboBox;
 	private JComboBox<String> entranceComboBox;
 	private JComboBox<String> directionComboBox;
+	private JCheckBox deathPortalCheckBox;
+	private JTextField entranceNameTextField;
+
 
 	// TODO: move direction to map entrance since it makes more sense to put it there.
 
@@ -28,8 +32,13 @@ public class MapTransitionDialog extends JPanel {
 		triggerData = givenTriggerData;
 		
 		JLabel destinationLabel = new JLabel("Destination");
-		JLabel entranceLabel = new JLabel("Entrance");
+		JLabel entranceLabel = new JLabel("Destination Entrance");
 		JLabel directionLabel = new JLabel("Direction");
+		JLabel entranceNameLabel = new JLabel("Entrance Name");
+
+		JCheckBox deathPortalCheckBox = new JCheckBox("Death Portal");
+		JTextField entranceNameTextField = new JTextField();
+		entranceNameTextField.setColumns(10);
 		
 		// Fill combo boxes with available maps.
 		String[] mapList = givenMapMaker.getAvailableMaps();
@@ -49,10 +58,10 @@ public class MapTransitionDialog extends JPanel {
                 entranceComboBox.setEnabled(true);
                 entranceComboBox.removeAllItems();
 
-                String[] mapEntrances = triggerData.getMapEntrancesForMap((String)destinationComboBox.getSelectedItem());
-                for (String entrance: mapEntrances) {
-                    entranceComboBox.addItem(entrance); // TODO: lambda?
-                }
+//                String[] mapEntrances = triggerData.getMapEntrancesForMap((String)destinationComboBox.getSelectedItem());
+//                for (String entrance: mapEntrances) {
+//                    entranceComboBox.addItem(entrance); // TODO: lambda?
+//                }
             }
         });
 		
@@ -68,6 +77,10 @@ public class MapTransitionDialog extends JPanel {
 					.addGap(6)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(entranceNameLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(entranceNameTextField, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(destinationLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 							.addGap(12)
 							.addComponent(destinationComboBox, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
@@ -78,13 +91,21 @@ public class MapTransitionDialog extends JPanel {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(directionLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 							.addGap(12)
-							.addComponent(directionComboBox, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(directionComboBox, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(deathPortalCheckBox, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))))
 		);
 
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(2)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup())
+							.addGap(4)
+							.addComponent(entranceNameLabel)
+						.addComponent(entranceNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(4)
@@ -101,7 +122,9 @@ public class MapTransitionDialog extends JPanel {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(4)
 							.addComponent(directionLabel))
-						.addComponent(directionComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(directionComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createSequentialGroup())
+						.addComponent(deathPortalCheckBox))
 		);
 		setLayout(groupLayout);
 	}
@@ -114,25 +137,13 @@ public class MapTransitionDialog extends JPanel {
 		return (String)entranceComboBox.getSelectedItem();
 	}
 	
-	public void setMapTransition(MapTransitionTrigger mapTransition) {
+	public void setMapTransition(MapTransitionMatcher mapTransition) {
 		destinationComboBox.setSelectedItem(mapTransition.getNextMap());
-		entranceComboBox.setSelectedItem(mapTransition.getMapEntranceName());
+		entranceComboBox.setSelectedItem(mapTransition.getNextEntranceName());
 		directionComboBox.setSelectedIndex(mapTransition.getDirection().ordinal() + 1); // TODO: Not sure what's going on here but it should probably be in a direction method instead of using the ordinal
 	}
-	
-	public MapTransitionTrigger getMapTransition(String name) {
-		String destination = getDestination();
-		String entrance = getMapEntrance();
-		
-		if (destination.isEmpty() || entrance.isEmpty()) {
-			return null;
-		}
-		
-//		return new MapTransitionTrigger(name, "", destination, entrance, directionComboBox.getSelectedIndex() - 1);
-		return null;
-	}
 
-	// TODO: This needs to return MapExitMatcher thingy
+	// TODO: This needs to return MapTransitionMatcher thingy
 	public TriggerMatcher getTriggerData(String name) {
 		String destination = getDestination();
 		String entrance = getMapEntrance();

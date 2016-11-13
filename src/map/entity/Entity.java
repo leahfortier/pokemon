@@ -28,7 +28,8 @@ public abstract class Entity {
 	public int getY() {
 		return this.charY;
 	}
-	
+
+	// TODO: DrawUtils
 	// Takes in the draw coordinates and returns the location of the entity where to draw it relative to the canvas
 	public Point getCanvasCoordinates(float drawX, float drawY) {
 		int cx = (int) drawX + Global.TILE_SIZE * charX;
