@@ -3,7 +3,9 @@ package mapMaker.dialogs;
 import map.Direction;
 import mapMaker.MapMaker;
 import mapMaker.data.MapMakerTriggerData;
+import pattern.MapDataMatcher;
 import pattern.MapTransitionMatcher;
+import util.FileIO;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -11,6 +13,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 	private static final long serialVersionUID = 6937677302812347311L;
@@ -38,6 +42,17 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		}
 	}
 
+	private static Set<String> getMapEntrancesForMap(MapMaker mapMaker, String mapName) {
+		String mapFileName = mapMaker.getMapTextFileName(mapName);
+		String fileText = FileIO.readEntireFileWithReplacements(mapFileName, false);
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName, fileText);
+
+		return mapDataMatcher.getMapExits()
+				.stream()
+				.map(MapTransitionMatcher::getExitName)
+				.collect(Collectors.toSet());
+	}
+
 	public MapTransitionDialog(MapMaker givenMapMaker, MapMakerTriggerData givenTriggerData) {
 		triggerData = givenTriggerData;
 
@@ -46,8 +61,8 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		JLabel directionLabel = new JLabel("Direction");
 		JLabel entranceNameLabel = new JLabel("Entrance Name");
 
-		JCheckBox deathPortalCheckBox = new JCheckBox("Death Portal");
-		JTextField entranceNameTextField = new JTextField();
+		deathPortalCheckBox = new JCheckBox("Death Portal");
+		entranceNameTextField = new JTextField();
 		entranceNameTextField.setColumns(10);
 		
 		// Fill combo boxes with available maps.
@@ -68,11 +83,9 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
                 entranceComboBox.setEnabled(true);
                 entranceComboBox.removeAllItems();
 
-				// TODO: This
-//                String[] mapEntrances = triggerData.getMapEntrancesForMap((String)destinationComboBox.getSelectedItem());
-//                for (String entrance: mapEntrances) {
-//                    entranceComboBox.addItem(entrance); // TODO: lambda?
-//                }
+				String destinationMap = (String)destinationComboBox.getSelectedItem();
+				getMapEntrancesForMap(givenMapMaker, destinationMap)
+						.forEach(entranceComboBox::addItem);
             }
         });
 		

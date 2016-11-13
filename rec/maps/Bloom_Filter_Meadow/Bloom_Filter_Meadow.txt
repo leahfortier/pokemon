@@ -41,6 +41,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -85,6 +86,7 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -99,13 +101,11 @@
   ],
   "items": [
     {
-      "name": "Bloom_Filter_Meadow_Item_Pecha_Berry_01",
       "x": 21,
       "y": 26,
       "item": "Pecha_Berry"
     },
     {
-      "name": "Bloom_Filter_Meadow_Item_Meadow_Plate_01",
       "x": 44,
       "y": 14,
       "item": "Meadow_Plate"
@@ -122,7 +122,8 @@
       ],
       "nextMap": "RSATown_BFM_TransitionBuilding",
       "nextEntrance": "WestDoor",
-      "direction": "RIGHT"
+      "direction": "RIGHT",
+      "deathPortal": false
     },
     {
       "exitName": "WestTransitionBuilding",
@@ -134,7 +135,8 @@
       ],
       "nextMap": "BFM_TomTown_TransitionBuilding",
       "nextEntrance": "EastDoor",
-      "direction": "LEFT"
+      "direction": "LEFT",
+      "deathPortal": false
     }
   ],
   "triggerData": [

@@ -96,7 +96,7 @@ public class MapTransitionMatcher extends MapMakerEntityMatcher {
             int exitX = entrance.x + this.direction.dx;
             int exitY = entrance.y + this.direction.dy;
 
-            this.exits.add(new Point(exitX, exitY));
+            this.getExits().add(new Point(exitX, exitY));
         }
     }
 

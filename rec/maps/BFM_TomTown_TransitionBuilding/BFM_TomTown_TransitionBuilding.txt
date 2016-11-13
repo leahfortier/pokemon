@@ -26,7 +26,8 @@
       ],
       "nextMap": "Tom_Town",
       "nextEntrance": "EastTransitionBuilding",
-      "direction": "LEFT"
+      "direction": "LEFT",
+      "deathPortal": false
     },
     {
       "exitName": "EastDoor",
@@ -36,7 +37,8 @@
       ],
       "nextMap": "Bloom_Filter_Meadow",
       "nextEntrance": "WestTransitionBuilding",
-      "direction": "RIGHT"
+      "direction": "RIGHT",
+      "deathPortal": false
     }
   ],
   "triggerData": [],
