@@ -6,6 +6,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
@@ -14,7 +15,7 @@ import javax.swing.text.NumberFormatter;
 import java.awt.Color;
 import java.text.NumberFormat;
 
-public class WildPokemonDataPanel extends TriggerDialog {
+public class WildPokemonDataPanel extends JPanel {
 	
 	private static final long serialVersionUID = -7408589859784929623L;
 

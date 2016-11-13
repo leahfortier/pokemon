@@ -12,13 +12,17 @@ public class TriggerModel extends MapMakerModel {
 
     private DefaultListModel<ImageIcon> triggerListModel;
 
+    // TODO: I hate everything
+    public static BufferedImage getMapExitImage(final MapMaker mapMaker) {
+        return mapMaker.getTileFromSet(TileType.MAP_MAKER, 0x2);
+    }
+
     public enum TriggerModelType {
         ITEM("Item", TileType.TRAINER, 0x0),
         NPC("NPC", TileType.TRAINER, 0x00000040),
         TRIGGER_ENTITY("Trigger Entity", TileType.MAP_MAKER, 0x4),
         WILD_BATTLE("Wild Battle", TileType.MAP_MAKER, 0x3),
-        MAP_EXIT("Map Exit", TileType.MAP_MAKER, 0x2),
-        MAP_ENTRANCE("Map Entrance", TileType.MAP_MAKER, 0x1),
+        MAP_TRANSITION("Map Exit", TileType.MAP_MAKER, 0x1),
         EVENT("Event", TileType.MAP_MAKER, 0xc);
 
         private final String name;

@@ -1,7 +1,6 @@
 package mapMaker.data;
 
 import main.Global;
-import map.triggers.DialogueTrigger;
 import mapMaker.MapMaker;
 import mapMaker.data.PlaceableTrigger.PlaceableTriggerType;
 import mapMaker.dialogs.EventTriggerDialog;
@@ -13,6 +12,7 @@ import mapMaker.dialogs.TriggerEntityDialog;
 import mapMaker.dialogs.WildBattleTriggerEditDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
 import mapMaker.model.TileModel.TileType;
+import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import namesies.ItemNamesies;
 import pattern.AreaDataMatcher;
@@ -28,7 +28,6 @@ import util.Point;
 import util.PokeString;
 import util.StringUtils;
 
-import javax.swing.JOptionPane;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -36,8 +35,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static mapMaker.model.TriggerModel.TriggerModelType.MAP_ENTRANCE;
 
 public class MapMakerTriggerData {
 
@@ -133,10 +130,10 @@ public class MapMakerTriggerData {
 			for (Point point : entity.getLocation()) {
 				final BufferedImage image;
 				if (entity instanceof MapTransitionMatcher) {
-					image = MAP_ENTRANCE.getImage(mapMaker);
+					image = TriggerModelType.MAP_TRANSITION.getImage(mapMaker);
 
 					for (Point exit : ((MapTransitionMatcher) entity).getExits()) {
-						BufferedImage exitImage = TriggerModelType.MAP_EXIT.getImage(mapMaker);
+						BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
 						DrawUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
 					}
 				} else if (entity instanceof NPCMatcher) {
@@ -197,7 +194,7 @@ public class MapMakerTriggerData {
 			} else if (trigger.entity instanceof TriggerMatcher) {
 				return TriggerModelType.TRIGGER_ENTITY;
 			} else if (trigger.entity instanceof MapTransitionMatcher) {
-				return MAP_ENTRANCE;
+				return TriggerModelType.MAP_TRANSITION;
 			}
 		}
 		else if (trigger.triggerType == PlaceableTriggerType.TRIGGER_DATA) {
@@ -235,17 +232,13 @@ public class MapMakerTriggerData {
 				System.out.println("Wild Battle");
 				trigger = wildBattleTriggerOptions();
 				break;
-			case MAP_EXIT:
-				System.out.println("Exit");
+			case MAP_TRANSITION:
+				System.out.println("Map Transition");
 				trigger = editMapTransition(null);
 				break;
-			case MAP_ENTRANCE:
-				System.out.println("Entrance");
-				trigger = editMapEntrance(null);
-				break;
 			case EVENT:
-				System.out.println("Dialogue");
-				trigger = editDialogueTrigger(null);
+				System.out.println("Event");
+				trigger = editEventTrigger(null);
 				break;
 		}
 
@@ -287,33 +280,17 @@ public class MapMakerTriggerData {
 			if (trigger.triggerData.isWildBattleTrigger()) {
 				newTrigger = editWildBattleTrigger(trigger.triggerData);
 			}
-//			else if (trigger.triggerData.triggerType == TriggerType.DIALOGUE) {
-////				newTrigger = editDialogueTrigger(new DialogueTrigger(trigger.name, trigger.triggerData.triggerContents));
-//				// TODO
-//			}
-//
-//			if (newTrigger != null) {
-////				this.triggerData.remove(trigger.triggerData);
-////				this.triggerData.add(newTrigger.triggerData);
-//				triggerNames.add(newTrigger.triggerData.name);
-//
-//				triggersSaved = false;
-//
-//				// Loop through all of previous and replace with new
-//				renameTriggerData(trigger.triggerData, newTrigger.triggerData);
-//			}
-		}
-	}
+			else {
+				newTrigger = editEventTrigger(trigger.triggerData);
+			}
 
-	public void renameTriggerData(TriggerMatcher prev, TriggerMatcher updated) {
-//		updated.points = prev.points;
-//
-//		for (Integer loc : updated.getPoints((int) currentMapSize.getWidth())) {
-//			triggerDataOnMap.put(loc, updated);
-//		}
-//
-//		wildBattleTriggers.remove(prev.name);
-//		wildBattleTriggers.put(updated.name, updated);
+			if (newTrigger != null) {
+				this.triggerData.remove(trigger.triggerData);
+				this.triggerData.add(newTrigger.triggerData);
+
+				triggersSaved = false;
+			}
+		}
 	}
 
 	public List<EntityMatcher> getEntitiesAtLocation(Point location) {
@@ -495,27 +472,33 @@ public class MapMakerTriggerData {
 		return new PlaceableTrigger(newEntity);
 	}
 
+	private List<TriggerMatcher> getWildBattleTriggers() {
+		return this.triggerData
+				.stream()
+				.filter(TriggerMatcher::isWildBattleTrigger)
+				.collect(Collectors.toList());
+	}
+
 	private PlaceableTrigger wildBattleTriggerOptions() {
-	//	WildBattleTriggerOptionsDialog wildBattleTriggerOptions = new WildBattleTriggerOptionsDialog(wildBattleTriggers, this);
-		WildBattleTriggerOptionsDialog wildBattleTriggerOptions = new WildBattleTriggerOptionsDialog(null, this);
+		WildBattleTriggerOptionsDialog wildBattleTriggerOptions = new WildBattleTriggerOptionsDialog();
+		wildBattleTriggerOptions.loadMatcher(this.getWildBattleTriggers());
+
 		if (!dialogOption("Wild Battle Trigger Options", wildBattleTriggerOptions)) {
 			return null;
 		}
 
-		if (wildBattleTriggerOptions.comboBox.getItemCount() == 0) {
+		List<TriggerMatcher> matcher = wildBattleTriggerOptions.getMatcher();
+		if (matcher == null || matcher.isEmpty()) {
 			return null;
 		}
 
-		String wildBattleTriggerName = (String) wildBattleTriggerOptions.comboBox.getSelectedItem();
-		return null;
-//		TriggerMatcher td = wildBattleTriggers.get(wildBattleTriggerName);
-//
-//		return new PlaceableTrigger(td);
+		// TODO: Wild battles need to be handled differently
+		return new PlaceableTrigger(matcher.get(0));
 	}
 
 	private PlaceableTrigger editWildBattleTrigger(TriggerMatcher wildBattleTrigger) {
 		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
-		dialog.initialize(wildBattleTrigger);
+		dialog.loadMatcher(wildBattleTrigger);
 
 		if (!dialogOption("Wild Battle Trigger Editor", dialog)) {
 			return null;
@@ -541,71 +524,26 @@ public class MapMakerTriggerData {
 		}
 
 		String mapDestination = mapTransitionDialog.getDestination();
-		if (mapDestination.isEmpty() || mapTransitionDialog.getMapEntrance().isEmpty()) {
-			return null;
-		}
+		String mapTriggerName = getUniqueEntityName(TriggerModelType.MAP_TRANSITION, mapDestination);
 
-		String mapTriggerName = getUniqueEntityName(MAP_ENTRANCE, mapDestination);
-		TriggerMatcher td = mapTransitionDialog.getTriggerData(mapTriggerName);
-
-		return new PlaceableTrigger(td);
+		MapTransitionMatcher mapTransition = mapTransitionDialog.getMatcher();
+		return new PlaceableTrigger(mapTransition);
 	}
 
-	private PlaceableTrigger editMapEntrance(String entrance) {
-		String originalEntrance = entrance;
-
-		entrance = JOptionPane.showInputDialog(mapMaker, "Please specify an entrance name:", entrance);
-		if (entrance != null) {
-			entrance = entrance.trim().replace(' ', '_');
-		}
-
-		while (!StringUtils.isNullOrEmpty(entrance) &&
-				!entrance.equals(originalEntrance)) {
-//			if (mapEntrances.containsValue(entrance)) {
-//				entrance = JOptionPane.showInputDialog(mapMaker, "The entrance \"" + entrance + "\" already exist.\nPlease specify a different entrance name:", entrance.replace('_', ' '));
-//			}
-
-			if (entrance != null) {
-				entrance = entrance.trim().replace(' ', '_');
-			}
-		}
-
-		if (StringUtils.isNullOrEmpty(entrance) || entrance.equals(originalEntrance)) {
-			return null;
-		}
-
-		return null;
-		//return new PlaceableTrigger(PlaceableTriggerType.MAP_ENTRANCE, entrance);
-	}
-
-	private PlaceableTrigger editDialogueTrigger(DialogueTrigger dialogueTrigger) {
+	private PlaceableTrigger editEventTrigger(TriggerMatcher triggerMatcher) {
 		EventTriggerDialog eventTriggerDialog = new EventTriggerDialog();
-
-		// TODO: this is all wrong and I don't feel like fixing it right now
-		if (dialogueTrigger != null) {
-			String name = dialogueTrigger.getName();
-			String prefix = mapMaker.getCurrentMapName() + "_DialogueTrigger_";
-
-			// TODO: what is happening? what is -3?
-			String actualName = name.substring(prefix.length(), name.length() - 3);
-			System.out.println(actualName);
-
-			eventTriggerDialog.setDialogueTrigger(dialogueTrigger, actualName);
-		}
+		eventTriggerDialog.loadMatcher(triggerMatcher);
 
 		if (!dialogOption("Event Trigger Editor", eventTriggerDialog)) {
 			return null;
 		}
 
-		String eventTriggerName = eventTriggerDialog.getDialogueTriggerName();
-		if (eventTriggerName.isEmpty()) {
-			return null;
-		}
+		// TODO: confirm at least one action first
 
-
+		String eventTriggerName = eventTriggerDialog.getEventName();
 		String triggerName = getUniqueEntityName(TriggerModelType.EVENT, eventTriggerName);
-		TriggerMatcher td = eventTriggerDialog.getTriggerData(triggerName);
 
-		return new PlaceableTrigger(td);
+		TriggerMatcher matcher = eventTriggerDialog.getMatcher();
+		return new PlaceableTrigger(matcher);
 	}
 }

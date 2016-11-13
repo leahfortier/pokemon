@@ -76,10 +76,14 @@ public class EventTriggerDialog extends TriggerDialog<TriggerMatcher> {
 		this.setPanelSize();
 	}
 
+	public String getEventName() {
+		return this.nameTextField.getText().trim();
+	}
+
 	@Override
 	public TriggerMatcher getMatcher() {
 		return new TriggerMatcher(
-				nameTextField.getText(),
+				this.getEventName(), // TODO: This is incorrect -- or they can all be renamed at saving time?
 				conditionTextArea.getText(),
 				actionListPanel.getActions()
 		);

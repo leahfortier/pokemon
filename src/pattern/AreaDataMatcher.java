@@ -359,11 +359,6 @@ public class AreaDataMatcher {
             this.itemNamesies = itemName;
         }
 
-        public ItemMatcher(String name, ItemNamesies itemName) {
-            this(itemName);
-            this.name = name;
-        }
-
         @Override
         public String getName() {
             return this.name;
@@ -423,12 +418,20 @@ public class AreaDataMatcher {
         private String nextMap;
         private String nextEntrance;
         private Direction direction;
-        private Boolean deathPortal;
+        private boolean deathPortal;
 
         private String previousMap;
 
         private transient List<Point> entrances;
         private transient List<Point> exits;
+
+        public MapTransitionMatcher(String exitName, String nextMap, String nextEntrance, Direction direction, boolean deathPortal) {
+            this.exitName = exitName;
+            this.nextMap = nextMap;
+            this.nextEntrance = nextEntrance;
+            this.direction = direction;
+            this.deathPortal = deathPortal;
+        }
 
         public void setMapName(final String mapName) {
             this.previousMap = mapName;
@@ -513,7 +516,7 @@ public class AreaDataMatcher {
         }
 
         public boolean isDeathPortal() {
-            return deathPortal == null ? false : deathPortal;
+            return deathPortal;
         }
     }
 
