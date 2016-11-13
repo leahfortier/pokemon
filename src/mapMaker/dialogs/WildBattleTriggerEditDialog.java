@@ -3,8 +3,8 @@ package mapMaker.dialogs;
 import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
-import pattern.AreaDataMatcher.TriggerMatcher;
-import pattern.AreaDataMatcher.WildBattleTriggerMatcher;
+import pattern.TriggerMatcher;
+import pattern.WildBattleTriggerMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;

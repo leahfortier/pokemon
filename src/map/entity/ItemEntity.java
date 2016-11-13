@@ -8,9 +8,9 @@ import map.MapData;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import namesies.ItemNamesies;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.GroupTriggerMatcher;
+import pattern.GroupTriggerMatcher;
 import util.InputControl;
+import util.JsonUtils;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;
@@ -73,7 +73,7 @@ class ItemEntity extends Entity {
 			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(dialogue.getName(), giveItem.getName());
 			groupTriggerMatcher.suffix = itemTriggerSuffix;
 
-			TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(groupTriggerMatcher), null);
+			TriggerType.GROUP.createTrigger(JsonUtils.getJson(groupTriggerMatcher), null);
 		}
 
 		// This trigger will only call the item trigger when the conditions apply
@@ -81,7 +81,7 @@ class ItemEntity extends Entity {
 		matcher.suffix = this.getTriggerSuffix();
 		matcher.globals = new String[] { "has" + name };
 
-		TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher), null);
+		TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
 
 		dataCreated = true;
 	}

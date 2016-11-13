@@ -2,9 +2,9 @@ package map.triggers;
 
 import message.MessageUpdate;
 import message.Messages;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.ChoiceActionMatcher;
-import pattern.AreaDataMatcher.ChoiceMatcher;
+import pattern.ActionMatcher.ChoiceActionMatcher;
+import pattern.ActionMatcher.ChoiceActionMatcher.ChoiceMatcher;
+import util.JsonUtils;
 
 public class ChoiceTrigger extends Trigger {
     private String question;
@@ -13,7 +13,7 @@ public class ChoiceTrigger extends Trigger {
     ChoiceTrigger(String choices, String condition) {
         super(TriggerType.CHOICE, choices, condition);
 
-        ChoiceActionMatcher matcher = AreaDataMatcher.deserialize(choices, ChoiceActionMatcher.class);
+        ChoiceActionMatcher matcher = JsonUtils.deserialize(choices, ChoiceActionMatcher.class);
         this.question = matcher.question;
         this.choices = matcher.choices;
     }

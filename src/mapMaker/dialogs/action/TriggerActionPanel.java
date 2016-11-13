@@ -1,8 +1,8 @@
 package mapMaker.dialogs.action;
 
 import map.triggers.TriggerType;
-import pattern.AreaDataMatcher.ActionMatcher;
-import pattern.AreaDataMatcher.TriggerActionMatcher;
+import pattern.ActionMatcher;
+import pattern.ActionMatcher.TriggerActionMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;

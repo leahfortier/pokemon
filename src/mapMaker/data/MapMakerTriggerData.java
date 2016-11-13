@@ -14,16 +14,17 @@ import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import namesies.ItemNamesies;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.AreaMatcher;
-import pattern.AreaDataMatcher.EntityMatcher;
-import pattern.AreaDataMatcher.ItemMatcher;
-import pattern.AreaDataMatcher.MapMakerEntityMatcher;
-import pattern.AreaDataMatcher.MapTransitionMatcher;
-import pattern.AreaDataMatcher.NPCMatcher;
-import pattern.AreaDataMatcher.TriggerMatcher;
+import pattern.MapDataMatcher;
+import pattern.AreaMatcher;
+import pattern.EntityMatcher;
+import pattern.ItemMatcher;
+import pattern.MapMakerEntityMatcher;
+import pattern.MapTransitionMatcher;
+import pattern.NPCMatcher;
+import pattern.TriggerMatcher;
 import util.DrawUtils;
 import util.FileIO;
+import util.JsonUtils;
 import util.Point;
 import util.PokeString;
 import util.StringUtils;
@@ -59,10 +60,10 @@ public class MapMakerTriggerData {
 		initialize(mapMaker);
 
 		String fileText = FileIO.readEntireFileWithoutReplacements(mapTriggerFileName, false);
-		AreaDataMatcher areaDataMatcher = AreaDataMatcher.matchArea(mapTriggerFileName, fileText);
-		this.areaData = new HashSet<>(areaDataMatcher.getAreas());
-		this.entities = new HashSet<>(areaDataMatcher.getEntities());
-		this.triggerData = new HashSet<>(areaDataMatcher.getTriggerData());
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapTriggerFileName, fileText);
+		this.areaData = new HashSet<>(mapDataMatcher.getAreas());
+		this.entities = new HashSet<>(mapDataMatcher.getEntities());
+		this.triggerData = new HashSet<>(mapDataMatcher.getTriggerData());
 
 		triggersSaved = true;
 	}
@@ -90,14 +91,14 @@ public class MapMakerTriggerData {
 		entities.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
 		triggerData.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
 
-		AreaDataMatcher areaDataMatcher = new AreaDataMatcher(
+		MapDataMatcher mapDataMatcher = new MapDataMatcher(
 				areaData,
 				entities,
 				triggerData
 		);
 
 		FileIO.createFile(mapFileName);
-		FileIO.overwriteFile(mapFileName, new StringBuilder(AreaDataMatcher.getJson(areaDataMatcher)));
+		FileIO.overwriteFile(mapFileName, new StringBuilder(JsonUtils.getJson(mapDataMatcher)));
 	}
 
 	private String getUniqueEntityName(MapMakerEntityMatcher matcher, Set<String> entityNames) {

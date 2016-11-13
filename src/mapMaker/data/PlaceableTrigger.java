@@ -1,7 +1,7 @@
 package mapMaker.data;
 
-import pattern.AreaDataMatcher.MapMakerEntityMatcher;
-import pattern.AreaDataMatcher.TriggerMatcher;
+import pattern.MapMakerEntityMatcher;
+import pattern.TriggerMatcher;
 
 public class PlaceableTrigger {
 

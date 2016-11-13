@@ -1,7 +1,7 @@
 package map.entity;
 
 import map.Condition;
-import pattern.AreaDataMatcher.EntityMatcher;
+import pattern.EntityMatcher;
 
 public abstract class EntityData {
 	public String name;

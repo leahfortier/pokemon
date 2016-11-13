@@ -3,8 +3,8 @@ package mapMaker.dialogs;
 import map.Direction;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
-import pattern.AreaDataMatcher.NPCInteractionMatcher;
-import pattern.AreaDataMatcher.NPCMatcher;
+import pattern.NPCMatcher.NPCInteractionMatcher;
+import pattern.NPCMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;

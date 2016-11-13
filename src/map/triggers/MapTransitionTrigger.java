@@ -2,9 +2,9 @@ package map.triggers;
 
 import main.Game;
 import map.Direction;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.MapTransitionMatcher;
+import pattern.MapTransitionMatcher;
 import trainer.CharacterData;
+import util.JsonUtils;
 
 public class MapTransitionTrigger extends Trigger {
 	private String nextMap;
@@ -16,14 +16,14 @@ public class MapTransitionTrigger extends Trigger {
 	private int newY;
 
 	static String getTriggerSuffix(String contents) {
-		MapTransitionMatcher matcher = AreaDataMatcher.deserialize(contents, MapTransitionMatcher.class);
+		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
 		return matcher.getPreviousMap() + "_" + matcher.getNextMap() + "_" + matcher.getNextEntranceName();
 	}
 
 	MapTransitionTrigger(String contents, String condition) {
 		super(TriggerType.MAP_TRANSITION, contents, condition);
 
-		MapTransitionMatcher matcher = AreaDataMatcher.deserialize(contents, MapTransitionMatcher.class);
+		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
 		this.nextMap = matcher.getNextMap();
 		this.mapEntranceName = matcher.getNextEntranceName();
 		this.direction = matcher.getDirection();

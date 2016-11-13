@@ -8,12 +8,12 @@ import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
 import namesies.PokemonNamesies;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.WildBattleTriggerMatcher;
+import pattern.WildBattleTriggerMatcher;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
 import trainer.WildPokemon;
+import util.JsonUtils;
 
 public class WildBattleTrigger extends Trigger {
 	// TODO: Ideally would like to make a separate class for holding these
@@ -23,7 +23,7 @@ public class WildBattleTrigger extends Trigger {
 	WildBattleTrigger(String matcherJson, String condition) {
 		super(TriggerType.WILD_BATTLE, matcherJson, condition);
 
-		WildBattleTriggerMatcher matcher = AreaDataMatcher.deserialize(matcherJson, WildBattleTriggerMatcher.class);
+		WildBattleTriggerMatcher matcher = JsonUtils.deserialize(matcherJson, WildBattleTriggerMatcher.class);
 		this.wildEncounters = matcher.getWildEncounters();
 		this.encounterRate = matcher.getEncounterRate();
 

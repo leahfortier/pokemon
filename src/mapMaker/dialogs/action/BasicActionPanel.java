@@ -1,7 +1,7 @@
 package mapMaker.dialogs.action;
 
 import main.Global;
-import pattern.AreaDataMatcher.ActionMatcher;
+import pattern.ActionMatcher;
 import util.StringUtils;
 
 import javax.swing.JTextField;

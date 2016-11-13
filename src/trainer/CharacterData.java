@@ -15,13 +15,13 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.GroupTriggerMatcher;
-import pattern.AreaDataMatcher.UpdateMatcher;
+import pattern.ActionMatcher.UpdateMatcher;
+import pattern.GroupTriggerMatcher;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
 import trainer.Pokedex.PokedexStatus;
+import util.JsonUtils;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -173,7 +173,7 @@ public class CharacterData extends Trainer implements Serializable {
 				Trigger evolutionView = TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null);
 
 				GroupTriggerMatcher matcher = new GroupTriggerMatcher(dialogue.getName(), evolutionView.getName());
-				Trigger group = TriggerType.GROUP.createTrigger(AreaDataMatcher.getJson(matcher), null);
+				Trigger group = TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
 				Messages.addMessage(new MessageUpdate("", group.getName(), Update.TRIGGER));
 				
 				// Only one hatch per step

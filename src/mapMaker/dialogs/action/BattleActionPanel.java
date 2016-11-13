@@ -1,7 +1,7 @@
 package mapMaker.dialogs.action;
 
-import pattern.AreaDataMatcher.ActionMatcher;
-import pattern.AreaDataMatcher.BattleMatcher;
+import pattern.ActionMatcher;
+import pattern.ActionMatcher.BattleMatcher;
 import trainer.Trainer;
 
 import javax.swing.GroupLayout;

@@ -1,6 +1,6 @@
 package mapMaker.dialogs.action;
 
-import pattern.AreaDataMatcher.ActionMatcher;
+import pattern.ActionMatcher;
 
 // TODO: wawawawa
 class ChoiceActionPanel extends ActionPanel {

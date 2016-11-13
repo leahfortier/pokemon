@@ -30,7 +30,7 @@ import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
-import pattern.AreaDataMatcher.UpdateMatcher;
+import pattern.ActionMatcher.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.CharacterData;

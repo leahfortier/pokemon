@@ -1,7 +1,7 @@
 package map.entity;
 
 import namesies.ItemNamesies;
-import pattern.AreaDataMatcher.ItemMatcher;
+import pattern.ItemMatcher;
 
 // TODO: This whole class can be deleted and make sure the getEntity method is just moved to the ItemMatcher class
 public class ItemEntityData extends EntityData {

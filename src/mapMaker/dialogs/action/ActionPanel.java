@@ -1,6 +1,6 @@
 package mapMaker.dialogs.action;
 
-import pattern.AreaDataMatcher.ActionMatcher;
+import pattern.ActionMatcher;
 
 import javax.swing.JPanel;
 

@@ -12,11 +12,12 @@ import map.entity.npc.NPCEntityData;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.MapTransitionMatcher;
-import pattern.AreaDataMatcher.TriggerMatcher;
+import pattern.MapDataMatcher;
+import pattern.MapTransitionMatcher;
+import pattern.TriggerMatcher;
 import trainer.CharacterData;
 import util.FileIO;
+import util.JsonUtils;
 import util.Point;
 
 import java.awt.image.BufferedImage;
@@ -78,27 +79,27 @@ public class MapData {
 		File f = new File(beginFilePath + ".txt");
 		String fileText = FileIO.readEntireFileWithReplacements(f, false);
 
-		AreaDataMatcher areaDataMatcher = AreaDataMatcher.matchArea(beginFilePath + ".txt", fileText);
-		this.areaData = areaDataMatcher.getAreaData();
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + ".txt", fileText);
+		this.areaData = mapDataMatcher.getAreaData();
 
-		entities.addAll(areaDataMatcher.getNPCs()
+		entities.addAll(mapDataMatcher.getNPCs()
 				.stream()
 				.map(NPCEntityData::new)
 				.collect(Collectors.toList()));
 
-		entities.addAll(areaDataMatcher.getItems()
+		entities.addAll(mapDataMatcher.getItems()
 				.stream()
 				.map(ItemEntityData::new)
 				.collect(Collectors.toList()));
 
-		for (TriggerMatcher matcher : areaDataMatcher.getMiscEntities()) {
+		for (TriggerMatcher matcher : mapDataMatcher.getMiscEntities()) {
 			entities.addAll(matcher.getLocation()
 					.stream()
 					.map(point -> new TriggerEntityData(point.x, point.y, matcher))
 					.collect(Collectors.toList()));
 		}
 
-		for (MapTransitionMatcher matcher : areaDataMatcher.getMapExits()) {
+		for (MapTransitionMatcher matcher : mapDataMatcher.getMapExits()) {
             matcher.setMapName(this.name);
 
             List<Point> entrances = matcher.getEntrances();
@@ -108,12 +109,12 @@ public class MapData {
 
             List<Point> exits = matcher.getExits();
 			for (Point point : exits) {
-				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(AreaDataMatcher.getJson(matcher), null);
+				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(JsonUtils.getJson(matcher), null);
 				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
 			}
         }
 
-		for (TriggerMatcher matcher : areaDataMatcher.getTriggerData()) {
+		for (TriggerMatcher matcher : mapDataMatcher.getTriggerData()) {
 			TriggerData triggerData = new TriggerData(matcher);
 			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
 

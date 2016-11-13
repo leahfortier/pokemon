@@ -2,11 +2,12 @@ package map.entity;
 
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.BattleMatcher;
-import pattern.AreaDataMatcher.ChoiceActionMatcher;
-import pattern.AreaDataMatcher.GroupTriggerMatcher;
-import pattern.AreaDataMatcher.UpdateMatcher;
+import pattern.MapDataMatcher;
+import pattern.ActionMatcher.BattleMatcher;
+import pattern.ActionMatcher.ChoiceActionMatcher;
+import pattern.GroupTriggerMatcher;
+import pattern.ActionMatcher.UpdateMatcher;
+import util.JsonUtils;
 import util.StringUtils;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public abstract class EntityAction {
 
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
         matcher.suffix = triggerSuffix;
-        final String groupContents = AreaDataMatcher.getJson(matcher);
+        final String groupContents = JsonUtils.getJson(matcher);
 
         // Condition is really in the interaction name and the npc condition, so
         // once these are both valid then the interaction can proceed as usual
@@ -93,7 +94,7 @@ public abstract class EntityAction {
         @Override
         protected String getTriggerContents(String entityName) {
             this.entityName = entityName;
-            return AreaDataMatcher.getJson(this);
+            return JsonUtils.getJson(this);
         }
     }
 
@@ -112,7 +113,7 @@ public abstract class EntityAction {
         @Override
         protected String getTriggerContents(String entityName) {
             UpdateMatcher matcher = new UpdateMatcher(entityName, interactionName);
-            return AreaDataMatcher.getJson(matcher);
+            return JsonUtils.getJson(matcher);
         }
     }
 
@@ -131,7 +132,7 @@ public abstract class EntityAction {
         @Override
         protected String getTriggerContents(String entityName) {
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerName);
-            return AreaDataMatcher.getJson(matcher);
+            return JsonUtils.getJson(matcher);
         }
     }
 
@@ -166,7 +167,7 @@ public abstract class EntityAction {
 
         @Override
         protected String getTriggerContents(String entityName) {
-            return AreaDataMatcher.getJson(matcher);
+            return JsonUtils.getJson(matcher);
         }
     }
 }

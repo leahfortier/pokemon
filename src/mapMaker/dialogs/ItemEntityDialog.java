@@ -4,7 +4,7 @@ import item.Item;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import namesies.ItemNamesies;
-import pattern.AreaDataMatcher.ItemMatcher;
+import pattern.ItemMatcher;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;

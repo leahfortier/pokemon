@@ -1,6 +1,6 @@
 package map.entity;
 
-import pattern.AreaDataMatcher.TriggerMatcher;
+import pattern.TriggerMatcher;
 
 import java.util.List;
 

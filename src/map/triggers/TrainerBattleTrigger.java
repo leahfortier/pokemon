@@ -3,11 +3,11 @@ package map.triggers;
 import battle.Battle;
 import main.Game;
 import map.entity.EntityAction.BattleAction;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.UpdateMatcher;
+import pattern.ActionMatcher.UpdateMatcher;
 import pattern.PokemonMatcher;
 import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
+import util.JsonUtils;
 
 import java.util.regex.Pattern;
 
@@ -28,7 +28,7 @@ public class TrainerBattleTrigger extends Trigger {
 	TrainerBattleTrigger(String contents, String condition) {
 		super(TriggerType.TRAINER_BATTLE, contents, condition);
 
-		BattleAction battleAction = AreaDataMatcher.deserialize(contents, BattleAction.class);
+		BattleAction battleAction = JsonUtils.deserialize(contents, BattleAction.class);
 
 		String trainerName = battleAction.name;
 		int cash = battleAction.cashMoney;
