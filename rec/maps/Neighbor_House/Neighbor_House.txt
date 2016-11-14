@@ -26,7 +26,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 4,
         "y": 4
       },
@@ -41,7 +41,7 @@
       "nextEntrance": "NeighborsHouse",
       "direction": "DOWN",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 3,
         "y": 6
       },

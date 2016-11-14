@@ -34,7 +34,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 62,
         "y": 18
       },
@@ -105,7 +105,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 49,
         "y": 24
       },
@@ -151,7 +151,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 52,
         "y": 16
       },
@@ -198,7 +198,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 32,
         "y": 18
       },
@@ -245,7 +245,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 30,
         "y": 28
       },
@@ -292,7 +292,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 19,
         "y": 20
       },
@@ -302,7 +302,7 @@
   "items": [
     {
       "item": "Paralyze_Heal",
-      "location2": {
+      "location": {
         "x": 31,
         "y": 16
       },
@@ -316,7 +316,7 @@
       "nextEntrance": "DFS_Town",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 74,
         "y": 17
       },
@@ -328,7 +328,7 @@
       "nextEntrance": "DFS_Town",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 85,
         "y": 15
       },
@@ -340,7 +340,7 @@
       "nextEntrance": "EastDoor",
       "direction": "LEFT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 14,
         "y": 20
       },
@@ -352,7 +352,7 @@
       "nextEntrance": "DFS_Town",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 74,
         "y": 27
       },
@@ -364,7 +364,7 @@
       "nextEntrance": "DFS_Town",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 85,
         "y": 27
       },
@@ -383,7 +383,7 @@
         "Fletchling 2-4 15%",
         "Lillipup 2-4 10%"
       ],
-      "location2": [
+      "location": [
         {
           "x": 17,
           "y": 13

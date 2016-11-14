@@ -15,7 +15,7 @@
       "nextEntrance": "stairs",
       "direction": "RIGHT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 4,
         "y": 2
       },

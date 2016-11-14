@@ -15,7 +15,7 @@
       "nextEntrance": "stairs",
       "direction": "LEFT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 20,
         "y": 6
       },
@@ -27,7 +27,7 @@
       "nextEntrance": "RivalsHouse",
       "direction": "DOWN",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 15,
         "y": 10
       },

@@ -50,7 +50,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 22,
         "y": 16
       },
@@ -98,7 +98,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 48,
         "y": 23
       },
@@ -108,7 +108,7 @@
   "items": [
     {
       "item": "Meadow_Plate",
-      "location2": {
+      "location": {
         "x": 44,
         "y": 14
       },
@@ -116,7 +116,7 @@
     },
     {
       "item": "Pecha_Berry",
-      "location2": {
+      "location": {
         "x": 21,
         "y": 26
       },
@@ -130,7 +130,7 @@
       "nextEntrance": "EastDoor",
       "direction": "LEFT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 13,
         "y": 21
       },
@@ -142,7 +142,7 @@
       "nextEntrance": "WestDoor",
       "direction": "RIGHT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 54,
         "y": 21
       },
@@ -168,7 +168,7 @@
         "Oddish 4-6 5%",
         "Flabebe 4-6 10%"
       ],
-      "location2": [
+      "location": [
         {
           "x": 20,
           "y": 14

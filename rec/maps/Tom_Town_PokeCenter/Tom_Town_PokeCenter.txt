@@ -12,7 +12,7 @@
       "spriteIndex": 8,
       "direction": "DOWN",
       "interactions": [],
-      "location2": {
+      "location": {
         "x": 7,
         "y": 2
       },
@@ -23,7 +23,7 @@
       "spriteIndex": 9,
       "direction": "RIGHT",
       "interactions": [],
-      "location2": {
+      "location": {
         "x": 2,
         "y": 7
       },
@@ -47,7 +47,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 10,
         "y": 4
       },
@@ -62,7 +62,7 @@
       "nextEntrance": "PokeCenter",
       "direction": "DOWN",
       "deathPortal": true,
-      "location2": {
+      "location": {
         "x": 7,
         "y": 8
       },

@@ -25,7 +25,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 6,
         "y": 7
       },
@@ -51,7 +51,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 3,
         "y": 5
       },
@@ -77,7 +77,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 5,
         "y": 7
       },
@@ -109,7 +109,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 6,
         "y": 7
       },
@@ -141,7 +141,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 3,
         "y": 3
       },
@@ -153,7 +153,7 @@
       "spriteIndex": 10,
       "direction": "LEFT",
       "interactions": [],
-      "location2": {
+      "location": {
         "x": 9,
         "y": 4
       },
@@ -178,7 +178,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 4,
         "y": 6
       },
@@ -194,7 +194,7 @@
       "nextEntrance": "NorthTransitionBuilding",
       "direction": "DOWN",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 6,
         "y": 7
       },
@@ -206,7 +206,7 @@
       "nextEntrance": "SouthTransitionBuilding",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 6,
         "y": 1
       },

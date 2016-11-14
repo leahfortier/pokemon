@@ -26,7 +26,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 12,
         "y": 4
       },
@@ -42,7 +42,7 @@
       "nextEntrance": "FromBasement1",
       "direction": "LEFT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 6,
         "y": 9
       },

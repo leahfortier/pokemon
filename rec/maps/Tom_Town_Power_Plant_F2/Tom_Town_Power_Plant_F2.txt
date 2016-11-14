@@ -26,7 +26,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 14,
         "y": 9
       },
@@ -52,7 +52,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 6,
         "y": 4
       },
@@ -68,7 +68,7 @@
       "nextEntrance": "FromFloor2",
       "direction": "LEFT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 6,
         "y": 9
       },
@@ -80,7 +80,7 @@
       "nextEntrance": "FromFloor2",
       "direction": "LEFT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 6,
         "y": 11
       },

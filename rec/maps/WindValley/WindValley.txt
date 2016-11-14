@@ -14,7 +14,7 @@
       "nextEntrance": "SouthDoor",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 31,
         "y": 12
       },
@@ -47,7 +47,7 @@
         "Larvitar 7-11 1%",
         "Rufflet 7-11 5%"
       ],
-      "location2": [
+      "location": [
         {
           "x": 41,
           "y": 65
@@ -1693,7 +1693,7 @@
         "Petilil 6-10 10%",
         "Cherubi 6-10 10%"
       ],
-      "location2": [
+      "location": [
         {
           "x": 17,
           "y": 24

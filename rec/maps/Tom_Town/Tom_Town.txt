@@ -26,7 +26,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 28,
         "y": 23
       },
@@ -52,7 +52,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 31,
         "y": 22
       },
@@ -78,7 +78,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 30,
         "y": 14
       },
@@ -104,7 +104,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 32,
         "y": 15
       },
@@ -130,7 +130,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 28,
         "y": 15
       },
@@ -156,7 +156,7 @@
           ]
         }
       ],
-      "location2": {
+      "location": {
         "x": 28,
         "y": 16
       },
@@ -172,7 +172,7 @@
       "nextEntrance": "NorthDoor",
       "direction": "DOWN",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 26,
         "y": 36
       },
@@ -184,7 +184,7 @@
       "nextEntrance": "FromTomTown",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 29,
         "y": 14
       },
@@ -196,7 +196,7 @@
       "nextEntrance": "Tom_Town",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 17,
         "y": 32
       },
@@ -208,7 +208,7 @@
       "nextEntrance": "FrontDoor",
       "direction": "UP",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 38,
         "y": 32
       },
@@ -220,7 +220,7 @@
       "nextEntrance": "WestDoor",
       "direction": "RIGHT",
       "deathPortal": false,
-      "location2": {
+      "location": {
         "x": 52,
         "y": 26
       },
@@ -256,7 +256,7 @@
           "global": "TomTownPowerPlantExplosionTriggered"
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 20,
           "y": 33
