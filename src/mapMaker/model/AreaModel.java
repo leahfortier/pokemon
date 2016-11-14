@@ -56,6 +56,7 @@ public class AreaModel extends MapMakerModel {
         areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(name, new Color(rgb, true)), rgb + ""));
     }
 
+    // TODO: Redo all of this
     @Override
     public void reload(MapMaker mapMaker) {
 //        File areaIndexFile = new File(mapMaker.getPathWithRoot(FileName.MAP_AREA_INDEX));

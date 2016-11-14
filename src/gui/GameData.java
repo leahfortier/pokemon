@@ -50,6 +50,9 @@ public class GameData {
 		File dir = new File(Folder.MAPS);
 
 		for (File d : dir.listFiles()) {
+			if (d.getName().charAt(0) == '.') {
+				continue;
+			}
 
 			maps.put(d.getName(), new MapData(d));
 

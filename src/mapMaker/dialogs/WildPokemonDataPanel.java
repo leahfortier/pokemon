@@ -32,7 +32,7 @@ public class WildPokemonDataPanel extends JPanel {
 		wildBattleEditDialog = givenWildBattleEditDialog;
 		index = givenIndex;
 
-		JCheckBox selectedCheckBox = new JCheckBox("");
+		JCheckBox selectedCheckBox = new JCheckBox();
 		selectedCheckBox.addActionListener(event -> wildBattleEditDialog.setSelected(index));
 		
 		pokemonTextField = new JTextField();
