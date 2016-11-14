@@ -12,6 +12,29 @@
       ]
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "ReloadLocation",
+      "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 10
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_MapExit_ReloadLocation_01"
+    },
+    {
+      "exitName": "FromFloor2",
+      "nextMap": "Tom_Town_Power_Plant_F2",
+      "nextEntrance": "FromFloor3",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 2,
+        "y": 8
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_MapExit_FromFloor2_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
@@ -235,29 +258,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "ReloadLocation",
-      "deathPortal": false,
-      "location": {
-        "x": 10,
-        "y": 10
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_MapExit_ReloadLocation_01"
-    },
-    {
-      "exitName": "FromFloor2",
-      "nextMap": "Tom_Town_Power_Plant_F2",
-      "nextEntrance": "FromFloor3",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 2,
-        "y": 8
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_MapExit_FromFloor2_01"
-    }
-  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": []

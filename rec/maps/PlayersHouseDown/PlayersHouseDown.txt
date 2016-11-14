@@ -6,6 +6,32 @@
       "music": "PLAYER_HOUSE"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "stairs",
+      "nextMap": "PlayersHouseUp",
+      "nextEntrance": "stairs",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 1
+      },
+      "triggerName": "PlayersHouseDown_MapExit_stairs_01"
+    },
+    {
+      "exitName": "DFS_Town",
+      "nextMap": "DFS_Town",
+      "nextEntrance": "PlayersHouse",
+      "direction": "DOWN",
+      "deathPortal": true,
+      "location": {
+        "x": 6,
+        "y": 8
+      },
+      "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "PlayersHouseDown_NPC_Mom_01",
@@ -34,32 +60,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "stairs",
-      "nextMap": "PlayersHouseUp",
-      "nextEntrance": "stairs",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 10,
-        "y": 1
-      },
-      "triggerName": "PlayersHouseDown_MapExit_stairs_01"
-    },
-    {
-      "exitName": "DFS_Town",
-      "nextMap": "DFS_Town",
-      "nextEntrance": "PlayersHouse",
-      "direction": "DOWN",
-      "deathPortal": true,
-      "location": {
-        "x": 6,
-        "y": 8
-      },
-      "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
-    }
-  ],
   "miscEntities": [
     {
       "name": "fridge",

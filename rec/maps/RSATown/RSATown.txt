@@ -6,6 +6,44 @@
       "music": "RSA_TOWN"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "WestTransitionBuilding",
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 16,
+        "y": 20
+      },
+      "triggerName": "RSATown_MapExit_WestTransitionBuilding_01"
+    },
+    {
+      "exitName": "EastTransitionBuilding",
+      "nextMap": "Edge1_RSATown_TransitionBuilding",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 43,
+        "y": 20
+      },
+      "triggerName": "RSATown_MapExit_EastTransitionBuilding_01"
+    },
+    {
+      "exitName": "PokeCenter",
+      "nextMap": "RSATown_PokeCenter",
+      "nextEntrance": "FrontDoor",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 25,
+        "y": 17
+      },
+      "triggerName": "RSATown_MapExit_PokeCenter_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "RSATown_NPC_Rival_01",
@@ -81,44 +119,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "WestTransitionBuilding",
-      "nextMap": "RSATown_BFM_TransitionBuilding",
-      "nextEntrance": "EastDoor",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 16,
-        "y": 20
-      },
-      "triggerName": "RSATown_MapExit_WestTransitionBuilding_01"
-    },
-    {
-      "exitName": "EastTransitionBuilding",
-      "nextMap": "Edge1_RSATown_TransitionBuilding",
-      "nextEntrance": "WestDoor",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 43,
-        "y": 20
-      },
-      "triggerName": "RSATown_MapExit_EastTransitionBuilding_01"
-    },
-    {
-      "exitName": "PokeCenter",
-      "nextMap": "RSATown_PokeCenter",
-      "nextEntrance": "FrontDoor",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 25,
-        "y": 17
-      },
-      "triggerName": "RSATown_MapExit_PokeCenter_01"
-    }
-  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": []

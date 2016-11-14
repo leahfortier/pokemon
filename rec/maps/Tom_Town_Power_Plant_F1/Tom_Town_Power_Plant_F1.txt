@@ -6,6 +6,44 @@
       "music": "TOM_TOWN"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "FromTomTown",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "TomTownPowerPlant",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 8,
+        "y": 12
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
+    },
+    {
+      "exitName": "FromBasement1",
+      "nextMap": "Tom_Town_Power_Plant_B1",
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 2,
+        "y": 9
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromBasement1_01"
+    },
+    {
+      "exitName": "FromFloor2",
+      "nextMap": "Tom_Town_Power_Plant_F2",
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 2,
+        "y": 11
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromFloor2_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01",
@@ -61,44 +99,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "FromTomTown",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "TomTownPowerPlant",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 8,
-        "y": 12
-      },
-      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
-    },
-    {
-      "exitName": "FromBasement1",
-      "nextMap": "Tom_Town_Power_Plant_B1",
-      "nextEntrance": "FromFloor1",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 2,
-        "y": 9
-      },
-      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromBasement1_01"
-    },
-    {
-      "exitName": "FromFloor2",
-      "nextMap": "Tom_Town_Power_Plant_F2",
-      "nextEntrance": "FromFloor1",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 2,
-        "y": 11
-      },
-      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromFloor2_01"
-    }
-  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": []

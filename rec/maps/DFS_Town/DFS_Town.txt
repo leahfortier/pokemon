@@ -14,6 +14,68 @@
       "music": "EDGE_1"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "MaplesLab",
+      "nextMap": "MaplesLab",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 74,
+        "y": 17
+      },
+      "triggerName": "DFS_Town_MapExit_MaplesLab_01"
+    },
+    {
+      "exitName": "RivalsHouse",
+      "nextMap": "Rival_House",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 85,
+        "y": 15
+      },
+      "triggerName": "DFS_Town_MapExit_RivalsHouse_01"
+    },
+    {
+      "exitName": "WestTransitionBuilding",
+      "nextMap": "Edge1_RSATown_TransitionBuilding",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 14,
+        "y": 20
+      },
+      "triggerName": "DFS_Town_MapExit_WestTransitionBuilding_01"
+    },
+    {
+      "exitName": "NeighborsHouse",
+      "nextMap": "Neighbor_House",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 74,
+        "y": 27
+      },
+      "triggerName": "DFS_Town_MapExit_NeighborsHouse_01"
+    },
+    {
+      "exitName": "PlayersHouse",
+      "nextMap": "PlayersHouseDown",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 85,
+        "y": 27
+      },
+      "triggerName": "DFS_Town_MapExit_PlayersHouse_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "DFS_Town_NPC_Green_01",
@@ -307,68 +369,6 @@
         "y": 16
       },
       "triggerName": "DFS_Town_Item_Paralyze_Heal_01"
-    }
-  ],
-  "mapTransitions": [
-    {
-      "exitName": "MaplesLab",
-      "nextMap": "MaplesLab",
-      "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 74,
-        "y": 17
-      },
-      "triggerName": "DFS_Town_MapExit_MaplesLab_01"
-    },
-    {
-      "exitName": "RivalsHouse",
-      "nextMap": "Rival_House",
-      "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 85,
-        "y": 15
-      },
-      "triggerName": "DFS_Town_MapExit_RivalsHouse_01"
-    },
-    {
-      "exitName": "WestTransitionBuilding",
-      "nextMap": "Edge1_RSATown_TransitionBuilding",
-      "nextEntrance": "EastDoor",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 14,
-        "y": 20
-      },
-      "triggerName": "DFS_Town_MapExit_WestTransitionBuilding_01"
-    },
-    {
-      "exitName": "NeighborsHouse",
-      "nextMap": "Neighbor_House",
-      "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 74,
-        "y": 27
-      },
-      "triggerName": "DFS_Town_MapExit_NeighborsHouse_01"
-    },
-    {
-      "exitName": "PlayersHouse",
-      "nextMap": "PlayersHouseDown",
-      "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 85,
-        "y": 27
-      },
-      "triggerName": "DFS_Town_MapExit_PlayersHouse_01"
     }
   ],
   "miscEntities": [],

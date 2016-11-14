@@ -5,6 +5,32 @@
       "music": "TRANSITION_BUILDING"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "EastDoor",
+      "nextMap": "RSATown",
+      "nextEntrance": "WestTransitionBuilding",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 3
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoor_01"
+    },
+    {
+      "exitName": "WestDoor",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "EastTransitionBuilding",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 2,
+        "y": 3
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoor_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "BFM_Guy",
@@ -45,32 +71,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "EastDoor",
-      "nextMap": "RSATown",
-      "nextEntrance": "WestTransitionBuilding",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 10,
-        "y": 3
-      },
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoor_01"
-    },
-    {
-      "exitName": "WestDoor",
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "EastTransitionBuilding",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 2,
-        "y": 3
-      },
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoor_01"
-    }
-  ],
   "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",

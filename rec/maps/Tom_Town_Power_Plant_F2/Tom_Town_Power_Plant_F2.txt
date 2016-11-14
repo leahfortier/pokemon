@@ -6,6 +6,32 @@
       "music": "TOM_TOWN"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "FromFloor3",
+      "nextMap": "Tom_Town_Power_Plant_F3",
+      "nextEntrance": "FromFloor2",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 6,
+        "y": 9
+      },
+      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor3_01"
+    },
+    {
+      "exitName": "FromFloor1",
+      "nextMap": "Tom_Town_Power_Plant_F1",
+      "nextEntrance": "FromFloor2",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 6,
+        "y": 11
+      },
+      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor1_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_02",
@@ -61,32 +87,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "FromFloor3",
-      "nextMap": "Tom_Town_Power_Plant_F3",
-      "nextEntrance": "FromFloor2",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 9
-      },
-      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor3_01"
-    },
-    {
-      "exitName": "FromFloor1",
-      "nextMap": "Tom_Town_Power_Plant_F1",
-      "nextEntrance": "FromFloor2",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 11
-      },
-      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor1_01"
-    }
-  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": []

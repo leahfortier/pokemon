@@ -6,6 +6,20 @@
       "music": "POKE_CENTER"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "FrontDoor",
+      "nextMap": "RSATown",
+      "nextEntrance": "PokeCenter",
+      "direction": "DOWN",
+      "deathPortal": true,
+      "location": {
+        "x": 7,
+        "y": 8
+      },
+      "triggerName": "RSATown_PokeCenter_MapExit_FrontDoor_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "Mart_Guy",
@@ -31,20 +45,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "FrontDoor",
-      "nextMap": "RSATown",
-      "nextEntrance": "PokeCenter",
-      "direction": "DOWN",
-      "deathPortal": true,
-      "location": {
-        "x": 7,
-        "y": 8
-      },
-      "triggerName": "RSATown_PokeCenter_MapExit_FrontDoor_01"
-    }
-  ],
   "miscEntities": [
     {
       "name": "Mart",

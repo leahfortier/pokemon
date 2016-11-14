@@ -6,8 +6,6 @@
       "music": "DFS_TOWN"
     }
   ],
-  "NPCs": [],
-  "items": [],
   "mapTransitions": [
     {
       "exitName": "stairs",
@@ -34,6 +32,8 @@
       "triggerName": "Rival_House_MapExit_DFS_Town_01"
     }
   ],
+  "NPCs": [],
+  "items": [],
   "miscEntities": [],
   "events": [],
   "wildBattles": []

@@ -5,6 +5,32 @@
       "music": "TRANSITION_BUILDING"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "SouthDoor",
+      "nextMap": "WindValley",
+      "nextEntrance": "NorthTransitionBuilding",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 6,
+        "y": 7
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoor_01"
+    },
+    {
+      "exitName": "NorthDoor",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "SouthTransitionBuilding",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 6,
+        "y": 1
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoor_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
@@ -187,32 +213,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "SouthDoor",
-      "nextMap": "WindValley",
-      "nextEntrance": "NorthTransitionBuilding",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 7
-      },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoor_01"
-    },
-    {
-      "exitName": "NorthDoor",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "SouthTransitionBuilding",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 1
-      },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoor_01"
-    }
-  ],
   "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",

@@ -6,6 +6,20 @@
       "music": "POKE_GYM"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "Tom_Town",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "Gym",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 9,
+        "y": 15
+      },
+      "triggerName": "Tom_Gym_MapExit_Tom_Town_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Gym_NPC_Leader_Moore_01",
@@ -170,20 +184,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "Tom_Town",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "Gym",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 9,
-        "y": 15
-      },
-      "triggerName": "Tom_Gym_MapExit_Tom_Town_01"
-    }
-  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": []

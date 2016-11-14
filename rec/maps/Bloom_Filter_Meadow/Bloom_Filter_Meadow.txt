@@ -7,6 +7,32 @@
       "music": "BLOOM_FILTER_MEADOW"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "WestTransitionBuilding",
+      "nextMap": "BFM_TomTown_TransitionBuilding",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 13,
+        "y": 21
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuilding_01"
+    },
+    {
+      "exitName": "EastTransitionBuilding",
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 54,
+        "y": 21
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuilding_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02",
@@ -121,32 +147,6 @@
         "y": 26
       },
       "triggerName": "Bloom_Filter_Meadow_Item_Pecha_Berry_01"
-    }
-  ],
-  "mapTransitions": [
-    {
-      "exitName": "WestTransitionBuilding",
-      "nextMap": "BFM_TomTown_TransitionBuilding",
-      "nextEntrance": "EastDoor",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 13,
-        "y": 21
-      },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuilding_01"
-    },
-    {
-      "exitName": "EastTransitionBuilding",
-      "nextMap": "RSATown_BFM_TransitionBuilding",
-      "nextEntrance": "WestDoor",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 54,
-        "y": 21
-      },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuilding_01"
     }
   ],
   "miscEntities": [],

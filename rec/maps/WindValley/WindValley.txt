@@ -5,8 +5,6 @@
       "terrain": "GRASS"
     }
   ],
-  "NPCs": [],
-  "items": [],
   "mapTransitions": [
     {
       "exitName": "TransitionSouthDoor",
@@ -21,6 +19,8 @@
       "triggerName": "WindValley_MapExit_TransitionSouthDoor_01"
     }
   ],
+  "NPCs": [],
+  "items": [],
   "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",

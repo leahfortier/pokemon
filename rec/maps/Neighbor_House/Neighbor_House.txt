@@ -6,6 +6,20 @@
       "music": "DFS_TOWN"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "DFS_Town",
+      "nextMap": "DFS_Town",
+      "nextEntrance": "NeighborsHouse",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 3,
+        "y": 6
+      },
+      "triggerName": "Neighbor_House_MapExit_DFS_Town_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "Neighbor_House_NPC_Green_01",
@@ -34,20 +48,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "DFS_Town",
-      "nextMap": "DFS_Town",
-      "nextEntrance": "NeighborsHouse",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 3,
-        "y": 6
-      },
-      "triggerName": "Neighbor_House_MapExit_DFS_Town_01"
-    }
-  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": []

@@ -5,21 +5,6 @@
       "music": "TRANSITION_BUILDING"
     }
   ],
-  "NPCs": [
-    {
-      "name": "Info_Guy",
-      "path": "w",
-      "spriteIndex": 10,
-      "direction": "DOWN",
-      "interactions": [],
-      "location": {
-        "x": 6,
-        "y": 1
-      },
-      "triggerName": "Edge1_RSATown_TransitionBuilding_NPC_Info_Guy_01"
-    }
-  ],
-  "items": [],
   "mapTransitions": [
     {
       "exitName": "WestDoor",
@@ -46,6 +31,21 @@
       "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_EastDoor_01"
     }
   ],
+  "NPCs": [
+    {
+      "name": "Info_Guy",
+      "path": "w",
+      "spriteIndex": 10,
+      "direction": "DOWN",
+      "interactions": [],
+      "location": {
+        "x": 6,
+        "y": 1
+      },
+      "triggerName": "Edge1_RSATown_TransitionBuilding_NPC_Info_Guy_01"
+    }
+  ],
+  "items": [],
   "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",

@@ -6,8 +6,6 @@
       "music": "DFS_TOWN"
     }
   ],
-  "NPCs": [],
-  "items": [],
   "mapTransitions": [
     {
       "exitName": "stairs",
@@ -22,6 +20,8 @@
       "triggerName": "R_House_Up_MapExit_stairs_01"
     }
   ],
+  "NPCs": [],
+  "items": [],
   "miscEntities": [],
   "events": [],
   "wildBattles": []

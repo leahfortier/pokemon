@@ -6,6 +6,20 @@
       "music": "POKE_LAB"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "DFS_Town",
+      "nextMap": "DFS_Town",
+      "nextEntrance": "MaplesLab",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 15
+      },
+      "triggerName": "MaplesLab_MapExit_DFS_Town_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "MaplesLab_NPC_MapleAssistant_02",
@@ -177,20 +191,6 @@
     }
   ],
   "items": [],
-  "mapTransitions": [
-    {
-      "exitName": "DFS_Town",
-      "nextMap": "DFS_Town",
-      "nextEntrance": "MaplesLab",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 10,
-        "y": 15
-      },
-      "triggerName": "MaplesLab_MapExit_DFS_Town_01"
-    }
-  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": []
