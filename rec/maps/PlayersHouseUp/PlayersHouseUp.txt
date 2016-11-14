@@ -48,7 +48,8 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "PlayersHouseUp_NPC_TestMomBattle_01"
     }
   ],
   "items": [],
@@ -59,7 +60,8 @@
         6,
         5
       ],
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "PlayersHouseUp_MapExit_GameStartLocation_01"
     },
     {
       "exitName": "stairs",
@@ -70,7 +72,8 @@
       "nextMap": "PlayersHouseDown",
       "nextEntrance": "stairs",
       "direction": "RIGHT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "PlayersHouseUp_MapExit_stairs_01"
     }
   ],
   "triggerData": [],
@@ -94,7 +97,8 @@
             "triggerContents": "PC_VIEW"
           }
         }
-      ]
+      ],
+      "triggerName": "PlayersHouseUp_Event_PC_01"
     }
   ]
 }

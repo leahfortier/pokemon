@@ -18,7 +18,8 @@
       "nextMap": "Rival_House",
       "nextEntrance": "stairs",
       "direction": "RIGHT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "R_House_Up_MapExit_stairs_01"
     }
   ],
   "triggerData": [],

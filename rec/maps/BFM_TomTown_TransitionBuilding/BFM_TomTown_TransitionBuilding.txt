@@ -13,22 +13,12 @@
       "path": "w",
       "spriteIndex": 10,
       "direction": "DOWN",
-      "interactions": []
+      "interactions": [],
+      "triggerName": "BFM_TomTown_TransitionBuilding_NPC_Info_Guy_01"
     }
   ],
   "items": [],
   "mapExits": [
-    {
-      "exitName": "WestDoor",
-      "location": [
-        2,
-        3
-      ],
-      "nextMap": "Tom_Town",
-      "nextEntrance": "EastTransitionBuilding",
-      "direction": "LEFT",
-      "deathPortal": false
-    },
     {
       "exitName": "EastDoor",
       "location": [
@@ -38,7 +28,20 @@
       "nextMap": "Bloom_Filter_Meadow",
       "nextEntrance": "WestTransitionBuilding",
       "direction": "RIGHT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoor_01"
+    },
+    {
+      "exitName": "WestDoor",
+      "location": [
+        2,
+        3
+      ],
+      "nextMap": "Tom_Town",
+      "nextEntrance": "EastTransitionBuilding",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoor_01"
     }
   ],
   "triggerData": [],
@@ -53,7 +56,8 @@
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
-      ]
+      ],
+      "triggerName": "BFM_TomTown_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
   ]
 }

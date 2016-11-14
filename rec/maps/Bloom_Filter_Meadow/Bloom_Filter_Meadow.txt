@@ -9,51 +9,6 @@
   ],
   "NPCs": [
     {
-      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01",
-      "startX": 48,
-      "startY": 23,
-      "path": "w",
-      "spriteIndex": 16,
-      "direction": "UP",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm a meadow lady in a meadow!!!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Meadow Lady",
-                "cashMoney": 100,
-                "pokemon": [
-                  "Budew 6",
-                  "Oddish 6"
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02",
       "startX": 22,
       "startY": 16,
@@ -96,35 +51,71 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_02_01"
+    },
+    {
+      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01",
+      "startX": 48,
+      "startY": 23,
+      "path": "w",
+      "spriteIndex": 16,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'm a meadow lady in a meadow!!!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Meadow Lady",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Budew 6",
+                  "Oddish 6"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_01_01"
     }
   ],
   "items": [
     {
-      "x": 21,
-      "y": 26,
-      "item": "Pecha_Berry"
-    },
-    {
       "x": 44,
       "y": 14,
-      "item": "Meadow_Plate"
+      "item": "Meadow_Plate",
+      "triggerName": "Bloom_Filter_Meadow_Item_Meadow_Plate_01"
+    },
+    {
+      "x": 21,
+      "y": 26,
+      "item": "Pecha_Berry",
+      "triggerName": "Bloom_Filter_Meadow_Item_Pecha_Berry_01"
     }
   ],
   "mapExits": [
-    {
-      "exitName": "EastTransitionBuilding",
-      "location": [
-        54,
-        21,
-        54,
-        20
-      ],
-      "nextMap": "RSATown_BFM_TransitionBuilding",
-      "nextEntrance": "WestDoor",
-      "direction": "RIGHT",
-      "deathPortal": false
-    },
     {
       "exitName": "WestTransitionBuilding",
       "location": [
@@ -136,7 +127,22 @@
       "nextMap": "BFM_TomTown_TransitionBuilding",
       "nextEntrance": "EastDoor",
       "direction": "LEFT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuilding_01"
+    },
+    {
+      "exitName": "EastTransitionBuilding",
+      "location": [
+        54,
+        21,
+        54,
+        20
+      ],
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuilding_01"
     }
   ],
   "triggerData": [
@@ -472,7 +478,8 @@
       }"
           }
         }
-      ]
+      ],
+      "triggerName": "Bloom_Filter_Meadow_WildBattle_Nameless_01"
     }
   ],
   "miscEntities": []

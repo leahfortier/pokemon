@@ -13,7 +13,8 @@
       "startY": 2,
       "spriteIndex": 8,
       "direction": "DOWN",
-      "interactions": []
+      "interactions": [],
+      "triggerName": "Tom_Town_PokeCenter_NPC_Nurse_Joy_01"
     },
     {
       "name": "Mart_Guy",
@@ -21,7 +22,8 @@
       "startY": 7,
       "spriteIndex": 9,
       "direction": "RIGHT",
-      "interactions": []
+      "interactions": [],
+      "triggerName": "Tom_Town_PokeCenter_NPC_Mart_Guy_01"
     },
     {
       "name": "Tom",
@@ -42,7 +44,8 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_PokeCenter_NPC_Tom_01"
     }
   ],
   "items": [],
@@ -56,7 +59,8 @@
       "nextMap": "Tom_Town",
       "nextEntrance": "PokeCenter",
       "direction": "DOWN",
-      "deathPortal": true
+      "deathPortal": true,
+      "triggerName": "Tom_Town_PokeCenter_MapExit_FrontDoor_01"
     }
   ],
   "triggerData": [],
@@ -80,7 +84,8 @@
             "triggerContents": "PC_VIEW"
           }
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_PokeCenter_Event_PC_01"
     },
     {
       "name": "Mart",
@@ -101,7 +106,8 @@
             "triggerContents": "MART_VIEW"
           }
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_PokeCenter_Event_Mart_01"
     },
     {
       "name": "Heal",
@@ -151,7 +157,8 @@
             "triggerContents": "I hope to see you again soon!"
           }
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_PokeCenter_Event_Heal_01"
     }
   ]
 }

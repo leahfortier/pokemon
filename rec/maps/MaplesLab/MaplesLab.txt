@@ -8,6 +8,52 @@
   ],
   "NPCs": [
     {
+      "name": "MaplesLab_NPC_MapleAssistant_02",
+      "startX": 17,
+      "startY": 7,
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "This syrup soda is amazing!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_02_01"
+    },
+    {
+      "name": "MaplesLab_NPC_MapleAssistant_01",
+      "startX": 6,
+      "startY": 10,
+      "path": "w",
+      "spriteIndex": 12,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Don't disturb me! I'm doing syrup science!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_01_01"
+    },
+    {
       "name": "MaplesLab_NPC_Prof_Maple_01",
       "startX": 10,
       "startY": 1,
@@ -120,51 +166,8 @@
             }
           ]
         }
-      ]
-    },
-    {
-      "name": "MaplesLab_NPC_MapleAssistant_02",
-      "startX": 17,
-      "startY": 7,
-      "path": "w",
-      "spriteIndex": 19,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "This syrup soda is amazing!"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "MaplesLab_NPC_MapleAssistant_01",
-      "startX": 6,
-      "startY": 10,
-      "path": "w",
-      "spriteIndex": 12,
-      "direction": "LEFT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Don't disturb me! I'm doing syrup science!"
-              }
-            }
-          ]
-        }
-      ]
+      ],
+      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_Prof_Maple_01_01"
     }
   ],
   "items": [],
@@ -178,7 +181,8 @@
       "nextMap": "DFS_Town",
       "nextEntrance": "MaplesLab",
       "direction": "DOWN",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "MaplesLab_MapExit_DFS_Town_01"
     }
   ],
   "triggerData": [],

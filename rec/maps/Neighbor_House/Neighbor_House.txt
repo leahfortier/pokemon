@@ -27,7 +27,8 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Neighbor_House_NPC_Neighbor_House_NPC_Green_01_01"
     }
   ],
   "items": [],
@@ -41,7 +42,8 @@
       "nextMap": "DFS_Town",
       "nextEntrance": "NeighborsHouse",
       "direction": "DOWN",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Neighbor_House_MapExit_DFS_Town_01"
     }
   ],
   "triggerData": [],

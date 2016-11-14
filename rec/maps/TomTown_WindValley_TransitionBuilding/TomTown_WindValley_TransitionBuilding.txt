@@ -7,6 +7,30 @@
   ],
   "NPCs": [
     {
+      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
+      "startX": 6,
+      "startY": 7,
+      "path": "w",
+      "spriteIndex": 9,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "The Tom Town gym sounds really tough."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01_01",
+      "condition": "!BadgeTrigger_0"
+    },
+    {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01",
       "startX": 3,
       "startY": 5,
@@ -27,6 +51,7 @@
           ]
         }
       ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
@@ -50,52 +75,7 @@
           ]
         }
       ],
-      "condition": "!BadgeTrigger_0"
-    },
-    {
-      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01",
-      "startX": 4,
-      "startY": 6,
-      "path": "w",
-      "spriteIndex": 9,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Team Deadlock is a big bug in our society."
-              }
-            }
-          ]
-        }
-      ],
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
-    },
-    {
-      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
-      "startX": 6,
-      "startY": 7,
-      "path": "w",
-      "spriteIndex": 9,
-      "direction": "LEFT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "The Tom Town gym sounds really tough."
-              }
-            }
-          ]
-        }
-      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01_01",
       "condition": "!BadgeTrigger_0"
     },
     {
@@ -125,6 +105,7 @@
           ]
         }
       ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_PoliceOfficer_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
@@ -153,7 +134,8 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01_01"
     },
     {
       "name": "TransitionBuildingV_NPC_Info_Guy_01",
@@ -162,22 +144,36 @@
       "path": "w",
       "spriteIndex": 10,
       "direction": "LEFT",
-      "interactions": []
+      "interactions": [],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_Info_Guy_01_01"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01",
+      "startX": 4,
+      "startY": 6,
+      "path": "w",
+      "spriteIndex": 9,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Team Deadlock is a big bug in our society."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
   "mapExits": [
-    {
-      "exitName": "NorthDoor",
-      "location": [
-        6,
-        1
-      ],
-      "nextMap": "Tom_Town",
-      "nextEntrance": "SouthTransitionBuilding",
-      "direction": "UP",
-      "deathPortal": false
-    },
     {
       "exitName": "SouthDoor",
       "location": [
@@ -187,7 +183,20 @@
       "nextMap": "WindValley",
       "nextEntrance": "NorthTransitionBuilding",
       "direction": "DOWN",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoor_01"
+    },
+    {
+      "exitName": "NorthDoor",
+      "location": [
+        6,
+        1
+      ],
+      "nextMap": "Tom_Town",
+      "nextEntrance": "SouthTransitionBuilding",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoor_01"
     }
   ],
   "triggerData": [],
@@ -202,7 +211,8 @@
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
-      ]
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
   ]
 }

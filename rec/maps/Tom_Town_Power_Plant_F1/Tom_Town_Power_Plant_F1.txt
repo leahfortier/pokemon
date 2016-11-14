@@ -8,29 +8,6 @@
   ],
   "NPCs": [
     {
-      "name": "Tom_Town_Power_Plant_NPC_Scientist_01",
-      "startX": 12,
-      "startY": 6,
-      "path": "w",
-      "spriteIndex": 19,
-      "direction": "DOWN",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Time to get back to my research."
-              }
-            }
-          ]
-        }
-      ],
-      "condition": "VisitedTomTownPowerPlant"
-    },
-    {
       "name": "Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01",
       "startX": 7,
       "startY": 9,
@@ -51,7 +28,32 @@
           ]
         }
       ],
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01_01",
       "condition": "!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_NPC_Scientist_01",
+      "startX": 12,
+      "startY": 6,
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Time to get back to my research."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_Scientist_01_01",
+      "condition": "VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
@@ -65,18 +67,8 @@
       "nextMap": "Tom_Town",
       "nextEntrance": "TomTownPowerPlant",
       "direction": "DOWN",
-      "deathPortal": false
-    },
-    {
-      "exitName": "FromFloor2",
-      "location": [
-        2,
-        11
-      ],
-      "nextMap": "Tom_Town_Power_Plant_F2",
-      "nextEntrance": "FromFloor1",
-      "direction": "RIGHT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
     },
     {
       "exitName": "FromBasement1",
@@ -87,7 +79,20 @@
       "nextMap": "Tom_Town_Power_Plant_B1",
       "nextEntrance": "FromFloor1",
       "direction": "RIGHT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromBasement1_01"
+    },
+    {
+      "exitName": "FromFloor2",
+      "location": [
+        2,
+        11
+      ],
+      "nextMap": "Tom_Town_Power_Plant_F2",
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromFloor2_01"
     }
   ],
   "triggerData": [],

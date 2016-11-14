@@ -69,7 +69,8 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Leader_Moore_01_01"
     },
     {
       "name": "Tom_Gym_NPC_Tom_Trainer_01",
@@ -113,7 +114,8 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Tom_Trainer_01_01"
     },
     {
       "name": "Tom_Gym_NPC_Tom_Trainer_02",
@@ -157,7 +159,8 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Tom_Trainer_02_01"
     }
   ],
   "items": [],
@@ -171,7 +174,8 @@
       "nextMap": "Tom_Town",
       "nextEntrance": "Gym",
       "direction": "DOWN",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Tom_Gym_MapExit_Tom_Town_01"
     }
   ],
   "triggerData": [],

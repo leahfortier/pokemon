@@ -8,20 +8,22 @@
   ],
   "NPCs": [
     {
-      "name": "Nurse_Joy",
-      "startX": 7,
-      "startY": 2,
-      "spriteIndex": 8,
-      "direction": "DOWN",
-      "interactions": []
-    },
-    {
       "name": "Mart_Guy",
       "startX": 2,
       "startY": 7,
       "spriteIndex": 9,
       "direction": "RIGHT",
-      "interactions": []
+      "interactions": [],
+      "triggerName": "RSATown_PokeCenter_NPC_Mart_Guy_01"
+    },
+    {
+      "name": "Nurse_Joy",
+      "startX": 7,
+      "startY": 2,
+      "spriteIndex": 8,
+      "direction": "DOWN",
+      "interactions": [],
+      "triggerName": "RSATown_PokeCenter_NPC_Nurse_Joy_01"
     }
   ],
   "items": [],
@@ -35,32 +37,12 @@
       "nextMap": "RSATown",
       "nextEntrance": "PokeCenter",
       "direction": "DOWN",
-      "deathPortal": true
+      "deathPortal": true,
+      "triggerName": "RSATown_PokeCenter_MapExit_FrontDoor_01"
     }
   ],
   "triggerData": [],
   "miscEntities": [
-    {
-      "name": "PC_View",
-      "location": [
-        11,
-        1
-      ],
-      "actions": [
-        {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Starting up PC..."
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "ChangeView",
-            "triggerContents": "PC_VIEW"
-          }
-        }
-      ]
-    },
     {
       "name": "Mart",
       "location": [
@@ -80,7 +62,8 @@
             "triggerContents": "MART_VIEW"
           }
         }
-      ]
+      ],
+      "triggerName": "RSATown_PokeCenter_Event_Mart_01"
     },
     {
       "name": "Heal",
@@ -130,7 +113,30 @@
             "triggerContents": "I hope to see you again soon!"
           }
         }
-      ]
+      ],
+      "triggerName": "RSATown_PokeCenter_Event_Heal_01"
+    },
+    {
+      "name": "PC_View",
+      "location": [
+        11,
+        1
+      ],
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Starting up PC..."
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "ChangeView",
+            "triggerContents": "PC_VIEW"
+          }
+        }
+      ],
+      "triggerName": "RSATown_PokeCenter_Event_PC_View_01"
     }
   ]
 }

@@ -49,7 +49,8 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "RSATown_NPC_RSATown_NPC_Rival_01_01"
     },
     {
       "name": "RSATown_NPC_Guy_01",
@@ -71,24 +72,12 @@
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "RSATown_NPC_RSATown_NPC_Guy_01_01"
     }
   ],
   "items": [],
   "mapExits": [
-    {
-      "exitName": "EastTransitionBuilding",
-      "location": [
-        43,
-        20,
-        43,
-        19
-      ],
-      "nextMap": "Edge1_RSATown_TransitionBuilding",
-      "nextEntrance": "WestDoor",
-      "direction": "RIGHT",
-      "deathPortal": false
-    },
     {
       "exitName": "WestTransitionBuilding",
       "location": [
@@ -100,7 +89,22 @@
       "nextMap": "RSATown_BFM_TransitionBuilding",
       "nextEntrance": "EastDoor",
       "direction": "LEFT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "RSATown_MapExit_WestTransitionBuilding_01"
+    },
+    {
+      "exitName": "EastTransitionBuilding",
+      "location": [
+        43,
+        20,
+        43,
+        19
+      ],
+      "nextMap": "Edge1_RSATown_TransitionBuilding",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "RSATown_MapExit_EastTransitionBuilding_01"
     },
     {
       "exitName": "PokeCenter",
@@ -111,7 +115,8 @@
       "nextMap": "RSATown_PokeCenter",
       "nextEntrance": "FrontDoor",
       "direction": "UP",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "RSATown_MapExit_PokeCenter_01"
     }
   ],
   "triggerData": [],

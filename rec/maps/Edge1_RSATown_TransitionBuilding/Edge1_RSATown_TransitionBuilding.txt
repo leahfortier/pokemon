@@ -13,7 +13,8 @@
       "path": "w",
       "spriteIndex": 10,
       "direction": "DOWN",
-      "interactions": []
+      "interactions": [],
+      "triggerName": "Edge1_RSATown_TransitionBuilding_NPC_Info_Guy_01"
     }
   ],
   "items": [],
@@ -27,7 +28,8 @@
       "nextMap": "RSATown",
       "nextEntrance": "EastTransitionBuilding",
       "direction": "LEFT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_WestDoor_01"
     },
     {
       "exitName": "EastDoor",
@@ -38,7 +40,8 @@
       "nextMap": "DFS_Town",
       "nextEntrance": "WestTransitionBuilding",
       "direction": "RIGHT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_EastDoor_01"
     }
   ],
   "triggerData": [],
@@ -53,7 +56,8 @@
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
-      ]
+      ],
+      "triggerName": "Edge1_RSATown_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
   ]
 }

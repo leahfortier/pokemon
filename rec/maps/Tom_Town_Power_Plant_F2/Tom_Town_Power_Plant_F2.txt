@@ -28,6 +28,7 @@
           ]
         }
       ],
+      "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_02_01",
       "condition": "VisitedTomTownPowerPlant"
     },
     {
@@ -51,6 +52,7 @@
           ]
         }
       ],
+      "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_01_01",
       "condition": "VisitedTomTownPowerPlant"
     }
   ],
@@ -65,7 +67,8 @@
       "nextMap": "Tom_Town_Power_Plant_F3",
       "nextEntrance": "FromFloor2",
       "direction": "LEFT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor3_01"
     },
     {
       "exitName": "FromFloor1",
@@ -76,7 +79,8 @@
       "nextMap": "Tom_Town_Power_Plant_F1",
       "nextEntrance": "FromFloor2",
       "direction": "LEFT",
-      "deathPortal": false
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor1_01"
     }
   ],
   "triggerData": [],
