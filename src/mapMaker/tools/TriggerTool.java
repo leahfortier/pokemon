@@ -26,7 +26,9 @@ public class TriggerTool extends Tool {
 
         selectedTrigger = null;
         triggerListPopup = new JPopupMenu();
+        triggerListPopup.setLightWeightPopupEnabled(false);
         triggerOptionsPopup = new JPopupMenu();
+        triggerListPopup.setLightWeightPopupEnabled(false);
 
         JMenuItem editItem = new JMenuItem("Edit");
         triggerOptionsPopup.add(editItem);

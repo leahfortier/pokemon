@@ -214,6 +214,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
     private JComboBox<EditType> createEditTypeComboBox() {
         editTypeComboBox = new JComboBox<>();
+		editTypeComboBox.setLightWeightPopupEnabled(false);
         editTypeComboBox.addActionListener(event -> {
             this.editType = (EditType) editTypeComboBox.getSelectedItem();
 

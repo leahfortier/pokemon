@@ -1,29 +1,24 @@
 package pattern;
 
 import map.Direction;
-import map.entity.EntityAction;
 import map.entity.npc.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import util.Point;
 import util.StringUtils;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NPCMatcher extends MapMakerEntityMatcher {
-    public String name;
-    private int startX;
-    private int startY;
+public class NPCMatcher extends SinglePointEntityMatcher {
+    private static final String NO_INTERACTIONS_KEY = "no_interactions";
+
+    private String name;
     private String path;
     public int spriteIndex;
     public Direction direction;
-    public NPCInteractionMatcher[] interactions;
-
-    private transient List<Point> location;
-    private transient Map<String, NPCInteraction> interactionMap;
-    private transient String startKey;
+    private NPCInteractionMatcher[] interactions;
 
     public NPCMatcher(String name,
                       String condition,
@@ -31,7 +26,7 @@ public class NPCMatcher extends MapMakerEntityMatcher {
                       int spriteIndex,
                       Direction direction,
                       List<NPCInteractionMatcher> interactions) {
-        this.setName(name);
+        this.name = StringUtils.nullWhiteSpace(name);
         this.path = StringUtils.nullWhiteSpace(path);
         this.spriteIndex = spriteIndex;
         this.direction = direction;
@@ -40,45 +35,31 @@ public class NPCMatcher extends MapMakerEntityMatcher {
         super.setCondition(condition);
     }
 
-    public void setName(String name) {
-        this.name = StringUtils.nullWhiteSpace(name);
+    public List<NPCInteractionMatcher> getInteractionMatcherList() {
+        return Arrays.asList(this.interactions);
     }
 
     public Map<String, NPCInteraction> getInteractionMap() {
-        if (interactionMap != null) {
-            return interactionMap;
-        }
-
-        interactionMap = new HashMap<>();
+        Map<String, NPCInteraction> interactionMap = new HashMap<>();
         for (NPCInteractionMatcher interaction : interactions) {
-            interactionMap.put(interaction.name, new NPCInteraction(interaction.walkToPlayer, interaction.getActions()));
+            NPCInteraction npcInteraction = new NPCInteraction(interaction.shouldWalkToPlayer(), interaction.getActions());
+            interactionMap.put(interaction.getName(), npcInteraction);
         }
 
         if (interactions.length == 0) {
-            startKey = "no_interactions";
-            interactionMap.put(startKey, new NPCInteraction(false, new ArrayList<>()));
-
-        } else {
-            startKey = interactions[0].name;
-
+            interactionMap.put(NO_INTERACTIONS_KEY, new NPCInteraction(false, Collections.emptyList()));
         }
+
         return interactionMap;
     }
 
-    public int getX() {
-        return this.startX;
-    }
-
-    public int getY() {
-        return this.startY;
-    }
-
     public String getStartKey() {
-        if (interactionMap == null) {
-            getInteractionMap();
-        }
+        if (interactions.length == 0) {
+            return NO_INTERACTIONS_KEY;
 
-        return startKey;
+        } else {
+            return interactions[0].getName();
+        }
     }
 
     public String getPath() {
@@ -98,23 +79,6 @@ public class NPCMatcher extends MapMakerEntityMatcher {
     }
 
     @Override
-    public List<Point> getLocation() {
-        if (this.location != null) {
-            return this.location;
-        }
-
-        this.location = new ArrayList<>();
-        this.location.add(new Point(startX, startY));
-        return this.location;
-    }
-
-    @Override
-    public void addPoint(Point location) {
-        this.startX = location.x;
-        this.startY = location.y;
-    }
-
-    @Override
     public TriggerModelType getTriggerModelType() {
         return TriggerModelType.NPC;
     }
@@ -124,24 +88,4 @@ public class NPCMatcher extends MapMakerEntityMatcher {
         return this.name;
     }
 
-    public static class NPCInteractionMatcher {
-        public String name;
-        public boolean walkToPlayer;
-        public ActionMatcher[] npcActions;
-
-        public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher[] npcActions) {
-            this.name = StringUtils.nullWhiteSpace(name);
-            this.walkToPlayer = walkToPlayer;
-            this.npcActions = npcActions;
-        }
-
-        public List<EntityAction> getActions() {
-            List<EntityAction> actions = new ArrayList<>();
-            for (ActionMatcher action : this.npcActions) {
-                actions.add(action.getAction(null));
-            }
-
-            return actions;
-        }
-    }
 }

@@ -1,6 +1,8 @@
 package map.entity;
 
-import pattern.TriggerMatcher;
+import pattern.MiscEntityMatcher;
+import util.JsonUtils;
+import util.Point;
 
 import java.util.List;
 
@@ -9,11 +11,12 @@ public class TriggerEntityData extends EntityData {
 
 	private List<EntityAction> actions;
 
-	public TriggerEntityData(int x, int y, TriggerMatcher matcher) {
+	public TriggerEntityData(MiscEntityMatcher matcher) {
 		super(matcher);
 
-		this.x = x;
-		this.y = y;
+		Point location = matcher.getLocation();
+		this.x = location.x;
+		this.y = location.y;
 		this.actions = matcher.getActions();
 	}
 	

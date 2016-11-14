@@ -2,6 +2,7 @@ package map.entity;
 
 import namesies.ItemNamesies;
 import pattern.ItemMatcher;
+import util.Point;
 
 // TODO: This whole class can be deleted and make sure the getEntity method is just moved to the ItemMatcher class
 public class ItemEntityData extends EntityData {
@@ -11,8 +12,9 @@ public class ItemEntityData extends EntityData {
 	public ItemEntityData(ItemMatcher matcher) {
 		super(matcher, "!has" + matcher.getTriggerName());
 
-		this.x = matcher.getX();
-		this.y = matcher.getY();
+		Point point = matcher.getLocation();
+		x = point.x;
+		y = point.y;
 		this.item = matcher.getItem();
 	}
 

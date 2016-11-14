@@ -22,8 +22,6 @@ public class ActionMatcher {
     public String groupTrigger;
     public String global;
 
-    private transient EntityAction entityAction;
-
     public ActionType getActionType() {
         if (!MapDataMatcher.hasOnlyOneNonEmpty(trigger, battle, choice, update, groupTrigger, global)) {
             Global.error("Can only have one nonempty field for ActionMatcher");
@@ -48,36 +46,24 @@ public class ActionMatcher {
     }
 
     public EntityAction getAction(final String condition) {
-        if (entityAction != null) {
-            return entityAction;
-        }
-
         ActionType actionType = this.getActionType();
         switch (actionType) {
             case TRIGGER:
-                this.entityAction = new TriggerAction(trigger.getTriggerType(), trigger.triggerContents, condition);
-                break;
+                return new TriggerAction(trigger.getTriggerType(), trigger.triggerContents, condition);
             case BATTLE:
-                this.entityAction = new BattleAction(battle);
-                break;
+                return new BattleAction(battle);
             case UPDATE:
-                this.entityAction = new UpdateAction(update);
-                break;
+                return new UpdateAction(update);
             case GROUP_TRIGGER:
-                this.entityAction = new GroupTriggerAction(groupTrigger);
-                break;
+                return new GroupTriggerAction(groupTrigger);
             case CHOICE:
-                this.entityAction = new ChoiceAction(choice);
-                break;
+                return new ChoiceAction(choice);
             case GLOBAL:
-                this.entityAction = new GlobalAction(global);
-                break;
+                return new GlobalAction(global);
             default:
                 Global.error("No action found.");
-                break;
+                return null;
         }
-
-        return this.entityAction;
     }
 
     public static class ChoiceActionMatcher {

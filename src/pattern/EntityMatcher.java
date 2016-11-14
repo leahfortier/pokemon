@@ -3,7 +3,7 @@ package pattern;
 import util.StringUtils;
 
 public abstract class EntityMatcher {
-    private String triggerName;
+    public String triggerName;
     private String condition;
 
     public String getTriggerName() {

@@ -1,7 +1,7 @@
 package mapMaker.data;
 
-import pattern.MapMakerEntityMatcher;
-import pattern.TriggerMatcher;
+import pattern.MultiPointEntityMatcher;
+import pattern.SinglePointEntityMatcher;
 
 public class PlaceableTrigger {
 
@@ -15,21 +15,21 @@ public class PlaceableTrigger {
 	public String name;
 	public Integer location;
 	
-	public MapMakerEntityMatcher entity;
-	public TriggerMatcher triggerData;
+	public SinglePointEntityMatcher entity;
+	public MultiPointEntityMatcher triggerData;
 
-	public PlaceableTrigger(MapMakerEntityMatcher entity, Integer location) {
+	public PlaceableTrigger(SinglePointEntityMatcher entity, Integer location) {
 		this(entity);
 		this.location = location;
 	}
 
-	public PlaceableTrigger(MapMakerEntityMatcher entity) {
+	public PlaceableTrigger(SinglePointEntityMatcher entity) {
 		this.triggerType = PlaceableTriggerType.ENTITY;
 		this.entity = entity;
 		this.name = entity.getBasicName();
 	}
 
-	public PlaceableTrigger(TriggerMatcher triggerData) {
+	public PlaceableTrigger(MultiPointEntityMatcher triggerData) {
 		this.triggerType = PlaceableTriggerType.TRIGGER_DATA;
 		this.triggerData = triggerData;
 		this.name = triggerData.getBasicName();

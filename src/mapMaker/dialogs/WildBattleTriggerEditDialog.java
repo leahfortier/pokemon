@@ -1,10 +1,8 @@
 package mapMaker.dialogs;
 
-import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
-import pattern.TriggerMatcher;
-import pattern.WildBattleTriggerMatcher;
+import pattern.WildBattleMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -23,7 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WildBattleTriggerEditDialog extends TriggerDialog<TriggerMatcher> {
+public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher> {
 	private static final long serialVersionUID = -3454589908432207758L;
 
 	private JTextField nameTextField;
@@ -179,7 +177,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<TriggerMatcher> {
 	}
 
 	@Override
-	public TriggerMatcher getMatcher() {
+	public WildBattleMatcher getMatcher() {
 		String name = nameTextField.getText();
 		EncounterRate encounterRate = (EncounterRate)rateComboBox.getSelectedItem();
 
@@ -200,21 +198,15 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<TriggerMatcher> {
 			System.out.println(wildEncounters[currRow].getPokemonName());
 		}
 
-		return WildBattleTriggerMatcher.createWildBattleMatcher(name, encounterRate, wildEncounters);
+		return new WildBattleMatcher(name, encounterRate, wildEncounters);
 	}
 
 	@Override
-	public void load(TriggerMatcher matcher) {
-		if (!matcher.isWildBattleTrigger()) {
-			Global.error("Invalid wild battle trigger");
-		}
-
-		WildBattleTriggerMatcher wildBattleTriggerMatcher = matcher.getWildBattleTriggerContents();
-
+	public void load(WildBattleMatcher matcher) {
 		nameTextField.setText(matcher.getBasicName());
-		rateComboBox.setSelectedItem(wildBattleTriggerMatcher.getEncounterRate());
+		rateComboBox.setSelectedItem(matcher.getEncounterRate());
 
-		for (WildEncounter wildEncounter : wildBattleTriggerMatcher.getWildEncounters()) {
+		for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
 			WildPokemonDataPanel panel = addPokemonPanel();
 
 			panel.pokemonTextField.setText(wildEncounter.getPokemonName());

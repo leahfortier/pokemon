@@ -4,6 +4,7 @@ import map.Direction;
 import map.entity.Entity;
 import map.entity.EntityData;
 import pattern.NPCMatcher;
+import util.Point;
 
 import java.util.Map;
 
@@ -19,8 +20,10 @@ public class NPCEntityData extends EntityData {
 	public NPCEntityData(NPCMatcher matcher) {
 		super(matcher);
 
-		x = matcher.getX();
-		y = matcher.getY();
+		Point point = matcher.getLocation();
+		x = point.x;
+		y = point.y;
+
 		path = matcher.getPath();
 		spriteIndex = matcher.spriteIndex;
 		defaultDirection = matcher.direction;

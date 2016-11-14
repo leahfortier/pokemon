@@ -1,6 +1,5 @@
 package mapMaker.data;
 
-import main.Global;
 import mapMaker.MapMaker;
 import mapMaker.data.PlaceableTrigger.PlaceableTriggerType;
 import mapMaker.dialogs.EventTriggerDialog;
@@ -14,14 +13,17 @@ import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import namesies.ItemNamesies;
-import pattern.MapDataMatcher;
 import pattern.AreaMatcher;
 import pattern.EntityMatcher;
+import pattern.EventMatcher;
 import pattern.ItemMatcher;
+import pattern.MapDataMatcher;
 import pattern.MapMakerEntityMatcher;
 import pattern.MapTransitionMatcher;
+import pattern.MultiPointEntityMatcher;
 import pattern.NPCMatcher;
-import pattern.TriggerMatcher;
+import pattern.SinglePointEntityMatcher;
+import pattern.WildBattleMatcher;
 import util.DrawUtils;
 import util.FileIO;
 import util.JsonUtils;
@@ -41,8 +43,8 @@ public class MapMakerTriggerData {
 
 	// TODO: Merge trigger data and entities
 	private Set<AreaMatcher> areaData;
-	private Set<MapMakerEntityMatcher> entities;
-	private Set<TriggerMatcher> triggerData;
+	private Set<SinglePointEntityMatcher> entities;
+	private Set<MultiPointEntityMatcher> triggerData;
 
 	// Have the triggers been saved or have they been edited?
 	private boolean triggersSaved;
@@ -63,7 +65,7 @@ public class MapMakerTriggerData {
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapTriggerFileName, fileText);
 		this.areaData = new HashSet<>(mapDataMatcher.getAreas());
 		this.entities = new HashSet<>(mapDataMatcher.getEntities());
-		this.triggerData = new HashSet<>(mapDataMatcher.getTriggerData());
+		this.triggerData = new HashSet<>(mapDataMatcher.getEvents());
 
 		triggersSaved = true;
 	}
@@ -91,10 +93,13 @@ public class MapMakerTriggerData {
 		entities.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
 		triggerData.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
 
+		Set<MapMakerEntityMatcher> combinedSet = new HashSet<>();
+		combinedSet.addAll(entities);
+		combinedSet.addAll(triggerData);
+
 		MapDataMatcher mapDataMatcher = new MapDataMatcher(
 				areaData,
-				entities,
-				triggerData
+				combinedSet
 		);
 
 		FileIO.createFile(mapFileName);
@@ -127,65 +132,55 @@ public class MapMakerTriggerData {
 	public void moveTriggerData(Point delta) {
 		triggersSaved = false;
 
-		for (TriggerMatcher matcher : this.triggerData) {
-			for (Point point : matcher.getLocation()) {
-				point.add(delta);
-			}
+		for (MapMakerEntityMatcher matcher : this.triggerData) {
+			matcher.addDelta(delta);
 		}
 
 		for (MapMakerEntityMatcher matcher : this.entities) {
-			for (Point point : matcher.getLocation()) {
-				point.add(delta);
-			}
+			matcher.addDelta(delta);
 		}
 	}
 
 	public void drawTriggers(Graphics2D g2d, Point mapLocation) {
-		for (TriggerMatcher data : this.triggerData) {
+		for (MultiPointEntityMatcher data : this.triggerData) {
 			for (Point point : data.getLocation()) {
 				DrawUtils.outlineTileRed(g2d, point, mapLocation);
 
-				if (data.isWildBattleTrigger()) {
+				if (data.getTriggerModelType() == TriggerModelType.WILD_BATTLE) {
 					BufferedImage image = TriggerModelType.WILD_BATTLE.getImage(mapMaker);
 					DrawUtils.drawTileImage(g2d, image, point, mapLocation);
 				}
 			}
 		}
 
-		for (MapMakerEntityMatcher entity : this.entities) {
-			for (Point point : entity.getLocation()) {
-				final BufferedImage image;
-				if (entity instanceof MapTransitionMatcher) {
-					image = TriggerModelType.MAP_TRANSITION.getImage(mapMaker);
+		for (SinglePointEntityMatcher entity : this.entities) {
+			Point point = entity.getLocation();
+			TriggerModelType triggerModelType = entity.getTriggerModelType();
 
-					for (Point exit : ((MapTransitionMatcher) entity).getExits()) {
-						BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
-						DrawUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
-					}
-				} else if (entity instanceof NPCMatcher) {
+			BufferedImage image = null;
+			switch (triggerModelType) {
+				case MAP_TRANSITION:
+					Point exit = ((MapTransitionMatcher)entity).getExitLocation();
+					BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
+					DrawUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
+					break;
+				case NPC:
 					NPCMatcher npc = (NPCMatcher) entity;
 					// TODO: This should be in a method
 					image = mapMaker.getTileFromSet(TileType.TRAINER, 12 * npc.spriteIndex + 1 + npc.direction.ordinal());
-				} else if (entity instanceof ItemMatcher) {
-					image = TriggerModelType.ITEM.getImage(mapMaker);
-				} else if (entity instanceof TriggerMatcher) {
-					image = TriggerModelType.TRIGGER_ENTITY.getImage(mapMaker);
-				} else {
-					Global.error("Unknown entity matcher class " + entity.getClass().getSimpleName());
-					continue;
-				}
-
-				DrawUtils.drawTileImage(g2d, image, point, mapLocation);
+					break;
 			}
+
+			if (image == null) {
+				image = triggerModelType.getImage(mapMaker);
+			}
+
+			DrawUtils.drawTileImage(g2d, image, point, mapLocation);
 		}
 	}
 
-	private int getMapIndex(int x, int y) {
-		return Point.getIndex(x, y, this.mapMaker.getCurrentMapSize().width);
-	}
-
 	private int getMapIndex(Point location) {
-		return getMapIndex(location.x, location.y);
+		return location.getIndex(this.mapMaker.getCurrentMapSize().width);
 	}
 
 	public void placeTrigger(Point location) {
@@ -194,15 +189,15 @@ public class MapMakerTriggerData {
 		PlaceableTrigger placeableTrigger = mapMaker.getPlaceableTrigger();
 		switch (placeableTrigger.triggerType) {
 			case ENTITY:
-				MapMakerEntityMatcher entity = placeableTrigger.entity;
+				SinglePointEntityMatcher entity = placeableTrigger.entity;
 
-				entity.addPoint(location);
+				entity.setPoint(location);
 				this.entities.add(entity);
 
 				System.out.println("Entity placed at (" + location.x + ", " + location.y + ").");
 				break;
 			case TRIGGER_DATA:
-				TriggerMatcher trigger = placeableTrigger.triggerData;
+				MultiPointEntityMatcher trigger = placeableTrigger.triggerData;
 				trigger.addPoint(location);
 				this.triggerData.add(trigger);
 				break;
@@ -215,23 +210,10 @@ public class MapMakerTriggerData {
 	// Used for moving triggers
 	public TriggerModelType getTriggerModelType(PlaceableTrigger trigger) {
 		if (trigger.triggerType == PlaceableTriggerType.ENTITY) {
-			if (trigger.entity instanceof ItemMatcher) {
-				return TriggerModelType.ITEM;
-			} else if (trigger.entity instanceof NPCMatcher) {
-				return TriggerModelType.NPC;
-			} else if (trigger.entity instanceof TriggerMatcher) {
-				return TriggerModelType.TRIGGER_ENTITY;
-			} else if (trigger.entity instanceof MapTransitionMatcher) {
-				return TriggerModelType.MAP_TRANSITION;
-			}
+			return trigger.entity.getTriggerModelType();
 		}
 		else if (trigger.triggerType == PlaceableTriggerType.TRIGGER_DATA) {
-			if (trigger.triggerData.isWildBattleTrigger()) {
-				return TriggerModelType.WILD_BATTLE;
-			}
-			else {
-				return TriggerModelType.EVENT;
-			}
+			return  trigger.triggerData.getTriggerModelType();
 		}
 
 		return null;
@@ -280,17 +262,22 @@ public class MapMakerTriggerData {
 
 		if (trigger.triggerType == PlaceableTriggerType.ENTITY) {
 			EntityMatcher entity = trigger.entity;
+			TriggerModelType triggerModelType = trigger.entity.getTriggerModelType();
 
-			if (entity instanceof ItemMatcher) {
-				newTrigger = editItem((ItemMatcher)entity);
-			}
-			else if (entity instanceof NPCMatcher) {
-				newTrigger = editNPC((NPCMatcher)entity);
-			}
-			else if (entity instanceof TriggerMatcher) {
-				newTrigger = editEventTrigger((TriggerMatcher)entity);
-			} else if (entity instanceof MapTransitionMatcher) {
-				newTrigger = editMapTransition((MapTransitionMatcher)entity);
+			switch (triggerModelType) {
+				case ITEM:
+					newTrigger = editItem((ItemMatcher)entity);
+					break;
+				case NPC:
+					newTrigger = editNPC((NPCMatcher)entity);
+					break;
+				case TRIGGER_ENTITY:
+					// TODO: Need a new edit and dialog
+					newTrigger = editEventTrigger((EventMatcher)entity);
+					break;
+				case MAP_TRANSITION:
+					newTrigger = editMapTransition((MapTransitionMatcher)entity);
+					break;
 			}
 
 			// Update entity list
@@ -298,18 +285,20 @@ public class MapMakerTriggerData {
 				this.entities.remove(trigger.entity);
 				this.entities.add(newTrigger.entity);
 
-				newTrigger.entity.addPoint(trigger.entity.getLocation().get(0));
+				newTrigger.entity.setPoint(trigger.entity.getLocation());
 
 				triggersSaved = false;
 			}
 		}
 		else if (trigger.triggerType == PlaceableTriggerType.TRIGGER_DATA) {
 
-			if (trigger.triggerData.isWildBattleTrigger()) {
-				newTrigger = editWildBattleTrigger(trigger.triggerData);
-			}
-			else {
-				newTrigger = editEventTrigger(trigger.triggerData);
+			switch (trigger.triggerData.getTriggerModelType()) {
+				case WILD_BATTLE:
+					newTrigger = editWildBattleTrigger((WildBattleMatcher)trigger.triggerData);
+					break;
+				case EVENT:
+					newTrigger = editEventTrigger((EventMatcher)trigger.triggerData);
+					break;
 			}
 
 			if (newTrigger != null) {
@@ -321,16 +310,13 @@ public class MapMakerTriggerData {
 		}
 	}
 
-	private List<MapMakerEntityMatcher> getEntitiesAtLocation(Point location) {
-		List<MapMakerEntityMatcher> triggerList = new ArrayList<>();
-		for (MapMakerEntityMatcher entity : this.entities) {
-			triggerList.addAll(
-					entity.getLocation()
-							.stream()
-							.filter(point -> point.equals(location))
-							.map(point -> entity)
-							.collect(Collectors.toList())
-			);
+	// TODO: Why is this just entities and not triggers?
+	private List<SinglePointEntityMatcher> getEntitiesAtLocation(Point location) {
+		List<SinglePointEntityMatcher> triggerList = new ArrayList<>();
+		for (SinglePointEntityMatcher entity : this.entities) {
+			if (entity.isAtLocation(location)) {
+				triggerList.add(entity);
+			}
 		}
 
 		return triggerList;
@@ -354,8 +340,8 @@ public class MapMakerTriggerData {
 	}
 
 	public void moveTrigger(PlaceableTrigger trigger) {
-		mapMaker.setPlaceableTrigger(trigger);
 		removeTrigger(trigger);
+		mapMaker.setPlaceableTrigger(trigger);
 		System.out.println(mapMaker.getPlaceableTrigger().name);
 	}
 
@@ -401,10 +387,11 @@ public class MapMakerTriggerData {
 		return new PlaceableTrigger(newEntity);
 	}
 
-	private List<TriggerMatcher> getWildBattleTriggers() {
+	private List<WildBattleMatcher> getWildBattleTriggers() {
 		return this.triggerData
 				.stream()
-				.filter(TriggerMatcher::isWildBattleTrigger)
+				.filter(entity -> entity instanceof WildBattleMatcher)
+				.map(entity -> (WildBattleMatcher)entity)
 				.collect(Collectors.toList());
 	}
 
@@ -416,7 +403,7 @@ public class MapMakerTriggerData {
 			return null;
 		}
 
-		List<TriggerMatcher> matcher = wildBattleTriggerOptions.getMatcher();
+		List<WildBattleMatcher> matcher = wildBattleTriggerOptions.getMatcher();
 		if (matcher == null || matcher.isEmpty()) {
 			return null;
 		}
@@ -425,7 +412,7 @@ public class MapMakerTriggerData {
 		return new PlaceableTrigger(matcher.get(0));
 	}
 
-	private PlaceableTrigger editWildBattleTrigger(TriggerMatcher wildBattleTrigger) {
+	private PlaceableTrigger editWildBattleTrigger(WildBattleMatcher wildBattleTrigger) {
 		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
 		dialog.loadMatcher(wildBattleTrigger);
 
@@ -433,7 +420,7 @@ public class MapMakerTriggerData {
 			return null;
 		}
 
-		TriggerMatcher td = dialog.getMatcher();
+		WildBattleMatcher td = dialog.getMatcher();
 		return new PlaceableTrigger(td);
 	}
 
@@ -451,9 +438,9 @@ public class MapMakerTriggerData {
 		return new PlaceableTrigger(mapTransition);
 	}
 
-	private PlaceableTrigger editEventTrigger(TriggerMatcher triggerMatcher) {
+	private PlaceableTrigger editEventTrigger(EventMatcher eventMatcher) {
 		EventTriggerDialog eventTriggerDialog = new EventTriggerDialog();
-		eventTriggerDialog.loadMatcher(triggerMatcher);
+		eventTriggerDialog.loadMatcher(eventMatcher);
 
 		if (!dialogOption("Event Trigger Editor", eventTriggerDialog)) {
 			return null;
@@ -461,7 +448,7 @@ public class MapMakerTriggerData {
 
 		// TODO: confirm at least one action first
 
-		TriggerMatcher matcher = eventTriggerDialog.getMatcher();
+		EventMatcher matcher = eventTriggerDialog.getMatcher();
 		return new PlaceableTrigger(matcher);
 	}
 }

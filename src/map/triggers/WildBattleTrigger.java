@@ -8,7 +8,7 @@ import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
 import namesies.PokemonNamesies;
-import pattern.WildBattleTriggerMatcher;
+import pattern.WildBattleMatcher;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
@@ -23,7 +23,7 @@ public class WildBattleTrigger extends Trigger {
 	WildBattleTrigger(String matcherJson, String condition) {
 		super(TriggerType.WILD_BATTLE, matcherJson, condition);
 
-		WildBattleTriggerMatcher matcher = JsonUtils.deserialize(matcherJson, WildBattleTriggerMatcher.class);
+		WildBattleMatcher matcher = JsonUtils.deserialize(matcherJson, WildBattleMatcher.class);
 		this.wildEncounters = matcher.getWildEncounters();
 		this.encounterRate = matcher.getEncounterRate();
 

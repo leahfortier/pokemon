@@ -12,9 +12,9 @@ import map.entity.npc.NPCEntityData;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
+import pattern.EventMatcher;
 import pattern.MapDataMatcher;
 import pattern.MapTransitionMatcher;
-import pattern.TriggerMatcher;
 import trainer.CharacterData;
 import util.FileIO;
 import util.JsonUtils;
@@ -92,29 +92,25 @@ public class MapData {
 				.map(ItemEntityData::new)
 				.collect(Collectors.toList()));
 
-		for (TriggerMatcher matcher : mapDataMatcher.getMiscEntities()) {
-			entities.addAll(matcher.getLocation()
-					.stream()
-					.map(point -> new TriggerEntityData(point.x, point.y, matcher))
-					.collect(Collectors.toList()));
-		}
+		entities.addAll(mapDataMatcher.getMiscEntities()
+				.stream()
+				.map(TriggerEntityData::new)
+				.collect(Collectors.toList()));
 
-		for (MapTransitionMatcher matcher : mapDataMatcher.getMapExits()) {
+		for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
             matcher.setMapName(this.name);
 
-            List<Point> entrances = matcher.getEntrances();
-            for (Point point : entrances) {
-                mapEntrances.put(matcher.getExitName(), getMapIndex(point.x, point.y)); // TODO: Doesn't work correctly
-            }
+			Point entrance = matcher.getLocation();
+			mapEntrances.put(matcher.getExitName(), getMapIndex(entrance.x, entrance.y));
 
-            List<Point> exits = matcher.getExits();
-			for (Point point : exits) {
+            Point exit = matcher.getExitLocation();
+			if (exit != null) {
 				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(JsonUtils.getJson(matcher), null);
-				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
+				triggers.put(getMapIndex(exit.x, exit.y), trigger.getName());
 			}
         }
 
-		for (TriggerMatcher matcher : mapDataMatcher.getTriggerData()) {
+		for (EventMatcher matcher : mapDataMatcher.getEvents()) {
 			TriggerData triggerData = new TriggerData(matcher);
 			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
 

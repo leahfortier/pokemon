@@ -47,7 +47,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		String fileText = FileIO.readEntireFileWithReplacements(mapFileName, false);
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName, fileText);
 
-		return mapDataMatcher.getMapExits()
+		return mapDataMatcher.getMapTransitions()
 				.stream()
 				.map(MapTransitionMatcher::getExitName)
 				.collect(Collectors.toSet());

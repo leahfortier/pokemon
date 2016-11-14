@@ -3,7 +3,7 @@ package mapMaker.dialogs;
 import map.Direction;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
-import pattern.NPCMatcher.NPCInteractionMatcher;
+import pattern.NPCInteractionMatcher;
 import pattern.NPCMatcher;
 
 import javax.swing.BoxLayout;
@@ -234,6 +234,6 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 		pathTextField.setText(matcher.getPath());
 		spriteComboBox.setSelectedIndex(matcher.getSpriteIndex());
 		directionComboBox.setSelectedItem(matcher.getDirection());
-		interactions.addAll(Arrays.asList(matcher.interactions));
+		interactions.addAll(matcher.getInteractionMatcherList());
 	}
 }
