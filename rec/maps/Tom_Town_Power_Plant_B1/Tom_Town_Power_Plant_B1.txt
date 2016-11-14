@@ -9,8 +9,6 @@
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_B1_NPC_Scientist_01",
-      "startX": 12,
-      "startY": 4,
       "path": "w",
       "spriteIndex": 19,
       "direction": "UP",
@@ -28,25 +26,30 @@
           ]
         }
       ],
+      "location2": {
+        "x": 12,
+        "y": 4
+      },
       "triggerName": "Tom_Town_Power_Plant_B1_NPC_Tom_Town_Power_Plant_B1_NPC_Scientist_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "FromFloor1",
-      "location": [
-        6,
-        9
-      ],
       "nextMap": "Tom_Town_Power_Plant_F1",
       "nextEntrance": "FromBasement1",
       "direction": "LEFT",
       "deathPortal": false,
+      "location2": {
+        "x": 6,
+        "y": 9
+      },
       "triggerName": "Tom_Town_Power_Plant_B1_MapExit_FromFloor1_01"
     }
   ],
-  "triggerData": [],
-  "miscEntities": []
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": []
 }

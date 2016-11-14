@@ -9,8 +9,6 @@
   "NPCs": [
     {
       "name": "Neighbor_House_NPC_Green_01",
-      "startX": 4,
-      "startY": 4,
       "path": "w",
       "spriteIndex": 17,
       "direction": "DOWN",
@@ -28,24 +26,29 @@
           ]
         }
       ],
+      "location2": {
+        "x": 4,
+        "y": 4
+      },
       "triggerName": "Neighbor_House_NPC_Neighbor_House_NPC_Green_01_01"
     }
   ],
   "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "DFS_Town",
-      "location": [
-        3,
-        6
-      ],
       "nextMap": "DFS_Town",
       "nextEntrance": "NeighborsHouse",
       "direction": "DOWN",
       "deathPortal": false,
+      "location2": {
+        "x": 3,
+        "y": 6
+      },
       "triggerName": "Neighbor_House_MapExit_DFS_Town_01"
     }
   ],
-  "triggerData": [],
-  "miscEntities": []
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": []
 }

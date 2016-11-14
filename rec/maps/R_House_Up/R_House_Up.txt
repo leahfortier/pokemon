@@ -8,20 +8,21 @@
   ],
   "NPCs": [],
   "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "stairs",
-      "location": [
-        4,
-        2
-      ],
       "nextMap": "Rival_House",
       "nextEntrance": "stairs",
       "direction": "RIGHT",
       "deathPortal": false,
+      "location2": {
+        "x": 4,
+        "y": 2
+      },
       "triggerName": "R_House_Up_MapExit_stairs_01"
     }
   ],
-  "triggerData": [],
-  "miscEntities": []
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": []
 }

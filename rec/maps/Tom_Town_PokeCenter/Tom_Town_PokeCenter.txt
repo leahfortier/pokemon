@@ -9,26 +9,28 @@
   "NPCs": [
     {
       "name": "Nurse_Joy",
-      "startX": 7,
-      "startY": 2,
       "spriteIndex": 8,
       "direction": "DOWN",
       "interactions": [],
+      "location2": {
+        "x": 7,
+        "y": 2
+      },
       "triggerName": "Tom_Town_PokeCenter_NPC_Nurse_Joy_01"
     },
     {
       "name": "Mart_Guy",
-      "startX": 2,
-      "startY": 7,
       "spriteIndex": 9,
       "direction": "RIGHT",
       "interactions": [],
+      "location2": {
+        "x": 2,
+        "y": 7
+      },
       "triggerName": "Tom_Town_PokeCenter_NPC_Mart_Guy_01"
     },
     {
       "name": "Tom",
-      "startX": 10,
-      "startY": 4,
       "spriteIndex": 5,
       "direction": "DOWN",
       "interactions": [
@@ -45,32 +47,31 @@
           ]
         }
       ],
+      "location2": {
+        "x": 10,
+        "y": 4
+      },
       "triggerName": "Tom_Town_PokeCenter_NPC_Tom_01"
     }
   ],
   "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "FrontDoor",
-      "location": [
-        7,
-        8
-      ],
       "nextMap": "Tom_Town",
       "nextEntrance": "PokeCenter",
       "direction": "DOWN",
       "deathPortal": true,
+      "location2": {
+        "x": 7,
+        "y": 8
+      },
       "triggerName": "Tom_Town_PokeCenter_MapExit_FrontDoor_01"
     }
   ],
-  "triggerData": [],
   "miscEntities": [
     {
       "name": "PC",
-      "location": [
-        3,
-        1
-      ],
       "actions": [
         {
           "trigger": {
@@ -89,10 +90,6 @@
     },
     {
       "name": "Mart",
-      "location": [
-        3,
-        7
-      ],
       "actions": [
         {
           "trigger": {
@@ -111,10 +108,6 @@
     },
     {
       "name": "Heal",
-      "location": [
-        7,
-        3
-      ],
       "actions": [
         {
           "trigger": {
@@ -160,5 +153,7 @@
       ],
       "triggerName": "Tom_Town_PokeCenter_Event_Heal_01"
     }
-  ]
+  ],
+  "events": [],
+  "wildBattles": []
 }

@@ -9,8 +9,6 @@
   "NPCs": [
     {
       "name": "TestMomBattle",
-      "startX": 3,
-      "startY": 4,
       "spriteIndex": 13,
       "direction": "DOWN",
       "interactions": [
@@ -49,41 +47,40 @@
           ]
         }
       ],
+      "location2": {
+        "x": 3,
+        "y": 4
+      },
       "triggerName": "PlayersHouseUp_NPC_TestMomBattle_01"
     }
   ],
   "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "GameStartLocation",
-      "location": [
-        6,
-        5
-      ],
       "deathPortal": false,
+      "location2": {
+        "x": 6,
+        "y": 5
+      },
       "triggerName": "PlayersHouseUp_MapExit_GameStartLocation_01"
     },
     {
       "exitName": "stairs",
-      "location": [
-        8,
-        1
-      ],
       "nextMap": "PlayersHouseDown",
       "nextEntrance": "stairs",
       "direction": "RIGHT",
       "deathPortal": false,
+      "location2": {
+        "x": 8,
+        "y": 1
+      },
       "triggerName": "PlayersHouseUp_MapExit_stairs_01"
     }
   ],
-  "triggerData": [],
   "miscEntities": [
     {
       "name": "PC",
-      "location": [
-        3,
-        1
-      ],
       "actions": [
         {
           "trigger": {
@@ -100,5 +97,7 @@
       ],
       "triggerName": "PlayersHouseUp_Event_PC_01"
     }
-  ]
+  ],
+  "events": [],
+  "wildBattles": []
 }

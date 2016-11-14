@@ -8,50 +8,47 @@
   "NPCs": [
     {
       "name": "Info_Guy",
-      "startX": 6,
-      "startY": 1,
       "path": "w",
       "spriteIndex": 10,
       "direction": "DOWN",
       "interactions": [],
+      "location2": {
+        "x": 6,
+        "y": 1
+      },
       "triggerName": "Edge1_RSATown_TransitionBuilding_NPC_Info_Guy_01"
     }
   ],
   "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "WestDoor",
-      "location": [
-        2,
-        3
-      ],
       "nextMap": "RSATown",
       "nextEntrance": "EastTransitionBuilding",
       "direction": "LEFT",
       "deathPortal": false,
+      "location2": {
+        "x": 2,
+        "y": 3
+      },
       "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_WestDoor_01"
     },
     {
       "exitName": "EastDoor",
-      "location": [
-        10,
-        3
-      ],
       "nextMap": "DFS_Town",
       "nextEntrance": "WestTransitionBuilding",
       "direction": "RIGHT",
       "deathPortal": false,
+      "location2": {
+        "x": 10,
+        "y": 3
+      },
       "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_EastDoor_01"
     }
   ],
-  "triggerData": [],
   "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",
-      "location": [
-        6,
-        2
-      ],
       "actions": [
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
@@ -59,5 +56,7 @@
       ],
       "triggerName": "Edge1_RSATown_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
-  ]
+  ],
+  "events": [],
+  "wildBattles": []
 }
