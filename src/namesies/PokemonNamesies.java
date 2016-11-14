@@ -737,13 +737,21 @@ public enum PokemonNamesies {
         return this.name;
     }
 
+    public static PokemonNamesies tryValueOf(String name) {
+		try {
+			return PokemonNamesies.valueOf(PokeString.getNamesiesString(name));
+		} catch (IllegalArgumentException exception) {
+			return null;
+		}
+	}
+
     public static PokemonNamesies getValueOf(String name) {
-        try {
-            return PokemonNamesies.valueOf(PokeString.getNamesiesString(name));
-        } catch (IllegalArgumentException exception) {
-            Global.error(name + " does not have a valid PokemonNamesies value");
-            return null;
-        }
+        PokemonNamesies namesies = tryValueOf(name);
+		if (namesies == null) {
+			Global.error(name + " does not have a valid PokemonNamesies value");
+		}
+
+		return namesies;
     }
 }
 

@@ -1,129 +1,43 @@
 {
-  "NPCs": [
+  "areas": [
     {
-      "name": "DFS_Town_NPC_Edge1_Trainer_03",
-      "startX": 19,
-      "startY": 20,
-      "path": "uuddddduuu",
-      "spriteIndex": 6,
-      "direction": "RIGHT",
-      "walkToPlayer": true,
-      "interactions": [
-        {
-          "name": "battle",
-          "npcActions": [
-            {
-              "text": "Rattata!"
-            },
-            {
-              "battle": {
-                "name": "Youngster Joey",
-                "cashMoney": 100,
-                "pokemon": [
-                  "Sentret 4"
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "npcActions": [
-            {
-              "text": "Rattata..."
-            }
-          ]
-        }
-      ]
+      "color": "ffff220b",
+      "displayName": "Depth First Search Town",
+      "terrain": "GRASS",
+      "music": "DFS_TOWN"
     },
     {
+      "color": "ff1a8524",
+      "displayName": "Edge 1",
+      "terrain": "GRASS",
+      "weather": "RAIN",
+      "music": "EDGE_1"
+    }
+  ],
+  "NPCs": [
+    {
       "name": "DFS_Town_NPC_Green_01",
-      "condition": "!triggered_MaplesLab_NPC_Prof_Maple_01",
       "startX": 62,
       "startY": 18,
       "path": "w",
       "spriteIndex": 16,
       "direction": "DOWN",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": true,
           "npcActions": [
             {
-              "text": "Hey, you should go talk to Professor Maple first before leaving town."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "DFS_Town_NPC_Potion_Giver_01",
-      "startX": 52,
-      "startY": 16,
-      "path": "w",
-      "spriteIndex": 2,
-      "direction": "DOWN",
-      "walkToPlayer": false,
-      "interactions": [
-        {
-          "name": "give_item",
-          "npcActions": [
-            {
-              "text": "Here, take this potion. You are going to need it!"
-            },
-            {
-              "giveItem": "Potion"
-            }
-          ],
-          "update": "done"
-        },
-        {
-          "name": "done",
-          "npcActions": [
-            {
-              "text": "You can use potions to heal your Pokémon!"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "DFS_Town_NPC_Edge1_Trainer_02",
-      "startX": 30,
-      "startY": 28,
-      "path": "w",
-      "spriteIndex": 6,
-      "direction": "RIGHT",
-      "walkToPlayer": true,
-      "interactions": [
-        {
-          "name": "battle",
-          "npcActions": [
-            {
-              "text": "Someone freed the pointer to my Rattata! Was it you?"
-            },
-            {
-              "battle": {
-                "name": "Youngster Joey",
-                "cashMoney": 100,
-                "pokemon": [
-                  "Bidoof 4"
-                ],
-                "update": "won"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Hey, you should go talk to Professor Maple first before leaving town."
               }
             }
           ]
-        },
-        {
-          "name": "won",
-          "npcActions": [
-            {
-              "text": "I would have won with my Rattata!"
-            }
-          ]
         }
-      ]
+      ],
+      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Green_01_01",
+      "condition": "!triggered_MaplesLab_NPC_Prof_Maple_01"
     },
     {
       "name": "DFS_Town_NPC_Ball_Giver_01",
@@ -132,41 +46,110 @@
       "path": "w",
       "spriteIndex": 3,
       "direction": "DOWN",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "give_item",
+          "walkToPlayer": true,
           "npcActions": [
             {
-              "text": "Here, take these Pokéballs. You'll need them to capture Poké!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Here, take these Pokéballs. You'll need them to capture Poké!"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "GiveItem",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "GiveItem",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "GiveItem",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "GiveItem",
+                "triggerContents": "Poké Ball"
+              }
             },
             {
-              "giveItem": "Poké Ball"
+              "trigger": {
+                "triggerType": "GiveItem",
+                "triggerContents": "Poké Ball"
+              }
+            },
+            {
+              "update": "done"
             }
-          ],
-          "update": "done"
+          ]
         },
         {
           "name": "done",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "You can use Pokéballs to catch new Pokémon!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You can use Pokéballs to catch new Pokémon!"
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Ball_Giver_01_01"
+    },
+    {
+      "name": "DFS_Town_NPC_Potion_Giver_01",
+      "startX": 52,
+      "startY": 16,
+      "path": "w",
+      "spriteIndex": 2,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "give_item",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Here, take this potion. You are going to need it!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "GiveItem",
+                "triggerContents": "Potion"
+              }
+            },
+            {
+              "update": "done"
+            }
+          ]
+        },
+        {
+          "name": "done",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You can use potions to heal your Pokémon!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Potion_Giver_01_01"
     },
     {
       "name": "DFS_Town_NPC_Edge1_Trainer_01",
@@ -174,14 +157,17 @@
       "startY": 18,
       "path": "w",
       "spriteIndex": 6,
-      "direction": "UP",
-      "walkToPlayer": true,
+      "direction": "RIGHT",
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
-              "text": "My Rattata is in the top percentage of Rattata!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Rattata is in the top percentage of Rattata!"
+              }
             },
             {
               "battle": {
@@ -197,104 +183,184 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "I thought Rattata was the very best..."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I thought Rattata was the very best..."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Edge1_Trainer_01_01"
+    },
+    {
+      "name": "DFS_Town_NPC_Edge1_Trainer_02",
+      "startX": 30,
+      "startY": 28,
+      "path": "w",
+      "spriteIndex": 6,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Someone freed the pointer to my Rattata! Was it you?"
+              }
+            },
+            {
+              "battle": {
+                "name": "Youngster Joey",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Bidoof 4"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I would have won with my Rattata!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Edge1_Trainer_02_01"
+    },
+    {
+      "name": "DFS_Town_NPC_Edge1_Trainer_03",
+      "startX": 19,
+      "startY": 20,
+      "path": "uuddddduuu",
+      "spriteIndex": 6,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Rattata!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Youngster Joey",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Sentret 4"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Rattata..."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Edge1_Trainer_03_01"
     }
   ],
   "items": [
     {
-      "name": "DFS_Town_Item_Paralyze_Heal_01",
       "x": 31,
       "y": 16,
-      "item": "Paralyze_Heal"
+      "item": "Paralyze_Heal",
+      "triggerName": "DFS_Town_Item_Paralyze_Heal_01"
     }
   ],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "RivalsHouse",
-      "x": 85,
-      "y": 15
+      "exitName": "MaplesLab",
+      "location": [
+        74,
+        17
+      ],
+      "nextMap": "MaplesLab",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "DFS_Town_MapExit_MaplesLab_01"
     },
     {
-      "name": "PlayersHouse",
-      "x": 85,
-      "y": 27
+      "exitName": "RivalsHouse",
+      "location": [
+        85,
+        15
+      ],
+      "nextMap": "Rival_House",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "DFS_Town_MapExit_RivalsHouse_01"
     },
     {
-      "name": "TransitionBuildingHEastDoor01",
-      "x": 14,
-      "y": 20
+      "exitName": "WestTransitionBuilding",
+      "location": [
+        14,
+        20,
+        14,
+        19
+      ],
+      "nextMap": "Edge1_RSATown_TransitionBuilding",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "triggerName": "DFS_Town_MapExit_WestTransitionBuilding_01"
     },
     {
-      "name": "NeighborsHouse",
-      "x": 74,
-      "y": 27
+      "exitName": "NeighborsHouse",
+      "location": [
+        74,
+        27
+      ],
+      "nextMap": "Neighbor_House",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "DFS_Town_MapExit_NeighborsHouse_01"
     },
     {
-      "name": "MaplesLab",
-      "x": 74,
-      "y": 17
+      "exitName": "PlayersHouse",
+      "location": [
+        85,
+        27
+      ],
+      "nextMap": "PlayersHouseDown",
+      "nextEntrance": "DFS_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "DFS_Town_MapExit_PlayersHouse_01"
     }
   ],
   "triggerData": [
     {
-      "name": "from_DFS_Town_to_Neighbor_House_01",
-      "location": [
-        74,
-        26
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Neighbor_House,
-        mapEntrance: DFS_Town
-      }"
-    },
-    {
-      "name": "from_DFS_Town_to_MaplesLab_01",
-      "location": [
-        74,
-        16
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: MaplesLab,
-        mapEntrance: DFS_Town
-      }"
-    },
-    {
-      "name": "DFS_Town_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_EastDoor",
-      "location": [
-        13,
-        20,
-        13,
-        19
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: EastDoor
-      }"
-    },
-    {
-      "name": "from_DFS_Town_to_Rival_House_01",
-      "location": [
-        85,
-        14
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Rival_House,
-        mapEntrance: DFS_Town
-      }"
-    },
-    {
-      "name": "Edge_1_Wild_Pokemon",
       "location": [
         17,
         13,
@@ -723,8 +789,11 @@
         48,
         28
       ],
-      "triggerType": "WildBattle",
-      "triggerContents": "{
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "WildBattle",
+            "triggerContents": "{
         encounterRate: VERY_COMMON,
         pokemon: [
 			\"Pidgey 2-4 30%\", 
@@ -734,19 +803,11 @@
 			\"Lillipup 2-4 10%\"
         ]
       }"
-    },
-    {
-      "name": "from_DFS_Town_to_PlayersHouseDown_01",
-      "location": [
-        85,
-        26
+          }
+        }
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: PlayersHouseDown,
-        mapEntrance: DFS_Town
-      }"
+      "triggerName": "DFS_Town_WildBattle_Nameless_01"
     }
   ],
-  "triggers": []
+  "miscEntities": []
 }

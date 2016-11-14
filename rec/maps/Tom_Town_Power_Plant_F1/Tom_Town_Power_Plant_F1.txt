@@ -1,101 +1,100 @@
 {
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "TOM_TOWN"
+    }
+  ],
   "NPCs": [
     {
-      "name": "Tom_Town_Power_Plant_NPC_Scientist_01",
-      "condition": "VisitedTomTownPowerPlant",
-      "startX": 12,
-      "startY": 6,
-      "path": "w",
-      "spriteIndex": 19,
-      "direction": "DOWN",
-      "walkToPlayer": false,
-      "interactions": [
-        {
-          "name": "dialogue",
-          "npcActions": [
-            {
-              "text": "Time to get back to my research."
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01",
-      "condition": "!VisitedTomTownPowerPlant",
       "startX": 7,
       "startY": 9,
       "path": "w",
       "spriteIndex": 18,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "It's not safe here."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "It's not safe here."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01_01",
+      "condition": "!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_NPC_Scientist_01",
+      "startX": 12,
+      "startY": 6,
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Time to get back to my research."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_Scientist_01_01",
+      "condition": "VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "FromTomTown",
-      "x": 8,
-      "y": 12
-    },
-    {
-      "name": "FromFloor2",
-      "x": 2,
-      "y": 11
-    },
-    {
-      "name": "FromBasement1",
-      "x": 2,
-      "y": 9
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "from_Tom_Town_Power_Plant_to_Tom_Town_Power_Plant_B1_01",
-      "location": [
-        3,
-        9
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_B1,
-        mapEntrance: FromFloor1
-      }"
-    },
-    {
-      "name": "from_Tom_Town_Power_Plant_to_Tom_Town_01",
+      "exitName": "FromTomTown",
       "location": [
         8,
-        13
+        12
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town,
-        mapEntrance: TomTownPowerPlant
-      }"
+      "nextMap": "Tom_Town",
+      "nextEntrance": "TomTownPowerPlant",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
     },
     {
-      "name": "from_Tom_Town_Power_Plant_to_Tom_Town_Power_Plant_F2_01",
+      "exitName": "FromBasement1",
       "location": [
-        3,
+        2,
+        9
+      ],
+      "nextMap": "Tom_Town_Power_Plant_B1",
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromBasement1_01"
+    },
+    {
+      "exitName": "FromFloor2",
+      "location": [
+        2,
         11
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_F2,
-        mapEntrance: FromFloor1
-      }"
+      "nextMap": "Tom_Town_Power_Plant_F2",
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromFloor2_01"
     }
   ],
-  "triggers": []
+  "triggerData": [],
+  "miscEntities": []
 }

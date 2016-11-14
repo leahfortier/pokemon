@@ -2,78 +2,63 @@ package map.triggers;
 
 import main.Game;
 import map.Direction;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.MapTransitionTriggerMatcher;
+import pattern.MapTransitionMatcher;
 import trainer.CharacterData;
+import util.JsonUtils;
 
 public class MapTransitionTrigger extends Trigger {
-	private String mapName;
+	private String nextMap;
 	private String mapEntranceName;
 	private Direction direction;
+	private boolean deathPortal;
+
 	private int newX;
 	private int newY;
 
-	public MapTransitionTrigger(String name, String contents) {
-		super(name, contents);
+	static String getTriggerSuffix(String contents) {
+		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
+		return matcher.getPreviousMap() + "_" + matcher.getNextMap() + "_" + matcher.getNextEntranceName();
+	}
 
-		MapTransitionTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, MapTransitionTriggerMatcher.class);
-		this.mapName = matcher.nextMap;
-		this.mapEntranceName = matcher.mapEntrance;
-		this.direction = matcher.direction;
-		this.newX = matcher.newX;
-		this.newY = matcher.newY;
+	MapTransitionTrigger(String contents, String condition) {
+		super(TriggerType.MAP_TRANSITION, contents, condition);
+
+		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
+		this.nextMap = matcher.getNextMap();
+		this.mapEntranceName = matcher.getNextEntranceName();
+		this.direction = matcher.getDirection();
+		this.deathPortal = matcher.isDeathPortal();
 	}
 	
-	public MapTransitionTrigger(String name, String conditionString, String mapName, String mapEntranceName, int directionIndex) {
-		super(name, conditionString);
-		
-		this.mapName = mapName;
-		this.mapEntranceName = mapEntranceName;
-		this.direction = directionIndex == -1 ? null : Direction.values()[directionIndex];
-	}
-	
-	public void execute() {
-		super.execute();
-
+	protected void executeTrigger() {
 		CharacterData player = Game.getPlayer();
-		player.setMap(mapName, mapEntranceName);
-		
-		if (mapEntranceName == null || !Game.getData().getMap(mapName).setCharacterToEntrance(player, mapEntranceName)) {
+		player.setMap(nextMap, mapEntranceName);
+
+		// TODO: When is newx/newy specified? why would they not just specify an actual entrance?
+		if (mapEntranceName == null || !Game.getData().getMap(nextMap).setCharacterToEntrance(mapEntranceName)) {
 			player.setLocation(newX, newY);
 		}
 		
 		if (direction != null) {
 			player.setDirection(direction);
 		}
+
+		if (deathPortal) {
+			Game.getPlayer().setPokeCenter();
+		}
 		
 		player.mapReset = true;
 	}
 
-	public String getTransitionTriggerName() {
-		return this.mapName + "_" + this.mapEntranceName;
+	public String getNextMap() {
+		return this.nextMap;
 	}
 
-	// TODO: Lalala rename these
-	public String getMapNamee() {
-		return this.mapName;
-	}
-
-	public String getMapEntranceNamee() {
+	public String getMapEntranceName() {
 		return this.mapEntranceName;
 	}
 
 	public Direction getDirection() {
 		return this.direction;
-	}
-
-	public String toString() {
-		return "MapTransitionTrigger: " + name + " map:" + mapName + " " + newX + " " + newY;
-	}
-	
-	public String triggerDataAsString() {
-		return super.triggerDataAsString()
-				+ "\tnextMap: " + mapName + "\n"
-				+ "\tmapEntrance: " + mapEntranceName + "\n"
-				+ (direction == null ? "" : "\tdirection: " + direction + "\n");
 	}
 }

@@ -165,9 +165,7 @@ public class MartView extends View {
 		
 		if (buyButton.checkConsumePress()) {
 			player.sucksToSuck(itemAmount*selectedItem.getPrice());
-			for (int i = 0; i < itemAmount; i++) {
-				player.getBag().addItem(selectedItem);
-			}
+			player.getBag().addItem(selectedItem, itemAmount);
 			
 			setSelectedItem(selectedItem);
 			updateActiveButtons();

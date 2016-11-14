@@ -1,0 +1,218 @@
+{
+  "areas": [
+    {
+      "terrain": "BUILDING",
+      "music": "TRANSITION_BUILDING"
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
+      "startX": 6,
+      "startY": 7,
+      "path": "w",
+      "spriteIndex": 9,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "The Tom Town gym sounds really tough."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01_01",
+      "condition": "!BadgeTrigger_0"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01",
+      "startX": 3,
+      "startY": 5,
+      "path": "w",
+      "spriteIndex": 3,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "What happened at the power plant? Who is this Team Deadlock?"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01",
+      "startX": 5,
+      "startY": 7,
+      "path": "w",
+      "spriteIndex": 3,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'm amazed how fast Leader Moore defeated my Pidgey!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01_01",
+      "condition": "!BadgeTrigger_0"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_PoliceOfficer_01",
+      "startX": 6,
+      "startY": 7,
+      "path": "w",
+      "spriteIndex": 18,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "default",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "There power plant has been taken over by Team Deadlock!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Wind Valley is closed off until this matter has been resolved."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_PoliceOfficer_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01",
+      "startX": 3,
+      "startY": 3,
+      "path": "w",
+      "spriteIndex": 6,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "default",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Tom Town generates most of the power for all of Hash Map."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "It's all thanks to the Magnemite Power Plant!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01_01"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_Info_Guy_01",
+      "startX": 9,
+      "startY": 4,
+      "path": "w",
+      "spriteIndex": 10,
+      "direction": "LEFT",
+      "interactions": [],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_Info_Guy_01_01"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01",
+      "startX": 4,
+      "startY": 6,
+      "path": "w",
+      "spriteIndex": 9,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Team Deadlock is a big bug in our society."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    }
+  ],
+  "items": [],
+  "mapExits": [
+    {
+      "exitName": "SouthDoor",
+      "location": [
+        6,
+        7
+      ],
+      "nextMap": "WindValley",
+      "nextEntrance": "NorthTransitionBuilding",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoor_01"
+    },
+    {
+      "exitName": "NorthDoor",
+      "location": [
+        6,
+        1
+      ],
+      "nextMap": "Tom_Town",
+      "nextEntrance": "SouthTransitionBuilding",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoor_01"
+    }
+  ],
+  "triggerData": [],
+  "miscEntities": [
+    {
+      "name": "Info_Guy_Dialogue",
+      "location": [
+        8,
+        4
+      ],
+      "actions": [
+        {
+          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
+        }
+      ],
+      "triggerName": "TomTown_WindValley_TransitionBuilding_Event_Info_Guy_Dialogue_01"
+    }
+  ]
+}

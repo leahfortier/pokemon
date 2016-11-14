@@ -56,7 +56,7 @@ import item.use.TrainerUseItem;
 import item.use.UseItem;
 import main.Global;
 import main.Type;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.AttackNamesies;
@@ -75,6 +75,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import util.StringUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -168,6 +169,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return getItem(ItemNamesies.NO_ITEM);
 	}
 
+	// TODO: Delete this
 	public static Item getItemFromName(String itemName) {
 		return getItem(ItemNamesies.getValueOf(itemName));
 	}
@@ -181,12 +183,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return map.get(itemName);
 	}
 
-	public static boolean isItem(String m) {
+	public static boolean isItem(String itemName) {
 		if (map == null) {
 			loadItems();
 		}
 
-		return map.containsKey(m);
+		if (StringUtils.isNullOrEmpty(itemName)) {
+			return false;
+		}
+
+		return map.containsKey(itemName);
 	}
 
 	public int hashCode() {

@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Main",
+      "terrain": "BUILDING",
+      "music": "PLAYER_HOUSE"
+    }
+  ],
   "NPCs": [
     {
       "name": "PlayersHouseDown_NPC_Mom_01",
@@ -7,74 +14,67 @@
       "path": "w",
       "spriteIndex": 13,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "It's nice when you come to visit, but please get a job."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "It's nice when you come to visit, but please get a job."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "PlayersHouseDown_NPC_PlayersHouseDown_NPC_Mom_01_01"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "stairs",
-      "x": 10,
-      "y": 1
-    },
-    {
-      "name": "DFS_Town",
-      "x": 6,
-      "y": 8
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "PlayersHouseDown_to_PlayersHouseUp",
+      "exitName": "stairs",
       "location": [
-        9,
+        10,
         1
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-		nextMap: PlayersHouseUp, 
-		mapEntrance: stairs
-	  }"
+      "nextMap": "PlayersHouseUp",
+      "nextEntrance": "stairs",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "triggerName": "PlayersHouseDown_MapExit_stairs_01"
     },
     {
-      "name": "PlayersHouseDown_to_DFS_Town",
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-         nextMap: DFS_Town,
-         mapEntrance: PlayersHouse
-	  }"
-    },
-    {
-      "name": "GT_PlayersHouseDown_to_DFS_Town",
+      "exitName": "DFS_Town",
       "location": [
         6,
-        9
+        8
       ],
-      "triggerType": "Group",
-      "triggerContents": "{
-	    triggers: [
-			PlayersHouseDown_to_DFS_Town,
-			SetTeleportToLastPokeCenter
-		]
-      }"
+      "nextMap": "DFS_Town",
+      "nextEntrance": "PlayersHouse",
+      "direction": "DOWN",
+      "deathPortal": true,
+      "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
     }
   ],
-  "triggers": [
+  "triggerData": [],
+  "miscEntities": [
     {
-      "name": "PlayersHouseDown_TriggerEntity_PlayersFridge_01",
-      "x": 5,
-      "y": 1,
-      "trigger": "PlayersFridgeTrigger"
+      "name": "fridge",
+      "location": [
+        5,
+        1
+      ],
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Nothing good to eat. As usual."
+          }
+        }
+      ],
+      "triggerName": "PlayersHouseDown_Event_fridge_01"
     }
   ]
 }

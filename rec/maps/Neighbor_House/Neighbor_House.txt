@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Depth First Search Town",
+      "terrain": "BUILDING",
+      "music": "DFS_TOWN"
+    }
+  ],
   "NPCs": [
     {
       "name": "Neighbor_House_NPC_Green_01",
@@ -7,40 +14,38 @@
       "path": "w",
       "spriteIndex": 17,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "R U A WIZARD 'ARRY"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "R U A WIZARD 'ARRY"
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Neighbor_House_NPC_Neighbor_House_NPC_Green_01_01"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "DFS_Town",
-      "x": 3,
-      "y": 6
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "from_Neighbor_House_to_DFS_Town_01",
+      "exitName": "DFS_Town",
       "location": [
         3,
-        7
+        6
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: DFS_Town,
-        mapEntrance: NeighborsHouse
-      }"
+      "nextMap": "DFS_Town",
+      "nextEntrance": "NeighborsHouse",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "triggerName": "Neighbor_House_MapExit_DFS_Town_01"
     }
   ],
-  "triggers": []
+  "triggerData": [],
+  "miscEntities": []
 }

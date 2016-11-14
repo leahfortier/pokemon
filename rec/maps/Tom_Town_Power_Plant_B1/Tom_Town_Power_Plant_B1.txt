@@ -1,47 +1,52 @@
 {
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "TOM_TOWN"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_B1_NPC_Scientist_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
       "startX": 12,
       "startY": 4,
       "path": "w",
       "spriteIndex": 19,
       "direction": "UP",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "I'm trying my best to stall the reactor meltdown."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'm trying my best to stall the reactor meltdown."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_Power_Plant_B1_NPC_Tom_Town_Power_Plant_B1_NPC_Scientist_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "FromFloor1",
-      "x": 6,
-      "y": 9
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "from_Tom_Town_Power_Plant_B1_to_Tom_Town_Power_Plant_02",
+      "exitName": "FromFloor1",
       "location": [
-        5,
+        6,
         9
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_F1,
-        mapEntrance: FromBasement1
-      }"
+      "nextMap": "Tom_Town_Power_Plant_F1",
+      "nextEntrance": "FromBasement1",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_B1_MapExit_FromFloor1_01"
     }
   ],
-  "triggers": []
+  "triggerData": [],
+  "miscEntities": []
 }

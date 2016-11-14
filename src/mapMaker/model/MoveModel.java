@@ -42,11 +42,10 @@ public class MoveModel extends MapMakerModel {
         }
     }
 
-    public MoveModel(MapMaker mapMaker) {
+    MoveModel() {
         super(MoveModelType.IMMOVABLE.getImageIndex());
 
         this.moveListModel = new DefaultListModel<>();
-        this.reload(mapMaker);
     }
 
     @Override

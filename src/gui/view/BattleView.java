@@ -14,7 +14,7 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.Type;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
@@ -1690,7 +1690,7 @@ public class BattleView extends View {
 				if (newMessage.gainUpdate()) {
 					newStats = newMessage.getNewStats();
 					statGains = newMessage.getGain();
-				}	
+				}
 			}
 			
 			if (newMessage.getMessage().isEmpty()) {
@@ -1772,7 +1772,6 @@ public class BattleView extends View {
 	}
 
 	public void movedToFront() {
-		System.out.println("moved to front cycle started");
 		cycleMessage(false);
 	}
 }

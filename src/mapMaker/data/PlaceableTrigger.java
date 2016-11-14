@@ -1,71 +1,37 @@
 package mapMaker.data;
 
-import map.entity.EntityData;
-import map.triggers.TriggerData;
+import pattern.MapMakerEntityMatcher;
+import pattern.TriggerMatcher;
 
 public class PlaceableTrigger {
 
-	public static enum TriggerType{
-		Entity, OldTrigger, MapEntrance, TriggerData
-	};
+	public enum PlaceableTriggerType {
+		ENTITY,
+		TRIGGER_DATA
+	}
 	
-	
-	public TriggerType triggerType;
-	
+	public PlaceableTriggerType triggerType;
+
 	public String name;
 	public Integer location;
 	
-	public EntityData entity;
-	public TriggerData triggerData;
-	
-	public TransitionBuildingPair transitionBuildingPair;
-	
-	//OldTrigger, MapEntrance
-	public PlaceableTrigger(TriggerType triggerType, String name, Integer location){
-		this.triggerType = triggerType;
-		this.name = name;
+	public MapMakerEntityMatcher entity;
+	public TriggerMatcher triggerData;
+
+	public PlaceableTrigger(MapMakerEntityMatcher entity, Integer location) {
+		this(entity);
 		this.location = location;
 	}
-	
-	//OldTrigger, MapEntrance
-	public PlaceableTrigger(TriggerType triggerType, String name){
-		this.triggerType = triggerType;
-		this.name = name;
-	}
-	
-	
-	//NPCEntity, ItemEntity, TriggerEntity
-	public PlaceableTrigger(EntityData entity, Integer location) {
-		this.triggerType = TriggerType.Entity;
+
+	public PlaceableTrigger(MapMakerEntityMatcher entity) {
+		this.triggerType = PlaceableTriggerType.ENTITY;
 		this.entity = entity;
-		
-		name = entity.name;
-		this.location = location;
+		this.name = entity.getBasicName();
 	}
-	//NPCEntity, ItemEntity, TriggerEntity
-	public PlaceableTrigger(EntityData entity) {
-		this.triggerType = TriggerType.Entity;
-		this.entity = entity;
-		
-		name = entity.name;
-	}
-	
-	
-	
-	//MapExit, WildBattle, TriggerData
-	public PlaceableTrigger(TriggerData triggerData, Integer location) {
-		this.triggerType = TriggerType.TriggerData;
+
+	public PlaceableTrigger(TriggerMatcher triggerData) {
+		this.triggerType = PlaceableTriggerType.TRIGGER_DATA;
 		this.triggerData = triggerData;
-		
-		name = triggerData.name;
-		this.location = location;
-	}
-	
-	//MapExit, WildBattle, TriggerData
-	public PlaceableTrigger(TriggerData triggerData) {
-		this.triggerType = TriggerType.TriggerData;
-		this.triggerData = triggerData;
-		
-		name = triggerData.name;
+		this.name = triggerData.getBasicName();
 	}
 }

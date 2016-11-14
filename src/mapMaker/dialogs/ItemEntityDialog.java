@@ -1,18 +1,16 @@
 package mapMaker.dialogs;
 
 import item.Item;
-import map.entity.ItemEntityData;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
-import util.PokeString;
-import util.StringUtils;
+import namesies.ItemNamesies;
+import pattern.ItemMatcher;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -22,7 +20,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.Color;
 
-public class ItemEntityDialog extends JPanel {
+public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 	private static final long serialVersionUID = 7469923865936465388L;
 
 	private JTextField itemTextField;
@@ -52,16 +50,15 @@ public class ItemEntityDialog extends JPanel {
 			  }
 
 			  private void checkItem() {
-				  String itemName = getItemName();
-				  if (!Item.isItem(itemName)) {
+				  ItemNamesies itemName = getItemName();
+				  if (itemName == null) {
 					  itemImageLabel.setIcon(null);
 					  itemTextField.setBackground(new Color(0xFF9494));
-					  return;
+				  } else {
+					  int index = Item.getItem(itemName).getImageIndex();
+					  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
+					  itemTextField.setBackground(new Color(0x90EE90));
 				  }
-				  
-				  int index = Item.getItemFromName(itemName).getImageIndex();
-				  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
-				  itemTextField.setBackground(new Color(0x90EE90));
 			  }
 		});
 		
@@ -118,34 +115,21 @@ public class ItemEntityDialog extends JPanel {
 		setLayout(groupLayout);
 	}
 
-	public void setItem(ItemEntityData item) {
-		itemTextField.setText(item.getItem().replace('_', ' '));
-		conditionTextArea.setText(item.placedCondition.replace("&"," & ").replace("|", " | "));
-		
-		int index = Item.getItemFromName(PokeString.restoreSpecialFromUnicode(itemTextField.getText())).getImageIndex();
+	public ItemNamesies getItemName() {
+		return ItemNamesies.tryValueOf(itemTextField.getText());
+	}
+
+	@Override
+	public ItemMatcher getMatcher() {
+		return new ItemMatcher(this.getItemName());
+	}
+
+	@Override
+	public void load(ItemMatcher matcher) {
+		ItemNamesies itemName = matcher.getItem();
+		itemTextField.setText(itemName.getName());
+
+		int index = Item.getItem(itemName).getImageIndex();
 		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
-	}
-	
-	public String getItemName() {
-		String itemName = PokeString.restoreSpecialFromUnicode(itemTextField.getText());
-		itemName = StringUtils.properCase(itemName);
-		return itemName;
-	}
-	
-	public ItemEntityData getItem(String name) {
-		String item = getItemName();
-		
-		// TODO: Ask Josh about this -- I have no idea what this is doing, but should this throw an error or should it return null? I don't really feel like looking into this right now
-		if (!Item.isItem(item)) {
-			return null;
-		}
-		
-		return new ItemEntityData(
-				name, 
-				"condition: " + conditionTextArea.getText().trim().replace(" ", ""), 
-				item.replace(' ', '_'), 
-				-1, 
-				-1
-		);
 	}
 }

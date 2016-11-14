@@ -17,7 +17,6 @@ import gui.view.TrainerCardView;
 import gui.view.View;
 import item.Item;
 import item.hold.HoldItem;
-import message.Messages;
 import namesies.ItemNamesies;
 import namesies.PokemonNamesies;
 import pokemon.ActivePokemon;
@@ -33,6 +32,8 @@ public class Game {
 	private static Game game;
 	public static void create() {
 		game = new Game();
+		game.data = new GameData();
+		game.data.loadData();
 	}
 
 	public static GameData getData() {
@@ -58,7 +59,7 @@ public class Game {
 		TRAINER_CARD_VIEW,
 	}
 	
-	private final GameData data;
+	private GameData data;
 	private final Map<ViewMode, View> viewMap;
 	
 	private CharacterData characterData;
@@ -66,8 +67,6 @@ public class Game {
 	private View currentView;
 	
 	private Game() {
-		data = new GameData();
-		
 		viewMap = new EnumMap<>(ViewMode.class);
 		viewMap.put(ViewMode.MAIN_MENU_VIEW, new MainMenuView());
 		
@@ -99,10 +98,6 @@ public class Game {
 		((MapView)game.viewMap.get(ViewMode.MAP_VIEW)).setBattle(battle, seenWildPokemon);
 	}
 
-	public static void setMapViewDialogue(final String dialogueName) {
-		Messages.addMessage(game.data.getDialogue(dialogueName));
-	}
-
 	public static void draw(Graphics g) {
 		game.currentView.draw(g);
 	}
@@ -126,7 +121,7 @@ public class Game {
 		String startingMap = "PlayersHouseUp";
 		String startingMapEntrance = "GameStartLocation";
 		game.characterData.setMap(startingMap, startingMapEntrance);
-		game.data.getMap(startingMap).setCharacterToEntrance(game.characterData, startingMapEntrance);
+		game.data.getMap(startingMap).setCharacterToEntrance(startingMapEntrance);
 
 		game.characterData.setFileNum(index);
 		game.setupCharacter();

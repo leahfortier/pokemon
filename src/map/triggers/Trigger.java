@@ -1,75 +1,26 @@
 package map.triggers;
 
 import main.Game;
-import main.Global;
 import map.Condition;
-import trainer.CharacterData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class Trigger {
-	private static final Pattern globalPattern = Pattern.compile("global:\\s*([!]?\\w+)");
-	protected static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*([\\w -.']+)", Pattern.UNICODE_CHARACTER_CLASS);
-	
+
 	protected final String name;
 	protected final Condition condition;
-
 	protected final List<String> globals;
 
-	public Trigger(String name, String str) {
-		this.name = name;
-		
-		condition = new Condition(str);
-		
-		globals = new ArrayList<>();
-		Matcher m = globalPattern.matcher(str);
-	
-		while (m.find()) {
-			globals.add(m.group(1));
-		}		
-	}
+	protected Trigger(TriggerType type, String contents, String condition, String... globals) {
+		this.name = type.getTriggerName(contents);
 
-	public static Trigger createTrigger(String type, String name, String contents) {
-		return TriggerType.getTrigger(type, name, contents);
-	}
+		this.condition = new Condition(condition);
 
-	private enum TriggerType {
-		BADGE("Badge", BadgeTrigger::new),
-		CHANGE_VIEW("ChangeView", ChangeViewTrigger::new),
-		EVENT("Event", EventTrigger::new),
-		GIVE("Give", GiveTrigger::new),
-		GROUP("Group", GroupTrigger::new),
-		HEAL_PARTY("HealParty", HealPartyTrigger::new),
-		LAST_POKE_CENTER("LastPokeCenter", LastPokeCenterTrigger::new),
-		MAP_TRANSITION("MapTransition", MapTransitionTrigger::new),
-		SOUND("Sound", SoundTrigger::new),
-		TRAINER_BATTLE("TrainerBattle", TrainerBattleTrigger::new),
-		WILD_BATTLE("WildBattle", WildBattleTrigger::new);
-
-		final String typeName;
-		final GetTrigger getTrigger;
-
-		TriggerType(final String typeName, final GetTrigger getTrigger) {
-			this.typeName = typeName;
-			this.getTrigger = getTrigger;
-		}
-
-		private interface GetTrigger {
-			Trigger getTrigger(final String name, final String contents);
-		}
-
-		public static Trigger getTrigger(final String type, final String name, final String contents) {
-			for (final TriggerType triggerType : TriggerType.values()) {
-				if (triggerType.typeName.equals(type)) {
-					return triggerType.getTrigger.getTrigger(name, contents);
-				}
-			}
-
-			Global.error("Could not find a trigger with type " + type + ". Name: " + name + ", Contents: " + contents);
-			return null;
+		this.globals = new ArrayList<>();
+		if (globals != null) {
+			this.globals.addAll(Arrays.asList(globals));
 		}
 	}
 	
@@ -78,40 +29,11 @@ public abstract class Trigger {
 	public boolean isTriggered() {
 		return condition.isTrue();
 	}
-	
-	public void execute() {
-		for (String s: globals) {
-			if (s.charAt(0) == '!') {
-				Game.getPlayer().removeGlobal(s.substring(1));
-			}
-			else {
-				Game.getPlayer().addGlobal(s);
-			}
-		}
-	}
-	
+
 	public String getName() {
-		return name;
+		return this.name;
 	}
-	
-	public String triggerDataAsString() {
-		StringBuilder ret = new StringBuilder();
-		
-		if (!condition.getOriginalConditionString().isEmpty()) {
-			ret.append("\tcondition: ")
-					.append(condition.getOriginalConditionString())
-					.append("\n");
-		}
-		
-		for (String global: globals) {
-			ret.append("\tglobal: ")
-					.append(global)
-					.append("\n");
-		}
-		
-		return ret.toString();
-	}
-	
+
 	public Condition getCondition() {
 		return condition;
 	}
@@ -119,4 +41,19 @@ public abstract class Trigger {
 	public List<String> getGlobals() {
 		return globals;
 	}
+
+	public final void execute() {
+		for (String global: globals) {
+			if (global.startsWith("!")) {
+				Game.getPlayer().removeGlobal(global.substring(1));
+			}
+			else {
+				Game.getPlayer().addGlobal(global);
+			}
+		}
+
+		this.executeTrigger();
+	}
+
+	protected abstract void executeTrigger();
 }

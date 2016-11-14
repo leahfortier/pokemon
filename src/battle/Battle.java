@@ -23,16 +23,18 @@ import battle.effect.generic.Weather;
 import main.Game;
 import main.Global;
 import main.Type;
-import map.AreaData.TerrainType;
+import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import namesies.AbilityNamesies;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
+import pattern.ActionMatcher.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.CharacterData;
+import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Pokedex.PokedexStatus;
 import trainer.Team;
@@ -47,18 +49,23 @@ import java.util.List;
 public class Battle {
 	private CharacterData player;
 	private Opponent opponent; // SO OBJECT-ORIENTED
+
 	private Weather weather;
 	private List<BattleEffect> effects;
+
 	private int turn;
 	private boolean firstAttacking;
 	private boolean reduce;
 	private int escapeAttempts;
-	private String winGlobal;
+
+	private UpdateMatcher npcUpdateInteraction;
+
 	private TerrainType baseTerrain;
 	private TerrainType currentTerrain;
 	
 	public Battle(Opponent o) {
-		Messages.clear();
+		Messages.clearBattleMessages();
+		Messages.fightyFight();
 		Messages.addMessage(new MessageUpdate("", Update.ENTER_BATTLE));
 
 		player = Game.getPlayer();
@@ -85,9 +92,9 @@ public class Battle {
 		enterBattle(player.front());
 	}
 
-	public Battle(Opponent o, String win) {
-		this(o);
-		winGlobal = win;
+	public Battle(EnemyTrainer npcTrainer, UpdateMatcher npcUpdateInteraction) {
+		this(npcTrainer);
+		this.npcUpdateInteraction = npcUpdateInteraction;
 	}
 
 	public CharacterData getPlayer() {
@@ -98,16 +105,16 @@ public class Battle {
 		return opponent;
 	}
 
-	public String getWinGlobal() {
-		return winGlobal;
-	}
-
 	public Weather getWeather() {
 		return weather;
 	}
 
 	public int getTurn() {
 		return turn;
+	}
+
+	public UpdateMatcher getNpcUpdateInteraction() {
+		return this.npcUpdateInteraction;
 	}
 
 	public TerrainType getTerrainType() {
@@ -273,6 +280,7 @@ public class Battle {
 
 		player.healAll();
 		player.teleportToPokeCenter();
+		Messages.clearMapMessages();
 		Messages.addMessage(" ", Update.EXIT_BATTLE);
 	}
 

@@ -1,27 +1,25 @@
 package map.entity;
 
-import java.util.regex.Pattern;
-
 import map.Condition;
+import pattern.EntityMatcher;
 
 public abstract class EntityData {
-	public static final Pattern variablePattern = Pattern.compile("(\\w+):\\s*(-?[\\w'.-]+)", Pattern.UNICODE_CHARACTER_CLASS);
-	
 	public String name;
 	public Condition condition;
-	protected String trigger;
 	
 	public int x;
 	public int y;
 
-	// TODO: contents -> condition
-	protected EntityData(String name, String contents) {
-		this.name = name;
-		condition = new Condition(contents);
+	protected EntityData(EntityMatcher matcher) {
+		this(matcher, null);
+	}
+
+	protected EntityData(EntityMatcher matcher, String condition) {
+		this.name = matcher.getTriggerName();
+		this.condition = new Condition(Condition.and(matcher.getCondition(), condition));
 	}
 
 	public abstract Entity getEntity();
-	public abstract String entityDataAsString();
 
 	public boolean isEntityPresent() {
 		return condition.isTrue();

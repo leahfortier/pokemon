@@ -28,6 +28,10 @@ public class Point {
         return x >= 0 && x < dimension.width && y >= 0 && y < dimension.height;
     }
 
+    public boolean isAt(int x, int y) {
+        return this.x == x && this.y == y;
+    }
+
     public Point add(int x, int y) {
         this.x += x;
         this.y += y;

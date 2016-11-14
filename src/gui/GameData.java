@@ -1,32 +1,17 @@
 package gui;
 
+import main.Global;
+import map.MapData;
+import map.triggers.Trigger;
+import util.Folder;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import main.Global;
-import map.AreaData;
-import map.DialogueSequence;
-import map.MapData;
-import map.triggers.Trigger;
-import trainer.CharacterData;
-import util.FileIO;
-import util.FileName;
-import util.Folder;
 
 public class GameData {
-	public static final Pattern triggerBlockPattern = Pattern.compile("(Group|Event|MapTransition|TrainerBattle|WildBattle|Give|HealParty|LastPokeCenter|Badge|ChangeView|Sound)Trigger\\s+(\\w+)\\s*\\{([^}]*)\\}"); // TODO: Make private again maybe
-	private static final Pattern dialogueBlockPattern = Pattern.compile("Dialogue\\s+(\\w+)\\s*\\{([^}]*)\\}");
-	private static final Pattern areaIndexPattern = Pattern.compile("\"([^\"]*)\"\\s+(\\w+)\\s*(\\w+)\\s*(\\w+)\\s*([()&|!\\w-:,]+)?");
-
-	private static final String AREA_LOCATION = FileName.MAP_AREA_INDEX;
-
 	private Map<String, MapData> maps;
-	private Map<Integer, AreaData> areas;
 	private Map<String, Trigger> triggers;
-	private Map<String, DialogueSequence> dialogues;
 
 	private TileSet mapTiles;
 	private TileSet battleTiles;
@@ -40,11 +25,8 @@ public class GameData {
 	private TileSet mainMenuTiles;
 	private TileSet bagTiles;
 
-	public GameData() {
+	public void loadData() {
 		loadTiles();
-		loadTriggers();
-		loadAreas();
-		loadDialogue();
 		loadMaps();
 	}
 
@@ -63,78 +45,31 @@ public class GameData {
 	}
 
 	private void loadMaps() {
+		triggers = new HashMap<>();
 		maps = new HashMap<>();
-		File dir = new File(Folder.MAPS); // TODO: Check exists
+		File dir = new File(Folder.MAPS);
 
 		for (File d : dir.listFiles()) {
-			if (d.getName().charAt(0) == '.' || d.getName().equals("areaIndex.txt")) {
+			if (d.getName().charAt(0) == '.') {
 				continue;
 			}
 
 			maps.put(d.getName(), new MapData(d));
+
+//			if (!d.isDirectory()) {
+//				continue;
+//			}
+//
+//			for (File mapFolder : d.listFiles()) {
+//				maps.put(mapFolder.getName(), new MapData(mapFolder));
+//			}
+
 		}
 	}
 
 	public void testMaps() {
 		for (String map : maps.keySet()) {
 			maps.get(map).populateEntities();
-		}
-	}
-
-	private void loadAreas() {
-		areas = new HashMap<>();
-
-		File indexFile = new File(AREA_LOCATION);
-		if (!indexFile.exists()) {
-			Global.error("Failed to find map area index file: " + indexFile.getName() + ".");
-		}
-
-		String fileText = FileIO.readEntireFileWithReplacements(indexFile, false);
-
-		Matcher m = areaIndexPattern.matcher(fileText);
-		while (m.find()) {
-			String areaName = m.group(1);
-			int value = (int) Long.parseLong(m.group(2), 16);
-
-			AreaData area = new AreaData(areaName, value, m.group(3), m.group(4), m.group(5));
-			areas.put(value, area);
-			area.addMusicTriggers(this);
-		}
-	}
-
-	private void loadDialogue() {
-		dialogues = new HashMap<>();
-		File dialogueFolder = new File(Folder.DIALOGUES);
-		for (File f : dialogueFolder.listFiles()) {
-			if (f.getName().charAt(0) == '.') {
-				continue;
-			}
-
-			String fileText = FileIO.readEntireFileWithReplacements(f, false);
-			Matcher m = dialogueBlockPattern.matcher(fileText);
-			while (m.find()) {
-				String name = m.group(1);
-				addDialogue(name, m.group(2));
-				// System.out.println("Dialogue: " + name + " " + m.group(2));
-			}
-		}
-	}
-
-	private void loadTriggers() {
-		triggers = new HashMap<>();
-		File triggerFolder = new File(Folder.TRIGGERS);
-		for (File f : triggerFolder.listFiles()) {
-			if (f.getName().charAt(0) == '.') {
-				continue;
-			}
-
-			String fileText = FileIO.readEntireFileWithReplacements(f, false);
-			Matcher m = triggerBlockPattern.matcher(fileText);
-			while (m.find()) {
-				String type = m.group(1);
-				String name = m.group(2);
-				addTrigger(type, name, m.group(3));
-			}
 		}
 	}
 
@@ -146,26 +81,16 @@ public class GameData {
 		return maps.get(name);
 	}
 
-	public AreaData getArea(int color) {
-		return areas.containsKey(color) ? areas.get(color) : areas.get(0);
+	public boolean hasTrigger(String triggerName) {
+		return triggers.containsKey(triggerName);
 	}
 
 	public Trigger getTrigger(String name) {
 		return triggers.get(name);
 	}
 
-	public DialogueSequence getDialogue(String name) {
-		return dialogues.get(name);
-	}
-
-	public void addDialogue(String name, String contents) {
-		DialogueSequence dialogue = new DialogueSequence(name, contents);
-		dialogues.put(name, dialogue);
-	}
-
-	public void addTrigger(String type, String name, String contents) {
-		Trigger trigger = Trigger.createTrigger(type, name, contents);
-		triggers.put(name, trigger);
+	public void addTrigger(Trigger trigger) {
+		triggers.put(trigger.getName(), trigger);
 	}
 
 	public TileSet getMapTiles() {

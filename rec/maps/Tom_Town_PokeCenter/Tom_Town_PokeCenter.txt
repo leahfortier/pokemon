@@ -1,0 +1,164 @@
+{
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "POKE_CENTER"
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "Nurse_Joy",
+      "startX": 7,
+      "startY": 2,
+      "spriteIndex": 8,
+      "direction": "DOWN",
+      "interactions": [],
+      "triggerName": "Tom_Town_PokeCenter_NPC_Nurse_Joy_01"
+    },
+    {
+      "name": "Mart_Guy",
+      "startX": 2,
+      "startY": 7,
+      "spriteIndex": 9,
+      "direction": "RIGHT",
+      "interactions": [],
+      "triggerName": "Tom_Town_PokeCenter_NPC_Mart_Guy_01"
+    },
+    {
+      "name": "Tom",
+      "startX": 10,
+      "startY": 4,
+      "spriteIndex": 5,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Hi, I'm Tom!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Tom_Town_PokeCenter_NPC_Tom_01"
+    }
+  ],
+  "items": [],
+  "mapExits": [
+    {
+      "exitName": "FrontDoor",
+      "location": [
+        7,
+        8
+      ],
+      "nextMap": "Tom_Town",
+      "nextEntrance": "PokeCenter",
+      "direction": "DOWN",
+      "deathPortal": true,
+      "triggerName": "Tom_Town_PokeCenter_MapExit_FrontDoor_01"
+    }
+  ],
+  "triggerData": [],
+  "miscEntities": [
+    {
+      "name": "PC",
+      "location": [
+        3,
+        1
+      ],
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Starting up PC..."
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "ChangeView",
+            "triggerContents": "PC_VIEW"
+          }
+        }
+      ],
+      "triggerName": "Tom_Town_PokeCenter_Event_PC_01"
+    },
+    {
+      "name": "Mart",
+      "location": [
+        3,
+        7
+      ],
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Welcome to the PokéMart!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "ChangeView",
+            "triggerContents": "MART_VIEW"
+          }
+        }
+      ],
+      "triggerName": "Tom_Town_PokeCenter_Event_Mart_01"
+    },
+    {
+      "name": "Heal",
+      "location": [
+        7,
+        3
+      ],
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Welcome to the Pokémon Center!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Let me heal your Pokémon for you!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Dun Dun Dun-Dun Dun!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "Sound",
+            "triggerContents": "POKE_CENTER_HEAL"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "HealParty"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Your Pokémon have been healed!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "I hope to see you again soon!"
+          }
+        }
+      ],
+      "triggerName": "Tom_Town_PokeCenter_Event_Heal_01"
+    }
+  ]
+}

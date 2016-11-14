@@ -2,20 +2,23 @@ package map;
 
 import gui.GameFrame;
 import main.Game;
+import main.Global;
 import map.entity.Entity;
+import map.entity.EntityAction;
 import map.entity.EntityData;
 import map.entity.ItemEntityData;
 import map.entity.TriggerEntityData;
 import map.entity.npc.NPCEntityData;
+import map.triggers.Trigger;
 import map.triggers.TriggerData;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.ItemMatcher;
-import pattern.AreaDataMatcher.MapEntranceMatcher;
-import pattern.AreaDataMatcher.NPCMatcher;
-import pattern.AreaDataMatcher.TriggerDataMatcher;
-import pattern.AreaDataMatcher.TriggerMatcher;
+import map.triggers.TriggerType;
+import pattern.MapDataMatcher;
+import pattern.MapTransitionMatcher;
+import pattern.TriggerMatcher;
 import trainer.CharacterData;
 import util.FileIO;
+import util.JsonUtils;
+import util.Point;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 
 public class MapData {
@@ -33,6 +36,8 @@ public class MapData {
 	private final int[] fgTile;
 	private final int[] walkMap;
 	private final int[] areaMap;
+
+	private final AreaData[] areaData;
 	
 	private final Map<Integer, String> triggers;
 	private final Map<String, Integer> mapEntrances;
@@ -61,47 +66,61 @@ public class MapData {
 		BufferedImage areaM;
 		File areaMapFile = new File(beginFilePath + "_area.png");
 		if (areaMapFile.exists()) {
-			areaM = FileIO.readImage(areaMapFile);			
+			areaM = FileIO.readImage(areaMapFile);
+			areaMap = areaM.getRGB(0, 0, width, height, null, 0, width);
+		} else {
+			areaMap = new int[0];
 		}
-		else {
-			// If map doesn't have an image for areas, create and save an empty image for areas.
-			areaM = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			FileIO.writeImage(areaM, areaMapFile);
-		}
-		areaMap = areaM.getRGB(0, 0, width, height, null, 0, width);
-		
+
 		entities = new ArrayList<>();
 		triggers = new HashMap<>();
 		mapEntrances = new HashMap<>();
-		
+
 		File f = new File(beginFilePath + ".txt");
 		String fileText = FileIO.readEntireFileWithReplacements(f, false);
 
-		AreaDataMatcher areaDataMatcher = AreaDataMatcher.matchArea(beginFilePath + ".txt", fileText);
-		for (NPCMatcher matcher : areaDataMatcher.NPCs) {
-			entities.add(new NPCEntityData(matcher));
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + ".txt", fileText);
+		this.areaData = mapDataMatcher.getAreaData();
+
+		entities.addAll(mapDataMatcher.getNPCs()
+				.stream()
+				.map(NPCEntityData::new)
+				.collect(Collectors.toList()));
+
+		entities.addAll(mapDataMatcher.getItems()
+				.stream()
+				.map(ItemEntityData::new)
+				.collect(Collectors.toList()));
+
+		for (TriggerMatcher matcher : mapDataMatcher.getMiscEntities()) {
+			entities.addAll(matcher.getLocation()
+					.stream()
+					.map(point -> new TriggerEntityData(point.x, point.y, matcher))
+					.collect(Collectors.toList()));
 		}
 
-		for (ItemMatcher matcher : areaDataMatcher.items) {
-			entities.add(new ItemEntityData(matcher));
-		}
+		for (MapTransitionMatcher matcher : mapDataMatcher.getMapExits()) {
+            matcher.setMapName(this.name);
 
-		for (MapEntranceMatcher matcher : areaDataMatcher.mapEntrances) {
-			mapEntrances.put(matcher.name, getMapIndex(matcher.x, matcher.y));
-		}
+            List<Point> entrances = matcher.getEntrances();
+            for (Point point : entrances) {
+                mapEntrances.put(matcher.getExitName(), getMapIndex(point.x, point.y)); // TODO: Doesn't work correctly
+            }
 
-		for (TriggerDataMatcher matcher : areaDataMatcher.triggerData) {
-			TriggerData triggerData = new TriggerData(matcher);
-
-			for (Integer loc: triggerData.getPoints(width)) {
-				triggers.put(loc, matcher.name);
+            List<Point> exits = matcher.getExits();
+			for (Point point : exits) {
+				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(JsonUtils.getJson(matcher), null);
+				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
 			}
+        }
 
-			triggerData.addData();
-		}
+		for (TriggerMatcher matcher : mapDataMatcher.getTriggerData()) {
+			TriggerData triggerData = new TriggerData(matcher);
+			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
 
-		for (TriggerMatcher matcher : areaDataMatcher.triggers) {
-			entities.add(new TriggerEntityData(matcher));
+			for (Point point : matcher.getLocation()) {
+				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
+			}
 		}
 	}
 
@@ -123,27 +142,8 @@ public class MapData {
 			value = v;
 		}
 	}
-	
-	public static int getMapEntranceLocation(String contents, int width) {
-		int x = 0;
-		int y = 0;
-		
-		Matcher m = EntityData.variablePattern.matcher(contents);
-		while (m.find()) {
-			switch (m.group(1)) {
-				case "x":
-					x = Integer.parseInt(m.group(2));
-					break;
-				case "y":
-					y = Integer.parseInt(m.group(2));
-					break;
-			}
-		}
-		
-		return getMapIndex(x, y, width);
-	}
 
-	public int getPlayerMapIndex() {
+	private int getPlayerMapIndex() {
 		CharacterData player = Game.getPlayer();
 		return getMapIndex(player.locationX, player.locationY);
 	}
@@ -191,12 +191,24 @@ public class MapData {
 		return WalkType.NOT_WALKABLE;
 	}
 	
-	public int getAreaName(int x, int y) {
-		if (!inBounds(x, y) || areaMap == null) {
-			return 0;
+	public AreaData getArea(int x, int y) {
+		if (areaData.length == 1) {
+			return areaData[0];
 		}
-		
-		return areaMap[getMapIndex(x, y)];
+
+		if (!inBounds(x, y) || areaMap == null) {
+			return AreaData.VOID;
+		}
+
+		int areaColor = areaMap[getMapIndex(x, y)];
+		for (AreaData data : areaData) {
+			if (data.isColor(areaColor)) {
+				return data;
+			}
+		}
+
+		Global.error("No area found with color " + areaColor + " for map " + this.name);
+		return AreaData.VOID;
 	}
 	
 	public String trigger() {
@@ -208,16 +220,16 @@ public class MapData {
 		return null;
 	}
 	
-	public boolean setCharacterToEntrance(CharacterData character, String entranceName) {
-		if (mapEntrances.containsKey(entranceName)) {
+	public boolean setCharacterToEntrance(String entranceName) {
+        if (mapEntrances.containsKey(entranceName)) {
 			int entrance = mapEntrances.get(entranceName);
 			int newY = entrance / width;
 			int newX = entrance - newY * width;
-			character.setLocation(newX, newY);
-			
+			Game.getPlayer().setLocation(newX, newY);
+
 			return true;
 		}
-		
+
 		return false;
 	}
 

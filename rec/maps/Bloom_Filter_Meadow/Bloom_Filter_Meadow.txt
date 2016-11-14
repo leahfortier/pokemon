@@ -1,43 +1,13 @@
 {
-  "NPCs": [
+  "areas": [
     {
-      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01",
-      "startX": 48,
-      "startY": 23,
-      "path": "w",
-      "spriteIndex": 16,
-      "direction": "RIGHT",
-      "walkToPlayer": true,
-      "interactions": [
-        {
-          "name": "battle",
-          "npcActions": [
-            {
-              "text": "I'm a meadow lady in a meadow!!!"
-            },
-            {
-              "battle": {
-                "name": "Meadow Lady",
-                "cashMoney": 100,
-                "pokemon": [
-                  "Budew 6",
-                  "Oddish 6"
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "npcActions": [
-            {
-              "text": "Yayyy I'm in a meadow and I'm a lady lalalala!"
-            }
-          ]
-        }
-      ]
-    },
+      "displayName": "Bloom Filter Meadow",
+      "terrain": "GRASS",
+      "weather": "SUN",
+      "music": "BLOOM_FILTER_MEADOW"
+    }
+  ],
+  "NPCs": [
     {
       "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02",
       "startX": 22,
@@ -45,13 +15,16 @@
       "path": "w",
       "spriteIndex": 1,
       "direction": "DOWN",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
-              "text": "I like shorts!!!!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I like shorts!!!!"
+              }
             },
             {
               "battle": {
@@ -68,74 +41,112 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "SHORRRRTTTTTSSSSSS"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "SHORRRRTTTTTSSSSSS"
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_02_01"
+    },
+    {
+      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01",
+      "startX": 48,
+      "startY": 23,
+      "path": "w",
+      "spriteIndex": 16,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'm a meadow lady in a meadow!!!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Meadow Lady",
+                "cashMoney": 100,
+                "pokemon": [
+                  "Budew 6",
+                  "Oddish 6"
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_01_01"
     }
   ],
   "items": [
     {
-      "name": "Bloom_Filter_Meadow_Item_Pecha_Berry_01",
-      "x": 21,
-      "y": 26,
-      "item": "Pecha_Berry"
-    },
-    {
-      "name": "Bloom_Filter_Meadow_Item_Meadow_Plate_01",
       "x": 44,
       "y": 14,
-      "item": "Meadow_Plate"
-    }
-  ],
-  "mapEntrances": [
-    {
-      "name": "TransitionBuildingHWestDoor01",
-      "x": 54,
-      "y": 21
+      "item": "Meadow_Plate",
+      "triggerName": "Bloom_Filter_Meadow_Item_Meadow_Plate_01"
     },
     {
-      "name": "TransitionBuildingHEastDoor01",
-      "x": 13,
-      "y": 21
+      "x": 21,
+      "y": 26,
+      "item": "Pecha_Berry",
+      "triggerName": "Bloom_Filter_Meadow_Item_Pecha_Berry_01"
+    }
+  ],
+  "mapExits": [
+    {
+      "exitName": "WestTransitionBuilding",
+      "location": [
+        13,
+        21,
+        13,
+        20
+      ],
+      "nextMap": "BFM_TomTown_TransitionBuilding",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuilding_01"
+    },
+    {
+      "exitName": "EastTransitionBuilding",
+      "location": [
+        54,
+        21,
+        54,
+        20
+      ],
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuilding_01"
     }
   ],
   "triggerData": [
     {
-      "name": "Bloom_Filter_Meadow_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_WestDoor",
-      "location": [
-        55,
-        21,
-        55,
-        20
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: WestDoor
-      }"
-    },
-    {
-      "name": "Bloom_Filter_Meadow_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_EastDoor",
-      "location": [
-        12,
-        21,
-        12,
-        20
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: EastDoor
-      }"
-    },
-    {
-      "name": "Bloom_Filter_Wild_Pokemon",
       "location": [
         20,
         14,
@@ -444,8 +455,11 @@
         46,
         19
       ],
-      "triggerType": "WildBattle",
-      "triggerContents": "{
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "WildBattle",
+            "triggerContents": "{
         encounterRate: VERY_COMMON,
         pokemon: [
 			\"Caterpie 4-6 20%\", 
@@ -462,7 +476,11 @@
 			\"Flabebe 4-6 10%\"
         ]
       }"
+          }
+        }
+      ],
+      "triggerName": "Bloom_Filter_Meadow_WildBattle_Nameless_01"
     }
   ],
-  "triggers": []
+  "miscEntities": []
 }

@@ -1,31 +1,27 @@
 package map.triggers;
 
-import java.util.regex.Matcher;
-
 import main.Game;
+import main.Global;
+import map.Condition;
+import trainer.CharacterData;
 
 public class BadgeTrigger extends Trigger {
-	private int badgeIndex;
+	private final int badgeIndex;
 
-	public BadgeTrigger(String name, String contents) {
-		super(name, contents);
+	BadgeTrigger(String badgeIndex, String condition) {
+		this(badgeIndex, condition, TriggerType.BADGE.getTriggerName(badgeIndex));
+	}
 
-		Matcher m = variablePattern.matcher(contents);
-		while (m.find()) {
-			switch (m.group(1)) {
-				case "badgeIndex":
-					badgeIndex = Integer.parseInt(m.group(2));
-					break;
-			}
+	private BadgeTrigger(String badgeIndex, String condition, String triggerName) {
+		super(TriggerType.BADGE, badgeIndex, Condition.and(condition, "!" + triggerName), triggerName);
+
+		this.badgeIndex = Integer.parseInt(badgeIndex);
+		if (this.badgeIndex < 0 || this.badgeIndex >= CharacterData.NUM_BADGES) {
+			Global.error("Invalid badge index " + this.badgeIndex);
 		}
 	}
 
-	public void execute() {
-		super.execute();
-		Game.getPlayer().giveBadge(badgeIndex);
-	}
-
-	public String toString() {
-		return "BadgeTrigger: " + badgeIndex;
+	protected void executeTrigger() {
+		Game.getPlayer().giveBadge(this.badgeIndex);
 	}
 }

@@ -1,26 +1,27 @@
 {
+  "areas": [
+    {
+      "displayName": "Depth First Search Town",
+      "terrain": "BUILDING",
+      "music": "DFS_TOWN"
+    }
+  ],
   "NPCs": [],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "stairs",
-      "x": 4,
-      "y": 2
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "from_R_House_Up_to_Rival_House_01",
+      "exitName": "stairs",
       "location": [
-        5,
+        4,
         2
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Rival_House,
-        mapEntrance: stairs
-      }"
+      "nextMap": "Rival_House",
+      "nextEntrance": "stairs",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "R_House_Up_MapExit_stairs_01"
     }
   ],
-  "triggers": []
+  "triggerData": [],
+  "miscEntities": []
 }

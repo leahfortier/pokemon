@@ -1,8 +1,12 @@
 package map.triggers;
 
 import main.Game;
-import pattern.AreaDataMatcher;
-import pattern.AreaDataMatcher.GroupTriggerMatcher;
+import map.Condition;
+import message.MessageUpdate;
+import message.MessageUpdate.Update;
+import message.Messages;
+import pattern.GroupTriggerMatcher;
+import util.JsonUtils;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -10,40 +14,35 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GroupTrigger extends Trigger {
-	
 	public final List<String> triggers;
-	
-	public GroupTrigger(String name, String contents) {
-		super(name, contents);
 
-		GroupTriggerMatcher matcher = AreaDataMatcher.deserialize(contents, GroupTriggerMatcher.class);
-		triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
+	static String getTriggerSuffix(String contents) {
+		GroupTriggerMatcher matcher = JsonUtils.deserialize(contents, GroupTriggerMatcher.class);
+		if (!StringUtils.isNullOrEmpty(matcher.suffix)) {
+			return matcher.suffix;
+		}
+
+		return contents;
+	}
+
+	GroupTrigger(String contents, String condition) {
+		this(contents, condition, JsonUtils.deserialize(contents, GroupTriggerMatcher.class));
+	}
+
+	private GroupTrigger(String contents, String condition, GroupTriggerMatcher matcher) {
+		super(TriggerType.GROUP, contents, Condition.and(condition, matcher.getCondition()), matcher.globals);
+		this.triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
 	}
 
 	@Override
-	public void execute() {
-		super.execute();
-		for (String s: triggers) {
-			Trigger trigger = Game.getData().getTrigger(s);
+	protected void executeTrigger() {
+		// Add all triggers in the group to the beginning of the message queue
+		for (int i = triggers.size() - 1; i >= 0; i--) {
+			String triggerName = triggers.get(i);
+			Trigger trigger = Game.getData().getTrigger(triggerName);
 			if (trigger != null && trigger.isTriggered()) {
-				trigger.execute();
+				Messages.addMessageToFront(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
 			}
 		}
-	}
-	
-	@Override
-	public String toString() {
-		return "GroupTrigger: " + name + " triggers: " + triggers.toString();
-	}
-	
-	@Override
-	public String triggerDataAsString() {
-		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
-		
-		for (String trigger: triggers) {
-			StringUtils.appendLine(ret, "\ttrigger: " + trigger);
-		}
-		
-		return ret.toString();
 	}
 }

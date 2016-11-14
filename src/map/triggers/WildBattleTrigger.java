@@ -8,67 +8,36 @@ import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
 import namesies.PokemonNamesies;
+import pattern.WildBattleTriggerMatcher;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
 import trainer.WildPokemon;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import util.JsonUtils;
 
 public class WildBattleTrigger extends Trigger {
-	private static final Pattern eventTriggerPattern = Pattern.compile("(?:encounterRate:\\s*(\\w+)|pokemon:\\s*(\\w+)\\s+(\\d+)-(\\d+)\\s+(\\d+)%)");
-
 	// TODO: Ideally would like to make a separate class for holding these
 	private WildEncounter[] wildEncounters;
 	private EncounterRate encounterRate;
 
-	public WildBattleTrigger(String name, String function) {
-		super(name, function);
-		
-		int count = 0;
-		Matcher m = eventTriggerPattern.matcher(function);
-		while (m.find()) {
-			if (m.group(2) != null) {
-				++count;
-			}
-		}
-		
-		wildEncounters = new WildEncounter[count];
-		
+	WildBattleTrigger(String matcherJson, String condition) {
+		super(TriggerType.WILD_BATTLE, matcherJson, condition);
+
+		WildBattleTriggerMatcher matcher = JsonUtils.deserialize(matcherJson, WildBattleTriggerMatcher.class);
+		this.wildEncounters = matcher.getWildEncounters();
+		this.encounterRate = matcher.getEncounterRate();
+
 		int totalProbability = 0;
-		int index = 0;
-		m = eventTriggerPattern.matcher(function);
-		
-		// System.out.println(function);
-		
-		while (m.find()) {
-			if (m.group(1) != null) {
-				encounterRate = EncounterRate.valueOf(m.group(1));
-			}
-			else {
-				wildEncounters[index] = new WildEncounter(m.group(2), m.group(3), m.group(4), m.group(5));
-				totalProbability += wildEncounters[index].getProbability();
-				
-				index++;
-			}
+		for (WildEncounter wildEncounter : this.wildEncounters) {
+			totalProbability = totalProbability + wildEncounter.getProbability();
 		}
 		
 		if (totalProbability != 100) {
-			Global.error(name + " wild battle trigger probabilities add up to " + totalProbability + ", not 100.");
+			Global.error("Wild battle trigger probabilities add up to " + totalProbability + ", not 100.");
 		}
 	}
 	
-	public WildBattleTrigger(String name, WildEncounter[] wildEncounters, EncounterRate encounterRate) {
-		super(name, "");
-		
-		this.wildEncounters = wildEncounters;
-		this.encounterRate = encounterRate;
-	}
-	
-	public void execute() {
-		super.execute();
-
+	protected void executeTrigger() {
 		// TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class
 		double rand = Math.random()*187.5/encounterRate.getRate();
 				
@@ -136,20 +105,7 @@ public class WildBattleTrigger extends Trigger {
 			}
 		}
 
-		Global.error("Probabilities don't add to 100 for " + this.name + " wild battle trigger.");
+		Global.error("Probabilities don't add to 100 for wild battle trigger.");
 		return -1;
-	}
-	
-	public String triggerDataAsString() {
-		StringBuilder ret = new StringBuilder(super.triggerDataAsString());
-		ret.append("\tencounterRate: ")
-				.append(encounterRate.name())
-				.append("\n");
-		
-		for (WildEncounter wildEncounter : wildEncounters) {
-			ret.append(wildEncounter.toString());
-		}
-		
-		return ret.toString();
 	}
 }

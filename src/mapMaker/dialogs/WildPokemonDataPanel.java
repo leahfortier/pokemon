@@ -1,9 +1,6 @@
 package mapMaker.dialogs;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.NumberFormat;
+import namesies.PokemonNamesies;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -15,56 +12,41 @@ import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
-
-import pokemon.PokemonInfo;
+import java.awt.Color;
+import java.text.NumberFormat;
 
 public class WildPokemonDataPanel extends JPanel {
 	
 	private static final long serialVersionUID = -7408589859784929623L;
-	
-	private JCheckBox selectedCheckBox;
+
 	public JTextField pokemonTextField;
 	public JFormattedTextField probabilityFormattedTextField;
 	public JFormattedTextField lowLevelFormattedTextField;
 	public JFormattedTextField highLevelFormattedTextField;
 	
-	WildBattleTriggerEditDialog wildBattleEditDialog;
+	private WildBattleTriggerEditDialog wildBattleEditDialog;
 	int index;
 	
-	public WildPokemonDataPanel(WildBattleTriggerEditDialog givenWildBattleEditDialog, int givenIndex) {
+	WildPokemonDataPanel(WildBattleTriggerEditDialog givenWildBattleEditDialog, int givenIndex) {
 		
 		wildBattleEditDialog = givenWildBattleEditDialog;
 		index = givenIndex;
-		
-		selectedCheckBox = new JCheckBox("");
-		selectedCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				wildBattleEditDialog.setSelected(index);
-			}
-		});
+
+		JCheckBox selectedCheckBox = new JCheckBox();
+		selectedCheckBox.addActionListener(event -> wildBattleEditDialog.setSelected(index));
 		
 		pokemonTextField = new JTextField();
 		pokemonTextField.setColumns(10);
 		pokemonTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void removeUpdate(DocumentEvent e) {valueChanged();}
-			public void insertUpdate(DocumentEvent e) {valueChanged();}
-			public void changedUpdate(DocumentEvent e) {}
+			public void removeUpdate(DocumentEvent event) { valueChanged(); }
+			public void insertUpdate(DocumentEvent event) { valueChanged(); }
+			public void changedUpdate(DocumentEvent event) {}
 			public void valueChanged() {
-				String pokemonName = pokemonTextField.getText().trim();
-				if (pokemonName.length() < 2) 
-				{
-					pokemonTextField.setBackground(new Color(0xFF9494));
-					return;
-				}
-				
-				pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
-				
-				if (!PokemonInfo.isPokemonName(pokemonName)) 
-				{
+				PokemonNamesies namesies = PokemonNamesies.tryValueOf(pokemonTextField.getText().trim());
+				if (namesies == null) {
 					pokemonTextField.setBackground(new Color(0xFF9494));
 				}
-				else 
-				{
+				else {
 					pokemonTextField.setBackground(new Color(0x90EE90));
 				}
 			}
@@ -78,7 +60,7 @@ public class WildPokemonDataPanel extends JPanel {
 		probabilityFormattedTextField = new JFormattedTextField(formatter);
 		probabilityFormattedTextField.setHorizontalAlignment(SwingConstants.RIGHT);
 		probabilityFormattedTextField.setValue(100);
-		
+
 		lowLevelFormattedTextField = new JFormattedTextField(formatter);
 		lowLevelFormattedTextField.setValue(1);
 		lowLevelFormattedTextField.setHorizontalAlignment(SwingConstants.RIGHT);

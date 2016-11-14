@@ -1,84 +1,88 @@
 {
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "TOM_TOWN"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_02",
-      "condition": "VisitedTomTownPowerPlant",
       "startX": 14,
       "startY": 9,
       "path": "w",
       "spriteIndex": 11,
-      "direction": "RIGHT",
-      "walkToPlayer": false,
+      "direction": "UP",
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "Thankfully the Magnemites weren't harmed. Although, I'm still angry at Team Deadlock."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Thankfully the Magnemites weren't harmed. Although, I'm still angry at Team Deadlock."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_02_01",
+      "condition": "VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_01",
-      "condition": "VisitedTomTownPowerPlant",
       "startX": 6,
       "startY": 4,
       "path": "w",
       "spriteIndex": 19,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "Thank you for your help! Things are back to normal now."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Thank you for your help! Things are back to normal now."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_01_01",
+      "condition": "VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "FromFloor3",
-      "x": 6,
-      "y": 9
-    },
-    {
-      "name": "FromFloor1",
-      "x": 6,
-      "y": 11
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "from_Tom_Town_Power_Plant_F2_to_Tom_Town_Power_Plant_01",
+      "exitName": "FromFloor3",
       "location": [
-        5,
-        11
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_F1,
-        mapEntrance: FromFloor2
-      }"
-    },
-    {
-      "name": "from_Tom_Town_Power_Plant_F2_to_Tom_Town_Power_Plant_F3_01",
-      "location": [
-        5,
+        6,
         9
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_F3,
-        mapEntrance: FromFloor2
-      }"
+      "nextMap": "Tom_Town_Power_Plant_F3",
+      "nextEntrance": "FromFloor2",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor3_01"
+    },
+    {
+      "exitName": "FromFloor1",
+      "location": [
+        6,
+        11
+      ],
+      "nextMap": "Tom_Town_Power_Plant_F1",
+      "nextEntrance": "FromFloor2",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor1_01"
     }
   ],
-  "triggers": []
+  "triggerData": [],
+  "miscEntities": []
 }

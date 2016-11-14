@@ -72,7 +72,6 @@ public class StuffGen {
 				String text = mcSplit[i];
 				for (int j = i + 1; j < mcSplit.length; j++) {
 					if (body.contains("{" + (j + 1))) {
-						System.out.println(body);
 						Global.error(j + " Cannot have any more parameters once you split through. (ClassName = " + className + ")");
 					}
 					

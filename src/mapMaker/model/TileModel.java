@@ -47,7 +47,7 @@ public class TileModel extends MapMakerModel {
         }
     }
 
-    public TileModel(MapMaker mapMaker) {
+    TileModel() {
         super(BLANK_TILE_INDEX);
 
         this.tileListModel = new DefaultListModel<>();
@@ -59,8 +59,6 @@ public class TileModel extends MapMakerModel {
         for (TileType tileType : TileType.values()) {
             this.tileMap.put(tileType, new HashMap<>());
         }
-
-        this.reload(mapMaker);
     }
 
     @Override
@@ -107,8 +105,7 @@ public class TileModel extends MapMakerModel {
 
                 BufferedImage image = FileIO.readImage(imageFile);
                 if (tileType == TileType.MAP) {
-                    // TODO: What is this doing?
-                    image = image.getSubimage(
+                    BufferedImage resizedImage = image.getSubimage(
                             0,
                             0,
                             Math.min(image.getWidth(), Global.TILE_SIZE*3),
@@ -116,7 +113,7 @@ public class TileModel extends MapMakerModel {
                     );
 
                     this.indexMap.put(val, name);
-                    this.tileListModel.addElement(new ImageIcon(image, val + ""));
+                    this.tileListModel.addElement(new ImageIcon(resizedImage, val + ""));
                 }
 
                 tileMap.put(val, image);

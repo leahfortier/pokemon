@@ -4,8 +4,7 @@ import main.Global;
 import map.MapMetaData.MapDataType;
 import mapMaker.data.MapMakerTriggerData;
 import mapMaker.data.PlaceableTrigger;
-import mapMaker.model.EditMode;
-import mapMaker.model.EditMode.EditType;
+import mapMaker.data.PlaceableTrigger.PlaceableTriggerType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
@@ -80,7 +79,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private JLabel rootLabel;
 	private JComboBox<EditType> editTypeComboBox;
 
-    private EditMode editMode;
+    private EditType editType;
     private EditMapMetaData mapData;
 
     private PlaceableTrigger placeableTrigger;
@@ -103,7 +102,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.mouseHoverLocation = new Point();
 
         this.mapData = new EditMapMetaData();
-        this.editMode = new EditMode(this);
+		this.editType = EditType.BACKGROUND;
 
         this.canvas = new Canvas();
         this.canvas.addMouseListener(this);
@@ -216,7 +215,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     private JComboBox<EditType> createEditTypeComboBox() {
         editTypeComboBox = new JComboBox<>();
         editTypeComboBox.addActionListener(event -> {
-            editMode.setEditType((EditType) editTypeComboBox.getSelectedItem());
+            this.editType = (EditType) editTypeComboBox.getSelectedItem();
 
             MapMakerModel model = this.getModel();
             tileList.setModel(model.getListModel());
@@ -267,7 +266,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.toolList.setSelectedIndex(toolType.ordinal());
     }
 
-	public Tool getTool(ToolType toolType) {
+	private Tool getTool(ToolType toolType) {
         return toolList.getModel().getElementAt(toolType.ordinal());
     }
 
@@ -280,7 +279,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
     public BufferedImage getTileFromSet(TileType tileType, int index) {
-        return this.editMode.getTileModel().getTile(tileType, index);
+		return MapMakerModel.getTileModel().getTile(tileType, index);
     }
 
 	// Called when trying to exit, shows a confirm dialog asking to save first if there are any unsaved changes
@@ -301,7 +300,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 	private void resetMap() {
         this.location = new Point();
-        this.editMode.getAreaModel().resetMap();
+		MapMakerModel.getAreaModel().resetMap();
     }
 
 	// TODO: Should this be checking if that name is already taken?
@@ -317,7 +316,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		String[] mapList = getAvailableMaps();
 		String name = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, mapList, mapList[0]);
         if (!StringUtils.isNullOrEmpty(name)) {
-			this.mapData.loadPreviousMap(this, name, this.editMode.getAreaModel());
+			this.mapData.loadPreviousMap(this, name);
             this.resetMap();
 		}
 	}
@@ -368,23 +367,26 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 		}
 	}
-	
+
+	// TODO: This is likely not working anymore since I put the maps into subfolders
+	// TODO: Also need to be able to choose which subfolder this should go in and which to choose from
 	public String[] getAvailableMaps() {
 		File mapFolder = new File(getPathWithRoot(Folder.MAPS));
 		return mapFolder.list((dir, name) -> !dir.isHidden() && !name.contains("."));
 	}
 
+	// TODO: I still never figured out what root is doing
 	public String getPathWithRoot(final String path) {
 //		return root.getPath() + path;
 		return path;
 	}
 
-	public String getMapFolderName(final String mapName) {
+	public String getMapFolderPath(final String mapName) {
 		return getPathWithRoot(FileIO.makeFolderPath(Folder.MAPS, mapName));
 	}
 
-	public File getMapTextFile(final String mapName) {
-		return new File(getMapFolderName(mapName) + mapName + ".txt");
+	public String getMapTextFileName(final String mapName) {
+		return getMapFolderPath(mapName) + mapName + ".txt";
 	}
 
 	// TODO: Srsly what is going on with setting the root what the fuck
@@ -400,7 +402,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		FileIO.createFolder(getPathWithRoot(Folder.MAP_TILES));
 		FileIO.createFolder(getPathWithRoot(Folder.MAPS));
 
-        this.editMode.reload(this);
+        MapMakerModel.reloadModels(this);
 	}
 	
 	private void saveMap() {
@@ -409,16 +411,16 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		}
 
         this.mapData.save(this);
-        this.editMode.getTileModel().save(this);
+        MapMakerModel.getTileModel().save(this);
 	}
 
 	public Point setTile(Point location, int val) {
 		Point delta = this.mapData.checkNewDimension(location);
 
 		Point start = Point.add(delta, location);
-		boolean clearSelection = this.editMode.setTile(mapData, start, val);
+		boolean clearSelection = this.mapData.setTile(editType, start, val);
         if (clearSelection) {
-            tileList.clearSelection();;
+            tileList.clearSelection();
         }
 
 		return delta;
@@ -442,7 +444,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			}
 		}
 
-		this.mapData.drawMap(g2d, this.location, this.getEditType(), this.editMode.getTileModel());
+		this.mapData.drawMap(g2d, this.location, this.getEditType());
 		
 		if (!toolList.isSelectionEmpty()) {
 			toolList.getSelectedValue().draw(g2d);
@@ -508,7 +510,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	public void keyTyped(KeyEvent event) {}
 
 	public void keyPressed(KeyEvent event) {
-
 		// TODO: e for eraser, s for single, r for rect, t for trigger, ? for select?
 		if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType == null && !toolList.isSelectionEmpty()) {
             previousToolType = ToolType.values()[toolList.getSelectedIndex()];
@@ -529,7 +530,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				toolList.clearSelection();
 			}
 		}
-		
+
 		if (event.getModifiers() == Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
 			controlKeyDown = true;
 		}
@@ -579,7 +580,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     public EditType getEditType() {
-        return this.editMode.getEditType();
+        return this.editType;
     }
 
     public boolean isEditType(EditType editType) {
@@ -591,7 +592,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     public MapMakerModel getModel() {
-        return this.editMode.getModel();
+        return this.editType.getModel();
     }
 
     public PlaceableTrigger getPlaceableTrigger() {
@@ -610,12 +611,13 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.placeableTrigger = null;
     }
 
-    public boolean isPlaceableTriggerType(PlaceableTrigger.TriggerType triggerType) {
+    public boolean isPlaceableTriggerType(PlaceableTriggerType triggerType) {
         return this.placeableTrigger != null && this.placeableTrigger.triggerType == triggerType;
     }
 
 	public void valueChanged(ListSelectionEvent event) {
 		if (event.getSource() == tileList) {
+
 			// When a trigger item selected
 			if (this.isEditType(EditType.TRIGGERS) && !this.isTileSelectionEmpty() && !event.getValueIsAdjusting()) {
 				if (!this.hasMap()) {

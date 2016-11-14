@@ -1,60 +1,12 @@
 {
-  "NPCs": [
+  "areas": [
     {
-      "name": "MaplesLab_NPC_Prof_Maple_01",
-      "startX": 10,
-      "startY": 1,
-      "path": "w",
-      "spriteIndex": 7,
-      "direction": "DOWN",
-      "walkToPlayer": false,
-      "interactions": [
-        {
-          "name": "intro",
-          "npcActions": [
-            {
-              "text": "I am Professor Maple, eh. Welcome to my lab."
-            },
-            {
-              "text": "While you are here, let me heal your Pokémon."
-            },
-            {},
-            {
-              "text": "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
-            },
-            {
-              "giveItem": "Syrup"
-            },
-            {
-              "text": "Oh, and also take this egg. No idea what Pokémon is in it, but I'm sure you'll take good care of it."
-            },
-            {
-              "givePokemon": "RandomEgg"
-            },
-            {}
-          ]
-        },
-        {
-          "name": "stone_choice",
-          "npcActions": [
-            {
-              "text": "wudya wan"
-            },
-            {},
-            {}
-          ]
-        },
-        {
-          "name": "heal",
-          "npcActions": [
-            {
-              "text": "How's it goin'? Need to rest up your Pokémon a bit?"
-            },
-            {}
-          ]
-        }
-      ]
-    },
+      "displayName": "Depth First Search Town",
+      "terrain": "BUILDING",
+      "music": "POKE_LAB"
+    }
+  ],
+  "NPCs": [
     {
       "name": "MaplesLab_NPC_MapleAssistant_02",
       "startX": 17,
@@ -62,17 +14,21 @@
       "path": "w",
       "spriteIndex": 19,
       "direction": "RIGHT",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "This syrup soda is amazing!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "This syrup soda is amazing!"
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_02_01"
     },
     {
       "name": "MaplesLab_NPC_MapleAssistant_01",
@@ -81,40 +37,154 @@
       "path": "w",
       "spriteIndex": 12,
       "direction": "LEFT",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "Don't disturb me! I'm doing syrup science!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Don't disturb me! I'm doing syrup science!"
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_01_01"
+    },
+    {
+      "name": "MaplesLab_NPC_Prof_Maple_01",
+      "startX": 10,
+      "startY": 1,
+      "path": "w",
+      "spriteIndex": 7,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "intro",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I am Professor Maple, eh. Welcome to my lab."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "While you are here, let me heal your Pokémon."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "HealParty"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I have lots of this syrup lying around, why don't you take one? I'm sure it will come in handy one day."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "GiveItem",
+                "triggerContents": "Syrup"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Oh, and also take this egg. No idea what Pokémon is in it, but I'm sure you'll take good care of it."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "GivePokemon",
+                "triggerContents": "RandomEgg"
+              }
+            },
+            {
+              "update": "heal"
+            }
+          ]
+        },
+        {
+          "name": "stone_choice",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "choice": {
+                "question": "wudya wan",
+                "choices": [
+                  {
+                    "text": "wawa",
+                    "actions": [
+                      {
+                        "trigger": {
+                          "triggerType": "GiveItem",
+                          "triggerContents": "Water Stone"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "text": "sunsunsunherewecome",
+                    "actions": [
+                      {
+                        "trigger": {
+                          "triggerType": "GiveItem",
+                          "triggerContents": "Sun Stone"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "update": "heal"
+            }
+          ]
+        },
+        {
+          "name": "heal",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "How's it goin'? Need to rest up your Pokémon a bit?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "HealParty"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_Prof_Maple_01_01"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "DFS_Town",
-      "x": 10,
-      "y": 15
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "from_MaplesLab_to_DFS_Town_01",
+      "exitName": "DFS_Town",
       "location": [
         10,
-        16
+        15
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: DFS_Town,
-        mapEntrance: MaplesLab
-      }"
+      "nextMap": "DFS_Town",
+      "nextEntrance": "MaplesLab",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "triggerName": "MaplesLab_MapExit_DFS_Town_01"
     }
   ],
-  "triggers": []
+  "triggerData": [],
+  "miscEntities": []
 }

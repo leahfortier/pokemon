@@ -14,6 +14,14 @@ public class StringUtils {
         return s == null || s.isEmpty();
     }
 
+    public static boolean isNullOrWhiteSpace(String s) {
+        return isNullOrEmpty(s) || s.trim().isEmpty();
+    }
+
+    public static String nullWhiteSpace(String s) {
+        return isNullOrWhiteSpace(s) ? null : s;
+    }
+
     // Adds a space to a non-empty string
     public static String addSpace(final String s) {
         return isNullOrEmpty(s) ? empty() : s + " ";
@@ -29,6 +37,15 @@ public class StringUtils {
 
     public static String empty() {
         return "";
+    }
+
+    public static String articleString(final String s) {
+        if (isNullOrEmpty(s)) {
+            return empty();
+        }
+
+        boolean vowelStart = (s.charAt(0) + "").matches("[AEIOU]");
+        return "a" + (vowelStart ? "n" : "") + " " + s;
     }
 
     // TODO: Look at this again and rewrite it

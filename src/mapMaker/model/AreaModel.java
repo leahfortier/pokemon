@@ -1,12 +1,10 @@
 package mapMaker.model;
 
-import map.AreaData.TerrainType;
 import map.AreaData.WeatherState;
 import map.MapMetaData.MapDataType;
+import map.TerrainType;
 import mapMaker.MapMaker;
 import util.DrawUtils;
-import util.FileIO;
-import util.FileName;
 import util.Point;
 import util.StringUtils;
 
@@ -16,17 +14,11 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AreaModel extends MapMakerModel {
@@ -38,14 +30,12 @@ public class AreaModel extends MapMakerModel {
     private final Map<Integer, String> areaIndexMap;
     private final Set<Integer> areasOnMap;
 
-    public AreaModel(MapMaker mapMaker) {
+    AreaModel() {
         super(VOID_INDEX);
 
         this.areaListModel = new DefaultListModel<>();
         this.areaIndexMap = new HashMap<>();
         this.areasOnMap = new HashSet<>();
-
-        this.reload(mapMaker);
     }
 
     public void resetMap() {
@@ -66,24 +56,25 @@ public class AreaModel extends MapMakerModel {
         areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(name, new Color(rgb, true)), rgb + ""));
     }
 
+    // TODO: Redo all of this
     @Override
     public void reload(MapMaker mapMaker) {
-        File areaIndexFile = new File(mapMaker.getPathWithRoot(FileName.MAP_AREA_INDEX));
+//        File areaIndexFile = new File(mapMaker.getPathWithRoot(FileName.MAP_AREA_INDEX));
         areaIndexMap.clear();
         areasOnMap.clear();
         areaListModel.clear();
 
-        if (areaIndexFile.exists()) {
-            String fileText = FileIO.readEntireFileWithReplacements(areaIndexFile, false);
-
-            Matcher m = mapAreaPattern.matcher(fileText);
-            while (m.find()) {
-                String name = m.group(1);
-                int val = (int) Long.parseLong(m.group(2), 16);
-
-                this.addArea(val, name);
-            }
-        }
+//        if (areaIndexFile.exists()) {
+//            String fileText = FileIO.readEntireFileWithReplacements(areaIndexFile, false);
+//
+//            Matcher m = mapAreaPattern.matcher(fileText);
+//            while (m.find()) {
+//                String name = m.group(1);
+//                int val = (int) Long.parseLong(m.group(2), 16);
+//
+//                this.addArea(val, name);
+//            }
+//        }
     }
 
     @Override
@@ -127,16 +118,16 @@ public class AreaModel extends MapMakerModel {
 
                         if (weatherState != null) {
                             // Save index file with new area
-                            File areaIndexFile = new File(mapMaker.getPathWithRoot(FileName.MAP_AREA_INDEX));
-
-                            // TODO: Use FileIO for this -- yeah not doing that because this is getting deleted succkkkaaaaahhhh
-                            try {
-                                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(areaIndexFile, true)));
-                                out.println("\"" + newAreaName + "\"\t\t" + (Long.toString(color.getRGB() & 0xFFFFFFFFL, 16) ) + "\t\t" +weatherState+"\t\t" +terrainType);
-                            }
-                            catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+//                            File areaIndexFile = new File(mapMaker.getPathWithRoot(FileName.MAP_AREA_INDEX));
+//
+//                            // TODO: Use FileIO for this -- yeah not doing that because this is getting deleted succkkkaaaaahhhh
+//                            try {
+//                                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(areaIndexFile, true)));
+//                                out.println("\"" + newAreaName + "\"\t\t" + (Long.toString(color.getRGB() & 0xFFFFFFFFL, 16) ) + "\t\t" +weatherState+"\t\t" +terrainType);
+//                            }
+//                            catch (IOException ex) {
+//                                ex.printStackTrace();
+//                            }
 
                             // Add area to the list.
                             areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(newAreaName, color), color.getRGB() + ""));

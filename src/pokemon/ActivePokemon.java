@@ -152,9 +152,7 @@ public class ActivePokemon implements Serializable {
 	 * 		Item: item name*
 	 */
 	// Constructor for triggers
-	public static ActivePokemon createActivePokemon(String pokemonDescription, boolean user) {
-
-		final PokemonMatcher pokemonMatcher = PokemonMatcher.matchPokemonDescription(pokemonDescription);
+	public static ActivePokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean user) {
 		
 		// Random Egg
 		if (pokemonMatcher.isRandomEgg()) {

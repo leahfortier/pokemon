@@ -2,7 +2,7 @@ package mapMaker.tools;
 
 import mapMaker.MapMaker;
 import mapMaker.data.PlaceableTrigger;
-import mapMaker.model.EditMode.EditType;
+import mapMaker.EditType;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import util.DrawUtils;
 import util.Point;

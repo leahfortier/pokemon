@@ -11,7 +11,6 @@ public abstract class FileName {
     public static final String TM_LIST = Folder.GENERATOR + "tmList.txt";
     public static final String INTERFACES = Folder.GENERATOR + "interfaces.txt";
 
-    public static final String MAP_AREA_INDEX = Folder.MAPS + "areaIndex.txt";
     public static final String MAP_TILES_INDEX = getIndexFileName(Folder.MAP_TILES);
     public static final String TRAINER_TILES_INDEX = getIndexFileName(Folder.TRAINER_TILES);
     public static final String MAP_MAKER_TILES_INDEX = getIndexFileName(Folder.MAP_MAKER_TILES);

@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Main",
+      "terrain": "BUILDING",
+      "music": "PLAYER_HOUSE"
+    }
+  ],
   "NPCs": [
     {
       "name": "TestMomBattle",
@@ -6,13 +13,16 @@
       "startY": 4,
       "spriteIndex": 13,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "I'm gonna be the very best like no one ever was."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'm gonna be the very best like no one ever was."
+              }
             },
             {
               "battle": {
@@ -28,48 +38,67 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "Just get out. You're not welcome here."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Just get out. You're not welcome here."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "PlayersHouseUp_NPC_TestMomBattle_01"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "stairs",
-      "x": 8,
-      "y": 1
+      "exitName": "GameStartLocation",
+      "location": [
+        6,
+        5
+      ],
+      "deathPortal": false,
+      "triggerName": "PlayersHouseUp_MapExit_GameStartLocation_01"
     },
     {
-      "name": "GameStartLocation",
-      "x": 6,
-      "y": 5
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "PlayersHouseUp_to_PlayersHouseDown",
+      "exitName": "stairs",
       "location": [
-        9,
+        8,
         1
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-		 nextMap: PlayersHouseDown,
-	 	 mapEntrance: stairs
-	  }"
+      "nextMap": "PlayersHouseDown",
+      "nextEntrance": "stairs",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "PlayersHouseUp_MapExit_stairs_01"
     }
   ],
-  "triggers": [
+  "triggerData": [],
+  "miscEntities": [
     {
       "name": "PC",
-      "x": 3,
-      "y": 1,
-      "trigger": "PC_Trigger"
+      "location": [
+        3,
+        1
+      ],
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Starting up PC..."
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "ChangeView",
+            "triggerContents": "PC_VIEW"
+          }
+        }
+      ],
+      "triggerName": "PlayersHouseUp_Event_PC_01"
     }
   ]
 }

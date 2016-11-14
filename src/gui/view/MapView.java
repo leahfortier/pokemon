@@ -1,8 +1,34 @@
 package gui.view;
 
+import battle.Battle;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
+import main.Game;
+import main.Game.ViewMode;
+import main.Global;
+import map.AreaData;
+import map.AreaData.WeatherState;
+import map.Direction;
+import map.MapData;
+import map.entity.Entity;
+import map.entity.EntityAction;
+import map.entity.MovableEntity;
+import map.entity.PlayerEntity;
+import map.entity.npc.NPCEntity;
+import map.triggers.Trigger;
+import message.MessageUpdate;
+import message.MessageUpdate.Update;
+import message.Messages;
+import pattern.ActionMatcher.ChoiceActionMatcher.ChoiceMatcher;
+import pokemon.ActivePokemon;
+import sound.SoundTitle;
+import trainer.CharacterData;
+import util.DrawUtils;
+import util.InputControl;
+import util.InputControl.Control;
+import util.Save;
+import util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,31 +38,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
-import main.Game;
-import main.Game.ViewMode;
-import main.Global;
-import map.AreaData;
-import map.AreaData.WeatherState;
-import map.Direction;
-import map.MapData;
-import map.entity.Entity;
-import map.entity.MovableEntity;
-import map.entity.npc.NPCEntity;
-import map.entity.PlayerEntity;
-import map.triggers.Trigger;
-import message.MessageUpdate;
-import message.MessageUpdate.Update;
-import message.Messages;
-import pokemon.ActivePokemon;
-import sound.SoundTitle;
-import trainer.CharacterData;
-import util.DrawUtils;
-import util.InputControl;
-import util.Save;
-import util.InputControl.Control;
-import battle.Battle;
-import util.StringUtils;
 
 public class MapView extends View {
 	// TODO: these should reference the constants
@@ -60,7 +61,7 @@ public class MapView extends View {
 	private String currentMapName;
 	private AreaData currentArea;
 	private MapData currentMap;
-	private Trigger currentMusicTrigger;
+	private SoundTitle currentMusicTitle;
 	
 	private Entity[][] entities;
 	private List<Entity> entityList;
@@ -68,6 +69,7 @@ public class MapView extends View {
 	private PlayerEntity playerEntity;
 
 	private MessageUpdate currentMessage;
+	private int dialogueSelection;
 
 	private int startX, startY, endX, endY;
 	private float drawX, drawY;
@@ -98,10 +100,7 @@ public class MapView extends View {
 	private int lightningFrame;
 	
 	public MapView() {
-		Messages.clear();
-
 		currentMapName = StringUtils.empty();
-		currentArea = null;
 		rainHeight = new int[Global.GAME_SIZE.width/2];
 		state = VisualState.MAP;
 		selectedButton = 0;
@@ -196,24 +195,19 @@ public class MapView extends View {
 				
 				DrawUtils.setFont(g, 30);
 				g.setColor(Color.BLACK);
-				
-				DrawUtils.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
-//				int height = DrawUtils.drawWrappedText(g, currentDialogue.text, 30, 490, 720);
-//
-//				// TODO: wtf is this variable name
-//				int i1 = 0;
-//
-//				for (String choice: currentDialogue.choices) {
-//					if (choice == null) {
-//						break;
-//					}
-//
-//					if (i1 == dialogueSelection) {
-//						g.fillOval(50, height + i1*36, 10, 10);
-//					}
-//
-//					g.drawString(choice, 80, height + (i1++)*36);
-//				}
+
+				int height = DrawUtils.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
+				if (currentMessage.isChoice()) {
+					ChoiceMatcher[] choices = currentMessage.getChoices();
+					for (int i = 0; i < choices.length; i++) {
+						int y = height + i*DrawUtils.getDistanceBetweenRows(g);
+						if (i == dialogueSelection) {
+							g.fillOval(50, y - DrawUtils.getTextHeight(g)/2 - 5, 10, 10);
+						}
+
+						g.drawString(choices[i].text, 80, y);
+					}
+				}
 				break;
 			case MENU:
 				TileSet menuTiles = data.getMenuTiles();
@@ -324,11 +318,11 @@ public class MapView extends View {
 		// Black border
 		g.setColor(Color.BLACK);
 		g.fillRect(0, yValue, totalWidth, totalHeight);
-		
+
 		// Light grey border
 		g.setColor(new Color(195, 195, 195));
 		g.fillRect(borderSize, yValue + borderSize, insideWidth + 2*graySize, insideHeight + 2*graySize);
-		
+
 		// White inside
 		g.setColor(Color.WHITE);
 		g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
@@ -406,10 +400,8 @@ public class MapView extends View {
 			
 			if (character.mapReset) {
 				character.mapReset = false;
-				currentMap.setCharacterToEntrance(character, character.mapEntranceName);
+				currentMap.setCharacterToEntrance(character.mapEntranceName);
 			}
-			
-			currentArea = null;
 
 			entities = currentMap.populateEntities();
 
@@ -437,18 +429,23 @@ public class MapView extends View {
 		}
 		
 		// New area
-		AreaData area = data.getArea(currentMap.getAreaName(character.locationX, character.locationY));
-		if (currentArea == null || !area.getAreaName().equals(currentArea.getAreaName())) {
-			character.areaName = area.getAreaName();
-			currentArea = area;
+		AreaData area = currentMap.getArea(character.locationX, character.locationY);
+		String areaName = area.getAreaName();
 
+		character.areaName = areaName;
+		currentArea = area;
+
+		// If new area has a new name, display the area name animation
+		if (!StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
-			weatherState = area.getWeather();
-			
-			//Queue to play new area's music.
-			currentMusicTrigger = data.getTrigger(area.getMusicTriggerName());
-			//System.out.println(currentMusicTrigger);
-			
+		}
+
+		weatherState = area.getWeather();
+
+		// Queue to play new area's music.
+		SoundTitle areaMusic = area.getMusic();
+		if (currentMusicTitle != areaMusic) {
+			currentMusicTitle = areaMusic;
 			playAreaMusic();
 		}
 		
@@ -466,7 +463,7 @@ public class MapView extends View {
 				
 				battleAnimationTime -= dt;
 				showMessage = false;
-				break;		
+				break;
 			case MAP:
 				if (input.isDown(Control.ESC)) {
 					input.consumeKey(Control.ESC);
@@ -480,35 +477,40 @@ public class MapView extends View {
 //				}
 				break;
 			case MESSAGE:
-//				if (input.isDown(Control.DOWN)) {
-//					input.consumeKey(Control.DOWN);
-//					dialogueSelection++;
-//				} else if (input.isDown(Control.UP)) {
-//					input.consumeKey(Control.UP);
-//					dialogueSelection--;
-//				}
+				if (currentMessage.isChoice()) {
+					if (input.isDown(Control.DOWN)) {
+						input.consumeKey(Control.DOWN);
+						dialogueSelection++;
+					} else if (input.isDown(Control.UP)) {
+						input.consumeKey(Control.UP);
+						dialogueSelection--;
+					}
 
-//				if (currentDialogue.next.length != 0) {
-//					if (dialogueSelection < 0) {
-//						dialogueSelection += currentDialogue.next.length;
-//					}
-//
-//					dialogueSelection %= currentDialogue.next.length;
-//				}
+					dialogueSelection += currentMessage.getChoices().length;
+					dialogueSelection %= currentMessage.getChoices().length;
+				}
 
 				if (input.isDown(Control.SPACE) && !Global.soundPlayer.soundEffectIsPlaying()) {
 					input.consumeKey(Control.SPACE);
-//					currentDialogue.choose(dialogueSelection, this, game);
 
+					if (currentMessage.isChoice()) {
+						ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
+						Trigger trigger = EntityAction.addActionGroupTrigger(null, null, choice.getActions());
+						Messages.addMessageToFront(new MessageUpdate("", trigger.getName(), Update.TRIGGER));
+					}
+
+					boolean newMessage = false;
 					while (Messages.hasMessages()) {
 						cycleMessage();
 
 						if (state != VisualState.MESSAGE || !StringUtils.isNullOrEmpty(currentMessage.getMessage())) {
+							newMessage = true;
 							break;
 						}
 					}
 
-					if (!Messages.hasMessages()) {
+					if (!newMessage && !Messages.hasMessages()) {
+						PlayerEntity.currentInteractionEntity = null; // TODO: Make this not static
 						currentMessage = null;
 						if (battle == null) {
 							state = VisualState.MAP;
@@ -546,7 +548,7 @@ public class MapView extends View {
 					case 5: // save
 						// TODO: Question user if they would like to save first.
 						Save.save();
-						Messages.addMessage(Game.getData().getDialogue("savedGame"));
+						Messages.addMessage("Your game has now been saved!");
 						state = VisualState.MESSAGE;
 						break;
 					case 6: // exit
@@ -582,6 +584,7 @@ public class MapView extends View {
 		
 		// Check for any NPCs facing the player
 		if (!playerEntity.isStalled() && state == VisualState.MAP) {
+			// TODO: Need to make sure every space is passable between the npc and player
 			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; ++dist) {
 				// TODO: Move to movable entity
 				for (Direction direction : Direction.values()) {
@@ -595,7 +598,7 @@ public class MapView extends View {
 					if (entities[x][y] != null
 							&& entities[x][y] instanceof NPCEntity
 							&& ((NPCEntity)entities[x][y]).isFacing(playerEntity.getX(), playerEntity.getY())
-							&& ((NPCEntity)entities[x][y]).getWalkToPlayer()) {
+							&& ((NPCEntity)entities[x][y]).shouldWalkToPlayer()) {
 
 						NPCEntity npc = (NPCEntity)entities[x][y];
 						if (!npc.getWalkingToPlayer() && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
@@ -654,8 +657,8 @@ public class MapView extends View {
 	}
 
 	private void playAreaMusic() {
-		if (currentMusicTrigger != null) {
-			currentMusicTrigger.execute();
+		if (currentMusicTitle != null) {
+			Global.soundPlayer.playMusic(currentMusicTitle);
 		}
 		else if(currentArea != null) {
 			System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
@@ -704,7 +707,7 @@ public class MapView extends View {
 			battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
 		}
 	}
-	
+
 	public void addEntity(Entity e) {
 		entities[e.getX()][e.getY()] = e;
 		entityList.add(e);

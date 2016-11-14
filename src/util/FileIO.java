@@ -1,5 +1,10 @@
 package util;
 
+import main.Global;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,12 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Scanner;
-
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-
-import main.Global;
 
 public class FileIO {
 	private static final String FILE_SLASH = File.separator;
@@ -26,6 +25,19 @@ public class FileIO {
 
 		if (!file.delete()) {
 			Global.error("Could not delete file " + file.getName());
+		}
+	}
+
+	public static void createFile(final String filePath) {
+		final File file = new File(filePath);
+		if (!file.exists()) {
+			try {
+				if (!file.createNewFile()) {
+                    throw new IOException();
+                }
+			} catch (IOException e) {
+				Global.error("Unable to create file with path " + filePath);
+			}
 		}
 	}
 
@@ -53,7 +65,11 @@ public class FileIO {
 		return readImage(file);
 	}
 	
-	public static BufferedImage readImage(File file) {	
+	public static BufferedImage readImage(File file) {
+		if (!file.exists()) {
+			System.out.println("File does not exist");
+		}
+
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(file);
@@ -160,7 +176,8 @@ public class FileIO {
 		final String previousFile = readEntireFile(fileName);
 		final String newFile = out.toString();
 
-		if (!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {
+		if (StringUtils.isNullOrEmpty(previousFile) ||
+				!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {
 			writeToFile(fileName, out);
 			System.out.println(fileName + " overwritten.");
 			return true;

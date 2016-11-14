@@ -1,186 +1,229 @@
 {
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "GRASS",
+      "music": "TOM_TOWN"
+    }
+  ],
   "NPCs": [
     {
-      "name": "Tom_Town_NPC_Scientist_02",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
-      "startX": 30,
-      "startY": 14,
-      "path": "w",
-      "spriteIndex": 19,
-      "direction": "DOWN",
-      "walkToPlayer": false,
-      "interactions": [
-        {
-          "name": "dialogue",
-          "npcActions": [
-            {
-              "text": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Tom_Town_NPC_TomTownPoliceOfficer01_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
-      "startX": 28,
-      "startY": 15,
-      "path": "w",
-      "spriteIndex": 18,
-      "direction": "DOWN",
-      "walkToPlayer": false,
-      "interactions": [
-        {
-          "name": "dialogue",
-          "npcActions": [
-            {
-              "text": "I wish he would just calm down and try to explain what happened."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Tom_Town_NPC_Citizen_02",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
-      "startX": 31,
-      "startY": 22,
-      "path": "w",
-      "spriteIndex": 16,
-      "direction": "RIGHT",
-      "walkToPlayer": false,
-      "interactions": [
-        {
-          "name": "dialogue",
-          "npcActions": [
-            {
-              "text": "I've never felt a shock like that before! Did it come from our powerplant?"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Tom_Town_NPC_Scientist_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
-      "startX": 28,
-      "startY": 16,
-      "path": "w",
-      "spriteIndex": 12,
-      "direction": "RIGHT",
-      "walkToPlayer": false,
-      "interactions": [
-        {
-          "name": "dialogue",
-          "npcActions": [
-            {
-              "text": "I need to get back in there. The reactor is going to explode!"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Tom_Town_NPC_Scientist_03",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
-      "startX": 32,
-      "startY": 15,
-      "path": "w",
-      "spriteIndex": 11,
-      "direction": "LEFT",
-      "walkToPlayer": false,
-      "interactions": [
-        {
-          "name": "dialogue",
-          "npcActions": [
-            {
-              "text": "Team Deadlock better not harm the Magnemites!"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Tom_Town_NPC_Citizen_01",
-      "condition": "Badge_0&!VisitedTomTownPowerPlant",
       "startX": 28,
       "startY": 23,
       "path": "w",
       "spriteIndex": 2,
       "direction": "RIGHT",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_NPC_Citizen_02",
+      "startX": 31,
+      "startY": 22,
+      "path": "w",
+      "spriteIndex": 16,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I've never felt a shock like that before! Did it come from the Power Plant?!??"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_02_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_NPC_Scientist_02",
+      "startX": 30,
+      "startY": 14,
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_02_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_NPC_Scientist_03",
+      "startX": 32,
+      "startY": 15,
+      "path": "w",
+      "spriteIndex": 11,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Team Deadlock better not harm the Magnemites!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_03_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_NPC_TomTownPoliceOfficer01_01",
+      "startX": 28,
+      "startY": 15,
+      "path": "w",
+      "spriteIndex": 18,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I wish he would just calm down and try to explain what happened."
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Tom_Town_NPC_Tom_Town_NPC_TomTownPoliceOfficer01_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_NPC_Scientist_01",
+      "startX": 28,
+      "startY": 16,
+      "path": "w",
+      "spriteIndex": 12,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I need to get back in there. The reactor is going to explode!"
+              }
+            }
+          ]
+        }
+      ],
+      "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "PokeCenter01",
-      "x": 38,
-      "y": 32
+      "exitName": "SouthTransitionBuilding",
+      "location": [
+        26,
+        36,
+        25,
+        36,
+        27,
+        36
+      ],
+      "nextMap": "TomTown_WindValley_TransitionBuilding",
+      "nextEntrance": "NorthDoor",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_MapExit_SouthTransitionBuilding_01"
     },
     {
-      "name": "Gym",
-      "x": 17,
-      "y": 32
+      "exitName": "TomTownPowerPlant",
+      "location": [
+        29,
+        14
+      ],
+      "nextMap": "Tom_Town_Power_Plant_F1",
+      "nextEntrance": "FromTomTown",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_MapExit_TomTownPowerPlant_01"
     },
     {
-      "name": "TomTownPowerPlant",
-      "x": 29,
-      "y": 14
+      "exitName": "Gym",
+      "location": [
+        17,
+        32
+      ],
+      "nextMap": "Tom_Gym",
+      "nextEntrance": "Tom_Town",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_MapExit_Gym_01"
     },
     {
-      "name": "TransitionBuildingHWestDoor01",
-      "x": 52,
-      "y": 26
+      "exitName": "PokeCenter",
+      "location": [
+        38,
+        32
+      ],
+      "nextMap": "Tom_Town_PokeCenter",
+      "nextEntrance": "FrontDoor",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_MapExit_PokeCenter_01"
     },
     {
-      "name": "TransitionBuildingVNorthDoor01",
-      "x": 26,
-      "y": 36
+      "exitName": "EastTransitionBuilding",
+      "location": [
+        52,
+        26,
+        52,
+        25
+      ],
+      "nextMap": "BFM_TomTown_TransitionBuilding",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "Tom_Town_MapExit_EastTransitionBuilding_01"
     }
   ],
   "triggerData": [
     {
-      "name": "from_Tom_Town_to_Tom_Town_Power_Plant_02",
-      "location": [
-        29,
-        13
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town_Power_Plant_F1,
-        mapEntrance: FromTomTown
-      }"
-    },
-    {
-      "name": "Tom_Town_to_TransitionBuildingV_between_Tom_Town_and_WindValley_pair_01_NorthDoor",
-      "location": [
-        26,
-        37,
-        25,
-        37,
-        27,
-        37
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingV,
-        mapEntrance: NorthDoor
-      }"
-    },
-    {
-      "name": "Tom_Town_EventTrigger_TomTownPowerPlantExplosionTrigger_01",
+      "name": "Rumbles",
       "location": [
         20,
         33,
@@ -189,61 +232,38 @@
         20,
         34
       ],
-      "triggerType": "Event",
-      "condition": "Badge_0&!TomTownPowerPlantExplosionTriggered",
-      "global": "TomTownPowerPlantExplosionTriggered",
-      "triggerContents": "{
-        createDialogue: TomTownPowerPlantExplosionDialogue,
-        text: \"Rumble Rumble Rumble\"
-      }"
-    },
-    {
-      "name": "Tom_Town_to_TransitionBuildingH_between_Bloom_Filter_Meadow_and_Tom_Town_pair_01_WestDoor",
-      "location": [
-        53,
-        26,
-        53,
-        25
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Rumble Rumble Rumble"
+          }
+        },
+        {
+          "global": "TomTownPowerPlantExplosionTriggered"
+        }
       ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: WestDoor
-      }"
-    },
-    {
-      "name": "from_Tom_Town_to_Tom_Gym_01",
-      "location": [
-        17,
-        31
-      ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Gym,
-        mapEntrance: Tom_Town
-      }"
-    },
-    {
-      "name": "from_Tom_Town_to_PokeCenter_01",
-      "location": [
-        38,
-        31
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_toPokeCenterFromEntrance_PokeCenter01",
-      "triggerContents": "{
-        nextMap: PokeCenter,
-        mapEntrance: FrontDoor
-      }"
+      "triggerName": "Tom_Town_Event_Rumbles_01",
+      "condition": "BadgeTrigger_0&!TomTownPowerPlantExplosionTriggered"
     }
   ],
-  "triggers": [
+  "miscEntities": [
     {
-      "name": "Tom_Town_TriggerEntity_MagnemiteFacilityDoor_01",
-      "x": 29,
-      "y": 13,
-      "trigger": "LockedDoorTrigger"
+      "name": "LockedDoor",
+      "location": [
+        29,
+        13
+      ],
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "The door is locked."
+          }
+        }
+      ],
+      "triggerName": "Tom_Town_Event_LockedDoor_01",
+      "condition": "!BadgeTrigger_0"
     }
   ]
 }

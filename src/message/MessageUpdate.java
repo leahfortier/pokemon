@@ -9,6 +9,8 @@ import main.Game;
 import main.Game.ViewMode;
 import main.Global;
 import main.Type;
+import map.entity.PlayerEntity;
+import pattern.ActionMatcher.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
@@ -38,6 +40,7 @@ public class MessageUpdate {
 	private Move move;
 	private Integer duration;
 	private String triggerName;
+	private ChoiceMatcher[] choices;
 	
 	public enum Update {
 		NO_UPDATE,
@@ -52,6 +55,9 @@ public class MessageUpdate {
 		EXIT_BATTLE(battleView -> {
             Game.setViewMode(ViewMode.MAP_VIEW);
             battleView.clearUpdate();
+			Messages.clearBattleMessages();
+			Messages.mappityMap();
+			PlayerEntity.currentInteractionEntity = null;
         }),
 		FORCE_SWITCH(battleView -> {
             battleView.setVisualState(VisualState.POKEMON);
@@ -181,6 +187,11 @@ public class MessageUpdate {
 		if (update == Update.TRIGGER) {
 			this.triggerName = triggerName;
 		}
+	}
+
+	public MessageUpdate(String m, ChoiceMatcher[] choices) {
+		this(m);
+		this.choices = choices;
 	}
 	
 	// EXP Gain update
@@ -373,5 +384,13 @@ public class MessageUpdate {
 
 	public String getTriggerName() {
 		return this.triggerName;
+	}
+
+	public boolean isChoice() {
+		return this.choices != null;
+	}
+
+	public ChoiceMatcher[] getChoices() {
+		return this.choices;
 	}
 }

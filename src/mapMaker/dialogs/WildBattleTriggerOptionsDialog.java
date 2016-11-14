@@ -1,64 +1,52 @@
 package mapMaker.dialogs;
 
-import map.triggers.TriggerData;
-import map.triggers.WildBattleTrigger;
-import mapMaker.data.MapMakerTriggerData;
+import main.Global;
+import pattern.TriggerMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-public class WildBattleTriggerOptionsDialog extends JPanel {
+public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<TriggerMatcher>> {
 	private static final long serialVersionUID = -7378035463487486331L;
 	
-	public JComboBox<String> comboBox; // TODO: This should probably be private
+	private JComboBox<String> comboBox;
 
-	private JButton btnEdit;
-	private Map<String, TriggerData> wildBattleTriggers;
-	private MapMakerTriggerData mapMakerTriggerData;
+	private JButton editButton;
+	private List<TriggerMatcher> wildBattleTriggers;
 	
-	public WildBattleTriggerOptionsDialog(Map<String, TriggerData> givenWildBattleTriggers, MapMakerTriggerData givenMapMakerTriggerData) {
-		this.wildBattleTriggers = givenWildBattleTriggers;
-		this.mapMakerTriggerData = givenMapMakerTriggerData;
-		
-		JButton btnCreate = new JButton("Create New");
-		btnCreate.addActionListener(event -> {
-            TriggerData td = editWildBattleTrigger(null, (JButton)event.getSource());
-            if (td == null) {
+	public WildBattleTriggerOptionsDialog() {
+		JButton createButton = new JButton("Create New");
+		createButton.addActionListener(event -> {
+			TriggerMatcher matcher = editWildBattleTrigger(null);
+            if (matcher == null) {
 				return;
 			}
 
-            wildBattleTriggers.put(td.name, td);
-            comboBox.addItem(td.name);
-
-            if (wildBattleTriggers.size() == 1) {
-                btnEdit.setEnabled(true);
-            }
+			this.addWildBattleTrigger(matcher);
         });
-		
-		String[] items = new String[givenWildBattleTriggers.size()];
-		comboBox = new JComboBox<>(givenWildBattleTriggers.keySet().toArray(items));
-		
-		btnEdit = new JButton("Edit");
-		btnEdit.setEnabled(items.length != 0);
-		btnEdit.addActionListener(event -> {
-            TriggerData trigger = wildBattleTriggers.get((String)comboBox.getSelectedItem());
-            TriggerData td = editWildBattleTrigger(trigger, (JButton)event.getSource());
-            if (td == null) {
+
+		comboBox = new JComboBox<>();
+
+		this.wildBattleTriggers = new ArrayList<>();
+
+		editButton = new JButton("Edit");
+		editButton.setEnabled(false);
+		editButton.addActionListener(event -> {
+            TriggerMatcher oldMatcher = this.getSelectedTriggerMatcher();
+			TriggerMatcher newMatcher = editWildBattleTrigger(oldMatcher);
+            if (newMatcher == null) {
 				return;
 			}
 
-            mapMakerTriggerData.renameTriggerData(trigger, td);
+			if (oldMatcher != null) {
+				wildBattleTriggers.remove(oldMatcher);
+			}
 
-            comboBox.removeAllItems();
-            String[] items1 = new String[wildBattleTriggers.size()];
-            for (String item: wildBattleTriggers.keySet().toArray(items1)) { // TODO: wtf is this
-                comboBox.addItem(item);
-            }
+			addWildBattleTrigger(newMatcher);
         });
 		
 		GroupLayout groupLayout = new GroupLayout(this);
@@ -69,9 +57,9 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 246, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnCreate, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+							.addComponent(createButton, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
 							.addGap(12)
-							.addComponent(btnEdit, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(editButton, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -79,34 +67,59 @@ public class WildBattleTriggerOptionsDialog extends JPanel {
 					.addGap(7)
 					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnCreate)
-						.addComponent(btnEdit)))
-		);
-		setLayout(groupLayout);
-	}
-	
-	private TriggerData editWildBattleTrigger(TriggerData trigger, JButton button) {
-		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
-		if (trigger != null) {
-			dialog.initialize(new WildBattleTrigger(trigger.name, trigger.triggerContents));
-		}
-		
-		Object[] options = {"Done", "Cancel"};
-		int results = JOptionPane.showOptionDialog(
-				button,
-				dialog,
-				"Wild Battle Trigger Editor",
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.PLAIN_MESSAGE,
-				null,
-				options,
-				options[0]
+						.addComponent(createButton)
+						.addComponent(editButton)))
 		);
 
-		if (results == JOptionPane.CLOSED_OPTION || results == 1) {
+		setLayout(groupLayout);
+	}
+
+	private TriggerMatcher getSelectedTriggerMatcher() {
+		String wildBattleName = (String)comboBox.getSelectedItem();
+		for (TriggerMatcher matcher : wildBattleTriggers) {
+			if (wildBattleName.equals(matcher.getBasicName())) {
+				return matcher;
+			}
+		}
+
+		Global.error("No wild battle trigger found with name " + wildBattleName);
+		return null;
+	}
+
+	private TriggerMatcher editWildBattleTrigger(TriggerMatcher triggerMatcher) {
+		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
+		dialog.loadMatcher(triggerMatcher);
+
+		if (!dialog.giveOption("Wild Battle Trigger Editor", this)) {
 			return null;
 		}
 
-		return dialog.getTriggerData();
+		return dialog.getMatcher();
+	}
+
+	@Override
+	protected void renderDialog() {
+		comboBox.removeAllItems();
+		this.wildBattleTriggers
+				.forEach(matcher ->
+						comboBox.addItem(matcher.getBasicName()));
+
+		editButton.setEnabled(!wildBattleTriggers.isEmpty());
+	}
+
+
+	private void addWildBattleTrigger(TriggerMatcher newMatcher) {
+		wildBattleTriggers.add(newMatcher);
+		render();
+	}
+
+	@Override
+	public List<TriggerMatcher> getMatcher() {
+		return this.wildBattleTriggers;
+	}
+
+	@Override
+	protected void load(List<TriggerMatcher> matchers) {
+		matchers.forEach(this::addWildBattleTrigger);
 	}
 }

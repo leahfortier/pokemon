@@ -2,106 +2,108 @@ package message;
 
 import battle.Battle;
 import battle.Move;
-import main.Game;
-import map.DialogueSequence;
 import message.MessageUpdate.Update;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import util.StringUtils;
 
 import java.util.ArrayDeque;
-import java.util.Queue;
 
 public class Messages {
-    private static Queue<MessageUpdate> messages;
+    private static final ArrayDeque<MessageUpdate> mapMessages = new ArrayDeque<>();
+    private static final ArrayDeque<MessageUpdate> battleMessages = new ArrayDeque<>();
+    private static boolean fightyFight = false;
 
-    public static void clear() {
-        messages = new ArrayDeque<>();
+    private static ArrayDeque<MessageUpdate> getQueue() {
+        return fightyFight ? battleMessages : mapMessages;
+    }
+
+    public static void clearBattleMessages() {
+        battleMessages.clear();
+    }
+
+    public static void clearMapMessages() {
+        mapMessages.clear();
     }
 
     public static boolean hasMessages() {
-        return !messages.isEmpty();
+        return !getQueue().isEmpty();
     }
 
     public static MessageUpdate getNextMessage() {
-        return messages.poll();
+        return getQueue().poll();
     }
 
     public static boolean nextMessageEmpty() {
-        return StringUtils.isNullOrEmpty(messages.peek().getMessage());
+        return StringUtils.isNullOrEmpty(getQueue().peek().getMessage());
     }
 
     public static void addMessage(MessageUpdate message) {
-        messages.add(message);
+        getQueue().add(message);
     }
 
-    public static void addMessage(DialogueSequence dialogueSequence) {
-        if (!StringUtils.isNullOrEmpty(dialogueSequence.text)) {
-            addMessage(dialogueSequence.text);
-            System.out.println("Text: " + dialogueSequence.text);
-        }
-
-        for (String dialogueName : dialogueSequence.next) {
-            if (!StringUtils.isNullOrEmpty(dialogueName)) {
-                addMessage(Game.getData().getDialogue(dialogueName));
-                System.out.println("Next: " + dialogueName);
-            }
-        }
-
-        for (String triggerName : dialogueSequence.triggers) {
-            if (!StringUtils.isNullOrEmpty(triggerName)) {
-                messages.add(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
-                System.out.println("TriggerMatcher: " + triggerName);
-            }
-        }
+    public static void addMessageToFront(String message) {
+        addMessageToFront(new MessageUpdate(message));
     }
-    
+
+    public static void addMessageToFront(MessageUpdate messageUpdate) {
+        getQueue().addFirst(messageUpdate);
+    }
+
     // Just a plain old regular message
     public static void addMessage(String message) {
-        messages.add(new MessageUpdate(message));
+        addMessage(new MessageUpdate(message));
     }
 
     public static void addMessage(String message, Battle b, ActivePokemon p) {
-        messages.add(new MessageUpdate(message));
+        addMessage(new MessageUpdate(message));
 
-        messages.add(new MessageUpdate(p.getHP(), p.user()));
-        messages.add(new MessageUpdate(p.getHP(), p.getMaxHP(), p.user()));
-        messages.add(new MessageUpdate(p.getStatus().getType(), p.user()));
-        messages.add(new MessageUpdate(p.getDisplayType(b), p.user()));
-        messages.add(new MessageUpdate(p.getName(), p.user()));
-        messages.add(new MessageUpdate(p.getGender(), p.user()));
+        addMessage(new MessageUpdate(p.getHP(), p.user()));
+        addMessage(new MessageUpdate(p.getHP(), p.getMaxHP(), p.user()));
+        addMessage(new MessageUpdate(p.getStatus().getType(), p.user()));
+        addMessage(new MessageUpdate(p.getDisplayType(b), p.user()));
+        addMessage(new MessageUpdate(p.getName(), p.user()));
+        addMessage(new MessageUpdate(p.getGender(), p.user()));
     }
 
     // TODO: What is the point of switching?
     public static void addMessage(String message, Battle b, ActivePokemon p, boolean switching) {
-        messages.add(new MessageUpdate(message, p, b));
+        addMessage(new MessageUpdate(message, p, b));
     }
 
     public static void addMessage(String message, Battle b, ActivePokemon gainer, int[] statGains, int[] stats) {
         addMessage(StringUtils.empty(), b, gainer);
-        messages.add(new MessageUpdate(statGains, stats));
+        addMessage(new MessageUpdate(statGains, stats));
     }
 
     // Image update
     public static void addMessage(String message, PokemonInfo pokemon, boolean shiny, boolean animation, boolean target) {
-        messages.add(new MessageUpdate(message, pokemon, shiny, animation, target));
+        addMessage(new MessageUpdate(message, pokemon, shiny, animation, target));
     }
 
     public static void addMessage(String message, Update update) {
-        messages.add(new MessageUpdate(message, update));
+        addMessage(new MessageUpdate(message, update));
     }
 
     public static void addMessage(String message, int duration) {
-        messages.add(new MessageUpdate(message, duration));
+        addMessage(new MessageUpdate(message, duration));
     }
 
     public static void addMessage(String message, Battle b, ActivePokemon gainer, float expRatio, boolean levelUp) {
         addMessage(message, b, gainer);
-        messages.add(new MessageUpdate(gainer.getLevel(), expRatio, levelUp));
+        addMessage(new MessageUpdate(gainer.getLevel(), expRatio, levelUp));
     }
 
     // Learning a move
     public static void addMessage(String message, ActivePokemon p, Move move) {
-        messages.add(new MessageUpdate(message, p, move));
+        addMessage(new MessageUpdate(message, p, move));
+    }
+
+    public static void fightyFight() {
+        fightyFight = true;
+    }
+
+    public static void mappityMap() {
+        fightyFight = false;
     }
 }

@@ -1,9 +1,10 @@
 package mapMaker.dialogs;
 
-import map.triggers.TriggerData;
-import map.triggers.WildBattleTrigger;
+import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
+import pattern.TriggerMatcher;
+import pattern.WildBattleTriggerMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -17,15 +18,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WildBattleTriggerEditDialog extends JPanel {
+public class WildBattleTriggerEditDialog extends TriggerDialog<TriggerMatcher> {
 	private static final long serialVersionUID = -3454589908432207758L;
 
 	private JTextField nameTextField;
-	private JComboBox<String> rateComboBox;
+	private JComboBox<EncounterRate> rateComboBox;
 	
 	private JScrollPane pokemonScrollPane;
 	private JPanel pokemonCollectionPanel;
@@ -34,8 +36,7 @@ public class WildBattleTriggerEditDialog extends JPanel {
 	private List<WildPokemonDataPanel> wildPokemonPanels;
 	private Set<Integer> selected;
 	
-	public WildBattleTriggerEditDialog() 
-	{
+	public WildBattleTriggerEditDialog() {
 		wildPokemonPanels = new ArrayList<>();
 		selected = new HashSet<>();
 		
@@ -45,7 +46,7 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		nameTextField.setColumns(10);
 		
 		rateComboBox = new JComboBox<>();
-		rateComboBox.setModel(new DefaultComboBoxModel<>(EncounterRate.ENCOUNTER_RATE_NAMES));
+		rateComboBox.setModel(new DefaultComboBoxModel<>(EncounterRate.values()));
 		
 		pokemonScrollPane = new JScrollPane();
 		pokemonScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -59,19 +60,20 @@ public class WildBattleTriggerEditDialog extends JPanel {
 		
 		removeSelectedButton = new JButton("Remove Selected");
 		removeSelectedButton.addActionListener(actionEvent -> {
-            int[] values = new int[selected.size()];
-			int index = 0;
-			for (int value : selected) {
-				// TODO: lambda??
-				values[index++] = value;
-			}
 
-            for (int currPanel = values.length - 1; currPanel >= 0; --currPanel) {
-                wildPokemonPanels.remove(values[currPanel]);
-                pokemonCollectionPanel.remove(values[currPanel]);
+			// Convert selected to an int array
+			int[] indexesToRemove = Arrays
+					.stream(selected.toArray(new Integer[0]))
+					.mapToInt(Integer::intValue)
+					.sorted()
+					.toArray();
+
+            for (int index = indexesToRemove.length - 1; index >= 0; index--) {
+                wildPokemonPanels.remove(indexesToRemove[index]);
+                pokemonCollectionPanel.remove(indexesToRemove[index]);
             }
 
-            for (int currPanel = 0; currPanel < wildPokemonPanels.size(); ++currPanel) {
+            for (int currPanel = 0; currPanel < wildPokemonPanels.size(); currPanel++) {
                 wildPokemonPanels.get(currPanel).index = currPanel;
             }
 
@@ -175,52 +177,52 @@ public class WildBattleTriggerEditDialog extends JPanel {
 			}
 		}
 	}
-	
-	public void initialize(WildBattleTrigger trigger) {
-		nameTextField.setText(trigger.getName());
-		
-		rateComboBox.setSelectedIndex(trigger.getEncounterRate().ordinal());
-		
-		for (WildEncounter wildEncounter : trigger.getWildEncounters()) {
-			WildPokemonDataPanel panel = addPokemonPanel();
-			
-			panel.pokemonTextField.setText(wildEncounter.getPokemonName());
-			panel.probabilityFormattedTextField.setValue(wildEncounter.getProbability());
-			panel.lowLevelFormattedTextField.setValue(wildEncounter.getMinLevel());
-			panel.highLevelFormattedTextField.setValue(wildEncounter.getMaxLevel());
-		}
-	}
-	
-	public WildBattleTrigger getTrigger() {
+
+	@Override
+	public TriggerMatcher getMatcher() {
 		String name = nameTextField.getText();
-		EncounterRate encounterRate = EncounterRate.valueOf((String)rateComboBox.getSelectedItem());
+		EncounterRate encounterRate = (EncounterRate)rateComboBox.getSelectedItem();
 
 		if (name.isEmpty() || wildPokemonPanels.isEmpty()) {
 			return null;
 		}
-		
+
 		WildEncounter[] wildEncounters = new WildEncounter[wildPokemonPanels.size()];
-		for (int currRow = 0; currRow < wildEncounters.length; ++currRow) {
+		for (int currRow = 0; currRow < wildEncounters.length; currRow++) {
 			WildPokemonDataPanel panel = wildPokemonPanels.get(currRow);
-			
+
 			String pokemon = panel.pokemonTextField.getText();
 			String minLevel = panel.lowLevelFormattedTextField.getText();
 			String maxLevel = panel.highLevelFormattedTextField.getText();
 			String probability = panel.probabilityFormattedTextField.getText();
-			
+
 			wildEncounters[currRow] = new WildEncounter(pokemon, minLevel, maxLevel, probability);
 			System.out.println(wildEncounters[currRow].getPokemonName());
 		}
-		
-		return new WildBattleTrigger(name, wildEncounters, encounterRate);
+
+		return WildBattleTriggerMatcher.createWildBattleMatcher(name, encounterRate, wildEncounters);
 	}
-	
-	public TriggerData getTriggerData() {
-		WildBattleTrigger wildBattleTrigger = getTrigger();
-		if (wildBattleTrigger == null) {
-			return null;
+
+	@Override
+	public void load(TriggerMatcher matcher) {
+		if (!matcher.isWildBattleTrigger()) {
+			Global.error("Invalid wild battle trigger");
 		}
-		
-		return new TriggerData(wildBattleTrigger.getName(), "WildBattle\n" + wildBattleTrigger.triggerDataAsString());
+
+		WildBattleTriggerMatcher wildBattleTriggerMatcher = matcher.getWildBattleTriggerContents();
+
+		nameTextField.setText(matcher.getBasicName());
+		rateComboBox.setSelectedItem(wildBattleTriggerMatcher.getEncounterRate());
+
+		for (WildEncounter wildEncounter : wildBattleTriggerMatcher.getWildEncounters()) {
+			WildPokemonDataPanel panel = addPokemonPanel();
+
+			panel.pokemonTextField.setText(wildEncounter.getPokemonName());
+			panel.probabilityFormattedTextField.setValue(wildEncounter.getProbability());
+			panel.lowLevelFormattedTextField.setValue(wildEncounter.getMinLevel());
+			panel.highLevelFormattedTextField.setValue(wildEncounter.getMaxLevel());
+
+			System.out.println(wildEncounter.getPokemonName() + " " + wildEncounter.getMinLevel() + " " + wildEncounter.getMaxLevel() + " " + wildEncounter.getProbability());
+		}
 	}
 }

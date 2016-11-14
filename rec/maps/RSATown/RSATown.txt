@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "RSA Town",
+      "terrain": "GRASS",
+      "music": "RSA_TOWN"
+    }
+  ],
   "NPCs": [
     {
       "name": "RSATown_NPC_Rival_01",
@@ -7,13 +14,16 @@
       "path": "llldddrrrrrruuulll",
       "spriteIndex": 14,
       "direction": "LEFT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
-              "text": "My Riolu is going to punch the normal off your Eevee!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Riolu is going to punch the normal off your Eevee!"
+              }
             },
             {
               "battle": {
@@ -29,13 +39,18 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "..."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "..."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "RSATown_NPC_RSATown_NPC_Rival_01_01"
     },
     {
       "name": "RSATown_NPC_Guy_01",
@@ -44,81 +59,66 @@
       "path": "w",
       "spriteIndex": 5,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "dialogue",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "RSATown_NPC_RSATown_NPC_Guy_01_01"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "PokeCenter01",
-      "x": 25,
-      "y": 17
-    },
-    {
-      "name": "TransitionBuildingHEastDoor01",
-      "x": 16,
-      "y": 20
-    },
-    {
-      "name": "TransitionBuildingHWestDoor01",
-      "x": 43,
-      "y": 20
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "RSATown_to_TransitionBuildingH_between_DFS_Town_and_RSATown_pair_01_WestDoor",
+      "exitName": "WestTransitionBuilding",
       "location": [
-        44,
+        16,
         20,
-        44,
+        16,
         19
       ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: WestDoor
-      }"
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "EastDoor",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "triggerName": "RSATown_MapExit_WestTransitionBuilding_01"
     },
     {
-      "name": "from_RSATown_to_PokeCenter_01",
+      "exitName": "EastTransitionBuilding",
+      "location": [
+        43,
+        20,
+        43,
+        19
+      ],
+      "nextMap": "Edge1_RSATown_TransitionBuilding",
+      "nextEntrance": "WestDoor",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "triggerName": "RSATown_MapExit_EastTransitionBuilding_01"
+    },
+    {
+      "exitName": "PokeCenter",
       "location": [
         25,
-        16
+        17
       ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_toPokeCenterFromEntrance_PokeCenter01",
-      "triggerContents": "{
-        nextMap: PokeCenter,
-        mapEntrance: FrontDoor
-      }"
-    },
-    {
-      "name": "RSATown_to_TransitionBuildingH_between_RSATown_and_Bloom_Filter_Meadow_pair_01_EastDoor",
-      "location": [
-        15,
-        20,
-        15,
-        19
-      ],
-      "triggerType": "MapTransition",
-      "global": "MapGlobal_TransitionPair01",
-      "triggerContents": "{
-        nextMap: TransitionBuildingH,
-        mapEntrance: EastDoor
-      }"
+      "nextMap": "RSATown_PokeCenter",
+      "nextEntrance": "FrontDoor",
+      "direction": "UP",
+      "deathPortal": false,
+      "triggerName": "RSATown_MapExit_PokeCenter_01"
     }
   ],
-  "triggers": []
+  "triggerData": [],
+  "miscEntities": []
 }

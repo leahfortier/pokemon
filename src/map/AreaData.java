@@ -1,25 +1,17 @@
 package map;
 
-import battle.effect.status.StatusCondition;
-import gui.GameData;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import main.Global;
-import main.Type;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import pokemon.Stat;
-import battle.Attack;
-import battle.effect.generic.Effect;
-import battle.effect.generic.PokemonEffect;
-import util.StringUtils;
+import sound.MusicCondition;
+import sound.SoundTitle;
 
 public class AreaData {
-	private static final Pattern areaSoundConditionPattern = Pattern.compile("(?:([()&|!\\w]+)\\s*:\\s*)?([\\w-]+)");
+	static final AreaData VOID = new AreaData(
+			"Void",
+			0,
+			TerrainType.CAVE,
+			WeatherState.NORMAL,
+			SoundTitle.DEFAULT_TUNE,
+			new MusicCondition[0]
+	);
 
 	public enum WeatherState {
 		NORMAL,
@@ -29,142 +21,33 @@ public class AreaData {
 		SNOW
 	}
 
-	// TODO: Move this to its own file
-	public enum TerrainType {
-		GRASS(Type.GRASS, AttackNamesies.ENERGY_BALL, StatusCondition.ASLEEP),
-		BUILDING(Type.NORMAL, AttackNamesies.TRI_ATTACK, StatusCondition.PARALYZED),
-		CAVE(Type.ROCK, AttackNamesies.POWER_GEM, EffectNamesies.FLINCH),
-		SAND(Type.GROUND, AttackNamesies.EARTH_POWER, Stat.ACCURACY),
-		WATER(Type.WATER, AttackNamesies.HYDRO_PUMP, Stat.ATTACK),
-		SNOW(Type.ICE, AttackNamesies.FROST_BREATH, StatusCondition.FROZEN),
-		ICE(Type.ICE, AttackNamesies.ICE_BEAM, StatusCondition.FROZEN),
-		MISTY(Type.FAIRY, AttackNamesies.MOONBLAST, Stat.SP_ATTACK),
-		ELECTRIC(Type.ELECTRIC, AttackNamesies.THUNDERBOLT, StatusCondition.PARALYZED);
-		
-		private final Type type;
-		private final Attack attack;
-		
-		private final StatusCondition status;
-		private final int[] statChanges;
-		private final List<Effect> effects;
-		
-		private int backgroundIndex;
-		private int playerCircleIndex;
-		private int opponentCircleIndex;
-		
-		TerrainType(Type type, AttackNamesies attack, Object effect) {
-			this.type = type;
-			this.attack = Attack.getAttack(attack);
-		
-			this.statChanges = new int[Stat.NUM_BATTLE_STATS];
-			this.effects = new ArrayList<>();
-			
-			if (effect instanceof StatusCondition) {
-				this.status = (StatusCondition)effect;
-			}
-			else {
-				this.status = StatusCondition.NO_STATUS;
-				
-				if (effect instanceof Stat) {
-					this.statChanges[((Stat)effect).index()] = -1;
-				}
-				else if (effect instanceof EffectNamesies) {
-					this.effects.add(PokemonEffect.getEffect((EffectNamesies)effect));
-				}
-				else {
-					Global.error("Invalid effect for terrain type " + this.name());
-				}	
-			}
-			
-			this.backgroundIndex = 0x100 + this.ordinal();
-			this.playerCircleIndex = 0x200 + this.ordinal();
-			this.opponentCircleIndex = 0x300 + this.ordinal();
-		}
-		
-		static {
-			// TODO: Need Terrain images for misty and electric terrain -- use snow and sand for now (for no particular reason)
-			// TODO: Once that's finished need to include final tags on all these variables
-			MISTY.backgroundIndex = SNOW.backgroundIndex;
-			ELECTRIC.backgroundIndex = SAND.backgroundIndex;
-			
-			MISTY.playerCircleIndex = SNOW.playerCircleIndex;
-			ELECTRIC.playerCircleIndex = SAND.playerCircleIndex;
-			
-			MISTY.opponentCircleIndex = SNOW.opponentCircleIndex;
-			ELECTRIC.opponentCircleIndex = SAND.opponentCircleIndex;
-		}
-		
-		public Type getType() {
-			return type;
-		}
-		
-		public Attack getAttack() {
-			return attack;
-		}
-		
-		public StatusCondition getStatusCondition() {
-			return status;
-		}
-		
-		public int[] getStatChanges() {
-			return statChanges;
-		}
-		
-		public List<Effect> getEffects() {
-			return effects;
-		}
-		
-		public int getBackgroundIndex() {
-			return backgroundIndex;
-		}
-		
-		public int getPlayerCircleIndex() {
-			return playerCircleIndex;
-		}
-		
-		public int getOpponentCircleIndex() {
-			return opponentCircleIndex;
-		}
-	}
-
 	private String name;
 	private int color;
+
 	private TerrainType terrainType;
 	private WeatherState weather;
 
-	private String musicCondition;
-	private String musicTriggerName;
+	private SoundTitle music;
+	private MusicCondition[] musicConditions;
 
-	public AreaData(String name, int color, String weather, String terrainType, String musicCondition) {
+	public AreaData(String name,
+					int color,
+					TerrainType terrainType,
+					WeatherState weather,
+					SoundTitle music,
+					MusicCondition[] musicConditions) {
 		this.name = name;
 		this.color = color;
-		this.terrainType = TerrainType.valueOf(terrainType);
 
-		this.musicCondition = musicCondition;
+		this.terrainType = terrainType;
+		this.weather = weather;
 
-		this.weather = WeatherState.valueOf(weather);
+		this.music = music;
+		this.musicConditions = musicConditions;
 	}
 
-	public void addMusicTriggers(GameData data) {
-		if (musicCondition != null) {
-			StringBuilder groupTriggers = new StringBuilder();
-			String areaNameDisplay = name.replace(' ', '_').replaceAll("\\W", "");
-
-			Matcher areaSoundMatcher = areaSoundConditionPattern.matcher(musicCondition);
-			while (areaSoundMatcher.find()) {
-				String condition = areaSoundMatcher.group(1);
-				String musicName = areaSoundMatcher.group(2);
-				String soundTriggerName = "SoundTrigger_AreaSound_for_" + areaNameDisplay + "_MusicName_" + musicName;
-
-				// System.out.println(condition + " : " + musicName);
-
-				data.addTrigger("Sound", soundTriggerName, (condition != null ? "condition: " + condition : "") + "\nmusicName: " + musicName);
-				StringUtils.appendLine(groupTriggers, "trigger: " + soundTriggerName);
-			}
-
-			data.addTrigger("Group", "GroupTrigger_AreaSound_for_" + areaNameDisplay, groupTriggers.toString());
-			musicTriggerName = "GroupTrigger_AreaSound_for_" + areaNameDisplay;
-		}
+	public boolean isColor(int color) {
+		return this.color == color;
 	}
 
 	public WeatherState getWeather() {
@@ -179,7 +62,13 @@ public class AreaData {
 		return name;
 	}
 
-	public String getMusicTriggerName() {
-		return musicTriggerName;
+	public SoundTitle getMusic() {
+		for (MusicCondition condition : musicConditions) {
+			if (condition.isTrue()) {
+				return condition.getMusic();
+			}
+		}
+
+		return this.music;
 	}
 }

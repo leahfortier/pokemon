@@ -98,7 +98,7 @@ public class DrawUtils {
 	public static void drawCenteredImage(Graphics g, BufferedImage image, int x, int y) {
 		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2, null);
 	}
-	
+
 	public static BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
 		ColorModel colorModel = image.getColorModel();
 		boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
@@ -127,7 +127,19 @@ public class DrawUtils {
         }
         return image;
     }
-	
+
+    public static int getTextHeight(Graphics g) {
+		int fontSize = g.getFont().getSize();
+		Metrics fontMetrics = getFontMetrics(fontSize);
+		return fontMetrics.letterHeight;
+	}
+
+    public static int getDistanceBetweenRows(Graphics g) {
+		int fontSize = g.getFont().getSize();
+		Metrics fontMetrics = getFontMetrics(fontSize);
+		return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
+	}
+
 	public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
 		int fontSize = g.getFont().getSize();
 		Metrics fontMetrics = getFontMetrics(fontSize);
@@ -136,7 +148,7 @@ public class DrawUtils {
 		StringBuilder build = new StringBuilder();
 		
 		int height = y;
-		int distanceBetweenRows = (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
+		int distanceBetweenRows = getDistanceBetweenRows(g);
 
 		for (String word : words) {
 			if ((word.length() + build.length() + 1) * fontMetrics.horizontalSpacing > width) {
@@ -255,8 +267,8 @@ public class DrawUtils {
 
 	public static Point getImageDrawLocation(BufferedImage image, Point location, Point mapLocation) {
 		Point drawLocation = getDrawLocation(location, mapLocation);
-		drawLocation.x += Global.TILE_SIZE/2 - image.getWidth()/2;
-		drawLocation.y += Global.TILE_SIZE/2 -  image.getHeight()/2;
+		drawLocation.x += Global.TILE_SIZE - image.getWidth();
+		drawLocation.y += Global.TILE_SIZE -  image.getHeight();
 
 		return drawLocation;
 	}

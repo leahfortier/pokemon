@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Condition {
-	private static final Pattern conditionPattern = Pattern.compile("condition:\\s*(\\S+)");
 	private static final Pattern functionPattern = Pattern.compile("(\\w+)|([()&|!])");
 	
 	/*
@@ -19,14 +18,15 @@ public class Condition {
 	private List<String> condition;
 	private String originalConditionString;
 	
-	public Condition(String str) {
+	public Condition(String conditionString) {
+
 		originalConditionString = StringUtils.empty();
 		condition = new ArrayList<>();
-		Matcher conditionMatcher = conditionPattern.matcher(str);
-		
-		if (conditionMatcher.find()) {
-			String function = conditionMatcher.group(1);
-			Matcher m = functionPattern.matcher(function);
+
+		if (StringUtils.isNullOrEmpty(conditionString)) {
+			condition.add("true");
+		} else {
+			Matcher m = functionPattern.matcher(conditionString);
 			Stack<String> stack = new Stack<>();
 			
 			while (m.find()) {
@@ -68,9 +68,6 @@ public class Condition {
 				condition.add(stack.pop());
 			}
 		}
-		else {
-			condition.add("true");
-		}
 	}
 	
 	public boolean isTrue() {
@@ -107,6 +104,21 @@ public class Condition {
 		}
 		
 		return stack.pop();
+	}
+
+	public static String and(final String firstCondition, final String secondCondition) {
+		if (StringUtils.isNullOrEmpty(firstCondition)) {
+			if (StringUtils.isNullOrEmpty(secondCondition)) {
+				return StringUtils.empty();
+			}
+
+			return secondCondition;
+		} else if (StringUtils.isNullOrEmpty(secondCondition)) {
+			return firstCondition;
+		} else {
+			return String.format("(%s)&(%s)", firstCondition, secondCondition);
+		}
+
 	}
 	
 	public boolean add(String global, char op) {

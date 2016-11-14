@@ -1,4 +1,11 @@
 {
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "POKE_GYM"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Gym_NPC_Leader_Moore_01",
@@ -7,13 +14,16 @@
       "path": "w",
       "spriteIndex": 15,
       "direction": "DOWN",
-      "walkToPlayer": false,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "My Pokemon pack enough electricity to power the Cray Titan!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Pokemon pack enough electricity to power the Cray Titan!"
+              }
             },
             {
               "battle": {
@@ -31,23 +41,36 @@
         },
         {
           "name": "badge",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "My data BUS just wasn't large enough! Take this, the Round Badge!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My data BUS just wasn't large enough! Take this, the Round Badge!"
+              }
             },
-            {}
-          ],
-          "update": "won"
+            {
+              "trigger": {
+                "triggerType": "Badge",
+                "triggerContents": "0"
+              }
+            }
+          ]
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo"
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Leader_Moore_01_01"
     },
     {
       "name": "Tom_Gym_NPC_Tom_Trainer_01",
@@ -56,13 +79,16 @@
       "path": "w",
       "spriteIndex": 5,
       "direction": "RIGHT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
-              "text": "Watch out, I'm gonna fry your motherboard!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Watch out, I'm gonna fry your motherboard!"
+              }
             },
             {
               "battle": {
@@ -78,13 +104,18 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "Hey! You fried my motherboard!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Hey! You fried my motherboard!"
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Tom_Trainer_01_01"
     },
     {
       "name": "Tom_Gym_NPC_Tom_Trainer_02",
@@ -93,13 +124,16 @@
       "path": "w",
       "spriteIndex": 5,
       "direction": "LEFT",
-      "walkToPlayer": true,
       "interactions": [
         {
           "name": "battle",
+          "walkToPlayer": true,
           "npcActions": [
             {
-              "text": "My Pokemon and I communicate over PCI express!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Pokemon and I communicate over PCI express!"
+              }
             },
             {
               "battle": {
@@ -115,36 +149,35 @@
         },
         {
           "name": "won",
+          "walkToPlayer": false,
           "npcActions": [
             {
-              "text": "I need more bandwidth!"
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I need more bandwidth!"
+              }
             }
           ]
         }
-      ]
+      ],
+      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Tom_Trainer_02_01"
     }
   ],
   "items": [],
-  "mapEntrances": [
+  "mapExits": [
     {
-      "name": "Tom_Town",
-      "x": 9,
-      "y": 15
-    }
-  ],
-  "triggerData": [
-    {
-      "name": "from_Tom_Gym_to_Tom_Town_01",
+      "exitName": "Tom_Town",
       "location": [
         9,
-        16
+        15
       ],
-      "triggerType": "MapTransition",
-      "triggerContents": "{
-        nextMap: Tom_Town,
-        mapEntrance: Gym
-      }"
+      "nextMap": "Tom_Town",
+      "nextEntrance": "Gym",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "triggerName": "Tom_Gym_MapExit_Tom_Town_01"
     }
   ],
-  "triggers": []
+  "triggerData": [],
+  "miscEntities": []
 }
