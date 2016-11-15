@@ -140,9 +140,6 @@ public class EditMapMetaData {
 
         Point delta = Point.copy(location).negate().lowerBound();
 
-        System.out.println("New " + currentMapSize.width + " " + currentMapSize.height);
-        System.out.println("Start " + delta);
-
         this.resetMaps();
 
         for (Entry<MapDataType, BufferedImage> entry : currentMap.entrySet()) {

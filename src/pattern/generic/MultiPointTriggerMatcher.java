@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class MultiPointTriggerMatcher extends LocationTriggerMatcher {
-    public List<Point> location;
+    protected List<Point> location;
 
     public List<Point> getLocation() {
         if (this.location == null) {

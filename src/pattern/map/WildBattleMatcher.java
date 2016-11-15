@@ -18,7 +18,7 @@ public class WildBattleMatcher extends MultiPointTriggerMatcher {
                     MatchConstants.group(MatchType.INTEGER) + "%"
     );
 
-    public String name;
+    private String name;
     private EncounterRate encounterRate;
     private String[] pokemon;
 

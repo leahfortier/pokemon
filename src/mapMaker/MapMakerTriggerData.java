@@ -144,7 +144,7 @@ public class MapMakerTriggerData {
 					case NPC:
 						NPCMatcher npc = (NPCMatcher) entity;
 						// TODO: This should be in a method
-						image = mapMaker.getTileFromSet(TileType.TRAINER, 12 * npc.spriteIndex + 1 + npc.direction.ordinal());
+						image = mapMaker.getTileFromSet(TileType.TRAINER, 12 * npc.getSpriteIndex() + 1 + npc.getDirection().ordinal());
 						break;
 				}
 

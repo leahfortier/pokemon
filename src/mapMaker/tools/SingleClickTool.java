@@ -60,7 +60,7 @@ class SingleClickTool extends Tool {
             if (type == TriggerModelType.NPC) {
                 // TODO
                 NPCMatcher npc = (NPCMatcher) mapMaker.getPlaceableTrigger();
-                image = mapMaker.getTileFromSet(TileType.TRAINER, 12*npc.spriteIndex + 1 + npc.direction.ordinal());
+                image = mapMaker.getTileFromSet(TileType.TRAINER, 12*npc.getSpriteIndex() + 1 + npc.getDirection().ordinal());
             }
             else {
                 image = type.getImage(mapMaker);

@@ -21,8 +21,8 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
 
     private String name;
     private String path;
-    public int spriteIndex;
-    public Direction direction;
+    private int spriteIndex;
+    private Direction direction;
     private NPCInteractionMatcher[] interactions;
 
     public NPCMatcher(String name,

@@ -97,9 +97,9 @@ public class MapDataMatcher {
 
     public List<LocationTriggerMatcher> getAllEntities() {
         List<LocationTriggerMatcher> entities = new ArrayList<>();
+        entities.addAll(getMapTransitions());
         entities.addAll(getNPCs());
         entities.addAll(getItems());
-        entities.addAll(getMapTransitions());
         entities.addAll(getMiscEntities());
         entities.addAll(getEvents());
         entities.addAll(getWildBattles());

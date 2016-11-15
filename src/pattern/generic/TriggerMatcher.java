@@ -3,7 +3,7 @@ package pattern.generic;
 import util.StringUtils;
 
 public abstract class TriggerMatcher {
-    public String triggerName;
+    private String triggerName;
     private String condition;
 
     public String getTriggerName() {
