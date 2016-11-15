@@ -78,7 +78,7 @@ class NamesiesGen {
 				.append("(\"")
 				.append(name)
 				.append("\"")
-//				.append(StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new")
+				.append(StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new")
 				.append(")");
 		firstNamesies = false;
 	}

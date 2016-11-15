@@ -1,119 +1,226 @@
 package battle.effect.generic;
 
+import battle.effect.generic.BattleEffect.ElectricTerrain;
+import battle.effect.generic.BattleEffect.GrassyTerrain;
+import battle.effect.generic.BattleEffect.Gravity;
+import battle.effect.generic.BattleEffect.MagicRoom;
+import battle.effect.generic.BattleEffect.MistyTerrain;
+import battle.effect.generic.BattleEffect.MudSport;
+import battle.effect.generic.BattleEffect.TrickRoom;
+import battle.effect.generic.BattleEffect.WaterSport;
+import battle.effect.generic.BattleEffect.WonderRoom;
+import battle.effect.generic.PokemonEffect.AquaRing;
+import battle.effect.generic.PokemonEffect.BadPoison;
+import battle.effect.generic.PokemonEffect.Bide;
+import battle.effect.generic.PokemonEffect.Binded;
+import battle.effect.generic.PokemonEffect.Bracing;
+import battle.effect.generic.PokemonEffect.ChangeAbility;
+import battle.effect.generic.PokemonEffect.ChangeItem;
+import battle.effect.generic.PokemonEffect.ChangeType;
+import battle.effect.generic.PokemonEffect.Charge;
+import battle.effect.generic.PokemonEffect.Clamped;
+import battle.effect.generic.PokemonEffect.Confusion;
+import battle.effect.generic.PokemonEffect.ConsumedItem;
+import battle.effect.generic.PokemonEffect.CraftyShield;
+import battle.effect.generic.PokemonEffect.Curse;
+import battle.effect.generic.PokemonEffect.DestinyBond;
+import battle.effect.generic.PokemonEffect.Disable;
+import battle.effect.generic.PokemonEffect.EatenBerry;
+import battle.effect.generic.PokemonEffect.Electrified;
+import battle.effect.generic.PokemonEffect.Embargo;
+import battle.effect.generic.PokemonEffect.Encore;
+import battle.effect.generic.PokemonEffect.FairyLock;
+import battle.effect.generic.PokemonEffect.FiddyPercentStronger;
+import battle.effect.generic.PokemonEffect.FireSpin;
+import battle.effect.generic.PokemonEffect.Flinch;
+import battle.effect.generic.PokemonEffect.Focusing;
+import battle.effect.generic.PokemonEffect.Foresight;
+import battle.effect.generic.PokemonEffect.Grounded;
+import battle.effect.generic.PokemonEffect.Grudge;
+import battle.effect.generic.PokemonEffect.GuardSpecial;
+import battle.effect.generic.PokemonEffect.GuardSplit;
+import battle.effect.generic.PokemonEffect.HalfWeight;
+import battle.effect.generic.PokemonEffect.HealBlock;
+import battle.effect.generic.PokemonEffect.Imprison;
+import battle.effect.generic.PokemonEffect.Infatuated;
+import battle.effect.generic.PokemonEffect.Infestation;
+import battle.effect.generic.PokemonEffect.Ingrain;
+import battle.effect.generic.PokemonEffect.KingsShield;
+import battle.effect.generic.PokemonEffect.LeechSeed;
+import battle.effect.generic.PokemonEffect.LockOn;
+import battle.effect.generic.PokemonEffect.MagicCoat;
+import battle.effect.generic.PokemonEffect.MagmaStorm;
+import battle.effect.generic.PokemonEffect.MagnetRise;
+import battle.effect.generic.PokemonEffect.MatBlock;
+import battle.effect.generic.PokemonEffect.Mimic;
+import battle.effect.generic.PokemonEffect.MiracleEye;
+import battle.effect.generic.PokemonEffect.Mist;
+import battle.effect.generic.PokemonEffect.Nightmare;
+import battle.effect.generic.PokemonEffect.PerishSong;
+import battle.effect.generic.PokemonEffect.Powder;
+import battle.effect.generic.PokemonEffect.PowerSplit;
+import battle.effect.generic.PokemonEffect.PowerTrick;
+import battle.effect.generic.PokemonEffect.Protecting;
+import battle.effect.generic.PokemonEffect.QuickGuard;
+import battle.effect.generic.PokemonEffect.RaiseCrits;
+import battle.effect.generic.PokemonEffect.Safeguard;
+import battle.effect.generic.PokemonEffect.SandTomb;
+import battle.effect.generic.PokemonEffect.SelfConfusion;
+import battle.effect.generic.PokemonEffect.Snatch;
+import battle.effect.generic.PokemonEffect.SpikyShield;
+import battle.effect.generic.PokemonEffect.Stockpile;
+import battle.effect.generic.PokemonEffect.Substitute;
+import battle.effect.generic.PokemonEffect.Taunt;
+import battle.effect.generic.PokemonEffect.Telekinesis;
+import battle.effect.generic.PokemonEffect.Torment;
+import battle.effect.generic.PokemonEffect.Transformed;
+import battle.effect.generic.PokemonEffect.Trapped;
+import battle.effect.generic.PokemonEffect.Uproar;
+import battle.effect.generic.PokemonEffect.UsedDefenseCurl;
+import battle.effect.generic.PokemonEffect.UsedMinimize;
+import battle.effect.generic.PokemonEffect.Whirlpooled;
+import battle.effect.generic.PokemonEffect.Wrapped;
+import battle.effect.generic.PokemonEffect.Yawn;
+import battle.effect.generic.TeamEffect.DeadAlly;
+import battle.effect.generic.TeamEffect.DoomDesire;
+import battle.effect.generic.TeamEffect.FutureSight;
+import battle.effect.generic.TeamEffect.GetDatCashMoneyTwice;
+import battle.effect.generic.TeamEffect.HealSwitch;
+import battle.effect.generic.TeamEffect.LightScreen;
+import battle.effect.generic.TeamEffect.LuckyChant;
+import battle.effect.generic.TeamEffect.PayDay;
+import battle.effect.generic.TeamEffect.Reflect;
+import battle.effect.generic.TeamEffect.Spikes;
+import battle.effect.generic.TeamEffect.StealthRock;
+import battle.effect.generic.TeamEffect.StickyWeb;
+import battle.effect.generic.TeamEffect.Tailwind;
+import battle.effect.generic.TeamEffect.ToxicSpikes;
+import battle.effect.generic.TeamEffect.Wish;
+import battle.effect.generic.Weather.ClearSkies;
+import battle.effect.generic.Weather.Hailing;
+import battle.effect.generic.Weather.Raining;
+import battle.effect.generic.Weather.Sandstorm;
+import battle.effect.generic.Weather.Sunny;
 import main.Global;
 import util.PokeString;
 
 public enum EffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
-	LEECH_SEED("LeechSeed"),
-	BAD_POISON("BadPoison"),
-	FLINCH("Flinch"),
-	FIRE_SPIN("FireSpin"),
-	INFESTATION("Infestation"),
-	MAGMA_STORM("MagmaStorm"),
-	CLAMPED("Clamped"),
-	WHIRLPOOLED("Whirlpooled"),
-	WRAPPED("Wrapped"),
-	BINDED("Binded"),
-	SAND_TOMB("SandTomb"),
-	KINGS_SHIELD("KingsShield"),
-	SPIKY_SHIELD("SpikyShield"),
-	PROTECTING("Protecting"),
-	QUICK_GUARD("QuickGuard"),
-	CRAFTY_SHIELD("CraftyShield"),
-	MAT_BLOCK("MatBlock"),
-	BRACING("Bracing"),
-	CONFUSION("Confusion"),
-	SELF_CONFUSION("SelfConfusion"),
-	SAFEGUARD("Safeguard"),
-	GUARD_SPECIAL("GuardSpecial"),
-	ENCORE("Encore"),
-	DISABLE("Disable"),
-	RAISE_CRITS("RaiseCrits"),
-	CHANGE_ITEM("ChangeItem"),
-	CHANGE_TYPE("ChangeType"),
-	CHANGE_ABILITY("ChangeAbility"),
-	STOCKPILE("Stockpile"),
-	USED_DEFENSE_CURL("UsedDefenseCurl"),
-	USED_MINIMIZE("UsedMinimize"),
-	MIMIC("Mimic"),
-	IMPRISON("Imprison"),
-	TRAPPED("Trapped"),
-	FORESIGHT("Foresight"),
-	MIRACLE_EYE("MiracleEye"),
-	TORMENT("Torment"),
-	TAUNT("Taunt"),
-	LOCK_ON("LockOn"),
-	TELEKINESIS("Telekinesis"),
-	INGRAIN("Ingrain"),
-	GROUNDED("Grounded"),
-	CURSE("Curse"),
-	YAWN("Yawn"),
-	MAGNET_RISE("MagnetRise"),
-	UPROAR("Uproar"),
-	AQUA_RING("AquaRing"),
-	NIGHTMARE("Nightmare"),
-	CHARGE("Charge"),
-	FOCUSING("Focusing"),
-	FIDDY_PERCENT_STRONGER("FiddyPercentStronger"),
-	TRANSFORMED("Transformed"),
-	SUBSTITUTE("Substitute"),
-	MIST("Mist"),
-	MAGIC_COAT("MagicCoat"),
-	BIDE("Bide"),
-	HALF_WEIGHT("HalfWeight"),
-	POWER_TRICK("PowerTrick"),
-	POWER_SPLIT("PowerSplit"),
-	GUARD_SPLIT("GuardSplit"),
-	HEAL_BLOCK("HealBlock"),
-	INFATUATED("Infatuated"),
-	SNATCH("Snatch"),
-	GRUDGE("Grudge"),
-	DESTINY_BOND("DestinyBond"),
-	PERISH_SONG("PerishSong"),
-	EMBARGO("Embargo"),
-	CONSUMED_ITEM("ConsumedItem"),
-	FAIRY_LOCK("FairyLock"),
-	POWDER("Powder"),
-	ELECTRIFIED("Electrified"),
-	EATEN_BERRY("EatenBerry"),
-	REFLECT("Reflect"),
-	LIGHT_SCREEN("LightScreen"),
-	TAILWIND("Tailwind"),
-	STICKY_WEB("StickyWeb"),
-	STEALTH_ROCK("StealthRock"),
-	TOXIC_SPIKES("ToxicSpikes"),
-	SPIKES("Spikes"),
-	WISH("Wish"),
-	LUCKY_CHANT("LuckyChant"),
-	FUTURE_SIGHT("FutureSight"),
-	DOOM_DESIRE("DoomDesire"),
-	HEAL_SWITCH("HealSwitch"),
-	DEAD_ALLY("DeadAlly"),
-	PAY_DAY("PayDay"),
-	GET_DAT_CASH_MONEY_TWICE("GetDatCashMoneyTwice"),
-	GRAVITY("Gravity"),
-	WATER_SPORT("WaterSport"),
-	MUD_SPORT("MudSport"),
-	WONDER_ROOM("WonderRoom"),
-	TRICK_ROOM("TrickRoom"),
-	MAGIC_ROOM("MagicRoom"),
-	MISTY_TERRAIN("MistyTerrain"),
-	GRASSY_TERRAIN("GrassyTerrain"),
-	ELECTRIC_TERRAIN("ElectricTerrain"),
-	CLEAR_SKIES("ClearSkies"),
-	RAINING("Raining"),
-	SUNNY("Sunny"),
-	SANDSTORM("Sandstorm"),
-	HAILING("Hailing");
+	LEECH_SEED("LeechSeed", LeechSeed::new),
+	BAD_POISON("BadPoison", BadPoison::new),
+	FLINCH("Flinch", Flinch::new),
+	FIRE_SPIN("FireSpin", FireSpin::new),
+	INFESTATION("Infestation", Infestation::new),
+	MAGMA_STORM("MagmaStorm", MagmaStorm::new),
+	CLAMPED("Clamped", Clamped::new),
+	WHIRLPOOLED("Whirlpooled", Whirlpooled::new),
+	WRAPPED("Wrapped", Wrapped::new),
+	BINDED("Binded", Binded::new),
+	SAND_TOMB("SandTomb", SandTomb::new),
+	KINGS_SHIELD("KingsShield", KingsShield::new),
+	SPIKY_SHIELD("SpikyShield", SpikyShield::new),
+	PROTECTING("Protecting", Protecting::new),
+	QUICK_GUARD("QuickGuard", QuickGuard::new),
+	CRAFTY_SHIELD("CraftyShield", CraftyShield::new),
+	MAT_BLOCK("MatBlock", MatBlock::new),
+	BRACING("Bracing", Bracing::new),
+	CONFUSION("Confusion", Confusion::new),
+	SELF_CONFUSION("SelfConfusion", SelfConfusion::new),
+	SAFEGUARD("Safeguard", Safeguard::new),
+	GUARD_SPECIAL("GuardSpecial", GuardSpecial::new),
+	ENCORE("Encore", Encore::new),
+	DISABLE("Disable", Disable::new),
+	RAISE_CRITS("RaiseCrits", RaiseCrits::new),
+	CHANGE_ITEM("ChangeItem", ChangeItem::new),
+	CHANGE_TYPE("ChangeType", ChangeType::new),
+	CHANGE_ABILITY("ChangeAbility", ChangeAbility::new),
+	STOCKPILE("Stockpile", Stockpile::new),
+	USED_DEFENSE_CURL("UsedDefenseCurl", UsedDefenseCurl::new),
+	USED_MINIMIZE("UsedMinimize", UsedMinimize::new),
+	MIMIC("Mimic", Mimic::new),
+	IMPRISON("Imprison", Imprison::new),
+	TRAPPED("Trapped", Trapped::new),
+	FORESIGHT("Foresight", Foresight::new),
+	MIRACLE_EYE("MiracleEye", MiracleEye::new),
+	TORMENT("Torment", Torment::new),
+	TAUNT("Taunt", Taunt::new),
+	LOCK_ON("LockOn", LockOn::new),
+	TELEKINESIS("Telekinesis", Telekinesis::new),
+	INGRAIN("Ingrain", Ingrain::new),
+	GROUNDED("Grounded", Grounded::new),
+	CURSE("Curse", Curse::new),
+	YAWN("Yawn", Yawn::new),
+	MAGNET_RISE("MagnetRise", MagnetRise::new),
+	UPROAR("Uproar", Uproar::new),
+	AQUA_RING("AquaRing", AquaRing::new),
+	NIGHTMARE("Nightmare", Nightmare::new),
+	CHARGE("Charge", Charge::new),
+	FOCUSING("Focusing", Focusing::new),
+	FIDDY_PERCENT_STRONGER("FiddyPercentStronger", FiddyPercentStronger::new),
+	TRANSFORMED("Transformed", Transformed::new),
+	SUBSTITUTE("Substitute", Substitute::new),
+	MIST("Mist", Mist::new),
+	MAGIC_COAT("MagicCoat", MagicCoat::new),
+	BIDE("Bide", Bide::new),
+	HALF_WEIGHT("HalfWeight", HalfWeight::new),
+	POWER_TRICK("PowerTrick", PowerTrick::new),
+	POWER_SPLIT("PowerSplit", PowerSplit::new),
+	GUARD_SPLIT("GuardSplit", GuardSplit::new),
+	HEAL_BLOCK("HealBlock", HealBlock::new),
+	INFATUATED("Infatuated", Infatuated::new),
+	SNATCH("Snatch", Snatch::new),
+	GRUDGE("Grudge", Grudge::new),
+	DESTINY_BOND("DestinyBond", DestinyBond::new),
+	PERISH_SONG("PerishSong", PerishSong::new),
+	EMBARGO("Embargo", Embargo::new),
+	CONSUMED_ITEM("ConsumedItem", ConsumedItem::new),
+	FAIRY_LOCK("FairyLock", FairyLock::new),
+	POWDER("Powder", Powder::new),
+	ELECTRIFIED("Electrified", Electrified::new),
+	EATEN_BERRY("EatenBerry", EatenBerry::new),
+	REFLECT("Reflect", Reflect::new),
+	LIGHT_SCREEN("LightScreen", LightScreen::new),
+	TAILWIND("Tailwind", Tailwind::new),
+	STICKY_WEB("StickyWeb", StickyWeb::new),
+	STEALTH_ROCK("StealthRock", StealthRock::new),
+	TOXIC_SPIKES("ToxicSpikes", ToxicSpikes::new),
+	SPIKES("Spikes", Spikes::new),
+	WISH("Wish", Wish::new),
+	LUCKY_CHANT("LuckyChant", LuckyChant::new),
+	FUTURE_SIGHT("FutureSight", FutureSight::new),
+	DOOM_DESIRE("DoomDesire", DoomDesire::new),
+	HEAL_SWITCH("HealSwitch", HealSwitch::new),
+	DEAD_ALLY("DeadAlly", DeadAlly::new),
+	PAY_DAY("PayDay", PayDay::new),
+	GET_DAT_CASH_MONEY_TWICE("GetDatCashMoneyTwice", GetDatCashMoneyTwice::new),
+	GRAVITY("Gravity", Gravity::new),
+	WATER_SPORT("WaterSport", WaterSport::new),
+	MUD_SPORT("MudSport", MudSport::new),
+	WONDER_ROOM("WonderRoom", WonderRoom::new),
+	TRICK_ROOM("TrickRoom", TrickRoom::new),
+	MAGIC_ROOM("MagicRoom", MagicRoom::new),
+	MISTY_TERRAIN("MistyTerrain", MistyTerrain::new),
+	GRASSY_TERRAIN("GrassyTerrain", GrassyTerrain::new),
+	ELECTRIC_TERRAIN("ElectricTerrain", ElectricTerrain::new),
+	CLEAR_SKIES("ClearSkies", ClearSkies::new),
+	RAINING("Raining", Raining::new),
+	SUNNY("Sunny", Sunny::new),
+	SANDSTORM("Sandstorm", Sandstorm::new),
+	HAILING("Hailing", Hailing::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
-    private String name;
+    private final String name;
+	private final EffectCreator effectCreator;
 
-    EffectNamesies(String name) {
+    EffectNamesies(String name, EffectCreator effectCreator) {
         this.name = name;
+		this.effectCreator = effectCreator;
     }
+
+    private interface EffectCreator {
+		Effect createEffect();
+	}
 
 	public String getName() {
 		return this.name;
