@@ -8,16 +8,16 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "SouthTransitionBuilding",
-      "nextMap": "TomTown_WindValley_TransitionBuilding",
-      "nextEntrance": "NorthDoor",
-      "direction": "DOWN",
+      "exitName": "EastTransitionBuildingBottom",
+      "nextMap": "BFM_TomTown_TransitionBuilding",
+      "nextEntrance": "WestDoorBottom",
+      "direction": "RIGHT",
       "deathPortal": false,
       "location": {
-        "x": 26,
-        "y": 36
+        "x": 52,
+        "y": 27
       },
-      "triggerName": "Tom_Town_MapExit_SouthTransitionBuilding_01"
+      "triggerName": "Tom_Town_MapExit_EastTransitionBuildingBottom_01"
     },
     {
       "exitName": "TomTownPowerPlant",
@@ -48,7 +48,7 @@
       "nextMap": "Tom_Town_PokeCenter",
       "nextEntrance": "FrontDoor",
       "direction": "UP",
-      "deathPortal": false,
+      "deathPortal": true,
       "location": {
         "x": 38,
         "y": 32
@@ -56,16 +56,64 @@
       "triggerName": "Tom_Town_MapExit_PokeCenter_01"
     },
     {
-      "exitName": "EastTransitionBuilding",
+      "exitName": "SouthTransitionBuildingRight",
+      "nextMap": "TomTown_WindValley_TransitionBuilding",
+      "nextEntrance": "NorthDoorRight",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 27,
+        "y": 36
+      },
+      "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingRight_01"
+    },
+    {
+      "exitName": "SouthTransitionBuildingMiddle",
+      "nextMap": "TomTown_WindValley_TransitionBuilding",
+      "nextEntrance": "NorthDoorMiddle",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 26,
+        "y": 36
+      },
+      "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingMiddle_01"
+    },
+    {
+      "exitName": "EastTransitionBuildingMiddle",
       "nextMap": "BFM_TomTown_TransitionBuilding",
-      "nextEntrance": "WestDoor",
+      "nextEntrance": "WestDoorMiddle",
       "direction": "RIGHT",
       "deathPortal": false,
       "location": {
         "x": 52,
         "y": 26
       },
-      "triggerName": "Tom_Town_MapExit_EastTransitionBuilding_01"
+      "triggerName": "Tom_Town_MapExit_EastTransitionBuildingMiddle_01"
+    },
+    {
+      "exitName": "EastTransitionBuildingTop",
+      "nextMap": "BFM_TomTown_TransitionBuilding",
+      "nextEntrance": "WestDoorTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 52,
+        "y": 25
+      },
+      "triggerName": "Tom_Town_MapExit_EastTransitionBuildingTop_01"
+    },
+    {
+      "exitName": "SouthTransitionBuildingLeft",
+      "nextMap": "TomTown_WindValley_TransitionBuilding",
+      "nextEntrance": "NorthDoorLeft",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 25,
+        "y": 36
+      },
+      "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingLeft_01"
     }
   ],
   "NPCs": [
@@ -93,32 +141,6 @@
         "y": 23
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_01_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
-    },
-    {
-      "name": "Tom_Town_NPC_Citizen_02",
-      "path": "w",
-      "spriteIndex": 16,
-      "direction": "LEFT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I've never felt a shock like that before! Did it come from the Power Plant?!??"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 31,
-        "y": 22
-      },
-      "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_02_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
@@ -224,6 +246,32 @@
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_NPC_Citizen_02",
+      "path": "w",
+      "spriteIndex": 16,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I've never felt a shock like that before! Did it come from the Power Plant?!??"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 31,
+        "y": 22
+      },
+      "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_02_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
@@ -242,7 +290,7 @@
         "x": 29,
         "y": 13
       },
-      "triggerName": "Tom_Town_Event_LockedDoor_01",
+      "triggerName": "Tom_Town_TriggerEntity_LockedDoor_01",
       "condition": "!BadgeTrigger_0"
     }
   ],

@@ -347,10 +347,8 @@ public class MapMakerTriggerData {
 	}
 
 	private MapTransitionMatcher editMapTransition(MapTransitionMatcher transitionMatcher) {
-		MapTransitionDialog mapTransitionDialog = new MapTransitionDialog(mapMaker, this);
-		if (transitionMatcher != null) {
-			mapTransitionDialog.setMapTransition(transitionMatcher);
-		}
+		MapTransitionDialog mapTransitionDialog = new MapTransitionDialog(mapMaker);
+		mapTransitionDialog.loadMatcher(transitionMatcher);
 
 		if (!dialogOption("Map Transition Editor", mapTransitionDialog)) {
 			return null;

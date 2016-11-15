@@ -2,7 +2,6 @@ package mapMaker.dialogs;
 
 import map.Direction;
 import mapMaker.MapMaker;
-import mapMaker.MapMakerTriggerData;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import util.FileIO;
@@ -18,8 +17,6 @@ import java.util.stream.Collectors;
 
 public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 	private static final long serialVersionUID = 6937677302812347311L;
-
-	private MapMakerTriggerData triggerData;
 
 	private JComboBox<String> destinationComboBox;
 	private JComboBox<String> entranceComboBox;
@@ -53,9 +50,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 				.collect(Collectors.toSet());
 	}
 
-	public MapTransitionDialog(MapMaker givenMapMaker, MapMakerTriggerData givenTriggerData) {
-		triggerData = givenTriggerData;
-
+	public MapTransitionDialog(MapMaker givenMapMaker) {
 		JLabel destinationLabel = new JLabel("Destination");
 		JLabel entranceLabel = new JLabel("Destination Entrance");
 		JLabel directionLabel = new JLabel("Direction");
@@ -153,18 +148,12 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		setLayout(groupLayout);
 	}
 
-	public String getDestination() {
+	private String getDestination() {
 		return (String)destinationComboBox.getSelectedItem();
 	}
 	
-	public String getMapEntrance() {
+	private String getMapEntrance() {
 		return (String)entranceComboBox.getSelectedItem();
-	}
-	
-	public void setMapTransition(MapTransitionMatcher mapTransition) {
-		destinationComboBox.setSelectedItem(mapTransition.getNextMap());
-		entranceComboBox.setSelectedItem(mapTransition.getNextEntranceName());
-		directionComboBox.setSelectedIndex(mapTransition.getDirection().ordinal() + 1); // TODO: Not sure what's going on here but it should probably be in a direction method instead of using the ordinal
 	}
 
 	@Override
@@ -187,7 +176,10 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 
 	@Override
 	protected void load(MapTransitionMatcher matcher) {
-		this.entranceNameTextField.setText(matcher.getExitName());
-
+		entranceNameTextField.setText(matcher.getExitName());
+		destinationComboBox.setSelectedItem(matcher.getNextMap());
+		entranceComboBox.setSelectedItem(matcher.getNextEntranceName());
+		directionComboBox.setSelectedIndex(matcher.getDirection().ordinal() + 1); // TODO: Not sure what's going on here but it should probably be in a direction method instead of using the ordinal
+		deathPortalCheckBox.setSelected(matcher.isDeathPortal());
 	}
 }

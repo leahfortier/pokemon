@@ -106,10 +106,6 @@ public class Game {
 		game.currentViewMode = mode;
 	}
 
-	public static boolean isCurrentViewMode(ViewMode viewMode) {
-		return game.currentViewMode == viewMode;
-	}
-
 	public static void loadSave(int index) {
 		game.characterData = Save.load(index);
 		game.setViews();

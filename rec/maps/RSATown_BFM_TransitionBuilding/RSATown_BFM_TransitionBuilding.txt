@@ -7,31 +7,91 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "EastDoor",
-      "nextMap": "RSATown",
-      "nextEntrance": "WestTransitionBuilding",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 10,
-        "y": 3
-      },
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoor_01"
-    },
-    {
-      "exitName": "WestDoor",
+      "exitName": "WestDoorBottom",
       "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "EastTransitionBuilding",
+      "nextEntrance": "EastTransitionBuildingBottom",
       "direction": "LEFT",
       "deathPortal": false,
       "location": {
-        "x": 2,
-        "y": 3
+        "x": 1,
+        "y": 6
       },
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoor_01"
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorBottom_01"
+    },
+    {
+      "exitName": "EastDoorBottom",
+      "nextMap": "RSATown",
+      "nextEntrance": "WestTransitionBuildingBottom",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 11,
+        "y": 6
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorBottom_01"
+    },
+    {
+      "exitName": "EastDoorMiddle",
+      "nextMap": "RSATown",
+      "nextEntrance": "WestTransitionBuildingMiddle",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 11,
+        "y": 5
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorMiddle_01"
+    },
+    {
+      "exitName": "WestDoorMiddle",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "EastTransitionBuildingMiddle",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 1,
+        "y": 5
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorMiddle_01"
+    },
+    {
+      "exitName": "WestDoorTop",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "EastTransitionBuildingTop",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 1,
+        "y": 4
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorTop_01"
+    },
+    {
+      "exitName": "EastDoorTop",
+      "nextMap": "RSATown",
+      "nextEntrance": "WestTransitionBuildingTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 11,
+        "y": 4
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorTop_01"
     }
   ],
   "NPCs": [
+    {
+      "name": "Info_Guy",
+      "path": "w",
+      "spriteIndex": 10,
+      "direction": "DOWN",
+      "interactions": [],
+      "location": {
+        "x": 6,
+        "y": 3
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_NPC_Info_Guy_01"
+    },
     {
       "name": "BFM_Guy",
       "path": "w",
@@ -53,21 +113,9 @@
       ],
       "location": {
         "x": 2,
-        "y": 2
+        "y": 4
       },
       "triggerName": "RSATown_BFM_TransitionBuilding_NPC_BFM_Guy_01"
-    },
-    {
-      "name": "Info_Guy",
-      "path": "w",
-      "spriteIndex": 10,
-      "direction": "DOWN",
-      "interactions": [],
-      "location": {
-        "x": 6,
-        "y": 1
-      },
-      "triggerName": "RSATown_BFM_TransitionBuilding_NPC_Info_Guy_01"
     }
   ],
   "items": [],
@@ -81,9 +129,9 @@
       ],
       "location": {
         "x": 6,
-        "y": 2
+        "y": 4
       },
-      "triggerName": "RSATown_BFM_TransitionBuilding_Event_Info_Guy_Dialogue_01"
+      "triggerName": "RSATown_BFM_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
     }
   ],
   "events": [],

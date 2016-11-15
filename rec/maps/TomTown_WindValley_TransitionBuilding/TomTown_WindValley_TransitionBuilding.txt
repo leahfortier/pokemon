@@ -7,71 +7,99 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "SouthDoor",
+      "exitName": "SouthDoorLeft",
       "nextMap": "WindValley",
-      "nextEntrance": "NorthTransitionBuilding",
+      "nextEntrance": "NorthTransitionBuildingLeft",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 5,
+        "y": 10
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorLeft_01"
+    },
+    {
+      "exitName": "SouthDoorRight",
+      "nextMap": "WindValley",
+      "nextEntrance": "NorthTransitionBuildingRight",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 7,
+        "y": 10
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorRight_01"
+    },
+    {
+      "exitName": "NorthDoorLeft",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "SouthTransitionBuildingLeft",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 5,
+        "y": 2
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorLeft_01"
+    },
+    {
+      "exitName": "SouthDoorMiddle",
+      "nextMap": "WindValley",
+      "nextEntrance": "NorthTransitionBuildingMiddle",
       "direction": "DOWN",
       "deathPortal": false,
       "location": {
         "x": 6,
-        "y": 7
+        "y": 10
       },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoor_01"
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorMiddle_01"
     },
     {
-      "exitName": "NorthDoor",
+      "exitName": "NorthDoorRight",
       "nextMap": "Tom_Town",
-      "nextEntrance": "SouthTransitionBuilding",
+      "nextEntrance": "SouthTransitionBuildingRight",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 7,
+        "y": 2
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorRight_01"
+    },
+    {
+      "exitName": "NorthDoorMiddle",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "SouthTransitionBuildingMiddle",
       "direction": "UP",
       "deathPortal": false,
       "location": {
         "x": 6,
-        "y": 1
+        "y": 2
       },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoor_01"
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorMiddle_01"
     }
   ],
   "NPCs": [
     {
-      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
+      "name": "TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01",
       "path": "w",
-      "spriteIndex": 9,
-      "direction": "LEFT",
+      "spriteIndex": 6,
+      "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
+          "name": "default",
           "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "The Tom Town gym sounds really tough."
+                "triggerContents": "Tom Town generates most of the power for all of Hash Map."
               }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 6,
-        "y": 7
-      },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01_01",
-      "condition": "!BadgeTrigger_0"
-    },
-    {
-      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01",
-      "path": "w",
-      "spriteIndex": 3,
-      "direction": "UP",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
+            },
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "What happened at the power plant? Who is this Team Deadlock?"
+                "triggerContents": "It's all thanks to the Magnemite Power Plant!"
               }
             }
           ]
@@ -81,8 +109,7 @@
         "x": 3,
         "y": 5
       },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01_01"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01",
@@ -105,10 +132,22 @@
       ],
       "location": {
         "x": 5,
-        "y": 7
+        "y": 9
       },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01_01",
       "condition": "!BadgeTrigger_0"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_Info_Guy_01",
+      "path": "w",
+      "spriteIndex": 10,
+      "direction": "LEFT",
+      "interactions": [],
+      "location": {
+        "x": 9,
+        "y": 6
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_Info_Guy_01_01"
     },
     {
       "name": "TransitionBuildingV_NPC_PoliceOfficer_01",
@@ -137,31 +176,51 @@
       ],
       "location": {
         "x": 6,
-        "y": 7
+        "y": 9
       },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_PoliceOfficer_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
-      "name": "TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01",
+      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
       "path": "w",
-      "spriteIndex": 6,
-      "direction": "DOWN",
+      "spriteIndex": 9,
+      "direction": "LEFT",
       "interactions": [
         {
-          "name": "default",
+          "name": "dialogue",
           "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "Tom Town generates most of the power for all of Hash Map."
+                "triggerContents": "The Tom Town gym sounds really tough."
               }
-            },
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 6,
+        "y": 9
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01_01",
+      "condition": "!BadgeTrigger_0"
+    },
+    {
+      "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01",
+      "path": "w",
+      "spriteIndex": 3,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "It's all thanks to the Magnemite Power Plant!"
+                "triggerContents": "What happened at the power plant? Who is this Team Deadlock?"
               }
             }
           ]
@@ -169,21 +228,10 @@
       ],
       "location": {
         "x": 3,
-        "y": 3
+        "y": 7
       },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01_01"
-    },
-    {
-      "name": "TransitionBuildingV_NPC_Info_Guy_01",
-      "path": "w",
-      "spriteIndex": 10,
-      "direction": "LEFT",
-      "interactions": [],
-      "location": {
-        "x": 9,
-        "y": 4
-      },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_Info_Guy_01_01"
+      "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01_01",
+      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01",
@@ -206,7 +254,7 @@
       ],
       "location": {
         "x": 4,
-        "y": 6
+        "y": 8
       },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
@@ -223,9 +271,9 @@
       ],
       "location": {
         "x": 8,
-        "y": 4
+        "y": 6
       },
-      "triggerName": "TomTown_WindValley_TransitionBuilding_Event_Info_Guy_Dialogue_01"
+      "triggerName": "TomTown_WindValley_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
     }
   ],
   "events": [],

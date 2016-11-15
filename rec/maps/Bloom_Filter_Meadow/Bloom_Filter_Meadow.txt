@@ -9,28 +9,76 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "WestTransitionBuilding",
+      "exitName": "EastTransitionBuildingTop",
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "WestDoorTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 55,
+        "y": 20
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingTop_01"
+    },
+    {
+      "exitName": "WestTransitionBuildingMiddle",
       "nextMap": "BFM_TomTown_TransitionBuilding",
-      "nextEntrance": "EastDoor",
+      "nextEntrance": "EastDoorMiddle",
       "direction": "LEFT",
       "deathPortal": false,
       "location": {
         "x": 13,
         "y": 21
       },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuilding_01"
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingMiddle_01"
     },
     {
-      "exitName": "EastTransitionBuilding",
+      "exitName": "WestTransitionBuildingTop",
+      "nextMap": "BFM_TomTown_TransitionBuilding",
+      "nextEntrance": "EastDoorTop",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 13,
+        "y": 20
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingTop_01"
+    },
+    {
+      "exitName": "EastTransitionBuildingMiddle",
       "nextMap": "RSATown_BFM_TransitionBuilding",
-      "nextEntrance": "WestDoor",
+      "nextEntrance": "WestDoorMiddle",
       "direction": "RIGHT",
       "deathPortal": false,
       "location": {
-        "x": 54,
+        "x": 55,
         "y": 21
       },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuilding_01"
+      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingMiddle_01"
+    },
+    {
+      "exitName": "WestTransitionBuildingBottom",
+      "nextMap": "BFM_TomTown_TransitionBuilding",
+      "nextEntrance": "EastDoorBottom",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 13,
+        "y": 22
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingBottom_01"
+    },
+    {
+      "exitName": "EastTransitionBuildingBottom",
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "WestDoorBottom",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 55,
+        "y": 22
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingBottom_01"
     }
   ],
   "NPCs": [
