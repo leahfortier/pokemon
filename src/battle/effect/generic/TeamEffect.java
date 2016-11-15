@@ -1,8 +1,8 @@
 package battle.effect.generic;
 
-import battle.Attack;
+import battle.attack.Attack;
 import battle.Battle;
-import battle.Move;
+import battle.attack.Move;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
@@ -15,10 +15,9 @@ import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.attack.AttackNamesies;
+import item.ItemNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.Trainer;

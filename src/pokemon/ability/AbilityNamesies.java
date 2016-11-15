@@ -1,4 +1,4 @@
-package namesies;
+package pokemon.ability;
 
 import main.Global;
 import util.PokeString;

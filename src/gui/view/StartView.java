@@ -6,7 +6,7 @@ import main.Game;
 import main.Global;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
-import namesies.PokemonNamesies;
+import pokemon.PokemonNamesies;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;
 import trainer.CharacterData;

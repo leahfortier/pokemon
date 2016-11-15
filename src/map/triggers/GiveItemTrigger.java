@@ -2,7 +2,7 @@ package map.triggers;
 
 import item.Item;
 import main.Game;
-import namesies.ItemNamesies;
+import item.ItemNamesies;
 
 public class GiveItemTrigger extends Trigger {
 

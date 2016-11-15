@@ -3,11 +3,11 @@ package main;
 import java.awt.Color;
 import java.io.Serializable;
 
-import battle.MoveType;
+import battle.attack.MoveType;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import message.Messages;
-import namesies.AbilityNamesies;
+import pokemon.ability.AbilityNamesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
 

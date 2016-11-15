@@ -4,9 +4,8 @@ import item.Item;
 import item.hold.HoldItem;
 import main.Global;
 import main.Type;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.PokemonNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.attack.AttackNamesies;
 import util.FileIO;
 import util.FileName;
 

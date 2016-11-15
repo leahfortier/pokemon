@@ -1,4 +1,4 @@
-package namesies;
+package battle.effect.generic;
 
 import main.Global;
 import util.PokeString;

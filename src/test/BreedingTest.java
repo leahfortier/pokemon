@@ -1,10 +1,10 @@
 package test;
 
-import battle.Attack;
-import battle.Move;
-import namesies.AttackNamesies;
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
+import battle.attack.Attack;
+import battle.attack.Move;
+import battle.attack.AttackNamesies;
+import item.ItemNamesies;
+import pokemon.PokemonNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ActivePokemon;

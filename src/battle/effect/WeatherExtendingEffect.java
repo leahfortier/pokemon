@@ -1,6 +1,6 @@
 package battle.effect;
 
-import namesies.EffectNamesies;
+import battle.effect.generic.EffectNamesies;
 
 public interface WeatherExtendingEffect {
 	EffectNamesies getWeatherType();

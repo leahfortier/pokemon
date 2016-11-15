@@ -1,10 +1,10 @@
 package main;
 
-import battle.Attack;
-import battle.MoveCategory;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.PokemonNamesies;
+import battle.attack.Attack;
+import battle.attack.MoveCategory;
+import pokemon.ability.AbilityNamesies;
+import battle.attack.AttackNamesies;
+import pokemon.PokemonNamesies;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
 import pokemon.Stat;

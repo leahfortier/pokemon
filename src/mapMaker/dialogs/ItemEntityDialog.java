@@ -3,7 +3,7 @@ package mapMaker.dialogs;
 import item.Item;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
-import namesies.ItemNamesies;
+import item.ItemNamesies;
 import pattern.map.ItemMatcher;
 
 import javax.swing.BorderFactory;

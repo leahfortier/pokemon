@@ -3,7 +3,7 @@ package battle.effect.generic;
 import java.util.HashMap;
 import java.util.Map;
 
-import battle.MoveType;
+import battle.attack.MoveType;
 import battle.effect.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
@@ -17,7 +17,6 @@ import battle.effect.status.StatusCondition;
 import main.Type;
 import map.TerrainType;
 import message.Messages;
-import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
 import pokemon.Stat;

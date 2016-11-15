@@ -1,4 +1,4 @@
-package item;
+package item.bag;
 
 import java.awt.Color;
 import java.io.Serializable;

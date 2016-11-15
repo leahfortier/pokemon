@@ -1,11 +1,11 @@
 package pattern;
 
-import battle.Attack;
-import battle.Move;
+import battle.attack.Attack;
+import battle.attack.Move;
 import item.Item;
 import item.hold.HoldItem;
 import main.Global;
-import namesies.PokemonNamesies;
+import pokemon.PokemonNamesies;
 import pattern.MatchConstants.MatchType;
 
 import java.util.ArrayList;

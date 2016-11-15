@@ -1,10 +1,10 @@
-package pokemon;
+package pokemon.ability;
 
-import battle.Attack;
+import battle.attack.Attack;
 import battle.Battle;
-import battle.Move;
-import battle.MoveCategory;
-import battle.MoveType;
+import battle.attack.Move;
+import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
 import battle.effect.ModifyStageValueEffect;
@@ -62,11 +62,14 @@ import item.hold.PlateItem;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
+import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
+import item.ItemNamesies;
+import pokemon.PokemonNamesies;
+import pokemon.ActivePokemon;
+import pokemon.Gender;
+import pokemon.PokemonInfo;
+import pokemon.Stat;
 import trainer.Trainer;
 import trainer.WildPokemon;
 

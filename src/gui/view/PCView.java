@@ -19,7 +19,7 @@ import trainer.Trainer;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
-import battle.Move;
+import battle.attack.Move;
 
 public class PCView extends View {
 	private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + 6;

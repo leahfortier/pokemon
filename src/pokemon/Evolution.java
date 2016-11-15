@@ -1,10 +1,9 @@
 package pokemon;
 
-import battle.Move;
+import battle.attack.Move;
 import main.Global;
-import namesies.AttackNamesies;
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
+import battle.attack.AttackNamesies;
+import item.ItemNamesies;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package mapMaker.dialogs.action;
 
-import battle.Attack;
-import battle.Move;
+import battle.attack.Attack;
+import battle.attack.Move;
 import main.Global;
 import pattern.PokemonMatcher;
 import pokemon.PokemonInfo;

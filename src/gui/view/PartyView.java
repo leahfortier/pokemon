@@ -1,6 +1,6 @@
 package gui.view;
 
-import battle.Move;
+import battle.attack.Move;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;

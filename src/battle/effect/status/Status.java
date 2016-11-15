@@ -10,8 +10,8 @@ import item.berry.GainableEffectBerry;
 import item.berry.StatusBerry;
 import main.Global;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.EffectNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;

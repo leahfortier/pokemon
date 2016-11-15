@@ -6,7 +6,7 @@ import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
+import pokemon.ability.AbilityNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 

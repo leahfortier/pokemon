@@ -1,7 +1,8 @@
-package item;
+package item.bag;
 
 import battle.Battle;
-import battle.Move;
+import battle.attack.Move;
+import item.Item;
 import item.hold.HoldItem;
 import item.use.BallItem;
 import item.use.BattleUseItem;
@@ -204,7 +205,7 @@ public class Bag implements Serializable {
 				boolean front = Game.getPlayer().front() == activePokemon;
 
 				// TODO: This is made to look generalized for an enemy trainer using an item, but this method is inside Bag, which is only valid for the player
-				Messages.addMessage(((Trainer)battle.getTrainer(activePokemon.user())).getName() + " used " + item.name + "!");
+				Messages.addMessage(((Trainer)battle.getTrainer(activePokemon.user())).getName() + " used " + item.getName() + "!");
 				Messages.addMessage(((UseItem)item).getSuccessMessage(activePokemon));
 				
 				if (front) {

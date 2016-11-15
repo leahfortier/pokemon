@@ -1,9 +1,9 @@
 package pokemon;
 
-import battle.Attack;
+import battle.attack.Attack;
 import battle.Battle;
 import battle.BattleAttributes;
-import battle.Move;
+import battle.attack.Move;
 import battle.effect.StallingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.Effect.CastSource;
@@ -34,14 +34,14 @@ import item.hold.HoldItem;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
+import item.ItemNamesies;
 import pattern.PokemonMatcher;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
+import pokemon.ability.Ability;
 import trainer.Pokedex.PokedexStatus;
 import util.DrawUtils;
 

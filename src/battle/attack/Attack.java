@@ -1,5 +1,6 @@
-package battle;
+package battle.attack;
 
+import battle.Battle;
 import battle.effect.PassableEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
@@ -43,11 +44,10 @@ import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
-import pokemon.Ability;
+import pokemon.ability.AbilityNamesies;
+import battle.effect.generic.EffectNamesies;
+import item.ItemNamesies;
+import pokemon.ability.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Stat;

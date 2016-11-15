@@ -1,12 +1,11 @@
 package battle.effect.generic;
 
 import battle.Battle;
-import battle.Move;
+import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Type;
-import namesies.EffectNamesies;
-import pokemon.Ability;
+import pokemon.ability.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.Trainer;

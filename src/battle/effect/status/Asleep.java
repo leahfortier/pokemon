@@ -1,13 +1,13 @@
 package battle.effect.status;
 
 import battle.Battle;
-import battle.MoveType;
+import battle.attack.MoveType;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import main.Global;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.EffectNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
 
 class Asleep extends Status implements BeforeTurnEffect {

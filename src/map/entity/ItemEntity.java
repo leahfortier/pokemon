@@ -7,7 +7,7 @@ import map.Direction;
 import map.MapData;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import namesies.ItemNamesies;
+import item.ItemNamesies;
 import pattern.GroupTriggerMatcher;
 import util.InputControl;
 import util.JsonUtils;

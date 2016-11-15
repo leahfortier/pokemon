@@ -1,10 +1,11 @@
 package generator;
 
 import main.Global;
-import namesies.PokemonNamesies;
+import pokemon.PokemonNamesies;
 import pokemon.PokemonInfo;
 import util.FileIO;
 import util.FileName;
+import util.Folder;
 import util.StringUtils;
 
 import java.io.PrintStream;
@@ -32,7 +33,7 @@ public class StuffGen {
 
 	private StuffGen() {
 		new PokeGen();
-		new NamesiesGen(PokemonNamesies.class);
+		new NamesiesGen(Folder.POKEMON, PokemonNamesies.class);
 		baseEvolutionGenerator();
 		
 		new InterfaceGen();

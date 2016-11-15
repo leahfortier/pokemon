@@ -9,7 +9,6 @@ import item.Item;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 

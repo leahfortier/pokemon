@@ -1,9 +1,8 @@
 package map;
 
 import main.Global;
-import namesies.PokemonNamesies;
+import pokemon.PokemonNamesies;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
 import trainer.WildPokemon;
 
 // TODO: Not exactly sure if this is the best location for this class

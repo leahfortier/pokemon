@@ -1,4 +1,4 @@
-package item;
+package item.bag;
 
 import java.io.Serializable;
 

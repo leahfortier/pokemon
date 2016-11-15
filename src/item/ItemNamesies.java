@@ -1,4 +1,4 @@
-package namesies;
+package item;
 
 import main.Global;
 import util.PokeString;

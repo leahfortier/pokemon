@@ -3,7 +3,7 @@ package pattern.map;
 import map.entity.Entity;
 import map.entity.ItemEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import namesies.ItemNamesies;
+import item.ItemNamesies;
 import pattern.generic.EntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
 

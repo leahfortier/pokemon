@@ -1,14 +1,13 @@
 package pokemon;
 
-import battle.Attack;
-import battle.Move;
+import battle.attack.Attack;
+import battle.attack.Move;
 import item.Item;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
 import main.Global;
-import namesies.AttackNamesies;
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
+import battle.attack.AttackNamesies;
+import item.ItemNamesies;
 
 import java.util.ArrayList;
 import java.util.Arrays;

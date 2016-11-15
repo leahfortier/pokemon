@@ -1,5 +1,6 @@
-package battle;
+package battle.attack;
 
+import battle.Battle;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
@@ -7,7 +8,6 @@ import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.AttackNamesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;
@@ -133,7 +133,7 @@ public class Move implements Serializable {
 		return true;
 	}
 	
-	static Move selectOpponentMove(Battle b, ActivePokemon p) {
+	public static Move selectOpponentMove(Battle b, ActivePokemon p) {
 		if (forceMove(b, p)) {
 			return p.getMove();
 		}

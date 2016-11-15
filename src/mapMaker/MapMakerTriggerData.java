@@ -11,7 +11,7 @@ import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import namesies.ItemNamesies;
+import item.ItemNamesies;
 import pattern.map.AreaMatcher;
 import pattern.map.EventMatcher;
 import pattern.map.ItemMatcher;

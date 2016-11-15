@@ -1,11 +1,11 @@
 package gui;
 
-import battle.Attack;
-import battle.Move;
+import battle.attack.Attack;
+import battle.attack.Move;
 import item.Item;
 import main.Game;
 import main.Global;
-import namesies.PokemonNamesies;
+import pokemon.PokemonNamesies;
 import pokemon.ActivePokemon;
 import util.DrawUtils;
 import util.InputControl;

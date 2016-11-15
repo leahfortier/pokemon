@@ -5,7 +5,6 @@ import java.util.List;
 
 import main.Global;
 import message.Messages;
-import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 import battle.Battle;
 import util.StringUtils;

@@ -1,13 +1,13 @@
 package map;
 
-import battle.Attack;
+import battle.attack.Attack;
 import battle.effect.generic.Effect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Type;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
+import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
 import pokemon.Stat;
 
 import java.util.ArrayList;

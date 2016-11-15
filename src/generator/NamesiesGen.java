@@ -1,10 +1,9 @@
 package generator;
 
 import main.Global;
-import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import util.FileIO;
-import util.Folder;
 import util.PokeString;
 import util.StringUtils;
 
@@ -12,13 +11,16 @@ import java.util.Scanner;
 
 class NamesiesGen {
 
-	private final Class namesiesClass;
+	private final String namesiesFolder;
+	private final String namesiesClassName;
 	private final StringBuilder namesies;
 
 	private boolean firstNamesies;
 	
-	NamesiesGen(final Class namesiesClass) {
-		this.namesiesClass = namesiesClass;
+	NamesiesGen(final String namesiesFolder, final Class namesiesClass) {
+		this.namesiesFolder = namesiesFolder;
+		this.namesiesClassName = namesiesClass.getSimpleName();
+
 		this.namesies = new StringBuilder();
 		this.firstNamesies = true;
 
@@ -29,7 +31,7 @@ class NamesiesGen {
 	}
 	
 	void writeNamesies() {
-		final String fileName = Folder.NAMESIES + namesiesClass.getSimpleName() + ".java";
+		final String fileName = this.namesiesFolder + this.namesiesClassName + ".java";
 
 		Scanner original = FileIO.openFile(fileName);
 		StringBuilder out = new StringBuilder();

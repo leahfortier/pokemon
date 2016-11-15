@@ -1,8 +1,7 @@
-package namesies;
+package battle.attack;
 
 import main.Global;
 import util.PokeString;
-import util.StringUtils;
 
 public enum AttackNamesies {
     // EVERYTHING BELOW IS GENERATED ###

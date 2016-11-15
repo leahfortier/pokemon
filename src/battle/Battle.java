@@ -1,5 +1,8 @@
 package battle;
 
+import battle.attack.Move;
+import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
@@ -27,9 +30,9 @@ import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.effect.generic.EffectNamesies;
+import item.ItemNamesies;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Stat;

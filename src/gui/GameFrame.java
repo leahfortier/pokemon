@@ -1,13 +1,13 @@
 package gui;
 
-import battle.Attack;
+import battle.attack.Attack;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import item.Item;
 import main.Game;
 import main.Global;
-import pokemon.Ability;
+import pokemon.ability.Ability;
 import pokemon.PokemonInfo;
 import util.DrawUtils;
 import util.InputControl;
