@@ -5,59 +5,62 @@
       "music": "TRANSITION_BUILDING"
     }
   ],
-  "NPCs": [
-    {
-      "name": "Info_Guy",
-      "startX": 6,
-      "startY": 1,
-      "path": "w",
-      "spriteIndex": 10,
-      "direction": "DOWN",
-      "interactions": [],
-      "triggerName": "BFM_TomTown_TransitionBuilding_NPC_Info_Guy_01"
-    }
-  ],
-  "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "EastDoor",
-      "location": [
-        10,
-        3
-      ],
       "nextMap": "Bloom_Filter_Meadow",
       "nextEntrance": "WestTransitionBuilding",
       "direction": "RIGHT",
       "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 3
+      },
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoor_01"
     },
     {
       "exitName": "WestDoor",
-      "location": [
-        2,
-        3
-      ],
       "nextMap": "Tom_Town",
       "nextEntrance": "EastTransitionBuilding",
       "direction": "LEFT",
       "deathPortal": false,
+      "location": {
+        "x": 2,
+        "y": 3
+      },
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoor_01"
     }
   ],
-  "triggerData": [],
+  "NPCs": [
+    {
+      "name": "Info_Guy",
+      "path": "w",
+      "spriteIndex": 10,
+      "direction": "DOWN",
+      "interactions": [],
+      "location": {
+        "x": 6,
+        "y": 1
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_NPC_Info_Guy_01"
+    }
+  ],
+  "items": [],
   "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",
-      "location": [
-        6,
-        2
-      ],
       "actions": [
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
+      "location": {
+        "x": 6,
+        "y": 2
+      },
       "triggerName": "BFM_TomTown_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
-  ]
+  ],
+  "events": [],
+  "wildBattles": []
 }

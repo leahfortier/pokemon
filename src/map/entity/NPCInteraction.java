@@ -1,6 +1,4 @@
-package map.entity.npc;
-
-import map.entity.EntityAction;
+package map.entity;
 
 import java.util.List;
 

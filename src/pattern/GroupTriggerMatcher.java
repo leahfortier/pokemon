@@ -1,6 +1,8 @@
 package pattern;
 
-public class GroupTriggerMatcher extends EntityMatcher {
+import pattern.generic.TriggerMatcher;
+
+public class GroupTriggerMatcher extends TriggerMatcher {
     public String[] triggers;
 
     public String suffix;

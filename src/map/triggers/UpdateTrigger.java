@@ -1,7 +1,7 @@
 package map.triggers;
 
 import main.Game;
-import pattern.ActionMatcher.UpdateMatcher;
+import pattern.action.UpdateMatcher;
 import util.JsonUtils;
 
 public class UpdateTrigger extends Trigger {

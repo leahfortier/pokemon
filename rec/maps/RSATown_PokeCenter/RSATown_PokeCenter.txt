@@ -6,49 +6,48 @@
       "music": "POKE_CENTER"
     }
   ],
-  "NPCs": [
-    {
-      "name": "Mart_Guy",
-      "startX": 2,
-      "startY": 7,
-      "spriteIndex": 9,
-      "direction": "RIGHT",
-      "interactions": [],
-      "triggerName": "RSATown_PokeCenter_NPC_Mart_Guy_01"
-    },
-    {
-      "name": "Nurse_Joy",
-      "startX": 7,
-      "startY": 2,
-      "spriteIndex": 8,
-      "direction": "DOWN",
-      "interactions": [],
-      "triggerName": "RSATown_PokeCenter_NPC_Nurse_Joy_01"
-    }
-  ],
-  "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "FrontDoor",
-      "location": [
-        7,
-        8
-      ],
       "nextMap": "RSATown",
       "nextEntrance": "PokeCenter",
       "direction": "DOWN",
       "deathPortal": true,
+      "location": {
+        "x": 7,
+        "y": 8
+      },
       "triggerName": "RSATown_PokeCenter_MapExit_FrontDoor_01"
     }
   ],
-  "triggerData": [],
+  "NPCs": [
+    {
+      "name": "Mart_Guy",
+      "spriteIndex": 9,
+      "direction": "RIGHT",
+      "interactions": [],
+      "location": {
+        "x": 2,
+        "y": 7
+      },
+      "triggerName": "RSATown_PokeCenter_NPC_Mart_Guy_01"
+    },
+    {
+      "name": "Nurse_Joy",
+      "spriteIndex": 8,
+      "direction": "DOWN",
+      "interactions": [],
+      "location": {
+        "x": 7,
+        "y": 2
+      },
+      "triggerName": "RSATown_PokeCenter_NPC_Nurse_Joy_01"
+    }
+  ],
+  "items": [],
   "miscEntities": [
     {
       "name": "Mart",
-      "location": [
-        3,
-        7
-      ],
       "actions": [
         {
           "trigger": {
@@ -63,14 +62,14 @@
           }
         }
       ],
+      "location": {
+        "x": 3,
+        "y": 7
+      },
       "triggerName": "RSATown_PokeCenter_Event_Mart_01"
     },
     {
       "name": "Heal",
-      "location": [
-        7,
-        3
-      ],
       "actions": [
         {
           "trigger": {
@@ -114,14 +113,14 @@
           }
         }
       ],
+      "location": {
+        "x": 7,
+        "y": 3
+      },
       "triggerName": "RSATown_PokeCenter_Event_Heal_01"
     },
     {
       "name": "PC_View",
-      "location": [
-        11,
-        1
-      ],
       "actions": [
         {
           "trigger": {
@@ -136,7 +135,13 @@
           }
         }
       ],
+      "location": {
+        "x": 11,
+        "y": 1
+      },
       "triggerName": "RSATown_PokeCenter_Event_PC_View_01"
     }
-  ]
+  ],
+  "events": [],
+  "wildBattles": []
 }

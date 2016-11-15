@@ -3,7 +3,7 @@ package map.triggers;
 import battle.Battle;
 import main.Game;
 import map.entity.EntityAction.BattleAction;
-import pattern.ActionMatcher.UpdateMatcher;
+import pattern.action.UpdateMatcher;
 import pattern.PokemonMatcher;
 import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;

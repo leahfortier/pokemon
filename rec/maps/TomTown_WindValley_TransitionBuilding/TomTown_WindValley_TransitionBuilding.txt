@@ -5,11 +5,35 @@
       "music": "TRANSITION_BUILDING"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "SouthDoor",
+      "nextMap": "WindValley",
+      "nextEntrance": "NorthTransitionBuilding",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 6,
+        "y": 7
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoor_01"
+    },
+    {
+      "exitName": "NorthDoor",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "SouthTransitionBuilding",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 6,
+        "y": 1
+      },
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoor_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
-      "startX": 6,
-      "startY": 7,
       "path": "w",
       "spriteIndex": 9,
       "direction": "LEFT",
@@ -27,13 +51,15 @@
           ]
         }
       ],
+      "location": {
+        "x": 6,
+        "y": 7
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01_01",
       "condition": "!BadgeTrigger_0"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01",
-      "startX": 3,
-      "startY": 5,
       "path": "w",
       "spriteIndex": 3,
       "direction": "UP",
@@ -51,13 +77,15 @@
           ]
         }
       ],
+      "location": {
+        "x": 3,
+        "y": 5
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01",
-      "startX": 5,
-      "startY": 7,
       "path": "w",
       "spriteIndex": 3,
       "direction": "UP",
@@ -75,13 +103,15 @@
           ]
         }
       ],
+      "location": {
+        "x": 5,
+        "y": 7
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01_01",
       "condition": "!BadgeTrigger_0"
     },
     {
       "name": "TransitionBuildingV_NPC_PoliceOfficer_01",
-      "startX": 6,
-      "startY": 7,
       "path": "w",
       "spriteIndex": 18,
       "direction": "RIGHT",
@@ -105,13 +135,15 @@
           ]
         }
       ],
+      "location": {
+        "x": 6,
+        "y": 7
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_PoliceOfficer_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01",
-      "startX": 3,
-      "startY": 3,
       "path": "w",
       "spriteIndex": 6,
       "direction": "DOWN",
@@ -135,22 +167,26 @@
           ]
         }
       ],
+      "location": {
+        "x": 3,
+        "y": 3
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_SomeGuy_TomTown_WindValley_01_01"
     },
     {
       "name": "TransitionBuildingV_NPC_Info_Guy_01",
-      "startX": 9,
-      "startY": 4,
       "path": "w",
       "spriteIndex": 10,
       "direction": "LEFT",
       "interactions": [],
+      "location": {
+        "x": 9,
+        "y": 4
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_Info_Guy_01_01"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01",
-      "startX": 4,
-      "startY": 6,
       "path": "w",
       "spriteIndex": 9,
       "direction": "RIGHT",
@@ -168,51 +204,30 @@
           ]
         }
       ],
+      "location": {
+        "x": 4,
+        "y": 6
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01_01",
       "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
-  "mapExits": [
-    {
-      "exitName": "SouthDoor",
-      "location": [
-        6,
-        7
-      ],
-      "nextMap": "WindValley",
-      "nextEntrance": "NorthTransitionBuilding",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoor_01"
-    },
-    {
-      "exitName": "NorthDoor",
-      "location": [
-        6,
-        1
-      ],
-      "nextMap": "Tom_Town",
-      "nextEntrance": "SouthTransitionBuilding",
-      "direction": "UP",
-      "deathPortal": false,
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoor_01"
-    }
-  ],
-  "triggerData": [],
   "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",
-      "location": [
-        8,
-        4
-      ],
       "actions": [
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
+      "location": {
+        "x": 8,
+        "y": 4
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
-  ]
+  ],
+  "events": [],
+  "wildBattles": []
 }

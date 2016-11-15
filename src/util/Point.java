@@ -15,6 +15,7 @@ public class Point {
         this.y = y;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Point)) {
             return false;
@@ -28,18 +29,10 @@ public class Point {
         return x >= 0 && x < dimension.width && y >= 0 && y < dimension.height;
     }
 
-    public boolean isAt(int x, int y) {
-        return this.x == x && this.y == y;
-    }
-
-    public Point add(int x, int y) {
-        this.x += x;
-        this.y += y;
-        return this;
-    }
-
     public Point add(Point other) {
-        return this.add(other.x, other.y);
+        this.x += other.x;
+        this.y += other.y;
+        return this;
     }
 
     public static Point add(Point first, Point second) {
@@ -109,10 +102,6 @@ public class Point {
         this.x = -this.x;
         this.y = -this.y;
         return this;
-    }
-
-    public static Point negate(Point point) {
-        return copy(point).negate();
     }
 
     public Dimension maximizeDimension(Dimension previousDimension) {

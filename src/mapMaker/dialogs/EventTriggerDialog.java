@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import mapMaker.dialogs.action.ActionListPanel;
-import pattern.TriggerMatcher;
+import pattern.map.EventMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-public class EventTriggerDialog extends TriggerDialog<TriggerMatcher> {
+public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
 	private static final long serialVersionUID = -1493772382824925408L;
 	
 	private JTextField nameTextField;
@@ -77,8 +77,8 @@ public class EventTriggerDialog extends TriggerDialog<TriggerMatcher> {
 	}
 
 	@Override
-	public TriggerMatcher getMatcher() {
-		return new TriggerMatcher(
+	public EventMatcher getMatcher() {
+		return new EventMatcher(
 				nameTextField.getText(),
 				conditionTextArea.getText(),
 				actionListPanel.getActions()
@@ -86,9 +86,9 @@ public class EventTriggerDialog extends TriggerDialog<TriggerMatcher> {
 	}
 
 	@Override
-	public void load(TriggerMatcher matcher) {
+	public void load(EventMatcher matcher) {
 		nameTextField.setText(matcher.getBasicName());
 		conditionTextArea.setText(matcher.getCondition());
-		actionListPanel.load(matcher.getActionMatchers());
+		actionListPanel.load(matcher.getActionMatcherList());
 	}
 }

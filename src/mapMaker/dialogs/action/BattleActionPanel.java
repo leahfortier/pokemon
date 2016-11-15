@@ -1,7 +1,7 @@
 package mapMaker.dialogs.action;
 
-import pattern.ActionMatcher;
-import pattern.ActionMatcher.BattleMatcher;
+import pattern.action.ActionMatcher;
+import pattern.action.BattleMatcher;
 import trainer.Trainer;
 
 import javax.swing.GroupLayout;
@@ -291,7 +291,7 @@ class BattleActionPanel extends ActionPanel {
 
 	@Override
 	protected void load(ActionMatcher matcher) {
-		BattleMatcher battleMatcher = matcher.battle;
+		BattleMatcher battleMatcher = matcher.getBattle();
 
 		nameTextField.setText(battleMatcher.name);
 		cashFormattedTextField.setValue(battleMatcher.cashMoney);
@@ -320,7 +320,7 @@ class BattleActionPanel extends ActionPanel {
 
 		BattleMatcher battleMatcher = new BattleMatcher(name, cashMoney, pokemon, update);
 		ActionMatcher actionMatcher = new ActionMatcher();
-		actionMatcher.battle = battleMatcher;
+		actionMatcher.setBattle(battleMatcher);
 
 		return actionMatcher;
 	}

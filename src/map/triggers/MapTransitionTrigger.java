@@ -2,7 +2,7 @@ package map.triggers;
 
 import main.Game;
 import map.Direction;
-import pattern.MapTransitionMatcher;
+import pattern.map.MapTransitionMatcher;
 import trainer.CharacterData;
 import util.JsonUtils;
 

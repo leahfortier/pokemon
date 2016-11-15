@@ -1,6 +1,7 @@
 package map;
 
 import util.InputControl.Control;
+import util.Point;
 
 public enum Direction {
     RIGHT('r', 1, 0, Control.RIGHT),
@@ -31,5 +32,9 @@ public enum Direction {
         UP.opposite = DOWN;
         LEFT.opposite = RIGHT;
         DOWN.opposite = UP;
+    }
+
+    public Point getDeltaPoint() {
+        return new Point(dx, dy);
     }
 }

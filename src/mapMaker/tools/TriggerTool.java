@@ -1,9 +1,9 @@
 package mapMaker.tools;
 
 import mapMaker.MapMaker;
-import mapMaker.data.PlaceableTrigger;
 import mapMaker.EditType;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.generic.LocationTriggerMatcher;
 import util.DrawUtils;
 import util.Point;
 
@@ -12,21 +12,25 @@ import javax.swing.JPopupMenu;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.util.List;
 
-// TODO: This tool doesn't work and doesn't look like it did previously either
-public class TriggerTool extends Tool {
+class TriggerTool extends Tool {
     private JPopupMenu triggerListPopup;
     private JPopupMenu triggerOptionsPopup;
 
-    private PlaceableTrigger[] triggers;
-    private PlaceableTrigger selectedTrigger;
+    private List<LocationTriggerMatcher> triggers;
+    private LocationTriggerMatcher selectedTrigger;
 
-    public TriggerTool(MapMaker mapMaker) {
+    TriggerTool(MapMaker mapMaker) {
         super(mapMaker);
 
         selectedTrigger = null;
+
         triggerListPopup = new JPopupMenu();
+        triggerListPopup.setLightWeightPopupEnabled(false);
+
         triggerOptionsPopup = new JPopupMenu();
+        triggerOptionsPopup.setLightWeightPopupEnabled(false);
 
         JMenuItem editItem = new JMenuItem("Edit");
         triggerOptionsPopup.add(editItem);
@@ -37,7 +41,7 @@ public class TriggerTool extends Tool {
         triggerOptionsPopup.add(moveItem);
         moveItem.addActionListener(event -> {
             mapMaker.setTool(ToolType.SINGLE_CLICK);
-            TriggerModelType triggerModelType = mapMaker.getTriggerData().getTriggerModelType(selectedTrigger);
+            TriggerModelType triggerModelType = selectedTrigger.getTriggerModelType();
             if (triggerModelType != null) {
                 mapMaker.setEditType(EditType.TRIGGERS);
 
@@ -63,19 +67,19 @@ public class TriggerTool extends Tool {
 
         System.out.println("Trigger click: " + clickLocation);
 
-        triggers = mapMaker.getTriggerData().getTrigger(location);
+        triggers = mapMaker.getTriggerData().getEntitiesAtLocation(location);
         triggerListPopup.removeAll();
 
-        for (PlaceableTrigger trigger : triggers) {
-            JMenuItem menuItem = new JMenuItem(trigger.name + " (" + trigger.triggerType + ")");
+        for (LocationTriggerMatcher trigger : triggers) {
+            JMenuItem menuItem = new JMenuItem(trigger.getBasicName() + " (" + trigger.getTriggerModelType() + ")");
             triggerListPopup.add(menuItem);
             menuItem.addActionListener(event -> {
                 Component[] components = triggerListPopup.getComponents();
                 // TODO: If someone reads this, please suggest a better way to find the index of the selected item...
                 for (Component component : components) {
                     if (((JMenuItem) component).getText().equals(event.getActionCommand())) {
-                        for (PlaceableTrigger trigger1 : triggers) {
-                            if (event.getActionCommand().equals(trigger1.name + " (" + trigger1.triggerType + ")")) {
+                        for (LocationTriggerMatcher trigger1 : triggers) {
+                            if (event.getActionCommand().equals(trigger1.getBasicName() + " (" + trigger1.getTriggerModelType() + ")")) {
                                 //System.out.println("Clicked " + e.getActionCommand());
                                 selectedTrigger = trigger1;
                                 break;

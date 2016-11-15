@@ -7,13 +7,13 @@ import util.Point;
 
 import java.awt.Graphics;
 
-public class RectangleTool extends Tool {
+class RectangleTool extends Tool {
     private Point startLocation;
     private Rectangle rectangle;
 
     private boolean pressed = false;
 
-    public RectangleTool(MapMaker mapMaker) {
+    RectangleTool(MapMaker mapMaker) {
         super(mapMaker);
         this.rectangle = new Rectangle(false);
     }

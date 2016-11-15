@@ -13,34 +13,35 @@ public class Rectangle {
     private boolean inBoundsRequired;
 
     private Point upperLeftRectangleCoordinate;
-    private Point lowerRightRectangleCoordinate;
     private Dimension dimension;
 
     public Rectangle(boolean inBoundsRequired) {
         this.inBoundsRequired = inBoundsRequired;
     }
 
-    public void setCoordinates(Point startLocation, Point endLocation, Dimension dimension) {
+    void setCoordinates(Point startLocation, Point endLocation, Dimension dimension) {
 
         this.upperLeftRectangleCoordinate = Point.min(startLocation, endLocation);
-        this.lowerRightRectangleCoordinate = Point.max(startLocation, endLocation);
+        Point lowerRightRectangleCoordinate = Point.max(startLocation, endLocation);
 
         if (this.inBoundsRequired) {
             this.upperLeftRectangleCoordinate.lowerBound();
-            this.lowerRightRectangleCoordinate.upperBound(dimension);
+            lowerRightRectangleCoordinate.upperBound(dimension);
         }
 
         this.dimension = new Dimension(
-                this.lowerRightRectangleCoordinate.x - this.upperLeftRectangleCoordinate.x + 1,
-                this.lowerRightRectangleCoordinate.y - this.upperLeftRectangleCoordinate.y + 1
+                lowerRightRectangleCoordinate.x - this.upperLeftRectangleCoordinate.x + 1,
+                lowerRightRectangleCoordinate.y - this.upperLeftRectangleCoordinate.y + 1
         );
+
+        System.out.println("New rectangle with dimension " + this.dimension.width + " " + this.dimension.height);
     }
 
-    public void outlineRed(Graphics g, Point mapLocation) {
+    void outlineRed(Graphics g, Point mapLocation) {
         DrawUtils.outlineTiles(g, this.upperLeftRectangleCoordinate, mapLocation, Color.RED, this.dimension);
     }
 
-    public BufferedImage getImage(BufferedImage currentImage) {
+    BufferedImage getImage(BufferedImage currentImage) {
         int width = this.dimension.width;
         int height = this.dimension.height;
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -51,7 +52,7 @@ public class Rectangle {
         return image;
     }
 
-    public void drawTiles(MapMaker mapMaker, int val) {
+    void drawTiles(MapMaker mapMaker, int val) {
         for (int x = 0; x < this.dimension.width; x++) {
             for (int y = 0; y < this.dimension.height; y++) {
                 Point delta = mapMaker.setTile(new Point(x, y).add(this.upperLeftRectangleCoordinate), val);

@@ -1,8 +1,8 @@
-package pattern;
+package pattern.generic;
 
 import util.StringUtils;
 
-public abstract class EntityMatcher {
+public abstract class TriggerMatcher {
     private String triggerName;
     private String condition;
 

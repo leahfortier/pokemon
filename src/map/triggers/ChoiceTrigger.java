@@ -2,8 +2,8 @@ package map.triggers;
 
 import message.MessageUpdate;
 import message.Messages;
-import pattern.ActionMatcher.ChoiceActionMatcher;
-import pattern.ActionMatcher.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ChoiceActionMatcher;
+import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import util.JsonUtils;
 
 public class ChoiceTrigger extends Trigger {

@@ -1,7 +1,7 @@
 package mapMaker.dialogs.action;
 
 import mapMaker.dialogs.TriggerDialog;
-import pattern.ActionMatcher;
+import pattern.action.ActionMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;

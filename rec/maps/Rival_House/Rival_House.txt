@@ -6,34 +6,35 @@
       "music": "DFS_TOWN"
     }
   ],
-  "NPCs": [],
-  "items": [],
-  "mapExits": [
+  "mapTransitions": [
     {
       "exitName": "stairs",
-      "location": [
-        20,
-        6
-      ],
       "nextMap": "R_House_Up",
       "nextEntrance": "stairs",
       "direction": "LEFT",
       "deathPortal": false,
+      "location": {
+        "x": 20,
+        "y": 6
+      },
       "triggerName": "Rival_House_MapExit_stairs_01"
     },
     {
       "exitName": "DFS_Town",
-      "location": [
-        15,
-        10
-      ],
       "nextMap": "DFS_Town",
       "nextEntrance": "RivalsHouse",
       "direction": "DOWN",
       "deathPortal": false,
+      "location": {
+        "x": 15,
+        "y": 10
+      },
       "triggerName": "Rival_House_MapExit_DFS_Town_01"
     }
   ],
-  "triggerData": [],
-  "miscEntities": []
+  "NPCs": [],
+  "items": [],
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": []
 }

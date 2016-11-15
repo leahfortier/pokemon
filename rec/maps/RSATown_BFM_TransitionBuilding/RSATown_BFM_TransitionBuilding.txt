@@ -5,11 +5,35 @@
       "music": "TRANSITION_BUILDING"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "EastDoor",
+      "nextMap": "RSATown",
+      "nextEntrance": "WestTransitionBuilding",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 3
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoor_01"
+    },
+    {
+      "exitName": "WestDoor",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "EastTransitionBuilding",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 2,
+        "y": 3
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoor_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "BFM_Guy",
-      "startX": 2,
-      "startY": 2,
       "path": "w",
       "spriteIndex": 1,
       "direction": "DOWN",
@@ -27,60 +51,41 @@
           ]
         }
       ],
+      "location": {
+        "x": 2,
+        "y": 2
+      },
       "triggerName": "RSATown_BFM_TransitionBuilding_NPC_BFM_Guy_01"
     },
     {
       "name": "Info_Guy",
-      "startX": 6,
-      "startY": 1,
       "path": "w",
       "spriteIndex": 10,
       "direction": "DOWN",
       "interactions": [],
+      "location": {
+        "x": 6,
+        "y": 1
+      },
       "triggerName": "RSATown_BFM_TransitionBuilding_NPC_Info_Guy_01"
     }
   ],
   "items": [],
-  "mapExits": [
-    {
-      "exitName": "EastDoor",
-      "location": [
-        10,
-        3
-      ],
-      "nextMap": "RSATown",
-      "nextEntrance": "WestTransitionBuilding",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoor_01"
-    },
-    {
-      "exitName": "WestDoor",
-      "location": [
-        2,
-        3
-      ],
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "EastTransitionBuilding",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoor_01"
-    }
-  ],
-  "triggerData": [],
   "miscEntities": [
     {
       "name": "Info_Guy_Dialogue",
-      "location": [
-        6,
-        2
-      ],
       "actions": [
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
+      "location": {
+        "x": 6,
+        "y": 2
+      },
       "triggerName": "RSATown_BFM_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
-  ]
+  ],
+  "events": [],
+  "wildBattles": []
 }

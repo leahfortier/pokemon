@@ -6,11 +6,35 @@
       "music": "PLAYER_HOUSE"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "stairs",
+      "nextMap": "PlayersHouseUp",
+      "nextEntrance": "stairs",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 1
+      },
+      "triggerName": "PlayersHouseDown_MapExit_stairs_01"
+    },
+    {
+      "exitName": "DFS_Town",
+      "nextMap": "DFS_Town",
+      "nextEntrance": "PlayersHouse",
+      "direction": "DOWN",
+      "deathPortal": true,
+      "location": {
+        "x": 6,
+        "y": 8
+      },
+      "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "PlayersHouseDown_NPC_Mom_01",
-      "startX": 4,
-      "startY": 4,
       "path": "w",
       "spriteIndex": 13,
       "direction": "DOWN",
@@ -28,44 +52,17 @@
           ]
         }
       ],
+      "location": {
+        "x": 4,
+        "y": 4
+      },
       "triggerName": "PlayersHouseDown_NPC_PlayersHouseDown_NPC_Mom_01_01"
     }
   ],
   "items": [],
-  "mapExits": [
-    {
-      "exitName": "stairs",
-      "location": [
-        10,
-        1
-      ],
-      "nextMap": "PlayersHouseUp",
-      "nextEntrance": "stairs",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "triggerName": "PlayersHouseDown_MapExit_stairs_01"
-    },
-    {
-      "exitName": "DFS_Town",
-      "location": [
-        6,
-        8
-      ],
-      "nextMap": "DFS_Town",
-      "nextEntrance": "PlayersHouse",
-      "direction": "DOWN",
-      "deathPortal": true,
-      "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
-    }
-  ],
-  "triggerData": [],
   "miscEntities": [
     {
       "name": "fridge",
-      "location": [
-        5,
-        1
-      ],
       "actions": [
         {
           "trigger": {
@@ -74,7 +71,13 @@
           }
         }
       ],
+      "location": {
+        "x": 5,
+        "y": 1
+      },
       "triggerName": "PlayersHouseDown_Event_fridge_01"
     }
-  ]
+  ],
+  "events": [],
+  "wildBattles": []
 }

@@ -2,9 +2,9 @@ package mapMaker.dialogs;
 
 import map.Direction;
 import mapMaker.MapMaker;
-import mapMaker.data.MapMakerTriggerData;
-import pattern.MapDataMatcher;
-import pattern.MapTransitionMatcher;
+import mapMaker.MapMakerTriggerData;
+import pattern.map.MapDataMatcher;
+import pattern.map.MapTransitionMatcher;
 import util.FileIO;
 
 import javax.swing.GroupLayout;
@@ -47,7 +47,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		String fileText = FileIO.readEntireFileWithReplacements(mapFileName, false);
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName, fileText);
 
-		return mapDataMatcher.getMapExits()
+		return mapDataMatcher.getMapTransitions()
 				.stream()
 				.map(MapTransitionMatcher::getExitName)
 				.collect(Collectors.toSet());

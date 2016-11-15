@@ -6,11 +6,23 @@
       "music": "POKE_GYM"
     }
   ],
+  "mapTransitions": [
+    {
+      "exitName": "Tom_Town",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "Gym",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 9,
+        "y": 15
+      },
+      "triggerName": "Tom_Gym_MapExit_Tom_Town_01"
+    }
+  ],
   "NPCs": [
     {
       "name": "Tom_Gym_NPC_Leader_Moore_01",
-      "startX": 9,
-      "startY": 5,
       "path": "w",
       "spriteIndex": 15,
       "direction": "DOWN",
@@ -70,12 +82,14 @@
           ]
         }
       ],
+      "location": {
+        "x": 9,
+        "y": 5
+      },
       "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Leader_Moore_01_01"
     },
     {
       "name": "Tom_Gym_NPC_Tom_Trainer_01",
-      "startX": 7,
-      "startY": 11,
       "path": "w",
       "spriteIndex": 5,
       "direction": "RIGHT",
@@ -115,12 +129,14 @@
           ]
         }
       ],
+      "location": {
+        "x": 7,
+        "y": 11
+      },
       "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Tom_Trainer_01_01"
     },
     {
       "name": "Tom_Gym_NPC_Tom_Trainer_02",
-      "startX": 11,
-      "startY": 9,
       "path": "w",
       "spriteIndex": 5,
       "direction": "LEFT",
@@ -160,24 +176,15 @@
           ]
         }
       ],
+      "location": {
+        "x": 11,
+        "y": 9
+      },
       "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Tom_Trainer_02_01"
     }
   ],
   "items": [],
-  "mapExits": [
-    {
-      "exitName": "Tom_Town",
-      "location": [
-        9,
-        15
-      ],
-      "nextMap": "Tom_Town",
-      "nextEntrance": "Gym",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "triggerName": "Tom_Gym_MapExit_Tom_Town_01"
-    }
-  ],
-  "triggerData": [],
-  "miscEntities": []
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": []
 }

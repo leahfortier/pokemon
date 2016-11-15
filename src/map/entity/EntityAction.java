@@ -2,11 +2,10 @@ package map.entity;
 
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import pattern.MapDataMatcher;
-import pattern.ActionMatcher.BattleMatcher;
-import pattern.ActionMatcher.ChoiceActionMatcher;
+import pattern.action.BattleMatcher;
+import pattern.action.ChoiceActionMatcher;
 import pattern.GroupTriggerMatcher;
-import pattern.ActionMatcher.UpdateMatcher;
+import pattern.action.UpdateMatcher;
 import util.JsonUtils;
 import util.StringUtils;
 

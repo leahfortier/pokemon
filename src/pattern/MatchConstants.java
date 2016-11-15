@@ -1,8 +1,8 @@
 package pattern;
 
-class MatchConstants {
+public class MatchConstants {
 
-    enum MatchType {
+    public enum MatchType {
         WORD("\\w+"),
         MULTI_WORD("[\\w ]+"),
         INTEGER("\\d+"),
@@ -19,7 +19,7 @@ class MatchConstants {
         }
     }
 
-    static String group(final MatchType matchType) {
+    public static String group(final MatchType matchType) {
          return "(" + matchType.regex + ")";
     }
 

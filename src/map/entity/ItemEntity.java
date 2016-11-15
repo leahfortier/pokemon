@@ -11,20 +11,19 @@ import namesies.ItemNamesies;
 import pattern.GroupTriggerMatcher;
 import util.InputControl;
 import util.JsonUtils;
+import util.Point;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;
 
-class ItemEntity extends Entity {
-	private String name;
-	private boolean hasTriggered;
-	private ItemNamesies itemName;
+public class ItemEntity extends Entity {
+	private final ItemNamesies itemName;
 
+	private boolean hasTriggered;
 	private boolean dataCreated;
 
-	public ItemEntity(String name, int x, int y, ItemNamesies item) {
-		super(x,y);
-		this.name = name;
+	public ItemEntity(String name, Point location, String condition, ItemNamesies item) {
+		super(location, name, condition);
 		this.itemName = item;
 
 		this.hasTriggered = false;
@@ -40,10 +39,6 @@ class ItemEntity extends Entity {
 	protected BufferedImage getFrame() {
 		// TODO: Needs constant
 		return Game.getData().getTrainerTiles().getTile(0);
-	}
-
-	public String getTriggerSuffix() {
-		return this.name;
 	}
 
 	public void getAttention(Direction direction) {
@@ -79,7 +74,7 @@ class ItemEntity extends Entity {
 		// This trigger will only call the item trigger when the conditions apply
 		GroupTriggerMatcher matcher = new GroupTriggerMatcher(itemTriggerName);
 		matcher.suffix = this.getTriggerSuffix();
-		matcher.globals = new String[] { "has" + name };
+		matcher.globals = new String[] { "has" + this.getEntityName() };
 
 		TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
 

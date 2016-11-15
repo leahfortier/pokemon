@@ -1,7 +1,6 @@
 package mapMaker;
 
 import map.MapMetaData.MapDataType;
-import mapMaker.data.MapMakerTriggerData;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.MoveModel.MoveModelType;
 import mapMaker.model.TileModel;
@@ -139,10 +138,7 @@ public class EditMapMetaData {
 
         currentMapSize = location.maximizeDimension(previousDimension);
 
-        Point delta = Point.negate(location).lowerBound();
-
-        System.out.println("New " + currentMapSize.width + " " + currentMapSize.height);
-        System.out.println("Start " + delta);
+        Point delta = Point.copy(location).negate().lowerBound();
 
         this.resetMaps();
 

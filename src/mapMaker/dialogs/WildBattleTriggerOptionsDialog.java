@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import main.Global;
-import pattern.TriggerMatcher;
+import pattern.map.WildBattleMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -10,18 +10,18 @@ import javax.swing.JComboBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<TriggerMatcher>> {
+public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattleMatcher>> {
 	private static final long serialVersionUID = -7378035463487486331L;
 	
 	private JComboBox<String> comboBox;
 
 	private JButton editButton;
-	private List<TriggerMatcher> wildBattleTriggers;
+	private List<WildBattleMatcher> wildBattleTriggers;
 	
 	public WildBattleTriggerOptionsDialog() {
 		JButton createButton = new JButton("Create New");
 		createButton.addActionListener(event -> {
-			TriggerMatcher matcher = editWildBattleTrigger(null);
+			WildBattleMatcher matcher = editWildBattleTrigger(null);
             if (matcher == null) {
 				return;
 			}
@@ -36,8 +36,8 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<TriggerMa
 		editButton = new JButton("Edit");
 		editButton.setEnabled(false);
 		editButton.addActionListener(event -> {
-            TriggerMatcher oldMatcher = this.getSelectedTriggerMatcher();
-			TriggerMatcher newMatcher = editWildBattleTrigger(oldMatcher);
+			WildBattleMatcher oldMatcher = this.getSelectedTriggerMatcher();
+			WildBattleMatcher newMatcher = editWildBattleTrigger(oldMatcher);
             if (newMatcher == null) {
 				return;
 			}
@@ -74,9 +74,9 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<TriggerMa
 		setLayout(groupLayout);
 	}
 
-	private TriggerMatcher getSelectedTriggerMatcher() {
+	private WildBattleMatcher getSelectedTriggerMatcher() {
 		String wildBattleName = (String)comboBox.getSelectedItem();
-		for (TriggerMatcher matcher : wildBattleTriggers) {
+		for (WildBattleMatcher matcher : wildBattleTriggers) {
 			if (wildBattleName.equals(matcher.getBasicName())) {
 				return matcher;
 			}
@@ -86,9 +86,9 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<TriggerMa
 		return null;
 	}
 
-	private TriggerMatcher editWildBattleTrigger(TriggerMatcher triggerMatcher) {
+	private WildBattleMatcher editWildBattleTrigger(WildBattleMatcher eventMatcher) {
 		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
-		dialog.loadMatcher(triggerMatcher);
+		dialog.loadMatcher(eventMatcher);
 
 		if (!dialog.giveOption("Wild Battle Trigger Editor", this)) {
 			return null;
@@ -108,18 +108,18 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<TriggerMa
 	}
 
 
-	private void addWildBattleTrigger(TriggerMatcher newMatcher) {
+	private void addWildBattleTrigger(WildBattleMatcher newMatcher) {
 		wildBattleTriggers.add(newMatcher);
 		render();
 	}
 
 	@Override
-	public List<TriggerMatcher> getMatcher() {
+	public List<WildBattleMatcher> getMatcher() {
 		return this.wildBattleTriggers;
 	}
 
 	@Override
-	protected void load(List<TriggerMatcher> matchers) {
+	protected void load(List<WildBattleMatcher> matchers) {
 		matchers.forEach(this::addWildBattleTrigger);
 	}
 }

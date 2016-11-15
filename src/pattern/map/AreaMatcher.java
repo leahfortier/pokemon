@@ -1,4 +1,4 @@
-package pattern;
+package pattern.map;
 
 import map.AreaData;
 import map.AreaData.WeatherState;

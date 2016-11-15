@@ -1,12 +1,11 @@
 package mapMaker.dialogs.action;
 
-import pattern.ActionMatcher;
+import pattern.action.ActionMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ActionListPanel extends JPanel {
@@ -26,8 +25,8 @@ public class ActionListPanel extends JPanel {
         render();
     }
 
-    public void load(ActionMatcher[] actions) {
-        actionList.addAll(Arrays.asList(actions));
+    public void load(List<ActionMatcher> actions) {
+        actionList.addAll(actions);
     }
 
     public void render() {

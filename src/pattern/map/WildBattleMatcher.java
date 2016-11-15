@@ -1,39 +1,30 @@
-package pattern;
+package pattern.map;
 
 import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
-import map.triggers.TriggerType;
-import pattern.ActionMatcher.TriggerActionMatcher;
+import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.MatchConstants;
 import pattern.MatchConstants.MatchType;
-import util.JsonUtils;
+import pattern.generic.MultiPointTriggerMatcher;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WildBattleTriggerMatcher {
+public class WildBattleMatcher extends MultiPointTriggerMatcher {
     private static final Pattern wildEncounterPattern = Pattern.compile(
             MatchConstants.group(MatchType.POKEMON_NAME) + " " +
                     MatchConstants.group(MatchType.INTEGER) + "-" + MatchConstants.group(MatchType.INTEGER) + " " +
                     MatchConstants.group(MatchType.INTEGER) + "%"
     );
 
+    private String name;
     private EncounterRate encounterRate;
     private String[] pokemon;
 
-    private transient WildEncounter[] wildEncounters;
-
-    public static TriggerMatcher createWildBattleMatcher(String name, EncounterRate encounterRate, WildEncounter[] wildEncounters) {
-        WildBattleTriggerMatcher wildBattleTriggerMatcher = new WildBattleTriggerMatcher(encounterRate, wildEncounters);
-        ActionMatcher action = new ActionMatcher();
-        action.trigger = new TriggerActionMatcher(TriggerType.WILD_BATTLE, JsonUtils.getJson(wildBattleTriggerMatcher));
-
-        return new TriggerMatcher(name, null, new ActionMatcher[] { action });
-    }
-
-    private WildBattleTriggerMatcher(EncounterRate encounterRate, WildEncounter[] wildEncounters) {
+    public WildBattleMatcher(String name, EncounterRate encounterRate, WildEncounter[] wildEncounters) {
+        this.name = name;
         this.encounterRate = encounterRate;
-        this.wildEncounters = wildEncounters;
         this.pokemon = new String[wildEncounters.length];
         for (int i = 0; i < pokemon.length; i++) {
             WildEncounter wildEncounter = wildEncounters[i];
@@ -46,11 +37,7 @@ public class WildBattleTriggerMatcher {
     }
 
     public WildEncounter[] getWildEncounters() {
-        if (this.wildEncounters != null) {
-            return wildEncounters;
-        }
-
-        this.wildEncounters = new WildEncounter[pokemon.length];
+        WildEncounter[] wildEncounters = new WildEncounter[pokemon.length];
         for (int i = 0; i < pokemon.length; i++) {
             Matcher matcher = wildEncounterPattern.matcher(pokemon[i]);
             if (!matcher.matches()) {
@@ -65,6 +52,16 @@ public class WildBattleTriggerMatcher {
             );
         }
 
-        return this.wildEncounters;
+        return wildEncounters;
+    }
+
+    @Override
+    public TriggerModelType getTriggerModelType() {
+        return TriggerModelType.WILD_BATTLE;
+    }
+
+    @Override
+    public String getBasicName() {
+        return this.name;
     }
 }

@@ -1,8 +1,9 @@
-package pattern;
+package pattern.map;
 
 import com.google.gson.JsonObject;
 import main.Global;
 import map.AreaData;
+import pattern.generic.LocationTriggerMatcher;
 import util.FileIO;
 import util.JsonUtils;
 
@@ -14,39 +15,56 @@ import java.util.Set;
 public class MapDataMatcher {
 
     private AreaMatcher[] areas = new AreaMatcher[0];
+    private MapTransitionMatcher[] mapTransitions = new MapTransitionMatcher[0];
     private NPCMatcher[] NPCs = new NPCMatcher[0];
     private ItemMatcher[] items = new ItemMatcher[0];
-    private MapTransitionMatcher[] mapExits = new MapTransitionMatcher[0];
-    private TriggerMatcher[] triggerData = new TriggerMatcher[0];
-    private TriggerMatcher[] miscEntities = new TriggerMatcher[0];
+    private MiscEntityMatcher[] miscEntities = new MiscEntityMatcher[0];
+    private EventMatcher[] events = new EventMatcher[0];
+    private WildBattleMatcher[] wildBattles = new WildBattleMatcher[0];
 
     public MapDataMatcher(Set<AreaMatcher> areaData,
-                          Set<MapMakerEntityMatcher> entities,
-                          Set<TriggerMatcher> triggerData) {
+                          Set<LocationTriggerMatcher> entities) {
+        List<MapTransitionMatcher> mapTransitions = new ArrayList<>();
         List<NPCMatcher> npcs = new ArrayList<>();
         List<ItemMatcher> items = new ArrayList<>();
-        List<MapTransitionMatcher> mapExits = new ArrayList<>();
-        List<TriggerMatcher> misc = new ArrayList<>();
-        for (EntityMatcher entity : entities) {
-            if (entity instanceof NPCMatcher) {
-                npcs.add((NPCMatcher)entity);
-            } else if (entity instanceof ItemMatcher) {
-                items.add((ItemMatcher)entity);
-            } else if (entity instanceof MapTransitionMatcher) {
-                mapExits.add((MapTransitionMatcher)entity);
-            } else if (entity instanceof TriggerMatcher) {
-                misc.add((TriggerMatcher)entity);
-            } else {
-                Global.error("Unknown entity class " + entity.getClass().getSimpleName());
+        List<MiscEntityMatcher> misc = new ArrayList<>();
+        List<EventMatcher> events = new ArrayList<>();
+        List<WildBattleMatcher> wildBattles = new ArrayList<>();
+
+        for (LocationTriggerMatcher entity : entities) {
+            switch (entity.getTriggerModelType()) {
+                case MAP_TRANSITION:
+                    mapTransitions.add((MapTransitionMatcher) entity);
+                    break;
+                case NPC:
+                    npcs.add((NPCMatcher)entity);
+                    break;
+                case ITEM:
+                    items.add((ItemMatcher) entity);
+                    break;
+                case TRIGGER_ENTITY:
+                    misc.add((MiscEntityMatcher)entity);
+                    break;
+                case EVENT:
+                    events.add((EventMatcher)entity);
+                    break;
+                case WILD_BATTLE:
+                    wildBattles.add((WildBattleMatcher)entity);
+                    break;
+                default:
+                    Global.error("Unknown trigger model type " + entity.getTriggerModelType() + "," +
+                            "entity class: " + entity.getClass().getSimpleName());
+                    break;
             }
         }
 
         this.areas = areaData.toArray(new AreaMatcher[0]);
+        this.mapTransitions = mapTransitions.toArray(new MapTransitionMatcher[0]);
         this.NPCs = npcs.toArray(new NPCMatcher[0]);
         this.items = items.toArray(new ItemMatcher[0]);
-        this.mapExits = mapExits.toArray(new MapTransitionMatcher[0]);
-        this.miscEntities = misc.toArray(new TriggerMatcher[0]);
-        this.triggerData = triggerData.toArray(new TriggerMatcher[0]);
+        this.miscEntities = misc.toArray(new MiscEntityMatcher[0]);
+        this.events = events.toArray(new EventMatcher[0]);
+        this.wildBattles = wildBattles.toArray(new WildBattleMatcher[0]);
     }
 
     public List<AreaMatcher> getAreas() {
@@ -61,24 +79,30 @@ public class MapDataMatcher {
         return Arrays.asList(this.items);
     }
 
-    public List<MapTransitionMatcher> getMapExits() {
-        return Arrays.asList(this.mapExits);
+    public List<MapTransitionMatcher> getMapTransitions() {
+        return Arrays.asList(this.mapTransitions);
     }
 
-    public List<TriggerMatcher> getMiscEntities() {
+    public List<MiscEntityMatcher> getMiscEntities() {
         return Arrays.asList(this.miscEntities);
     }
 
-    public List<TriggerMatcher> getTriggerData() {
-        return Arrays.asList(this.triggerData);
+    public List<EventMatcher> getEvents() {
+        return Arrays.asList(this.events);
     }
 
-    public List<MapMakerEntityMatcher> getEntities() {
-        List<MapMakerEntityMatcher> entities = new ArrayList<>();
+    public List<WildBattleMatcher> getWildBattles() {
+        return Arrays.asList(this.wildBattles);
+    }
+
+    public List<LocationTriggerMatcher> getAllEntities() {
+        List<LocationTriggerMatcher> entities = new ArrayList<>();
+        entities.addAll(getMapTransitions());
         entities.addAll(getNPCs());
         entities.addAll(getItems());
-        entities.addAll(getMapExits());
         entities.addAll(getMiscEntities());
+        entities.addAll(getEvents());
+        entities.addAll(getWildBattles());
 
         return entities;
     }
