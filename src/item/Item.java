@@ -633,7 +633,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class NoItem extends Item implements HoldItem {
+	static class NoItem extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		NoItem() {
@@ -649,7 +649,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Syrup extends Item implements TrainerUseItem {
+	static class Syrup extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Syrup() {
@@ -665,7 +665,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Bicycle extends Item implements TrainerUseItem {
+	static class Bicycle extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Bicycle() {
@@ -683,7 +683,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Surfboard extends Item implements TrainerUseItem {
+	static class Surfboard extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Surfboard() {
@@ -700,7 +700,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FishingRod extends Item implements TrainerUseItem {
+	static class FishingRod extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FishingRod() {
@@ -718,7 +718,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AbsorbBulb extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class AbsorbBulb extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		AbsorbBulb() {
@@ -740,7 +740,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AirBalloon extends Item implements HoldItem, ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect {
+	static class AirBalloon extends Item implements HoldItem, ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirBalloon() {
@@ -772,7 +772,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AmuletCoin extends Item implements HoldItem, EntryEffect {
+	static class AmuletCoin extends Item implements HoldItem, EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		AmuletCoin() {
@@ -792,7 +792,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BigRoot extends Item implements HoldItem {
+	static class BigRoot extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BigRoot() {
@@ -808,7 +808,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BindingBand extends Item implements HoldItem {
+	static class BindingBand extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BindingBand() {
@@ -824,7 +824,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BlackSludge extends Item implements HoldItem, EndTurnEffect {
+	static class BlackSludge extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		BlackSludge() {
@@ -856,7 +856,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BrightPowder extends Item implements HoldItem, StatChangingEffect {
+	static class BrightPowder extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		BrightPowder() {
@@ -884,7 +884,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CellBattery extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class CellBattery extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		CellBattery() {
@@ -906,7 +906,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceBand() {
@@ -947,7 +947,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceScarf() {
@@ -988,7 +988,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceSpecs() {
@@ -1029,7 +1029,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CleanseTag extends Item implements HoldItem, RepellingEffect {
+	static class CleanseTag extends Item implements HoldItem, RepellingEffect {
 		private static final long serialVersionUID = 1L;
 
 		CleanseTag() {
@@ -1049,7 +1049,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DampRock extends Item implements HoldItem, WeatherExtendingEffect {
+	static class DampRock extends Item implements HoldItem, WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
 		DampRock() {
@@ -1069,7 +1069,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HeatRock extends Item implements HoldItem, WeatherExtendingEffect {
+	static class HeatRock extends Item implements HoldItem, WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
 		HeatRock() {
@@ -1089,7 +1089,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IcyRock extends Item implements HoldItem, WeatherExtendingEffect {
+	static class IcyRock extends Item implements HoldItem, WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
 		IcyRock() {
@@ -1109,7 +1109,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SmoothRock extends Item implements HoldItem, WeatherExtendingEffect {
+	static class SmoothRock extends Item implements HoldItem, WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SmoothRock() {
@@ -1129,7 +1129,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EjectButton extends Item implements HoldItem, TakeDamageEffect {
+	static class EjectButton extends Item implements HoldItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		EjectButton() {
@@ -1165,7 +1165,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DestinyKnot extends Item implements HoldItem {
+	static class DestinyKnot extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		DestinyKnot() {
@@ -1181,7 +1181,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ExpertBelt extends Item implements HoldItem, PowerChangeEffect {
+	static class ExpertBelt extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ExpertBelt() {
@@ -1201,7 +1201,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlameOrb extends Item implements HoldItem, EndTurnEffect {
+	static class FlameOrb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlameOrb() {
@@ -1222,7 +1222,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ToxicOrb extends Item implements HoldItem, EndTurnEffect {
+	static class ToxicOrb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		ToxicOrb() {
@@ -1248,7 +1248,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FloatStone extends Item implements HoldItem, HalfWeightEffect {
+	static class FloatStone extends Item implements HoldItem, HalfWeightEffect {
 		private static final long serialVersionUID = 1L;
 
 		FloatStone() {
@@ -1268,7 +1268,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FocusBand extends Item implements HoldItem, BracingEffect {
+	static class FocusBand extends Item implements HoldItem, BracingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FocusBand() {
@@ -1292,7 +1292,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FocusSash extends Item implements HoldItem, ConsumableItem, BracingEffect {
+	static class FocusSash extends Item implements HoldItem, ConsumableItem, BracingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FocusSash() {
@@ -1321,7 +1321,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GripClaw extends Item implements HoldItem {
+	static class GripClaw extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		GripClaw() {
@@ -1337,7 +1337,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AdamantOrb extends Item implements HoldItem, PowerChangeEffect {
+	static class AdamantOrb extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		AdamantOrb() {
@@ -1371,7 +1371,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LustrousOrb extends Item implements HoldItem, PowerChangeEffect {
+	static class LustrousOrb extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		LustrousOrb() {
@@ -1405,7 +1405,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GriseousOrb extends Item implements HoldItem, PowerChangeEffect {
+	static class GriseousOrb extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		GriseousOrb() {
@@ -1439,7 +1439,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect, BeforeTurnEffect {
+	static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronBall() {
@@ -1488,7 +1488,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LaggingTail extends Item implements HoldItem, StallingEffect {
+	static class LaggingTail extends Item implements HoldItem, StallingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LaggingTail() {
@@ -1504,7 +1504,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LifeOrb extends Item implements HoldItem, PowerChangeEffect, ApplyDamageEffect {
+	static class LifeOrb extends Item implements HoldItem, PowerChangeEffect, ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LifeOrb() {
@@ -1533,7 +1533,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LightBall extends Item implements HoldItem, StatChangingEffect {
+	static class LightBall extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LightBall() {
@@ -1562,7 +1562,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LightClay extends Item implements HoldItem {
+	static class LightClay extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		LightClay() {
@@ -1578,7 +1578,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuckyEgg extends Item implements HoldItem {
+	static class LuckyEgg extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		LuckyEgg() {
@@ -1594,7 +1594,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuckyPunch extends Item implements HoldItem, CritStageEffect {
+	static class LuckyPunch extends Item implements HoldItem, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuckyPunch() {
@@ -1618,7 +1618,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuminousMoss extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class LuminousMoss extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuminousMoss() {
@@ -1640,7 +1640,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MachoBrace extends Item implements EVItem, StatChangingEffect {
+	static class MachoBrace extends Item implements EVItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MachoBrace() {
@@ -1676,7 +1676,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
+	static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		// TODO: This should be an object array
 		EffectNamesies[] effects = {
@@ -1723,7 +1723,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MetalPowder extends Item implements HoldItem, StatChangingEffect {
+	static class MetalPowder extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MetalPowder() {
@@ -1751,7 +1751,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Metronome extends Item implements HoldItem, PowerChangeEffect {
+	static class Metronome extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Metronome() {
@@ -1771,7 +1771,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MuscleBand extends Item implements HoldItem, PowerChangeEffect {
+	static class MuscleBand extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MuscleBand() {
@@ -1791,7 +1791,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerAnklet extends Item implements PowerItem, StatChangingEffect {
+	static class PowerAnklet extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerAnklet() {
@@ -1828,7 +1828,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerBand extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBand extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBand() {
@@ -1865,7 +1865,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerBelt extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBelt extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBelt() {
@@ -1902,7 +1902,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerBracer extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBracer extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBracer() {
@@ -1939,7 +1939,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerLens extends Item implements PowerItem, StatChangingEffect {
+	static class PowerLens extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerLens() {
@@ -1976,7 +1976,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerWeight extends Item implements PowerItem, StatChangingEffect {
+	static class PowerWeight extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerWeight() {
@@ -2013,7 +2013,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class QuickClaw extends Item implements HoldItem {
+	static class QuickClaw extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		QuickClaw() {
@@ -2029,7 +2029,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class QuickPowder extends Item implements HoldItem, StatChangingEffect {
+	static class QuickPowder extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickPowder() {
@@ -2057,7 +2057,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RedCard extends Item implements HoldItem, TakeDamageEffect {
+	static class RedCard extends Item implements HoldItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RedCard() {
@@ -2093,7 +2093,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RingTarget extends Item implements HoldItem, AdvantageChanger {
+	static class RingTarget extends Item implements HoldItem, AdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		RingTarget() {
@@ -2119,7 +2119,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockyHelmet extends Item implements HoldItem, PhysicalContactEffect {
+	static class RockyHelmet extends Item implements HoldItem, PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		RockyHelmet() {
@@ -2140,7 +2140,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, EffectBlockerEffect {
+	static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		SafetyGoggles() {
@@ -2176,7 +2176,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ScopeLens extends Item implements HoldItem, CritStageEffect {
+	static class ScopeLens extends Item implements HoldItem, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ScopeLens() {
@@ -2196,7 +2196,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShedShell extends Item implements HoldItem {
+	static class ShedShell extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		ShedShell() {
@@ -2212,7 +2212,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShellBell extends Item implements HoldItem, ApplyDamageEffect {
+	static class ShellBell extends Item implements HoldItem, ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShellBell() {
@@ -2238,7 +2238,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SmokeBall extends Item implements HoldItem, DefiniteEscape {
+	static class SmokeBall extends Item implements HoldItem, DefiniteEscape {
 		private static final long serialVersionUID = 1L;
 
 		SmokeBall() {
@@ -2254,7 +2254,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Snowball extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class Snowball extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Snowball() {
@@ -2276,7 +2276,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SoulDew extends Item implements HoldItem, StatChangingEffect {
+	static class SoulDew extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SoulDew() {
@@ -2304,7 +2304,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Stick extends Item implements HoldItem, CritStageEffect {
+	static class Stick extends Item implements HoldItem, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stick() {
@@ -2328,7 +2328,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemHolder {
+	static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -2384,7 +2384,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThickClub extends Item implements HoldItem, StatChangingEffect {
+	static class ThickClub extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ThickClub() {
@@ -2412,7 +2412,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WeaknessPolicy extends Item implements HoldItem, TakeDamageEffect {
+	static class WeaknessPolicy extends Item implements HoldItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		WeaknessPolicy() {
@@ -2435,7 +2435,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WhiteHerb extends Item implements HoldItem, StatProtectingEffect {
+	static class WhiteHerb extends Item implements HoldItem, StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WhiteHerb() {
@@ -2468,7 +2468,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WideLens extends Item implements HoldItem, StatChangingEffect {
+	static class WideLens extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WideLens() {
@@ -2496,7 +2496,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WiseGlasses extends Item implements HoldItem, StatChangingEffect {
+	static class WiseGlasses extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WiseGlasses() {
@@ -2524,7 +2524,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ZoomLens extends Item implements HoldItem, StatChangingEffect {
+	static class ZoomLens extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ZoomLens() {
@@ -2552,7 +2552,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FullIncense extends Item implements HoldItem, StallingEffect, IncenseItem {
+	static class FullIncense extends Item implements HoldItem, StallingEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		FullIncense() {
@@ -2572,7 +2572,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LaxIncense extends Item implements HoldItem, IncenseItem, StatChangingEffect {
+	static class LaxIncense extends Item implements HoldItem, IncenseItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LaxIncense() {
@@ -2604,7 +2604,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuckIncense extends Item implements HoldItem, EntryEffect, IncenseItem {
+	static class LuckIncense extends Item implements HoldItem, EntryEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		LuckIncense() {
@@ -2628,7 +2628,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OddIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class OddIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		OddIncense() {
@@ -2656,7 +2656,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PureIncense extends Item implements HoldItem, RepellingEffect, IncenseItem {
+	static class PureIncense extends Item implements HoldItem, RepellingEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		PureIncense() {
@@ -2680,7 +2680,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class RockIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RockIncense() {
@@ -2708,7 +2708,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoseIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class RoseIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RoseIncense() {
@@ -2736,7 +2736,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SeaIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class SeaIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SeaIncense() {
@@ -2764,7 +2764,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WaveIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class WaveIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		WaveIncense() {
@@ -2792,7 +2792,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DracoPlate extends Item implements PlateItem {
+	static class DracoPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		DracoPlate() {
@@ -2821,7 +2821,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DreadPlate extends Item implements PlateItem {
+	static class DreadPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		DreadPlate() {
@@ -2850,7 +2850,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EarthPlate extends Item implements PlateItem {
+	static class EarthPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		EarthPlate() {
@@ -2879,7 +2879,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FistPlate extends Item implements PlateItem {
+	static class FistPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		FistPlate() {
@@ -2908,7 +2908,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlamePlate extends Item implements PlateItem {
+	static class FlamePlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		FlamePlate() {
@@ -2937,7 +2937,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IciclePlate extends Item implements PlateItem {
+	static class IciclePlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		IciclePlate() {
@@ -2966,7 +2966,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class InsectPlate extends Item implements PlateItem {
+	static class InsectPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		InsectPlate() {
@@ -2995,7 +2995,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IronPlate extends Item implements PlateItem {
+	static class IronPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		IronPlate() {
@@ -3024,7 +3024,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MeadowPlate extends Item implements PlateItem {
+	static class MeadowPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		MeadowPlate() {
@@ -3053,7 +3053,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MindPlate extends Item implements PlateItem {
+	static class MindPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		MindPlate() {
@@ -3082,7 +3082,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PixiePlate extends Item implements PlateItem {
+	static class PixiePlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		PixiePlate() {
@@ -3111,7 +3111,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SkyPlate extends Item implements PlateItem {
+	static class SkyPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		SkyPlate() {
@@ -3140,7 +3140,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SplashPlate extends Item implements PlateItem {
+	static class SplashPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		SplashPlate() {
@@ -3169,7 +3169,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SpookyPlate extends Item implements PlateItem {
+	static class SpookyPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		SpookyPlate() {
@@ -3198,7 +3198,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StonePlate extends Item implements PlateItem {
+	static class StonePlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		StonePlate() {
@@ -3227,7 +3227,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ToxicPlate extends Item implements PlateItem {
+	static class ToxicPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		ToxicPlate() {
@@ -3256,7 +3256,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ZapPlate extends Item implements PlateItem {
+	static class ZapPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		ZapPlate() {
@@ -3285,7 +3285,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BurnDrive extends Item implements DriveItem {
+	static class BurnDrive extends Item implements DriveItem {
 		private static final long serialVersionUID = 1L;
 
 		BurnDrive() {
@@ -3305,7 +3305,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChillDrive extends Item implements DriveItem {
+	static class ChillDrive extends Item implements DriveItem {
 		private static final long serialVersionUID = 1L;
 
 		ChillDrive() {
@@ -3325,7 +3325,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DouseDrive extends Item implements DriveItem {
+	static class DouseDrive extends Item implements DriveItem {
 		private static final long serialVersionUID = 1L;
 
 		DouseDrive() {
@@ -3345,7 +3345,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShockDrive extends Item implements DriveItem {
+	static class ShockDrive extends Item implements DriveItem {
 		private static final long serialVersionUID = 1L;
 
 		ShockDrive() {
@@ -3365,7 +3365,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FireGem extends Item implements GemItem {
+	static class FireGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		FireGem() {
@@ -3398,7 +3398,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WaterGem extends Item implements GemItem {
+	static class WaterGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		WaterGem() {
@@ -3431,7 +3431,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ElectricGem extends Item implements GemItem {
+	static class ElectricGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		ElectricGem() {
@@ -3464,7 +3464,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GrassGem extends Item implements GemItem {
+	static class GrassGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		GrassGem() {
@@ -3497,7 +3497,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IceGem extends Item implements GemItem {
+	static class IceGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		IceGem() {
@@ -3530,7 +3530,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FightingGem extends Item implements GemItem {
+	static class FightingGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		FightingGem() {
@@ -3563,7 +3563,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PoisonGem extends Item implements GemItem {
+	static class PoisonGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		PoisonGem() {
@@ -3596,7 +3596,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GroundGem extends Item implements GemItem {
+	static class GroundGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		GroundGem() {
@@ -3629,7 +3629,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlyingGem extends Item implements GemItem {
+	static class FlyingGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		FlyingGem() {
@@ -3662,7 +3662,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PsychicGem extends Item implements GemItem {
+	static class PsychicGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		PsychicGem() {
@@ -3695,7 +3695,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BugGem extends Item implements GemItem {
+	static class BugGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		BugGem() {
@@ -3728,7 +3728,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockGem extends Item implements GemItem {
+	static class RockGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		RockGem() {
@@ -3761,7 +3761,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GhostGem extends Item implements GemItem {
+	static class GhostGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		GhostGem() {
@@ -3794,7 +3794,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonGem extends Item implements GemItem {
+	static class DragonGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonGem() {
@@ -3827,7 +3827,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DarkGem extends Item implements GemItem {
+	static class DarkGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		DarkGem() {
@@ -3860,7 +3860,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SteelGem extends Item implements GemItem {
+	static class SteelGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		SteelGem() {
@@ -3893,7 +3893,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NormalGem extends Item implements GemItem {
+	static class NormalGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		NormalGem() {
@@ -3926,7 +3926,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FairyGem extends Item implements GemItem {
+	static class FairyGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		FairyGem() {
@@ -3959,7 +3959,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Leftovers extends Item implements HoldItem, EndTurnEffect {
+	static class Leftovers extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Leftovers() {
@@ -3984,7 +3984,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BlackBelt extends Item implements PowerChangeEffect, HoldItem {
+	static class BlackBelt extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BlackBelt() {
@@ -4008,7 +4008,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BlackGlasses extends Item implements PowerChangeEffect, HoldItem {
+	static class BlackGlasses extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BlackGlasses() {
@@ -4032,7 +4032,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Charcoal extends Item implements PowerChangeEffect, HoldItem {
+	static class Charcoal extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Charcoal() {
@@ -4056,7 +4056,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonFang extends Item implements PowerChangeEffect, HoldItem {
+	static class DragonFang extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonFang() {
@@ -4080,7 +4080,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HardStone extends Item implements PowerChangeEffect, HoldItem {
+	static class HardStone extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		HardStone() {
@@ -4104,7 +4104,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Magnet extends Item implements PowerChangeEffect, HoldItem {
+	static class Magnet extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Magnet() {
@@ -4128,7 +4128,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MetalCoat extends Item implements PowerChangeEffect, HoldItem, PokemonUseItem {
+	static class MetalCoat extends Item implements PowerChangeEffect, HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		MetalCoat() {
@@ -4167,7 +4167,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MiracleSeed extends Item implements PowerChangeEffect, HoldItem {
+	static class MiracleSeed extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MiracleSeed() {
@@ -4191,7 +4191,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MysticWater extends Item implements PowerChangeEffect, HoldItem {
+	static class MysticWater extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MysticWater() {
@@ -4215,7 +4215,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NeverMeltIce extends Item implements PowerChangeEffect, HoldItem {
+	static class NeverMeltIce extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		NeverMeltIce() {
@@ -4239,7 +4239,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PoisonBarb extends Item implements PowerChangeEffect, HoldItem {
+	static class PoisonBarb extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		PoisonBarb() {
@@ -4264,7 +4264,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SharpBeak extends Item implements PowerChangeEffect, HoldItem {
+	static class SharpBeak extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SharpBeak() {
@@ -4288,7 +4288,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SilkScarf extends Item implements PowerChangeEffect, HoldItem {
+	static class SilkScarf extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SilkScarf() {
@@ -4312,7 +4312,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SilverPowder extends Item implements PowerChangeEffect, HoldItem {
+	static class SilverPowder extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SilverPowder() {
@@ -4336,7 +4336,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SoftSand extends Item implements PowerChangeEffect, HoldItem {
+	static class SoftSand extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SoftSand() {
@@ -4360,7 +4360,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SpellTag extends Item implements PowerChangeEffect, HoldItem {
+	static class SpellTag extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SpellTag() {
@@ -4384,7 +4384,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TwistedSpoon extends Item implements PowerChangeEffect, HoldItem {
+	static class TwistedSpoon extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		TwistedSpoon() {
@@ -4408,7 +4408,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DawnStone extends Item implements HoldItem, PokemonUseItem {
+	static class DawnStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DawnStone() {
@@ -4439,7 +4439,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DeepSeaScale extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
+	static class DeepSeaScale extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DeepSeaScale() {
@@ -4482,7 +4482,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DeepSeaTooth extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
+	static class DeepSeaTooth extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DeepSeaTooth() {
@@ -4525,7 +4525,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonScale extends Item implements HoldItem, PokemonUseItem {
+	static class DragonScale extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonScale() {
@@ -4556,7 +4556,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DubiousDisc extends Item implements HoldItem, PokemonUseItem {
+	static class DubiousDisc extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DubiousDisc() {
@@ -4587,7 +4587,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DuskStone extends Item implements HoldItem, PokemonUseItem {
+	static class DuskStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DuskStone() {
@@ -4618,7 +4618,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Electirizer extends Item implements HoldItem, PokemonUseItem {
+	static class Electirizer extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Electirizer() {
@@ -4649,7 +4649,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FireStone extends Item implements HoldItem, PokemonUseItem {
+	static class FireStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FireStone() {
@@ -4680,7 +4680,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KingsRock extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
+	static class KingsRock extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		KingsRock() {
@@ -4726,7 +4726,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LeafStone extends Item implements HoldItem, PokemonUseItem {
+	static class LeafStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		LeafStone() {
@@ -4757,7 +4757,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Magmarizer extends Item implements HoldItem, PokemonUseItem {
+	static class Magmarizer extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Magmarizer() {
@@ -4788,7 +4788,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MoonStone extends Item implements HoldItem, PokemonUseItem {
+	static class MoonStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		MoonStone() {
@@ -4819,7 +4819,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OvalStone extends Item implements HoldItem, PokemonUseItem {
+	static class OvalStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		OvalStone() {
@@ -4850,7 +4850,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Everstone extends Item implements HoldItem {
+	static class Everstone extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Everstone() {
@@ -4866,7 +4866,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PrismScale extends Item implements HoldItem, PokemonUseItem {
+	static class PrismScale extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PrismScale() {
@@ -4897,7 +4897,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Protector extends Item implements HoldItem, PokemonUseItem {
+	static class Protector extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Protector() {
@@ -4928,7 +4928,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RazorClaw extends Item implements HoldItem, CritStageEffect, PokemonUseItem {
+	static class RazorClaw extends Item implements HoldItem, CritStageEffect, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RazorClaw() {
@@ -4963,7 +4963,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RazorFang extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
+	static class RazorFang extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RazorFang() {
@@ -5009,7 +5009,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ReaperCloth extends Item implements HoldItem, PokemonUseItem {
+	static class ReaperCloth extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ReaperCloth() {
@@ -5040,7 +5040,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Sachet extends Item implements HoldItem, PokemonUseItem {
+	static class Sachet extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Sachet() {
@@ -5071,7 +5071,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShinyStone extends Item implements HoldItem, PokemonUseItem {
+	static class ShinyStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ShinyStone() {
@@ -5102,7 +5102,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SunStone extends Item implements HoldItem, PokemonUseItem {
+	static class SunStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SunStone() {
@@ -5133,7 +5133,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThunderStone extends Item implements HoldItem, PokemonUseItem {
+	static class ThunderStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThunderStone() {
@@ -5164,7 +5164,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class UpGrade extends Item implements HoldItem, PokemonUseItem {
+	static class UpGrade extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		UpGrade() {
@@ -5195,7 +5195,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WaterStone extends Item implements HoldItem, PokemonUseItem {
+	static class WaterStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WaterStone() {
@@ -5226,7 +5226,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WhippedDream extends Item implements HoldItem, PokemonUseItem {
+	static class WhippedDream extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WhippedDream() {
@@ -5257,7 +5257,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Antidote extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class Antidote extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5296,7 +5296,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Awakening extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class Awakening extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5335,7 +5335,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BurnHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class BurnHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5374,7 +5374,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IceHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class IceHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5413,7 +5413,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5452,7 +5452,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FullHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class FullHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FullHeal() {
@@ -5492,7 +5492,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FullRestore extends Item implements PokemonUseItem, HoldItem, BattleUseItem {
+	static class FullRestore extends Item implements PokemonUseItem, HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FullRestore() {
@@ -5534,7 +5534,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private boolean use(List<Move> moves)
 		{
@@ -5577,7 +5577,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private boolean use(List<Move> moves)
 		{
@@ -5620,7 +5620,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Ether extends Item implements HoldItem, MoveUseItem {
+	static class Ether extends Item implements HoldItem, MoveUseItem {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
@@ -5648,7 +5648,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxEther extends Item implements HoldItem, MoveUseItem {
+	static class MaxEther extends Item implements HoldItem, MoveUseItem {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
@@ -5676,7 +5676,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BerryJuice extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class BerryJuice extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BerryJuice() {
@@ -5709,7 +5709,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SweetHeart extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class SweetHeart extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SweetHeart() {
@@ -5742,7 +5742,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Potion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Potion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Potion() {
@@ -5775,7 +5775,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EnergyPowder extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class EnergyPowder extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		EnergyPowder() {
@@ -5808,7 +5808,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FreshWater extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class FreshWater extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		FreshWater() {
@@ -5841,7 +5841,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SuperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class SuperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SuperPotion() {
@@ -5874,7 +5874,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SodaPop extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class SodaPop extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SodaPop() {
@@ -5907,7 +5907,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Lemonade extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Lemonade extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Lemonade() {
@@ -5940,7 +5940,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MoomooMilk extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MoomooMilk extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MoomooMilk() {
@@ -5973,7 +5973,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EnergyRoot extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class EnergyRoot extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		EnergyRoot() {
@@ -6006,7 +6006,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HyperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class HyperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		HyperPotion() {
@@ -6039,7 +6039,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MaxPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MaxPotion() {
@@ -6068,7 +6068,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Revive extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Revive extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Revive() {
@@ -6105,7 +6105,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxRevive extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MaxRevive extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MaxRevive() {
@@ -6142,7 +6142,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RevivalHerb extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class RevivalHerb extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RevivalHerb() {
@@ -6179,7 +6179,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SacredAsh extends Item implements TrainerUseItem, HoldItem, BattleUseItem {
+	static class SacredAsh extends Item implements TrainerUseItem, HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SacredAsh() {
@@ -6216,7 +6216,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DireHit extends Item implements BattleUseItem, HoldItem {
+	static class DireHit extends Item implements BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		DireHit() {
@@ -6247,7 +6247,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GuardSpec extends Item implements BattleUseItem, HoldItem {
+	static class GuardSpec extends Item implements BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		GuardSpec() {
@@ -6278,7 +6278,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XAccuracy extends Item implements HoldItem, BattleUseItem {
+	static class XAccuracy extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XAccuracy() {
@@ -6307,7 +6307,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XAttack extends Item implements HoldItem, BattleUseItem {
+	static class XAttack extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XAttack() {
@@ -6336,7 +6336,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XDefend extends Item implements HoldItem, BattleUseItem {
+	static class XDefend extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XDefend() {
@@ -6365,7 +6365,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XSpecial extends Item implements HoldItem, BattleUseItem {
+	static class XSpecial extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XSpecial() {
@@ -6394,7 +6394,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XSpDef extends Item implements HoldItem, BattleUseItem {
+	static class XSpDef extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XSpDef() {
@@ -6423,7 +6423,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XSpeed extends Item implements HoldItem, BattleUseItem {
+	static class XSpeed extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XSpeed() {
@@ -6452,7 +6452,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HPUp extends Item implements HoldItem, PokemonUseItem {
+	static class HPUp extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HPUp() {
@@ -6487,7 +6487,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Protein extends Item implements HoldItem, PokemonUseItem {
+	static class Protein extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Protein() {
@@ -6522,7 +6522,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Iron extends Item implements HoldItem, PokemonUseItem {
+	static class Iron extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Iron() {
@@ -6557,7 +6557,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Calcium extends Item implements HoldItem, PokemonUseItem {
+	static class Calcium extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Calcium() {
@@ -6592,7 +6592,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Zinc extends Item implements HoldItem, PokemonUseItem {
+	static class Zinc extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Zinc() {
@@ -6627,7 +6627,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Carbos extends Item implements HoldItem, PokemonUseItem {
+	static class Carbos extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Carbos() {
@@ -6662,7 +6662,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HealthWing extends Item implements HoldItem, PokemonUseItem {
+	static class HealthWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HealthWing() {
@@ -6697,7 +6697,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MuscleWing extends Item implements HoldItem, PokemonUseItem {
+	static class MuscleWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		MuscleWing() {
@@ -6732,7 +6732,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ResistWing extends Item implements HoldItem, PokemonUseItem {
+	static class ResistWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ResistWing() {
@@ -6767,7 +6767,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GeniusWing extends Item implements HoldItem, PokemonUseItem {
+	static class GeniusWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GeniusWing() {
@@ -6802,7 +6802,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CleverWing extends Item implements HoldItem, PokemonUseItem {
+	static class CleverWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		CleverWing() {
@@ -6837,7 +6837,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SwiftWing extends Item implements HoldItem, PokemonUseItem {
+	static class SwiftWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SwiftWing() {
@@ -6872,7 +6872,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PPMax extends Item implements MoveUseItem, HoldItem {
+	static class PPMax extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private String increase;
 
@@ -6898,7 +6898,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PPUp extends Item implements MoveUseItem, HoldItem {
+	static class PPUp extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private String increase;
 
@@ -6924,7 +6924,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RareCandy extends Item implements HoldItem, PokemonUseItem {
+	static class RareCandy extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RareCandy() {
@@ -6949,7 +6949,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CherishBall extends Item implements BallItem {
+	static class CherishBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		CherishBall() {
@@ -6966,7 +6966,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DiveBall extends Item implements BallItem {
+	static class DiveBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		DiveBall() {
@@ -6988,7 +6988,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DuskBall extends Item implements BallItem {
+	static class DuskBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		DuskBall() {
@@ -7009,7 +7009,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FastBall extends Item implements BallItem {
+	static class FastBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		FastBall() {
@@ -7031,7 +7031,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GreatBall extends Item implements BallItem {
+	static class GreatBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		GreatBall() {
@@ -7048,7 +7048,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HealBall extends Item implements BallItem {
+	static class HealBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		HealBall() {
@@ -7066,7 +7066,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HeavyBall extends Item implements BallItem {
+	static class HeavyBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		HeavyBall() {
@@ -7094,7 +7094,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LevelBall extends Item implements BallItem {
+	static class LevelBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		LevelBall() {
@@ -7115,7 +7115,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LoveBall extends Item implements BallItem {
+	static class LoveBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		LoveBall() {
@@ -7136,7 +7136,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LureBall extends Item implements BallItem {
+	static class LureBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		LureBall() {
@@ -7158,7 +7158,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuxuryBall extends Item implements BallItem {
+	static class LuxuryBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		LuxuryBall() {
@@ -7176,7 +7176,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MasterBall extends Item implements BallItem {
+	static class MasterBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		MasterBall() {
@@ -7193,7 +7193,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MoonBall extends Item implements BallItem {
+	static class MoonBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		MoonBall() {
@@ -7215,7 +7215,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NestBall extends Item implements BallItem {
+	static class NestBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		NestBall() {
@@ -7235,7 +7235,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NetBall extends Item implements BallItem {
+	static class NetBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		NetBall() {
@@ -7256,7 +7256,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PokeBall extends Item implements BallItem {
+	static class PokeBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		PokeBall() {
@@ -7273,7 +7273,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PremierBall extends Item implements BallItem {
+	static class PremierBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		PremierBall() {
@@ -7290,7 +7290,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class QuickBall extends Item implements BallItem {
+	static class QuickBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		QuickBall() {
@@ -7312,7 +7312,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RepeatBall extends Item implements BallItem {
+	static class RepeatBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		RepeatBall() {
@@ -7333,7 +7333,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SafariBall extends Item implements BallItem {
+	static class SafariBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		SafariBall() {
@@ -7349,7 +7349,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TimerBall extends Item implements BallItem {
+	static class TimerBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		TimerBall() {
@@ -7369,7 +7369,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class UltraBall extends Item implements BallItem {
+	static class UltraBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		UltraBall() {
@@ -7386,7 +7386,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CheriBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class CheriBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7472,7 +7472,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7558,7 +7558,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PechaBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class PechaBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7644,7 +7644,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RawstBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class RawstBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7730,7 +7730,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AspearBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class AspearBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7816,7 +7816,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, MoveUseItem {
+	static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, MoveUseItem {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
@@ -7913,7 +7913,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OranBerry extends Item implements HealthTriggeredBerry, PokemonUseItem, BattleUseItem {
+	static class OranBerry extends Item implements HealthTriggeredBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		OranBerry() {
@@ -7994,7 +7994,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry {
+	static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry {
 		private static final long serialVersionUID = 1L;
 
 		PersimBerry() {
@@ -8068,7 +8068,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LumBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class LumBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String holdMessage;
 
@@ -8161,7 +8161,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SitrusBerry extends Item implements PokemonUseItem, BattleUseItem, HealthTriggeredBerry {
+	static class SitrusBerry extends Item implements PokemonUseItem, BattleUseItem, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		SitrusBerry() {
@@ -8242,7 +8242,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RazzBerry extends Item implements Berry {
+	static class RazzBerry extends Item implements Berry {
 		private static final long serialVersionUID = 1L;
 
 		RazzBerry() {
@@ -8266,7 +8266,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PomegBerry extends Item implements Berry, PokemonUseItem {
+	static class PomegBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PomegBerry() {
@@ -8310,7 +8310,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KelpsyBerry extends Item implements Berry, PokemonUseItem {
+	static class KelpsyBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		KelpsyBerry() {
@@ -8354,7 +8354,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class QualotBerry extends Item implements Berry, PokemonUseItem {
+	static class QualotBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		QualotBerry() {
@@ -8398,7 +8398,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HondewBerry extends Item implements Berry, PokemonUseItem {
+	static class HondewBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HondewBerry() {
@@ -8442,7 +8442,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GrepaBerry extends Item implements Berry, PokemonUseItem {
+	static class GrepaBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GrepaBerry() {
@@ -8486,7 +8486,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TamatoBerry extends Item implements Berry, PokemonUseItem {
+	static class TamatoBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		TamatoBerry() {
@@ -8530,7 +8530,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OccaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class OccaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		OccaBerry() {
@@ -8564,7 +8564,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PasshoBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class PasshoBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		PasshoBerry() {
@@ -8598,7 +8598,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WacanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class WacanBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		WacanBerry() {
@@ -8632,7 +8632,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RindoBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class RindoBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		RindoBerry() {
@@ -8666,7 +8666,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class YacheBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class YacheBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		YacheBerry() {
@@ -8700,7 +8700,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChopleBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChopleBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChopleBerry() {
@@ -8734,7 +8734,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KebiaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class KebiaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		KebiaBerry() {
@@ -8768,7 +8768,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShucaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ShucaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShucaBerry() {
@@ -8802,7 +8802,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CobaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class CobaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		CobaBerry() {
@@ -8836,7 +8836,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PayapaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class PayapaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		PayapaBerry() {
@@ -8870,7 +8870,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TangaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class TangaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		TangaBerry() {
@@ -8904,7 +8904,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChartiBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChartiBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChartiBerry() {
@@ -8938,7 +8938,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KasibBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class KasibBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		KasibBerry() {
@@ -8972,7 +8972,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HabanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class HabanBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		HabanBerry() {
@@ -9006,7 +9006,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ColburBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ColburBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ColburBerry() {
@@ -9040,7 +9040,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BabiriBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class BabiriBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		BabiriBerry() {
@@ -9074,7 +9074,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChilanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChilanBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChilanBerry() {
@@ -9108,7 +9108,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoseliBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class RoseliBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		RoseliBerry() {
@@ -9142,7 +9142,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LiechiBerry extends Item implements HealthTriggeredBerry {
+	static class LiechiBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		LiechiBerry() {
@@ -9218,7 +9218,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GanlonBerry extends Item implements HealthTriggeredBerry {
+	static class GanlonBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		GanlonBerry() {
@@ -9294,7 +9294,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SalacBerry extends Item implements HealthTriggeredBerry {
+	static class SalacBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		SalacBerry() {
@@ -9370,7 +9370,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PetayaBerry extends Item implements HealthTriggeredBerry {
+	static class PetayaBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		PetayaBerry() {
@@ -9446,7 +9446,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ApicotBerry extends Item implements HealthTriggeredBerry {
+	static class ApicotBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		ApicotBerry() {
@@ -9522,7 +9522,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MicleBerry extends Item implements HealthTriggeredBerry {
+	static class MicleBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		MicleBerry() {
@@ -9598,7 +9598,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KeeBerry extends Item implements Berry, TakeDamageEffect {
+	static class KeeBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		KeeBerry() {
@@ -9632,7 +9632,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MarangaBerry extends Item implements Berry, TakeDamageEffect {
+	static class MarangaBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		MarangaBerry() {
@@ -9666,7 +9666,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class JabocaBerry extends Item implements Berry, TakeDamageEffect {
+	static class JabocaBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		JabocaBerry() {
@@ -9702,7 +9702,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RowapBerry extends Item implements Berry, TakeDamageEffect {
+	static class RowapBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RowapBerry() {
@@ -9738,7 +9738,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CustapBerry extends Item implements Berry, PriorityChangeEffect {
+	static class CustapBerry extends Item implements Berry, PriorityChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		CustapBerry() {
@@ -9774,7 +9774,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EnigmaBerry extends Item implements Berry, TakeDamageEffect {
+	static class EnigmaBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		EnigmaBerry() {
@@ -9807,7 +9807,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LansatBerry extends Item implements HealthTriggeredBerry {
+	static class LansatBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		LansatBerry() {
@@ -9880,7 +9880,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StarfBerry extends Item implements HealthTriggeredBerry {
+	static class StarfBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 		private String holdMessage;
 		private String useMessage;
@@ -9974,7 +9974,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CometShard extends Item implements HoldItem {
+	static class CometShard extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		CometShard() {
@@ -9990,7 +9990,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TinyMushroom extends Item implements HoldItem {
+	static class TinyMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		TinyMushroom() {
@@ -10006,7 +10006,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BigMushroom extends Item implements HoldItem {
+	static class BigMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BigMushroom() {
@@ -10022,7 +10022,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BalmMushroom extends Item implements HoldItem {
+	static class BalmMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BalmMushroom() {
@@ -10038,7 +10038,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Nugget extends Item implements HoldItem {
+	static class Nugget extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Nugget() {
@@ -10054,7 +10054,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BigNugget extends Item implements HoldItem {
+	static class BigNugget extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BigNugget() {
@@ -10070,7 +10070,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Pearl extends Item implements HoldItem {
+	static class Pearl extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Pearl() {
@@ -10086,7 +10086,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BigPearl extends Item implements HoldItem {
+	static class BigPearl extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BigPearl() {
@@ -10102,7 +10102,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Stardust extends Item implements HoldItem {
+	static class Stardust extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Stardust() {
@@ -10118,7 +10118,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StarPiece extends Item implements HoldItem {
+	static class StarPiece extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		StarPiece() {
@@ -10134,7 +10134,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RareBone extends Item implements HoldItem {
+	static class RareBone extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RareBone() {
@@ -10150,7 +10150,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Honey extends Item implements HoldItem {
+	static class Honey extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Honey() {
@@ -10167,7 +10167,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Eviolite extends Item implements HoldItem, StatChangingEffect {
+	static class Eviolite extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Eviolite() {
@@ -10195,7 +10195,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HeartScale extends Item implements HoldItem {
+	static class HeartScale extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		HeartScale() {
@@ -10211,7 +10211,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Repel extends Item implements HoldItem, TrainerUseItem {
+	static class Repel extends Item implements HoldItem, TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Repel() {
@@ -10249,7 +10249,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SuperRepel extends Item implements HoldItem, TrainerUseItem {
+	static class SuperRepel extends Item implements HoldItem, TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SuperRepel() {
@@ -10287,7 +10287,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxRepel extends Item implements HoldItem, TrainerUseItem {
+	static class MaxRepel extends Item implements HoldItem, TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		MaxRepel() {
@@ -10325,7 +10325,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AbilityCapsule extends Item implements PokemonUseItem {
+	static class AbilityCapsule extends Item implements PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		AbilityCapsule() {
@@ -10348,7 +10348,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AssaultVest extends Item implements HoldItem, AttackSelectionEffect, StatChangingEffect {
+	static class AssaultVest extends Item implements HoldItem, AttackSelectionEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		AssaultVest() {
@@ -10384,7 +10384,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerHerb extends Item implements HoldItem {
+	static class PowerHerb extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		PowerHerb() {
@@ -10400,7 +10400,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HoneClawsTM extends Item implements MoveUseItem {
+	static class HoneClawsTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HoneClawsTM() {
@@ -10451,7 +10451,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonClawTM extends Item implements MoveUseItem {
+	static class DragonClawTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonClawTM() {
@@ -10502,7 +10502,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PsyshockTM extends Item implements MoveUseItem {
+	static class PsyshockTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PsyshockTM() {
@@ -10553,7 +10553,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CalmMindTM extends Item implements MoveUseItem {
+	static class CalmMindTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		CalmMindTM() {
@@ -10604,7 +10604,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoarTM extends Item implements MoveUseItem {
+	static class RoarTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RoarTM() {
@@ -10655,7 +10655,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ToxicTM extends Item implements MoveUseItem {
+	static class ToxicTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ToxicTM() {
@@ -10706,7 +10706,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HailTM extends Item implements MoveUseItem {
+	static class HailTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HailTM() {
@@ -10757,7 +10757,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BulkUpTM extends Item implements MoveUseItem {
+	static class BulkUpTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		BulkUpTM() {
@@ -10808,7 +10808,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class VenoshockTM extends Item implements MoveUseItem {
+	static class VenoshockTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		VenoshockTM() {
@@ -10859,7 +10859,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HiddenPowerTM extends Item implements MoveUseItem {
+	static class HiddenPowerTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HiddenPowerTM() {
@@ -10910,7 +10910,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SunnyDayTM extends Item implements MoveUseItem {
+	static class SunnyDayTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SunnyDayTM() {
@@ -10961,7 +10961,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TauntTM extends Item implements MoveUseItem {
+	static class TauntTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		TauntTM() {
@@ -11012,7 +11012,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IceBeamTM extends Item implements MoveUseItem {
+	static class IceBeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		IceBeamTM() {
@@ -11063,7 +11063,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BlizzardTM extends Item implements MoveUseItem {
+	static class BlizzardTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		BlizzardTM() {
@@ -11114,7 +11114,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HyperBeamTM extends Item implements MoveUseItem {
+	static class HyperBeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HyperBeamTM() {
@@ -11165,7 +11165,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LightScreenTM extends Item implements MoveUseItem {
+	static class LightScreenTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		LightScreenTM() {
@@ -11216,7 +11216,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ProtectTM extends Item implements MoveUseItem {
+	static class ProtectTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ProtectTM() {
@@ -11267,7 +11267,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RainDanceTM extends Item implements MoveUseItem {
+	static class RainDanceTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RainDanceTM() {
@@ -11318,7 +11318,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoostTM extends Item implements MoveUseItem {
+	static class RoostTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RoostTM() {
@@ -11369,7 +11369,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SafeguardTM extends Item implements MoveUseItem {
+	static class SafeguardTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SafeguardTM() {
@@ -11420,7 +11420,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SolarBeamTM extends Item implements MoveUseItem {
+	static class SolarBeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SolarBeamTM() {
@@ -11471,7 +11471,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SmackDownTM extends Item implements MoveUseItem {
+	static class SmackDownTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SmackDownTM() {
@@ -11522,7 +11522,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThunderboltTM extends Item implements MoveUseItem {
+	static class ThunderboltTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThunderboltTM() {
@@ -11573,7 +11573,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThunderTM extends Item implements MoveUseItem {
+	static class ThunderTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThunderTM() {
@@ -11624,7 +11624,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EarthquakeTM extends Item implements MoveUseItem {
+	static class EarthquakeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		EarthquakeTM() {
@@ -11675,7 +11675,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DigTM extends Item implements MoveUseItem {
+	static class DigTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DigTM() {
@@ -11726,7 +11726,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PsychicTM extends Item implements MoveUseItem {
+	static class PsychicTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PsychicTM() {
@@ -11777,7 +11777,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShadowBallTM extends Item implements MoveUseItem {
+	static class ShadowBallTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ShadowBallTM() {
@@ -11828,7 +11828,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BrickBreakTM extends Item implements MoveUseItem {
+	static class BrickBreakTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		BrickBreakTM() {
@@ -11879,7 +11879,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DoubleTeamTM extends Item implements MoveUseItem {
+	static class DoubleTeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DoubleTeamTM() {
@@ -11930,7 +11930,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ReflectTM extends Item implements MoveUseItem {
+	static class ReflectTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ReflectTM() {
@@ -11981,7 +11981,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SludgeWaveTM extends Item implements MoveUseItem {
+	static class SludgeWaveTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SludgeWaveTM() {
@@ -12032,7 +12032,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlamethrowerTM extends Item implements MoveUseItem {
+	static class FlamethrowerTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlamethrowerTM() {
@@ -12083,7 +12083,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SludgeBombTM extends Item implements MoveUseItem {
+	static class SludgeBombTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SludgeBombTM() {
@@ -12134,7 +12134,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SandstormTM extends Item implements MoveUseItem {
+	static class SandstormTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SandstormTM() {
@@ -12185,7 +12185,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FireBlastTM extends Item implements MoveUseItem {
+	static class FireBlastTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FireBlastTM() {
@@ -12236,7 +12236,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockTombTM extends Item implements MoveUseItem {
+	static class RockTombTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RockTombTM() {
@@ -12287,7 +12287,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AerialAceTM extends Item implements MoveUseItem {
+	static class AerialAceTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		AerialAceTM() {
@@ -12338,7 +12338,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TormentTM extends Item implements MoveUseItem {
+	static class TormentTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		TormentTM() {
@@ -12389,7 +12389,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FacadeTM extends Item implements MoveUseItem {
+	static class FacadeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FacadeTM() {
@@ -12440,7 +12440,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlameChargeTM extends Item implements MoveUseItem {
+	static class FlameChargeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlameChargeTM() {
@@ -12491,7 +12491,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RestTM extends Item implements MoveUseItem {
+	static class RestTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RestTM() {
@@ -12542,7 +12542,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AttractTM extends Item implements MoveUseItem {
+	static class AttractTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		AttractTM() {
@@ -12593,7 +12593,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThiefTM extends Item implements MoveUseItem {
+	static class ThiefTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThiefTM() {
@@ -12644,7 +12644,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LowSweepTM extends Item implements MoveUseItem {
+	static class LowSweepTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		LowSweepTM() {
@@ -12695,7 +12695,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoundTM extends Item implements MoveUseItem {
+	static class RoundTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RoundTM() {
@@ -12746,7 +12746,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EchoedVoiceTM extends Item implements MoveUseItem {
+	static class EchoedVoiceTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		EchoedVoiceTM() {
@@ -12797,7 +12797,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OverheatTM extends Item implements MoveUseItem {
+	static class OverheatTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		OverheatTM() {
@@ -12848,7 +12848,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SteelWingTM extends Item implements MoveUseItem {
+	static class SteelWingTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SteelWingTM() {
@@ -12899,7 +12899,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FocusBlastTM extends Item implements MoveUseItem {
+	static class FocusBlastTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FocusBlastTM() {
@@ -12950,7 +12950,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EnergyBallTM extends Item implements MoveUseItem {
+	static class EnergyBallTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		EnergyBallTM() {
@@ -13001,7 +13001,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FalseSwipeTM extends Item implements MoveUseItem {
+	static class FalseSwipeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FalseSwipeTM() {
@@ -13052,7 +13052,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ScaldTM extends Item implements MoveUseItem {
+	static class ScaldTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ScaldTM() {
@@ -13103,7 +13103,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlingTM extends Item implements MoveUseItem {
+	static class FlingTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlingTM() {
@@ -13154,7 +13154,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChargeBeamTM extends Item implements MoveUseItem {
+	static class ChargeBeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ChargeBeamTM() {
@@ -13205,7 +13205,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SkyDropTM extends Item implements MoveUseItem {
+	static class SkyDropTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SkyDropTM() {
@@ -13256,7 +13256,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IncinerateTM extends Item implements MoveUseItem {
+	static class IncinerateTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		IncinerateTM() {
@@ -13307,7 +13307,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WillOWispTM extends Item implements MoveUseItem {
+	static class WillOWispTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WillOWispTM() {
@@ -13358,7 +13358,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AcrobaticsTM extends Item implements MoveUseItem {
+	static class AcrobaticsTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		AcrobaticsTM() {
@@ -13409,7 +13409,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EmbargoTM extends Item implements MoveUseItem {
+	static class EmbargoTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		EmbargoTM() {
@@ -13460,7 +13460,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ExplosionTM extends Item implements MoveUseItem {
+	static class ExplosionTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ExplosionTM() {
@@ -13511,7 +13511,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShadowClawTM extends Item implements MoveUseItem {
+	static class ShadowClawTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ShadowClawTM() {
@@ -13562,7 +13562,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PaybackTM extends Item implements MoveUseItem {
+	static class PaybackTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PaybackTM() {
@@ -13613,7 +13613,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RetaliateTM extends Item implements MoveUseItem {
+	static class RetaliateTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RetaliateTM() {
@@ -13664,7 +13664,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GigaImpactTM extends Item implements MoveUseItem {
+	static class GigaImpactTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GigaImpactTM() {
@@ -13715,7 +13715,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockPolishTM extends Item implements MoveUseItem {
+	static class RockPolishTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RockPolishTM() {
@@ -13766,7 +13766,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlashTM extends Item implements MoveUseItem {
+	static class FlashTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlashTM() {
@@ -13817,7 +13817,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StoneEdgeTM extends Item implements MoveUseItem {
+	static class StoneEdgeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		StoneEdgeTM() {
@@ -13868,7 +13868,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class VoltSwitchTM extends Item implements MoveUseItem {
+	static class VoltSwitchTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		VoltSwitchTM() {
@@ -13919,7 +13919,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThunderWaveTM extends Item implements MoveUseItem {
+	static class ThunderWaveTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThunderWaveTM() {
@@ -13970,7 +13970,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GyroBallTM extends Item implements MoveUseItem {
+	static class GyroBallTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GyroBallTM() {
@@ -14021,7 +14021,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SwordsDanceTM extends Item implements MoveUseItem {
+	static class SwordsDanceTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SwordsDanceTM() {
@@ -14072,7 +14072,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StruggleBugTM extends Item implements MoveUseItem {
+	static class StruggleBugTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		StruggleBugTM() {
@@ -14123,7 +14123,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PsychUpTM extends Item implements MoveUseItem {
+	static class PsychUpTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PsychUpTM() {
@@ -14174,7 +14174,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BulldozeTM extends Item implements MoveUseItem {
+	static class BulldozeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		BulldozeTM() {
@@ -14225,7 +14225,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FrostBreathTM extends Item implements MoveUseItem {
+	static class FrostBreathTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FrostBreathTM() {
@@ -14276,7 +14276,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockSlideTM extends Item implements MoveUseItem {
+	static class RockSlideTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RockSlideTM() {
@@ -14327,7 +14327,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XScissorTM extends Item implements MoveUseItem {
+	static class XScissorTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XScissorTM() {
@@ -14378,7 +14378,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonTailTM extends Item implements MoveUseItem {
+	static class DragonTailTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonTailTM() {
@@ -14429,7 +14429,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class InfestationTM extends Item implements MoveUseItem {
+	static class InfestationTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		InfestationTM() {
@@ -14480,7 +14480,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PoisonJabTM extends Item implements MoveUseItem {
+	static class PoisonJabTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PoisonJabTM() {
@@ -14531,7 +14531,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DreamEaterTM extends Item implements MoveUseItem {
+	static class DreamEaterTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DreamEaterTM() {
@@ -14582,7 +14582,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GrassKnotTM extends Item implements MoveUseItem {
+	static class GrassKnotTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GrassKnotTM() {
@@ -14633,7 +14633,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SwaggerTM extends Item implements MoveUseItem {
+	static class SwaggerTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SwaggerTM() {
@@ -14684,7 +14684,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SleepTalkTM extends Item implements MoveUseItem {
+	static class SleepTalkTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SleepTalkTM() {
@@ -14735,7 +14735,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class UTurnTM extends Item implements MoveUseItem {
+	static class UTurnTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		UTurnTM() {
@@ -14786,7 +14786,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SubstituteTM extends Item implements MoveUseItem {
+	static class SubstituteTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SubstituteTM() {
@@ -14837,7 +14837,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlashCannonTM extends Item implements MoveUseItem {
+	static class FlashCannonTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlashCannonTM() {
@@ -14888,7 +14888,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TrickRoomTM extends Item implements MoveUseItem {
+	static class TrickRoomTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		TrickRoomTM() {
@@ -14939,7 +14939,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WildChargeTM extends Item implements MoveUseItem {
+	static class WildChargeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WildChargeTM() {
@@ -14990,7 +14990,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockSmashTM extends Item implements MoveUseItem {
+	static class RockSmashTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RockSmashTM() {
@@ -15041,7 +15041,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SnarlTM extends Item implements MoveUseItem {
+	static class SnarlTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SnarlTM() {
@@ -15092,7 +15092,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NaturePowerTM extends Item implements MoveUseItem {
+	static class NaturePowerTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		NaturePowerTM() {
@@ -15143,7 +15143,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DarkPulseTM extends Item implements MoveUseItem {
+	static class DarkPulseTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DarkPulseTM() {
@@ -15194,7 +15194,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerUpPunchTM extends Item implements MoveUseItem {
+	static class PowerUpPunchTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PowerUpPunchTM() {
@@ -15245,7 +15245,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DazzlingGleamTM extends Item implements MoveUseItem {
+	static class DazzlingGleamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DazzlingGleamTM() {
@@ -15296,7 +15296,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ConfideTM extends Item implements MoveUseItem {
+	static class ConfideTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ConfideTM() {
@@ -15347,7 +15347,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CutTM extends Item implements MoveUseItem {
+	static class CutTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		CutTM() {
@@ -15398,7 +15398,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlyTM extends Item implements MoveUseItem {
+	static class FlyTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlyTM() {
@@ -15449,7 +15449,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SurfTM extends Item implements MoveUseItem {
+	static class SurfTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SurfTM() {
@@ -15500,7 +15500,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StrengthTM extends Item implements MoveUseItem {
+	static class StrengthTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		StrengthTM() {
@@ -15551,7 +15551,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WaterfallTM extends Item implements MoveUseItem {
+	static class WaterfallTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WaterfallTM() {

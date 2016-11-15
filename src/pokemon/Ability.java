@@ -384,7 +384,7 @@ public abstract class Ability implements Serializable {
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class NoAbility extends Ability {
+	static class NoAbility extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		NoAbility() {
@@ -396,7 +396,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Overgrow extends Ability implements PowerChangeEffect {
+	static class Overgrow extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Overgrow() {
@@ -412,7 +412,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Chlorophyll extends Ability implements StatChangingEffect {
+	static class Chlorophyll extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Chlorophyll() {
@@ -436,7 +436,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Blaze extends Ability implements PowerChangeEffect {
+	static class Blaze extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Blaze() {
@@ -452,7 +452,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SolarPower extends Ability implements PowerChangeEffect, EndTurnEffect {
+	static class SolarPower extends Ability implements PowerChangeEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		SolarPower() {
@@ -475,7 +475,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Torrent extends Ability implements PowerChangeEffect {
+	static class Torrent extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Torrent() {
@@ -491,7 +491,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class RainDish extends Ability implements EndTurnEffect {
+	static class RainDish extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		RainDish() {
@@ -510,7 +510,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ShieldDust extends Ability implements EffectBlockerEffect {
+	static class ShieldDust extends Ability implements EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShieldDust() {
@@ -526,7 +526,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ShedSkin extends Ability implements EndTurnEffect {
+	static class ShedSkin extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShedSkin() {
@@ -544,7 +544,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Compoundeyes extends Ability implements StatChangingEffect {
+	static class Compoundeyes extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Compoundeyes() {
@@ -568,7 +568,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class TintedLens extends Ability implements PowerChangeEffect {
+	static class TintedLens extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		TintedLens() {
@@ -584,7 +584,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Swarm extends Ability implements PowerChangeEffect {
+	static class Swarm extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Swarm() {
@@ -600,7 +600,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Sniper extends Ability {
+	static class Sniper extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Sniper() {
@@ -612,7 +612,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect {
+	static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		KeenEye() {
@@ -636,7 +636,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class TangledFeet extends Ability implements StageChangingEffect {
+	static class TangledFeet extends Ability implements StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		TangledFeet() {
@@ -652,7 +652,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Guts extends Ability implements StatChangingEffect {
+	static class Guts extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Guts() {
@@ -676,7 +676,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Intimidate extends Ability implements EntryEffect {
+	static class Intimidate extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Intimidate() {
@@ -693,7 +693,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Static extends Ability implements PhysicalContactEffect {
+	static class Static extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		Static() {
@@ -711,7 +711,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Lightningrod extends Ability implements DamageBlocker {
+	static class Lightningrod extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Lightningrod() {
@@ -736,7 +736,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SandVeil extends Ability implements StageChangingEffect {
+	static class SandVeil extends Ability implements StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandVeil() {
@@ -752,7 +752,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SandRush extends Ability implements StatChangingEffect {
+	static class SandRush extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandRush() {
@@ -776,7 +776,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class PoisonPoint extends Ability implements PhysicalContactEffect {
+	static class PoisonPoint extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		PoisonPoint() {
@@ -794,7 +794,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Rivalry extends Ability implements PowerChangeEffect {
+	static class Rivalry extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Rivalry() {
@@ -813,7 +813,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class CuteCharm extends Ability implements PhysicalContactEffect {
+	static class CuteCharm extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		CuteCharm() {
@@ -835,7 +835,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MagicGuard extends Ability implements WeatherBlockerEffect {
+	static class MagicGuard extends Ability implements WeatherBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagicGuard() {
@@ -851,7 +851,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FlashFire extends Ability implements DamageBlocker, PowerChangeEffect {
+	static class FlashFire extends Ability implements DamageBlocker, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 
@@ -883,7 +883,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Drought extends Ability implements EntryEffect {
+	static class Drought extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Drought() {
@@ -900,7 +900,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Frisk extends Ability implements EntryEffect {
+	static class Frisk extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Frisk() {
@@ -917,7 +917,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class InnerFocus extends Ability {
+	static class InnerFocus extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		InnerFocus() {
@@ -929,7 +929,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Infiltrator extends Ability {
+	static class Infiltrator extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Infiltrator() {
@@ -941,7 +941,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Stench extends Ability implements ApplyDamageEffect {
+	static class Stench extends Ability implements ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stench() {
@@ -963,7 +963,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class EffectSpore extends Ability implements PhysicalContactEffect {
+	static class EffectSpore extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 		private static StatusCondition[] statuses = new StatusCondition[] {
 			StatusCondition.PARALYZED,
@@ -992,7 +992,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class DrySkin extends Ability implements EndTurnEffect, OpponentPowerChangeEffect, DamageBlocker {
+	static class DrySkin extends Ability implements EndTurnEffect, OpponentPowerChangeEffect, DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		DrySkin() {
@@ -1035,7 +1035,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ArenaTrap extends Ability implements OpponentTrappingEffect {
+	static class ArenaTrap extends Ability implements OpponentTrappingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ArenaTrap() {
@@ -1055,7 +1055,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Technician extends Ability implements PowerChangeEffect {
+	static class Technician extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Technician() {
@@ -1071,7 +1071,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Limber extends Ability implements StatusPreventionEffect {
+	static class Limber extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Limber() {
@@ -1091,7 +1091,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Damp extends Ability implements BeforeTurnEffect, OpponentBeforeTurnEffect {
+	static class Damp extends Ability implements BeforeTurnEffect, OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean checkeroo(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
 			if (attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION) {
@@ -1120,7 +1120,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class CloudNine extends Ability implements EntryEffect {
+	static class CloudNine extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		CloudNine() {
@@ -1138,7 +1138,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class VitalSpirit extends Ability implements StatusPreventionEffect {
+	static class VitalSpirit extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		VitalSpirit() {
@@ -1158,7 +1158,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Insomnia extends Ability implements StatusPreventionEffect {
+	static class Insomnia extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Insomnia() {
@@ -1178,7 +1178,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class AngerPoint extends Ability {
+	static class AngerPoint extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		AngerPoint() {
@@ -1190,7 +1190,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Synchronize extends Ability {
+	static class Synchronize extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Synchronize() {
@@ -1202,7 +1202,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class NoGuard extends Ability implements AccuracyBypassEffect, OpponentAccuracyBypassEffect {
+	static class NoGuard extends Ability implements AccuracyBypassEffect, OpponentAccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		NoGuard() {
@@ -1224,7 +1224,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class OwnTempo extends Ability {
+	static class OwnTempo extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		OwnTempo() {
@@ -1236,7 +1236,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ClearBody extends Ability implements StatProtectingEffect {
+	static class ClearBody extends Ability implements StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ClearBody() {
@@ -1256,7 +1256,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class LiquidOoze extends Ability {
+	static class LiquidOoze extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		LiquidOoze() {
@@ -1268,7 +1268,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class RockHead extends Ability {
+	static class RockHead extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		RockHead() {
@@ -1280,7 +1280,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Sturdy extends Ability implements BracingEffect {
+	static class Sturdy extends Ability implements BracingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Sturdy() {
@@ -1300,7 +1300,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Oblivious extends Ability {
+	static class Oblivious extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Oblivious() {
@@ -1312,7 +1312,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MagnetPull extends Ability implements OpponentTrappingEffect {
+	static class MagnetPull extends Ability implements OpponentTrappingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagnetPull() {
@@ -1332,7 +1332,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Unaware extends Ability implements OpponentIgnoreStageEffect {
+	static class Unaware extends Ability implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Unaware() {
@@ -1348,7 +1348,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Simple extends Ability implements ModifyStageValueEffect {
+	static class Simple extends Ability implements ModifyStageValueEffect {
 		private static final long serialVersionUID = 1L;
 
 		Simple() {
@@ -1364,7 +1364,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class EarlyBird extends Ability {
+	static class EarlyBird extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		EarlyBird() {
@@ -1376,7 +1376,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ThickFat extends Ability implements OpponentPowerChangeEffect {
+	static class ThickFat extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ThickFat() {
@@ -1392,7 +1392,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Hydration extends Ability implements EndTurnEffect {
+	static class Hydration extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hydration() {
@@ -1410,7 +1410,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ShellArmor extends Ability implements CritBlockerEffect {
+	static class ShellArmor extends Ability implements CritBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShellArmor() {
@@ -1426,7 +1426,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class BattleArmor extends Ability implements CritBlockerEffect {
+	static class BattleArmor extends Ability implements CritBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		BattleArmor() {
@@ -1442,7 +1442,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SkillLink extends Ability {
+	static class SkillLink extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		SkillLink() {
@@ -1454,7 +1454,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Levitate extends Ability implements LevitationEffect {
+	static class Levitate extends Ability implements LevitationEffect {
 		private static final long serialVersionUID = 1L;
 
 		Levitate() {
@@ -1473,7 +1473,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Forewarn extends Ability implements EntryEffect {
+	static class Forewarn extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Forewarn() {
@@ -1519,7 +1519,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class HyperCutter extends Ability implements StatProtectingEffect {
+	static class HyperCutter extends Ability implements StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		HyperCutter() {
@@ -1539,7 +1539,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Soundproof extends Ability implements OpponentBeforeTurnEffect {
+	static class Soundproof extends Ability implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Soundproof() {
@@ -1561,7 +1561,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Reckless extends Ability implements PowerChangeEffect {
+	static class Reckless extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Reckless() {
@@ -1577,7 +1577,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class IronFist extends Ability implements PowerChangeEffect, EntryEffect {
+	static class IronFist extends Ability implements PowerChangeEffect, EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronFist() {
@@ -1599,7 +1599,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class NaturalCure extends Ability implements SwitchOutEffect {
+	static class NaturalCure extends Ability implements SwitchOutEffect {
 		private static final long serialVersionUID = 1L;
 
 		NaturalCure() {
@@ -1617,7 +1617,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SereneGrace extends Ability {
+	static class SereneGrace extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		SereneGrace() {
@@ -1629,7 +1629,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class LeafGuard extends Ability implements StatusPreventionEffect {
+	static class LeafGuard extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		LeafGuard() {
@@ -1649,7 +1649,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Scrappy extends Ability implements AdvantageChanger {
+	static class Scrappy extends Ability implements AdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Scrappy() {
@@ -1671,7 +1671,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SwiftSwim extends Ability implements StatChangingEffect {
+	static class SwiftSwim extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SwiftSwim() {
@@ -1695,7 +1695,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WaterVeil extends Ability implements StatusPreventionEffect {
+	static class WaterVeil extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		WaterVeil() {
@@ -1715,7 +1715,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Filter extends Ability implements OpponentPowerChangeEffect {
+	static class Filter extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Filter() {
@@ -1731,7 +1731,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FlameBody extends Ability implements PhysicalContactEffect {
+	static class FlameBody extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlameBody() {
@@ -1749,7 +1749,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Rattled extends Ability implements TakeDamageEffect {
+	static class Rattled extends Ability implements TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Rattled() {
@@ -1768,7 +1768,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Moxie extends Ability implements MurderEffect {
+	static class Moxie extends Ability implements MurderEffect {
 		private static final long serialVersionUID = 1L;
 
 		Moxie() {
@@ -1784,7 +1784,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Imposter extends Ability implements EntryEffect {
+	static class Imposter extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Imposter() {
@@ -1800,7 +1800,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Adaptability extends Ability {
+	static class Adaptability extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Adaptability() {
@@ -1812,7 +1812,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WaterAbsorb extends Ability implements DamageBlocker {
+	static class WaterAbsorb extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		WaterAbsorb() {
@@ -1840,7 +1840,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class VoltAbsorb extends Ability implements DamageBlocker {
+	static class VoltAbsorb extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		VoltAbsorb() {
@@ -1868,7 +1868,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class QuickFeet extends Ability implements StatChangingEffect {
+	static class QuickFeet extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickFeet() {
@@ -1892,7 +1892,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Trace extends Ability implements EntryEffect, ChangeAbilityMove {
+	static class Trace extends Ability implements EntryEffect, ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		Trace() {
@@ -1922,7 +1922,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Download extends Ability implements EntryEffect {
+	static class Download extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Download() {
@@ -1946,7 +1946,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Pressure extends Ability implements EntryEffect {
+	static class Pressure extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Pressure() {
@@ -1962,7 +1962,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Immunity extends Ability implements StatusPreventionEffect {
+	static class Immunity extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Immunity() {
@@ -1982,7 +1982,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SnowCloak extends Ability implements StageChangingEffect {
+	static class SnowCloak extends Ability implements StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SnowCloak() {
@@ -1998,7 +1998,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MarvelScale extends Ability implements StatChangingEffect {
+	static class MarvelScale extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MarvelScale() {
@@ -2022,7 +2022,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Multiscale extends Ability implements OpponentPowerChangeEffect {
+	static class Multiscale extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Multiscale() {
@@ -2038,7 +2038,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SheerForce extends Ability implements PowerChangeEffect {
+	static class SheerForce extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SheerForce() {
@@ -2054,7 +2054,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Hustle extends Ability implements StatChangingEffect {
+	static class Hustle extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hustle() {
@@ -2077,7 +2077,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class HugePower extends Ability implements StatChangingEffect {
+	static class HugePower extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		HugePower() {
@@ -2101,7 +2101,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SpeedBoost extends Ability implements EndTurnEffect {
+	static class SpeedBoost extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		SpeedBoost() {
@@ -2117,7 +2117,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MagicBounce extends Ability implements TargetSwapperEffect {
+	static class MagicBounce extends Ability implements TargetSwapperEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagicBounce() {
@@ -2139,7 +2139,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SuperLuck extends Ability implements CritStageEffect {
+	static class SuperLuck extends Ability implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SuperLuck() {
@@ -2155,7 +2155,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ShadowTag extends Ability implements OpponentTrappingEffect {
+	static class ShadowTag extends Ability implements OpponentTrappingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShadowTag() {
@@ -2175,7 +2175,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Overcoat extends Ability implements WeatherBlockerEffect, EffectBlockerEffect {
+	static class Overcoat extends Ability implements WeatherBlockerEffect, EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		Overcoat() {
@@ -2207,7 +2207,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MagmaArmor extends Ability implements StatusPreventionEffect {
+	static class MagmaArmor extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagmaArmor() {
@@ -2227,7 +2227,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SuctionCups extends Ability {
+	static class SuctionCups extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		SuctionCups() {
@@ -2239,7 +2239,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Steadfast extends Ability {
+	static class Steadfast extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Steadfast() {
@@ -2251,7 +2251,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SandStream extends Ability implements EntryEffect {
+	static class SandStream extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandStream() {
@@ -2268,7 +2268,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Regenerator extends Ability implements SwitchOutEffect {
+	static class Regenerator extends Ability implements SwitchOutEffect {
 		private static final long serialVersionUID = 1L;
 
 		Regenerator() {
@@ -2286,7 +2286,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class PoisonHeal extends Ability {
+	static class PoisonHeal extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		PoisonHeal() {
@@ -2298,7 +2298,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Truant extends Ability implements EndTurnEffect, BeforeTurnEffect {
+	static class Truant extends Ability implements EndTurnEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean lazyface;
 
@@ -2331,7 +2331,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WonderGuard extends Ability implements OpponentBeforeTurnEffect {
+	static class WonderGuard extends Ability implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		WonderGuard() {
@@ -2365,7 +2365,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Normalize extends Ability implements ChangeAttackTypeEffect {
+	static class Normalize extends Ability implements ChangeAttackTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Normalize() {
@@ -2381,7 +2381,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Stall extends Ability implements StallingEffect {
+	static class Stall extends Ability implements StallingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stall() {
@@ -2393,7 +2393,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class PurePower extends Ability implements StatChangingEffect {
+	static class PurePower extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PurePower() {
@@ -2417,7 +2417,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class RoughSkin extends Ability implements PhysicalContactEffect {
+	static class RoughSkin extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		RoughSkin() {
@@ -2434,7 +2434,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SolidRock extends Ability implements OpponentPowerChangeEffect {
+	static class SolidRock extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SolidRock() {
@@ -2450,7 +2450,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WhiteSmoke extends Ability implements StatProtectingEffect {
+	static class WhiteSmoke extends Ability implements StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WhiteSmoke() {
@@ -2470,7 +2470,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ToxicBoost extends Ability implements StatChangingEffect {
+	static class ToxicBoost extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ToxicBoost() {
@@ -2494,7 +2494,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Anticipation extends Ability implements EntryEffect {
+	static class Anticipation extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Anticipation() {
@@ -2518,7 +2518,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StormDrain extends Ability implements DamageBlocker {
+	static class StormDrain extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		StormDrain() {
@@ -2543,7 +2543,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ColorChange extends Ability implements TakeDamageEffect, ChangeTypeMove {
+	static class ColorChange extends Ability implements TakeDamageEffect, ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 		private Type type;
 
@@ -2570,7 +2570,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class IceBody extends Ability implements EndTurnEffect, WeatherBlockerEffect {
+	static class IceBody extends Ability implements EndTurnEffect, WeatherBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		IceBody() {
@@ -2593,7 +2593,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class LightMetal extends Ability implements HalfWeightEffect {
+	static class LightMetal extends Ability implements HalfWeightEffect {
 		private static final long serialVersionUID = 1L;
 
 		LightMetal() {
@@ -2609,7 +2609,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Drizzle extends Ability implements EntryEffect {
+	static class Drizzle extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Drizzle() {
@@ -2626,7 +2626,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class AirLock extends Ability implements EntryEffect {
+	static class AirLock extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirLock() {
@@ -2644,7 +2644,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Defiant extends Ability implements StatLoweredEffect {
+	static class Defiant extends Ability implements StatLoweredEffect {
 		private static final long serialVersionUID = 1L;
 
 		Defiant() {
@@ -2660,7 +2660,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Competitive extends Ability implements StatLoweredEffect {
+	static class Competitive extends Ability implements StatLoweredEffect {
 		private static final long serialVersionUID = 1L;
 
 		Competitive() {
@@ -2676,7 +2676,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FlowerGift extends Ability implements StatChangingEffect {
+	static class FlowerGift extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlowerGift() {
@@ -2700,7 +2700,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Aftermath extends Ability implements PhysicalContactEffect {
+	static class Aftermath extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		Aftermath() {
@@ -2720,7 +2720,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Heatproof extends Ability implements OpponentPowerChangeEffect {
+	static class Heatproof extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Heatproof() {
@@ -2736,7 +2736,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SandForce extends Ability implements PowerChangeEffect, WeatherBlockerEffect {
+	static class SandForce extends Ability implements PowerChangeEffect, WeatherBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandForce() {
@@ -2757,7 +2757,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SnowWarning extends Ability implements EntryEffect {
+	static class SnowWarning extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		SnowWarning() {
@@ -2774,7 +2774,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MotorDrive extends Ability implements DamageBlocker {
+	static class MotorDrive extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		MotorDrive() {
@@ -2799,7 +2799,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Justified extends Ability implements TakeDamageEffect {
+	static class Justified extends Ability implements TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Justified() {
@@ -2817,7 +2817,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class CursedBody extends Ability implements PhysicalContactEffect {
+	static class CursedBody extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		CursedBody() {
@@ -2840,7 +2840,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SlowStart extends Ability implements EndTurnEffect, EntryEffect, StatChangingEffect {
+	static class SlowStart extends Ability implements EndTurnEffect, EntryEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 		int count;
 
@@ -2875,7 +2875,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class BadDreams extends Ability implements EndTurnEffect {
+	static class BadDreams extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		BadDreams() {
@@ -2895,7 +2895,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class VictoryStar extends Ability implements StatChangingEffect {
+	static class VictoryStar extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		VictoryStar() {
@@ -2919,7 +2919,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Contrary extends Ability implements ModifyStageValueEffect {
+	static class Contrary extends Ability implements ModifyStageValueEffect {
 		private static final long serialVersionUID = 1L;
 
 		Contrary() {
@@ -2935,7 +2935,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class BigPecks extends Ability implements StatProtectingEffect {
+	static class BigPecks extends Ability implements StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		BigPecks() {
@@ -2955,7 +2955,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class PoisonTouch extends Ability implements ApplyDamageEffect {
+	static class PoisonTouch extends Ability implements ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		PoisonTouch() {
@@ -2973,7 +2973,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Prankster extends Ability implements PriorityChangeEffect {
+	static class Prankster extends Ability implements PriorityChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Prankster() {
@@ -2997,7 +2997,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WonderSkin extends Ability implements StatChangingEffect {
+	static class WonderSkin extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WonderSkin() {
@@ -3021,7 +3021,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Mummy extends Ability implements PhysicalContactEffect, ChangeAbilityMove {
+	static class Mummy extends Ability implements PhysicalContactEffect, ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		Mummy() {
@@ -3050,7 +3050,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Defeatist extends Ability implements PowerChangeEffect {
+	static class Defeatist extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Defeatist() {
@@ -3066,7 +3066,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WeakArmor extends Ability implements TakeDamageEffect {
+	static class WeakArmor extends Ability implements TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		WeakArmor() {
@@ -3085,7 +3085,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger {
+	static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 		private String illusionName;
@@ -3193,7 +3193,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Analytic extends Ability implements PowerChangeEffect {
+	static class Analytic extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Analytic() {
@@ -3209,7 +3209,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SapSipper extends Ability implements DamageBlocker {
+	static class SapSipper extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		SapSipper() {
@@ -3234,7 +3234,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class IronBarbs extends Ability implements PhysicalContactEffect {
+	static class IronBarbs extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronBarbs() {
@@ -3251,7 +3251,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MoldBreaker extends Ability implements EntryEffect {
+	static class MoldBreaker extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		MoldBreaker() {
@@ -3267,7 +3267,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Teravolt extends Ability implements EntryEffect {
+	static class Teravolt extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Teravolt() {
@@ -3283,7 +3283,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Turboblaze extends Ability implements EntryEffect {
+	static class Turboblaze extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Turboblaze() {
@@ -3299,7 +3299,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class RunAway extends Ability implements DefiniteEscape {
+	static class RunAway extends Ability implements DefiniteEscape {
 		private static final long serialVersionUID = 1L;
 
 		RunAway() {
@@ -3311,7 +3311,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StickyHold extends Ability {
+	static class StickyHold extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		StickyHold() {
@@ -3323,7 +3323,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Klutz extends Ability {
+	static class Klutz extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Klutz() {
@@ -3335,7 +3335,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Unburden extends Ability implements StatChangingEffect {
+	static class Unburden extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Unburden() {
@@ -3359,7 +3359,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Pickpocket extends Ability implements PhysicalContactEffect, ItemHolder {
+	static class Pickpocket extends Ability implements PhysicalContactEffect, ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -3406,7 +3406,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Harvest extends Ability implements EndTurnEffect {
+	static class Harvest extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Harvest() {
@@ -3431,7 +3431,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Pickup extends Ability implements EndBattleEffect {
+	static class Pickup extends Ability implements EndBattleEffect {
 		private static final long serialVersionUID = 1L;
 
 		Pickup() {
@@ -3450,7 +3450,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Unnerve extends Ability implements EntryEffect {
+	static class Unnerve extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Unnerve() {
@@ -3466,7 +3466,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class HoneyGather extends Ability implements EndBattleEffect {
+	static class HoneyGather extends Ability implements EndBattleEffect {
 		private static final long serialVersionUID = 1L;
 
 		HoneyGather() {
@@ -3485,7 +3485,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Gluttony extends Ability {
+	static class Gluttony extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Gluttony() {
@@ -3497,7 +3497,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Multitype extends Ability implements ChangeTypeEffect {
+	static class Multitype extends Ability implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Multitype() {
@@ -3518,7 +3518,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Forecast extends Ability implements ChangeTypeEffect {
+	static class Forecast extends Ability implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Forecast() {
@@ -3534,7 +3534,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Bulletproof extends Ability implements OpponentBeforeTurnEffect {
+	static class Bulletproof extends Ability implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Bulletproof() {
@@ -3556,7 +3556,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class AuraBreak extends Ability {
+	static class AuraBreak extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		AuraBreak() {
@@ -3568,7 +3568,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FairyAura extends Ability implements PowerChangeEffect {
+	static class FairyAura extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		FairyAura() {
@@ -3592,7 +3592,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class DarkAura extends Ability implements PowerChangeEffect {
+	static class DarkAura extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		DarkAura() {
@@ -3616,7 +3616,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Magician extends Ability implements ApplyDamageEffect, ItemHolder {
+	static class Magician extends Ability implements ApplyDamageEffect, ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -3663,7 +3663,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class CheekPouch extends Ability {
+	static class CheekPouch extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		CheekPouch() {
@@ -3675,7 +3675,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StrongJaw extends Ability implements PowerChangeEffect {
+	static class StrongJaw extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		StrongJaw() {
@@ -3691,7 +3691,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MegaLauncher extends Ability implements PowerChangeEffect {
+	static class MegaLauncher extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MegaLauncher() {
@@ -3707,7 +3707,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ToughClaws extends Ability implements PowerChangeEffect {
+	static class ToughClaws extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ToughClaws() {
@@ -3723,7 +3723,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SweetVeil extends Ability implements StatusPreventionEffect {
+	static class SweetVeil extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		SweetVeil() {
@@ -3743,7 +3743,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class AromaVeil extends Ability {
+	static class AromaVeil extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		AromaVeil() {
@@ -3755,7 +3755,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Healer extends Ability implements EndTurnEffect {
+	static class Healer extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Healer() {
@@ -3773,7 +3773,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Pixilate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
+	static class Pixilate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 
@@ -3809,7 +3809,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Refrigerate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
+	static class Refrigerate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 
@@ -3845,7 +3845,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
+	static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
 		private static final long serialVersionUID = 1L;
 		private static final int[] BLADE_STATS = new int[] {60, 150, 50, 150, 50, 60};
 		private static final int[] SHIELD_STATS = new int[] {60, 50, 150, 50, 150, 60};
@@ -3887,7 +3887,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FurCoat extends Ability implements StatChangingEffect {
+	static class FurCoat extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FurCoat() {
@@ -3911,7 +3911,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class GrassPelt extends Ability implements StatChangingEffect {
+	static class GrassPelt extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		GrassPelt() {
@@ -3935,7 +3935,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FlowerVeil extends Ability implements StatusPreventionEffect, StatProtectingEffect {
+	static class FlowerVeil extends Ability implements StatusPreventionEffect, StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlowerVeil() {
@@ -3963,7 +3963,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class GaleWings extends Ability implements PriorityChangeEffect {
+	static class GaleWings extends Ability implements PriorityChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		GaleWings() {
@@ -3987,7 +3987,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Protean extends Ability implements BeforeTurnEffect, ChangeTypeMove {
+	static class Protean extends Ability implements BeforeTurnEffect, ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 		private Type type;
 

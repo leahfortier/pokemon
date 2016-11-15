@@ -10,7 +10,6 @@ import namesies.PokemonNamesies;
 import util.FileIO;
 import util.FileName;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;

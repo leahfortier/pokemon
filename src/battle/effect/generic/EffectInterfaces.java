@@ -1,6 +1,5 @@
 package battle.effect.generic;
 
-import battle.Attack;
 import battle.Battle;
 import battle.Move;
 import battle.effect.status.StatusCondition;

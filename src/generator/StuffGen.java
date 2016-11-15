@@ -190,7 +190,7 @@ public class StuffGen {
 			accessModifier = "public";
 			classType = "interface";
 		} else {
-			accessModifier = "private static";
+			accessModifier = "static";
 			classType = "class";
 		}
 		

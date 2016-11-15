@@ -147,7 +147,7 @@ class PokeGen {
 	}
 	
 	private void addClass(StringBuilder out, StringBuilder classes, String name, String className, Map<String, String> fields) {
-		this.namesiesGen.createNamesies(name);
+		this.namesiesGen.createNamesies(name, className);
 		
 		// Mappity map
 		if (this.currentGen.isMappity()) {

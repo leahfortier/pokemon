@@ -1044,7 +1044,7 @@ public abstract class Attack implements Serializable {
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class Tackle extends Attack {
+	static class Tackle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Tackle() {
@@ -1055,7 +1055,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeechSeed extends Attack {
+	static class LeechSeed extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LeechSeed() {
@@ -1065,7 +1065,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ThunderWave extends Attack {
+	static class ThunderWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ThunderWave() {
@@ -1075,7 +1075,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonPowder extends Attack {
+	static class PoisonPowder extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonPowder() {
@@ -1086,7 +1086,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SleepPowder extends Attack {
+	static class SleepPowder extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SleepPowder() {
@@ -1097,7 +1097,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Toxic extends Attack implements AccuracyBypassEffect {
+	static class Toxic extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Toxic() {
@@ -1112,7 +1112,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Ember extends Attack {
+	static class Ember extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Ember() {
@@ -1124,7 +1124,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Growl extends Attack {
+	static class Growl extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Growl() {
@@ -1135,7 +1135,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Scratch extends Attack {
+	static class Scratch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Scratch() {
@@ -1146,7 +1146,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VineWhip extends Attack {
+	static class VineWhip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VineWhip() {
@@ -1157,7 +1157,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SonicBoom extends Attack {
+	static class SonicBoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SonicBoom() {
@@ -1170,7 +1170,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Smokescreen extends Attack {
+	static class Smokescreen extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Smokescreen() {
@@ -1180,7 +1180,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TakeDown extends Attack implements RecoilMove {
+	static class TakeDown extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		TakeDown() {
@@ -1201,7 +1201,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Struggle extends Attack implements RecoilMove {
+	static class Struggle extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		Struggle() {
@@ -1220,7 +1220,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RazorLeaf extends Attack implements CritStageEffect {
+	static class RazorLeaf extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RazorLeaf() {
@@ -1234,7 +1234,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SweetScent extends Attack {
+	static class SweetScent extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SweetScent() {
@@ -1244,7 +1244,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Growth extends Attack {
+	static class Growth extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Growth() {
@@ -1271,7 +1271,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleEdge extends Attack implements RecoilMove {
+	static class DoubleEdge extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleEdge() {
@@ -1292,7 +1292,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SeedBomb extends Attack {
+	static class SeedBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SeedBomb() {
@@ -1303,7 +1303,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Synthesis extends Attack implements SelfHealingMove {
+	static class Synthesis extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Synthesis() {
@@ -1338,7 +1338,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Recover extends Attack implements SelfHealingMove {
+	static class Recover extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Recover() {
@@ -1358,7 +1358,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonRage extends Attack {
+	static class DragonRage extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonRage() {
@@ -1371,7 +1371,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ScaryFace extends Attack {
+	static class ScaryFace extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ScaryFace() {
@@ -1381,7 +1381,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FireFang extends Attack {
+	static class FireFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FireFang() {
@@ -1405,7 +1405,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlameBurst extends Attack {
+	static class FlameBurst extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlameBurst() {
@@ -1415,7 +1415,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bite extends Attack {
+	static class Bite extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bite() {
@@ -1429,7 +1429,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Slash extends Attack implements CritStageEffect {
+	static class Slash extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Slash() {
@@ -1444,7 +1444,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TailWhip extends Attack {
+	static class TailWhip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TailWhip() {
@@ -1454,7 +1454,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SolarBeam extends Attack implements MultiTurnMove {
+	static class SolarBeam extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		SolarBeam() {
@@ -1496,7 +1496,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Flamethrower extends Attack {
+	static class Flamethrower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Flamethrower() {
@@ -1508,7 +1508,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Fly extends Attack implements MultiTurnMove {
+	static class Fly extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Fly() {
@@ -1537,7 +1537,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FireSpin extends Attack {
+	static class FireSpin extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FireSpin() {
@@ -1548,7 +1548,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Inferno extends Attack {
+	static class Inferno extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Inferno() {
@@ -1559,7 +1559,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonClaw extends Attack {
+	static class DragonClaw extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonClaw() {
@@ -1570,7 +1570,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowClaw extends Attack implements CritStageEffect {
+	static class ShadowClaw extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShadowClaw() {
@@ -1585,7 +1585,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AirSlash extends Attack {
+	static class AirSlash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AirSlash() {
@@ -1597,7 +1597,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WingAttack extends Attack {
+	static class WingAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WingAttack() {
@@ -1608,7 +1608,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeatWave extends Attack {
+	static class HeatWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeatWave() {
@@ -1620,7 +1620,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlareBlitz extends Attack implements RecoilMove {
+	static class FlareBlitz extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		FlareBlitz() {
@@ -1644,7 +1644,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlashCannon extends Attack {
+	static class FlashCannon extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlashCannon() {
@@ -1656,7 +1656,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bubble extends Attack {
+	static class Bubble extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bubble() {
@@ -1668,7 +1668,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Withdraw extends Attack {
+	static class Withdraw extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Withdraw() {
@@ -1678,7 +1678,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterGun extends Attack {
+	static class WaterGun extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterGun() {
@@ -1688,7 +1688,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RapidSpin extends Attack {
+	static class RapidSpin extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RapidSpin() {
@@ -1703,7 +1703,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Reflect extends Attack {
+	static class Reflect extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Reflect() {
@@ -1713,7 +1713,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SpikyShield extends Attack {
+	static class SpikyShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SpikyShield() {
@@ -1728,7 +1728,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class KingsShield extends Attack {
+	static class KingsShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		KingsShield() {
@@ -1743,7 +1743,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Protect extends Attack {
+	static class Protect extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Protect() {
@@ -1758,7 +1758,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Detect extends Attack {
+	static class Detect extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Detect() {
@@ -1773,7 +1773,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class QuickGuard extends Attack {
+	static class QuickGuard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		QuickGuard() {
@@ -1788,7 +1788,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Endure extends Attack {
+	static class Endure extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Endure() {
@@ -1803,7 +1803,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterPulse extends Attack {
+	static class WaterPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterPulse() {
@@ -1816,7 +1816,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ConfusionDamage extends Attack implements CritBlockerEffect {
+	static class ConfusionDamage extends Attack implements CritBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		ConfusionDamage() {
@@ -1829,7 +1829,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ConfuseRay extends Attack {
+	static class ConfuseRay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ConfuseRay() {
@@ -1839,7 +1839,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AquaTail extends Attack {
+	static class AquaTail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AquaTail() {
@@ -1850,7 +1850,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SkullBash extends Attack implements MultiTurnMove {
+	static class SkullBash extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		SkullBash() {
@@ -1879,7 +1879,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IronDefense extends Attack {
+	static class IronDefense extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IronDefense() {
@@ -1889,7 +1889,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HydroPump extends Attack {
+	static class HydroPump extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HydroPump() {
@@ -1899,7 +1899,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RainDance extends Attack {
+	static class RainDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RainDance() {
@@ -1910,7 +1910,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SunnyDay extends Attack {
+	static class SunnyDay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SunnyDay() {
@@ -1921,7 +1921,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sandstorm extends Attack {
+	static class Sandstorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sandstorm() {
@@ -1932,7 +1932,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Hail extends Attack {
+	static class Hail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Hail() {
@@ -1943,7 +1943,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PetalDance extends Attack {
+	static class PetalDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PetalDance() {
@@ -1956,7 +1956,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Thrash extends Attack {
+	static class Thrash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Thrash() {
@@ -1969,7 +1969,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HyperBeam extends Attack implements MultiTurnMove {
+	static class HyperBeam extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		HyperBeam() {
@@ -1996,7 +1996,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StringShot extends Attack {
+	static class StringShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StringShot() {
@@ -2006,7 +2006,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BugBite extends Attack {
+	static class BugBite extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BugBite() {
@@ -2029,7 +2029,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Harden extends Attack {
+	static class Harden extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Harden() {
@@ -2039,7 +2039,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Confusion extends Attack {
+	static class Confusion extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Confusion() {
@@ -2051,7 +2051,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StunSpore extends Attack {
+	static class StunSpore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StunSpore() {
@@ -2062,7 +2062,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Gust extends Attack implements AccuracyBypassEffect {
+	static class Gust extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Gust() {
@@ -2082,7 +2082,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Supersonic extends Attack {
+	static class Supersonic extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Supersonic() {
@@ -2093,7 +2093,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psybeam extends Attack {
+	static class Psybeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Psybeam() {
@@ -2105,7 +2105,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SilverWind extends Attack {
+	static class SilverWind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SilverWind() {
@@ -2124,7 +2124,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Tailwind extends Attack {
+	static class Tailwind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Tailwind() {
@@ -2134,7 +2134,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MorningSun extends Attack implements SelfHealingMove {
+	static class MorningSun extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		MorningSun() {
@@ -2169,7 +2169,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Safeguard extends Attack {
+	static class Safeguard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Safeguard() {
@@ -2179,7 +2179,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Captivate extends Attack {
+	static class Captivate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Captivate() {
@@ -2202,7 +2202,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BugBuzz extends Attack {
+	static class BugBuzz extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BugBuzz() {
@@ -2215,7 +2215,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class QuiverDance extends Attack {
+	static class QuiverDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		QuiverDance() {
@@ -2227,7 +2227,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Encore extends Attack {
+	static class Encore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Encore() {
@@ -2239,7 +2239,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonSting extends Attack {
+	static class PoisonSting extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonSting() {
@@ -2251,7 +2251,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FuryAttack extends Attack implements MultiStrikeMove {
+	static class FuryAttack extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		FuryAttack() {
@@ -2288,7 +2288,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FalseSwipe extends Attack {
+	static class FalseSwipe extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FalseSwipe() {
@@ -2305,7 +2305,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Disable extends Attack {
+	static class Disable extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Disable() {
@@ -2316,7 +2316,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FocusEnergy extends Attack {
+	static class FocusEnergy extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FocusEnergy() {
@@ -2326,7 +2326,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Twineedle extends Attack implements MultiStrikeMove {
+	static class Twineedle extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		Twineedle() {
@@ -2364,7 +2364,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Rage extends Attack {
+	static class Rage extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Rage() {
@@ -2380,7 +2380,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Pursuit extends Attack {
+	static class Pursuit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Pursuit() {
@@ -2407,7 +2407,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ToxicSpikes extends Attack {
+	static class ToxicSpikes extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ToxicSpikes() {
@@ -2417,7 +2417,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PinMissile extends Attack implements MultiStrikeMove {
+	static class PinMissile extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		PinMissile() {
@@ -2453,7 +2453,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Agility extends Attack {
+	static class Agility extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Agility() {
@@ -2463,7 +2463,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Assurance extends Attack {
+	static class Assurance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Assurance() {
@@ -2478,7 +2478,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonJab extends Attack {
+	static class PoisonJab extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonJab() {
@@ -2492,7 +2492,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Endeavor extends Attack {
+	static class Endeavor extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Endeavor() {
@@ -2515,7 +2515,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SandAttack extends Attack {
+	static class SandAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SandAttack() {
@@ -2525,7 +2525,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class QuickAttack extends Attack {
+	static class QuickAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		QuickAttack() {
@@ -2537,7 +2537,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Twister extends Attack implements AccuracyBypassEffect {
+	static class Twister extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Twister() {
@@ -2559,7 +2559,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FeatherDance extends Attack {
+	static class FeatherDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FeatherDance() {
@@ -2569,7 +2569,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Roost extends Attack implements SelfHealingMove, ChangeTypeMove {
+	static class Roost extends Attack implements SelfHealingMove, ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 		private boolean healFail;
 
@@ -2616,7 +2616,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ThunderShock extends Attack {
+	static class ThunderShock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ThunderShock() {
@@ -2628,7 +2628,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MirrorMove extends Attack {
+	static class MirrorMove extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MirrorMove() {
@@ -2652,7 +2652,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Hurricane extends Attack implements AccuracyBypassEffect {
+	static class Hurricane extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hurricane() {
@@ -2683,7 +2683,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HyperFang extends Attack {
+	static class HyperFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HyperFang() {
@@ -2697,7 +2697,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SuckerPunch extends Attack {
+	static class SuckerPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SuckerPunch() {
@@ -2718,7 +2718,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Crunch extends Attack {
+	static class Crunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Crunch() {
@@ -2732,7 +2732,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SuperFang extends Attack {
+	static class SuperFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SuperFang() {
@@ -2747,7 +2747,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SwordsDance extends Attack {
+	static class SwordsDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SwordsDance() {
@@ -2757,7 +2757,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Peck extends Attack {
+	static class Peck extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Peck() {
@@ -2768,7 +2768,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Leer extends Attack {
+	static class Leer extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Leer() {
@@ -2778,7 +2778,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AerialAce extends Attack {
+	static class AerialAce extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AerialAce() {
@@ -2788,7 +2788,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DrillPeck extends Attack {
+	static class DrillPeck extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DrillPeck() {
@@ -2799,7 +2799,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Pluck extends Attack {
+	static class Pluck extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Pluck() {
@@ -2822,7 +2822,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DrillRun extends Attack implements CritStageEffect {
+	static class DrillRun extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		DrillRun() {
@@ -2837,7 +2837,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Wrap extends Attack {
+	static class Wrap extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Wrap() {
@@ -2849,7 +2849,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Glare extends Attack {
+	static class Glare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Glare() {
@@ -2859,7 +2859,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Screech extends Attack {
+	static class Screech extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Screech() {
@@ -2870,7 +2870,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Acid extends Attack {
+	static class Acid extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Acid() {
@@ -2882,7 +2882,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Stockpile extends Attack {
+	static class Stockpile extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Stockpile() {
@@ -2892,7 +2892,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SpitUp extends Attack {
+	static class SpitUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SpitUp() {
@@ -2932,7 +2932,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Swallow extends Attack implements SelfHealingMove {
+	static class Swallow extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Swallow() {
@@ -2977,7 +2977,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AcidSpray extends Attack {
+	static class AcidSpray extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AcidSpray() {
@@ -2989,7 +2989,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudBomb extends Attack {
+	static class MudBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudBomb() {
@@ -3002,7 +3002,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Haze extends Attack {
+	static class Haze extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Haze() {
@@ -3019,7 +3019,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Coil extends Attack {
+	static class Coil extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Coil() {
@@ -3031,7 +3031,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GunkShot extends Attack {
+	static class GunkShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GunkShot() {
@@ -3043,7 +3043,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceFang extends Attack {
+	static class IceFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IceFang() {
@@ -3067,7 +3067,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ThunderFang extends Attack {
+	static class ThunderFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ThunderFang() {
@@ -3091,7 +3091,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ElectroBall extends Attack {
+	static class ElectroBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ElectroBall() {
@@ -3109,7 +3109,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleTeam extends Attack {
+	static class DoubleTeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DoubleTeam() {
@@ -3119,7 +3119,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Slam extends Attack {
+	static class Slam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Slam() {
@@ -3130,7 +3130,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Thunderbolt extends Attack {
+	static class Thunderbolt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Thunderbolt() {
@@ -3142,7 +3142,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Feint extends Attack {
+	static class Feint extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Feint() {
@@ -3156,7 +3156,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Discharge extends Attack {
+	static class Discharge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Discharge() {
@@ -3168,7 +3168,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LightScreen extends Attack {
+	static class LightScreen extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LightScreen() {
@@ -3178,7 +3178,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Thunder extends Attack implements AccuracyBypassEffect {
+	static class Thunder extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Thunder() {
@@ -3209,7 +3209,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DefenseCurl extends Attack {
+	static class DefenseCurl extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DefenseCurl() {
@@ -3220,7 +3220,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Swift extends Attack {
+	static class Swift extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Swift() {
@@ -3229,7 +3229,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FurySwipes extends Attack implements MultiStrikeMove {
+	static class FurySwipes extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		FurySwipes() {
@@ -3266,7 +3266,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Rollout extends Attack {
+	static class Rollout extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Rollout() {
@@ -3282,7 +3282,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FuryCutter extends Attack {
+	static class FuryCutter extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FuryCutter() {
@@ -3297,7 +3297,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SandTomb extends Attack {
+	static class SandTomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SandTomb() {
@@ -3308,7 +3308,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GyroBall extends Attack {
+	static class GyroBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GyroBall() {
@@ -3323,7 +3323,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CrushClaw extends Attack {
+	static class CrushClaw extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CrushClaw() {
@@ -3336,7 +3336,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleKick extends Attack implements MultiStrikeMove {
+	static class DoubleKick extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleKick() {
@@ -3373,7 +3373,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonTail extends Attack implements CritStageEffect {
+	static class PoisonTail extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		PoisonTail() {
@@ -3390,7 +3390,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Flatter extends Attack {
+	static class Flatter extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Flatter() {
@@ -3401,7 +3401,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonFang extends Attack {
+	static class PoisonFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonFang() {
@@ -3415,7 +3415,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ChipAway extends Attack implements OpponentIgnoreStageEffect {
+	static class ChipAway extends Attack implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChipAway() {
@@ -3430,7 +3430,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BodySlam extends Attack implements AccuracyBypassEffect {
+	static class BodySlam extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		BodySlam() {
@@ -3451,7 +3451,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EarthPower extends Attack {
+	static class EarthPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EarthPower() {
@@ -3463,7 +3463,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Superpower extends Attack {
+	static class Superpower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Superpower() {
@@ -3477,7 +3477,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HornAttack extends Attack {
+	static class HornAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HornAttack() {
@@ -3488,7 +3488,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HornDrill extends Attack {
+	static class HornDrill extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HornDrill() {
@@ -3521,7 +3521,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Megahorn extends Attack {
+	static class Megahorn extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Megahorn() {
@@ -3532,7 +3532,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Pound extends Attack {
+	static class Pound extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Pound() {
@@ -3543,7 +3543,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sing extends Attack {
+	static class Sing extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sing() {
@@ -3554,7 +3554,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleSlap extends Attack implements MultiStrikeMove {
+	static class DoubleSlap extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleSlap() {
@@ -3591,7 +3591,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Wish extends Attack {
+	static class Wish extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Wish() {
@@ -3601,7 +3601,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Minimize extends Attack {
+	static class Minimize extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Minimize() {
@@ -3612,7 +3612,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WakeUpSlap extends Attack {
+	static class WakeUpSlap extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WakeUpSlap() {
@@ -3633,7 +3633,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CosmicPower extends Attack {
+	static class CosmicPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CosmicPower() {
@@ -3644,7 +3644,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LuckyChant extends Attack {
+	static class LuckyChant extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LuckyChant() {
@@ -3654,7 +3654,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Metronome extends Attack {
+	static class Metronome extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Metronome() {
@@ -3676,7 +3676,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Gravity extends Attack {
+	static class Gravity extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Gravity() {
@@ -3687,7 +3687,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Moonlight extends Attack implements SelfHealingMove {
+	static class Moonlight extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Moonlight() {
@@ -3722,7 +3722,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StoredPower extends Attack {
+	static class StoredPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StoredPower() {
@@ -3736,7 +3736,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Mimic extends Attack {
+	static class Mimic extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Mimic() {
@@ -3750,7 +3750,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MeteorMash extends Attack {
+	static class MeteorMash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MeteorMash() {
@@ -3765,7 +3765,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Imprison extends Attack {
+	static class Imprison extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Imprison() {
@@ -3777,7 +3777,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WillOWisp extends Attack {
+	static class WillOWisp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WillOWisp() {
@@ -3787,7 +3787,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Payback extends Attack {
+	static class Payback extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Payback() {
@@ -3802,7 +3802,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Extrasensory extends Attack {
+	static class Extrasensory extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Extrasensory() {
@@ -3814,7 +3814,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FireBlast extends Attack {
+	static class FireBlast extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FireBlast() {
@@ -3826,7 +3826,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NastyPlot extends Attack {
+	static class NastyPlot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NastyPlot() {
@@ -3836,7 +3836,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Round extends Attack {
+	static class Round extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Round() {
@@ -3847,7 +3847,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Rest extends Attack implements SelfHealingMove {
+	static class Rest extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Rest() {
@@ -3879,7 +3879,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HyperVoice extends Attack {
+	static class HyperVoice extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HyperVoice() {
@@ -3890,7 +3890,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeechLife extends Attack {
+	static class LeechLife extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LeechLife() {
@@ -3902,7 +3902,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Astonish extends Attack {
+	static class Astonish extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Astonish() {
@@ -3915,7 +3915,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AirCutter extends Attack implements CritStageEffect {
+	static class AirCutter extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirCutter() {
@@ -3929,7 +3929,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MeanLook extends Attack {
+	static class MeanLook extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MeanLook() {
@@ -3938,7 +3938,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Acrobatics extends Attack {
+	static class Acrobatics extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Acrobatics() {
@@ -3953,7 +3953,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Absorb extends Attack {
+	static class Absorb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Absorb() {
@@ -3964,7 +3964,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MegaDrain extends Attack {
+	static class MegaDrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MegaDrain() {
@@ -3975,7 +3975,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NaturalGift extends Attack {
+	static class NaturalGift extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NaturalGift() {
@@ -4013,7 +4013,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GigaDrain extends Attack {
+	static class GigaDrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GigaDrain() {
@@ -4024,7 +4024,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Aromatherapy extends Attack {
+	static class Aromatherapy extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Aromatherapy() {
@@ -4043,7 +4043,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spore extends Attack {
+	static class Spore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spore() {
@@ -4054,7 +4054,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CrossPoison extends Attack implements CritStageEffect {
+	static class CrossPoison extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		CrossPoison() {
@@ -4071,7 +4071,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class XScissor extends Attack {
+	static class XScissor extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		XScissor() {
@@ -4082,7 +4082,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Foresight extends Attack {
+	static class Foresight extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Foresight() {
@@ -4097,7 +4097,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class OdorSleuth extends Attack {
+	static class OdorSleuth extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		OdorSleuth() {
@@ -4112,7 +4112,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MiracleEye extends Attack {
+	static class MiracleEye extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MiracleEye() {
@@ -4127,7 +4127,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Howl extends Attack {
+	static class Howl extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Howl() {
@@ -4137,7 +4137,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SignalBeam extends Attack {
+	static class SignalBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SignalBeam() {
@@ -4149,7 +4149,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ZenHeadbutt extends Attack {
+	static class ZenHeadbutt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ZenHeadbutt() {
@@ -4162,7 +4162,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psychic extends Attack {
+	static class Psychic extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Psychic() {
@@ -4174,7 +4174,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudSlap extends Attack {
+	static class MudSlap extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudSlap() {
@@ -4185,7 +4185,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Magnitude extends Attack implements AccuracyBypassEffect {
+	static class Magnitude extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 		private static final int[] CHANCES = {5, 10, 20, 30, 20, 10, 5};
 		private static final int[] POWERS = {10, 30, 50, 70, 90, 110, 150};
@@ -4224,7 +4224,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bulldoze extends Attack {
+	static class Bulldoze extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bulldoze() {
@@ -4240,7 +4240,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Dig extends Attack implements MultiTurnMove {
+	static class Dig extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Dig() {
@@ -4268,7 +4268,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Earthquake extends Attack implements AccuracyBypassEffect {
+	static class Earthquake extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Earthquake() {
@@ -4299,7 +4299,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Fissure extends Attack {
+	static class Fissure extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Fissure() {
@@ -4331,7 +4331,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NightSlash extends Attack implements CritStageEffect {
+	static class NightSlash extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		NightSlash() {
@@ -4346,7 +4346,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TriAttack extends Attack {
+	static class TriAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 		private static StatusCondition[] statusConditions = {
 			StatusCondition.PARALYZED,
@@ -4367,7 +4367,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FakeOut extends Attack {
+	static class FakeOut extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FakeOut() {
@@ -4389,7 +4389,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FeintAttack extends Attack {
+	static class FeintAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FeintAttack() {
@@ -4399,7 +4399,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Taunt extends Attack {
+	static class Taunt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Taunt() {
@@ -4410,7 +4410,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PayDay extends Attack {
+	static class PayDay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PayDay() {
@@ -4422,7 +4422,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerGem extends Attack {
+	static class PowerGem extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerGem() {
@@ -4432,7 +4432,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterSport extends Attack {
+	static class WaterSport extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterSport() {
@@ -4443,7 +4443,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Soak extends Attack implements ChangeTypeMove {
+	static class Soak extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		Soak() {
@@ -4457,7 +4457,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TrickOrTreat extends Attack implements ChangeTypeMove {
+	static class TrickOrTreat extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		TrickOrTreat() {
@@ -4473,7 +4473,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ForestsCurse extends Attack implements ChangeTypeMove {
+	static class ForestsCurse extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		ForestsCurse() {
@@ -4489,7 +4489,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PsychUp extends Attack {
+	static class PsychUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PsychUp() {
@@ -4508,7 +4508,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Amnesia extends Attack {
+	static class Amnesia extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Amnesia() {
@@ -4518,7 +4518,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WonderRoom extends Attack {
+	static class WonderRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WonderRoom() {
@@ -4529,7 +4529,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AquaJet extends Attack {
+	static class AquaJet extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AquaJet() {
@@ -4541,7 +4541,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Covet extends Attack implements ItemHolder {
+	static class Covet extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -4590,7 +4590,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LowKick extends Attack {
+	static class LowKick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LowKick() {
@@ -4610,7 +4610,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class KarateChop extends Attack implements CritStageEffect {
+	static class KarateChop extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		KarateChop() {
@@ -4625,7 +4625,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SeismicToss extends Attack {
+	static class SeismicToss extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SeismicToss() {
@@ -4639,7 +4639,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Swagger extends Attack {
+	static class Swagger extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Swagger() {
@@ -4650,7 +4650,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CrossChop extends Attack implements CritStageEffect {
+	static class CrossChop extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		CrossChop() {
@@ -4665,7 +4665,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Punishment extends Attack {
+	static class Punishment extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Punishment() {
@@ -4680,7 +4680,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CloseCombat extends Attack {
+	static class CloseCombat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CloseCombat() {
@@ -4694,7 +4694,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonAscent extends Attack {
+	static class DragonAscent extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonAscent() {
@@ -4708,7 +4708,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlameWheel extends Attack {
+	static class FlameWheel extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlameWheel() {
@@ -4722,7 +4722,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Reversal extends Attack {
+	static class Reversal extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Reversal() {
@@ -4742,7 +4742,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ExtremeSpeed extends Attack {
+	static class ExtremeSpeed extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ExtremeSpeed() {
@@ -4754,7 +4754,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Hypnosis extends Attack {
+	static class Hypnosis extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Hypnosis() {
@@ -4764,7 +4764,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BubbleBeam extends Attack {
+	static class BubbleBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BubbleBeam() {
@@ -4776,7 +4776,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudShot extends Attack {
+	static class MudShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudShot() {
@@ -4787,7 +4787,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BellyDrum extends Attack {
+	static class BellyDrum extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BellyDrum() {
@@ -4809,7 +4809,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Submission extends Attack implements RecoilMove {
+	static class Submission extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		Submission() {
@@ -4830,7 +4830,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DynamicPunch extends Attack {
+	static class DynamicPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DynamicPunch() {
@@ -4843,7 +4843,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MindReader extends Attack {
+	static class MindReader extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MindReader() {
@@ -4854,7 +4854,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LockOn extends Attack {
+	static class LockOn extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LockOn() {
@@ -4865,7 +4865,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Kinesis extends Attack {
+	static class Kinesis extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Kinesis() {
@@ -4875,7 +4875,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Barrier extends Attack {
+	static class Barrier extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Barrier() {
@@ -4885,7 +4885,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Telekinesis extends Attack {
+	static class Telekinesis extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Telekinesis() {
@@ -4895,7 +4895,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Ingrain extends Attack {
+	static class Ingrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Ingrain() {
@@ -4905,7 +4905,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PsychoCut extends Attack implements CritStageEffect {
+	static class PsychoCut extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		PsychoCut() {
@@ -4919,7 +4919,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FutureSight extends Attack {
+	static class FutureSight extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FutureSight() {
@@ -4938,7 +4938,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoomDesire extends Attack {
+	static class DoomDesire extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DoomDesire() {
@@ -4957,7 +4957,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CalmMind extends Attack {
+	static class CalmMind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CalmMind() {
@@ -4968,7 +4968,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LowSweep extends Attack {
+	static class LowSweep extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LowSweep() {
@@ -4980,7 +4980,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Revenge extends Attack {
+	static class Revenge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Revenge() {
@@ -4996,7 +4996,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VitalThrow extends Attack {
+	static class VitalThrow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VitalThrow() {
@@ -5007,7 +5007,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WringOut extends Attack {
+	static class WringOut extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WringOut() {
@@ -5021,7 +5021,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeafTornado extends Attack {
+	static class LeafTornado extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LeafTornado() {
@@ -5033,7 +5033,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeafStorm extends Attack {
+	static class LeafStorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LeafStorm() {
@@ -5045,7 +5045,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeafBlade extends Attack implements CritStageEffect {
+	static class LeafBlade extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LeafBlade() {
@@ -5060,7 +5060,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Constrict extends Attack {
+	static class Constrict extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Constrict() {
@@ -5073,7 +5073,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Hex extends Attack {
+	static class Hex extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Hex() {
@@ -5087,7 +5087,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SludgeWave extends Attack {
+	static class SludgeWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SludgeWave() {
@@ -5099,7 +5099,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudSport extends Attack {
+	static class MudSport extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudSport() {
@@ -5110,7 +5110,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockPolish extends Attack {
+	static class RockPolish extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockPolish() {
@@ -5120,7 +5120,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockThrow extends Attack {
+	static class RockThrow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockThrow() {
@@ -5130,7 +5130,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockBlast extends Attack implements MultiStrikeMove {
+	static class RockBlast extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		RockBlast() {
@@ -5166,7 +5166,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SmackDown extends Attack implements AccuracyBypassEffect {
+	static class SmackDown extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		SmackDown() {
@@ -5187,7 +5187,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StealthRock extends Attack {
+	static class StealthRock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StealthRock() {
@@ -5197,7 +5197,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StoneEdge extends Attack implements CritStageEffect {
+	static class StoneEdge extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		StoneEdge() {
@@ -5211,7 +5211,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Steamroller extends Attack implements AccuracyBypassEffect {
+	static class Steamroller extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Steamroller() {
@@ -5232,7 +5232,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeavySlam extends Attack {
+	static class HeavySlam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeavySlam() {
@@ -5251,7 +5251,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Stomp extends Attack implements AccuracyBypassEffect {
+	static class Stomp extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stomp() {
@@ -5272,7 +5272,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlameCharge extends Attack {
+	static class FlameCharge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlameCharge() {
@@ -5285,7 +5285,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bounce extends Attack implements MultiTurnMove {
+	static class Bounce extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Bounce() {
@@ -5316,7 +5316,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Curse extends Attack {
+	static class Curse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Curse() {
@@ -5346,7 +5346,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Yawn extends Attack {
+	static class Yawn extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Yawn() {
@@ -5355,7 +5355,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Headbutt extends Attack {
+	static class Headbutt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Headbutt() {
@@ -5368,7 +5368,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SlackOff extends Attack implements SelfHealingMove {
+	static class SlackOff extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		SlackOff() {
@@ -5388,7 +5388,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealPulse extends Attack {
+	static class HealPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HealPulse() {
@@ -5410,7 +5410,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MetalSound extends Attack {
+	static class MetalSound extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MetalSound() {
@@ -5421,7 +5421,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spark extends Attack {
+	static class Spark extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spark() {
@@ -5434,7 +5434,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagnetBomb extends Attack {
+	static class MagnetBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagnetBomb() {
@@ -5444,7 +5444,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MirrorShot extends Attack {
+	static class MirrorShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MirrorShot() {
@@ -5455,7 +5455,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagnetRise extends Attack {
+	static class MagnetRise extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagnetRise() {
@@ -5466,7 +5466,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ZapCannon extends Attack {
+	static class ZapCannon extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ZapCannon() {
@@ -5478,7 +5478,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BraveBird extends Attack implements RecoilMove {
+	static class BraveBird extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		BraveBird() {
@@ -5499,7 +5499,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Uproar extends Attack {
+	static class Uproar extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Uproar() {
@@ -5513,7 +5513,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Acupressure extends Attack {
+	static class Acupressure extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Acupressure() {
@@ -5530,7 +5530,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleHit extends Attack implements MultiStrikeMove {
+	static class DoubleHit extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleHit() {
@@ -5567,7 +5567,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IcyWind extends Attack {
+	static class IcyWind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IcyWind() {
@@ -5578,7 +5578,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceShard extends Attack {
+	static class IceShard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IceShard() {
@@ -5589,7 +5589,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AquaRing extends Attack {
+	static class AquaRing extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AquaRing() {
@@ -5599,7 +5599,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AuroraBeam extends Attack {
+	static class AuroraBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AuroraBeam() {
@@ -5611,7 +5611,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Brine extends Attack {
+	static class Brine extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Brine() {
@@ -5625,7 +5625,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Dive extends Attack implements MultiTurnMove {
+	static class Dive extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Dive() {
@@ -5653,7 +5653,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceBeam extends Attack {
+	static class IceBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IceBeam() {
@@ -5665,7 +5665,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SheerCold extends Attack {
+	static class SheerCold extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SheerCold() {
@@ -5697,7 +5697,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonGas extends Attack {
+	static class PoisonGas extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonGas() {
@@ -5707,7 +5707,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sludge extends Attack {
+	static class Sludge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sludge() {
@@ -5719,7 +5719,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SludgeBomb extends Attack {
+	static class SludgeBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SludgeBomb() {
@@ -5732,7 +5732,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AcidArmor extends Attack {
+	static class AcidArmor extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AcidArmor() {
@@ -5742,7 +5742,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IcicleSpear extends Attack implements MultiStrikeMove {
+	static class IcicleSpear extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		IcicleSpear() {
@@ -5778,7 +5778,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Clamp extends Attack {
+	static class Clamp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Clamp() {
@@ -5790,7 +5790,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RazorShell extends Attack {
+	static class RazorShell extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RazorShell() {
@@ -5803,7 +5803,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Whirlpool extends Attack {
+	static class Whirlpool extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Whirlpool() {
@@ -5814,7 +5814,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShellSmash extends Attack {
+	static class ShellSmash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShellSmash() {
@@ -5828,7 +5828,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SpikeCannon extends Attack implements MultiStrikeMove {
+	static class SpikeCannon extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		SpikeCannon() {
@@ -5864,7 +5864,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spikes extends Attack {
+	static class Spikes extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spikes() {
@@ -5874,7 +5874,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IcicleCrash extends Attack {
+	static class IcicleCrash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IcicleCrash() {
@@ -5886,7 +5886,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Lick extends Attack {
+	static class Lick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Lick() {
@@ -5899,7 +5899,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spite extends Attack {
+	static class Spite extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spite() {
@@ -5921,7 +5921,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NightShade extends Attack {
+	static class NightShade extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NightShade() {
@@ -5934,7 +5934,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowBall extends Attack {
+	static class ShadowBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShadowBall() {
@@ -5947,7 +5947,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DreamEater extends Attack {
+	static class DreamEater extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DreamEater() {
@@ -5967,7 +5967,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DarkPulse extends Attack {
+	static class DarkPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DarkPulse() {
@@ -5980,7 +5980,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Nightmare extends Attack {
+	static class Nightmare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Nightmare() {
@@ -5991,7 +5991,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowPunch extends Attack {
+	static class ShadowPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShadowPunch() {
@@ -6002,7 +6002,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bind extends Attack {
+	static class Bind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bind() {
@@ -6014,7 +6014,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockTomb extends Attack {
+	static class RockTomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockTomb() {
@@ -6025,7 +6025,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonBreath extends Attack {
+	static class DragonBreath extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonBreath() {
@@ -6037,7 +6037,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IronTail extends Attack {
+	static class IronTail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IronTail() {
@@ -6050,7 +6050,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Meditate extends Attack {
+	static class Meditate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Meditate() {
@@ -6060,7 +6060,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Synchronoise extends Attack {
+	static class Synchronoise extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Synchronoise() {
@@ -6082,7 +6082,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psyshock extends Attack implements OpponentStatSwitchingEffect {
+	static class Psyshock extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Psyshock() {
@@ -6096,7 +6096,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ViceGrip extends Attack {
+	static class ViceGrip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ViceGrip() {
@@ -6107,7 +6107,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MetalClaw extends Attack {
+	static class MetalClaw extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MetalClaw() {
@@ -6120,7 +6120,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Guillotine extends Attack {
+	static class Guillotine extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Guillotine() {
@@ -6153,7 +6153,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Crabhammer extends Attack implements CritStageEffect {
+	static class Crabhammer extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Crabhammer() {
@@ -6168,7 +6168,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Flail extends Attack {
+	static class Flail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Flail() {
@@ -6188,7 +6188,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Charge extends Attack {
+	static class Charge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Charge() {
@@ -6199,7 +6199,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ChargeBeam extends Attack {
+	static class ChargeBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ChargeBeam() {
@@ -6212,7 +6212,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MirrorCoat extends Attack {
+	static class MirrorCoat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MirrorCoat() {
@@ -6236,7 +6236,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Counter extends Attack {
+	static class Counter extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Counter() {
@@ -6261,7 +6261,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Barrage extends Attack implements MultiStrikeMove {
+	static class Barrage extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		Barrage() {
@@ -6298,7 +6298,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BulletSeed extends Attack implements MultiStrikeMove {
+	static class BulletSeed extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		BulletSeed() {
@@ -6335,7 +6335,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EggBomb extends Attack {
+	static class EggBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EggBomb() {
@@ -6346,7 +6346,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WoodHammer extends Attack implements RecoilMove {
+	static class WoodHammer extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		WoodHammer() {
@@ -6367,7 +6367,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BoneClub extends Attack {
+	static class BoneClub extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BoneClub() {
@@ -6379,7 +6379,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bonemerang extends Attack implements MultiStrikeMove {
+	static class Bonemerang extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		Bonemerang() {
@@ -6415,7 +6415,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BoneRush extends Attack implements MultiStrikeMove {
+	static class BoneRush extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		BoneRush() {
@@ -6451,7 +6451,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RollingKick extends Attack {
+	static class RollingKick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RollingKick() {
@@ -6464,7 +6464,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class JumpKick extends Attack implements CrashDamageMove {
+	static class JumpKick extends Attack implements CrashDamageMove {
 		private static final long serialVersionUID = 1L;
 
 		JumpKick() {
@@ -6481,7 +6481,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BrickBreak extends Attack {
+	static class BrickBreak extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BrickBreak() {
@@ -6496,7 +6496,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HighJumpKick extends Attack implements CrashDamageMove {
+	static class HighJumpKick extends Attack implements CrashDamageMove {
 		private static final long serialVersionUID = 1L;
 
 		HighJumpKick() {
@@ -6513,7 +6513,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BlazeKick extends Attack implements CritStageEffect {
+	static class BlazeKick extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		BlazeKick() {
@@ -6530,7 +6530,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MegaKick extends Attack {
+	static class MegaKick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MegaKick() {
@@ -6541,7 +6541,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CometPunch extends Attack implements MultiStrikeMove {
+	static class CometPunch extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		CometPunch() {
@@ -6579,7 +6579,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MachPunch extends Attack {
+	static class MachPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MachPunch() {
@@ -6592,7 +6592,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BulletPunch extends Attack {
+	static class BulletPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BulletPunch() {
@@ -6605,7 +6605,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VacuumWave extends Attack {
+	static class VacuumWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VacuumWave() {
@@ -6616,7 +6616,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ThunderPunch extends Attack {
+	static class ThunderPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ThunderPunch() {
@@ -6630,7 +6630,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IcePunch extends Attack {
+	static class IcePunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IcePunch() {
@@ -6644,7 +6644,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FirePunch extends Attack {
+	static class FirePunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FirePunch() {
@@ -6658,7 +6658,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SkyUppercut extends Attack implements AccuracyBypassEffect {
+	static class SkyUppercut extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		SkyUppercut() {
@@ -6680,7 +6680,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MegaPunch extends Attack {
+	static class MegaPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MegaPunch() {
@@ -6692,7 +6692,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FocusPunch extends Attack {
+	static class FocusPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FocusPunch() {
@@ -6720,7 +6720,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MeFirst extends Attack {
+	static class MeFirst extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MeFirst() {
@@ -6744,7 +6744,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Refresh extends Attack {
+	static class Refresh extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Refresh() {
@@ -6766,7 +6766,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerWhip extends Attack {
+	static class PowerWhip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerWhip() {
@@ -6777,7 +6777,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Smog extends Attack {
+	static class Smog extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Smog() {
@@ -6789,7 +6789,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ClearSmog extends Attack {
+	static class ClearSmog extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ClearSmog() {
@@ -6804,7 +6804,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HammerArm extends Attack {
+	static class HammerArm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HammerArm() {
@@ -6818,7 +6818,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SoftBoiled extends Attack implements SelfHealingMove {
+	static class SoftBoiled extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		SoftBoiled() {
@@ -6838,7 +6838,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AncientPower extends Attack {
+	static class AncientPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AncientPower() {
@@ -6857,7 +6857,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Tickle extends Attack {
+	static class Tickle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Tickle() {
@@ -6868,7 +6868,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DizzyPunch extends Attack {
+	static class DizzyPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DizzyPunch() {
@@ -6882,7 +6882,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Outrage extends Attack {
+	static class Outrage extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Outrage() {
@@ -6895,7 +6895,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonDance extends Attack {
+	static class DragonDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonDance() {
@@ -6906,7 +6906,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonPulse extends Attack {
+	static class DragonPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonPulse() {
@@ -6917,7 +6917,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DracoMeteor extends Attack {
+	static class DracoMeteor extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DracoMeteor() {
@@ -6929,7 +6929,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Waterfall extends Attack {
+	static class Waterfall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Waterfall() {
@@ -6942,7 +6942,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ReflectType extends Attack implements ChangeTypeMove {
+	static class ReflectType extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		ReflectType() {
@@ -6957,7 +6957,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagicalLeaf extends Attack {
+	static class MagicalLeaf extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagicalLeaf() {
@@ -6966,7 +6966,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerSwap extends Attack {
+	static class PowerSwap extends Attack {
 		private static final long serialVersionUID = 1L;
 		private static Stat[] swapStats = { Stat.ATTACK, Stat.SP_ATTACK };
 
@@ -6990,7 +6990,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GuardSwap extends Attack {
+	static class GuardSwap extends Attack {
 		private static final long serialVersionUID = 1L;
 		private static Stat[] swapStats = { Stat.DEFENSE, Stat.SP_DEFENSE };
 
@@ -7014,7 +7014,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Copycat extends Attack {
+	static class Copycat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Copycat() {
@@ -7038,7 +7038,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Transform extends Attack {
+	static class Transform extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Transform() {
@@ -7053,7 +7053,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Substitute extends Attack {
+	static class Substitute extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Substitute() {
@@ -7063,7 +7063,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RazorWind extends Attack implements MultiTurnMove, CritStageEffect {
+	static class RazorWind extends Attack implements MultiTurnMove, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RazorWind() {
@@ -7094,7 +7094,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LovelyKiss extends Attack {
+	static class LovelyKiss extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LovelyKiss() {
@@ -7104,7 +7104,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowderSnow extends Attack {
+	static class PowderSnow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowderSnow() {
@@ -7116,7 +7116,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeartStamp extends Attack {
+	static class HeartStamp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeartStamp() {
@@ -7129,7 +7129,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FakeTears extends Attack {
+	static class FakeTears extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FakeTears() {
@@ -7139,7 +7139,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Avalanche extends Attack {
+	static class Avalanche extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Avalanche() {
@@ -7155,7 +7155,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Blizzard extends Attack implements AccuracyBypassEffect {
+	static class Blizzard extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Blizzard() {
@@ -7172,7 +7172,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShockWave extends Attack {
+	static class ShockWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShockWave() {
@@ -7181,7 +7181,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LavaPlume extends Attack {
+	static class LavaPlume extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LavaPlume() {
@@ -7193,7 +7193,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WorkUp extends Attack {
+	static class WorkUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WorkUp() {
@@ -7204,7 +7204,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GigaImpact extends Attack implements MultiTurnMove {
+	static class GigaImpact extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		GigaImpact() {
@@ -7232,7 +7232,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Splash extends Attack {
+	static class Splash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Splash() {
@@ -7246,7 +7246,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Mist extends Attack {
+	static class Mist extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Mist() {
@@ -7256,7 +7256,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LastResort extends Attack {
+	static class LastResort extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LastResort() {
@@ -7282,7 +7282,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TrumpCard extends Attack {
+	static class TrumpCard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TrumpCard() {
@@ -7308,7 +7308,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MuddyWater extends Attack {
+	static class MuddyWater extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MuddyWater() {
@@ -7320,7 +7320,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Conversion extends Attack implements ChangeTypeMove {
+	static class Conversion extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		Conversion() {
@@ -7353,7 +7353,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Conversion2 extends Attack implements ChangeTypeMove {
+	static class Conversion2 extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 		private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
 			List<Type> types = new ArrayList<>();
@@ -7390,7 +7390,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sharpen extends Attack {
+	static class Sharpen extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sharpen() {
@@ -7400,7 +7400,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagicCoat extends Attack {
+	static class MagicCoat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagicCoat() {
@@ -7412,7 +7412,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SkyDrop extends Attack {
+	static class SkyDrop extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SkyDrop() {
@@ -7433,7 +7433,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IronHead extends Attack {
+	static class IronHead extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IronHead() {
@@ -7446,7 +7446,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockSlide extends Attack {
+	static class RockSlide extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockSlide() {
@@ -7458,7 +7458,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Snore extends Attack {
+	static class Snore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Snore() {
@@ -7482,7 +7482,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SleepTalk extends Attack {
+	static class SleepTalk extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SleepTalk() {
@@ -7516,7 +7516,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Block extends Attack {
+	static class Block extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Block() {
@@ -7525,7 +7525,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SkyAttack extends Attack implements MultiTurnMove, CritStageEffect {
+	static class SkyAttack extends Attack implements MultiTurnMove, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SkyAttack() {
@@ -7558,7 +7558,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonRush extends Attack implements AccuracyBypassEffect {
+	static class DragonRush extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		DragonRush() {
@@ -7579,7 +7579,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AuraSphere extends Attack {
+	static class AuraSphere extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AuraSphere() {
@@ -7590,7 +7590,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psystrike extends Attack implements OpponentStatSwitchingEffect {
+	static class Psystrike extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Psystrike() {
@@ -7604,7 +7604,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Eruption extends Attack {
+	static class Eruption extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Eruption() {
@@ -7617,7 +7617,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Charm extends Attack {
+	static class Charm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Charm() {
@@ -7627,7 +7627,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EchoedVoice extends Attack {
+	static class EchoedVoice extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EchoedVoice() {
@@ -7642,7 +7642,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PsychoShift extends Attack {
+	static class PsychoShift extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PsychoShift() {
@@ -7663,7 +7663,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowSneak extends Attack {
+	static class ShadowSneak extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShadowSneak() {
@@ -7675,7 +7675,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SpiderWeb extends Attack {
+	static class SpiderWeb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SpiderWeb() {
@@ -7684,7 +7684,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SweetKiss extends Attack {
+	static class SweetKiss extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SweetKiss() {
@@ -7694,7 +7694,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class OminousWind extends Attack {
+	static class OminousWind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		OminousWind() {
@@ -7713,7 +7713,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CottonSpore extends Attack {
+	static class CottonSpore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CottonSpore() {
@@ -7724,7 +7724,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CottonGuard extends Attack {
+	static class CottonGuard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CottonGuard() {
@@ -7734,7 +7734,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GrassWhistle extends Attack {
+	static class GrassWhistle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GrassWhistle() {
@@ -7745,7 +7745,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Torment extends Attack {
+	static class Torment extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Torment() {
@@ -7756,7 +7756,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HiddenPower extends Attack {
+	static class HiddenPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HiddenPower() {
@@ -7770,7 +7770,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psywave extends Attack {
+	static class Psywave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Psywave() {
@@ -7783,7 +7783,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PainSplit extends Attack {
+	static class PainSplit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PainSplit() {
@@ -7801,7 +7801,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bide extends Attack {
+	static class Bide extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bide() {
@@ -7818,7 +7818,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Autotomize extends Attack {
+	static class Autotomize extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Autotomize() {
@@ -7829,7 +7829,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StruggleBug extends Attack {
+	static class StruggleBug extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StruggleBug() {
@@ -7840,7 +7840,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerTrick extends Attack {
+	static class PowerTrick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerTrick() {
@@ -7850,7 +7850,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerSplit extends Attack {
+	static class PowerSplit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerSplit() {
@@ -7861,7 +7861,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GuardSplit extends Attack {
+	static class GuardSplit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GuardSplit() {
@@ -7872,7 +7872,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HoneClaws extends Attack {
+	static class HoneClaws extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HoneClaws() {
@@ -7883,7 +7883,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BeatUp extends Attack {
+	static class BeatUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BeatUp() {
@@ -7913,7 +7913,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Octazooka extends Attack {
+	static class Octazooka extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Octazooka() {
@@ -7926,7 +7926,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Present extends Attack {
+	static class Present extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Present() {
@@ -7967,7 +7967,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SteelWing extends Attack {
+	static class SteelWing extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SteelWing() {
@@ -7981,7 +7981,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sketch extends Attack {
+	static class Sketch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sketch() {
@@ -8014,7 +8014,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TripleKick extends Attack implements MultiStrikeMove {
+	static class TripleKick extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		TripleKick() {
@@ -8051,7 +8051,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MilkDrink extends Attack implements SelfHealingMove {
+	static class MilkDrink extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		MilkDrink() {
@@ -8071,7 +8071,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealBell extends Attack {
+	static class HealBell extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HealBell() {
@@ -8091,7 +8091,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WeatherBall extends Attack {
+	static class WeatherBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WeatherBall() {
@@ -8110,7 +8110,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Aeroblast extends Attack implements CritStageEffect {
+	static class Aeroblast extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Aeroblast() {
@@ -8124,7 +8124,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SacredFire extends Attack {
+	static class SacredFire extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SacredFire() {
@@ -8137,7 +8137,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealBlock extends Attack {
+	static class HealBlock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HealBlock() {
@@ -8147,7 +8147,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EnergyBall extends Attack {
+	static class EnergyBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EnergyBall() {
@@ -8160,7 +8160,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BulkUp extends Attack {
+	static class BulkUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BulkUp() {
@@ -8171,7 +8171,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Thief extends Attack implements ItemHolder {
+	static class Thief extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -8220,7 +8220,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Attract extends Attack {
+	static class Attract extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Attract() {
@@ -8231,7 +8231,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ForcePalm extends Attack {
+	static class ForcePalm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ForcePalm() {
@@ -8244,7 +8244,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ArmThrust extends Attack implements MultiStrikeMove {
+	static class ArmThrust extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		ArmThrust() {
@@ -8281,7 +8281,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SmellingSalts extends Attack {
+	static class SmellingSalts extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SmellingSalts() {
@@ -8302,7 +8302,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Assist extends Attack {
+	static class Assist extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Assist() {
@@ -8336,7 +8336,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MetalBurst extends Attack {
+	static class MetalBurst extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MetalBurst() {
@@ -8355,7 +8355,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WildCharge extends Attack implements RecoilMove {
+	static class WildCharge extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		WildCharge() {
@@ -8376,7 +8376,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Flash extends Attack {
+	static class Flash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Flash() {
@@ -8386,7 +8386,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TailGlow extends Attack {
+	static class TailGlow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TailGlow() {
@@ -8396,7 +8396,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterSpout extends Attack {
+	static class WaterSpout extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterSpout() {
@@ -8409,7 +8409,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TeeterDance extends Attack {
+	static class TeeterDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TeeterDance() {
@@ -8419,7 +8419,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NeedleArm extends Attack {
+	static class NeedleArm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NeedleArm() {
@@ -8432,7 +8432,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Venoshock extends Attack {
+	static class Venoshock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Venoshock() {
@@ -8446,7 +8446,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Snatch extends Attack {
+	static class Snatch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Snatch() {
@@ -8460,7 +8460,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceBall extends Attack {
+	static class IceBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IceBall() {
@@ -8476,7 +8476,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeadSmash extends Attack implements RecoilMove {
+	static class HeadSmash extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		HeadSmash() {
@@ -8497,7 +8497,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MistBall extends Attack {
+	static class MistBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MistBall() {
@@ -8510,7 +8510,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LusterPurge extends Attack {
+	static class LusterPurge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LusterPurge() {
@@ -8522,7 +8522,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PsychoBoost extends Attack {
+	static class PsychoBoost extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PsychoBoost() {
@@ -8534,7 +8534,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Facade extends Attack {
+	static class Facade extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Facade() {
@@ -8553,7 +8553,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DefendOrder extends Attack {
+	static class DefendOrder extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DefendOrder() {
@@ -8564,7 +8564,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealOrder extends Attack implements SelfHealingMove {
+	static class HealOrder extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		HealOrder() {
@@ -8584,7 +8584,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AttackOrder extends Attack implements CritStageEffect {
+	static class AttackOrder extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		AttackOrder() {
@@ -8598,7 +8598,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Chatter extends Attack {
+	static class Chatter extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Chatter() {
@@ -8610,7 +8610,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DualChop extends Attack implements MultiStrikeMove {
+	static class DualChop extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		DualChop() {
@@ -8647,7 +8647,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockWrecker extends Attack implements MultiTurnMove {
+	static class RockWrecker extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		RockWrecker() {
@@ -8675,7 +8675,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TrickRoom extends Attack {
+	static class TrickRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TrickRoom() {
@@ -8687,7 +8687,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RoarOfTime extends Attack implements MultiTurnMove {
+	static class RoarOfTime extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		RoarOfTime() {
@@ -8714,7 +8714,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SpacialRend extends Attack implements CritStageEffect {
+	static class SpacialRend extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SpacialRend() {
@@ -8728,7 +8728,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagmaStorm extends Attack {
+	static class MagmaStorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagmaStorm() {
@@ -8739,7 +8739,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CrushGrip extends Attack {
+	static class CrushGrip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CrushGrip() {
@@ -8753,7 +8753,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowForce extends Attack implements MultiTurnMove {
+	static class ShadowForce extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		ShadowForce() {
@@ -8782,7 +8782,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeartSwap extends Attack {
+	static class HeartSwap extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeartSwap() {
@@ -8803,7 +8803,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DarkVoid extends Attack {
+	static class DarkVoid extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DarkVoid() {
@@ -8813,7 +8813,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SeedFlare extends Attack {
+	static class SeedFlare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SeedFlare() {
@@ -8825,7 +8825,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Judgement extends Attack {
+	static class Judgement extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Judgement() {
@@ -8844,7 +8844,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SearingShot extends Attack {
+	static class SearingShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SearingShot() {
@@ -8857,7 +8857,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Incinerate extends Attack {
+	static class Incinerate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Incinerate() {
@@ -8876,7 +8876,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Overheat extends Attack {
+	static class Overheat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Overheat() {
@@ -8888,7 +8888,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeatCrash extends Attack {
+	static class HeatCrash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeatCrash() {
@@ -8907,7 +8907,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GrassKnot extends Attack {
+	static class GrassKnot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GrassKnot() {
@@ -8927,7 +8927,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Scald extends Attack {
+	static class Scald extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Scald() {
@@ -8940,7 +8940,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DrainPunch extends Attack {
+	static class DrainPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DrainPunch() {
@@ -8953,7 +8953,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StormThrow extends Attack {
+	static class StormThrow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StormThrow() {
@@ -8965,7 +8965,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FrostBreath extends Attack {
+	static class FrostBreath extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FrostBreath() {
@@ -8976,7 +8976,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockSmash extends Attack {
+	static class RockSmash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockSmash() {
@@ -8989,7 +8989,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockClimb extends Attack {
+	static class RockClimb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockClimb() {
@@ -9002,7 +9002,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NightDaze extends Attack {
+	static class NightDaze extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NightDaze() {
@@ -9014,7 +9014,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TailSlap extends Attack implements MultiStrikeMove {
+	static class TailSlap extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		TailSlap() {
@@ -9051,7 +9051,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Defog extends Attack {
+	static class Defog extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Defog() {
@@ -9065,7 +9065,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HornLeech extends Attack {
+	static class HornLeech extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HornLeech() {
@@ -9077,7 +9077,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Electroweb extends Attack {
+	static class Electroweb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Electroweb() {
@@ -9088,7 +9088,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GearGrind extends Attack implements MultiStrikeMove {
+	static class GearGrind extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		GearGrind() {
@@ -9124,7 +9124,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShiftGear extends Attack {
+	static class ShiftGear extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShiftGear() {
@@ -9135,7 +9135,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeadCharge extends Attack implements RecoilMove {
+	static class HeadCharge extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		HeadCharge() {
@@ -9156,7 +9156,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FieryDance extends Attack {
+	static class FieryDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FieryDance() {
@@ -9169,7 +9169,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SacredSword extends Attack implements OpponentIgnoreStageEffect {
+	static class SacredSword extends Attack implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SacredSword() {
@@ -9184,7 +9184,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SecretSword extends Attack implements OpponentStatSwitchingEffect {
+	static class SecretSword extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SecretSword() {
@@ -9200,7 +9200,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FusionFlare extends Attack {
+	static class FusionFlare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FusionFlare() {
@@ -9219,7 +9219,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FusionBolt extends Attack {
+	static class FusionBolt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FusionBolt() {
@@ -9233,7 +9233,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BlueFlare extends Attack {
+	static class BlueFlare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BlueFlare() {
@@ -9245,7 +9245,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BoltStrike extends Attack {
+	static class BoltStrike extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BoltStrike() {
@@ -9258,7 +9258,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Glaciate extends Attack {
+	static class Glaciate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Glaciate() {
@@ -9269,7 +9269,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TechnoBlast extends Attack {
+	static class TechnoBlast extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TechnoBlast() {
@@ -9290,7 +9290,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Explosion extends Attack {
+	static class Explosion extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Explosion() {
@@ -9301,7 +9301,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SelfDestruct extends Attack {
+	static class SelfDestruct extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SelfDestruct() {
@@ -9312,7 +9312,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Fling extends Attack {
+	static class Fling extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Fling() {
@@ -9344,7 +9344,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FreezeShock extends Attack implements MultiTurnMove {
+	static class FreezeShock extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		FreezeShock() {
@@ -9374,7 +9374,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SecretPower extends Attack {
+	static class SecretPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SecretPower() {
@@ -9399,7 +9399,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FinalGambit extends Attack {
+	static class FinalGambit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FinalGambit() {
@@ -9414,7 +9414,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GastroAcid extends Attack implements ChangeAbilityMove {
+	static class GastroAcid extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		GastroAcid() {
@@ -9444,7 +9444,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealingWish extends Attack {
+	static class HealingWish extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HealingWish() {
@@ -9456,7 +9456,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LunarDance extends Attack {
+	static class LunarDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LunarDance() {
@@ -9468,7 +9468,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Roar extends Attack {
+	static class Roar extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Roar() {
@@ -9528,7 +9528,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Grudge extends Attack {
+	static class Grudge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Grudge() {
@@ -9540,7 +9540,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Retaliate extends Attack {
+	static class Retaliate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Retaliate() {
@@ -9555,7 +9555,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CircleThrow extends Attack {
+	static class CircleThrow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CircleThrow() {
@@ -9615,7 +9615,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Teleport extends Attack {
+	static class Teleport extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Teleport() {
@@ -9635,7 +9635,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RolePlay extends Attack implements ChangeAbilityMove {
+	static class RolePlay extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		RolePlay() {
@@ -9671,7 +9671,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class KnockOff extends Attack implements ItemHolder {
+	static class KnockOff extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 
 		KnockOff() {
@@ -9700,7 +9700,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Whirlwind extends Attack {
+	static class Whirlwind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Whirlwind() {
@@ -9759,7 +9759,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bestow extends Attack implements ItemHolder {
+	static class Bestow extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -9804,7 +9804,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Switcheroo extends Attack implements ItemHolder {
+	static class Switcheroo extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -9851,7 +9851,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Trick extends Attack implements ItemHolder {
+	static class Trick extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -9898,7 +9898,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Memento extends Attack {
+	static class Memento extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Memento() {
@@ -9911,7 +9911,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DestinyBond extends Attack {
+	static class DestinyBond extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DestinyBond() {
@@ -9925,7 +9925,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Camouflage extends Attack implements ChangeTypeMove {
+	static class Camouflage extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		Camouflage() {
@@ -9939,7 +9939,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Recycle extends Attack {
+	static class Recycle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Recycle() {
@@ -9960,7 +9960,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PartingShot extends Attack {
+	static class PartingShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PartingShot() {
@@ -10003,7 +10003,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class UTurn extends Attack {
+	static class UTurn extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		UTurn() {
@@ -10040,7 +10040,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BatonPass extends Attack {
+	static class BatonPass extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BatonPass() {
@@ -10083,7 +10083,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PerishSong extends Attack {
+	static class PerishSong extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PerishSong() {
@@ -10108,7 +10108,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonTail extends Attack {
+	static class DragonTail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonTail() {
@@ -10168,7 +10168,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FoulPlay extends Attack {
+	static class FoulPlay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FoulPlay() {
@@ -10186,7 +10186,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Embargo extends Attack {
+	static class Embargo extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Embargo() {
@@ -10196,7 +10196,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NaturePower extends Attack {
+	static class NaturePower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NaturePower() {
@@ -10215,7 +10215,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Entrainment extends Attack implements ChangeAbilityMove {
+	static class Entrainment extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		Entrainment() {
@@ -10249,7 +10249,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagicRoom extends Attack {
+	static class MagicRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagicRoom() {
@@ -10260,7 +10260,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WorrySeed extends Attack implements ChangeAbilityMove {
+	static class WorrySeed extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		WorrySeed() {
@@ -10290,7 +10290,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SimpleBeam extends Attack implements ChangeAbilityMove {
+	static class SimpleBeam extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		SimpleBeam() {
@@ -10320,7 +10320,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SkillSwap extends Attack implements ChangeAbilityMove {
+	static class SkillSwap extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 		private Ability ability;
 		
@@ -10365,7 +10365,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VoltSwitch extends Attack {
+	static class VoltSwitch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VoltSwitch() {
@@ -10401,7 +10401,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RelicSong extends Attack {
+	static class RelicSong extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RelicSong() {
@@ -10415,7 +10415,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Snarl extends Attack {
+	static class Snarl extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Snarl() {
@@ -10428,7 +10428,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceBurn extends Attack implements MultiTurnMove {
+	static class IceBurn extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		IceBurn() {
@@ -10458,7 +10458,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VCreate extends Attack {
+	static class VCreate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VCreate() {
@@ -10474,7 +10474,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Surf extends Attack {
+	static class Surf extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Surf() {
@@ -10484,7 +10484,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VoltTackle extends Attack implements RecoilMove {
+	static class VoltTackle extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		VoltTackle() {
@@ -10507,7 +10507,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FocusBlast extends Attack {
+	static class FocusBlast extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FocusBlast() {
@@ -10520,7 +10520,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DiamondStorm extends Attack {
+	static class DiamondStorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DiamondStorm() {
@@ -10534,7 +10534,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Moonblast extends Attack {
+	static class Moonblast extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Moonblast() {
@@ -10547,7 +10547,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LandsWrath extends Attack {
+	static class LandsWrath extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LandsWrath() {
@@ -10558,7 +10558,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PhantomForce extends Attack implements MultiTurnMove, AccuracyBypassEffect {
+	static class PhantomForce extends Attack implements MultiTurnMove, AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		PhantomForce() {
@@ -10596,7 +10596,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class OblivionWing extends Attack {
+	static class OblivionWing extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		OblivionWing() {
@@ -10608,7 +10608,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Geomancy extends Attack implements MultiTurnMove {
+	static class Geomancy extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Geomancy() {
@@ -10637,7 +10637,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Boomburst extends Attack {
+	static class Boomburst extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Boomburst() {
@@ -10648,7 +10648,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PlayRough extends Attack {
+	static class PlayRough extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PlayRough() {
@@ -10661,7 +10661,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CraftyShield extends Attack {
+	static class CraftyShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CraftyShield() {
@@ -10676,7 +10676,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Nuzzle extends Attack {
+	static class Nuzzle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Nuzzle() {
@@ -10688,7 +10688,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DrainingKiss extends Attack {
+	static class DrainingKiss extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DrainingKiss() {
@@ -10701,7 +10701,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FairyWind extends Attack {
+	static class FairyWind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FairyWind() {
@@ -10711,7 +10711,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ParabolicCharge extends Attack {
+	static class ParabolicCharge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ParabolicCharge() {
@@ -10722,7 +10722,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DisarmingVoice extends Attack {
+	static class DisarmingVoice extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DisarmingVoice() {
@@ -10732,7 +10732,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FreezeDry extends Attack implements AdvantageMultiplierMove {
+	static class FreezeDry extends Attack implements AdvantageMultiplierMove {
 		private static final long serialVersionUID = 1L;
 
 		FreezeDry() {
@@ -10755,7 +10755,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlyingPress extends Attack implements AdvantageMultiplierMove {
+	static class FlyingPress extends Attack implements AdvantageMultiplierMove {
 		private static final long serialVersionUID = 1L;
 
 		FlyingPress() {
@@ -10770,7 +10770,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TopsyTurvy extends Attack {
+	static class TopsyTurvy extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TopsyTurvy() {
@@ -10787,7 +10787,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PlayNice extends Attack {
+	static class PlayNice extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PlayNice() {
@@ -10798,7 +10798,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EerieImpulse extends Attack {
+	static class EerieImpulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EerieImpulse() {
@@ -10808,7 +10808,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MistyTerrain extends Attack {
+	static class MistyTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MistyTerrain() {
@@ -10819,7 +10819,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FairyLock extends Attack {
+	static class FairyLock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FairyLock() {
@@ -10830,7 +10830,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AromaticMist extends Attack {
+	static class AromaticMist extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AromaticMist() {
@@ -10840,7 +10840,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BabyDollEyes extends Attack {
+	static class BabyDollEyes extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BabyDollEyes() {
@@ -10851,7 +10851,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PetalBlizzard extends Attack {
+	static class PetalBlizzard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PetalBlizzard() {
@@ -10862,7 +10862,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GrassyTerrain extends Attack {
+	static class GrassyTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GrassyTerrain() {
@@ -10873,7 +10873,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlowerShield extends Attack {
+	static class FlowerShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlowerShield() {
@@ -10883,7 +10883,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NobleRoar extends Attack {
+	static class NobleRoar extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NobleRoar() {
@@ -10895,7 +10895,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Powder extends Attack {
+	static class Powder extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Powder() {
@@ -10907,7 +10907,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Rototiller extends Attack {
+	static class Rototiller extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Rototiller() {
@@ -10918,7 +10918,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterShuriken extends Attack implements MultiStrikeMove {
+	static class WaterShuriken extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		WaterShuriken() {
@@ -10955,7 +10955,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MatBlock extends Attack {
+	static class MatBlock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MatBlock() {
@@ -10975,7 +10975,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MysticalFire extends Attack {
+	static class MysticalFire extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MysticalFire() {
@@ -10986,7 +10986,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Infestation extends Attack {
+	static class Infestation extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Infestation() {
@@ -10998,7 +10998,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Electrify extends Attack {
+	static class Electrify extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Electrify() {
@@ -11009,7 +11009,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FellStinger extends Attack implements MurderEffect {
+	static class FellStinger extends Attack implements MurderEffect {
 		private static final long serialVersionUID = 1L;
 
 		FellStinger() {
@@ -11024,7 +11024,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagneticFlux extends Attack {
+	static class MagneticFlux extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagneticFlux() {
@@ -11035,7 +11035,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StickyWeb extends Attack {
+	static class StickyWeb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StickyWeb() {
@@ -11045,7 +11045,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Belch extends Attack {
+	static class Belch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Belch() {
@@ -11065,7 +11065,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VenomDrench extends Attack {
+	static class VenomDrench extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VenomDrench() {
@@ -11086,7 +11086,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ElectricTerrain extends Attack {
+	static class ElectricTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ElectricTerrain() {
@@ -11097,7 +11097,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerUpPunch extends Attack {
+	static class PowerUpPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerUpPunch() {
@@ -11111,7 +11111,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Confide extends Attack {
+	static class Confide extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Confide() {
@@ -11122,7 +11122,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Cut extends Attack {
+	static class Cut extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Cut() {
@@ -11133,7 +11133,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DazzlingGleam extends Attack {
+	static class DazzlingGleam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DazzlingGleam() {
@@ -11143,7 +11143,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Strength extends Attack {
+	static class Strength extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Strength() {
@@ -11154,7 +11154,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class OriginPulse extends Attack {
+	static class OriginPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		OriginPulse() {
@@ -11164,7 +11164,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PrecipiceBlades extends Attack {
+	static class PrecipiceBlades extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PrecipiceBlades() {

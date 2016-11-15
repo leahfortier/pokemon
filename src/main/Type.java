@@ -2,7 +2,6 @@ package main;
 
 import java.awt.Color;
 import java.io.Serializable;
-import java.util.Collections;
 
 import battle.MoveType;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;

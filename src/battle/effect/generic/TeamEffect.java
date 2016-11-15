@@ -86,7 +86,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class Reflect extends TeamEffect implements BarrierEffect, StatChangingEffect {
+	static class Reflect extends TeamEffect implements BarrierEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Reflect() {
@@ -142,7 +142,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class LightScreen extends TeamEffect implements BarrierEffect, StatChangingEffect {
+	static class LightScreen extends TeamEffect implements BarrierEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LightScreen() {
@@ -198,7 +198,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Tailwind extends TeamEffect implements StatChangingEffect {
+	static class Tailwind extends TeamEffect implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Tailwind() {
@@ -234,7 +234,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class StickyWeb extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+	static class StickyWeb extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 
 		StickyWeb() {
@@ -278,7 +278,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class StealthRock extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+	static class StealthRock extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 
 		StealthRock() {
@@ -323,7 +323,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class ToxicSpikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+	static class ToxicSpikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 		private int layers;
 
@@ -391,7 +391,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Spikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+	static class Spikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 		private int layers;
 
@@ -450,7 +450,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Wish extends TeamEffect {
+	static class Wish extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 		private String casterName;
 
@@ -483,7 +483,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class LuckyChant extends TeamEffect implements CritBlockerEffect {
+	static class LuckyChant extends TeamEffect implements CritBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuckyChant() {
@@ -511,7 +511,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class FutureSight extends TeamEffect {
+	static class FutureSight extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 		private ActivePokemon theSeeer;
 
@@ -553,7 +553,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class DoomDesire extends TeamEffect {
+	static class DoomDesire extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 		private ActivePokemon theSeeer;
 
@@ -595,7 +595,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class HealSwitch extends TeamEffect implements EntryEffect {
+	static class HealSwitch extends TeamEffect implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 		private String wish;
 
@@ -628,7 +628,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class DeadAlly extends TeamEffect {
+	static class DeadAlly extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 
 		DeadAlly() {
@@ -644,7 +644,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class PayDay extends TeamEffect implements EndBattleEffect {
+	static class PayDay extends TeamEffect implements EndBattleEffect {
 		private static final long serialVersionUID = 1L;
 		private int coins;
 
@@ -680,7 +680,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class GetDatCashMoneyTwice extends TeamEffect {
+	static class GetDatCashMoneyTwice extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 
 		GetDatCashMoneyTwice() {

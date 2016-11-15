@@ -80,7 +80,7 @@ public abstract class BattleEffect extends Effect {
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect, BeforeTurnEffect {
+	static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Gravity() {
@@ -133,7 +133,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	private static class WaterSport extends BattleEffect implements PowerChangeEffect {
+	static class WaterSport extends BattleEffect implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		WaterSport() {
@@ -161,7 +161,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	private static class MudSport extends BattleEffect implements PowerChangeEffect {
+	static class MudSport extends BattleEffect implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MudSport() {
@@ -189,7 +189,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	private static class WonderRoom extends BattleEffect implements StatSwitchingEffect {
+	static class WonderRoom extends BattleEffect implements StatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WonderRoom() {
@@ -228,7 +228,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	private static class TrickRoom extends BattleEffect {
+	static class TrickRoom extends BattleEffect {
 		private static final long serialVersionUID = 1L;
 
 		TrickRoom() {
@@ -260,7 +260,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	private static class MagicRoom extends BattleEffect {
+	static class MagicRoom extends BattleEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagicRoom() {
@@ -292,7 +292,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	private static class MistyTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect {
+	static class MistyTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect {
 		private static final long serialVersionUID = 1L;
 
 		MistyTerrain() {
@@ -349,7 +349,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	private static class GrassyTerrain extends BattleEffect implements EndTurnEffect, PowerChangeEffect, TerrainEffect {
+	static class GrassyTerrain extends BattleEffect implements EndTurnEffect, PowerChangeEffect, TerrainEffect {
 		private static final long serialVersionUID = 1L;
 
 		GrassyTerrain() {
@@ -404,7 +404,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	private static class ElectricTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect {
+	static class ElectricTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect {
 		private static final long serialVersionUID = 1L;
 
 		ElectricTerrain() {

@@ -84,7 +84,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class ClearSkies extends Weather {
+	static class ClearSkies extends Weather {
 		private static final long serialVersionUID = 1L;
 
 		ClearSkies() {
@@ -99,7 +99,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	private static class Raining extends Weather implements StatChangingEffect {
+	static class Raining extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Raining() {
@@ -142,7 +142,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	private static class Sunny extends Weather implements StatChangingEffect {
+	static class Sunny extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Sunny() {
@@ -185,7 +185,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	private static class Sandstorm extends Weather implements StatChangingEffect {
+	static class Sandstorm extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 		private static Type[] immunees = new Type[] {Type.ROCK, Type.GROUND, Type.STEEL};
 		private void buffet(Battle b, ActivePokemon p) {
@@ -247,7 +247,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	private static class Hailing extends Weather {
+	static class Hailing extends Weather {
 		private static final long serialVersionUID = 1L;
 		private static Type[] immunees = new Type[] {Type.ICE};
 		private void buffet(Battle b, ActivePokemon p) {
