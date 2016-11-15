@@ -21,17 +21,7 @@
   ],
   "NPCs": [],
   "items": [],
-  "miscEntities": [
-    {
-      "name": "Info_Guy_Dialogue",
-      "actions": [
-        {
-          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
-        }
-      ],
-      "triggerName": "WindValley_Event_Info_Guy_Dialogue_01"
-    }
-  ],
+  "miscEntities": [],
   "events": [],
   "wildBattles": [
     {

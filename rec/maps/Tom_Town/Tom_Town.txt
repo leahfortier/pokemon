@@ -238,6 +238,10 @@
           }
         }
       ],
+      "location": {
+        "x": 29,
+        "y": 13
+      },
       "triggerName": "Tom_Town_Event_LockedDoor_01",
       "condition": "!BadgeTrigger_0"
     }

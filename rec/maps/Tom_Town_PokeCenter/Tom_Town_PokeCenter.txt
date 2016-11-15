@@ -71,24 +71,6 @@
   "items": [],
   "miscEntities": [
     {
-      "name": "PC",
-      "actions": [
-        {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Starting up PC..."
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "ChangeView",
-            "triggerContents": "PC_VIEW"
-          }
-        }
-      ],
-      "triggerName": "Tom_Town_PokeCenter_Event_PC_01"
-    },
-    {
       "name": "Mart",
       "actions": [
         {
@@ -104,7 +86,11 @@
           }
         }
       ],
-      "triggerName": "Tom_Town_PokeCenter_Event_Mart_01"
+      "location": {
+        "x": 3,
+        "y": 7
+      },
+      "triggerName": "RSATown_PokeCenter_Event_Mart_01"
     },
     {
       "name": "Heal",
@@ -123,14 +109,14 @@
         },
         {
           "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Dun Dun Dun-Dun Dun!"
+            "triggerType": "Sound",
+            "triggerContents": "POKE_CENTER_HEAL"
           }
         },
         {
           "trigger": {
-            "triggerType": "Sound",
-            "triggerContents": "POKE_CENTER_HEAL"
+            "triggerType": "Dialogue",
+            "triggerContents": "Dun Dun Dun-Dun Dun!"
           }
         },
         {
@@ -151,7 +137,33 @@
           }
         }
       ],
-      "triggerName": "Tom_Town_PokeCenter_Event_Heal_01"
+      "location": {
+        "x": 7,
+        "y": 3
+      },
+      "triggerName": "RSATown_PokeCenter_Event_Heal_01"
+    },
+    {
+      "name": "PC_View",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Starting up PC..."
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "ChangeView",
+            "triggerContents": "PC_VIEW"
+          }
+        }
+      ],
+      "location": {
+        "x": 11,
+        "y": 1
+      },
+      "triggerName": "RSATown_PokeCenter_Event_PC_View_01"
     }
   ],
   "events": [],

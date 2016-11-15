@@ -95,6 +95,10 @@
           }
         }
       ],
+      "location": {
+        "x": 3,
+        "y": 1
+      },
       "triggerName": "PlayersHouseUp_Event_PC_01"
     }
   ],

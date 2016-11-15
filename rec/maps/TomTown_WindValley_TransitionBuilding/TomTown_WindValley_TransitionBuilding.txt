@@ -221,6 +221,10 @@
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
+      "location": {
+        "x": 8,
+        "y": 4
+      },
       "triggerName": "TomTown_WindValley_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
   ],

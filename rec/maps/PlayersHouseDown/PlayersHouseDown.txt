@@ -71,6 +71,10 @@
           }
         }
       ],
+      "location": {
+        "x": 5,
+        "y": 1
+      },
       "triggerName": "PlayersHouseDown_Event_fridge_01"
     }
   ],

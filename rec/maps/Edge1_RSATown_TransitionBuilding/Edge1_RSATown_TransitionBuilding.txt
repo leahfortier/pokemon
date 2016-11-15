@@ -54,6 +54,10 @@
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
+      "location": {
+        "x": 6,
+        "y": 2
+      },
       "triggerName": "Edge1_RSATown_TransitionBuilding_Event_Info_Guy_Dialogue_01"
     }
   ],
