@@ -136,8 +136,10 @@ public class MapMakerTriggerData {
 				switch (triggerModelType) {
 					case MAP_TRANSITION:
 						Point exit = ((MapTransitionMatcher)entity).getExitLocation();
-						BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
-						DrawUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
+						if (exit != null) {
+							BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
+							DrawUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
+						}
 						break;
 					case NPC:
 						NPCMatcher npc = (NPCMatcher) entity;
@@ -171,7 +173,6 @@ public class MapMakerTriggerData {
 		this.entities.add(placeableTrigger);
 		System.out.println("Entity placed at (" + location.x + ", " + location.y + ").");
 
-		mapMaker.clearPlaceableTrigger();
 		triggersSaved = false;
 	}
 

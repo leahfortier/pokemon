@@ -25,10 +25,12 @@ class TriggerTool extends Tool {
         super(mapMaker);
 
         selectedTrigger = null;
+
         triggerListPopup = new JPopupMenu();
         triggerListPopup.setLightWeightPopupEnabled(false);
+
         triggerOptionsPopup = new JPopupMenu();
-        triggerListPopup.setLightWeightPopupEnabled(false);
+        triggerOptionsPopup.setLightWeightPopupEnabled(false);
 
         JMenuItem editItem = new JMenuItem("Edit");
         triggerOptionsPopup.add(editItem);
