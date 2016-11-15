@@ -1,7 +1,6 @@
 package mapMaker;
 
 import map.MapMetaData.MapDataType;
-import mapMaker.data.MapMakerTriggerData;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.MoveModel.MoveModelType;
 import mapMaker.model.TileModel;

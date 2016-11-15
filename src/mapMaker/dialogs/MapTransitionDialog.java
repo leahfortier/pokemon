@@ -2,7 +2,7 @@ package mapMaker.dialogs;
 
 import map.Direction;
 import mapMaker.MapMaker;
-import mapMaker.data.MapMakerTriggerData;
+import mapMaker.MapMakerTriggerData;
 import pattern.MapDataMatcher;
 import pattern.MapTransitionMatcher;
 import util.FileIO;

@@ -1,16 +1,22 @@
 package pattern;
 
+import main.Global;
 import util.Point;
 
 public abstract class SinglePointEntityMatcher extends MapMakerEntityMatcher {
     protected Point location;
 
+    private void setLocation(Point location) {
+        this.location = Point.copy(location);
+    }
+
     public Point getLocation() {
         return Point.copy(location);
     }
 
-    public void setPoint(Point point) {
-        this.location = Point.copy(point);
+    @Override
+    public void addPoint(Point point) {
+        this.setLocation(point);
     }
 
     @Override
@@ -21,5 +27,14 @@ public abstract class SinglePointEntityMatcher extends MapMakerEntityMatcher {
     @Override
     public void addDelta(Point delta) {
         this.location.add(delta);
+    }
+
+    @Override
+    public void setLocation(MapMakerEntityMatcher oldMatcher) {
+        if (oldMatcher instanceof SinglePointEntityMatcher) {
+            this.setLocation(((SinglePointEntityMatcher) oldMatcher).location);
+        } else {
+            Global.error("Cannot convert multi point matcher to single point matcher.");
+        }
     }
 }

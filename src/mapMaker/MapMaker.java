@@ -2,9 +2,6 @@ package mapMaker;
 
 import main.Global;
 import map.MapMetaData.MapDataType;
-import mapMaker.data.MapMakerTriggerData;
-import mapMaker.data.PlaceableTrigger;
-import mapMaker.data.PlaceableTrigger.PlaceableTriggerType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
@@ -12,6 +9,7 @@ import mapMaker.tools.SelectTool;
 import mapMaker.tools.Tool;
 import mapMaker.tools.Tool.ToolType;
 import mapMaker.tools.ToolRenderer;
+import pattern.MapMakerEntityMatcher;
 import util.DrawUtils;
 import util.FileIO;
 import util.Folder;
@@ -82,7 +80,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     private EditType editType;
     private EditMapMetaData mapData;
 
-    private PlaceableTrigger placeableTrigger;
+    private MapMakerEntityMatcher placeableTrigger;
 
 	private File root;
 
@@ -596,7 +594,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.editType.getModel();
     }
 
-    public PlaceableTrigger getPlaceableTrigger() {
+    public MapMakerEntityMatcher getPlaceableTrigger() {
         return this.placeableTrigger;
     }
 
@@ -604,16 +602,12 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.placeableTrigger != null;
     }
 
-    public void setPlaceableTrigger(PlaceableTrigger trigger) {
+    public void setPlaceableTrigger(MapMakerEntityMatcher trigger) {
         this.placeableTrigger = trigger;
     }
 
     public void clearPlaceableTrigger() {
         this.placeableTrigger = null;
-    }
-
-    public boolean isPlaceableTriggerType(PlaceableTriggerType triggerType) {
-        return this.placeableTrigger != null && this.placeableTrigger.triggerType == triggerType;
     }
 
 	public void valueChanged(ListSelectionEvent event) {

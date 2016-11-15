@@ -11,8 +11,8 @@ import util.Point;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class SingleClickTool extends Tool {
-    public SingleClickTool(final MapMaker mapMaker) {
+class SingleClickTool extends Tool {
+    SingleClickTool(final MapMaker mapMaker) {
         super(mapMaker);
     }
 
@@ -59,7 +59,7 @@ public class SingleClickTool extends Tool {
             BufferedImage image;
             if (type == TriggerModelType.NPC) {
                 // TODO
-                NPCMatcher npc = (NPCMatcher) mapMaker.getPlaceableTrigger().entity;
+                NPCMatcher npc = (NPCMatcher) mapMaker.getPlaceableTrigger();
                 image = mapMaker.getTileFromSet(TileType.TRAINER, 12*npc.spriteIndex + 1 + npc.direction.ordinal());
             }
             else {

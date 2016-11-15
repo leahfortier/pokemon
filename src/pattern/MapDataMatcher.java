@@ -90,12 +90,18 @@ public class MapDataMatcher {
         return Arrays.asList(this.events);
     }
 
-    public List<SinglePointEntityMatcher> getEntities() {
-        List<SinglePointEntityMatcher> entities = new ArrayList<>();
+    public List<WildBattleMatcher> getWildBattles() {
+        return Arrays.asList(this.wildBattles);
+    }
+
+    public List<MapMakerEntityMatcher> getAllEntities() {
+        List<MapMakerEntityMatcher> entities = new ArrayList<>();
         entities.addAll(getNPCs());
         entities.addAll(getItems());
         entities.addAll(getMapTransitions());
         entities.addAll(getMiscEntities());
+        entities.addAll(getEvents());
+        entities.addAll(getWildBattles());
 
         return entities;
     }

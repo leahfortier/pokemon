@@ -1,5 +1,6 @@
 package pattern;
 
+import main.Global;
 import util.Point;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public abstract class MultiPointEntityMatcher extends MapMakerEntityMatcher {
         return new ArrayList<>(this.location);
     }
 
+    @Override
     public void addPoint(Point point) {
         if (this.location == null) {
             this.location = new ArrayList<>();
@@ -33,5 +35,14 @@ public abstract class MultiPointEntityMatcher extends MapMakerEntityMatcher {
     @Override
     public void addDelta(Point delta) {
         this.location.forEach(point -> point.add(delta));
+    }
+
+    @Override
+    public void setLocation(MapMakerEntityMatcher oldMatcher) {
+        if (oldMatcher instanceof MultiPointEntityMatcher) {
+            this.location = ((MultiPointEntityMatcher) oldMatcher).getLocation();
+        } else {
+            Global.error("Cannot convert single point matcher to multi point matcher.");
+        }
     }
 }
