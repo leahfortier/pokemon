@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import main.Game;
-import main.Game.ViewMode;
 import main.Type;
 import pokemon.PC;
 import pokemon.PokemonInfo;
@@ -253,7 +252,7 @@ public class PokedexView extends View {
 	}
 
 	public ViewMode getViewModel() {
-		return Game.ViewMode.POKEDEX_VIEW;
+		return ViewMode.POKEDEX_VIEW;
 	}
 
 	public void movedToFront() {

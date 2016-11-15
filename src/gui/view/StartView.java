@@ -3,7 +3,6 @@ package gui.view;
 import gui.GameData;
 import gui.TileSet;
 import main.Game;
-import main.Game.ViewMode;
 import main.Global;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;

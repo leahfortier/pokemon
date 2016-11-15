@@ -5,7 +5,6 @@ import gui.Button;
 import gui.GameData;
 import gui.TileSet;
 import main.Game;
-import main.Game.ViewMode;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;

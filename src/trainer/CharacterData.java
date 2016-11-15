@@ -5,7 +5,7 @@ import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import item.Item;
 import item.use.BallItem;
 import main.Game;
-import main.Game.ViewMode;
+import gui.view.ViewMode;
 import main.Global;
 import map.Direction;
 import map.triggers.Trigger;

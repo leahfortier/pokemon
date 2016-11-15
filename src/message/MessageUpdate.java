@@ -6,7 +6,7 @@ import battle.effect.status.StatusCondition;
 import gui.view.BattleView;
 import gui.view.BattleView.VisualState;
 import main.Game;
-import main.Game.ViewMode;
+import gui.view.ViewMode;
 import main.Global;
 import main.Type;
 import map.entity.PlayerEntity;

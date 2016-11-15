@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import main.Game;
-import main.Game.ViewMode;
 import main.Global;
 import main.Type;
 import namesies.ItemNamesies;

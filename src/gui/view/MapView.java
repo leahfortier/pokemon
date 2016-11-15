@@ -5,7 +5,6 @@ import gui.Button;
 import gui.GameData;
 import gui.TileSet;
 import main.Game;
-import main.Game.ViewMode;
 import main.Global;
 import map.AreaData;
 import map.AreaData.WeatherState;
@@ -99,7 +98,7 @@ public class MapView extends View {
 	private int[] rainHeight;
 	private int lightningFrame;
 	
-	public MapView() {
+	MapView() {
 		currentMapName = StringUtils.empty();
 		rainHeight = new int[Global.GAME_SIZE.width/2];
 		state = VisualState.MAP;
@@ -526,7 +525,8 @@ public class MapView extends View {
 						clicked = i;
 					}
 				}
-				
+
+				// TODO: Handle this better
 				switch (clicked) {
 					case -1: // no click
 						break;
@@ -537,13 +537,13 @@ public class MapView extends View {
 						Game.setViewMode(ViewMode.PARTY_VIEW);
 						break;
 					case 2: // bag
-						Game.setViewMode(Game.ViewMode.BAG_VIEW);
+						Game.setViewMode(ViewMode.BAG_VIEW);
 						break;
 					case 3: // player
-						Game.setViewMode(Game.ViewMode.TRAINER_CARD_VIEW);
+						Game.setViewMode(ViewMode.TRAINER_CARD_VIEW);
 						break;
 					case 4: // options
-						Game.setViewMode(Game.ViewMode.OPTIONS_VIEW);
+						Game.setViewMode(ViewMode.OPTIONS_VIEW);
 						break;
 					case 5: // save
 						// TODO: Question user if they would like to save first.
@@ -616,11 +616,9 @@ public class MapView extends View {
 			}
 		}
 
-		for (Entity e: entityList) {
-			if (e != null && (state == VisualState.MAP || e != playerEntity)) {
-				e.update(dt, entities, currentMap, input, this);
-			}
-		}
+		entityList.stream()
+				.filter(entity -> entity != null && (state == VisualState.MAP || entity != playerEntity))
+				.forEach(entity -> entity.update(dt, entities, currentMap, input, this));
 		
 		if (state == VisualState.MAP) {
 			playerEntity.triggerCheck(currentMap);
@@ -666,8 +664,8 @@ public class MapView extends View {
 		}
 	}
 
-	public Game.ViewMode getViewModel() {
-		return Game.ViewMode.MAP_VIEW;
+	public ViewMode getViewModel() {
+		return ViewMode.MAP_VIEW;
 	}
 	
 	public void setBattle(Battle battle, boolean seenWild) {
@@ -706,11 +704,6 @@ public class MapView extends View {
 			battleImageSlideRight = data.getBattleTiles().getTile(0x00100001);
 			battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
 		}
-	}
-
-	public void addEntity(Entity e) {
-		entities[e.getX()][e.getY()] = e;
-		entityList.add(e);
 	}
 	
 	public void removeEntity(Entity e) {

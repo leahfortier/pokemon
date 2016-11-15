@@ -1,7 +1,6 @@
 package gui.view;
 
 import main.Game;
-import main.Game.ViewMode;
 import main.Global;
 import util.DrawUtils;
 import util.InputControl;

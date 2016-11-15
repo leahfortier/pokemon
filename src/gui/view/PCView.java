@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import main.Game;
-import main.Game.ViewMode;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.PC;
@@ -376,7 +375,7 @@ public class PCView extends View {
 	}
 
 	public ViewMode getViewModel() {
-		return Game.ViewMode.PC_VIEW;
+		return ViewMode.PC_VIEW;
 	}
 
 	public void movedToFront() {

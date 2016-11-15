@@ -1,7 +1,6 @@
 package gui.view;
 
 import gui.Button;
-import main.Game.ViewMode;
 import util.InputControl;
 
 import java.awt.Graphics;

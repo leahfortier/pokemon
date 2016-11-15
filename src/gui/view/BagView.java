@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 import main.Game;
-import main.Game.ViewMode;
 import main.Type;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;

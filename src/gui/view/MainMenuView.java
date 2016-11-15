@@ -8,7 +8,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import main.Game;
-import main.Game.ViewMode;
 import main.Global;
 import sound.SoundTitle;
 import util.DrawUtils;

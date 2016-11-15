@@ -11,7 +11,6 @@ import item.BattleBagCategory;
 import item.Item;
 import item.use.PokemonUseItem;
 import main.Game;
-import main.Game.ViewMode;
 import main.Global;
 import main.Type;
 import map.TerrainType;
