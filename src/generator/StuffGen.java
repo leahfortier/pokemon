@@ -19,17 +19,23 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StuffGen {
-	
-	public StuffGen() {
+
+	public static void main(String[] args) {
+		new StuffGen();
+
+//		pokemonInfoStuff();
+//		compareMoves();
+//		DrawMetrics.FindMetrics.writeFontMetrics();
+
+		System.out.println("GEN GEN GEN");
+	}
+
+	private StuffGen() {
 		new PokeGen();
 		new NamesiesGen(PokemonNamesies.class);
 		baseEvolutionGenerator();
 		
 		new InterfaceGen();
-		
-//		pokemonInfoStuff();
-//		compareMoves();
-//		DrawMetrics.FindMetrics.writeFontMetrics();
 	}
 
 	// Opens the original file and appends the beginning until the key to generate

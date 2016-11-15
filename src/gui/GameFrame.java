@@ -4,7 +4,6 @@ import battle.Attack;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
-import generator.StuffGen;
 import item.Item;
 import main.Game;
 import main.Global;
@@ -25,28 +24,11 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 
 public class GameFrame {
-//	public static final boolean GENERATE_STUFF = true;
-	public static final boolean GENERATE_STUFF = false;
 	private static final boolean DEV_MODE = true;
 
 	private static JFrame frame;
 
 	public static void main(String[] args) {
-		if (GENERATE_STUFF) {
-			new StuffGen();
-
-			// Make sure these don't throw any errors
-			loadAllTheThings();
-
-			// Load all maps and test if all triggers and NPC data is correct
-			Game.create();
-			Game.getData().testMaps();
-
-			System.out.println("GEN GEN GEN");
-			
-			return;
-		}
-
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
