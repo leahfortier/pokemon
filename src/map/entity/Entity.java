@@ -2,23 +2,35 @@ package map.entity;
 
 import gui.view.MapView;
 import main.Global;
+import map.Condition;
 import map.Direction;
 import map.MapData;
 import map.MapData.WalkType;
 import map.triggers.TriggerType;
 import util.InputControl;
+import util.Point;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
+
+	private String entityName;
+	private Condition condition;
+
 	protected int charX;
 	protected int charY;
 
-	public Entity(int x, int y) {
+	public Entity(Point location, String triggerName, String condition) {
+		this(location.x, location.y, triggerName, condition);
+	}
+
+	public Entity(int x, int y, String entityName, String condition) {
 		charX = x;
 		charY = y;
+
+		this.entityName = entityName;
+		this.condition = new Condition(condition);
 	}
 	
 	public int getX() {
@@ -27,6 +39,10 @@ public abstract class Entity {
 	
 	public int getY() {
 		return this.charY;
+	}
+
+	public boolean isPresent() {
+		return this.condition.isTrue();
 	}
 
 	// TODO: DrawUtils
@@ -87,7 +103,13 @@ public abstract class Entity {
 	public abstract void addData();
 	public abstract void reset();
 
-	public abstract String getTriggerSuffix();
+	protected String getEntityName() {
+		return this.entityName;
+	}
+
+	public String getTriggerSuffix() {
+		return this.getEntityName();
+	}
 
 	public String getTriggerName() {
 		return TriggerType.GROUP.getTriggerNameFromSuffix(this.getTriggerSuffix());

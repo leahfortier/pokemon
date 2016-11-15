@@ -7,9 +7,9 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import util.InputControl;
+import util.Point;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 public abstract class MovableEntity extends Entity {
@@ -19,8 +19,8 @@ public abstract class MovableEntity extends Entity {
 	
 	protected int spriteIndex;
 	
-	public MovableEntity(int x, int y, int spriteIndex, Direction startDirection) {
-		super(x, y);
+	public MovableEntity(Point location, String triggerName, String condition, int spriteIndex, Direction startDirection) {
+		super(location, triggerName, condition);
 		
 		this.transitionDirection = startDirection;
 		

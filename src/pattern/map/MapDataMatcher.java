@@ -3,7 +3,7 @@ package pattern.map;
 import com.google.gson.JsonObject;
 import main.Global;
 import map.AreaData;
-import pattern.generic.LocationEntityMatcher;
+import pattern.generic.LocationTriggerMatcher;
 import util.FileIO;
 import util.JsonUtils;
 
@@ -23,7 +23,7 @@ public class MapDataMatcher {
     private WildBattleMatcher[] wildBattles = new WildBattleMatcher[0];
 
     public MapDataMatcher(Set<AreaMatcher> areaData,
-                          Set<LocationEntityMatcher> entities) {
+                          Set<LocationTriggerMatcher> entities) {
         List<MapTransitionMatcher> mapTransitions = new ArrayList<>();
         List<NPCMatcher> npcs = new ArrayList<>();
         List<ItemMatcher> items = new ArrayList<>();
@@ -31,7 +31,7 @@ public class MapDataMatcher {
         List<EventMatcher> events = new ArrayList<>();
         List<WildBattleMatcher> wildBattles = new ArrayList<>();
 
-        for (LocationEntityMatcher entity : entities) {
+        for (LocationTriggerMatcher entity : entities) {
             switch (entity.getTriggerModelType()) {
                 case MAP_TRANSITION:
                     mapTransitions.add((MapTransitionMatcher) entity);
@@ -95,8 +95,8 @@ public class MapDataMatcher {
         return Arrays.asList(this.wildBattles);
     }
 
-    public List<LocationEntityMatcher> getAllEntities() {
-        List<LocationEntityMatcher> entities = new ArrayList<>();
+    public List<LocationTriggerMatcher> getAllEntities() {
+        List<LocationTriggerMatcher> entities = new ArrayList<>();
         entities.addAll(getNPCs());
         entities.addAll(getItems());
         entities.addAll(getMapTransitions());

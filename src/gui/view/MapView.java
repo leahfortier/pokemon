@@ -15,7 +15,7 @@ import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.MovableEntity;
 import map.entity.PlayerEntity;
-import map.entity.npc.NPCEntity;
+import map.entity.NPCEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;

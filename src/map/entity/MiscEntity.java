@@ -6,19 +6,18 @@ import main.Game;
 import map.Direction;
 import map.MapData;
 import util.InputControl;
+import util.Point;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class TriggerEntity extends Entity {
-	private final String name;
+public class MiscEntity extends Entity {
 	private final List<EntityAction> actions;
 
 	private boolean dataCreated;
 
-	public TriggerEntity(String name, int x, int y, List<EntityAction> actions) {
-		super(x, y);
-		this.name = name;
+	public MiscEntity(String name, Point location, String condition, List<EntityAction> actions) {
+		super(location, name, condition);
 		this.actions = actions;
 		this.dataCreated = false;
 	}
@@ -29,10 +28,6 @@ public class TriggerEntity extends Entity {
 		return Game.getData().getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
 	}
 
-	public String getTriggerSuffix() {
-		return this.name;
-	}
-
 	public void getAttention(Direction direction) {}
 	
 	public void addData() {
@@ -40,7 +35,7 @@ public class TriggerEntity extends Entity {
 			return;
 		}
 
-		EntityAction.addActionGroupTrigger(this.name, this.getTriggerSuffix(), this.actions);
+		EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(), this.actions);
 		dataCreated = true;
 	}
 

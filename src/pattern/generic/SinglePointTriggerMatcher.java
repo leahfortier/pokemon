@@ -3,7 +3,7 @@ package pattern.generic;
 import main.Global;
 import util.Point;
 
-public abstract class SinglePointEntityMatcher extends LocationEntityMatcher {
+public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     protected Point location;
 
     private void setLocation(Point location) {
@@ -30,9 +30,9 @@ public abstract class SinglePointEntityMatcher extends LocationEntityMatcher {
     }
 
     @Override
-    public void setLocation(LocationEntityMatcher oldMatcher) {
-        if (oldMatcher instanceof SinglePointEntityMatcher) {
-            this.setLocation(((SinglePointEntityMatcher) oldMatcher).location);
+    public void setLocation(LocationTriggerMatcher oldMatcher) {
+        if (oldMatcher instanceof SinglePointTriggerMatcher) {
+            this.setLocation(((SinglePointTriggerMatcher) oldMatcher).location);
         } else {
             Global.error("Cannot convert multi point matcher to single point matcher.");
         }

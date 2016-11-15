@@ -5,16 +5,16 @@ import main.Game;
 import main.Global;
 import map.entity.Entity;
 import map.entity.EntityAction;
-import map.entity.EntityData;
-import map.entity.ItemEntityData;
-import map.entity.TriggerEntityData;
-import map.entity.npc.NPCEntityData;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
 import pattern.map.EventMatcher;
+import pattern.map.ItemMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
+import pattern.map.MiscEntityMatcher;
+import pattern.map.NPCMatcher;
+import pattern.map.WildBattleMatcher;
 import trainer.CharacterData;
 import util.FileIO;
 import util.JsonUtils;
@@ -45,7 +45,7 @@ public class MapData {
 	private final int width;
 	private final int height;
 	
-	private final List<EntityData> entities;
+	private final List<Entity> entities;
 	
 	public MapData(File file) {
 		name = file.getName();
@@ -84,17 +84,17 @@ public class MapData {
 
 		entities.addAll(mapDataMatcher.getNPCs()
 				.stream()
-				.map(NPCEntityData::new)
+				.map(NPCMatcher::createEntity)
 				.collect(Collectors.toList()));
 
 		entities.addAll(mapDataMatcher.getItems()
 				.stream()
-				.map(ItemEntityData::new)
+				.map(ItemMatcher::createEntity)
 				.collect(Collectors.toList()));
 
 		entities.addAll(mapDataMatcher.getMiscEntities()
 				.stream()
-				.map(TriggerEntityData::new)
+				.map(MiscEntityMatcher::createEntity)
 				.collect(Collectors.toList()));
 
 		for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
@@ -114,6 +114,13 @@ public class MapData {
 			TriggerData triggerData = new TriggerData(matcher);
 			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
 
+			for (Point point : matcher.getLocation()) {
+				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
+			}
+		}
+
+		for (WildBattleMatcher matcher : mapDataMatcher.getWildBattles()) {
+			Trigger trigger = TriggerType.WILD_BATTLE.createTrigger(JsonUtils.getJson(matcher), null);
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
 			}
@@ -232,9 +239,8 @@ public class MapData {
 	public Entity[][] populateEntities() {
 		Entity[][] res = new Entity[width][height];
 		entities.stream()
-				.filter(data -> data.isEntityPresent() || GameFrame.GENERATE_STUFF)
-				.forEach(data -> {
-					Entity entity = data.getEntity();
+				.filter(entity -> entity.isPresent() || GameFrame.GENERATE_STUFF)
+				.forEach(entity -> {
 					entity.reset();
 					entity.addData();
 					res[entity.getX()][entity.getY()] = entity;

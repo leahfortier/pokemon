@@ -1,16 +1,14 @@
-package map.entity.npc;
+package map.entity;
 
 import gui.view.MapView;
 import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
-import map.entity.Entity;
-import map.entity.EntityAction;
-import map.entity.MovableEntity;
 import map.entity.EntityAction.BattleAction;
 import trainer.CharacterData;
 import util.InputControl;
+import util.Point;
 import util.StringUtils;
 
 import java.util.List;
@@ -20,53 +18,40 @@ import java.util.Map.Entry;
 public class NPCEntity extends MovableEntity {
 	public static final int NPC_SIGHT_DISTANCE = 5;
 
-	private String name;
-	private String path;
+	private final String path;
+	private final Point defaultLocation;
+	private final Direction defaultDirection;
+
+	private final Map<String, NPCInteraction> interactions;
+	private final String startKey;
+
 	private String tempPath;
 	private int pathIndex;
 	private int waitTime;
 	private boolean hasAttention;
-
 	private boolean walkingToPlayer;
-
-	private Map<String, NPCInteraction> interactions;
-	private String startKey;
-
-	private int defaultX;
-	private int defaultY;
-	private Direction defaultDirection;
 
 	private boolean dataCreated;
 
-	NPCEntity(
+	public NPCEntity(
 			String name,
-			int x,
-			int y,
+			Point location,
+			String condition,
 			String path,
 			Direction direction,
-			int index,
+			int spriteIndex,
 			Map<String, NPCInteraction> interactions,
 			String startKey) {
-		super(x, y, index, direction);
-		
-		this.name = name;
+		super(location, name, condition, spriteIndex, direction);
+
 		this.path = path;
-		
-		tempPath = null;
-		waitTime = 0;
-		hasAttention = false;
-		spriteIndex = index;
+		this.spriteIndex = spriteIndex;
 
-		this.walkingToPlayer = false;
-
-		defaultX = x;
-		defaultY = y;
-		defaultDirection = direction;
+		this.defaultLocation =  location;
+		this.defaultDirection = direction;
 
 		this.interactions = interactions;
 		this.startKey = startKey;
-
-//		dataCreated = firstDialogue.length == 0;
 	}
 
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
@@ -140,8 +125,8 @@ public class NPCEntity extends MovableEntity {
 
 	private String getCurrentInteractionKey() {
 		CharacterData player = Game.getPlayer();
-		if (player.hasNpcInteraction(this.name)) {
-			return player.getNpcInteractionName(this.name);
+		if (player.hasNpcInteraction(this.getEntityName())) {
+			return player.getNpcInteractionName(this.getEntityName());
 		}
 
 		return this.startKey;
@@ -152,7 +137,7 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	private String getTriggerSuffix(final String interactionName) {
-		return this.name + "_" + interactionName;
+		return super.getTriggerSuffix() + "_" + interactionName;
 	}
 
 	public int getTransitionTime() {
@@ -190,8 +175,8 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	public void reset() {
-		charX = defaultX;
-		charY = defaultY;
+		charX = defaultLocation.x;
+		charY = defaultLocation.y;
 		waitTime = 0;
 		pathIndex = 0;
 		hasAttention = false;
@@ -209,7 +194,7 @@ public class NPCEntity extends MovableEntity {
 			final String interactionName = interaction.getKey();
 			final List<EntityAction> actions = interaction.getValue().getActions();
 
-			EntityAction.addActionGroupTrigger(this.name, this.getTriggerSuffix(interactionName), actions);
+			EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(interactionName), actions);
 		}
 		
 		dataCreated = true;

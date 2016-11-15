@@ -1,10 +1,13 @@
 package pattern.map;
 
 import map.Direction;
-import map.entity.npc.NPCInteraction;
+import map.entity.Entity;
+import map.entity.NPCEntity;
+import map.entity.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.NPCInteractionMatcher;
-import pattern.generic.SinglePointEntityMatcher;
+import pattern.generic.EntityMatcher;
+import pattern.generic.SinglePointTriggerMatcher;
 import util.StringUtils;
 
 import java.util.Arrays;
@@ -13,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NPCMatcher extends SinglePointEntityMatcher {
+public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatcher {
     private static final String NO_INTERACTIONS_KEY = "no_interactions";
 
     private String name;
@@ -90,4 +93,17 @@ public class NPCMatcher extends SinglePointEntityMatcher {
         return this.name;
     }
 
+    @Override
+    public Entity createEntity() {
+        return new NPCEntity(
+                this.getTriggerName(),
+                this.getLocation(),
+                this.getCondition(),
+                this.getPath(),
+                this.getDirection(),
+                this.getSpriteIndex(),
+                this.getInteractionMap(),
+                this.getStartKey()
+        );
+    }
 }

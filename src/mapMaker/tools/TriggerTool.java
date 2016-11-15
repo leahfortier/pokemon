@@ -3,7 +3,7 @@ package mapMaker.tools;
 import mapMaker.MapMaker;
 import mapMaker.EditType;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.generic.LocationEntityMatcher;
+import pattern.generic.LocationTriggerMatcher;
 import util.DrawUtils;
 import util.Point;
 
@@ -18,8 +18,8 @@ class TriggerTool extends Tool {
     private JPopupMenu triggerListPopup;
     private JPopupMenu triggerOptionsPopup;
 
-    private List<LocationEntityMatcher> triggers;
-    private LocationEntityMatcher selectedTrigger;
+    private List<LocationTriggerMatcher> triggers;
+    private LocationTriggerMatcher selectedTrigger;
 
     TriggerTool(MapMaker mapMaker) {
         super(mapMaker);
@@ -70,7 +70,7 @@ class TriggerTool extends Tool {
         triggers = mapMaker.getTriggerData().getEntitiesAtLocation(location);
         triggerListPopup.removeAll();
 
-        for (LocationEntityMatcher trigger : triggers) {
+        for (LocationTriggerMatcher trigger : triggers) {
             JMenuItem menuItem = new JMenuItem(trigger.getBasicName() + " (" + trigger.getTriggerModelType() + ")");
             triggerListPopup.add(menuItem);
             menuItem.addActionListener(event -> {
@@ -78,7 +78,7 @@ class TriggerTool extends Tool {
                 // TODO: If someone reads this, please suggest a better way to find the index of the selected item...
                 for (Component component : components) {
                     if (((JMenuItem) component).getText().equals(event.getActionCommand())) {
-                        for (LocationEntityMatcher trigger1 : triggers) {
+                        for (LocationTriggerMatcher trigger1 : triggers) {
                             if (event.getActionCommand().equals(trigger1.getBasicName() + " (" + trigger1.getTriggerModelType() + ")")) {
                                 //System.out.println("Clicked " + e.getActionCommand());
                                 selectedTrigger = trigger1;

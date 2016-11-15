@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class MultiPointEntityMatcher extends LocationEntityMatcher {
+public abstract class MultiPointTriggerMatcher extends LocationTriggerMatcher {
     public List<Point> location;
 
     public List<Point> getLocation() {
@@ -38,9 +38,9 @@ public abstract class MultiPointEntityMatcher extends LocationEntityMatcher {
     }
 
     @Override
-    public void setLocation(LocationEntityMatcher oldMatcher) {
-        if (oldMatcher instanceof MultiPointEntityMatcher) {
-            this.location = ((MultiPointEntityMatcher) oldMatcher).getLocation();
+    public void setLocation(LocationTriggerMatcher oldMatcher) {
+        if (oldMatcher instanceof MultiPointTriggerMatcher) {
+            this.location = ((MultiPointTriggerMatcher) oldMatcher).getLocation();
         } else {
             Global.error("Cannot convert single point matcher to multi point matcher.");
         }

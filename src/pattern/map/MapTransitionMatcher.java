@@ -2,10 +2,10 @@ package pattern.map;
 
 import map.Direction;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.generic.SinglePointEntityMatcher;
+import pattern.generic.SinglePointTriggerMatcher;
 import util.Point;
 
-public class MapTransitionMatcher extends SinglePointEntityMatcher {
+public class MapTransitionMatcher extends SinglePointTriggerMatcher {
     private String exitName;
     private String nextMap;
     private String nextEntrance;

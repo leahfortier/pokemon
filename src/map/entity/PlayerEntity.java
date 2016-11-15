@@ -11,6 +11,7 @@ import map.triggers.TriggerType;
 import trainer.CharacterData;
 import util.InputControl;
 import util.InputControl.Control;
+import util.Point;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -25,7 +26,8 @@ public class PlayerEntity extends MovableEntity {
 	private boolean justCreated;
 
 	public PlayerEntity(CharacterData data) {
-		super(data.locationX, data.locationY, 0, data.direction);
+		// TODO: point shit
+		super(new Point(data.locationX, data.locationY), null, null, 0, data.direction);
 
 		justMoved = true;
 		stalled = false;

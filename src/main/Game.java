@@ -118,8 +118,10 @@ public class Game {
 	public static void newSave(int index) {
 		game.characterData = new CharacterData();
 		
-		String startingMap = "PlayersHouseUp";
-		String startingMapEntrance = "GameStartLocation";
+//		String startingMap = "PlayersHouseUp";
+//		String startingMapEntrance = "GameStartLocation";
+		String startingMap = "DFS_Town";
+		String startingMapEntrance = "WestTransitionBuilding";
 		game.characterData.setMap(startingMap, startingMapEntrance);
 		game.data.getMap(startingMap).setCharacterToEntrance(startingMapEntrance);
 

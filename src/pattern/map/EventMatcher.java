@@ -2,14 +2,14 @@ package pattern.map;
 
 import map.entity.EntityAction;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.generic.MultiPointEntityMatcher;
+import pattern.generic.MultiPointTriggerMatcher;
 import pattern.action.ActionMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EventMatcher extends MultiPointEntityMatcher {
+public class EventMatcher extends MultiPointTriggerMatcher {
     private String name;
     private ActionMatcher[] actions;
 

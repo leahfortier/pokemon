@@ -6,12 +6,12 @@ import map.WildEncounter;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.MatchConstants;
 import pattern.MatchConstants.MatchType;
-import pattern.generic.MultiPointEntityMatcher;
+import pattern.generic.MultiPointTriggerMatcher;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WildBattleMatcher extends MultiPointEntityMatcher {
+public class WildBattleMatcher extends MultiPointTriggerMatcher {
     private static final Pattern wildEncounterPattern = Pattern.compile(
             MatchConstants.group(MatchType.POKEMON_NAME) + " " +
                     MatchConstants.group(MatchType.INTEGER) + "-" + MatchConstants.group(MatchType.INTEGER) + " " +
