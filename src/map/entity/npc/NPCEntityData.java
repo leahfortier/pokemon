@@ -3,7 +3,7 @@ package map.entity.npc;
 import map.Direction;
 import map.entity.Entity;
 import map.entity.EntityData;
-import pattern.NPCMatcher;
+import pattern.map.NPCMatcher;
 import util.Point;
 
 import java.util.Map;

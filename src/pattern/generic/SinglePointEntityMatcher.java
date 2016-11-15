@@ -1,9 +1,9 @@
-package pattern;
+package pattern.generic;
 
 import main.Global;
 import util.Point;
 
-public abstract class SinglePointEntityMatcher extends MapMakerEntityMatcher {
+public abstract class SinglePointEntityMatcher extends LocationEntityMatcher {
     protected Point location;
 
     private void setLocation(Point location) {
@@ -30,7 +30,7 @@ public abstract class SinglePointEntityMatcher extends MapMakerEntityMatcher {
     }
 
     @Override
-    public void setLocation(MapMakerEntityMatcher oldMatcher) {
+    public void setLocation(LocationEntityMatcher oldMatcher) {
         if (oldMatcher instanceof SinglePointEntityMatcher) {
             this.setLocation(((SinglePointEntityMatcher) oldMatcher).location);
         } else {

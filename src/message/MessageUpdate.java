@@ -10,7 +10,7 @@ import main.Game.ViewMode;
 import main.Global;
 import main.Type;
 import map.entity.PlayerEntity;
-import pattern.ActionMatcher.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;

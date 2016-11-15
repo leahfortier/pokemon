@@ -20,7 +20,7 @@ import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import pattern.ActionMatcher.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import sound.SoundTitle;
 import trainer.CharacterData;

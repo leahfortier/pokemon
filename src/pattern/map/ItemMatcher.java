@@ -1,7 +1,8 @@
-package pattern;
+package pattern.map;
 
 import mapMaker.model.TriggerModel.TriggerModelType;
 import namesies.ItemNamesies;
+import pattern.generic.SinglePointEntityMatcher;
 
 public class ItemMatcher extends SinglePointEntityMatcher {
     private String item;

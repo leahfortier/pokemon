@@ -1,7 +1,8 @@
-package pattern;
+package pattern.map;
 
 import map.Direction;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.generic.SinglePointEntityMatcher;
 import util.Point;
 
 public class MapTransitionMatcher extends SinglePointEntityMatcher {

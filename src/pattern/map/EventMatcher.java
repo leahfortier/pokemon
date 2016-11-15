@@ -1,7 +1,9 @@
-package pattern;
+package pattern.map;
 
 import map.entity.EntityAction;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.generic.MultiPointEntityMatcher;
+import pattern.action.ActionMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;

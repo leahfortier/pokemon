@@ -15,7 +15,7 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import namesies.EffectNamesies;
 import namesies.ItemNamesies;
-import pattern.ActionMatcher.UpdateMatcher;
+import pattern.action.UpdateMatcher;
 import pattern.GroupTriggerMatcher;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;

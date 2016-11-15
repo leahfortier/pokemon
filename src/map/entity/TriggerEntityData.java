@@ -1,7 +1,6 @@
 package map.entity;
 
-import pattern.MiscEntityMatcher;
-import util.JsonUtils;
+import pattern.map.MiscEntityMatcher;
 import util.Point;
 
 import java.util.List;

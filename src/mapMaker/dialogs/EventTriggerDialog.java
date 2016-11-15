@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import mapMaker.dialogs.action.ActionListPanel;
-import pattern.EventMatcher;
+import pattern.map.EventMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;

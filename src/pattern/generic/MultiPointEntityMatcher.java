@@ -1,4 +1,4 @@
-package pattern;
+package pattern.generic;
 
 import main.Global;
 import util.Point;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class MultiPointEntityMatcher extends MapMakerEntityMatcher {
+public abstract class MultiPointEntityMatcher extends LocationEntityMatcher {
     public List<Point> location;
 
     public List<Point> getLocation() {
@@ -38,7 +38,7 @@ public abstract class MultiPointEntityMatcher extends MapMakerEntityMatcher {
     }
 
     @Override
-    public void setLocation(MapMakerEntityMatcher oldMatcher) {
+    public void setLocation(LocationEntityMatcher oldMatcher) {
         if (oldMatcher instanceof MultiPointEntityMatcher) {
             this.location = ((MultiPointEntityMatcher) oldMatcher).getLocation();
         } else {

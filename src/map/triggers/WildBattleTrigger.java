@@ -8,7 +8,7 @@ import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
 import namesies.PokemonNamesies;
-import pattern.WildBattleMatcher;
+import pattern.map.WildBattleMatcher;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;

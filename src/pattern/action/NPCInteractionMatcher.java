@@ -1,4 +1,4 @@
-package pattern;
+package pattern.action;
 
 import map.entity.EntityAction;
 import util.StringUtils;

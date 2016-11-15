@@ -9,7 +9,7 @@ import mapMaker.tools.SelectTool;
 import mapMaker.tools.Tool;
 import mapMaker.tools.Tool.ToolType;
 import mapMaker.tools.ToolRenderer;
-import pattern.MapMakerEntityMatcher;
+import pattern.generic.LocationEntityMatcher;
 import util.DrawUtils;
 import util.FileIO;
 import util.Folder;
@@ -80,7 +80,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     private EditType editType;
     private EditMapMetaData mapData;
 
-    private MapMakerEntityMatcher placeableTrigger;
+    private LocationEntityMatcher placeableTrigger;
 
 	private File root;
 
@@ -594,7 +594,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.editType.getModel();
     }
 
-    public MapMakerEntityMatcher getPlaceableTrigger() {
+    public LocationEntityMatcher getPlaceableTrigger() {
         return this.placeableTrigger;
     }
 
@@ -602,7 +602,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.placeableTrigger != null;
     }
 
-    public void setPlaceableTrigger(MapMakerEntityMatcher trigger) {
+    public void setPlaceableTrigger(LocationEntityMatcher trigger) {
         this.placeableTrigger = trigger;
     }
 

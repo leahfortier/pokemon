@@ -2,7 +2,7 @@ package mapMaker.dialogs;
 
 import map.EncounterRate;
 import map.WildEncounter;
-import pattern.WildBattleMatcher;
+import pattern.map.WildBattleMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;

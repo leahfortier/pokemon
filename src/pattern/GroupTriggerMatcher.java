@@ -1,5 +1,7 @@
 package pattern;
 
+import pattern.generic.EntityMatcher;
+
 public class GroupTriggerMatcher extends EntityMatcher {
     public String[] triggers;
 

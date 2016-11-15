@@ -2,7 +2,7 @@ package map.triggers;
 
 
 import map.entity.EntityAction;
-import pattern.EventMatcher;
+import pattern.map.EventMatcher;
 
 import java.util.List;
 

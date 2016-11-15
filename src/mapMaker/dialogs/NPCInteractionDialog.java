@@ -1,8 +1,8 @@
 package mapMaker.dialogs;
 
 import mapMaker.dialogs.action.ActionListPanel;
-import pattern.ActionMatcher;
-import pattern.NPCInteractionMatcher;
+import pattern.action.ActionMatcher;
+import pattern.action.NPCInteractionMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;

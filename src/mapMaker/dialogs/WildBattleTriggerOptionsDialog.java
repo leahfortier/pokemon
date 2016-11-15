@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import main.Global;
-import pattern.WildBattleMatcher;
+import pattern.map.WildBattleMatcher;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;

@@ -1,7 +1,7 @@
 package map.entity;
 
 import namesies.ItemNamesies;
-import pattern.ItemMatcher;
+import pattern.map.ItemMatcher;
 import util.Point;
 
 // TODO: This whole class can be deleted and make sure the getEntity method is just moved to the ItemMatcher class

@@ -3,8 +3,8 @@ package mapMaker.dialogs;
 import map.Direction;
 import mapMaker.MapMaker;
 import mapMaker.MapMakerTriggerData;
-import pattern.MapDataMatcher;
-import pattern.MapTransitionMatcher;
+import pattern.map.MapDataMatcher;
+import pattern.map.MapTransitionMatcher;
 import util.FileIO;
 
 import javax.swing.GroupLayout;

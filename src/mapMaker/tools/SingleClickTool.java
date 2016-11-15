@@ -4,7 +4,7 @@ import mapMaker.MapMaker;
 import mapMaker.EditType;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.NPCMatcher;
+import pattern.map.NPCMatcher;
 import util.DrawUtils;
 import util.Point;
 

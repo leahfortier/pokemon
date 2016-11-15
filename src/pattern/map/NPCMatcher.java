@@ -1,8 +1,10 @@
-package pattern;
+package pattern.map;
 
 import map.Direction;
 import map.entity.npc.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.action.NPCInteractionMatcher;
+import pattern.generic.SinglePointEntityMatcher;
 import util.StringUtils;
 
 import java.util.Arrays;

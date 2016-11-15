@@ -1,6 +1,6 @@
 package mapMaker.dialogs.action;
 
-import pattern.ActionMatcher;
+import pattern.action.ActionMatcher;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;

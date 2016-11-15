@@ -1,4 +1,4 @@
-package pattern;
+package pattern.generic;
 
 import util.StringUtils;
 

@@ -12,16 +12,16 @@ import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import namesies.ItemNamesies;
-import pattern.AreaMatcher;
-import pattern.EventMatcher;
-import pattern.ItemMatcher;
-import pattern.MapDataMatcher;
-import pattern.MapMakerEntityMatcher;
-import pattern.MapTransitionMatcher;
-import pattern.MultiPointEntityMatcher;
-import pattern.NPCMatcher;
-import pattern.SinglePointEntityMatcher;
-import pattern.WildBattleMatcher;
+import pattern.map.AreaMatcher;
+import pattern.map.EventMatcher;
+import pattern.map.ItemMatcher;
+import pattern.map.MapDataMatcher;
+import pattern.generic.LocationEntityMatcher;
+import pattern.map.MapTransitionMatcher;
+import pattern.generic.MultiPointEntityMatcher;
+import pattern.map.NPCMatcher;
+import pattern.generic.SinglePointEntityMatcher;
+import pattern.map.WildBattleMatcher;
 import util.DrawUtils;
 import util.FileIO;
 import util.JsonUtils;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 public class MapMakerTriggerData {
 
 	private Set<AreaMatcher> areaData;
-	private Set<MapMakerEntityMatcher> entities;
+	private Set<LocationEntityMatcher> entities;
 
 	// Have the triggers been saved or have they been edited?
 	private boolean triggersSaved;
@@ -94,7 +94,7 @@ public class MapMakerTriggerData {
 		FileIO.overwriteFile(mapFileName, new StringBuilder(JsonUtils.getJson(mapDataMatcher)));
 	}
 
-	private String getUniqueEntityName(MapMakerEntityMatcher matcher, Set<String> entityNames) {
+	private String getUniqueEntityName(LocationEntityMatcher matcher, Set<String> entityNames) {
 		TriggerModelType type = matcher.getTriggerModelType();
 		String basicEntityName = matcher.getBasicName();
 
@@ -118,7 +118,7 @@ public class MapMakerTriggerData {
 	}
 
 	void moveTriggerData(Point delta) {
-		for (MapMakerEntityMatcher matcher : this.entities) {
+		for (LocationEntityMatcher matcher : this.entities) {
 			matcher.addDelta(delta);
 		}
 
@@ -126,7 +126,7 @@ public class MapMakerTriggerData {
 	}
 
 	void drawTriggers(Graphics2D g2d, Point mapLocation) {
-		for (MapMakerEntityMatcher entity : this.entities) {
+		for (LocationEntityMatcher entity : this.entities) {
 			TriggerModelType triggerModelType = entity.getTriggerModelType();
 
 			if (entity instanceof SinglePointEntityMatcher) {
@@ -168,7 +168,7 @@ public class MapMakerTriggerData {
 	void placeTrigger(Point location) {
 
 		// TODO: Ask user if they would like to place over
-		MapMakerEntityMatcher placeableTrigger = mapMaker.getPlaceableTrigger();
+		LocationEntityMatcher placeableTrigger = mapMaker.getPlaceableTrigger();
 		placeableTrigger.addPoint(location);
 		this.entities.add(placeableTrigger);
 		System.out.println("Entity placed at (" + location.x + ", " + location.y + ").");
@@ -179,7 +179,7 @@ public class MapMakerTriggerData {
 	boolean createTrigger(TriggerModelType type) {
 		mapMaker.clearPlaceableTrigger();
 
-		MapMakerEntityMatcher trigger = null;
+		LocationEntityMatcher trigger = null;
 
 		// TODO: Show popup asking user about specific trigger being placed.
 		switch (type) {
@@ -214,8 +214,8 @@ public class MapMakerTriggerData {
 		return trigger != null;
 	}
 
-	public void editTrigger(MapMakerEntityMatcher trigger) {
-		MapMakerEntityMatcher newTrigger = null;
+	public void editTrigger(LocationEntityMatcher trigger) {
+		LocationEntityMatcher newTrigger = null;
 		TriggerModelType triggerModelType = trigger.getTriggerModelType();
 
 		switch (triggerModelType) {
@@ -251,20 +251,20 @@ public class MapMakerTriggerData {
 		}
 	}
 
-	public List<MapMakerEntityMatcher> getEntitiesAtLocation(Point location) {
+	public List<LocationEntityMatcher> getEntitiesAtLocation(Point location) {
 		return this.entities
 				.stream()
 				.filter(entity -> entity.isAtLocation(location))
 				.collect(Collectors.toList());
 	}
 
-	public void removeTrigger(MapMakerEntityMatcher trigger) {
+	public void removeTrigger(LocationEntityMatcher trigger) {
 		this.entities.removeIf(matcher -> trigger == matcher);
 
 		triggersSaved = false;
 	}
 
-	public void moveTrigger(MapMakerEntityMatcher trigger) {
+	public void moveTrigger(LocationEntityMatcher trigger) {
 		removeTrigger(trigger);
 		mapMaker.setPlaceableTrigger(trigger);
 	}

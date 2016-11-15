@@ -1,10 +1,12 @@
-package pattern;
+package pattern.map;
 
 import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.MatchConstants;
 import pattern.MatchConstants.MatchType;
+import pattern.generic.MultiPointEntityMatcher;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
