@@ -52,7 +52,7 @@ public class Move implements Serializable {
 	}
 	
 	public void resetReady() {
-		ready = attack instanceof MultiTurnMove ? ((MultiTurnMove)attack).chargesFirst() : true;
+		ready = !(attack instanceof MultiTurnMove) || ((MultiTurnMove) attack).chargesFirst();
 	}
 	
 	public boolean isReady() {

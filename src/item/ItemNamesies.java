@@ -410,6 +410,9 @@ import item.Item.ZoomLens;
 import main.Global;
 import util.PokeString;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public enum ItemNamesies {
     // EVERYTHING BELOW IS GENERATED ###
 	NO_ITEM("No Item", NoItem::new),
@@ -822,6 +825,8 @@ public enum ItemNamesies {
 
     // EVERYTHING ABOVE IS GENERATED ###
 
+	private static final Map<ItemNamesies, Item> itemMap = new EnumMap<>(ItemNamesies.class);
+
     private final String name;
 	private final ItemCreator itemCreator;
 
@@ -839,7 +844,11 @@ public enum ItemNamesies {
 	}
 
 	public Item getItem() {
-		return this.itemCreator.createItem();
+		if (!itemMap.containsKey(this)) {
+			itemMap.put(this, this.itemCreator.createItem());
+		}
+
+		return itemMap.get(this);
 	}
 
 	public static ItemNamesies tryValueOf(String name) {

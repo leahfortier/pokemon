@@ -599,6 +599,9 @@ import battle.attack.Attack.ZenHeadbutt;
 import main.Global;
 import util.PokeString;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public enum AttackNamesies {
     // EVERYTHING BELOW IS GENERATED ###
 	TACKLE("Tackle", Tackle::new),
@@ -1200,6 +1203,8 @@ public enum AttackNamesies {
 
     // EVERYTHING ABOVE IS GENERATED ###
 
+    private static final Map<AttackNamesies, Attack> attackMap = new EnumMap<>(AttackNamesies.class);
+
 	private String name;
 	private AttackCreator attackCreator;
 
@@ -1217,7 +1222,11 @@ public enum AttackNamesies {
 	}
 
 	public Attack getAttack() {
-		return this.attackCreator.createAttack();
+        if (!attackMap.containsKey(this)) {
+            attackMap.put(this, this.attackCreator.createAttack());
+        }
+
+		return attackMap.get(this);
 	}
 
 	public static AttackNamesies tryValueOf(String name) {
