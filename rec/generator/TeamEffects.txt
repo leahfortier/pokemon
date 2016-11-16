@@ -64,7 +64,7 @@ ToxicSpikes:
 	private int layers;
 	###
 	Activate: 
-	x.layers = 1;
+	this.layers = 1;
 	###
 	Enter: 
 	if (enterer.isLevitating(b)) {
@@ -108,7 +108,7 @@ Spikes:
 	private int layers;
 	###
 	Activate: 
-	x.layers = 1;
+	this.layers = 1;
 	###
 	Enter: 
 	if (enterer.isLevitating(b) || enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
@@ -143,9 +143,6 @@ Wish:
 	Field: 
 	private String casterName;
 	###
-	Activate: 
-	x.casterName = casterName;
-	###
 	Subside: 
 	if (p.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 		return;
@@ -174,9 +171,6 @@ DoomDesire:
 HealSwitch:
 	Field: 
 	private String wish;
-	###
-	Activate: 
-	x.wish = wish;
 	###
 	Int: EntryEffect
 	Enter: 
@@ -212,9 +206,6 @@ PayDay:
 	}
 	###
 	CastMessage: "Coins scattered everywhere!"
-	Activate: 
-	x.coins = coins;
-	###
 	CanHave: True
 	EndBattle: 
 	Messages.addMessage(player.getName() + " picked up " + coins + " pokedollars!");

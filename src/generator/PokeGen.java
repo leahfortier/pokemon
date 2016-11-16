@@ -35,30 +35,26 @@ class PokeGen {
 	private static final int TM_BASE_INDEX = 2000;
 
 	private enum Generator {
-		ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, AttackNamesies.class, false, true),
-		POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, EffectNamesies.class, true, true),
-		TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, EffectNamesies.class, true, true),
-		BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, EffectNamesies.class, true, true),
-		WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, Weather.class, EffectNamesies.class, true, true),
-		ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, AbilityNamesies.class, true, true),
-		ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, ItemNamesies.class, false, true);
+		ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, AttackNamesies.class),
+		POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, EffectNamesies.class),
+		TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, EffectNamesies.class),
+		BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, EffectNamesies.class),
+		WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, Weather.class, EffectNamesies.class),
+		ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, AbilityNamesies.class),
+		ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, ItemNamesies.class);
 		
 		private final String inputPath;
 		private final String outputPath;
 		private final String outputFolder;
 		private final String superClassName;
 		private final Class namesiesClass;
-		private final boolean activate;
-		private final boolean mappity;
 		
-		Generator(String inputFileName, String outputFolder, Class superClass, Class namesiesClass, boolean activate, boolean mappity) {
+		Generator(String inputFileName, String outputFolder, Class superClass, Class namesiesClass) {
 			this.inputPath = Folder.GENERATOR + inputFileName;
 			this.outputPath = outputFolder + superClass.getSimpleName() + ".java";
 			this.outputFolder = outputFolder;
 			this.superClassName = superClass.getSimpleName();
 			this.namesiesClass = namesiesClass;
-			this.activate = activate;
-			this.mappity = mappity;
 		}
 		
 		public String getInputPath() {
@@ -79,14 +75,6 @@ class PokeGen {
 
 		public Class getNamesiesClass() {
 			return this.namesiesClass;
-		}
-		
-		public boolean isActivate() {
-			return this.activate;
-		}
-		
-		public boolean isMappity() {
-			return this.mappity;
 		}
 	}
 
@@ -149,9 +137,6 @@ class PokeGen {
 			fields.remove("Field");
 		}
 		
-		// Write activation method if applicable
-		additionalMethods = getActivationMethod(className, fields) + additionalMethods;
-		
 		String classString = StuffGen.createClass(null, className, this.currentGen.getSuperClassName(), implementsString, extraFields, constructor, additionalMethods, false);
 		
 		fields.remove("ClassName");
@@ -211,30 +196,6 @@ class PokeGen {
 				.append("}");
 
 		FileIO.overwriteFile(this.currentGen.getOutputPath(), out);
-	}
-	
-	private String getActivationMethod(String className, Map<String, String> fields) {
-		if (!this.currentGen.isActivate()) {
-			return StringUtils.empty();
-		}
-
-		String activation = "(" + className + ")(new " + className + "().activate())";
-		String activateHeader = className + " newInstance()";
-		
-		MethodInfo activateInfo;
-		if (fields.containsKey("Activate")) {
-			String activateBegin = className + " x = " + activation + ";\n";
-			String activateEnd = "return x;";
-			
-			activateInfo = new MethodInfo(activateHeader, activateBegin, fields.get("Activate"), activateEnd);
-			
-			fields.remove("Activate");
-		}
-		else {
-			activateInfo = new MethodInfo(activateHeader, "", "return " + activation + ";", "");
-		}
-		
-		return activateInfo.writeFunction("", className, this.currentGen.superClassName);
 	}
 	
 	private static void readFileFormat(Scanner in) {
@@ -489,6 +450,11 @@ class PokeGen {
 			if (physicalContact) {
 				constructor.append("super.moveTypes.add(MoveType.PHYSICAL_CONTACT);\n");
 			}
+		}
+
+		if (fields.containsKey("Activate")) {
+			constructor.append(fields.get("Activate"));
+			fields.remove("Activate");
 		}
 
 		return new MethodInfo(fields.get("ClassName") + "()", constructor.toString(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();

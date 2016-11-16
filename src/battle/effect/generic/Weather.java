@@ -42,8 +42,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		return 5;
 	}
 	
-	public abstract Weather newInstance();
-	
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
@@ -52,10 +50,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
 		ClearSkies() {
 			super(EffectNamesies.CLEAR_SKIES, Type.NORMAL);
-		}
-
-		public ClearSkies newInstance() {
-			return (ClearSkies)(new ClearSkies().activate());
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -67,10 +61,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
 		Raining() {
 			super(EffectNamesies.RAINING, Type.WATER);
-		}
-
-		public Raining newInstance() {
-			return (Raining)(new Raining().activate());
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
@@ -110,10 +100,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
 		Sunny() {
 			super(EffectNamesies.SUNNY, Type.FIRE);
-		}
-
-		public Sunny newInstance() {
-			return (Sunny)(new Sunny().activate());
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
@@ -173,10 +159,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			super(EffectNamesies.SANDSTORM, Type.ROCK);
 		}
 
-		public Sandstorm newInstance() {
-			return (Sandstorm)(new Sandstorm().activate());
-		}
-
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
@@ -233,10 +215,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
 		Hailing() {
 			super(EffectNamesies.HAILING, Type.ICE);
-		}
-
-		public Hailing newInstance() {
-			return (Hailing)(new Hailing().activate());
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {

@@ -142,7 +142,7 @@ public class BattleAttributes implements Serializable {
 	}
 	
 	public void addEffect(PokemonEffect e) {
-		effects.add(e.newInstance());
+		effects.add(e);
 	}
 	
 	public boolean removeEffect(EffectNamesies effect) {

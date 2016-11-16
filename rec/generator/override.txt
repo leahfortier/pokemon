@@ -2002,9 +2002,6 @@ Override:
 		AddMapField: Field: 
 		private ActivePokemon theSeeer;
 		###
-		AddMapField: Activate: 
-		x.theSeeer = theSeeer;
-		###
 		AddMapField: Subside: 
 		Messages.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
@@ -2354,7 +2351,7 @@ Override:
 		private boolean activated;
 		###
 		AddMapField: Activate:
-		x.activated = false;
+		this.activated = false;
 		###
 		AddInterface: EndTurnEffect
 		AddMapField: ApplyEndTurn:

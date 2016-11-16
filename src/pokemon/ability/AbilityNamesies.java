@@ -377,7 +377,7 @@ public enum AbilityNamesies {
 	}
 
 	public Ability getNewAbility() {
-		return this.abilityCreator.createAbility().newInstance();
+		return this.abilityCreator.createAbility();
 	}
 
 	public static AbilityNamesies getValueOf(String name) {

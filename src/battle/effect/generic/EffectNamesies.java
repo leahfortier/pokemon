@@ -223,7 +223,7 @@ public enum EffectNamesies {
 	}
 
 	public Effect getEffect() {
-		return this.effectCreator.createEffect().newInstance();
+		return this.effectCreator.createEffect();
 	}
 
 	public String getName() {

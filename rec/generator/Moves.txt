@@ -5448,7 +5448,9 @@ Role Play:
 	Int: ChangeAbilityMove
 	Effect: Pokemon ChangeAbility
 	AbilityChange: 
-	return b.getOtherPokemon(victim.user()).getAbility().newInstance();
+	// TODO: Combine with Trace
+	Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+	return otherAbility.namesies().getNewAbility();
 	###
 	AbilityMessage: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
@@ -5705,7 +5707,8 @@ Entrainment:
 	Int: ChangeAbilityMove
 	Effect: Pokemon ChangeAbility
 	AbilityChange: 
-	return caster.getAbility().newInstance();
+	// TODO: Combine with Trace/Role Play
+	return caster.getAbility().namesies().getNewAbility();
 	###
 	AbilityMessage: 
 	return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";

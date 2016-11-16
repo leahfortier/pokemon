@@ -9,7 +9,6 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
-import battle.effect.generic.Effect.EffectType;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
@@ -9029,7 +9028,9 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return b.getOtherPokemon(victim.user()).getAbility().newInstance();
+			// TODO: Combine with Trace
+			Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+			return otherAbility.namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9608,7 +9609,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return caster.getAbility().newInstance();
+			// TODO: Combine with Trace/Role Play
+			return caster.getAbility().namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {

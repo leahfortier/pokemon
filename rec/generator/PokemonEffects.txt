@@ -188,7 +188,7 @@ Confusion:
 	return true;
 	###
 	Activate: 
-	x.turns = Global.getRandomInt(1, 4); // Between 1 and 4 turns
+	this.turns = Global.getRandomInt(1, 4); // Between 1 and 4 turns
 	###
 	CastMessage: victim.getName() + " became confused!"
 	Cast: 
@@ -220,9 +220,6 @@ SelfConfusion:
 	Cast: 
 	move = caster.getMove();
 	super.cast(b, caster, victim, source, printCast);
-	###
-	Activate: 
-	x.move = move;
 	###
 *
 Safeguard:
@@ -259,9 +256,6 @@ Encore:
 	move = victim.getAttributes().getLastMoveUsed();
 	super.cast(b, caster, victim, source, printCast);
 	###
-	Activate: 
-	x.move = move;
-	###
 	CanAttack: 
 	if (p.getAttack().namesies() != move.getAttack().namesies()) {
 		b.printAttacking(p);
@@ -282,8 +276,7 @@ Disable:
 	private int turns;
 	###
 	Activate: 
-	x.disabled = disabled;
-	x.turns = Global.getRandomInt(4, 7); // Between 4 and 7 turns
+	this.turns = Global.getRandomInt(4, 7); // Between 4 and 7 turns
 	###
 	Usable: 
 	return disabled.getAttack().namesies() != m.getAttack().namesies();
@@ -324,9 +317,9 @@ RaiseCrits:
 	private boolean berrylicious;
 	###
 	Activate: 
-	x.focusEnergy = false;
-	x.direHit = false;
-	x.berrylicious = false;
+	this.focusEnergy = false;
+	this.direHit = false;
+	this.berrylicious = false;
 	###
 	Int: CritStageEffect, PassableEffect
 	IncreaseCritStage: 
@@ -381,9 +374,6 @@ RaiseCrits:
 *
 ChangeItem:
 	Int: ItemHolder
-	Activate: 
-	x.item = item;
-	###
 	Cast: 
 	item = ((ItemHolder)source.getSource(b, caster)).getItem();
 	while (victim.getAttributes().removeEffect(this.namesies));
@@ -421,11 +411,6 @@ ChangeType:
 		}
 	}
 	###
-	Activate: 
-	x.type = type;
-	x.castSource = castSource;
-	x.typeSource = typeSource;
-	###
 	Cast: 
 	castSource = source;
 	typeSource = (ChangeTypeMove)source.getSource(b, caster);
@@ -451,10 +436,6 @@ ChangeAbility:
 	private Ability ability;
 	private String message;
 	###
-	Activate: 
-	x.ability = ability;
-	x.message = message;
-	###
 	Cast: 
 	Ability oldAbility = victim.getAbility();
 	oldAbility.deactivate(b, victim);
@@ -478,7 +459,7 @@ Stockpile:
 	private int turns;
 	###
 	Activate: 
-	x.turns = 0;
+	this.turns = 0;
 	###
 	GetTurns: 
 	return turns;
@@ -545,17 +526,11 @@ Mimic:
 	super.cast(b, caster, victim, source, printCast);
 	###
 	CastMessage: victim.getName() + " learned " + mimicMove.getAttack().getName() + "!"
-	Activate: 
-	x.mimicMove = mimicMove;
-	###
 *
 Imprison:
 	Int: AttackSelectionEffect, BeforeTurnEffect
 	Field: 
 	private List<AttackNamesies> unableMoves;
-	###
-	Activate: 
-	x.unableMoves = unableMoves;
 	###
 	Cast:
 	unableMoves = new ArrayList<>();
@@ -730,9 +705,6 @@ Uproar:
 	wakeUp(b, victim);
 	wakeUp(b, b.getOtherPokemon(victim.user()));
 	###
-	Activate: 
-	x.uproar = uproar;
-	###
 	Field: 
 	private Move uproar;
 	
@@ -812,11 +784,6 @@ Transformed:
 	private int[] stats;
 	private Type[] type;
 	###
-	Activate: 
-	x.moveList = moveList;
-	x.stats = stats;
-	x.type = type;
-	###
 	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!"
 	Cast: 
 	// Pokemon to transform into
@@ -865,9 +832,6 @@ Substitute:
 	Int: IntegerHolder, PassableEffect, EffectBlockerEffect
 	Field: 
 	private int hp;
-	###
-	Activate: 
-	x.hp = hp;
 	###
 	IntegerName: hp
 	CastMessage: victim.getName() + " put in a substitute!"
@@ -930,9 +894,8 @@ Bide:
 	###
 	CastMessage: user.getName() + " is storing energy!"
 	Activate: 
-	x.move = move;
-	x.turns = 1;
-	x.damage = 0;
+	this.turns = 1;
+	this.damage = 0;
 	###
 	Cast: 
 	Bide bidesies = (Bide)victim.getEffect(this.namesies);
@@ -981,7 +944,7 @@ HalfWeight:
 	else halfWeight.layers++;
 	###
 	Activate: 
-	x.layers = 1;
+	this.layers = 1;
 	###
 	Int: HalfWeightEffect
 	HalfAmount: layers
@@ -1124,9 +1087,6 @@ Embargo:
 ConsumedItem:
 	Field: 
 	private Item consumed;
-	###
-	Activate: 
-	x.consumed = consumed;
 	###
 	Cast: 
 	consumed = victim.getHeldItem(b);

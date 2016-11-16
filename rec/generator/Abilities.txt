@@ -167,7 +167,7 @@ Flash Fire:
 	private boolean activated;
 	###
 	Activate: 
-	x.activated = false;
+	this.activated = false;
 	###
 	IsActive:
 	return activated;
@@ -565,7 +565,8 @@ Trace:
 	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
 	###
 	AbilityChange: 
-	return b.getOtherPokemon(victim.user()).getAbility().newInstance();
+	Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+	return otherAbility.namesies().getNewAbility();
 	###
 	AbilityMessage: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
@@ -702,7 +703,7 @@ Truant:
 	private boolean lazyface;
 	###
 	Activate: 
-	x.lazyface = false;
+	this.lazyface = false;
 	###
 	Int: EndTurnEffect, BeforeTurnEffect
 	ApplyEndTurn: 
@@ -818,9 +819,6 @@ Color Change:
 		type = t;
 		EffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
 	}
-	###
-	Activate: 
-	x.type = type;
 	###
 	Field: 
 	private Type type;
@@ -938,7 +936,7 @@ Slow Start:
 	int count;
 	###
 	Activate: 
-	x.count = 0;
+	this.count = 0;
 	###
 	Int: EndTurnEffect, EntryEffect
 	ApplyEndTurn: 
@@ -1011,7 +1009,7 @@ Mummy:
 	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
 	###
 	AbilityChange: 
-	return (new Mummy()).newInstance();
+	return AbilityNamesies.MUMMY.getNewAbility();
 	###
 	AbilityMessage: 
 	return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
@@ -1056,7 +1054,7 @@ Illusion:
 	}
 	###
 	Activate: 
-	x.activated = false;
+	this.activated = false;
 	###
 	Deactivate:
 	breakIllusion(b, victim);
@@ -1335,7 +1333,7 @@ Stance Change:
 	private boolean shieldForm;
 	###
 	Activate:
-	x.shieldForm = true;
+	this.shieldForm = true;
 	###
 	Int: BeforeTurnEffect, EntryEffect, DifferentStatEffect
 	CanAttack:
@@ -1397,9 +1395,6 @@ Protean:
 	}
 	
 	return true;
-	###
-	Activate: 
-	x.type = type;
 	###
 	Field: 
 	private Type type;
