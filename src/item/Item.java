@@ -125,6 +125,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 	public String getName() {
 		return this.name;
 	}
+
 	public String getDescription()
 	{
 		return this.description;

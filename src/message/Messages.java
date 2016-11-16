@@ -24,6 +24,7 @@ public class Messages {
     public enum MessageState {
         FIGHTY_FIGHT,   // Battle View
         MAPPITY_MAP,    // Map View
+        BAGGIN_IT_UP;   // Bag View
     }
 
     private static ArrayDeque<MessageUpdate> getQueue() {

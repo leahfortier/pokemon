@@ -14,7 +14,6 @@ import main.Game;
 import main.Global;
 import message.Messages;
 import pokemon.ActivePokemon;
-import trainer.CharacterData;
 import trainer.Trainer;
 
 import java.io.Serializable;
@@ -25,6 +24,8 @@ import java.util.Set;
 
 public class Bag implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	private static final String DEFAULT_FAIL_MESSAGE = "It won't have any effect.";
 
 	private Map<ItemNamesies, Integer> items; // Item -> quantity
 	private Map<BagCategory, Set<ItemNamesies>> bag;
@@ -46,40 +47,44 @@ public class Bag implements Serializable {
 		}
 	}
 	
-	public String giveItem(ActivePokemon p, ItemNamesies hold) {
+	public boolean giveItem(ActivePokemon p, ItemNamesies hold) {
 		if (p.isEgg()) {
-			return "You can't give an item to an egg!";
+			Messages.addMessage("You can't give an item to an egg!");
+			return false;
 		}
 		
-		String message = "";
-
 		ItemNamesies item = p.getActualHeldItem().namesies();
+		System.out.println("Holding item: " + item.getName());
 		if (item != ItemNamesies.NO_ITEM) {
 			addItem(item);
 			p.removeItem();
-			message += "Took the " + item.getName() + " from " + p.getActualName() + ".";
+			Messages.addMessage("Took the " + item.getName() + " from " + p.getActualName() + ".");
 		}
 		
 		p.giveItem(hold);
 		removeItem(hold);
-		message += p.getActualName() + " is now holding " + hold.getName() + ".";
+		Messages.addMessage(p.getActualName() + " is now holding " + hold.getName() + ".");
 		
-		return message;
+		return true;
 	}
 	
-	public String takeItem(ActivePokemon p) {
+	public boolean takeItem(ActivePokemon p) {
 		if (p.isEgg()) {
-			return "Eggs can't hold anything. They're eggs.";
+			Messages.addMessage("Eggs can't hold anything. They're eggs.");
+			return false;
 		}
 		
 		ItemNamesies item = p.getActualHeldItem().namesies();
-		if (item != ItemNamesies.NO_ITEM) {
-			addItem(item);
-			p.removeItem();
-			return "Took the " + item.getName() + " from " + p.getActualName() + ".";
+		if (item == ItemNamesies.NO_ITEM) {
+			Messages.addMessage(p.getActualName() + " is not holding anything.");
+			return false;
 		}
-		
-		return p.getActualName() + " is not holding anything.";
+
+		// Remove the item from the pokemon and add it to the bag
+		p.removeItem();
+		addItem(item);
+		Messages.addMessage("Took the " + item.getName() + " from " + p.getActualName() + ".");
+		return true;
 	}
 	
 	public void addItem(ItemNamesies item) {
@@ -141,11 +146,6 @@ public class Bag implements Serializable {
 	}
 	
 	public boolean useItem(ItemNamesies item, Trainer trainer) {
-		// This theoretically should not be possible anymore but I can't bring myself to remove error checking
-		if (items.get(item) <= 0) {
-			Global.error("You can't use that item (" + item.getName() + ") as you do not have no more.");
-		}
-
 		Item useItem = item.getItem();
 		if (useItem instanceof TrainerUseItem && ((TrainerUseItem)useItem).use(trainer)) {
 			removeItem(item);
@@ -155,26 +155,32 @@ public class Bag implements Serializable {
 		return false;
 	}
 
-	public boolean useItem(CharacterData player, ItemNamesies item, ActivePokemon p) {
-		// This theoretically should not be possible anymore but I can't bring myself to remove error checking
-		if (items.get(item) <= 0) {
-			Global.error("You can't use that item (" + item.getName() + ") as you do not have no more.");
+	public boolean useItem(ItemNamesies item, ActivePokemon p) {
+		if (p.isEgg()) {
+			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
+			return false;
 		}
 
-		Item useItem = item.getItem();
-		if (useItem instanceof PokemonUseItem && ((PokemonUseItem)useItem).use(player, p)) {
-			removeItem(item);
-			return true;
+		Item itemValue = item.getItem();
+		if (!(itemValue instanceof PokemonUseItem)) {
+			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
+			return false;
 		}
 
-		return false;
+		PokemonUseItem useItem = (PokemonUseItem) itemValue;
+		if (!useItem.use(Game.getPlayer(), p)) {
+			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
+			return false;
+		}
+
+		Messages.addMessage(Game.getPlayer().getName() + " used the " + item.getName() + "!");
+		Messages.addMessage(useItem.getSuccessMessage(p));
+		removeItem(item);
+		return true;
 	}
 
+	// TODO: Add messages
 	public boolean useMoveItem(ItemNamesies item, ActivePokemon p, Move m) {
-		if (items.get(item) <= 0) {
-			Global.error("You can't use that item (" + item.getName() + ") as you do not have no more.");
-		}
-
 		Item useItem = item.getItem();
 		if (useItem instanceof MoveUseItem && ((MoveUseItem)useItem).use(p, m)) {
 			removeItem(item);
@@ -185,10 +191,6 @@ public class Bag implements Serializable {
 	}
 
 	public boolean battleUseItem(ItemNamesies item, ActivePokemon activePokemon, Battle battle) {
-		if (items.get(item) <= 0) {
-			Global.error("You can't use that item (" + item.getName() + ") as you do not have no more.");
-		}
-
 		Item useItem = item.getItem();
 		final boolean used;
 		if (useItem instanceof BattleUseItem && battle != null)  {

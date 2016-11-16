@@ -11,11 +11,13 @@ import item.bag.Bag;
 import item.bag.BagCategory;
 import item.hold.HoldItem;
 import item.use.MoveUseItem;
-import item.use.PokemonUseItem;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
 import main.Game;
 import main.Type;
+import message.MessageUpdate;
+import message.Messages;
+import message.Messages.MessageState;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer;
@@ -53,7 +55,7 @@ class BagView extends View {
 	private int pageNum;
 	private int selectedTab;
 	private int selectedButton;
-	private String message;
+	private MessageUpdate message;
 
 	private BagState state;
 	private ItemNamesies selectedItem;
@@ -76,27 +78,21 @@ class BagView extends View {
 	// TODO: There is a really annoying bug that sometimes happens where two buttons have hoverAction at the same time -- mainly one of the useButtons and generally the first Pokemon in the party, but the useButton is the active one and the party one just looks active and is really confusing
 	private enum UseState {
 		GIVE("Give", BagView.GIVE, (state, bagView, p) -> {
-            bagView.addMessage(Game.getPlayer().getBag().giveItem(p, bagView.selectedItem));
+            Game.getPlayer().getBag().giveItem(p, bagView.selectedItem);
             state.deactivate(bagView);
         }),
 		USE("Use", BagView.USE, (state, bagView, p) -> {
-            if (p.isEgg()) {
-                UseState.addUseMessages(bagView, false, p);
-            }
-            else if (bagView.selectedItem.getItem() instanceof PokemonUseItem) {
-                Bag bag = Game.getPlayer().getBag();
-                UseState.addUseMessages(bagView, bag.useItem(Game.getPlayer(), bagView.selectedItem, p), p);
-            }
-            else if (bagView.selectedItem.getItem() instanceof MoveUseItem) {
-                bagView.selectedPokemon = p;
-                bagView.state = BagState.MOVE_SELECT;
-
-                bagView.updateActiveButtons();
-            }
+			if (bagView.selectedItem.getItem() instanceof MoveUseItem) {
+				bagView.selectedPokemon = p;
+				bagView.state = BagState.MOVE_SELECT;
+			} else {
+				Game.getPlayer().getBag().useItem(bagView.selectedItem, p);
+				state.deactivate(bagView);
+			}
         }),
 		// TODO: Change back to discard -- maybe have discard when over an item, and take when over a Pokemon
 		TAKE("Take", BagView.TAKE, (state, bagView, p) -> {
-            bagView.addMessage(Game.getPlayer().getBag().takeItem(p));
+            Game.getPlayer().getBag().takeItem(p);
             state.deactivate(bagView);
         });
 		
@@ -125,20 +121,7 @@ class BagView extends View {
 			
 			bagView.updateActiveButtons();
 		}
-		
-		private static void addUseMessages(BagView bagView, boolean success, ActivePokemon p) {
-			ItemNamesies selected = bagView.selectedItem;
-			
-			if (success) {
-				bagView.addMessage(Game.getPlayer().getName() + " used the " + selected.getName() + "! " + ((UseItem)selected.getItem()).getSuccessMessage(p));
-			}
-			else {
-				bagView.addMessage("It won't have any effect.");	
-			}
-			
-			UseState.USE.deactivate(bagView);
-		}
-		
+
 		private interface UseButton {
 			void useButton(UseState state, BagView bagView, ActivePokemon p);
 		}
@@ -228,8 +211,6 @@ class BagView extends View {
 		
 		movedToFront();
 	}
-	
-	
 
 	public void update(int dt, InputControl input) {
 		CharacterData player = Game.getPlayer();
@@ -245,8 +226,14 @@ class BagView extends View {
 				message = null;
 			}
 
-			return;
+			// TODO: There was a return here before, make sure it's okay to remove it
 		}
+
+		if (message == null) {
+            if (Messages.hasMessages()) {
+                message = Messages.getNextMessage();
+            }
+        }
 
 		selectedButton = Button.update(buttons, selectedButton, input);
 
@@ -256,11 +243,10 @@ class BagView extends View {
 			}
 		}
 
-
 		for (int i = 0; i < Move.MAX_MOVES; ++i) {
 			if (moveButtons[i].checkConsumePress()) {
 				Move m = selectedPokemon.getActualMoves().get(i);
-				UseState.addUseMessages(this, player.getBag().useMoveItem(selectedItem, selectedPokemon, m), selectedPokemon);
+				player.getBag().useMoveItem(selectedItem, selectedPokemon, m);
 			}
 		}
 		
@@ -269,6 +255,7 @@ class BagView extends View {
 				for (UseState useState : UseState.USE_STATE_VALUES) {
 					if (useState.clicked) {
 						useState.useButton.useButton(useState, this, player.getTeam().get(i));
+                        updateActiveButtons();
 					}
 				}
 			}
@@ -315,7 +302,7 @@ class BagView extends View {
 				updateActiveButtons();
 				
 				if (useState == UseState.USE && selectedItem.getItem() instanceof TrainerUseItem) {
-					UseState.addUseMessages(this, player.getBag().useItem(selectedItem, player), null);
+					player.getBag().useItem(selectedItem, player);
 				}
 			}
 		}
@@ -344,14 +331,20 @@ class BagView extends View {
 		}
 		
 		if (buttons[RETURN].checkConsumePress()) {
-			Game.setViewMode(ViewMode.MAP_VIEW);
+			returnToMap();
 		}
 
 		if (input.isDown(Control.ESC)) {
 			input.consumeKey(Control.ESC);
-			Game.setViewMode(ViewMode.MAP_VIEW);
+			returnToMap();
 		}
 	}
+
+	private void returnToMap() {
+        Messages.clearMessages(MessageState.BAGGIN_IT_UP);
+        Messages.setMessageState(MessageState.MAPPITY_MAP);
+        Game.setViewMode(ViewMode.MAP_VIEW);
+    }
 
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
@@ -562,10 +555,10 @@ class BagView extends View {
 		
 		if (message != null) {
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			g.setColor(Color.WHITE);
+			g.setColor(Color.BLACK);
 			
 			DrawUtils.setFont(g, 30);
-			DrawUtils.drawWrappedText(g, message, 30, 490, 750);
+			DrawUtils.drawWrappedText(g, message.getMessage(), 30, 490, 750);
 		}
 		else {
 			for (Button b : buttons) {
@@ -593,15 +586,13 @@ class BagView extends View {
 
 	public void movedToFront() {
 		changeCategory(0);
+        Messages.clearMessages(MessageState.BAGGIN_IT_UP);
+        Messages.setMessageState(MessageState.BAGGIN_IT_UP);
 	}
 	
 	private int totalPages(int size) {
 		// TODO: isn't 0%n always 0?
 		return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
-	}
-	
-	private void addMessage(String message) {
-		this.message = message;
 	}
 	
 	private void updateActiveButtons() {
