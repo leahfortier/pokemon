@@ -1,8 +1,6 @@
 package battle.effect.generic;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import battle.Battle;
 import battle.attack.MoveType;
 import battle.effect.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
@@ -18,8 +16,9 @@ import main.Type;
 import map.TerrainType;
 import message.Messages;
 import pokemon.ActivePokemon;
-import battle.Battle;
 import pokemon.Stat;
+
+import java.util.Map;
 
 public abstract class BattleEffect extends Effect {
 	private static final long serialVersionUID = 1L;
@@ -77,6 +76,7 @@ public abstract class BattleEffect extends Effect {
 		map.put("ElectricTerrain", new ElectricTerrain());
 	}
 
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
 	static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect, BeforeTurnEffect {

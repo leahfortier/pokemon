@@ -6,13 +6,11 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import item.Item;
-import main.Global;
 import main.Type;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
@@ -72,13 +70,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		map = new HashMap<>();
 
 		// EVERYTHING BELOW IS GENERATED ###
-
-		// List all of the classes we are loading
-		map.put("ClearSkies", new ClearSkies());
-		map.put("Raining", new Raining());
-		map.put("Sunny", new Sunny());
-		map.put("Sandstorm", new Sandstorm());
-		map.put("Hailing", new Hailing());
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/

@@ -1,7 +1,8 @@
 package item;
 
-import battle.attack.Attack;
 import battle.Battle;
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
@@ -31,6 +32,7 @@ import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.holder.ItemHolder;
@@ -60,29 +62,25 @@ import main.Global;
 import main.Type;
 import map.TerrainType;
 import message.Messages;
-import pokemon.ability.AbilityNamesies;
-import battle.attack.AttackNamesies;
-import battle.effect.generic.EffectNamesies;
-import pokemon.PokemonNamesies;
-import pokemon.ability.Ability;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.Evolution;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.ability.Ability;
+import pokemon.ability.AbilityNamesies;
 import trainer.CharacterData;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
-import util.StringUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -220,418 +218,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		// EVERYTHING BELOW IS GENERATED ###
 
-		// List all of the classes we are loading
-		map.put("No Item", new NoItem());
-		map.put("Syrup", new Syrup());
-		map.put("Bicycle", new Bicycle());
-		map.put("Surfboard", new Surfboard());
-		map.put("Fishing Rod", new FishingRod());
-		map.put("Absorb Bulb", new AbsorbBulb());
-		map.put("Air Balloon", new AirBalloon());
-		map.put("Amulet Coin", new AmuletCoin());
-		map.put("Big Root", new BigRoot());
-		map.put("Binding Band", new BindingBand());
-		map.put("Black Sludge", new BlackSludge());
-		map.put("Bright Powder", new BrightPowder());
-		map.put("Cell Battery", new CellBattery());
-		map.put("Choice Band", new ChoiceBand());
-		map.put("Choice Scarf", new ChoiceScarf());
-		map.put("Choice Specs", new ChoiceSpecs());
-		map.put("Cleanse Tag", new CleanseTag());
-		map.put("Damp Rock", new DampRock());
-		map.put("Heat Rock", new HeatRock());
-		map.put("Icy Rock", new IcyRock());
-		map.put("Smooth Rock", new SmoothRock());
-		map.put("Eject Button", new EjectButton());
-		map.put("Destiny Knot", new DestinyKnot());
-		map.put("Expert Belt", new ExpertBelt());
-		map.put("Flame Orb", new FlameOrb());
-		map.put("Toxic Orb", new ToxicOrb());
-		map.put("Float Stone", new FloatStone());
-		map.put("Focus Band", new FocusBand());
-		map.put("Focus Sash", new FocusSash());
-		map.put("Grip Claw", new GripClaw());
-		map.put("Adamant Orb", new AdamantOrb());
-		map.put("Lustrous Orb", new LustrousOrb());
-		map.put("Griseous Orb", new GriseousOrb());
-		map.put("Iron Ball", new IronBall());
-		map.put("Lagging Tail", new LaggingTail());
-		map.put("Life Orb", new LifeOrb());
-		map.put("Light Ball", new LightBall());
-		map.put("Light Clay", new LightClay());
-		map.put("Lucky Egg", new LuckyEgg());
-		map.put("Lucky Punch", new LuckyPunch());
-		map.put("Luminous Moss", new LuminousMoss());
-		map.put("Macho Brace", new MachoBrace());
-		map.put("Mental Herb", new MentalHerb());
-		map.put("Metal Powder", new MetalPowder());
-		map.put("Metronome", new Metronome());
-		map.put("Muscle Band", new MuscleBand());
-		map.put("Power Anklet", new PowerAnklet());
-		map.put("Power Band", new PowerBand());
-		map.put("Power Belt", new PowerBelt());
-		map.put("Power Bracer", new PowerBracer());
-		map.put("Power Lens", new PowerLens());
-		map.put("Power Weight", new PowerWeight());
-		map.put("Quick Claw", new QuickClaw());
-		map.put("Quick Powder", new QuickPowder());
-		map.put("Red Card", new RedCard());
-		map.put("Ring Target", new RingTarget());
-		map.put("Rocky Helmet", new RockyHelmet());
-		map.put("Safety Goggles", new SafetyGoggles());
-		map.put("Scope Lens", new ScopeLens());
-		map.put("Shed Shell", new ShedShell());
-		map.put("Shell Bell", new ShellBell());
-		map.put("Smoke Ball", new SmokeBall());
-		map.put("Snowball", new Snowball());
-		map.put("Soul Dew", new SoulDew());
-		map.put("Stick", new Stick());
-		map.put("Sticky Barb", new StickyBarb());
-		map.put("Thick Club", new ThickClub());
-		map.put("Weakness Policy", new WeaknessPolicy());
-		map.put("White Herb", new WhiteHerb());
-		map.put("Wide Lens", new WideLens());
-		map.put("Wise Glasses", new WiseGlasses());
-		map.put("Zoom Lens", new ZoomLens());
-		map.put("Full Incense", new FullIncense());
-		map.put("Lax Incense", new LaxIncense());
-		map.put("Luck Incense", new LuckIncense());
-		map.put("Odd Incense", new OddIncense());
-		map.put("Pure Incense", new PureIncense());
-		map.put("Rock Incense", new RockIncense());
-		map.put("Rose Incense", new RoseIncense());
-		map.put("Sea Incense", new SeaIncense());
-		map.put("Wave Incense", new WaveIncense());
-		map.put("Draco Plate", new DracoPlate());
-		map.put("Dread Plate", new DreadPlate());
-		map.put("Earth Plate", new EarthPlate());
-		map.put("Fist Plate", new FistPlate());
-		map.put("Flame Plate", new FlamePlate());
-		map.put("Icicle Plate", new IciclePlate());
-		map.put("Insect Plate", new InsectPlate());
-		map.put("Iron Plate", new IronPlate());
-		map.put("Meadow Plate", new MeadowPlate());
-		map.put("Mind Plate", new MindPlate());
-		map.put("Pixie Plate", new PixiePlate());
-		map.put("Sky Plate", new SkyPlate());
-		map.put("Splash Plate", new SplashPlate());
-		map.put("Spooky Plate", new SpookyPlate());
-		map.put("Stone Plate", new StonePlate());
-		map.put("Toxic Plate", new ToxicPlate());
-		map.put("Zap Plate", new ZapPlate());
-		map.put("Burn Drive", new BurnDrive());
-		map.put("Chill Drive", new ChillDrive());
-		map.put("Douse Drive", new DouseDrive());
-		map.put("Shock Drive", new ShockDrive());
-		map.put("Fire Gem", new FireGem());
-		map.put("Water Gem", new WaterGem());
-		map.put("Electric Gem", new ElectricGem());
-		map.put("Grass Gem", new GrassGem());
-		map.put("Ice Gem", new IceGem());
-		map.put("Fighting Gem", new FightingGem());
-		map.put("Poison Gem", new PoisonGem());
-		map.put("Ground Gem", new GroundGem());
-		map.put("Flying Gem", new FlyingGem());
-		map.put("Psychic Gem", new PsychicGem());
-		map.put("Bug Gem", new BugGem());
-		map.put("Rock Gem", new RockGem());
-		map.put("Ghost Gem", new GhostGem());
-		map.put("Dragon Gem", new DragonGem());
-		map.put("Dark Gem", new DarkGem());
-		map.put("Steel Gem", new SteelGem());
-		map.put("Normal Gem", new NormalGem());
-		map.put("Fairy Gem", new FairyGem());
-		map.put("Leftovers", new Leftovers());
-		map.put("Black Belt", new BlackBelt());
-		map.put("Black Glasses", new BlackGlasses());
-		map.put("Charcoal", new Charcoal());
-		map.put("Dragon Fang", new DragonFang());
-		map.put("Hard Stone", new HardStone());
-		map.put("Magnet", new Magnet());
-		map.put("Metal Coat", new MetalCoat());
-		map.put("Miracle Seed", new MiracleSeed());
-		map.put("Mystic Water", new MysticWater());
-		map.put("NeverMeltIce", new NeverMeltIce());
-		map.put("Poison Barb", new PoisonBarb());
-		map.put("Sharp Beak", new SharpBeak());
-		map.put("Silk Scarf", new SilkScarf());
-		map.put("Silver Powder", new SilverPowder());
-		map.put("Soft Sand", new SoftSand());
-		map.put("Spell Tag", new SpellTag());
-		map.put("Twisted Spoon", new TwistedSpoon());
-		map.put("Dawn Stone", new DawnStone());
-		map.put("Deep Sea Scale", new DeepSeaScale());
-		map.put("Deep Sea Tooth", new DeepSeaTooth());
-		map.put("Dragon Scale", new DragonScale());
-		map.put("Dubious Disc", new DubiousDisc());
-		map.put("Dusk Stone", new DuskStone());
-		map.put("Electirizer", new Electirizer());
-		map.put("Fire Stone", new FireStone());
-		map.put("King's Rock", new KingsRock());
-		map.put("Leaf Stone", new LeafStone());
-		map.put("Magmarizer", new Magmarizer());
-		map.put("Moon Stone", new MoonStone());
-		map.put("Oval Stone", new OvalStone());
-		map.put("Everstone", new Everstone());
-		map.put("Prism Scale", new PrismScale());
-		map.put("Protector", new Protector());
-		map.put("Razor Claw", new RazorClaw());
-		map.put("Razor Fang", new RazorFang());
-		map.put("Reaper Cloth", new ReaperCloth());
-		map.put("Sachet", new Sachet());
-		map.put("Shiny Stone", new ShinyStone());
-		map.put("Sun Stone", new SunStone());
-		map.put("Thunder Stone", new ThunderStone());
-		map.put("Up-Grade", new UpGrade());
-		map.put("Water Stone", new WaterStone());
-		map.put("Whipped Dream", new WhippedDream());
-		map.put("Antidote", new Antidote());
-		map.put("Awakening", new Awakening());
-		map.put("Burn Heal", new BurnHeal());
-		map.put("Ice Heal", new IceHeal());
-		map.put("Paralyze Heal", new ParalyzeHeal());
-		map.put("Full Heal", new FullHeal());
-		map.put("Full Restore", new FullRestore());
-		map.put("Elixir", new Elixir());
-		map.put("Max Elixir", new MaxElixir());
-		map.put("Ether", new Ether());
-		map.put("Max Ether", new MaxEther());
-		map.put("Berry Juice", new BerryJuice());
-		map.put("Sweet Heart", new SweetHeart());
-		map.put("Potion", new Potion());
-		map.put("Energy Powder", new EnergyPowder());
-		map.put("Fresh Water", new FreshWater());
-		map.put("Super Potion", new SuperPotion());
-		map.put("Soda Pop", new SodaPop());
-		map.put("Lemonade", new Lemonade());
-		map.put("Moomoo Milk", new MoomooMilk());
-		map.put("Energy Root", new EnergyRoot());
-		map.put("Hyper Potion", new HyperPotion());
-		map.put("Max Potion", new MaxPotion());
-		map.put("Revive", new Revive());
-		map.put("Max Revive", new MaxRevive());
-		map.put("Revival Herb", new RevivalHerb());
-		map.put("Sacred Ash", new SacredAsh());
-		map.put("Dire Hit", new DireHit());
-		map.put("Guard Spec.", new GuardSpec());
-		map.put("X Accuracy", new XAccuracy());
-		map.put("X Attack", new XAttack());
-		map.put("X Defend", new XDefend());
-		map.put("X Special", new XSpecial());
-		map.put("X Sp. Def", new XSpDef());
-		map.put("X Speed", new XSpeed());
-		map.put("HP Up", new HPUp());
-		map.put("Protein", new Protein());
-		map.put("Iron", new Iron());
-		map.put("Calcium", new Calcium());
-		map.put("Zinc", new Zinc());
-		map.put("Carbos", new Carbos());
-		map.put("Health Wing", new HealthWing());
-		map.put("Muscle Wing", new MuscleWing());
-		map.put("Resist Wing", new ResistWing());
-		map.put("Genius Wing", new GeniusWing());
-		map.put("Clever Wing", new CleverWing());
-		map.put("Swift Wing", new SwiftWing());
-		map.put("PP Max", new PPMax());
-		map.put("PP Up", new PPUp());
-		map.put("Rare Candy", new RareCandy());
-		map.put("Cherish Ball", new CherishBall());
-		map.put("Dive Ball", new DiveBall());
-		map.put("Dusk Ball", new DuskBall());
-		map.put("Fast Ball", new FastBall());
-		map.put("Great Ball", new GreatBall());
-		map.put("Heal Ball", new HealBall());
-		map.put("Heavy Ball", new HeavyBall());
-		map.put("Level Ball", new LevelBall());
-		map.put("Love Ball", new LoveBall());
-		map.put("Lure Ball", new LureBall());
-		map.put("Luxury Ball", new LuxuryBall());
-		map.put("Master Ball", new MasterBall());
-		map.put("Moon Ball", new MoonBall());
-		map.put("Nest Ball", new NestBall());
-		map.put("Net Ball", new NetBall());
-		map.put("Pok\u00e9 Ball", new PokeBall());
-		map.put("Premier Ball", new PremierBall());
-		map.put("Quick Ball", new QuickBall());
-		map.put("Repeat Ball", new RepeatBall());
-		map.put("Safari Ball", new SafariBall());
-		map.put("Timer Ball", new TimerBall());
-		map.put("Ultra Ball", new UltraBall());
-		map.put("Cheri Berry", new CheriBerry());
-		map.put("Chesto Berry", new ChestoBerry());
-		map.put("Pecha Berry", new PechaBerry());
-		map.put("Rawst Berry", new RawstBerry());
-		map.put("Aspear Berry", new AspearBerry());
-		map.put("Leppa Berry", new LeppaBerry());
-		map.put("Oran Berry", new OranBerry());
-		map.put("Persim Berry", new PersimBerry());
-		map.put("Lum Berry", new LumBerry());
-		map.put("Sitrus Berry", new SitrusBerry());
-		map.put("Razz Berry", new RazzBerry());
-		map.put("Pomeg Berry", new PomegBerry());
-		map.put("Kelpsy Berry", new KelpsyBerry());
-		map.put("Qualot Berry", new QualotBerry());
-		map.put("Hondew Berry", new HondewBerry());
-		map.put("Grepa Berry", new GrepaBerry());
-		map.put("Tamato Berry", new TamatoBerry());
-		map.put("Occa Berry", new OccaBerry());
-		map.put("Passho Berry", new PasshoBerry());
-		map.put("Wacan Berry", new WacanBerry());
-		map.put("Rindo Berry", new RindoBerry());
-		map.put("Yache Berry", new YacheBerry());
-		map.put("Chople Berry", new ChopleBerry());
-		map.put("Kebia Berry", new KebiaBerry());
-		map.put("Shuca Berry", new ShucaBerry());
-		map.put("Coba Berry", new CobaBerry());
-		map.put("Payapa Berry", new PayapaBerry());
-		map.put("Tanga Berry", new TangaBerry());
-		map.put("Charti Berry", new ChartiBerry());
-		map.put("Kasib Berry", new KasibBerry());
-		map.put("Haban Berry", new HabanBerry());
-		map.put("Colbur Berry", new ColburBerry());
-		map.put("Babiri Berry", new BabiriBerry());
-		map.put("Chilan Berry", new ChilanBerry());
-		map.put("Roseli Berry", new RoseliBerry());
-		map.put("Liechi Berry", new LiechiBerry());
-		map.put("Ganlon Berry", new GanlonBerry());
-		map.put("Salac Berry", new SalacBerry());
-		map.put("Petaya Berry", new PetayaBerry());
-		map.put("Apicot Berry", new ApicotBerry());
-		map.put("Micle Berry", new MicleBerry());
-		map.put("Kee Berry", new KeeBerry());
-		map.put("Maranga Berry", new MarangaBerry());
-		map.put("Jaboca Berry", new JabocaBerry());
-		map.put("Rowap Berry", new RowapBerry());
-		map.put("Custap Berry", new CustapBerry());
-		map.put("Enigma Berry", new EnigmaBerry());
-		map.put("Lansat Berry", new LansatBerry());
-		map.put("Starf Berry", new StarfBerry());
-		map.put("Comet Shard", new CometShard());
-		map.put("Tiny Mushroom", new TinyMushroom());
-		map.put("Big Mushroom", new BigMushroom());
-		map.put("Balm Mushroom", new BalmMushroom());
-		map.put("Nugget", new Nugget());
-		map.put("Big Nugget", new BigNugget());
-		map.put("Pearl", new Pearl());
-		map.put("Big Pearl", new BigPearl());
-		map.put("Stardust", new Stardust());
-		map.put("Star Piece", new StarPiece());
-		map.put("Rare Bone", new RareBone());
-		map.put("Honey", new Honey());
-		map.put("Eviolite", new Eviolite());
-		map.put("Heart Scale", new HeartScale());
-		map.put("Repel", new Repel());
-		map.put("Super Repel", new SuperRepel());
-		map.put("Max Repel", new MaxRepel());
-		map.put("Ability Capsule", new AbilityCapsule());
-		map.put("Assault Vest", new AssaultVest());
-		map.put("Power Herb", new PowerHerb());
-		map.put("Hone Claws TM", new HoneClawsTM());
-		map.put("Dragon Claw TM", new DragonClawTM());
-		map.put("Psyshock TM", new PsyshockTM());
-		map.put("Calm Mind TM", new CalmMindTM());
-		map.put("Roar TM", new RoarTM());
-		map.put("Toxic TM", new ToxicTM());
-		map.put("Hail TM", new HailTM());
-		map.put("Bulk Up TM", new BulkUpTM());
-		map.put("Venoshock TM", new VenoshockTM());
-		map.put("Hidden Power TM", new HiddenPowerTM());
-		map.put("Sunny Day TM", new SunnyDayTM());
-		map.put("Taunt TM", new TauntTM());
-		map.put("Ice Beam TM", new IceBeamTM());
-		map.put("Blizzard TM", new BlizzardTM());
-		map.put("Hyper Beam TM", new HyperBeamTM());
-		map.put("Light Screen TM", new LightScreenTM());
-		map.put("Protect TM", new ProtectTM());
-		map.put("Rain Dance TM", new RainDanceTM());
-		map.put("Roost TM", new RoostTM());
-		map.put("Safeguard TM", new SafeguardTM());
-		map.put("Solar Beam TM", new SolarBeamTM());
-		map.put("Smack Down TM", new SmackDownTM());
-		map.put("Thunderbolt TM", new ThunderboltTM());
-		map.put("Thunder TM", new ThunderTM());
-		map.put("Earthquake TM", new EarthquakeTM());
-		map.put("Dig TM", new DigTM());
-		map.put("Psychic TM", new PsychicTM());
-		map.put("Shadow Ball TM", new ShadowBallTM());
-		map.put("Brick Break TM", new BrickBreakTM());
-		map.put("Double Team TM", new DoubleTeamTM());
-		map.put("Reflect TM", new ReflectTM());
-		map.put("Sludge Wave TM", new SludgeWaveTM());
-		map.put("Flamethrower TM", new FlamethrowerTM());
-		map.put("Sludge Bomb TM", new SludgeBombTM());
-		map.put("Sandstorm TM", new SandstormTM());
-		map.put("Fire Blast TM", new FireBlastTM());
-		map.put("Rock Tomb TM", new RockTombTM());
-		map.put("Aerial Ace TM", new AerialAceTM());
-		map.put("Torment TM", new TormentTM());
-		map.put("Facade TM", new FacadeTM());
-		map.put("Flame Charge TM", new FlameChargeTM());
-		map.put("Rest TM", new RestTM());
-		map.put("Attract TM", new AttractTM());
-		map.put("Thief TM", new ThiefTM());
-		map.put("Low Sweep TM", new LowSweepTM());
-		map.put("Round TM", new RoundTM());
-		map.put("Echoed Voice TM", new EchoedVoiceTM());
-		map.put("Overheat TM", new OverheatTM());
-		map.put("Steel Wing TM", new SteelWingTM());
-		map.put("Focus Blast TM", new FocusBlastTM());
-		map.put("Energy Ball TM", new EnergyBallTM());
-		map.put("False Swipe TM", new FalseSwipeTM());
-		map.put("Scald TM", new ScaldTM());
-		map.put("Fling TM", new FlingTM());
-		map.put("Charge Beam TM", new ChargeBeamTM());
-		map.put("Sky Drop TM", new SkyDropTM());
-		map.put("Incinerate TM", new IncinerateTM());
-		map.put("Will-O-Wisp TM", new WillOWispTM());
-		map.put("Acrobatics TM", new AcrobaticsTM());
-		map.put("Embargo TM", new EmbargoTM());
-		map.put("Explosion TM", new ExplosionTM());
-		map.put("Shadow Claw TM", new ShadowClawTM());
-		map.put("Payback TM", new PaybackTM());
-		map.put("Retaliate TM", new RetaliateTM());
-		map.put("Giga Impact TM", new GigaImpactTM());
-		map.put("Rock Polish TM", new RockPolishTM());
-		map.put("Flash TM", new FlashTM());
-		map.put("Stone Edge TM", new StoneEdgeTM());
-		map.put("Volt Switch TM", new VoltSwitchTM());
-		map.put("Thunder Wave TM", new ThunderWaveTM());
-		map.put("Gyro Ball TM", new GyroBallTM());
-		map.put("Swords Dance TM", new SwordsDanceTM());
-		map.put("Struggle Bug TM", new StruggleBugTM());
-		map.put("Psych Up TM", new PsychUpTM());
-		map.put("Bulldoze TM", new BulldozeTM());
-		map.put("Frost Breath TM", new FrostBreathTM());
-		map.put("Rock Slide TM", new RockSlideTM());
-		map.put("X-Scissor TM", new XScissorTM());
-		map.put("Dragon Tail TM", new DragonTailTM());
-		map.put("Infestation TM", new InfestationTM());
-		map.put("Poison Jab TM", new PoisonJabTM());
-		map.put("Dream Eater TM", new DreamEaterTM());
-		map.put("Grass Knot TM", new GrassKnotTM());
-		map.put("Swagger TM", new SwaggerTM());
-		map.put("Sleep Talk TM", new SleepTalkTM());
-		map.put("U-turn TM", new UTurnTM());
-		map.put("Substitute TM", new SubstituteTM());
-		map.put("Flash Cannon TM", new FlashCannonTM());
-		map.put("Trick Room TM", new TrickRoomTM());
-		map.put("Wild Charge TM", new WildChargeTM());
-		map.put("Rock Smash TM", new RockSmashTM());
-		map.put("Snarl TM", new SnarlTM());
-		map.put("Nature Power TM", new NaturePowerTM());
-		map.put("Dark Pulse TM", new DarkPulseTM());
-		map.put("Power-Up Punch TM", new PowerUpPunchTM());
-		map.put("Dazzling Gleam TM", new DazzlingGleamTM());
-		map.put("Confide TM", new ConfideTM());
-		map.put("Cut TM", new CutTM());
-		map.put("Fly TM", new FlyTM());
-		map.put("Surf TM", new SurfTM());
-		map.put("Strength TM", new StrengthTM());
-		map.put("Waterfall TM", new WaterfallTM());
-
 		processIncenseItems();
 	}
 
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
 	static class NoItem extends Item implements HoldItem {
@@ -10408,8 +9998,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.HONE_CLAWS_TM, "The user sharpens its claws to boost its Attack stat and accuracy.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Hone Claws"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Hone Claws").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10459,8 +10049,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.DRAGON_CLAW_TM, "The user slashes the target with huge, sharp claws.", BagCategory.TM, 2014);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dragon Claw"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dragon Claw").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10510,8 +10100,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.PSYSHOCK_TM, "The user materializes an odd psychic wave to attack the target. This attack does physical damage.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Psyshock"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Psyshock").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10561,8 +10151,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.CALM_MIND_TM, "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Calm Mind"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Calm Mind").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10612,8 +10202,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ROAR_TM, "The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Roar"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Roar").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10663,8 +10253,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.TOXIC_TM, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Toxic"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Toxic").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10714,8 +10304,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.HAIL_TM, "The user summons a hailstorm lasting five turns. It damages all Pokémon except the Ice type.", BagCategory.TM, 2005);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Hail"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Hail").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10765,8 +10355,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.BULK_UP_TM, "The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Bulk Up"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Bulk Up").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10816,8 +10406,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.VENOSHOCK_TM, "The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Venoshock"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Venoshock").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10867,8 +10457,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.HIDDEN_POWER_TM, "A unique attack that varies in type and intensity depending on the Pokémon using it.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Hidden Power"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Hidden Power").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10918,8 +10508,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SUNNY_DAY_TM, "The user intensifies the sun for five turns, powering up Fire-type moves.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sunny Day"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sunny Day").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10969,8 +10559,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.TAUNT_TM, "The target is taunted into a rage that allows it to use only attack moves for three turns.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Taunt"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Taunt").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11020,8 +10610,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ICE_BEAM_TM, "The target is struck with an icy-cold beam of energy. It may also freeze the target solid.", BagCategory.TM, 2005);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Ice Beam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Ice Beam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11071,8 +10661,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.", BagCategory.TM, 2005);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Blizzard"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Blizzard").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11122,8 +10712,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.HYPER_BEAM_TM, "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Hyper Beam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Hyper Beam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11173,8 +10763,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.LIGHT_SCREEN_TM, "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Light Screen"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Light Screen").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11224,8 +10814,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.PROTECT_TM, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Protect"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Protect").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11275,8 +10865,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.RAIN_DANCE_TM, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", BagCategory.TM, 2002);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rain Dance"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rain Dance").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11326,8 +10916,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ROOST_TM, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Roost"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Roost").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11377,8 +10967,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SAFEGUARD_TM, "The user creates a protective field that prevents status problems for five turns.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Safeguard"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Safeguard").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11428,8 +11018,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SOLAR_BEAM_TM, "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", BagCategory.TM, 2004);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Solar Beam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Solar Beam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11479,8 +11069,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or projectile to attack an opponent. A flying Pokémon will fall to the ground when hit.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Smack Down"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Smack Down").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11530,8 +11120,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.THUNDERBOLT_TM, "A strong electric blast is loosed at the target. It may also leave the target with paralysis.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Thunderbolt"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Thunderbolt").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11581,8 +11171,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.THUNDER_TM, "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Thunder"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Thunder").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11632,8 +11222,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.EARTHQUAKE_TM, "The user sets off an earthquake that strikes those around it.", BagCategory.TM, 2008);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Earthquake"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Earthquake").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11683,8 +11273,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.DIG_TM, "The user burrows, then attacks on the second turn. It can also be used to exit dungeons.", BagCategory.TM, 2008);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dig"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dig").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11734,8 +11324,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.PSYCHIC_TM, "The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Psychic"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Psychic").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11785,8 +11375,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SHADOW_BALL_TM, "The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.", BagCategory.TM, 2013);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Shadow Ball"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Shadow Ball").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11836,8 +11426,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.BRICK_BREAK_TM, "The user attacks with a swift chop. It can also break any barrier such as Light Screen and Reflect.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Brick Break"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Brick Break").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11887,8 +11477,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.DOUBLE_TEAM_TM, "By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Double Team"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Double Team").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11938,8 +11528,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.REFLECT_TM, "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Reflect"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Reflect").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11989,8 +11579,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SLUDGE_WAVE_TM, "It swamps the area around the user with a giant sludge wave. It may also poison those hit.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sludge Wave"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sludge Wave").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12040,8 +11630,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FLAMETHROWER_TM, "The target is scorched with an intense blast of fire. It may also leave the target with a burn.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Flamethrower"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Flamethrower").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12091,8 +11681,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SLUDGE_BOMB_TM, "Unsanitary sludge is hurled at the target. It may also poison the target.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sludge Bomb"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sludge Bomb").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12142,8 +11732,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sandstorm"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sandstorm").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12193,8 +11783,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FIRE_BLAST_TM, "The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Fire Blast"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Fire Blast").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12244,8 +11834,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ROCK_TOMB_TM, "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rock Tomb"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rock Tomb").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12295,8 +11885,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.AERIAL_ACE_TM, "The user confounds the foe with speed, then slashes. The attack lands without fail.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Aerial Ace"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Aerial Ace").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12346,8 +11936,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.TORMENT_TM, "The user torments and enrages the target, making it incapable of using the same move twice in a row.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Torment"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Torment").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12397,8 +11987,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FACADE_TM, "An attack move that doubles its power if the user is poisoned, burned, or has paralysis.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Facade"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Facade").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12448,8 +12038,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FLAME_CHARGE_TM, "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Flame Charge"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Flame Charge").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12499,8 +12089,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.REST_TM, "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rest"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rest").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12550,8 +12140,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ATTRACT_TM, "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Attract"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Attract").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12601,8 +12191,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.THIEF_TM, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Thief"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Thief").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12652,8 +12242,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.LOW_SWEEP_TM, "The user attacks the target's legs swiftly, reducing the target's Speed stat.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Low Sweep"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Low Sweep").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12703,8 +12293,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ROUND_TM, "The user attacks the target with a song.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Round"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Round").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12754,8 +12344,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ECHOED_VOICE_TM, "The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Echoed Voice"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Echoed Voice").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12805,8 +12395,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.OVERHEAT_TM, "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Overheat"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Overheat").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12856,8 +12446,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.STEEL_WING_TM, "The target is hit with wings of steel. It may also raise the user's Defense stat.", BagCategory.TM, 2016);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Steel Wing"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Steel Wing").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12907,8 +12497,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FOCUS_BLAST_TM, "The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Focus Blast"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Focus Blast").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12958,8 +12548,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ENERGY_BALL_TM, "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.", BagCategory.TM, 2004);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Energy Ball"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Energy Ball").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13009,8 +12599,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FALSE_SWIPE_TM, "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("False Swipe"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("False Swipe").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13060,8 +12650,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SCALD_TM, "The user shoots boiling hot water at its target. It may also leave the target with a burn.", BagCategory.TM, 2002);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Scald"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Scald").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13111,8 +12701,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FLING_TM, "The user flings its held item at the target to attack. Its power and effects depend on the item.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Fling"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Fling").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13162,8 +12752,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.CHARGE_BEAM_TM, "The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Charge Beam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Charge Beam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13213,8 +12803,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SKY_DROP_TM, "The user takes the target into the sky, then slams it into the ground.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sky Drop"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sky Drop").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13264,8 +12854,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.INCINERATE_TM, "The user attacks the target with fire. If the target is holding a Berry, the Berry becomes burnt up and unusable.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Incinerate"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Incinerate").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13315,8 +12905,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.WILL_O_WISP_TM, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Will-O-Wisp"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Will-O-Wisp").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13366,8 +12956,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ACROBATICS_TM, "The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Acrobatics"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Acrobatics").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13417,8 +13007,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.EMBARGO_TM, "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Embargo"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Embargo").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13468,8 +13058,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.EXPLOSION_TM, "The user explodes to inflict damage on those around it. The user faints upon using this move.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Explosion"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Explosion").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13519,8 +13109,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SHADOW_CLAW_TM, "The user slashes with a sharp claw made from shadows. Critical hits land more easily.", BagCategory.TM, 2013);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Shadow Claw"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Shadow Claw").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13570,8 +13160,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.PAYBACK_TM, "If the user moves after the target, this attack's power will be doubled.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Payback"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Payback").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13621,8 +13211,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.RETALIATE_TM, "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this attack's damage increases.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Retaliate"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Retaliate").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13672,8 +13262,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.GIGA_IMPACT_TM, "The user charges at the target using every bit of its power. The user must rest on the next turn.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Giga Impact"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Giga Impact").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13723,8 +13313,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. It can sharply raise the Speed stat.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rock Polish"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rock Polish").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13774,8 +13364,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FLASH_TM, "The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Flash"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Flash").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13825,8 +13415,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.STONE_EDGE_TM, "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Stone Edge"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Stone Edge").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13876,8 +13466,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.VOLT_SWITCH_TM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Volt Switch"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Volt Switch").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13927,8 +13517,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.THUNDER_WAVE_TM, "A weak electric charge is launched at the target. It causes paralysis if it hits.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Thunder Wave"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Thunder Wave").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13978,8 +13568,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.GYRO_BALL_TM, "The user tackles the target with a high-speed spin. The slower the user, the greater the damage.", BagCategory.TM, 2016);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Gyro Ball"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Gyro Ball").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14029,8 +13619,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SWORDS_DANCE_TM, "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Swords Dance"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Swords Dance").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14080,8 +13670,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.STRUGGLE_BUG_TM, "While resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced.", BagCategory.TM, 2011);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Struggle Bug"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Struggle Bug").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14131,8 +13721,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.PSYCH_UP_TM, "The user hypnotizes itself into copying any stat change made by the target.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Psych Up"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Psych Up").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14182,8 +13772,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.BULLDOZE_TM, "The user stomps down on the ground and attacks everything in the area. Hit Pokémon's Speed stat is reduced.", BagCategory.TM, 2008);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Bulldoze"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Bulldoze").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14233,8 +13823,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FROST_BREATH_TM, "The user blows a cold breath on the target. This attack always results in a critical hit.", BagCategory.TM, 2005);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Frost Breath"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Frost Breath").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14284,8 +13874,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rock Slide"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rock Slide").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14335,8 +13925,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.X_SCISSOR_TM, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", BagCategory.TM, 2011);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("X-Scissor"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("X-Scissor").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14386,8 +13976,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.DRAGON_TAIL_TM, "The user knocks away the target and drags out another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM, 2014);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dragon Tail"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dragon Tail").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14437,8 +14027,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.INFESTATION_TM, "The target is infested and attacked for four to five turns. The target can't flee during this time.", BagCategory.TM, 2011);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Infestation"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Infestation").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14488,8 +14078,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Poison Jab"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Poison Jab").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14539,8 +14129,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dream Eater"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dream Eater").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14590,8 +14180,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.GRASS_KNOT_TM, "The user snares the target with grass and trips it. The heavier the target, the greater the damage.", BagCategory.TM, 2004);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Grass Knot"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Grass Knot").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14641,8 +14231,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SWAGGER_TM, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Swagger"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Swagger").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14692,8 +14282,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SLEEP_TALK_TM, "While it is asleep, the user randomly uses one of the moves it knows.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sleep Talk"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sleep Talk").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14743,8 +14333,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.U_TURN_TM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM, 2011);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("U-turn"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("U-turn").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14794,8 +14384,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SUBSTITUTE_TM, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Substitute"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Substitute").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14845,8 +14435,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FLASH_CANNON_TM, "The user gathers all its light energy and releases it at once. It may also lower the target's Sp. Def stat.", BagCategory.TM, 2016);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Flash Cannon"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Flash Cannon").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14896,8 +14486,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.TRICK_ROOM_TM, "The user creates a bizarre area in which slower Pokémon get to move first for five turns.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Trick Room"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Trick Room").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14947,8 +14537,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.WILD_CHARGE_TM, "The user shrouds itself in electricity and smashes into its target. It also damages the user a little.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Wild Charge"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Wild Charge").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14998,8 +14588,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.ROCK_SMASH_TM, "The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rock Smash"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rock Smash").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15049,8 +14639,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SNARL_TM, "The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Snarl"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Snarl").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15100,8 +14690,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.NATURE_POWER_TM, "An attack that makes use of nature's power. Its effects vary depending on the user's environment.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Nature Power"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Nature Power").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15151,8 +14741,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.DARK_PULSE_TM, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dark Pulse"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dark Pulse").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15202,8 +14792,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.POWER_UP_PUNCH_TM, "Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Power-Up Punch"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Power-Up Punch").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15253,8 +14843,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.DAZZLING_GLEAM_TM, "The user damages opposing Pokémon by emitting a powerful flash.", BagCategory.TM, 2017);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dazzling Gleam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dazzling Gleam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15304,8 +14894,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.CONFIDE_TM, "The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target's Sp. Atk stat.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Confide"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Confide").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15355,8 +14945,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.CUT_TM, "The target is cut with a scythe or a claw. It can also be used to cut down thin trees.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Cut"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Cut").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15406,8 +14996,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.FLY_TM, "The user soars, then strikes its target on the second turn. It can also be used for flying to any familiar town.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Fly"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Fly").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15457,8 +15047,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.SURF_TM, "It swamps the area around the user with a giant wave. It can also be used for crossing water.", BagCategory.TM, 2002);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Surf"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Surf").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15508,8 +15098,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.STRENGTH_TM, "The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Strength"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Strength").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15559,8 +15149,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super(ItemNamesies.WATERFALL_TM, "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", BagCategory.TM, 2002);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Waterfall"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Waterfall").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {

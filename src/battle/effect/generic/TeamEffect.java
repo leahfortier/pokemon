@@ -1,7 +1,8 @@
 package battle.effect.generic;
 
-import battle.attack.Attack;
 import battle.Battle;
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
@@ -12,18 +13,15 @@ import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
-import main.Global;
+import item.ItemNamesies;
 import main.Type;
 import message.Messages;
-import pokemon.ability.AbilityNamesies;
-import battle.attack.AttackNamesies;
-import item.ItemNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 // Class to handle effects that are specific to one side of the battle
@@ -65,24 +63,9 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		
 		// EVERYTHING BELOW IS GENERATED ###
 
-		// List all of the classes we are loading
-		map.put("Reflect", new Reflect());
-		map.put("LightScreen", new LightScreen());
-		map.put("Tailwind", new Tailwind());
-		map.put("StickyWeb", new StickyWeb());
-		map.put("StealthRock", new StealthRock());
-		map.put("ToxicSpikes", new ToxicSpikes());
-		map.put("Spikes", new Spikes());
-		map.put("Wish", new Wish());
-		map.put("LuckyChant", new LuckyChant());
-		map.put("FutureSight", new FutureSight());
-		map.put("DoomDesire", new DoomDesire());
-		map.put("HealSwitch", new HealSwitch());
-		map.put("DeadAlly", new DeadAlly());
-		map.put("PayDay", new PayDay());
-		map.put("GetDatCashMoneyTwice", new GetDatCashMoneyTwice());
 	}
 
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
 	static class Reflect extends TeamEffect implements BarrierEffect, StatChangingEffect {

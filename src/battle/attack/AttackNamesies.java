@@ -1216,13 +1216,25 @@ public enum AttackNamesies {
 		return this.name;
 	}
 
-	public static AttackNamesies getValueOf(String name) {
+	public Attack getAttack() {
+		return this.attackCreator.createAttack();
+	}
+
+	public static AttackNamesies tryValueOf(String name) {
 		try {
 			return AttackNamesies.valueOf(PokeString.getNamesiesString(name));
 		} catch (IllegalArgumentException exception) {
-			Global.error(name + " does not have a valid AttackNamesies value");
 			return null;
 		}
+	}
+
+	public static AttackNamesies getValueOf(String name) {
+		AttackNamesies namesies = tryValueOf(name);
+		if (namesies == null) {
+			Global.error(name + " does not have a valid AttackNamesies value");
+		}
+
+		return namesies;
 	}
 }
 

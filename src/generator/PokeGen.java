@@ -134,25 +134,9 @@ class PokeGen {
 		return fields;
 	}
 	
-	private StringBuilder startGen() {
-		StringBuilder out = StuffGen.startGen(this.currentGen.getOutputPath());
-		out.append("\n\t\t// List all of the classes we are loading\n");
-		
-		return out;
-	}
-	
-	private void addClass(StringBuilder out, StringBuilder classes, String name, String className, Map<String, String> fields) {
+	private void addClass(StringBuilder classes, String name, String className, Map<String, String> fields) {
 		this.namesiesGen.createNamesies(name, className);
 		
-		// Mappity map
-		if (this.currentGen.isMappity()) {
-			out.append("\t\tmap.put(\"")
-					.append(name)
-					.append("\", new ")
-					.append(className)
-					.append("());\n");
-		}
-
 		List<String> interfaces = new ArrayList<>();
 		String additionalMethods = getAdditionalMethods(fields, interfaces);
 		String constructor = getConstructor(fields);
@@ -181,7 +165,7 @@ class PokeGen {
 	}
 	
 	private void superGen() {
-		StringBuilder out = startGen();
+		StringBuilder out = StuffGen.startGen(this.currentGen.getOutputPath());
 
 		Scanner in = FileIO.openFile(this.currentGen.getInputPath());
 		readFileFormat(in);
@@ -208,7 +192,7 @@ class PokeGen {
 			// Read in all of the fields
 			Map<String, String> fields = readFields(in, name, className, index);
 			
-			addClass(out, classes, name, className, fields);
+			addClass(classes, name, className, fields);
 			
 			if (this.currentGen == Generator.ITEM_GEN) {
 				addImageIndex(indexOut, index, name, className.toLowerCase());
@@ -216,21 +200,10 @@ class PokeGen {
 			
 			index++;
 		}
-		
-		switch (this.currentGen) {
-			case ATTACK_GEN:
-				out.append("\n\t\tfor (String s : map.keySet()) {\n\t\t\tmoveNames.add(s);\n\t\t}\n");
-				break;
-			case ITEM_GEN:
-				addTMs(out, classes, indexOut);
-				out.append("\n\t\tprocessIncenseItems();\n");
-				FileIO.writeToFile(Folder.ITEM_TILES + "index.txt", indexOut);
-			default:
-				break;
-		}
-		
-		if (this.currentGen.isMappity()) {
-			out.append("\t}\n\n");	
+
+		if (this.currentGen == Generator.ITEM_GEN) {
+			addTMs(classes, indexOut);
+			FileIO.writeToFile(Folder.ITEM_TILES + "index.txt", indexOut);
 		}
 		
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n") // DON'T DO IT
@@ -394,7 +367,7 @@ class PokeGen {
 		return methods.toString();
 	}
 	
-	private void addTMs(StringBuilder out, StringBuilder classes, StringBuilder indexOut) {
+	private void addTMs(StringBuilder classes, StringBuilder indexOut) {
 		if (this.currentGen != Generator.ITEM_GEN) {
 			Global.error("Can only add TMs for the Item class");
 		}
@@ -414,7 +387,7 @@ class PokeGen {
 			String attackName = in.nextLine().trim();
 			String className = PokeString.writeClassName(attackName);
 
-			Attack attack = Attack.getAttack(AttackNamesies.getValueOf(attackName));
+			Attack attack = AttackNamesies.getValueOf(attackName).getAttack();
 
 			String itemName = attackName + " TM";
 			className += "TM";
@@ -426,7 +399,7 @@ class PokeGen {
 			fields.put("Desc", attack.getDescription());
 			fields.put("TM", attackName);
 
-			addClass(out, classes, itemName, className, fields);
+			addClass(classes, itemName, className, fields);
 		}
 	}
 	

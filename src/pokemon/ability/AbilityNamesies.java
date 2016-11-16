@@ -376,6 +376,10 @@ public enum AbilityNamesies {
 		return this.name;
 	}
 
+	public Ability getNewAbility() {
+		return this.abilityCreator.createAbility().newInstance();
+	}
+
 	public static AbilityNamesies getValueOf(String name) {
 		try {
 			return AbilityNamesies.valueOf(PokeString.getNamesiesString(name));

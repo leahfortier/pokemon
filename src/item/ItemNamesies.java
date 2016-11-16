@@ -838,6 +838,10 @@ public enum ItemNamesies {
 		return this.name;
 	}
 
+	public Item getItem() {
+		return this.itemCreator.createItem();
+	}
+
 	public static ItemNamesies tryValueOf(String name) {
 		try {
 			return ItemNamesies.valueOf(PokeString.getNamesiesString(name));

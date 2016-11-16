@@ -222,6 +222,10 @@ public enum EffectNamesies {
 		Effect createEffect();
 	}
 
+	public Effect getEffect() {
+		return this.effectCreator.createEffect();
+	}
+
 	public String getName() {
 		return this.name;
 	}

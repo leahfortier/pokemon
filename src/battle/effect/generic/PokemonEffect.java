@@ -1,7 +1,8 @@
 package battle.effect.generic;
 
-import battle.attack.Attack;
 import battle.Battle;
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
@@ -45,21 +46,19 @@ import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
+import item.ItemNamesies;
 import main.Global;
 import main.Type;
 import message.Messages;
-import pokemon.ability.AbilityNamesies;
-import battle.attack.AttackNamesies;
-import item.ItemNamesies;
-import pokemon.ability.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Stat;
+import pokemon.ability.Ability;
+import pokemon.ability.AbilityNamesies;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +84,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 	
 	public abstract PokemonEffect newInstance();
 
+	// TODO: Delete this
 	public static PokemonEffect getEffect(EffectNamesies name) {
 		String effectName = name.getName();
 		if (map == null) {
@@ -108,79 +108,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		// EVERYTHING BELOW IS GENERATED ###
 
-		// List all of the classes we are loading
-		map.put("LeechSeed", new LeechSeed());
-		map.put("BadPoison", new BadPoison());
-		map.put("Flinch", new Flinch());
-		map.put("FireSpin", new FireSpin());
-		map.put("Infestation", new Infestation());
-		map.put("MagmaStorm", new MagmaStorm());
-		map.put("Clamped", new Clamped());
-		map.put("Whirlpooled", new Whirlpooled());
-		map.put("Wrapped", new Wrapped());
-		map.put("Binded", new Binded());
-		map.put("SandTomb", new SandTomb());
-		map.put("KingsShield", new KingsShield());
-		map.put("SpikyShield", new SpikyShield());
-		map.put("Protecting", new Protecting());
-		map.put("QuickGuard", new QuickGuard());
-		map.put("CraftyShield", new CraftyShield());
-		map.put("MatBlock", new MatBlock());
-		map.put("Bracing", new Bracing());
-		map.put("Confusion", new Confusion());
-		map.put("SelfConfusion", new SelfConfusion());
-		map.put("Safeguard", new Safeguard());
-		map.put("GuardSpecial", new GuardSpecial());
-		map.put("Encore", new Encore());
-		map.put("Disable", new Disable());
-		map.put("RaiseCrits", new RaiseCrits());
-		map.put("ChangeItem", new ChangeItem());
-		map.put("ChangeType", new ChangeType());
-		map.put("ChangeAbility", new ChangeAbility());
-		map.put("Stockpile", new Stockpile());
-		map.put("UsedDefenseCurl", new UsedDefenseCurl());
-		map.put("UsedMinimize", new UsedMinimize());
-		map.put("Mimic", new Mimic());
-		map.put("Imprison", new Imprison());
-		map.put("Trapped", new Trapped());
-		map.put("Foresight", new Foresight());
-		map.put("MiracleEye", new MiracleEye());
-		map.put("Torment", new Torment());
-		map.put("Taunt", new Taunt());
-		map.put("LockOn", new LockOn());
-		map.put("Telekinesis", new Telekinesis());
-		map.put("Ingrain", new Ingrain());
-		map.put("Grounded", new Grounded());
-		map.put("Curse", new Curse());
-		map.put("Yawn", new Yawn());
-		map.put("MagnetRise", new MagnetRise());
-		map.put("Uproar", new Uproar());
-		map.put("AquaRing", new AquaRing());
-		map.put("Nightmare", new Nightmare());
-		map.put("Charge", new Charge());
-		map.put("Focusing", new Focusing());
-		map.put("FiddyPercentStronger", new FiddyPercentStronger());
-		map.put("Transformed", new Transformed());
-		map.put("Substitute", new Substitute());
-		map.put("Mist", new Mist());
-		map.put("MagicCoat", new MagicCoat());
-		map.put("Bide", new Bide());
-		map.put("HalfWeight", new HalfWeight());
-		map.put("PowerTrick", new PowerTrick());
-		map.put("PowerSplit", new PowerSplit());
-		map.put("GuardSplit", new GuardSplit());
-		map.put("HealBlock", new HealBlock());
-		map.put("Infatuated", new Infatuated());
-		map.put("Snatch", new Snatch());
-		map.put("Grudge", new Grudge());
-		map.put("DestinyBond", new DestinyBond());
-		map.put("PerishSong", new PerishSong());
-		map.put("Embargo", new Embargo());
-		map.put("ConsumedItem", new ConsumedItem());
-		map.put("FairyLock", new FairyLock());
-		map.put("Powder", new Powder());
-		map.put("Electrified", new Electrified());
-		map.put("EatenBerry", new EatenBerry());
 	}
 
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
