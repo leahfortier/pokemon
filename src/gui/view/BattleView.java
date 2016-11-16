@@ -65,10 +65,9 @@ public class BattleView extends View {
 	private static final int POKEMON_SWITCH_BUTTON = Trainer.MAX_POKEMON;
 	
 	// Loss Constants <-- Super Meaningful Comment
-	private static final int FRAMES_PER_HP_LOSS = 1;
-//	private static final int FRAMES_PER_HP_LOSS = 20;
+	private static final int FRAMES_PER_HP_LOSS = 20;
 	private static final float HP_LOSS_RATIO = 0.1f;
-	private static final float EXP_LOSS_RATIO = 1500f;
+	private static final float EXP_LOSS_RATIO = 15f;
 	
 	// Evolution and Catch Lifespans
 	private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
