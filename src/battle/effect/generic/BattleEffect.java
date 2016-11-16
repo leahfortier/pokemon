@@ -64,16 +64,6 @@ public abstract class BattleEffect extends Effect {
 
 		// EVERYTHING BELOW IS GENERATED ###
 
-		// List all of the classes we are loading
-		map.put("Gravity", new Gravity());
-		map.put("WaterSport", new WaterSport());
-		map.put("MudSport", new MudSport());
-		map.put("WonderRoom", new WonderRoom());
-		map.put("TrickRoom", new TrickRoom());
-		map.put("MagicRoom", new MagicRoom());
-		map.put("MistyTerrain", new MistyTerrain());
-		map.put("GrassyTerrain", new GrassyTerrain());
-		map.put("ElectricTerrain", new ElectricTerrain());
 	}
 
 	// EVERYTHING BELOW IS GENERATED ###
