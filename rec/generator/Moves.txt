@@ -5491,7 +5491,7 @@ Knock Off:
 	super.applyEffects(b, user, victim);
 	###
 	GetItem: 
-	return Item.noneItem();
+	return ItemNamesies.NO_ITEM.getItem();
 	###
 	Effect: ChangeItem
 	Int: ItemHolder

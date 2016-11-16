@@ -9067,7 +9067,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Item getItem() {
-			return Item.noneItem();
+			return ItemNamesies.NO_ITEM.getItem();
 		}
 	}
 

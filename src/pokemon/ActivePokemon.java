@@ -117,7 +117,7 @@ public class ActivePokemon implements Serializable {
 		this.ability = Ability.assign(this.pokemon);
 		this.hiddenPowerType = computeHiddenPowerType();
 		
-		this.heldItem = isWild ? WildHoldItem.getWildHoldItem(this.pokemon.getWildItems()) : (HoldItem)Item.noneItem();
+		this.heldItem = isWild ? WildHoldItem.getWildHoldItem(this.pokemon.getWildItems()) : (HoldItem)ItemNamesies.NO_ITEM.getItem();
 		
 		this.isEgg = false;
 		this.eggSteps = 0;
@@ -1107,7 +1107,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public void removeItem() {
-		heldItem = (HoldItem)Item.noneItem();
+		heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 	}
 	
 	public void consumeItem(Battle b) {
@@ -1129,9 +1129,10 @@ public class ActivePokemon implements Serializable {
 		if (b == null) {
 			return getActualHeldItem();
 		}
-		
+
+		// TODO: Make effect interface for this
 		if (hasAbility(AbilityNamesies.KLUTZ) || b.hasEffect(EffectNamesies.MAGIC_ROOM) || hasEffect(EffectNamesies.EMBARGO)) {
-			return Item.noneItem();
+			return ItemNamesies.NO_ITEM.getItem();
 		}
 		
 		// Check if the Pokemon has had its item changed during the battle
@@ -1139,7 +1140,7 @@ public class ActivePokemon implements Serializable {
 		Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 		
 		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility(AbilityNamesies.UNNERVE)) {
-			return Item.noneItem();
+			return ItemNamesies.NO_ITEM.getItem();
 		}
 		
 		return item;
@@ -1150,7 +1151,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public boolean isHoldingItem(Battle b) {
-		return getHeldItem(b) != Item.noneItem();
+		return getHeldItem(b).namesies() != ItemNamesies.NO_ITEM;
 	}
 	
 	public boolean isShiny() {

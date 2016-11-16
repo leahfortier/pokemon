@@ -17,10 +17,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class MartView extends View {
+class MartView extends View {
 
 	// TODO: Need to eventually make this dynamic
 	private static final ItemNamesies[] FOR_SALE_NAMES = new ItemNamesies[] {
@@ -31,8 +32,7 @@ public class MartView extends View {
 			ItemNamesies.BURN_HEAL
 	};
 
-	// TODO: Should be a namesies list
-	private static List<Item> forSaleItems;
+	private static List<ItemNamesies> forSaleItems;
 	
 	private static final Color BACKGROUND_COLOR = new Color (68, 123, 184);
 	
@@ -65,7 +65,7 @@ public class MartView extends View {
 	private int selectedButton;
 	private int itemAmount;
 	
-	private Item selectedItem;
+	private ItemNamesies selectedItem;
 	
 	private Button[] buttons;
 	private Button[] itemButtons;
@@ -76,7 +76,7 @@ public class MartView extends View {
 	private Button shopRightButton;
 	private Button returnButton;
 	
-	public MartView() {
+	MartView() {
 		selectedButton = 0;
 		itemAmount = 1;
 
@@ -110,12 +110,10 @@ public class MartView extends View {
 		buttons[BUY] = buyButton = new Button(SIDE_BOX_X, MONEY_BOX_Y + SIDE_BOX_GAP*5, 308, 61, Button.HoverAction.BOX, new int[] { RETURN, BUY, RETURN, BUY });
 		
 		buttons[RETURN] = returnButton = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW });
-		
+
 		if (forSaleItems == null) {
 			forSaleItems = new ArrayList<>();
-			for (ItemNamesies itemName : FOR_SALE_NAMES) {
-				forSaleItems.add(itemName.getItem());
-			}
+			Collections.addAll(forSaleItems, FOR_SALE_NAMES);
 		}
 		
 		setSelectedItem(forSaleItems.get(0));
@@ -125,15 +123,15 @@ public class MartView extends View {
 	public void update(int dt, InputControl input) {
 		CharacterData player = Game.getPlayer();
 		selectedButton = Button.update(buttons, selectedButton, input);
-			
-		Iterator<Item> iter = forSaleItems.iterator();
+
+		Iterator<ItemNamesies> iter = forSaleItems.iterator();
 		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
 			iter.next();
 		}
 
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
-				Item item = iter.next();
+				ItemNamesies item = iter.next();
 				if (itemButtons[k].checkConsumePress()) {
 					setSelectedItem(item);
 					updateActiveButtons();
@@ -141,10 +139,12 @@ public class MartView extends View {
 			}
 		}
 
+		Item selectedItemValue = selectedItem.getItem();
+
 		// TODO: Need to have a method to get the max purchase amount
 		if (amountLeftButton.checkConsumePress()) {
 			if (itemAmount == 1) {
-				itemAmount = player.getDatCashMoney()/selectedItem.getPrice();
+				itemAmount = player.getDatCashMoney()/selectedItemValue.getPrice();
 			}
 			else {
 				itemAmount--;
@@ -154,7 +154,7 @@ public class MartView extends View {
 		}
 		
 		if (amountRightButton.checkConsumePress()) {
-			if (itemAmount ==  player.getDatCashMoney()/selectedItem.getPrice()) {
+			if (itemAmount ==  player.getDatCashMoney()/selectedItemValue.getPrice()) {
 				itemAmount = 1;
 			}
 			else {
@@ -165,7 +165,7 @@ public class MartView extends View {
 		}		
 		
 		if (buyButton.checkConsumePress()) {
-			player.sucksToSuck(itemAmount*selectedItem.getPrice());
+			player.sucksToSuck(itemAmount*selectedItemValue.getPrice());
 			player.getBag().addItem(selectedItem, itemAmount);
 			
 			setSelectedItem(selectedItem);
@@ -228,8 +228,10 @@ public class MartView extends View {
 		
 		// Item Display
 		if (selectedItem != null) {
+			Item selectedItemValue = selectedItem.getItem();
+
 			// Draw item image
-			BufferedImage img = itemTiles.getTile(selectedItem.getImageIndex());
+			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageIndex());
 			DrawUtils.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
@@ -237,7 +239,7 @@ public class MartView extends View {
 			g.drawString(selectedItem.getName(), 448, 138);
 			
 			DrawUtils.setFont(g, 14);
-			DrawUtils.drawWrappedText(g, selectedItem.getDescription(), 418, 156, 726 - amountLeftButton.x);
+			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
 			
 			DrawUtils.setFont(g, 20);
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
@@ -250,7 +252,7 @@ public class MartView extends View {
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
-		Iterator<Item> iter = forSaleItems.iterator();
+		Iterator<ItemNamesies> iter = forSaleItems.iterator();
 		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
 			iter.next();
 		}
@@ -258,11 +260,11 @@ public class MartView extends View {
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				g.translate(itemButtons[k].x, itemButtons[k].y);
-				Item item = iter.next();
+				ItemNamesies item = iter.next();
 				
 				g.drawImage(tiles.getTile(0x26), 0,0, null);
 				
-				BufferedImage img = itemTiles.getTile(item.getImageIndex());
+				BufferedImage img = itemTiles.getTile(item.getItem().getImageIndex());
 				DrawUtils.drawCenteredImage(g, img, 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
@@ -319,7 +321,7 @@ public class MartView extends View {
 		g.drawImage(tiles.getTile(0x25), 0, 0, null);
 		
 		g.setColor(Color.BLACK);
-		g.drawString("Total: " + Global.MONEY_SYMBOL + selectedItem.getPrice()*itemAmount, BOX_TEXT_X, BOX_TEXT_Y);
+		g.drawString("Total: " + Global.MONEY_SYMBOL + selectedItem.getItem().getPrice()*itemAmount, BOX_TEXT_X, BOX_TEXT_Y);
 		
 		g.translate(-SIDE_BOX_X, -TOTAL_BOX_Y);
 		
@@ -394,8 +396,8 @@ public class MartView extends View {
 		buyButton.setActive(amountSet);
 	}	
 
-	private void setSelectedItem(Item item) {
+	private void setSelectedItem(ItemNamesies item) {
 		selectedItem = item;
-		itemAmount = selectedItem.getPrice() <= Game.getPlayer().getDatCashMoney() ? 1 : 0;
+		itemAmount = selectedItem.getItem().getPrice() <= Game.getPlayer().getDatCashMoney() ? 1 : 0;
 	}
 }

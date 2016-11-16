@@ -6,9 +6,9 @@ import battle.effect.status.StatusCondition;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
+import item.ItemNamesies;
 import item.bag.Bag;
 import item.bag.BattleBagCategory;
-import item.Item;
 import item.use.PokemonUseItem;
 import main.Game;
 import main.Global;
@@ -110,7 +110,7 @@ public class BattleView extends View {
 	// Current bag page, bag category, and selected item
 	private int bagPage;
 	private int selectedBagTab;
-	private Item selectedItem;
+	private ItemNamesies selectedItem;
 	
 	// Current selected tab in Pokemon view and whether or not a switch is forced
 	private int selectedPokemonTab;
@@ -893,7 +893,7 @@ public class BattleView extends View {
 			}
 
 			// TODO: Make a method for this
-			view.bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != Item.noneItem());
+			view.bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != ItemNamesies.NO_ITEM);
 			
 			for (Button b: view.bagButtons) {
 				b.setForceHover(false);
@@ -909,11 +909,11 @@ public class BattleView extends View {
 			
 			Bag bag = view.currentBattle.getPlayer().getBag();
 			
-			Set<Item> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
+			Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
 			TileSet itemTiles = Game.getData().getItemTiles();
 
 			DrawUtils.setFont(g, 12);
-			Iterator<Item> iter = toDraw.iterator();
+			Iterator<ItemNamesies> iter = toDraw.iterator();
 			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) {
 				iter.next();
 			}
@@ -928,15 +928,15 @@ public class BattleView extends View {
 					g.drawImage(tiles.getTile(0x11), 0, 0, null);
 					
 					// Draw item image
-					Item i = iter.next();
-					BufferedImage img = itemTiles.getTile(i.getImageIndex());
+					ItemNamesies item = iter.next();
+					BufferedImage img = itemTiles.getTile(item.getItem().getImageIndex());
 					DrawUtils.drawCenteredImage(g, img, 14, 14);
 
 					// Item name
-					g.drawString(i.getName(), 28, 19);
+					g.drawString(item.getName(), 28, 19);
 					
 					// Item quantity
-					DrawUtils.drawRightAlignedString(g, "x" + view.currentBattle.getPlayer().getBag().getQuantity(i), 140, 19);
+					DrawUtils.drawRightAlignedString(g, "x" + view.currentBattle.getPlayer().getBag().getQuantity(item), 140, 19);
 					
 					g.translate(-dx, -dy);
 				}
@@ -950,14 +950,15 @@ public class BattleView extends View {
 			View.drawArrows(g, view.bagLeftButton, view.bagRightButton);
 			
 			// Last Item Used
-			Item lastUsedItem = bag.getLastUsedItem();
+			ItemNamesies lastUsedItem = bag.getLastUsedItem();
+
 			// TODO: Should have a method to check if it is the empty item
-			if (lastUsedItem != Item.noneItem()) {
+			if (lastUsedItem != ItemNamesies.NO_ITEM) {
 				g.translate(214, 517);
 				DrawUtils.setFont(g, 12);
 				g.drawImage(tiles.getTile(0x11), 0, 0, null);
-				
-				BufferedImage img = itemTiles.getTile(lastUsedItem.getImageIndex());
+
+				BufferedImage img = itemTiles.getTile(lastUsedItem.getItem().getImageIndex());
 				DrawUtils.drawCenteredImage(g, img, 14, 14);
 
 				g.drawString(lastUsedItem.getName(), 28, 19);
@@ -965,7 +966,7 @@ public class BattleView extends View {
 
 				g.translate(-214, -517);
 			}
-			
+
 			// Messages text
 			String msgLine = view.state == VisualState.INVALID_BAG && view.message != null ? view.message : "Choose an item!";
 			g.setColor(Color.BLACK);
@@ -998,8 +999,8 @@ public class BattleView extends View {
 			
 			CharacterData player = view.currentBattle.getPlayer();
 			Bag bag = player.getBag();
-			Set<Item> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
-			Iterator<Item> iter = toDraw.iterator();
+			Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
+			Iterator<ItemNamesies> iter = toDraw.iterator();
 			
 			// Skip ahead to the current page
 			for (int i = 0; i < view.bagPage*ITEMS_PER_PAGE; i++) {
@@ -1008,10 +1009,10 @@ public class BattleView extends View {
 			
 			// Go through each item on the page
 			for (int i = ITEMS; i < ITEMS + ITEMS_PER_PAGE && iter.hasNext(); i++) {
-				Item item = iter.next();
+				ItemNamesies item = iter.next();
 				if (view.bagButtons[i].checkConsumePress()) {
 					// Pokemon Use Item -- Set item to be selected an change to Pokemon View
-					if (item instanceof PokemonUseItem) {
+					if (item.getItem() instanceof PokemonUseItem) {
 						view.selectedItem = item;
 						view.setVisualState(VisualState.USE_ITEM);
 						break;
@@ -1033,8 +1034,8 @@ public class BattleView extends View {
 			
 			// Selecting the Last Item Used Button
 			if (view.bagLastUsedBtn.checkConsumePress()) {
-				Item lastItemUsed = bag.getLastUsedItem();
-				if (lastItemUsed != Item.noneItem() && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle)) {
+				ItemNamesies lastItemUsed = bag.getLastUsedItem();
+				if (lastItemUsed != ItemNamesies.NO_ITEM && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle)) {
 					player.performAction(view.currentBattle, Action.ITEM);
 					view.setVisualState(VisualState.MENU);
 					view.cycleMessage(false);

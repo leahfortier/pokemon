@@ -7,7 +7,6 @@ import gui.view.MapView;
 import gui.view.View;
 import gui.view.ViewMode;
 import item.ItemNamesies;
-import item.hold.HoldItem;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.CharacterData;
@@ -51,7 +50,7 @@ public class Game {
 	
 	private void setupCharacter() {
 		characterData.addPokemon(null, new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
-		characterData.front().giveItem((HoldItem)ItemNamesies.ORAN_BERRY.getItem());
+		characterData.front().giveItem(ItemNamesies.ORAN_BERRY);
 	}
 	
 	private void checkViewSwitch(InputControl input) {

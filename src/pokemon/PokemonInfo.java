@@ -1,12 +1,11 @@
 package pokemon;
 
-import item.Item;
+import battle.attack.AttackNamesies;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
 import main.Type;
 import pokemon.ability.AbilityNamesies;
-import battle.attack.AttackNamesies;
 import util.FileIO;
 import util.FileName;
 
@@ -347,7 +346,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 				}
 			}
 			
-			return (HoldItem)Item.noneItem();
+			return (HoldItem)ItemNamesies.NO_ITEM.getItem();
 		}
 	}
 	

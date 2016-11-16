@@ -1214,7 +1214,7 @@ Pickup:
 	EndBattle: 
 	if (!p.isHoldingItem(b) && Global.chanceTest(10)) {
 		// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
-		p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
+		p.giveItem(ItemNamesies.LEFTOVERS);
 	}
 	###
 *
@@ -1230,7 +1230,7 @@ Honey Gather:
 	EndBattle: 
 	if (!p.isHoldingItem(b) && Global.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
 		// TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
-		p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
+		p.giveItem(ItemNamesies.LEFTOVERS);
 	}
 	###
 	Desc: The Pok\u00e9mon may gather Honey from somewhere.

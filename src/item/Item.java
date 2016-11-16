@@ -146,10 +146,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return this.battleBagCategories;
 	}
 
-	public static Item noneItem() {
-		return ItemNamesies.NO_ITEM.getItem();
-	}
-
 	public int hashCode() {
 		return name.hashCode();
 	}

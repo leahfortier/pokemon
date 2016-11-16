@@ -3,12 +3,12 @@ package trainer;
 import battle.Battle;
 import battle.effect.SwitchOutEffect;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import battle.effect.status.StatusCondition;
+import item.ItemNamesies;
 import item.bag.Bag;
-import item.Item;
 import main.Global;
-import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;
@@ -127,9 +127,8 @@ public abstract class Trainer implements Team, Serializable {
 	
 	public abstract void addPokemon(Battle b, ActivePokemon p);
 
-	// TODO: Namesies
-	public void addItem(Item i, int amt) {
-		bag.addItem(i, amt);
+	public void addItem(ItemNamesies item, int amount) {
+		bag.addItem(item, amount);
 	}
 	
 	public Bag getBag() {

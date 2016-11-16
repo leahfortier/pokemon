@@ -2,9 +2,7 @@ package pattern;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import item.Item;
 import item.ItemNamesies;
-import item.hold.HoldItem;
 import main.Global;
 import pattern.MatchConstants.MatchType;
 import pokemon.PokemonNamesies;
@@ -41,7 +39,7 @@ public class PokemonMatcher {
     private boolean isShiny;
     private List<Move> moves;
     private boolean isEgg;
-    private HoldItem holdItem;
+    private ItemNamesies holdItem;
 
     public static PokemonMatcher matchPokemonDescription(final String pokemonDescription) {
         Matcher matcher = pokemonPattern.matcher(pokemonDescription);
@@ -98,13 +96,12 @@ public class PokemonMatcher {
 
             if (params.group(8) != null) {
                 String itemName = params.group(9);
-                Item item = ItemNamesies.getValueOf(itemName).getItem();
-                if (item.isHoldable()) {
-                    this.holdItem = (HoldItem)item;
-                }
-                else {
+                ItemNamesies item = ItemNamesies.getValueOf(itemName);
+                if (!item.getItem().isHoldable()) {
                     Global.error(itemName +" is not a hold item. Pokemon: " + this.namesies.getName());
                 }
+
+                this.holdItem = item;
             }
         }
     }
@@ -147,7 +144,7 @@ public class PokemonMatcher {
         return this.holdItem != null;
     }
 
-    public HoldItem getHoldItem() {
+    public ItemNamesies getHoldItem() {
         return this.holdItem;
     }
 }

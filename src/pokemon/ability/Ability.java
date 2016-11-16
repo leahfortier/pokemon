@@ -2583,7 +2583,7 @@ public abstract class Ability implements Serializable {
 			item = stolen;
 			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
 			
-			item = Item.noneItem();
+			item = ItemNamesies.NO_ITEM.getItem();
 			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
 		}
 
@@ -2628,7 +2628,7 @@ public abstract class Ability implements Serializable {
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
 			if (!p.isHoldingItem(b) && Global.chanceTest(10)) {
 				// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
-				p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
+				p.giveItem(ItemNamesies.LEFTOVERS);
 			}
 		}
 	}
@@ -2655,7 +2655,7 @@ public abstract class Ability implements Serializable {
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
 			if (!p.isHoldingItem(b) && Global.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
 				// TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
-				p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
+				p.giveItem(ItemNamesies.LEFTOVERS);
 			}
 		}
 	}
@@ -2792,7 +2792,7 @@ public abstract class Ability implements Serializable {
 			item = stolen;
 			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
 			
-			item = Item.noneItem();
+			item = ItemNamesies.NO_ITEM.getItem();
 			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
 		}
 

@@ -1,25 +1,19 @@
 package gui.view;
 
+import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
+import item.Item;
+import item.ItemNamesies;
 import item.bag.Bag;
 import item.bag.BagCategory;
-import item.Item;
 import item.hold.HoldItem;
 import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import main.Game;
 import main.Type;
 import pokemon.ActivePokemon;
@@ -28,9 +22,15 @@ import trainer.Trainer;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
-import battle.attack.Move;
 
-public class BagView extends View {
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+class BagView extends View {
 	private static final BagCategory[] CATEGORIES = BagCategory.values();
 	private static final int ITEMS_PER_PAGE = 10;
 	
@@ -56,7 +56,7 @@ public class BagView extends View {
 	private String message;
 
 	private BagState state;
-	private Item selectedItem;
+	private ItemNamesies selectedItem;
 	private ActivePokemon selectedPokemon;
 	
 	private Button[] buttons;
@@ -83,11 +83,11 @@ public class BagView extends View {
             if (p.isEgg()) {
                 UseState.addUseMessages(bagView, false, p);
             }
-            else if (bagView.selectedItem instanceof PokemonUseItem) {
+            else if (bagView.selectedItem.getItem() instanceof PokemonUseItem) {
                 Bag bag = Game.getPlayer().getBag();
                 UseState.addUseMessages(bagView, bag.useItem(Game.getPlayer(), bagView.selectedItem, p), p);
             }
-            else if (bagView.selectedItem instanceof MoveUseItem) {
+            else if (bagView.selectedItem.getItem() instanceof MoveUseItem) {
                 bagView.selectedPokemon = p;
                 bagView.state = BagState.MOVE_SELECT;
 
@@ -127,10 +127,10 @@ public class BagView extends View {
 		}
 		
 		private static void addUseMessages(BagView bagView, boolean success, ActivePokemon p) {
-			Item selected = bagView.selectedItem;
+			ItemNamesies selected = bagView.selectedItem;
 			
 			if (success) {
-				bagView.addMessage(Game.getPlayer().getName() + " used the " + selected.getName() + "! " + ((UseItem)selected).getSuccessMessage(p));
+				bagView.addMessage(Game.getPlayer().getName() + " used the " + selected.getName() + "! " + ((UseItem)selected.getItem()).getSuccessMessage(p));
 			}
 			else {
 				bagView.addMessage("It won't have any effect.");	
@@ -144,9 +144,10 @@ public class BagView extends View {
 		}
 	}
 
-	public BagView() {
+	BagView() {
 		selectedTab = 0;
 		selectedButton = 0;
+		selectedItem = ItemNamesies.NO_ITEM;
 		
 		buttons = new Button[NUM_BUTTONS];
 		tabButtons = new Button[CATEGORIES.length];
@@ -274,8 +275,8 @@ public class BagView extends View {
 		}
 
 		// TODO: Maybe there should be a method that returns the iterator set to the appropriate page
-		Set<Item> list = player.getBag().getCategory(CATEGORIES[selectedTab]);
-		Iterator<Item> iter = list.iterator();
+		Set<ItemNamesies> list = player.getBag().getCategory(CATEGORIES[selectedTab]);
+		Iterator<ItemNamesies> iter = list.iterator();
 		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
 			iter.next();
 		}
@@ -283,7 +284,7 @@ public class BagView extends View {
 		// TODO: Why does this loop need to be like this?
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
-				Item item = iter.next();
+				ItemNamesies item = iter.next();
 				if (itemButtons[k].checkConsumePress()) {
 					selectedItem = item;
 					updateActiveButtons();
@@ -313,7 +314,7 @@ public class BagView extends View {
 				
 				updateActiveButtons();
 				
-				if (useState == UseState.USE && selectedItem instanceof TrainerUseItem) {
+				if (useState == UseState.USE && selectedItem.getItem() instanceof TrainerUseItem) {
 					UseState.addUseMessages(this, player.getBag().useItem(selectedItem, player), null);
 				}
 			}
@@ -376,7 +377,7 @@ public class BagView extends View {
 		g.drawImage(tiles.getTile(0x22), 62, 112, null);
 		
 		// Item Display
-		if (selectedItem != null) {
+		if (selectedItem != ItemNamesies.NO_ITEM) {
 			for (UseState useState : UseState.USE_STATE_VALUES) {
 
 				// Grey out selected buttons
@@ -390,20 +391,22 @@ public class BagView extends View {
 				}
 			}
 
+			Item selectedItemValue = selectedItem.getItem();
+
 			// Draw item image
-			BufferedImage img = itemTiles.getTile(selectedItem.getImageIndex());
+			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageIndex());
 			DrawUtils.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
 			DrawUtils.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
-			if (selectedItem.hasQuantity()) {
+			if (selectedItemValue.hasQuantity()) {
 				DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(selectedItem), 726, 138);
 			}
 			
 			DrawUtils.setFont(g, 14);
-			DrawUtils.drawWrappedText(g, selectedItem.getDescription(), 418, 156, 726 - buttons[GIVE].x);
+			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - buttons[GIVE].x);
 			
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
 			DrawUtils.setFont(g, 20);
@@ -416,8 +419,8 @@ public class BagView extends View {
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
-		Set<Item> list = bag.getCategory(CATEGORIES[selectedTab]);
-		Iterator<Item> iter = list.iterator();
+		Set<ItemNamesies> list = bag.getCategory(CATEGORIES[selectedTab]);
+		Iterator<ItemNamesies> iter = list.iterator();
 		
 		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
 			iter.next();
@@ -426,14 +429,15 @@ public class BagView extends View {
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				g.translate(itemButtons[k].x, itemButtons[k].y);
-				Item item = iter.next();
+				ItemNamesies item = iter.next();
+				Item itemValue = item.getItem();
 				
 				g.drawImage(tiles.getTile(0x26), 0, 0, null);
-				DrawUtils.drawCenteredImage(g, itemTiles.getTile(item.getImageIndex()), 14, 14);
+				DrawUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageIndex()), 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
 				
-				if (item.hasQuantity()) {
+				if (itemValue.hasQuantity()) {
 					DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
 				}
 				
@@ -581,8 +585,8 @@ public class BagView extends View {
 		selectedTab = index;
 		state = BagState.ITEM_SELECT;
 
-		Set<Item> list = Game.getPlayer().getBag().getCategory(CATEGORIES[selectedTab]);
-		selectedItem = list.size() > 0 ? list.iterator().next() : null;
+		Set<ItemNamesies> list = Game.getPlayer().getBag().getCategory(CATEGORIES[selectedTab]);
+		selectedItem = list.size() > 0 ? list.iterator().next() : ItemNamesies.NO_ITEM;
 		
 		updateActiveButtons();
 	}
@@ -616,8 +620,9 @@ public class BagView extends View {
 		for (int i = 0; i < Move.MAX_MOVES; i++) {
 			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
 		}
-		
-		buttons[GIVE].setActive(selectedItem instanceof HoldItem);
-		buttons[USE].setActive(selectedItem instanceof UseItem);
+
+		Item selectedItemValue = selectedItem.getItem();
+		buttons[GIVE].setActive(selectedItemValue instanceof HoldItem);
+		buttons[USE].setActive(selectedItemValue instanceof UseItem);
 	}
 }

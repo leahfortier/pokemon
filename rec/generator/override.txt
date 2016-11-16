@@ -2279,7 +2279,7 @@ Override:
 		item = stolen;
 		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
 		
-		item = Item.noneItem();
+		item = ItemNamesies.NO_ITEM.getItem();
 		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
 		###
 		AddInterface: ItemHolder
