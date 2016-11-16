@@ -138,7 +138,7 @@ public abstract class Status implements Serializable {
 		if (victim.hasAbility(AbilityNamesies.SYNCHRONIZE) && s.applies(b, victim, caster)
 				&& (status == StatusCondition.BURNED || status == StatusCondition.POISONED || status == StatusCondition.PARALYZED)) {
 			if (victim.hasEffect(EffectNamesies.BAD_POISON)) {
-				caster.addEffect(PokemonEffect.getEffect(EffectNamesies.BAD_POISON).newInstance());
+				caster.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
 			}
 			
 			caster.setStatus(s);

@@ -60,13 +60,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 // Class to handle effects that are on a single Pokemon
 public abstract class PokemonEffect extends Effect implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static Map<String, PokemonEffect> map;
-	
+
 	public PokemonEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
@@ -84,32 +82,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 	
 	public abstract PokemonEffect newInstance();
 
-	// TODO: Delete this
-	public static PokemonEffect getEffect(EffectNamesies name) {
-		String effectName = name.getName();
-		if (map == null) {
-			loadEffects();
-		}
-		
-		if (!map.containsKey(effectName)) {
-			Global.error("No such PokemonEffect " + effectName);
-		}
-
-		return map.get(effectName);
-	}
-
-	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
-	}
-
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
 	static class LeechSeed extends PokemonEffect implements EndTurnEffect, RapidSpinRelease, PassableEffect {
@@ -1100,7 +1073,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 				
 				// Perform confusion damage
 				Move temp = p.getMove();
-				p.setMove(new Move(Attack.getAttack(AttackNamesies.CONFUSION_DAMAGE)));
+				p.setMove(new Move(AttackNamesies.CONFUSION_DAMAGE.getAttack()));
 				p.reduceHealth(b, b.calculateDamage(p, p));
 				p.setMove(temp);
 				

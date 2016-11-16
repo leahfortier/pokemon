@@ -1,9 +1,8 @@
 package mapMaker.dialogs;
 
-import item.Item;
+import item.ItemNamesies;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
-import item.ItemNamesies;
 import pattern.map.ItemMatcher;
 
 import javax.swing.BorderFactory;
@@ -55,7 +54,7 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 					  itemImageLabel.setIcon(null);
 					  itemTextField.setBackground(new Color(0xFF9494));
 				  } else {
-					  int index = Item.getItem(itemName).getImageIndex();
+					  int index = itemName.getItem().getImageIndex();
 					  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
 					  itemTextField.setBackground(new Color(0x90EE90));
 				  }
@@ -129,7 +128,7 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 		ItemNamesies itemName = matcher.getItem();
 		itemTextField.setText(itemName.getName());
 
-		int index = Item.getItem(itemName).getImageIndex();
+		int index = itemName.getItem().getImageIndex();
 		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
 	}
 }

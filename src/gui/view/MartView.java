@@ -4,21 +4,21 @@ import gui.Button;
 import gui.GameData;
 import gui.TileSet;
 import item.Item;
+import item.ItemNamesies;
+import main.Game;
+import main.Global;
+import main.Type;
+import trainer.CharacterData;
+import util.DrawUtils;
+import util.InputControl;
+import util.InputControl.Control;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import main.Game;
-import main.Global;
-import main.Type;
-import item.ItemNamesies;
-import trainer.CharacterData;
-import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import java.util.List;
 
 public class MartView extends View {
 
@@ -30,7 +30,9 @@ public class MartView extends View {
 			ItemNamesies.PARALYZE_HEAL,
 			ItemNamesies.BURN_HEAL
 	};
-	private static ArrayList<Item> forSaleItems;
+
+	// TODO: Should be a namesies list
+	private static List<Item> forSaleItems;
 	
 	private static final Color BACKGROUND_COLOR = new Color (68, 123, 184);
 	
@@ -112,7 +114,7 @@ public class MartView extends View {
 		if (forSaleItems == null) {
 			forSaleItems = new ArrayList<>();
 			for (ItemNamesies itemName : FOR_SALE_NAMES) {
-				forSaleItems.add(Item.getItem(itemName));
+				forSaleItems.add(itemName.getItem());
 			}
 		}
 		

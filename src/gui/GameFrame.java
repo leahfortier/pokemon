@@ -48,11 +48,6 @@ public class GameFrame {
 	
 	private static void loadAllTheThings() {
 		PokemonInfo.loadPokemonInfo();
-		Attack.loadMoves();
-		PokemonEffect.loadEffects();
-		TeamEffect.loadEffects();
-		BattleEffect.loadEffects();
-		Ability.loadAbilities();
 		Item.loadItems();
 		DrawUtils.loadFontMetricsMap();
 	}

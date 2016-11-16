@@ -1,13 +1,13 @@
 package battle.effect.generic;
 
-import java.io.Serializable;
-import java.util.List;
-
+import battle.Battle;
 import main.Global;
 import message.Messages;
 import pokemon.ActivePokemon;
-import battle.Battle;
 import util.StringUtils;
+
+import java.io.Serializable;
+import java.util.List;
 
 public abstract class Effect implements Serializable
 {
@@ -75,20 +75,9 @@ public abstract class Effect implements Serializable
 	public boolean nextTurnSubside() {
 		return nextTurnSubside;
 	}
-	
-	public static Effect getEffect(EffectNamesies effect, EffectType type) {
-		switch (type) {
-			case POKEMON:
-				return PokemonEffect.getEffect(effect);
-			case TEAM:
-				return TeamEffect.getEffect(effect);
-			case BATTLE:
-				return BattleEffect.getEffect(effect);
-		}
 
-		// TODO: Make sure this should actually throw an error here -- I'm not sure why this wasn't already here
-		Global.error("Unknown effect type " + type + ".  Could not get effect for " + effect);
-		return null;
+	public static Effect getEffect(EffectNamesies effect) {
+		return effect.getEffect();
 	}
 	
 	// Returns the effect if it is in the list, otherwise returns null

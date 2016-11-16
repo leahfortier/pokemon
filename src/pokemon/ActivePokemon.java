@@ -251,12 +251,12 @@ public class ActivePokemon implements Serializable {
 				continue;
 			}
 			
-			for (AttackNamesies s : map.get(levelLearned)) {
-				if (hasActualMove(s)) {
+			for (AttackNamesies attackNamesies : map.get(levelLearned)) {
+				if (hasActualMove(attackNamesies)) {
 					continue;
 				}
 				
-				moves.add(new Move(Attack.getAttack(s)));
+				moves.add(new Move(attackNamesies.getAttack()));
 				
 				// This can be an 'if' statement, but just to be safe...
 				while (moves.size() > Move.MAX_MOVES) {
@@ -498,7 +498,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public void evolve(Battle b, BaseEvolution ev) {
-		if (getActualHeldItem() == Item.getItem(ItemNamesies.EVERSTONE)) {
+		if (getActualHeldItem().namesies() == ItemNamesies.EVERSTONE) {
 			return;
 		}
 		
@@ -559,7 +559,7 @@ public class ActivePokemon implements Serializable {
 			return;
 		}
 		
-		Move m = new Move(Attack.getAttack(attackName));
+		Move m = new Move(attackName.getAttack());
 		if (moves.size() < Move.MAX_MOVES) {
 			if (b != null) {
 				Messages.addMessage(getActualName() + " learned " + m.getAttack().getName() + "!");
@@ -700,11 +700,8 @@ public class ActivePokemon implements Serializable {
 	
 	public boolean isSemiInvulnerable() {
 		final Move move = this.getMove();
-		if (move == null) {
-			return false;
-		}
-		
-		return !move.isReady() && ((MultiTurnMove)getAttack()).semiInvulnerability();
+		return move != null && !move.isReady() && ((MultiTurnMove) getAttack()).semiInvulnerability();
+
 	}
 	
 	public boolean isSemiInvulnerableFlying() {
@@ -862,7 +859,7 @@ public class ActivePokemon implements Serializable {
 				MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
 			}
 			
-			b.getEffects(playerPokemon).add(TeamEffect.getEffect(EffectNamesies.DEAD_ALLY).newInstance());
+			b.getEffects(playerPokemon).add((TeamEffect)EffectNamesies.DEAD_ALLY.getEffect());
 			
 			return true;	
 		}
@@ -1000,7 +997,7 @@ public class ActivePokemon implements Serializable {
 		if (hasEffect(EffectNamesies.FOCUSING)) {
 			Messages.addMessage(getName() + " lost its focus and couldn't move!");
 			attributes.removeEffect(EffectNamesies.FOCUSING);
-			addEffect(PokemonEffect.getEffect(EffectNamesies.FLINCH));
+			addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
 		}
 		
 		// Health Triggered Berries
@@ -1099,7 +1096,7 @@ public class ActivePokemon implements Serializable {
 	}
 
 	public void giveItem(ItemNamesies itemName) {
-		Item item = Item.getItem(itemName);
+		Item item = itemName.getItem();
 		if (item.isHoldable()) {
 			this.giveItem((HoldItem)item);
 		}
@@ -1115,7 +1112,7 @@ public class ActivePokemon implements Serializable {
 	
 	public void consumeItem(Battle b) {
 		Item consumed = getHeldItem(b);
-		PokemonEffect.getEffect(EffectNamesies.CONSUMED_ITEM).cast(b, this, this, CastSource.HELD_ITEM, false);
+		EffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 		
 		ActivePokemon other = b.getOtherPokemon(playerPokemon); 
 		if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
@@ -1149,7 +1146,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public boolean isHoldingItem(Battle b, ItemNamesies itemName) {
-		return getHeldItem(b) == Item.getItem(itemName);
+		return getHeldItem(b).namesies() == itemName;
 	}
 	
 	public boolean isHoldingItem(Battle b) {
@@ -1181,7 +1178,7 @@ public class ActivePokemon implements Serializable {
 		this.getMove().setAttributes(b, this, opp);
 	}
 	
-	public void endAttack(Battle b, ActivePokemon opp, boolean success, boolean reduce) {
+	public void endAttack(ActivePokemon opp, boolean success, boolean reduce) {
 		if (!success) {
 			this.getAttributes().removeEffect(EffectNamesies.SELF_CONFUSION);
 			this.getAttributes().resetCount();
@@ -1196,7 +1193,7 @@ public class ActivePokemon implements Serializable {
 		this.getAttributes().setAttacking(false);
 	}
 	
-	public boolean canBreed() {
+	boolean canBreed() {
 		return !isEgg && pokemon.canBreed();
 	}
 }

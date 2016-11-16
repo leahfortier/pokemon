@@ -37,7 +37,7 @@ public enum TerrainType {
 
     TerrainType(Type type, AttackNamesies attack, Object effect) {
         this.type = type;
-        this.attack = Attack.getAttack(attack);
+        this.attack = attack.getAttack();
 
         this.statChanges = new int[Stat.NUM_BATTLE_STATS];
         this.effects = new ArrayList<>();

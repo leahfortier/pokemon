@@ -178,7 +178,7 @@ Confusion:
 		
 		// Perform confusion damage
 		Move temp = p.getMove();
-		p.setMove(new Move(Attack.getAttack(AttackNamesies.CONFUSION_DAMAGE)));
+		p.setMove(new Move(AttackNamesies.CONFUSION_DAMAGE.getAttack()));
 		p.reduceHealth(b, b.calculateDamage(p, p));
 		p.setMove(temp);
 		

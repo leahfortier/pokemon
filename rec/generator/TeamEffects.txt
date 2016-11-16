@@ -80,7 +80,7 @@ ToxicSpikes:
 	ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.user());
 	if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
 		if (layers >= 2) {
-			PokemonEffect.getEffect(EffectNamesies.BAD_POISON).cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
+			EffectNamesies.BAD_POISON.getEffect().cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
 		}
 		else {
 			Status.giveStatus(b, theOtherPokemon, enterer, StatusCondition.POISONED);

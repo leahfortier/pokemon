@@ -1,6 +1,7 @@
 package pokemon;
 
 import item.Item;
+import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
 import main.Type;
@@ -324,7 +325,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		private int chance;
 		
 		public WildHoldItem(int chance, String itemName) {
-			item = (HoldItem)Item.getItemFromName(itemName);
+			item = (HoldItem) ItemNamesies.getValueOf(itemName).getItem();
 			this.chance = chance;
 		}
 		

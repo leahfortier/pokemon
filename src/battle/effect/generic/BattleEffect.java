@@ -40,32 +40,6 @@ public abstract class BattleEffect extends Effect {
 		Messages.addMessage("", b, victim);
 	}
 
-	public static BattleEffect getEffect(EffectNamesies name) {
-		String effectName = name.getName();
-		if (map == null) {
-			loadEffects();
-		}
-
-		if (map.containsKey(effectName)) {
-			return map.get(effectName);
-		}
-
-		// Otherwise, check if it's a weather effect which will handle the error checking and such if it isn't there either
-		return Weather.getEffect(name);
-	}
-
-	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
-	}
-
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 

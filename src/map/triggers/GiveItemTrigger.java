@@ -1,8 +1,7 @@
 package map.triggers;
 
-import item.Item;
-import main.Game;
 import item.ItemNamesies;
+import main.Game;
 
 public class GiveItemTrigger extends Trigger {
 
@@ -17,6 +16,6 @@ public class GiveItemTrigger extends Trigger {
     }
 
     protected void executeTrigger() {
-        Game.getPlayer().addItem(Item.getItem(this.item), quantity);
+        Game.getPlayer().addItem(this.item.getItem(), quantity);
     }
 }

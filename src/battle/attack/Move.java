@@ -140,7 +140,7 @@ public class Move implements Serializable {
 		
 		List<Move> usable = getUsableMoves(b, p);
 		if (usable.size() == 0) {
-			return new Move(Attack.getAttack(AttackNamesies.STRUGGLE));
+			return new Move(AttackNamesies.STRUGGLE.getAttack());
 		}
 		
 		return chooseMove(usable);
@@ -174,7 +174,7 @@ public class Move implements Serializable {
 		}
 
 		if (p.user() && getUsableMoves(b, p).size() == 0) {
-			p.setMove(new Move(Attack.getAttack(AttackNamesies.STRUGGLE)));
+			p.setMove(new Move(AttackNamesies.STRUGGLE.getAttack()));
 			return true;
 		}
 		

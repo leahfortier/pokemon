@@ -104,7 +104,7 @@ Amulet Coin:
 	Price: 100
 	Fling: 30
 	Enter:
-		TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
+		EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		###
 *
 Big Root:
@@ -280,7 +280,7 @@ Toxic Orb:
 	ApplyEndTurn:
 		// Badly poisons the holder at the end of the turn
 		if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
-			victim.addEffect(PokemonEffect.getEffect(EffectNamesies.BAD_POISON).newInstance());
+			victim.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
 			Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 		}
 		###
@@ -713,10 +713,10 @@ Sticky Barb:
 	         
 		// TODO: Generalize this with other item stealing effects
 		item = this;
-		PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, victim, user, CastSource.HELD_ITEM, false);
+		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, user, CastSource.HELD_ITEM, false);
 
 		item = Item.noneItem();
-		PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		###
 	GetItem: return item;
 	Field: 
@@ -818,7 +818,8 @@ Luck Incense:
 	Price: 9600
 	Fling: 10
 	Enter:
-		TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
+		// TODO: Combine with Amulet Coin
+		EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		###
 	Baby: Happiny
 *
@@ -1613,7 +1614,7 @@ Dire Hit:
 	Price: 650
 	Fling: 30
 	BattleUse:
-		PokemonEffect crits = PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS);
+		PokemonEffect crits = (PokemonEffect)EffectNamesies.RAISE_CRITS.getEffect();
 		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
 			return false;
 		}
@@ -1631,7 +1632,7 @@ Guard Spec.:
 	Price: 700
 	Fling: 30
 	BattleUse:
-		PokemonEffect gSpesh = PokemonEffect.getEffect(EffectNamesies.GUARD_SPECIAL);
+		PokemonEffect gSpesh = (PokemonEffect)EffectNamesies.GUARD_SPECIAL.getEffect();
 		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
 			return false;
 		}
@@ -2294,7 +2295,7 @@ Lansat Berry:
 	NGPow: 100
 	HealthTriggerRatio: 4
 	HealthTrigger:
-		PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS).cast(b, user, user, source, false);
+		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 		return true;
 		###
 	HoldSuccessMessage: p.getName() + " is getting pumped due to its " + this.name + "!"
@@ -2314,7 +2315,7 @@ Starf Berry:
 		
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS) {
-			PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS).cast(b, user, user, source, false);
+			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 			holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
 			useMessage = user.getName() + " is getting pumped!";
 			return true;

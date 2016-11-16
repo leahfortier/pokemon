@@ -34,7 +34,6 @@ import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
-import battle.effect.generic.TeamEffect;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -77,18 +76,12 @@ import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public abstract class Item implements Comparable<Item>, Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private static Map<String, Item> map; // TODO: change the key to namesies -- enum map?
 
 	protected ItemNamesies namesies;
 	protected String name;
@@ -97,17 +90,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 	private List<BattleBagCategory> battleBagCategories;
 	private int price;
 	private int imageIndex;
-
-	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-		ois.defaultReadObject();
-		synchronized(Item.class) {
-			if (map == null) {
-				loadItems();
-			}
-
-			map.put(this.getName(), this);
-		}
-	}
 
 	public Item(ItemNamesies name, String description, BagCategory category, int index) {
 		this.namesies = name;
@@ -165,33 +147,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 	}
 
 	public static Item noneItem() {
-		return getItem(ItemNamesies.NO_ITEM);
-	}
-
-	// TODO: Delete this
-	public static Item getItemFromName(String itemName) {
-		return getItem(ItemNamesies.getValueOf(itemName));
-	}
-
-	public static Item getItem(ItemNamesies itemNamesies) {
-		String itemName = itemNamesies.getName();
-		if (!isItem(itemName)) {
-			Global.error("No such Item " + itemName);
-		}
-
-		return map.get(itemName);
-	}
-
-	public static boolean isItem(String itemName) {
-		if (map == null) {
-			loadItems();
-		}
-
-		if (StringUtils.isNullOrEmpty(itemName)) {
-			return false;
-		}
-
-		return map.containsKey(itemName);
+		return ItemNamesies.NO_ITEM.getItem();
 	}
 
 	public int hashCode() {
@@ -199,25 +155,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 	}
 
 	private static void processIncenseItems() {
-		Set<String> itemStringKeySet = map.keySet();
-		for (String itemString : itemStringKeySet) {
-			Item item = map.get(itemString);
+		for (ItemNamesies itemNamesies : ItemNamesies.values()) {
+			Item item = itemNamesies.getItem();
 			if (item instanceof IncenseItem) {
-				IncenseItem incense = (IncenseItem) item;
-				PokemonInfo.addIncenseBaby(incense.getBaby());
+				PokemonInfo.addIncenseBaby(((IncenseItem)item).getBaby());
 			}
 		}
 	}
 
+	// TODO
 	public static void loadItems() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
 		processIncenseItems();
 	}
 
@@ -379,7 +326,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		}
 	}
 
@@ -833,7 +780,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			// Badly poisons the holder at the end of the turn
 			if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
-				victim.addEffect(PokemonEffect.getEffect(EffectNamesies.BAD_POISON).newInstance());
+				victim.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
 				Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 			}
 		}
@@ -1964,10 +1911,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			
 			// TODO: Generalize this with other item stealing effects
 			item = this;
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, victim, user, CastSource.HELD_ITEM, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, user, CastSource.HELD_ITEM, false);
 			
 			item = Item.noneItem();
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 
 		public Item getItem() {
@@ -2211,7 +2158,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
+			// TODO: Combine with Amulet Coin
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		}
 
 		public PokemonNamesies getBaby() {
@@ -4296,7 +4244,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Global.chanceTest(10)) {
-				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
 					Messages.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
@@ -4309,7 +4257,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
 				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
 				Messages.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
@@ -4579,7 +4527,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Global.chanceTest(10)) {
-				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
 					Messages.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
@@ -4592,7 +4540,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
 				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
 				Messages.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
@@ -5821,7 +5769,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			PokemonEffect crits = PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS);
+			PokemonEffect crits = (PokemonEffect)EffectNamesies.RAISE_CRITS.getEffect();
 			if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
 				return false;
 			}
@@ -5852,7 +5800,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			PokemonEffect gSpesh = PokemonEffect.getEffect(EffectNamesies.GUARD_SPECIAL);
+			PokemonEffect gSpesh = (PokemonEffect)EffectNamesies.GUARD_SPECIAL.getEffect();
 			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
 				return false;
 			}
@@ -7041,7 +6989,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7127,7 +7075,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7213,7 +7161,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7299,7 +7247,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7385,7 +7333,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7476,7 +7424,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7563,7 +7511,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7637,7 +7585,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7730,7 +7678,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7811,7 +7759,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -8787,7 +8735,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -8863,7 +8811,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -8939,7 +8887,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9015,7 +8963,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9091,7 +9039,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9167,7 +9115,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9415,7 +9363,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS).cast(b, user, user, source, false);
+			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 			return true;
 		}
 
@@ -9449,7 +9397,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9497,7 +9445,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			
 			// Raise crit
 			if (rand == Stat.NUM_BATTLE_STATS) {
-				PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS).cast(b, user, user, source, false);
+				EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 				holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
 				useMessage = user.getName() + " is getting pumped!";
 				return true;
@@ -9543,7 +9491,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}

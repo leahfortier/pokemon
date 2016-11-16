@@ -1,7 +1,8 @@
 package pokemon.ability;
 
-import battle.attack.Attack;
 import battle.Battle;
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
@@ -49,12 +50,14 @@ import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.Weather;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
+import item.ItemNamesies;
 import item.berry.Berry;
 import item.hold.ConsumableItem;
 import item.hold.HoldItem;
@@ -62,26 +65,21 @@ import item.hold.PlateItem;
 import main.Global;
 import main.Type;
 import message.Messages;
-import battle.attack.AttackNamesies;
-import battle.effect.generic.EffectNamesies;
-import item.ItemNamesies;
-import pokemon.PokemonNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.Trainer;
 import trainer.WildPokemon;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public abstract class Ability implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static HashMap<String, Ability> map; // Mappity map
-	
+
 	protected AbilityNamesies namesies;
 	private String description;
 	
@@ -140,11 +138,11 @@ public abstract class Ability implements Serializable {
 		
 		// Only has one ability -- return the first one
 		if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-			return getAbility(abilities[0]).newInstance();
+			return abilities[0].getNewAbility();
 		}
-		
+
 		// Has two abilties -- return a random one
-		return getAbility(Global.getRandomValue(abilities)).newInstance();
+		return Global.getRandomValue(abilities).getNewAbility();
 	}
 	
 	public static Ability evolutionAssign(ActivePokemon p, PokemonInfo ev) {
@@ -160,10 +158,10 @@ public abstract class Ability implements Serializable {
 
 		AbilityNamesies[] abilities = ev.getAbilities();
 		if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-			return getAbility(abilities[0]);
+			return abilities[0].getNewAbility();
 		}
 		
-		return getAbility(Global.getRandomValue(abilities));
+		return Global.getRandomValue(abilities).getNewAbility();
 	}
 	
 	public static Ability getOtherAbility(ActivePokemon p) {
@@ -176,38 +174,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		AbilityNamesies[] abilities = p.getAbilities();
-		return getAbility(abilities[0] == ability ? abilities[1] : abilities[0]); 
+		return (abilities[0] == ability ? abilities[1] : abilities[0]).getNewAbility();
 	}
 	
 	public abstract Ability newInstance();
-	
-	public static Ability getAbility(AbilityNamesies namesies) {
-		String abilityName = namesies.getName();
-		
-		if (map == null) {
-			loadAbilities();
-		}
-		
-		if (map.containsKey(abilityName)) {
-			return map.get(abilityName);
-		}
 
-		Global.error("No such Ability " + abilityName);
-		return new NoAbility();
-	}
-	
-	// Create and load the Ability map if it doesn't already exist
-	public static void loadAbilities() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
-	}
-
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
 	static class NoAbility extends Ability {
@@ -652,9 +624,9 @@ public abstract class Ability implements Serializable {
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (Global.chanceTest(30)) {
-				PokemonEffect e = PokemonEffect.getEffect(EffectNamesies.INFATUATED);
-				if (e.applies(b, victim, user, CastSource.ABILITY)) {
-					user.addEffect(e.newInstance());
+				PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
+				if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
+					user.addEffect(infatuated);
 					Messages.addMessage(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 				}
 			}
@@ -721,7 +693,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect(Weather.getEffect(EffectNamesies.SUNNY).newInstance());
+			b.addEffect((Weather)EffectNamesies.SUNNY.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
 		}
 	}
@@ -780,7 +752,7 @@ public abstract class Ability implements Serializable {
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Global.chanceTest(10)) {
-				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
 					flinch.cast(b, user, victim, CastSource.ABILITY, false);
 					Messages.addMessage(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
@@ -959,7 +931,7 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			// TODO: I think this isn't the intended effect of this ability
-			b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
+			b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		}
 	}
@@ -1622,7 +1594,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			PokemonEffect.getEffect(EffectNamesies.TRANSFORMED).cast(b, enterer, enterer, CastSource.ABILITY, false);
+			EffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
 		}
 	}
 
@@ -1735,7 +1707,7 @@ public abstract class Ability implements Serializable {
 				return;
 			}
 			
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, enterer, enterer, CastSource.ABILITY, true);
+			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -2089,7 +2061,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect(Weather.getEffect(EffectNamesies.SANDSTORM).newInstance());
+			b.addEffect((Weather)EffectNamesies.SANDSTORM.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
 		}
 	}
@@ -2387,7 +2359,7 @@ public abstract class Ability implements Serializable {
 			Type t = user.getAttackType();
 			if (!victim.isType(b, t)) {
 				type = t;
-				PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, victim, victim, CastSource.ABILITY, true);
+				EffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
 			}
 		}
 
@@ -2447,7 +2419,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect(Weather.getEffect(EffectNamesies.RAINING).newInstance());
+			b.addEffect((Weather)EffectNamesies.RAINING.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " started a downpour!");
 		}
 	}
@@ -2465,7 +2437,7 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			// TODO: I think this isn't the intended effect of this ability
-			b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
+			b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		}
 	}
@@ -2595,7 +2567,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect(Weather.getEffect(EffectNamesies.HAILING).newInstance());
+			b.addEffect((Weather)EffectNamesies.HAILING.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
 		}
 	}
@@ -2657,7 +2629,7 @@ public abstract class Ability implements Serializable {
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (Global.chanceTest(30)) {
 				user.getAttributes().setLastMoveUsed();
-				PokemonEffect disable = PokemonEffect.getEffect(EffectNamesies.DISABLE);
+				PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
 				if (disable.applies(b, victim, user, CastSource.ABILITY)) {
 					disable.cast(b, victim, user, CastSource.ABILITY, false);
 					Messages.addMessage(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
@@ -2864,7 +2836,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// Cast the change ability effect onto the user
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, victim, user, CastSource.ABILITY, true);
+			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -3216,10 +3188,10 @@ public abstract class Ability implements Serializable {
 			}
 			
 			item = stolen;
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, thief, CastSource.ABILITY, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
 			
 			item = Item.noneItem();
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, victim, CastSource.ABILITY, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3271,7 +3243,7 @@ public abstract class Ability implements Serializable {
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
 			if (!p.isHoldingItem(b) && Global.chanceTest(10)) {
 				// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
-				p.giveItem((HoldItem)Item.getItem(ItemNamesies.LEFTOVERS));
+				p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
 			}
 		}
 	}
@@ -3306,7 +3278,7 @@ public abstract class Ability implements Serializable {
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
 			if (!p.isHoldingItem(b) && Global.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
 				// TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
-				p.giveItem((HoldItem)Item.getItem(ItemNamesies.LEFTOVERS));
+				p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
 			}
 		}
 	}
@@ -3473,10 +3445,10 @@ public abstract class Ability implements Serializable {
 			}
 			
 			item = stolen;
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, thief, CastSource.ABILITY, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
 			
 			item = Item.noneItem();
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, victim, CastSource.ABILITY, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
@@ -3831,7 +3803,7 @@ public abstract class Ability implements Serializable {
 			// Protean activates for all moves except for Struggle
 			if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
 				type = p.getAttackType();
-				PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, p, p, CastSource.ABILITY, true);
+				EffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
 			}
 			
 			return true;

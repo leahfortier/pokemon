@@ -11,12 +11,9 @@ import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 
-import java.util.Map;
-
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;
-	private static Map<String, Weather> map;
-	
+
 	protected Type weatherElement;
 	
 	public Weather(EffectNamesies namesies, Type weatherElement) {
@@ -47,31 +44,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	
 	public abstract Weather newInstance();
 	
-	public static Weather getEffect(EffectNamesies name) {
-		String effectName = name.getName();
-		
-		if (map == null) {
-			loadEffects();
-		}
-		
-		if (!map.containsKey(effectName)) {
-			Global.error("No such Effect " + effectName);
-		}
-
-		return map.get(effectName);
-	}
-
-	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-	}
-
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
 	static class ClearSkies extends Weather {

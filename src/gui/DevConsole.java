@@ -1,12 +1,13 @@
 package gui;
 
 import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import item.Item;
+import item.ItemNamesies;
 import main.Game;
 import main.Global;
-import pokemon.PokemonNamesies;
 import pokemon.ActivePokemon;
+import pokemon.PokemonNamesies;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
@@ -173,7 +174,7 @@ class DevConsole {
 								
 								// TODO: 'None' isn't a valid attack so can this if statement be deleted?
 								if (!"none".equals(s.toLowerCase())) {
-									moves.add(new Move(Attack.getAttackFromName(s)));
+									moves.add(new Move(AttackNamesies.getValueOf(s).getAttack()));
 								}
 							}
 							
@@ -206,7 +207,7 @@ class DevConsole {
 					amount = Integer.parseInt(in.next());
 				}
 				
-				Game.getPlayer().addItem(Item.getItemFromName(itemName), amount);
+				Game.getPlayer().addItem(ItemNamesies.getValueOf(itemName).getItem(), amount);
 				break;
 		}
 	}

@@ -295,7 +295,7 @@ public class TeamPlanner {
 			this.coverageCount = new int[types.length][types.length];
 			
 			for (String moveName : moves) {
-				Attack attack = Attack.getAttack(AttackNamesies.getValueOf(moveName));
+				Attack attack = AttackNamesies.getValueOf(moveName).getAttack();
 				this.moveList.add(attack);
 				
 				Type attackType = attack.getActualType();

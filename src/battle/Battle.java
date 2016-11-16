@@ -79,7 +79,7 @@ public class Battle {
 		turn = 0;
 		escapeAttempts = 0;
 		firstAttacking = false;
-		weather = Weather.getEffect(EffectNamesies.CLEAR_SKIES);
+		weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 		player.enterBattle();
 
 		if (opponent instanceof Trainer) {
@@ -414,7 +414,7 @@ public class Battle {
 	private void decrementWeather() {
 		if (!weather.isActive()) {
 			Messages.addMessage(weather.getSubsideMessage(player.front()));
-			weather = Weather.getEffect(EffectNamesies.CLEAR_SKIES);
+			weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 			return;
 		}
 
@@ -458,7 +458,7 @@ public class Battle {
 			}			
 		}
 		
-		me.endAttack(this, o, success, reduce);
+		me.endAttack(o, success, reduce);
 	}
 	
 	public void printAttacking(ActivePokemon p) {

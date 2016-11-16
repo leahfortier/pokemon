@@ -411,7 +411,7 @@ Override:
 		AddInterface: ChangeAbilityMove
 		AddMapField: Effect: Pokemon ChangeAbility
 		AddMapField: AbilityChange:
-		return Ability.getAbility(AbilityNamesies.{00}).newInstance();
+		return AbilityNamesies.{00}.getNewAbility();
 		###
 		AddMapField: AbilityMessage: 
 		return victim.getName() + "'s ability was changed to " + AbilityNamesies.{00}.getName() + "!";
@@ -1240,7 +1240,7 @@ Override:
 	WeatherStarter:
 		AddInterface: EntryEffect
 		AddMapField: Enter: 
-		b.addEffect(Weather.getEffect(EffectNamesies.{11}).newInstance());
+		b.addEffect((Weather)EffectNamesies.{11}.getEffect());
 		Messages.addMessage(enterer.getName() + "'s " + this.getName() + " {2-}!");
 		###
 	*
@@ -1258,7 +1258,7 @@ Override:
 		AddInterface: EntryEffect
 		AddMapField: Enter: 
 		// TODO: I think this isn't the intended effect of this ability
-		b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
+		b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
 		Messages.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		###
 	*
@@ -2008,7 +2008,7 @@ Override:
 		AddMapField: Subside: 
 		Messages.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
-		Attack attack = Attack.getAttack(AttackNamesies.{00});
+		Attack attack = AttackNamesies.{00}.getAttack();
 		
 		// Don't do anything for moves that are uneffective
 		if (!attack.effective(b, theSeeer, p)) {
@@ -2099,7 +2099,7 @@ GainableEffectBerry:
 		}
 		
 		// Eat dat berry!!
-		PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+		EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 		
 		return true;
 		###
@@ -2280,10 +2280,10 @@ Override:
 		}
 		
 		item = stolen;
-		PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, thief, CastSource.ABILITY, false);
+		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
 		
 		item = Item.noneItem();
-		PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, victim, CastSource.ABILITY, false);
+		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
 		###
 		AddInterface: ItemHolder
 		AddMapField: Field:
@@ -2377,7 +2377,7 @@ StatLoweredEffect:
 Override:
 	FlinchItem:
 		AddMapField: FlingEffect:
-		PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+		PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 		if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
 			flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
 			Messages.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
@@ -2385,7 +2385,7 @@ Override:
 		###
 		AddMapField: OnApplyDamage:
 		if (Global.chanceTest(10)) {
-			PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
 				Messages.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
@@ -2406,8 +2406,9 @@ Override:
 Override:
 	TM:
 		Header: Attack getAttack()
+		AccessModifier: PRIVATE
 		Body:
-		return Attack.getAttack(AttackNamesies.getValueOf("{0}"));
+		return AttackNamesies.getValueOf("{0}").getAttack();
 		###
 		AddMapField: Cat: TM
 		AddInterface: MoveUseItem

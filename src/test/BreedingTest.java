@@ -1,16 +1,15 @@
 package test;
 
-import battle.attack.Attack;
-import battle.attack.Move;
 import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import item.ItemNamesies;
-import pokemon.PokemonNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ActivePokemon;
 import pokemon.Breeding;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import util.StringUtils;
 
@@ -292,7 +291,7 @@ public class BreedingTest extends Breeding {
         ActivePokemon parent = getParent(pokemon, gender);
         parent.setMoves(
                 Arrays.stream(moves)
-                .map(move -> new Move(Attack.getAttack(move)))
+                .map(move -> new Move(move.getAttack()))
                 .collect(Collectors.toList())
         );
 

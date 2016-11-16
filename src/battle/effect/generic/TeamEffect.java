@@ -43,28 +43,6 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		Messages.addMessage("", b, victim);
 	}
 
-	public static TeamEffect getEffect(EffectNamesies name) {
-		String effectName = name.getName();
-		if (map == null) {
-			loadEffects();
-		}
-		
-		if (!map.containsKey(effectName)) {
-			Global.error("No such Effect " + effectName);
-		}
-
-		return map.get(effectName);
-	}
-
-	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects() {
-		if (map != null) return;
-		map = new HashMap<>();
-		
-		// EVERYTHING BELOW IS GENERATED ###
-
-	}
-
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
@@ -348,7 +326,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.user());
 			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
 				if (layers >= 2) {
-					PokemonEffect.getEffect(EffectNamesies.BAD_POISON).cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
+					EffectNamesies.BAD_POISON.getEffect().cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
 				}
 				else {
 					Status.giveStatus(b, theOtherPokemon, enterer, StatusCondition.POISONED);
@@ -523,7 +501,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		public void subside(Battle b, ActivePokemon p) {
 			Messages.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
-			Attack attack = Attack.getAttack(AttackNamesies.FUTURE_SIGHT);
+			Attack attack = AttackNamesies.FUTURE_SIGHT.getAttack();
 			
 			// Don't do anything for moves that are uneffective
 			if (!attack.effective(b, theSeeer, p)) {
@@ -565,7 +543,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		public void subside(Battle b, ActivePokemon p) {
 			Messages.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
-			Attack attack = Attack.getAttack(AttackNamesies.DOOM_DESIRE);
+			Attack attack = AttackNamesies.DOOM_DESIRE.getAttack();
 			
 			// Don't do anything for moves that are uneffective
 			if (!attack.effective(b, theSeeer, p)) {
