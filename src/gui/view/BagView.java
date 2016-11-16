@@ -96,8 +96,6 @@ class BagView extends View {
             state.deactivate(bagView);
         });
 		
-		private static final UseState[] USE_STATE_VALUES = UseState.values();
-		
 		private final String displayName;
 		private final int buttonIndex;
 		private final UseButton useButton;
@@ -200,8 +198,8 @@ class BagView extends View {
 			}
 		}
 		
-		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN});
-		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] { PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN});
+		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN });
+		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] { PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN });
 		
 		buttons[GIVE] = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] { USE, selectedTab, PARTY, ITEMS });
 		buttons[USE] = new Button(518, 193, 110, 38, Button.HoverAction.BOX, new int[] { TAKE, selectedTab, GIVE, ITEMS });
@@ -247,12 +245,13 @@ class BagView extends View {
 			if (moveButtons[i].checkConsumePress()) {
 				Move m = selectedPokemon.getActualMoves().get(i);
 				player.getBag().useMoveItem(selectedItem, selectedPokemon, m);
+				updateActiveButtons();
 			}
 		}
 		
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
 			if (partyButtons[i].checkConsumePress()) {
-				for (UseState useState : UseState.USE_STATE_VALUES) {
+				for (UseState useState : UseState.values()) {
 					if (useState.clicked) {
 						useState.useButton.useButton(useState, this, player.getTeam().get(i));
                         updateActiveButtons();
@@ -280,7 +279,7 @@ class BagView extends View {
 		}
 		
 		// Check the use buttons
-		for (UseState useState : UseState.USE_STATE_VALUES) {
+		for (UseState useState : UseState.values()) {
 			if (buttons[useState.buttonIndex].checkConsumePress()) {
 				if (!useState.clicked) {
 					state = BagState.POKEMON_SELECT;
@@ -291,7 +290,7 @@ class BagView extends View {
 				
 				useState.clicked = !useState.clicked;
 				
-				for (UseState otherState : UseState.USE_STATE_VALUES) {
+				for (UseState otherState : UseState.values()) {
 					if (useState == otherState) {
 						continue;
 					}
@@ -299,11 +298,11 @@ class BagView extends View {
 					otherState.clicked = false;
 				}
 				
-				updateActiveButtons();
-				
 				if (useState == UseState.USE && selectedItem.getItem() instanceof TrainerUseItem) {
 					player.getBag().useItem(selectedItem, player);
 				}
+
+				updateActiveButtons();
 			}
 		}
 
@@ -338,6 +337,8 @@ class BagView extends View {
 			input.consumeKey(Control.ESC);
 			returnToMap();
 		}
+
+		updateActiveButtons();
 	}
 
 	private void returnToMap() {
@@ -368,22 +369,30 @@ class BagView extends View {
 		
 		g.drawImage(tiles.getTile(0x21), 42, 92, null);
 		g.drawImage(tiles.getTile(0x22), 62, 112, null);
-		
-		// Item Display
-		if (selectedItem != ItemNamesies.NO_ITEM) {
-			for (UseState useState : UseState.USE_STATE_VALUES) {
 
-				// Grey out selected buttons
-				if (useState.clicked) {
-					buttons[useState.buttonIndex].greyOut(g, false);
-				}
-				
-				// Grey out inactive buttons
-				if (!buttons[useState.buttonIndex].isActive()) {
-					buttons[useState.buttonIndex].greyOut(g, true);
-				}
+		for (UseState useState : UseState.values()) {
+
+			// Grey out selected buttons
+			if (useState.clicked) {
+				buttons[useState.buttonIndex].greyOut(g, false);
 			}
 
+			// Grey out inactive buttons
+			if (!buttons[useState.buttonIndex].isActive()) {
+				buttons[useState.buttonIndex].greyOut(g, true);
+			}
+		}
+
+		// Draw Use State buttons
+		g.drawImage(tiles.getTile(0x28), 410, 193, null);
+		g.setColor(Color.BLACK);
+		DrawUtils.setFont(g, 20);
+		for (UseState useState : UseState.values()) {
+			DrawUtils.drawCenteredString(g, useState.displayName, buttons[useState.buttonIndex]);
+		}
+
+		// Item Display
+		if (selectedItem != ItemNamesies.NO_ITEM) {
 			Item selectedItemValue = selectedItem.getItem();
 
 			// Draw item image
@@ -400,12 +409,6 @@ class BagView extends View {
 			
 			DrawUtils.setFont(g, 14);
 			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - buttons[GIVE].x);
-			
-			g.drawImage(tiles.getTile(0x28), 410, 193, null);
-			DrawUtils.setFont(g, 20);
-			for (UseState useState : UseState.USE_STATE_VALUES) {
-				DrawUtils.drawCenteredString(g, useState.displayName, buttons[useState.buttonIndex]);
-			}
 		}
 		
 		DrawUtils.setFont(g, 12);
@@ -541,8 +544,12 @@ class BagView extends View {
 			g.setColor(CATEGORIES[i].getColor());
 			g.fillRect(0, 0, tabButtons[i].width, tabButtons[i].height);
 			
-			if (selectedTab == i) g.drawImage(tiles.getTile(0x23), 0, 0, null);
-			else g.drawImage(tiles.getTile(0x24), 0, 0, null);
+			if (selectedTab == i) {
+				g.drawImage(tiles.getTile(0x23), 0, 0, null);
+			}
+			else {
+				g.drawImage(tiles.getTile(0x24), 0, 0, null);
+			}
 			
 			g.setColor(Color.BLACK);
 			
@@ -612,8 +619,14 @@ class BagView extends View {
 			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
 		}
 
-		Item selectedItemValue = selectedItem.getItem();
-		buttons[GIVE].setActive(selectedItemValue instanceof HoldItem);
-		buttons[USE].setActive(selectedItemValue instanceof UseItem);
+		if (selectedItem == ItemNamesies.NO_ITEM || player.getBag().getQuantity(selectedItem) == 0) {
+			selectedItem = ItemNamesies.NO_ITEM;
+			buttons[GIVE].setActive(false);
+			buttons[USE].setActive(false);
+		} else {
+			Item selectedItemValue = selectedItem.getItem();
+			buttons[GIVE].setActive(selectedItemValue instanceof HoldItem);
+			buttons[USE].setActive(selectedItemValue instanceof UseItem);
+		}
 	}
 }
