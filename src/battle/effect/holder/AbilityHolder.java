@@ -1,6 +1,6 @@
 package battle.effect.holder;
 
-import pokemon.Ability;
+import pokemon.ability.Ability;
 
 public interface AbilityHolder {
 	Ability getAbility();

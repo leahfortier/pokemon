@@ -1,7 +1,5 @@
 package util;
 
-import java.io.File;
-
 public abstract class Folder {
     public static final String SRC = FileIO.makeFolderPath("src");
     public static final String REC = FileIO.makeFolderPath("rec");
@@ -9,10 +7,12 @@ public abstract class Folder {
 
     public static final String BATTLE = FileIO.makeFolderPath(SRC, "battle");
     public static final String ITEMS = FileIO.makeFolderPath(SRC, "item");
-    public static final String NAMESIES = FileIO.makeFolderPath(SRC, "namesies");
     public static final String POKEMON = FileIO.makeFolderPath(SRC, "pokemon");
 
+    public static final String ATTACK = FileIO.makeFolderPath(BATTLE, "attack");
     public static final String GENERIC_EFFECT = FileIO.makeFolderPath(BATTLE, "effect", "generic");
+
+    public static final String ABILITY = FileIO.makeFolderPath(POKEMON, "ability");
 
     public static final String MAPS = FileIO.makeFolderPath(REC, "maps");
     public static final String TILES = FileIO.makeFolderPath(REC, "tiles");

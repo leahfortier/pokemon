@@ -1,10 +1,11 @@
 package battle.effect.generic;
 
-import battle.Attack;
 import battle.Battle;
-import battle.Move;
-import battle.MoveCategory;
-import battle.MoveType;
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
+import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.PassableEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
@@ -45,30 +46,25 @@ import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
+import item.ItemNamesies;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
-import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Stat;
+import pokemon.ability.Ability;
+import pokemon.ability.AbilityNamesies;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // Class to handle effects that are on a single Pokemon
 public abstract class PokemonEffect extends Effect implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static Map<String, PokemonEffect> map;
-	
+
 	public PokemonEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
@@ -86,107 +82,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 	
 	public abstract PokemonEffect newInstance();
 
-	public static PokemonEffect getEffect(EffectNamesies name) {
-		String effectName = name.getName();
-		if (map == null) {
-			loadEffects();
-		}
-		
-		if (!map.containsKey(effectName)) {
-			Global.error("No such PokemonEffect " + effectName);
-		}
-
-		return map.get(effectName);
-	}
-
-	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
-		// List all of the classes we are loading
-		map.put("LeechSeed", new LeechSeed());
-		map.put("BadPoison", new BadPoison());
-		map.put("Flinch", new Flinch());
-		map.put("FireSpin", new FireSpin());
-		map.put("Infestation", new Infestation());
-		map.put("MagmaStorm", new MagmaStorm());
-		map.put("Clamped", new Clamped());
-		map.put("Whirlpooled", new Whirlpooled());
-		map.put("Wrapped", new Wrapped());
-		map.put("Binded", new Binded());
-		map.put("SandTomb", new SandTomb());
-		map.put("KingsShield", new KingsShield());
-		map.put("SpikyShield", new SpikyShield());
-		map.put("Protecting", new Protecting());
-		map.put("QuickGuard", new QuickGuard());
-		map.put("CraftyShield", new CraftyShield());
-		map.put("MatBlock", new MatBlock());
-		map.put("Bracing", new Bracing());
-		map.put("Confusion", new Confusion());
-		map.put("SelfConfusion", new SelfConfusion());
-		map.put("Safeguard", new Safeguard());
-		map.put("GuardSpecial", new GuardSpecial());
-		map.put("Encore", new Encore());
-		map.put("Disable", new Disable());
-		map.put("RaiseCrits", new RaiseCrits());
-		map.put("ChangeItem", new ChangeItem());
-		map.put("ChangeType", new ChangeType());
-		map.put("ChangeAbility", new ChangeAbility());
-		map.put("Stockpile", new Stockpile());
-		map.put("UsedDefenseCurl", new UsedDefenseCurl());
-		map.put("UsedMinimize", new UsedMinimize());
-		map.put("Mimic", new Mimic());
-		map.put("Imprison", new Imprison());
-		map.put("Trapped", new Trapped());
-		map.put("Foresight", new Foresight());
-		map.put("MiracleEye", new MiracleEye());
-		map.put("Torment", new Torment());
-		map.put("Taunt", new Taunt());
-		map.put("LockOn", new LockOn());
-		map.put("Telekinesis", new Telekinesis());
-		map.put("Ingrain", new Ingrain());
-		map.put("Grounded", new Grounded());
-		map.put("Curse", new Curse());
-		map.put("Yawn", new Yawn());
-		map.put("MagnetRise", new MagnetRise());
-		map.put("Uproar", new Uproar());
-		map.put("AquaRing", new AquaRing());
-		map.put("Nightmare", new Nightmare());
-		map.put("Charge", new Charge());
-		map.put("Focusing", new Focusing());
-		map.put("FiddyPercentStronger", new FiddyPercentStronger());
-		map.put("Transformed", new Transformed());
-		map.put("Substitute", new Substitute());
-		map.put("Mist", new Mist());
-		map.put("MagicCoat", new MagicCoat());
-		map.put("Bide", new Bide());
-		map.put("HalfWeight", new HalfWeight());
-		map.put("PowerTrick", new PowerTrick());
-		map.put("PowerSplit", new PowerSplit());
-		map.put("GuardSplit", new GuardSplit());
-		map.put("HealBlock", new HealBlock());
-		map.put("Infatuated", new Infatuated());
-		map.put("Snatch", new Snatch());
-		map.put("Grudge", new Grudge());
-		map.put("DestinyBond", new DestinyBond());
-		map.put("PerishSong", new PerishSong());
-		map.put("Embargo", new Embargo());
-		map.put("ConsumedItem", new ConsumedItem());
-		map.put("FairyLock", new FairyLock());
-		map.put("Powder", new Powder());
-		map.put("Electrified", new Electrified());
-		map.put("EatenBerry", new EatenBerry());
-	}
-
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class LeechSeed extends PokemonEffect implements EndTurnEffect, RapidSpinRelease, PassableEffect {
+	static class LeechSeed extends PokemonEffect implements EndTurnEffect, RapidSpinRelease, PassableEffect {
 		private static final long serialVersionUID = 1L;
 
 		LeechSeed() {
@@ -234,7 +133,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class BadPoison extends PokemonEffect implements EndTurnEffect {
+	static class BadPoison extends PokemonEffect implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private int turns;
 
@@ -264,7 +163,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Flinch extends PokemonEffect implements BeforeTurnEffect {
+	static class Flinch extends PokemonEffect implements BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Flinch() {
@@ -295,7 +194,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class FireSpin extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+	static class FireSpin extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
 		private static final long serialVersionUID = 1L;
 
 		FireSpin() {
@@ -352,7 +251,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Infestation extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+	static class Infestation extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
 		private static final long serialVersionUID = 1L;
 
 		Infestation() {
@@ -409,7 +308,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class MagmaStorm extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+	static class MagmaStorm extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
 		private static final long serialVersionUID = 1L;
 
 		MagmaStorm() {
@@ -466,7 +365,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Clamped extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+	static class Clamped extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
 		private static final long serialVersionUID = 1L;
 
 		Clamped() {
@@ -523,7 +422,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Whirlpooled extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+	static class Whirlpooled extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
 		private static final long serialVersionUID = 1L;
 
 		Whirlpooled() {
@@ -580,7 +479,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Wrapped extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+	static class Wrapped extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
 		private static final long serialVersionUID = 1L;
 
 		Wrapped() {
@@ -637,7 +536,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Binded extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+	static class Binded extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
 		private static final long serialVersionUID = 1L;
 
 		Binded() {
@@ -694,7 +593,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class SandTomb extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+	static class SandTomb extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
 		private static final long serialVersionUID = 1L;
 
 		SandTomb() {
@@ -751,7 +650,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class KingsShield extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class KingsShield extends PokemonEffect implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		KingsShield() {
@@ -808,7 +707,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class SpikyShield extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class SpikyShield extends PokemonEffect implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		SpikyShield() {
@@ -866,7 +765,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Protecting extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class Protecting extends PokemonEffect implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Protecting() {
@@ -920,7 +819,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class QuickGuard extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class QuickGuard extends PokemonEffect implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickGuard() {
@@ -974,7 +873,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class CraftyShield extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class CraftyShield extends PokemonEffect implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		CraftyShield() {
@@ -1028,7 +927,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class MatBlock extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class MatBlock extends PokemonEffect implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		MatBlock() {
@@ -1078,7 +977,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Bracing extends PokemonEffect implements BracingEffect {
+	static class Bracing extends PokemonEffect implements BracingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Bracing() {
@@ -1115,7 +1014,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Confusion extends PokemonEffect implements PassableEffect, BeforeTurnEffect {
+	static class Confusion extends PokemonEffect implements PassableEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private int turns;
 
@@ -1174,7 +1073,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 				
 				// Perform confusion damage
 				Move temp = p.getMove();
-				p.setMove(new Move(Attack.getAttack(AttackNamesies.CONFUSION_DAMAGE)));
+				p.setMove(new Move(AttackNamesies.CONFUSION_DAMAGE.getAttack()));
 				p.reduceHealth(b, b.calculateDamage(p, p));
 				p.setMove(temp);
 				
@@ -1185,7 +1084,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class SelfConfusion extends PokemonEffect implements ForceMoveEffect {
+	static class SelfConfusion extends PokemonEffect implements ForceMoveEffect {
 		private static final long serialVersionUID = 1L;
 		private Move move;
 
@@ -1221,7 +1120,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Safeguard extends PokemonEffect implements DefogRelease, StatusPreventionEffect {
+	static class Safeguard extends PokemonEffect implements DefogRelease, StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Safeguard() {
@@ -1261,7 +1160,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class GuardSpecial extends PokemonEffect implements StatusPreventionEffect {
+	static class GuardSpecial extends PokemonEffect implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		GuardSpecial() {
@@ -1293,7 +1192,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Encore extends PokemonEffect implements AttackSelectionEffect, ForceMoveEffect, BeforeTurnEffect, EndTurnEffect {
+	static class Encore extends PokemonEffect implements AttackSelectionEffect, ForceMoveEffect, BeforeTurnEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private Move move;
 
@@ -1358,7 +1257,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Disable extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class Disable extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private Move disabled;
 		private int turns;
@@ -1425,7 +1324,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class RaiseCrits extends PokemonEffect implements CritStageEffect, PassableEffect {
+	static class RaiseCrits extends PokemonEffect implements CritStageEffect, PassableEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean focusEnergy;
 		private boolean direHit;
@@ -1500,7 +1399,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class ChangeItem extends PokemonEffect implements ItemHolder {
+	static class ChangeItem extends PokemonEffect implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -1525,7 +1424,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class ChangeType extends PokemonEffect implements ChangeTypeEffect {
+	static class ChangeType extends PokemonEffect implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 		private Type[] type;
 		private ChangeTypeMove typeSource;
@@ -1584,7 +1483,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class ChangeAbility extends PokemonEffect implements AbilityHolder {
+	static class ChangeAbility extends PokemonEffect implements AbilityHolder {
 		private static final long serialVersionUID = 1L;
 		private Ability ability;
 		private String message;
@@ -1622,7 +1521,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Stockpile extends PokemonEffect implements StageChangingEffect {
+	static class Stockpile extends PokemonEffect implements StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 		private int turns;
 
@@ -1665,7 +1564,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class UsedDefenseCurl extends PokemonEffect {
+	static class UsedDefenseCurl extends PokemonEffect {
 		private static final long serialVersionUID = 1L;
 
 		UsedDefenseCurl() {
@@ -1686,7 +1585,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class UsedMinimize extends PokemonEffect {
+	static class UsedMinimize extends PokemonEffect {
 		private static final long serialVersionUID = 1L;
 
 		UsedMinimize() {
@@ -1707,7 +1606,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Mimic extends PokemonEffect implements ChangeMoveListEffect {
+	static class Mimic extends PokemonEffect implements ChangeMoveListEffect {
 		private static final long serialVersionUID = 1L;
 		private Move mimicMove;
 
@@ -1758,7 +1657,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Imprison extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class Imprison extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private List<AttackNamesies> unableMoves;
 
@@ -1808,7 +1707,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Trapped extends PokemonEffect implements TrappingEffect {
+	static class Trapped extends PokemonEffect implements TrappingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Trapped() {
@@ -1837,7 +1736,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Foresight extends PokemonEffect implements AdvantageChanger {
+	static class Foresight extends PokemonEffect implements AdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Foresight() {
@@ -1872,7 +1771,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class MiracleEye extends PokemonEffect implements AdvantageChanger {
+	static class MiracleEye extends PokemonEffect implements AdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		MiracleEye() {
@@ -1907,7 +1806,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Torment extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class Torment extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Torment() {
@@ -1952,7 +1851,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Taunt extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class Taunt extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Taunt() {
@@ -2001,7 +1900,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class LockOn extends PokemonEffect implements PassableEffect, AccuracyBypassEffect {
+	static class LockOn extends PokemonEffect implements PassableEffect, AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		LockOn() {
@@ -2025,7 +1924,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Telekinesis extends PokemonEffect implements LevitationEffect, OpponentAccuracyBypassEffect {
+	static class Telekinesis extends PokemonEffect implements LevitationEffect, OpponentAccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Telekinesis() {
@@ -2061,7 +1960,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect, BeforeTurnEffect {
+	static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Ingrain() {
@@ -2126,7 +2025,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Grounded extends PokemonEffect implements GroundedEffect, BeforeTurnEffect {
+	static class Grounded extends PokemonEffect implements GroundedEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Grounded() {
@@ -2166,7 +2065,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Curse extends PokemonEffect implements EndTurnEffect, PassableEffect {
+	static class Curse extends PokemonEffect implements EndTurnEffect, PassableEffect {
 		private static final long serialVersionUID = 1L;
 
 		Curse() {
@@ -2200,7 +2099,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Yawn extends PokemonEffect {
+	static class Yawn extends PokemonEffect {
 		private static final long serialVersionUID = 1L;
 
 		Yawn() {
@@ -2224,7 +2123,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class MagnetRise extends PokemonEffect implements LevitationEffect, PassableEffect {
+	static class MagnetRise extends PokemonEffect implements LevitationEffect, PassableEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagnetRise() {
@@ -2255,7 +2154,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Uproar extends PokemonEffect implements ForceMoveEffect, AttackSelectionEffect, EndTurnEffect {
+	static class Uproar extends PokemonEffect implements ForceMoveEffect, AttackSelectionEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private Move uproar;
 		
@@ -2316,7 +2215,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class AquaRing extends PokemonEffect implements PassableEffect, EndTurnEffect {
+	static class AquaRing extends PokemonEffect implements PassableEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		AquaRing() {
@@ -2346,7 +2245,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Nightmare extends PokemonEffect implements EndTurnEffect {
+	static class Nightmare extends PokemonEffect implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Nightmare() {
@@ -2379,7 +2278,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Charge extends PokemonEffect implements PowerChangeEffect {
+	static class Charge extends PokemonEffect implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Charge() {
@@ -2399,7 +2298,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Focusing extends PokemonEffect {
+	static class Focusing extends PokemonEffect {
 		private static final long serialVersionUID = 1L;
 
 		Focusing() {
@@ -2419,7 +2318,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class FiddyPercentStronger extends PokemonEffect implements PowerChangeEffect {
+	static class FiddyPercentStronger extends PokemonEffect implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		FiddyPercentStronger() {
@@ -2439,7 +2338,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect {
+	static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 		private Move[] moveList; // TODO: Check if I can change this to a list -- not sure about the activate method in particular
 		private int[] stats;
@@ -2510,7 +2409,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Substitute extends PokemonEffect implements IntegerHolder, PassableEffect, EffectBlockerEffect {
+	static class Substitute extends PokemonEffect implements IntegerHolder, PassableEffect, EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 		private int hp;
 
@@ -2570,7 +2469,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Mist extends PokemonEffect implements StatProtectingEffect, DefogRelease {
+	static class Mist extends PokemonEffect implements StatProtectingEffect, DefogRelease {
 		private static final long serialVersionUID = 1L;
 
 		Mist() {
@@ -2610,7 +2509,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class MagicCoat extends PokemonEffect implements TargetSwapperEffect {
+	static class MagicCoat extends PokemonEffect implements TargetSwapperEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagicCoat() {
@@ -2640,7 +2539,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, IntegerHolder {
+	static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, IntegerHolder {
 		private static final long serialVersionUID = 1L;
 		private Move move;
 		private int turns;
@@ -2719,7 +2618,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class HalfWeight extends PokemonEffect implements HalfWeightEffect {
+	static class HalfWeight extends PokemonEffect implements HalfWeightEffect {
 		private static final long serialVersionUID = 1L;
 		private int layers;
 
@@ -2744,7 +2643,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class PowerTrick extends PokemonEffect implements PassableEffect, StatSwitchingEffect {
+	static class PowerTrick extends PokemonEffect implements PassableEffect, StatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerTrick() {
@@ -2777,7 +2676,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class PowerSplit extends PokemonEffect implements StatChangingEffect {
+	static class PowerSplit extends PokemonEffect implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerSplit() {
@@ -2807,7 +2706,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class GuardSplit extends PokemonEffect implements StatChangingEffect {
+	static class GuardSplit extends PokemonEffect implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		GuardSplit() {
@@ -2837,7 +2736,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class HealBlock extends PokemonEffect implements BeforeTurnEffect {
+	static class HealBlock extends PokemonEffect implements BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		HealBlock() {
@@ -2879,7 +2778,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Infatuated extends PokemonEffect implements BeforeTurnEffect {
+	static class Infatuated extends PokemonEffect implements BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Infatuated() {
@@ -2925,7 +2824,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Snatch extends PokemonEffect implements TargetSwapperEffect {
+	static class Snatch extends PokemonEffect implements TargetSwapperEffect {
 		private static final long serialVersionUID = 1L;
 
 		Snatch() {
@@ -2951,7 +2850,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Grudge extends PokemonEffect implements FaintEffect {
+	static class Grudge extends PokemonEffect implements FaintEffect {
 		private static final long serialVersionUID = 1L;
 
 		Grudge() {
@@ -2978,7 +2877,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class DestinyBond extends PokemonEffect implements FaintEffect, BeforeTurnEffect {
+	static class DestinyBond extends PokemonEffect implements FaintEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		DestinyBond() {
@@ -3010,7 +2909,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class PerishSong extends PokemonEffect implements PassableEffect, EndTurnEffect {
+	static class PerishSong extends PokemonEffect implements PassableEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		PerishSong() {
@@ -3041,7 +2940,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Embargo extends PokemonEffect implements PassableEffect {
+	static class Embargo extends PokemonEffect implements PassableEffect {
 		private static final long serialVersionUID = 1L;
 
 		Embargo() {
@@ -3065,7 +2964,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class ConsumedItem extends PokemonEffect implements ItemHolder {
+	static class ConsumedItem extends PokemonEffect implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item consumed;
 
@@ -3091,7 +2990,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class FairyLock extends PokemonEffect implements OpponentTrappingEffect {
+	static class FairyLock extends PokemonEffect implements OpponentTrappingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FairyLock() {
@@ -3115,7 +3014,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Powder extends PokemonEffect implements BeforeTurnEffect {
+	static class Powder extends PokemonEffect implements BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Powder() {
@@ -3146,7 +3045,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Electrified extends PokemonEffect implements ChangeAttackTypeEffect {
+	static class Electrified extends PokemonEffect implements ChangeAttackTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Electrified() {
@@ -3170,7 +3069,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class EatenBerry extends PokemonEffect {
+	static class EatenBerry extends PokemonEffect {
 		private static final long serialVersionUID = 1L;
 
 		EatenBerry() {

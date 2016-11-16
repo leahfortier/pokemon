@@ -1,13 +1,13 @@
 package gui.view;
 
 import battle.Battle;
-import battle.Move;
+import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
-import item.Bag;
-import item.BattleBagCategory;
+import item.bag.Bag;
+import item.bag.BattleBagCategory;
 import item.Item;
 import item.use.PokemonUseItem;
 import main.Game;

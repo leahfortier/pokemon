@@ -1,10 +1,10 @@
 package main;
 
-import battle.Attack;
-import battle.MoveCategory;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.PokemonNamesies;
+import battle.attack.Attack;
+import battle.attack.MoveCategory;
+import pokemon.ability.AbilityNamesies;
+import battle.attack.AttackNamesies;
+import pokemon.PokemonNamesies;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
@@ -295,7 +295,7 @@ public class TeamPlanner {
 			this.coverageCount = new int[types.length][types.length];
 			
 			for (String moveName : moves) {
-				Attack attack = Attack.getAttack(AttackNamesies.getValueOf(moveName));
+				Attack attack = AttackNamesies.getValueOf(moveName).getAttack();
 				this.moveList.add(attack);
 				
 				Type attackType = attack.getActualType();

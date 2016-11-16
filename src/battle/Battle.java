@@ -1,5 +1,8 @@
 package battle;
 
+import battle.attack.Move;
+import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
@@ -27,9 +30,9 @@ import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.effect.generic.EffectNamesies;
+import item.ItemNamesies;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
@@ -76,7 +79,7 @@ public class Battle {
 		turn = 0;
 		escapeAttempts = 0;
 		firstAttacking = false;
-		weather = Weather.getEffect(EffectNamesies.CLEAR_SKIES);
+		weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 		player.enterBattle();
 
 		if (opponent instanceof Trainer) {
@@ -411,7 +414,7 @@ public class Battle {
 	private void decrementWeather() {
 		if (!weather.isActive()) {
 			Messages.addMessage(weather.getSubsideMessage(player.front()));
-			weather = Weather.getEffect(EffectNamesies.CLEAR_SKIES);
+			weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 			return;
 		}
 
@@ -455,7 +458,7 @@ public class Battle {
 			}			
 		}
 		
-		me.endAttack(this, o, success, reduce);
+		me.endAttack(o, success, reduce);
 	}
 	
 	public void printAttacking(ActivePokemon p) {

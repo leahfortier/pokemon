@@ -1,10 +1,11 @@
-package pokemon;
+package pokemon.ability;
 
-import battle.Attack;
 import battle.Battle;
-import battle.Move;
-import battle.MoveCategory;
-import battle.MoveType;
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
+import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
 import battle.effect.ModifyStageValueEffect;
@@ -49,12 +50,14 @@ import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.Weather;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
+import item.ItemNamesies;
 import item.berry.Berry;
 import item.hold.ConsumableItem;
 import item.hold.HoldItem;
@@ -62,23 +65,21 @@ import item.hold.PlateItem;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
+import pokemon.ActivePokemon;
+import pokemon.Gender;
+import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
+import pokemon.Stat;
 import trainer.Trainer;
 import trainer.WildPokemon;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public abstract class Ability implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static HashMap<String, Ability> map; // Mappity map
-	
+
 	protected AbilityNamesies namesies;
 	private String description;
 	
@@ -137,11 +138,11 @@ public abstract class Ability implements Serializable {
 		
 		// Only has one ability -- return the first one
 		if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-			return getAbility(abilities[0]).newInstance();
+			return abilities[0].getNewAbility();
 		}
-		
+
 		// Has two abilties -- return a random one
-		return getAbility(Global.getRandomValue(abilities)).newInstance();
+		return Global.getRandomValue(abilities).getNewAbility();
 	}
 	
 	public static Ability evolutionAssign(ActivePokemon p, PokemonInfo ev) {
@@ -157,10 +158,10 @@ public abstract class Ability implements Serializable {
 
 		AbilityNamesies[] abilities = ev.getAbilities();
 		if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-			return getAbility(abilities[0]);
+			return abilities[0].getNewAbility();
 		}
 		
-		return getAbility(Global.getRandomValue(abilities));
+		return Global.getRandomValue(abilities).getNewAbility();
 	}
 	
 	public static Ability getOtherAbility(ActivePokemon p) {
@@ -173,218 +174,15 @@ public abstract class Ability implements Serializable {
 		}
 
 		AbilityNamesies[] abilities = p.getAbilities();
-		return getAbility(abilities[0] == ability ? abilities[1] : abilities[0]); 
+		return (abilities[0] == ability ? abilities[1] : abilities[0]).getNewAbility();
 	}
 	
 	public abstract Ability newInstance();
-	
-	public static Ability getAbility(AbilityNamesies namesies) {
-		String abilityName = namesies.getName();
-		
-		if (map == null) {
-			loadAbilities();
-		}
-		
-		if (map.containsKey(abilityName)) {
-			return map.get(abilityName);
-		}
 
-		Global.error("No such Ability " + abilityName);
-		return new NoAbility();
-	}
-	
-	// Create and load the Ability map if it doesn't already exist
-	public static void loadAbilities() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
-		// List all of the classes we are loading
-		map.put("No Ability", new NoAbility());
-		map.put("Overgrow", new Overgrow());
-		map.put("Chlorophyll", new Chlorophyll());
-		map.put("Blaze", new Blaze());
-		map.put("Solar Power", new SolarPower());
-		map.put("Torrent", new Torrent());
-		map.put("Rain Dish", new RainDish());
-		map.put("Shield Dust", new ShieldDust());
-		map.put("Shed Skin", new ShedSkin());
-		map.put("Compoundeyes", new Compoundeyes());
-		map.put("Tinted Lens", new TintedLens());
-		map.put("Swarm", new Swarm());
-		map.put("Sniper", new Sniper());
-		map.put("Keen Eye", new KeenEye());
-		map.put("Tangled Feet", new TangledFeet());
-		map.put("Guts", new Guts());
-		map.put("Intimidate", new Intimidate());
-		map.put("Static", new Static());
-		map.put("Lightningrod", new Lightningrod());
-		map.put("Sand Veil", new SandVeil());
-		map.put("Sand Rush", new SandRush());
-		map.put("Poison Point", new PoisonPoint());
-		map.put("Rivalry", new Rivalry());
-		map.put("Cute Charm", new CuteCharm());
-		map.put("Magic Guard", new MagicGuard());
-		map.put("Flash Fire", new FlashFire());
-		map.put("Drought", new Drought());
-		map.put("Frisk", new Frisk());
-		map.put("Inner Focus", new InnerFocus());
-		map.put("Infiltrator", new Infiltrator());
-		map.put("Stench", new Stench());
-		map.put("Effect Spore", new EffectSpore());
-		map.put("Dry Skin", new DrySkin());
-		map.put("Arena Trap", new ArenaTrap());
-		map.put("Technician", new Technician());
-		map.put("Limber", new Limber());
-		map.put("Damp", new Damp());
-		map.put("Cloud Nine", new CloudNine());
-		map.put("Vital Spirit", new VitalSpirit());
-		map.put("Insomnia", new Insomnia());
-		map.put("Anger Point", new AngerPoint());
-		map.put("Synchronize", new Synchronize());
-		map.put("No Guard", new NoGuard());
-		map.put("Own Tempo", new OwnTempo());
-		map.put("Clear Body", new ClearBody());
-		map.put("Liquid Ooze", new LiquidOoze());
-		map.put("Rock Head", new RockHead());
-		map.put("Sturdy", new Sturdy());
-		map.put("Oblivious", new Oblivious());
-		map.put("Magnet Pull", new MagnetPull());
-		map.put("Unaware", new Unaware());
-		map.put("Simple", new Simple());
-		map.put("Early Bird", new EarlyBird());
-		map.put("Thick Fat", new ThickFat());
-		map.put("Hydration", new Hydration());
-		map.put("Shell Armor", new ShellArmor());
-		map.put("Battle Armor", new BattleArmor());
-		map.put("Skill Link", new SkillLink());
-		map.put("Levitate", new Levitate());
-		map.put("Forewarn", new Forewarn());
-		map.put("Hyper Cutter", new HyperCutter());
-		map.put("Soundproof", new Soundproof());
-		map.put("Reckless", new Reckless());
-		map.put("Iron Fist", new IronFist());
-		map.put("Natural Cure", new NaturalCure());
-		map.put("Serene Grace", new SereneGrace());
-		map.put("Leaf Guard", new LeafGuard());
-		map.put("Scrappy", new Scrappy());
-		map.put("Swift Swim", new SwiftSwim());
-		map.put("Water Veil", new WaterVeil());
-		map.put("Filter", new Filter());
-		map.put("Flame Body", new FlameBody());
-		map.put("Rattled", new Rattled());
-		map.put("Moxie", new Moxie());
-		map.put("Imposter", new Imposter());
-		map.put("Adaptability", new Adaptability());
-		map.put("Water Absorb", new WaterAbsorb());
-		map.put("Volt Absorb", new VoltAbsorb());
-		map.put("Quick Feet", new QuickFeet());
-		map.put("Trace", new Trace());
-		map.put("Download", new Download());
-		map.put("Pressure", new Pressure());
-		map.put("Immunity", new Immunity());
-		map.put("Snow Cloak", new SnowCloak());
-		map.put("Marvel Scale", new MarvelScale());
-		map.put("Multiscale", new Multiscale());
-		map.put("Sheer Force", new SheerForce());
-		map.put("Hustle", new Hustle());
-		map.put("Huge Power", new HugePower());
-		map.put("Speed Boost", new SpeedBoost());
-		map.put("Magic Bounce", new MagicBounce());
-		map.put("Super Luck", new SuperLuck());
-		map.put("Shadow Tag", new ShadowTag());
-		map.put("Overcoat", new Overcoat());
-		map.put("Magma Armor", new MagmaArmor());
-		map.put("Suction Cups", new SuctionCups());
-		map.put("Steadfast", new Steadfast());
-		map.put("Sand Stream", new SandStream());
-		map.put("Regenerator", new Regenerator());
-		map.put("Poison Heal", new PoisonHeal());
-		map.put("Truant", new Truant());
-		map.put("Wonder Guard", new WonderGuard());
-		map.put("Normalize", new Normalize());
-		map.put("Stall", new Stall());
-		map.put("Pure Power", new PurePower());
-		map.put("Rough Skin", new RoughSkin());
-		map.put("Solid Rock", new SolidRock());
-		map.put("White Smoke", new WhiteSmoke());
-		map.put("Toxic Boost", new ToxicBoost());
-		map.put("Anticipation", new Anticipation());
-		map.put("Storm Drain", new StormDrain());
-		map.put("Color Change", new ColorChange());
-		map.put("Ice Body", new IceBody());
-		map.put("Light Metal", new LightMetal());
-		map.put("Drizzle", new Drizzle());
-		map.put("Air Lock", new AirLock());
-		map.put("Defiant", new Defiant());
-		map.put("Competitive", new Competitive());
-		map.put("Flower Gift", new FlowerGift());
-		map.put("Aftermath", new Aftermath());
-		map.put("Heatproof", new Heatproof());
-		map.put("Sand Force", new SandForce());
-		map.put("Snow Warning", new SnowWarning());
-		map.put("Motor Drive", new MotorDrive());
-		map.put("Justified", new Justified());
-		map.put("Cursed Body", new CursedBody());
-		map.put("Slow Start", new SlowStart());
-		map.put("Bad Dreams", new BadDreams());
-		map.put("Victory Star", new VictoryStar());
-		map.put("Contrary", new Contrary());
-		map.put("Big Pecks", new BigPecks());
-		map.put("Poison Touch", new PoisonTouch());
-		map.put("Prankster", new Prankster());
-		map.put("Wonder Skin", new WonderSkin());
-		map.put("Mummy", new Mummy());
-		map.put("Defeatist", new Defeatist());
-		map.put("Weak Armor", new WeakArmor());
-		map.put("Illusion", new Illusion());
-		map.put("Analytic", new Analytic());
-		map.put("Sap Sipper", new SapSipper());
-		map.put("Iron Barbs", new IronBarbs());
-		map.put("Mold Breaker", new MoldBreaker());
-		map.put("Teravolt", new Teravolt());
-		map.put("Turboblaze", new Turboblaze());
-		map.put("Run Away", new RunAway());
-		map.put("Sticky Hold", new StickyHold());
-		map.put("Klutz", new Klutz());
-		map.put("Unburden", new Unburden());
-		map.put("Pickpocket", new Pickpocket());
-		map.put("Harvest", new Harvest());
-		map.put("Pickup", new Pickup());
-		map.put("Unnerve", new Unnerve());
-		map.put("Honey Gather", new HoneyGather());
-		map.put("Gluttony", new Gluttony());
-		map.put("Multitype", new Multitype());
-		map.put("Forecast", new Forecast());
-		map.put("Bulletproof", new Bulletproof());
-		map.put("Aura Break", new AuraBreak());
-		map.put("Fairy Aura", new FairyAura());
-		map.put("Dark Aura", new DarkAura());
-		map.put("Magician", new Magician());
-		map.put("Cheek Pouch", new CheekPouch());
-		map.put("Strong Jaw", new StrongJaw());
-		map.put("Mega Launcher", new MegaLauncher());
-		map.put("Tough Claws", new ToughClaws());
-		map.put("Sweet Veil", new SweetVeil());
-		map.put("Aroma Veil", new AromaVeil());
-		map.put("Healer", new Healer());
-		map.put("Pixilate", new Pixilate());
-		map.put("Refrigerate", new Refrigerate());
-		map.put("Stance Change", new StanceChange());
-		map.put("Fur Coat", new FurCoat());
-		map.put("Grass Pelt", new GrassPelt());
-		map.put("Flower Veil", new FlowerVeil());
-		map.put("Gale Wings", new GaleWings());
-		map.put("Protean", new Protean());
-	}
-
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class NoAbility extends Ability {
+	static class NoAbility extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		NoAbility() {
@@ -396,7 +194,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Overgrow extends Ability implements PowerChangeEffect {
+	static class Overgrow extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Overgrow() {
@@ -412,7 +210,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Chlorophyll extends Ability implements StatChangingEffect {
+	static class Chlorophyll extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Chlorophyll() {
@@ -436,7 +234,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Blaze extends Ability implements PowerChangeEffect {
+	static class Blaze extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Blaze() {
@@ -452,7 +250,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SolarPower extends Ability implements PowerChangeEffect, EndTurnEffect {
+	static class SolarPower extends Ability implements PowerChangeEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		SolarPower() {
@@ -475,7 +273,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Torrent extends Ability implements PowerChangeEffect {
+	static class Torrent extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Torrent() {
@@ -491,7 +289,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class RainDish extends Ability implements EndTurnEffect {
+	static class RainDish extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		RainDish() {
@@ -510,7 +308,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ShieldDust extends Ability implements EffectBlockerEffect {
+	static class ShieldDust extends Ability implements EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShieldDust() {
@@ -526,7 +324,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ShedSkin extends Ability implements EndTurnEffect {
+	static class ShedSkin extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShedSkin() {
@@ -544,7 +342,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Compoundeyes extends Ability implements StatChangingEffect {
+	static class Compoundeyes extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Compoundeyes() {
@@ -568,7 +366,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class TintedLens extends Ability implements PowerChangeEffect {
+	static class TintedLens extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		TintedLens() {
@@ -584,7 +382,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Swarm extends Ability implements PowerChangeEffect {
+	static class Swarm extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Swarm() {
@@ -600,7 +398,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Sniper extends Ability {
+	static class Sniper extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Sniper() {
@@ -612,7 +410,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect {
+	static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		KeenEye() {
@@ -636,7 +434,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class TangledFeet extends Ability implements StageChangingEffect {
+	static class TangledFeet extends Ability implements StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		TangledFeet() {
@@ -652,7 +450,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Guts extends Ability implements StatChangingEffect {
+	static class Guts extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Guts() {
@@ -676,7 +474,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Intimidate extends Ability implements EntryEffect {
+	static class Intimidate extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Intimidate() {
@@ -693,7 +491,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Static extends Ability implements PhysicalContactEffect {
+	static class Static extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		Static() {
@@ -711,7 +509,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Lightningrod extends Ability implements DamageBlocker {
+	static class Lightningrod extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Lightningrod() {
@@ -736,7 +534,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SandVeil extends Ability implements StageChangingEffect {
+	static class SandVeil extends Ability implements StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandVeil() {
@@ -752,7 +550,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SandRush extends Ability implements StatChangingEffect {
+	static class SandRush extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandRush() {
@@ -776,7 +574,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class PoisonPoint extends Ability implements PhysicalContactEffect {
+	static class PoisonPoint extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		PoisonPoint() {
@@ -794,7 +592,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Rivalry extends Ability implements PowerChangeEffect {
+	static class Rivalry extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Rivalry() {
@@ -813,7 +611,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class CuteCharm extends Ability implements PhysicalContactEffect {
+	static class CuteCharm extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		CuteCharm() {
@@ -826,16 +624,16 @@ public abstract class Ability implements Serializable {
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (Global.chanceTest(30)) {
-				PokemonEffect e = PokemonEffect.getEffect(EffectNamesies.INFATUATED);
-				if (e.applies(b, victim, user, CastSource.ABILITY)) {
-					user.addEffect(e.newInstance());
+				PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
+				if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
+					user.addEffect(infatuated);
 					Messages.addMessage(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 				}
 			}
 		}
 	}
 
-	private static class MagicGuard extends Ability implements WeatherBlockerEffect {
+	static class MagicGuard extends Ability implements WeatherBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagicGuard() {
@@ -851,7 +649,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FlashFire extends Ability implements DamageBlocker, PowerChangeEffect {
+	static class FlashFire extends Ability implements DamageBlocker, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 
@@ -883,7 +681,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Drought extends Ability implements EntryEffect {
+	static class Drought extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Drought() {
@@ -895,12 +693,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect(Weather.getEffect(EffectNamesies.SUNNY).newInstance());
+			b.addEffect((Weather)EffectNamesies.SUNNY.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
 		}
 	}
 
-	private static class Frisk extends Ability implements EntryEffect {
+	static class Frisk extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Frisk() {
@@ -917,7 +715,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class InnerFocus extends Ability {
+	static class InnerFocus extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		InnerFocus() {
@@ -929,7 +727,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Infiltrator extends Ability {
+	static class Infiltrator extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Infiltrator() {
@@ -941,7 +739,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Stench extends Ability implements ApplyDamageEffect {
+	static class Stench extends Ability implements ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stench() {
@@ -954,7 +752,7 @@ public abstract class Ability implements Serializable {
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Global.chanceTest(10)) {
-				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
 					flinch.cast(b, user, victim, CastSource.ABILITY, false);
 					Messages.addMessage(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
@@ -963,7 +761,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class EffectSpore extends Ability implements PhysicalContactEffect {
+	static class EffectSpore extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 		private static StatusCondition[] statuses = new StatusCondition[] {
 			StatusCondition.PARALYZED,
@@ -992,7 +790,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class DrySkin extends Ability implements EndTurnEffect, OpponentPowerChangeEffect, DamageBlocker {
+	static class DrySkin extends Ability implements EndTurnEffect, OpponentPowerChangeEffect, DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		DrySkin() {
@@ -1035,7 +833,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ArenaTrap extends Ability implements OpponentTrappingEffect {
+	static class ArenaTrap extends Ability implements OpponentTrappingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ArenaTrap() {
@@ -1055,7 +853,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Technician extends Ability implements PowerChangeEffect {
+	static class Technician extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Technician() {
@@ -1071,7 +869,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Limber extends Ability implements StatusPreventionEffect {
+	static class Limber extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Limber() {
@@ -1091,7 +889,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Damp extends Ability implements BeforeTurnEffect, OpponentBeforeTurnEffect {
+	static class Damp extends Ability implements BeforeTurnEffect, OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean checkeroo(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
 			if (attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION) {
@@ -1120,7 +918,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class CloudNine extends Ability implements EntryEffect {
+	static class CloudNine extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		CloudNine() {
@@ -1133,12 +931,12 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			// TODO: I think this isn't the intended effect of this ability
-			b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
+			b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		}
 	}
 
-	private static class VitalSpirit extends Ability implements StatusPreventionEffect {
+	static class VitalSpirit extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		VitalSpirit() {
@@ -1158,7 +956,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Insomnia extends Ability implements StatusPreventionEffect {
+	static class Insomnia extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Insomnia() {
@@ -1178,7 +976,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class AngerPoint extends Ability {
+	static class AngerPoint extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		AngerPoint() {
@@ -1190,7 +988,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Synchronize extends Ability {
+	static class Synchronize extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Synchronize() {
@@ -1202,7 +1000,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class NoGuard extends Ability implements AccuracyBypassEffect, OpponentAccuracyBypassEffect {
+	static class NoGuard extends Ability implements AccuracyBypassEffect, OpponentAccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		NoGuard() {
@@ -1224,7 +1022,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class OwnTempo extends Ability {
+	static class OwnTempo extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		OwnTempo() {
@@ -1236,7 +1034,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ClearBody extends Ability implements StatProtectingEffect {
+	static class ClearBody extends Ability implements StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ClearBody() {
@@ -1256,7 +1054,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class LiquidOoze extends Ability {
+	static class LiquidOoze extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		LiquidOoze() {
@@ -1268,7 +1066,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class RockHead extends Ability {
+	static class RockHead extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		RockHead() {
@@ -1280,7 +1078,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Sturdy extends Ability implements BracingEffect {
+	static class Sturdy extends Ability implements BracingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Sturdy() {
@@ -1300,7 +1098,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Oblivious extends Ability {
+	static class Oblivious extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Oblivious() {
@@ -1312,7 +1110,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MagnetPull extends Ability implements OpponentTrappingEffect {
+	static class MagnetPull extends Ability implements OpponentTrappingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagnetPull() {
@@ -1332,7 +1130,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Unaware extends Ability implements OpponentIgnoreStageEffect {
+	static class Unaware extends Ability implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Unaware() {
@@ -1348,7 +1146,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Simple extends Ability implements ModifyStageValueEffect {
+	static class Simple extends Ability implements ModifyStageValueEffect {
 		private static final long serialVersionUID = 1L;
 
 		Simple() {
@@ -1364,7 +1162,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class EarlyBird extends Ability {
+	static class EarlyBird extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		EarlyBird() {
@@ -1376,7 +1174,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ThickFat extends Ability implements OpponentPowerChangeEffect {
+	static class ThickFat extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ThickFat() {
@@ -1392,7 +1190,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Hydration extends Ability implements EndTurnEffect {
+	static class Hydration extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hydration() {
@@ -1410,7 +1208,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ShellArmor extends Ability implements CritBlockerEffect {
+	static class ShellArmor extends Ability implements CritBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShellArmor() {
@@ -1426,7 +1224,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class BattleArmor extends Ability implements CritBlockerEffect {
+	static class BattleArmor extends Ability implements CritBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		BattleArmor() {
@@ -1442,7 +1240,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SkillLink extends Ability {
+	static class SkillLink extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		SkillLink() {
@@ -1454,7 +1252,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Levitate extends Ability implements LevitationEffect {
+	static class Levitate extends Ability implements LevitationEffect {
 		private static final long serialVersionUID = 1L;
 
 		Levitate() {
@@ -1473,7 +1271,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Forewarn extends Ability implements EntryEffect {
+	static class Forewarn extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Forewarn() {
@@ -1519,7 +1317,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class HyperCutter extends Ability implements StatProtectingEffect {
+	static class HyperCutter extends Ability implements StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		HyperCutter() {
@@ -1539,7 +1337,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Soundproof extends Ability implements OpponentBeforeTurnEffect {
+	static class Soundproof extends Ability implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Soundproof() {
@@ -1561,7 +1359,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Reckless extends Ability implements PowerChangeEffect {
+	static class Reckless extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Reckless() {
@@ -1577,7 +1375,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class IronFist extends Ability implements PowerChangeEffect, EntryEffect {
+	static class IronFist extends Ability implements PowerChangeEffect, EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronFist() {
@@ -1599,7 +1397,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class NaturalCure extends Ability implements SwitchOutEffect {
+	static class NaturalCure extends Ability implements SwitchOutEffect {
 		private static final long serialVersionUID = 1L;
 
 		NaturalCure() {
@@ -1617,7 +1415,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SereneGrace extends Ability {
+	static class SereneGrace extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		SereneGrace() {
@@ -1629,7 +1427,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class LeafGuard extends Ability implements StatusPreventionEffect {
+	static class LeafGuard extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		LeafGuard() {
@@ -1649,7 +1447,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Scrappy extends Ability implements AdvantageChanger {
+	static class Scrappy extends Ability implements AdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Scrappy() {
@@ -1671,7 +1469,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SwiftSwim extends Ability implements StatChangingEffect {
+	static class SwiftSwim extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SwiftSwim() {
@@ -1695,7 +1493,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WaterVeil extends Ability implements StatusPreventionEffect {
+	static class WaterVeil extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		WaterVeil() {
@@ -1715,7 +1513,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Filter extends Ability implements OpponentPowerChangeEffect {
+	static class Filter extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Filter() {
@@ -1731,7 +1529,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FlameBody extends Ability implements PhysicalContactEffect {
+	static class FlameBody extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlameBody() {
@@ -1749,7 +1547,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Rattled extends Ability implements TakeDamageEffect {
+	static class Rattled extends Ability implements TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Rattled() {
@@ -1768,7 +1566,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Moxie extends Ability implements MurderEffect {
+	static class Moxie extends Ability implements MurderEffect {
 		private static final long serialVersionUID = 1L;
 
 		Moxie() {
@@ -1784,7 +1582,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Imposter extends Ability implements EntryEffect {
+	static class Imposter extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Imposter() {
@@ -1796,11 +1594,11 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			PokemonEffect.getEffect(EffectNamesies.TRANSFORMED).cast(b, enterer, enterer, CastSource.ABILITY, false);
+			EffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
 		}
 	}
 
-	private static class Adaptability extends Ability {
+	static class Adaptability extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Adaptability() {
@@ -1812,7 +1610,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WaterAbsorb extends Ability implements DamageBlocker {
+	static class WaterAbsorb extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		WaterAbsorb() {
@@ -1840,7 +1638,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class VoltAbsorb extends Ability implements DamageBlocker {
+	static class VoltAbsorb extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		VoltAbsorb() {
@@ -1868,7 +1666,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class QuickFeet extends Ability implements StatChangingEffect {
+	static class QuickFeet extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickFeet() {
@@ -1892,7 +1690,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Trace extends Ability implements EntryEffect, ChangeAbilityMove {
+	static class Trace extends Ability implements EntryEffect, ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		Trace() {
@@ -1909,7 +1707,7 @@ public abstract class Ability implements Serializable {
 				return;
 			}
 			
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, enterer, enterer, CastSource.ABILITY, true);
+			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -1922,7 +1720,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Download extends Ability implements EntryEffect {
+	static class Download extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Download() {
@@ -1946,7 +1744,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Pressure extends Ability implements EntryEffect {
+	static class Pressure extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Pressure() {
@@ -1962,7 +1760,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Immunity extends Ability implements StatusPreventionEffect {
+	static class Immunity extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Immunity() {
@@ -1982,7 +1780,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SnowCloak extends Ability implements StageChangingEffect {
+	static class SnowCloak extends Ability implements StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SnowCloak() {
@@ -1998,7 +1796,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MarvelScale extends Ability implements StatChangingEffect {
+	static class MarvelScale extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MarvelScale() {
@@ -2022,7 +1820,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Multiscale extends Ability implements OpponentPowerChangeEffect {
+	static class Multiscale extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Multiscale() {
@@ -2038,7 +1836,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SheerForce extends Ability implements PowerChangeEffect {
+	static class SheerForce extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SheerForce() {
@@ -2054,7 +1852,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Hustle extends Ability implements StatChangingEffect {
+	static class Hustle extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hustle() {
@@ -2077,7 +1875,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class HugePower extends Ability implements StatChangingEffect {
+	static class HugePower extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		HugePower() {
@@ -2101,7 +1899,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SpeedBoost extends Ability implements EndTurnEffect {
+	static class SpeedBoost extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		SpeedBoost() {
@@ -2117,7 +1915,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MagicBounce extends Ability implements TargetSwapperEffect {
+	static class MagicBounce extends Ability implements TargetSwapperEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagicBounce() {
@@ -2139,7 +1937,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SuperLuck extends Ability implements CritStageEffect {
+	static class SuperLuck extends Ability implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SuperLuck() {
@@ -2155,7 +1953,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ShadowTag extends Ability implements OpponentTrappingEffect {
+	static class ShadowTag extends Ability implements OpponentTrappingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShadowTag() {
@@ -2175,7 +1973,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Overcoat extends Ability implements WeatherBlockerEffect, EffectBlockerEffect {
+	static class Overcoat extends Ability implements WeatherBlockerEffect, EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		Overcoat() {
@@ -2207,7 +2005,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MagmaArmor extends Ability implements StatusPreventionEffect {
+	static class MagmaArmor extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		MagmaArmor() {
@@ -2227,7 +2025,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SuctionCups extends Ability {
+	static class SuctionCups extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		SuctionCups() {
@@ -2239,7 +2037,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Steadfast extends Ability {
+	static class Steadfast extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Steadfast() {
@@ -2251,7 +2049,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SandStream extends Ability implements EntryEffect {
+	static class SandStream extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandStream() {
@@ -2263,12 +2061,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect(Weather.getEffect(EffectNamesies.SANDSTORM).newInstance());
+			b.addEffect((Weather)EffectNamesies.SANDSTORM.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
 		}
 	}
 
-	private static class Regenerator extends Ability implements SwitchOutEffect {
+	static class Regenerator extends Ability implements SwitchOutEffect {
 		private static final long serialVersionUID = 1L;
 
 		Regenerator() {
@@ -2286,7 +2084,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class PoisonHeal extends Ability {
+	static class PoisonHeal extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		PoisonHeal() {
@@ -2298,7 +2096,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Truant extends Ability implements EndTurnEffect, BeforeTurnEffect {
+	static class Truant extends Ability implements EndTurnEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean lazyface;
 
@@ -2331,7 +2129,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WonderGuard extends Ability implements OpponentBeforeTurnEffect {
+	static class WonderGuard extends Ability implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		WonderGuard() {
@@ -2365,7 +2163,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Normalize extends Ability implements ChangeAttackTypeEffect {
+	static class Normalize extends Ability implements ChangeAttackTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Normalize() {
@@ -2381,7 +2179,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Stall extends Ability implements StallingEffect {
+	static class Stall extends Ability implements StallingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stall() {
@@ -2393,7 +2191,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class PurePower extends Ability implements StatChangingEffect {
+	static class PurePower extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PurePower() {
@@ -2417,7 +2215,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class RoughSkin extends Ability implements PhysicalContactEffect {
+	static class RoughSkin extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		RoughSkin() {
@@ -2434,7 +2232,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SolidRock extends Ability implements OpponentPowerChangeEffect {
+	static class SolidRock extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SolidRock() {
@@ -2450,7 +2248,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WhiteSmoke extends Ability implements StatProtectingEffect {
+	static class WhiteSmoke extends Ability implements StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WhiteSmoke() {
@@ -2470,7 +2268,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ToxicBoost extends Ability implements StatChangingEffect {
+	static class ToxicBoost extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ToxicBoost() {
@@ -2494,7 +2292,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Anticipation extends Ability implements EntryEffect {
+	static class Anticipation extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Anticipation() {
@@ -2518,7 +2316,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StormDrain extends Ability implements DamageBlocker {
+	static class StormDrain extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		StormDrain() {
@@ -2543,7 +2341,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ColorChange extends Ability implements TakeDamageEffect, ChangeTypeMove {
+	static class ColorChange extends Ability implements TakeDamageEffect, ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 		private Type type;
 
@@ -2561,7 +2359,7 @@ public abstract class Ability implements Serializable {
 			Type t = user.getAttackType();
 			if (!victim.isType(b, t)) {
 				type = t;
-				PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, victim, victim, CastSource.ABILITY, true);
+				EffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
 			}
 		}
 
@@ -2570,7 +2368,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class IceBody extends Ability implements EndTurnEffect, WeatherBlockerEffect {
+	static class IceBody extends Ability implements EndTurnEffect, WeatherBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		IceBody() {
@@ -2593,7 +2391,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class LightMetal extends Ability implements HalfWeightEffect {
+	static class LightMetal extends Ability implements HalfWeightEffect {
 		private static final long serialVersionUID = 1L;
 
 		LightMetal() {
@@ -2609,7 +2407,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Drizzle extends Ability implements EntryEffect {
+	static class Drizzle extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Drizzle() {
@@ -2621,12 +2419,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect(Weather.getEffect(EffectNamesies.RAINING).newInstance());
+			b.addEffect((Weather)EffectNamesies.RAINING.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " started a downpour!");
 		}
 	}
 
-	private static class AirLock extends Ability implements EntryEffect {
+	static class AirLock extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirLock() {
@@ -2639,12 +2437,12 @@ public abstract class Ability implements Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			// TODO: I think this isn't the intended effect of this ability
-			b.addEffect(Weather.getEffect(EffectNamesies.CLEAR_SKIES));
+			b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		}
 	}
 
-	private static class Defiant extends Ability implements StatLoweredEffect {
+	static class Defiant extends Ability implements StatLoweredEffect {
 		private static final long serialVersionUID = 1L;
 
 		Defiant() {
@@ -2660,7 +2458,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Competitive extends Ability implements StatLoweredEffect {
+	static class Competitive extends Ability implements StatLoweredEffect {
 		private static final long serialVersionUID = 1L;
 
 		Competitive() {
@@ -2676,7 +2474,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FlowerGift extends Ability implements StatChangingEffect {
+	static class FlowerGift extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlowerGift() {
@@ -2700,7 +2498,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Aftermath extends Ability implements PhysicalContactEffect {
+	static class Aftermath extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		Aftermath() {
@@ -2720,7 +2518,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Heatproof extends Ability implements OpponentPowerChangeEffect {
+	static class Heatproof extends Ability implements OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Heatproof() {
@@ -2736,7 +2534,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SandForce extends Ability implements PowerChangeEffect, WeatherBlockerEffect {
+	static class SandForce extends Ability implements PowerChangeEffect, WeatherBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandForce() {
@@ -2757,7 +2555,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SnowWarning extends Ability implements EntryEffect {
+	static class SnowWarning extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		SnowWarning() {
@@ -2769,12 +2567,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect(Weather.getEffect(EffectNamesies.HAILING).newInstance());
+			b.addEffect((Weather)EffectNamesies.HAILING.getEffect());
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
 		}
 	}
 
-	private static class MotorDrive extends Ability implements DamageBlocker {
+	static class MotorDrive extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		MotorDrive() {
@@ -2799,7 +2597,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Justified extends Ability implements TakeDamageEffect {
+	static class Justified extends Ability implements TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Justified() {
@@ -2817,7 +2615,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class CursedBody extends Ability implements PhysicalContactEffect {
+	static class CursedBody extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		CursedBody() {
@@ -2831,7 +2629,7 @@ public abstract class Ability implements Serializable {
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (Global.chanceTest(30)) {
 				user.getAttributes().setLastMoveUsed();
-				PokemonEffect disable = PokemonEffect.getEffect(EffectNamesies.DISABLE);
+				PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
 				if (disable.applies(b, victim, user, CastSource.ABILITY)) {
 					disable.cast(b, victim, user, CastSource.ABILITY, false);
 					Messages.addMessage(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
@@ -2840,7 +2638,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SlowStart extends Ability implements EndTurnEffect, EntryEffect, StatChangingEffect {
+	static class SlowStart extends Ability implements EndTurnEffect, EntryEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 		int count;
 
@@ -2875,7 +2673,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class BadDreams extends Ability implements EndTurnEffect {
+	static class BadDreams extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		BadDreams() {
@@ -2895,7 +2693,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class VictoryStar extends Ability implements StatChangingEffect {
+	static class VictoryStar extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		VictoryStar() {
@@ -2919,7 +2717,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Contrary extends Ability implements ModifyStageValueEffect {
+	static class Contrary extends Ability implements ModifyStageValueEffect {
 		private static final long serialVersionUID = 1L;
 
 		Contrary() {
@@ -2935,7 +2733,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class BigPecks extends Ability implements StatProtectingEffect {
+	static class BigPecks extends Ability implements StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		BigPecks() {
@@ -2955,7 +2753,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class PoisonTouch extends Ability implements ApplyDamageEffect {
+	static class PoisonTouch extends Ability implements ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		PoisonTouch() {
@@ -2973,7 +2771,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Prankster extends Ability implements PriorityChangeEffect {
+	static class Prankster extends Ability implements PriorityChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Prankster() {
@@ -2997,7 +2795,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WonderSkin extends Ability implements StatChangingEffect {
+	static class WonderSkin extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WonderSkin() {
@@ -3021,7 +2819,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Mummy extends Ability implements PhysicalContactEffect, ChangeAbilityMove {
+	static class Mummy extends Ability implements PhysicalContactEffect, ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		Mummy() {
@@ -3038,7 +2836,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// Cast the change ability effect onto the user
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, victim, user, CastSource.ABILITY, true);
+			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -3050,7 +2848,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Defeatist extends Ability implements PowerChangeEffect {
+	static class Defeatist extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Defeatist() {
@@ -3066,7 +2864,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class WeakArmor extends Ability implements TakeDamageEffect {
+	static class WeakArmor extends Ability implements TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		WeakArmor() {
@@ -3085,7 +2883,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger {
+	static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 		private String illusionName;
@@ -3193,7 +2991,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Analytic extends Ability implements PowerChangeEffect {
+	static class Analytic extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Analytic() {
@@ -3209,7 +3007,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SapSipper extends Ability implements DamageBlocker {
+	static class SapSipper extends Ability implements DamageBlocker {
 		private static final long serialVersionUID = 1L;
 
 		SapSipper() {
@@ -3234,7 +3032,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class IronBarbs extends Ability implements PhysicalContactEffect {
+	static class IronBarbs extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronBarbs() {
@@ -3251,7 +3049,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MoldBreaker extends Ability implements EntryEffect {
+	static class MoldBreaker extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		MoldBreaker() {
@@ -3267,7 +3065,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Teravolt extends Ability implements EntryEffect {
+	static class Teravolt extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Teravolt() {
@@ -3283,7 +3081,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Turboblaze extends Ability implements EntryEffect {
+	static class Turboblaze extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Turboblaze() {
@@ -3299,7 +3097,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class RunAway extends Ability implements DefiniteEscape {
+	static class RunAway extends Ability implements DefiniteEscape {
 		private static final long serialVersionUID = 1L;
 
 		RunAway() {
@@ -3311,7 +3109,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StickyHold extends Ability {
+	static class StickyHold extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		StickyHold() {
@@ -3323,7 +3121,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Klutz extends Ability {
+	static class Klutz extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Klutz() {
@@ -3335,7 +3133,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Unburden extends Ability implements StatChangingEffect {
+	static class Unburden extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Unburden() {
@@ -3359,7 +3157,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Pickpocket extends Ability implements PhysicalContactEffect, ItemHolder {
+	static class Pickpocket extends Ability implements PhysicalContactEffect, ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -3390,10 +3188,10 @@ public abstract class Ability implements Serializable {
 			}
 			
 			item = stolen;
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, thief, CastSource.ABILITY, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
 			
 			item = Item.noneItem();
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, victim, CastSource.ABILITY, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3406,7 +3204,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Harvest extends Ability implements EndTurnEffect {
+	static class Harvest extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Harvest() {
@@ -3431,7 +3229,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Pickup extends Ability implements EndBattleEffect {
+	static class Pickup extends Ability implements EndBattleEffect {
 		private static final long serialVersionUID = 1L;
 
 		Pickup() {
@@ -3445,12 +3243,12 @@ public abstract class Ability implements Serializable {
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
 			if (!p.isHoldingItem(b) && Global.chanceTest(10)) {
 				// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
-				p.giveItem((HoldItem)Item.getItem(ItemNamesies.LEFTOVERS));
+				p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
 			}
 		}
 	}
 
-	private static class Unnerve extends Ability implements EntryEffect {
+	static class Unnerve extends Ability implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		Unnerve() {
@@ -3466,7 +3264,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class HoneyGather extends Ability implements EndBattleEffect {
+	static class HoneyGather extends Ability implements EndBattleEffect {
 		private static final long serialVersionUID = 1L;
 
 		HoneyGather() {
@@ -3480,12 +3278,12 @@ public abstract class Ability implements Serializable {
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
 			if (!p.isHoldingItem(b) && Global.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
 				// TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
-				p.giveItem((HoldItem)Item.getItem(ItemNamesies.LEFTOVERS));
+				p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
 			}
 		}
 	}
 
-	private static class Gluttony extends Ability {
+	static class Gluttony extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		Gluttony() {
@@ -3497,7 +3295,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Multitype extends Ability implements ChangeTypeEffect {
+	static class Multitype extends Ability implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Multitype() {
@@ -3518,7 +3316,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Forecast extends Ability implements ChangeTypeEffect {
+	static class Forecast extends Ability implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Forecast() {
@@ -3534,7 +3332,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Bulletproof extends Ability implements OpponentBeforeTurnEffect {
+	static class Bulletproof extends Ability implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Bulletproof() {
@@ -3556,7 +3354,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class AuraBreak extends Ability {
+	static class AuraBreak extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		AuraBreak() {
@@ -3568,7 +3366,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FairyAura extends Ability implements PowerChangeEffect {
+	static class FairyAura extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		FairyAura() {
@@ -3592,7 +3390,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class DarkAura extends Ability implements PowerChangeEffect {
+	static class DarkAura extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		DarkAura() {
@@ -3616,7 +3414,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Magician extends Ability implements ApplyDamageEffect, ItemHolder {
+	static class Magician extends Ability implements ApplyDamageEffect, ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -3647,10 +3445,10 @@ public abstract class Ability implements Serializable {
 			}
 			
 			item = stolen;
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, thief, CastSource.ABILITY, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
 			
 			item = Item.noneItem();
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, thief, victim, CastSource.ABILITY, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
@@ -3663,7 +3461,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class CheekPouch extends Ability {
+	static class CheekPouch extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		CheekPouch() {
@@ -3675,7 +3473,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StrongJaw extends Ability implements PowerChangeEffect {
+	static class StrongJaw extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		StrongJaw() {
@@ -3691,7 +3489,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class MegaLauncher extends Ability implements PowerChangeEffect {
+	static class MegaLauncher extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MegaLauncher() {
@@ -3707,7 +3505,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class ToughClaws extends Ability implements PowerChangeEffect {
+	static class ToughClaws extends Ability implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ToughClaws() {
@@ -3723,7 +3521,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class SweetVeil extends Ability implements StatusPreventionEffect {
+	static class SweetVeil extends Ability implements StatusPreventionEffect {
 		private static final long serialVersionUID = 1L;
 
 		SweetVeil() {
@@ -3743,7 +3541,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class AromaVeil extends Ability {
+	static class AromaVeil extends Ability {
 		private static final long serialVersionUID = 1L;
 
 		AromaVeil() {
@@ -3755,7 +3553,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Healer extends Ability implements EndTurnEffect {
+	static class Healer extends Ability implements EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Healer() {
@@ -3773,7 +3571,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Pixilate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
+	static class Pixilate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 
@@ -3809,7 +3607,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Refrigerate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
+	static class Refrigerate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 
@@ -3845,7 +3643,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
+	static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
 		private static final long serialVersionUID = 1L;
 		private static final int[] BLADE_STATS = new int[] {60, 150, 50, 150, 50, 60};
 		private static final int[] SHIELD_STATS = new int[] {60, 50, 150, 50, 150, 60};
@@ -3887,7 +3685,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FurCoat extends Ability implements StatChangingEffect {
+	static class FurCoat extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FurCoat() {
@@ -3911,7 +3709,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class GrassPelt extends Ability implements StatChangingEffect {
+	static class GrassPelt extends Ability implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		GrassPelt() {
@@ -3935,7 +3733,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class FlowerVeil extends Ability implements StatusPreventionEffect, StatProtectingEffect {
+	static class FlowerVeil extends Ability implements StatusPreventionEffect, StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlowerVeil() {
@@ -3963,7 +3761,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class GaleWings extends Ability implements PriorityChangeEffect {
+	static class GaleWings extends Ability implements PriorityChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		GaleWings() {
@@ -3987,7 +3785,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	private static class Protean extends Ability implements BeforeTurnEffect, ChangeTypeMove {
+	static class Protean extends Ability implements BeforeTurnEffect, ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 		private Type type;
 
@@ -4005,7 +3803,7 @@ public abstract class Ability implements Serializable {
 			// Protean activates for all moves except for Struggle
 			if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
 				type = p.getAttackType();
-				PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, p, p, CastSource.ABILITY, true);
+				EffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
 			}
 			
 			return true;

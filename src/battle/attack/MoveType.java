@@ -1,4 +1,4 @@
-package battle;
+package battle.attack;
 
 public enum MoveType {
     AIRBORNE,

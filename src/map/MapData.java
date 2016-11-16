@@ -1,6 +1,5 @@
 package map;
 
-import gui.GameFrame;
 import main.Game;
 import main.Global;
 import map.entity.Entity;
@@ -239,7 +238,7 @@ public class MapData {
 	public Entity[][] populateEntities() {
 		Entity[][] res = new Entity[width][height];
 		entities.stream()
-				.filter(entity -> entity.isPresent() || GameFrame.GENERATE_STUFF)
+				.filter(Entity::isPresent)
 				.forEach(entity -> {
 					entity.reset();
 					entity.addData();

@@ -11,7 +11,7 @@ Constructor:
 Fields:
 	Pow Int power
 	Acc Int accuracy
-	Effect Function Effect.getEffect 2 1 Enum EffectNamesies 0 Enum EffectType effects List
+	Effect Function Effect.getEffect 1 1 Enum EffectNamesies effects List
 	EffChance Int effectChance
 	Status Enum StatusCondition status
 	MoveType Multiple Enum MoveType moveTypes List
@@ -822,7 +822,7 @@ False Swipe:
 	Acc: 100
 	Type: Normal
 	ApplyDamage: 
-	o.addEffect(PokemonEffect.getEffect(EffectNamesies.BRACING));
+	o.addEffect((PokemonEffect)EffectNamesies.BRACING.getEffect());
 	super.applyDamage(me, o, b);
 	o.getAttributes().removeEffect(EffectNamesies.BRACING);
 	###
@@ -996,7 +996,7 @@ Roost:
 	healFail = true;
 	super.applyEffects(b, user, victim);
 	if (!healFail && getType(b, user, victim) != null) {
-		PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, user, victim, CastSource.ATTACK, super.printCast);
+		EffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
 		user.getEffect(EffectNamesies.CHANGE_TYPE).setTurns(1);
 	}
 	###
@@ -1657,12 +1657,17 @@ Lucky Chant:
 Metronome:
 	MoveType: Sleep_Talk_Fail, Mimicless, Assistless, Metronomeless, No_Magic_Coat
 	Apply: 
+	AttackNamesies[] attackNames = AttackNamesies.values();
+
 	int index;
+	Attack metronomeMove;
+
 	do {
-		index = Global.getRandomIndex(moveNames);
-	} while (map.get(moveNames.get(index)).isMoveType(MoveType.METRONOMELESS));
+		index = Global.getRandomIndex(attackNames);
+		metronomeMove = attackNames[index].getAttack();
+	} while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
 	
-	me.callNewMove(b, o, new Move(map.get(moveNames.get(index))));
+	me.callNewMove(b, o, new Move(metronomeMove));
 	###
 	Desc: The user waggles a finger and stimulates its brain into randomly using nearly any move.
 	PP: 10
@@ -3551,7 +3556,7 @@ Me First:
 		return;
 	}
 	
-	me.addEffect(PokemonEffect.getEffect(EffectNamesies.FIDDY_PERCENT_STRONGER));
+	me.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
 	me.callNewMove(b, o, new Move(o.getAttack()));
 	me.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
 	###
@@ -4372,7 +4377,7 @@ Beat Up:
 		}
 		
 		Move temp = p.getMove();
-		p.setMove(new Move(Attack.getAttack(super.namesies)));
+		p.setMove(new Move(super.namesies.getAttack()));
 		Messages.addMessage(p.getName() + "'s attack!");
 		super.applyDamage(p, o, b);
 		p.setMove(temp);
@@ -5342,7 +5347,7 @@ Gastro Acid:
 	Int: ChangeAbilityMove
 	Effect: Pokemon ChangeAbility
 	AbilityChange: 
-	return Ability.getAbility(AbilityNamesies.NO_ABILITY).newInstance();
+	return AbilityNamesies.NO_ABILITY.getNewAbility();
 	###
 	PP: 10
 	Type: Poison

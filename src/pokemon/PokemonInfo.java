@@ -1,16 +1,15 @@
 package pokemon;
 
 import item.Item;
+import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
 import main.Type;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.PokemonNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.attack.AttackNamesies;
 import util.FileIO;
 import util.FileName;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -326,7 +325,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		private int chance;
 		
 		public WildHoldItem(int chance, String itemName) {
-			item = (HoldItem)Item.getItemFromName(itemName);
+			item = (HoldItem) ItemNamesies.getValueOf(itemName).getItem();
 			this.chance = chance;
 		}
 		

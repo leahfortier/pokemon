@@ -1,12 +1,13 @@
 package pattern;
 
-import battle.Attack;
-import battle.Move;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import item.Item;
+import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
-import namesies.PokemonNamesies;
 import pattern.MatchConstants.MatchType;
+import pokemon.PokemonNamesies;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +86,8 @@ public class PokemonMatcher {
                 for (int i = 0; i < Move.MAX_MOVES; i++) {
                     String attackName = params.group(3 + i);
                     if (!attackName.equals("None")) { // TODO: Use constant
-                        moves.add(new Move(Attack.getAttackFromName(attackName)));
+                        AttackNamesies attackNamesies = AttackNamesies.getValueOf(attackName);
+                        moves.add(new Move(attackNamesies.getAttack()));
                     }
                 }
             }
@@ -96,7 +98,7 @@ public class PokemonMatcher {
 
             if (params.group(8) != null) {
                 String itemName = params.group(9);
-                Item item = Item.getItemFromName(itemName);
+                Item item = ItemNamesies.getValueOf(itemName).getItem();
                 if (item.isHoldable()) {
                     this.holdItem = (HoldItem)item;
                 }

@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import namesies.PokemonNamesies;
+import pokemon.PokemonNamesies;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;

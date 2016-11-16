@@ -146,9 +146,9 @@ Cute Charm:
 	Int: PhysicalContactEffect
 	Contact: 
 	if (Global.chanceTest(30)) {
-		PokemonEffect e = PokemonEffect.getEffect(EffectNamesies.INFATUATED);
-		if (e.applies(b, victim, user, CastSource.ABILITY)) {
-			user.addEffect(e.newInstance());
+		PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
+		if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
+			user.addEffect(infatuated);
 			Messages.addMessage(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 		}
 	}
@@ -207,7 +207,7 @@ Stench:
 	Int: ApplyDamageEffect
 	OnApplyDamage: 
 	if (Global.chanceTest(10)) {
-		PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+		PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 		if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
 			flinch.cast(b, user, victim, CastSource.ABILITY, false);
 			Messages.addMessage(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
@@ -534,7 +534,7 @@ Imposter:
 	Desc: It transforms itself into the Pok\u00e9mon it is facing.
 	Int: EntryEffect
 	Enter: 
-	PokemonEffect.getEffect(EffectNamesies.TRANSFORMED).cast(b, enterer, enterer, CastSource.ABILITY, false);
+	EffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
 	###
 *
 Adaptability:
@@ -562,7 +562,7 @@ Trace:
 		return;
 	}
 	
-	PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, enterer, enterer, CastSource.ABILITY, true);
+	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
 	###
 	AbilityChange: 
 	return b.getOtherPokemon(victim.user()).getAbility().newInstance();
@@ -816,7 +816,7 @@ Color Change:
 	Type t = user.getAttackType();
 	if (!victim.isType(b, t)) {
 		type = t;
-		PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, victim, victim, CastSource.ABILITY, true);
+		EffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
 	}
 	###
 	Activate: 
@@ -924,7 +924,7 @@ Cursed Body:
 	Contact: 
 	if (Global.chanceTest(30)) {
 		user.getAttributes().setLastMoveUsed();
-		PokemonEffect disable = PokemonEffect.getEffect(EffectNamesies.DISABLE);
+		PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
 		if (disable.applies(b, victim, user, CastSource.ABILITY)) {
 			disable.cast(b, victim, user, CastSource.ABILITY, false);
 			Messages.addMessage(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
@@ -1008,7 +1008,7 @@ Mummy:
 	}
 	
 	// Cast the change ability effect onto the user
-	PokemonEffect.getEffect(EffectNamesies.CHANGE_ABILITY).cast(b, victim, user, CastSource.ABILITY, true);
+	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
 	###
 	AbilityChange: 
 	return (new Mummy()).newInstance();
@@ -1216,7 +1216,7 @@ Pickup:
 	EndBattle: 
 	if (!p.isHoldingItem(b) && Global.chanceTest(10)) {
 		// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
-		p.giveItem((HoldItem)Item.getItem(ItemNamesies.LEFTOVERS));
+		p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
 	}
 	###
 *
@@ -1232,7 +1232,7 @@ Honey Gather:
 	EndBattle: 
 	if (!p.isHoldingItem(b) && Global.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
 		// TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
-		p.giveItem((HoldItem)Item.getItem(ItemNamesies.LEFTOVERS));
+		p.giveItem((HoldItem)ItemNamesies.LEFTOVERS.getItem());
 	}
 	###
 	Desc: The Pok\u00e9mon may gather Honey from somewhere.
@@ -1393,7 +1393,7 @@ Protean:
 	// Protean activates for all moves except for Struggle
 	if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
 		type = p.getAttackType();
-		PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, p, p, CastSource.ABILITY, true);
+		EffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
 	}
 	
 	return true;

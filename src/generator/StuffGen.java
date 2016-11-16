@@ -1,10 +1,11 @@
 package generator;
 
 import main.Global;
-import namesies.PokemonNamesies;
+import pokemon.PokemonNamesies;
 import pokemon.PokemonInfo;
 import util.FileIO;
 import util.FileName;
+import util.Folder;
 import util.StringUtils;
 
 import java.io.PrintStream;
@@ -19,17 +20,23 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StuffGen {
-	
-	public StuffGen() {
-		new PokeGen();
-		new NamesiesGen(PokemonNamesies.class);
-		baseEvolutionGenerator();
-		
-		new InterfaceGen();
-		
+
+	public static void main(String[] args) {
+		new StuffGen();
+
 //		pokemonInfoStuff();
 //		compareMoves();
 //		DrawMetrics.FindMetrics.writeFontMetrics();
+
+		System.out.println("GEN GEN GEN");
+	}
+
+	private StuffGen() {
+		new PokeGen();
+		new NamesiesGen(Folder.POKEMON, PokemonNamesies.class);
+		baseEvolutionGenerator();
+		
+		new InterfaceGen();
 	}
 
 	// Opens the original file and appends the beginning until the key to generate
@@ -184,7 +191,7 @@ public class StuffGen {
 			accessModifier = "public";
 			classType = "interface";
 		} else {
-			accessModifier = "private static";
+			accessModifier = "static";
 			classType = "class";
 		}
 		

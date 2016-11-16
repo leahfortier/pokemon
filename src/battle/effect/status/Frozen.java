@@ -1,14 +1,14 @@
 package battle.effect.status;
 
 import battle.Battle;
-import battle.MoveType;
+import battle.attack.MoveType;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.EffectNamesies;
+import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
 
 class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {

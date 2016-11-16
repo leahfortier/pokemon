@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import battle.attack.Move;
+import battle.attack.MoveType;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import main.Global;
 import message.Messages;
-import namesies.EffectNamesies;
-import pokemon.Ability;
+import battle.effect.generic.EffectNamesies;
+import pokemon.ability.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.effect.generic.Effect;

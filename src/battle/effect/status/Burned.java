@@ -5,7 +5,7 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
+import pokemon.ability.AbilityNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 

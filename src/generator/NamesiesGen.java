@@ -1,24 +1,26 @@
 package generator;
 
-import java.util.Scanner;
-
 import main.Global;
-import namesies.PokemonNamesies;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import util.FileIO;
-import util.Folder;
 import util.PokeString;
 import util.StringUtils;
 
+import java.util.Scanner;
+
 class NamesiesGen {
 
-	private final Class namesiesClass;
+	private final String namesiesFolder;
+	private final String namesiesClassName;
 	private final StringBuilder namesies;
 
 	private boolean firstNamesies;
 	
-	NamesiesGen(final Class namesiesClass) {
-		this.namesiesClass = namesiesClass;
+	NamesiesGen(final String namesiesFolder, final Class namesiesClass) {
+		this.namesiesFolder = namesiesFolder;
+		this.namesiesClassName = namesiesClass.getSimpleName();
+
 		this.namesies = new StringBuilder();
 		this.firstNamesies = true;
 
@@ -29,7 +31,7 @@ class NamesiesGen {
 	}
 	
 	void writeNamesies() {
-		final String fileName = Folder.NAMESIES + namesiesClass.getSimpleName() + ".java";
+		final String fileName = this.namesiesFolder + this.namesiesClassName + ".java";
 
 		Scanner original = FileIO.openFile(fileName);
 		StringBuilder out = new StringBuilder();
@@ -68,22 +70,24 @@ class NamesiesGen {
 		FileIO.overwriteFile(fileName, out);
 	}
 	
-	void createNamesies(String name) {
+	void createNamesies(String name, String className) {
 		String enumName = PokeString.getNamesiesString(name);
 		namesies.append(firstNamesies ? "" : ",\n")
 				.append("\t")
 				.append(enumName)
 				.append("(\"")
 				.append(name)
-				.append("\")");
+				.append("\"")
+				.append(StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new")
+				.append(")");
 		firstNamesies = false;
 	}
 
-	void pokemonNamesies() {
+	private void pokemonNamesies() {
 		// Add the Pokemon to namesies
 		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			PokemonInfo info = PokemonInfo.getPokemonInfo(i);
-			createNamesies(info.getName());
+			createNamesies(info.getName(), null);
 		}
 	}
 }

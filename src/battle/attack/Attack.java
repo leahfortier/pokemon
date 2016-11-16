@@ -1,5 +1,6 @@
-package battle;
+package battle.attack;
 
+import battle.Battle;
 import battle.effect.PassableEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
@@ -26,11 +27,13 @@ import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
+import item.ItemNamesies;
 import item.berry.Berry;
 import item.berry.GainableEffectBerry;
 import item.hold.DriveItem;
@@ -43,14 +46,11 @@ import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
-import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Stat;
+import pokemon.ability.Ability;
+import pokemon.ability.AbilityNamesies;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
@@ -58,16 +58,11 @@ import trainer.WildPokemon;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class Attack implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private static Map<String, Attack> map; // Mappity map
-	private static List<String> moveNames;
-
 	private AttackNamesies namesies;
 	private String name;
 	private String description;
@@ -404,647 +399,14 @@ public abstract class Attack implements Serializable {
 	// To be overridden if necessary
 	public void startTurn(Battle b, ActivePokemon me) {}
 
-	// ONLY CALL THIS FUNCTION IF YOU SRSLY LIKE NEED TO LIKE YOU'RE READING FROM A FILE OR SOMETHING OTHERWISE JUST FUCKING USE THE FUCKING NAMESIES I FUCKING MEAN IT AND EVEN IN THE SITUATION I SAID IT COULD BE USED IT BETTER FUCKING BE PRECEDED BY THE ISATTACK FUNCTION SRSRLY SRSLY SRSLY
-	public static Attack getAttackFromName(String m) {
-		if (isAttack(m)) {
-			return map.get(m);
-		}
-
-		Global.error("No such Move " + m);
-		return null;
-	}
-	
-	public static Attack getAttack(AttackNamesies name) {
-		return getAttackFromName(name.getName());
-	}
-	
-	public static boolean isAttack(String m) {
-		if (map == null) {
-			loadMoves();
-		}
-		
-		return map.containsKey(m);
+	public static boolean isAttack(String name) {
+		return AttackNamesies.tryValueOf(name) != null;
 	}
 
-	// Create and load the Moves map if it doesn't already exist
-	public static void loadMoves() 
-	{
-		if (map != null) 
-		{
-			return;
-		}
-		
-		map = new HashMap<>();
-		moveNames = new ArrayList<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
-		// List all of the classes we are loading
-		map.put("Tackle", new Tackle());
-		map.put("Leech Seed", new LeechSeed());
-		map.put("Thunder Wave", new ThunderWave());
-		map.put("Poison Powder", new PoisonPowder());
-		map.put("Sleep Powder", new SleepPowder());
-		map.put("Toxic", new Toxic());
-		map.put("Ember", new Ember());
-		map.put("Growl", new Growl());
-		map.put("Scratch", new Scratch());
-		map.put("Vine Whip", new VineWhip());
-		map.put("Sonic Boom", new SonicBoom());
-		map.put("Smokescreen", new Smokescreen());
-		map.put("Take Down", new TakeDown());
-		map.put("Struggle", new Struggle());
-		map.put("Razor Leaf", new RazorLeaf());
-		map.put("Sweet Scent", new SweetScent());
-		map.put("Growth", new Growth());
-		map.put("Double-Edge", new DoubleEdge());
-		map.put("Seed Bomb", new SeedBomb());
-		map.put("Synthesis", new Synthesis());
-		map.put("Recover", new Recover());
-		map.put("Dragon Rage", new DragonRage());
-		map.put("Scary Face", new ScaryFace());
-		map.put("Fire Fang", new FireFang());
-		map.put("Flame Burst", new FlameBurst());
-		map.put("Bite", new Bite());
-		map.put("Slash", new Slash());
-		map.put("Tail Whip", new TailWhip());
-		map.put("Solar Beam", new SolarBeam());
-		map.put("Flamethrower", new Flamethrower());
-		map.put("Fly", new Fly());
-		map.put("Fire Spin", new FireSpin());
-		map.put("Inferno", new Inferno());
-		map.put("Dragon Claw", new DragonClaw());
-		map.put("Shadow Claw", new ShadowClaw());
-		map.put("Air Slash", new AirSlash());
-		map.put("Wing Attack", new WingAttack());
-		map.put("Heat Wave", new HeatWave());
-		map.put("Flare Blitz", new FlareBlitz());
-		map.put("Flash Cannon", new FlashCannon());
-		map.put("Bubble", new Bubble());
-		map.put("Withdraw", new Withdraw());
-		map.put("Water Gun", new WaterGun());
-		map.put("Rapid Spin", new RapidSpin());
-		map.put("Reflect", new Reflect());
-		map.put("Spiky Shield", new SpikyShield());
-		map.put("King's Shield", new KingsShield());
-		map.put("Protect", new Protect());
-		map.put("Detect", new Detect());
-		map.put("Quick Guard", new QuickGuard());
-		map.put("Endure", new Endure());
-		map.put("Water Pulse", new WaterPulse());
-		map.put("ConfusionDamage", new ConfusionDamage());
-		map.put("Confuse Ray", new ConfuseRay());
-		map.put("Aqua Tail", new AquaTail());
-		map.put("Skull Bash", new SkullBash());
-		map.put("Iron Defense", new IronDefense());
-		map.put("Hydro Pump", new HydroPump());
-		map.put("Rain Dance", new RainDance());
-		map.put("Sunny Day", new SunnyDay());
-		map.put("Sandstorm", new Sandstorm());
-		map.put("Hail", new Hail());
-		map.put("Petal Dance", new PetalDance());
-		map.put("Thrash", new Thrash());
-		map.put("Hyper Beam", new HyperBeam());
-		map.put("String Shot", new StringShot());
-		map.put("Bug Bite", new BugBite());
-		map.put("Harden", new Harden());
-		map.put("Confusion", new Confusion());
-		map.put("Stun Spore", new StunSpore());
-		map.put("Gust", new Gust());
-		map.put("Supersonic", new Supersonic());
-		map.put("Psybeam", new Psybeam());
-		map.put("Silver Wind", new SilverWind());
-		map.put("Tailwind", new Tailwind());
-		map.put("Morning Sun", new MorningSun());
-		map.put("Safeguard", new Safeguard());
-		map.put("Captivate", new Captivate());
-		map.put("Bug Buzz", new BugBuzz());
-		map.put("Quiver Dance", new QuiverDance());
-		map.put("Encore", new Encore());
-		map.put("Poison Sting", new PoisonSting());
-		map.put("Fury Attack", new FuryAttack());
-		map.put("False Swipe", new FalseSwipe());
-		map.put("Disable", new Disable());
-		map.put("Focus Energy", new FocusEnergy());
-		map.put("Twineedle", new Twineedle());
-		map.put("Rage", new Rage());
-		map.put("Pursuit", new Pursuit());
-		map.put("Toxic Spikes", new ToxicSpikes());
-		map.put("Pin Missile", new PinMissile());
-		map.put("Agility", new Agility());
-		map.put("Assurance", new Assurance());
-		map.put("Poison Jab", new PoisonJab());
-		map.put("Endeavor", new Endeavor());
-		map.put("Sand Attack", new SandAttack());
-		map.put("Quick Attack", new QuickAttack());
-		map.put("Twister", new Twister());
-		map.put("Feather Dance", new FeatherDance());
-		map.put("Roost", new Roost());
-		map.put("Thunder Shock", new ThunderShock());
-		map.put("Mirror Move", new MirrorMove());
-		map.put("Hurricane", new Hurricane());
-		map.put("Hyper Fang", new HyperFang());
-		map.put("Sucker Punch", new SuckerPunch());
-		map.put("Crunch", new Crunch());
-		map.put("Super Fang", new SuperFang());
-		map.put("Swords Dance", new SwordsDance());
-		map.put("Peck", new Peck());
-		map.put("Leer", new Leer());
-		map.put("Aerial Ace", new AerialAce());
-		map.put("Drill Peck", new DrillPeck());
-		map.put("Pluck", new Pluck());
-		map.put("Drill Run", new DrillRun());
-		map.put("Wrap", new Wrap());
-		map.put("Glare", new Glare());
-		map.put("Screech", new Screech());
-		map.put("Acid", new Acid());
-		map.put("Stockpile", new Stockpile());
-		map.put("Spit Up", new SpitUp());
-		map.put("Swallow", new Swallow());
-		map.put("Acid Spray", new AcidSpray());
-		map.put("Mud Bomb", new MudBomb());
-		map.put("Haze", new Haze());
-		map.put("Coil", new Coil());
-		map.put("Gunk Shot", new GunkShot());
-		map.put("Ice Fang", new IceFang());
-		map.put("Thunder Fang", new ThunderFang());
-		map.put("Electro Ball", new ElectroBall());
-		map.put("Double Team", new DoubleTeam());
-		map.put("Slam", new Slam());
-		map.put("Thunderbolt", new Thunderbolt());
-		map.put("Feint", new Feint());
-		map.put("Discharge", new Discharge());
-		map.put("Light Screen", new LightScreen());
-		map.put("Thunder", new Thunder());
-		map.put("Defense Curl", new DefenseCurl());
-		map.put("Swift", new Swift());
-		map.put("Fury Swipes", new FurySwipes());
-		map.put("Rollout", new Rollout());
-		map.put("Fury Cutter", new FuryCutter());
-		map.put("Sand Tomb", new SandTomb());
-		map.put("Gyro Ball", new GyroBall());
-		map.put("Crush Claw", new CrushClaw());
-		map.put("Double Kick", new DoubleKick());
-		map.put("Poison Tail", new PoisonTail());
-		map.put("Flatter", new Flatter());
-		map.put("Poison Fang", new PoisonFang());
-		map.put("Chip Away", new ChipAway());
-		map.put("Body Slam", new BodySlam());
-		map.put("Earth Power", new EarthPower());
-		map.put("Superpower", new Superpower());
-		map.put("Horn Attack", new HornAttack());
-		map.put("Horn Drill", new HornDrill());
-		map.put("Megahorn", new Megahorn());
-		map.put("Pound", new Pound());
-		map.put("Sing", new Sing());
-		map.put("Double Slap", new DoubleSlap());
-		map.put("Wish", new Wish());
-		map.put("Minimize", new Minimize());
-		map.put("Wake-Up Slap", new WakeUpSlap());
-		map.put("Cosmic Power", new CosmicPower());
-		map.put("Lucky Chant", new LuckyChant());
-		map.put("Metronome", new Metronome());
-		map.put("Gravity", new Gravity());
-		map.put("Moonlight", new Moonlight());
-		map.put("Stored Power", new StoredPower());
-		map.put("Mimic", new Mimic());
-		map.put("Meteor Mash", new MeteorMash());
-		map.put("Imprison", new Imprison());
-		map.put("Will-O-Wisp", new WillOWisp());
-		map.put("Payback", new Payback());
-		map.put("Extrasensory", new Extrasensory());
-		map.put("Fire Blast", new FireBlast());
-		map.put("Nasty Plot", new NastyPlot());
-		map.put("Round", new Round());
-		map.put("Rest", new Rest());
-		map.put("Hyper Voice", new HyperVoice());
-		map.put("Leech Life", new LeechLife());
-		map.put("Astonish", new Astonish());
-		map.put("Air Cutter", new AirCutter());
-		map.put("Mean Look", new MeanLook());
-		map.put("Acrobatics", new Acrobatics());
-		map.put("Absorb", new Absorb());
-		map.put("Mega Drain", new MegaDrain());
-		map.put("Natural Gift", new NaturalGift());
-		map.put("Giga Drain", new GigaDrain());
-		map.put("Aromatherapy", new Aromatherapy());
-		map.put("Spore", new Spore());
-		map.put("Cross Poison", new CrossPoison());
-		map.put("X-Scissor", new XScissor());
-		map.put("Foresight", new Foresight());
-		map.put("Odor Sleuth", new OdorSleuth());
-		map.put("Miracle Eye", new MiracleEye());
-		map.put("Howl", new Howl());
-		map.put("Signal Beam", new SignalBeam());
-		map.put("Zen Headbutt", new ZenHeadbutt());
-		map.put("Psychic", new Psychic());
-		map.put("Mud-Slap", new MudSlap());
-		map.put("Magnitude", new Magnitude());
-		map.put("Bulldoze", new Bulldoze());
-		map.put("Dig", new Dig());
-		map.put("Earthquake", new Earthquake());
-		map.put("Fissure", new Fissure());
-		map.put("Night Slash", new NightSlash());
-		map.put("Tri Attack", new TriAttack());
-		map.put("Fake Out", new FakeOut());
-		map.put("Feint Attack", new FeintAttack());
-		map.put("Taunt", new Taunt());
-		map.put("Pay Day", new PayDay());
-		map.put("Power Gem", new PowerGem());
-		map.put("Water Sport", new WaterSport());
-		map.put("Soak", new Soak());
-		map.put("Trick-or-Treat", new TrickOrTreat());
-		map.put("Forest's Curse", new ForestsCurse());
-		map.put("Psych Up", new PsychUp());
-		map.put("Amnesia", new Amnesia());
-		map.put("Wonder Room", new WonderRoom());
-		map.put("Aqua Jet", new AquaJet());
-		map.put("Covet", new Covet());
-		map.put("Low Kick", new LowKick());
-		map.put("Karate Chop", new KarateChop());
-		map.put("Seismic Toss", new SeismicToss());
-		map.put("Swagger", new Swagger());
-		map.put("Cross Chop", new CrossChop());
-		map.put("Punishment", new Punishment());
-		map.put("Close Combat", new CloseCombat());
-		map.put("Dragon Ascent", new DragonAscent());
-		map.put("Flame Wheel", new FlameWheel());
-		map.put("Reversal", new Reversal());
-		map.put("Extreme Speed", new ExtremeSpeed());
-		map.put("Hypnosis", new Hypnosis());
-		map.put("Bubble Beam", new BubbleBeam());
-		map.put("Mud Shot", new MudShot());
-		map.put("Belly Drum", new BellyDrum());
-		map.put("Submission", new Submission());
-		map.put("Dynamic Punch", new DynamicPunch());
-		map.put("Mind Reader", new MindReader());
-		map.put("Lock-On", new LockOn());
-		map.put("Kinesis", new Kinesis());
-		map.put("Barrier", new Barrier());
-		map.put("Telekinesis", new Telekinesis());
-		map.put("Ingrain", new Ingrain());
-		map.put("Psycho Cut", new PsychoCut());
-		map.put("Future Sight", new FutureSight());
-		map.put("Doom Desire", new DoomDesire());
-		map.put("Calm Mind", new CalmMind());
-		map.put("Low Sweep", new LowSweep());
-		map.put("Revenge", new Revenge());
-		map.put("Vital Throw", new VitalThrow());
-		map.put("Wring Out", new WringOut());
-		map.put("Leaf Tornado", new LeafTornado());
-		map.put("Leaf Storm", new LeafStorm());
-		map.put("Leaf Blade", new LeafBlade());
-		map.put("Constrict", new Constrict());
-		map.put("Hex", new Hex());
-		map.put("Sludge Wave", new SludgeWave());
-		map.put("Mud Sport", new MudSport());
-		map.put("Rock Polish", new RockPolish());
-		map.put("Rock Throw", new RockThrow());
-		map.put("Rock Blast", new RockBlast());
-		map.put("Smack Down", new SmackDown());
-		map.put("Stealth Rock", new StealthRock());
-		map.put("Stone Edge", new StoneEdge());
-		map.put("Steamroller", new Steamroller());
-		map.put("Heavy Slam", new HeavySlam());
-		map.put("Stomp", new Stomp());
-		map.put("Flame Charge", new FlameCharge());
-		map.put("Bounce", new Bounce());
-		map.put("Curse", new Curse());
-		map.put("Yawn", new Yawn());
-		map.put("Headbutt", new Headbutt());
-		map.put("Slack Off", new SlackOff());
-		map.put("Heal Pulse", new HealPulse());
-		map.put("Metal Sound", new MetalSound());
-		map.put("Spark", new Spark());
-		map.put("Magnet Bomb", new MagnetBomb());
-		map.put("Mirror Shot", new MirrorShot());
-		map.put("Magnet Rise", new MagnetRise());
-		map.put("Zap Cannon", new ZapCannon());
-		map.put("Brave Bird", new BraveBird());
-		map.put("Uproar", new Uproar());
-		map.put("Acupressure", new Acupressure());
-		map.put("Double Hit", new DoubleHit());
-		map.put("Icy Wind", new IcyWind());
-		map.put("Ice Shard", new IceShard());
-		map.put("Aqua Ring", new AquaRing());
-		map.put("Aurora Beam", new AuroraBeam());
-		map.put("Brine", new Brine());
-		map.put("Dive", new Dive());
-		map.put("Ice Beam", new IceBeam());
-		map.put("Sheer Cold", new SheerCold());
-		map.put("Poison Gas", new PoisonGas());
-		map.put("Sludge", new Sludge());
-		map.put("Sludge Bomb", new SludgeBomb());
-		map.put("Acid Armor", new AcidArmor());
-		map.put("Icicle Spear", new IcicleSpear());
-		map.put("Clamp", new Clamp());
-		map.put("Razor Shell", new RazorShell());
-		map.put("Whirlpool", new Whirlpool());
-		map.put("Shell Smash", new ShellSmash());
-		map.put("Spike Cannon", new SpikeCannon());
-		map.put("Spikes", new Spikes());
-		map.put("Icicle Crash", new IcicleCrash());
-		map.put("Lick", new Lick());
-		map.put("Spite", new Spite());
-		map.put("Night Shade", new NightShade());
-		map.put("Shadow Ball", new ShadowBall());
-		map.put("Dream Eater", new DreamEater());
-		map.put("Dark Pulse", new DarkPulse());
-		map.put("Nightmare", new Nightmare());
-		map.put("Shadow Punch", new ShadowPunch());
-		map.put("Bind", new Bind());
-		map.put("Rock Tomb", new RockTomb());
-		map.put("Dragon Breath", new DragonBreath());
-		map.put("Iron Tail", new IronTail());
-		map.put("Meditate", new Meditate());
-		map.put("Synchronoise", new Synchronoise());
-		map.put("Psyshock", new Psyshock());
-		map.put("Vice Grip", new ViceGrip());
-		map.put("Metal Claw", new MetalClaw());
-		map.put("Guillotine", new Guillotine());
-		map.put("Crabhammer", new Crabhammer());
-		map.put("Flail", new Flail());
-		map.put("Charge", new Charge());
-		map.put("Charge Beam", new ChargeBeam());
-		map.put("Mirror Coat", new MirrorCoat());
-		map.put("Counter", new Counter());
-		map.put("Barrage", new Barrage());
-		map.put("Bullet Seed", new BulletSeed());
-		map.put("Egg Bomb", new EggBomb());
-		map.put("Wood Hammer", new WoodHammer());
-		map.put("Bone Club", new BoneClub());
-		map.put("Bonemerang", new Bonemerang());
-		map.put("Bone Rush", new BoneRush());
-		map.put("Rolling Kick", new RollingKick());
-		map.put("Jump Kick", new JumpKick());
-		map.put("Brick Break", new BrickBreak());
-		map.put("High Jump Kick", new HighJumpKick());
-		map.put("Blaze Kick", new BlazeKick());
-		map.put("Mega Kick", new MegaKick());
-		map.put("Comet Punch", new CometPunch());
-		map.put("Mach Punch", new MachPunch());
-		map.put("Bullet Punch", new BulletPunch());
-		map.put("Vacuum Wave", new VacuumWave());
-		map.put("Thunder Punch", new ThunderPunch());
-		map.put("Ice Punch", new IcePunch());
-		map.put("Fire Punch", new FirePunch());
-		map.put("Sky Uppercut", new SkyUppercut());
-		map.put("Mega Punch", new MegaPunch());
-		map.put("Focus Punch", new FocusPunch());
-		map.put("Me First", new MeFirst());
-		map.put("Refresh", new Refresh());
-		map.put("Power Whip", new PowerWhip());
-		map.put("Smog", new Smog());
-		map.put("Clear Smog", new ClearSmog());
-		map.put("Hammer Arm", new HammerArm());
-		map.put("Soft-Boiled", new SoftBoiled());
-		map.put("Ancient Power", new AncientPower());
-		map.put("Tickle", new Tickle());
-		map.put("Dizzy Punch", new DizzyPunch());
-		map.put("Outrage", new Outrage());
-		map.put("Dragon Dance", new DragonDance());
-		map.put("Dragon Pulse", new DragonPulse());
-		map.put("Draco Meteor", new DracoMeteor());
-		map.put("Waterfall", new Waterfall());
-		map.put("Reflect Type", new ReflectType());
-		map.put("Magical Leaf", new MagicalLeaf());
-		map.put("Power Swap", new PowerSwap());
-		map.put("Guard Swap", new GuardSwap());
-		map.put("Copycat", new Copycat());
-		map.put("Transform", new Transform());
-		map.put("Substitute", new Substitute());
-		map.put("Razor Wind", new RazorWind());
-		map.put("Lovely Kiss", new LovelyKiss());
-		map.put("Powder Snow", new PowderSnow());
-		map.put("Heart Stamp", new HeartStamp());
-		map.put("Fake Tears", new FakeTears());
-		map.put("Avalanche", new Avalanche());
-		map.put("Blizzard", new Blizzard());
-		map.put("Shock Wave", new ShockWave());
-		map.put("Lava Plume", new LavaPlume());
-		map.put("Work Up", new WorkUp());
-		map.put("Giga Impact", new GigaImpact());
-		map.put("Splash", new Splash());
-		map.put("Mist", new Mist());
-		map.put("Last Resort", new LastResort());
-		map.put("Trump Card", new TrumpCard());
-		map.put("Muddy Water", new MuddyWater());
-		map.put("Conversion", new Conversion());
-		map.put("Conversion 2", new Conversion2());
-		map.put("Sharpen", new Sharpen());
-		map.put("Magic Coat", new MagicCoat());
-		map.put("Sky Drop", new SkyDrop());
-		map.put("Iron Head", new IronHead());
-		map.put("Rock Slide", new RockSlide());
-		map.put("Snore", new Snore());
-		map.put("Sleep Talk", new SleepTalk());
-		map.put("Block", new Block());
-		map.put("Sky Attack", new SkyAttack());
-		map.put("Dragon Rush", new DragonRush());
-		map.put("Aura Sphere", new AuraSphere());
-		map.put("Psystrike", new Psystrike());
-		map.put("Eruption", new Eruption());
-		map.put("Charm", new Charm());
-		map.put("Echoed Voice", new EchoedVoice());
-		map.put("Psycho Shift", new PsychoShift());
-		map.put("Shadow Sneak", new ShadowSneak());
-		map.put("Spider Web", new SpiderWeb());
-		map.put("Sweet Kiss", new SweetKiss());
-		map.put("Ominous Wind", new OminousWind());
-		map.put("Cotton Spore", new CottonSpore());
-		map.put("Cotton Guard", new CottonGuard());
-		map.put("Grass Whistle", new GrassWhistle());
-		map.put("Torment", new Torment());
-		map.put("Hidden Power", new HiddenPower());
-		map.put("Psywave", new Psywave());
-		map.put("Pain Split", new PainSplit());
-		map.put("Bide", new Bide());
-		map.put("Autotomize", new Autotomize());
-		map.put("Struggle Bug", new StruggleBug());
-		map.put("Power Trick", new PowerTrick());
-		map.put("Power Split", new PowerSplit());
-		map.put("Guard Split", new GuardSplit());
-		map.put("Hone Claws", new HoneClaws());
-		map.put("Beat Up", new BeatUp());
-		map.put("Octazooka", new Octazooka());
-		map.put("Present", new Present());
-		map.put("Steel Wing", new SteelWing());
-		map.put("Sketch", new Sketch());
-		map.put("Triple Kick", new TripleKick());
-		map.put("Milk Drink", new MilkDrink());
-		map.put("Heal Bell", new HealBell());
-		map.put("Weather Ball", new WeatherBall());
-		map.put("Aeroblast", new Aeroblast());
-		map.put("Sacred Fire", new SacredFire());
-		map.put("Heal Block", new HealBlock());
-		map.put("Energy Ball", new EnergyBall());
-		map.put("Bulk Up", new BulkUp());
-		map.put("Thief", new Thief());
-		map.put("Attract", new Attract());
-		map.put("Force Palm", new ForcePalm());
-		map.put("Arm Thrust", new ArmThrust());
-		map.put("Smelling Salts", new SmellingSalts());
-		map.put("Assist", new Assist());
-		map.put("Metal Burst", new MetalBurst());
-		map.put("Wild Charge", new WildCharge());
-		map.put("Flash", new Flash());
-		map.put("Tail Glow", new TailGlow());
-		map.put("Water Spout", new WaterSpout());
-		map.put("Teeter Dance", new TeeterDance());
-		map.put("Needle Arm", new NeedleArm());
-		map.put("Venoshock", new Venoshock());
-		map.put("Snatch", new Snatch());
-		map.put("Ice Ball", new IceBall());
-		map.put("Head Smash", new HeadSmash());
-		map.put("Mist Ball", new MistBall());
-		map.put("Luster Purge", new LusterPurge());
-		map.put("Psycho Boost", new PsychoBoost());
-		map.put("Facade", new Facade());
-		map.put("Defend Order", new DefendOrder());
-		map.put("Heal Order", new HealOrder());
-		map.put("Attack Order", new AttackOrder());
-		map.put("Chatter", new Chatter());
-		map.put("Dual Chop", new DualChop());
-		map.put("Rock Wrecker", new RockWrecker());
-		map.put("Trick Room", new TrickRoom());
-		map.put("Roar Of Time", new RoarOfTime());
-		map.put("Spacial Rend", new SpacialRend());
-		map.put("Magma Storm", new MagmaStorm());
-		map.put("Crush Grip", new CrushGrip());
-		map.put("Shadow Force", new ShadowForce());
-		map.put("Heart Swap", new HeartSwap());
-		map.put("Dark Void", new DarkVoid());
-		map.put("Seed Flare", new SeedFlare());
-		map.put("Judgement", new Judgement());
-		map.put("Searing Shot", new SearingShot());
-		map.put("Incinerate", new Incinerate());
-		map.put("Overheat", new Overheat());
-		map.put("Heat Crash", new HeatCrash());
-		map.put("Grass Knot", new GrassKnot());
-		map.put("Scald", new Scald());
-		map.put("Drain Punch", new DrainPunch());
-		map.put("Storm Throw", new StormThrow());
-		map.put("Frost Breath", new FrostBreath());
-		map.put("Rock Smash", new RockSmash());
-		map.put("Rock Climb", new RockClimb());
-		map.put("Night Daze", new NightDaze());
-		map.put("Tail Slap", new TailSlap());
-		map.put("Defog", new Defog());
-		map.put("Horn Leech", new HornLeech());
-		map.put("Electroweb", new Electroweb());
-		map.put("Gear Grind", new GearGrind());
-		map.put("Shift Gear", new ShiftGear());
-		map.put("Head Charge", new HeadCharge());
-		map.put("Fiery Dance", new FieryDance());
-		map.put("Sacred Sword", new SacredSword());
-		map.put("Secret Sword", new SecretSword());
-		map.put("Fusion Flare", new FusionFlare());
-		map.put("Fusion Bolt", new FusionBolt());
-		map.put("Blue Flare", new BlueFlare());
-		map.put("Bolt Strike", new BoltStrike());
-		map.put("Glaciate", new Glaciate());
-		map.put("Techno Blast", new TechnoBlast());
-		map.put("Explosion", new Explosion());
-		map.put("Self-Destruct", new SelfDestruct());
-		map.put("Fling", new Fling());
-		map.put("Freeze Shock", new FreezeShock());
-		map.put("Secret Power", new SecretPower());
-		map.put("Final Gambit", new FinalGambit());
-		map.put("Gastro Acid", new GastroAcid());
-		map.put("Healing Wish", new HealingWish());
-		map.put("Lunar Dance", new LunarDance());
-		map.put("Roar", new Roar());
-		map.put("Grudge", new Grudge());
-		map.put("Retaliate", new Retaliate());
-		map.put("Circle Throw", new CircleThrow());
-		map.put("Teleport", new Teleport());
-		map.put("Role Play", new RolePlay());
-		map.put("Knock Off", new KnockOff());
-		map.put("Whirlwind", new Whirlwind());
-		map.put("Bestow", new Bestow());
-		map.put("Switcheroo", new Switcheroo());
-		map.put("Trick", new Trick());
-		map.put("Memento", new Memento());
-		map.put("Destiny Bond", new DestinyBond());
-		map.put("Camouflage", new Camouflage());
-		map.put("Recycle", new Recycle());
-		map.put("Parting Shot", new PartingShot());
-		map.put("U-turn", new UTurn());
-		map.put("Baton Pass", new BatonPass());
-		map.put("Perish Song", new PerishSong());
-		map.put("Dragon Tail", new DragonTail());
-		map.put("Foul Play", new FoulPlay());
-		map.put("Embargo", new Embargo());
-		map.put("Nature Power", new NaturePower());
-		map.put("Entrainment", new Entrainment());
-		map.put("Magic Room", new MagicRoom());
-		map.put("Worry Seed", new WorrySeed());
-		map.put("Simple Beam", new SimpleBeam());
-		map.put("Skill Swap", new SkillSwap());
-		map.put("Volt Switch", new VoltSwitch());
-		map.put("Relic Song", new RelicSong());
-		map.put("Snarl", new Snarl());
-		map.put("Ice Burn", new IceBurn());
-		map.put("V-create", new VCreate());
-		map.put("Surf", new Surf());
-		map.put("Volt Tackle", new VoltTackle());
-		map.put("Focus Blast", new FocusBlast());
-		map.put("Diamond Storm", new DiamondStorm());
-		map.put("Moonblast", new Moonblast());
-		map.put("Land's Wrath", new LandsWrath());
-		map.put("Phantom Force", new PhantomForce());
-		map.put("Oblivion Wing", new OblivionWing());
-		map.put("Geomancy", new Geomancy());
-		map.put("Boomburst", new Boomburst());
-		map.put("Play Rough", new PlayRough());
-		map.put("Crafty Shield", new CraftyShield());
-		map.put("Nuzzle", new Nuzzle());
-		map.put("Draining Kiss", new DrainingKiss());
-		map.put("Fairy Wind", new FairyWind());
-		map.put("Parabolic Charge", new ParabolicCharge());
-		map.put("Disarming Voice", new DisarmingVoice());
-		map.put("Freeze-Dry", new FreezeDry());
-		map.put("Flying Press", new FlyingPress());
-		map.put("Topsy-Turvy", new TopsyTurvy());
-		map.put("Play Nice", new PlayNice());
-		map.put("Eerie Impulse", new EerieImpulse());
-		map.put("Misty Terrain", new MistyTerrain());
-		map.put("Fairy Lock", new FairyLock());
-		map.put("Aromatic Mist", new AromaticMist());
-		map.put("Baby-Doll Eyes", new BabyDollEyes());
-		map.put("Petal Blizzard", new PetalBlizzard());
-		map.put("Grassy Terrain", new GrassyTerrain());
-		map.put("Flower Shield", new FlowerShield());
-		map.put("Noble Roar", new NobleRoar());
-		map.put("Powder", new Powder());
-		map.put("Rototiller", new Rototiller());
-		map.put("Water Shuriken", new WaterShuriken());
-		map.put("Mat Block", new MatBlock());
-		map.put("Mystical Fire", new MysticalFire());
-		map.put("Infestation", new Infestation());
-		map.put("Electrify", new Electrify());
-		map.put("Fell Stinger", new FellStinger());
-		map.put("Magnetic Flux", new MagneticFlux());
-		map.put("Sticky Web", new StickyWeb());
-		map.put("Belch", new Belch());
-		map.put("Venom Drench", new VenomDrench());
-		map.put("Electric Terrain", new ElectricTerrain());
-		map.put("Power-Up Punch", new PowerUpPunch());
-		map.put("Confide", new Confide());
-		map.put("Cut", new Cut());
-		map.put("Dazzling Gleam", new DazzlingGleam());
-		map.put("Strength", new Strength());
-		map.put("Origin Pulse", new OriginPulse());
-		map.put("Precipice Blades", new PrecipiceBlades());
-
-		for (String s : map.keySet()) {
-			moveNames.add(s);
-		}
-	}
-
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class Tackle extends Attack {
+	static class Tackle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Tackle() {
@@ -1055,17 +417,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeechSeed extends Attack {
+	static class LeechSeed extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LeechSeed() {
 			super(AttackNamesies.LEECH_SEED, "A seed is planted on the target. It steals some HP from the target every turn.", 10, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.LEECH_SEED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.LEECH_SEED));
 		}
 	}
 
-	private static class ThunderWave extends Attack {
+	static class ThunderWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ThunderWave() {
@@ -1075,7 +437,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonPowder extends Attack {
+	static class PoisonPowder extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonPowder() {
@@ -1086,7 +448,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SleepPowder extends Attack {
+	static class SleepPowder extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SleepPowder() {
@@ -1097,13 +459,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Toxic extends Attack implements AccuracyBypassEffect {
+	static class Toxic extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Toxic() {
 			super(AttackNamesies.TOXIC, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", 10, Type.POISON, MoveCategory.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.BAD_POISON, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.BAD_POISON));
 		}
 
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
@@ -1112,7 +474,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Ember extends Attack {
+	static class Ember extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Ember() {
@@ -1124,7 +486,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Growl extends Attack {
+	static class Growl extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Growl() {
@@ -1135,7 +497,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Scratch extends Attack {
+	static class Scratch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Scratch() {
@@ -1146,7 +508,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VineWhip extends Attack {
+	static class VineWhip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VineWhip() {
@@ -1157,7 +519,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SonicBoom extends Attack {
+	static class SonicBoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SonicBoom() {
@@ -1170,7 +532,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Smokescreen extends Attack {
+	static class Smokescreen extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Smokescreen() {
@@ -1180,7 +542,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TakeDown extends Attack implements RecoilMove {
+	static class TakeDown extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		TakeDown() {
@@ -1201,7 +563,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Struggle extends Attack implements RecoilMove {
+	static class Struggle extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		Struggle() {
@@ -1220,7 +582,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RazorLeaf extends Attack implements CritStageEffect {
+	static class RazorLeaf extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RazorLeaf() {
@@ -1234,7 +596,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SweetScent extends Attack {
+	static class SweetScent extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SweetScent() {
@@ -1244,7 +606,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Growth extends Attack {
+	static class Growth extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Growth() {
@@ -1271,7 +633,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleEdge extends Attack implements RecoilMove {
+	static class DoubleEdge extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleEdge() {
@@ -1292,7 +654,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SeedBomb extends Attack {
+	static class SeedBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SeedBomb() {
@@ -1303,7 +665,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Synthesis extends Attack implements SelfHealingMove {
+	static class Synthesis extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Synthesis() {
@@ -1338,7 +700,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Recover extends Attack implements SelfHealingMove {
+	static class Recover extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Recover() {
@@ -1358,7 +720,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonRage extends Attack {
+	static class DragonRage extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonRage() {
@@ -1371,7 +733,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ScaryFace extends Attack {
+	static class ScaryFace extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ScaryFace() {
@@ -1381,14 +743,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FireFang extends Attack {
+	static class FireFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FireFang() {
 			super(AttackNamesies.FIRE_FANG, "The user bites with flame-cloaked fangs. It may also make the target flinch or leave it burned.", 15, Type.FIRE, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1405,7 +767,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlameBurst extends Attack {
+	static class FlameBurst extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlameBurst() {
@@ -1415,21 +777,21 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bite extends Attack {
+	static class Bite extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bite() {
 			super(AttackNamesies.BITE, "The target is bitten with viciously sharp fangs. It may make the target flinch.", 25, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class Slash extends Attack implements CritStageEffect {
+	static class Slash extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Slash() {
@@ -1444,7 +806,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TailWhip extends Attack {
+	static class TailWhip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TailWhip() {
@@ -1454,7 +816,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SolarBeam extends Attack implements MultiTurnMove {
+	static class SolarBeam extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		SolarBeam() {
@@ -1496,7 +858,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Flamethrower extends Attack {
+	static class Flamethrower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Flamethrower() {
@@ -1508,7 +870,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Fly extends Attack implements MultiTurnMove {
+	static class Fly extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Fly() {
@@ -1537,18 +899,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FireSpin extends Attack {
+	static class FireSpin extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FireSpin() {
 			super(AttackNamesies.FIRE_SPIN, "The target becomes trapped within a fierce vortex of fire that rages for four to five turns.", 15, Type.FIRE, MoveCategory.SPECIAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.FIRE_SPIN, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FIRE_SPIN));
 		}
 	}
 
-	private static class Inferno extends Attack {
+	static class Inferno extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Inferno() {
@@ -1559,7 +921,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonClaw extends Attack {
+	static class DragonClaw extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonClaw() {
@@ -1570,7 +932,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowClaw extends Attack implements CritStageEffect {
+	static class ShadowClaw extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShadowClaw() {
@@ -1585,19 +947,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AirSlash extends Attack {
+	static class AirSlash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AirSlash() {
 			super(AttackNamesies.AIR_SLASH, "The user attacks with a blade of air that slices even the sky. It may also make the target flinch.", 15, Type.FLYING, MoveCategory.SPECIAL);
 			super.power = 75;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 		}
 	}
 
-	private static class WingAttack extends Attack {
+	static class WingAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WingAttack() {
@@ -1608,7 +970,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeatWave extends Attack {
+	static class HeatWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeatWave() {
@@ -1620,7 +982,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlareBlitz extends Attack implements RecoilMove {
+	static class FlareBlitz extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		FlareBlitz() {
@@ -1644,7 +1006,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlashCannon extends Attack {
+	static class FlashCannon extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlashCannon() {
@@ -1656,7 +1018,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bubble extends Attack {
+	static class Bubble extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bubble() {
@@ -1668,7 +1030,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Withdraw extends Attack {
+	static class Withdraw extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Withdraw() {
@@ -1678,7 +1040,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterGun extends Attack {
+	static class WaterGun extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterGun() {
@@ -1688,7 +1050,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RapidSpin extends Attack {
+	static class RapidSpin extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RapidSpin() {
@@ -1703,22 +1065,22 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Reflect extends Attack {
+	static class Reflect extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Reflect() {
 			super(AttackNamesies.REFLECT, "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", 20, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.REFLECT, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.REFLECT));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class SpikyShield extends Attack {
+	static class SpikyShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SpikyShield() {
 			super(AttackNamesies.SPIKY_SHIELD, "In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.", 10, Type.GRASS, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SPIKY_SHIELD, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.SPIKY_SHIELD));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1728,12 +1090,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class KingsShield extends Attack {
+	static class KingsShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		KingsShield() {
 			super(AttackNamesies.KINGS_SHIELD, "The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.", 10, Type.STEEL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.KINGS_SHIELD, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.KINGS_SHIELD));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1743,12 +1105,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Protect extends Attack {
+	static class Protect extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Protect() {
 			super(AttackNamesies.PROTECT, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.PROTECTING, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.PROTECTING));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1758,12 +1120,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Detect extends Attack {
+	static class Detect extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Detect() {
 			super(AttackNamesies.DETECT, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", 5, Type.FIGHTING, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.PROTECTING, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.PROTECTING));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1773,12 +1135,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class QuickGuard extends Attack {
+	static class QuickGuard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		QuickGuard() {
 			super(AttackNamesies.QUICK_GUARD, "The user protects itself and its allies from priority moves. If used in succession, its chance of failing rises.", 15, Type.FIGHTING, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.QUICK_GUARD, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.QUICK_GUARD));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1788,12 +1150,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Endure extends Attack {
+	static class Endure extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Endure() {
 			super(AttackNamesies.ENDURE, "The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.BRACING, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.BRACING));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -1803,20 +1165,20 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterPulse extends Attack {
+	static class WaterPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterPulse() {
 			super(AttackNamesies.WATER_PULSE, "The user attacks the target with a pulsing blast of water. It may also confuse the target.", 20, Type.WATER, MoveCategory.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.AURA_PULSE);
 		}
 	}
 
-	private static class ConfusionDamage extends Attack implements CritBlockerEffect {
+	static class ConfusionDamage extends Attack implements CritBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		ConfusionDamage() {
@@ -1829,17 +1191,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ConfuseRay extends Attack {
+	static class ConfuseRay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ConfuseRay() {
 			super(AttackNamesies.CONFUSE_RAY, "The target is exposed to a sinister ray that triggers confusion.", 10, Type.GHOST, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 		}
 	}
 
-	private static class AquaTail extends Attack {
+	static class AquaTail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AquaTail() {
@@ -1850,7 +1212,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SkullBash extends Attack implements MultiTurnMove {
+	static class SkullBash extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		SkullBash() {
@@ -1879,7 +1241,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IronDefense extends Attack {
+	static class IronDefense extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IronDefense() {
@@ -1889,7 +1251,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HydroPump extends Attack {
+	static class HydroPump extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HydroPump() {
@@ -1899,77 +1261,77 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RainDance extends Attack {
+	static class RainDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RainDance() {
 			super(AttackNamesies.RAIN_DANCE, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.RAINING, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.RAINING));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class SunnyDay extends Attack {
+	static class SunnyDay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SunnyDay() {
 			super(AttackNamesies.SUNNY_DAY, "The user intensifies the sun for five turns, powering up Fire-type moves.", 5, Type.FIRE, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SUNNY, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.SUNNY));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class Sandstorm extends Attack {
+	static class Sandstorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sandstorm() {
 			super(AttackNamesies.SANDSTORM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", 10, Type.ROCK, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SANDSTORM, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.SANDSTORM));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class Hail extends Attack {
+	static class Hail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Hail() {
 			super(AttackNamesies.HAIL, "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.", 10, Type.ICE, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.HAILING, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.HAILING));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class PetalDance extends Attack {
+	static class PetalDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PetalDance() {
 			super(AttackNamesies.PETAL_DANCE, "The user attacks the target by scattering petals for two to three turns. The user then becomes confused.", 10, Type.GRASS, MoveCategory.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION));
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class Thrash extends Attack {
+	static class Thrash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Thrash() {
 			super(AttackNamesies.THRASH, "The user rampages and attacks for two to three turns. It then becomes confused, however.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION));
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class HyperBeam extends Attack implements MultiTurnMove {
+	static class HyperBeam extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		HyperBeam() {
@@ -1996,7 +1358,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StringShot extends Attack {
+	static class StringShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StringShot() {
@@ -2006,7 +1368,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BugBite extends Attack {
+	static class BugBite extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BugBite() {
@@ -2029,7 +1391,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Harden extends Attack {
+	static class Harden extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Harden() {
@@ -2039,19 +1401,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Confusion extends Attack {
+	static class Confusion extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Confusion() {
 			super(AttackNamesies.CONFUSION, "The target is hit by a weak telekinetic force. It may also leave the target confused.", 25, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.effectChance = 10;
 		}
 	}
 
-	private static class StunSpore extends Attack {
+	static class StunSpore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StunSpore() {
@@ -2062,7 +1424,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Gust extends Attack implements AccuracyBypassEffect {
+	static class Gust extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Gust() {
@@ -2082,30 +1444,30 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Supersonic extends Attack {
+	static class Supersonic extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Supersonic() {
 			super(AttackNamesies.SUPERSONIC, "The user generates odd sound waves from its body. It may confuse the target.", 20, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 55;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.moveTypes.add(MoveType.SOUND_BASED);
 		}
 	}
 
-	private static class Psybeam extends Attack {
+	static class Psybeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Psybeam() {
 			super(AttackNamesies.PSYBEAM, "The target is attacked with a peculiar ray. It may also cause confusion.", 20, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.effectChance = 10;
 		}
 	}
 
-	private static class SilverWind extends Attack {
+	static class SilverWind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SilverWind() {
@@ -2124,17 +1486,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Tailwind extends Attack {
+	static class Tailwind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Tailwind() {
 			super(AttackNamesies.TAILWIND, "The user whips up a turbulent whirlwind that ups the Speed of all party Pok\u00e9mon for four turns.", 30, Type.FLYING, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TAILWIND, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.TAILWIND));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class MorningSun extends Attack implements SelfHealingMove {
+	static class MorningSun extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		MorningSun() {
@@ -2169,17 +1531,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Safeguard extends Attack {
+	static class Safeguard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Safeguard() {
 			super(AttackNamesies.SAFEGUARD, "The user creates a protective field that prevents status problems for five turns.", 25, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SAFEGUARD, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.SAFEGUARD));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Captivate extends Attack {
+	static class Captivate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Captivate() {
@@ -2202,7 +1564,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BugBuzz extends Attack {
+	static class BugBuzz extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BugBuzz() {
@@ -2215,7 +1577,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class QuiverDance extends Attack {
+	static class QuiverDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		QuiverDance() {
@@ -2227,19 +1589,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Encore extends Attack {
+	static class Encore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Encore() {
 			super(AttackNamesies.ENCORE, "The user compels the target to keep using only the move it last used for three turns.", 5, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.ENCORE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.ENCORE));
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
 
-	private static class PoisonSting extends Attack {
+	static class PoisonSting extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonSting() {
@@ -2251,7 +1613,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FuryAttack extends Attack implements MultiStrikeMove {
+	static class FuryAttack extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		FuryAttack() {
@@ -2288,7 +1650,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FalseSwipe extends Attack {
+	static class FalseSwipe extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FalseSwipe() {
@@ -2299,34 +1661,34 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			o.addEffect(PokemonEffect.getEffect(EffectNamesies.BRACING));
+			o.addEffect((PokemonEffect)EffectNamesies.BRACING.getEffect());
 			super.applyDamage(me, o, b);
 			o.getAttributes().removeEffect(EffectNamesies.BRACING);
 		}
 	}
 
-	private static class Disable extends Attack {
+	static class Disable extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Disable() {
 			super(AttackNamesies.DISABLE, "For four turns, this move prevents the target from using the move it last used.", 20, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.DISABLE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.DISABLE));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
 
-	private static class FocusEnergy extends Attack {
+	static class FocusEnergy extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FocusEnergy() {
 			super(AttackNamesies.FOCUS_ENERGY, "The user takes a deep breath and focuses so that critical hits land more easily.", 30, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.RAISE_CRITS, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.RAISE_CRITS));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Twineedle extends Attack implements MultiStrikeMove {
+	static class Twineedle extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		Twineedle() {
@@ -2364,7 +1726,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Rage extends Attack {
+	static class Rage extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Rage() {
@@ -2380,7 +1742,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Pursuit extends Attack {
+	static class Pursuit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Pursuit() {
@@ -2407,17 +1769,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ToxicSpikes extends Attack {
+	static class ToxicSpikes extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ToxicSpikes() {
 			super(AttackNamesies.TOXIC_SPIKES, "The user lays a trap of poison spikes at the opponent's feet. They poison opponents that switch into battle.", 20, Type.POISON, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TOXIC_SPIKES, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.TOXIC_SPIKES));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class PinMissile extends Attack implements MultiStrikeMove {
+	static class PinMissile extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		PinMissile() {
@@ -2453,7 +1815,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Agility extends Attack {
+	static class Agility extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Agility() {
@@ -2463,7 +1825,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Assurance extends Attack {
+	static class Assurance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Assurance() {
@@ -2478,7 +1840,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonJab extends Attack {
+	static class PoisonJab extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonJab() {
@@ -2492,7 +1854,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Endeavor extends Attack {
+	static class Endeavor extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Endeavor() {
@@ -2515,7 +1877,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SandAttack extends Attack {
+	static class SandAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SandAttack() {
@@ -2525,7 +1887,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class QuickAttack extends Attack {
+	static class QuickAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		QuickAttack() {
@@ -2537,14 +1899,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Twister extends Attack implements AccuracyBypassEffect {
+	static class Twister extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Twister() {
 			super(AttackNamesies.TWISTER, "The user whips up a vicious tornado to tear at the opposing team. It may also make targets flinch.", 20, Type.DRAGON, MoveCategory.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 20;
 		}
 
@@ -2559,7 +1921,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FeatherDance extends Attack {
+	static class FeatherDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FeatherDance() {
@@ -2569,7 +1931,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Roost extends Attack implements SelfHealingMove, ChangeTypeMove {
+	static class Roost extends Attack implements SelfHealingMove, ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 		private boolean healFail;
 
@@ -2583,7 +1945,7 @@ public abstract class Attack implements Serializable {
 			healFail = true;
 			super.applyEffects(b, user, victim);
 			if (!healFail && getType(b, user, victim) != null) {
-				PokemonEffect.getEffect(EffectNamesies.CHANGE_TYPE).cast(b, user, victim, CastSource.ATTACK, super.printCast);
+				EffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
 				user.getEffect(EffectNamesies.CHANGE_TYPE).setTurns(1);
 			}
 		}
@@ -2616,7 +1978,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ThunderShock extends Attack {
+	static class ThunderShock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ThunderShock() {
@@ -2628,7 +1990,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MirrorMove extends Attack {
+	static class MirrorMove extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MirrorMove() {
@@ -2652,14 +2014,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Hurricane extends Attack implements AccuracyBypassEffect {
+	static class Hurricane extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hurricane() {
 			super(AttackNamesies.HURRICANE, "The user attacks by wrapping its opponent in a fierce wind that flies up into the sky. It may also confuse the target.", 10, Type.FLYING, MoveCategory.SPECIAL);
 			super.power = 110;
 			super.accuracy = 70;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.effectChance = 30;
 		}
 
@@ -2683,21 +2045,21 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HyperFang extends Attack {
+	static class HyperFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HyperFang() {
 			super(AttackNamesies.HYPER_FANG, "The user bites hard on the target with its sharp front fangs. It may also make the target flinch.", 15, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 10;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class SuckerPunch extends Attack {
+	static class SuckerPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SuckerPunch() {
@@ -2718,7 +2080,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Crunch extends Attack {
+	static class Crunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Crunch() {
@@ -2732,7 +2094,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SuperFang extends Attack {
+	static class SuperFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SuperFang() {
@@ -2747,7 +2109,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SwordsDance extends Attack {
+	static class SwordsDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SwordsDance() {
@@ -2757,7 +2119,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Peck extends Attack {
+	static class Peck extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Peck() {
@@ -2768,7 +2130,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Leer extends Attack {
+	static class Leer extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Leer() {
@@ -2778,7 +2140,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AerialAce extends Attack {
+	static class AerialAce extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AerialAce() {
@@ -2788,7 +2150,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DrillPeck extends Attack {
+	static class DrillPeck extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DrillPeck() {
@@ -2799,7 +2161,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Pluck extends Attack {
+	static class Pluck extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Pluck() {
@@ -2822,7 +2184,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DrillRun extends Attack implements CritStageEffect {
+	static class DrillRun extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		DrillRun() {
@@ -2837,19 +2199,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Wrap extends Attack {
+	static class Wrap extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Wrap() {
 			super(AttackNamesies.WRAP, "A long body or vines are used to wrap and squeeze the target for four to five turns.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.WRAPPED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.WRAPPED));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class Glare extends Attack {
+	static class Glare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Glare() {
@@ -2859,7 +2221,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Screech extends Attack {
+	static class Screech extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Screech() {
@@ -2870,7 +2232,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Acid extends Attack {
+	static class Acid extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Acid() {
@@ -2882,17 +2244,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Stockpile extends Attack {
+	static class Stockpile extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Stockpile() {
 			super(AttackNamesies.STOCKPILE, "The user charges up power and raises both its Defense and Sp. Def. The move can be used three times.", 20, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.STOCKPILE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.STOCKPILE));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class SpitUp extends Attack {
+	static class SpitUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SpitUp() {
@@ -2932,7 +2294,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Swallow extends Attack implements SelfHealingMove {
+	static class Swallow extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Swallow() {
@@ -2977,7 +2339,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AcidSpray extends Attack {
+	static class AcidSpray extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AcidSpray() {
@@ -2989,7 +2351,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudBomb extends Attack {
+	static class MudBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudBomb() {
@@ -3002,7 +2364,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Haze extends Attack {
+	static class Haze extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Haze() {
@@ -3019,7 +2381,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Coil extends Attack {
+	static class Coil extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Coil() {
@@ -3031,7 +2393,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GunkShot extends Attack {
+	static class GunkShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GunkShot() {
@@ -3043,14 +2405,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceFang extends Attack {
+	static class IceFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IceFang() {
 			super(AttackNamesies.ICE_FANG, "The user bites with cold-infused fangs. It may also make the target flinch or leave it frozen.", 15, Type.ICE, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3067,14 +2429,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ThunderFang extends Attack {
+	static class ThunderFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ThunderFang() {
 			super(AttackNamesies.THUNDER_FANG, "The user bites with electrified fangs. It may also make the target flinch or leave it with paralysis.", 15, Type.ELECTRIC, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3091,7 +2453,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ElectroBall extends Attack {
+	static class ElectroBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ElectroBall() {
@@ -3109,7 +2471,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleTeam extends Attack {
+	static class DoubleTeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DoubleTeam() {
@@ -3119,7 +2481,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Slam extends Attack {
+	static class Slam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Slam() {
@@ -3130,7 +2492,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Thunderbolt extends Attack {
+	static class Thunderbolt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Thunderbolt() {
@@ -3142,7 +2504,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Feint extends Attack {
+	static class Feint extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Feint() {
@@ -3156,7 +2518,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Discharge extends Attack {
+	static class Discharge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Discharge() {
@@ -3168,17 +2530,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LightScreen extends Attack {
+	static class LightScreen extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LightScreen() {
 			super(AttackNamesies.LIGHT_SCREEN, "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", 30, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.LIGHT_SCREEN, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.LIGHT_SCREEN));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Thunder extends Attack implements AccuracyBypassEffect {
+	static class Thunder extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Thunder() {
@@ -3209,18 +2571,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DefenseCurl extends Attack {
+	static class DefenseCurl extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DefenseCurl() {
 			super(AttackNamesies.DEFENSE_CURL, "The user curls up to conceal weak spots and raise its Defense stat.", 40, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.USED_DEFENSE_CURL, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.USED_DEFENSE_CURL));
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 		}
 	}
 
-	private static class Swift extends Attack {
+	static class Swift extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Swift() {
@@ -3229,7 +2591,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FurySwipes extends Attack implements MultiStrikeMove {
+	static class FurySwipes extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		FurySwipes() {
@@ -3266,7 +2628,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Rollout extends Attack {
+	static class Rollout extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Rollout() {
@@ -3282,7 +2644,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FuryCutter extends Attack {
+	static class FuryCutter extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FuryCutter() {
@@ -3297,18 +2659,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SandTomb extends Attack {
+	static class SandTomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SandTomb() {
 			super(AttackNamesies.SAND_TOMB, "The user traps the target inside a harshly raging sandstorm for four to five turns.", 15, Type.GROUND, MoveCategory.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.SAND_TOMB, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.SAND_TOMB));
 		}
 	}
 
-	private static class GyroBall extends Attack {
+	static class GyroBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GyroBall() {
@@ -3323,7 +2685,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CrushClaw extends Attack {
+	static class CrushClaw extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CrushClaw() {
@@ -3336,7 +2698,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleKick extends Attack implements MultiStrikeMove {
+	static class DoubleKick extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleKick() {
@@ -3373,7 +2735,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonTail extends Attack implements CritStageEffect {
+	static class PoisonTail extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		PoisonTail() {
@@ -3390,32 +2752,32 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Flatter extends Attack {
+	static class Flatter extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Flatter() {
 			super(AttackNamesies.FLATTER, "Flattery is used to confuse the target. However, it also raises the target's Sp. Atk stat.", 15, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.statChanges[Stat.SP_ATTACK.index()] = 2;
 		}
 	}
 
-	private static class PoisonFang extends Attack {
+	static class PoisonFang extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonFang() {
 			super(AttackNamesies.POISON_FANG, "The user bites the target with toxic fangs. It may also leave the target badly poisoned.", 15, Type.POISON, MoveCategory.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.BAD_POISON, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.BAD_POISON));
 			super.effectChance = 50;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class ChipAway extends Attack implements OpponentIgnoreStageEffect {
+	static class ChipAway extends Attack implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChipAway() {
@@ -3430,7 +2792,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BodySlam extends Attack implements AccuracyBypassEffect {
+	static class BodySlam extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		BodySlam() {
@@ -3451,7 +2813,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EarthPower extends Attack {
+	static class EarthPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EarthPower() {
@@ -3463,7 +2825,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Superpower extends Attack {
+	static class Superpower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Superpower() {
@@ -3477,7 +2839,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HornAttack extends Attack {
+	static class HornAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HornAttack() {
@@ -3488,7 +2850,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HornDrill extends Attack {
+	static class HornDrill extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HornDrill() {
@@ -3521,7 +2883,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Megahorn extends Attack {
+	static class Megahorn extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Megahorn() {
@@ -3532,7 +2894,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Pound extends Attack {
+	static class Pound extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Pound() {
@@ -3543,7 +2905,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sing extends Attack {
+	static class Sing extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sing() {
@@ -3554,7 +2916,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleSlap extends Attack implements MultiStrikeMove {
+	static class DoubleSlap extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleSlap() {
@@ -3591,28 +2953,28 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Wish extends Attack {
+	static class Wish extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Wish() {
 			super(AttackNamesies.WISH, "One turn after this move is used, the target's HP is restored by half the user's maximum HP.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.WISH, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.WISH));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Minimize extends Attack {
+	static class Minimize extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Minimize() {
 			super(AttackNamesies.MINIMIZE, "The user compresses its body to make itself look smaller, which sharply raises its evasiveness.", 20, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.USED_MINIMIZE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.USED_MINIMIZE));
 			super.selfTarget = true;
 			super.statChanges[Stat.EVASION.index()] = 2;
 		}
 	}
 
-	private static class WakeUpSlap extends Attack {
+	static class WakeUpSlap extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WakeUpSlap() {
@@ -3633,7 +2995,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CosmicPower extends Attack {
+	static class CosmicPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CosmicPower() {
@@ -3644,17 +3006,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LuckyChant extends Attack {
+	static class LuckyChant extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LuckyChant() {
 			super(AttackNamesies.LUCKY_CHANT, "The user chants an incantation toward the sky, preventing opposing Pok\u00e9mon from landing critical hits.", 30, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.LUCKY_CHANT, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.LUCKY_CHANT));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Metronome extends Attack {
+	static class Metronome extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Metronome() {
@@ -3667,27 +3029,32 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			int index;
-			do {
-				index = Global.getRandomIndex(moveNames);
-			} while (map.get(moveNames.get(index)).isMoveType(MoveType.METRONOMELESS));
+			AttackNamesies[] attackNames = AttackNamesies.values();
 			
-			me.callNewMove(b, o, new Move(map.get(moveNames.get(index))));
+			int index;
+			Attack metronomeMove;
+			
+			do {
+				index = Global.getRandomIndex(attackNames);
+				metronomeMove = attackNames[index].getAttack();
+			} while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
+			
+			me.callNewMove(b, o, new Move(metronomeMove));
 		}
 	}
 
-	private static class Gravity extends Attack {
+	static class Gravity extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Gravity() {
 			super(AttackNamesies.GRAVITY, "Gravity is intensified for five turns, making moves involving flying unusable and negating Levitate.", 5, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.GRAVITY, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.GRAVITY));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class Moonlight extends Attack implements SelfHealingMove {
+	static class Moonlight extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Moonlight() {
@@ -3722,7 +3089,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StoredPower extends Attack {
+	static class StoredPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StoredPower() {
@@ -3736,12 +3103,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Mimic extends Attack {
+	static class Mimic extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Mimic() {
 			super(AttackNamesies.MIMIC, "The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MIMIC, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.MIMIC));
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -3750,7 +3117,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MeteorMash extends Attack {
+	static class MeteorMash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MeteorMash() {
@@ -3765,19 +3132,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Imprison extends Attack {
+	static class Imprison extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Imprison() {
 			super(AttackNamesies.IMPRISON, "If the opponents know any move also known by the user, the opponents are prevented from using it.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.IMPRISON, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.IMPRISON));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
 
-	private static class WillOWisp extends Attack {
+	static class WillOWisp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WillOWisp() {
@@ -3787,7 +3154,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Payback extends Attack {
+	static class Payback extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Payback() {
@@ -3802,19 +3169,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Extrasensory extends Attack {
+	static class Extrasensory extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Extrasensory() {
 			super(AttackNamesies.EXTRASENSORY, "The user attacks with an odd, unseeable power. It may also make the target flinch.", 20, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 10;
 		}
 	}
 
-	private static class FireBlast extends Attack {
+	static class FireBlast extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FireBlast() {
@@ -3826,7 +3193,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NastyPlot extends Attack {
+	static class NastyPlot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NastyPlot() {
@@ -3836,7 +3203,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Round extends Attack {
+	static class Round extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Round() {
@@ -3847,7 +3214,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Rest extends Attack implements SelfHealingMove {
+	static class Rest extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Rest() {
@@ -3879,7 +3246,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HyperVoice extends Attack {
+	static class HyperVoice extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HyperVoice() {
@@ -3890,7 +3257,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeechLife extends Attack {
+	static class LeechLife extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LeechLife() {
@@ -3902,20 +3269,20 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Astonish extends Attack {
+	static class Astonish extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Astonish() {
 			super(AttackNamesies.ASTONISH, "The user attacks the target while shouting in a startling fashion. It may also make the target flinch.", 15, Type.GHOST, MoveCategory.PHYSICAL);
 			super.power = 30;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class AirCutter extends Attack implements CritStageEffect {
+	static class AirCutter extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirCutter() {
@@ -3929,16 +3296,16 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MeanLook extends Attack {
+	static class MeanLook extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MeanLook() {
 			super(AttackNamesies.MEAN_LOOK, "The user pins the target with a dark, arresting look. The target becomes unable to flee.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED));
 		}
 	}
 
-	private static class Acrobatics extends Attack {
+	static class Acrobatics extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Acrobatics() {
@@ -3953,7 +3320,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Absorb extends Attack {
+	static class Absorb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Absorb() {
@@ -3964,7 +3331,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MegaDrain extends Attack {
+	static class MegaDrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MegaDrain() {
@@ -3975,7 +3342,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NaturalGift extends Attack {
+	static class NaturalGift extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NaturalGift() {
@@ -4013,7 +3380,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GigaDrain extends Attack {
+	static class GigaDrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GigaDrain() {
@@ -4024,7 +3391,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Aromatherapy extends Attack {
+	static class Aromatherapy extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Aromatherapy() {
@@ -4043,7 +3410,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spore extends Attack {
+	static class Spore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spore() {
@@ -4054,7 +3421,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CrossPoison extends Attack implements CritStageEffect {
+	static class CrossPoison extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		CrossPoison() {
@@ -4071,7 +3438,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class XScissor extends Attack {
+	static class XScissor extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		XScissor() {
@@ -4082,12 +3449,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Foresight extends Attack {
+	static class Foresight extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Foresight() {
 			super(AttackNamesies.FORESIGHT, "Enables a Ghost-type target to be hit by Normal and Fighting type attacks. It also enables an evasive target to be hit.", 40, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.FORESIGHT, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FORESIGHT));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -4097,12 +3464,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class OdorSleuth extends Attack {
+	static class OdorSleuth extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		OdorSleuth() {
 			super(AttackNamesies.ODOR_SLEUTH, "Enables a Ghost-type target to be hit with Normal- and Fighting-type attacks. It also enables an evasive target to be hit.", 40, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.FORESIGHT, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FORESIGHT));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -4112,12 +3479,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MiracleEye extends Attack {
+	static class MiracleEye extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MiracleEye() {
 			super(AttackNamesies.MIRACLE_EYE, "Enables a Dark-type target to be hit by Psychic-type attacks. It also enables an evasive target to be hit.", 40, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MIRACLE_EYE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.MIRACLE_EYE));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -4127,7 +3494,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Howl extends Attack {
+	static class Howl extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Howl() {
@@ -4137,32 +3504,32 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SignalBeam extends Attack {
+	static class SignalBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SignalBeam() {
 			super(AttackNamesies.SIGNAL_BEAM, "The user attacks with a sinister beam of light. It may also confuse the target.", 15, Type.BUG, MoveCategory.SPECIAL);
 			super.power = 75;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.effectChance = 10;
 		}
 	}
 
-	private static class ZenHeadbutt extends Attack {
+	static class ZenHeadbutt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ZenHeadbutt() {
 			super(AttackNamesies.ZEN_HEADBUTT, "The user focuses its willpower to its head and attacks the target. It may also make the target flinch.", 15, Type.PSYCHIC, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class Psychic extends Attack {
+	static class Psychic extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Psychic() {
@@ -4174,7 +3541,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudSlap extends Attack {
+	static class MudSlap extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudSlap() {
@@ -4185,7 +3552,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Magnitude extends Attack implements AccuracyBypassEffect {
+	static class Magnitude extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 		private static final int[] CHANCES = {5, 10, 20, 30, 20, 10, 5};
 		private static final int[] POWERS = {10, 30, 50, 70, 90, 110, 150};
@@ -4224,7 +3591,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bulldoze extends Attack {
+	static class Bulldoze extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bulldoze() {
@@ -4240,7 +3607,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Dig extends Attack implements MultiTurnMove {
+	static class Dig extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Dig() {
@@ -4268,7 +3635,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Earthquake extends Attack implements AccuracyBypassEffect {
+	static class Earthquake extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Earthquake() {
@@ -4299,7 +3666,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Fissure extends Attack {
+	static class Fissure extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Fissure() {
@@ -4331,7 +3698,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NightSlash extends Attack implements CritStageEffect {
+	static class NightSlash extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		NightSlash() {
@@ -4346,7 +3713,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TriAttack extends Attack {
+	static class TriAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 		private static StatusCondition[] statusConditions = {
 			StatusCondition.PARALYZED,
@@ -4367,14 +3734,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FakeOut extends Attack {
+	static class FakeOut extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FakeOut() {
 			super(AttackNamesies.FAKE_OUT, "An attack that hits first and makes the target flinch. It only works the first turn the user is in battle.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.priority = 3;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4389,7 +3756,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FeintAttack extends Attack {
+	static class FeintAttack extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FeintAttack() {
@@ -4399,30 +3766,30 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Taunt extends Attack {
+	static class Taunt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Taunt() {
 			super(AttackNamesies.TAUNT, "The target is taunted into a rage that allows it to use only attack moves for three turns.", 20, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.TAUNT, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.TAUNT));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
 
-	private static class PayDay extends Attack {
+	static class PayDay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PayDay() {
 			super(AttackNamesies.PAY_DAY, "Numerous coins are hurled at the target to inflict damage. Money is earned after the battle.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.PAY_DAY, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.PAY_DAY));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class PowerGem extends Attack {
+	static class PowerGem extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerGem() {
@@ -4432,24 +3799,24 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterSport extends Attack {
+	static class WaterSport extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterSport() {
 			super(AttackNamesies.WATER_SPORT, "The user soaks itself with water. The move weakens Fire-type moves while the user is in the battle.", 15, Type.WATER, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.WATER_SPORT, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.WATER_SPORT));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class Soak extends Attack implements ChangeTypeMove {
+	static class Soak extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		Soak() {
 			super(AttackNamesies.SOAK, "The user shoots a torrent of water at the target and changes the target's type to Water.", 20, Type.WATER, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -4457,13 +3824,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TrickOrTreat extends Attack implements ChangeTypeMove {
+	static class TrickOrTreat extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		TrickOrTreat() {
 			super(AttackNamesies.TRICK_OR_TREAT, "The user takes the target trick-or-treating. This adds Ghost type to the target's type.", 20, Type.GHOST, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -4473,13 +3840,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ForestsCurse extends Attack implements ChangeTypeMove {
+	static class ForestsCurse extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		ForestsCurse() {
 			super(AttackNamesies.FORESTS_CURSE, "The user puts a forest curse on the target. Afflicted targets are now Grass type as well.", 20, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -4489,7 +3856,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PsychUp extends Attack {
+	static class PsychUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PsychUp() {
@@ -4508,7 +3875,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Amnesia extends Attack {
+	static class Amnesia extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Amnesia() {
@@ -4518,18 +3885,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WonderRoom extends Attack {
+	static class WonderRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WonderRoom() {
 			super(AttackNamesies.WONDER_ROOM, "The user creates a bizarre area in which Pok\u00e9mon's Defense and Sp. Def stats are swapped for five turns.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.WONDER_ROOM, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.WONDER_ROOM));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class AquaJet extends Attack {
+	static class AquaJet extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AquaJet() {
@@ -4541,7 +3908,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Covet extends Attack implements ItemHolder {
+	static class Covet extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -4549,7 +3916,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.COVET, "The user endearingly approaches the target, then steals the target's held item.", 25, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -4590,7 +3957,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LowKick extends Attack {
+	static class LowKick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LowKick() {
@@ -4610,7 +3977,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class KarateChop extends Attack implements CritStageEffect {
+	static class KarateChop extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		KarateChop() {
@@ -4625,7 +3992,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SeismicToss extends Attack {
+	static class SeismicToss extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SeismicToss() {
@@ -4639,18 +4006,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Swagger extends Attack {
+	static class Swagger extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Swagger() {
 			super(AttackNamesies.SWAGGER, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", 15, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.statChanges[Stat.ATTACK.index()] = 2;
 		}
 	}
 
-	private static class CrossChop extends Attack implements CritStageEffect {
+	static class CrossChop extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		CrossChop() {
@@ -4665,7 +4032,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Punishment extends Attack {
+	static class Punishment extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Punishment() {
@@ -4680,7 +4047,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CloseCombat extends Attack {
+	static class CloseCombat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CloseCombat() {
@@ -4694,7 +4061,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonAscent extends Attack {
+	static class DragonAscent extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonAscent() {
@@ -4708,7 +4075,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlameWheel extends Attack {
+	static class FlameWheel extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlameWheel() {
@@ -4722,7 +4089,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Reversal extends Attack {
+	static class Reversal extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Reversal() {
@@ -4742,7 +4109,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ExtremeSpeed extends Attack {
+	static class ExtremeSpeed extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ExtremeSpeed() {
@@ -4754,7 +4121,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Hypnosis extends Attack {
+	static class Hypnosis extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Hypnosis() {
@@ -4764,7 +4131,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BubbleBeam extends Attack {
+	static class BubbleBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BubbleBeam() {
@@ -4776,7 +4143,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudShot extends Attack {
+	static class MudShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudShot() {
@@ -4787,7 +4154,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BellyDrum extends Attack {
+	static class BellyDrum extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BellyDrum() {
@@ -4809,7 +4176,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Submission extends Attack implements RecoilMove {
+	static class Submission extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		Submission() {
@@ -4830,42 +4197,42 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DynamicPunch extends Attack {
+	static class DynamicPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DynamicPunch() {
 			super(AttackNamesies.DYNAMIC_PUNCH, "The user punches the target with full, concentrated power. It confuses the target if it hits.", 5, Type.FIGHTING, MoveCategory.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 50;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.moveTypes.add(MoveType.PUNCHING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class MindReader extends Attack {
+	static class MindReader extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MindReader() {
 			super(AttackNamesies.MIND_READER, "The user senses the target's movements with its mind to ensure its next attack does not miss the target.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.LOCK_ON, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.LOCK_ON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class LockOn extends Attack {
+	static class LockOn extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LockOn() {
 			super(AttackNamesies.LOCK_ON, "The user takes sure aim at the target. It ensures the next attack does not fail to hit the target.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.LOCK_ON, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.LOCK_ON));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Kinesis extends Attack {
+	static class Kinesis extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Kinesis() {
@@ -4875,7 +4242,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Barrier extends Attack {
+	static class Barrier extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Barrier() {
@@ -4885,27 +4252,27 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Telekinesis extends Attack {
+	static class Telekinesis extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Telekinesis() {
 			super(AttackNamesies.TELEKINESIS, "The user makes the target float with its psychic power. The target is easier to hit for three turns.", 15, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TELEKINESIS, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.TELEKINESIS));
 			super.moveTypes.add(MoveType.AIRBORNE);
 		}
 	}
 
-	private static class Ingrain extends Attack {
+	static class Ingrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Ingrain() {
 			super(AttackNamesies.INGRAIN, "The user lays roots that restore its HP on every turn. Because it is rooted, it can't switch out.", 20, Type.GRASS, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.INGRAIN, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.INGRAIN));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class PsychoCut extends Attack implements CritStageEffect {
+	static class PsychoCut extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		PsychoCut() {
@@ -4919,14 +4286,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FutureSight extends Attack {
+	static class FutureSight extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FutureSight() {
 			super(AttackNamesies.FUTURE_SIGHT, "Two turns after this move is used, a hunk of psychic energy attacks the target.", 10, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FUTURE_SIGHT, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.FUTURE_SIGHT));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -4938,14 +4305,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoomDesire extends Attack {
+	static class DoomDesire extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DoomDesire() {
 			super(AttackNamesies.DOOM_DESIRE, "Two turns after this move is used, the user blasts the target with a concentrated bundle of light.", 5, Type.STEEL, MoveCategory.SPECIAL);
 			super.power = 140;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.DOOM_DESIRE, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.DOOM_DESIRE));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -4957,7 +4324,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CalmMind extends Attack {
+	static class CalmMind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CalmMind() {
@@ -4968,7 +4335,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LowSweep extends Attack {
+	static class LowSweep extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LowSweep() {
@@ -4980,7 +4347,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Revenge extends Attack {
+	static class Revenge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Revenge() {
@@ -4996,7 +4363,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VitalThrow extends Attack {
+	static class VitalThrow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VitalThrow() {
@@ -5007,7 +4374,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WringOut extends Attack {
+	static class WringOut extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WringOut() {
@@ -5021,7 +4388,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeafTornado extends Attack {
+	static class LeafTornado extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LeafTornado() {
@@ -5033,7 +4400,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeafStorm extends Attack {
+	static class LeafStorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LeafStorm() {
@@ -5045,7 +4412,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LeafBlade extends Attack implements CritStageEffect {
+	static class LeafBlade extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LeafBlade() {
@@ -5060,7 +4427,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Constrict extends Attack {
+	static class Constrict extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Constrict() {
@@ -5073,7 +4440,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Hex extends Attack {
+	static class Hex extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Hex() {
@@ -5087,7 +4454,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SludgeWave extends Attack {
+	static class SludgeWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SludgeWave() {
@@ -5099,18 +4466,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MudSport extends Attack {
+	static class MudSport extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MudSport() {
 			super(AttackNamesies.MUD_SPORT, "The user covers itself with mud. It weakens Electric-type moves while the user is in the battle.", 15, Type.GROUND, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MUD_SPORT, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.MUD_SPORT));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class RockPolish extends Attack {
+	static class RockPolish extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockPolish() {
@@ -5120,7 +4487,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockThrow extends Attack {
+	static class RockThrow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockThrow() {
@@ -5130,7 +4497,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockBlast extends Attack implements MultiStrikeMove {
+	static class RockBlast extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		RockBlast() {
@@ -5166,14 +4533,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SmackDown extends Attack implements AccuracyBypassEffect {
+	static class SmackDown extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		SmackDown() {
 			super(AttackNamesies.SMACK_DOWN, "The user throws a stone or projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when hit.", 15, Type.ROCK, MoveCategory.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.GROUNDED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.GROUNDED));
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -5187,17 +4554,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StealthRock extends Attack {
+	static class StealthRock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StealthRock() {
 			super(AttackNamesies.STEALTH_ROCK, "The user lays a trap of levitating stones around the opponent's team. The trap hurts opponents that switch into battle.", 20, Type.ROCK, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.STEALTH_ROCK, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.STEALTH_ROCK));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class StoneEdge extends Attack implements CritStageEffect {
+	static class StoneEdge extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		StoneEdge() {
@@ -5211,14 +4578,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Steamroller extends Attack implements AccuracyBypassEffect {
+	static class Steamroller extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Steamroller() {
 			super(AttackNamesies.STEAMROLLER, "The user crushes its targets by rolling over them with its rolled-up body. This attack may make the target flinch.", 20, Type.BUG, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5232,7 +4599,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeavySlam extends Attack {
+	static class HeavySlam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeavySlam() {
@@ -5251,14 +4618,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Stomp extends Attack implements AccuracyBypassEffect {
+	static class Stomp extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stomp() {
 			super(AttackNamesies.STOMP, "The target is stomped with a big foot. It may also make the target flinch.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -5272,7 +4639,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlameCharge extends Attack {
+	static class FlameCharge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlameCharge() {
@@ -5285,7 +4652,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bounce extends Attack implements MultiTurnMove {
+	static class Bounce extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Bounce() {
@@ -5316,12 +4683,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Curse extends Attack {
+	static class Curse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Curse() {
 			super(AttackNamesies.CURSE, "A move that works differently for the Ghost type than for all other types.", 10, Type.GHOST, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CURSE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CURSE));
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -5346,29 +4713,29 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Yawn extends Attack {
+	static class Yawn extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Yawn() {
 			super(AttackNamesies.YAWN, "The user lets loose a huge yawn that lulls the target into falling asleep on the next turn.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.YAWN, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.YAWN));
 		}
 	}
 
-	private static class Headbutt extends Attack {
+	static class Headbutt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Headbutt() {
 			super(AttackNamesies.HEADBUTT, "The user sticks out its head and attacks by charging straight into the target. It may also make the target flinch.", 15, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class SlackOff extends Attack implements SelfHealingMove {
+	static class SlackOff extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		SlackOff() {
@@ -5388,7 +4755,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealPulse extends Attack {
+	static class HealPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HealPulse() {
@@ -5410,7 +4777,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MetalSound extends Attack {
+	static class MetalSound extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MetalSound() {
@@ -5421,7 +4788,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spark extends Attack {
+	static class Spark extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spark() {
@@ -5434,7 +4801,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagnetBomb extends Attack {
+	static class MagnetBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagnetBomb() {
@@ -5444,7 +4811,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MirrorShot extends Attack {
+	static class MirrorShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MirrorShot() {
@@ -5455,18 +4822,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagnetRise extends Attack {
+	static class MagnetRise extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagnetRise() {
 			super(AttackNamesies.MAGNET_RISE, "The user levitates using electrically generated magnetism for five turns.", 10, Type.ELECTRIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MAGNET_RISE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.MAGNET_RISE));
 			super.moveTypes.add(MoveType.AIRBORNE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class ZapCannon extends Attack {
+	static class ZapCannon extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ZapCannon() {
@@ -5478,7 +4845,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BraveBird extends Attack implements RecoilMove {
+	static class BraveBird extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		BraveBird() {
@@ -5499,21 +4866,21 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Uproar extends Attack {
+	static class Uproar extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Uproar() {
 			super(AttackNamesies.UPROAR, "The user attacks in an uproar for three turns. Over that time, no one can fall asleep.", 10, Type.NORMAL, MoveCategory.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.UPROAR, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.UPROAR));
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Acupressure extends Attack {
+	static class Acupressure extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Acupressure() {
@@ -5530,7 +4897,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DoubleHit extends Attack implements MultiStrikeMove {
+	static class DoubleHit extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleHit() {
@@ -5567,7 +4934,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IcyWind extends Attack {
+	static class IcyWind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IcyWind() {
@@ -5578,7 +4945,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceShard extends Attack {
+	static class IceShard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IceShard() {
@@ -5589,17 +4956,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AquaRing extends Attack {
+	static class AquaRing extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AquaRing() {
 			super(AttackNamesies.AQUA_RING, "The user envelops itself in a veil made of water. It regains some HP on every turn.", 20, Type.WATER, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.AQUA_RING, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.AQUA_RING));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class AuroraBeam extends Attack {
+	static class AuroraBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AuroraBeam() {
@@ -5611,7 +4978,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Brine extends Attack {
+	static class Brine extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Brine() {
@@ -5625,7 +4992,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Dive extends Attack implements MultiTurnMove {
+	static class Dive extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Dive() {
@@ -5653,7 +5020,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceBeam extends Attack {
+	static class IceBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IceBeam() {
@@ -5665,7 +5032,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SheerCold extends Attack {
+	static class SheerCold extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SheerCold() {
@@ -5697,7 +5064,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PoisonGas extends Attack {
+	static class PoisonGas extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PoisonGas() {
@@ -5707,7 +5074,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sludge extends Attack {
+	static class Sludge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sludge() {
@@ -5719,7 +5086,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SludgeBomb extends Attack {
+	static class SludgeBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SludgeBomb() {
@@ -5732,7 +5099,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AcidArmor extends Attack {
+	static class AcidArmor extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AcidArmor() {
@@ -5742,7 +5109,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IcicleSpear extends Attack implements MultiStrikeMove {
+	static class IcicleSpear extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		IcicleSpear() {
@@ -5778,19 +5145,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Clamp extends Attack {
+	static class Clamp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Clamp() {
 			super(AttackNamesies.CLAMP, "The target is clamped and squeezed by the user's very thick and sturdy shell for four to five turns.", 15, Type.WATER, MoveCategory.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.CLAMPED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CLAMPED));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class RazorShell extends Attack {
+	static class RazorShell extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RazorShell() {
@@ -5803,18 +5170,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Whirlpool extends Attack {
+	static class Whirlpool extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Whirlpool() {
 			super(AttackNamesies.WHIRLPOOL, "Traps foes in a violent swirling whirlpool for four to five turns.", 15, Type.WATER, MoveCategory.SPECIAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.WHIRLPOOLED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.WHIRLPOOLED));
 		}
 	}
 
-	private static class ShellSmash extends Attack {
+	static class ShellSmash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShellSmash() {
@@ -5828,7 +5195,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SpikeCannon extends Attack implements MultiStrikeMove {
+	static class SpikeCannon extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		SpikeCannon() {
@@ -5864,29 +5231,29 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spikes extends Attack {
+	static class Spikes extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spikes() {
 			super(AttackNamesies.SPIKES, "The user lays a trap of spikes at the opposing team's feet. The trap hurts Pok\u00e9mon that switch into battle.", 20, Type.GROUND, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SPIKES, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.SPIKES));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class IcicleCrash extends Attack {
+	static class IcicleCrash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IcicleCrash() {
 			super(AttackNamesies.ICICLE_CRASH, "The user attacks by harshly dropping an icicle onto the target. It may also make the target flinch.", 10, Type.ICE, MoveCategory.PHYSICAL);
 			super.power = 85;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 		}
 	}
 
-	private static class Lick extends Attack {
+	static class Lick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Lick() {
@@ -5899,7 +5266,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Spite extends Attack {
+	static class Spite extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Spite() {
@@ -5921,7 +5288,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NightShade extends Attack {
+	static class NightShade extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NightShade() {
@@ -5934,7 +5301,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowBall extends Attack {
+	static class ShadowBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShadowBall() {
@@ -5947,7 +5314,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DreamEater extends Attack {
+	static class DreamEater extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DreamEater() {
@@ -5967,31 +5334,31 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DarkPulse extends Attack {
+	static class DarkPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DarkPulse() {
 			super(AttackNamesies.DARK_PULSE, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", 15, Type.DARK, MoveCategory.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.AURA_PULSE);
 		}
 	}
 
-	private static class Nightmare extends Attack {
+	static class Nightmare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Nightmare() {
 			super(AttackNamesies.NIGHTMARE, "A sleeping target sees a nightmare that inflicts some damage every turn.", 15, Type.GHOST, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.NIGHTMARE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.NIGHTMARE));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 	}
 
-	private static class ShadowPunch extends Attack {
+	static class ShadowPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShadowPunch() {
@@ -6002,19 +5369,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bind extends Attack {
+	static class Bind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bind() {
 			super(AttackNamesies.BIND, "Things such as long bodies or tentacles are used to bind and squeeze the target for four to five turns.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.BINDED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.BINDED));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class RockTomb extends Attack {
+	static class RockTomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockTomb() {
@@ -6025,7 +5392,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonBreath extends Attack {
+	static class DragonBreath extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonBreath() {
@@ -6037,7 +5404,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IronTail extends Attack {
+	static class IronTail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IronTail() {
@@ -6050,7 +5417,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Meditate extends Attack {
+	static class Meditate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Meditate() {
@@ -6060,7 +5427,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Synchronoise extends Attack {
+	static class Synchronoise extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Synchronoise() {
@@ -6082,7 +5449,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psyshock extends Attack implements OpponentStatSwitchingEffect {
+	static class Psyshock extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Psyshock() {
@@ -6096,7 +5463,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ViceGrip extends Attack {
+	static class ViceGrip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ViceGrip() {
@@ -6107,7 +5474,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MetalClaw extends Attack {
+	static class MetalClaw extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MetalClaw() {
@@ -6120,7 +5487,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Guillotine extends Attack {
+	static class Guillotine extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Guillotine() {
@@ -6153,7 +5520,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Crabhammer extends Attack implements CritStageEffect {
+	static class Crabhammer extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Crabhammer() {
@@ -6168,7 +5535,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Flail extends Attack {
+	static class Flail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Flail() {
@@ -6188,18 +5555,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Charge extends Attack {
+	static class Charge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Charge() {
 			super(AttackNamesies.CHARGE, "The user boosts the power of the Electric move it uses on the next turn. It also raises the user's Sp. Def stat.", 20, Type.ELECTRIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHARGE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHARGE));
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
 		}
 	}
 
-	private static class ChargeBeam extends Attack {
+	static class ChargeBeam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ChargeBeam() {
@@ -6212,7 +5579,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MirrorCoat extends Attack {
+	static class MirrorCoat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MirrorCoat() {
@@ -6236,7 +5603,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Counter extends Attack {
+	static class Counter extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Counter() {
@@ -6261,7 +5628,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Barrage extends Attack implements MultiStrikeMove {
+	static class Barrage extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		Barrage() {
@@ -6298,7 +5665,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BulletSeed extends Attack implements MultiStrikeMove {
+	static class BulletSeed extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		BulletSeed() {
@@ -6335,7 +5702,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EggBomb extends Attack {
+	static class EggBomb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EggBomb() {
@@ -6346,7 +5713,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WoodHammer extends Attack implements RecoilMove {
+	static class WoodHammer extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		WoodHammer() {
@@ -6367,19 +5734,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BoneClub extends Attack {
+	static class BoneClub extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BoneClub() {
 			super(AttackNamesies.BONE_CLUB, "The user clubs the target with a bone. It may also make the target flinch.", 20, Type.GROUND, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 10;
 		}
 	}
 
-	private static class Bonemerang extends Attack implements MultiStrikeMove {
+	static class Bonemerang extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		Bonemerang() {
@@ -6415,7 +5782,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BoneRush extends Attack implements MultiStrikeMove {
+	static class BoneRush extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		BoneRush() {
@@ -6451,20 +5818,20 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RollingKick extends Attack {
+	static class RollingKick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RollingKick() {
 			super(AttackNamesies.ROLLING_KICK, "The user lashes out with a quick, spinning kick. It may also make the target flinch.", 15, Type.FIGHTING, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class JumpKick extends Attack implements CrashDamageMove {
+	static class JumpKick extends Attack implements CrashDamageMove {
 		private static final long serialVersionUID = 1L;
 
 		JumpKick() {
@@ -6481,7 +5848,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BrickBreak extends Attack {
+	static class BrickBreak extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BrickBreak() {
@@ -6496,7 +5863,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HighJumpKick extends Attack implements CrashDamageMove {
+	static class HighJumpKick extends Attack implements CrashDamageMove {
 		private static final long serialVersionUID = 1L;
 
 		HighJumpKick() {
@@ -6513,7 +5880,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BlazeKick extends Attack implements CritStageEffect {
+	static class BlazeKick extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		BlazeKick() {
@@ -6530,7 +5897,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MegaKick extends Attack {
+	static class MegaKick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MegaKick() {
@@ -6541,7 +5908,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CometPunch extends Attack implements MultiStrikeMove {
+	static class CometPunch extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		CometPunch() {
@@ -6579,7 +5946,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MachPunch extends Attack {
+	static class MachPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MachPunch() {
@@ -6592,7 +5959,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BulletPunch extends Attack {
+	static class BulletPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BulletPunch() {
@@ -6605,7 +5972,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VacuumWave extends Attack {
+	static class VacuumWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VacuumWave() {
@@ -6616,7 +5983,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ThunderPunch extends Attack {
+	static class ThunderPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ThunderPunch() {
@@ -6630,7 +5997,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IcePunch extends Attack {
+	static class IcePunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IcePunch() {
@@ -6644,7 +6011,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FirePunch extends Attack {
+	static class FirePunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FirePunch() {
@@ -6658,7 +6025,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SkyUppercut extends Attack implements AccuracyBypassEffect {
+	static class SkyUppercut extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		SkyUppercut() {
@@ -6680,7 +6047,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MegaPunch extends Attack {
+	static class MegaPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MegaPunch() {
@@ -6692,14 +6059,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FocusPunch extends Attack {
+	static class FocusPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FocusPunch() {
 			super(AttackNamesies.FOCUS_PUNCH, "The user focuses its mind before launching a punch. It will fail if the user is hit before it is used.", 20, Type.FIGHTING, MoveCategory.PHYSICAL);
 			super.power = 150;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FOCUSING, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FOCUSING));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -6720,7 +6087,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MeFirst extends Attack {
+	static class MeFirst extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MeFirst() {
@@ -6738,13 +6105,13 @@ public abstract class Attack implements Serializable {
 				return;
 			}
 			
-			me.addEffect(PokemonEffect.getEffect(EffectNamesies.FIDDY_PERCENT_STRONGER));
+			me.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
 			me.callNewMove(b, o, new Move(o.getAttack()));
 			me.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
 		}
 	}
 
-	private static class Refresh extends Attack {
+	static class Refresh extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Refresh() {
@@ -6766,7 +6133,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerWhip extends Attack {
+	static class PowerWhip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerWhip() {
@@ -6777,7 +6144,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Smog extends Attack {
+	static class Smog extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Smog() {
@@ -6789,7 +6156,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ClearSmog extends Attack {
+	static class ClearSmog extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ClearSmog() {
@@ -6804,7 +6171,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HammerArm extends Attack {
+	static class HammerArm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HammerArm() {
@@ -6818,7 +6185,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SoftBoiled extends Attack implements SelfHealingMove {
+	static class SoftBoiled extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		SoftBoiled() {
@@ -6838,7 +6205,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AncientPower extends Attack {
+	static class AncientPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AncientPower() {
@@ -6857,7 +6224,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Tickle extends Attack {
+	static class Tickle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Tickle() {
@@ -6868,34 +6235,34 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DizzyPunch extends Attack {
+	static class DizzyPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DizzyPunch() {
 			super(AttackNamesies.DIZZY_PUNCH, "The target is hit with rhythmically launched punches that may also leave it confused.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PUNCHING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class Outrage extends Attack {
+	static class Outrage extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Outrage() {
 			super(AttackNamesies.OUTRAGE, "The user rampages and attacks for two to three turns. It then becomes confused, however.", 10, Type.DRAGON, MoveCategory.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION));
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class DragonDance extends Attack {
+	static class DragonDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonDance() {
@@ -6906,7 +6273,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonPulse extends Attack {
+	static class DragonPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonPulse() {
@@ -6917,7 +6284,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DracoMeteor extends Attack {
+	static class DracoMeteor extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DracoMeteor() {
@@ -6929,25 +6296,25 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Waterfall extends Attack {
+	static class Waterfall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Waterfall() {
 			super(AttackNamesies.WATERFALL, "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", 15, Type.WATER, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class ReflectType extends Attack implements ChangeTypeMove {
+	static class ReflectType extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		ReflectType() {
 			super(AttackNamesies.REFLECT_TYPE, "The user reflects the target's type, making it the same type as the target.", 15, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -6957,7 +6324,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagicalLeaf extends Attack {
+	static class MagicalLeaf extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagicalLeaf() {
@@ -6966,7 +6333,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerSwap extends Attack {
+	static class PowerSwap extends Attack {
 		private static final long serialVersionUID = 1L;
 		private static Stat[] swapStats = { Stat.ATTACK, Stat.SP_ATTACK };
 
@@ -6990,7 +6357,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GuardSwap extends Attack {
+	static class GuardSwap extends Attack {
 		private static final long serialVersionUID = 1L;
 		private static Stat[] swapStats = { Stat.DEFENSE, Stat.SP_DEFENSE };
 
@@ -7014,7 +6381,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Copycat extends Attack {
+	static class Copycat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Copycat() {
@@ -7038,12 +6405,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Transform extends Attack {
+	static class Transform extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Transform() {
 			super(AttackNamesies.TRANSFORM, "The user transforms into a copy of the target right down to having the same move set.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRANSFORMED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.TRANSFORMED));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.ENCORELESS);
@@ -7053,17 +6420,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Substitute extends Attack {
+	static class Substitute extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Substitute() {
 			super(AttackNamesies.SUBSTITUTE, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SUBSTITUTE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.SUBSTITUTE));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class RazorWind extends Attack implements MultiTurnMove, CritStageEffect {
+	static class RazorWind extends Attack implements MultiTurnMove, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RazorWind() {
@@ -7094,7 +6461,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LovelyKiss extends Attack {
+	static class LovelyKiss extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LovelyKiss() {
@@ -7104,7 +6471,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowderSnow extends Attack {
+	static class PowderSnow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowderSnow() {
@@ -7116,20 +6483,20 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeartStamp extends Attack {
+	static class HeartStamp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeartStamp() {
 			super(AttackNamesies.HEART_STAMP, "The user unleashes a vicious blow after its cute act makes the target less wary. It may also make the target flinch.", 25, Type.PSYCHIC, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class FakeTears extends Attack {
+	static class FakeTears extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FakeTears() {
@@ -7139,7 +6506,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Avalanche extends Attack {
+	static class Avalanche extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Avalanche() {
@@ -7155,7 +6522,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Blizzard extends Attack implements AccuracyBypassEffect {
+	static class Blizzard extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		Blizzard() {
@@ -7172,7 +6539,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShockWave extends Attack {
+	static class ShockWave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShockWave() {
@@ -7181,7 +6548,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LavaPlume extends Attack {
+	static class LavaPlume extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LavaPlume() {
@@ -7193,7 +6560,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WorkUp extends Attack {
+	static class WorkUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WorkUp() {
@@ -7204,7 +6571,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GigaImpact extends Attack implements MultiTurnMove {
+	static class GigaImpact extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		GigaImpact() {
@@ -7232,7 +6599,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Splash extends Attack {
+	static class Splash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Splash() {
@@ -7246,17 +6613,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Mist extends Attack {
+	static class Mist extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Mist() {
 			super(AttackNamesies.MIST, "The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns.", 30, Type.ICE, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MIST, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.MIST));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class LastResort extends Attack {
+	static class LastResort extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LastResort() {
@@ -7282,7 +6649,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TrumpCard extends Attack {
+	static class TrumpCard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TrumpCard() {
@@ -7308,7 +6675,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MuddyWater extends Attack {
+	static class MuddyWater extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MuddyWater() {
@@ -7320,12 +6687,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Conversion extends Attack implements ChangeTypeMove {
+	static class Conversion extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		Conversion() {
 			super(AttackNamesies.CONVERSION, "The user changes its type to become the same type as one of its moves.", 30, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
 			super.selfTarget = true;
 		}
 
@@ -7353,7 +6720,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Conversion2 extends Attack implements ChangeTypeMove {
+	static class Conversion2 extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 		private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
 			List<Type> types = new ArrayList<>();
@@ -7368,7 +6735,7 @@ public abstract class Attack implements Serializable {
 
 		Conversion2() {
 			super(AttackNamesies.CONVERSION2, "The user changes its type to make itself resistant to the type of the attack the opponent used last.", 30, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -7390,7 +6757,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sharpen extends Attack {
+	static class Sharpen extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sharpen() {
@@ -7400,19 +6767,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagicCoat extends Attack {
+	static class MagicCoat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagicCoat() {
 			super(AttackNamesies.MAGIC_COAT, "A barrier reflects back to the target moves like Leech Seed and moves that damage status.", 15, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MAGIC_COAT, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.MAGIC_COAT));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 			super.priority = 4;
 		}
 	}
 
-	private static class SkyDrop extends Attack {
+	static class SkyDrop extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SkyDrop() {
@@ -7433,39 +6800,39 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IronHead extends Attack {
+	static class IronHead extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IronHead() {
 			super(AttackNamesies.IRON_HEAD, "The user slams the target with its steel-hard head. It may also make the target flinch.", 15, Type.STEEL, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class RockSlide extends Attack {
+	static class RockSlide extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockSlide() {
 			super(AttackNamesies.ROCK_SLIDE, "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", 10, Type.ROCK, MoveCategory.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 		}
 	}
 
-	private static class Snore extends Attack {
+	static class Snore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Snore() {
 			super(AttackNamesies.SNORE, "An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.", 15, Type.NORMAL, MoveCategory.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -7482,7 +6849,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SleepTalk extends Attack {
+	static class SleepTalk extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SleepTalk() {
@@ -7516,23 +6883,23 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Block extends Attack {
+	static class Block extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Block() {
 			super(AttackNamesies.BLOCK, "The user blocks the target's way with arms spread wide to prevent escape.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED));
 		}
 	}
 
-	private static class SkyAttack extends Attack implements MultiTurnMove, CritStageEffect {
+	static class SkyAttack extends Attack implements MultiTurnMove, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SkyAttack() {
 			super(AttackNamesies.SKY_ATTACK, "A second-turn attack move where critical hits land more easily. It may also make the target flinch.", 5, Type.FLYING, MoveCategory.PHYSICAL);
 			super.power = 140;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
@@ -7558,14 +6925,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonRush extends Attack implements AccuracyBypassEffect {
+	static class DragonRush extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		DragonRush() {
 			super(AttackNamesies.DRAGON_RUSH, "The user tackles the target while exhibiting overwhelming menace. It may also make the target flinch.", 10, Type.DRAGON, MoveCategory.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -7579,7 +6946,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AuraSphere extends Attack {
+	static class AuraSphere extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AuraSphere() {
@@ -7590,7 +6957,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psystrike extends Attack implements OpponentStatSwitchingEffect {
+	static class Psystrike extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Psystrike() {
@@ -7604,7 +6971,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Eruption extends Attack {
+	static class Eruption extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Eruption() {
@@ -7617,7 +6984,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Charm extends Attack {
+	static class Charm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Charm() {
@@ -7627,7 +6994,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EchoedVoice extends Attack {
+	static class EchoedVoice extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EchoedVoice() {
@@ -7642,7 +7009,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PsychoShift extends Attack {
+	static class PsychoShift extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PsychoShift() {
@@ -7663,7 +7030,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowSneak extends Attack {
+	static class ShadowSneak extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShadowSneak() {
@@ -7675,26 +7042,26 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SpiderWeb extends Attack {
+	static class SpiderWeb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SpiderWeb() {
 			super(AttackNamesies.SPIDER_WEB, "The user ensnares the target with thin, gooey silk so it can't flee from battle.", 10, Type.BUG, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED));
 		}
 	}
 
-	private static class SweetKiss extends Attack {
+	static class SweetKiss extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SweetKiss() {
 			super(AttackNamesies.SWEET_KISS, "The user kisses the target with a sweet, angelic cuteness that causes confusion.", 10, Type.FAIRY, MoveCategory.STATUS);
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 		}
 	}
 
-	private static class OminousWind extends Attack {
+	static class OminousWind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		OminousWind() {
@@ -7713,7 +7080,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CottonSpore extends Attack {
+	static class CottonSpore extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CottonSpore() {
@@ -7724,7 +7091,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CottonGuard extends Attack {
+	static class CottonGuard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CottonGuard() {
@@ -7734,7 +7101,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GrassWhistle extends Attack {
+	static class GrassWhistle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GrassWhistle() {
@@ -7745,18 +7112,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Torment extends Attack {
+	static class Torment extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Torment() {
 			super(AttackNamesies.TORMENT, "The user torments and enrages the target, making it incapable of using the same move twice in a row.", 15, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.TORMENT, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.TORMENT));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
 
-	private static class HiddenPower extends Attack {
+	static class HiddenPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HiddenPower() {
@@ -7770,7 +7137,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Psywave extends Attack {
+	static class Psywave extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Psywave() {
@@ -7783,7 +7150,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PainSplit extends Attack {
+	static class PainSplit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PainSplit() {
@@ -7801,12 +7168,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bide extends Attack {
+	static class Bide extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Bide() {
 			super(AttackNamesies.BIDE, "The user endures attacks for two turns, then strikes back to cause double the damage taken.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
-			super.effects.add(Effect.getEffect(EffectNamesies.BIDE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.BIDE));
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.selfTarget = true;
 			super.priority = 1;
@@ -7818,18 +7185,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Autotomize extends Attack {
+	static class Autotomize extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Autotomize() {
 			super(AttackNamesies.AUTOTOMIZE, "The user sheds part of its body to make itself lighter and sharply raise its Speed stat.", 15, Type.STEEL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.HALF_WEIGHT, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.HALF_WEIGHT));
 			super.selfTarget = true;
 			super.statChanges[Stat.SPEED.index()] = 2;
 		}
 	}
 
-	private static class StruggleBug extends Attack {
+	static class StruggleBug extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StruggleBug() {
@@ -7840,39 +7207,39 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PowerTrick extends Attack {
+	static class PowerTrick extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerTrick() {
 			super(AttackNamesies.POWER_TRICK, "The user employs its psychic power to switch its Attack with its Defense stat.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.POWER_TRICK, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.POWER_TRICK));
 			super.selfTarget = true;
 		}
 	}
 
-	private static class PowerSplit extends Attack {
+	static class PowerSplit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerSplit() {
 			super(AttackNamesies.POWER_SPLIT, "The user employs its psychic power to average its Attack and Sp. Atk stats with those of the target's.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.POWER_SPLIT, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.POWER_SPLIT));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class GuardSplit extends Attack {
+	static class GuardSplit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GuardSplit() {
 			super(AttackNamesies.GUARD_SPLIT, "The user employs its psychic power to average its Defense and Sp. Def stats with those of its target's.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.GUARD_SPLIT, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.GUARD_SPLIT));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class HoneClaws extends Attack {
+	static class HoneClaws extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HoneClaws() {
@@ -7883,7 +7250,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BeatUp extends Attack {
+	static class BeatUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BeatUp() {
@@ -7905,7 +7272,7 @@ public abstract class Attack implements Serializable {
 				}
 				
 				Move temp = p.getMove();
-				p.setMove(new Move(Attack.getAttack(super.namesies)));
+				p.setMove(new Move(super.namesies.getAttack()));
 				Messages.addMessage(p.getName() + "'s attack!");
 				super.applyDamage(p, o, b);
 				p.setMove(temp);
@@ -7913,7 +7280,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Octazooka extends Attack {
+	static class Octazooka extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Octazooka() {
@@ -7926,7 +7293,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Present extends Attack {
+	static class Present extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Present() {
@@ -7967,7 +7334,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SteelWing extends Attack {
+	static class SteelWing extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SteelWing() {
@@ -7981,7 +7348,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Sketch extends Attack {
+	static class Sketch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Sketch() {
@@ -8014,7 +7381,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TripleKick extends Attack implements MultiStrikeMove {
+	static class TripleKick extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		TripleKick() {
@@ -8051,7 +7418,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MilkDrink extends Attack implements SelfHealingMove {
+	static class MilkDrink extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		MilkDrink() {
@@ -8071,7 +7438,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealBell extends Attack {
+	static class HealBell extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HealBell() {
@@ -8091,7 +7458,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WeatherBall extends Attack {
+	static class WeatherBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WeatherBall() {
@@ -8110,7 +7477,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Aeroblast extends Attack implements CritStageEffect {
+	static class Aeroblast extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Aeroblast() {
@@ -8124,7 +7491,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SacredFire extends Attack {
+	static class SacredFire extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SacredFire() {
@@ -8137,17 +7504,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealBlock extends Attack {
+	static class HealBlock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HealBlock() {
 			super(AttackNamesies.HEAL_BLOCK, "For five turns, the user prevents the opposing team from using any moves, Abilities, or held items that recover HP.", 15, Type.PSYCHIC, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_BLOCK, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_BLOCK));
 		}
 	}
 
-	private static class EnergyBall extends Attack {
+	static class EnergyBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EnergyBall() {
@@ -8160,7 +7527,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BulkUp extends Attack {
+	static class BulkUp extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BulkUp() {
@@ -8171,7 +7538,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Thief extends Attack implements ItemHolder {
+	static class Thief extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -8179,7 +7546,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.THIEF, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", 25, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -8220,18 +7587,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Attract extends Attack {
+	static class Attract extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Attract() {
 			super(AttackNamesies.ATTRACT, "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.", 15, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.INFATUATED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.INFATUATED));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
 
-	private static class ForcePalm extends Attack {
+	static class ForcePalm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ForcePalm() {
@@ -8244,7 +7611,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ArmThrust extends Attack implements MultiStrikeMove {
+	static class ArmThrust extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		ArmThrust() {
@@ -8281,7 +7648,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SmellingSalts extends Attack {
+	static class SmellingSalts extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SmellingSalts() {
@@ -8302,7 +7669,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Assist extends Attack {
+	static class Assist extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Assist() {
@@ -8336,7 +7703,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MetalBurst extends Attack {
+	static class MetalBurst extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MetalBurst() {
@@ -8355,7 +7722,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WildCharge extends Attack implements RecoilMove {
+	static class WildCharge extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		WildCharge() {
@@ -8376,7 +7743,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Flash extends Attack {
+	static class Flash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Flash() {
@@ -8386,7 +7753,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TailGlow extends Attack {
+	static class TailGlow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TailGlow() {
@@ -8396,7 +7763,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterSpout extends Attack {
+	static class WaterSpout extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		WaterSpout() {
@@ -8409,30 +7776,30 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TeeterDance extends Attack {
+	static class TeeterDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TeeterDance() {
 			super(AttackNamesies.TEETER_DANCE, "The user performs a wobbly dance that confuses the Pok\u00e9mon around it.", 20, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 		}
 	}
 
-	private static class NeedleArm extends Attack {
+	static class NeedleArm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NeedleArm() {
 			super(AttackNamesies.NEEDLE_ARM, "The user attacks by wildly swinging its thorny arms. It may also make the target flinch.", 15, Type.GRASS, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class Venoshock extends Attack {
+	static class Venoshock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Venoshock() {
@@ -8446,12 +7813,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Snatch extends Attack {
+	static class Snatch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Snatch() {
 			super(AttackNamesies.SNATCH, "The user steals the effects of any healing or stat-changing move the opponent attempts to use.", 10, Type.DARK, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SNATCH, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.SNATCH));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -8460,7 +7827,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceBall extends Attack {
+	static class IceBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		IceBall() {
@@ -8476,7 +7843,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeadSmash extends Attack implements RecoilMove {
+	static class HeadSmash extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		HeadSmash() {
@@ -8497,7 +7864,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MistBall extends Attack {
+	static class MistBall extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MistBall() {
@@ -8510,7 +7877,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LusterPurge extends Attack {
+	static class LusterPurge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LusterPurge() {
@@ -8522,7 +7889,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PsychoBoost extends Attack {
+	static class PsychoBoost extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PsychoBoost() {
@@ -8534,7 +7901,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Facade extends Attack {
+	static class Facade extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Facade() {
@@ -8553,7 +7920,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DefendOrder extends Attack {
+	static class DefendOrder extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DefendOrder() {
@@ -8564,7 +7931,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealOrder extends Attack implements SelfHealingMove {
+	static class HealOrder extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		HealOrder() {
@@ -8584,7 +7951,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class AttackOrder extends Attack implements CritStageEffect {
+	static class AttackOrder extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		AttackOrder() {
@@ -8598,19 +7965,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Chatter extends Attack {
+	static class Chatter extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Chatter() {
 			super(AttackNamesies.CHATTER, "The user attacks using a sound wave based on words it has learned. It may also confuse the target.", 20, Type.FLYING, MoveCategory.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.moveTypes.add(MoveType.SOUND_BASED);
 		}
 	}
 
-	private static class DualChop extends Attack implements MultiStrikeMove {
+	static class DualChop extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		DualChop() {
@@ -8647,7 +8014,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockWrecker extends Attack implements MultiTurnMove {
+	static class RockWrecker extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		RockWrecker() {
@@ -8675,19 +8042,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TrickRoom extends Attack {
+	static class TrickRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TrickRoom() {
 			super(AttackNamesies.TRICK_ROOM, "The user creates a bizarre area in which slower Pok\u00e9mon get to move first for five turns.", 5, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRICK_ROOM, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.TRICK_ROOM));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 			super.priority = -7;
 		}
 	}
 
-	private static class RoarOfTime extends Attack implements MultiTurnMove {
+	static class RoarOfTime extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		RoarOfTime() {
@@ -8714,7 +8081,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SpacialRend extends Attack implements CritStageEffect {
+	static class SpacialRend extends Attack implements CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SpacialRend() {
@@ -8728,18 +8095,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagmaStorm extends Attack {
+	static class MagmaStorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagmaStorm() {
 			super(AttackNamesies.MAGMA_STORM, "The target becomes trapped within a maelstrom of fire that rages for four to five turns.", 5, Type.FIRE, MoveCategory.SPECIAL);
 			super.power = 100;
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect(EffectNamesies.MAGMA_STORM, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.MAGMA_STORM));
 		}
 	}
 
-	private static class CrushGrip extends Attack {
+	static class CrushGrip extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CrushGrip() {
@@ -8753,7 +8120,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShadowForce extends Attack implements MultiTurnMove {
+	static class ShadowForce extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		ShadowForce() {
@@ -8782,7 +8149,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeartSwap extends Attack {
+	static class HeartSwap extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeartSwap() {
@@ -8803,7 +8170,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DarkVoid extends Attack {
+	static class DarkVoid extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DarkVoid() {
@@ -8813,7 +8180,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SeedFlare extends Attack {
+	static class SeedFlare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SeedFlare() {
@@ -8825,7 +8192,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Judgement extends Attack {
+	static class Judgement extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Judgement() {
@@ -8844,7 +8211,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SearingShot extends Attack {
+	static class SearingShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SearingShot() {
@@ -8857,7 +8224,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Incinerate extends Attack {
+	static class Incinerate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Incinerate() {
@@ -8876,7 +8243,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Overheat extends Attack {
+	static class Overheat extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Overheat() {
@@ -8888,7 +8255,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeatCrash extends Attack {
+	static class HeatCrash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HeatCrash() {
@@ -8907,7 +8274,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GrassKnot extends Attack {
+	static class GrassKnot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GrassKnot() {
@@ -8927,7 +8294,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Scald extends Attack {
+	static class Scald extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Scald() {
@@ -8940,7 +8307,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DrainPunch extends Attack {
+	static class DrainPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DrainPunch() {
@@ -8953,7 +8320,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StormThrow extends Attack {
+	static class StormThrow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StormThrow() {
@@ -8965,7 +8332,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FrostBreath extends Attack {
+	static class FrostBreath extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FrostBreath() {
@@ -8976,7 +8343,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockSmash extends Attack {
+	static class RockSmash extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockSmash() {
@@ -8989,20 +8356,20 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RockClimb extends Attack {
+	static class RockClimb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RockClimb() {
 			super(AttackNamesies.ROCK_CLIMB, "The user attacks the target by smashing into it with incredible force. It may also confuse the target.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class NightDaze extends Attack {
+	static class NightDaze extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NightDaze() {
@@ -9014,7 +8381,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TailSlap extends Attack implements MultiStrikeMove {
+	static class TailSlap extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		TailSlap() {
@@ -9051,7 +8418,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Defog extends Attack {
+	static class Defog extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Defog() {
@@ -9065,7 +8432,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HornLeech extends Attack {
+	static class HornLeech extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HornLeech() {
@@ -9077,7 +8444,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Electroweb extends Attack {
+	static class Electroweb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Electroweb() {
@@ -9088,7 +8455,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GearGrind extends Attack implements MultiStrikeMove {
+	static class GearGrind extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		GearGrind() {
@@ -9124,7 +8491,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ShiftGear extends Attack {
+	static class ShiftGear extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ShiftGear() {
@@ -9135,7 +8502,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HeadCharge extends Attack implements RecoilMove {
+	static class HeadCharge extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		HeadCharge() {
@@ -9156,7 +8523,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FieryDance extends Attack {
+	static class FieryDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FieryDance() {
@@ -9169,7 +8536,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SacredSword extends Attack implements OpponentIgnoreStageEffect {
+	static class SacredSword extends Attack implements OpponentIgnoreStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SacredSword() {
@@ -9184,7 +8551,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SecretSword extends Attack implements OpponentStatSwitchingEffect {
+	static class SecretSword extends Attack implements OpponentStatSwitchingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SecretSword() {
@@ -9200,7 +8567,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FusionFlare extends Attack {
+	static class FusionFlare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FusionFlare() {
@@ -9219,7 +8586,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FusionBolt extends Attack {
+	static class FusionBolt extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FusionBolt() {
@@ -9233,7 +8600,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BlueFlare extends Attack {
+	static class BlueFlare extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BlueFlare() {
@@ -9245,7 +8612,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BoltStrike extends Attack {
+	static class BoltStrike extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BoltStrike() {
@@ -9258,7 +8625,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Glaciate extends Attack {
+	static class Glaciate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Glaciate() {
@@ -9269,7 +8636,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TechnoBlast extends Attack {
+	static class TechnoBlast extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TechnoBlast() {
@@ -9290,7 +8657,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Explosion extends Attack {
+	static class Explosion extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Explosion() {
@@ -9301,7 +8668,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SelfDestruct extends Attack {
+	static class SelfDestruct extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SelfDestruct() {
@@ -9312,7 +8679,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Fling extends Attack {
+	static class Fling extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Fling() {
@@ -9344,7 +8711,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FreezeShock extends Attack implements MultiTurnMove {
+	static class FreezeShock extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		FreezeShock() {
@@ -9374,7 +8741,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SecretPower extends Attack {
+	static class SecretPower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		SecretPower() {
@@ -9399,7 +8766,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FinalGambit extends Attack {
+	static class FinalGambit extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FinalGambit() {
@@ -9414,13 +8781,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GastroAcid extends Attack implements ChangeAbilityMove {
+	static class GastroAcid extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		GastroAcid() {
 			super(AttackNamesies.GASTRO_ACID, "The user hurls up its stomach acids on the target. The fluid eliminates the effect of the target's Ability.", 10, Type.POISON, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -9436,7 +8803,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return Ability.getAbility(AbilityNamesies.NO_ABILITY).newInstance();
+			return AbilityNamesies.NO_ABILITY.getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9444,31 +8811,31 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class HealingWish extends Attack {
+	static class HealingWish extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		HealingWish() {
 			super(AttackNamesies.HEALING_WISH, "The user faints. In return, the Pok\u00e9mon taking its place will have its HP restored and status cured.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_SWITCH, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_SWITCH));
 			super.moveTypes.add(MoveType.USER_FAINTS);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class LunarDance extends Attack {
+	static class LunarDance extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LunarDance() {
 			super(AttackNamesies.LUNAR_DANCE, "The user faints. In return, the Pok\u00e9mon taking its place will have its status and HP fully restored.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_SWITCH, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_SWITCH));
 			super.moveTypes.add(MoveType.USER_FAINTS);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Roar extends Attack {
+	static class Roar extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Roar() {
@@ -9528,19 +8895,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Grudge extends Attack {
+	static class Grudge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Grudge() {
 			super(AttackNamesies.GRUDGE, "If the user faints, the user's grudge fully depletes the PP of the opponent's move that knocked it out.", 5, Type.GHOST, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.GRUDGE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.GRUDGE));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class Retaliate extends Attack {
+	static class Retaliate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Retaliate() {
@@ -9555,7 +8922,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CircleThrow extends Attack {
+	static class CircleThrow extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CircleThrow() {
@@ -9615,7 +8982,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Teleport extends Attack {
+	static class Teleport extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Teleport() {
@@ -9635,12 +9002,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RolePlay extends Attack implements ChangeAbilityMove {
+	static class RolePlay extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		RolePlay() {
 			super(AttackNamesies.ROLE_PLAY, "The user mimics the target completely, copying the target's natural Ability.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -9671,14 +9038,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class KnockOff extends Attack implements ItemHolder {
+	static class KnockOff extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 
 		KnockOff() {
 			super(AttackNamesies.KNOCK_OFF, "The user slaps down the target's held item, preventing that item from being used in the battle.", 25, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
@@ -9700,7 +9067,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Whirlwind extends Attack {
+	static class Whirlwind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Whirlwind() {
@@ -9759,13 +9126,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Bestow extends Attack implements ItemHolder {
+	static class Bestow extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
 		Bestow() {
 			super(AttackNamesies.BESTOW, "The user passes its held item to the target when the target isn't holding an item.", 15, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
@@ -9804,14 +9171,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Switcheroo extends Attack implements ItemHolder {
+	static class Switcheroo extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
 		Switcheroo() {
 			super(AttackNamesies.SWITCHEROO, "The user passes its held item to the target when the target isn't holding an item.", 10, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -9851,14 +9218,14 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Trick extends Attack implements ItemHolder {
+	static class Trick extends Attack implements ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
 		Trick() {
 			super(AttackNamesies.TRICK, "The user catches the target off guard and swaps its held item with its own.", 10, Type.PSYCHIC, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -9898,7 +9265,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Memento extends Attack {
+	static class Memento extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Memento() {
@@ -9911,12 +9278,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DestinyBond extends Attack {
+	static class DestinyBond extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DestinyBond() {
 			super(AttackNamesies.DESTINY_BOND, "When this move is used, if the user faints, the Pok\u00e9mon that landed the knockout hit also faints.", 5, Type.GHOST, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.DESTINY_BOND, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.DESTINY_BOND));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -9925,12 +9292,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Camouflage extends Attack implements ChangeTypeMove {
+	static class Camouflage extends Attack implements ChangeTypeMove {
 		private static final long serialVersionUID = 1L;
 
 		Camouflage() {
 			super(AttackNamesies.CAMOUFLAGE, "The user's type is changed depending on its environment, such as at water's edge, in grass, or in a cave.", 20, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
 			super.selfTarget = true;
 		}
 
@@ -9939,7 +9306,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Recycle extends Attack {
+	static class Recycle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Recycle() {
@@ -9960,7 +9327,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PartingShot extends Attack {
+	static class PartingShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PartingShot() {
@@ -10003,7 +9370,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class UTurn extends Attack {
+	static class UTurn extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		UTurn() {
@@ -10040,7 +9407,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BatonPass extends Attack {
+	static class BatonPass extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BatonPass() {
@@ -10083,12 +9450,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PerishSong extends Attack {
+	static class PerishSong extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PerishSong() {
 			super(AttackNamesies.PERISH_SONG, "Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.PERISH_SONG, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.PERISH_SONG));
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -10108,7 +9475,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DragonTail extends Attack {
+	static class DragonTail extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DragonTail() {
@@ -10168,7 +9535,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FoulPlay extends Attack {
+	static class FoulPlay extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FoulPlay() {
@@ -10186,17 +9553,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Embargo extends Attack {
+	static class Embargo extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Embargo() {
 			super(AttackNamesies.EMBARGO, "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", 15, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.EMBARGO, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.EMBARGO));
 		}
 	}
 
-	private static class NaturePower extends Attack {
+	static class NaturePower extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NaturePower() {
@@ -10215,13 +9582,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Entrainment extends Attack implements ChangeAbilityMove {
+	static class Entrainment extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		Entrainment() {
 			super(AttackNamesies.ENTRAINMENT, "The user dances with an odd rhythm that compels the target to mimic it, making the target's Ability the same as the user's.", 15, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -10249,24 +9616,24 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagicRoom extends Attack {
+	static class MagicRoom extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagicRoom() {
 			super(AttackNamesies.MAGIC_ROOM, "The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MAGIC_ROOM, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.MAGIC_ROOM));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class WorrySeed extends Attack implements ChangeAbilityMove {
+	static class WorrySeed extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		WorrySeed() {
 			super(AttackNamesies.WORRY_SEED, "A seed that causes worry is planted on the target. It prevents sleep by making its Ability Insomnia.", 10, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -10282,7 +9649,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return Ability.getAbility(AbilityNamesies.INSOMNIA).newInstance();
+			return AbilityNamesies.INSOMNIA.getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -10290,13 +9657,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SimpleBeam extends Attack implements ChangeAbilityMove {
+	static class SimpleBeam extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 
 		SimpleBeam() {
 			super(AttackNamesies.SIMPLE_BEAM, "The user's mysterious psychic wave changes the target's Ability to Simple.", 15, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -10312,7 +9679,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return Ability.getAbility(AbilityNamesies.SIMPLE).newInstance();
+			return AbilityNamesies.SIMPLE.getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -10320,7 +9687,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class SkillSwap extends Attack implements ChangeAbilityMove {
+	static class SkillSwap extends Attack implements ChangeAbilityMove {
 		private static final long serialVersionUID = 1L;
 		private Ability ability;
 		
@@ -10338,7 +9705,7 @@ public abstract class Attack implements Serializable {
 
 		SkillSwap() {
 			super(AttackNamesies.SKILL_SWAP, "The user employs its psychic power to exchange Abilities with the target.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
@@ -10365,7 +9732,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VoltSwitch extends Attack {
+	static class VoltSwitch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VoltSwitch() {
@@ -10401,7 +9768,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class RelicSong extends Attack {
+	static class RelicSong extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		RelicSong() {
@@ -10415,7 +9782,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Snarl extends Attack {
+	static class Snarl extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Snarl() {
@@ -10428,7 +9795,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class IceBurn extends Attack implements MultiTurnMove {
+	static class IceBurn extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		IceBurn() {
@@ -10458,7 +9825,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VCreate extends Attack {
+	static class VCreate extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VCreate() {
@@ -10474,7 +9841,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Surf extends Attack {
+	static class Surf extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Surf() {
@@ -10484,7 +9851,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VoltTackle extends Attack implements RecoilMove {
+	static class VoltTackle extends Attack implements RecoilMove {
 		private static final long serialVersionUID = 1L;
 
 		VoltTackle() {
@@ -10507,7 +9874,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FocusBlast extends Attack {
+	static class FocusBlast extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FocusBlast() {
@@ -10520,7 +9887,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DiamondStorm extends Attack {
+	static class DiamondStorm extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DiamondStorm() {
@@ -10534,7 +9901,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Moonblast extends Attack {
+	static class Moonblast extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Moonblast() {
@@ -10547,7 +9914,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class LandsWrath extends Attack {
+	static class LandsWrath extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		LandsWrath() {
@@ -10558,7 +9925,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PhantomForce extends Attack implements MultiTurnMove, AccuracyBypassEffect {
+	static class PhantomForce extends Attack implements MultiTurnMove, AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		PhantomForce() {
@@ -10596,7 +9963,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class OblivionWing extends Attack {
+	static class OblivionWing extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		OblivionWing() {
@@ -10608,7 +9975,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Geomancy extends Attack implements MultiTurnMove {
+	static class Geomancy extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
 		Geomancy() {
@@ -10637,7 +10004,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Boomburst extends Attack {
+	static class Boomburst extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Boomburst() {
@@ -10648,7 +10015,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PlayRough extends Attack {
+	static class PlayRough extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PlayRough() {
@@ -10661,12 +10028,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class CraftyShield extends Attack {
+	static class CraftyShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		CraftyShield() {
 			super(AttackNamesies.CRAFTY_SHIELD, "The user protects itself and its allies from status moves with a mysterious power. This does not stop moves that do damage.", 10, Type.FAIRY, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CRAFTY_SHIELD, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.CRAFTY_SHIELD));
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -10676,7 +10043,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Nuzzle extends Attack {
+	static class Nuzzle extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Nuzzle() {
@@ -10688,7 +10055,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DrainingKiss extends Attack {
+	static class DrainingKiss extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DrainingKiss() {
@@ -10701,7 +10068,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FairyWind extends Attack {
+	static class FairyWind extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FairyWind() {
@@ -10711,7 +10078,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ParabolicCharge extends Attack {
+	static class ParabolicCharge extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ParabolicCharge() {
@@ -10722,7 +10089,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DisarmingVoice extends Attack {
+	static class DisarmingVoice extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DisarmingVoice() {
@@ -10732,7 +10099,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FreezeDry extends Attack implements AdvantageMultiplierMove {
+	static class FreezeDry extends Attack implements AdvantageMultiplierMove {
 		private static final long serialVersionUID = 1L;
 
 		FreezeDry() {
@@ -10755,7 +10122,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class FlyingPress extends Attack implements AdvantageMultiplierMove {
+	static class FlyingPress extends Attack implements AdvantageMultiplierMove {
 		private static final long serialVersionUID = 1L;
 
 		FlyingPress() {
@@ -10770,7 +10137,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class TopsyTurvy extends Attack {
+	static class TopsyTurvy extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		TopsyTurvy() {
@@ -10787,7 +10154,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PlayNice extends Attack {
+	static class PlayNice extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PlayNice() {
@@ -10798,7 +10165,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class EerieImpulse extends Attack {
+	static class EerieImpulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		EerieImpulse() {
@@ -10808,29 +10175,29 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MistyTerrain extends Attack {
+	static class MistyTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MistyTerrain() {
 			super(AttackNamesies.MISTY_TERRAIN, "The user covers the ground under everyone's feet with mist for five turns. This protects Pok\u00e9mon on the ground from status conditions.", 10, Type.FAIRY, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MISTY_TERRAIN, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.MISTY_TERRAIN));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class FairyLock extends Attack {
+	static class FairyLock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FairyLock() {
 			super(AttackNamesies.FAIRY_LOCK, "By locking down the battlefield, the user keeps all Pok\u00e9mon from fleeing during the next turn.", 10, Type.FAIRY, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.FAIRY_LOCK, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.FAIRY_LOCK));
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
 	}
 
-	private static class AromaticMist extends Attack {
+	static class AromaticMist extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		AromaticMist() {
@@ -10840,7 +10207,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class BabyDollEyes extends Attack {
+	static class BabyDollEyes extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		BabyDollEyes() {
@@ -10851,7 +10218,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PetalBlizzard extends Attack {
+	static class PetalBlizzard extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PetalBlizzard() {
@@ -10862,18 +10229,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class GrassyTerrain extends Attack {
+	static class GrassyTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		GrassyTerrain() {
 			super(AttackNamesies.GRASSY_TERRAIN, "The user turns the ground under everyone's feet to grass for five turns. This restores the HP of Pok\u00e9mon on the ground a little every turn.", 10, Type.GRASS, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.GRASSY_TERRAIN, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.GRASSY_TERRAIN));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class FlowerShield extends Attack {
+	static class FlowerShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		FlowerShield() {
@@ -10883,7 +10250,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class NobleRoar extends Attack {
+	static class NobleRoar extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		NobleRoar() {
@@ -10895,19 +10262,19 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Powder extends Attack {
+	static class Powder extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Powder() {
 			super(AttackNamesies.POWDER, "The user covers the target in a powder that explodes and damages the target if it uses a Fire-type move.", 20, Type.BUG, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.POWDER, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.POWDER));
 			super.moveTypes.add(MoveType.POWDER);
 			super.priority = 1;
 		}
 	}
 
-	private static class Rototiller extends Attack {
+	static class Rototiller extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Rototiller() {
@@ -10918,7 +10285,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class WaterShuriken extends Attack implements MultiStrikeMove {
+	static class WaterShuriken extends Attack implements MultiStrikeMove {
 		private static final long serialVersionUID = 1L;
 
 		WaterShuriken() {
@@ -10955,12 +10322,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MatBlock extends Attack {
+	static class MatBlock extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MatBlock() {
 			super(AttackNamesies.MAT_BLOCK, "Using a pulled-up mat as a shield, the user protects itself and its allies from damaging moves. This does not stop status moves.", 15, Type.FIGHTING, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MAT_BLOCK, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.MAT_BLOCK));
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.selfTarget = true;
 		}
@@ -10975,7 +10342,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MysticalFire extends Attack {
+	static class MysticalFire extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MysticalFire() {
@@ -10986,30 +10353,30 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Infestation extends Attack {
+	static class Infestation extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Infestation() {
 			super(AttackNamesies.INFESTATION, "The target is infested and attacked for four to five turns. The target can't flee during this time.", 20, Type.BUG, MoveCategory.SPECIAL);
 			super.power = 20;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.INFESTATION, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.INFESTATION));
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	private static class Electrify extends Attack {
+	static class Electrify extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Electrify() {
 			super(AttackNamesies.ELECTRIFY, "If the target is electrified before it uses a move during that turn, the target's move becomes Electric type.", 20, Type.ELECTRIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.ELECTRIFIED, EffectType.POKEMON));
+			super.effects.add(Effect.getEffect(EffectNamesies.ELECTRIFIED));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.priority = 1;
 		}
 	}
 
-	private static class FellStinger extends Attack implements MurderEffect {
+	static class FellStinger extends Attack implements MurderEffect {
 		private static final long serialVersionUID = 1L;
 
 		FellStinger() {
@@ -11024,7 +10391,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class MagneticFlux extends Attack {
+	static class MagneticFlux extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		MagneticFlux() {
@@ -11035,17 +10402,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class StickyWeb extends Attack {
+	static class StickyWeb extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		StickyWeb() {
 			super(AttackNamesies.STICKY_WEB, "The user weaves a sticky net around the opposing team, which lowers their Speed stat upon switching into battle.", 20, Type.BUG, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.STICKY_WEB, EffectType.TEAM));
+			super.effects.add(Effect.getEffect(EffectNamesies.STICKY_WEB));
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class Belch extends Attack {
+	static class Belch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Belch() {
@@ -11065,7 +10432,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class VenomDrench extends Attack {
+	static class VenomDrench extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		VenomDrench() {
@@ -11086,18 +10453,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class ElectricTerrain extends Attack {
+	static class ElectricTerrain extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		ElectricTerrain() {
 			super(AttackNamesies.ELECTRIC_TERRAIN, "The user electrifies the ground under everyone's feet for five turns. Pok\u00e9mon on the ground no longer fall asleep.", 10, Type.ELECTRIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.ELECTRIC_TERRAIN, EffectType.BATTLE));
+			super.effects.add(Effect.getEffect(EffectNamesies.ELECTRIC_TERRAIN));
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
 
-	private static class PowerUpPunch extends Attack {
+	static class PowerUpPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PowerUpPunch() {
@@ -11111,7 +10478,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Confide extends Attack {
+	static class Confide extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Confide() {
@@ -11122,7 +10489,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Cut extends Attack {
+	static class Cut extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Cut() {
@@ -11133,7 +10500,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class DazzlingGleam extends Attack {
+	static class DazzlingGleam extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		DazzlingGleam() {
@@ -11143,7 +10510,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class Strength extends Attack {
+	static class Strength extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		Strength() {
@@ -11154,7 +10521,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class OriginPulse extends Attack {
+	static class OriginPulse extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		OriginPulse() {
@@ -11164,7 +10531,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	private static class PrecipiceBlades extends Attack {
+	static class PrecipiceBlades extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		PrecipiceBlades() {

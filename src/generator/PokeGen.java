@@ -1,6 +1,6 @@
 package generator;
 
-import battle.Attack;
+import battle.attack.Attack;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
@@ -8,11 +8,11 @@ import battle.effect.generic.Weather;
 import item.Item;
 import main.Global;
 import main.Type;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
-import pokemon.Ability;
+import pokemon.ability.AbilityNamesies;
+import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
+import item.ItemNamesies;
+import pokemon.ability.Ability;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -34,36 +34,27 @@ import java.util.Set;
 class PokeGen {
 	private static final int TM_BASE_INDEX = 2000;
 
-	private static final String POKEMON_EFFECT_PATH = Folder.GENERIC_EFFECT + "PokemonEffect.java";
-	private static final String TEAM_EFFECT_PATH = Folder.GENERIC_EFFECT + "TeamEffect.java";
-	private static final String BATTLE_EFFECT_PATH = Folder.GENERIC_EFFECT + "BattleEffect.java";
-	private static final String WEATHER_PATH = Folder.GENERIC_EFFECT + "Weather.java";
-	
-	private static final String MOVE_PATH = Folder.BATTLE + "Attack.java";
-	private static final String ABILITY_PATH = Folder.POKEMON + "Ability.java";
-	private static final String ITEM_PATH = Folder.ITEMS + "Item.java";
-	private static final String ITEM_TILES_FOLDER = Folder.ITEM_TILES;
-
-	// TODO: Honestly these should all be in the subfolder of rec instead of just chillin all over the main folder
 	private enum Generator {
-		ATTACK_GEN("Moves.txt", MOVE_PATH, Attack.class, AttackNamesies.class, false, true),
-		POKEMON_EFFECT_GEN("PokemonEffects.txt", POKEMON_EFFECT_PATH, PokemonEffect.class, EffectNamesies.class, true, true),
-		TEAM_EFFECT_GEN("TeamEffects.txt", TEAM_EFFECT_PATH, TeamEffect.class, EffectNamesies.class, true, true),
-		BATTLE_EFFECT_GEN("BattleEffects.txt", BATTLE_EFFECT_PATH, BattleEffect.class, EffectNamesies.class, true, true),
-		WEATHER_GEN("Weather.txt", WEATHER_PATH, Weather.class, EffectNamesies.class, true, true),
-		ABILITY_GEN("Abilities.txt", ABILITY_PATH, Ability.class, AbilityNamesies.class, true, true),
-		ITEM_GEN("Items.txt", ITEM_PATH, Item.class, ItemNamesies.class, false, true);
+		ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, AttackNamesies.class, false, true),
+		POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, EffectNamesies.class, true, true),
+		TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, EffectNamesies.class, true, true),
+		BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, EffectNamesies.class, true, true),
+		WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, Weather.class, EffectNamesies.class, true, true),
+		ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, AbilityNamesies.class, true, true),
+		ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, ItemNamesies.class, false, true);
 		
 		private final String inputPath;
 		private final String outputPath;
+		private final String outputFolder;
 		private final String superClassName;
 		private final Class namesiesClass;
 		private final boolean activate;
 		private final boolean mappity;
 		
-		Generator(String inputPath, String outputPath, Class superClass, Class namesiesClass, boolean activate, boolean mappity) {
-			this.inputPath = Folder.GENERATOR + inputPath;
-			this.outputPath = outputPath;
+		Generator(String inputFileName, String outputFolder, Class superClass, Class namesiesClass, boolean activate, boolean mappity) {
+			this.inputPath = Folder.GENERATOR + inputFileName;
+			this.outputPath = outputFolder + superClass.getSimpleName() + ".java";
+			this.outputFolder = outputFolder;
 			this.superClassName = superClass.getSimpleName();
 			this.namesiesClass = namesiesClass;
 			this.activate = activate;
@@ -73,9 +64,13 @@ class PokeGen {
 		public String getInputPath() {
 			return this.inputPath;
 		}
-		
+
 		public String getOutputPath() {
 			return this.outputPath;
+		}
+
+		public String getOutputFolder() {
+			return this.outputFolder;
 		}
 		
 		public String getSuperClassName() {
@@ -109,7 +104,7 @@ class PokeGen {
 
 			final Class namesiesClass = generator.getNamesiesClass();
 			if (!namesiesMap.containsKey(namesiesClass)) {
-				namesiesMap.put(namesiesClass, new NamesiesGen(namesiesClass));
+				namesiesMap.put(namesiesClass, new NamesiesGen(generator.getOutputFolder(), namesiesClass));
 			}
 
 			this.namesiesGen = namesiesMap.get(namesiesClass);
@@ -139,25 +134,9 @@ class PokeGen {
 		return fields;
 	}
 	
-	private StringBuilder startGen() {
-		StringBuilder out = StuffGen.startGen(this.currentGen.getOutputPath());
-		out.append("\n\t\t// List all of the classes we are loading\n");
+	private void addClass(StringBuilder classes, String name, String className, Map<String, String> fields) {
+		this.namesiesGen.createNamesies(name, className);
 		
-		return out;
-	}
-	
-	private void addClass(StringBuilder out, StringBuilder classes, String name, String className, Map<String, String> fields) {
-		this.namesiesGen.createNamesies(name);
-		
-		// Mappity map
-		if (this.currentGen.isMappity()) {
-			out.append("\t\tmap.put(\"")
-					.append(name)
-					.append("\", new ")
-					.append(className)
-					.append("());\n");
-		}
-
 		List<String> interfaces = new ArrayList<>();
 		String additionalMethods = getAdditionalMethods(fields, interfaces);
 		String constructor = getConstructor(fields);
@@ -186,7 +165,7 @@ class PokeGen {
 	}
 	
 	private void superGen() {
-		StringBuilder out = startGen();
+		StringBuilder out = StuffGen.startGen(this.currentGen.getOutputPath());
 
 		Scanner in = FileIO.openFile(this.currentGen.getInputPath());
 		readFileFormat(in);
@@ -213,7 +192,7 @@ class PokeGen {
 			// Read in all of the fields
 			Map<String, String> fields = readFields(in, name, className, index);
 			
-			addClass(out, classes, name, className, fields);
+			addClass(classes, name, className, fields);
 			
 			if (this.currentGen == Generator.ITEM_GEN) {
 				addImageIndex(indexOut, index, name, className.toLowerCase());
@@ -221,21 +200,10 @@ class PokeGen {
 			
 			index++;
 		}
-		
-		switch (this.currentGen) {
-			case ATTACK_GEN:
-				out.append("\n\t\tfor (String s : map.keySet()) {\n\t\t\tmoveNames.add(s);\n\t\t}\n");
-				break;
-			case ITEM_GEN:
-				addTMs(out, classes, indexOut);
-				out.append("\n\t\tprocessIncenseItems();\n");
-				FileIO.writeToFile(ITEM_TILES_FOLDER + "index.txt", indexOut);
-			default:
-				break;
-		}
-		
-		if (this.currentGen.isMappity()) {
-			out.append("\t}\n\n");	
+
+		if (this.currentGen == Generator.ITEM_GEN) {
+			addTMs(classes, indexOut);
+			FileIO.writeToFile(Folder.ITEM_TILES + "index.txt", indexOut);
 		}
 		
 		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n") // DON'T DO IT
@@ -399,7 +367,7 @@ class PokeGen {
 		return methods.toString();
 	}
 	
-	private void addTMs(StringBuilder out, StringBuilder classes, StringBuilder indexOut) {
+	private void addTMs(StringBuilder classes, StringBuilder indexOut) {
 		if (this.currentGen != Generator.ITEM_GEN) {
 			Global.error("Can only add TMs for the Item class");
 		}
@@ -419,7 +387,7 @@ class PokeGen {
 			String attackName = in.nextLine().trim();
 			String className = PokeString.writeClassName(attackName);
 
-			Attack attack = Attack.getAttack(AttackNamesies.getValueOf(attackName));
+			Attack attack = AttackNamesies.getValueOf(attackName).getAttack();
 
 			String itemName = attackName + " TM";
 			className += "TM";
@@ -431,12 +399,12 @@ class PokeGen {
 			fields.put("Desc", attack.getDescription());
 			fields.put("TM", attackName);
 
-			addClass(out, classes, itemName, className, fields);
+			addClass(classes, itemName, className, fields);
 		}
 	}
 	
 	private static void addImageIndex(StringBuilder indexOut, int index, String name, String imageName) {
-		File imageFile = new File(ITEM_TILES_FOLDER + imageName + ".png");
+		File imageFile = new File(Folder.ITEM_TILES + imageName + ".png");
 		if (!imageFile.exists()) {
 			Global.error("Image for " + name + " does not exist." + imageFile.getAbsolutePath());
 		}

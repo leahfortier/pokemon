@@ -1,14 +1,12 @@
 package pokemon;
 
-import battle.Attack;
-import battle.Move;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import item.Item;
+import item.ItemNamesies;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
 import main.Global;
-import namesies.AttackNamesies;
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -204,7 +202,7 @@ public class Breeding {
 
 		for (int i = 0; i < numMoves; i++) {
 			final AttackNamesies namesies = babyMovesNamesies.get(startingIndex + i);
-			babyMoves.add(new Move(Attack.getAttack(namesies)));
+			babyMoves.add(new Move(namesies.getAttack()));
 		}
 		
 		return babyMoves;

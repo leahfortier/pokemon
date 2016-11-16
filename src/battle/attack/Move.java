@@ -1,5 +1,6 @@
-package battle;
+package battle.attack;
 
+import battle.Battle;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
@@ -7,7 +8,6 @@ import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.AttackNamesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;
@@ -133,14 +133,14 @@ public class Move implements Serializable {
 		return true;
 	}
 	
-	static Move selectOpponentMove(Battle b, ActivePokemon p) {
+	public static Move selectOpponentMove(Battle b, ActivePokemon p) {
 		if (forceMove(b, p)) {
 			return p.getMove();
 		}
 		
 		List<Move> usable = getUsableMoves(b, p);
 		if (usable.size() == 0) {
-			return new Move(Attack.getAttack(AttackNamesies.STRUGGLE));
+			return new Move(AttackNamesies.STRUGGLE.getAttack());
 		}
 		
 		return chooseMove(usable);
@@ -174,7 +174,7 @@ public class Move implements Serializable {
 		}
 
 		if (p.user() && getUsableMoves(b, p).size() == 0) {
-			p.setMove(new Move(Attack.getAttack(AttackNamesies.STRUGGLE)));
+			p.setMove(new Move(AttackNamesies.STRUGGLE.getAttack()));
 			return true;
 		}
 		

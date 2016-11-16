@@ -1,10 +1,11 @@
 package item;
 
-import battle.Attack;
 import battle.Battle;
-import battle.Move;
-import battle.MoveCategory;
-import battle.MoveType;
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
+import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.RepellingEffect;
 import battle.effect.StallingEffect;
@@ -31,11 +32,13 @@ import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
-import battle.effect.generic.TeamEffect;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
+import item.bag.BagCategory;
+import item.bag.BattleBagCategory;
 import item.berry.Berry;
 import item.berry.GainableEffectBerry;
 import item.berry.HealthTriggeredBerry;
@@ -58,38 +61,27 @@ import main.Global;
 import main.Type;
 import map.TerrainType;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
-import namesies.PokemonNamesies;
-import pokemon.Ability;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.Evolution;
 import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.ability.Ability;
+import pokemon.ability.AbilityNamesies;
 import trainer.CharacterData;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
-import util.StringUtils;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public abstract class Item implements Comparable<Item>, Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private static Map<String, Item> map; // TODO: change the key to namesies -- enum map?
 
 	protected ItemNamesies namesies;
 	protected String name;
@@ -98,17 +90,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 	private List<BattleBagCategory> battleBagCategories;
 	private int price;
 	private int imageIndex;
-
-	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-		ois.defaultReadObject();
-		synchronized(Item.class) {
-			if (map == null) {
-				loadItems();
-			}
-
-			map.put(this.getName(), this);
-		}
-	}
 
 	public Item(ItemNamesies name, String description, BagCategory category, int index) {
 		this.namesies = name;
@@ -166,33 +147,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 	}
 
 	public static Item noneItem() {
-		return getItem(ItemNamesies.NO_ITEM);
-	}
-
-	// TODO: Delete this
-	public static Item getItemFromName(String itemName) {
-		return getItem(ItemNamesies.getValueOf(itemName));
-	}
-
-	public static Item getItem(ItemNamesies itemNamesies) {
-		String itemName = itemNamesies.getName();
-		if (!isItem(itemName)) {
-			Global.error("No such Item " + itemName);
-		}
-
-		return map.get(itemName);
-	}
-
-	public static boolean isItem(String itemName) {
-		if (map == null) {
-			loadItems();
-		}
-
-		if (StringUtils.isNullOrEmpty(itemName)) {
-			return false;
-		}
-
-		return map.containsKey(itemName);
+		return ItemNamesies.NO_ITEM.getItem();
 	}
 
 	public int hashCode() {
@@ -200,440 +155,23 @@ public abstract class Item implements Comparable<Item>, Serializable {
 	}
 
 	private static void processIncenseItems() {
-		Set<String> itemStringKeySet = map.keySet();
-		for (String itemString : itemStringKeySet) {
-			Item item = map.get(itemString);
+		for (ItemNamesies itemNamesies : ItemNamesies.values()) {
+			Item item = itemNamesies.getItem();
 			if (item instanceof IncenseItem) {
-				IncenseItem incense = (IncenseItem) item;
-				PokemonInfo.addIncenseBaby(incense.getBaby());
+				PokemonInfo.addIncenseBaby(((IncenseItem)item).getBaby());
 			}
 		}
 	}
 
+	// TODO
 	public static void loadItems() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
-		// List all of the classes we are loading
-		map.put("No Item", new NoItem());
-		map.put("Syrup", new Syrup());
-		map.put("Bicycle", new Bicycle());
-		map.put("Surfboard", new Surfboard());
-		map.put("Fishing Rod", new FishingRod());
-		map.put("Absorb Bulb", new AbsorbBulb());
-		map.put("Air Balloon", new AirBalloon());
-		map.put("Amulet Coin", new AmuletCoin());
-		map.put("Big Root", new BigRoot());
-		map.put("Binding Band", new BindingBand());
-		map.put("Black Sludge", new BlackSludge());
-		map.put("Bright Powder", new BrightPowder());
-		map.put("Cell Battery", new CellBattery());
-		map.put("Choice Band", new ChoiceBand());
-		map.put("Choice Scarf", new ChoiceScarf());
-		map.put("Choice Specs", new ChoiceSpecs());
-		map.put("Cleanse Tag", new CleanseTag());
-		map.put("Damp Rock", new DampRock());
-		map.put("Heat Rock", new HeatRock());
-		map.put("Icy Rock", new IcyRock());
-		map.put("Smooth Rock", new SmoothRock());
-		map.put("Eject Button", new EjectButton());
-		map.put("Destiny Knot", new DestinyKnot());
-		map.put("Expert Belt", new ExpertBelt());
-		map.put("Flame Orb", new FlameOrb());
-		map.put("Toxic Orb", new ToxicOrb());
-		map.put("Float Stone", new FloatStone());
-		map.put("Focus Band", new FocusBand());
-		map.put("Focus Sash", new FocusSash());
-		map.put("Grip Claw", new GripClaw());
-		map.put("Adamant Orb", new AdamantOrb());
-		map.put("Lustrous Orb", new LustrousOrb());
-		map.put("Griseous Orb", new GriseousOrb());
-		map.put("Iron Ball", new IronBall());
-		map.put("Lagging Tail", new LaggingTail());
-		map.put("Life Orb", new LifeOrb());
-		map.put("Light Ball", new LightBall());
-		map.put("Light Clay", new LightClay());
-		map.put("Lucky Egg", new LuckyEgg());
-		map.put("Lucky Punch", new LuckyPunch());
-		map.put("Luminous Moss", new LuminousMoss());
-		map.put("Macho Brace", new MachoBrace());
-		map.put("Mental Herb", new MentalHerb());
-		map.put("Metal Powder", new MetalPowder());
-		map.put("Metronome", new Metronome());
-		map.put("Muscle Band", new MuscleBand());
-		map.put("Power Anklet", new PowerAnklet());
-		map.put("Power Band", new PowerBand());
-		map.put("Power Belt", new PowerBelt());
-		map.put("Power Bracer", new PowerBracer());
-		map.put("Power Lens", new PowerLens());
-		map.put("Power Weight", new PowerWeight());
-		map.put("Quick Claw", new QuickClaw());
-		map.put("Quick Powder", new QuickPowder());
-		map.put("Red Card", new RedCard());
-		map.put("Ring Target", new RingTarget());
-		map.put("Rocky Helmet", new RockyHelmet());
-		map.put("Safety Goggles", new SafetyGoggles());
-		map.put("Scope Lens", new ScopeLens());
-		map.put("Shed Shell", new ShedShell());
-		map.put("Shell Bell", new ShellBell());
-		map.put("Smoke Ball", new SmokeBall());
-		map.put("Snowball", new Snowball());
-		map.put("Soul Dew", new SoulDew());
-		map.put("Stick", new Stick());
-		map.put("Sticky Barb", new StickyBarb());
-		map.put("Thick Club", new ThickClub());
-		map.put("Weakness Policy", new WeaknessPolicy());
-		map.put("White Herb", new WhiteHerb());
-		map.put("Wide Lens", new WideLens());
-		map.put("Wise Glasses", new WiseGlasses());
-		map.put("Zoom Lens", new ZoomLens());
-		map.put("Full Incense", new FullIncense());
-		map.put("Lax Incense", new LaxIncense());
-		map.put("Luck Incense", new LuckIncense());
-		map.put("Odd Incense", new OddIncense());
-		map.put("Pure Incense", new PureIncense());
-		map.put("Rock Incense", new RockIncense());
-		map.put("Rose Incense", new RoseIncense());
-		map.put("Sea Incense", new SeaIncense());
-		map.put("Wave Incense", new WaveIncense());
-		map.put("Draco Plate", new DracoPlate());
-		map.put("Dread Plate", new DreadPlate());
-		map.put("Earth Plate", new EarthPlate());
-		map.put("Fist Plate", new FistPlate());
-		map.put("Flame Plate", new FlamePlate());
-		map.put("Icicle Plate", new IciclePlate());
-		map.put("Insect Plate", new InsectPlate());
-		map.put("Iron Plate", new IronPlate());
-		map.put("Meadow Plate", new MeadowPlate());
-		map.put("Mind Plate", new MindPlate());
-		map.put("Pixie Plate", new PixiePlate());
-		map.put("Sky Plate", new SkyPlate());
-		map.put("Splash Plate", new SplashPlate());
-		map.put("Spooky Plate", new SpookyPlate());
-		map.put("Stone Plate", new StonePlate());
-		map.put("Toxic Plate", new ToxicPlate());
-		map.put("Zap Plate", new ZapPlate());
-		map.put("Burn Drive", new BurnDrive());
-		map.put("Chill Drive", new ChillDrive());
-		map.put("Douse Drive", new DouseDrive());
-		map.put("Shock Drive", new ShockDrive());
-		map.put("Fire Gem", new FireGem());
-		map.put("Water Gem", new WaterGem());
-		map.put("Electric Gem", new ElectricGem());
-		map.put("Grass Gem", new GrassGem());
-		map.put("Ice Gem", new IceGem());
-		map.put("Fighting Gem", new FightingGem());
-		map.put("Poison Gem", new PoisonGem());
-		map.put("Ground Gem", new GroundGem());
-		map.put("Flying Gem", new FlyingGem());
-		map.put("Psychic Gem", new PsychicGem());
-		map.put("Bug Gem", new BugGem());
-		map.put("Rock Gem", new RockGem());
-		map.put("Ghost Gem", new GhostGem());
-		map.put("Dragon Gem", new DragonGem());
-		map.put("Dark Gem", new DarkGem());
-		map.put("Steel Gem", new SteelGem());
-		map.put("Normal Gem", new NormalGem());
-		map.put("Fairy Gem", new FairyGem());
-		map.put("Leftovers", new Leftovers());
-		map.put("Black Belt", new BlackBelt());
-		map.put("Black Glasses", new BlackGlasses());
-		map.put("Charcoal", new Charcoal());
-		map.put("Dragon Fang", new DragonFang());
-		map.put("Hard Stone", new HardStone());
-		map.put("Magnet", new Magnet());
-		map.put("Metal Coat", new MetalCoat());
-		map.put("Miracle Seed", new MiracleSeed());
-		map.put("Mystic Water", new MysticWater());
-		map.put("NeverMeltIce", new NeverMeltIce());
-		map.put("Poison Barb", new PoisonBarb());
-		map.put("Sharp Beak", new SharpBeak());
-		map.put("Silk Scarf", new SilkScarf());
-		map.put("Silver Powder", new SilverPowder());
-		map.put("Soft Sand", new SoftSand());
-		map.put("Spell Tag", new SpellTag());
-		map.put("Twisted Spoon", new TwistedSpoon());
-		map.put("Dawn Stone", new DawnStone());
-		map.put("Deep Sea Scale", new DeepSeaScale());
-		map.put("Deep Sea Tooth", new DeepSeaTooth());
-		map.put("Dragon Scale", new DragonScale());
-		map.put("Dubious Disc", new DubiousDisc());
-		map.put("Dusk Stone", new DuskStone());
-		map.put("Electirizer", new Electirizer());
-		map.put("Fire Stone", new FireStone());
-		map.put("King's Rock", new KingsRock());
-		map.put("Leaf Stone", new LeafStone());
-		map.put("Magmarizer", new Magmarizer());
-		map.put("Moon Stone", new MoonStone());
-		map.put("Oval Stone", new OvalStone());
-		map.put("Everstone", new Everstone());
-		map.put("Prism Scale", new PrismScale());
-		map.put("Protector", new Protector());
-		map.put("Razor Claw", new RazorClaw());
-		map.put("Razor Fang", new RazorFang());
-		map.put("Reaper Cloth", new ReaperCloth());
-		map.put("Sachet", new Sachet());
-		map.put("Shiny Stone", new ShinyStone());
-		map.put("Sun Stone", new SunStone());
-		map.put("Thunder Stone", new ThunderStone());
-		map.put("Up-Grade", new UpGrade());
-		map.put("Water Stone", new WaterStone());
-		map.put("Whipped Dream", new WhippedDream());
-		map.put("Antidote", new Antidote());
-		map.put("Awakening", new Awakening());
-		map.put("Burn Heal", new BurnHeal());
-		map.put("Ice Heal", new IceHeal());
-		map.put("Paralyze Heal", new ParalyzeHeal());
-		map.put("Full Heal", new FullHeal());
-		map.put("Full Restore", new FullRestore());
-		map.put("Elixir", new Elixir());
-		map.put("Max Elixir", new MaxElixir());
-		map.put("Ether", new Ether());
-		map.put("Max Ether", new MaxEther());
-		map.put("Berry Juice", new BerryJuice());
-		map.put("Sweet Heart", new SweetHeart());
-		map.put("Potion", new Potion());
-		map.put("Energy Powder", new EnergyPowder());
-		map.put("Fresh Water", new FreshWater());
-		map.put("Super Potion", new SuperPotion());
-		map.put("Soda Pop", new SodaPop());
-		map.put("Lemonade", new Lemonade());
-		map.put("Moomoo Milk", new MoomooMilk());
-		map.put("Energy Root", new EnergyRoot());
-		map.put("Hyper Potion", new HyperPotion());
-		map.put("Max Potion", new MaxPotion());
-		map.put("Revive", new Revive());
-		map.put("Max Revive", new MaxRevive());
-		map.put("Revival Herb", new RevivalHerb());
-		map.put("Sacred Ash", new SacredAsh());
-		map.put("Dire Hit", new DireHit());
-		map.put("Guard Spec.", new GuardSpec());
-		map.put("X Accuracy", new XAccuracy());
-		map.put("X Attack", new XAttack());
-		map.put("X Defend", new XDefend());
-		map.put("X Special", new XSpecial());
-		map.put("X Sp. Def", new XSpDef());
-		map.put("X Speed", new XSpeed());
-		map.put("HP Up", new HPUp());
-		map.put("Protein", new Protein());
-		map.put("Iron", new Iron());
-		map.put("Calcium", new Calcium());
-		map.put("Zinc", new Zinc());
-		map.put("Carbos", new Carbos());
-		map.put("Health Wing", new HealthWing());
-		map.put("Muscle Wing", new MuscleWing());
-		map.put("Resist Wing", new ResistWing());
-		map.put("Genius Wing", new GeniusWing());
-		map.put("Clever Wing", new CleverWing());
-		map.put("Swift Wing", new SwiftWing());
-		map.put("PP Max", new PPMax());
-		map.put("PP Up", new PPUp());
-		map.put("Rare Candy", new RareCandy());
-		map.put("Cherish Ball", new CherishBall());
-		map.put("Dive Ball", new DiveBall());
-		map.put("Dusk Ball", new DuskBall());
-		map.put("Fast Ball", new FastBall());
-		map.put("Great Ball", new GreatBall());
-		map.put("Heal Ball", new HealBall());
-		map.put("Heavy Ball", new HeavyBall());
-		map.put("Level Ball", new LevelBall());
-		map.put("Love Ball", new LoveBall());
-		map.put("Lure Ball", new LureBall());
-		map.put("Luxury Ball", new LuxuryBall());
-		map.put("Master Ball", new MasterBall());
-		map.put("Moon Ball", new MoonBall());
-		map.put("Nest Ball", new NestBall());
-		map.put("Net Ball", new NetBall());
-		map.put("Pok\u00e9 Ball", new PokeBall());
-		map.put("Premier Ball", new PremierBall());
-		map.put("Quick Ball", new QuickBall());
-		map.put("Repeat Ball", new RepeatBall());
-		map.put("Safari Ball", new SafariBall());
-		map.put("Timer Ball", new TimerBall());
-		map.put("Ultra Ball", new UltraBall());
-		map.put("Cheri Berry", new CheriBerry());
-		map.put("Chesto Berry", new ChestoBerry());
-		map.put("Pecha Berry", new PechaBerry());
-		map.put("Rawst Berry", new RawstBerry());
-		map.put("Aspear Berry", new AspearBerry());
-		map.put("Leppa Berry", new LeppaBerry());
-		map.put("Oran Berry", new OranBerry());
-		map.put("Persim Berry", new PersimBerry());
-		map.put("Lum Berry", new LumBerry());
-		map.put("Sitrus Berry", new SitrusBerry());
-		map.put("Razz Berry", new RazzBerry());
-		map.put("Pomeg Berry", new PomegBerry());
-		map.put("Kelpsy Berry", new KelpsyBerry());
-		map.put("Qualot Berry", new QualotBerry());
-		map.put("Hondew Berry", new HondewBerry());
-		map.put("Grepa Berry", new GrepaBerry());
-		map.put("Tamato Berry", new TamatoBerry());
-		map.put("Occa Berry", new OccaBerry());
-		map.put("Passho Berry", new PasshoBerry());
-		map.put("Wacan Berry", new WacanBerry());
-		map.put("Rindo Berry", new RindoBerry());
-		map.put("Yache Berry", new YacheBerry());
-		map.put("Chople Berry", new ChopleBerry());
-		map.put("Kebia Berry", new KebiaBerry());
-		map.put("Shuca Berry", new ShucaBerry());
-		map.put("Coba Berry", new CobaBerry());
-		map.put("Payapa Berry", new PayapaBerry());
-		map.put("Tanga Berry", new TangaBerry());
-		map.put("Charti Berry", new ChartiBerry());
-		map.put("Kasib Berry", new KasibBerry());
-		map.put("Haban Berry", new HabanBerry());
-		map.put("Colbur Berry", new ColburBerry());
-		map.put("Babiri Berry", new BabiriBerry());
-		map.put("Chilan Berry", new ChilanBerry());
-		map.put("Roseli Berry", new RoseliBerry());
-		map.put("Liechi Berry", new LiechiBerry());
-		map.put("Ganlon Berry", new GanlonBerry());
-		map.put("Salac Berry", new SalacBerry());
-		map.put("Petaya Berry", new PetayaBerry());
-		map.put("Apicot Berry", new ApicotBerry());
-		map.put("Micle Berry", new MicleBerry());
-		map.put("Kee Berry", new KeeBerry());
-		map.put("Maranga Berry", new MarangaBerry());
-		map.put("Jaboca Berry", new JabocaBerry());
-		map.put("Rowap Berry", new RowapBerry());
-		map.put("Custap Berry", new CustapBerry());
-		map.put("Enigma Berry", new EnigmaBerry());
-		map.put("Lansat Berry", new LansatBerry());
-		map.put("Starf Berry", new StarfBerry());
-		map.put("Comet Shard", new CometShard());
-		map.put("Tiny Mushroom", new TinyMushroom());
-		map.put("Big Mushroom", new BigMushroom());
-		map.put("Balm Mushroom", new BalmMushroom());
-		map.put("Nugget", new Nugget());
-		map.put("Big Nugget", new BigNugget());
-		map.put("Pearl", new Pearl());
-		map.put("Big Pearl", new BigPearl());
-		map.put("Stardust", new Stardust());
-		map.put("Star Piece", new StarPiece());
-		map.put("Rare Bone", new RareBone());
-		map.put("Honey", new Honey());
-		map.put("Eviolite", new Eviolite());
-		map.put("Heart Scale", new HeartScale());
-		map.put("Repel", new Repel());
-		map.put("Super Repel", new SuperRepel());
-		map.put("Max Repel", new MaxRepel());
-		map.put("Ability Capsule", new AbilityCapsule());
-		map.put("Assault Vest", new AssaultVest());
-		map.put("Power Herb", new PowerHerb());
-		map.put("Hone Claws TM", new HoneClawsTM());
-		map.put("Dragon Claw TM", new DragonClawTM());
-		map.put("Psyshock TM", new PsyshockTM());
-		map.put("Calm Mind TM", new CalmMindTM());
-		map.put("Roar TM", new RoarTM());
-		map.put("Toxic TM", new ToxicTM());
-		map.put("Hail TM", new HailTM());
-		map.put("Bulk Up TM", new BulkUpTM());
-		map.put("Venoshock TM", new VenoshockTM());
-		map.put("Hidden Power TM", new HiddenPowerTM());
-		map.put("Sunny Day TM", new SunnyDayTM());
-		map.put("Taunt TM", new TauntTM());
-		map.put("Ice Beam TM", new IceBeamTM());
-		map.put("Blizzard TM", new BlizzardTM());
-		map.put("Hyper Beam TM", new HyperBeamTM());
-		map.put("Light Screen TM", new LightScreenTM());
-		map.put("Protect TM", new ProtectTM());
-		map.put("Rain Dance TM", new RainDanceTM());
-		map.put("Roost TM", new RoostTM());
-		map.put("Safeguard TM", new SafeguardTM());
-		map.put("Solar Beam TM", new SolarBeamTM());
-		map.put("Smack Down TM", new SmackDownTM());
-		map.put("Thunderbolt TM", new ThunderboltTM());
-		map.put("Thunder TM", new ThunderTM());
-		map.put("Earthquake TM", new EarthquakeTM());
-		map.put("Dig TM", new DigTM());
-		map.put("Psychic TM", new PsychicTM());
-		map.put("Shadow Ball TM", new ShadowBallTM());
-		map.put("Brick Break TM", new BrickBreakTM());
-		map.put("Double Team TM", new DoubleTeamTM());
-		map.put("Reflect TM", new ReflectTM());
-		map.put("Sludge Wave TM", new SludgeWaveTM());
-		map.put("Flamethrower TM", new FlamethrowerTM());
-		map.put("Sludge Bomb TM", new SludgeBombTM());
-		map.put("Sandstorm TM", new SandstormTM());
-		map.put("Fire Blast TM", new FireBlastTM());
-		map.put("Rock Tomb TM", new RockTombTM());
-		map.put("Aerial Ace TM", new AerialAceTM());
-		map.put("Torment TM", new TormentTM());
-		map.put("Facade TM", new FacadeTM());
-		map.put("Flame Charge TM", new FlameChargeTM());
-		map.put("Rest TM", new RestTM());
-		map.put("Attract TM", new AttractTM());
-		map.put("Thief TM", new ThiefTM());
-		map.put("Low Sweep TM", new LowSweepTM());
-		map.put("Round TM", new RoundTM());
-		map.put("Echoed Voice TM", new EchoedVoiceTM());
-		map.put("Overheat TM", new OverheatTM());
-		map.put("Steel Wing TM", new SteelWingTM());
-		map.put("Focus Blast TM", new FocusBlastTM());
-		map.put("Energy Ball TM", new EnergyBallTM());
-		map.put("False Swipe TM", new FalseSwipeTM());
-		map.put("Scald TM", new ScaldTM());
-		map.put("Fling TM", new FlingTM());
-		map.put("Charge Beam TM", new ChargeBeamTM());
-		map.put("Sky Drop TM", new SkyDropTM());
-		map.put("Incinerate TM", new IncinerateTM());
-		map.put("Will-O-Wisp TM", new WillOWispTM());
-		map.put("Acrobatics TM", new AcrobaticsTM());
-		map.put("Embargo TM", new EmbargoTM());
-		map.put("Explosion TM", new ExplosionTM());
-		map.put("Shadow Claw TM", new ShadowClawTM());
-		map.put("Payback TM", new PaybackTM());
-		map.put("Retaliate TM", new RetaliateTM());
-		map.put("Giga Impact TM", new GigaImpactTM());
-		map.put("Rock Polish TM", new RockPolishTM());
-		map.put("Flash TM", new FlashTM());
-		map.put("Stone Edge TM", new StoneEdgeTM());
-		map.put("Volt Switch TM", new VoltSwitchTM());
-		map.put("Thunder Wave TM", new ThunderWaveTM());
-		map.put("Gyro Ball TM", new GyroBallTM());
-		map.put("Swords Dance TM", new SwordsDanceTM());
-		map.put("Struggle Bug TM", new StruggleBugTM());
-		map.put("Psych Up TM", new PsychUpTM());
-		map.put("Bulldoze TM", new BulldozeTM());
-		map.put("Frost Breath TM", new FrostBreathTM());
-		map.put("Rock Slide TM", new RockSlideTM());
-		map.put("X-Scissor TM", new XScissorTM());
-		map.put("Dragon Tail TM", new DragonTailTM());
-		map.put("Infestation TM", new InfestationTM());
-		map.put("Poison Jab TM", new PoisonJabTM());
-		map.put("Dream Eater TM", new DreamEaterTM());
-		map.put("Grass Knot TM", new GrassKnotTM());
-		map.put("Swagger TM", new SwaggerTM());
-		map.put("Sleep Talk TM", new SleepTalkTM());
-		map.put("U-turn TM", new UTurnTM());
-		map.put("Substitute TM", new SubstituteTM());
-		map.put("Flash Cannon TM", new FlashCannonTM());
-		map.put("Trick Room TM", new TrickRoomTM());
-		map.put("Wild Charge TM", new WildChargeTM());
-		map.put("Rock Smash TM", new RockSmashTM());
-		map.put("Snarl TM", new SnarlTM());
-		map.put("Nature Power TM", new NaturePowerTM());
-		map.put("Dark Pulse TM", new DarkPulseTM());
-		map.put("Power-Up Punch TM", new PowerUpPunchTM());
-		map.put("Dazzling Gleam TM", new DazzlingGleamTM());
-		map.put("Confide TM", new ConfideTM());
-		map.put("Cut TM", new CutTM());
-		map.put("Fly TM", new FlyTM());
-		map.put("Surf TM", new SurfTM());
-		map.put("Strength TM", new StrengthTM());
-		map.put("Waterfall TM", new WaterfallTM());
-
 		processIncenseItems();
 	}
 
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class NoItem extends Item implements HoldItem {
+	static class NoItem extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		NoItem() {
@@ -649,7 +187,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Syrup extends Item implements TrainerUseItem {
+	static class Syrup extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Syrup() {
@@ -665,7 +203,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Bicycle extends Item implements TrainerUseItem {
+	static class Bicycle extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Bicycle() {
@@ -683,7 +221,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Surfboard extends Item implements TrainerUseItem {
+	static class Surfboard extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Surfboard() {
@@ -700,7 +238,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FishingRod extends Item implements TrainerUseItem {
+	static class FishingRod extends Item implements TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FishingRod() {
@@ -718,7 +256,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AbsorbBulb extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class AbsorbBulb extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		AbsorbBulb() {
@@ -740,7 +278,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AirBalloon extends Item implements HoldItem, ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect {
+	static class AirBalloon extends Item implements HoldItem, ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirBalloon() {
@@ -772,7 +310,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AmuletCoin extends Item implements HoldItem, EntryEffect {
+	static class AmuletCoin extends Item implements HoldItem, EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		AmuletCoin() {
@@ -788,11 +326,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		}
 	}
 
-	private static class BigRoot extends Item implements HoldItem {
+	static class BigRoot extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BigRoot() {
@@ -808,7 +346,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BindingBand extends Item implements HoldItem {
+	static class BindingBand extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BindingBand() {
@@ -824,7 +362,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BlackSludge extends Item implements HoldItem, EndTurnEffect {
+	static class BlackSludge extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		BlackSludge() {
@@ -856,7 +394,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BrightPowder extends Item implements HoldItem, StatChangingEffect {
+	static class BrightPowder extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		BrightPowder() {
@@ -884,7 +422,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CellBattery extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class CellBattery extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		CellBattery() {
@@ -906,7 +444,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceBand() {
@@ -947,7 +485,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceScarf() {
@@ -988,7 +526,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceSpecs() {
@@ -1029,7 +567,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CleanseTag extends Item implements HoldItem, RepellingEffect {
+	static class CleanseTag extends Item implements HoldItem, RepellingEffect {
 		private static final long serialVersionUID = 1L;
 
 		CleanseTag() {
@@ -1049,7 +587,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DampRock extends Item implements HoldItem, WeatherExtendingEffect {
+	static class DampRock extends Item implements HoldItem, WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
 		DampRock() {
@@ -1069,7 +607,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HeatRock extends Item implements HoldItem, WeatherExtendingEffect {
+	static class HeatRock extends Item implements HoldItem, WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
 		HeatRock() {
@@ -1089,7 +627,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IcyRock extends Item implements HoldItem, WeatherExtendingEffect {
+	static class IcyRock extends Item implements HoldItem, WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
 		IcyRock() {
@@ -1109,7 +647,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SmoothRock extends Item implements HoldItem, WeatherExtendingEffect {
+	static class SmoothRock extends Item implements HoldItem, WeatherExtendingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SmoothRock() {
@@ -1129,7 +667,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EjectButton extends Item implements HoldItem, TakeDamageEffect {
+	static class EjectButton extends Item implements HoldItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		EjectButton() {
@@ -1165,7 +703,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DestinyKnot extends Item implements HoldItem {
+	static class DestinyKnot extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		DestinyKnot() {
@@ -1181,7 +719,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ExpertBelt extends Item implements HoldItem, PowerChangeEffect {
+	static class ExpertBelt extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ExpertBelt() {
@@ -1201,7 +739,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlameOrb extends Item implements HoldItem, EndTurnEffect {
+	static class FlameOrb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlameOrb() {
@@ -1222,7 +760,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ToxicOrb extends Item implements HoldItem, EndTurnEffect {
+	static class ToxicOrb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		ToxicOrb() {
@@ -1242,13 +780,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			// Badly poisons the holder at the end of the turn
 			if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
-				victim.addEffect(PokemonEffect.getEffect(EffectNamesies.BAD_POISON).newInstance());
+				victim.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
 				Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 			}
 		}
 	}
 
-	private static class FloatStone extends Item implements HoldItem, HalfWeightEffect {
+	static class FloatStone extends Item implements HoldItem, HalfWeightEffect {
 		private static final long serialVersionUID = 1L;
 
 		FloatStone() {
@@ -1268,7 +806,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FocusBand extends Item implements HoldItem, BracingEffect {
+	static class FocusBand extends Item implements HoldItem, BracingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FocusBand() {
@@ -1292,7 +830,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FocusSash extends Item implements HoldItem, ConsumableItem, BracingEffect {
+	static class FocusSash extends Item implements HoldItem, ConsumableItem, BracingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FocusSash() {
@@ -1321,7 +859,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GripClaw extends Item implements HoldItem {
+	static class GripClaw extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		GripClaw() {
@@ -1337,7 +875,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AdamantOrb extends Item implements HoldItem, PowerChangeEffect {
+	static class AdamantOrb extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		AdamantOrb() {
@@ -1371,7 +909,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LustrousOrb extends Item implements HoldItem, PowerChangeEffect {
+	static class LustrousOrb extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		LustrousOrb() {
@@ -1405,7 +943,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GriseousOrb extends Item implements HoldItem, PowerChangeEffect {
+	static class GriseousOrb extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		GriseousOrb() {
@@ -1439,7 +977,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect, BeforeTurnEffect {
+	static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronBall() {
@@ -1488,7 +1026,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LaggingTail extends Item implements HoldItem, StallingEffect {
+	static class LaggingTail extends Item implements HoldItem, StallingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LaggingTail() {
@@ -1504,7 +1042,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LifeOrb extends Item implements HoldItem, PowerChangeEffect, ApplyDamageEffect {
+	static class LifeOrb extends Item implements HoldItem, PowerChangeEffect, ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LifeOrb() {
@@ -1533,7 +1071,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LightBall extends Item implements HoldItem, StatChangingEffect {
+	static class LightBall extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LightBall() {
@@ -1562,7 +1100,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LightClay extends Item implements HoldItem {
+	static class LightClay extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		LightClay() {
@@ -1578,7 +1116,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuckyEgg extends Item implements HoldItem {
+	static class LuckyEgg extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		LuckyEgg() {
@@ -1594,7 +1132,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuckyPunch extends Item implements HoldItem, CritStageEffect {
+	static class LuckyPunch extends Item implements HoldItem, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuckyPunch() {
@@ -1618,7 +1156,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuminousMoss extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class LuminousMoss extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuminousMoss() {
@@ -1640,7 +1178,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MachoBrace extends Item implements EVItem, StatChangingEffect {
+	static class MachoBrace extends Item implements EVItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MachoBrace() {
@@ -1676,7 +1214,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
+	static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		// TODO: This should be an object array
 		EffectNamesies[] effects = {
@@ -1723,7 +1261,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MetalPowder extends Item implements HoldItem, StatChangingEffect {
+	static class MetalPowder extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MetalPowder() {
@@ -1751,7 +1289,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Metronome extends Item implements HoldItem, PowerChangeEffect {
+	static class Metronome extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Metronome() {
@@ -1771,7 +1309,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MuscleBand extends Item implements HoldItem, PowerChangeEffect {
+	static class MuscleBand extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MuscleBand() {
@@ -1791,7 +1329,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerAnklet extends Item implements PowerItem, StatChangingEffect {
+	static class PowerAnklet extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerAnklet() {
@@ -1828,7 +1366,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerBand extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBand extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBand() {
@@ -1865,7 +1403,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerBelt extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBelt extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBelt() {
@@ -1902,7 +1440,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerBracer extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBracer extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBracer() {
@@ -1939,7 +1477,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerLens extends Item implements PowerItem, StatChangingEffect {
+	static class PowerLens extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerLens() {
@@ -1976,7 +1514,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerWeight extends Item implements PowerItem, StatChangingEffect {
+	static class PowerWeight extends Item implements PowerItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerWeight() {
@@ -2013,7 +1551,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class QuickClaw extends Item implements HoldItem {
+	static class QuickClaw extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		QuickClaw() {
@@ -2029,7 +1567,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class QuickPowder extends Item implements HoldItem, StatChangingEffect {
+	static class QuickPowder extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickPowder() {
@@ -2057,7 +1595,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RedCard extends Item implements HoldItem, TakeDamageEffect {
+	static class RedCard extends Item implements HoldItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RedCard() {
@@ -2093,7 +1631,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RingTarget extends Item implements HoldItem, AdvantageChanger {
+	static class RingTarget extends Item implements HoldItem, AdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		RingTarget() {
@@ -2119,7 +1657,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockyHelmet extends Item implements HoldItem, PhysicalContactEffect {
+	static class RockyHelmet extends Item implements HoldItem, PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
 		RockyHelmet() {
@@ -2140,7 +1678,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, EffectBlockerEffect {
+	static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		SafetyGoggles() {
@@ -2176,7 +1714,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ScopeLens extends Item implements HoldItem, CritStageEffect {
+	static class ScopeLens extends Item implements HoldItem, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ScopeLens() {
@@ -2196,7 +1734,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShedShell extends Item implements HoldItem {
+	static class ShedShell extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		ShedShell() {
@@ -2212,7 +1750,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShellBell extends Item implements HoldItem, ApplyDamageEffect {
+	static class ShellBell extends Item implements HoldItem, ApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShellBell() {
@@ -2238,7 +1776,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SmokeBall extends Item implements HoldItem, DefiniteEscape {
+	static class SmokeBall extends Item implements HoldItem, DefiniteEscape {
 		private static final long serialVersionUID = 1L;
 
 		SmokeBall() {
@@ -2254,7 +1792,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Snowball extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class Snowball extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Snowball() {
@@ -2276,7 +1814,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SoulDew extends Item implements HoldItem, StatChangingEffect {
+	static class SoulDew extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SoulDew() {
@@ -2304,7 +1842,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Stick extends Item implements HoldItem, CritStageEffect {
+	static class Stick extends Item implements HoldItem, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stick() {
@@ -2328,7 +1866,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemHolder {
+	static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemHolder {
 		private static final long serialVersionUID = 1L;
 		private Item item;
 
@@ -2373,10 +1911,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			
 			// TODO: Generalize this with other item stealing effects
 			item = this;
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, victim, user, CastSource.HELD_ITEM, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, user, CastSource.HELD_ITEM, false);
 			
 			item = Item.noneItem();
-			PokemonEffect.getEffect(EffectNamesies.CHANGE_ITEM).cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 
 		public Item getItem() {
@@ -2384,7 +1922,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThickClub extends Item implements HoldItem, StatChangingEffect {
+	static class ThickClub extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ThickClub() {
@@ -2412,7 +1950,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WeaknessPolicy extends Item implements HoldItem, TakeDamageEffect {
+	static class WeaknessPolicy extends Item implements HoldItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		WeaknessPolicy() {
@@ -2435,7 +1973,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WhiteHerb extends Item implements HoldItem, StatProtectingEffect {
+	static class WhiteHerb extends Item implements HoldItem, StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WhiteHerb() {
@@ -2468,7 +2006,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WideLens extends Item implements HoldItem, StatChangingEffect {
+	static class WideLens extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WideLens() {
@@ -2496,7 +2034,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WiseGlasses extends Item implements HoldItem, StatChangingEffect {
+	static class WiseGlasses extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WiseGlasses() {
@@ -2524,7 +2062,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ZoomLens extends Item implements HoldItem, StatChangingEffect {
+	static class ZoomLens extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ZoomLens() {
@@ -2552,7 +2090,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FullIncense extends Item implements HoldItem, StallingEffect, IncenseItem {
+	static class FullIncense extends Item implements HoldItem, StallingEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		FullIncense() {
@@ -2572,7 +2110,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LaxIncense extends Item implements HoldItem, IncenseItem, StatChangingEffect {
+	static class LaxIncense extends Item implements HoldItem, IncenseItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LaxIncense() {
@@ -2604,7 +2142,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuckIncense extends Item implements HoldItem, EntryEffect, IncenseItem {
+	static class LuckIncense extends Item implements HoldItem, EntryEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		LuckIncense() {
@@ -2620,7 +2158,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			TeamEffect.getEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE).cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
+			// TODO: Combine with Amulet Coin
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
 		}
 
 		public PokemonNamesies getBaby() {
@@ -2628,7 +2167,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OddIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class OddIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		OddIncense() {
@@ -2656,7 +2195,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PureIncense extends Item implements HoldItem, RepellingEffect, IncenseItem {
+	static class PureIncense extends Item implements HoldItem, RepellingEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		PureIncense() {
@@ -2680,7 +2219,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class RockIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RockIncense() {
@@ -2708,7 +2247,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoseIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class RoseIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RoseIncense() {
@@ -2736,7 +2275,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SeaIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class SeaIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SeaIncense() {
@@ -2764,7 +2303,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WaveIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class WaveIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		WaveIncense() {
@@ -2792,7 +2331,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DracoPlate extends Item implements PlateItem {
+	static class DracoPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		DracoPlate() {
@@ -2821,7 +2360,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DreadPlate extends Item implements PlateItem {
+	static class DreadPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		DreadPlate() {
@@ -2850,7 +2389,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EarthPlate extends Item implements PlateItem {
+	static class EarthPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		EarthPlate() {
@@ -2879,7 +2418,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FistPlate extends Item implements PlateItem {
+	static class FistPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		FistPlate() {
@@ -2908,7 +2447,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlamePlate extends Item implements PlateItem {
+	static class FlamePlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		FlamePlate() {
@@ -2937,7 +2476,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IciclePlate extends Item implements PlateItem {
+	static class IciclePlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		IciclePlate() {
@@ -2966,7 +2505,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class InsectPlate extends Item implements PlateItem {
+	static class InsectPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		InsectPlate() {
@@ -2995,7 +2534,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IronPlate extends Item implements PlateItem {
+	static class IronPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		IronPlate() {
@@ -3024,7 +2563,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MeadowPlate extends Item implements PlateItem {
+	static class MeadowPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		MeadowPlate() {
@@ -3053,7 +2592,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MindPlate extends Item implements PlateItem {
+	static class MindPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		MindPlate() {
@@ -3082,7 +2621,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PixiePlate extends Item implements PlateItem {
+	static class PixiePlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		PixiePlate() {
@@ -3111,7 +2650,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SkyPlate extends Item implements PlateItem {
+	static class SkyPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		SkyPlate() {
@@ -3140,7 +2679,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SplashPlate extends Item implements PlateItem {
+	static class SplashPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		SplashPlate() {
@@ -3169,7 +2708,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SpookyPlate extends Item implements PlateItem {
+	static class SpookyPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		SpookyPlate() {
@@ -3198,7 +2737,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StonePlate extends Item implements PlateItem {
+	static class StonePlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		StonePlate() {
@@ -3227,7 +2766,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ToxicPlate extends Item implements PlateItem {
+	static class ToxicPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		ToxicPlate() {
@@ -3256,7 +2795,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ZapPlate extends Item implements PlateItem {
+	static class ZapPlate extends Item implements PlateItem {
 		private static final long serialVersionUID = 1L;
 
 		ZapPlate() {
@@ -3285,7 +2824,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BurnDrive extends Item implements DriveItem {
+	static class BurnDrive extends Item implements DriveItem {
 		private static final long serialVersionUID = 1L;
 
 		BurnDrive() {
@@ -3305,7 +2844,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChillDrive extends Item implements DriveItem {
+	static class ChillDrive extends Item implements DriveItem {
 		private static final long serialVersionUID = 1L;
 
 		ChillDrive() {
@@ -3325,7 +2864,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DouseDrive extends Item implements DriveItem {
+	static class DouseDrive extends Item implements DriveItem {
 		private static final long serialVersionUID = 1L;
 
 		DouseDrive() {
@@ -3345,7 +2884,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShockDrive extends Item implements DriveItem {
+	static class ShockDrive extends Item implements DriveItem {
 		private static final long serialVersionUID = 1L;
 
 		ShockDrive() {
@@ -3365,7 +2904,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FireGem extends Item implements GemItem {
+	static class FireGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		FireGem() {
@@ -3398,7 +2937,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WaterGem extends Item implements GemItem {
+	static class WaterGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		WaterGem() {
@@ -3431,7 +2970,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ElectricGem extends Item implements GemItem {
+	static class ElectricGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		ElectricGem() {
@@ -3464,7 +3003,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GrassGem extends Item implements GemItem {
+	static class GrassGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		GrassGem() {
@@ -3497,7 +3036,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IceGem extends Item implements GemItem {
+	static class IceGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		IceGem() {
@@ -3530,7 +3069,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FightingGem extends Item implements GemItem {
+	static class FightingGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		FightingGem() {
@@ -3563,7 +3102,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PoisonGem extends Item implements GemItem {
+	static class PoisonGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		PoisonGem() {
@@ -3596,7 +3135,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GroundGem extends Item implements GemItem {
+	static class GroundGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		GroundGem() {
@@ -3629,7 +3168,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlyingGem extends Item implements GemItem {
+	static class FlyingGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		FlyingGem() {
@@ -3662,7 +3201,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PsychicGem extends Item implements GemItem {
+	static class PsychicGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		PsychicGem() {
@@ -3695,7 +3234,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BugGem extends Item implements GemItem {
+	static class BugGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		BugGem() {
@@ -3728,7 +3267,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockGem extends Item implements GemItem {
+	static class RockGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		RockGem() {
@@ -3761,7 +3300,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GhostGem extends Item implements GemItem {
+	static class GhostGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		GhostGem() {
@@ -3794,7 +3333,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonGem extends Item implements GemItem {
+	static class DragonGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonGem() {
@@ -3827,7 +3366,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DarkGem extends Item implements GemItem {
+	static class DarkGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		DarkGem() {
@@ -3860,7 +3399,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SteelGem extends Item implements GemItem {
+	static class SteelGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		SteelGem() {
@@ -3893,7 +3432,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NormalGem extends Item implements GemItem {
+	static class NormalGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		NormalGem() {
@@ -3926,7 +3465,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FairyGem extends Item implements GemItem {
+	static class FairyGem extends Item implements GemItem {
 		private static final long serialVersionUID = 1L;
 
 		FairyGem() {
@@ -3959,7 +3498,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Leftovers extends Item implements HoldItem, EndTurnEffect {
+	static class Leftovers extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		Leftovers() {
@@ -3984,7 +3523,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BlackBelt extends Item implements PowerChangeEffect, HoldItem {
+	static class BlackBelt extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BlackBelt() {
@@ -4008,7 +3547,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BlackGlasses extends Item implements PowerChangeEffect, HoldItem {
+	static class BlackGlasses extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BlackGlasses() {
@@ -4032,7 +3571,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Charcoal extends Item implements PowerChangeEffect, HoldItem {
+	static class Charcoal extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Charcoal() {
@@ -4056,7 +3595,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonFang extends Item implements PowerChangeEffect, HoldItem {
+	static class DragonFang extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonFang() {
@@ -4080,7 +3619,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HardStone extends Item implements PowerChangeEffect, HoldItem {
+	static class HardStone extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		HardStone() {
@@ -4104,7 +3643,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Magnet extends Item implements PowerChangeEffect, HoldItem {
+	static class Magnet extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Magnet() {
@@ -4128,7 +3667,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MetalCoat extends Item implements PowerChangeEffect, HoldItem, PokemonUseItem {
+	static class MetalCoat extends Item implements PowerChangeEffect, HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		MetalCoat() {
@@ -4167,7 +3706,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MiracleSeed extends Item implements PowerChangeEffect, HoldItem {
+	static class MiracleSeed extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MiracleSeed() {
@@ -4191,7 +3730,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MysticWater extends Item implements PowerChangeEffect, HoldItem {
+	static class MysticWater extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MysticWater() {
@@ -4215,7 +3754,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NeverMeltIce extends Item implements PowerChangeEffect, HoldItem {
+	static class NeverMeltIce extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		NeverMeltIce() {
@@ -4239,7 +3778,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PoisonBarb extends Item implements PowerChangeEffect, HoldItem {
+	static class PoisonBarb extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		PoisonBarb() {
@@ -4264,7 +3803,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SharpBeak extends Item implements PowerChangeEffect, HoldItem {
+	static class SharpBeak extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SharpBeak() {
@@ -4288,7 +3827,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SilkScarf extends Item implements PowerChangeEffect, HoldItem {
+	static class SilkScarf extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SilkScarf() {
@@ -4312,7 +3851,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SilverPowder extends Item implements PowerChangeEffect, HoldItem {
+	static class SilverPowder extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SilverPowder() {
@@ -4336,7 +3875,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SoftSand extends Item implements PowerChangeEffect, HoldItem {
+	static class SoftSand extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SoftSand() {
@@ -4360,7 +3899,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SpellTag extends Item implements PowerChangeEffect, HoldItem {
+	static class SpellTag extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SpellTag() {
@@ -4384,7 +3923,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TwistedSpoon extends Item implements PowerChangeEffect, HoldItem {
+	static class TwistedSpoon extends Item implements PowerChangeEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		TwistedSpoon() {
@@ -4408,7 +3947,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DawnStone extends Item implements HoldItem, PokemonUseItem {
+	static class DawnStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DawnStone() {
@@ -4439,7 +3978,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DeepSeaScale extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
+	static class DeepSeaScale extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DeepSeaScale() {
@@ -4482,7 +4021,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DeepSeaTooth extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
+	static class DeepSeaTooth extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DeepSeaTooth() {
@@ -4525,7 +4064,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonScale extends Item implements HoldItem, PokemonUseItem {
+	static class DragonScale extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonScale() {
@@ -4556,7 +4095,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DubiousDisc extends Item implements HoldItem, PokemonUseItem {
+	static class DubiousDisc extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DubiousDisc() {
@@ -4587,7 +4126,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DuskStone extends Item implements HoldItem, PokemonUseItem {
+	static class DuskStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DuskStone() {
@@ -4618,7 +4157,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Electirizer extends Item implements HoldItem, PokemonUseItem {
+	static class Electirizer extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Electirizer() {
@@ -4649,7 +4188,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FireStone extends Item implements HoldItem, PokemonUseItem {
+	static class FireStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FireStone() {
@@ -4680,7 +4219,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KingsRock extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
+	static class KingsRock extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		KingsRock() {
@@ -4705,7 +4244,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Global.chanceTest(10)) {
-				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
 					Messages.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
@@ -4718,7 +4257,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
 				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
 				Messages.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
@@ -4726,7 +4265,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LeafStone extends Item implements HoldItem, PokemonUseItem {
+	static class LeafStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		LeafStone() {
@@ -4757,7 +4296,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Magmarizer extends Item implements HoldItem, PokemonUseItem {
+	static class Magmarizer extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Magmarizer() {
@@ -4788,7 +4327,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MoonStone extends Item implements HoldItem, PokemonUseItem {
+	static class MoonStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		MoonStone() {
@@ -4819,7 +4358,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OvalStone extends Item implements HoldItem, PokemonUseItem {
+	static class OvalStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		OvalStone() {
@@ -4850,7 +4389,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Everstone extends Item implements HoldItem {
+	static class Everstone extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Everstone() {
@@ -4866,7 +4405,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PrismScale extends Item implements HoldItem, PokemonUseItem {
+	static class PrismScale extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PrismScale() {
@@ -4897,7 +4436,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Protector extends Item implements HoldItem, PokemonUseItem {
+	static class Protector extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Protector() {
@@ -4928,7 +4467,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RazorClaw extends Item implements HoldItem, CritStageEffect, PokemonUseItem {
+	static class RazorClaw extends Item implements HoldItem, CritStageEffect, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RazorClaw() {
@@ -4963,7 +4502,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RazorFang extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
+	static class RazorFang extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RazorFang() {
@@ -4988,7 +4527,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (Global.chanceTest(10)) {
-				PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
 					Messages.addMessage(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
@@ -5001,7 +4540,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			PokemonEffect flinch = PokemonEffect.getEffect(EffectNamesies.FLINCH);
+			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
 				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
 				Messages.addMessage("The " + this.name + " caused " + pelted.getName() + " to flinch!");
@@ -5009,7 +4548,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ReaperCloth extends Item implements HoldItem, PokemonUseItem {
+	static class ReaperCloth extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ReaperCloth() {
@@ -5040,7 +4579,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Sachet extends Item implements HoldItem, PokemonUseItem {
+	static class Sachet extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Sachet() {
@@ -5071,7 +4610,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShinyStone extends Item implements HoldItem, PokemonUseItem {
+	static class ShinyStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ShinyStone() {
@@ -5102,7 +4641,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SunStone extends Item implements HoldItem, PokemonUseItem {
+	static class SunStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SunStone() {
@@ -5133,7 +4672,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThunderStone extends Item implements HoldItem, PokemonUseItem {
+	static class ThunderStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThunderStone() {
@@ -5164,7 +4703,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class UpGrade extends Item implements HoldItem, PokemonUseItem {
+	static class UpGrade extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		UpGrade() {
@@ -5195,7 +4734,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WaterStone extends Item implements HoldItem, PokemonUseItem {
+	static class WaterStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WaterStone() {
@@ -5226,7 +4765,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WhippedDream extends Item implements HoldItem, PokemonUseItem {
+	static class WhippedDream extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WhippedDream() {
@@ -5257,7 +4796,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Antidote extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class Antidote extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5296,7 +4835,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Awakening extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class Awakening extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5335,7 +4874,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BurnHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class BurnHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5374,7 +4913,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IceHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class IceHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5413,7 +4952,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 
@@ -5452,7 +4991,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FullHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
+	static class FullHeal extends Item implements HoldItem, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FullHeal() {
@@ -5492,7 +5031,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FullRestore extends Item implements PokemonUseItem, HoldItem, BattleUseItem {
+	static class FullRestore extends Item implements PokemonUseItem, HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FullRestore() {
@@ -5534,7 +5073,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private boolean use(List<Move> moves)
 		{
@@ -5577,7 +5116,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private boolean use(List<Move> moves)
 		{
@@ -5620,7 +5159,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Ether extends Item implements HoldItem, MoveUseItem {
+	static class Ether extends Item implements HoldItem, MoveUseItem {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
@@ -5648,7 +5187,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxEther extends Item implements HoldItem, MoveUseItem {
+	static class MaxEther extends Item implements HoldItem, MoveUseItem {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
@@ -5676,7 +5215,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BerryJuice extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class BerryJuice extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BerryJuice() {
@@ -5709,7 +5248,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SweetHeart extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class SweetHeart extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SweetHeart() {
@@ -5742,7 +5281,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Potion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Potion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Potion() {
@@ -5775,7 +5314,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EnergyPowder extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class EnergyPowder extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		EnergyPowder() {
@@ -5808,7 +5347,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FreshWater extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class FreshWater extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		FreshWater() {
@@ -5841,7 +5380,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SuperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class SuperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SuperPotion() {
@@ -5874,7 +5413,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SodaPop extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class SodaPop extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		SodaPop() {
@@ -5907,7 +5446,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Lemonade extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Lemonade extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Lemonade() {
@@ -5940,7 +5479,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MoomooMilk extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MoomooMilk extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MoomooMilk() {
@@ -5973,7 +5512,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EnergyRoot extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class EnergyRoot extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		EnergyRoot() {
@@ -6006,7 +5545,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HyperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class HyperPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		HyperPotion() {
@@ -6039,7 +5578,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MaxPotion extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MaxPotion() {
@@ -6068,7 +5607,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Revive extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Revive extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Revive() {
@@ -6105,7 +5644,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxRevive extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MaxRevive extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		MaxRevive() {
@@ -6142,7 +5681,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RevivalHerb extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class RevivalHerb extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RevivalHerb() {
@@ -6179,7 +5718,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SacredAsh extends Item implements TrainerUseItem, HoldItem, BattleUseItem {
+	static class SacredAsh extends Item implements TrainerUseItem, HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SacredAsh() {
@@ -6216,7 +5755,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DireHit extends Item implements BattleUseItem, HoldItem {
+	static class DireHit extends Item implements BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		DireHit() {
@@ -6230,7 +5769,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			PokemonEffect crits = PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS);
+			PokemonEffect crits = (PokemonEffect)EffectNamesies.RAISE_CRITS.getEffect();
 			if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
 				return false;
 			}
@@ -6247,7 +5786,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GuardSpec extends Item implements BattleUseItem, HoldItem {
+	static class GuardSpec extends Item implements BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		GuardSpec() {
@@ -6261,7 +5800,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			PokemonEffect gSpesh = PokemonEffect.getEffect(EffectNamesies.GUARD_SPECIAL);
+			PokemonEffect gSpesh = (PokemonEffect)EffectNamesies.GUARD_SPECIAL.getEffect();
 			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
 				return false;
 			}
@@ -6278,7 +5817,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XAccuracy extends Item implements HoldItem, BattleUseItem {
+	static class XAccuracy extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XAccuracy() {
@@ -6307,7 +5846,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XAttack extends Item implements HoldItem, BattleUseItem {
+	static class XAttack extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XAttack() {
@@ -6336,7 +5875,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XDefend extends Item implements HoldItem, BattleUseItem {
+	static class XDefend extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XDefend() {
@@ -6365,7 +5904,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XSpecial extends Item implements HoldItem, BattleUseItem {
+	static class XSpecial extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XSpecial() {
@@ -6394,7 +5933,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XSpDef extends Item implements HoldItem, BattleUseItem {
+	static class XSpDef extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XSpDef() {
@@ -6423,7 +5962,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XSpeed extends Item implements HoldItem, BattleUseItem {
+	static class XSpeed extends Item implements HoldItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XSpeed() {
@@ -6452,7 +5991,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HPUp extends Item implements HoldItem, PokemonUseItem {
+	static class HPUp extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HPUp() {
@@ -6487,7 +6026,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Protein extends Item implements HoldItem, PokemonUseItem {
+	static class Protein extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Protein() {
@@ -6522,7 +6061,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Iron extends Item implements HoldItem, PokemonUseItem {
+	static class Iron extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Iron() {
@@ -6557,7 +6096,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Calcium extends Item implements HoldItem, PokemonUseItem {
+	static class Calcium extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Calcium() {
@@ -6592,7 +6131,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Zinc extends Item implements HoldItem, PokemonUseItem {
+	static class Zinc extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Zinc() {
@@ -6627,7 +6166,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Carbos extends Item implements HoldItem, PokemonUseItem {
+	static class Carbos extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Carbos() {
@@ -6662,7 +6201,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HealthWing extends Item implements HoldItem, PokemonUseItem {
+	static class HealthWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HealthWing() {
@@ -6697,7 +6236,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MuscleWing extends Item implements HoldItem, PokemonUseItem {
+	static class MuscleWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		MuscleWing() {
@@ -6732,7 +6271,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ResistWing extends Item implements HoldItem, PokemonUseItem {
+	static class ResistWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ResistWing() {
@@ -6767,7 +6306,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GeniusWing extends Item implements HoldItem, PokemonUseItem {
+	static class GeniusWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GeniusWing() {
@@ -6802,7 +6341,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CleverWing extends Item implements HoldItem, PokemonUseItem {
+	static class CleverWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		CleverWing() {
@@ -6837,7 +6376,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SwiftWing extends Item implements HoldItem, PokemonUseItem {
+	static class SwiftWing extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SwiftWing() {
@@ -6872,7 +6411,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PPMax extends Item implements MoveUseItem, HoldItem {
+	static class PPMax extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private String increase;
 
@@ -6898,7 +6437,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PPUp extends Item implements MoveUseItem, HoldItem {
+	static class PPUp extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
 		private String increase;
 
@@ -6924,7 +6463,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RareCandy extends Item implements HoldItem, PokemonUseItem {
+	static class RareCandy extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RareCandy() {
@@ -6949,7 +6488,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CherishBall extends Item implements BallItem {
+	static class CherishBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		CherishBall() {
@@ -6966,7 +6505,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DiveBall extends Item implements BallItem {
+	static class DiveBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		DiveBall() {
@@ -6988,7 +6527,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DuskBall extends Item implements BallItem {
+	static class DuskBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		DuskBall() {
@@ -7009,7 +6548,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FastBall extends Item implements BallItem {
+	static class FastBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		FastBall() {
@@ -7031,7 +6570,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GreatBall extends Item implements BallItem {
+	static class GreatBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		GreatBall() {
@@ -7048,7 +6587,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HealBall extends Item implements BallItem {
+	static class HealBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		HealBall() {
@@ -7066,7 +6605,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HeavyBall extends Item implements BallItem {
+	static class HeavyBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		HeavyBall() {
@@ -7094,7 +6633,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LevelBall extends Item implements BallItem {
+	static class LevelBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		LevelBall() {
@@ -7115,7 +6654,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LoveBall extends Item implements BallItem {
+	static class LoveBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		LoveBall() {
@@ -7136,7 +6675,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LureBall extends Item implements BallItem {
+	static class LureBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		LureBall() {
@@ -7158,7 +6697,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LuxuryBall extends Item implements BallItem {
+	static class LuxuryBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		LuxuryBall() {
@@ -7176,7 +6715,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MasterBall extends Item implements BallItem {
+	static class MasterBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		MasterBall() {
@@ -7193,7 +6732,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MoonBall extends Item implements BallItem {
+	static class MoonBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		MoonBall() {
@@ -7215,7 +6754,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NestBall extends Item implements BallItem {
+	static class NestBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		NestBall() {
@@ -7235,7 +6774,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NetBall extends Item implements BallItem {
+	static class NetBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		NetBall() {
@@ -7256,7 +6795,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PokeBall extends Item implements BallItem {
+	static class PokeBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		PokeBall() {
@@ -7273,7 +6812,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PremierBall extends Item implements BallItem {
+	static class PremierBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		PremierBall() {
@@ -7290,7 +6829,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class QuickBall extends Item implements BallItem {
+	static class QuickBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		QuickBall() {
@@ -7312,7 +6851,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RepeatBall extends Item implements BallItem {
+	static class RepeatBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		RepeatBall() {
@@ -7333,7 +6872,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SafariBall extends Item implements BallItem {
+	static class SafariBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		SafariBall() {
@@ -7349,7 +6888,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TimerBall extends Item implements BallItem {
+	static class TimerBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		TimerBall() {
@@ -7369,7 +6908,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class UltraBall extends Item implements BallItem {
+	static class UltraBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
 		UltraBall() {
@@ -7386,7 +6925,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CheriBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class CheriBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7450,7 +6989,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7472,7 +7011,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7536,7 +7075,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7558,7 +7097,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PechaBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class PechaBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7622,7 +7161,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7644,7 +7183,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RawstBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class RawstBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7708,7 +7247,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7730,7 +7269,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AspearBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class AspearBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String message;
 		private String holdMessage;
@@ -7794,7 +7333,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7816,7 +7355,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, MoveUseItem {
+	static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, MoveUseItem {
 		private static final long serialVersionUID = 1L;
 		private String restore;
 
@@ -7885,7 +7424,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7913,7 +7452,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OranBerry extends Item implements HealthTriggeredBerry, PokemonUseItem, BattleUseItem {
+	static class OranBerry extends Item implements HealthTriggeredBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		OranBerry() {
@@ -7972,7 +7511,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -7994,7 +7533,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry {
+	static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry {
 		private static final long serialVersionUID = 1L;
 
 		PersimBerry() {
@@ -8046,7 +7585,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -8068,7 +7607,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LumBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
+	static class LumBerry extends Item implements StatusBerry, PokemonUseItem, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 		private String holdMessage;
 
@@ -8139,7 +7678,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -8161,7 +7700,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SitrusBerry extends Item implements PokemonUseItem, BattleUseItem, HealthTriggeredBerry {
+	static class SitrusBerry extends Item implements PokemonUseItem, BattleUseItem, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		SitrusBerry() {
@@ -8220,7 +7759,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -8242,7 +7781,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RazzBerry extends Item implements Berry {
+	static class RazzBerry extends Item implements Berry {
 		private static final long serialVersionUID = 1L;
 
 		RazzBerry() {
@@ -8266,7 +7805,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PomegBerry extends Item implements Berry, PokemonUseItem {
+	static class PomegBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PomegBerry() {
@@ -8310,7 +7849,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KelpsyBerry extends Item implements Berry, PokemonUseItem {
+	static class KelpsyBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		KelpsyBerry() {
@@ -8354,7 +7893,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class QualotBerry extends Item implements Berry, PokemonUseItem {
+	static class QualotBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		QualotBerry() {
@@ -8398,7 +7937,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HondewBerry extends Item implements Berry, PokemonUseItem {
+	static class HondewBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HondewBerry() {
@@ -8442,7 +7981,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GrepaBerry extends Item implements Berry, PokemonUseItem {
+	static class GrepaBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GrepaBerry() {
@@ -8486,7 +8025,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TamatoBerry extends Item implements Berry, PokemonUseItem {
+	static class TamatoBerry extends Item implements Berry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		TamatoBerry() {
@@ -8530,7 +8069,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OccaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class OccaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		OccaBerry() {
@@ -8564,7 +8103,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PasshoBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class PasshoBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		PasshoBerry() {
@@ -8598,7 +8137,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WacanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class WacanBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		WacanBerry() {
@@ -8632,7 +8171,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RindoBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class RindoBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		RindoBerry() {
@@ -8666,7 +8205,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class YacheBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class YacheBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		YacheBerry() {
@@ -8700,7 +8239,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChopleBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChopleBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChopleBerry() {
@@ -8734,7 +8273,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KebiaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class KebiaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		KebiaBerry() {
@@ -8768,7 +8307,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShucaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ShucaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ShucaBerry() {
@@ -8802,7 +8341,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CobaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class CobaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		CobaBerry() {
@@ -8836,7 +8375,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PayapaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class PayapaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		PayapaBerry() {
@@ -8870,7 +8409,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TangaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class TangaBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		TangaBerry() {
@@ -8904,7 +8443,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChartiBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChartiBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChartiBerry() {
@@ -8938,7 +8477,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KasibBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class KasibBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		KasibBerry() {
@@ -8972,7 +8511,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HabanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class HabanBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		HabanBerry() {
@@ -9006,7 +8545,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ColburBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ColburBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ColburBerry() {
@@ -9040,7 +8579,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BabiriBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class BabiriBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		BabiriBerry() {
@@ -9074,7 +8613,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChilanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChilanBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChilanBerry() {
@@ -9108,7 +8647,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoseliBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class RoseliBerry extends Item implements Berry, OpponentPowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		RoseliBerry() {
@@ -9142,7 +8681,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LiechiBerry extends Item implements HealthTriggeredBerry {
+	static class LiechiBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		LiechiBerry() {
@@ -9196,7 +8735,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9218,7 +8757,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GanlonBerry extends Item implements HealthTriggeredBerry {
+	static class GanlonBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		GanlonBerry() {
@@ -9272,7 +8811,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9294,7 +8833,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SalacBerry extends Item implements HealthTriggeredBerry {
+	static class SalacBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		SalacBerry() {
@@ -9348,7 +8887,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9370,7 +8909,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PetayaBerry extends Item implements HealthTriggeredBerry {
+	static class PetayaBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		PetayaBerry() {
@@ -9424,7 +8963,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9446,7 +8985,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ApicotBerry extends Item implements HealthTriggeredBerry {
+	static class ApicotBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		ApicotBerry() {
@@ -9500,7 +9039,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9522,7 +9061,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MicleBerry extends Item implements HealthTriggeredBerry {
+	static class MicleBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		MicleBerry() {
@@ -9576,7 +9115,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9598,7 +9137,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class KeeBerry extends Item implements Berry, TakeDamageEffect {
+	static class KeeBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		KeeBerry() {
@@ -9632,7 +9171,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MarangaBerry extends Item implements Berry, TakeDamageEffect {
+	static class MarangaBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		MarangaBerry() {
@@ -9666,7 +9205,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class JabocaBerry extends Item implements Berry, TakeDamageEffect {
+	static class JabocaBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		JabocaBerry() {
@@ -9702,7 +9241,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RowapBerry extends Item implements Berry, TakeDamageEffect {
+	static class RowapBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RowapBerry() {
@@ -9738,7 +9277,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CustapBerry extends Item implements Berry, PriorityChangeEffect {
+	static class CustapBerry extends Item implements Berry, PriorityChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		CustapBerry() {
@@ -9774,7 +9313,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EnigmaBerry extends Item implements Berry, TakeDamageEffect {
+	static class EnigmaBerry extends Item implements Berry, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		EnigmaBerry() {
@@ -9807,7 +9346,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LansatBerry extends Item implements HealthTriggeredBerry {
+	static class LansatBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		LansatBerry() {
@@ -9824,7 +9363,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS).cast(b, user, user, source, false);
+			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 			return true;
 		}
 
@@ -9858,7 +9397,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9880,7 +9419,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StarfBerry extends Item implements HealthTriggeredBerry {
+	static class StarfBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 		private String holdMessage;
 		private String useMessage;
@@ -9906,7 +9445,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			
 			// Raise crit
 			if (rand == Stat.NUM_BATTLE_STATS) {
-				PokemonEffect.getEffect(EffectNamesies.RAISE_CRITS).cast(b, user, user, source, false);
+				EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 				holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
 				useMessage = user.getName() + " is getting pumped!";
 				return true;
@@ -9952,7 +9491,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				}
 				
 				// Eat dat berry!!
-				PokemonEffect.getEffect(EffectNamesies.EATEN_BERRY).cast(b, user, user, source, false);
+				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
 				
 				return true;
 		}
@@ -9974,7 +9513,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CometShard extends Item implements HoldItem {
+	static class CometShard extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		CometShard() {
@@ -9990,7 +9529,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TinyMushroom extends Item implements HoldItem {
+	static class TinyMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		TinyMushroom() {
@@ -10006,7 +9545,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BigMushroom extends Item implements HoldItem {
+	static class BigMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BigMushroom() {
@@ -10022,7 +9561,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BalmMushroom extends Item implements HoldItem {
+	static class BalmMushroom extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BalmMushroom() {
@@ -10038,7 +9577,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Nugget extends Item implements HoldItem {
+	static class Nugget extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Nugget() {
@@ -10054,7 +9593,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BigNugget extends Item implements HoldItem {
+	static class BigNugget extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BigNugget() {
@@ -10070,7 +9609,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Pearl extends Item implements HoldItem {
+	static class Pearl extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Pearl() {
@@ -10086,7 +9625,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BigPearl extends Item implements HoldItem {
+	static class BigPearl extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		BigPearl() {
@@ -10102,7 +9641,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Stardust extends Item implements HoldItem {
+	static class Stardust extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Stardust() {
@@ -10118,7 +9657,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StarPiece extends Item implements HoldItem {
+	static class StarPiece extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		StarPiece() {
@@ -10134,7 +9673,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RareBone extends Item implements HoldItem {
+	static class RareBone extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RareBone() {
@@ -10150,7 +9689,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Honey extends Item implements HoldItem {
+	static class Honey extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		Honey() {
@@ -10167,7 +9706,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Eviolite extends Item implements HoldItem, StatChangingEffect {
+	static class Eviolite extends Item implements HoldItem, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Eviolite() {
@@ -10195,7 +9734,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HeartScale extends Item implements HoldItem {
+	static class HeartScale extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		HeartScale() {
@@ -10211,7 +9750,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class Repel extends Item implements HoldItem, TrainerUseItem {
+	static class Repel extends Item implements HoldItem, TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Repel() {
@@ -10249,7 +9788,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SuperRepel extends Item implements HoldItem, TrainerUseItem {
+	static class SuperRepel extends Item implements HoldItem, TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SuperRepel() {
@@ -10287,7 +9826,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class MaxRepel extends Item implements HoldItem, TrainerUseItem {
+	static class MaxRepel extends Item implements HoldItem, TrainerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		MaxRepel() {
@@ -10325,7 +9864,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AbilityCapsule extends Item implements PokemonUseItem {
+	static class AbilityCapsule extends Item implements PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		AbilityCapsule() {
@@ -10348,7 +9887,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AssaultVest extends Item implements HoldItem, AttackSelectionEffect, StatChangingEffect {
+	static class AssaultVest extends Item implements HoldItem, AttackSelectionEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		AssaultVest() {
@@ -10384,7 +9923,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerHerb extends Item implements HoldItem {
+	static class PowerHerb extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		PowerHerb() {
@@ -10400,15 +9939,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HoneClawsTM extends Item implements MoveUseItem {
+	static class HoneClawsTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HoneClawsTM() {
 			super(ItemNamesies.HONE_CLAWS_TM, "The user sharpens its claws to boost its Attack stat and accuracy.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Hone Claws"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Hone Claws").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10451,15 +9990,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonClawTM extends Item implements MoveUseItem {
+	static class DragonClawTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonClawTM() {
 			super(ItemNamesies.DRAGON_CLAW_TM, "The user slashes the target with huge, sharp claws.", BagCategory.TM, 2014);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dragon Claw"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dragon Claw").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10502,15 +10041,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PsyshockTM extends Item implements MoveUseItem {
+	static class PsyshockTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PsyshockTM() {
 			super(ItemNamesies.PSYSHOCK_TM, "The user materializes an odd psychic wave to attack the target. This attack does physical damage.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Psyshock"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Psyshock").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10553,15 +10092,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CalmMindTM extends Item implements MoveUseItem {
+	static class CalmMindTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		CalmMindTM() {
 			super(ItemNamesies.CALM_MIND_TM, "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Calm Mind"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Calm Mind").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10604,15 +10143,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoarTM extends Item implements MoveUseItem {
+	static class RoarTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RoarTM() {
 			super(ItemNamesies.ROAR_TM, "The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Roar"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Roar").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10655,15 +10194,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ToxicTM extends Item implements MoveUseItem {
+	static class ToxicTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ToxicTM() {
 			super(ItemNamesies.TOXIC_TM, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Toxic"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Toxic").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10706,15 +10245,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HailTM extends Item implements MoveUseItem {
+	static class HailTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HailTM() {
 			super(ItemNamesies.HAIL_TM, "The user summons a hailstorm lasting five turns. It damages all Pokémon except the Ice type.", BagCategory.TM, 2005);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Hail"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Hail").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10757,15 +10296,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BulkUpTM extends Item implements MoveUseItem {
+	static class BulkUpTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		BulkUpTM() {
 			super(ItemNamesies.BULK_UP_TM, "The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Bulk Up"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Bulk Up").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10808,15 +10347,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class VenoshockTM extends Item implements MoveUseItem {
+	static class VenoshockTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		VenoshockTM() {
 			super(ItemNamesies.VENOSHOCK_TM, "The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Venoshock"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Venoshock").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10859,15 +10398,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HiddenPowerTM extends Item implements MoveUseItem {
+	static class HiddenPowerTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HiddenPowerTM() {
 			super(ItemNamesies.HIDDEN_POWER_TM, "A unique attack that varies in type and intensity depending on the Pokémon using it.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Hidden Power"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Hidden Power").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10910,15 +10449,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SunnyDayTM extends Item implements MoveUseItem {
+	static class SunnyDayTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SunnyDayTM() {
 			super(ItemNamesies.SUNNY_DAY_TM, "The user intensifies the sun for five turns, powering up Fire-type moves.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sunny Day"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sunny Day").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -10961,15 +10500,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TauntTM extends Item implements MoveUseItem {
+	static class TauntTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		TauntTM() {
 			super(ItemNamesies.TAUNT_TM, "The target is taunted into a rage that allows it to use only attack moves for three turns.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Taunt"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Taunt").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11012,15 +10551,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IceBeamTM extends Item implements MoveUseItem {
+	static class IceBeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		IceBeamTM() {
 			super(ItemNamesies.ICE_BEAM_TM, "The target is struck with an icy-cold beam of energy. It may also freeze the target solid.", BagCategory.TM, 2005);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Ice Beam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Ice Beam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11063,15 +10602,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BlizzardTM extends Item implements MoveUseItem {
+	static class BlizzardTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		BlizzardTM() {
 			super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.", BagCategory.TM, 2005);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Blizzard"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Blizzard").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11114,15 +10653,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class HyperBeamTM extends Item implements MoveUseItem {
+	static class HyperBeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		HyperBeamTM() {
 			super(ItemNamesies.HYPER_BEAM_TM, "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Hyper Beam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Hyper Beam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11165,15 +10704,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LightScreenTM extends Item implements MoveUseItem {
+	static class LightScreenTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		LightScreenTM() {
 			super(ItemNamesies.LIGHT_SCREEN_TM, "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Light Screen"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Light Screen").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11216,15 +10755,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ProtectTM extends Item implements MoveUseItem {
+	static class ProtectTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ProtectTM() {
 			super(ItemNamesies.PROTECT_TM, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Protect"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Protect").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11267,15 +10806,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RainDanceTM extends Item implements MoveUseItem {
+	static class RainDanceTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RainDanceTM() {
 			super(ItemNamesies.RAIN_DANCE_TM, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", BagCategory.TM, 2002);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rain Dance"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rain Dance").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11318,15 +10857,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoostTM extends Item implements MoveUseItem {
+	static class RoostTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RoostTM() {
 			super(ItemNamesies.ROOST_TM, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Roost"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Roost").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11369,15 +10908,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SafeguardTM extends Item implements MoveUseItem {
+	static class SafeguardTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SafeguardTM() {
 			super(ItemNamesies.SAFEGUARD_TM, "The user creates a protective field that prevents status problems for five turns.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Safeguard"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Safeguard").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11420,15 +10959,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SolarBeamTM extends Item implements MoveUseItem {
+	static class SolarBeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SolarBeamTM() {
 			super(ItemNamesies.SOLAR_BEAM_TM, "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", BagCategory.TM, 2004);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Solar Beam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Solar Beam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11471,15 +11010,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SmackDownTM extends Item implements MoveUseItem {
+	static class SmackDownTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SmackDownTM() {
 			super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or projectile to attack an opponent. A flying Pokémon will fall to the ground when hit.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Smack Down"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Smack Down").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11522,15 +11061,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThunderboltTM extends Item implements MoveUseItem {
+	static class ThunderboltTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThunderboltTM() {
 			super(ItemNamesies.THUNDERBOLT_TM, "A strong electric blast is loosed at the target. It may also leave the target with paralysis.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Thunderbolt"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Thunderbolt").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11573,15 +11112,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThunderTM extends Item implements MoveUseItem {
+	static class ThunderTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThunderTM() {
 			super(ItemNamesies.THUNDER_TM, "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Thunder"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Thunder").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11624,15 +11163,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EarthquakeTM extends Item implements MoveUseItem {
+	static class EarthquakeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		EarthquakeTM() {
 			super(ItemNamesies.EARTHQUAKE_TM, "The user sets off an earthquake that strikes those around it.", BagCategory.TM, 2008);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Earthquake"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Earthquake").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11675,15 +11214,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DigTM extends Item implements MoveUseItem {
+	static class DigTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DigTM() {
 			super(ItemNamesies.DIG_TM, "The user burrows, then attacks on the second turn. It can also be used to exit dungeons.", BagCategory.TM, 2008);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dig"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dig").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11726,15 +11265,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PsychicTM extends Item implements MoveUseItem {
+	static class PsychicTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PsychicTM() {
 			super(ItemNamesies.PSYCHIC_TM, "The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Psychic"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Psychic").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11777,15 +11316,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShadowBallTM extends Item implements MoveUseItem {
+	static class ShadowBallTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ShadowBallTM() {
 			super(ItemNamesies.SHADOW_BALL_TM, "The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.", BagCategory.TM, 2013);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Shadow Ball"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Shadow Ball").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11828,15 +11367,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BrickBreakTM extends Item implements MoveUseItem {
+	static class BrickBreakTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		BrickBreakTM() {
 			super(ItemNamesies.BRICK_BREAK_TM, "The user attacks with a swift chop. It can also break any barrier such as Light Screen and Reflect.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Brick Break"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Brick Break").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11879,15 +11418,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DoubleTeamTM extends Item implements MoveUseItem {
+	static class DoubleTeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DoubleTeamTM() {
 			super(ItemNamesies.DOUBLE_TEAM_TM, "By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Double Team"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Double Team").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11930,15 +11469,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ReflectTM extends Item implements MoveUseItem {
+	static class ReflectTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ReflectTM() {
 			super(ItemNamesies.REFLECT_TM, "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Reflect"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Reflect").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -11981,15 +11520,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SludgeWaveTM extends Item implements MoveUseItem {
+	static class SludgeWaveTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SludgeWaveTM() {
 			super(ItemNamesies.SLUDGE_WAVE_TM, "It swamps the area around the user with a giant sludge wave. It may also poison those hit.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sludge Wave"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sludge Wave").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12032,15 +11571,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlamethrowerTM extends Item implements MoveUseItem {
+	static class FlamethrowerTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlamethrowerTM() {
 			super(ItemNamesies.FLAMETHROWER_TM, "The target is scorched with an intense blast of fire. It may also leave the target with a burn.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Flamethrower"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Flamethrower").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12083,15 +11622,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SludgeBombTM extends Item implements MoveUseItem {
+	static class SludgeBombTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SludgeBombTM() {
 			super(ItemNamesies.SLUDGE_BOMB_TM, "Unsanitary sludge is hurled at the target. It may also poison the target.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sludge Bomb"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sludge Bomb").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12134,15 +11673,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SandstormTM extends Item implements MoveUseItem {
+	static class SandstormTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SandstormTM() {
 			super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sandstorm"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sandstorm").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12185,15 +11724,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FireBlastTM extends Item implements MoveUseItem {
+	static class FireBlastTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FireBlastTM() {
 			super(ItemNamesies.FIRE_BLAST_TM, "The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Fire Blast"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Fire Blast").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12236,15 +11775,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockTombTM extends Item implements MoveUseItem {
+	static class RockTombTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RockTombTM() {
 			super(ItemNamesies.ROCK_TOMB_TM, "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rock Tomb"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rock Tomb").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12287,15 +11826,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AerialAceTM extends Item implements MoveUseItem {
+	static class AerialAceTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		AerialAceTM() {
 			super(ItemNamesies.AERIAL_ACE_TM, "The user confounds the foe with speed, then slashes. The attack lands without fail.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Aerial Ace"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Aerial Ace").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12338,15 +11877,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TormentTM extends Item implements MoveUseItem {
+	static class TormentTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		TormentTM() {
 			super(ItemNamesies.TORMENT_TM, "The user torments and enrages the target, making it incapable of using the same move twice in a row.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Torment"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Torment").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12389,15 +11928,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FacadeTM extends Item implements MoveUseItem {
+	static class FacadeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FacadeTM() {
 			super(ItemNamesies.FACADE_TM, "An attack move that doubles its power if the user is poisoned, burned, or has paralysis.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Facade"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Facade").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12440,15 +11979,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlameChargeTM extends Item implements MoveUseItem {
+	static class FlameChargeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlameChargeTM() {
 			super(ItemNamesies.FLAME_CHARGE_TM, "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Flame Charge"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Flame Charge").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12491,15 +12030,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RestTM extends Item implements MoveUseItem {
+	static class RestTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RestTM() {
 			super(ItemNamesies.REST_TM, "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rest"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rest").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12542,15 +12081,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AttractTM extends Item implements MoveUseItem {
+	static class AttractTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		AttractTM() {
 			super(ItemNamesies.ATTRACT_TM, "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Attract"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Attract").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12593,15 +12132,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThiefTM extends Item implements MoveUseItem {
+	static class ThiefTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThiefTM() {
 			super(ItemNamesies.THIEF_TM, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Thief"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Thief").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12644,15 +12183,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class LowSweepTM extends Item implements MoveUseItem {
+	static class LowSweepTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		LowSweepTM() {
 			super(ItemNamesies.LOW_SWEEP_TM, "The user attacks the target's legs swiftly, reducing the target's Speed stat.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Low Sweep"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Low Sweep").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12695,15 +12234,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RoundTM extends Item implements MoveUseItem {
+	static class RoundTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RoundTM() {
 			super(ItemNamesies.ROUND_TM, "The user attacks the target with a song.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Round"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Round").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12746,15 +12285,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EchoedVoiceTM extends Item implements MoveUseItem {
+	static class EchoedVoiceTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		EchoedVoiceTM() {
 			super(ItemNamesies.ECHOED_VOICE_TM, "The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Echoed Voice"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Echoed Voice").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12797,15 +12336,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class OverheatTM extends Item implements MoveUseItem {
+	static class OverheatTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		OverheatTM() {
 			super(ItemNamesies.OVERHEAT_TM, "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Overheat"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Overheat").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12848,15 +12387,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SteelWingTM extends Item implements MoveUseItem {
+	static class SteelWingTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SteelWingTM() {
 			super(ItemNamesies.STEEL_WING_TM, "The target is hit with wings of steel. It may also raise the user's Defense stat.", BagCategory.TM, 2016);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Steel Wing"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Steel Wing").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12899,15 +12438,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FocusBlastTM extends Item implements MoveUseItem {
+	static class FocusBlastTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FocusBlastTM() {
 			super(ItemNamesies.FOCUS_BLAST_TM, "The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Focus Blast"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Focus Blast").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -12950,15 +12489,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EnergyBallTM extends Item implements MoveUseItem {
+	static class EnergyBallTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		EnergyBallTM() {
 			super(ItemNamesies.ENERGY_BALL_TM, "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.", BagCategory.TM, 2004);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Energy Ball"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Energy Ball").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13001,15 +12540,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FalseSwipeTM extends Item implements MoveUseItem {
+	static class FalseSwipeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FalseSwipeTM() {
 			super(ItemNamesies.FALSE_SWIPE_TM, "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("False Swipe"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("False Swipe").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13052,15 +12591,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ScaldTM extends Item implements MoveUseItem {
+	static class ScaldTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ScaldTM() {
 			super(ItemNamesies.SCALD_TM, "The user shoots boiling hot water at its target. It may also leave the target with a burn.", BagCategory.TM, 2002);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Scald"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Scald").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13103,15 +12642,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlingTM extends Item implements MoveUseItem {
+	static class FlingTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlingTM() {
 			super(ItemNamesies.FLING_TM, "The user flings its held item at the target to attack. Its power and effects depend on the item.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Fling"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Fling").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13154,15 +12693,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ChargeBeamTM extends Item implements MoveUseItem {
+	static class ChargeBeamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ChargeBeamTM() {
 			super(ItemNamesies.CHARGE_BEAM_TM, "The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Charge Beam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Charge Beam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13205,15 +12744,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SkyDropTM extends Item implements MoveUseItem {
+	static class SkyDropTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SkyDropTM() {
 			super(ItemNamesies.SKY_DROP_TM, "The user takes the target into the sky, then slams it into the ground.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sky Drop"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sky Drop").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13256,15 +12795,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class IncinerateTM extends Item implements MoveUseItem {
+	static class IncinerateTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		IncinerateTM() {
 			super(ItemNamesies.INCINERATE_TM, "The user attacks the target with fire. If the target is holding a Berry, the Berry becomes burnt up and unusable.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Incinerate"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Incinerate").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13307,15 +12846,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WillOWispTM extends Item implements MoveUseItem {
+	static class WillOWispTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WillOWispTM() {
 			super(ItemNamesies.WILL_O_WISP_TM, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", BagCategory.TM, 2001);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Will-O-Wisp"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Will-O-Wisp").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13358,15 +12897,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class AcrobaticsTM extends Item implements MoveUseItem {
+	static class AcrobaticsTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		AcrobaticsTM() {
 			super(ItemNamesies.ACROBATICS_TM, "The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Acrobatics"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Acrobatics").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13409,15 +12948,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class EmbargoTM extends Item implements MoveUseItem {
+	static class EmbargoTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		EmbargoTM() {
 			super(ItemNamesies.EMBARGO_TM, "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Embargo"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Embargo").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13460,15 +12999,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ExplosionTM extends Item implements MoveUseItem {
+	static class ExplosionTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ExplosionTM() {
 			super(ItemNamesies.EXPLOSION_TM, "The user explodes to inflict damage on those around it. The user faints upon using this move.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Explosion"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Explosion").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13511,15 +13050,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ShadowClawTM extends Item implements MoveUseItem {
+	static class ShadowClawTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ShadowClawTM() {
 			super(ItemNamesies.SHADOW_CLAW_TM, "The user slashes with a sharp claw made from shadows. Critical hits land more easily.", BagCategory.TM, 2013);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Shadow Claw"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Shadow Claw").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13562,15 +13101,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PaybackTM extends Item implements MoveUseItem {
+	static class PaybackTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PaybackTM() {
 			super(ItemNamesies.PAYBACK_TM, "If the user moves after the target, this attack's power will be doubled.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Payback"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Payback").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13613,15 +13152,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RetaliateTM extends Item implements MoveUseItem {
+	static class RetaliateTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RetaliateTM() {
 			super(ItemNamesies.RETALIATE_TM, "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this attack's damage increases.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Retaliate"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Retaliate").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13664,15 +13203,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GigaImpactTM extends Item implements MoveUseItem {
+	static class GigaImpactTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GigaImpactTM() {
 			super(ItemNamesies.GIGA_IMPACT_TM, "The user charges at the target using every bit of its power. The user must rest on the next turn.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Giga Impact"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Giga Impact").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13715,15 +13254,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockPolishTM extends Item implements MoveUseItem {
+	static class RockPolishTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RockPolishTM() {
 			super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. It can sharply raise the Speed stat.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rock Polish"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rock Polish").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13766,15 +13305,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlashTM extends Item implements MoveUseItem {
+	static class FlashTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlashTM() {
 			super(ItemNamesies.FLASH_TM, "The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Flash"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Flash").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13817,15 +13356,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StoneEdgeTM extends Item implements MoveUseItem {
+	static class StoneEdgeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		StoneEdgeTM() {
 			super(ItemNamesies.STONE_EDGE_TM, "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Stone Edge"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Stone Edge").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13868,15 +13407,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class VoltSwitchTM extends Item implements MoveUseItem {
+	static class VoltSwitchTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		VoltSwitchTM() {
 			super(ItemNamesies.VOLT_SWITCH_TM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Volt Switch"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Volt Switch").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13919,15 +13458,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ThunderWaveTM extends Item implements MoveUseItem {
+	static class ThunderWaveTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ThunderWaveTM() {
 			super(ItemNamesies.THUNDER_WAVE_TM, "A weak electric charge is launched at the target. It causes paralysis if it hits.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Thunder Wave"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Thunder Wave").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -13970,15 +13509,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GyroBallTM extends Item implements MoveUseItem {
+	static class GyroBallTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GyroBallTM() {
 			super(ItemNamesies.GYRO_BALL_TM, "The user tackles the target with a high-speed spin. The slower the user, the greater the damage.", BagCategory.TM, 2016);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Gyro Ball"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Gyro Ball").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14021,15 +13560,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SwordsDanceTM extends Item implements MoveUseItem {
+	static class SwordsDanceTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SwordsDanceTM() {
 			super(ItemNamesies.SWORDS_DANCE_TM, "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Swords Dance"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Swords Dance").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14072,15 +13611,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StruggleBugTM extends Item implements MoveUseItem {
+	static class StruggleBugTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		StruggleBugTM() {
 			super(ItemNamesies.STRUGGLE_BUG_TM, "While resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced.", BagCategory.TM, 2011);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Struggle Bug"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Struggle Bug").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14123,15 +13662,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PsychUpTM extends Item implements MoveUseItem {
+	static class PsychUpTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PsychUpTM() {
 			super(ItemNamesies.PSYCH_UP_TM, "The user hypnotizes itself into copying any stat change made by the target.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Psych Up"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Psych Up").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14174,15 +13713,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class BulldozeTM extends Item implements MoveUseItem {
+	static class BulldozeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		BulldozeTM() {
 			super(ItemNamesies.BULLDOZE_TM, "The user stomps down on the ground and attacks everything in the area. Hit Pokémon's Speed stat is reduced.", BagCategory.TM, 2008);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Bulldoze"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Bulldoze").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14225,15 +13764,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FrostBreathTM extends Item implements MoveUseItem {
+	static class FrostBreathTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FrostBreathTM() {
 			super(ItemNamesies.FROST_BREATH_TM, "The user blows a cold breath on the target. This attack always results in a critical hit.", BagCategory.TM, 2005);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Frost Breath"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Frost Breath").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14276,15 +13815,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockSlideTM extends Item implements MoveUseItem {
+	static class RockSlideTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RockSlideTM() {
 			super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", BagCategory.TM, 2012);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rock Slide"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rock Slide").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14327,15 +13866,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class XScissorTM extends Item implements MoveUseItem {
+	static class XScissorTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		XScissorTM() {
 			super(ItemNamesies.X_SCISSOR_TM, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", BagCategory.TM, 2011);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("X-Scissor"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("X-Scissor").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14378,15 +13917,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DragonTailTM extends Item implements MoveUseItem {
+	static class DragonTailTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DragonTailTM() {
 			super(ItemNamesies.DRAGON_TAIL_TM, "The user knocks away the target and drags out another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM, 2014);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dragon Tail"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dragon Tail").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14429,15 +13968,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class InfestationTM extends Item implements MoveUseItem {
+	static class InfestationTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		InfestationTM() {
 			super(ItemNamesies.INFESTATION_TM, "The target is infested and attacked for four to five turns. The target can't flee during this time.", BagCategory.TM, 2011);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Infestation"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Infestation").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14480,15 +14019,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PoisonJabTM extends Item implements MoveUseItem {
+	static class PoisonJabTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PoisonJabTM() {
 			super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.", BagCategory.TM, 2007);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Poison Jab"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Poison Jab").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14531,15 +14070,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DreamEaterTM extends Item implements MoveUseItem {
+	static class DreamEaterTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DreamEaterTM() {
 			super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dream Eater"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dream Eater").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14582,15 +14121,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class GrassKnotTM extends Item implements MoveUseItem {
+	static class GrassKnotTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		GrassKnotTM() {
 			super(ItemNamesies.GRASS_KNOT_TM, "The user snares the target with grass and trips it. The heavier the target, the greater the damage.", BagCategory.TM, 2004);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Grass Knot"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Grass Knot").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14633,15 +14172,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SwaggerTM extends Item implements MoveUseItem {
+	static class SwaggerTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SwaggerTM() {
 			super(ItemNamesies.SWAGGER_TM, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Swagger"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Swagger").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14684,15 +14223,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SleepTalkTM extends Item implements MoveUseItem {
+	static class SleepTalkTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SleepTalkTM() {
 			super(ItemNamesies.SLEEP_TALK_TM, "While it is asleep, the user randomly uses one of the moves it knows.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Sleep Talk"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Sleep Talk").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14735,15 +14274,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class UTurnTM extends Item implements MoveUseItem {
+	static class UTurnTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		UTurnTM() {
 			super(ItemNamesies.U_TURN_TM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM, 2011);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("U-turn"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("U-turn").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14786,15 +14325,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SubstituteTM extends Item implements MoveUseItem {
+	static class SubstituteTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SubstituteTM() {
 			super(ItemNamesies.SUBSTITUTE_TM, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Substitute"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Substitute").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14837,15 +14376,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlashCannonTM extends Item implements MoveUseItem {
+	static class FlashCannonTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlashCannonTM() {
 			super(ItemNamesies.FLASH_CANNON_TM, "The user gathers all its light energy and releases it at once. It may also lower the target's Sp. Def stat.", BagCategory.TM, 2016);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Flash Cannon"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Flash Cannon").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14888,15 +14427,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class TrickRoomTM extends Item implements MoveUseItem {
+	static class TrickRoomTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		TrickRoomTM() {
 			super(ItemNamesies.TRICK_ROOM_TM, "The user creates a bizarre area in which slower Pokémon get to move first for five turns.", BagCategory.TM, 2010);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Trick Room"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Trick Room").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14939,15 +14478,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WildChargeTM extends Item implements MoveUseItem {
+	static class WildChargeTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WildChargeTM() {
 			super(ItemNamesies.WILD_CHARGE_TM, "The user shrouds itself in electricity and smashes into its target. It also damages the user a little.", BagCategory.TM, 2003);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Wild Charge"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Wild Charge").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -14990,15 +14529,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class RockSmashTM extends Item implements MoveUseItem {
+	static class RockSmashTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		RockSmashTM() {
 			super(ItemNamesies.ROCK_SMASH_TM, "The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Rock Smash"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Rock Smash").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15041,15 +14580,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SnarlTM extends Item implements MoveUseItem {
+	static class SnarlTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SnarlTM() {
 			super(ItemNamesies.SNARL_TM, "The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Snarl"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Snarl").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15092,15 +14631,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class NaturePowerTM extends Item implements MoveUseItem {
+	static class NaturePowerTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		NaturePowerTM() {
 			super(ItemNamesies.NATURE_POWER_TM, "An attack that makes use of nature's power. Its effects vary depending on the user's environment.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Nature Power"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Nature Power").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15143,15 +14682,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DarkPulseTM extends Item implements MoveUseItem {
+	static class DarkPulseTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DarkPulseTM() {
 			super(ItemNamesies.DARK_PULSE_TM, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", BagCategory.TM, 2015);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dark Pulse"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dark Pulse").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15194,15 +14733,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class PowerUpPunchTM extends Item implements MoveUseItem {
+	static class PowerUpPunchTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PowerUpPunchTM() {
 			super(ItemNamesies.POWER_UP_PUNCH_TM, "Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.", BagCategory.TM, 2006);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Power-Up Punch"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Power-Up Punch").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15245,15 +14784,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class DazzlingGleamTM extends Item implements MoveUseItem {
+	static class DazzlingGleamTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DazzlingGleamTM() {
 			super(ItemNamesies.DAZZLING_GLEAM_TM, "The user damages opposing Pokémon by emitting a powerful flash.", BagCategory.TM, 2017);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Dazzling Gleam"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Dazzling Gleam").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15296,15 +14835,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class ConfideTM extends Item implements MoveUseItem {
+	static class ConfideTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		ConfideTM() {
 			super(ItemNamesies.CONFIDE_TM, "The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target's Sp. Atk stat.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Confide"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Confide").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15347,15 +14886,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class CutTM extends Item implements MoveUseItem {
+	static class CutTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		CutTM() {
 			super(ItemNamesies.CUT_TM, "The target is cut with a scythe or a claw. It can also be used to cut down thin trees.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Cut"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Cut").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15398,15 +14937,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class FlyTM extends Item implements MoveUseItem {
+	static class FlyTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FlyTM() {
 			super(ItemNamesies.FLY_TM, "The user soars, then strikes its target on the second turn. It can also be used for flying to any familiar town.", BagCategory.TM, 2009);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Fly"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Fly").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15449,15 +14988,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class SurfTM extends Item implements MoveUseItem {
+	static class SurfTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		SurfTM() {
 			super(ItemNamesies.SURF_TM, "It swamps the area around the user with a giant wave. It can also be used for crossing water.", BagCategory.TM, 2002);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Surf"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Surf").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15500,15 +15039,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class StrengthTM extends Item implements MoveUseItem {
+	static class StrengthTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		StrengthTM() {
 			super(ItemNamesies.STRENGTH_TM, "The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.", BagCategory.TM, 2000);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Strength"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Strength").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -15551,15 +15090,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	private static class WaterfallTM extends Item implements MoveUseItem {
+	static class WaterfallTM extends Item implements MoveUseItem {
 		private static final long serialVersionUID = 1L;
 
 		WaterfallTM() {
 			super(ItemNamesies.WATERFALL_TM, "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", BagCategory.TM, 2002);
 		}
 
-		public Attack getAttack() {
-			return Attack.getAttack(AttackNamesies.getValueOf("Waterfall"));
+		private Attack getAttack() {
+			return AttackNamesies.getValueOf("Waterfall").getAttack();
 		}
 
 		public boolean use(ActivePokemon p, Move m) {

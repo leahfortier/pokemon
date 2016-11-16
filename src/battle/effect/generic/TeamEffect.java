@@ -1,8 +1,9 @@
 package battle.effect.generic;
 
-import battle.Attack;
 import battle.Battle;
-import battle.Move;
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
@@ -12,19 +13,15 @@ import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
-import main.Global;
+import item.ItemNamesies;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
-import namesies.ItemNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 // Class to handle effects that are specific to one side of the battle
@@ -46,47 +43,10 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		Messages.addMessage("", b, victim);
 	}
 
-	public static TeamEffect getEffect(EffectNamesies name) {
-		String effectName = name.getName();
-		if (map == null) {
-			loadEffects();
-		}
-		
-		if (!map.containsKey(effectName)) {
-			Global.error("No such Effect " + effectName);
-		}
-
-		return map.get(effectName);
-	}
-
-	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects() {
-		if (map != null) return;
-		map = new HashMap<>();
-		
-		// EVERYTHING BELOW IS GENERATED ###
-
-		// List all of the classes we are loading
-		map.put("Reflect", new Reflect());
-		map.put("LightScreen", new LightScreen());
-		map.put("Tailwind", new Tailwind());
-		map.put("StickyWeb", new StickyWeb());
-		map.put("StealthRock", new StealthRock());
-		map.put("ToxicSpikes", new ToxicSpikes());
-		map.put("Spikes", new Spikes());
-		map.put("Wish", new Wish());
-		map.put("LuckyChant", new LuckyChant());
-		map.put("FutureSight", new FutureSight());
-		map.put("DoomDesire", new DoomDesire());
-		map.put("HealSwitch", new HealSwitch());
-		map.put("DeadAlly", new DeadAlly());
-		map.put("PayDay", new PayDay());
-		map.put("GetDatCashMoneyTwice", new GetDatCashMoneyTwice());
-	}
-
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class Reflect extends TeamEffect implements BarrierEffect, StatChangingEffect {
+	static class Reflect extends TeamEffect implements BarrierEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Reflect() {
@@ -142,7 +102,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class LightScreen extends TeamEffect implements BarrierEffect, StatChangingEffect {
+	static class LightScreen extends TeamEffect implements BarrierEffect, StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LightScreen() {
@@ -198,7 +158,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Tailwind extends TeamEffect implements StatChangingEffect {
+	static class Tailwind extends TeamEffect implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Tailwind() {
@@ -234,7 +194,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class StickyWeb extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+	static class StickyWeb extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 
 		StickyWeb() {
@@ -278,7 +238,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class StealthRock extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+	static class StealthRock extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 
 		StealthRock() {
@@ -323,7 +283,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class ToxicSpikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+	static class ToxicSpikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 		private int layers;
 
@@ -366,7 +326,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.user());
 			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
 				if (layers >= 2) {
-					PokemonEffect.getEffect(EffectNamesies.BAD_POISON).cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
+					EffectNamesies.BAD_POISON.getEffect().cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
 				}
 				else {
 					Status.giveStatus(b, theOtherPokemon, enterer, StatusCondition.POISONED);
@@ -391,7 +351,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Spikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+	static class Spikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 		private int layers;
 
@@ -450,7 +410,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class Wish extends TeamEffect {
+	static class Wish extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 		private String casterName;
 
@@ -483,7 +443,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class LuckyChant extends TeamEffect implements CritBlockerEffect {
+	static class LuckyChant extends TeamEffect implements CritBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuckyChant() {
@@ -511,7 +471,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class FutureSight extends TeamEffect {
+	static class FutureSight extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 		private ActivePokemon theSeeer;
 
@@ -541,7 +501,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		public void subside(Battle b, ActivePokemon p) {
 			Messages.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
-			Attack attack = Attack.getAttack(AttackNamesies.FUTURE_SIGHT);
+			Attack attack = AttackNamesies.FUTURE_SIGHT.getAttack();
 			
 			// Don't do anything for moves that are uneffective
 			if (!attack.effective(b, theSeeer, p)) {
@@ -553,7 +513,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class DoomDesire extends TeamEffect {
+	static class DoomDesire extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 		private ActivePokemon theSeeer;
 
@@ -583,7 +543,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		public void subside(Battle b, ActivePokemon p) {
 			Messages.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
-			Attack attack = Attack.getAttack(AttackNamesies.DOOM_DESIRE);
+			Attack attack = AttackNamesies.DOOM_DESIRE.getAttack();
 			
 			// Don't do anything for moves that are uneffective
 			if (!attack.effective(b, theSeeer, p)) {
@@ -595,7 +555,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class HealSwitch extends TeamEffect implements EntryEffect {
+	static class HealSwitch extends TeamEffect implements EntryEffect {
 		private static final long serialVersionUID = 1L;
 		private String wish;
 
@@ -628,7 +588,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class DeadAlly extends TeamEffect {
+	static class DeadAlly extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 
 		DeadAlly() {
@@ -644,7 +604,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class PayDay extends TeamEffect implements EndBattleEffect {
+	static class PayDay extends TeamEffect implements EndBattleEffect {
 		private static final long serialVersionUID = 1L;
 		private int coins;
 
@@ -680,7 +640,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
-	private static class GetDatCashMoneyTwice extends TeamEffect {
+	static class GetDatCashMoneyTwice extends TeamEffect {
 		private static final long serialVersionUID = 1L;
 
 		GetDatCashMoneyTwice() {

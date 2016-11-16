@@ -1,7 +1,7 @@
 package message;
 
 import battle.Battle;
-import battle.Move;
+import battle.attack.Move;
 import message.MessageUpdate.Update;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;

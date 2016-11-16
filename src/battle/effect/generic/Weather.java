@@ -6,20 +6,14 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import item.Item;
-import main.Global;
 import main.Type;
 import message.Messages;
-import namesies.EffectNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;
-	private static Map<String, Weather> map;
-	
+
 	protected Type weatherElement;
 	
 	public Weather(EffectNamesies namesies, Type weatherElement) {
@@ -50,41 +44,10 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	
 	public abstract Weather newInstance();
 	
-	public static Weather getEffect(EffectNamesies name) {
-		String effectName = name.getName();
-		
-		if (map == null) {
-			loadEffects();
-		}
-		
-		if (!map.containsKey(effectName)) {
-			Global.error("No such Effect " + effectName);
-		}
-
-		return map.get(effectName);
-	}
-
-	// Create and load the effects map if it doesn't already exist
-	public static void loadEffects() {
-		if (map != null) {
-			return;
-		}
-
-		map = new HashMap<>();
-
-		// EVERYTHING BELOW IS GENERATED ###
-
-		// List all of the classes we are loading
-		map.put("ClearSkies", new ClearSkies());
-		map.put("Raining", new Raining());
-		map.put("Sunny", new Sunny());
-		map.put("Sandstorm", new Sandstorm());
-		map.put("Hailing", new Hailing());
-	}
-
+	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	private static class ClearSkies extends Weather {
+	static class ClearSkies extends Weather {
 		private static final long serialVersionUID = 1L;
 
 		ClearSkies() {
@@ -99,7 +62,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	private static class Raining extends Weather implements StatChangingEffect {
+	static class Raining extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Raining() {
@@ -142,7 +105,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	private static class Sunny extends Weather implements StatChangingEffect {
+	static class Sunny extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Sunny() {
@@ -185,7 +148,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	private static class Sandstorm extends Weather implements StatChangingEffect {
+	static class Sandstorm extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
 		private static Type[] immunees = new Type[] {Type.ROCK, Type.GROUND, Type.STEEL};
 		private void buffet(Battle b, ActivePokemon p) {
@@ -247,7 +210,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	private static class Hailing extends Weather {
+	static class Hailing extends Weather {
 		private static final long serialVersionUID = 1L;
 		private static Type[] immunees = new Type[] {Type.ICE};
 		private void buffet(Battle b, ActivePokemon p) {

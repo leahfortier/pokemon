@@ -5,8 +5,8 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.PokemonEffect;
 import main.Type;
 import message.Messages;
-import namesies.AbilityNamesies;
-import namesies.EffectNamesies;
+import pokemon.ability.AbilityNamesies;
+import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
 
 class Poisoned extends Status implements EndTurnEffect {

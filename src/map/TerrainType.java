@@ -1,13 +1,13 @@
 package map;
 
-import battle.Attack;
+import battle.attack.Attack;
 import battle.effect.generic.Effect;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Type;
-import namesies.AttackNamesies;
-import namesies.EffectNamesies;
+import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
 import pokemon.Stat;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public enum TerrainType {
 
     TerrainType(Type type, AttackNamesies attack, Object effect) {
         this.type = type;
-        this.attack = Attack.getAttack(attack);
+        this.attack = attack.getAttack();
 
         this.statChanges = new int[Stat.NUM_BATTLE_STATS];
         this.effects = new ArrayList<>();

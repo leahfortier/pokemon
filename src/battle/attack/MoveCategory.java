@@ -1,4 +1,4 @@
-package battle;
+package battle.attack;
 
 import java.io.Serializable;
 
