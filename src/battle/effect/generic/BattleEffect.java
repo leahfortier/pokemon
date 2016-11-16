@@ -18,23 +18,18 @@ import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 
-import java.util.Map;
-
 public abstract class BattleEffect extends Effect {
 	private static final long serialVersionUID = 1L;
-	private static Map<String, BattleEffect> map;
-
 	public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		super(name, minTurns, maxTurns, nextTurnSubside);
 	}
-
-	public abstract BattleEffect newInstance();
 
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) {
 			Messages.addMessage(getCastMessage(b, caster, victim));
 		}
-		b.addEffect(this.newInstance());
+
+		b.addEffect(this);
 
 		Messages.addMessage("", b, caster);
 		Messages.addMessage("", b, victim);
@@ -48,10 +43,6 @@ public abstract class BattleEffect extends Effect {
 
 		Gravity() {
 			super(EffectNamesies.GRAVITY, 5, 5, false);
-		}
-
-		public Gravity newInstance() {
-			return (Gravity)(new Gravity().activate());
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
@@ -103,10 +94,6 @@ public abstract class BattleEffect extends Effect {
 			super(EffectNamesies.WATER_SPORT, 5, 5, false);
 		}
 
-		public WaterSport newInstance() {
-			return (WaterSport)(new WaterSport().activate());
-		}
-
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
@@ -131,10 +118,6 @@ public abstract class BattleEffect extends Effect {
 			super(EffectNamesies.MUD_SPORT, 5, 5, false);
 		}
 
-		public MudSport newInstance() {
-			return (MudSport)(new MudSport().activate());
-		}
-
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
@@ -157,10 +140,6 @@ public abstract class BattleEffect extends Effect {
 
 		WonderRoom() {
 			super(EffectNamesies.WONDER_ROOM, 5, 5, false);
-		}
-
-		public WonderRoom newInstance() {
-			return (WonderRoom)(new WonderRoom().activate());
 		}
 
 		public Stat switchStat(Stat s) {
@@ -198,10 +177,6 @@ public abstract class BattleEffect extends Effect {
 			super(EffectNamesies.TRICK_ROOM, 5, 5, false);
 		}
 
-		public TrickRoom newInstance() {
-			return (TrickRoom)(new TrickRoom().activate());
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
 			if (roomsies == null) {
@@ -230,10 +205,6 @@ public abstract class BattleEffect extends Effect {
 			super(EffectNamesies.MAGIC_ROOM, 5, 5, false);
 		}
 
-		public MagicRoom newInstance() {
-			return (MagicRoom)(new MagicRoom().activate());
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
 			if (roomsies == null) {
@@ -260,10 +231,6 @@ public abstract class BattleEffect extends Effect {
 
 		MistyTerrain() {
 			super(EffectNamesies.MISTY_TERRAIN, 5, 5, false);
-		}
-
-		public MistyTerrain newInstance() {
-			return (MistyTerrain)(new MistyTerrain().activate());
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
@@ -319,10 +286,6 @@ public abstract class BattleEffect extends Effect {
 			super(EffectNamesies.GRASSY_TERRAIN, 5, 5, false);
 		}
 
-		public GrassyTerrain newInstance() {
-			return (GrassyTerrain)(new GrassyTerrain().activate());
-		}
-
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
@@ -372,10 +335,6 @@ public abstract class BattleEffect extends Effect {
 
 		ElectricTerrain() {
 			super(EffectNamesies.ELECTRIC_TERRAIN, 5, 5, false);
-		}
-
-		public ElectricTerrain newInstance() {
-			return (ElectricTerrain)(new ElectricTerrain().activate());
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {

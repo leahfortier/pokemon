@@ -11,7 +11,7 @@ Constructor:
 Fields:
 	Pow Int power
 	Acc Int accuracy
-	Effect Function Effect.getEffect 1 1 Enum EffectNamesies effects List
+	Effect Multiple Enum EffectNamesies effects List
 	EffChance Int effectChance
 	Status Enum StatusCondition status
 	MoveType Multiple Enum MoveType moveTypes List
@@ -36,7 +36,7 @@ Leech Seed:
 	Cat: Status
 	Desc: A seed is planted on the target. It steals some HP from the target every turn.
 	PP: 10
-	Effect: Pokemon LeechSeed
+	Effect: LeechSeed
 *	
 Thunder Wave:
 	Acc: 100
@@ -68,7 +68,7 @@ Toxic:
 	PP: 10
 	Type: Poison
 	Desc: A move that leaves the target badly poisoned. Its poison damage worsens every turn.
-	Effect: Pokemon BadPoison
+	Effect: BadPoison
 	Cat: Status
 	Acc: 90
 	Int: AccuracyBypassEffect
@@ -267,7 +267,7 @@ Bite:
 	Acc: 100
 	Type: Dark
 	Cat: Physical
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 	MoveType: Biting
 *
@@ -343,7 +343,7 @@ Fire Spin:
 	Pow: 35
 	Acc: 85
 	Cat: Special
-	Effect: Pokemon FireSpin
+	Effect: FireSpin
 *
 Inferno:
 	Type: Fire
@@ -378,7 +378,7 @@ Air Slash:
 	Desc: The user attacks with a blade of air that slices even the sky. It may also make the target flinch.
 	Pow: 75
 	Acc: 95
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 *
 Wing Attack:
@@ -464,7 +464,7 @@ Reflect:
 	PP: 20
 	Type: Psychic
 	Cat: Status
-	Effect: Team Reflect
+	Effect: Reflect
 	SelfTarget: True
 *
 Spiky Shield:
@@ -507,14 +507,14 @@ Endure:
 	Type: Normal
 	Cat: Status
 	PP: 10
-	Effect: Pokemon Bracing
+	Effect: Bracing
 	SelfTarget: True
 	MoveType: Assistless, Successive_Decay, Non_Snatchable, Metronomeless
 	Priority: 4
 *
 Water Pulse:
 	Desc: The user attacks the target with a pulsing blast of water. It may also confuse the target.
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	Acc: 100
 	MoveType: Aura_Pulse
 	Pow: 60
@@ -538,7 +538,7 @@ Confuse Ray:
 	Acc: 100
 	Cat: Status
 	PP: 10
-	Effect: Pokemon Confusion
+	Effect: Confusion
 *
 Aqua Tail:
 	Desc: The user attacks by swinging its tail as if it were a vicious wave in a raging storm.
@@ -615,7 +615,7 @@ Petal Dance:
 	PhysicalContact: True
 	Type: Grass
 	Cat: Special
-	Effect: Pokemon SelfConfusion
+	Effect: SelfConfusion
 	SelfTarget: True
 *
 Thrash:
@@ -625,7 +625,7 @@ Thrash:
 	PP: 10
 	Type: Normal
 	Cat: Physical
-	Effect: Pokemon SelfConfusion
+	Effect: SelfConfusion
 	SelfTarget: True
 *
 Hyper Beam:
@@ -668,7 +668,7 @@ Harden:
 Confusion:
 	Desc: The target is hit by a weak telekinetic force. It may also leave the target confused.
 	Type: Psychic
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	EffChance: 10
 	Cat: Special
 	Pow: 50
@@ -700,7 +700,7 @@ Supersonic:
 	MoveType: Sound_Based
 	Type: Normal
 	Cat: Status
-	Effect: Pokemon Confusion
+	Effect: Confusion
 *
 Psybeam:
 	Desc: The target is attacked with a peculiar ray. It may also cause confusion.
@@ -709,7 +709,7 @@ Psybeam:
 	Acc: 100
 	Type: Psychic
 	Cat: Special
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	EffChance: 10
 *
 Silver Wind:
@@ -725,7 +725,7 @@ Silver Wind:
 *
 Tailwind:
 	Desc: The user whips up a turbulent whirlwind that ups the Speed of all party Pok\u00e9mon for four turns.
-	Effect: Team Tailwind
+	Effect: Tailwind
 	SelfTarget: True
 	Type: Flying
 	Cat: Status
@@ -743,7 +743,7 @@ Safeguard:
 	PP: 25
 	Type: Normal
 	Cat: Status
-	Effect: Pokemon Safeguard
+	Effect: Safeguard
 	SelfTarget: True
 *
 Captivate:
@@ -791,7 +791,7 @@ Encore:
 	Type: Normal
 	Cat: Status
 	Acc: 100
-	Effect: Pokemon Encore
+	Effect: Encore
 	MoveType: Encoreless, Substitute_Piercing
 *
 Poison Sting:
@@ -833,7 +833,7 @@ Disable:
 	Acc: 100
 	Type: Normal
 	Cat: Status
-	Effect: Pokemon Disable
+	Effect: Disable
 	MoveType: Substitute_Piercing
 *
 Focus Energy:
@@ -842,7 +842,7 @@ Focus Energy:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon RaiseCrits
+	Effect: RaiseCrits
 *
 Twineedle:
 	Desc: The user damages the target twice in succession by jabbing it with two spikes. It may also poison the target.
@@ -896,7 +896,7 @@ Toxic Spikes:
 	Type: Poison
 	Cat: Status
 	MoveType: Field
-	Effect: Team ToxicSpikes
+	Effect: ToxicSpikes
 *
 Pin Missile:
 	Desc: Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.
@@ -969,7 +969,7 @@ Twister:
 	PP: 20
 	Pow: 40
 	Acc: 100
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 20
 	HitFly: True
 *
@@ -1043,7 +1043,7 @@ Hurricane:
 	Type: Flying
 	Cat: Special
 	StormyMove: True
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	EffChance: 30
 *
 Hyper Fang:
@@ -1054,7 +1054,7 @@ Hyper Fang:
 	Acc: 90
 	MoveType: Biting
 	Type: Normal
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 10
 *
 Sucker Punch:
@@ -1151,7 +1151,7 @@ Wrap:
 	Acc: 90
 	Type: Normal
 	Cat: Physical
-	Effect: Pokemon Wrapped
+	Effect: Wrapped
 *
 Glare:
 	Desc: The user intimidates the target with the pattern on its belly to cause paralysis.
@@ -1186,7 +1186,7 @@ Stockpile:
 	Cat: Status
 	Type: Normal
 	SelfTarget: True
-	Effect: Pokemon Stockpile
+	Effect: Stockpile
 *
 Spit Up:
 	Desc: The power stored using the move Stockpile is released at once in an attack. The more power is stored, the greater the damage.
@@ -1386,7 +1386,7 @@ Light Screen:
 	PP: 30
 	Type: Psychic
 	Cat: Status
-	Effect: Team LightScreen
+	Effect: LightScreen
 	SelfTarget: True
 *
 Thunder:
@@ -1404,7 +1404,7 @@ Defense Curl:
 	Desc: The user curls up to conceal weak spots and raise its Defense stat.
 	Type: Normal
 	SelfTarget: True
-	Effect: Pokemon UsedDefenseCurl
+	Effect: UsedDefenseCurl
 	Cat: Status
 	PP: 40
 	StatChange: 1 Defense 1
@@ -1455,7 +1455,7 @@ Sand Tomb:
 	Acc: 85
 	Cat: Physical
 	Type: Ground
-	Effect: Pokemon SandTomb
+	Effect: SandTomb
 	PhysicalContact: False
 *
 Gyro Ball:
@@ -1505,7 +1505,7 @@ Flatter:
 	Type: Dark
 	Cat: Status
 	Acc: 100
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	StatChange: 1 Sp_Attack 2
 *
 Poison Fang:
@@ -1516,7 +1516,7 @@ Poison Fang:
 	Cat: Physical
 	Type: Poison
 	MoveType: Biting
-	Effect: Pokemon BadPoison
+	Effect: BadPoison
 	EffChance: 50
 *
 Chip Away:
@@ -1613,7 +1613,7 @@ Double Slap:
 	PP: 10
 *
 Wish:
-	Effect: Team Wish
+	Effect: Wish
 	SelfTarget: True
 	Desc: One turn after this move is used, the target's HP is restored by half the user's maximum HP.
 	PP: 10
@@ -1627,7 +1627,7 @@ Minimize:
 	PP: 20
 	Cat: Status
 	Type: Normal
-	Effect: Pokemon UsedMinimize
+	Effect: UsedMinimize
 *
 Wake-Up Slap:
 	Desc: This attack inflicts big damage on a sleeping target. It also wakes the target up, however.
@@ -1651,7 +1651,7 @@ Lucky Chant:
 	PP: 30
 	Type: Normal
 	Cat: Status
-	Effect: Team LuckyChant
+	Effect: LuckyChant
 	SelfTarget: True
 *
 Metronome:
@@ -1704,7 +1704,7 @@ Mimic:
 	PP: 10
 	Type: Normal
 	Cat: Status
-	Effect: Pokemon Mimic
+	Effect: Mimic
 	MoveType: Encoreless, Assistless, Metronomeless, Non_Snatchable
 	SelfTarget: True
 *
@@ -1725,7 +1725,7 @@ Imprison:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	Effect: Pokemon Imprison
+	Effect: Imprison
 	MoveType: No_Magic_Coat, Protect_Piercing, Substitute_Piercing
 *
 Will-O-Wisp:
@@ -1752,7 +1752,7 @@ Extrasensory:
 	Cat: Special
 	Acc: 100
 	Pow: 80
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 10
 *
 Fire Blast:
@@ -1826,7 +1826,7 @@ Astonish:
 	Acc: 100
 	Cat: Physical
 	Type: Ghost
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 *
 Air Cutter:
@@ -1843,7 +1843,7 @@ Mean Look:
 	PP: 5
 	Type: Normal
 	Cat: Status
-	Effect: Pokemon Trapped
+	Effect: Trapped
 *
 Acrobatics:
 	Desc: The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage.
@@ -1978,7 +1978,7 @@ Signal Beam:
 	Cat: Special
 	Acc: 100
 	Pow: 75
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	EffChance: 10
 *
 Zen Headbutt:
@@ -1987,7 +1987,7 @@ Zen Headbutt:
 	Pow: 80
 	Cat: Physical
 	Type: Psychic
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 20
 	Acc: 90
 *
@@ -2111,7 +2111,7 @@ Fake Out:
 	Type: Normal
 	Priority: 3
 	Pow: 40
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	ApplyError: !me.getAttributes().isFirstTurn()
 *
 Feint Attack:
@@ -2127,7 +2127,7 @@ Taunt:
 	Acc: 100
 	Cat: Status
 	Type: Dark
-	Effect: Pokemon Taunt
+	Effect: Taunt
 	MoveType: Substitute_Piercing
 *
 Pay Day:
@@ -2138,7 +2138,7 @@ Pay Day:
 	Cat: Physical
 	Type: Normal
 	PhysicalContact: False
-	Effect: Team PayDay
+	Effect: PayDay
 	SelfTarget: True
 *
 Power Gem:
@@ -2162,7 +2162,7 @@ Soak:
 	Acc: 100
 	Type: Water
 	Cat: Status
-	Effect: Pokemon ChangeType
+	Effect: ChangeType
 	ChangeType: 
 	return new Type[] { Type.WATER, Type.NO_TYPE };
 	###
@@ -2263,7 +2263,7 @@ Swagger:
 	PP: 15
 	Cat: Status
 	Type: Normal
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	StatChange: 1 Attack 2
 	Acc: 90
 *
@@ -2396,7 +2396,7 @@ Dynamic Punch:
 	PP: 5
 	Pow: 100
 	Acc: 50
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	Type: Fighting
 	Cat: Physical
 	MoveType: Punching
@@ -2408,7 +2408,7 @@ Mind Reader:
 	Cat: Status
 	Type: Normal
 	SelfTarget: True
-	Effect: Pokemon LockOn
+	Effect: LockOn
 *
 Lock-On:
 	Desc: The user takes sure aim at the target. It ensures the next attack does not fail to hit the target.
@@ -2417,7 +2417,7 @@ Lock-On:
 	MoveType: Non_Snatchable
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon LockOn
+	Effect: LockOn
 *
 Kinesis:
 	Desc: The user distracts the target by bending a spoon. It lowers the target's accuracy.
@@ -2440,12 +2440,12 @@ Telekinesis:
 	PP: 15
 	Type: Psychic
 	Cat: Status
-	Effect: Pokemon Telekinesis
+	Effect: Telekinesis
 	MoveType: Airborne
 *
 Ingrain:
 	SelfTarget: True
-	Effect: Pokemon Ingrain
+	Effect: Ingrain
 	Desc: The user lays roots that restore its HP on every turn. Because it is rooted, it can't switch out.
 	PP: 20
 	Type: Grass
@@ -2616,7 +2616,7 @@ Rock Blast:
 	Desc: The user hurls hard rocks at the target. Two to five rocks are launched in quick succession.
 *
 Smack Down:
-	Effect: Pokemon Grounded
+	Effect: Grounded
 	HitFly: True
 	Pow: 50
 	Desc: The user throws a stone or projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when hit.
@@ -2630,7 +2630,7 @@ Stealth Rock:
 	Type: Rock
 	Cat: Status
 	PP: 20
-	Effect: Team StealthRock
+	Effect: StealthRock
 	MoveType: Field
 	Desc: The user lays a trap of levitating stones around the opponent's team. The trap hurts opponents that switch into battle.
 *
@@ -2651,7 +2651,7 @@ Steamroller:
 	Acc: 100
 	Type: Bug
 	Pow: 65
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 	HitMinimize: True
 *
@@ -2670,7 +2670,7 @@ Stomp:
 	Acc: 100
 	Cat: Physical
 	Type: Normal
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 	HitMinimize: True
 *
@@ -2704,20 +2704,22 @@ Curse:
 	PP: 10
 	Cat: Status
 	Type: Ghost
-	Effect: Pokemon Curse
 	StatChange: 3 Attack 1 Defense 1 Speed -1
 	Apply: 
 	// Different effects based on the type of the user
 	if (me.isType(b, Type.GHOST)) {
+		Effect curse = EffectNamesies.CURSE.getEffect();
+
 		// Manually apply the effect if it applies
-		if (super.effects.get(0).applies(b, me, o, CastSource.ATTACK)) {
-			super.effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
+		if (curse.applies(b, me, o, CastSource.ATTACK)) {
+			curse.cast(b, me, o, CastSource.ATTACK, super.printCast);
 		}
 		else {
 			Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 		}
-	} else {
-		me.modifyStages(b, me, super.statChanges, CastSource.ATTACK);
+	}
+	else {
+		super.apply(me, o, b);
 	}
 	###
 	MoveType: Protect_Piercing, Substitute_Piercing, No_Magic_Coat
@@ -2727,7 +2729,7 @@ Yawn:
 	PP: 10
 	Cat: Status
 	Type: Normal
-	Effect: Pokemon Yawn
+	Effect: Yawn
 *
 Headbutt:
 	Desc: The user sticks out its head and attacks by charging straight into the target. It may also make the target flinch.
@@ -2736,7 +2738,7 @@ Headbutt:
 	Cat: Physical
 	Acc: 100
 	Pow: 70
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 *
 Slack Off:
@@ -2808,7 +2810,7 @@ Magnet Rise:
 	PP: 10
 	Cat: Status
 	Type: Electric
-	Effect: Pokemon MagnetRise
+	Effect: MagnetRise
 	SelfTarget: True
 	MoveType: Airborne
 *
@@ -2841,7 +2843,7 @@ Uproar:
 	Pow: 90
 	Acc: 100
 	SelfTarget: True
-	Effect: Pokemon Uproar
+	Effect: Uproar
 *
 Acupressure:
 	Desc: The user applies pressure to stress points, sharply boosting one of its stats.
@@ -2891,7 +2893,7 @@ Aqua Ring:
 	Type: Water
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon AquaRing
+	Effect: AquaRing
 *
 Aurora Beam:
 	Desc: The target is hit with a rainbow-colored beam. This may also lower the target's Attack stat.
@@ -2996,7 +2998,7 @@ Clamp:
 	Cat: Physical
 	Acc: 85
 	Pow: 35
-	Effect: Pokemon Clamped
+	Effect: Clamped
 *
 Razor Shell:
 	Desc: The user cuts its target with sharp shells. This attack may also lower the target's Defense stat.
@@ -3015,7 +3017,7 @@ Whirlpool:
 	Cat: Special
 	Acc: 85
 	Type: Water
-	Effect: Pokemon Whirlpooled
+	Effect: Whirlpooled
 *
 Shell Smash:
 	Desc: The user breaks its shell, lowering its Defense and Sp. Def stats but sharply raising Attack, Sp. Atk, and Speed stats.
@@ -3041,7 +3043,7 @@ Spikes:
 	Cat: Status
 	Type: Ground
 	MoveType: Field
-	Effect: Team Spikes
+	Effect: Spikes
 *
 Icicle Crash:
 	Desc: The user attacks by harshly dropping an icicle onto the target. It may also make the target flinch.
@@ -3050,7 +3052,7 @@ Icicle Crash:
 	Acc: 90
 	Cat: Physical
 	PhysicalContact: False
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 	Type: Ice
 *
@@ -3119,7 +3121,7 @@ Dark Pulse:
 	Acc: 100
 	Type: Dark
 	Cat: Special
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 20
 	MoveType: Aura_Pulse
 *
@@ -3129,7 +3131,7 @@ Nightmare:
 	Type: Ghost
 	Cat: Status
 	Acc: 100
-	Effect: Pokemon Nightmare
+	Effect: Nightmare
 	MoveType: No_Magic_Coat
 *
 Shadow Punch:
@@ -3147,7 +3149,7 @@ Bind:
 	Type: Normal
 	Acc: 85
 	Pow: 15
-	Effect: Pokemon Binded
+	Effect: Binded
 *
 Rock Tomb:
 	Desc: Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.
@@ -3268,7 +3270,7 @@ Charge:
 	Cat: Status
 	SelfTarget: True
 	StatChange: 1 Sp_Defense 1
-	Effect: Pokemon Charge
+	Effect: Charge
 *
 Charge Beam:
 	Desc: The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.
@@ -3342,7 +3344,7 @@ Bone Club:
 	Acc: 85
 	Type: Ground
 	Cat: Physical
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 10
 	PhysicalContact: False
 *
@@ -3373,7 +3375,7 @@ Rolling Kick:
 	Acc: 85
 	Cat: Physical
 	Type: Fighting
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 *
 Jump Kick:
@@ -3532,7 +3534,7 @@ Focus Punch:
 	Priority: -3
 	PP: 20
 	Type: Fighting
-	Effect: Pokemon Focusing
+	Effect: Focusing
 	SelfTarget: True
 	StartTurn: 
 	super.applyEffects(b, me, me);
@@ -3644,7 +3646,7 @@ Dizzy Punch:
 	MoveType: Punching
 	Pow: 70
 	Type: Normal
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	EffChance: 20	
 *
 Outrage:
@@ -3653,7 +3655,7 @@ Outrage:
 	Pow: 120
 	Cat: Physical
 	Acc: 100
-	Effect: Pokemon SelfConfusion
+	Effect: SelfConfusion
 	SelfTarget: True
 	Type: Dragon
 *
@@ -3691,7 +3693,7 @@ Waterfall:
 	Pow: 80
 	Acc: 100
 	Cat: Physical
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 20
 *
 Reflect Type:
@@ -3700,7 +3702,7 @@ Reflect Type:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon ChangeType
+	Effect: ChangeType
 	Int: ChangeTypeMove
 	ChangeType: 
 	return b.getOtherPokemon(caster.user()).getType(b).clone();
@@ -3740,7 +3742,7 @@ Transform:
 	Cat: Status
 	PP: 10
 	Type: Normal
-	Effect: Pokemon Transformed
+	Effect: Transformed
 	SelfTarget: True
 	MoveType: Non_Snatchable, Protect_Piercing, Encoreless, Assistless, Metronomeless
 *
@@ -3749,7 +3751,7 @@ Substitute:
 	PP: 10
 	Type: Normal
 	SelfTarget: True
-	Effect: Pokemon Substitute
+	Effect: Substitute
 	Cat: Status
 *
 Razor Wind:
@@ -3789,7 +3791,7 @@ Heart Stamp:
 	Acc: 100
 	Cat: Physical
 	Pow: 60
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 *
 Fake Tears:
@@ -3879,7 +3881,7 @@ Mist:
 	Type: Ice
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon Mist
+	Effect: Mist
 *
 Last Resort:
 	Desc: This move can be used only after the user has used all the other moves it knows in the battle.
@@ -3964,7 +3966,7 @@ Conversion:
 	
 	return new Type[] { Global.getRandomValue(types), Type.NO_TYPE };
 	###
-	Effect: Pokemon ChangeType
+	Effect: ChangeType
 *
 Conversion 2:
 	MoveType: Non_Snatchable
@@ -3983,7 +3985,7 @@ Conversion 2:
 	
 	super.apply(me, o, b);
 	###
-	Effect: Pokemon ChangeType
+	Effect: ChangeType
 	ChangeType: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
@@ -4015,7 +4017,7 @@ Magic Coat:
 	PP: 15
 	Type: Psychic
 	Cat: Status
-	Effect: Pokemon MagicCoat
+	Effect: MagicCoat
 	SelfTarget: True
 	Priority: 4
 	MoveType: Non_Snatchable
@@ -4037,7 +4039,7 @@ Iron Head:
 	Acc: 100
 	Cat: Physical
 	Type: Steel
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 *
 Rock Slide:
@@ -4047,7 +4049,7 @@ Rock Slide:
 	Acc: 90
 	Cat: Physical
 	Type: Rock
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	PhysicalContact: False
 	EffChance: 30
 *
@@ -4059,7 +4061,7 @@ Snore:
 	Cat: Special
 	Type: Normal
 	MoveType: Sound_Based, Metronomeless, Asleep_User
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 	ApplyError: !me.hasStatus(StatusCondition.ASLEEP)
 *
@@ -4095,7 +4097,7 @@ Block:
 	PP: 5
 	Type: Normal
 	Cat: Status
-	Effect: Pokemon Trapped
+	Effect: Trapped
 *
 Sky Attack:
 	Desc: A second-turn attack move where critical hits land more easily. It may also make the target flinch.
@@ -4104,7 +4106,7 @@ Sky Attack:
 	Acc: 90
 	PhysicalContact: False
 	Cat: Physical
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 	Int: MultiTurnMove, CritStageEffect
 	ChargeFirst: true
@@ -4119,7 +4121,7 @@ Dragon Rush:
 	Pow: 100
 	Type: Dragon
 	Cat: Physical
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 20
 	HitMinimize: True
 *
@@ -4203,7 +4205,7 @@ Spider Web:
 	PP: 10
 	Type: Bug
 	Cat: Status
-	Effect: Pokemon Trapped
+	Effect: Trapped
 *
 Sweet Kiss:
 	Desc: The user kisses the target with a sweet, angelic cuteness that causes confusion.
@@ -4211,7 +4213,7 @@ Sweet Kiss:
 	Type: Fairy
 	Acc: 75
 	Cat: Status
-	Effect: Pokemon Confusion
+	Effect: Confusion
 *
 Ominous Wind:
 	Desc: The user blasts the target with a gust of repulsive wind. It may also raise all the user's stats at once.
@@ -4256,7 +4258,7 @@ Torment:
 	Acc: 100
 	Type: Dark
 	Cat: Status
-	Effect: Pokemon Torment
+	Effect: Torment
 	MoveType: Substitute_Piercing
 *
 Hidden Power:
@@ -4298,7 +4300,7 @@ Bide:
 	PP: 10
 	Cat: Physical
 	Type: Normal
-	Effect: Pokemon Bide
+	Effect: Bide
 	SelfTarget: True
 	Priority: 1
 	Apply:
@@ -4313,7 +4315,7 @@ Autotomize:
 	SelfTarget: True
 	Cat: Status
 	StatChange: 1 Speed 2
-	Effect: Pokemon HalfWeight
+	Effect: HalfWeight
 *
 Struggle Bug:
 	Desc: While resisting, the user attacks the opposing Pok\u00e9mon. The targets' Sp. Atk stat is reduced.
@@ -4330,14 +4332,14 @@ Power Trick:
 	Type: Psychic
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon PowerTrick
+	Effect: PowerTrick
 *
 Power Split:
 	Desc: The user employs its psychic power to average its Attack and Sp. Atk stats with those of the target's.
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	Effect: Pokemon PowerSplit
+	Effect: PowerSplit
 	SelfTarget: True
 	MoveType: Non_Snatchable
 *
@@ -4346,7 +4348,7 @@ Guard Split:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	Effect: Pokemon GuardSplit
+	Effect: GuardSplit
 	SelfTarget: True
 	MoveType: Non_Snatchable
 *
@@ -4534,7 +4536,7 @@ Heal Block:
 	PP: 15
 	Type: Psychic
 	Acc: 100
-	Effect: Pokemon HealBlock
+	Effect: HealBlock
 	Cat: Status
 *
 Energy Ball:
@@ -4573,7 +4575,7 @@ Attract:
 	Type: Normal
 	Cat: Status
 	Acc: 100
-	Effect: Pokemon Infatuated
+	Effect: Infatuated
 	MoveType: Substitute_Piercing
 *
 Force Palm:
@@ -4689,7 +4691,7 @@ Teeter Dance:
 	Type: Normal
 	Cat: Status
 	Acc: 100
-	Effect: Pokemon Confusion
+	Effect: Confusion
 *
 Needle Arm:
 	Desc: The user attacks by wildly swinging its thorny arms. It may also make the target flinch.
@@ -4698,7 +4700,7 @@ Needle Arm:
 	Cat: Physical
 	Pow: 60
 	Acc: 100
-	Effect: Pokemon Flinch
+	Effect: Flinch
 	EffChance: 30
 *
 Venoshock:
@@ -4716,7 +4718,7 @@ Snatch:
 	PP: 10
 	Type: Dark
 	Cat: Status
-	Effect: Pokemon Snatch
+	Effect: Snatch
 	SelfTarget: True
 	MoveType: Assistless, Metronomeless, Non_Snatchable
 *
@@ -4815,7 +4817,7 @@ Chatter:
 	Type: Flying
 	Pow: 65
 	Cat: Special
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	Acc: 100
 	MoveType: Sound_Based
 *
@@ -4878,7 +4880,7 @@ Magma Storm:
 	Acc: 75
 	Cat: Special
 	Type: Fire
-	Effect: Pokemon MagmaStorm
+	Effect: MagmaStorm
 *
 Crush Grip:
 	Desc: The target is crushed with great force. The attack is more powerful the more HP the target has left.
@@ -5061,7 +5063,7 @@ Rock Climb:
 	Acc: 85
 	Type: Normal
 	Cat: Physical
-	Effect: Pokemon Confusion
+	Effect: Confusion
 	EffChance: 20
 *
 Night Daze:
@@ -5345,7 +5347,7 @@ Final Gambit:
 Gastro Acid:
 	Desc: The user hurls up its stomach acids on the target. The fluid eliminates the effect of the target's Ability.
 	Int: ChangeAbilityMove
-	Effect: Pokemon ChangeAbility
+	Effect: ChangeAbility
 	AbilityChange: 
 	return AbilityNamesies.NO_ABILITY.getNewAbility();
 	###
@@ -5373,7 +5375,7 @@ Healing Wish:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	Effect: Team HealSwitch
+	Effect: HealSwitch
 	SelfTarget: True
 	MoveType: User_Faints, Non_Snatchable
 *
@@ -5382,7 +5384,7 @@ Lunar Dance:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	Effect: Team HealSwitch
+	Effect: HealSwitch
 	SelfTarget: True
 	MoveType: User_Faints, Non_Snatchable
 *
@@ -5399,7 +5401,7 @@ Grudge:
 	PP: 5
 	Type: Ghost
 	Cat: Status
-	Effect: Pokemon Grudge
+	Effect: Grudge
 	SelfTarget: True
 	MoveType: Substitute_Piercing, Non_Snatchable
 *
@@ -5446,9 +5448,11 @@ Role Play:
 	Cat: Status
 	SelfTarget: True
 	Int: ChangeAbilityMove
-	Effect: Pokemon ChangeAbility
+	Effect: ChangeAbility
 	AbilityChange: 
-	return b.getOtherPokemon(victim.user()).getAbility().newInstance();
+	// TODO: Combine with Trace
+	Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+	return otherAbility.namesies().getNewAbility();
 	###
 	AbilityMessage: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
@@ -5489,7 +5493,7 @@ Knock Off:
 	GetItem: 
 	return Item.noneItem();
 	###
-	Effect: Pokemon ChangeItem
+	Effect: ChangeItem
 	Int: ItemHolder
 *
 Whirlwind:
@@ -5543,7 +5547,7 @@ Destiny Bond:
 	Type: Ghost
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon DestinyBond
+	Effect: DestinyBond
 	MoveType: Substitute_Piercing, Assistless, Metronomeless, Non_Snatchable
 *
 Camouflage:
@@ -5552,7 +5556,7 @@ Camouflage:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon ChangeType
+	Effect: ChangeType
 	Int: ChangeTypeMove
 	ChangeType: 
 	return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
@@ -5645,7 +5649,7 @@ Perish Song:
 	PP: 5
 	Type: Normal
 	Cat: Status
-	Effect: Pokemon PerishSong
+	Effect: PerishSong
 	ApplyEffects: 
 	Messages.addMessage("All Pokemon hearing this song will faint in three turns!");
 	
@@ -5681,7 +5685,7 @@ Embargo:
 	Type: Dark
 	Cat: Status
 	Acc: 100
-	Effect: Pokemon Embargo
+	Effect: Embargo
 *
 Nature Power:
 	Desc: An attack that makes use of nature's power. Its effects vary depending on the user's environment.
@@ -5703,9 +5707,10 @@ Entrainment:
 	Acc: 100
 	Cat: Status
 	Int: ChangeAbilityMove
-	Effect: Pokemon ChangeAbility
+	Effect: ChangeAbility
 	AbilityChange: 
-	return caster.getAbility().newInstance();
+	// TODO: Combine with Trace/Role Play
+	return caster.getAbility().namesies().getNewAbility();
 	###
 	AbilityMessage: 
 	return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
@@ -5756,7 +5761,6 @@ Skill Swap:
 	Cat: Status
 	MoveType: Substitute_Piercing, No_Magic_Coat
 	Int: ChangeAbilityMove
-	Effect: Pokemon ChangeAbility
 	AbilityChange: 
 	return ability;
 	###
@@ -5785,10 +5789,10 @@ Skill Swap:
 	}
 	
 	ability = user.getAbility();
-	Ability temp = victim.getAbility();
-	super.effects.get(0).cast(b, user, victim, CastSource.ATTACK, super.printCast);
-	ability = temp;
-	super.effects.get(0).cast(b, user, user, CastSource.ATTACK, super.printCast);
+	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
+
+	ability = victim.getAbility();
+	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, user, CastSource.ATTACK, super.printCast);
 	###
 *
 Volt Switch:
@@ -6087,7 +6091,7 @@ Fairy Lock:
 	Desc: By locking down the battlefield, the user keeps all Pok\u00e9mon from fleeing during the next turn.
 	PP: 10
 	Cat: Status
-	Effect: Pokemon FairyLock
+	Effect: FairyLock
 	SelfTarget: True
 	MoveType: Non_Snatchable
 *
@@ -6146,7 +6150,7 @@ Powder:
 	Type: Bug
 	Acc: 100
 	Cat: Status
-	Effect: Pokemon Powder
+	Effect: Powder
 	MoveType: Powder
 	Priority: 1
 *
@@ -6174,7 +6178,7 @@ Mat Block:
 	Type: Fighting
 	Cat: Status
 	SelfTarget: True
-	Effect: Pokemon MatBlock
+	Effect: MatBlock
 	MoveType: Assistless
 *
 Mystical Fire:
@@ -6194,14 +6198,14 @@ Infestation:
 	PhysicalContact: True
 	Acc: 100
 	Pow: 20
-	Effect: Pokemon Infestation
+	Effect: Infestation
 *
 Electrify:
 	Desc: If the target is electrified before it uses a move during that turn, the target's move becomes Electric type.
 	PP: 20
 	Type: Electric
 	Cat: Status
-	Effect: Pokemon Electrified
+	Effect: Electrified
 	Priority: 1
 	MoveType: No_Magic_Coat
 *
@@ -6229,7 +6233,7 @@ Sticky Web:
 	Type: Bug
 	Cat: Status
 	PP: 20
-	Effect: Team StickyWeb
+	Effect: StickyWeb
 	MoveType: Field
 	Desc: The user weaves a sticky net around the opposing team, which lowers their Speed stat upon switching into battle.
 *

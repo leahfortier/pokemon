@@ -32,7 +32,7 @@ RecoilMove:
 Override:
 	StatusFang:
 		AddMapField: EffChance: 20
-		AddMapField: Effect: Pokemon Flinch
+		AddMapField: Effect: Flinch
 		AddMapField: MoveType: Biting
 		AddMapField: ApplyEffects:
 		// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
@@ -192,7 +192,7 @@ Override:
 		item = victimItem;
 		super.applyEffects(b, user, user);
 		###
-		AddMapField: Effect: Pokemon ChangeItem
+		AddMapField: Effect: ChangeItem
 		AddInterface: ItemHolder
 		AddMapField: Field:
 		private Item item;
@@ -214,13 +214,13 @@ Override:
 ***
 Override:
 	BattleEffect:
-		AddMapField: Effect: Battle {0}
+		AddMapField: Effect: {0}
 		AddMapField: MoveType: No_Magic_Coat, Field
 	*
 ***
 Override:
 	ProtectingAttack:
-		AddMapField: Effect: Pokemon {0}
+		AddMapField: Effect: {0}
 		AddMapField: Priority: 4
 		AddMapField: SelfTarget: True
 		AddMapField: MoveType: Successive_Decay, Assistless, Metronomeless, Non_Snatchable
@@ -409,7 +409,7 @@ BarrierEffect:
 Override:
 	SpecificAbilityChange:
 		AddInterface: ChangeAbilityMove
-		AddMapField: Effect: Pokemon ChangeAbility
+		AddMapField: Effect: ChangeAbility
 		AddMapField: AbilityChange:
 		return AbilityNamesies.{00}.getNewAbility();
 		###
@@ -1958,7 +1958,7 @@ Override:
 ***
 Override:
 	ForesightMove:
-		AddMapField: Effect: Pokemon {0}
+		AddMapField: Effect: {0}
 		AddMapField: ApplyEffects: 
 		super.applyEffects(b, user, victim);
 		victim.getAttributes().resetStage(Stat.EVASION);
@@ -1969,7 +1969,7 @@ Override:
 Override:
 	AddTypeMove:
 		AddInterface: ChangeTypeMove
-		AddMapField: Effect: Pokemon ChangeType
+		AddMapField: Effect: ChangeType
 		AddMapField: ChangeType:
 		Type primary = victim.getType(b)[0];
 				
@@ -1987,7 +1987,7 @@ Override:
 ***
 Override:
 	FutureAttackMove:
-		AddMapField: Effect: Team {0}
+		AddMapField: Effect: {0}
 		AddMapField: Apply:
 		super.applyEffects(b, me, o); // Don't apply damage just yet!!
 		###
@@ -2001,9 +2001,6 @@ Override:
 		AddMapField: NextTurnSubside: True
 		AddMapField: Field: 
 		private ActivePokemon theSeeer;
-		###
-		AddMapField: Activate: 
-		x.theSeeer = theSeeer;
 		###
 		AddMapField: Subside: 
 		Messages.addMessage(p.getName() + " took " + theSeeer.getName() + "'s attack!");
@@ -2354,7 +2351,7 @@ Override:
 		private boolean activated;
 		###
 		AddMapField: Activate:
-		x.activated = false;
+		this.activated = false;
 		###
 		AddInterface: EndTurnEffect
 		AddMapField: ApplyEndTurn:

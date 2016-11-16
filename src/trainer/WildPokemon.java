@@ -38,7 +38,7 @@ public class WildPokemon implements Opponent {
 	}
 	
 	public void addEffect(TeamEffect e) {
-		effects.add(e.newInstance());
+		effects.add(e);
 	}
 	
 	public List<ActivePokemon> getTeam() {

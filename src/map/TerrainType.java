@@ -1,13 +1,11 @@
 package map;
 
 import battle.attack.Attack;
-import battle.effect.generic.Effect;
-import battle.effect.generic.PokemonEffect;
+import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Type;
-import battle.attack.AttackNamesies;
-import battle.effect.generic.EffectNamesies;
 import pokemon.Stat;
 
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ public enum TerrainType {
 
     private final StatusCondition status;
     private final int[] statChanges;
-    private final List<Effect> effects;
+    private final List<EffectNamesies> effects;
 
     private int backgroundIndex;
     private int playerCircleIndex;
@@ -52,7 +50,7 @@ public enum TerrainType {
                 this.statChanges[((Stat)effect).index()] = -1;
             }
             else if (effect instanceof EffectNamesies) {
-                this.effects.add(PokemonEffect.getEffect((EffectNamesies)effect));
+                this.effects.add((EffectNamesies) effect);
             }
             else {
                 Global.error("Invalid effect for terrain type " + this.name());
@@ -93,7 +91,7 @@ public enum TerrainType {
         return statChanges;
     }
 
-    public List<Effect> getEffects() {
+    public List<EffectNamesies> getEffects() {
         return effects;
     }
 

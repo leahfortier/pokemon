@@ -36,13 +36,15 @@ public abstract class Trainer implements Team, Serializable {
 	}
 	
 	public static final int MAX_POKEMON = 6;
-	
-	protected List<ActivePokemon> team;
-	protected List<TeamEffect> effects;
-	protected int frontIndex;
+
 	protected String name;
 	protected Action action;
 	protected int cashMoney;
+
+	protected List<ActivePokemon> team;
+	protected List<TeamEffect> effects;
+	private int frontIndex;
+
 //	protected boolean isBeTryingToSwitchRunOrUseItem;
 //	protected boolean isBTTSROUI;
 	
@@ -155,7 +157,7 @@ public abstract class Trainer implements Team, Serializable {
 	}
 	
 	public void addEffect(TeamEffect e) {
-		effects.add(e.newInstance());
+		effects.add(e);
 	}
 	
 	public boolean blackout() {

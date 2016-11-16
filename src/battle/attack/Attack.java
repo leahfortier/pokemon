@@ -9,7 +9,6 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.generic.Effect;
 import battle.effect.generic.Effect.CastSource;
-import battle.effect.generic.Effect.EffectType;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
@@ -71,7 +70,7 @@ public abstract class Attack implements Serializable {
 	private int pp;
 	private Type type;
 	private MoveCategory category;
-	private List<Effect> effects;
+	private List<EffectNamesies> effects;
 	private int effectChance;
 	private StatusCondition status;
 	private List<MoveType> moveTypes;
@@ -127,8 +126,8 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Confusion and flinching count as secondary effects -- but I don't think anything else does?
-		for (Effect e : effects) {
-			if (e.namesies() == EffectNamesies.CONFUSION || e.namesies() == EffectNamesies.FLINCH) {
+		for (EffectNamesies effect : effects) {
+			if (effect == EffectNamesies.CONFUSION || effect == EffectNamesies.FLINCH) {
 				return true;
 			}
 		}
@@ -373,12 +372,13 @@ public abstract class Attack implements Serializable {
 		victim.modifyStages(b, user, statChanges, CastSource.ATTACK);
 		
 		// Give additional effects
-		for (Effect e : effects) {
-			if (e.applies(b, user, victim, CastSource.ATTACK)) {
-				e.cast(b, user, victim, CastSource.ATTACK, canPrintCast());
+		for (EffectNamesies effectNamesies : effects) {
+            Effect effect = effectNamesies.getEffect();
+			if (effect.applies(b, user, victim, CastSource.ATTACK)) {
+				effect.cast(b, user, victim, CastSource.ATTACK, canPrintCast());
 			}
 			else if (canPrintFail()) {
-				Messages.addMessage(e.getFailMessage(b, user, victim));
+				Messages.addMessage(effect.getFailMessage(b, user, victim));
 			}
 		}
 		
@@ -423,7 +423,7 @@ public abstract class Attack implements Serializable {
 		LeechSeed() {
 			super(AttackNamesies.LEECH_SEED, "A seed is planted on the target. It steals some HP from the target every turn.", 10, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.LEECH_SEED));
+			super.effects.add(EffectNamesies.LEECH_SEED);
 		}
 	}
 
@@ -465,7 +465,7 @@ public abstract class Attack implements Serializable {
 		Toxic() {
 			super(AttackNamesies.TOXIC, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", 10, Type.POISON, MoveCategory.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.BAD_POISON));
+			super.effects.add(EffectNamesies.BAD_POISON);
 		}
 
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
@@ -750,7 +750,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.FIRE_FANG, "The user bites with flame-cloaked fangs. It may also make the target flinch or leave it burned.", 15, Type.FIRE, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -784,7 +784,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.BITE, "The target is bitten with viciously sharp fangs. It may make the target flinch.", 25, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -906,7 +906,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.FIRE_SPIN, "The target becomes trapped within a fierce vortex of fire that rages for four to five turns.", 15, Type.FIRE, MoveCategory.SPECIAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.FIRE_SPIN));
+			super.effects.add(EffectNamesies.FIRE_SPIN);
 		}
 	}
 
@@ -954,7 +954,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.AIR_SLASH, "The user attacks with a blade of air that slices even the sky. It may also make the target flinch.", 15, Type.FLYING, MoveCategory.SPECIAL);
 			super.power = 75;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 		}
 	}
@@ -1070,7 +1070,7 @@ public abstract class Attack implements Serializable {
 
 		Reflect() {
 			super(AttackNamesies.REFLECT, "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", 20, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.REFLECT));
+			super.effects.add(EffectNamesies.REFLECT);
 			super.selfTarget = true;
 		}
 	}
@@ -1080,7 +1080,7 @@ public abstract class Attack implements Serializable {
 
 		SpikyShield() {
 			super(AttackNamesies.SPIKY_SHIELD, "In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.", 10, Type.GRASS, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SPIKY_SHIELD));
+			super.effects.add(EffectNamesies.SPIKY_SHIELD);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1095,7 +1095,7 @@ public abstract class Attack implements Serializable {
 
 		KingsShield() {
 			super(AttackNamesies.KINGS_SHIELD, "The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.", 10, Type.STEEL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.KINGS_SHIELD));
+			super.effects.add(EffectNamesies.KINGS_SHIELD);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1110,7 +1110,7 @@ public abstract class Attack implements Serializable {
 
 		Protect() {
 			super(AttackNamesies.PROTECT, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.PROTECTING));
+			super.effects.add(EffectNamesies.PROTECTING);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1125,7 +1125,7 @@ public abstract class Attack implements Serializable {
 
 		Detect() {
 			super(AttackNamesies.DETECT, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", 5, Type.FIGHTING, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.PROTECTING));
+			super.effects.add(EffectNamesies.PROTECTING);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1140,7 +1140,7 @@ public abstract class Attack implements Serializable {
 
 		QuickGuard() {
 			super(AttackNamesies.QUICK_GUARD, "The user protects itself and its allies from priority moves. If used in succession, its chance of failing rises.", 15, Type.FIGHTING, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.QUICK_GUARD));
+			super.effects.add(EffectNamesies.QUICK_GUARD);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1155,7 +1155,7 @@ public abstract class Attack implements Serializable {
 
 		Endure() {
 			super(AttackNamesies.ENDURE, "The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.BRACING));
+			super.effects.add(EffectNamesies.BRACING);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -1172,7 +1172,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.WATER_PULSE, "The user attacks the target with a pulsing blast of water. It may also confuse the target.", 20, Type.WATER, MoveCategory.SPECIAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.AURA_PULSE);
 		}
@@ -1197,7 +1197,7 @@ public abstract class Attack implements Serializable {
 		ConfuseRay() {
 			super(AttackNamesies.CONFUSE_RAY, "The target is exposed to a sinister ray that triggers confusion.", 10, Type.GHOST, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 		}
 	}
 
@@ -1266,7 +1266,7 @@ public abstract class Attack implements Serializable {
 
 		RainDance() {
 			super(AttackNamesies.RAIN_DANCE, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", 5, Type.WATER, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.RAINING));
+			super.effects.add(EffectNamesies.RAINING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -1277,7 +1277,7 @@ public abstract class Attack implements Serializable {
 
 		SunnyDay() {
 			super(AttackNamesies.SUNNY_DAY, "The user intensifies the sun for five turns, powering up Fire-type moves.", 5, Type.FIRE, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SUNNY));
+			super.effects.add(EffectNamesies.SUNNY);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -1288,7 +1288,7 @@ public abstract class Attack implements Serializable {
 
 		Sandstorm() {
 			super(AttackNamesies.SANDSTORM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", 10, Type.ROCK, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SANDSTORM));
+			super.effects.add(EffectNamesies.SANDSTORM);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -1299,7 +1299,7 @@ public abstract class Attack implements Serializable {
 
 		Hail() {
 			super(AttackNamesies.HAIL, "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.", 10, Type.ICE, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.HAILING));
+			super.effects.add(EffectNamesies.HAILING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -1312,7 +1312,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.PETAL_DANCE, "The user attacks the target by scattering petals for two to three turns. The user then becomes confused.", 10, Type.GRASS, MoveCategory.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION));
+			super.effects.add(EffectNamesies.SELF_CONFUSION);
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -1325,7 +1325,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.THRASH, "The user rampages and attacks for two to three turns. It then becomes confused, however.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION));
+			super.effects.add(EffectNamesies.SELF_CONFUSION);
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -1408,7 +1408,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.CONFUSION, "The target is hit by a weak telekinetic force. It may also leave the target confused.", 25, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.effectChance = 10;
 		}
 	}
@@ -1450,7 +1450,7 @@ public abstract class Attack implements Serializable {
 		Supersonic() {
 			super(AttackNamesies.SUPERSONIC, "The user generates odd sound waves from its body. It may confuse the target.", 20, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 55;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.moveTypes.add(MoveType.SOUND_BASED);
 		}
 	}
@@ -1462,7 +1462,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.PSYBEAM, "The target is attacked with a peculiar ray. It may also cause confusion.", 20, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.effectChance = 10;
 		}
 	}
@@ -1491,7 +1491,7 @@ public abstract class Attack implements Serializable {
 
 		Tailwind() {
 			super(AttackNamesies.TAILWIND, "The user whips up a turbulent whirlwind that ups the Speed of all party Pok\u00e9mon for four turns.", 30, Type.FLYING, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TAILWIND));
+			super.effects.add(EffectNamesies.TAILWIND);
 			super.selfTarget = true;
 		}
 	}
@@ -1536,7 +1536,7 @@ public abstract class Attack implements Serializable {
 
 		Safeguard() {
 			super(AttackNamesies.SAFEGUARD, "The user creates a protective field that prevents status problems for five turns.", 25, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SAFEGUARD));
+			super.effects.add(EffectNamesies.SAFEGUARD);
 			super.selfTarget = true;
 		}
 	}
@@ -1595,7 +1595,7 @@ public abstract class Attack implements Serializable {
 		Encore() {
 			super(AttackNamesies.ENCORE, "The user compels the target to keep using only the move it last used for three turns.", 5, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.ENCORE));
+			super.effects.add(EffectNamesies.ENCORE);
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
@@ -1673,7 +1673,7 @@ public abstract class Attack implements Serializable {
 		Disable() {
 			super(AttackNamesies.DISABLE, "For four turns, this move prevents the target from using the move it last used.", 20, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.DISABLE));
+			super.effects.add(EffectNamesies.DISABLE);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
@@ -1683,7 +1683,7 @@ public abstract class Attack implements Serializable {
 
 		FocusEnergy() {
 			super(AttackNamesies.FOCUS_ENERGY, "The user takes a deep breath and focuses so that critical hits land more easily.", 30, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.RAISE_CRITS));
+			super.effects.add(EffectNamesies.RAISE_CRITS);
 			super.selfTarget = true;
 		}
 	}
@@ -1774,7 +1774,7 @@ public abstract class Attack implements Serializable {
 
 		ToxicSpikes() {
 			super(AttackNamesies.TOXIC_SPIKES, "The user lays a trap of poison spikes at the opponent's feet. They poison opponents that switch into battle.", 20, Type.POISON, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TOXIC_SPIKES));
+			super.effects.add(EffectNamesies.TOXIC_SPIKES);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -1906,7 +1906,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.TWISTER, "The user whips up a vicious tornado to tear at the opposing team. It may also make targets flinch.", 20, Type.DRAGON, MoveCategory.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 20;
 		}
 
@@ -2021,7 +2021,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.HURRICANE, "The user attacks by wrapping its opponent in a fierce wind that flies up into the sky. It may also confuse the target.", 10, Type.FLYING, MoveCategory.SPECIAL);
 			super.power = 110;
 			super.accuracy = 70;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.effectChance = 30;
 		}
 
@@ -2052,7 +2052,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.HYPER_FANG, "The user bites hard on the target with its sharp front fangs. It may also make the target flinch.", 15, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 10;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2206,7 +2206,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.WRAP, "A long body or vines are used to wrap and squeeze the target for four to five turns.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.WRAPPED));
+			super.effects.add(EffectNamesies.WRAPPED);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -2249,7 +2249,7 @@ public abstract class Attack implements Serializable {
 
 		Stockpile() {
 			super(AttackNamesies.STOCKPILE, "The user charges up power and raises both its Defense and Sp. Def. The move can be used three times.", 20, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.STOCKPILE));
+			super.effects.add(EffectNamesies.STOCKPILE);
 			super.selfTarget = true;
 		}
 	}
@@ -2412,7 +2412,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.ICE_FANG, "The user bites with cold-infused fangs. It may also make the target flinch or leave it frozen.", 15, Type.ICE, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2436,7 +2436,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.THUNDER_FANG, "The user bites with electrified fangs. It may also make the target flinch or leave it with paralysis.", 15, Type.ELECTRIC, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 95;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2535,7 +2535,7 @@ public abstract class Attack implements Serializable {
 
 		LightScreen() {
 			super(AttackNamesies.LIGHT_SCREEN, "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", 30, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.LIGHT_SCREEN));
+			super.effects.add(EffectNamesies.LIGHT_SCREEN);
 			super.selfTarget = true;
 		}
 	}
@@ -2576,7 +2576,7 @@ public abstract class Attack implements Serializable {
 
 		DefenseCurl() {
 			super(AttackNamesies.DEFENSE_CURL, "The user curls up to conceal weak spots and raise its Defense stat.", 40, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.USED_DEFENSE_CURL));
+			super.effects.add(EffectNamesies.USED_DEFENSE_CURL);
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 		}
@@ -2666,7 +2666,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.SAND_TOMB, "The user traps the target inside a harshly raging sandstorm for four to five turns.", 15, Type.GROUND, MoveCategory.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.SAND_TOMB));
+			super.effects.add(EffectNamesies.SAND_TOMB);
 		}
 	}
 
@@ -2758,7 +2758,7 @@ public abstract class Attack implements Serializable {
 		Flatter() {
 			super(AttackNamesies.FLATTER, "Flattery is used to confuse the target. However, it also raises the target's Sp. Atk stat.", 15, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.statChanges[Stat.SP_ATTACK.index()] = 2;
 		}
 	}
@@ -2770,7 +2770,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.POISON_FANG, "The user bites the target with toxic fangs. It may also leave the target badly poisoned.", 15, Type.POISON, MoveCategory.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.BAD_POISON));
+			super.effects.add(EffectNamesies.BAD_POISON);
 			super.effectChance = 50;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2958,7 +2958,7 @@ public abstract class Attack implements Serializable {
 
 		Wish() {
 			super(AttackNamesies.WISH, "One turn after this move is used, the target's HP is restored by half the user's maximum HP.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.WISH));
+			super.effects.add(EffectNamesies.WISH);
 			super.selfTarget = true;
 		}
 	}
@@ -2968,7 +2968,7 @@ public abstract class Attack implements Serializable {
 
 		Minimize() {
 			super(AttackNamesies.MINIMIZE, "The user compresses its body to make itself look smaller, which sharply raises its evasiveness.", 20, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.USED_MINIMIZE));
+			super.effects.add(EffectNamesies.USED_MINIMIZE);
 			super.selfTarget = true;
 			super.statChanges[Stat.EVASION.index()] = 2;
 		}
@@ -3011,7 +3011,7 @@ public abstract class Attack implements Serializable {
 
 		LuckyChant() {
 			super(AttackNamesies.LUCKY_CHANT, "The user chants an incantation toward the sky, preventing opposing Pok\u00e9mon from landing critical hits.", 30, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.LUCKY_CHANT));
+			super.effects.add(EffectNamesies.LUCKY_CHANT);
 			super.selfTarget = true;
 		}
 	}
@@ -3048,7 +3048,7 @@ public abstract class Attack implements Serializable {
 
 		Gravity() {
 			super(AttackNamesies.GRAVITY, "Gravity is intensified for five turns, making moves involving flying unusable and negating Levitate.", 5, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.GRAVITY));
+			super.effects.add(EffectNamesies.GRAVITY);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -3108,7 +3108,7 @@ public abstract class Attack implements Serializable {
 
 		Mimic() {
 			super(AttackNamesies.MIMIC, "The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MIMIC));
+			super.effects.add(EffectNamesies.MIMIC);
 			super.moveTypes.add(MoveType.ENCORELESS);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -3137,7 +3137,7 @@ public abstract class Attack implements Serializable {
 
 		Imprison() {
 			super(AttackNamesies.IMPRISON, "If the opponents know any move also known by the user, the opponents are prevented from using it.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.IMPRISON));
+			super.effects.add(EffectNamesies.IMPRISON);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
@@ -3176,7 +3176,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.EXTRASENSORY, "The user attacks with an odd, unseeable power. It may also make the target flinch.", 20, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 10;
 		}
 	}
@@ -3276,7 +3276,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.ASTONISH, "The user attacks the target while shouting in a startling fashion. It may also make the target flinch.", 15, Type.GHOST, MoveCategory.PHYSICAL);
 			super.power = 30;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -3301,7 +3301,7 @@ public abstract class Attack implements Serializable {
 
 		MeanLook() {
 			super(AttackNamesies.MEAN_LOOK, "The user pins the target with a dark, arresting look. The target becomes unable to flee.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED));
+			super.effects.add(EffectNamesies.TRAPPED);
 		}
 	}
 
@@ -3454,7 +3454,7 @@ public abstract class Attack implements Serializable {
 
 		Foresight() {
 			super(AttackNamesies.FORESIGHT, "Enables a Ghost-type target to be hit by Normal and Fighting type attacks. It also enables an evasive target to be hit.", 40, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.FORESIGHT));
+			super.effects.add(EffectNamesies.FORESIGHT);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -3469,7 +3469,7 @@ public abstract class Attack implements Serializable {
 
 		OdorSleuth() {
 			super(AttackNamesies.ODOR_SLEUTH, "Enables a Ghost-type target to be hit with Normal- and Fighting-type attacks. It also enables an evasive target to be hit.", 40, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.FORESIGHT));
+			super.effects.add(EffectNamesies.FORESIGHT);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -3484,7 +3484,7 @@ public abstract class Attack implements Serializable {
 
 		MiracleEye() {
 			super(AttackNamesies.MIRACLE_EYE, "Enables a Dark-type target to be hit by Psychic-type attacks. It also enables an evasive target to be hit.", 40, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MIRACLE_EYE));
+			super.effects.add(EffectNamesies.MIRACLE_EYE);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
@@ -3511,7 +3511,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.SIGNAL_BEAM, "The user attacks with a sinister beam of light. It may also confuse the target.", 15, Type.BUG, MoveCategory.SPECIAL);
 			super.power = 75;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.effectChance = 10;
 		}
 	}
@@ -3523,7 +3523,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.ZEN_HEADBUTT, "The user focuses its willpower to its head and attacks the target. It may also make the target flinch.", 15, Type.PSYCHIC, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -3741,7 +3741,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.FAKE_OUT, "An attack that hits first and makes the target flinch. It only works the first turn the user is in battle.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.priority = 3;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -3772,7 +3772,7 @@ public abstract class Attack implements Serializable {
 		Taunt() {
 			super(AttackNamesies.TAUNT, "The target is taunted into a rage that allows it to use only attack moves for three turns.", 20, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.TAUNT));
+			super.effects.add(EffectNamesies.TAUNT);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
@@ -3784,7 +3784,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.PAY_DAY, "Numerous coins are hurled at the target to inflict damage. Money is earned after the battle.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.PAY_DAY));
+			super.effects.add(EffectNamesies.PAY_DAY);
 			super.selfTarget = true;
 		}
 	}
@@ -3804,7 +3804,7 @@ public abstract class Attack implements Serializable {
 
 		WaterSport() {
 			super(AttackNamesies.WATER_SPORT, "The user soaks itself with water. The move weakens Fire-type moves while the user is in the battle.", 15, Type.WATER, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.WATER_SPORT));
+			super.effects.add(EffectNamesies.WATER_SPORT);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -3816,7 +3816,7 @@ public abstract class Attack implements Serializable {
 		Soak() {
 			super(AttackNamesies.SOAK, "The user shoots a torrent of water at the target and changes the target's type to Water.", 20, Type.WATER, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
+			super.effects.add(EffectNamesies.CHANGE_TYPE);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -3830,7 +3830,7 @@ public abstract class Attack implements Serializable {
 		TrickOrTreat() {
 			super(AttackNamesies.TRICK_OR_TREAT, "The user takes the target trick-or-treating. This adds Ghost type to the target's type.", 20, Type.GHOST, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
+			super.effects.add(EffectNamesies.CHANGE_TYPE);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -3846,7 +3846,7 @@ public abstract class Attack implements Serializable {
 		ForestsCurse() {
 			super(AttackNamesies.FORESTS_CURSE, "The user puts a forest curse on the target. Afflicted targets are now Grass type as well.", 20, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
+			super.effects.add(EffectNamesies.CHANGE_TYPE);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -3890,7 +3890,7 @@ public abstract class Attack implements Serializable {
 
 		WonderRoom() {
 			super(AttackNamesies.WONDER_ROOM, "The user creates a bizarre area in which Pok\u00e9mon's Defense and Sp. Def stats are swapped for five turns.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.WONDER_ROOM));
+			super.effects.add(EffectNamesies.WONDER_ROOM);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -3916,7 +3916,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.COVET, "The user endearingly approaches the target, then steals the target's held item.", 25, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
+			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -4012,7 +4012,7 @@ public abstract class Attack implements Serializable {
 		Swagger() {
 			super(AttackNamesies.SWAGGER, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", 15, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.statChanges[Stat.ATTACK.index()] = 2;
 		}
 	}
@@ -4204,7 +4204,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.DYNAMIC_PUNCH, "The user punches the target with full, concentrated power. It confuses the target if it hits.", 5, Type.FIGHTING, MoveCategory.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 50;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.moveTypes.add(MoveType.PUNCHING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4215,7 +4215,7 @@ public abstract class Attack implements Serializable {
 
 		MindReader() {
 			super(AttackNamesies.MIND_READER, "The user senses the target's movements with its mind to ensure its next attack does not miss the target.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.LOCK_ON));
+			super.effects.add(EffectNamesies.LOCK_ON);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -4226,7 +4226,7 @@ public abstract class Attack implements Serializable {
 
 		LockOn() {
 			super(AttackNamesies.LOCK_ON, "The user takes sure aim at the target. It ensures the next attack does not fail to hit the target.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.LOCK_ON));
+			super.effects.add(EffectNamesies.LOCK_ON);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -4257,7 +4257,7 @@ public abstract class Attack implements Serializable {
 
 		Telekinesis() {
 			super(AttackNamesies.TELEKINESIS, "The user makes the target float with its psychic power. The target is easier to hit for three turns.", 15, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TELEKINESIS));
+			super.effects.add(EffectNamesies.TELEKINESIS);
 			super.moveTypes.add(MoveType.AIRBORNE);
 		}
 	}
@@ -4267,7 +4267,7 @@ public abstract class Attack implements Serializable {
 
 		Ingrain() {
 			super(AttackNamesies.INGRAIN, "The user lays roots that restore its HP on every turn. Because it is rooted, it can't switch out.", 20, Type.GRASS, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.INGRAIN));
+			super.effects.add(EffectNamesies.INGRAIN);
 			super.selfTarget = true;
 		}
 	}
@@ -4293,7 +4293,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.FUTURE_SIGHT, "Two turns after this move is used, a hunk of psychic energy attacks the target.", 10, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FUTURE_SIGHT));
+			super.effects.add(EffectNamesies.FUTURE_SIGHT);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -4312,7 +4312,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.DOOM_DESIRE, "Two turns after this move is used, the user blasts the target with a concentrated bundle of light.", 5, Type.STEEL, MoveCategory.SPECIAL);
 			super.power = 140;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.DOOM_DESIRE));
+			super.effects.add(EffectNamesies.DOOM_DESIRE);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -4471,7 +4471,7 @@ public abstract class Attack implements Serializable {
 
 		MudSport() {
 			super(AttackNamesies.MUD_SPORT, "The user covers itself with mud. It weakens Electric-type moves while the user is in the battle.", 15, Type.GROUND, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MUD_SPORT));
+			super.effects.add(EffectNamesies.MUD_SPORT);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -4540,7 +4540,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.SMACK_DOWN, "The user throws a stone or projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when hit.", 15, Type.ROCK, MoveCategory.PHYSICAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.GROUNDED));
+			super.effects.add(EffectNamesies.GROUNDED);
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -4559,7 +4559,7 @@ public abstract class Attack implements Serializable {
 
 		StealthRock() {
 			super(AttackNamesies.STEALTH_ROCK, "The user lays a trap of levitating stones around the opponent's team. The trap hurts opponents that switch into battle.", 20, Type.ROCK, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.STEALTH_ROCK));
+			super.effects.add(EffectNamesies.STEALTH_ROCK);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -4585,7 +4585,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.STEAMROLLER, "The user crushes its targets by rolling over them with its rolled-up body. This attack may make the target flinch.", 20, Type.BUG, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4625,7 +4625,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.STOMP, "The target is stomped with a big foot. It may also make the target flinch.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4688,7 +4688,6 @@ public abstract class Attack implements Serializable {
 
 		Curse() {
 			super(AttackNamesies.CURSE, "A move that works differently for the Ghost type than for all other types.", 10, Type.GHOST, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CURSE));
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -4700,15 +4699,18 @@ public abstract class Attack implements Serializable {
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
 			// Different effects based on the type of the user
 			if (me.isType(b, Type.GHOST)) {
+				Effect curse = EffectNamesies.CURSE.getEffect();
+				
 				// Manually apply the effect if it applies
-				if (super.effects.get(0).applies(b, me, o, CastSource.ATTACK)) {
-					super.effects.get(0).cast(b, me, o, CastSource.ATTACK, super.printCast);
+				if (curse.applies(b, me, o, CastSource.ATTACK)) {
+					curse.cast(b, me, o, CastSource.ATTACK, super.printCast);
 				}
 				else {
 					Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
 				}
-				} else {
-				me.modifyStages(b, me, super.statChanges, CastSource.ATTACK);
+			}
+			else {
+				super.apply(me, o, b);
 			}
 		}
 	}
@@ -4718,7 +4720,7 @@ public abstract class Attack implements Serializable {
 
 		Yawn() {
 			super(AttackNamesies.YAWN, "The user lets loose a huge yawn that lulls the target into falling asleep on the next turn.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.YAWN));
+			super.effects.add(EffectNamesies.YAWN);
 		}
 	}
 
@@ -4729,7 +4731,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.HEADBUTT, "The user sticks out its head and attacks by charging straight into the target. It may also make the target flinch.", 15, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4827,7 +4829,7 @@ public abstract class Attack implements Serializable {
 
 		MagnetRise() {
 			super(AttackNamesies.MAGNET_RISE, "The user levitates using electrically generated magnetism for five turns.", 10, Type.ELECTRIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MAGNET_RISE));
+			super.effects.add(EffectNamesies.MAGNET_RISE);
 			super.moveTypes.add(MoveType.AIRBORNE);
 			super.selfTarget = true;
 		}
@@ -4873,7 +4875,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.UPROAR, "The user attacks in an uproar for three turns. Over that time, no one can fall asleep.", 10, Type.NORMAL, MoveCategory.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.UPROAR));
+			super.effects.add(EffectNamesies.UPROAR);
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.selfTarget = true;
@@ -4961,7 +4963,7 @@ public abstract class Attack implements Serializable {
 
 		AquaRing() {
 			super(AttackNamesies.AQUA_RING, "The user envelops itself in a veil made of water. It regains some HP on every turn.", 20, Type.WATER, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.AQUA_RING));
+			super.effects.add(EffectNamesies.AQUA_RING);
 			super.selfTarget = true;
 		}
 	}
@@ -5152,7 +5154,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.CLAMP, "The target is clamped and squeezed by the user's very thick and sturdy shell for four to five turns.", 15, Type.WATER, MoveCategory.PHYSICAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.CLAMPED));
+			super.effects.add(EffectNamesies.CLAMPED);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -5177,7 +5179,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.WHIRLPOOL, "Traps foes in a violent swirling whirlpool for four to five turns.", 15, Type.WATER, MoveCategory.SPECIAL);
 			super.power = 35;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.WHIRLPOOLED));
+			super.effects.add(EffectNamesies.WHIRLPOOLED);
 		}
 	}
 
@@ -5236,7 +5238,7 @@ public abstract class Attack implements Serializable {
 
 		Spikes() {
 			super(AttackNamesies.SPIKES, "The user lays a trap of spikes at the opposing team's feet. The trap hurts Pok\u00e9mon that switch into battle.", 20, Type.GROUND, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SPIKES));
+			super.effects.add(EffectNamesies.SPIKES);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -5248,7 +5250,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.ICICLE_CRASH, "The user attacks by harshly dropping an icicle onto the target. It may also make the target flinch.", 10, Type.ICE, MoveCategory.PHYSICAL);
 			super.power = 85;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 		}
 	}
@@ -5341,7 +5343,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.DARK_PULSE, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", 15, Type.DARK, MoveCategory.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.AURA_PULSE);
 		}
@@ -5353,7 +5355,7 @@ public abstract class Attack implements Serializable {
 		Nightmare() {
 			super(AttackNamesies.NIGHTMARE, "A sleeping target sees a nightmare that inflicts some damage every turn.", 15, Type.GHOST, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.NIGHTMARE));
+			super.effects.add(EffectNamesies.NIGHTMARE);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 	}
@@ -5376,7 +5378,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.BIND, "Things such as long bodies or tentacles are used to bind and squeeze the target for four to five turns.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 15;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.BINDED));
+			super.effects.add(EffectNamesies.BINDED);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -5560,7 +5562,7 @@ public abstract class Attack implements Serializable {
 
 		Charge() {
 			super(AttackNamesies.CHARGE, "The user boosts the power of the Electric move it uses on the next turn. It also raises the user's Sp. Def stat.", 20, Type.ELECTRIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHARGE));
+			super.effects.add(EffectNamesies.CHARGE);
 			super.selfTarget = true;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 1;
 		}
@@ -5741,7 +5743,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.BONE_CLUB, "The user clubs the target with a bone. It may also make the target flinch.", 20, Type.GROUND, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 10;
 		}
 	}
@@ -5825,7 +5827,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.ROLLING_KICK, "The user lashes out with a quick, spinning kick. It may also make the target flinch.", 15, Type.FIGHTING, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -6066,7 +6068,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.FOCUS_PUNCH, "The user focuses its mind before launching a punch. It will fail if the user is hit before it is used.", 20, Type.FIGHTING, MoveCategory.PHYSICAL);
 			super.power = 150;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FOCUSING));
+			super.effects.add(EffectNamesies.FOCUSING);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -6242,7 +6244,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.DIZZY_PUNCH, "The target is hit with rhythmically launched punches that may also leave it confused.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 70;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PUNCHING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -6256,7 +6258,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.OUTRAGE, "The user rampages and attacks for two to three turns. It then becomes confused, however.", 10, Type.DRAGON, MoveCategory.PHYSICAL);
 			super.power = 120;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.SELF_CONFUSION));
+			super.effects.add(EffectNamesies.SELF_CONFUSION);
 			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -6303,7 +6305,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.WATERFALL, "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", 15, Type.WATER, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -6314,7 +6316,7 @@ public abstract class Attack implements Serializable {
 
 		ReflectType() {
 			super(AttackNamesies.REFLECT_TYPE, "The user reflects the target's type, making it the same type as the target.", 15, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
+			super.effects.add(EffectNamesies.CHANGE_TYPE);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -6410,7 +6412,7 @@ public abstract class Attack implements Serializable {
 
 		Transform() {
 			super(AttackNamesies.TRANSFORM, "The user transforms into a copy of the target right down to having the same move set.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRANSFORMED));
+			super.effects.add(EffectNamesies.TRANSFORMED);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.ENCORELESS);
@@ -6425,7 +6427,7 @@ public abstract class Attack implements Serializable {
 
 		Substitute() {
 			super(AttackNamesies.SUBSTITUTE, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", 10, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SUBSTITUTE));
+			super.effects.add(EffectNamesies.SUBSTITUTE);
 			super.selfTarget = true;
 		}
 	}
@@ -6490,7 +6492,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.HEART_STAMP, "The user unleashes a vicious blow after its cute act makes the target less wary. It may also make the target flinch.", 25, Type.PSYCHIC, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -6618,7 +6620,7 @@ public abstract class Attack implements Serializable {
 
 		Mist() {
 			super(AttackNamesies.MIST, "The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns.", 30, Type.ICE, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MIST));
+			super.effects.add(EffectNamesies.MIST);
 			super.selfTarget = true;
 		}
 	}
@@ -6692,7 +6694,7 @@ public abstract class Attack implements Serializable {
 
 		Conversion() {
 			super(AttackNamesies.CONVERSION, "The user changes its type to become the same type as one of its moves.", 30, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
+			super.effects.add(EffectNamesies.CHANGE_TYPE);
 			super.selfTarget = true;
 		}
 
@@ -6735,7 +6737,7 @@ public abstract class Attack implements Serializable {
 
 		Conversion2() {
 			super(AttackNamesies.CONVERSION2, "The user changes its type to make itself resistant to the type of the attack the opponent used last.", 30, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
+			super.effects.add(EffectNamesies.CHANGE_TYPE);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -6772,7 +6774,7 @@ public abstract class Attack implements Serializable {
 
 		MagicCoat() {
 			super(AttackNamesies.MAGIC_COAT, "A barrier reflects back to the target moves like Leech Seed and moves that damage status.", 15, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MAGIC_COAT));
+			super.effects.add(EffectNamesies.MAGIC_COAT);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 			super.priority = 4;
@@ -6807,7 +6809,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.IRON_HEAD, "The user slams the target with its steel-hard head. It may also make the target flinch.", 15, Type.STEEL, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -6820,7 +6822,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.ROCK_SLIDE, "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", 10, Type.ROCK, MoveCategory.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 		}
 	}
@@ -6832,7 +6834,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.SNORE, "An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.", 15, Type.NORMAL, MoveCategory.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -6888,7 +6890,7 @@ public abstract class Attack implements Serializable {
 
 		Block() {
 			super(AttackNamesies.BLOCK, "The user blocks the target's way with arms spread wide to prevent escape.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED));
+			super.effects.add(EffectNamesies.TRAPPED);
 		}
 	}
 
@@ -6899,7 +6901,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.SKY_ATTACK, "A second-turn attack move where critical hits land more easily. It may also make the target flinch.", 5, Type.FLYING, MoveCategory.PHYSICAL);
 			super.power = 140;
 			super.accuracy = 90;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
@@ -6932,7 +6934,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.DRAGON_RUSH, "The user tackles the target while exhibiting overwhelming menace. It may also make the target flinch.", 10, Type.DRAGON, MoveCategory.PHYSICAL);
 			super.power = 100;
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -7047,7 +7049,7 @@ public abstract class Attack implements Serializable {
 
 		SpiderWeb() {
 			super(AttackNamesies.SPIDER_WEB, "The user ensnares the target with thin, gooey silk so it can't flee from battle.", 10, Type.BUG, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRAPPED));
+			super.effects.add(EffectNamesies.TRAPPED);
 		}
 	}
 
@@ -7057,7 +7059,7 @@ public abstract class Attack implements Serializable {
 		SweetKiss() {
 			super(AttackNamesies.SWEET_KISS, "The user kisses the target with a sweet, angelic cuteness that causes confusion.", 10, Type.FAIRY, MoveCategory.STATUS);
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 		}
 	}
 
@@ -7118,7 +7120,7 @@ public abstract class Attack implements Serializable {
 		Torment() {
 			super(AttackNamesies.TORMENT, "The user torments and enrages the target, making it incapable of using the same move twice in a row.", 15, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.TORMENT));
+			super.effects.add(EffectNamesies.TORMENT);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
@@ -7173,7 +7175,7 @@ public abstract class Attack implements Serializable {
 
 		Bide() {
 			super(AttackNamesies.BIDE, "The user endures attacks for two turns, then strikes back to cause double the damage taken.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
-			super.effects.add(Effect.getEffect(EffectNamesies.BIDE));
+			super.effects.add(EffectNamesies.BIDE);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 			super.selfTarget = true;
 			super.priority = 1;
@@ -7190,7 +7192,7 @@ public abstract class Attack implements Serializable {
 
 		Autotomize() {
 			super(AttackNamesies.AUTOTOMIZE, "The user sheds part of its body to make itself lighter and sharply raise its Speed stat.", 15, Type.STEEL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.HALF_WEIGHT));
+			super.effects.add(EffectNamesies.HALF_WEIGHT);
 			super.selfTarget = true;
 			super.statChanges[Stat.SPEED.index()] = 2;
 		}
@@ -7212,7 +7214,7 @@ public abstract class Attack implements Serializable {
 
 		PowerTrick() {
 			super(AttackNamesies.POWER_TRICK, "The user employs its psychic power to switch its Attack with its Defense stat.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.POWER_TRICK));
+			super.effects.add(EffectNamesies.POWER_TRICK);
 			super.selfTarget = true;
 		}
 	}
@@ -7222,7 +7224,7 @@ public abstract class Attack implements Serializable {
 
 		PowerSplit() {
 			super(AttackNamesies.POWER_SPLIT, "The user employs its psychic power to average its Attack and Sp. Atk stats with those of the target's.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.POWER_SPLIT));
+			super.effects.add(EffectNamesies.POWER_SPLIT);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -7233,7 +7235,7 @@ public abstract class Attack implements Serializable {
 
 		GuardSplit() {
 			super(AttackNamesies.GUARD_SPLIT, "The user employs its psychic power to average its Defense and Sp. Def stats with those of its target's.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.GUARD_SPLIT));
+			super.effects.add(EffectNamesies.GUARD_SPLIT);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -7510,7 +7512,7 @@ public abstract class Attack implements Serializable {
 		HealBlock() {
 			super(AttackNamesies.HEAL_BLOCK, "For five turns, the user prevents the opposing team from using any moves, Abilities, or held items that recover HP.", 15, Type.PSYCHIC, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_BLOCK));
+			super.effects.add(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -7546,7 +7548,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.THIEF, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", 25, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
+			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -7593,7 +7595,7 @@ public abstract class Attack implements Serializable {
 		Attract() {
 			super(AttackNamesies.ATTRACT, "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.", 15, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.INFATUATED));
+			super.effects.add(EffectNamesies.INFATUATED);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 	}
@@ -7782,7 +7784,7 @@ public abstract class Attack implements Serializable {
 		TeeterDance() {
 			super(AttackNamesies.TEETER_DANCE, "The user performs a wobbly dance that confuses the Pok\u00e9mon around it.", 20, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 		}
 	}
 
@@ -7793,7 +7795,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.NEEDLE_ARM, "The user attacks by wildly swinging its thorny arms. It may also make the target flinch.", 15, Type.GRASS, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.FLINCH));
+			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -7818,7 +7820,7 @@ public abstract class Attack implements Serializable {
 
 		Snatch() {
 			super(AttackNamesies.SNATCH, "The user steals the effects of any healing or stat-changing move the opponent attempts to use.", 10, Type.DARK, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.SNATCH));
+			super.effects.add(EffectNamesies.SNATCH);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -7972,7 +7974,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.CHATTER, "The user attacks using a sound wave based on words it has learned. It may also confuse the target.", 20, Type.FLYING, MoveCategory.SPECIAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.moveTypes.add(MoveType.SOUND_BASED);
 		}
 	}
@@ -8047,7 +8049,7 @@ public abstract class Attack implements Serializable {
 
 		TrickRoom() {
 			super(AttackNamesies.TRICK_ROOM, "The user creates a bizarre area in which slower Pok\u00e9mon get to move first for five turns.", 5, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.TRICK_ROOM));
+			super.effects.add(EffectNamesies.TRICK_ROOM);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 			super.priority = -7;
@@ -8102,7 +8104,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.MAGMA_STORM, "The target becomes trapped within a maelstrom of fire that rages for four to five turns.", 5, Type.FIRE, MoveCategory.SPECIAL);
 			super.power = 100;
 			super.accuracy = 75;
-			super.effects.add(Effect.getEffect(EffectNamesies.MAGMA_STORM));
+			super.effects.add(EffectNamesies.MAGMA_STORM);
 		}
 	}
 
@@ -8363,7 +8365,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.ROCK_CLIMB, "The user attacks the target by smashing into it with incredible force. It may also confuse the target.", 20, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 90;
 			super.accuracy = 85;
-			super.effects.add(Effect.getEffect(EffectNamesies.CONFUSION));
+			super.effects.add(EffectNamesies.CONFUSION);
 			super.effectChance = 20;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -8787,7 +8789,7 @@ public abstract class Attack implements Serializable {
 		GastroAcid() {
 			super(AttackNamesies.GASTRO_ACID, "The user hurls up its stomach acids on the target. The fluid eliminates the effect of the target's Ability.", 10, Type.POISON, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
+			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -8816,7 +8818,7 @@ public abstract class Attack implements Serializable {
 
 		HealingWish() {
 			super(AttackNamesies.HEALING_WISH, "The user faints. In return, the Pok\u00e9mon taking its place will have its HP restored and status cured.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_SWITCH));
+			super.effects.add(EffectNamesies.HEAL_SWITCH);
 			super.moveTypes.add(MoveType.USER_FAINTS);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
@@ -8828,7 +8830,7 @@ public abstract class Attack implements Serializable {
 
 		LunarDance() {
 			super(AttackNamesies.LUNAR_DANCE, "The user faints. In return, the Pok\u00e9mon taking its place will have its status and HP fully restored.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.HEAL_SWITCH));
+			super.effects.add(EffectNamesies.HEAL_SWITCH);
 			super.moveTypes.add(MoveType.USER_FAINTS);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
@@ -8900,7 +8902,7 @@ public abstract class Attack implements Serializable {
 
 		Grudge() {
 			super(AttackNamesies.GRUDGE, "If the user faints, the user's grudge fully depletes the PP of the opponent's move that knocked it out.", 5, Type.GHOST, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.GRUDGE));
+			super.effects.add(EffectNamesies.GRUDGE);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
@@ -9007,7 +9009,7 @@ public abstract class Attack implements Serializable {
 
 		RolePlay() {
 			super(AttackNamesies.ROLE_PLAY, "The user mimics the target completely, copying the target's natural Ability.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
+			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -9029,7 +9031,9 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return b.getOtherPokemon(victim.user()).getAbility().newInstance();
+			// TODO: Combine with Trace
+			Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+			return otherAbility.namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9045,7 +9049,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.KNOCK_OFF, "The user slaps down the target's held item, preventing that item from being used in the battle.", 25, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
+			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
@@ -9132,7 +9136,7 @@ public abstract class Attack implements Serializable {
 
 		Bestow() {
 			super(AttackNamesies.BESTOW, "The user passes its held item to the target when the target isn't holding an item.", 15, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
+			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
@@ -9178,7 +9182,7 @@ public abstract class Attack implements Serializable {
 		Switcheroo() {
 			super(AttackNamesies.SWITCHEROO, "The user passes its held item to the target when the target isn't holding an item.", 10, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
+			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -9225,7 +9229,7 @@ public abstract class Attack implements Serializable {
 		Trick() {
 			super(AttackNamesies.TRICK, "The user catches the target off guard and swaps its held item with its own.", 10, Type.PSYCHIC, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ITEM));
+			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
@@ -9283,7 +9287,7 @@ public abstract class Attack implements Serializable {
 
 		DestinyBond() {
 			super(AttackNamesies.DESTINY_BOND, "When this move is used, if the user faints, the Pok\u00e9mon that landed the knockout hit also faints.", 5, Type.GHOST, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.DESTINY_BOND));
+			super.effects.add(EffectNamesies.DESTINY_BOND);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -9297,7 +9301,7 @@ public abstract class Attack implements Serializable {
 
 		Camouflage() {
 			super(AttackNamesies.CAMOUFLAGE, "The user's type is changed depending on its environment, such as at water's edge, in grass, or in a cave.", 20, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_TYPE));
+			super.effects.add(EffectNamesies.CHANGE_TYPE);
 			super.selfTarget = true;
 		}
 
@@ -9455,7 +9459,7 @@ public abstract class Attack implements Serializable {
 
 		PerishSong() {
 			super(AttackNamesies.PERISH_SONG, "Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.PERISH_SONG));
+			super.effects.add(EffectNamesies.PERISH_SONG);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.SOUND_BASED);
@@ -9559,7 +9563,7 @@ public abstract class Attack implements Serializable {
 		Embargo() {
 			super(AttackNamesies.EMBARGO, "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", 15, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.EMBARGO));
+			super.effects.add(EffectNamesies.EMBARGO);
 		}
 	}
 
@@ -9588,7 +9592,7 @@ public abstract class Attack implements Serializable {
 		Entrainment() {
 			super(AttackNamesies.ENTRAINMENT, "The user dances with an odd rhythm that compels the target to mimic it, making the target's Ability the same as the user's.", 15, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
+			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -9608,7 +9612,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return caster.getAbility().newInstance();
+			// TODO: Combine with Trace/Role Play
+			return caster.getAbility().namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9621,7 +9626,7 @@ public abstract class Attack implements Serializable {
 
 		MagicRoom() {
 			super(AttackNamesies.MAGIC_ROOM, "The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MAGIC_ROOM));
+			super.effects.add(EffectNamesies.MAGIC_ROOM);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -9633,7 +9638,7 @@ public abstract class Attack implements Serializable {
 		WorrySeed() {
 			super(AttackNamesies.WORRY_SEED, "A seed that causes worry is planted on the target. It prevents sleep by making its Ability Insomnia.", 10, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
+			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -9663,7 +9668,7 @@ public abstract class Attack implements Serializable {
 		SimpleBeam() {
 			super(AttackNamesies.SIMPLE_BEAM, "The user's mysterious psychic wave changes the target's Ability to Simple.", 15, Type.NORMAL, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
+			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -9705,7 +9710,6 @@ public abstract class Attack implements Serializable {
 
 		SkillSwap() {
 			super(AttackNamesies.SKILL_SWAP, "The user employs its psychic power to exchange Abilities with the target.", 10, Type.PSYCHIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CHANGE_ABILITY));
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
@@ -9717,10 +9721,10 @@ public abstract class Attack implements Serializable {
 			}
 			
 			ability = user.getAbility();
-			Ability temp = victim.getAbility();
-			super.effects.get(0).cast(b, user, victim, CastSource.ATTACK, super.printCast);
-			ability = temp;
-			super.effects.get(0).cast(b, user, user, CastSource.ATTACK, super.printCast);
+			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
+			
+			ability = victim.getAbility();
+			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, user, CastSource.ATTACK, super.printCast);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -10033,7 +10037,7 @@ public abstract class Attack implements Serializable {
 
 		CraftyShield() {
 			super(AttackNamesies.CRAFTY_SHIELD, "The user protects itself and its allies from status moves with a mysterious power. This does not stop moves that do damage.", 10, Type.FAIRY, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.CRAFTY_SHIELD));
+			super.effects.add(EffectNamesies.CRAFTY_SHIELD);
 			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
@@ -10180,7 +10184,7 @@ public abstract class Attack implements Serializable {
 
 		MistyTerrain() {
 			super(AttackNamesies.MISTY_TERRAIN, "The user covers the ground under everyone's feet with mist for five turns. This protects Pok\u00e9mon on the ground from status conditions.", 10, Type.FAIRY, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MISTY_TERRAIN));
+			super.effects.add(EffectNamesies.MISTY_TERRAIN);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -10191,7 +10195,7 @@ public abstract class Attack implements Serializable {
 
 		FairyLock() {
 			super(AttackNamesies.FAIRY_LOCK, "By locking down the battlefield, the user keeps all Pok\u00e9mon from fleeing during the next turn.", 10, Type.FAIRY, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.FAIRY_LOCK));
+			super.effects.add(EffectNamesies.FAIRY_LOCK);
 			super.moveTypes.add(MoveType.NON_SNATCHABLE);
 			super.selfTarget = true;
 		}
@@ -10234,7 +10238,7 @@ public abstract class Attack implements Serializable {
 
 		GrassyTerrain() {
 			super(AttackNamesies.GRASSY_TERRAIN, "The user turns the ground under everyone's feet to grass for five turns. This restores the HP of Pok\u00e9mon on the ground a little every turn.", 10, Type.GRASS, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.GRASSY_TERRAIN));
+			super.effects.add(EffectNamesies.GRASSY_TERRAIN);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}
@@ -10268,7 +10272,7 @@ public abstract class Attack implements Serializable {
 		Powder() {
 			super(AttackNamesies.POWDER, "The user covers the target in a powder that explodes and damages the target if it uses a Fire-type move.", 20, Type.BUG, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.POWDER));
+			super.effects.add(EffectNamesies.POWDER);
 			super.moveTypes.add(MoveType.POWDER);
 			super.priority = 1;
 		}
@@ -10327,7 +10331,7 @@ public abstract class Attack implements Serializable {
 
 		MatBlock() {
 			super(AttackNamesies.MAT_BLOCK, "Using a pulled-up mat as a shield, the user protects itself and its allies from damaging moves. This does not stop status moves.", 15, Type.FIGHTING, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.MAT_BLOCK));
+			super.effects.add(EffectNamesies.MAT_BLOCK);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.selfTarget = true;
 		}
@@ -10360,7 +10364,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.INFESTATION, "The target is infested and attacked for four to five turns. The target can't flee during this time.", 20, Type.BUG, MoveCategory.SPECIAL);
 			super.power = 20;
 			super.accuracy = 100;
-			super.effects.add(Effect.getEffect(EffectNamesies.INFESTATION));
+			super.effects.add(EffectNamesies.INFESTATION);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -10370,7 +10374,7 @@ public abstract class Attack implements Serializable {
 
 		Electrify() {
 			super(AttackNamesies.ELECTRIFY, "If the target is electrified before it uses a move during that turn, the target's move becomes Electric type.", 20, Type.ELECTRIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.ELECTRIFIED));
+			super.effects.add(EffectNamesies.ELECTRIFIED);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.priority = 1;
 		}
@@ -10407,7 +10411,7 @@ public abstract class Attack implements Serializable {
 
 		StickyWeb() {
 			super(AttackNamesies.STICKY_WEB, "The user weaves a sticky net around the opposing team, which lowers their Speed stat upon switching into battle.", 20, Type.BUG, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.STICKY_WEB));
+			super.effects.add(EffectNamesies.STICKY_WEB);
 			super.moveTypes.add(MoveType.FIELD);
 		}
 	}
@@ -10458,7 +10462,7 @@ public abstract class Attack implements Serializable {
 
 		ElectricTerrain() {
 			super(AttackNamesies.ELECTRIC_TERRAIN, "The user electrifies the ground under everyone's feet for five turns. Pok\u00e9mon on the ground no longer fall asleep.", 10, Type.ELECTRIC, MoveCategory.STATUS);
-			super.effects.add(Effect.getEffect(EffectNamesies.ELECTRIC_TERRAIN));
+			super.effects.add(EffectNamesies.ELECTRIC_TERRAIN);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.FIELD);
 		}

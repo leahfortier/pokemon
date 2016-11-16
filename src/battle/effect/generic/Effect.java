@@ -23,12 +23,6 @@ public abstract class Effect implements Serializable
 	private int maxTurns;
 	private boolean nextTurnSubside;
 
-	public enum EffectType {
-		POKEMON,
-		TEAM,
-		BATTLE,
-	}
-
 	// TODO: Move this to its own file
 	public enum CastSource {
 		ATTACK,
@@ -54,6 +48,7 @@ public abstract class Effect implements Serializable
 	
 	public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		// TODO: Should have a constant for -1
+        // TODO: Move to test
 		if ((minTurns == -1 && maxTurns != -1) || (minTurns != -1 && maxTurns == -1)) {
 			Global.error("Incorrect min/max turns for effect " + name);
 		}
@@ -62,14 +57,9 @@ public abstract class Effect implements Serializable
 		this.minTurns = minTurns;
 		this.maxTurns = maxTurns;
 		this.nextTurnSubside = nextTurnSubside;
-	}
-	
-	public abstract Effect newInstance();
-	
-	protected Effect activate() {
-		this.numTurns = this.minTurns == -1 ? -1 : Global.getRandomInt(this.minTurns, this.maxTurns);
-		this.active = true;
-		return this;
+
+        this.numTurns = this.minTurns == -1 ? -1 : Global.getRandomInt(this.minTurns, this.maxTurns);
+        this.active = true;
 	}
 	
 	public boolean nextTurnSubside() {
