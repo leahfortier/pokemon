@@ -13,7 +13,7 @@ import battle.effect.StallingEffect;
 import battle.effect.SwitchOutEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
-import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;

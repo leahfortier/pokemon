@@ -2,7 +2,7 @@ package battle.effect.status;
 
 import battle.Battle;
 import battle.effect.generic.Effect;
-import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.PokemonEffect;
 import item.Item;

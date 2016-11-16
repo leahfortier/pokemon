@@ -9,8 +9,7 @@ import util.StringUtils;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class Effect implements Serializable
-{
+public abstract class Effect implements Serializable {
 	public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
 	
 	private static final long serialVersionUID = 1L;
@@ -19,33 +18,8 @@ public abstract class Effect implements Serializable
 	protected boolean active;
 
 	protected int numTurns;
-	private int minTurns;
-	private int maxTurns;
 	private boolean nextTurnSubside;
 
-	// TODO: Move this to its own file
-	public enum CastSource {
-		ATTACK,
-		ABILITY,
-		HELD_ITEM,
-		USE_ITEM,
-		EFFECT;
-		
-		public Object getSource(Battle b, ActivePokemon caster) {
-			switch (this) {
-				case ATTACK:
-					return caster.getAttack();
-				case ABILITY:
-					return caster.getAbility();
-				case HELD_ITEM:
-					return caster.getHeldItem(b);
-				default:
-					Global.error("Cannot get source for CastSource." + this.name() + ".");
-					return null;
-			}
-		}
-	}
-	
 	public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		// TODO: Should have a constant for -1
         // TODO: Move to test
@@ -54,11 +28,9 @@ public abstract class Effect implements Serializable
 		}
 		
 		this.namesies = name;
-		this.minTurns = minTurns;
-		this.maxTurns = maxTurns;
 		this.nextTurnSubside = nextTurnSubside;
 
-        this.numTurns = this.minTurns == -1 ? -1 : Global.getRandomInt(this.minTurns, this.maxTurns);
+        this.numTurns = minTurns == -1 ? -1 : Global.getRandomInt(minTurns, maxTurns);
         this.active = true;
 	}
 	
@@ -85,16 +57,8 @@ public abstract class Effect implements Serializable
 		return getEffect(effects, effect) != null;
 	}
 	
-	public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effect) {
-		// TODO: Change to for each
-		for (int i = 0; i < effects.size(); i++) {
-			if (effects.get(i).namesies() == effect) {
-				effects.remove(i);
-				return true;
-			}
-		}
-		
-		return false;
+	public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effectToRemove) {
+		return effects.removeIf(effect -> effect.namesies() == effectToRemove);
 	}
 	
 	public static boolean isInactiveEffect(Object object) {

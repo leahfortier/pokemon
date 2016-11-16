@@ -8,7 +8,7 @@ import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.generic.Effect;
-import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;

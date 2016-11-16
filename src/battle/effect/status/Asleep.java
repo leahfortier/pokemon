@@ -2,7 +2,7 @@ package battle.effect.status;
 
 import battle.Battle;
 import battle.attack.MoveType;
-import battle.effect.generic.Effect;
+import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import main.Global;
 import message.Messages;
@@ -40,7 +40,7 @@ class Asleep extends Status implements BeforeTurnEffect {
 
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
         if (numTurns == 0) {
-            Status.removeStatus(b, p, Effect.CastSource.EFFECT);
+            Status.removeStatus(b, p, CastSource.EFFECT);
             return true;
         }
 

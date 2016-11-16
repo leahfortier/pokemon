@@ -11,7 +11,7 @@ import battle.effect.RepellingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.Effect;
-import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;

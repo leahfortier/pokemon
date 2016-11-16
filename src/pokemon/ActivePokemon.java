@@ -6,7 +6,7 @@ import battle.BattleAttributes;
 import battle.attack.Move;
 import battle.effect.StallingEffect;
 import battle.effect.attack.MultiTurnMove;
-import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;

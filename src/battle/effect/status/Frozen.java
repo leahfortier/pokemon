@@ -2,7 +2,7 @@ package battle.effect.status;
 
 import battle.Battle;
 import battle.attack.MoveType;
-import battle.effect.generic.Effect;
+import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import main.Global;
@@ -26,7 +26,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
         // 20% chance to thaw out each turn
         if (Global.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
-            Status.removeStatus(b, p, Effect.CastSource.EFFECT);
+            Status.removeStatus(b, p, CastSource.EFFECT);
 
             return true;
         }
@@ -46,7 +46,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
     public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
         // Fire-type moves defrost the user
         if (user.isAttackType(Type.FIRE)) {
-            Status.removeStatus(b, victim, Effect.CastSource.EFFECT);
+            Status.removeStatus(b, victim, CastSource.EFFECT);
         }
     }
 

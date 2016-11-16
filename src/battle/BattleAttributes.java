@@ -15,7 +15,7 @@ import pokemon.ability.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import battle.effect.generic.Effect;
-import battle.effect.generic.Effect.CastSource;
+import battle.effect.generic.CastSource;
 import battle.effect.ModifyStageValueEffect;
 import battle.effect.generic.PokemonEffect;
 import util.StringUtils;
