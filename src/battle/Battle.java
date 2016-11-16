@@ -30,6 +30,7 @@ import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
+import message.Messages.MessageState;
 import pokemon.ability.AbilityNamesies;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
@@ -67,8 +68,8 @@ public class Battle {
 	private TerrainType currentTerrain;
 	
 	public Battle(Opponent o) {
-		Messages.clearBattleMessages();
-		Messages.fightyFight();
+        Messages.clearMessages(MessageState.FIGHTY_FIGHT);
+        Messages.setMessageState(MessageState.FIGHTY_FIGHT);
 		Messages.addMessage(new MessageUpdate("", Update.ENTER_BATTLE));
 
 		player = Game.getPlayer();
@@ -283,7 +284,7 @@ public class Battle {
 
 		player.healAll();
 		player.teleportToPokeCenter();
-		Messages.clearMapMessages();
+		Messages.clearMessages(MessageState.MAPPITY_MAP);
 		Messages.addMessage(" ", Update.EXIT_BATTLE);
 	}
 
