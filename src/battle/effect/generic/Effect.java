@@ -23,12 +23,6 @@ public abstract class Effect implements Serializable
 	private int maxTurns;
 	private boolean nextTurnSubside;
 
-	public enum EffectType {
-		POKEMON,
-		TEAM,
-		BATTLE,
-	}
-
 	// TODO: Move this to its own file
 	public enum CastSource {
 		ATTACK,

@@ -431,7 +431,8 @@ class PokeGen {
 				}
 				
 				physicalContact = Boolean.parseBoolean(physicalContactSpecified);
-				
+
+				// TODO: Move to test
 				if (category.contains("Status"))  {
 					Global.error("Status moves never make physical contact (Move " + fields.get("ClassName") + ")");
 				}

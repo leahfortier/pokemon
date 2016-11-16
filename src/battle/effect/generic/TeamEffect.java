@@ -32,7 +32,10 @@ public abstract class TeamEffect extends Effect implements Serializable {
 	}
 	
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-		if (printCast) Messages.addMessage(getCastMessage(b, caster, victim));
+		if (printCast) {
+			Messages.addMessage(getCastMessage(b, caster, victim));
+		}
+
 		b.getTrainer(victim.user()).addEffect(this);
 		
 		Messages.addMessage("", b, caster);
