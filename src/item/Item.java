@@ -1909,7 +1909,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			item = this;
 			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, user, CastSource.HELD_ITEM, false);
 			
-			item = Item.noneItem();
+			item = ItemNamesies.NO_ITEM.getItem();
 			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, victim, CastSource.HELD_ITEM, false);
 		}
 
