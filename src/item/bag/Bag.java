@@ -155,39 +155,51 @@ public class Bag implements Serializable {
 		return false;
 	}
 
-	public boolean useItem(ItemNamesies item, ActivePokemon p) {
+	// Checks conditions, add messages, and executes the UseItem
+	// Move should be null for PokemonUseItem and nonnull for MoveUseItem
+	private boolean useItem(ItemNamesies item, ActivePokemon p, Move move) {
+		// Eggs can't do shit
 		if (p.isEgg()) {
 			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
 			return false;
 		}
 
+		// Check if the item is an instance of the corresponding UseItem class
+		Class<? extends UseItem> useClass = move == null ? PokemonUseItem.class : MoveUseItem.class;
 		Item itemValue = item.getItem();
-		if (!(itemValue instanceof PokemonUseItem)) {
+		if (!useClass.isInstance(itemValue)) {
 			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
 			return false;
 		}
 
-		PokemonUseItem useItem = (PokemonUseItem) itemValue;
-		if (!useItem.use(Game.getPlayer(), p)) {
+		// Try to use the item
+		UseItem useItem = (UseItem) itemValue;
+		final boolean success;
+		if (move == null) {
+			success = ((PokemonUseItem)useItem).use(Game.getPlayer(), p);
+		} else {
+			success = ((MoveUseItem)useItem).use(p, move);
+		}
+
+		// :(
+		if (!success) {
 			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
 			return false;
 		}
 
+		// Item successfully used -- display success messages to the user and remove this item from the bag
 		Messages.addMessage(Game.getPlayer().getName() + " used the " + item.getName() + "!");
 		Messages.addMessage(useItem.getSuccessMessage(p));
 		removeItem(item);
 		return true;
 	}
 
-	// TODO: Add messages
-	public boolean useMoveItem(ItemNamesies item, ActivePokemon p, Move m) {
-		Item useItem = item.getItem();
-		if (useItem instanceof MoveUseItem && ((MoveUseItem)useItem).use(p, m)) {
-			removeItem(item);
-			return true;
-		}
+	public boolean useItem(ItemNamesies item, ActivePokemon p) {
+		return this.useItem(item, p, null);
+	}
 
-		return false;
+	public boolean useMoveItem(ItemNamesies item, ActivePokemon p, Move move) {
+		return this.useItem(item, p, move);
 	}
 
 	public boolean battleUseItem(ItemNamesies item, ActivePokemon activePokemon, Battle battle) {
