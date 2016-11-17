@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 class MethodInfo {
+    // TODO: Move to separate file
     enum AccessModifier {
         PUBLIC("public"),
         PRIVATE("private"),
@@ -161,9 +162,9 @@ class MethodInfo {
         }
     }
 
-    String writeFunction(String fieldValue, String className, String superClass) {
+    private String writeFunction(String fieldValue, String className, String superClass) {
         if (this.header == null) {
-            return "";
+            return StringUtils.empty();
         }
 
         if (this.body.isEmpty()) {
@@ -187,6 +188,10 @@ class MethodInfo {
 
         this.fullBody = this.begin + this.fullBody + this.end;
         this.fullBody = StuffGen.replaceBody(this.fullBody, fieldValue, className, superClass);
+
+        if (!this.required && !this.defaultBody && StringUtils.isNullOrEmpty(this.fullBody)) {
+            return StringUtils.empty();
+        }
 
         return this.writeFunction();
     }

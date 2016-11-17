@@ -1310,8 +1310,6 @@ HoldItem:
 	FlingEffect:
 		Header: void flingEffect(Battle b, ActivePokemon pelted)
 		Optional: True
-		Default:
-		###
 	*
 ***
 TrainerUseItem:
