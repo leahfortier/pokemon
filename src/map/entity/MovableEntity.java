@@ -38,6 +38,7 @@ public abstract class MovableEntity extends Entity {
 		Point canvasCoordinates = getCanvasCoordinates(drawX, drawY);
 		
 		if (transitionTime != 0) {
+			// TODO: util
 			int len = Global.TILE_SIZE*(getTransitionTime() - transitionTime)/getTransitionTime();
 			
 			canvasCoordinates.x -= transitionDirection.dx * len;
@@ -69,12 +70,13 @@ public abstract class MovableEntity extends Entity {
 	}
 
 	public boolean isFacing(int x, int y) {
-		if (x != charX && y != charY) {
+		if (x != getX() && y != getY()) {
 			return false;
 		}
-		
-		int dx = (int) Math.signum(x - charX);
-		int dy = (int) Math.signum(y - charY);
+
+		// TODO: Make point method for this
+		int dx = (int) Math.signum(x - getX());
+		int dy = (int) Math.signum(y - getY());
 
 		return transitionDirection.dx == dx && transitionDirection.dy == dy;
 	}
@@ -82,6 +84,7 @@ public abstract class MovableEntity extends Entity {
 	protected BufferedImage getFrame() {
 		TileSet trainerTiles = Game.getData().getTrainerTiles();
 		if (transitionTime > 0) {
+			// TODO: method
 			return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection.ordinal() + 4 * (1 + runFrame));
 		}
 

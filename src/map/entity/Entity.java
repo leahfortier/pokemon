@@ -18,27 +18,21 @@ public abstract class Entity {
 	private String entityName;
 	private Condition condition;
 
-	protected int charX;
-	protected int charY;
+	protected Point location;
 
-	public Entity(Point location, String triggerName, String condition) {
-		this(location.x, location.y, triggerName, condition);
-	}
-
-	public Entity(int x, int y, String entityName, String condition) {
-		charX = x;
-		charY = y;
+	protected Entity(Point location, String entityName, String condition) {
+		this.location = Point.copy(location);
 
 		this.entityName = entityName;
 		this.condition = new Condition(condition);
 	}
 	
 	public int getX() {
-		return this.charX;
+		return this.location.x;
 	}
 	
 	public int getY() {
-		return this.charY;
+		return this.location.y;
 	}
 
 	public boolean isPresent() {
@@ -48,8 +42,8 @@ public abstract class Entity {
 	// TODO: DrawUtils
 	// Takes in the draw coordinates and returns the location of the entity where to draw it relative to the canvas
 	public Point getCanvasCoordinates(float drawX, float drawY) {
-		int cx = (int) drawX + Global.TILE_SIZE * charX;
-		int cy = (int) drawY + Global.TILE_SIZE * charY;
+		int cx = (int) drawX + Global.TILE_SIZE * getX();
+		int cy = (int) drawY + Global.TILE_SIZE * getY();
 		
 		return new Point(cx, cy);
 	}

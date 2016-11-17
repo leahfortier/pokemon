@@ -84,18 +84,18 @@ public class NPCEntity extends MovableEntity {
 					if (pathChar != direction.character) {
 						continue;
 					}
-					
-					int x = charX + direction.dx;
-					int y = charY + direction.dy;
+
+					Point newPoint = Point.add(this.location, direction.getDeltaPoint());
+					int x = newPoint.x; // TODO
+					int y = newPoint.y;
 					
 					// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well? 
 					if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
-						entity[charX][charY] = null;
+						entity[getX()][getY()] = null;
 						
-						charX = x;
-						charY = y;
+						this.location = newPoint;
 						
-						entity[charX][charY] = this;
+						entity[getX()][getY()] = this;
 						
 						transitionTime = 1;
 						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
@@ -175,8 +175,7 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	public void reset() {
-		charX = defaultLocation.x;
-		charY = defaultLocation.y;
+		location = defaultLocation;
 		waitTime = 0;
 		pathIndex = 0;
 		hasAttention = false;

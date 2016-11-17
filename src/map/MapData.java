@@ -147,13 +147,14 @@ public class MapData {
 
 	private int getPlayerMapIndex() {
 		CharacterData player = Game.getPlayer();
-		return getMapIndex(player.locationX, player.locationY);
+		return getMapIndex(player.getX(), player.getY());
 	}
 
 	public int getMapIndex(int x, int y) {
 		return getMapIndex(x, y, width);
 	}
 
+	// TODO Point
 	public static Integer getMapIndex(int x, int y, int width) {
 		return x + y*width;
 	}

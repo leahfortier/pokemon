@@ -2,10 +2,12 @@ package trainer;
 
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
+import battle.effect.generic.EffectNamesies;
+import gui.view.ViewMode;
 import item.Item;
+import item.ItemNamesies;
 import item.use.BallItem;
 import main.Game;
-import gui.view.ViewMode;
 import main.Global;
 import map.Direction;
 import map.triggers.Trigger;
@@ -13,15 +15,14 @@ import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import battle.effect.generic.EffectNamesies;
-import item.ItemNamesies;
-import pattern.action.UpdateMatcher;
 import pattern.GroupTriggerMatcher;
+import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
 import trainer.Pokedex.PokedexStatus;
 import util.JsonUtils;
+import util.Point;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -43,7 +44,7 @@ public class CharacterData extends Trainer implements Serializable {
 	private static final int START_MONEY = 3000;
 
 	// TODO: Look into most of these to check if they really do need to be public
-	public int locationX, locationY;
+	public Point location;
 	public Direction direction;
 	
 	public boolean mapReset;
@@ -138,10 +139,21 @@ public class CharacterData extends Trainer implements Serializable {
 	public void setFileNum(int n) {
 		fileNum = n;
 	}
-	
+
+	public int getX() {
+		return this.location.x;
+	}
+
+	public int getY() {
+		return this.location.y;
+	}
+
+	public void setLocation(Point newLocation) {
+		this.location = Point.copy(newLocation);
+	}
+
 	public void setLocation(int x, int y) {
-		locationX = x;
-		locationY = y;
+		this.location = new Point(x, y);
 	}
 	
 	public void setMap(String name, String mapEntrance) {

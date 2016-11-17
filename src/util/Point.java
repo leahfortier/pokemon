@@ -104,6 +104,10 @@ public class Point {
         return this;
     }
 
+    public static Point negate(Point point) {
+        return copy(point).negate();
+    }
+
     public Dimension maximizeDimension(Dimension previousDimension) {
         return new Dimension(
                 max(previousDimension.width, x + 1, previousDimension.width - x),

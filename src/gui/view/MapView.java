@@ -410,7 +410,7 @@ public class MapView extends View {
 
 			playerEntity = new PlayerEntity(character);
 			playerEntity.setDirection(prevDir);
-			entities[character.locationX][character.locationY] = playerEntity;
+			entities[character.getX()][character.getY()] = playerEntity;
 			
 			entityList = new ArrayList<>();
 			for (Entity[] er: entities) {
@@ -430,7 +430,7 @@ public class MapView extends View {
 		}
 		
 		// New area
-		AreaData area = currentMap.getArea(character.locationX, character.locationY);
+		AreaData area = currentMap.getArea(character.getX(), character.getY());
 		String areaName = area.getAreaName();
 
 		character.areaName = areaName;
