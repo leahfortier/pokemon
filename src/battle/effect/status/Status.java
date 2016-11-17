@@ -18,10 +18,11 @@ import java.io.Serializable;
 
 public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
-	protected final StatusCondition type; // TODO: Rename this
+
+	private final StatusCondition statusCondition;
 	
-	protected Status(StatusCondition type) {
-		this.type = type;
+	protected Status(StatusCondition statusCondition) {
+		this.statusCondition = statusCondition;
 	}
 	
 	protected abstract String getCastMessage(ActivePokemon p);
@@ -56,7 +57,7 @@ public abstract class Status implements Serializable {
 	}
 	
 	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.type);
+		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.statusCondition);
 		if (statusPrevent != null) {
 			return statusPrevent.statusPreventionMessage(victim);
 		}
@@ -81,7 +82,7 @@ public abstract class Status implements Serializable {
 			return false;
 		}
 
-		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, caster, victim, this.type);
+		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, caster, victim, this.statusCondition);
 		if (statusPrevent != null) {
 			return false;
 		}
@@ -90,7 +91,7 @@ public abstract class Status implements Serializable {
 	}
 	
 	public StatusCondition getType() {
-		return type;
+		return statusCondition;
 	}
 	
 	public void setTurns(int turns) {}

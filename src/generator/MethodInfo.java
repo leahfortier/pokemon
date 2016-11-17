@@ -10,36 +10,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 class MethodInfo {
-    // TODO: Move to separate file
-    enum AccessModifier {
-        PUBLIC("public"),
-        PRIVATE("private"),
-        PROTECTED("protected"),
-        PACKAGE_PRIVATE("");
-
-        private final String modifierName;
-
-        AccessModifier(final String modifierName) {
-            this.modifierName = modifierName;
-        }
-
-        static AccessModifier getAccessModifier(final String modifierName) {
-            switch (modifierName.toLowerCase()) {
-                case "public":
-                    return PUBLIC;
-                case "private":
-                    return PRIVATE;
-                case "protected":
-                    return PROTECTED;
-                case "package-private":
-                case "none":
-                    return PACKAGE_PRIVATE;
-                default:
-                    Global.error("Unknown access modifier name " + modifierName + ".");
-                    return PUBLIC;
-            }
-        }
-    }
 
     private String header;
     private AccessModifier accessModifier;
@@ -203,7 +173,7 @@ class MethodInfo {
         StringUtils.appendLine(
                 method,
                 "\n\t\t" +
-                    StringUtils.addSpace(this.accessModifier.modifierName) +
+                    StringUtils.addSpace(this.accessModifier.getModifierName()) +
                     this.header.trim() +
                     " {"
         );
@@ -281,11 +251,11 @@ class MethodInfo {
         return added;
     }
 
-    public static String createHeader(final String returnType, final String methodName, final String parameters) {
+    static String createHeader(final String returnType, final String methodName, final String parameters) {
         return createHeader(returnType + " " + methodName, parameters);
     }
 
-    public static String createHeader(final String returnTypeAndName, final String parameters) {
+    static String createHeader(final String returnTypeAndName, final String parameters) {
         return String.format("%s(%s)", returnTypeAndName, parameters);
     }
 }

@@ -4,8 +4,6 @@ import sound.SoundPlayer;
 
 import javax.swing.JOptionPane;
 import java.awt.Dimension;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -22,7 +20,7 @@ public class Global {
 	public static final int FRAME_RATE = 30;
 
 	// The time(ms) between each frame.
-	public static long MS_BETWEEN_FRAMES = 1000 / FRAME_RATE;
+	public static final long MS_BETWEEN_FRAMES = 1000 / FRAME_RATE;
 
 	// The size of each tile in the map
 	public static final int TILE_SIZE = 32;
@@ -34,6 +32,7 @@ public class Global {
 
 	public static final SoundPlayer soundPlayer = new SoundPlayer();
 
+	// TODO: Need to make a RandomUtils class
 	private static final Random RANDOM = new Random();
 
 	public static boolean chanceTest(final int chance) {
@@ -105,30 +104,5 @@ public class Global {
 		
 		Global.error("Chances array is improperly formatted.");
 		return -1;
-	}
-	
-	private static Class<?>[] getParameterTypes(Object[] parameterValues) {
-		Class<?>[] parameterTypes = new Class<?>[parameterValues.length];
-		for (int i = 0; i < parameterValues.length; i++) {
-			parameterTypes[i] = parameterValues[i].getClass();
-		}
-		
-		return parameterTypes;
-	}
-	
-	public static Object dynamicMethodInvoke(Class<?> className, String methodName, Object invokee, Object... parameterValues) {
-		Class<?>[] parameterTypes = getParameterTypes(parameterValues);
-		
-		// YEAH TRY CATCH BLOCKS ARE THE GREATEST
-		try {
-			// Create and invoke the method -- THIS IS SO COOL THANK YOU MARCOD OF THE SEA
-			Method method = className.getMethod(methodName, parameterTypes);
-			return method.invoke(invokee, parameterValues);
-		}
-		// WOW SO MANY THINGS TO CATCH CATCH CATCHEROO
-		catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			Global.error("No such method " + methodName + " in class " + className.getName() + " or could not invoke such method.");
-			return null;
-		}
 	}
 }

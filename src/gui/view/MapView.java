@@ -26,6 +26,7 @@ import trainer.CharacterData;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
+import util.PokeString;
 import util.Save;
 import util.StringUtils;
 
@@ -39,10 +40,10 @@ import java.util.List;
 import java.util.Queue;
 
 public class MapView extends View {
-	// TODO: these should reference the constants
+	// TODO: Create enum to hold these and handle operations
 	private static final String[] MENU_TEXT = {
-			"Pok\u00E9dex",
-			"Pok\u00E9mon",
+			PokeString.POKEDEX,
+			PokeString.POKEMON,
 			"Bag",
 			"Player___",
 			"Options",
@@ -182,7 +183,7 @@ public class MapView extends View {
 
 		drawWeatherEffects(g);
 		
-		//Area Transition
+		// Area Transition
 		if (areaDisplayTime > 0) {
 			drawAreaTransitionAnimation(g);
 		}
@@ -234,7 +235,8 @@ public class MapView extends View {
 				break;
 		}
 	}
-	
+
+	// TODO: Weather should likely have its own class
 	private void drawWeatherEffects(Graphics g) {
 		switch(weatherState) {
 			case SUN:
@@ -607,7 +609,6 @@ public class MapView extends View {
 							npc.walkTowards(dist - 1, direction);
 							
 							if (npc.isTrainer()) {
-								// TODO: Get trainer spotted music
 								Global.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
 							}
 						}
@@ -682,7 +683,6 @@ public class MapView extends View {
 			Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
 		}
 		else {
-			// TODO: Get trainer battle music
 			Global.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
 		}
 	}
@@ -697,7 +697,7 @@ public class MapView extends View {
 			battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageIndex());
 			
 			if (seenWild) {
-				battleImageSlideRight = DrawUtils.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0});
+				battleImageSlideRight = DrawUtils.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0 });
 			}
 		}
 		else {

@@ -141,26 +141,13 @@ class MartView extends View {
 
 		Item selectedItemValue = selectedItem.getItem();
 
-		// TODO: Need to have a method to get the max purchase amount
 		if (amountLeftButton.checkConsumePress()) {
-			if (itemAmount == 1) {
-				itemAmount = player.getDatCashMoney()/selectedItemValue.getPrice();
-			}
-			else {
-				itemAmount--;
-			}
-			
+			this.updateItemAmount(-1);
 			updateActiveButtons();
 		}
 		
 		if (amountRightButton.checkConsumePress()) {
-			if (itemAmount ==  player.getDatCashMoney()/selectedItemValue.getPrice()) {
-				itemAmount = 1;
-			}
-			else {
-				itemAmount++;
-			}
-			
+			this.updateItemAmount(1);
 			updateActiveButtons();
 		}		
 		
@@ -378,7 +365,22 @@ class MartView extends View {
 	}
 
 	public void movedToFront() {}
-	
+
+	// TODO: Create util method for this
+	private void updateItemAmount(int delta) {
+		int maxPurchaseAmount = this.maxPurchaseAmount();
+
+		this.itemAmount -= 1;					// Set to be zero indexed
+		this.itemAmount += delta;				// Change the amount
+		this.itemAmount += maxPurchaseAmount;	// Confirm positive (BECAUSE CS IS STUPID AND MOD DOESN'T WORK RIGHT)
+		this.itemAmount %= maxPurchaseAmount;	// Apply wrap around
+		this.itemAmount += 1;					// Set back to be one indexed
+	}
+
+	private int maxPurchaseAmount() {
+		return Game.getPlayer().getDatCashMoney()/selectedItem.getItem().getPrice();
+	}
+
 	private int totalPages() {
 		int size = forSaleItems.size();
 		return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);

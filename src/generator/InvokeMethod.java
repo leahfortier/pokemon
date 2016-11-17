@@ -54,7 +54,7 @@ abstract class InvokeMethod {
         StringUtils.appendLine(body, "");
         StringUtils.appendLine(body, this.getPostLoop(interfaceMethod));
 
-        return new MethodInfo(header, body.toString().trim(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();
+        return new MethodInfo(header, body.toString().trim(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
     }
 
     protected String getAdditionalInvokeParameters() {

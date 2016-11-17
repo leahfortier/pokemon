@@ -458,7 +458,7 @@ class PokeGen {
 			fields.remove("Activate");
 		}
 
-		return new MethodInfo(fields.get("ClassName") + "()", constructor.toString(), MethodInfo.AccessModifier.PACKAGE_PRIVATE).writeFunction();
+		return new MethodInfo(fields.get("ClassName") + "()", constructor.toString(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
 	}
 	
 	private static String getAssignment(String assignmentInfo, String fieldValue) {
