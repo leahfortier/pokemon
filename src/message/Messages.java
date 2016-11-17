@@ -8,22 +8,35 @@ import pokemon.PokemonInfo;
 import util.StringUtils;
 
 import java.util.ArrayDeque;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class Messages {
-    private static final ArrayDeque<MessageUpdate> mapMessages = new ArrayDeque<>();
-    private static final ArrayDeque<MessageUpdate> battleMessages = new ArrayDeque<>();
-    private static boolean fightyFight = false;
+    private static final Map<MessageState, ArrayDeque<MessageUpdate>> messageMap =
+        new EnumMap<MessageState, ArrayDeque<MessageUpdate>>(MessageState.class) {{
+            for (MessageState messageState : MessageState.values()) {
+                put(messageState, new ArrayDeque<>());
+            }
+        }};
+
+    private static MessageState messageState = MessageState.MAPPITY_MAP;
+
+    public enum MessageState {
+        FIGHTY_FIGHT,   // Battle View
+        MAPPITY_MAP,    // Map View
+        BAGGIN_IT_UP;   // Bag View
+    }
 
     private static ArrayDeque<MessageUpdate> getQueue() {
-        return fightyFight ? battleMessages : mapMessages;
+        return messageMap.get(messageState);
     }
 
-    public static void clearBattleMessages() {
-        battleMessages.clear();
+    public static void setMessageState(MessageState newMessageState) {
+        messageState = newMessageState;
     }
 
-    public static void clearMapMessages() {
-        mapMessages.clear();
+    public static void clearMessages(MessageState messageState) {
+        messageMap.get(messageState).clear();
     }
 
     public static boolean hasMessages() {
@@ -97,13 +110,5 @@ public class Messages {
     // Learning a move
     public static void addMessage(String message, ActivePokemon p, Move move) {
         addMessage(new MessageUpdate(message, p, move));
-    }
-
-    public static void fightyFight() {
-        fightyFight = true;
-    }
-
-    public static void mappityMap() {
-        fightyFight = false;
     }
 }
