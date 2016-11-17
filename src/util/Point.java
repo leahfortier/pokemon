@@ -2,9 +2,10 @@ package util;
 
 import java.awt.Dimension;
 
+// Immutable point class
 public class Point {
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
 
     public Point() {
         this(0, 0);
@@ -29,26 +30,50 @@ public class Point {
         return x >= 0 && x < dimension.width && y >= 0 && y < dimension.height;
     }
 
-    public Point add(Point other) {
-        this.x += other.x;
-        this.y += other.y;
-        return this;
+    public static Point add(Point point, int dx, int dy) {
+        return new Point(
+                point.x + dx,
+                point.y + dy
+        );
     }
 
     public static Point add(Point first, Point second) {
-        return copy(first).add(second);
+        return Point.add(first, second.x, second.y);
     }
 
-    public Point lowerBound() {
-        this.x = Math.max(this.x, 0);
-        this.y = Math.max(this.y, 0);
-        return this;
+    public static Point subtract(Point first, Point second) {
+        return new Point(
+                first.x - second.x,
+                first.y - second.y
+        );
     }
 
-    public Point upperBound(Dimension dimension) {
-        this.x = (int) Math.min(this.x, dimension.getWidth() - 1);
-        this.y = (int) Math.min(this.y, dimension.getHeight() - 1);
-        return this;
+    public static Point negate(Point point) {
+        return new Point(
+                -point.x,
+                -point.y
+        );
+    }
+
+    public static Point scale(Point point, int factor) {
+        return new Point(
+                point.x*factor,
+                point.y*factor
+        );
+    }
+
+    public static Point lowerBound(Point point) {
+        return new Point(
+                Math.max(point.x, 0),
+                Math.max(point.y, 0)
+        );
+    }
+
+    public static Point upperBound(Point point, Dimension dimension) {
+        return new Point(
+                (int) Math.min(point.x, dimension.getWidth() - 1),
+                (int) Math.min(point.y, dimension.getHeight() - 1)
+        );
     }
 
     public static Point min(Point start, Point end) {
@@ -78,34 +103,6 @@ public class Point {
         int x = locationIndex - y * mapWidth;
 
         return new Point(x, y);
-    }
-
-    public Point subtract(Point point) {
-        this.x -= point.x;
-        this.y -= point.y;
-        return this;
-    }
-
-    public static Point subtract(Point first, Point second) {
-        return copy(first).subtract(second);
-    }
-
-    public static Point copy(Point point) {
-        if (point == null) {
-            return null;
-        }
-
-        return new Point(point.x, point.y);
-    }
-
-    public Point negate() {
-        this.x = -this.x;
-        this.y = -this.y;
-        return this;
-    }
-
-    public static Point negate(Point point) {
-        return copy(point).negate();
     }
 
     public Dimension maximizeDimension(Dimension previousDimension) {

@@ -149,7 +149,7 @@ public class CharacterData extends Trainer implements Serializable {
 	}
 
 	public void setLocation(Point newLocation) {
-		this.location = Point.copy(newLocation);
+		this.location = newLocation;
 	}
 
 	public void setLocation(int x, int y) {

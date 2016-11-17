@@ -38,13 +38,13 @@ public abstract class MovableEntity extends Entity {
 		Point canvasCoordinates = getCanvasCoordinates(drawX, drawY);
 		
 		if (transitionTime != 0) {
-			// TODO: util
-			int len = Global.TILE_SIZE*(getTransitionTime() - transitionTime)/getTransitionTime();
-			
-			canvasCoordinates.x -= transitionDirection.dx * len;
-			canvasCoordinates.y -= transitionDirection.dy * len;
-			
-			// System.out.println(transitionTime + " " +len + " " +cx + " " + cy);
+			// TODO: Should this be a method?
+			int length = Global.TILE_SIZE*(getTransitionTime() - transitionTime)/getTransitionTime();
+
+			canvasCoordinates = Point.subtract(
+					canvasCoordinates,
+					Point.scale(transitionDirection.getDeltaPoint(), length)
+			);
 		}
 		
 		super.draw(g, canvasCoordinates);

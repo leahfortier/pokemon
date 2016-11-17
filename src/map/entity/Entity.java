@@ -21,7 +21,7 @@ public abstract class Entity {
 	protected Point location;
 
 	protected Entity(Point location, String entityName, String condition) {
-		this.location = Point.copy(location);
+		this.location = location;
 
 		this.entityName = entityName;
 		this.condition = new Condition(condition);

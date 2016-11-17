@@ -6,6 +6,7 @@ import util.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class MultiPointTriggerMatcher extends LocationTriggerMatcher {
     protected List<Point> location;
@@ -34,7 +35,10 @@ public abstract class MultiPointTriggerMatcher extends LocationTriggerMatcher {
 
     @Override
     public void addDelta(Point delta) {
-        this.location.forEach(point -> point.add(delta));
+        this.location = this.getLocation()
+                .stream()
+                .map(point -> Point.add(point, delta))
+                .collect(Collectors.toList());
     }
 
     @Override

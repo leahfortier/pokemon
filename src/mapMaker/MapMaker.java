@@ -273,6 +273,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.location;
 	}
 
+	public void offSetLocation(Point delta) {
+		this.location = Point.add(this.location, delta);
+	}
+
 	public Point getMouseHoverLocation() {
 		return this.mouseHoverLocation;
 	}

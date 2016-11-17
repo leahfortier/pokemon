@@ -3,10 +3,10 @@ package mapMaker.tools;
 import util.Point;
 import mapMaker.MapMaker;
 
-public class MoveTool extends Tool {
+class MoveTool extends Tool {
     private Point previousLocation;
 
-    public MoveTool(MapMaker mapMaker) {
+    MoveTool(MapMaker mapMaker) {
         super(mapMaker);
         previousLocation = new Point();
     }
@@ -14,19 +14,19 @@ public class MoveTool extends Tool {
     @Override
     public void drag(Point dragLocation) {
         Point difference = Point.subtract(previousLocation, dragLocation);
-        mapMaker.getMapLocation().subtract(difference);
+        mapMaker.offSetLocation(Point.negate(difference));
 
-        previousLocation = Point.copy(dragLocation);
+        previousLocation = dragLocation;
     }
 
     @Override
     public void pressed(Point pressedLocation) {
-        previousLocation = Point.copy(pressedLocation);
+        previousLocation = pressedLocation;
     }
 
     @Override
     public void reset() {
-        previousLocation = Point.copy(mapMaker.getMouseHoverLocation());
+        previousLocation = mapMaker.getMouseHoverLocation();
     }
 
     public String toString() {

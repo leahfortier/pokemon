@@ -39,8 +39,8 @@ public class SelectTool extends Tool {
         for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
             for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
                 int val = copiedTiles.getRGB(currX, currY);
-                Point delta = mapMaker.setTile(new Point(currX, currY).add(location), val);
-                location.add(delta);
+                Point delta = mapMaker.setTile(Point.add(location, currX, currY), val);
+                location = Point.add(location, delta);
             }
         }
 

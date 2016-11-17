@@ -138,7 +138,7 @@ public class EditMapMetaData {
 
         currentMapSize = location.maximizeDimension(previousDimension);
 
-        Point delta = Point.copy(location).negate().lowerBound();
+        Point delta = Point.lowerBound(Point.negate(location));
 
         this.resetMaps();
 
@@ -153,7 +153,7 @@ public class EditMapMetaData {
         }
 
         // Update trigger data type
-        triggerData.moveTriggerData(Point.copy(delta));
+        triggerData.moveTriggerData(delta);
 
         return delta;
     }
