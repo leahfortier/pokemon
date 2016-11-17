@@ -26,8 +26,7 @@ public class PlayerEntity extends MovableEntity {
 	private boolean justCreated;
 
 	public PlayerEntity(CharacterData data) {
-		// TODO: point shit
-		super(new Point(data.locationX, data.locationY), null, null, 0, data.direction);
+		super(data.location, null, null, 0, data.direction);
 
 		justMoved = true;
 		stalled = false;
@@ -54,10 +53,9 @@ public class PlayerEntity extends MovableEntity {
 
 		CharacterData player = Game.getPlayer();
 
-		// TODO: have a method to check if locations are equal
-		if (charX != player.locationX || charY != player.locationY) {
-			entity[charX][charY] = null;
-			entity[player.locationX][player.locationY] = this;
+		if (!this.location.equals(player.location)) {
+			entity[getX()][getY()] = null;
+			entity[player.getX()][player.getY()] = this;
 			transitionTime = 0;
 		}
 
@@ -80,20 +78,18 @@ public class PlayerEntity extends MovableEntity {
 							continue;
 						}
 
-						int dx = player.locationX + direction.dx;
-						int dy = player.locationY + direction.dy;
+						Point delta = Point.add(player.location, direction.getDeltaPoint());
 						
-						WalkType curPassValue = map.getPassValue(player.locationX, player.locationY);
-						WalkType passValue = map.getPassValue(dx, dy);
+						WalkType curPassValue = map.getPassValue(player.getX(), player.getY());
+						WalkType passValue = map.getPassValue(delta.x, delta.y);
 						
-						if (isPassable(passValue, direction) && entity[dx][dy] == null) {
-							// dx += getWalkTypeAdditionalMove(passValue, i);
-							dy += getWalkTypeAdditionalMove(curPassValue, passValue, direction);
+						if (isPassable(passValue, direction) && entity[delta.x][delta.y] == null) {
+							delta = Point.add(delta, getWalkTypeAdditionalMove(curPassValue, passValue, direction));
 
-							entity[dx][dy] = this;
-							entity[player.locationX][player.locationY] = null;
+							entity[delta.x][delta.y] = this;
+							entity[player.getX()][player.getY()] = null;
 
-							player.setLocation(dx, dy);
+							player.setLocation(delta);
 							player.step();
 
 							transitionTime = 1;
@@ -106,13 +102,13 @@ public class PlayerEntity extends MovableEntity {
 				}
 			}
 
-			charX = player.locationX;
-			charY = player.locationY;
+			this.location = player.location;
 			player.direction = transitionDirection;
 
 			if (spacePressed) {
-				int x = transitionDirection.dx + charX;
-				int y = transitionDirection.dy + charY;
+				Point newPoint = Point.add(this.location, transitionDirection.getDeltaPoint());
+				int x = newPoint.x; // TODO
+				int y = newPoint.y;
 				
 				if (map.inBounds(x, y) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
 					npcTriggerSuffix = entity[x][y].getTriggerSuffix();
@@ -123,8 +119,9 @@ public class PlayerEntity extends MovableEntity {
 			
 			if (stalled) {
 				for (Direction direction : Direction.values()) {
-					int x = charX - direction.dx;
-					int y = charY - direction.dy;
+					Point newLocation = Point.add(this.location, Point.negate(direction.getDeltaPoint()));
+					int x = newLocation.x; // TODO
+					int y = newLocation.y;
 
 					// TODO: Should have a method for this
 					if (map.inBounds(x, y) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
@@ -145,26 +142,26 @@ public class PlayerEntity extends MovableEntity {
 
 	public static Entity currentInteractionEntity;
 
-	private int getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction) {
+	private Point getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction) {
 		if (direction == Direction.LEFT) {
 			if (next == WalkType.STAIRS_UP_LEFT) {
-				return Direction.UP.dy;
+				return Direction.UP.getDeltaPoint();
 			}
 			else if (next == WalkType.STAIRS_UP_RIGHT) {
-				return Direction.DOWN.dy;
+				return Direction.DOWN.getDeltaPoint();
 			}
 		}
 		
 		if (direction == Direction.RIGHT) {
 			if (prev == WalkType.STAIRS_UP_LEFT) {
-				return Direction.DOWN.dy;
+				return Direction.DOWN.getDeltaPoint();
 			}
 			else if (prev == WalkType.STAIRS_UP_RIGHT) {
-				return Direction.UP.dy;
+				return Direction.UP.getDeltaPoint();
 			}
 		}
 		
-		return 0;
+		return new Point();
 	}
 
 	public void triggerCheck(MapData map) {
@@ -190,19 +187,17 @@ public class PlayerEntity extends MovableEntity {
 	// TODO: should hold return value in an object instead of an arbitrary array
 	public float[] getDrawLocation(Dimension dimension) {
 
-		CharacterData player = Game.getPlayer();
-		int playerX = player.locationX;
-		int playerY = player.locationY;
+		Point playerLocation = Game.getPlayer().location;
 
 		float[] res = new float[2];
 		if (transitionTime > 0) {
 			float len = Math.max(0f, (Global.TIME_BETWEEN_TILES - (float) transitionTime/*-dt*/) / Global.TIME_BETWEEN_TILES);
-			res[0] = dimension.width/2 - (playerX - transitionDirection.dx*len)*Global.TILE_SIZE;
-			res[1] = dimension.height/2 - (playerY - transitionDirection.dy*len)*Global.TILE_SIZE;
+			res[0] = dimension.width/2 - (playerLocation.x - transitionDirection.dx*len)*Global.TILE_SIZE;
+			res[1] = dimension.height/2 - (playerLocation.y - transitionDirection.dy*len)*Global.TILE_SIZE;
 		}
 		else {
-			res[0] = dimension.width/2 - playerX*Global.TILE_SIZE;
-			res[1] = dimension.height/2 - playerY*Global.TILE_SIZE;
+			res[0] = dimension.width/2 - playerLocation.x*Global.TILE_SIZE;
+			res[1] = dimension.height/2 - playerLocation.y*Global.TILE_SIZE;
 		}
 
 		return res;
