@@ -30,7 +30,7 @@ public class Bag implements Serializable {
 	private Map<ItemNamesies, Integer> items; // Item -> quantity
 	private Map<BagCategory, Set<ItemNamesies>> bag;
 	private Map<BattleBagCategory, Set<ItemNamesies>> battleBag;
-	private ItemNamesies lastUsedItem;
+	private ItemNamesies lastUsedItem; // Only for battle
 	
 	public Bag() {
 		this.items = new EnumMap<>(ItemNamesies.class);
@@ -158,6 +158,7 @@ public class Bag implements Serializable {
 	// Checks conditions, add messages, and executes the UseItem
 	// Move should be null for PokemonUseItem and nonnull for MoveUseItem
 	private boolean useItem(ItemNamesies item, ActivePokemon p, Move move) {
+
 		// Eggs can't do shit
 		if (p.isEgg()) {
 			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
@@ -239,7 +240,7 @@ public class Bag implements Serializable {
 			removeItem(item);
 		}
 		else if (useItem instanceof UseItem) {
-			Messages.addMessage("It won't have any effect.");
+			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
 		}
 
 		return used;
