@@ -1454,7 +1454,7 @@ Full Heal:
 	FullHeal: True
 *
 Full Restore:
-	Int: PokemonUseItem, HoldItem, BattleUseItem
+	Int: PokemonUseItem, HoldItem
 	Cat: Medicine
 	BattleCat: HP_PP, Status
 	Desc: A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.
@@ -1559,7 +1559,7 @@ Hyper Potion:
 	HealAmt: 200
 *
 Max Potion:
-	Int: PokemonUseItem, BattleUseItem, HoldItem
+	Int: PokemonUseItem, HoldItem
 	Cat: Medicine
 	BattleCat: HP_PP
 	Desc: A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.
@@ -1586,7 +1586,7 @@ Revival Herb:
 	Revive: 1 fully
 *
 Sacred Ash:
-	Int: TrainerUseItem, HoldItem, BattleUseItem
+	Int: TrainerUseItem, BattleUseItem, HoldItem
 	Cat: Medicine
 	BattleCat: Status
 	Desc: It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.
@@ -2042,7 +2042,7 @@ Leppa Berry:
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
 Oran Berry:
-	Int: HealthTriggeredBerry, PokemonUseItem, BattleUseItem
+	Int: HealthTriggeredBerry, PokemonUseItem
 	BattleCat: HP_PP
 	Desc: If held by a Pok\u00e9mon, it heals the user by just 10 HP.
 	NGType: Poison
@@ -2097,7 +2097,7 @@ Lum Berry:
 *
 Sitrus Berry:
 	BattleCat: HP_PP
-	Int: PokemonUseItem, BattleUseItem, HealthTriggeredBerry
+	Int: PokemonUseItem, HealthTriggeredBerry
 	Desc: If held by a Pok\u00e9mon, it heals the user by a little.
 	NGType: Psychic
 	NGPow: 80

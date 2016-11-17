@@ -113,7 +113,7 @@ class BagView extends View {
 			bagView.selectedButton = this.buttonIndex;
 			bagView.state = BagState.ITEM_SELECT;
 			
-			if (Game.getPlayer().getBag().getQuantity(bagView.selectedItem) == 0) {
+			if (!Game.getPlayer().getBag().hasItem(bagView.selectedItem)) {
 				bagView.changeCategory(bagView.selectedTab);
 			}
 			
@@ -579,8 +579,9 @@ class BagView extends View {
 	}
 
 	private void changeCategory(int index) {
-		if (selectedTab != index) 
+		if (selectedTab != index) {
 			pageNum = 0;
+		}
 		
 		selectedTab = index;
 		state = BagState.ITEM_SELECT;
@@ -619,7 +620,7 @@ class BagView extends View {
 			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
 		}
 
-		if (selectedItem == ItemNamesies.NO_ITEM || player.getBag().getQuantity(selectedItem) == 0) {
+		if (selectedItem == ItemNamesies.NO_ITEM || !player.getBag().hasItem(selectedItem)) {
 			selectedItem = ItemNamesies.NO_ITEM;
 			buttons[GIVE].setActive(false);
 			buttons[USE].setActive(false);

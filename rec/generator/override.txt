@@ -1321,16 +1321,12 @@ TrainerUseItem:
 ***
 PokemonUseItem:
 	PokemonUse:
-		Header: boolean use(CharacterData player, ActivePokemon p)
+		Header: boolean use(ActivePokemon p)
 	*
 ***
 BattleUseItem:
 	BattleUse:
 		Header: boolean use(ActivePokemon p, Battle b)
-		Optional: True
-		Default:
-		return use(b.getPlayer(), p);
-		###
 	*
 ***
 MoveUseItem:
@@ -1697,7 +1693,7 @@ Override:
 			return false;
 		}
 
-		player.setEvolution(p, base);
+		Game.getPlayer().setEvolution(p, base);
 		return true;
 		###
 	*
@@ -1721,13 +1717,11 @@ Override:
 		AddMapField: SuccessMessage: p.getName() + " was cured of its status condition!"
 		AddMapField: BattleCat: Status
 		AddInterface: PokemonUseItem
-		AddInterface: BattleUseItem
 	*
 ***
 Override:
 	Revive:
 		AddInterface: PokemonUseItem
-		AddInterface: BattleUseItem
 		AddInterface: HoldItem
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: Status
@@ -1753,7 +1747,6 @@ Override:
 		return StatusCondition.{00};
 		###
 		AddInterface: PokemonUseItem
-		AddInterface: BattleUseItem
 		AddMapField: PokemonUse:
 		if (!p.hasStatus(toRemove())) {
 			return false;
@@ -1775,7 +1768,6 @@ Override:
 		return {0};
 		###
 		AddInterface: PokemonUseItem
-		AddInterface: BattleUseItem
 		AddMapField: PokemonUse:
 		return p.heal(healAmount()) != 0;
 		###
@@ -2111,7 +2103,7 @@ HealthTriggeredBerry:
 		Header: boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
 		Optional: True
 		Default:
-		return use(user, b);
+		return use(user);
 		###
 		AddInterface: Hidden-GainableEffectBerry
 		AddMapField: GainEffect:

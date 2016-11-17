@@ -14,6 +14,7 @@ import main.Game;
 import main.Global;
 import message.Messages;
 import pokemon.ActivePokemon;
+import trainer.CharacterData;
 import trainer.Trainer;
 
 import java.io.Serializable;
@@ -177,7 +178,7 @@ public class Bag implements Serializable {
 		UseItem useItem = (UseItem) itemValue;
 		final boolean success;
 		if (move == null) {
-			success = ((PokemonUseItem)useItem).use(Game.getPlayer(), p);
+			success = ((PokemonUseItem)useItem).use(p);
 		} else {
 			success = ((MoveUseItem)useItem).use(p, move);
 		}
@@ -204,25 +205,25 @@ public class Bag implements Serializable {
 	}
 
 	public boolean battleUseItem(ItemNamesies item, ActivePokemon activePokemon, Battle battle) {
+		CharacterData player = Game.getPlayer();
+
 		Item useItem = item.getItem();
 		final boolean used;
-		if (useItem instanceof BattleUseItem && battle != null)  {
+		if (useItem instanceof BattleUseItem) {
 			used = ((BattleUseItem) useItem).use(activePokemon, battle);
 		} else if (useItem instanceof PokemonUseItem) {
-			System.err.println("PokemonUseItem called from Bag.battleUseItem() instead of BattleUseItem.");
-			used = ((PokemonUseItem) useItem).use(Game.getPlayer(), activePokemon);
+			used = ((PokemonUseItem) useItem).use(activePokemon);
 		} else if (useItem instanceof BallItem) {
-			used = Game.getPlayer().catchPokemon(battle, (BallItem) useItem);
+			used = player.catchPokemon(battle, (BallItem) useItem);
 		} else {
 			used = false;
 		}
 
 		if (used) {
 			if (useItem instanceof UseItem) {
-				boolean front = Game.getPlayer().front() == activePokemon;
+				boolean front = player.front() == activePokemon;
 
-				// TODO: This is made to look generalized for an enemy trainer using an item, but this method is inside Bag, which is only valid for the player
-				Messages.addMessage(((Trainer)battle.getTrainer(activePokemon.user())).getName() + " used " + useItem.getName() + "!");
+				Messages.addMessage(player.getName() + " used " + useItem.getName() + "!");
 				Messages.addMessage(((UseItem)useItem).getSuccessMessage(activePokemon));
 				
 				if (front) {
@@ -249,7 +250,11 @@ public class Bag implements Serializable {
 	public ItemNamesies getLastUsedItem() {
 		return lastUsedItem;
 	}
-	
+
+	public boolean hasItem(ItemNamesies item) {
+		return this.getQuantity(item) > 0;
+	}
+
 	public int getQuantity(ItemNamesies item) {
 		if (items.containsKey(item)) {
 			return items.get(item);
