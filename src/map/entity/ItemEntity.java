@@ -44,6 +44,11 @@ public class ItemEntity extends Entity {
 	}
 
 	@Override
+	protected boolean isTransitioning() {
+		return false;
+	}
+
+	@Override
 	public void getAttention(Direction direction) {
 		hasTriggered = true;
 	}

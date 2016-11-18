@@ -33,19 +33,10 @@ public class PlayerEntity extends MovableEntity {
 		justCreated = true;
 	}
 
+	// Player is drawn in the center of the canvas
 	@Override
-	public void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
-		if (drawOnlyInTransition && transitionTime == 0) {
-			return;
-		}
-
-		Dimension d = Global.GAME_SIZE;
-
-		BufferedImage img = getFrame();
-		g.drawImage(img,
-				d.width / 2 - img.getWidth() / 2 + Global.TILE_SIZE / 2,
-				(d.height / 2) + (Global.TILE_SIZE - img.getHeight()) - (Global.TILE_SIZE / 2),
-				null); // TODO: draw metrics?
+	public Point getCanvasCoordinates(Point drawLocation) {
+		return Point.scaleDown(Global.GAME_SIZE, 2);
 	}
 
 	@Override

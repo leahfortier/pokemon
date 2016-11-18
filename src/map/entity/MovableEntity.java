@@ -6,11 +6,9 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
-import util.DrawUtils;
 import util.InputControl;
 import util.Point;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public abstract class MovableEntity extends Entity {
@@ -32,14 +30,10 @@ public abstract class MovableEntity extends Entity {
 	}
 
 	@Override
-	public void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
-		if (drawOnlyInTransition && transitionTime == 0) {
-			return;
-		}
+	protected Point getCanvasCoordinates(Point drawLocation) {
+		Point canvasCoordinates = super.getCanvasCoordinates(drawLocation);
 
-		Point canvasCoordinates = DrawUtils.getDrawLocation(this.location, drawLocation);
-		
-		if (transitionTime != 0) {
+		if (this.isTransitioning()) {
 			// TODO: Should this be a method?
 			int length = Global.TILE_SIZE*(getTransitionTime() - transitionTime)/getTransitionTime();
 
@@ -48,8 +42,8 @@ public abstract class MovableEntity extends Entity {
 					Point.scale(transitionDirection.getDeltaPoint(), length)
 			);
 		}
-		
-		super.draw(g, canvasCoordinates);
+
+		return canvasCoordinates;
 	}
 
 	@Override
@@ -97,4 +91,9 @@ public abstract class MovableEntity extends Entity {
 	}
 	
 	public abstract int getTransitionTime();
+
+	@Override
+	protected boolean isTransitioning() {
+		return this.transitionTime > 0;
+	}
 }

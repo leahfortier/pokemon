@@ -39,12 +39,16 @@ public abstract class Entity {
 		return this.condition.isTrue();
 	}
 
-	public void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
-		draw(g, DrawUtils.getDrawLocation(this.location, drawLocation));
+	public final void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
+		if (drawOnlyInTransition && this.isTransitioning()) {
+			return;
+		}
+
+		DrawUtils.drawEntityTileImage(g, this.getFrame(), this.getCanvasCoordinates(drawLocation));
 	}
-	
-	public void draw(Graphics g, Point canvasCoordinates) {
-		DrawUtils.drawEntityTileImage(g, this.getFrame(), canvasCoordinates);
+
+	protected Point getCanvasCoordinates(Point drawLocation) {
+		return DrawUtils.getDrawLocation(this.location, drawLocation);
 	}
 
 	// TODO: Don't pass the entity array around goddamnit
@@ -79,6 +83,7 @@ public abstract class Entity {
 	}
 
 	protected abstract BufferedImage getFrame();
+	protected abstract boolean isTransitioning();
 
 	public abstract void getAttention(Direction direction);
 	public abstract void addData();

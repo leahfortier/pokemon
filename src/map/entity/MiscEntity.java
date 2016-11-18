@@ -31,6 +31,11 @@ public class MiscEntity extends Entity {
 	}
 
 	@Override
+	protected boolean isTransitioning() {
+		return false;
+	}
+
+	@Override
 	public void getAttention(Direction direction) {}
 
 	@Override
