@@ -1,11 +1,19 @@
 package util;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ScrollPaneConstants;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
@@ -60,5 +68,65 @@ public class GUIUtils {
         setStyle(button);
 
         return button;
+    }
+
+    public static JPanel createTextFieldComponent(String text, JTextField textField) {
+        JPanel component = new JPanel();
+        JLabel label = createLabel(text);
+
+        setStyle(textField);
+        textField.setColumns(10);
+
+        setHorizontalLayout(component, label, textField);
+
+        return component;
+    }
+
+    public static JPanel createTextAreaComponent(String text, JTextArea textArea) {
+        JPanel component = new JPanel();
+
+        JLabel label = createLabel(text);
+
+        textArea.setRows(3);
+        textArea.setColumns(20);
+        textArea.setLineWrap(true);
+        setStyle(textArea);
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setViewportView(textArea);
+
+        setHorizontalLayout(component, label, scrollPane);
+
+        return component;
+    }
+
+    public static void setHorizontalLayout(JPanel panel, JComponent... components) {
+        setLayout(true, panel, components);
+    }
+
+    public static void setVerticalLayout(JPanel panel, JComponent... components) {
+        setLayout(false, panel, components);
+    }
+
+    private static void setLayout(boolean horizontal, JPanel panel, JComponent... components) {
+
+        GroupLayout groupLayout = new GroupLayout(panel);
+        ParallelGroup parallelGroup = groupLayout.createParallelGroup();
+        SequentialGroup sequentialGroup = groupLayout.createSequentialGroup();
+        for (JComponent component : components) {
+            parallelGroup.addComponent(component).addGap(12);
+            sequentialGroup.addComponent(component).addGap(12);
+        }
+
+        if (horizontal) {
+            groupLayout.setHorizontalGroup(sequentialGroup);
+            groupLayout.setVerticalGroup(parallelGroup);
+        } else {
+            groupLayout.setHorizontalGroup(parallelGroup);
+            groupLayout.setVerticalGroup(sequentialGroup);
+        }
+
+        panel.setLayout(groupLayout);
     }
 }
