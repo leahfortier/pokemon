@@ -13,6 +13,7 @@ import pattern.generic.LocationTriggerMatcher;
 import util.DrawUtils;
 import util.FileIO;
 import util.Folder;
+import util.GUIUtils;
 import util.Point;
 import util.StringUtils;
 
@@ -21,7 +22,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,7 +32,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
@@ -130,54 +129,20 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return new JScrollPane(toolList);
     }
 
-    private void setStyle(JComponent component) {
-        component.setFont(DrawUtils.getFont(16));
-        component.setBackground(Color.WHITE);
-    }
+	private JMenuItem createEditMenuItem(String text, int keyEvent) {
+		JMenuItem menuItem = GUIUtils.createMenuItem(text, keyEvent, this);
+		menuItem.setEnabled(false);
 
-    private JMenuItem createMenuItem(String text) {
-        JMenuItem menuItem = new JMenuItem(text);
-        menuItem.addActionListener(this);
-        this.setStyle(menuItem);
-
-        return menuItem;
-    }
-
-    private JMenuItem createMenuItem(String text, int keyEvent) {
-        JMenuItem menuItem = createMenuItem(text);
-
-        // System shortcut key. Control for windows, command for mac.
-        int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(keyEvent, shortcut));
-
-        return menuItem;
-    }
-
-    private JMenuItem createEditMenuItem(String text, int keyEvent) {
-        JMenuItem menuItem = this.createMenuItem(text, keyEvent);
-        menuItem.setEnabled(false);
-
-        return menuItem;
-    }
-
-    private JMenu createMenu(String text, JMenuItem... menuItems) {
-        JMenu menu = new JMenu(text);
-        this.setStyle(menu);
-
-        for (JMenuItem menuItem : menuItems) {
-            menu.add(menuItem);
-        }
-
-        return menu;
-    }
+		return menuItem;
+	}
 
     private JMenu createFileMenu() {
-        this.newMenuItem = this.createMenuItem("New", KeyEvent.VK_N);
-        this.saveMenuItem = this.createMenuItem("Save", KeyEvent.VK_S);
-        this.loadMenuItem = this.createMenuItem("Load", KeyEvent.VK_L);
-        this.setRootMenuItem = this.createMenuItem("Set Root");
+        this.newMenuItem = GUIUtils.createMenuItem("New", KeyEvent.VK_N, this);
+        this.saveMenuItem = GUIUtils.createMenuItem("Save", KeyEvent.VK_S, this);
+        this.loadMenuItem = GUIUtils.createMenuItem("Load", KeyEvent.VK_L, this);
+        this.setRootMenuItem = GUIUtils.createMenuItem("Set Root", this);
 
-        return this.createMenu("File", newMenuItem, saveMenuItem, loadMenuItem, setRootMenuItem);
+        return GUIUtils.createMenu("File", newMenuItem, saveMenuItem, loadMenuItem, setRootMenuItem);
     }
 
     private JMenu createEditMenu() {
@@ -185,17 +150,16 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.copyMenuItem = this.createEditMenuItem("Copy", KeyEvent.VK_C);
         this.pasteMenuItem = this.createEditMenuItem("Paste", KeyEvent.VK_V);
 
-        return this.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem);
+        return GUIUtils.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem);
     }
 
 	private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        this.setStyle(menuBar);
+		GUIUtils.setStyle(menuBar);
 
-        mapNameLabel = new JLabel("MapMaker");
-        this.setStyle(mapNameLabel);
+        mapNameLabel = GUIUtils.createLabel("MapMaker");
 
-        rootLabel = new JLabel("Root Location:");
+        rootLabel = GUIUtils.createLabel("Root Location:");
         rootLabel.setForeground(Color.RED);
 
         menuBar.add(this.createFileMenu());
@@ -229,7 +193,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
         editTypeComboBox.setModel(new DefaultComboBoxModel<>(EditType.values()));
         this.setEditType(EditType.BACKGROUND);
-        this.setStyle(editTypeComboBox);
+		GUIUtils.setStyle(editTypeComboBox);
 
         return editTypeComboBox;
     }
@@ -239,9 +203,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         tilePanel.setBorder(new LineBorder(Color.BLACK));
         tilePanel.setLayout(new BorderLayout());
 
-        newTileButton = new JButton("New Tile");
-        newTileButton.addActionListener(this);
-        this.setStyle(newTileButton);
+        newTileButton = GUIUtils.createButton("New Tile", this);
         tilePanel.add(newTileButton, BorderLayout.NORTH);
 
         tileList = new JList<>();
@@ -329,8 +291,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				saveMap();
 			}
 			else if (event.getSource() == newMenuItem || event.getSource() == loadMenuItem) {
-				boolean cancel = checkSaveOnExit();
-				if (!cancel) {
+				boolean exit = checkSaveOnExit();
+				if (!exit) {
 					return;
 				}
 
@@ -509,6 +471,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	public void keyTyped(KeyEvent event) {}
 
 	public void keyPressed(KeyEvent event) {
+		// TODO: This should be stored in the tool
 		// TODO: e for eraser, s for single, r for rect, t for trigger, ? for select?
 		if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType == null && !toolList.isSelectionEmpty()) {
             previousToolType = ToolType.values()[toolList.getSelectedIndex()];
