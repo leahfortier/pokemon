@@ -54,6 +54,7 @@ public class NPCEntity extends MovableEntity {
 		this.startKey = startKey;
 	}
 
+	@Override
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		super.update(dt, entity, map, input, view);
 
@@ -132,6 +133,7 @@ public class NPCEntity extends MovableEntity {
 		return this.startKey;
 	}
 
+	@Override
 	public String getTriggerSuffix() {
 		return this.getTriggerSuffix(this.getCurrentInteractionKey());
 	}
@@ -140,10 +142,12 @@ public class NPCEntity extends MovableEntity {
 		return super.getTriggerSuffix() + "_" + interactionName;
 	}
 
+	@Override
 	public int getTransitionTime() {
 		return Global.TIME_BETWEEN_TILES * 2;
 	}
 
+	@Override
 	public void getAttention(Direction direction) {
 		transitionDirection = direction;
 		hasAttention = true;
@@ -174,6 +178,7 @@ public class NPCEntity extends MovableEntity {
 		return false;
 	}
 
+	@Override
 	public void reset() {
 		location = defaultLocation;
 		waitTime = 0;
@@ -184,6 +189,7 @@ public class NPCEntity extends MovableEntity {
 		tempPath = null;
 	}
 
+	@Override
 	public void addData() {
 		if (dataCreated) {
 			return;

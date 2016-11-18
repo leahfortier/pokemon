@@ -22,14 +22,18 @@ public class MiscEntity extends Entity {
 		this.dataCreated = false;
 	}
 
+	@Override
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {}
 
+	@Override
 	protected BufferedImage getFrame() {
 		return Game.getData().getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
 	}
 
+	@Override
 	public void getAttention(Direction direction) {}
-	
+
+	@Override
 	public void addData() {
 		if (dataCreated) {
 			return;
@@ -39,5 +43,6 @@ public class MiscEntity extends Entity {
 		dataCreated = true;
 	}
 
+	@Override
 	public void reset() {}
 }

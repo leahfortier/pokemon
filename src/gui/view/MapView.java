@@ -26,6 +26,7 @@ import trainer.CharacterData;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
+import util.Point;
 import util.PokeString;
 import util.Save;
 import util.StringUtils;
@@ -71,8 +72,9 @@ public class MapView extends View {
 	private MessageUpdate currentMessage;
 	private int dialogueSelection;
 
-	private int startX, startY, endX, endY;
-	private float drawX, drawY;
+	private Point start;
+	private Point end;
+	private Point draw;
 	
 	private int areaDisplayTime;
 	
@@ -119,6 +121,10 @@ public class MapView extends View {
 								Button.basicDown(i, menuButtons.length) // Down
 							});
 		}
+
+		start = new Point();
+		end = new Point();
+		draw = new Point();
 	}
 
 	// TODO: This method should be split up further
@@ -128,54 +134,59 @@ public class MapView extends View {
 
 		GameData data = Game.getData();
 		TileSet mapTiles = data.getMapTiles();
-		
-		for (int y = startY; y < endY; y++) {
-			for (int x = startX; x < endX; x++) {
+
+		// Background
+		for (int y = start.y; y < end.y; y++) {
+			for (int x = start.x; x < end.x; x++) {
 				int bgTile = currentMap.getBgTile(x,y);
-				int dx = (int)drawX + x*Global.TILE_SIZE;
-				int dy = (int)drawY + y*Global.TILE_SIZE;
-				
+
+				// TODO: What does this mean?
 				if ((bgTile>>24) != 0) {
 					BufferedImage img = mapTiles.getTile(bgTile);
-					g.drawImage(img, dx + (Global.TILE_SIZE - img.getWidth()), dy + (Global.TILE_SIZE - img.getHeight()), null);
+					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
 			}
 		}
-		
-		for (int y = startY; y < endY; y++) {
-			for (int x = startX; x < endX; x++) {
-				int dx = (int) (drawX) + x*Global.TILE_SIZE;
-				int dy = (int) (drawY) + y*Global.TILE_SIZE;
+
+		// Foreground
+		for (int y = start.y; y < end.y; y++) {
+			for (int x = start.x; x < end.x; x++) {
+
+				// Draw foreground tiles
 				int fgTile = currentMap.getFgTile(x, y);
-				
 				if ((fgTile>>24) != 0) {
 					BufferedImage img = mapTiles.getTile(fgTile);
-					g.drawImage(img, dx + (Global.TILE_SIZE - img.getWidth()), dy + (Global.TILE_SIZE - img.getHeight()), null);
+					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
 				
-				//draw entities, and check for entities above and to the left of this location to see if they just moved out and draw them again.
+				// Draw entities
+				// Check for entities above and to the left of this location to see if they just moved out and draw them again.
 				for (int d = 0; d < ddx.length; d++) {
 					int nx, ny;
 					nx = ddx[d] + x;
 					ny = ddy[d] + y;
-					
+
+					// TODO: in bounds method
 					if (nx < 0 || ny < 0 || nx >= entities.length || ny >= entities[0].length) {
 						continue;
 					}
 
 					if (entities[nx][ny] != null) {
+
+						// TODO: I'm getting really confused about this whole check up and left only thing what is happening
 						// If entity is a movable entity and they are moving right or down, do not draw them again.
 						if (entities[nx][ny] instanceof MovableEntity) {
 							Direction td = ((MovableEntity)entities[nx][ny]).getDirection();
-							if (d != 0 && ((td == Direction.RIGHT) || (td == Direction.DOWN)))
+							if (d != 0 && ((td == Direction.RIGHT) || (td == Direction.DOWN))) {
 								continue;
+							}
 						}
 						// Not a movable entity, only draw once.
 						else if (d != 0) {
 							continue;
 						}
 						
-						entities[nx][ny].draw(g, drawX, drawY, d > 0);
+						entities[nx][ny].draw(g, draw, d > 0);
 					}
 				}
 			}
@@ -569,20 +580,12 @@ public class MapView extends View {
 				break;
 		}
 		
-		Dimension d = Global.GAME_SIZE;
-		float[] drawLoc = playerEntity.getDrawLocation(d);
+		Dimension gameSize = Global.GAME_SIZE;
+		Point tilesLocation = Point.scaleDown(gameSize, Global.TILE_SIZE);
 
-		drawX = drawLoc[0];
-		drawY = drawLoc[1];
-		
-		int tilesX = d.width/Global.TILE_SIZE;
-		int tilesY = d.height/Global.TILE_SIZE;
-		
-		startX = (int) (-drawX/Global.TILE_SIZE);
-		startY = (int) (-drawY/Global.TILE_SIZE);
-		
-		endX = startX + tilesX + 6;
-		endY = startY + tilesY + 6;
+		this.draw = playerEntity.getDrawLocation(gameSize);
+		this.start = Point.scaleDown(Point.negate(this.draw), Global.TILE_SIZE);
+		this.end = Point.add(this.start, tilesLocation, new Point(6, 6)); // TODO: What is the 6, 6 all about?
 		
 		// Check for any NPCs facing the player
 		if (!playerEntity.isStalled() && state == VisualState.MAP) {

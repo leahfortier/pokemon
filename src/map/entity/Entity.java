@@ -1,12 +1,12 @@
 package map.entity;
 
 import gui.view.MapView;
-import main.Global;
 import map.Condition;
 import map.Direction;
 import map.MapData;
 import map.MapData.WalkType;
 import map.triggers.TriggerType;
+import util.DrawUtils;
 import util.InputControl;
 import util.Point;
 
@@ -39,28 +39,15 @@ public abstract class Entity {
 		return this.condition.isTrue();
 	}
 
-	// TODO: DrawUtils
-	// Takes in the draw coordinates and returns the location of the entity where to draw it relative to the canvas
-	public Point getCanvasCoordinates(float drawX, float drawY) {
-		int cx = (int) drawX + Global.TILE_SIZE * getX();
-		int cy = (int) drawY + Global.TILE_SIZE * getY();
-		
-		return new Point(cx, cy);
-	}
-
-	public void draw(Graphics g, float drawX, float drawY, boolean drawOnlyInTransition) {
-		draw(g, getCanvasCoordinates(drawX, drawY));
+	public void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
+		draw(g, DrawUtils.getDrawLocation(this.location, drawLocation));
 	}
 	
 	public void draw(Graphics g, Point canvasCoordinates) {
-		int cx = canvasCoordinates.x;
-		int cy = canvasCoordinates.y;
-		
-		BufferedImage img = getFrame();
-		//TODO: metrics class?
-		g.drawImage(img, cx - img.getWidth() / 2 + Global.TILE_SIZE / 2, cy + (Global.TILE_SIZE - img.getHeight()) - (Global.TILE_SIZE / 2), null);
+		DrawUtils.drawEntityTileImage(g, this.getFrame(), canvasCoordinates);
 	}
 
+	// TODO: Don't pass the entity array around goddamnit
 	public abstract void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view);
 
 	protected boolean isPassable(WalkType type) {

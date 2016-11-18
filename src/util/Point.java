@@ -1,9 +1,12 @@
 package util;
 
 import java.awt.Dimension;
+import java.io.Serializable;
 
 // Immutable point class
-public class Point {
+public class Point implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public final int x;
     public final int y;
 
@@ -37,8 +40,15 @@ public class Point {
         );
     }
 
-    public static Point add(Point first, Point second) {
-        return Point.add(first, second.x, second.y);
+    public static Point add(Point first, Point second, Point... additional) {
+        Point point = Point.add(first, second.x, second.y);
+        if (additional != null) {
+            for (Point additionalPoint : additional) {
+                point = Point.add(point, additionalPoint);
+            }
+        }
+
+        return point;
     }
 
     public static Point subtract(Point first, Point second) {
@@ -60,6 +70,21 @@ public class Point {
                 point.x*factor,
                 point.y*factor
         );
+    }
+
+    private static Point scaleDown(int x, int y, int dividingFactor) {
+        return new Point(
+                x/dividingFactor,
+                y/dividingFactor
+        );
+    }
+
+    public static Point scaleDown(Point point, int dividingFactor) {
+        return scaleDown(point.x, point.y, dividingFactor);
+    }
+
+    public static Point scaleDown(Dimension dimension, int dividingFactor) {
+        return scaleDown(dimension.width, dimension.height, dividingFactor);
     }
 
     public static Point lowerBound(Point point) {

@@ -30,25 +30,30 @@ public class ItemEntity extends Entity {
 		this.dataCreated = false;
 	}
 
+	@Override
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		if (hasTriggered) {
 			view.removeEntity(this);
 		}
 	}
 
+	@Override
 	protected BufferedImage getFrame() {
 		// TODO: Needs constant
 		return Game.getData().getTrainerTiles().getTile(0);
 	}
 
+	@Override
 	public void getAttention(Direction direction) {
 		hasTriggered = true;
 	}
-	
+
+	@Override
 	public void reset() {
 		hasTriggered = false;
 	}
-	
+
+	@Override
 	public void addData() {
 		if (dataCreated) {
 			return;

@@ -33,7 +33,8 @@ public class PlayerEntity extends MovableEntity {
 		justCreated = true;
 	}
 
-	public void draw(Graphics g, float drawX, float drawY, boolean drawOnlyInTransition) {
+	@Override
+	public void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
 		if (drawOnlyInTransition && transitionTime == 0) {
 			return;
 		}
@@ -47,7 +48,7 @@ public class PlayerEntity extends MovableEntity {
 				null); // TODO: draw metrics?
 	}
 
-	// TODO: Don't pass the entity array around goddamnit
+	@Override
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		super.update(dt, entity, map, input, view);
 
@@ -184,8 +185,7 @@ public class PlayerEntity extends MovableEntity {
 		}
 	}
 
-	// TODO: should hold return value in an object instead of an arbitrary array
-	public float[] getDrawLocation(Dimension dimension) {
+	public Point getDrawLocation(Dimension dimension) {
 
 		Point playerLocation = Game.getPlayer().location;
 
@@ -200,17 +200,24 @@ public class PlayerEntity extends MovableEntity {
 			res[1] = dimension.height/2 - playerLocation.y*Global.TILE_SIZE;
 		}
 
-		return res;
+		// TODO
+		return new Point(
+				(int)res[0],
+				(int)res[1]
+		);
 	}
 
+	@Override
 	public String getTriggerSuffix() {
 		return null;
 	}
 
+	@Override
 	public int getTransitionTime() {
 		return Global.TIME_BETWEEN_TILES;
 	}
 
+	@Override
 	public void getAttention(Direction direction) {
 		transitionDirection = direction;
 		stalled = true;
@@ -224,7 +231,9 @@ public class PlayerEntity extends MovableEntity {
 		return stalled;
 	}
 
+	@Override
 	public void addData() {}
 
+	@Override
 	public void reset() {}
 }

@@ -6,6 +6,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
+import util.DrawUtils;
 import util.InputControl;
 import util.Point;
 
@@ -29,13 +30,14 @@ public abstract class MovableEntity extends Entity {
 		
 		this.spriteIndex = spriteIndex;
 	}
-	
-	public void draw(Graphics g, float drawX, float drawY, boolean drawOnlyInTransition) {
+
+	@Override
+	public void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
 		if (drawOnlyInTransition && transitionTime == 0) {
 			return;
 		}
-		
-		Point canvasCoordinates = getCanvasCoordinates(drawX, drawY);
+
+		Point canvasCoordinates = DrawUtils.getDrawLocation(this.location, drawLocation);
 		
 		if (transitionTime != 0) {
 			// TODO: Should this be a method?
@@ -49,7 +51,8 @@ public abstract class MovableEntity extends Entity {
 		
 		super.draw(g, canvasCoordinates);
 	}
-	
+
+	@Override
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		if (transitionTime != 0) {
 			transitionTime += dt;	
@@ -80,7 +83,8 @@ public abstract class MovableEntity extends Entity {
 
 		return transitionDirection.dx == dx && transitionDirection.dy == dy;
 	}
-	
+
+	@Override
 	protected BufferedImage getFrame() {
 		TileSet trainerTiles = Game.getData().getTrainerTiles();
 		if (transitionTime > 0) {
